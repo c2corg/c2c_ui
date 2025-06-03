@@ -26,8 +26,13 @@
     "4d_to_1m": {
       "severities": "Menys d'un mes"
     },
+    "5 months": "5 mesos",
     "50 meters while descending": "50 metres a la baixada",
+    "8 days": "8 dies",
+    "A message as been sent to the new address provided. You have to follow the link within to confirm the email address change.": "S'ha enviat un missatge a la nova adreça. Seguiu l'enllaç que hi trobareu per confirmar el canvi d'adreça de correu electrònic.",
     "Accident database": "Base de dades d'accidents",
+    "Accidents/Incidents database:": "Base de dades d'accidents / incidents:",
+    "Account": "Compte",
     "Action": {
       "Sophie picture context": "Acció"
     },
@@ -37,20 +42,29 @@
     "Action - prix du public": {
       "Sophie picture context": "Acció - premi del públic"
     },
+    "Action is disabled. You must confirm simplified geometry first.": "L'acció està inhabilitada. Primer heu de confirmar la simplificació en curs de la geometria.",
     "Activity feed": "Fil d'activitat",
+    "Activity trackers": "Rastrejadors d'activitat",
     "Add": "Afegeix",
     "Add here maps not automatically referenced": "Afegiu aquí els mapes no adjuntats automàticament",
     "Add images": "Afegeix imatges",
+    "Add more points": "Afegeix-hi més punts",
+    "Add page break before each document": "Afegeix un salt de pàgina entre cada document",
     "Add the first outing": "Afegeix la primera sortida",
     "Add title…": "Afegiu un títol...",
+    "Add to my outing": "Afegeix a la meva sortida",
     "Additional information": "Informació addicional",
     "All": "Tot",
     "Allow all": "Permet-ho tot",
     "Altitude": "Altitud",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "L'altitud és obligatòria quan els nivells de perill varien entre les cotes. Preciseu el valor donat pel butlletí d'allaus.",
+    "An error occurred, connection status could not be retrieved. Please refresh the page.": "Hi ha hagut un error: no s'ha pogut recuperar la connexió. Si us plau, refresqueu la pàgina.",
+    "An error occurred, could not retrieve activities": "Hi ha hagut un error: no s'han pogut recuperar les activitats.",
     "An error occurred, couldn't (un)mark route as to do": "No s'ha pogut afegir o retirar l'itinerari dels preferits",
+    "An error occurred, couldn't (un)mask version": "Hi ha hagut un error: no s'ha pogut (des)emmascarar la versió.",
     "An error occurred, couldn't save images": "No s'ha pogut desar la imatge",
     "Anonymity and confidentiality": "Anonimat i confidencialitat",
+    "Applications": "Aplicacions",
     "Are you sure you want to delete this document?": "Esteu segur/a de voler suprimir aquest document?",
     "Are you sure you want to delete this locale?": "Esteu segur de voler eliminar aquesta versió lingüística?",
     "Are you sure you want to merge?": "Esteu segur de voler-ho fusionar?",
@@ -70,17 +84,22 @@
       "Map controls": "Atribucions"
     },
     "Avalanche bulletins": "Butlletins d'allaus",
+    "Avalanche risk": "Risc d'allaus",
+    "Avalanche risk evaluation tool:": "Eina d'avaluació del risc d'allaus:",
     "Average slope (degrees)": "Pendent mitjà (graus)",
     "Average slope in degree": "Pendent mitjà en graus",
     "Back to code": "Torna al codi",
     "Back to edit mode": "Torna al mode d'edició",
+    "Back to the top": "Inici de la pàgina",
     "Base layer": "Fons de mapa",
+    "Base layers": "Fons de mapa",
     "Basemap (at)": {
       "Map layer": "Àustria"
     },
     "Basemap ortho (at)": {
       "Map layer": "Àustria Sat"
     },
+    "Be careful,": "Atenció,",
     "Be careful, in wet snow, no factor to reduce orientation or attendance can be applied.": "Compte, amb neu humida no es pot aplicar cap factor de reducció d'orientació o de freqüentació.",
     "Beginner": "Debutant",
     "Beginner Reduction Method": "mètode de reducció per a debutant",
@@ -88,10 +107,14 @@
     "Block account": "Bloqueja aquest usuari",
     "Bolted rock climbing gear": "Escalada esportiva de diversos llargs",
     "Book content": "Breu descripció del contingut del llibre",
+    "Books and websites not already associated to this route": "Indiqueu l'origen de la informació que no vingui de l'experiència personal. Un llibre o una revista haurien de disposar de la seva pròpia fitxa i associar-se al document (no mencionar-lo en aquest camp). Aquest camp serveix per als enllaços a d'altres llocs web, ressenyes en línia, blogs, fonts no difoses (llibreta a un refugi, bar o càmping), o informació complementària sobre els llibres de ressenyes (esquema erroni, etc.). Per activar els enllaços cal emprar els símbols < enllaç >.",
     "Both results and map": "Resultats i mapa",
+    "Bouldering climbing gear": "Escalada en bloc",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Descrigueu breument les eventuals ferides, i allò que faríeu avui, vist en perspectiva. Els comentaris que no encaixin als altres camps es poden entrar aquí.",
+    "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "Per defecte, el vostre pseudònim serà el vostre identificador a la guia de ressenyes. El podeu canviar lliurement a continuació dins de la configuració.",
     "By month": "Per mes",
     "By year": "Per any",
+    "Camptocamp Association": "Associació Camptocamp.org",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org té com a objectius compartir informació entre practicants d'esports de muntanya i contribuir a la seguretat a les activitats de muntanya.",
     "Cancel": "Cancel·la",
     "Candidates": "Totes les fotos",
@@ -100,6 +123,7 @@
     "Change password": "Canvia la contrasenya",
     "Checking...": "S'està verificant...",
     "Child": "Infant",
+    "Choose file": "Escolliu un fitxer",
     "Clear": "Esborra-ho",
     "Close": "Tanca",
     "Collapse": "Plega",
@@ -107,9 +131,14 @@
     "Comments are disabled.": "No s'autoritzen comentaris en aquest document.",
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Comunicació dels objectius i expectatives de cadascú, dels temors i observacions al llarg de la sortida, posta en comú per establir noves estratègies, elements de conducta de grup i de responsabilitats, grup acostumat a funcionar junt o no, objectiu conjunt, etc.",
     "Compare selected versions": "Compara les versions seleccionades",
+    "Compute one for a specific zone from the “Risk” tab": "Calculeu un risc per a una zona específica des de la pestanya \"Risc\"",
     "Compute risk": "Calcula el risc",
     "Conditions": "Condicions",
+    "Configure activity trackers": "Configuració dels rastrejadors d'activitat",
     "Configure cookies": "Configura les galetes",
+    "Configure layer": "Configura la capa",
+    "Configure your connection to external services like Strava or your GPS device application to easily retrieve geometries.": "Configureu aquí la connexió amb els serveis externs com ara Strava o l'aplicació del vostre dispositiu GPS per recuperar fàcilment les traces GPX de les vostres activitats.",
+    "Configured": "Configurat",
     "Confirm": "Confirma",
     "Confirm delete": "Confirmeu la supressió",
     "Conflict: version of document has changed": "El document ha estat modificant mentrestant i n'hi ha una versió més recent.",
@@ -120,9 +149,15 @@
     "Conflict: version of locale 'eu' has changed": "El document ha estat modificant mentrestant i n'hi ha una versió més recent.",
     "Conflict: version of locale 'fr' has changed": "El document ha estat modificant mentrestant i n'hi ha una versió més recent.",
     "Conflict: version of locale 'it' has changed": "El document ha estat modificant mentrestant i n'hi ha una versió més recent.",
+    "Conflict: version of locale 'sl' has changed": "El document ha estat modificat mentrestant i n'hi ha una versió més recent en eslovè.",
+    "Conflict: version of locale 'zh_CN' has changed": "El document ha estat modificat mentrestant i n'hi ha una versió més recent en xinès.",
     "Conflicting method and danger": "Mètode i nivell de perill incompatibles",
+    "Connect": "Connecta",
     "Contain invalid character(s)": {
       "API message": "Conté caràcters que no són vàlids"
+    },
+    "Contains consecutive special characters": {
+      "API message": "No pot contenir caràcters especials consecutius (-, _, .)"
     },
     "Continue the discussion": "Segueix la discussió",
     "Contribute to common knowledge": "Participeu a la construcció d'un saber col·lectiu",
@@ -139,9 +174,12 @@
       "yeti": "Crea"
     },
     "Create a new report": "Crea un nou informe",
+    "Create a simplified version of the geometry by reducing the amount of points": "Creeu una versió simplificada de la geometria reduint-ne el nombre de punts",
+    "Create the first version in the following lang": "Creeu la primera versió del document en la llengua següent",
     "Created on": "Creat el",
     "Creation?": "Creació?",
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "La vista actual del mapa no queda coberta per YETI. Només ho són els massissos muntanyosos de l'estat francès (delimitats per línies discontínues).",
+    "Current map view is too large. Please zoom to level": "La zona del mapa és massa gran. Feu zoom",
     "Current password": "Contrasenya actual",
     "Danger level": "Nivell de perill",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "El nivell de perill del butlletí d'allaus fa referència a totes les orientacions. La rosa dels vents distingeix els sectors crítics on el perill s'accentua.",
@@ -152,7 +190,10 @@
     "Danger rating - low": "Perill feble",
     "Danger rating - moderate": "Perill moderat",
     "Danger rating - very high": "Perill molt fort",
+    "Danger:": "Perill:",
+    "Dashboard": "Tauler de control:",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Dades tècniques, com l'orientació, el tipus de roca o la configuració general de l'itinerari (aresta, pilar, etc.)",
+    "Data-Avalanche": "Info-allaus",
     "Delete": {
       "yeti": "Eliminar"
     },
@@ -189,6 +230,7 @@
     "Differences between versions": "Diferències entre les versions",
     "Different high/low danger?": "Perill dalt/baix diferents?",
     "Directions (Google Maps)": "Indicacions (Google Maps)",
+    "Disabled at this zoom level": "Desactivat per a aquest nivell de zoom",
     "Disclaimer": "Advertiment",
     "Dispositions": "Disposicions",
     "Distance": "Distància",
@@ -204,6 +246,9 @@
     "Drop images here or click to upload": "Arrossegueu imatges aquí o cliqueu per carregar-ne",
     "Duration": "Durada",
     "Duration (hrs)": "Durada (h)",
+    "ESRI World Imagery": {
+      "Map layer": "Ortofoto ESRI"
+    },
     "EULA": "Acord de llicència d'usuari final",
     "Easy mountain climbing gear": "Alpinisme en roca de F a AD",
     "Easy snow ice mixed gear": "Alpinisme en neu/glaç/mixt de F a PD+",
@@ -212,8 +257,10 @@
       "yeti": "Edita"
     },
     "Edit a document": "Modifica el document",
+    "Edit and improve map on Openstreetmap.org": "Editar i millorar el mapa OpenStreetMap",
     "Edit associations": "Modifica les associacions",
     "Edit categories": "Modifica les categories",
+    "Edit mode": "Mode edició",
     "Edit titles": "Modifica els títols",
     "Elementary": "Elemental",
     "Elementary Reduction Method": "mètode de reducció per a debutant",
@@ -221,30 +268,48 @@
     "Elevation (m)": "Altitud (m)",
     "Elevation profile": "Perfil altimètric",
     "Email": "Correu electrònic",
+    "Enable drawing and editing features on map": "Activa el mode dibuix i l'edició de les línies del mapa",
+    "Ended by confusing suffix": {
+      "API message": "No ha de contenir cap sufix com ara '.json'"
+    },
     "Everything about ratings : difficulties, exposition...": "Entreu aquí totes les dades de l'itinerari (dificultat, exposició, qualitat de l'equipament, etc.)",
     "Expand": "Desplega",
     "Export": "Exporta",
     "Export route": "Exporta l'itinerari",
     "Export to CSV": "Exporta a csv",
     "FAQ?": "FAQs?",
+    "FF Vol Libre": "Federació francesa de vol lliure",
     "Fauna protection areas": "Zona de protecció de la fauna",
     "Fauna protection site:": "Indret de protecció de la fauna:",
     "Feel free to edit it.": "Editeu-ho",
     "Filter on map extent": "Limita la cerca al mapa visible",
     "Filter results": "Filtra",
+    "First character is invalid": {
+      "API message": "El primer caràcter ha de ser alfanumèric de l'alfabet llatí, inclòs el guió baix"
+    },
+    "Fit map to route": "Ajusta el mapa a l'itinerari",
+    "Fold section": "Plega la secció",
     "Followed users": "Usuaris seguits",
     "Forgot password?": "Contrasenya oblidada?",
     "Forum": "Fòrum",
     "Forum username": "Nom d'usuari del fòrum",
+    "Forum: a place to chat about technical matters, or just petty talk": "Un fòrum per tractar temes tècnics o per fer-la petar",
+    "From": "Des de",
     "From danger 3, consider the slopes which dominate the route": "A partir del nivell 3, tingueu en compte els pendents que dominen a l'itinerari",
     "From the interface": "Des de la interfase",
+    "Full bulletin": "Butlletí complet",
     "Fullname": "Nom complet",
     "GPS Track": "Traça GPS",
     "GPX file": "Fitxer GPX",
     "General information": "Informació general",
+    "Generate elevations": "Genera les altituds",
+    "Generate new elevations": "Genera noves altituds",
+    "Geographical data could not be retrieved": "No s'ha pogut recuperar la traça de l'activitat",
     "Geolocation": "Geolocalització",
+    "Get ready for your climb": "Prepareu la sortida",
     "Go back to YETI": "Torna a YETI",
     "Go to the previous page": "Torna a la pàgina anterior",
+    "Go to website": "Accedeix al lloc web",
     "Group": "Grup",
     "Group size": "Mida del grup",
     "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?": "S'havia establert un horari? S'havia respectat? La gestió del temps ha tingut influència sobre el desencadenament de l'esdeveniment?",
@@ -265,11 +330,18 @@
     "Home page feed parameters": "Paràmetre del fil d'activitat a la pàgina d'inici",
     "How is my testimony used ? How / why is it useful ?": "De què serveix el meu testimoni?",
     "I choose to cancel the outing": "Renuncio a sortir",
+    "I contribute": "Hi participo",
     "I have read and agree to the": "He llegit i accepto les",
     "I must not use slopes > 30°": "Renuncio als pendents > 30º",
     "I must not use slopes > 35°": "Renuncio als pendents > 35º",
     "I must not use slopes > 40°": "Renuncio als pendents > 40º",
     "I read and understood the interest and limitations of YETI": "He llegit i entenc l'interès i els límits de YETI",
+    "ICGC ortho (ca)": {
+      "Map layer": "Ortofoto ICGC (ca)"
+    },
+    "ICGC raster (ca)": {
+      "Map layer": "Mapa ICGC (ca)"
+    },
     "IGN Slopes": {
       "Map slopes layer": "Pendents IGN"
     },
@@ -288,10 +360,15 @@
     "Ice and dry climbing gear": "Escalada en gel i dry-tooling",
     "If the route does not exists in our base, you can create it.": "Si l'itinerari no existeix, el podeu crear",
     "If you can't see this email, please check your spam folder.": "Penseu a revisar l'spam si no trobeu aquest correu",
+    "If you change your email, a message will be sent to the new address provided. You have to follow the link within to confirm the email address change.": "Si canvieu l'adreça de correu electrònic, se us enviarà un missatge a la nova adreça. Haureu de clicar l'enllaç que conté per confirmar el canvi d'adreça.",
+    "Ignore year": "Ignora l'any",
     "Image could not be processed": "La imatge no ha pogut ser processada",
     "Image count": "Nombre d'imatges",
+    "Images are under license specified in the original document of each image": "Les imatges associades a aquesta pàgina estan disponibles sota la llicència especificada al document d'origen de cada imatge.",
     "Improve our understanding of risks": "Milloreu el coneixement dels riscos",
     "Incidents and accidents": "Incidents i accidents",
+    "Include image section": "Inclou-hi les imatges associades",
+    "Include summary": "Inclou-hi el resum",
     "Information about the terrain, like elevations, lengths...": "Dades relatives al terreny, com les alçades, la longitud, etc.",
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Informació sobre la localització de l'incident. Posicioneu la localització al mapa d'aquí sobre, encara que sigui de manera poc precisa (cas en què podeu donar més detalls en aquest camp). Després d'haver completat l'informe, podreu associar-hi un itinerari, un punt de pas o una sortida.",
     "Informations about the access": "Informació relativa a l'accés per carretera o amb transport públic",
@@ -300,13 +377,20 @@
     "Insert emoji": "Insereix una emoticona",
     "Insert image": "Insereix una imatge",
     "Insert link": "Insereix l'enllaç",
+    "Interpolate value should be a number > 0": "El valor d'interpolació ha de ser un nombre >0",
     "Invalid date": "Data no vàlida",
     "Invalid email address": {
       "API message": "Correu electrònic incorrecte"
     },
+    "Invalid value": "Valor no vàlid",
     "Issue report": "Alerta d'un problema",
+    "Join us": "Adherir-s'hi",
     "Know more about SERAC": "Més sobre SERAC",
     "Large group = 5 people and more": "Grup gran = 5 persones o més",
+    "Last activities": "Darreres activitats",
+    "Last character is invalid": {
+      "API message": "El darrer caràcter ha de ser una lletra o una xifra."
+    },
     "Last outings": "Darreres sortides",
     "Latitude": "Latitud",
     "Launch YETI": "Accedeix a YETI",
@@ -317,6 +401,7 @@
     "Leave fullscreen": "Surt del mode de pantalla completa",
     "Legend": "Llegenda",
     "Let's make our feedbacks valuable": "Donem valor al nostre feedback",
+    "Let's preserve our playground! I create an account on Outdoorvision to share my GPS tracks for the preservation and design of my practice sites in France.": "Preservem el nostre terreny de joc! Vull crear un compte a Outdoorvision per compartir-hi traces GPS per a la preservació i disseny dels llocs de pràctica a França.",
     "Licenses": "Llicències",
     "Lines chunks": "Segments de línies",
     "Links": "Enllaços",
@@ -653,6 +738,7 @@
       "area_types": "límit administratiu"
     },
     "advertisement": "publicitat",
+    "after:": "després:",
     "age": "edat",
     "aid_rating": "Dificultat en escalada artificial",
     "alpine_climbing": {
@@ -690,6 +776,9 @@
     },
     "at least one user required": {
       "API message": "Seleccioneu almenys un itinerari"
+    },
+    "auth-denied": {
+      "tracking": "L'autorització de connexió al servei ha estat refusada per l'usuari."
     },
     "author": "autor",
     "author_status": "Autor",
@@ -1118,6 +1207,7 @@
     "internal_witness": {
       "author_statuses": "testimoni directe"
     },
+    "is a non profit organization, where volunteers manage the camptocamp.org website": "és l'estructura de voluntaris sense ànim de lucre la que garanteix la gestió del lloc camptocamp.org",
     "isbn": "ISBN",
     "iso_speed": "Sensibilitat",
     "it": {
