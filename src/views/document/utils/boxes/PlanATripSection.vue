@@ -62,7 +62,7 @@
                     </select>
                   </template>
                   <template v-else-if="accessWaypoints.length === 1">
-                    <div class="single-waypoint">
+                    <div class="single-waypoint to-address">
                       {{ accessWaypoints[0].title }}
                     </div>
                   </template>
@@ -238,13 +238,11 @@
                 </div>
               </div>
 
-              <!-- Remplacer la partie affichage des détails de l'itinéraire -->
               <div class="journey-details" v-if="selectedJourney === journey">
                 <div class="journey-timeline">
-                  <!-- Première heure -->
                   <div class="timeline-item">
                     <div class="timeline-time">{{ formatTime(journey.departure_date_time) }}</div>
-                    <div class="timeline-icon">
+                    <div class="timeline-icon-beginning">
                       <img src="@/assets/img/boxes/start.svg" alt="start" />
                     </div>
                     <div class="timeline-content" v-if="activeTab === 'outbound'">
@@ -284,16 +282,20 @@
                           <i class="stop-circle"></i>
                         </div>
                         <div class="timeline-content">
-                          <div class="timeline-stop-name">Arrêt : {{ section.from?.name || 'Départ' }}</div>
+                          <div class="timeline-stop-name">
+                            <strong>Arrêt : </strong> {{ section.from?.name || 'Départ' }}
+                          </div>
                         </div>
                       </div>
 
                       <!-- Ligne de transport -->
                       <div class="timeline-item transport" :class="getTransportColorClass(section)">
                         <div class="timeline-content">
-                          <div class="timeline-line">Ligne : {{ section.display_informations?.code || '' }}</div>
+                          <div class="timeline-line">
+                            <strong>Ligne : </strong> {{ section.display_informations?.code || '' }}
+                          </div>
                           <div class="timeline-direction">
-                            Direction : {{ section.display_informations?.direction || '' }}
+                            <strong>Direction : </strong>{{ section.display_informations?.direction || '' }}
                           </div>
                           <div class="timeline-accessibility" v-if="section.display_informations?.equipments?.length">
                             <img
@@ -317,7 +319,9 @@
                           <i class="stop-circle"></i>
                         </div>
                         <div class="timeline-content">
-                          <div class="timeline-stop-name">Arrêt : {{ section.to?.name || 'Arrivée' }}</div>
+                          <div class="timeline-stop-name">
+                            <strong>Arrêt : </strong>{{ section.to?.name || 'Arrivée' }}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -326,7 +330,7 @@
                   <!-- Heure et adresse d'arrivée -->
                   <div class="timeline-item destination">
                     <div class="timeline-time">{{ formatTime(journey.arrival_date_time) }}</div>
-                    <div class="timeline-icon">
+                    <div class="timeline-icon-end">
                       <img src="@/assets/img/boxes/end.svg" alt="end" />
                     </div>
                     <div class="timeline-content" v-if="activeTab === 'outbound'">
@@ -1375,7 +1379,7 @@ export default {
   margin-top: 20px;
   display: flex;
   gap: 20px;
-  height: 650px;
+  min-height: 650px;
 
   .plan-trip-info {
     flex: 1;
@@ -1465,13 +1469,13 @@ export default {
                 width: 100%;
                 position: relative;
                 .from-address {
-                  margin-left: 10px;
+                  padding-left: 10px;
                   border: none;
                   outline: none;
-                  width: 88%;
                   text-overflow: ellipsis;
                   white-space: nowrap;
                   overflow: hidden;
+                  width: inherit;
                 }
                 .autocomplete-results {
                   position: absolute;
@@ -1523,6 +1527,9 @@ export default {
                 border-right: 1px solid lightgray;
                 font-weight: 600;
               }
+              .to-address {
+                padding-left: 10px;
+              }
               .chose-waypoint {
                 border: none;
                 margin-left: 10px;
@@ -1566,15 +1573,15 @@ export default {
 
               .date-input {
                 flex: 1;
-                padding: 12px 14px;
+                padding: 11px 13px;
                 padding-right: 8px;
                 width: 20px;
                 border: none;
                 outline: none;
-                font-size: 16px;
+                font-size: 15px;
                 color: #333;
                 background-color: white;
-                margin-right: 7px;
+                margin-right: 10px;
 
                 &::-webkit-calendar-picker-indicator {
                   opacity: 0;
@@ -1587,11 +1594,11 @@ export default {
 
               .hour-input {
                 flex: 1;
-                padding: 12px 12px;
+                padding: 11px 11px;
                 max-width: 76px;
                 border: none;
                 outline: none;
-                font-size: 16px;
+                font-size: 15px;
                 color: #333;
 
                 &::-webkit-calendar-picker-indicator {
@@ -1642,10 +1649,9 @@ export default {
           max-width: 650px;
           margin: 0 auto;
           padding: 15px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
           border-bottom-left-radius: 6px;
           border-bottom-right-radius: 6px;
-          border: solid 2px lightgray;
+          border: solid 1px lightgray;
           border-top: none;
           background-color: #fff;
 
@@ -1696,7 +1702,7 @@ export default {
               }
 
               &.transport {
-                padding-left: 26px;
+                padding-left: 22px;
                 margin-left: 52px;
                 padding-top: 10px;
                 padding-bottom: 10px;
@@ -1710,7 +1716,9 @@ export default {
               padding-top: 2px;
             }
 
-            .timeline-icon {
+            .timeline-icon,
+            .timeline-icon-beginning,
+            .timeline-icon-end {
               position: relative;
               z-index: 2;
               width: 32px;
@@ -1720,7 +1728,7 @@ export default {
               display: flex;
               align-items: center;
               justify-content: center;
-              margin: 0 15px 0 -22px;
+              margin: 0 15px 0 -45px;
 
               &.stop {
                 background-color: #fff;
@@ -1754,13 +1762,19 @@ export default {
               }
             }
 
+            .timeline-icon-beginning,
+            .timeline-icon-end {
+              margin: 0 15px 0 -22px;
+            }
+
             .timeline-content {
               flex: 1;
               padding-top: 2px;
 
               .timeline-address {
+                font-size: 15px;
+                margin-left: -8px;
                 font-weight: bold;
-                font-size: 16px;
               }
 
               .timeline-walking-info {
@@ -1768,6 +1782,7 @@ export default {
                 color: #757575;
                 display: flex;
                 align-items: center;
+                margin-left: -14px;
               }
 
               .timeline-stop-name {
@@ -1775,7 +1790,6 @@ export default {
               }
 
               .timeline-line {
-                font-weight: bold;
                 font-size: 15px;
               }
 
@@ -1855,7 +1869,6 @@ export default {
       }
       .itineraries-container {
         max-width: 490px;
-        overflow-y: auto;
         flex: 1;
         padding-right: 16px;
         transition: background-color 0.3s ease;
@@ -1955,6 +1968,7 @@ export default {
   .plan-trip-map {
     height: auto;
     width: 600px;
+    max-height: 650px;
     border: 1px solid lightgray;
     border-radius: 4px;
   }

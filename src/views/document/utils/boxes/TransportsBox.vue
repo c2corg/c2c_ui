@@ -10,7 +10,8 @@
         :class="{ 'is-active': activeSection === 'nearbyStops' }"
         @click="setActiveSection('nearbyStops')"
       >
-        <img class="public-transports-bus" src="@/assets/img/boxes/public_transport.svg" />
+        <img class="public-transports-bus default-icon" :src="require('@/assets/img/boxes/bus.svg')" />
+        <img class="public-transports-bus hover-icon" :src="require('@/assets/img/boxes/public_transport.svg')" />
         {{ $gettext('Show nearby stops') }}
       </button>
 
@@ -20,7 +21,8 @@
         :class="{ 'is-active': activeSection === 'planATrip' }"
         @click="setActiveSection('planATrip')"
       >
-        <img class="public-transports-bus" src="@/assets/img/boxes/itineraire.svg" />
+        <img class="public-transports-bus default-icon" :src="require('@/assets/img/boxes/itineraire-2.svg')" />
+        <img class="public-transports-bus hover-icon" :src="require('@/assets/img/boxes/itineraire.svg')" />
         {{ $gettext('Planifier un trajet de transport en commun') }}
       </button>
     </div>
@@ -42,7 +44,6 @@
       @has-protection-area="$emit('has-protection-area')"
     />
 
-    <!-- Future Second Section Component -->
     <plan-a-trip-section
       v-if="activeSection === 'planATrip'"
       :map-documents="mapDocuments"
@@ -322,16 +323,38 @@ export default {
     color: black;
     font-weight: 500;
     border: 1px solid lightgray;
+    position: relative;
 
     .public-transports-bus {
       width: 18px;
       height: 18px;
       margin-right: 8px;
+      transition: opacity 0.2s ease;
+    }
+
+    .default-icon {
+      opacity: 1;
+    }
+    .hover-icon {
+      position: absolute;
+      left: 12px; // Ajustez selon votre padding
+      opacity: 0;
+    }
+
+    &:hover,
+    &.is-active {
+      .default-icon {
+        opacity: 0;
+      }
+      .hover-icon {
+        opacity: 1;
+      }
     }
 
     &.is-active {
       background-color: #337ab7;
       border: none;
+      color: white;
     }
   }
 
