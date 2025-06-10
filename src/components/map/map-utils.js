@@ -244,7 +244,6 @@ export const getDocumentLineStyle = function (title, highlight, properties) {
       width: 5,
       zIndex: 1,
     };
-    console.log(properties.isWalking);
     if (properties.isWalking) {
       strokeConfig.lineDash = [8, 8];
     }

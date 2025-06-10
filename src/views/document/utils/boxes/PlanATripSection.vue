@@ -111,7 +111,7 @@
                       </ul>
                     </div>
                   </div>
-                  <button class="geolocalisation" @click="useCurrentLocation">
+                  <button class="geolocalisation geolocalisation-return" @click="useCurrentLocation">
                     <img class="geolocalisation-img" src="@/assets/img/boxes/geoloc.svg" />
                   </button>
                 </div>
@@ -160,21 +160,13 @@
             <p class="plan-trip-search-button-text">{{ $gettext('Calculer mon trajet aller') }}</p>
           </button>
 
-          <!-- <div class="calculated-duration" v-if="calculatedDuration">
+          <div class="calculated-duration" v-if="calculatedDuration && activeTab === 'return'">
             <div class="calculated-duration-number">
               Ce topoguide a une durée théorique estimée à {{ calculatedDuration.toFixed(2) }} jours.
             </div>
             <div class="calculated-duration-vigilant">
               Soyez vigilant à l'heure de départ pour votre trajet retour !
             </div>
-          </div> -->
-
-          <div v-if="showReturnWarning && activeTab === 'return'" class="return-warning">
-            <i class="warning-icon">⚠️</i>
-            <span
-              >Les horaires des transports en commun ne permettent peut-être pas de parcourir l'itinéraire
-              complet.</span
-            >
           </div>
 
           <div class="no-itineraries-container" v-if="noResult">
@@ -214,7 +206,7 @@
                         class="journey-step"
                       >
                         <div
-                          v-if="section.type === 'public_transport' || section.mode === 'on_demand_transport'"
+                          v-if="section.type === 'public_transport' || section.type === 'on_demand_transport'"
                           class="transport-icon"
                           :class="getTransportClass(section)"
                         >
@@ -284,7 +276,7 @@
                     </div>
 
                     <!-- Section transport en commun -->
-                    <div v-else-if="section.type === 'public_transport' || section.mode === 'on_demand_transport'">
+                    <div v-else-if="section.type === 'public_transport' || section.type === 'on_demand_transport'">
                       <!-- Arrêt de départ -->
                       <div class="timeline-item">
                         <div class="timeline-time">{{ formatTime(section.departure_date_time) }}</div>
@@ -389,6 +381,9 @@
 import { transform } from 'ol/proj';
 
 import start from '@/assets/img/boxes/geoloc-2.svg';
+import api from '@/js/apis/c2c';
+import c2c from '@/js/apis/c2c';
+import UserProfileService from '@/js/apis/c2c/UserProfileService';
 import photon from '@/js/apis/photon';
 import transportService from '@/js/apis/transport-service';
 import ol from '@/js/libs/ol';
@@ -454,14 +449,17 @@ export default {
         nonValidAddress: false,
       },
 
-      // Garder les autres propriétés existantes
+      userService: new UserProfileService(api),
       showReturnWarning: false,
       calculatedDuration: this.document.calculated_duration,
       transportColors: ['pink', 'orange', 'royalblue', 'purple', 'green', 'yellow', 'gray', 'salmon', 'teal', 'brown'],
       apiKey: 'eb6b9684-0714-4dd9-aba4-ce47c3368666',
-      reachableWaypoints: [], // Liste des waypoints desservis
-      loadingReachable: false, // État de chargement
+      reachableWaypoints: [],
+      loadingReachable: false,
     };
+  },
+  async mounted() {
+    await this.loadUserAddressIfLoggedIn();
   },
   computed: {
     accessWaypoints() {
@@ -1082,7 +1080,7 @@ export default {
 
     getRouteColor(section) {
       if (section.mode === 'walking') return 'blue';
-      if (section.type === 'public_transport' || section.mode === 'on_demand_transport') {
+      if (section.type === 'public_transport' || section.type === 'on_demand_transport') {
         const colorIndex = this.getTransportSectionIndex(section);
         return this.transportColors[colorIndex % this.transportColors.length];
       }
@@ -1178,17 +1176,14 @@ export default {
     },
 
     switchTab(tab) {
-      // Empêcher le changement vers retour si pas de résultats aller
       if (tab === 'return' && !this.canAccessReturnTab) {
         return;
       }
       this.activeTab = tab;
 
       if (tab === 'return' && !this.returnData.fromAddress && this.outboundData.selectedWaypoint) {
-        // Pour le retour : le point de départ devient le waypoint sélectionné
         this.returnData.selectedWaypoint = this.outboundData.selectedWaypoint;
 
-        // Et la destination devient l'adresse de départ de l'aller
         if (this.outboundData.fromAddress && this.outboundData.fromCoordinates) {
           this.returnData.fromAddress = this.outboundData.fromAddress;
           this.returnData.fromCoordinates = this.outboundData.fromCoordinates;
@@ -1324,6 +1319,51 @@ export default {
         if (isCurrentReachable) {
           this.returnData.selectedWaypoint = this.outboundData.selectedWaypoint;
         }
+      }
+    },
+
+    async loadUserAddressIfLoggedIn() {
+      if (!this.$user.isLogged) {
+        return;
+      }
+
+      try {
+        const profileResponse = await c2c.userProfile.getProfile(this.$user.id);
+        const profileData = profileResponse.data;
+
+        if (profileData.geometry && profileData.geometry.geom) {
+          const geomData = JSON.parse(profileData.geometry.geom);
+
+          if (geomData.type === 'Point' && geomData.coordinates) {
+            const [x, y] = geomData.coordinates;
+            const [lon, lat] = ol.proj.transform([x, y], 'EPSG:3857', 'EPSG:4326');
+            this.fromCoordinates = [lon, lat];
+
+            await this.reverseGeocodeUserLocation(lon, lat);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading user location:', error);
+      }
+    },
+
+    async reverseGeocodeUserLocation(lon, lat) {
+      try {
+        const response = await fetch(
+          `https://photon.komoot.io/reverse?lon=${lon}&lat=${lat}&lang=${this.$language.current}`
+        );
+        const data = await response.json();
+
+        if (data.features && data.features.length > 0) {
+          const location = data.features[0];
+          this.fromAddress = this.formatProposition(location);
+          this.selectedAddress = location;
+        } else {
+          this.fromAddress = `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+        }
+      } catch (error) {
+        console.error('Error during reverse geolocation:', error);
+        this.fromAddress = `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
       }
     },
   },
@@ -1462,6 +1502,9 @@ export default {
                   width: 18px;
                   display: flex;
                 }
+              }
+              .geolocalisation-return {
+                top: 52px;
               }
             }
             .from-container-return {
