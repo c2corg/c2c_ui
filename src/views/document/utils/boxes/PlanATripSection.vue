@@ -169,7 +169,7 @@
             </div>
           </div>
 
-          <div class="no-itineraries-container" v-if="noResult">
+          <div class="no-itineraries-container" :class="{ updating: isUpdating }" v-if="noResult">
             <div class="no-itineraries">
               <img class="no-itineraries-img" src="@/assets/img/boxes/transport_not_found.svg" />
               <div class="no-itineraries-text">
@@ -1528,7 +1528,8 @@ export default {
                 font-weight: 600;
               }
               .to-address {
-                padding-left: 10px;
+                padding-left: 9px;
+                color: black;
               }
               .chose-waypoint {
                 border: none;
@@ -1849,6 +1850,7 @@ export default {
       }
       .no-itineraries-container {
         border: 1px solid lightgrey;
+        position: relative;
         border-radius: 4px;
         max-width: 450px;
         .no-itineraries {
@@ -1912,7 +1914,8 @@ export default {
         }
       }
 
-      .itineraries-container.updating::before {
+      .itineraries-container.updating::before,
+      .no-itineraries-container.updating::before {
         content: '';
         position: absolute;
         top: 0;
