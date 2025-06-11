@@ -23,7 +23,7 @@
       >
         <img class="public-transports-bus default-icon" :src="require('@/assets/img/boxes/itineraire-2.svg')" />
         <img class="public-transports-bus hover-icon" :src="require('@/assets/img/boxes/itineraire.svg')" />
-        {{ $gettext('Planifier un trajet de transport en commun') }}
+        {{ $gettext('Plan a public transport trip') }}
       </button>
     </div>
 

@@ -3,7 +3,7 @@
     <div class="plan-trip-info">
       <div class="trip-tabs">
         <button class="tab-button" :class="{ active: activeTab === 'outbound' }" @click="switchTab('outbound')">
-          Trajet aller
+          {{ $gettext('Outbound trip') }}
         </button>
         <button
           class="tab-button"
@@ -14,11 +14,11 @@
           :disabled="!canAccessReturnTab"
           @click="switchTab('return')"
         >
-          Trajet retour
+          {{ $gettext('Return trip') }}
         </button>
       </div>
       <div class="plan-trip-content">
-        <h3 class="plan-trip-title">{{ $gettext('Planifier un trajet de transport en commun') }}</h3>
+        <h3 class="plan-trip-title">{{ $gettext('Plan a public transport trip') }}</h3>
 
         <div class="plan-trip-details">
           <div class="plan-trip-from-to">
@@ -26,7 +26,7 @@
               <!-- Trajet ALLER : De = adresse, À = waypoint -->
               <template v-if="activeTab === 'outbound'">
                 <div class="from-container">
-                  <div class="from-text">De</div>
+                  <div class="from-text">{{ $gettext('From') }}</div>
                   <div class="autocomplete-container">
                     <input
                       class="from-address"
@@ -34,7 +34,7 @@
                       @input="searchAddressPropositions"
                       @focus="showAddressPropositions = true"
                       @blur="handleBlur"
-                      placeholder="Entrez une adresse de départ"
+                      :placeholder="$gettext('Enter a departure address')"
                     />
                     <div class="autocomplete-results" v-if="showAddressPropositions && addressPropositions.length > 0">
                       <ul>
@@ -53,7 +53,7 @@
                   </button>
                 </div>
                 <div class="to-container">
-                  <div class="to-text">À</div>
+                  <div class="to-text">{{ $gettext('To') }}</div>
                   <template v-if="accessWaypoints.length > 1">
                     <select name="chose-waypoint" class="chose-waypoint" id="chose-waypoint" v-model="selectedWaypoint">
                       <option v-for="waypoint in accessWaypoints" :key="waypoint.id" :value="waypoint">
@@ -67,8 +67,8 @@
                     </div>
                   </template>
                   <template v-else>
-                    <div class="no-waypoint" v-if="loadingReachable">Chargement des points d'accès...</div>
-                    <div class="no-waypoint" v-else>Aucun point d'accès disponible</div>
+                    <div class="no-waypoint" v-if="loadingReachable">{{ $gettext('Loading access points...') }}</div>
+                    <div class="no-waypoint" v-else>{{ $gettext('No access points available') }}</div>
                   </template>
                 </div>
               </template>
@@ -76,7 +76,7 @@
               <!-- Trajet RETOUR : De = waypoint, À = adresse -->
               <template v-else>
                 <div class="to-container-return">
-                  <div class="to-text">De</div>
+                  <div class="to-text">{{ $gettext('From') }}</div>
                   <select
                     name="chose-waypoint"
                     class="chose-waypoint"
@@ -89,7 +89,7 @@
                   </select>
                 </div>
                 <div class="from-container-return">
-                  <div class="from-text">À</div>
+                  <div class="from-text">{{ $gettext('To') }}</div>
                   <div class="autocomplete-container">
                     <input
                       class="from-address"
@@ -121,7 +121,7 @@
 
           <div class="select-date-container">
             <div class="date-picker-container">
-              <label for="date-input">Date</label>
+              <label for="date-input">{{ $gettext('Date') }}</label>
               <div class="input-container">
                 <input type="date" id="date-input" class="date-input" v-model="selectedDate" />
                 <div class="calendar-icon">
@@ -131,17 +131,17 @@
             </div>
 
             <div class="date-picker-container">
-              <label for="date-input">Préférence</label>
+              <label for="date-input">{{ $gettext('Preference') }}</label>
               <div class="input-container">
                 <select name="preference" class="date-input" id="preference" v-model="timePreference">
-                  <option value="leave-after">Partir après</option>
-                  <option value="arrive-before">Arriver avant</option>
+                  <option value="leave-after">{{ $gettext('Leave after') }}</option>
+                  <option value="arrive-before">{{ $gettext('Arrive before') }}</option>
                 </select>
               </div>
             </div>
 
             <div class="date-picker-container hour-picker-container">
-              <label for="date-input">Heure</label>
+              <label for="date-input">{{ $gettext('Time') }}</label>
               <div class="input-container">
                 <input type="time" id="hour-input" class="hour-input" v-model="selectedTime" />
                 <div class="calendar-icon">
@@ -152,20 +152,21 @@
           </div>
 
           <div v-if="nonValidAddress" class="non-valid-address">
-            Veuillez sélectionner un départ et une destination.
+            {{ $gettext('Please select a departure and a destination.') }}
           </div>
 
           <button class="button is-primary plan-trip-search-button" @click="calculateRoute">
             <img class="" src="@/assets/img/boxes/itineraire.svg" />
-            <p class="plan-trip-search-button-text">{{ $gettext('Calculer mon trajet aller') }}</p>
+            <p class="plan-trip-search-button-text">{{ $gettext('Calculate my outbound trip') }}</p>
           </button>
 
           <div class="calculated-duration" v-if="calculatedDuration && activeTab === 'return'">
             <div class="calculated-duration-number">
-              Ce topoguide a une durée théorique estimée à {{ calculatedDuration.toFixed(2) }} jours.
+              {{ $gettext('This route guide has an estimated theoretical duration of') }}
+              {{ formatDurationForDisplay() }}.
             </div>
             <div class="calculated-duration-vigilant">
-              Soyez vigilant à l'heure de départ pour votre trajet retour !
+              {{ $gettext('Be mindful of the departure time for your return trip!') }}
             </div>
           </div>
 
@@ -173,9 +174,9 @@
             <div class="no-itineraries">
               <img class="no-itineraries-img" src="@/assets/img/boxes/transport_not_found.svg" />
               <div class="no-itineraries-text">
-                <div class="no-itineraries-found">Aucun itinéraire trouvé</div>
+                <div class="no-itineraries-found">{{ $gettext('No public transport found') }}</div>
                 <div class="no-itineraries-detail">
-                  Il semblerait que votre trajet ne puisse être réalisé à la date et aux horaires indiqués
+                  {{ $gettext("It seems your trip can't be completed on the selected date and and time") }}
                 </div>
               </div>
             </div>
@@ -234,7 +235,9 @@
                 </div>
 
                 <div class="itinerary-details-button">
-                  <button class="button is-info is-light" @click="showJourneyDetails(journey)">Voir le détail</button>
+                  <button class="button is-info is-light" @click="showJourneyDetails(journey)">
+                    {{ $gettext('View details') }}
+                  </button>
                 </div>
               </div>
 
@@ -268,7 +271,8 @@
                       </div>
                       <div class="timeline-content">
                         <div class="timeline-walking-info">
-                          {{ getDistance(section) }} mètres, {{ formatDuration(section.duration) }}
+                          {{ getDistance(section) }} {{ $gettext('Meter(s)').toLowerCase() }},
+                          {{ formatDuration(section.duration) }}
                         </div>
                       </div>
                     </div>
@@ -283,7 +287,7 @@
                         </div>
                         <div class="timeline-content">
                           <div class="timeline-stop-name">
-                            <strong>Arrêt : </strong> {{ section.from?.name || 'Départ' }}
+                            <strong>{{ $gettext('Stop') }} : </strong> {{ section.from?.name || 'Départ' }}
                           </div>
                         </div>
                       </div>
@@ -292,10 +296,11 @@
                       <div class="timeline-item transport" :class="getTransportColorClass(section)">
                         <div class="timeline-content">
                           <div class="timeline-line">
-                            <strong>Ligne : </strong> {{ section.display_informations?.code || '' }}
+                            <strong>{{ $gettext('Line') }} : </strong> {{ section.display_informations?.code || '' }}
                           </div>
                           <div class="timeline-direction">
-                            <strong>Direction : </strong>{{ section.display_informations?.direction || '' }}
+                            <strong>{{ $gettext('Direction') }} : </strong
+                            >{{ section.display_informations?.direction || '' }}
                           </div>
                           <div class="timeline-accessibility" v-if="section.display_informations?.equipments?.length">
                             <img
@@ -320,7 +325,7 @@
                         </div>
                         <div class="timeline-content">
                           <div class="timeline-stop-name">
-                            <strong>Arrêt : </strong>{{ section.to?.name || 'Arrivée' }}
+                            <strong>{{ $gettext('Stop') }} : </strong>{{ section.to?.name || 'Arrivée' }}
                           </div>
                         </div>
                       </div>
@@ -348,17 +353,17 @@
           <div class="time-modification-buttons" v-if="showTimeButton">
             <button class="modification-buttons" @click="departEarlier">
               <img src="@/assets/img/boxes/before.svg" alt="earlier" />
-              <span>Partir + tôt</span>
+              <span>{{ $gettext('Leave earlier') }}</span>
             </button>
 
             <button class="modification-buttons" @click="departLater">
               <img src="@/assets/img/boxes/after.svg" alt="later" />
-              <span>Partir + tard</span>
+              <span>{{ $gettext('Leave later') }}</span>
             </button>
 
             <button class="modification-buttons" @click="nextDay">
               <img src="@/assets/img/boxes/next_day.svg" alt="next day" />
-              <span>Jour suivant</span>
+              <span>{{ $gettext('Next day') }}</span>
             </button>
           </div>
         </div>
@@ -659,7 +664,6 @@ export default {
       return this.activeTab === 'outbound' ? 'Entrez une adresse de départ' : 'Entrez une adresse de départ (retour)';
     },
     canAccessReturnTab() {
-      // L'onglet retour est accessible seulement si l'aller a des résultats
       return this.outboundData.journeys.length > 0;
     },
   },
@@ -1373,6 +1377,21 @@ export default {
         console.error('Error during reverse geolocation:', error);
         this.fromAddress = `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
       }
+    },
+
+    formatDurationForDisplay() {
+      const durationInDays = this.document.durations?.length
+        ? Math.min(...this.document.durations)
+        : this.document.calculated_duration;
+
+      if (durationInDays < 1) {
+        const hours = durationInDays * 24;
+        const hoursInt = Math.floor(hours);
+        const minutes = Math.round((hours - hoursInt) * 60);
+        return `${hoursInt}h${minutes.toString().padStart(2, '0')}`;
+      }
+
+      return `${durationInDays} ${this.$gettext('Day(s)').toLowerCase()}`;
     },
   },
 };
