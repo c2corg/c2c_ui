@@ -388,6 +388,7 @@ import start from '@/assets/img/boxes/geoloc-2.svg';
 import api from '@/js/apis/c2c';
 import c2c from '@/js/apis/c2c';
 import UserProfileService from '@/js/apis/c2c/UserProfileService';
+import NavitiaService from '@/js/apis/navitia-service';
 import photon from '@/js/apis/photon';
 import transportService from '@/js/apis/transport-service';
 import ol from '@/js/libs/ol';
@@ -457,7 +458,6 @@ export default {
       showReturnWarning: false,
       calculatedDuration: this.document.calculated_duration,
       transportColors: ['pink', 'orange', 'royalblue', 'purple', 'green', 'yellow', 'gray', 'salmon', 'teal', 'brown'],
-      apiKey: 'eb6b9684-0714-4dd9-aba4-ce47c3368666',
       reachableWaypoints: [],
       loadingReachable: false,
     };
@@ -467,7 +467,7 @@ export default {
   },
   computed: {
     accessWaypoints() {
-      return this.reachableWaypoints.length > 0 ? this.reachableWaypoints : []; // Au cas où, même si vous dites qu'il y en a toujours au moins un
+      return this.reachableWaypoints.length > 0 ? this.reachableWaypoints : [];
     },
     mapDocuments() {
       const baseDocuments = this.document.associations.waypoints ? [this.document.associations.waypoints] : [];
@@ -771,7 +771,6 @@ export default {
       }
     },
 
-    /** Call Navitia with parameters (selected waypoint, from address, to address, date, time, preference) */
     async calculateRoute() {
       if (
         !this.selectedWaypoint ||
@@ -789,14 +788,14 @@ export default {
 
       if (this.activeTab === 'outbound') {
         // ALLER : De l'adresse vers le waypoint
-        fromCoords = `${this.fromCoordinates[0]};${this.fromCoordinates[1]}`;
-        toCoords = `${this.selectedWaypoint.coordinates[0]};${this.selectedWaypoint.coordinates[1]}`;
+        fromCoords = NavitiaService.formatCoordinates(this.fromCoordinates);
+        toCoords = NavitiaService.formatCoordinates(this.selectedWaypoint.coordinates);
         fromAddressDisplay = this.fromAddress;
         toAddressDisplay = this.selectedWaypoint.title;
       } else {
         // RETOUR : Du waypoint vers l'adresse
-        fromCoords = `${this.selectedWaypoint.coordinates[0]};${this.selectedWaypoint.coordinates[1]}`;
-        toCoords = `${this.fromCoordinates[0]};${this.fromCoordinates[1]}`;
+        fromCoords = NavitiaService.formatCoordinates(this.selectedWaypoint.coordinates);
+        toCoords = NavitiaService.formatCoordinates(this.fromCoordinates);
         fromAddressDisplay = this.selectedWaypoint.title;
         toAddressDisplay = this.fromAddress;
       }
@@ -807,28 +806,23 @@ export default {
         this.isUpdating = false;
       }, 600);
 
+      // Format datetime for Navitia API
       const dateTimeFormat = this.selectedDate.replace(/-/g, '') + 'T' + this.selectedTime.replace(':', '') + '00';
       const dateTimeRepresents = this.timePreference === 'arrive-before' ? 'arrival' : 'departure';
 
       try {
-        const response = await fetch(
-          `https://api.navitia.io/v1/journeys?from=${fromCoords}&to=${toCoords}&datetime=${dateTimeFormat}&datetime_represents=${dateTimeRepresents}`,
-          {
-            headers: {
-              Authorization: `${this.apiKey}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`Erreur HTTP: ${response.status}`);
-        }
+        const response = await NavitiaService.getJourneys({
+          from: fromCoords,
+          to: toCoords,
+          datetime: dateTimeFormat,
+          datetime_represents: dateTimeRepresents,
+        });
 
         console.log(
-          `https://api.navitia.io/v1/journeys?from=${fromCoords}&to=${toCoords}&datetime=${dateTimeFormat}&datetime_represents=${dateTimeRepresents}`
+          `Calling Navitia: from=${fromCoords}&to=${toCoords}&datetime=${dateTimeFormat}&datetime_represents=${dateTimeRepresents}`
         );
 
-        const data = await response.json();
+        const data = response.data;
         this.showTimeButton = true;
         const selectedDateFormatted = this.selectedDate.replace(/-/g, '');
 
@@ -855,12 +849,12 @@ export default {
 
           this.$emit('calculate-route', {
             from: {
-              address: this.fromAddress,
-              coordinates: this.fromCoordinates,
+              address: fromAddressDisplay,
+              coordinates: this.activeTab === 'outbound' ? this.fromCoordinates : this.selectedWaypoint.coordinates,
             },
             to: {
-              address: this.selectedWaypoint.title,
-              coordinates: this.selectedWaypoint.coordinates,
+              address: toAddressDisplay,
+              coordinates: this.activeTab === 'outbound' ? this.selectedWaypoint.coordinates : this.fromCoordinates,
             },
             date: this.selectedDate,
             time: this.selectedTime,
@@ -875,6 +869,16 @@ export default {
         console.error('Error retrieving routes:', error);
         this.noResult = true;
         this.journeys = [];
+
+        // Optionnel : gérer différents types d'erreurs
+        if (error.response?.status === 400) {
+          console.error('Paramètres invalides pour Navitia');
+        } else if (error.response?.status === 500) {
+          console.error("Erreur serveur lors de l'appel Navitia");
+        }
+      } finally {
+        clearTimeout(animationTimeout);
+        this.isUpdating = false;
       }
     },
 
@@ -1522,7 +1526,7 @@ export default {
               padding: 5px;
               border-radius: 4px;
               .to-text {
-                width: 32px;
+                width: 30px;
                 padding-left: 5px;
                 border-right: 1px solid lightgray;
                 font-weight: 600;
