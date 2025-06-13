@@ -1292,7 +1292,7 @@ export default {
 
         view.animate({
           center: coordinate,
-          zoom: Math.max(view.getZoom(), 15),
+          zoom: Math.max(view.getZoom(), 14),
           duration: 300,
         });
       }

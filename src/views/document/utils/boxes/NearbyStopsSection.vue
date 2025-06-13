@@ -1,6 +1,6 @@
 <template>
   <div class="public-transports-section">
-    <div class="public-transports-result">
+    <div v-if="showAccessibilityInfo" class="public-transports-result">
       <div class="stop-cards" ref="stopCardContainer">
         <div
           v-for="(stopGroup, stopName) in groupedStops"
@@ -8,8 +8,8 @@
           class="stop-card"
           :ref="'stopCard_' + stopGroup[0].id"
           :class="{ 'selected-stop': isStopGroupSelected(stopGroup) }"
-          @mouseover="$emit('select-stop-group', stopGroup)"
-          @click="$emit('see-line-details', stopGroup)"
+          @mouseover="selectStopGroup(stopGroup)"
+          @click="seeLineDetails(stopGroup)"
         >
           <div class="stop-header">
             <p>
@@ -50,6 +50,18 @@
       </div>
     </div>
 
+    <div v-if="!showAccessibilityInfo" class="public-transport-no-result">
+      <img class="public-transports-no-result-bus" src="@/assets/img/boxes/transport_not_found.svg" />
+      <div class="public-transport-no-result-text">
+        <strong>{{ $gettext('Unfortunately, this route may not be deserved by public transport') }}</strong>
+        <p>
+          {{
+            $gettext("We didn't find any public transport stop point in a 5 km foot range from any route access point.")
+          }}
+        </p>
+      </div>
+    </div>
+
     <div class="public-transports-map">
       <map-view
         ref="mapView"
@@ -68,51 +80,198 @@
 </template>
 
 <script>
+import transportService from '@/js/apis/transport-service';
+import { requireDocumentProperty } from '@/js/properties-mixins';
+
 export default {
   name: 'NearbyStopsSection',
+  mixins: [requireDocumentProperty],
   props: {
-    stops: {
-      type: Array,
-      required: true,
-    },
-    groupedStops: {
-      type: Object,
-      required: true,
-    },
-    missingTransportForWaypoint: {
-      type: Boolean,
-      default: false,
-    },
-    mapDocuments: {
-      type: Array,
-      required: true,
-    },
     document: {
       type: Object,
       required: true,
     },
-    selectedStop: {
-      type: Object,
-      default: null,
-    },
-    selectedStopGroup: {
+    mapDocuments: {
       type: Array,
-      default: null,
+      default: () => [],
     },
-    expandedStopGroups: {
-      type: Object,
-      default: () => ({}),
+  },
+  data() {
+    return {
+      stops: [],
+      stopDocuments: [],
+      showElevationProfile: false,
+      elevationProfileHasData: false,
+      selectedStop: null,
+      selectedStopGroup: null,
+      expandedLines: {},
+      showAccessibilityInfo: false,
+      missingTransportForWaypoint: false,
+      expandedStopGroups: {},
+    };
+  },
+  computed: {
+    accessWaypoints() {
+      if (!this.document.associations.waypoints || !Array.isArray(this.document.associations.waypoints)) {
+        return [];
+      }
+
+      const accessPoints = this.document.associations.waypoints.filter((doc) => doc && doc.waypoint_type === 'access');
+      const accessPointsCopy = JSON.parse(JSON.stringify(accessPoints));
+      console.log(accessPoints);
+
+      accessPointsCopy.forEach((doc) => {
+        if (doc.type === 'w') {
+          doc.type = 'z';
+        }
+
+        if (doc.maps && Array.isArray(doc.maps)) {
+          doc.maps.forEach((map) => {
+            if (map.type === 'w') {
+              map.type = 'z';
+            }
+          });
+        }
+      });
+
+      return accessPointsCopy;
     },
-    showElevationProfile: {
-      type: Boolean,
-      default: false,
+    groupedStops() {
+      return this.stops.reduce((acc, stop) => {
+        if (!acc[stop.stoparea_name]) {
+          acc[stop.stoparea_name] = [];
+        }
+        acc[stop.stoparea_name].push(stop);
+        return acc;
+      }, {});
     },
-    elevationProfileHasData: {
-      type: Boolean,
-      default: false,
+  },
+  watch: {
+    document: {
+      handler() {
+        this.processAccessWaypoints();
+      },
+      deep: true,
+      immediate: true,
+    },
+    stops: {
+      handler(newStops) {
+        if (newStops && newStops.length > 0) {
+          this.createStopDocuments();
+          this.$emit('stops-updated', this.stopDocuments);
+        }
+      },
+      deep: true,
     },
   },
   methods: {
+    processAccessWaypoints() {
+      const accessWaypoints = this.accessWaypoints;
+
+      if (accessWaypoints.length === 0) {
+        this.stops = [];
+        return;
+      }
+
+      this.fetchStopsForDocuments(accessWaypoints);
+    },
+    fetchStopsForDocuments(documents) {
+      transportService
+        .getStopareasForDocuments(documents)
+        .then((result) => {
+          documents.forEach((doc) => {
+            if (!result.documentResults[doc.document_id]) {
+              doc.public_transportation_rating = 'no service';
+            } else {
+              doc.public_transportation_rating = 'service available';
+            }
+          });
+
+          this.stops = result.stopareas.sort((a, b) => a.distance - b.distance);
+          this.missingTransportForWaypoint = result.missingTransportForWaypoint;
+          this.showAccessibilityInfo = this.stops.length > 0;
+          this.createStopDocuments();
+        })
+        .catch((error) => {
+          console.error('Erreur lors de la récupération des données :', error);
+          this.missingTransportForWaypoint = true;
+
+          documents.forEach((doc) => {
+            doc.public_transportation_rating = 'no service';
+          });
+        });
+    },
+    formattedDistance(distance) {
+      return `${distance.toFixed(3).replace('.', ',')} km`;
+    },
+    createStopDocuments() {
+      if (!this.stops || !this.stops.length) return;
+
+      if (this.accessWaypoints.length === 0) return;
+
+      this.stopDocuments = this.stops.reduce(
+        (uniqueStops, stop) => {
+          try {
+            if (!stop.coordinates || !stop.coordinates.x || !stop.coordinates.y) {
+              console.warn(`Stop ${stop.id} n'a pas de coordonnées valides:`, stop);
+              return uniqueStops;
+            }
+
+            const coordKey = `${stop.coordinates.x},${stop.coordinates.y}`;
+            if (uniqueStops.coordsMap[coordKey]) {
+              return uniqueStops;
+            }
+
+            const stopDoc = JSON.parse(JSON.stringify(this.accessWaypoints[0]));
+            stopDoc.document_id = stop.id;
+            stopDoc.type = 's';
+            if (stopDoc.locales && stopDoc.locales.length > 0) {
+              stopDoc.locales[0].title = '';
+            }
+            if (stopDoc.geometry) {
+              const geom = {
+                type: 'Point',
+                coordinates: [stop.coordinates.x, stop.coordinates.y],
+              };
+              stopDoc.geometry.geom = JSON.stringify(geom);
+            }
+            stopDoc.isStopPoint = true;
+            stopDoc.stopInfo = {
+              operator: stop.operator,
+              line: stop.line,
+              distance: stop.distance,
+            };
+
+            uniqueStops.coordsMap[coordKey] = true;
+            uniqueStops.docs.push(stopDoc);
+            return uniqueStops;
+          } catch (error) {
+            console.error(`Erreur lors de la création du document pour le stop ${stop.id}:`, error);
+            return uniqueStops;
+          }
+        },
+        { docs: [], coordsMap: {} }
+      ).docs;
+    },
+    selectStopGroup(stopGroup) {
+      this.selectedStopGroup = stopGroup;
+      this.selectedStop = stopGroup[0];
+      this.updateMap();
+    },
+    updateMap() {
+      if (this.selectedStop && this.$refs.mapView) {
+        this.$refs.mapView.highlightStop(this.selectedStop.id);
+        this.$refs.mapView.goAndZoomOnStop(this.selectedStop.id);
+      }
+    },
+
+    handleStopClicked(stopId) {
+      this.selectedStop = this.stops.find((stop) => stop.id === stopId);
+      this.selectedStopGroup = Object.values(this.groupedStops).find((group) =>
+        group.some((stop) => stop.id === stopId)
+      );
+    },
+
     isStopGroupSelected(stopGroup) {
       return (
         this.selectedStopGroup &&
@@ -120,66 +279,88 @@ export default {
       );
     },
 
+    toggleLineDetails(lineId) {
+      this.$set(this.expandedLines, lineId, !this.expandedLines[lineId]);
+    },
+
     isStopGroupExpanded(stopGroup) {
       const groupId = stopGroup[0].id;
       return this.expandedStopGroups[groupId] === true;
     },
 
-    handleStopClicked(stopId) {
-      this.$emit('stop-clicked', stopId);
+    seeLineDetails(stopGroup) {
+      const selection = window.getSelection();
+      if (selection && selection.toString().length > 0) {
+        return;
+      }
+
+      const groupId = stopGroup[0].id;
+      this.$set(this.expandedStopGroups, groupId, !this.expandedStopGroups[groupId]);
+
+      this.selectedStopGroup = stopGroup;
+      this.selectedStop = stopGroup[0];
+
+      this.$nextTick(() => {
+        const refName = 'stopCard_' + groupId;
+        if (this.$refs[refName] && this.$refs[refName][0]) {
+          this.$refs[refName][0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
     },
 
     handleDocumentHighlight(document) {
-      this.$emit('highlight-document', document);
-
       if (document && document.isStopPoint) {
         const stopId = document.document_id;
+        const stop = this.stops.find((s) => s.id === stopId);
+        if (stop) {
+          this.selectedStopGroup = Object.values(this.groupedStops).find((group) => group.some((s) => s.id === stopId));
+          this.selectedStop = stop;
 
-        this.$nextTick(() => {
-          const refName = 'stopCard_' + stopId;
-          const cardContainer = this.$refs.stopCardContainer;
-
-          if (this.$refs[refName] && this.$refs[refName][0] && cardContainer) {
-            const card = this.$refs[refName][0];
-
-            const containerRect = cardContainer.getBoundingClientRect();
-            const cardRect = card.getBoundingClientRect();
-
-            const isCardAbove = cardRect.top < containerRect.top;
-            const isCardBelow = cardRect.bottom > containerRect.bottom;
-
-            if (isCardAbove || isCardBelow) {
-              let newScrollTop;
-
-              if (isCardAbove) {
-                newScrollTop = cardContainer.scrollTop + (cardRect.top - containerRect.top) - 10;
-              } else {
-                newScrollTop = cardContainer.scrollTop + (cardRect.bottom - containerRect.bottom) + 10;
-              }
-
-              cardContainer.scrollTo({
-                top: newScrollTop,
-                behavior: 'smooth',
-              });
-            }
+          if (this.$refs.mapView) {
+            this.$refs.mapView.highlightStop(stopId);
           }
-        });
-      }
-    },
 
-    updateMap() {
-      if (this.selectedStop && this.$refs.mapView) {
-        this.$refs.mapView.highlightStop(this.selectedStop.id);
-        this.$refs.mapView.goAndZoomOnStop(this.selectedStop.id);
+          this.$nextTick(() => {
+            const refName = 'stopCard_' + stopId;
+            const cardContainer = this.$refs.stopCardContainer;
+
+            if (this.$refs[refName] && this.$refs[refName][0] && cardContainer) {
+              const card = this.$refs[refName][0];
+
+              const containerRect = cardContainer.getBoundingClientRect();
+              const cardRect = card.getBoundingClientRect();
+
+              const isCardAbove = cardRect.top < containerRect.top;
+              const isCardBelow = cardRect.bottom > containerRect.bottom;
+
+              if (isCardAbove || isCardBelow) {
+                let newScrollTop;
+
+                if (isCardAbove) {
+                  newScrollTop = cardContainer.scrollTop + (cardRect.top - containerRect.top) - 10;
+                } else {
+                  newScrollTop = cardContainer.scrollTop + (cardRect.bottom - containerRect.bottom) + 10;
+                }
+
+                cardContainer.scrollTo({
+                  top: newScrollTop,
+                  behavior: 'smooth',
+                });
+              }
+            }
+          });
+        }
+      } else {
+        this.selectedStopGroup = null;
+        this.selectedStop = null;
+
+        if (this.$refs.mapView) {
+          this.$refs.mapView.resetStopStyles();
+        }
       }
-    },
-  },
-  watch: {
-    selectedStop: {
-      handler() {
-        this.updateMap();
-      },
-      immediate: true,
+
+      // Transmettre l'événement au parent
+      this.$emit('highlight-document', document);
     },
   },
 };
@@ -296,6 +477,22 @@ export default {
     border: 1px solid lightgray;
     border-radius: 4px;
   }
+  .public-transport-no-result {
+    display: flex;
+    padding: 20px;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    margin-top: 20px;
+    gap: 30px;
+    align-items: center;
+    height: fit-content;
+
+    .public-transports-no-result-bus {
+      margin-left: 20px;
+      width: 100px;
+      height: 100px;
+    }
+  }
 }
 
 @media only screen and (max-width: 600px) {
@@ -315,6 +512,15 @@ export default {
   .missing-transports-warning {
     margin-top: 0px;
     margin-bottom: 10px;
+  }
+
+  .public-transport-no-result {
+    flex-direction: column;
+
+    .public-transports-no-result-bus {
+      margin-left: 0;
+      margin-bottom: 15px;
+    }
   }
 }
 </style>
