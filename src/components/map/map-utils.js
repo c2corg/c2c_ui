@@ -117,8 +117,58 @@ export const getDocumentPointStyle = function (document, title, highlight) {
   let color = null;
   let svgSrc = null;
 
+  if (type === 'start') {
+    const styles = [];
+
+    styles.push(
+      new ol.style.Style({
+        image: new ol.style.Circle({
+          radius: document.properties.radius || 10,
+          fill: new ol.style.Fill({
+            color: document.properties.color || '#4CAF50',
+          }),
+          stroke: new ol.style.Stroke({
+            color: 'white',
+            width: 2,
+          }),
+        }),
+        zIndex: highlight ? 101 : 60,
+      })
+    );
+
+    if (document.properties.image_url) {
+      styles.push(
+        new ol.style.Style({
+          image: new ol.style.Icon({
+            src: document.properties.image_url,
+            scale: 0.8,
+            anchor: [0.5, 0.5],
+          }),
+          zIndex: highlight ? 102 : 61,
+        })
+      );
+    }
+
+    return styles;
+  }
+
+  if (type === 'p') {
+    return new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: document.properties.radius || 5,
+        fill: new ol.style.Fill({
+          color: document.properties.color || '#ffffff',
+        }),
+        stroke: new ol.style.Stroke({
+          color: document.properties.border_color || '#000000',
+          width: document.properties.border_width || 1,
+        }),
+      }),
+      zIndex: highlight ? 101 : 50,
+    });
+  }
+
   if (!document.condition_rating) {
-    // Usual icon orange
     color = '#F93';
   } else {
     color = colorByConditionRating[document.condition_rating];
@@ -132,7 +182,6 @@ export const getDocumentPointStyle = function (document, title, highlight) {
       document.public_transportation_rating &&
       document.public_transportation_rating !== 'no service'
     ) {
-      // bulma green
       color = '#4baf50';
     }
     svgSrc = icon({ prefix: 'waypoint', iconName: document.waypoint_type || 'misc' }).html[0];
@@ -153,7 +202,6 @@ export const getDocumentPointStyle = function (document, title, highlight) {
       if (image instanceof ol.style.Circle) {
         image.getFill().setColor('rgba(255, 255, 255, 1)');
         image.getStroke().setColor('#4baf50');
-
         style.setZIndex(highlight ? 101 : 50);
       }
 
@@ -172,14 +220,36 @@ export const getDocumentPointStyle = function (document, title, highlight) {
   return buildPointStyle(title, svgSrc, color, highlight);
 };
 
-export const getDocumentLineStyle = function (title, highlight) {
-  if (highlight) {
+export const getDocumentLineStyle = function (title, highlight, properties) {
+  if (highlight && !properties) {
     return new ol.style.Style({
       stroke: new ol.style.Stroke({
         color: 'red',
         width: 3,
       }),
       text: buildTextStyle(title, highlight),
+    });
+  } else if (highlight && properties && properties.color) {
+    return new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: 'red',
+        width: 5,
+        zIndex: 1,
+      }),
+      text: buildTextStyle(properties.name, highlight),
+    });
+  } else if (properties && properties.color) {
+    const strokeConfig = {
+      color: properties.color,
+      width: 5,
+      zIndex: 1,
+    };
+    if (properties.isWalking) {
+      strokeConfig.lineDash = [8, 8];
+    }
+
+    return new ol.style.Style({
+      stroke: new ol.style.Stroke(strokeConfig),
     });
   } else {
     return [

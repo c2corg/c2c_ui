@@ -111,4 +111,8 @@ UserProfileService.prototype.validateRegisterEmail = function (nonce) {
   return this.api.post('/users/validate_register_email/' + nonce);
 };
 
+UserProfileService.prototype.getProfile = function (user_Id) {
+  return this.api.get(`/profiles/${user_Id}`);
+};
+
 export default UserProfileService;
