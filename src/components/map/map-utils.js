@@ -239,18 +239,29 @@ export const getDocumentLineStyle = function (title, highlight, properties) {
       text: buildTextStyle(properties.name, highlight),
     });
   } else if (properties && properties.color) {
-    const strokeConfig = {
-      color: properties.color,
-      width: 5,
-      zIndex: 1,
-    };
+    const strokeConfigs = [
+      {
+        color: 'white',
+        width: 7,
+        zIndex: 0,
+      },
+      {
+        color: properties.color,
+        width: 5,
+        zIndex: 1,
+      },
+    ];
     if (properties.isWalking) {
-      strokeConfig.lineDash = [8, 8];
+      strokeConfigs[1].lineDash = [8, 8];
+      strokeConfigs[0].lineDash = [8, 8];
     }
 
-    return new ol.style.Style({
-      stroke: new ol.style.Stroke(strokeConfig),
-    });
+    return strokeConfigs.map(
+      (config) =>
+        new ol.style.Style({
+          stroke: new ol.style.Stroke(config),
+        })
+    );
   } else {
     return [
       new ol.style.Style({

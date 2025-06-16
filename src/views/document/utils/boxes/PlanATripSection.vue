@@ -18,8 +18,6 @@
         </button>
       </div>
       <div class="plan-trip-content">
-        <h3 class="plan-trip-title">{{ $gettext('Plan a public transport trip') }}</h3>
-
         <div class="plan-trip-details">
           <div class="plan-trip-from-to">
             <div class="from-to-container">
@@ -462,13 +460,28 @@ export default {
       userService: new UserProfileService(api),
       showReturnWarning: false,
       calculatedDuration: this.document.calculated_duration,
-      transportColors: ['pink', 'orange', 'royalblue', 'purple', 'green', 'yellow', 'gray', 'salmon', 'teal', 'brown'],
+      transportColors: [
+        'fuchsia',
+        'orange',
+        'royalblue',
+        'purple',
+        'green',
+        'yellow',
+        'gray',
+        'salmon',
+        'teal',
+        'brown',
+      ],
       reachableWaypoints: [],
       loadingReachable: false,
     };
   },
   async mounted() {
     await this.loadUserAddressIfLoggedIn();
+    console.log(this.document.calculated_duration);
+    if (navigator.userAgent.toLowerCase().includes('firefox')) {
+      document.documentElement.classList.add('is-firefox');
+    }
   },
   computed: {
     accessWaypoints() {
@@ -911,9 +924,9 @@ export default {
       const mode = section.display_informations.commercial_mode?.toLowerCase() || '';
       if (mode.includes('bus')) return 'bus';
       if (mode.includes('tram')) return 'tram';
-      if (mode.includes('métro') || mode.includes('metro')) return 'Metro';
+      if (mode.includes('métro') || mode.includes('metro')) return 'tram';
       if (mode.includes('train')) return 'train';
-      if (mode.includes('car')) return 'car';
+      if (mode.includes('car')) return 'bus';
 
       return section.display_informations.code || '';
     },
@@ -926,9 +939,9 @@ export default {
 
       if (mode.includes('bus')) return 'bus';
       if (mode.includes('tram')) return 'tram';
-      if (mode.includes('métro') || mode.includes('metro')) return 'metro';
+      if (mode.includes('métro') || mode.includes('metro')) return 'tram';
       if (mode.includes('train')) return 'train';
-      if (mode.includes('car')) return 'car';
+      if (mode.includes('car')) return 'bus';
 
       return 'default-transport';
     },
@@ -999,6 +1012,7 @@ export default {
               duration: section.duration,
               color: this.getRouteColor(section),
               isWalking: isWalkingSection,
+              nonInteractive: true,
             },
           };
 
@@ -1023,6 +1037,7 @@ export default {
                 color: '#4CAF50',
                 radius: 12,
                 image_url: start,
+                nonInteractive: true,
               },
             };
 
@@ -1688,7 +1703,7 @@ export default {
               position: relative;
 
               &.transport-color-0 {
-                border-left: 3px solid pink;
+                border-left: 3px solid fuchsia;
               }
               &.transport-color-1 {
                 border-left: 3px solid orange;
@@ -1719,7 +1734,7 @@ export default {
               }
 
               &.walking {
-                border-left: 3px dotted lightgray;
+                border-left: 3px dotted #0000ff;
                 margin-left: 52px;
                 padding-top: 10px;
                 padding-bottom: 10px;
@@ -2015,5 +2030,8 @@ export default {
       margin-right: auto;
     }
   }
+}
+.is-firefox .calendar-icon {
+  display: none !important;
 }
 </style>
