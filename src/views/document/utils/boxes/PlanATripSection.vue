@@ -371,7 +371,7 @@
     <div class="plan-trip-map">
       <map-view
         ref="mapView"
-        :documents="mapDocuments.concat([document])"
+        :documents="filteredDocuments"
         :show-protection-areas="['r', 'w'].includes(document.type)"
         :biodiv-sports-activities="document.activities"
         :full-screen-element-id="
@@ -486,6 +486,20 @@ export default {
     }
   },
   computed: {
+    filteredDocuments() {
+      const filteredWaypoints =
+        this.document.associations.waypoints?.filter((waypoint) => waypoint.waypoint_type !== 'access') || [];
+
+      const mainDocument = {
+        ...this.document,
+        associations: {
+          ...this.document.associations,
+          waypoints: filteredWaypoints,
+        },
+      };
+
+      return this.mapDocuments.concat([mainDocument]);
+    },
     accessWaypoints() {
       return this.reachableWaypoints.length > 0 ? this.reachableWaypoints : [];
     },
@@ -502,6 +516,10 @@ export default {
               type: 'Point',
               coordinates: ol.proj.transform(waypoint.coordinates, 'EPSG:4326', 'EPSG:3857'),
             }),
+          },
+          properties: {
+            nonInteractive: true,
+            color: 'green',
           },
           locales: [{ title: waypoint.title, lang: this.$language.current }],
         };
@@ -1337,9 +1355,10 @@ export default {
 
       // Cas 3: Deux waypoints desservis (traversée)
       if (this.reachableWaypoints.length === 2) {
-        // MODIFICATION IMPORTANTE: On prend TOUJOURS le 2ème waypoint pour le retour
-        // (indépendamment du waypoint sélectionné pour l'aller)
-        this.returnData.selectedWaypoint = this.reachableWaypoints[1];
+        const outboundWaypointId = this.outboundData.selectedWaypoint?.id;
+        const returnWaypoint = this.reachableWaypoints.find((w) => w.id !== outboundWaypointId);
+
+        this.returnData.selectedWaypoint = returnWaypoint || this.reachableWaypoints[1];
         return;
       }
 
