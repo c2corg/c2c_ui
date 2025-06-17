@@ -66,7 +66,7 @@
                   </template>
                   <template v-else>
                     <div class="no-waypoint" v-if="loadingReachable">{{ $gettext('Loading access points...') }}</div>
-                    <div class="no-waypoint" v-else>{{ $gettext('No access points available') }}</div>
+                    <div class="no-waypoint to-address" v-else>{{ $gettext('No access points available') }}</div>
                   </template>
                 </div>
               </template>
@@ -247,7 +247,7 @@
                       <img src="@/assets/img/boxes/start.svg" alt="start" />
                     </div>
                     <div class="timeline-content" v-if="activeTab === 'outbound'">
-                      <div class="timeline-address">{{ fromAddress }}</div>
+                      <div class="timeline-address">{{ displayedFromAddress }}</div>
                     </div>
                     <div class="timeline-content" v-else>
                       <div class="timeline-address">{{ selectedWaypoint?.title || 'Destination' }}</div>
@@ -340,7 +340,7 @@
                       <div class="timeline-address">{{ selectedWaypoint?.title || 'Destination' }}</div>
                     </div>
                     <div class="timeline-content" v-else>
-                      <div class="timeline-address">{{ fromAddress }}</div>
+                      <div class="timeline-address">{{ displayedToAddress }}</div>
                     </div>
                   </div>
                 </div>
@@ -458,6 +458,8 @@ export default {
       },
 
       userService: new UserProfileService(api),
+      displayedFromAddress: '',
+      displayedToAddress: '',
       showReturnWarning: false,
       calculatedDuration: this.document.calculated_duration,
       transportColors: [
@@ -474,11 +476,11 @@ export default {
       ],
       reachableWaypoints: [],
       loadingReachable: false,
+      searchTimeout: null,
     };
   },
   async mounted() {
     await this.loadUserAddressIfLoggedIn();
-    console.log(this.document.calculated_duration);
     if (navigator.userAgent.toLowerCase().includes('firefox')) {
       document.documentElement.classList.add('is-firefox');
     }
@@ -666,15 +668,15 @@ export default {
 
     // Adapter les libellés selon l'onglet
     fromLabel() {
-      return this.activeTab === 'outbound' ? 'De' : 'De';
+      return this.activeTab === $gettext('From');
     },
 
     toLabel() {
-      return this.activeTab === 'outbound' ? 'À' : 'À';
+      return this.activeTab === $gettext('To');
     },
 
     fromPlaceholder() {
-      return this.activeTab === 'outbound' ? 'Entrez une adresse de départ' : 'Entrez une adresse de départ (retour)';
+      return this.activeTab === $gettext('View details');
     },
     canAccessReturnTab() {
       return this.outboundData.journeys.length > 0;
@@ -694,7 +696,20 @@ export default {
   methods: {
     /** Address auto-complete */
     async searchAddressPropositions() {
-      if (this.fromAddress?.length >= 3) {
+      // Annule le timeout précédent s'il existe
+      if (this.searchTimeout) {
+        clearTimeout(this.searchTimeout);
+      }
+
+      // Si le champ a moins de 3 caractères, on nettoie directement
+      if (this.fromAddress?.length < 3) {
+        this.showAddressPropositions = false;
+        this.addressPropositions = [];
+        return;
+      }
+
+      // Configure un nouveau timeout
+      this.searchTimeout = setTimeout(async () => {
         const center = this.$refs.mapView?.view?.getCenter();
         const centerWgs84 = center ? ol.proj.toLonLat(center) : null;
 
@@ -706,10 +721,7 @@ export default {
           console.error('Error searching for addresses:', error);
           this.addressPropositions = [];
         }
-      } else {
-        this.showAddressPropositions = false;
-        this.addressPropositions = [];
-      }
+      }, 600); // Délai de 800ms
     },
 
     /** Takes selected address proposition */
@@ -807,21 +819,16 @@ export default {
         // ALLER : De l'adresse vers le waypoint
         fromCoords = NavitiaService.formatCoordinates(this.fromCoordinates);
         toCoords = NavitiaService.formatCoordinates(this.selectedWaypoint.coordinates);
-        fromAddressDisplay = this.fromAddress;
-        toAddressDisplay = this.selectedWaypoint.title;
+        this.displayedFromAddress = this.fromAddress;
       } else {
         // RETOUR : Du waypoint vers l'adresse
         fromCoords = NavitiaService.formatCoordinates(this.selectedWaypoint.coordinates);
         toCoords = NavitiaService.formatCoordinates(this.fromCoordinates);
         fromAddressDisplay = this.selectedWaypoint.title;
-        toAddressDisplay = this.fromAddress;
+        this.displayedToAddress = this.fromAddress;
       }
 
       this.isUpdating = true;
-
-      const animationTimeout = setTimeout(() => {
-        this.isUpdating = false;
-      }, 600);
 
       // Format datetime for Navitia API
       const dateTimeFormat = this.selectedDate.replace(/-/g, '') + 'T' + this.selectedTime.replace(':', '') + '00';
@@ -834,10 +841,6 @@ export default {
           datetime: dateTimeFormat,
           datetime_represents: dateTimeRepresents,
         });
-
-        console.log(
-          `Calling Navitia: from=${fromCoords}&to=${toCoords}&datetime=${dateTimeFormat}&datetime_represents=${dateTimeRepresents}`
-        );
 
         const data = response.data;
         this.showTimeButton = true;
@@ -894,7 +897,6 @@ export default {
           console.error("Erreur serveur lors de l'appel Navitia");
         }
       } finally {
-        clearTimeout(animationTimeout);
         this.isUpdating = false;
       }
     },
@@ -928,7 +930,7 @@ export default {
       if (mode.includes('train')) return 'train';
       if (mode.includes('car')) return 'bus';
 
-      return section.display_informations.code || '';
+      return section.display_informations.code || 'bus';
     },
 
     /** Manage different spellings of transports */
@@ -943,7 +945,7 @@ export default {
       if (mode.includes('train')) return 'train';
       if (mode.includes('car')) return 'bus';
 
-      return 'default-transport';
+      return 'bus';
     },
 
     /** Get the selected access waypoint on the map */
@@ -983,7 +985,6 @@ export default {
 
       const routeDocuments = [];
       const journey = this.selectedRouteJourney;
-      console.log(journey);
 
       journey.sections.forEach((section, index) => {
         if (section.geojson) {
@@ -1322,29 +1323,39 @@ export default {
         return;
       }
 
-      // Cas 1: Un seul waypoint desservi
+      // Cas 1: Aucun waypoint desservi
+      if (this.reachableWaypoints.length === 0) {
+        this.returnData.selectedWaypoint = null;
+        return;
+      }
+
+      // Cas 2: Un seul waypoint desservi (itinéraire en boucle)
       if (this.reachableWaypoints.length === 1) {
         this.returnData.selectedWaypoint = this.reachableWaypoints[0];
         return;
       }
 
-      // Cas 2: Deux waypoints desservis
+      // Cas 3: Deux waypoints desservis (traversée)
       if (this.reachableWaypoints.length === 2) {
-        // Si le waypoint d'arrivée de l'aller est le premier, prendre le deuxième
-        if (this.outboundData.selectedWaypoint?.id === this.reachableWaypoints[0].id) {
-          this.returnData.selectedWaypoint = this.reachableWaypoints[1];
-        } else {
-          this.returnData.selectedWaypoint = this.reachableWaypoints[0];
-        }
+        // MODIFICATION IMPORTANTE: On prend TOUJOURS le 2ème waypoint pour le retour
+        // (indépendamment du waypoint sélectionné pour l'aller)
+        this.returnData.selectedWaypoint = this.reachableWaypoints[1];
         return;
       }
 
-      // Cas 3: Plus de deux waypoints desservis - laisser l'utilisateur choisir
-      // Cas 4: Certains waypoints non desservis - prendre celui de l'aller s'il est desservi
+      // Cas 4: Plus de deux waypoints desservis - laisser l'utilisateur choisir
+      if (this.reachableWaypoints.length > 2) {
+        this.returnData.selectedWaypoint = null; // Reset pour forcer la sélection manuelle
+        return;
+      }
+
+      // Cas 5: Certains waypoints non desservis - prendre celui de l'aller s'il est desservi
       if (this.outboundData.selectedWaypoint) {
         const isCurrentReachable = this.reachableWaypoints.some((w) => w.id === this.outboundData.selectedWaypoint.id);
         if (isCurrentReachable) {
           this.returnData.selectedWaypoint = this.outboundData.selectedWaypoint;
+        } else {
+          this.returnData.selectedWaypoint = null;
         }
       }
     },
@@ -1395,7 +1406,15 @@ export default {
     },
 
     formatDurationForDisplay() {
-      const durationInDays = this.document.durations?.length
+      // Priorité à la durée calculée si la durée minimale est exactement 1 jour
+      const shouldUseCalculated =
+        this.document.durations?.length &&
+        Math.min(...this.document.durations) === 1 &&
+        this.document.calculated_duration;
+
+      const durationInDays = shouldUseCalculated
+        ? this.document.calculated_duration
+        : this.document.durations?.length
         ? Math.min(...this.document.durations)
         : this.document.calculated_duration;
 
@@ -1404,6 +1423,11 @@ export default {
         const hoursInt = Math.floor(hours);
         const minutes = Math.round((hours - hoursInt) * 60);
         return `${hoursInt}h${minutes.toString().padStart(2, '0')}`;
+      }
+
+      // Format spécial quand la durée est exactement 1 jour
+      if (durationInDays === 1) {
+        return `1 ${this.$gettext('Day').toLowerCase()}`;
       }
 
       return `${durationInDays} ${this.$gettext('Day(s)').toLowerCase()}`;
