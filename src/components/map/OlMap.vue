@@ -1093,7 +1093,18 @@ export default {
       if (feature) {
         const document = feature.get('document');
 
-        if (document && document.properties.nonInteractive) {
+        if (
+          document &&
+          document.properties &&
+          document.properties.nonInteractive &&
+          document.type === 'w' &&
+          document.waypoint_type === 'access'
+        ) {
+          this.$emit('waypoint-clicked', document);
+          return;
+        }
+
+        if (document && document.properties && document.properties.nonInteractive) {
           return;
         }
 

@@ -178,9 +178,10 @@ export const getDocumentPointStyle = function (document, title, highlight) {
     svgSrc = svgSrcByDocumentType[type];
   } else if (type === 'w') {
     if (
-      document.waypoint_type === 'access' &&
-      document.public_transportation_rating &&
-      document.public_transportation_rating !== 'no service'
+      (document.waypoint_type === 'access' &&
+        document.public_transportation_rating &&
+        document.public_transportation_rating !== 'no service') ||
+      (document.properties && document.properties.color == 'green')
     ) {
       color = '#4baf50';
     }
