@@ -57,23 +57,38 @@ export const buildDiffStyle = function (isOld) {
 const buildPointStyle = function (title, svgSrc, color, highlight) {
   const imgSize = highlight ? 30 : 20;
   const circleRadius = highlight ? 20 : 15;
+  const zIndexValue = highlight ? 101 : 1;
+
+  if (svgSrc.includes('bus')) {
+    svgSrc = svgSrc.replace('fill="currentColor"', 'fill="white"');
+  } else {
+    svgSrc = svgSrc.replace('fill="currentColor"', `fill="${color}"`);
+  }
 
   svgSrc = svgSrc.replace('<svg ', `<svg width="${imgSize}px" height="${imgSize}px" `);
-  svgSrc = svgSrc.replace('fill="currentColor"', `fill="${color}"`);
 
   const iconStyle = new ol.style.Style({
     image: new ol.style.Icon({
       src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSrc),
     }),
     text: buildTextStyle(title, highlight),
+    zIndex: zIndexValue + 1,
   });
+
+  let circleFillColor = 'rgba(255, 255, 255, 0.5)';
+  let circleStrokeColor = '#ddd';
+
+  if (svgSrc.includes('bus')) {
+    circleFillColor = highlight ? '#4baf50' : '#337ab7';
+  }
 
   const circleStyle = new ol.style.Style({
     image: new ol.style.Circle({
       radius: circleRadius,
-      fill: new ol.style.Fill({ color: 'rgba(255, 255, 255, 0.5)' }),
-      stroke: new ol.style.Stroke({ color: '#ddd', width: 2 }),
+      fill: new ol.style.Fill({ color: circleFillColor }),
+      stroke: new ol.style.Stroke({ color: circleStrokeColor, width: 2 }),
     }),
+    zIndex: zIndexValue,
   });
 
   return [circleStyle, iconStyle];
@@ -85,6 +100,8 @@ const svgSrcByDocumentType = {
   r: icon({ prefix: 'fas', iconName: 'route' }).html[0],
   u: icon({ prefix: 'fas', iconName: 'user' }).html[0],
   x: icon({ prefix: 'fas', iconName: 'flag-checkered' }).html[0],
+  s: icon({ prefix: 'fas', iconName: 'bus' }).html[0],
+  z: icon({ prefix: 'waypoint', iconName: 'access' }).html[0],
 };
 
 const colorByConditionRating = {
@@ -100,25 +117,101 @@ export const getDocumentPointStyle = function (document, title, highlight) {
   let color = null;
   let svgSrc = null;
 
+  if (type === 'start') {
+    const styles = [];
+
+    styles.push(
+      new ol.style.Style({
+        image: new ol.style.Circle({
+          radius: document.properties.radius || 10,
+          fill: new ol.style.Fill({
+            color: document.properties.color || '#4CAF50',
+          }),
+          stroke: new ol.style.Stroke({
+            color: 'white',
+            width: 2,
+          }),
+        }),
+        zIndex: highlight ? 101 : 60,
+      })
+    );
+
+    if (document.properties.image_url) {
+      styles.push(
+        new ol.style.Style({
+          image: new ol.style.Icon({
+            src: document.properties.image_url,
+            scale: 0.8,
+            anchor: [0.5, 0.5],
+          }),
+          zIndex: highlight ? 102 : 61,
+        })
+      );
+    }
+
+    return styles;
+  }
+
+  if (type === 'p') {
+    return new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: document.properties.radius || 5,
+        fill: new ol.style.Fill({
+          color: document.properties.color || '#ffffff',
+        }),
+        stroke: new ol.style.Stroke({
+          color: document.properties.border_color || '#000000',
+          width: document.properties.border_width || 1,
+        }),
+      }),
+      zIndex: highlight ? 101 : 50,
+    });
+  }
+
   if (!document.condition_rating) {
-    // Usual icon orange
     color = '#F93';
   } else {
     color = colorByConditionRating[document.condition_rating];
   }
 
-  if (type === 'i' || type === 'u' || type === 'x' || type === 'o' || type === 'r') {
+  if (type === 'i' || type === 'u' || type === 'x' || type === 'o' || type === 'r' || type === 's') {
     svgSrc = svgSrcByDocumentType[type];
   } else if (type === 'w') {
     if (
-      document.waypoint_type === 'access' &&
-      document.public_transportation_rating &&
-      document.public_transportation_rating !== 'no service'
+      (document.waypoint_type === 'access' &&
+        document.public_transportation_rating &&
+        document.public_transportation_rating !== 'no service') ||
+      (document.properties && document.properties.color == 'green')
     ) {
-      // bulma green
       color = '#4baf50';
     }
     svgSrc = icon({ prefix: 'waypoint', iconName: document.waypoint_type || 'misc' }).html[0];
+  } else if (type === 'z') {
+    svgSrc = svgSrcByDocumentType['z'] || icon({ prefix: 'waypoint', iconName: 'access' }).html[0];
+
+    if (document.public_transportation_rating && document.public_transportation_rating !== 'no service') {
+      color = '#4baf50';
+    } else {
+      color = '#F93';
+    }
+
+    const styles = buildPointStyle(title, svgSrc, color, highlight);
+
+    styles.forEach((style) => {
+      const image = style.getImage();
+
+      if (image instanceof ol.style.Circle) {
+        image.getFill().setColor('rgba(255, 255, 255, 1)');
+        image.getStroke().setColor('#4baf50');
+        style.setZIndex(highlight ? 101 : 50);
+      }
+
+      if (image instanceof ol.style.Icon) {
+        style.setZIndex(highlight ? 102 : 51);
+      }
+    });
+
+    return styles;
   } else if (type === 'a') {
     return new ol.style.Style();
   } else {
@@ -128,8 +221,8 @@ export const getDocumentPointStyle = function (document, title, highlight) {
   return buildPointStyle(title, svgSrc, color, highlight);
 };
 
-export const getDocumentLineStyle = function (title, highlight) {
-  if (highlight) {
+export const getDocumentLineStyle = function (title, highlight, properties) {
+  if (highlight && !properties) {
     return new ol.style.Style({
       stroke: new ol.style.Stroke({
         color: 'red',
@@ -137,6 +230,39 @@ export const getDocumentLineStyle = function (title, highlight) {
       }),
       text: buildTextStyle(title, highlight),
     });
+  } else if (highlight && properties && properties.color) {
+    return new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: 'red',
+        width: 5,
+        zIndex: 1,
+      }),
+      text: buildTextStyle(properties.name, highlight),
+    });
+  } else if (properties && properties.color) {
+    const strokeConfigs = [
+      {
+        color: 'white',
+        width: 7,
+        zIndex: 0,
+      },
+      {
+        color: properties.color,
+        width: 5,
+        zIndex: 1,
+      },
+    ];
+    if (properties.isWalking) {
+      strokeConfigs[1].lineDash = [8, 8];
+      strokeConfigs[0].lineDash = [8, 8];
+    }
+
+    return strokeConfigs.map(
+      (config) =>
+        new ol.style.Style({
+          stroke: new ol.style.Stroke(config),
+        })
+    );
   } else {
     return [
       new ol.style.Style({

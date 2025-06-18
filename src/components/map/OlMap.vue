@@ -856,13 +856,12 @@ export default {
         feature.set('document', document);
         feature.setId(document.document_id);
       }
-
       if (document.geometry.geom_detail) {
         this.addFeature(
           source,
           JSON.parse(document.geometry.geom_detail),
-          style ?? getDocumentLineStyle(title, false),
-          style ? null : getDocumentLineStyle(title, true)
+          style ?? getDocumentLineStyle(title, false, document.properties),
+          style ? null : getDocumentLineStyle(title, true, document.properties)
         ).set('document', document);
       }
     },
@@ -1064,7 +1063,6 @@ export default {
         resultFeature = feature;
         return true;
       });
-
       this.setHighlightedFeature(resultFeature);
       this.$emit('highlight-document', resultFeature ? resultFeature.get('document') : null);
     },
@@ -1094,6 +1092,30 @@ export default {
 
       if (feature) {
         const document = feature.get('document');
+
+        if (
+          document &&
+          document.properties &&
+          document.properties.nonInteractive &&
+          document.type === 'w' &&
+          document.waypoint_type === 'access'
+        ) {
+          this.$emit('waypoint-clicked', document);
+          return;
+        }
+
+        if (document && document.properties && document.properties.nonInteractive) {
+          return;
+        }
+
+        if (document && document.type === 'z') {
+          this.$emit('waypoint-clicked', document);
+          return;
+        }
+        if (document && document.type === 's') {
+          this.$emit('stop-clicked', document.document_id);
+          return;
+        }
         if (document) {
           if (this.documents.length === 1 && document.document_id === this.documents[0].document_id) {
             return;
@@ -1255,6 +1277,137 @@ export default {
         ol.proj.get('EPSG:4326')
       );
       this.editMapLink = `https://www.openstreetmap.org/#map=13/${coords[1]}/${coords[0]}`;
+    },
+
+    /** Set the style for the highlighted points (hover) */
+    highlightStop(stopId) {
+      this.resetStopStyles();
+      const stopFeature = this.findStopPoint(stopId);
+
+      if (!stopFeature) {
+        console.warn(`Stop with ID ${stopId} not found.`);
+        return;
+      }
+
+      const title = stopFeature.get('document').stoparea_name;
+      stopFeature.setStyle(getDocumentPointStyle(stopFeature.get('document'), title, true));
+    },
+
+    /** Zoom and move the map to a point */
+    goAndZoomOnStop(stopId) {
+      const stopFeature = this.findStopPoint(stopId);
+
+      if (!stopFeature) {
+        console.warn(`Stop with ID ${stopId} not found.`);
+        return;
+      }
+      const geometry = stopFeature.getGeometry();
+      if (geometry) {
+        const coordinate = geometry.getCoordinates();
+
+        const view = this.map.getView();
+        view.cancelAnimations();
+
+        view.animate({
+          center: coordinate,
+          zoom: Math.max(view.getZoom(), 14),
+          duration: 300,
+        });
+      }
+    },
+
+    /** Center and zoom in/out the map depending on all elements on the map (points, multilines, etc.) */
+    recenterOnDocuments() {
+      if (!this.map || !this.documents || this.documents.length === 0) {
+        console.warn('Cannot recenter - map or documents not available');
+        return;
+      }
+
+      const extent = [Infinity, Infinity, -Infinity, -Infinity];
+
+      this.documents.forEach((doc) => {
+        try {
+          if (doc.geometry?.geom_detail) {
+            const geom = JSON.parse(doc.geometry.geom_detail);
+
+            if (geom.type === 'LineString' && geom.coordinates?.length > 0) {
+              geom.coordinates.forEach((coord) => {
+                const [x, y] =
+                  Math.abs(coord[0]) <= 180 && Math.abs(coord[1]) <= 90
+                    ? ol.proj.transform([coord[0], coord[1]], 'EPSG:4326', 'EPSG:3857')
+                    : [coord[0], coord[1]];
+
+                extent[0] = Math.min(extent[0], x);
+                extent[1] = Math.min(extent[1], y);
+                extent[2] = Math.max(extent[2], x);
+                extent[3] = Math.max(extent[3], y);
+              });
+            }
+          }
+        } catch (e) {
+          console.error('Error processing document geometry:', e);
+        }
+      });
+
+      if (extent[0] !== Infinity && extent[2] !== -Infinity) {
+        const padding = 50;
+        const mapSize = this.map.getSize();
+        const ratio = padding / Math.min(mapSize[0], mapSize[1]);
+
+        const width = extent[2] - extent[0];
+        const height = extent[3] - extent[1];
+
+        const paddedExtent = [
+          extent[0] - width * ratio,
+          extent[1] - height * ratio,
+          extent[2] + width * ratio,
+          extent[3] + height * ratio,
+        ];
+
+        this.map.getView().fit(paddedExtent, {
+          duration: 1000,
+          maxZoom: 18,
+        });
+      } else {
+        this.map.getView().fit(DEFAULT_EXTENT);
+        console.warn('No valid geometries found - using default extent');
+      }
+    },
+
+    /** Set map elements to their normal graphic style (unhighlight) */
+    resetStopStyles() {
+      const documentsSource = this.documentsLayer.getSource();
+      const waypointsSource = this.waypointsLayer.getSource();
+
+      documentsSource.forEachFeature((feature) => {
+        if (feature.values_.document.type !== 'w' && feature.values_.document.type !== 'z') {
+          feature.setStyle(feature.get('normalStyle'));
+        }
+      });
+
+      waypointsSource.forEachFeature((feature) => {
+        feature.setStyle(feature.get('normalStyle'));
+      });
+    },
+
+    /** Find the object of the stop based on its Id */
+    findStopPoint(stopId) {
+      const documentsSource = this.documentsLayer.getSource();
+      const documentFeature = documentsSource.getFeatureById(stopId);
+
+      if (documentFeature) {
+        return documentFeature;
+      }
+
+      const waypointsSource = this.waypointsLayer.getSource();
+      const waypointFeature = waypointsSource.getFeatureById(stopId);
+
+      if (waypointFeature) {
+        return waypointFeature;
+      }
+
+      console.warn(`Stop with ID ${stopId} not found.`);
+      return null;
     },
   },
 };
