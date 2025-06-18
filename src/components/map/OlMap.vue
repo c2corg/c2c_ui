@@ -1279,6 +1279,7 @@ export default {
       this.editMapLink = `https://www.openstreetmap.org/#map=13/${coords[1]}/${coords[0]}`;
     },
 
+    /** Set the style for the highlighted points (hover) */
     highlightStop(stopId) {
       this.resetStopStyles();
       const stopFeature = this.findStopPoint(stopId);
@@ -1292,6 +1293,7 @@ export default {
       stopFeature.setStyle(getDocumentPointStyle(stopFeature.get('document'), title, true));
     },
 
+    /** Zoom and move the map to a point */
     goAndZoomOnStop(stopId) {
       const stopFeature = this.findStopPoint(stopId);
 
@@ -1314,6 +1316,7 @@ export default {
       }
     },
 
+    /** Center and zoom in/out the map depending on all elements on the map (points, multilines, etc.) */
     recenterOnDocuments() {
       if (!this.map || !this.documents || this.documents.length === 0) {
         console.warn('Cannot recenter - map or documents not available');
@@ -1371,6 +1374,7 @@ export default {
       }
     },
 
+    /** Set map elements to their normal graphic style (unhighlight) */
     resetStopStyles() {
       const documentsSource = this.documentsLayer.getSource();
       const waypointsSource = this.waypointsLayer.getSource();
@@ -1386,6 +1390,7 @@ export default {
       });
     },
 
+    /** Find the object of the stop based on its Id */
     findStopPoint(stopId) {
       const documentsSource = this.documentsLayer.getSource();
       const documentFeature = documentsSource.getFeatureById(stopId);

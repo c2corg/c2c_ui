@@ -111,6 +111,7 @@ export default {
     };
   },
   computed: {
+    /** Copy access points to customize them */
     accessWaypoints() {
       if (!this.document.associations.waypoints || !Array.isArray(this.document.associations.waypoints)) {
         return [];
@@ -136,6 +137,8 @@ export default {
 
       return accessPointsCopy;
     },
+
+    /** Each stop can have multiple lines */
     groupedStops() {
       return this.stops.reduce((acc, stop) => {
         if (!acc[stop.stoparea_name]) {
@@ -165,6 +168,7 @@ export default {
     },
   },
   methods: {
+    /** Fetch access waypoints */
     processAccessWaypoints() {
       const accessWaypoints = this.accessWaypoints;
 
@@ -175,6 +179,8 @@ export default {
 
       this.fetchStopsForDocuments(accessWaypoints);
     },
+
+    /** Retrieves the stops of each waypoint in the database */
     fetchStopsForDocuments(documents) {
       transportService
         .getStopareasForDocuments(documents)
@@ -193,7 +199,7 @@ export default {
           this.createStopDocuments();
         })
         .catch((error) => {
-          console.error('Erreur lors de la récupération des données :', error);
+          console.error('Error retrieving data :', error);
           this.missingTransportForWaypoint = true;
 
           documents.forEach((doc) => {
@@ -201,9 +207,13 @@ export default {
           });
         });
     },
+
+    /** Formats the distance to display in km */
     formattedDistance(distance) {
       return `${distance.toFixed(3).replace('.', ',')} km`;
     },
+
+    /** Creates public transport stops near access type waypoints */
     createStopDocuments() {
       if (!this.stops || !this.stops.length) return;
 
@@ -213,7 +223,7 @@ export default {
         (uniqueStops, stop) => {
           try {
             if (!stop.coordinates || !stop.coordinates.x || !stop.coordinates.y) {
-              console.warn(`Stop ${stop.id} n'a pas de coordonnées valides:`, stop);
+              console.warn(`Stop ${stop.id} does not have valid coordinates:`, stop);
               return uniqueStops;
             }
 
@@ -246,18 +256,22 @@ export default {
             uniqueStops.docs.push(stopDoc);
             return uniqueStops;
           } catch (error) {
-            console.error(`Erreur lors de la création du document pour le stop ${stop.id}:`, error);
+            console.error(`Error creating document for stop ${stop.id}:`, error);
             return uniqueStops;
           }
         },
         { docs: [], coordsMap: {} }
       ).docs;
     },
+
+    /** Updates the map according to the selected stop */
     selectStopGroup(stopGroup) {
       this.selectedStopGroup = stopGroup;
       this.selectedStop = stopGroup[0];
       this.updateMap();
     },
+
+    /** Zooms in and highlight a stop on the map */
     updateMap() {
       if (this.selectedStop && this.$refs.mapView) {
         this.$refs.mapView.highlightStop(this.selectedStop.id);
@@ -265,6 +279,7 @@ export default {
       }
     },
 
+    /** Finds which stop area corresponds to the stop clicked on the map */
     handleStopClicked(stopId) {
       this.selectedStop = this.stops.find((stop) => stop.id === stopId);
       this.selectedStopGroup = Object.values(this.groupedStops).find((group) =>
@@ -272,6 +287,7 @@ export default {
       );
     },
 
+    /** Displays a card in green if selected */
     isStopGroupSelected(stopGroup) {
       return (
         this.selectedStopGroup &&
@@ -279,15 +295,13 @@ export default {
       );
     },
 
-    toggleLineDetails(lineId) {
-      this.$set(this.expandedLines, lineId, !this.expandedLines[lineId]);
-    },
-
+    /** Checks if a stoparea is expanded */
     isStopGroupExpanded(stopGroup) {
       const groupId = stopGroup[0].id;
       return this.expandedStopGroups[groupId] === true;
     },
 
+    /** Shows details of a stoparea */
     seeLineDetails(stopGroup) {
       const selection = window.getSelection();
       if (selection && selection.toString().length > 0) {
@@ -308,6 +322,7 @@ export default {
       });
     },
 
+    /** Makes a special display for the highlight (hover) */
     handleDocumentHighlight(document) {
       if (document && document.isStopPoint) {
         const stopId = document.document_id;
@@ -359,7 +374,6 @@ export default {
         }
       }
 
-      // Transmettre l'événement au parent
       this.$emit('highlight-document', document);
     },
   },

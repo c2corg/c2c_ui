@@ -1,5 +1,6 @@
 <template>
   <div v-if="accessWaypoint" class="box public-transports-box" id="public-transport">
+    <div class="hidden" id="public-transport-scroll"></div>
     <h2 class="title is-2">
       <span>{{ $gettext('Access by public transport') }}</span>
     </h2>
@@ -27,7 +28,6 @@
       </button>
     </div>
 
-    <!-- Section pour les arrêts proches -->
     <nearby-stops-section
       v-if="activeSection === 'nearbyStops'"
       :document="document"
@@ -37,7 +37,6 @@
       @stops-updated="handleStopsUpdated"
     />
 
-    <!-- Section pour planifier un trajet -->
     <plan-a-trip-section
       v-if="activeSection === 'planATrip'"
       :map-documents="mapDocuments"
@@ -69,17 +68,17 @@ export default {
   data() {
     return {
       activeSection: 'nearbyStops',
-      hasSecondSection: true, // Vous pouvez ajuster cette logique selon vos besoins
+      hasSecondSection: true,
       accessWaypoint: false,
       stopDocuments: [],
     };
   },
   computed: {
+    /** Copy access points to customize them */
     accessWaypoints() {
       if (!this.document.associations.waypoints || !Array.isArray(this.document.associations.waypoints)) {
         return [];
       }
-
       const accessPoints = this.document.associations.waypoints.filter((doc) => doc && doc.waypoint_type === 'access');
       const accessPointsCopy = JSON.parse(JSON.stringify(accessPoints));
 
@@ -99,6 +98,8 @@ export default {
 
       return accessPointsCopy;
     },
+
+    /** Adds custom points in document */
     mapDocuments() {
       if (!this.accessWaypoints || this.accessWaypoints.length === 0) {
         return [];
@@ -122,18 +123,23 @@ export default {
     },
   },
   methods: {
+    /** Determines whether the "nearby stop" or "plan a trip" section is active */
     setActiveSection(section) {
       this.activeSection = section;
     },
+
+    /** Checks if there are any waypoints accessible by public transport */
     checkAccessWaypoints() {
       const accessWaypoints = this.accessWaypoints;
       this.accessWaypoint = accessWaypoints.length > 0;
     },
+
+    /** Emits an event for highlighting points */
     handleDocumentHighlight(document) {
-      // Gérer la mise en évidence des documents
-      // Cette méthode peut être étendue selon vos besoins
       this.$emit('highlight-document', document);
     },
+
+    /** Updates stops */
     handleStopsUpdated(stopDocuments) {
       this.stopDocuments = stopDocuments;
     },
@@ -143,6 +149,11 @@ export default {
 
 <style scoped lang="scss">
 .public-transports-box {
+  position: relative;
+  .hidden {
+    position: absolute;
+    top: -100px;
+  }
   .public-transport-buttons {
     display: flex;
     gap: 10px;
