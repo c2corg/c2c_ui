@@ -65,7 +65,7 @@
     <div class="public-transports-map">
       <map-view
         ref="mapView"
-        :documents="[document].concat(mapDocuments)"
+        :documents="filteredDocuments"
         :show-protection-areas="['r', 'w'].includes(document.type)"
         :biodiv-sports-activities="document.activities"
         :full-screen-element-id="
@@ -147,6 +147,21 @@ export default {
         acc[stop.stoparea_name].push(stop);
         return acc;
       }, {});
+    },
+
+    filteredDocuments() {
+      const filteredWaypoints =
+        this.document.associations.waypoints?.filter((waypoint) => waypoint.waypoint_type !== 'access') || [];
+
+      const mainDocument = {
+        ...this.document,
+        associations: {
+          ...this.document.associations,
+          waypoints: filteredWaypoints,
+        },
+      };
+
+      return this.mapDocuments.concat([mainDocument]);
     },
   },
   watch: {
@@ -325,6 +340,7 @@ export default {
     /** Makes a special display for the highlight (hover) */
     handleDocumentHighlight(document) {
       if (document && document.isStopPoint) {
+        console.log('yihou');
         const stopId = document.document_id;
         const stop = this.stops.find((s) => s.id === stopId);
         if (stop) {
@@ -370,7 +386,9 @@ export default {
         this.selectedStop = null;
 
         if (this.$refs.mapView) {
-          this.$refs.mapView.resetStopStyles();
+          if (!document) {
+            this.$refs.mapView.resetStopStyles();
+          }
         }
       }
 

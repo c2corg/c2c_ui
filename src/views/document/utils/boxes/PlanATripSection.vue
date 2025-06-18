@@ -1439,6 +1439,9 @@ export default {
 
     /** Displays the duration of the route in days or hours depending on the source */
     formatDurationForDisplay() {
+      if (this.document.durations.length === 1 && this.document.durations[0] === '10+') {
+        return '10+ ' + this.$gettext('Day(s)').toLowerCase();
+      }
       // Priority to the calculated duration if the minimum duration is exactly 1 day
       const shouldUseCalculated =
         this.document.durations?.length &&
