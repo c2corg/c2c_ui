@@ -33,6 +33,7 @@
                       @focus="showAddressPropositions = true"
                       @blur="handleBlur"
                       :placeholder="$gettext('Enter a departure address')"
+                      autocomplete="address-line1"
                     />
                     <div class="autocomplete-results" v-if="showAddressPropositions && addressPropositions.length > 0">
                       <ul>
@@ -155,7 +156,10 @@
 
           <button class="button is-primary plan-trip-search-button" @click="calculateRoute">
             <img class="" src="@/assets/img/boxes/itineraire.svg" />
-            <p class="plan-trip-search-button-text">{{ $gettext('Calculate my outbound trip') }}</p>
+            <p class="plan-trip-search-button-text" v-if="activeTab === 'outbound'">
+              {{ $gettext('Calculate my outbound trip') }}
+            </p>
+            <p class="plan-trip-search-button-text" v-else>{{ $gettext('Calculate my return trip') }}</p>
           </button>
 
           <div class="calculated-duration" v-if="shouldShowDuration && activeTab === 'return'">
