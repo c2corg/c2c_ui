@@ -2071,7 +2071,6 @@ export default {
         bottom: 0;
         background-color: rgba(255, 255, 255, 0.8);
         z-index: 10;
-        animation: fadeFlash 0.6s ease;
         pointer-events: none;
       }
 
