@@ -143,15 +143,17 @@
               <label for="date-input">{{ $gettext('Time') }}</label>
               <div class="input-container">
                 <input type="time" id="hour-input" class="hour-input" v-model="selectedTime" />
-                <div class="calendar-icon">
-                  <img class="" src="@/assets/img/boxes/time.svg" />
-                </div>
               </div>
             </div>
           </div>
 
-          <div v-if="nonValidAddress" class="non-valid-address">
-            {{ $gettext('Please select a departure and a destination.') }}
+          <div v-if="missingDepartureAddress || missingDestinationAddress" class="non-valid-address">
+            <div v-if="missingDepartureAddress">
+              {{ $gettext('Please select a departure address.') }}
+            </div>
+            <div v-if="missingDestinationAddress">
+              {{ $gettext('Please select a destination.') }}
+            </div>
           </div>
 
           <button class="button is-primary plan-trip-search-button" @click="calculateRoute">
@@ -304,6 +306,10 @@
                             <strong>{{ $gettext('Direction') }} : </strong
                             >{{ section.display_informations?.direction || '' }}
                           </div>
+                          <div class="timeline-duration">
+                            <strong>{{ $gettext('Duration') }} : </strong
+                            >{{ formatJourneyDuration(calculateSectionDuration(section)) }}
+                          </div>
                           <div class="timeline-accessibility" v-if="section.display_informations?.equipments?.length">
                             <img
                               v-if="section.display_informations.equipments.includes('has_bike_accepted')"
@@ -437,7 +443,8 @@ export default {
         selectedRouteJourney: null,
         showTimeButton: false,
         isUpdating: false,
-        nonValidAddress: false,
+        missingDepartureAddress: false,
+        missingDestinationAddress: false,
       },
 
       // Data for return journey
@@ -457,7 +464,8 @@ export default {
         selectedRouteJourney: null,
         showTimeButton: false,
         isUpdating: false,
-        nonValidAddress: false,
+        missingDepartureAddress: false,
+        missingDestinationAddress: false,
       },
 
       userService: new UserProfileService(api),
@@ -684,12 +692,21 @@ export default {
       },
     },
 
-    nonValidAddress: {
+    missingDepartureAddress: {
       get() {
-        return this.currentData.nonValidAddress;
+        return this.currentData.missingDepartureAddress;
       },
       set(value) {
-        this.currentData.nonValidAddress = value;
+        this.currentData.missingDepartureAddress = value;
+      },
+    },
+
+    missingDestinationAddress: {
+      get() {
+        return this.currentData.missingDestinationAddress;
+      },
+      set(value) {
+        this.currentData.missingDestinationAddress = value;
       },
     },
 
@@ -823,16 +840,26 @@ export default {
 
     /** Call Navitia and store the results */
     async calculateRoute() {
+      this.missingDepartureAddress = false;
+      this.missingDestinationAddress = false;
+
       if (
-        !this.selectedWaypoint ||
-        (this.activeTab === 'outbound' && !this.fromCoordinates) ||
-        (this.activeTab === 'return' && !this.fromAddress)
+        (this.activeTab === 'outbound' && !this.fromAddress) ||
+        (this.activeTab === 'return' && !this.selectedWaypoint)
       ) {
-        this.nonValidAddress = true;
-        return;
+        this.missingDepartureAddress = true;
       }
 
-      this.nonValidAddress = false;
+      if (
+        (this.activeTab === 'outbound' && !this.selectedWaypoint) ||
+        (this.activeTab === 'return' && !this.fromAddress)
+      ) {
+        this.missingDestinationAddress = true;
+      }
+
+      if (this.missingDepartureAddress || this.missingDestinationAddress) {
+        return;
+      }
       let fromCoords, toCoords, fromAddressDisplay, toAddressDisplay;
 
       if (this.activeTab === 'outbound') {
@@ -1471,6 +1498,28 @@ export default {
 
       return `${durationInDays} ${this.$gettext('Day(s)').toLowerCase()}`;
     },
+
+    /** Convert times into calculable format and substract departure to arrival */
+    calculateSectionDuration(section) {
+      if (section.departure_date_time && section.arrival_date_time) {
+        const departure = section.departure_date_time;
+        const arrival = section.arrival_date_time;
+
+        const depHour = parseInt(departure.substring(9, 11));
+        const depMin = parseInt(departure.substring(11, 13));
+        const depSec = parseInt(departure.substring(13, 15));
+
+        const arrHour = parseInt(arrival.substring(9, 11));
+        const arrMin = parseInt(arrival.substring(11, 13));
+        const arrSec = parseInt(arrival.substring(13, 15));
+
+        const depTotalSec = depHour * 3600 + depMin * 60 + depSec;
+        const arrTotalSec = arrHour * 3600 + arrMin * 60 + arrSec;
+
+        return arrTotalSec - depTotalSec;
+      }
+      return 0;
+    },
   },
 };
 </script>
@@ -1696,18 +1745,15 @@ export default {
 
               .hour-input {
                 flex: 1;
-                padding: 11px 11px;
-                max-width: 76px;
+                padding: 11px 8px;
+                max-width: 90px;
+                margin-left: 5px;
                 border: none;
                 outline: none;
                 font-size: 15px;
                 color: #333;
 
                 &::-webkit-calendar-picker-indicator {
-                  opacity: 0;
-                  position: absolute;
-                  width: 100%;
-                  height: 100%;
                   cursor: pointer;
                 }
               }
