@@ -882,12 +882,18 @@ export default {
       const dateTimeRepresents = this.timePreference === 'arrive-before' ? 'arrival' : 'departure';
 
       try {
-        const response = await NavitiaService.getJourneys({
-          from: fromCoords,
-          to: toCoords,
-          datetime: dateTimeFormat,
-          datetime_represents: dateTimeRepresents,
-        });
+        const response = await NavitiaService.getJourneys(
+          {
+            from: fromCoords,
+            to: toCoords,
+            datetime: dateTimeFormat,
+            datetime_represents: dateTimeRepresents,
+          },
+          {
+            walking_speed: 1.12,
+            max_walking_direct_path_duration: 4464,
+          }
+        );
 
         const data = response.data;
         this.showTimeButton = true;
