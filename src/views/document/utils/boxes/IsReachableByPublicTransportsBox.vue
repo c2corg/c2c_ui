@@ -1,6 +1,6 @@
 <template>
   <div v-if="showAccessibilityInfo" class="box accessible-transport-box">
-    <a href="#public-transport">
+    <a href="#public-transport-scroll">
       <div class="accessible-transport">
         <img class="public-transports-bus" src="@/assets/img/boxes/public_transport.svg" />
         <div class="info-content">
@@ -30,6 +30,7 @@ export default {
     };
   },
   computed: {
+    /** Returns only access points */
     accessWaypoints() {
       if (Array.isArray(this.document)) {
         return this.document.filter((doc) => doc && doc.waypoint_type === 'access');
@@ -49,6 +50,7 @@ export default {
     },
   },
   methods: {
+    /** Returns true if at least one of the waypoints is served */
     checkAccessibility() {
       const accessWaypoints = this.accessWaypoints;
 
@@ -59,6 +61,8 @@ export default {
 
       this.checkWaypointsReachability(accessWaypoints);
     },
+
+    /** For all waypoints, looks at which ones are served */
     checkWaypointsReachability(waypoints) {
       if (!waypoints || waypoints.length === 0) {
         this.showAccessibilityInfo = false;
@@ -74,6 +78,8 @@ export default {
 
       this.checkMultipleWaypointsReachability(waypointIds);
     },
+
+    /** Calls the backend service to check if waypoints have associated transports */
     checkMultipleWaypointsReachability(waypointIds) {
       const checkNextWaypoint = (index) => {
         if (index >= waypointIds.length) {

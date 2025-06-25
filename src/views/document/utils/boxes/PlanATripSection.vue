@@ -33,6 +33,7 @@
                       @focus="showAddressPropositions = true"
                       @blur="handleBlur"
                       :placeholder="$gettext('Enter a departure address')"
+                      autocomplete="address-line1"
                     />
                     <div class="autocomplete-results" v-if="showAddressPropositions && addressPropositions.length > 0">
                       <ul>
@@ -142,23 +143,28 @@
               <label for="date-input">{{ $gettext('Time') }}</label>
               <div class="input-container">
                 <input type="time" id="hour-input" class="hour-input" v-model="selectedTime" />
-                <div class="calendar-icon">
-                  <img class="" src="@/assets/img/boxes/time.svg" />
-                </div>
               </div>
             </div>
           </div>
 
-          <div v-if="nonValidAddress" class="non-valid-address">
-            {{ $gettext('Please select a departure and a destination.') }}
+          <div v-if="missingDepartureAddress || missingDestinationAddress" class="non-valid-address">
+            <div v-if="missingDepartureAddress">
+              {{ $gettext('Please select a departure address.') }}
+            </div>
+            <div v-if="missingDestinationAddress">
+              {{ $gettext('Please select a destination.') }}
+            </div>
           </div>
 
           <button class="button is-primary plan-trip-search-button" @click="calculateRoute">
             <img class="" src="@/assets/img/boxes/itineraire.svg" />
-            <p class="plan-trip-search-button-text">{{ $gettext('Calculate my outbound trip') }}</p>
+            <p class="plan-trip-search-button-text" v-if="activeTab === 'outbound'">
+              {{ $gettext('Calculate my outbound trip') }}
+            </p>
+            <p class="plan-trip-search-button-text" v-else>{{ $gettext('Calculate my return trip') }}</p>
           </button>
 
-          <div class="calculated-duration" v-if="calculatedDuration && activeTab === 'return'">
+          <div class="calculated-duration" v-if="shouldShowDuration && activeTab === 'return'">
             <div class="calculated-duration-number">
               {{ $gettext('This route guide has an estimated theoretical duration of') }}
               {{ formatDurationForDisplay() }}.
@@ -300,6 +306,10 @@
                             <strong>{{ $gettext('Direction') }} : </strong
                             >{{ section.display_informations?.direction || '' }}
                           </div>
+                          <div class="timeline-duration">
+                            <strong>{{ $gettext('Duration') }} : </strong
+                            >{{ formatJourneyDuration(calculateSectionDuration(section)) }}
+                          </div>
                           <div class="timeline-accessibility" v-if="section.display_informations?.equipments?.length">
                             <img
                               v-if="section.display_informations.equipments.includes('has_bike_accepted')"
@@ -414,10 +424,9 @@ export default {
   },
   data() {
     return {
-      // Nouvelles propriétés pour les onglets
       activeTab: 'outbound',
 
-      // Données pour l'aller (renommer les propriétés existantes)
+      // Data for the outbound journey
       outboundData: {
         fromAddress: '',
         selectedAddress: null,
@@ -434,10 +443,11 @@ export default {
         selectedRouteJourney: null,
         showTimeButton: false,
         isUpdating: false,
-        nonValidAddress: false,
+        missingDepartureAddress: false,
+        missingDestinationAddress: false,
       },
 
-      // Données pour le retour
+      // Data for return journey
       returnData: {
         fromAddress: '',
         selectedAddress: null,
@@ -454,14 +464,15 @@ export default {
         selectedRouteJourney: null,
         showTimeButton: false,
         isUpdating: false,
-        nonValidAddress: false,
+        missingDepartureAddress: false,
+        missingDestinationAddress: false,
       },
 
       userService: new UserProfileService(api),
       displayedFromAddress: '',
       displayedToAddress: '',
       showReturnWarning: false,
-      calculatedDuration: this.document.calculated_duration,
+      calculatedDuration: this.document.calculated_duration, //TODO HERE CHANGE
       transportColors: [
         'fuchsia',
         'orange',
@@ -479,13 +490,19 @@ export default {
       searchTimeout: null,
     };
   },
+
   async mounted() {
+    // Loads a user's address to put it directly into the 'address' field
     await this.loadUserAddressIfLoggedIn();
+
+    // Firefox's date picker calendar has a specific design
     if (navigator.userAgent.toLowerCase().includes('firefox')) {
       document.documentElement.classList.add('is-firefox');
     }
   },
+
   computed: {
+    /** Removes access points natively in routes, to code specific behaviors */
     filteredDocuments() {
       const filteredWaypoints =
         this.document.associations.waypoints?.filter((waypoint) => waypoint.waypoint_type !== 'access') || [];
@@ -500,9 +517,13 @@ export default {
 
       return this.mapDocuments.concat([mainDocument]);
     },
+
+    /** Determines if a waypoint is accessible by public transport */
     accessWaypoints() {
       return this.reachableWaypoints.length > 0 ? this.reachableWaypoints : [];
     },
+
+    /** Customizes access points: clicking makes a selection instead of redirecting to a page, and the color is green */
     mapDocuments() {
       const baseDocuments = this.document.associations.waypoints ? [this.document.associations.waypoints] : [];
       const accessWaypointDocuments = this.accessWaypoints.map((waypoint) => {
@@ -529,6 +550,8 @@ export default {
 
       return [...baseDocuments, ...accessWaypointDocuments, ...routeDocuments];
     },
+
+    /** Returns the outbound or return data */
     currentData() {
       return this.activeTab === 'outbound' ? this.outboundData : this.returnData;
     },
@@ -668,65 +691,61 @@ export default {
       },
     },
 
-    nonValidAddress: {
+    missingDepartureAddress: {
       get() {
-        return this.currentData.nonValidAddress;
+        return this.currentData.missingDepartureAddress;
       },
       set(value) {
-        this.currentData.nonValidAddress = value;
+        this.currentData.missingDepartureAddress = value;
       },
     },
 
-    // Adapter le titre du bouton selon l'onglet
-    calculateButtonText() {
-      return this.activeTab === 'outbound'
-        ? this.$gettext('Calculer mon trajet aller')
-        : this.$gettext('Calculer mon trajet retour');
+    missingDestinationAddress: {
+      get() {
+        return this.currentData.missingDestinationAddress;
+      },
+      set(value) {
+        this.currentData.missingDestinationAddress = value;
+      },
     },
 
-    // Adapter les libellés selon l'onglet
-    fromLabel() {
-      return this.activeTab === $gettext('From');
-    },
-
-    toLabel() {
-      return this.activeTab === $gettext('To');
-    },
-
-    fromPlaceholder() {
-      return this.activeTab === $gettext('View details');
-    },
     canAccessReturnTab() {
       return this.outboundData.journeys.length > 0;
+    },
+
+    shouldShowDuration() {
+      const hasCalculatedDuration = this.document.calculated_duration;
+      const hasDurations = this.document.durations?.length;
+      const minDurationIsOne = hasDurations && Math.min(...this.document.durations) === 1;
+
+      // Do not display only if: no calculated_duration AND (no durations OR min = 1 day)
+      return !(!hasCalculatedDuration && (!hasDurations || minDurationIsOne));
     },
   },
 
   async created() {
-    // Charger les waypoints desservis au montage du composant
+    // Load the waypoints served when mounting the component
     await this.loadReachableWaypoints();
 
-    // Si un seul waypoint desservi, le sélectionner automatiquement
+    // If only one waypoint served, select it automatically
     if (this.reachableWaypoints.length === 1) {
       this.selectedWaypoint = this.reachableWaypoints[0];
     }
   },
 
   methods: {
-    /** Address auto-complete */
+    /** Address auto-complete, launched when the user has not typed anything for 0.6 seconds */
     async searchAddressPropositions() {
-      // Annule le timeout précédent s'il existe
       if (this.searchTimeout) {
         clearTimeout(this.searchTimeout);
       }
 
-      // Si le champ a moins de 3 caractères, on nettoie directement
       if (this.fromAddress?.length < 3) {
         this.showAddressPropositions = false;
         this.addressPropositions = [];
         return;
       }
 
-      // Configure un nouveau timeout
       this.searchTimeout = setTimeout(async () => {
         const center = this.$refs.mapView?.view?.getCenter();
         const centerWgs84 = center ? ol.proj.toLonLat(center) : null;
@@ -739,7 +758,7 @@ export default {
           console.error('Error searching for addresses:', error);
           this.addressPropositions = [];
         }
-      }, 600); // Délai de 800ms
+      }, 600);
     },
 
     /** Takes selected address proposition */
@@ -818,28 +837,37 @@ export default {
       }
     },
 
+    /** Call Navitia and store the results */
     async calculateRoute() {
+      this.missingDepartureAddress = false;
+      this.missingDestinationAddress = false;
+
       if (
-        !this.selectedWaypoint ||
-        (this.activeTab === 'outbound' && !this.fromCoordinates) ||
-        (this.activeTab === 'return' && !this.fromAddress)
+        (this.activeTab === 'outbound' && !this.fromAddress) ||
+        (this.activeTab === 'return' && !this.selectedWaypoint)
       ) {
-        this.nonValidAddress = true;
-        return;
+        this.missingDepartureAddress = true;
       }
 
-      this.nonValidAddress = false;
+      if (
+        (this.activeTab === 'outbound' && !this.selectedWaypoint) ||
+        (this.activeTab === 'return' && !this.fromAddress)
+      ) {
+        this.missingDestinationAddress = true;
+      }
 
-      // Logique inversée pour le retour
+      if (this.missingDepartureAddress || this.missingDestinationAddress) {
+        return;
+      }
       let fromCoords, toCoords, fromAddressDisplay, toAddressDisplay;
 
       if (this.activeTab === 'outbound') {
-        // ALLER : De l'adresse vers le waypoint
+        // OUTBOUND: From address to waypoint
         fromCoords = NavitiaService.formatCoordinates(this.fromCoordinates);
         toCoords = NavitiaService.formatCoordinates(this.selectedWaypoint.coordinates);
         this.displayedFromAddress = this.fromAddress;
       } else {
-        // RETOUR : Du waypoint vers l'adresse
+        // RETURN: From waypoint to address
         fromCoords = NavitiaService.formatCoordinates(this.selectedWaypoint.coordinates);
         toCoords = NavitiaService.formatCoordinates(this.fromCoordinates);
         fromAddressDisplay = this.selectedWaypoint.title;
@@ -853,12 +881,18 @@ export default {
       const dateTimeRepresents = this.timePreference === 'arrive-before' ? 'arrival' : 'departure';
 
       try {
-        const response = await NavitiaService.getJourneys({
-          from: fromCoords,
-          to: toCoords,
-          datetime: dateTimeFormat,
-          datetime_represents: dateTimeRepresents,
-        });
+        const response = await NavitiaService.getJourneys(
+          {
+            from: fromCoords,
+            to: toCoords,
+            datetime: dateTimeFormat,
+            datetime_represents: dateTimeRepresents,
+          },
+          {
+            walking_speed: 1.12,
+            max_walking_duration_to_pt: 4464,
+          }
+        );
 
         const data = response.data;
         this.showTimeButton = true;
@@ -908,7 +942,6 @@ export default {
         this.noResult = true;
         this.journeys = [];
 
-        // Optionnel : gérer différents types d'erreurs
         if (error.response?.status === 400) {
           console.error('Paramètres invalides pour Navitia');
         } else if (error.response?.status === 500) {
@@ -973,7 +1006,8 @@ export default {
         this.selectedWaypoint = waypoint;
       }
     },
-    // Method for calculating distance in meters
+
+    /** Method to calculate distance in meters */
     getDistance(section) {
       if (section.distance) {
         return Math.round(section.distance);
@@ -983,7 +1017,7 @@ export default {
         : 0;
     },
 
-    // Method to get accessibility icons
+    /** Method to get accessibility icons */
     hasAccessibility(section) {
       if (!section.display_informations || !section.display_informations.equipments) {
         return {
@@ -998,6 +1032,7 @@ export default {
       };
     },
 
+    /** Displays the routes of different transport on the map */
     prepareRouteDocuments() {
       if (!this.selectedRouteJourney || !this.journeys || this.journeys.length === 0) return [];
 
@@ -1124,6 +1159,7 @@ export default {
       return routeDocuments;
     },
 
+    /** Each route follows the same sequence of colors */
     getRouteColor(section) {
       if (section.mode === 'walking') return 'blue';
       if (section.type === 'public_transport' || section.type === 'on_demand_transport') {
@@ -1133,6 +1169,7 @@ export default {
       return 'gray';
     },
 
+    /** Shows route details */
     showJourneyDetails(journey) {
       this.selectedRouteJourney = journey;
 
@@ -1143,6 +1180,7 @@ export default {
       }
     },
 
+    /** Retrieves the route position in the list */
     getTransportSectionIndex(currentSection) {
       if (!this.selectedRouteJourney) return 0;
 
@@ -1158,10 +1196,12 @@ export default {
       return 0;
     },
 
+    /** Creates the class based on color */
     getTransportColorClass(section) {
       return 'transport-color-' + (this.getTransportSectionIndex(section) % this.transportColors.length);
     },
 
+    /** Leaves earlier button */
     departEarlier() {
       const [hours, minutes] = this.selectedTime.split(':').map(Number);
       let newHours = hours - 1;
@@ -1180,6 +1220,7 @@ export default {
       this.calculateRoute();
     },
 
+    /** Leaves later button */
     departLater() {
       const [hours, minutes] = this.selectedTime.split(':').map(Number);
       let newHours = hours + 1;
@@ -1198,6 +1239,7 @@ export default {
       this.calculateRoute();
     },
 
+    /** Next day button */
     nextDay() {
       const currentDate = new Date(this.selectedDate);
       currentDate.setDate(currentDate.getDate() + 1);
@@ -1206,9 +1248,12 @@ export default {
       this.calculateRoute();
     },
 
+    /** Selects a route without opening details */
     selectRouteOnly(journey) {
       this.selectedRouteJourney = journey;
     },
+
+    /** Formats the journey time in minutes and hours */
     formatJourneyDuration(seconds) {
       if (!seconds && seconds !== 0) return '';
 
@@ -1221,6 +1266,7 @@ export default {
       return `${minutes} min`;
     },
 
+    /** Switch from the outbound tab to the return tab */
     switchTab(tab) {
       if (tab === 'return' && !this.canAccessReturnTab) {
         return;
@@ -1237,6 +1283,7 @@ export default {
       }
     },
 
+    /** Calculation of return fields, according to the available or calculated duration */
     calculateReturnParameters() {
       if (!this.outboundData.journeys || this.outboundData.journeys.length === 0) {
         return;
@@ -1245,15 +1292,15 @@ export default {
       const outboundJourney = this.outboundData.journeys[0];
       const arrivalTime = outboundJourney.arrival_date_time;
 
-      // Récupération de la durée théorique ou de la durée renseignée
-      const theoreticalDuration = this.document.calculated_duration; // en jours (float)
-      const itineraryDuration = this.document.duration?.length ? Math.min(...this.document.duration) : null; // en jours (entier)
+      // Recovery of the theoretical duration or the duration entered
+      const theoreticalDuration = this.document.calculated_duration; // in days (float)
+      const itineraryDuration = this.document.duration?.length ? Math.min(...this.document.duration) : null; // in days (integer)
 
-      // Cas 1: Durée <= 1 jour avec durée théorique valide
+      // Case 1: Duration <= 1 day with valid theoretical duration
       if ((theoreticalDuration <= 1 || (itineraryDuration && itineraryDuration <= 1)) && theoreticalDuration) {
         const returnDate = this.outboundData.selectedDate;
 
-        // Calcul de l'heure de retour (heure d'arrivée + durée théorique)
+        // Calculation of return time (arrival time + theoretical duration)
         const arrivalHour = parseInt(arrivalTime.substring(9, 11));
         const arrivalMinute = parseInt(arrivalTime.substring(11, 13));
 
@@ -1263,15 +1310,15 @@ export default {
         let returnHour = arrivalHour + additionalHours;
         let returnMinute = arrivalMinute + additionalMinutes;
 
-        // Gestion des minutes > 60
+        // Minutes management > 60
         if (returnMinute >= 60) {
           returnHour += Math.floor(returnMinute / 60);
           returnMinute = returnMinute % 60;
         }
 
-        // Gestion des heures > 24
+        // Time management > 24
         if (returnHour >= 24) {
-          // Cas 2: Retour impossible le jour même
+          // Case 2: Return impossible on the same day
           returnHour = 17;
           returnMinute = 0;
           this.showReturnWarning = true;
@@ -1282,7 +1329,7 @@ export default {
           .toString()
           .padStart(2, '0')}`;
       }
-      // Cas 3: Durée > 1 jour
+      // Case 3: Duration > 1 day
       else if (theoreticalDuration > 1 || (itineraryDuration && itineraryDuration > 1)) {
         const outboundDate = new Date(this.outboundData.selectedDate);
         const daysToAdd = itineraryDuration ? Math.ceil(itineraryDuration) : Math.ceil(theoreticalDuration);
@@ -1291,7 +1338,7 @@ export default {
         this.returnData.selectedDate = outboundDate.toISOString().slice(0, 10);
         this.returnData.selectedTime = '17:00';
       }
-      // Cas 4: Autres cas (durée théorique non disponible ou incohérente)
+      // Case 4: Other cases (theoretical duration not available or inconsistent)
       else {
         this.returnData.selectedDate = this.outboundData.selectedDate;
         this.returnData.selectedTime = '17:00';
@@ -1299,6 +1346,7 @@ export default {
       }
     },
 
+    /** Loads waypoints that are accessible by public transport */
     async loadReachableWaypoints() {
       this.loadingReachable = true;
       this.reachableWaypoints = [];
@@ -1306,7 +1354,7 @@ export default {
       const waypoints = this.document.associations.waypoints || [];
       const reachableChecks = [];
 
-      // Vérifier l'accessibilité de chaque waypoint
+      // Check the accessibility of each waypoint
       for (const waypoint of waypoints) {
         if (waypoint.type === 'w' && waypoint.waypoint_type === 'access') {
           reachableChecks.push(
@@ -1315,10 +1363,9 @@ export default {
         }
       }
 
-      // Attendre toutes les vérifications
       const results = await Promise.all(reachableChecks);
 
-      // Filtrer les waypoints desservis
+      // Filter served waypoints
       for (const result of results) {
         if (result.isReachable) {
           const locale =
@@ -1335,25 +1382,25 @@ export default {
       this.loadingReachable = false;
     },
 
-    // Méthode pour déterminer le waypoint de retour automatiquement
+    /** Method to determine the return waypoint automatically */
     async determineReturnWaypoint() {
       if (!this.outboundData.journeys || this.outboundData.journeys.length === 0) {
         return;
       }
 
-      // Cas 1: Aucun waypoint desservi
+      // Case 1: No waypoint served
       if (this.reachableWaypoints.length === 0) {
         this.returnData.selectedWaypoint = null;
         return;
       }
 
-      // Cas 2: Un seul waypoint desservi (itinéraire en boucle)
+      // Case 2: Only one waypoint served (loop route)
       if (this.reachableWaypoints.length === 1) {
         this.returnData.selectedWaypoint = this.reachableWaypoints[0];
         return;
       }
 
-      // Cas 3: Deux waypoints desservis (traversée)
+      // Case 3: Two waypoints served (crossing)
       if (this.reachableWaypoints.length === 2) {
         const outboundWaypointId = this.outboundData.selectedWaypoint?.id;
         const returnWaypoint = this.reachableWaypoints.find((w) => w.id !== outboundWaypointId);
@@ -1362,13 +1409,13 @@ export default {
         return;
       }
 
-      // Cas 4: Plus de deux waypoints desservis - laisser l'utilisateur choisir
+      // Case 4: More than two waypoints served - let the user choose
       if (this.reachableWaypoints.length > 2) {
-        this.returnData.selectedWaypoint = null; // Reset pour forcer la sélection manuelle
+        this.returnData.selectedWaypoint = null; // Reset to force manual selection
         return;
       }
 
-      // Cas 5: Certains waypoints non desservis - prendre celui de l'aller s'il est desservi
+      // Case 5: Some waypoints not served - take the outward one if it is served
       if (this.outboundData.selectedWaypoint) {
         const isCurrentReachable = this.reachableWaypoints.some((w) => w.id === this.outboundData.selectedWaypoint.id);
         if (isCurrentReachable) {
@@ -1379,6 +1426,7 @@ export default {
       }
     },
 
+    /** If the user is authenticated and has entered their address in their profile, it is put in the address field */
     async loadUserAddressIfLoggedIn() {
       if (!this.$user.isLogged) {
         return;
@@ -1404,6 +1452,7 @@ export default {
       }
     },
 
+    /** Transforms a point's coordinates (longitude and latitude) into an address with photon */
     async reverseGeocodeUserLocation(lon, lat) {
       try {
         const response = await fetch(
@@ -1424,8 +1473,12 @@ export default {
       }
     },
 
+    /** Displays the duration of the route in days or hours depending on the source */
     formatDurationForDisplay() {
-      // Priorité à la durée calculée si la durée minimale est exactement 1 jour
+      if (this.document.durations.length === 1 && this.document.durations[0] === '10+') {
+        return '10+ ' + this.$gettext('Day(s)').toLowerCase();
+      }
+      // Priority to the calculated duration if the minimum duration is exactly 1 day
       const shouldUseCalculated =
         this.document.durations?.length &&
         Math.min(...this.document.durations) === 1 &&
@@ -1444,12 +1497,33 @@ export default {
         return `${hoursInt}h${minutes.toString().padStart(2, '0')}`;
       }
 
-      // Format spécial quand la durée est exactement 1 jour
       if (durationInDays === 1) {
         return `1 ${this.$gettext('Day').toLowerCase()}`;
       }
 
       return `${durationInDays} ${this.$gettext('Day(s)').toLowerCase()}`;
+    },
+
+    /** Convert times into calculable format and substract departure to arrival */
+    calculateSectionDuration(section) {
+      if (section.departure_date_time && section.arrival_date_time) {
+        const departure = section.departure_date_time;
+        const arrival = section.arrival_date_time;
+
+        const depHour = parseInt(departure.substring(9, 11));
+        const depMin = parseInt(departure.substring(11, 13));
+        const depSec = parseInt(departure.substring(13, 15));
+
+        const arrHour = parseInt(arrival.substring(9, 11));
+        const arrMin = parseInt(arrival.substring(11, 13));
+        const arrSec = parseInt(arrival.substring(13, 15));
+
+        const depTotalSec = depHour * 3600 + depMin * 60 + depSec;
+        const arrTotalSec = arrHour * 3600 + arrMin * 60 + arrSec;
+
+        return arrTotalSec - depTotalSec;
+      }
+      return 0;
     },
   },
 };
@@ -1676,18 +1750,15 @@ export default {
 
               .hour-input {
                 flex: 1;
-                padding: 11px 11px;
-                max-width: 76px;
+                padding: 11px 8px;
+                max-width: 90px;
+                margin-left: 5px;
                 border: none;
                 outline: none;
                 font-size: 15px;
                 color: #333;
 
                 &::-webkit-calendar-picker-indicator {
-                  opacity: 0;
-                  position: absolute;
-                  width: 100%;
-                  height: 100%;
                   cursor: pointer;
                 }
               }
@@ -2005,7 +2076,6 @@ export default {
         bottom: 0;
         background-color: rgba(255, 255, 255, 0.8);
         z-index: 10;
-        animation: fadeFlash 0.6s ease;
         pointer-events: none;
       }
 

@@ -3,28 +3,47 @@ import { icon } from '@fortawesome/fontawesome-svg-core';
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
-const buildTextStyle = function (title, highlight) {
+const buildTextStyle = function (title, highlight, isPublicTransport) {
   if (!highlight) {
     return undefined;
   }
-  // on hover in list view
-  const def = {
-    text: utils.stringDivider(title, 30, '\n'),
-    textAlign: 'left',
-    overflow: true,
-    offsetX: 20,
-    font: '12px verdana,sans-serif',
-    stroke: new ol.style.Stroke({
-      color: 'white',
-      width: 3,
-    }),
-    fill: new ol.style.Fill({
-      color: 'black',
-    }),
-    textBaseline: 'middle',
-  };
+  if (!isPublicTransport) {
+    // on hover in list view
+    const def = {
+      text: utils.stringDivider(title, 30, '\n'),
+      textAlign: 'left',
+      overflow: true,
+      offsetX: 20,
+      font: '12px verdana,sans-serif',
+      stroke: new ol.style.Stroke({
+        color: 'white',
+        width: 3,
+      }),
+      fill: new ol.style.Fill({
+        color: 'black',
+      }),
+      textBaseline: 'middle',
+    };
 
-  return new ol.style.Text(def);
+    return new ol.style.Text(def);
+  } else {
+    const def = {
+      text: utils.stringDivider(title, 30, '\n'),
+      overflow: false,
+      font: '16px verdana,sans-serif',
+      placement: 'line',
+      stroke: new ol.style.Stroke({
+        color: 'white',
+        width: 3,
+      }),
+      fill: new ol.style.Fill({
+        color: 'black',
+      }),
+      textBaseLine: 'bottom',
+    };
+
+    return new ol.style.Text(def);
+  }
 };
 
 export const buildPolygonStyle = function (opacity = 0.7) {
@@ -71,7 +90,7 @@ const buildPointStyle = function (title, svgSrc, color, highlight) {
     image: new ol.style.Icon({
       src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSrc),
     }),
-    text: buildTextStyle(title, highlight),
+    text: buildTextStyle(title, highlight, false),
     zIndex: zIndexValue + 1,
   });
 
@@ -228,7 +247,7 @@ export const getDocumentLineStyle = function (title, highlight, properties) {
         color: 'red',
         width: 3,
       }),
-      text: buildTextStyle(title, highlight),
+      text: buildTextStyle(title, highlight, false),
     });
   } else if (highlight && properties && properties.color) {
     return new ol.style.Style({
@@ -237,7 +256,7 @@ export const getDocumentLineStyle = function (title, highlight, properties) {
         width: 5,
         zIndex: 1,
       }),
-      text: buildTextStyle(properties.name, highlight),
+      text: buildTextStyle(properties.name, highlight, true),
     });
   } else if (properties && properties.color) {
     const strokeConfigs = [
