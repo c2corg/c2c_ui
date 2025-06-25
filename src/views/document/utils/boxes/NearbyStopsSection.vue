@@ -119,7 +119,6 @@ export default {
 
       const accessPoints = this.document.associations.waypoints.filter((doc) => doc && doc.waypoint_type === 'access');
       const accessPointsCopy = JSON.parse(JSON.stringify(accessPoints));
-      console.log(accessPoints);
 
       accessPointsCopy.forEach((doc) => {
         if (doc.type === 'w') {
@@ -340,7 +339,6 @@ export default {
     /** Makes a special display for the highlight (hover) */
     handleDocumentHighlight(document) {
       if (document && document.isStopPoint) {
-        console.log('yihou');
         const stopId = document.document_id;
         const stop = this.stops.find((s) => s.id === stopId);
         if (stop) {

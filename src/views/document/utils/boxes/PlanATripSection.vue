@@ -494,7 +494,6 @@ export default {
   async mounted() {
     // Loads a user's address to put it directly into the 'address' field
     await this.loadUserAddressIfLoggedIn();
-    console.log(this.document);
 
     // Firefox's date picker calendar has a specific design
     if (navigator.userAgent.toLowerCase().includes('firefox')) {
@@ -891,7 +890,7 @@ export default {
           },
           {
             walking_speed: 1.12,
-            max_walking_direct_path_duration: 4464,
+            max_walking_duration_to_pt: 4464,
           }
         );
 
