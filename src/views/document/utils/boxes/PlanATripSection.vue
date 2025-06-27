@@ -164,7 +164,7 @@
             <p class="plan-trip-search-button-text" v-else>{{ $gettext('Calculate my return trip') }}</p>
           </button>
 
-          <div class="calculated-duration" v-if="shouldShowDuration && activeTab === 'return'">
+          <div class="calculated-duration" v-if="activeTab === 'return'">
             <div class="calculated-duration-number">
               {{ $gettext('This route guide has an estimated theoretical duration of') }}
               {{ formatDurationForDisplay() }}.
@@ -472,7 +472,7 @@ export default {
       displayedFromAddress: '',
       displayedToAddress: '',
       showReturnWarning: false,
-      calculatedDuration: this.document.calculated_duration, //TODO HERE CHANGE
+      calculatedDuration: this.document.calculated_duration,
       transportColors: [
         'fuchsia',
         'orange',
@@ -494,6 +494,7 @@ export default {
   async mounted() {
     // Loads a user's address to put it directly into the 'address' field
     await this.loadUserAddressIfLoggedIn();
+    console.log(this.document);
 
     // Firefox's date picker calendar has a specific design
     if (navigator.userAgent.toLowerCase().includes('firefox')) {
@@ -711,15 +712,6 @@ export default {
 
     canAccessReturnTab() {
       return this.outboundData.journeys.length > 0;
-    },
-
-    shouldShowDuration() {
-      const hasCalculatedDuration = this.document.calculated_duration;
-      const hasDurations = this.document.durations?.length;
-      const minDurationIsOne = hasDurations && Math.min(...this.document.durations) === 1;
-
-      // Do not display only if: no calculated_duration AND (no durations OR min = 1 day)
-      return !(!hasCalculatedDuration && (!hasDurations || minDurationIsOne));
     },
   },
 
@@ -1498,7 +1490,7 @@ export default {
       }
 
       if (durationInDays === 1) {
-        return `1 ${this.$gettext('Day').toLowerCase()}`;
+        return `1 ${this.$gettext('Day(s)').toLowerCase()}`;
       }
 
       return `${durationInDays} ${this.$gettext('Day(s)').toLowerCase()}`;

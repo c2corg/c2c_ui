@@ -29,9 +29,10 @@ const buildTextStyle = function (title, highlight, isPublicTransport) {
   } else {
     const def = {
       text: utils.stringDivider(title, 30, '\n'),
-      overflow: false,
-      font: '16px verdana,sans-serif',
-      placement: 'line',
+      textAlign: 'left',
+      overflow: true,
+      offsetX: 20,
+      font: '17px verdana,sans-serif',
       stroke: new ol.style.Stroke({
         color: 'white',
         width: 3,
@@ -39,7 +40,7 @@ const buildTextStyle = function (title, highlight, isPublicTransport) {
       fill: new ol.style.Fill({
         color: 'black',
       }),
-      textBaseLine: 'bottom',
+      textBaseline: 'middle',
     };
 
     return new ol.style.Text(def);
