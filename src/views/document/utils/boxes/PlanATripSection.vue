@@ -297,7 +297,15 @@
                       </div>
 
                       <!-- Ligne de transport -->
-                      <div class="timeline-item transport" :class="getTransportColorClass(section)">
+                      <div
+                        class="timeline-item transport"
+                        :class="getTransportColorClass(section)"
+                        :style="{
+                          'border-left': section.display_informations?.color
+                            ? `3px solid #${section.display_informations.color}`
+                            : '3px solid gray',
+                        }"
+                      >
                         <div class="timeline-content">
                           <div class="timeline-line">
                             <strong>{{ $gettext('Line') }} : </strong> {{ section.display_informations?.code || '' }}
@@ -473,18 +481,6 @@ export default {
       displayedToAddress: '',
       showReturnWarning: false,
       calculatedDuration: this.document.calculated_duration,
-      transportColors: [
-        'fuchsia',
-        'orange',
-        'royalblue',
-        'purple',
-        'green',
-        'yellow',
-        'gray',
-        'salmon',
-        'teal',
-        'brown',
-      ],
       reachableWaypoints: [],
       loadingReachable: false,
       searchTimeout: null,
@@ -1155,8 +1151,8 @@ export default {
     getRouteColor(section) {
       if (section.mode === 'walking') return 'blue';
       if (section.type === 'public_transport' || section.type === 'on_demand_transport') {
-        const colorIndex = this.getTransportSectionIndex(section);
-        return this.transportColors[colorIndex % this.transportColors.length];
+        // Utilisez la couleur fournie par l'API si elle existe, sinon une couleur par défaut
+        return section.display_informations?.color || 'gray';
       }
       return 'gray';
     },
@@ -1190,7 +1186,10 @@ export default {
 
     /** Creates the class based on color */
     getTransportColorClass(section) {
-      return 'transport-color-' + (this.getTransportSectionIndex(section) % this.transportColors.length);
+      if (section.display_informations?.color) {
+        return 'transport-color-' + section.display_informations.color.replace('#', '');
+      }
+      return 'transport-color-default';
     },
 
     /** Leaves earlier button */
@@ -1808,35 +1807,8 @@ export default {
               align-items: center;
               position: relative;
 
-              &.transport-color-0 {
-                border-left: 3px solid fuchsia;
-              }
-              &.transport-color-1 {
-                border-left: 3px solid orange;
-              }
-              &.transport-color-2 {
-                border-left: 3px solid royalblue;
-              }
-              &.transport-color-3 {
-                border-left: 3px solid purple;
-              }
-              &.transport-color-4 {
-                border-left: 3px solid green;
-              }
-              &.transport-color-5 {
-                border-left: 3px solid yellow;
-              }
-              &.transport-color-6 {
-                border-left: 3px solid gray;
-              }
-              &.transport-color-7 {
-                border-left: 3px solid salmon;
-              }
-              &.transport-color-8 {
-                border-left: 3px solid teal;
-              }
-              &.transport-color-9 {
-                border-left: 3px solid brown;
+              &.transport-color-default {
+                border-left-color: gray;
               }
 
               &.walking {

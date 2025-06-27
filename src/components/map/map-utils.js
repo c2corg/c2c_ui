@@ -267,7 +267,7 @@ export const getDocumentLineStyle = function (title, highlight, properties) {
         zIndex: 0,
       },
       {
-        color: properties.color,
+        color: `#${properties.color}`,
         width: 5,
         zIndex: 1,
       },
