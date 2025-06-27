@@ -164,7 +164,7 @@
             <p class="plan-trip-search-button-text" v-else>{{ $gettext('Calculate my return trip') }}</p>
           </button>
 
-          <div class="calculated-duration" v-if="shouldShowDuration && activeTab === 'return'">
+          <div class="calculated-duration" v-if="activeTab === 'return'">
             <div class="calculated-duration-number">
               {{ $gettext('This route guide has an estimated theoretical duration of') }}
               {{ formatDurationForDisplay() }}.
@@ -297,7 +297,15 @@
                       </div>
 
                       <!-- Ligne de transport -->
-                      <div class="timeline-item transport" :class="getTransportColorClass(section)">
+                      <div
+                        class="timeline-item transport"
+                        :class="getTransportColorClass(section)"
+                        :style="{
+                          'border-left': section.display_informations?.color
+                            ? `3px solid #${section.display_informations.color}`
+                            : '3px solid gray',
+                        }"
+                      >
                         <div class="timeline-content">
                           <div class="timeline-line">
                             <strong>{{ $gettext('Line') }} : </strong> {{ section.display_informations?.code || '' }}
@@ -472,19 +480,7 @@ export default {
       displayedFromAddress: '',
       displayedToAddress: '',
       showReturnWarning: false,
-      calculatedDuration: this.document.calculated_duration, //TODO HERE CHANGE
-      transportColors: [
-        'fuchsia',
-        'orange',
-        'royalblue',
-        'purple',
-        'green',
-        'yellow',
-        'gray',
-        'salmon',
-        'teal',
-        'brown',
-      ],
+      calculatedDuration: this.document.calculated_duration,
       reachableWaypoints: [],
       loadingReachable: false,
       searchTimeout: null,
@@ -494,6 +490,7 @@ export default {
   async mounted() {
     // Loads a user's address to put it directly into the 'address' field
     await this.loadUserAddressIfLoggedIn();
+    console.log(this.document);
 
     // Firefox's date picker calendar has a specific design
     if (navigator.userAgent.toLowerCase().includes('firefox')) {
@@ -711,15 +708,6 @@ export default {
 
     canAccessReturnTab() {
       return this.outboundData.journeys.length > 0;
-    },
-
-    shouldShowDuration() {
-      const hasCalculatedDuration = this.document.calculated_duration;
-      const hasDurations = this.document.durations?.length;
-      const minDurationIsOne = hasDurations && Math.min(...this.document.durations) === 1;
-
-      // Do not display only if: no calculated_duration AND (no durations OR min = 1 day)
-      return !(!hasCalculatedDuration && (!hasDurations || minDurationIsOne));
     },
   },
 
@@ -1163,8 +1151,8 @@ export default {
     getRouteColor(section) {
       if (section.mode === 'walking') return 'blue';
       if (section.type === 'public_transport' || section.type === 'on_demand_transport') {
-        const colorIndex = this.getTransportSectionIndex(section);
-        return this.transportColors[colorIndex % this.transportColors.length];
+        // Utilisez la couleur fournie par l'API si elle existe, sinon une couleur par défaut
+        return section.display_informations?.color || 'gray';
       }
       return 'gray';
     },
@@ -1198,7 +1186,10 @@ export default {
 
     /** Creates the class based on color */
     getTransportColorClass(section) {
-      return 'transport-color-' + (this.getTransportSectionIndex(section) % this.transportColors.length);
+      if (section.display_informations?.color) {
+        return 'transport-color-' + section.display_informations.color.replace('#', '');
+      }
+      return 'transport-color-default';
     },
 
     /** Leaves earlier button */
@@ -1498,7 +1489,7 @@ export default {
       }
 
       if (durationInDays === 1) {
-        return `1 ${this.$gettext('Day').toLowerCase()}`;
+        return `1 ${this.$gettext('Day(s)').toLowerCase()}`;
       }
 
       return `${durationInDays} ${this.$gettext('Day(s)').toLowerCase()}`;
@@ -1816,35 +1807,8 @@ export default {
               align-items: center;
               position: relative;
 
-              &.transport-color-0 {
-                border-left: 3px solid fuchsia;
-              }
-              &.transport-color-1 {
-                border-left: 3px solid orange;
-              }
-              &.transport-color-2 {
-                border-left: 3px solid royalblue;
-              }
-              &.transport-color-3 {
-                border-left: 3px solid purple;
-              }
-              &.transport-color-4 {
-                border-left: 3px solid green;
-              }
-              &.transport-color-5 {
-                border-left: 3px solid yellow;
-              }
-              &.transport-color-6 {
-                border-left: 3px solid gray;
-              }
-              &.transport-color-7 {
-                border-left: 3px solid salmon;
-              }
-              &.transport-color-8 {
-                border-left: 3px solid teal;
-              }
-              &.transport-color-9 {
-                border-left: 3px solid brown;
+              &.transport-color-default {
+                border-left-color: gray;
               }
 
               &.walking {
