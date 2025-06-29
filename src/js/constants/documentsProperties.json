@@ -149,6 +149,8 @@
       { "id": "date_start", "properties": { "url": "date", "required": false } },
       { "id": "dates", "properties": { "url": "date", "required": false } },
       { "id": "disable_comments" },
+      { "id": "disable_view_count" },
+      { "id": "view_count" },
       { "id": "elevation_access", "properties": { "url": "oparka" } },
       {
         "id": "elevation_down_snow",
