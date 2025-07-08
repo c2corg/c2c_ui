@@ -690,6 +690,11 @@ export default {
   border-radius: 4px;
   box-shadow: 0 0 3px rgba($black, 0.5), 0 3px 8px rgba($black, 0.5);
   overflow: hidden;
+
+  p,
+  dl {
+    user-select: text;
+  }
 }
 .bulletins-header {
   background: $primary;
