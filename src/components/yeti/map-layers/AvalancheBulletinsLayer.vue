@@ -355,7 +355,7 @@ export default {
         let turfPolygon = format.writeFeatureObject(mountain);
 
         distances.forEach((distance, i) => {
-          let innerBuffer = turfBuffer(turfPolygon, -distance);
+          let innerBuffer = turfBuffer(turfPolygon, -distance, { steps: 1 });
           let innerDiff;
           if (innerBuffer) {
             innerDiff = turfDifference(turfFeatureCollection([turfPolygon, innerBuffer]));
