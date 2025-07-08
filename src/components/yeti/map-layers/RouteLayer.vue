@@ -1,3 +1,10 @@
+<template>
+  <div ref="drawInfoOverlay">
+    <p><fa-icon icon="route" transform="shrink-3" /> {{ Number(drawInfo.distance).toLocaleString() }}&nbsp;m</p>
+    <p><fa-icon icon="compass" transform="shrink-3" /> {{ drawInfo.bearing }}°</p>
+  </div>
+</template>
+
 <script>
 import layerMixin from './layer';
 import simplify from './simplify';
@@ -131,11 +138,21 @@ let elevationPointStyle = [
   }),
 ];
 
+let drawInfoOverlay = new ol.Overlay({
+  offset: [10, -10],
+  positioning: 'bottom-left',
+  className: 'draw-info-overlay',
+});
+
 export default {
   mixins: [layerMixin],
   data() {
     return {
       visibleSimplifiedLayer: false,
+      drawInfo: {
+        distance: 0,
+        bearing: 0,
+      },
     };
   },
   computed: {
@@ -181,6 +198,10 @@ export default {
     this.featuresLayerSource = this.featuresLayer.getSource();
 
     this.map.addLayer(this.featuresLayer);
+
+    // draw info overlay
+    drawInfoOverlay.setElement(this.$refs.drawInfoOverlay);
+    this.map.addOverlay(drawInfoOverlay);
 
     // simplified layer (preview)
     this.simplifiedLayer = new ol.layer.Vector({
@@ -257,6 +278,46 @@ export default {
         source,
         type: 'LineString',
         style: editStyle,
+        geometryFunction: (coords, geom) => {
+          if (!geom) {
+            geom = new ol.geom.LineString([]);
+          }
+
+          if (coords.length <= 1) {
+            drawInfoOverlay.setPosition(undefined);
+          }
+
+          // get 2 last points
+          if (coords.length >= 2) {
+            geom.setCoordinates(coords);
+
+            let geomCoords = geom.getCoordinates();
+            let point1 = geomCoords[geomCoords.length - 2];
+            let point2 = geomCoords[geomCoords.length - 1];
+            let distance = ol.sphere.getDistance(ol.proj.toLonLat(point1), ol.proj.toLonLat(point2));
+
+            let lon1 = (ol.proj.toLonLat(point1)[0] * Math.PI) / 180;
+            let lon2 = (ol.proj.toLonLat(point2)[0] * Math.PI) / 180;
+            let lat1 = (ol.proj.toLonLat(point1)[1] * Math.PI) / 180;
+            let lat2 = (ol.proj.toLonLat(point2)[1] * Math.PI) / 180;
+            let a = Math.sin(lon2 - lon1) * Math.cos(lat2);
+            let b = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
+
+            let angle = Math.atan2(a, b);
+            let bearing = ((angle * 180) / Math.PI + 360) % 360;
+
+            if (distance > 0) {
+              this.drawInfo.distance = Math.round(distance);
+              this.drawInfo.bearing = Math.round(bearing);
+            } else {
+              this.drawInfo.distance = 0;
+              this.drawInfo.bearing = 0;
+            }
+            drawInfoOverlay.setPosition(geomCoords[geomCoords.length - 1]);
+          }
+
+          return geom;
+        },
       });
       this.map.addInteraction(this.drawInteraction);
 
@@ -278,6 +339,9 @@ export default {
       this.drawInteraction.setActive(false);
       this.modifyInteraction.setActive(false);
       this.snapInteraction.setActive(false);
+
+      // hide draw info overlay
+      drawInfoOverlay.setPosition(undefined);
     },
     onDrawStart() {
       document.addEventListener('keydown', this.onKeyWhileDrawing);
@@ -286,6 +350,9 @@ export default {
     onDrawEnd() {
       document.removeEventListener('keydown', this.onKeyWhileDrawing);
       document.removeEventListener('keypress', this.onKeyWhileDrawing);
+
+      // hide draw info overlay
+      drawInfoOverlay.setPosition(undefined);
     },
     onModifyEnd() {
       this.updateFeaturesFromStore();
@@ -537,3 +604,13 @@ export default {
   },
 };
 </script>
+
+<style>
+.draw-info-overlay {
+  background: yellow;
+  padding: 2px;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  min-width: 60px;
+}
+</style>

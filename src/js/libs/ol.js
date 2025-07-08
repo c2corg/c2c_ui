@@ -22,6 +22,7 @@ import TileWMS from 'ol/source/TileWMS';
 import VectorSource from 'ol/source/Vector';
 import WMTS from 'ol/source/WMTS';
 import XYZ from 'ol/source/XYZ';
+import { getDistance } from 'ol/sphere';
 import { Circle, Fill, Icon, Stroke, Style, Text } from 'ol/style';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
 
@@ -108,6 +109,10 @@ export default {
     Vector: VectorSource,
     WMTS,
     XYZ,
+  },
+
+  sphere: {
+    getDistance,
   },
 
   style: {
