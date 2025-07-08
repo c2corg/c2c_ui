@@ -70,7 +70,7 @@ let defaultState = {
     visible: [],
   },
   bulletinsLoaded: false,
-  showAvalancheBulletins: true,
+  showAvalancheBulletins: false,
 
   winterRoutes: [],
   showWinterRoute: false,

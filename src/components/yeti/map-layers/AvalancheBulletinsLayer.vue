@@ -303,7 +303,11 @@ export default {
   },
   watch: {
     showAvalancheBulletins() {
-      this.loadAndUpdateAvalancheBulletins();
+      if (Yetix.mountains.all.length === 0) {
+        Yetix.fetchMountains().then(this.onMountainsResult);
+      } else {
+        this.loadAndUpdateAvalancheBulletins();
+      }
     },
   },
   mounted() {
@@ -331,11 +335,12 @@ export default {
     bulletinsLayer.setVisible(this.showAvalancheBulletins);
 
     // only on first mount, if mountains already loaded
-    if (Yetix.mountains.all.length === 0) {
+    if (this.showAvalancheBulletins && Yetix.mountains.all.length === 0) {
       Yetix.fetchMountains().then(this.onMountainsResult);
-
-      Yetix.$on('map-moveend', this.onMapMoveEnd);
     }
+
+    Yetix.$on('map-moveend', this.onMapMoveEnd);
+
     this.$emit('layer', this.layerSelector);
   },
   methods: {
