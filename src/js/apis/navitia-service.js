@@ -114,6 +114,10 @@ NavitiaService.prototype.getJourneysWithPreferences = function (
     options.max_walking_duration_to_pt = preferences.max_walking_duration;
   }
 
+  if (preferences.max_nb_transfers) {
+    options.max_nb_transfers = preferences.max_nb_transfers;
+  }
+
   if (preferences.wheelchair !== undefined) {
     options.wheelchair = preferences.wheelchair;
   }

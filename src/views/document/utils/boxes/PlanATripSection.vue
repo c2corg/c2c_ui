@@ -147,6 +147,26 @@
             </div>
           </div>
 
+          <div class="chose-transfer-limit">
+            <div class="chose-if-transfer-wanted">
+              <label for="limitTransfers" class="toggle-label"> Limiter le nombre de correspondances </label>
+              <label class="toggle">
+                <input type="checkbox" id="btnToggle" name="btnToggle" v-model="limitTransfers" />
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div v-if="limitTransfers" class="chose-nb-transfer" id="transferCountContainer">
+              <select class="number-dd" id="number-dd" name="number" v-model="maxTransfers">
+                <option value="0" :selected.attr="'selected'">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+          </div>
+
           <div v-if="missingDepartureAddress || missingDestinationAddress" class="non-valid-address">
             <div v-if="missingDepartureAddress">
               {{ $gettext('Please select a departure address.') }}
@@ -161,7 +181,9 @@
             <p class="plan-trip-search-button-text" v-if="activeTab === 'outbound'">
               {{ $gettext('Calculate my outbound trip') }}
             </p>
-            <p class="plan-trip-search-button-text" v-else>{{ $gettext('Calculate my return trip') }}</p>
+            <p class="plan-trip-search-button-text" v-else>
+              {{ $gettext('Calculate my return trip') }}
+            </p>
           </button>
 
           <div class="calculated-duration" v-if="activeTab === 'return'">
@@ -453,6 +475,8 @@ export default {
         isUpdating: false,
         missingDepartureAddress: false,
         missingDestinationAddress: false,
+        limitTransfers: false,
+        maxTransfers: 0,
       },
 
       // Data for return journey
@@ -474,6 +498,8 @@ export default {
         isUpdating: false,
         missingDepartureAddress: false,
         missingDestinationAddress: false,
+        limitTransfers: false,
+        maxTransfers: 0,
       },
 
       userService: new UserProfileService(api),
@@ -706,6 +732,24 @@ export default {
       },
     },
 
+    limitTransfers: {
+      get() {
+        return this.currentData.limitTransfers;
+      },
+      set(value) {
+        this.currentData.limitTransfers = value;
+      },
+    },
+
+    maxTransfers: {
+      get() {
+        return this.limitTransfers ? this.currentData.maxTransfers : null;
+      },
+      set(value) {
+        this.currentData.maxTransfers = value;
+      },
+    },
+
     canAccessReturnTab() {
       return this.outboundData.journeys.length > 0;
     },
@@ -864,8 +908,24 @@ export default {
 
       this.isUpdating = true;
 
-      // Format datetime for Navitia API
-      const dateTimeFormat = this.selectedDate.replace(/-/g, '') + 'T' + this.selectedTime.replace(':', '') + '00';
+      // Format datetime for Navitia API avec soustraction de 15 minutes
+      const originalDateTime = new Date(`${this.selectedDate}T${this.selectedTime}:00`);
+      const adjustedDateTime = new Date(originalDateTime);
+
+      // Soustraire 15 minutes, mais ne pas revenir à la veille
+      if (originalDateTime.getHours() === 0 && originalDateTime.getMinutes() < 15) {
+        // Si l'heure est entre 00h00 et 00h14, on garde l'heure originale
+        adjustedDateTime.setTime(originalDateTime.getTime());
+      } else {
+        // Sinon, on soustrait 15 minutes
+        adjustedDateTime.setTime(originalDateTime.getTime() - 15 * 60 * 1000);
+      }
+
+      const dateTimeFormat =
+        adjustedDateTime.toISOString().slice(0, 10).replace(/-/g, '') +
+        'T' +
+        adjustedDateTime.toTimeString().slice(0, 5).replace(':', '') +
+        '00';
       const dateTimeRepresents = this.timePreference === 'arrive-before' ? 'arrival' : 'departure';
 
       try {
@@ -879,6 +939,7 @@ export default {
           {
             walking_speed: 1.12,
             max_walking_duration_to_pt: 4464,
+            max_nb_transfers: this.maxTransfers,
           }
         );
 
@@ -1516,6 +1577,10 @@ export default {
       }
       return 0;
     },
+
+    myFunction() {
+      this.limitTransfers = !this.limitTransfers;
+    },
   },
 };
 </script>
@@ -1947,6 +2012,76 @@ export default {
         .plan-trip-search-button-text {
           font-weight: 600;
           margin-left: 12px;
+        }
+      }
+
+      .chose-transfer-limit {
+        display: flex;
+        position: relative;
+        width: fit-content;
+        .chose-if-transfer-wanted {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          .toggle-label {
+            line-height: normal;
+          }
+        }
+
+        .toggle {
+          position: relative;
+          display: inline-block;
+          width: 30px;
+          height: 17px;
+
+          input {
+            display: none;
+          }
+        }
+
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #333;
+          transition: 0.4s;
+          border-radius: 34px;
+        }
+
+        .slider:before {
+          position: absolute;
+          content: '';
+          height: 13px;
+          width: 13px;
+          left: 2px;
+          bottom: 2px;
+          background-color: #fff;
+          transition: 0.4s;
+          border-radius: 50%;
+        }
+
+        input:checked + .slider {
+          background-color: #337ab7;
+        }
+
+        input:checked + .slider:before {
+          transform: translateX(13px);
+        }
+
+        .chose-nb-transfer {
+          margin-left: 14px;
+          position: absolute;
+          right: -56px;
+          top: -2px;
+
+          .number-dd {
+            padding: 3px;
+            border-radius: 4px;
+          }
         }
       }
 
