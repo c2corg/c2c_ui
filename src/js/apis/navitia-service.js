@@ -118,6 +118,10 @@ NavitiaService.prototype.getJourneysWithPreferences = function (
     options.max_nb_transfers = preferences.max_nb_transfers;
   }
 
+  if (preferences.min_nb_journeys) {
+    options.min_nb_journeys = preferences.min_nb_journeys;
+  }
+
   if (preferences.wheelchair !== undefined) {
     options.wheelchair = preferences.wheelchair;
   }

@@ -157,13 +157,14 @@
             </div>
             <div v-if="limitTransfers" class="chose-nb-transfer" id="transferCountContainer">
               <select class="number-dd" id="number-dd" name="number" v-model="maxTransfers">
-                <option value="0" :selected.attr="'selected'">0</option>
+                <option value="0" :selected.attr="'selected'">0 (direct)</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
-                <option value="3" selected>3</option>
+                <option value="3">3</option>
                 <option value="4">4</option>
                 <option value="5">5</option>
               </select>
+              <div class="max">maximum</div>
             </div>
           </div>
 
@@ -939,6 +940,7 @@ export default {
           {
             walking_speed: 1.12,
             max_walking_duration_to_pt: 4464,
+            min_nb_journeys: 3,
             max_nb_transfers: this.maxTransfers,
           }
         );
@@ -2075,8 +2077,11 @@ export default {
         .chose-nb-transfer {
           margin-left: 14px;
           position: absolute;
-          right: -56px;
+          right: -162px;
           top: -2px;
+          display: flex;
+          gap: 4px;
+          align-items: center;
 
           .number-dd {
             padding: 3px;
