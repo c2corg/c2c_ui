@@ -1287,7 +1287,8 @@ export default {
     getRouteColor(section) {
       if (section.mode === 'walking') return '00008B';
       if (section.type === 'public_transport' || section.type === 'on_demand_transport') {
-        return section.display_informations?.color || '808080';
+        const color = section.display_informations?.color;
+        return color === 'FFFFFF' ? '808080' : color || '808080';
       }
       return '808080';
     },
