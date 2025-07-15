@@ -149,7 +149,9 @@
 
           <div class="chose-transfer-limit">
             <div class="chose-if-transfer-wanted">
-              <label for="limitTransfers" class="toggle-label"> Limiter le nombre de correspondances </label>
+              <label for="limitTransfers" class="toggle-label">
+                {{ $gettext('Limit the number of connections') }}
+              </label>
               <label class="toggle">
                 <input type="checkbox" id="btnToggle" name="btnToggle" v-model="limitTransfers" />
                 <span class="slider"></span>
@@ -158,13 +160,12 @@
             <div v-if="limitTransfers" class="chose-nb-transfer" id="transferCountContainer">
               <select class="number-dd" id="number-dd" name="number" v-model="maxTransfers">
                 <option value="0" :selected.attr="'selected'">0 (direct)</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
+                <option value="1">1 max</option>
+                <option value="2">2 max</option>
+                <option value="3">3 max</option>
+                <option value="4">4 max</option>
+                <option value="5">5 max</option>
               </select>
-              <div class="max">maximum</div>
             </div>
           </div>
 
@@ -332,6 +333,14 @@
                         <div class="timeline-content">
                           <div class="timeline-line">
                             <strong>{{ $gettext('Line') }} : </strong> {{ section.display_informations?.code || '' }}
+                            <img
+                              v-if="section.display_informations?.equipments?.includes('has_bike_accepted')"
+                              src="@/assets/img/boxes/velo.svg"
+                              alt="bike accepted"
+                            />
+                            <span v-if="section.type === 'on_demand_transport'" class="on-demand-text">
+                              {{ $gettext('Warning, this transport is on demand ⚠') }}
+                            </span>
                           </div>
                           <div class="timeline-direction">
                             <strong>{{ $gettext('Direction') }} : </strong
@@ -1212,12 +1221,11 @@ export default {
 
     /** Each route follows the same sequence of colors */
     getRouteColor(section) {
-      if (section.mode === 'walking') return 'blue';
+      if (section.mode === 'walking') return '00008B';
       if (section.type === 'public_transport' || section.type === 'on_demand_transport') {
-        // Utilisez la couleur fournie par l'API si elle existe, sinon une couleur par défaut
-        return section.display_informations?.color || 'gray';
+        return section.display_informations?.color || '808080';
       }
-      return 'gray';
+      return '808080';
     },
 
     /** Shows route details */
@@ -1974,7 +1982,11 @@ export default {
               }
 
               .timeline-line {
-                font-size: 15px;
+                font-size: 14px;
+                .on-demand-text {
+                  background-color: rgba(255, 165, 0, 0.5);
+                  font-style: italic;
+                }
               }
 
               .timeline-direction {
@@ -2077,7 +2089,7 @@ export default {
         .chose-nb-transfer {
           margin-left: 14px;
           position: absolute;
-          right: -162px;
+          right: -108px;
           top: -2px;
           display: flex;
           gap: 4px;
@@ -2085,7 +2097,18 @@ export default {
 
           .number-dd {
             padding: 3px;
+            text-align: center;
             border-radius: 4px;
+          }
+        }
+      }
+
+      @media only screen and (max-width: 1650px) {
+        .chose-transfer-limit {
+          display: block;
+          .chose-nb-transfer {
+            position: initial;
+            margin-top: 10px;
           }
         }
       }
