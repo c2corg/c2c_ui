@@ -147,6 +147,28 @@
             </div>
           </div>
 
+          <div class="chose-transfer-limit">
+            <div class="chose-if-transfer-wanted">
+              <label for="limitTransfers" class="toggle-label">
+                {{ $gettext('Limit the number of connections') }}
+              </label>
+              <label class="toggle">
+                <input type="checkbox" id="btnToggle" name="btnToggle" v-model="limitTransfers" />
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div v-if="limitTransfers" class="chose-nb-transfer" id="transferCountContainer">
+              <select class="number-dd" id="number-dd" name="number" v-model="maxTransfers">
+                <option value="0" :selected.attr="'selected'">0 (direct)</option>
+                <option value="1">1 max</option>
+                <option value="2">2 max</option>
+                <option value="3">3 max</option>
+                <option value="4">4 max</option>
+                <option value="5">5 max</option>
+              </select>
+            </div>
+          </div>
+
           <div v-if="missingDepartureAddress || missingDestinationAddress" class="non-valid-address">
             <div v-if="missingDepartureAddress">
               {{ $gettext('Please select a departure address.') }}
@@ -161,7 +183,9 @@
             <p class="plan-trip-search-button-text" v-if="activeTab === 'outbound'">
               {{ $gettext('Calculate my outbound trip') }}
             </p>
-            <p class="plan-trip-search-button-text" v-else>{{ $gettext('Calculate my return trip') }}</p>
+            <p class="plan-trip-search-button-text" v-else>
+              {{ $gettext('Calculate my return trip') }}
+            </p>
           </button>
 
           <div class="calculated-duration" v-if="activeTab === 'return'">
@@ -187,6 +211,9 @@
           </div>
 
           <div class="itineraries-container" :class="{ updating: isUpdating }" v-if="journeys.length > 0">
+            <div class="last-journey-message" v-if="noResult">
+              {{ $gettext('Here is the last journey of the day :') }}
+            </div>
             <div class="itinerary-card" v-for="(journey, index) in journeys" :key="index">
               <div
                 class="itinerary-header"
@@ -309,6 +336,14 @@
                         <div class="timeline-content">
                           <div class="timeline-line">
                             <strong>{{ $gettext('Line') }} : </strong> {{ section.display_informations?.code || '' }}
+                            <img
+                              v-if="section.display_informations?.equipments?.includes('has_bike_accepted')"
+                              src="@/assets/img/boxes/velo.svg"
+                              alt="bike accepted"
+                            />
+                            <span v-if="section.type === 'on_demand_transport'" class="on-demand-text">
+                              {{ $gettext('Warning, this transport is on demand ⚠') }}
+                            </span>
                           </div>
                           <div class="timeline-direction">
                             <strong>{{ $gettext('Direction') }} : </strong
@@ -453,6 +488,8 @@ export default {
         isUpdating: false,
         missingDepartureAddress: false,
         missingDestinationAddress: false,
+        limitTransfers: false,
+        maxTransfers: 0,
       },
 
       // Data for return journey
@@ -474,6 +511,8 @@ export default {
         isUpdating: false,
         missingDepartureAddress: false,
         missingDestinationAddress: false,
+        limitTransfers: false,
+        maxTransfers: 0,
       },
 
       userService: new UserProfileService(api),
@@ -706,6 +745,24 @@ export default {
       },
     },
 
+    limitTransfers: {
+      get() {
+        return this.currentData.limitTransfers;
+      },
+      set(value) {
+        this.currentData.limitTransfers = value;
+      },
+    },
+
+    maxTransfers: {
+      get() {
+        return this.limitTransfers ? this.currentData.maxTransfers : null;
+      },
+      set(value) {
+        this.currentData.maxTransfers = value;
+      },
+    },
+
     canAccessReturnTab() {
       return this.outboundData.journeys.length > 0;
     },
@@ -864,8 +921,21 @@ export default {
 
       this.isUpdating = true;
 
-      // Format datetime for Navitia API
-      const dateTimeFormat = this.selectedDate.replace(/-/g, '') + 'T' + this.selectedTime.replace(':', '') + '00';
+      // Format datetime for Navitia API minus 15 minutes
+      const originalDateTime = new Date(`${this.selectedDate}T${this.selectedTime}:00`);
+      const adjustedDateTime = new Date(originalDateTime);
+
+      if (originalDateTime.getHours() === 0 && originalDateTime.getMinutes() < 15) {
+        adjustedDateTime.setTime(originalDateTime.getTime());
+      } else {
+        adjustedDateTime.setTime(originalDateTime.getTime() - 15 * 60 * 1000);
+      }
+
+      const dateTimeFormat =
+        adjustedDateTime.toISOString().slice(0, 10).replace(/-/g, '') +
+        'T' +
+        adjustedDateTime.toTimeString().slice(0, 5).replace(':', '') +
+        '00';
       const dateTimeRepresents = this.timePreference === 'arrive-before' ? 'arrival' : 'departure';
 
       try {
@@ -879,6 +949,8 @@ export default {
           {
             walking_speed: 1.12,
             max_walking_duration_to_pt: 4464,
+            min_nb_journeys: 3,
+            max_nb_transfers: this.maxTransfers,
           }
         );
 
@@ -893,6 +965,11 @@ export default {
           });
 
           if (filteredJourneys.length === 0) {
+            if (this.activeTab === 'return') {
+              await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
+              return;
+            }
+
             this.noResult = true;
             this.journeys = [];
             return;
@@ -901,42 +978,101 @@ export default {
           this.journeys = data.journeys.slice(0, 3);
           this.noResult = false;
           this.selectedRouteJourney = this.journeys[0];
-
-          if (this.activeTab === 'outbound') {
-            this.calculateReturnParameters();
-            await this.determineReturnWaypoint();
+        } else {
+          if (this.activeTab === 'return') {
+            await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
+            return;
           }
 
-          this.$emit('calculate-route', {
-            from: {
-              address: fromAddressDisplay,
-              coordinates: this.activeTab === 'outbound' ? this.fromCoordinates : this.selectedWaypoint.coordinates,
-            },
-            to: {
-              address: toAddressDisplay,
-              coordinates: this.activeTab === 'outbound' ? this.selectedWaypoint.coordinates : this.fromCoordinates,
-            },
-            date: this.selectedDate,
-            time: this.selectedTime,
-            preference: this.timePreference,
-            journeys: this.journeys,
-          });
-        } else {
           this.noResult = true;
           this.journeys = [];
         }
       } catch (error) {
         console.error('Error retrieving routes:', error);
+
+        if (this.activeTab === 'return') {
+          await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
+          return;
+        }
+
         this.noResult = true;
         this.journeys = [];
-
-        if (error.response?.status === 400) {
-          console.error('Paramètres invalides pour Navitia');
-        } else if (error.response?.status === 500) {
-          console.error("Erreur serveur lors de l'appel Navitia");
-        }
       } finally {
         this.isUpdating = false;
+      }
+    },
+
+    async fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents) {
+      try {
+        const datePart = dateTimeFormat.substring(0, 8);
+        const dateTimeAtStartOfDay = datePart + 'T000100'; // Format: YYYYMMDDT000100
+        const response = await NavitiaService.getJourneys(
+          {
+            from: fromCoords,
+            to: toCoords,
+            datetime: dateTimeAtStartOfDay,
+            datetime_represents: dateTimeRepresents,
+          },
+          {
+            walking_speed: 1.12,
+            max_walking_duration_to_pt: 4464,
+            min_nb_journeys: 3,
+            max_nb_transfers: this.maxTransfers,
+            timeframe_duration: 86400,
+          }
+        );
+
+        const data = response.data;
+        const selectedDateFormatted = this.selectedDate.replace(/-/g, '');
+
+        if (data.journeys && data.journeys.length > 0) {
+          console.log(data.journeys);
+          const filteredJourneys = data.journeys.filter((journey) => {
+            const journeyDate = journey.departure_date_time.split('T')[0];
+            return journeyDate === selectedDateFormatted;
+          });
+
+          if (filteredJourneys.length > 0) {
+            const lastDepartureTime = filteredJourneys.reduce((latest, journey) => {
+              const depTime = journey.departure_date_time.substring(9); // HHMMSS
+              return depTime > latest ? depTime : latest;
+            }, '000000');
+
+            const bestLastJourney = filteredJourneys.find(
+              (journey) => journey.departure_date_time.substring(9) === lastDepartureTime
+            );
+
+            this.journeys = [bestLastJourney];
+            this.noResult = true;
+            this.selectedRouteJourney = bestLastJourney;
+            this.showTimeButton = true;
+
+            this.$emit('calculate-route', {
+              from: {
+                address: this.activeTab === 'outbound' ? this.fromAddress : this.selectedWaypoint?.title,
+                coordinates: this.activeTab === 'outbound' ? this.fromCoordinates : this.selectedWaypoint?.coordinates,
+              },
+              to: {
+                address: this.activeTab === 'outbound' ? this.selectedWaypoint?.title : this.fromAddress,
+                coordinates: this.activeTab === 'outbound' ? this.selectedWaypoint?.coordinates : this.fromCoordinates,
+              },
+              date: this.selectedDate,
+              time: this.selectedTime,
+              preference: this.timePreference,
+              journeys: this.journeys,
+              isExtendedTimeframe: true,
+            });
+
+            return;
+          }
+        }
+
+        this.noResult = true;
+        this.journeys = [];
+      } catch (error) {
+        console.error('Error retrieving extended timeframe routes:', error);
+        this.noResult = true;
+        this.journeys = [];
       }
     },
 
@@ -1149,12 +1285,12 @@ export default {
 
     /** Each route follows the same sequence of colors */
     getRouteColor(section) {
-      if (section.mode === 'walking') return 'blue';
+      if (section.mode === 'walking') return '00008B';
       if (section.type === 'public_transport' || section.type === 'on_demand_transport') {
-        // Utilisez la couleur fournie par l'API si elle existe, sinon une couleur par défaut
-        return section.display_informations?.color || 'gray';
+        const color = section.display_informations?.color;
+        return color === 'FFFFFF' ? '808080' : color || '808080';
       }
-      return 'gray';
+      return '808080';
     },
 
     /** Shows route details */
@@ -1515,6 +1651,10 @@ export default {
         return arrTotalSec - depTotalSec;
       }
       return 0;
+    },
+
+    myFunction() {
+      this.limitTransfers = !this.limitTransfers;
     },
   },
 };
@@ -1907,7 +2047,11 @@ export default {
               }
 
               .timeline-line {
-                font-size: 15px;
+                font-size: 14px;
+                .on-demand-text {
+                  background-color: rgba(255, 165, 0, 0.5);
+                  font-style: italic;
+                }
               }
 
               .timeline-direction {
@@ -1947,6 +2091,90 @@ export default {
         .plan-trip-search-button-text {
           font-weight: 600;
           margin-left: 12px;
+        }
+      }
+
+      .chose-transfer-limit {
+        display: flex;
+        position: relative;
+        width: fit-content;
+        .chose-if-transfer-wanted {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          .toggle-label {
+            line-height: normal;
+          }
+        }
+
+        .toggle {
+          position: relative;
+          display: inline-block;
+          width: 30px;
+          height: 17px;
+
+          input {
+            display: none;
+          }
+        }
+
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #333;
+          transition: 0.4s;
+          border-radius: 34px;
+        }
+
+        .slider:before {
+          position: absolute;
+          content: '';
+          height: 13px;
+          width: 13px;
+          left: 2px;
+          bottom: 2px;
+          background-color: #fff;
+          transition: 0.4s;
+          border-radius: 50%;
+        }
+
+        input:checked + .slider {
+          background-color: #337ab7;
+        }
+
+        input:checked + .slider:before {
+          transform: translateX(13px);
+        }
+
+        .chose-nb-transfer {
+          margin-left: 14px;
+          position: absolute;
+          right: -108px;
+          top: -2px;
+          display: flex;
+          gap: 4px;
+          align-items: center;
+
+          .number-dd {
+            padding: 3px;
+            text-align: center;
+            border-radius: 4px;
+          }
+        }
+      }
+
+      @media only screen and (max-width: 1650px) {
+        .chose-transfer-limit {
+          display: block;
+          .chose-nb-transfer {
+            position: initial;
+            margin-top: 10px;
+          }
         }
       }
 
