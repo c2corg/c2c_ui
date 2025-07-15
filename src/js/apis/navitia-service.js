@@ -118,6 +118,10 @@ NavitiaService.prototype.getJourneysWithPreferences = function (
     options.max_nb_transfers = preferences.max_nb_transfers;
   }
 
+  if (preferences.timeframe_duration) {
+    options.timeframe_duration = preferences.timeframe_duration;
+  }
+
   if (preferences.min_nb_journeys) {
     options.min_nb_journeys = preferences.min_nb_journeys;
   }

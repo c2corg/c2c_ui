@@ -211,6 +211,9 @@
           </div>
 
           <div class="itineraries-container" :class="{ updating: isUpdating }" v-if="journeys.length > 0">
+            <div class="last-journey-message" v-if="noResult">
+              {{ $gettext('Here is the last journey of the day :') }}
+            </div>
             <div class="itinerary-card" v-for="(journey, index) in journeys" :key="index">
               <div
                 class="itinerary-header"
@@ -918,16 +921,13 @@ export default {
 
       this.isUpdating = true;
 
-      // Format datetime for Navitia API avec soustraction de 15 minutes
+      // Format datetime for Navitia API minus 15 minutes
       const originalDateTime = new Date(`${this.selectedDate}T${this.selectedTime}:00`);
       const adjustedDateTime = new Date(originalDateTime);
 
-      // Soustraire 15 minutes, mais ne pas revenir à la veille
       if (originalDateTime.getHours() === 0 && originalDateTime.getMinutes() < 15) {
-        // Si l'heure est entre 00h00 et 00h14, on garde l'heure originale
         adjustedDateTime.setTime(originalDateTime.getTime());
       } else {
-        // Sinon, on soustrait 15 minutes
         adjustedDateTime.setTime(originalDateTime.getTime() - 15 * 60 * 1000);
       }
 
@@ -965,6 +965,11 @@ export default {
           });
 
           if (filteredJourneys.length === 0) {
+            if (this.activeTab === 'return') {
+              await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
+              return;
+            }
+
             this.noResult = true;
             this.journeys = [];
             return;
@@ -973,42 +978,101 @@ export default {
           this.journeys = data.journeys.slice(0, 3);
           this.noResult = false;
           this.selectedRouteJourney = this.journeys[0];
-
-          if (this.activeTab === 'outbound') {
-            this.calculateReturnParameters();
-            await this.determineReturnWaypoint();
+        } else {
+          if (this.activeTab === 'return') {
+            await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
+            return;
           }
 
-          this.$emit('calculate-route', {
-            from: {
-              address: fromAddressDisplay,
-              coordinates: this.activeTab === 'outbound' ? this.fromCoordinates : this.selectedWaypoint.coordinates,
-            },
-            to: {
-              address: toAddressDisplay,
-              coordinates: this.activeTab === 'outbound' ? this.selectedWaypoint.coordinates : this.fromCoordinates,
-            },
-            date: this.selectedDate,
-            time: this.selectedTime,
-            preference: this.timePreference,
-            journeys: this.journeys,
-          });
-        } else {
           this.noResult = true;
           this.journeys = [];
         }
       } catch (error) {
         console.error('Error retrieving routes:', error);
+
+        if (this.activeTab === 'return') {
+          await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
+          return;
+        }
+
         this.noResult = true;
         this.journeys = [];
-
-        if (error.response?.status === 400) {
-          console.error('Paramètres invalides pour Navitia');
-        } else if (error.response?.status === 500) {
-          console.error("Erreur serveur lors de l'appel Navitia");
-        }
       } finally {
         this.isUpdating = false;
+      }
+    },
+
+    async fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents) {
+      try {
+        const datePart = dateTimeFormat.substring(0, 8);
+        const dateTimeAtStartOfDay = datePart + 'T000100'; // Format: YYYYMMDDT000100
+        const response = await NavitiaService.getJourneys(
+          {
+            from: fromCoords,
+            to: toCoords,
+            datetime: dateTimeAtStartOfDay,
+            datetime_represents: dateTimeRepresents,
+          },
+          {
+            walking_speed: 1.12,
+            max_walking_duration_to_pt: 4464,
+            min_nb_journeys: 3,
+            max_nb_transfers: this.maxTransfers,
+            timeframe_duration: 86400,
+          }
+        );
+
+        const data = response.data;
+        const selectedDateFormatted = this.selectedDate.replace(/-/g, '');
+
+        if (data.journeys && data.journeys.length > 0) {
+          console.log(data.journeys);
+          const filteredJourneys = data.journeys.filter((journey) => {
+            const journeyDate = journey.departure_date_time.split('T')[0];
+            return journeyDate === selectedDateFormatted;
+          });
+
+          if (filteredJourneys.length > 0) {
+            const lastDepartureTime = filteredJourneys.reduce((latest, journey) => {
+              const depTime = journey.departure_date_time.substring(9); // HHMMSS
+              return depTime > latest ? depTime : latest;
+            }, '000000');
+
+            const bestLastJourney = filteredJourneys.find(
+              (journey) => journey.departure_date_time.substring(9) === lastDepartureTime
+            );
+
+            this.journeys = [bestLastJourney];
+            this.noResult = true;
+            this.selectedRouteJourney = bestLastJourney;
+            this.showTimeButton = true;
+
+            this.$emit('calculate-route', {
+              from: {
+                address: this.activeTab === 'outbound' ? this.fromAddress : this.selectedWaypoint?.title,
+                coordinates: this.activeTab === 'outbound' ? this.fromCoordinates : this.selectedWaypoint?.coordinates,
+              },
+              to: {
+                address: this.activeTab === 'outbound' ? this.selectedWaypoint?.title : this.fromAddress,
+                coordinates: this.activeTab === 'outbound' ? this.selectedWaypoint?.coordinates : this.fromCoordinates,
+              },
+              date: this.selectedDate,
+              time: this.selectedTime,
+              preference: this.timePreference,
+              journeys: this.journeys,
+              isExtendedTimeframe: true,
+            });
+
+            return;
+          }
+        }
+
+        this.noResult = true;
+        this.journeys = [];
+      } catch (error) {
+        console.error('Error retrieving extended timeframe routes:', error);
+        this.noResult = true;
+        this.journeys = [];
       }
     },
 
