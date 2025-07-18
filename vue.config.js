@@ -92,7 +92,7 @@ const config = {
   urlsConfigurations: {
     demo: {
       name: 'demo',
-      api: 'https://api.demov6.camptocamp.org',
+      api: 'https://preprod.c2c.preprod0.smart-origin.com/api',
       media: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
       imageBackend: 'https://images.demov6.camptocamp.org',
       tracking: 'https://tracking.demov6.camptocamp.org',
@@ -114,7 +114,7 @@ const config = {
     },
     prod: {
       name: 'prod',
-      api: 'https://api.camptocamp.org',
+      api: 'https://preprod.c2c.preprod0.smart-origin.com/api',
       media: 'https://media.camptocamp.org/c2corg-active',
       imageBackend: 'https://images.camptocamp.org',
       tracking: 'https://tracking.camptocamp.org',
@@ -134,10 +134,19 @@ const config = {
       corosConnectAuthUrl: 'https://open.coros.com/oauth2/authorize',
       corosClientId: 'f263ed9257c74e808befaf548a27852c',
     },
+    localhost: {
+      name: 'localhost',
+      api: 'http://localhost:6543',
+      media: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
+      imageBackend: 'https://images.demov6.camptocamp.org',
+      forum: 'https://forum.demov6.camptocamp.org',
+      modernThumbnailsTimestamp: 0,
+      modernThumbnailsId: 0,
+    },
   },
 };
 
-config.urls = config.urlsConfigurations.prod; // default: prod
+config.urls = config.urlsConfigurations.localhost; // default: prod
 
 const bundleAnalyzerConfig = {
   analyzerMode: 'disabled',
