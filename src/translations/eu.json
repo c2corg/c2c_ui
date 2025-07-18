@@ -18,6 +18,7 @@
     "Compare selected versions": "Aukeratutako bertsioak alderatu",
     "Created on": "Sortze data",
     "Current password": "Oraingo pasahitza",
+    "Date": "Data",
     "Describe access": "Abiagunea deskribatu",
     "Describe access period": "Sarbidearen denboraldia zehaztu",
     "Describe here the gear needed for this route": "Ohizko ekipamenduaz gain hartu behar den material espezifikoa. Aipatu behar ez den ekipamenduaren adibibe batzu: ARVA, pala, sonda, pioleta etabar.",
@@ -98,6 +99,7 @@
     "Types and styles": "Mota eta estiloa",
     "Upload a GPS track": "GPS hurratsa gehitu",
     "Username": "Identifikazioa",
+    "View details": "Xehetasunak ikusi",
     "View in other lang": "Beste hizkuntza batean ikusi",
     "We sent you an email, please click on the link to reset password.": "Laster email bat jasoko duzu. Bertan dagoen loturan klik egin pasahiotza berrasierazteko",
     "access": {
