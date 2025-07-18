@@ -11,6 +11,8 @@
       <div class="column is-3 no-print">
         <map-box :document="document" @has-protection-area="hasProtectionArea = true" />
         <avalanche-box :document="document" v-if="!$screen.isMobile" />
+        <is-reachable-by-public-transports-box :document="document.associations.waypoints" />
+
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
@@ -122,6 +124,8 @@
 
           <div style="clear: both" />
         </div>
+
+        <transports-box :document="document" />
 
         <routes-box :document="document" hide-buttons disable-activity-split />
         <images-box :document="document" />

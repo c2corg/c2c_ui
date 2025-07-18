@@ -134,6 +134,15 @@ const config = {
       corosConnectAuthUrl: 'https://open.coros.com/oauth2/authorize',
       corosClientId: 'f263ed9257c74e808befaf548a27852c',
     },
+    localhost: {
+      name: 'localhost',
+      api: 'http://localhost:6543',
+      media: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
+      imageBackend: 'https://images.demov6.camptocamp.org',
+      forum: 'https://forum.demov6.camptocamp.org',
+      modernThumbnailsTimestamp: 0,
+      modernThumbnailsId: 0,
+    },
   },
 };
 
