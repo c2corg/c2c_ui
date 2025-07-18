@@ -11,8 +11,12 @@
         :class="{ 'is-active': activeSection === 'nearbyStops' }"
         @click="setActiveSection('nearbyStops')"
       >
-        <img class="public-transports-bus default-icon" :src="require('@/assets/img/boxes/bus.svg')" />
-        <img class="public-transports-bus hover-icon" :src="require('@/assets/img/boxes/public_transport.svg')" />
+        <img class="public-transports-bus default-icon" :src="require('@/assets/img/boxes/bus.svg')" alt="transport" />
+        <img
+          class="public-transports-bus hover-icon"
+          :src="require('@/assets/img/boxes/public_transport.svg')"
+          alt="transport"
+        />
         {{ $gettext('Show nearby stops') }}
       </button>
 
@@ -22,8 +26,16 @@
         :class="{ 'is-active': activeSection === 'planATrip' }"
         @click="setActiveSection('planATrip')"
       >
-        <img class="public-transports-bus default-icon" :src="require('@/assets/img/boxes/itineraire-2.svg')" />
-        <img class="public-transports-bus hover-icon" :src="require('@/assets/img/boxes/itineraire.svg')" />
+        <img
+          class="public-transports-bus default-icon"
+          :src="require('@/assets/img/boxes/itineraire-2.svg')"
+          alt="itinerary"
+        />
+        <img
+          class="public-transports-bus hover-icon"
+          :src="require('@/assets/img/boxes/itineraire.svg')"
+          alt="itinerary"
+        />
         {{ $gettext('Plan a public transport trip') }}
       </button>
     </div>

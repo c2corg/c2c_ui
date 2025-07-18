@@ -51,7 +51,7 @@
     </div>
 
     <div v-if="!showAccessibilityInfo" class="public-transport-no-result">
-      <img class="public-transports-no-result-bus" src="@/assets/img/boxes/transport_not_found.svg" />
+      <img class="public-transports-no-result-bus" src="@/assets/img/boxes/transport_not_found.svg" alt="not found" />
       <div class="public-transport-no-result-text">
         <strong>{{ $gettext('Unfortunately, this route may not be deserved by public transport') }}</strong>
         <p>

@@ -48,7 +48,7 @@
                     </div>
                   </div>
                   <button class="geolocalisation" @click="useCurrentLocation">
-                    <img class="geolocalisation-img" src="@/assets/img/boxes/geoloc.svg" />
+                    <img class="geolocalisation-img" src="@/assets/img/boxes/geoloc.svg" alt="geoloc" />
                   </button>
                 </div>
                 <div class="to-container">
@@ -111,7 +111,7 @@
                     </div>
                   </div>
                   <button class="geolocalisation geolocalisation-return" @click="useCurrentLocation">
-                    <img class="geolocalisation-img" src="@/assets/img/boxes/geoloc.svg" />
+                    <img class="geolocalisation-img" src="@/assets/img/boxes/geoloc.svg" alt="geoloc" />
                   </button>
                 </div>
               </template>
@@ -124,7 +124,7 @@
               <div class="input-container">
                 <input type="date" id="date-input" class="date-input" v-model="selectedDate" />
                 <div class="calendar-icon">
-                  <img class="geolocalisation-img" src="@/assets/img/boxes/date.svg" />
+                  <img class="geolocalisation-img" src="@/assets/img/boxes/date.svg" alt="date" />
                 </div>
               </div>
             </div>
@@ -179,7 +179,7 @@
           </div>
 
           <button class="button is-primary plan-trip-search-button" @click="calculateRoute">
-            <img class="" src="@/assets/img/boxes/itineraire.svg" />
+            <img class="" src="@/assets/img/boxes/itineraire.svg" alt="itinerary" />
             <p class="plan-trip-search-button-text" v-if="activeTab === 'outbound'">
               {{ $gettext('Calculate my outbound trip') }}
             </p>
@@ -200,7 +200,11 @@
 
           <div class="no-itineraries-container" :class="{ updating: isUpdating }" v-if="noResult">
             <div class="no-itineraries">
-              <img class="no-itineraries-img" src="@/assets/img/boxes/transport_not_found.svg" />
+              <img
+                class="no-itineraries-img"
+                src="@/assets/img/boxes/transport_not_found.svg"
+                alt="transport not found"
+              />
               <div class="no-itineraries-text">
                 <div class="no-itineraries-found">{{ $gettext('No public transport found') }}</div>
                 <div class="no-itineraries-detail">
@@ -267,7 +271,7 @@
 
                 <div class="itinerary-details-button">
                   <button class="button is-info is-light" @click="showJourneyDetails(journey)">
-                    {{ $gettext('View details') }}
+                    {{ selectedJourney === journey ? $gettext('Hide details') : $gettext('View details') }}
                   </button>
                 </div>
               </div>
@@ -329,7 +333,11 @@
                         :class="getTransportColorClass(section)"
                         :style="{
                           'border-left': section.display_informations?.color
-                            ? `3px solid #${section.display_informations.color}`
+                            ? `3px solid #${
+                                section.display_informations.color === 'FFFFFF'
+                                  ? '808080'
+                                  : section.display_informations.color
+                              }`
                             : '3px solid gray',
                         }"
                       >
@@ -978,6 +986,11 @@ export default {
           this.journeys = data.journeys.slice(0, 3);
           this.noResult = false;
           this.selectedRouteJourney = this.journeys[0];
+
+          if (this.activeTab === 'outbound') {
+            this.calculateReturnParameters();
+            await this.determineReturnWaypoint();
+          }
         } else {
           if (this.activeTab === 'return') {
             await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
@@ -1421,10 +1434,11 @@ export default {
 
       // Recovery of the theoretical duration or the duration entered
       const theoreticalDuration = this.document.calculated_duration; // in days (float)
-      const itineraryDuration = this.document.duration?.length ? Math.min(...this.document.duration) : null; // in days (integer)
+      const itineraryDuration = this.document.durations?.length ? Math.min(...this.document.durations) : null; // in days (integer)
+      console.log(itineraryDuration);
 
       // Case 1: Duration <= 1 day with valid theoretical duration
-      if ((theoreticalDuration <= 1 || (itineraryDuration && itineraryDuration <= 1)) && theoreticalDuration) {
+      if (theoreticalDuration && theoreticalDuration <= 1 && itineraryDuration && itineraryDuration <= 1) {
         const returnDate = this.outboundData.selectedDate;
 
         // Calculation of return time (arrival time + theoretical duration)
@@ -1457,7 +1471,7 @@ export default {
           .padStart(2, '0')}`;
       }
       // Case 3: Duration > 1 day
-      else if (theoreticalDuration > 1 || (itineraryDuration && itineraryDuration > 1)) {
+      else if (itineraryDuration && itineraryDuration > 1) {
         const outboundDate = new Date(this.outboundData.selectedDate);
         const daysToAdd = itineraryDuration ? Math.ceil(itineraryDuration) : Math.ceil(theoreticalDuration);
         outboundDate.setDate(outboundDate.getDate() + daysToAdd);
