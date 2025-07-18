@@ -537,7 +537,6 @@ export default {
   async mounted() {
     // Loads a user's address to put it directly into the 'address' field
     await this.loadUserAddressIfLoggedIn();
-    console.log(this.document);
 
     // Firefox's date picker calendar has a specific design
     if (navigator.userAgent.toLowerCase().includes('firefox')) {
@@ -1039,7 +1038,6 @@ export default {
         const selectedDateFormatted = this.selectedDate.replace(/-/g, '');
 
         if (data.journeys && data.journeys.length > 0) {
-          console.log(data.journeys);
           const filteredJourneys = data.journeys.filter((journey) => {
             const journeyDate = journey.departure_date_time.split('T')[0];
             return journeyDate === selectedDateFormatted;
@@ -1118,7 +1116,7 @@ export default {
       if (mode.includes('train')) return 'train';
       if (mode.includes('car')) return 'bus';
 
-      return section.display_informations.code || 'bus';
+      return 'bus';
     },
 
     /** Manage different spellings of transports */
@@ -1435,7 +1433,6 @@ export default {
       // Recovery of the theoretical duration or the duration entered
       const theoreticalDuration = this.document.calculated_duration; // in days (float)
       const itineraryDuration = this.document.durations?.length ? Math.min(...this.document.durations) : null; // in days (integer)
-      console.log(itineraryDuration);
 
       // Case 1: Duration <= 1 day with valid theoretical duration
       if (theoreticalDuration && theoreticalDuration <= 1 && itineraryDuration && itineraryDuration <= 1) {
