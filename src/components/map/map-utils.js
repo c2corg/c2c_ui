@@ -201,7 +201,7 @@ export const getDocumentPointStyle = function (document, title, highlight) {
       (document.waypoint_type === 'access' &&
         document.public_transportation_rating &&
         document.public_transportation_rating !== 'no service') ||
-      (document.properties && document.properties.color == 'green')
+      (document.properties && document.properties.color === 'green')
     ) {
       color = '#4baf50';
     }

@@ -449,8 +449,7 @@
 import { transform } from 'ol/proj';
 
 import start from '@/assets/img/boxes/geoloc-2.svg';
-import api from '@/js/apis/c2c';
-import c2c from '@/js/apis/c2c';
+import { default as c2c } from '@/js/apis/c2c';
 import UserProfileService from '@/js/apis/c2c/UserProfileService';
 import NavitiaService from '@/js/apis/navitia-service';
 import photon from '@/js/apis/photon';
@@ -523,7 +522,7 @@ export default {
         maxTransfers: 0,
       },
 
-      userService: new UserProfileService(api),
+      userService: new UserProfileService(c2c),
       displayedFromAddress: '',
       displayedToAddress: '',
       showReturnWarning: false,
@@ -532,16 +531,6 @@ export default {
       loadingReachable: false,
       searchTimeout: null,
     };
-  },
-
-  async mounted() {
-    // Loads a user's address to put it directly into the 'address' field
-    await this.loadUserAddressIfLoggedIn();
-
-    // Firefox's date picker calendar has a specific design
-    if (navigator.userAgent.toLowerCase().includes('firefox')) {
-      document.documentElement.classList.add('is-firefox');
-    }
   },
 
   computed: {
@@ -775,6 +764,16 @@ export default {
     },
   },
 
+  async mounted() {
+    // Loads a user's address to put it directly into the 'address' field
+    await this.loadUserAddressIfLoggedIn();
+
+    // Firefox's date picker calendar has a specific design
+    if (navigator.userAgent.toLowerCase().includes('firefox')) {
+      document.documentElement.classList.add('is-firefox');
+    }
+  },
+
   async created() {
     // Load the waypoints served when mounting the component
     await this.loadReachableWaypoints();
@@ -911,7 +910,7 @@ export default {
       if (this.missingDepartureAddress || this.missingDestinationAddress) {
         return;
       }
-      let fromCoords, toCoords, fromAddressDisplay, toAddressDisplay;
+      let fromCoords, toCoords, fromAddressDisplay;
 
       if (this.activeTab === 'outbound') {
         // OUTBOUND: From address to waypoint
@@ -922,7 +921,6 @@ export default {
         // RETURN: From waypoint to address
         fromCoords = NavitiaService.formatCoordinates(this.selectedWaypoint.coordinates);
         toCoords = NavitiaService.formatCoordinates(this.fromCoordinates);
-        fromAddressDisplay = this.selectedWaypoint.title;
         this.displayedToAddress = this.fromAddress;
       }
 
@@ -2097,8 +2095,6 @@ export default {
         padding: 16px;
         display: flex;
         max-width: 220px;
-        .plan-trip-search-button-img {
-        }
         .plan-trip-search-button-text {
           font-weight: 600;
           margin-left: 12px;

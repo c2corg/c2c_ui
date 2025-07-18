@@ -146,7 +146,7 @@ const config = {
   },
 };
 
-config.urls = config.urlsConfigurations.localhost; // default: prod
+config.urls = config.urlsConfigurations.prod; // default: prod
 
 const bundleAnalyzerConfig = {
   analyzerMode: 'disabled',
