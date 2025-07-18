@@ -9,7 +9,6 @@
     "Associated routes": "Lotutako ibilbideak",
     "Association": "Camptocamp Elkartea",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Atribuzioa — Lanaren egilea zein den esan, lizentziara bideratzen duen lotura bat eman eta aldaketarik egin den esan behar da",
-    "Books and websites not already associated to this route": "Ibilbide honetan ez daude loturiko liburu edo web orririk",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org elkartearen helburuak mendiko kirolarien artean informazioa banatzea eta mendiko aktibitateen ziurtasuna hobetzen parte hartzea da. ",
     "Cancel": "Ezeztatu",
     "Change account parameters": "Kontuaren xehetasunak aldatu",
@@ -394,7 +393,7 @@
       "langs": "frantsesa"
     },
     "frequentation": "Jendetza",
-    "garmin": "Garmin",
+    "garmin": "Garmin Connect™",
     "gas_unstaffed": "gasa gordetako sasoitik kanpora",
     "gear": {
       "$$noContext": "Materiala",

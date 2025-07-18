@@ -90,7 +90,7 @@
     "Block account": "Bloquear cuenta",
     "Bolted rock climbing gear": "Escalada deportiva de varios largos",
     "Book content": "Contenido del libro",
-    "Books and websites not already associated to this route": "Ningún libro y sitio web asociado a este itinerario",
+    "Books and websites not already associated to this route": "Indique el origen de la información que no sea su experiencia personal. Un (topo)libro o revista debe tener su propia entrada y estar asociado al documento (no lo mencione en este campo). Este campo es para enlaces a páginas web, topos online, blogs, fuentes no distribuidas (cuaderno en un refugio, bar o camping), o información adicional sobre los topo-libros (falso diagrama, etc.). Un enlace debe activarse con los chevrones < link >.",
     "Both results and map": "Resultados y mapa",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Describe brevemente cualquier lesión. Aquí se pueden introducir comentarios que no encajen en ningún otro campo.",
     "By month": "Por mes",
@@ -268,7 +268,7 @@
     "Home": "Inicio",
     "How is my testimony used ? How / why is it useful ?": "A que sirve mi testimonio ?",
     "I choose to cancel the outing": "Prefiero cancelar la salida",
-    "I have read and agree to the terms of use": "He leido y acepto las condiciones",
+    "I have read and agree to the": "He leido y acepto las",
     "I must not use slopes > 30°": "no puedo coger pendientes >30°",
     "I must not use slopes > 35°": "no puedo coger pendientes >35°",
     "I must not use slopes > 40°": "no puedo coger pendientes >40°",
@@ -327,7 +327,7 @@
     "Make profile page public": "Hacer pública la página de perfil",
     "Map filter off": "Filtro de mapa desactivado",
     "Map filter on": "Filtro de mapa activado",
-    "Map only": "solo el mapa",
+    "Map only": "Solo el mapa",
     "Mark this route as to do": "Marcar esta ruta como favorita",
     "Massifs could not be loaded": "el macizo no ha podido ser cargado",
     "Merge documents": "Fusionar documentos",
@@ -459,6 +459,9 @@
     "Sort by": "Ordenar por",
     "Statistics": "Estadísticas",
     "Stop following this contributor": "Dejar de seguir este usuario",
+    "Terms of Service need to be accepted": {
+      "API message": "Es necesario aceptar los Condiciones Generales de Uso"
+    },
     "The page you are looking for does not exist or is broken.": "La página que estas buscando no existe o contiene un error.",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "Este contenido está bajo licencia Creative Commons BY-NC-ND 3.0",
     "This content is licensed under Creative Commons BY-SA 3.0": "Este contenido está bajo una licencia Creative Commons BY-SA 3.0",
@@ -559,7 +562,6 @@
     "admin_limits": {
       "area_types": "límite administrativo"
     },
-    "advertisement": "anuncio",
     "after:": "Después :",
     "age": "edad",
     "aid_rating": "Cotación escalada artificial",
@@ -881,7 +883,7 @@
       "langs": "francés"
     },
     "frequentation": "Frecuentación",
-    "garmin": "Garmin",
+    "garmin": "Garmin Connect™",
     "gas_unstaffed": "Gas fuera de los períodos de guardia",
     "gear": {
       "$$noContext": "Equipamiento",
@@ -1048,14 +1050,13 @@
       "avalanche_levels": "4"
     },
     "level_5": {
-      "avalanche_levels": "Muy fuerte"
+      "avalanche_levels": "5 - Muy fuerte"
     },
     "level_na": {
       "avalanche_levels": "nivel na"
     },
     "lift_access": "Medios de elevación",
     "lift_status": "Medios de elevación",
-    "link": "enlace",
     "loading": "Cargando",
     "local_product": {
       "waypoint_types": "productos locales"
@@ -1471,6 +1472,7 @@
     "temperature": {
       "weather_station_types": "temperatura"
     },
+    "terms of service": "Condiciones Generales de Uso",
     "time_management": "Gestión de horarios",
     "timing": "Duración",
     "title": "Titulo",

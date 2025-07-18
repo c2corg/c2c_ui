@@ -103,7 +103,7 @@
     "Block account": "Bloquer cet utilisateur",
     "Bolted rock climbing gear": "Escalade en grande voie sportive",
     "Book content": "Rapide description du contenu de l'ouvrage",
-    "Books and websites not already associated to this route": "Indiquez l'origine des informations de l'itinéraire parcouru. Un topo-livre ou un magazine doit être associé à l'itinéraire (ne pas le mentionner dans ce champ). Ce champ est prévu pour les liens vers des topos en ligne, des blogs, des sources non diffusées (cahier dans un refuge ou un bar), ou des infos complémentaires concernant les topo-livres (schéma faux, etc).",
+    "Books and websites not already associated to this route": "Indiquez l’origine des informations autres que votre expérience personnelle. Un (topo)livre ou un magazine doit avoir sa propre fiche et être associé au document (ne pas le mentionner dans ce champ). Ce champ est prévu pour les liens vers des sites web, des topos en ligne, des blogs, des sources non diffusées (cahier dans un refuge, bar ou camping), ou des informations complémentaires concernant les topo-livres (schéma faux, etc.). Un lien doit être activé avec les chevrons < lien >.",
     "Both results and map": "Résultats et carte",
     "Bouldering climbing gear": "Escalade sur bloc",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Décrivez brièvement les blessures éventuelles, et ce que vous feriez aujourd'hui avec du recul. Les commentaires qui n'entrent dans aucun autre champ peuvent être saisis ici.",
@@ -329,7 +329,7 @@
     "How is my testimony used ? How / why is it useful ?": "À quoi sert mon témoignage ?",
     "I choose to cancel the outing": "Je renonce à sortir",
     "I contribute": "Je participe",
-    "I have read and agree to the terms of use": "J'ai lu et approuvé les conditions d'utilisation",
+    "I have read and agree to the": "J'ai lu et accepte les",
     "I must not use slopes > 30°": "Je renonce aux pentes > 30°",
     "I must not use slopes > 35°": "Je renonce aux pentes > 35°",
     "I must not use slopes > 40°": "Je renonce aux pentes > 40°",
@@ -683,6 +683,9 @@
       "Map layer": "SwissTopo Sat"
     },
     "Target:": "Document à conserver (cible) :",
+    "Terms of Service need to be accepted": {
+      "API message": "Les Conditions Générales d'Utilisation (CGU) doivent être acceptées"
+    },
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Grâce aux cookies statistiques ou analytiques, fournis par nous et d'autres sociétés, nous pouvons compter les visites sur notre site Web et connaître les sources de trafic. Les données que nous obtenons nous aident à comprendre ce que les visiteurs aiment et améliorer le site Web. Si vous ne les acceptez pas, nous ne pourrons pas améliorer votre expérience.",
     "The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.": "La méthode MRD (débutant) est autorisée avec un niveau de danger de 3 maximum. Choisissez la méthode MRE ou MRP.",
     "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "Le potentiel de danger est calculé à partir du niveau de danger du bulletin d'avalanche. Il peut être affiné en sélectionnant un potentiel dans la plage correspondant au niveau du danger. Par exemple : Le bulletin évoque un danger 3 juste après une période en danger 4. On pourra alors indiquer un potentiel de danger de 12 au lieu de 8. ",
@@ -839,7 +842,6 @@
     "admin_limits": {
       "area_types": "limite administrative"
     },
-    "advertisement": "publicité",
     "after:": "après :",
     "age": "Âge",
     "aid_rating": "Cotation artificielle",
@@ -1158,7 +1160,7 @@
       "langs": "français"
     },
     "frequentation": "Fréquentation",
-    "garmin": "Garmin",
+    "garmin": "Garmin Connect™",
     "gas_unstaffed": "Gaz hors gardiennage",
     "gear": {
       "$$noContext": "Matériel",
@@ -1331,7 +1333,6 @@
     },
     "lift_access": "Remontées mécaniques",
     "lift_status": "Remontées mécaniques",
-    "link": "lien",
     "loading": "chargement en cours",
     "local_product": {
       "waypoint_types": "produits locaux"
@@ -1792,6 +1793,7 @@
     "temperature": {
       "weather_station_types": "température"
     },
+    "terms of service": "conditions générales d'utilisation",
     "text to display": "texte à afficher",
     "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "c’est une prévisualisation. La géométrie n’est pas encore simplifiée. Les interactions sur la carte ainsi que l’export sont désactivés.",
     "time_management": "Gestion de l'horaire",

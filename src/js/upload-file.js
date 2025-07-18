@@ -34,12 +34,17 @@ const parseDate = (exif, iptc) => {
 
   if (iptcDate) {
     if (iptc?.TimeCreated) {
-      date = dayjs(`${iptcDate}T${iptc.TimeCreated}`);
+      date = dayjs(`${iptcDate} ${iptc.TimeCreated}`, 'YYYYMMDD hhmmssZZ');
     } else {
       date = dayjs(iptcDate, 'YYYYMMDD');
     }
   } else if (exifDate) {
-    date = dayjs(exifDate, 'YYYY:MM:DD HH:mm:ss');
+    const offsetTime = exif?.Exif?.OffsetTimeOriginal ?? exif?.Exif?.OffsetTime;
+    if (offsetTime) {
+      date = dayjs(`${exifDate} ${offsetTime}`, 'YYYY:MM:DD HH:mm:ss Z');
+    } else {
+      date = dayjs(exifDate, 'YYYY:MM:DD HH:mm:ss');
+    }
   }
 
   return date && date.isValid() ? date.format() : null;
@@ -101,8 +106,8 @@ const extractDimensions = async (dataUrl) => {
 };
 
 const parseMetaData = (document, metaData) => {
-  const exif = metaData.exif ? metaData.exif.getAll() : null;
-  const iptc = metaData.iptc ? metaData.iptc.getAll() : null;
+  const exif = metaData.exif?.getAll() ?? null;
+  const iptc = metaData.iptc?.getAll() ?? null;
   let orientation = 0;
 
   setIfDefined(document, 'date_time', parseDate(exif, iptc));

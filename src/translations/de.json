@@ -147,7 +147,7 @@
     "Block account": "Konto blockieren",
     "Bolted rock climbing gear": "Mehrseillängensportkletterei",
     "Book content": "Buch Inhalt",
-    "Books and websites not already associated to this route": "Noch keine Bücher oder Webseiten mit dieser Route verbunden.",
+    "Books and websites not already associated to this route": "Geben Sie an, woher die Informationen stammen, die nicht aus Ihrer persönlichen Erfahrung stammen. Ein Buch oder eine Zeitschrift sollte einen eigenen Eintrag haben und mit dem Dokument verknüpft sein (bitte nicht in diesem Feld erwähnen). Dieses Feld ist für Links zu Websites, Online-Topos, Blogs, nicht verbreiteten Quellen (Notizbuch in einer Berghütte, Bar oder auf einem Campingplatz) oder für zusätzliche Informationen zu den Topoführern (falsches Schema usw.) vorgesehen. Ein Link muss mit den Chevrons < Link > aktiviert werden.",
     "Both results and map": "Beide Ergebnisse und Karte",
     "Bouldering climbing gear": "Boulder-Kletterausrüstung",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Beschreiben Sie kurz die möglichen Verletzungen und was Sie heute im Nachhinein tun würden. Kommentare, die in kein anderes Feld passen, können hier eingegeben werden.",
@@ -326,6 +326,7 @@
     "First character is invalid": {
       "API message": "Das erste Zeichen muss ein alphanumerisches Zeichen des lateinischen Alphabets sein, einschließlich des Unterstrichs"
     },
+    "Fit map to route": "Karte an die Route anpassen",
     "FlowCapt sensor": "FlowCapt-Sensor ",
     "FlowCapt sensors": "FlowCapt-Sensoren",
     "Fold section": "Abschnitt falten",
@@ -370,7 +371,7 @@
     "How is my testimony used ? How / why is it useful ?": "Was ist der Sinn meines Zeugnisses ?",
     "I choose to cancel the outing": "Ich verzichte auf den Tour",
     "I contribute": "Ich mache mit",
-    "I have read and agree to the terms of use": "Ich habe die Nutzungsbedingungen gelesen und akzeptiert",
+    "I have read and agree to the": "Ich habe gelesen und akzeptiere die",
     "I must not use slopes > 30°": "Ich verwende keine Neigungen über 30°.",
     "I must not use slopes > 35°": "Ich verwende keine Neigungen über 35°.",
     "I must not use slopes > 40°": "Ich verwende keine Neigungen über 40°.",
@@ -475,6 +476,7 @@
     "Massifs could not be loaded": "Die Gebirgemassiven konnten nicht geladen werden",
     "Merge documents": "Dokumente vereinigen",
     "Merge with other document": "Mit anderen Dokumenten vereinigen",
+    "Merged regions": "zusammengefasste Regionen",
     "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "Durch das Zusammenführen eines Quelldokuments mit einem Zieldokument werden alle Zuordnungen des Quelldokuments zum Zieldokument übertragen und eine Umleitung vom Quelldokument zum Zieldokument eingerichtet.",
     "Metaskirando: an aggregator of ski outings in Europe": "Metaskirando: eine Suchmaschine für Skitouren in Europa",
     "Methods": "Methoden",
@@ -710,6 +712,9 @@
       "Map layer": "Schweiz Luftbild"
     },
     "Target:": "Ziel:",
+    "Terms of Service need to be accepted": {
+      "API message": "Allgemeine Nutzungsbedingungen müssen akzeptiert werden"
+    },
     "Terrain": "Grund",
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Dank der statistischen oder analytischen Cookies, die von uns und anderen Unternehmen zur Verfügung gestellt werden, können wir die Besuche auf unserer Website zählen und die Quellen des Verkehrs kennen. Die Daten, die wir erhalten, helfen uns zu verstehen, was den Besuchern gefällt und die Website zu verbessern. Wenn Sie diese Daten nicht akzeptieren, sind wir nicht in der Lage, Ihr Erlebnis zu verbessern.",
     "The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.": "Die MRD-Methode (Anfänger) ist mit einer maximalen Gefahrenstufe von 3 zulässig. Wählen Sie die MRE- oder MRP-Methode.",
@@ -875,7 +880,6 @@
     "admin_limits": {
       "area_types": "administrative Grenze"
     },
-    "advertisement": "Werbung",
     "after:": "nach :",
     "age": "Alter",
     "aid_rating": "Technisches Klettern Schwierigkeitsgrad",
@@ -1242,7 +1246,7 @@
       "langs": "französisch"
     },
     "frequentation": "Begehungsfrequenz",
-    "garmin": "Garmin",
+    "garmin": "Garmin Connect™",
     "gas_unstaffed": "Gas (nicht bewartet)",
     "gear": {
       "$$noContext": "Ausrüstung",
@@ -1432,7 +1436,6 @@
     },
     "lift_access": "Seilbahn",
     "lift_status": "Seilbahn",
-    "link": "Link",
     "loading": "hochladen",
     "local_product": {
       "waypoint_types": "lokale Produkte/Geschäfte"
@@ -1931,6 +1934,7 @@
     "temperature": {
       "weather_station_types": "Temperatur"
     },
+    "terms of service": "Nutzungsbedingungen",
     "text to display": "anzuzeigender Text",
     "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "Vorschau : die Geometrie ist noch nicht vereinfacht. Interaktionen auf der Karte sowie der Export sind deaktiviert.",
     "time_management": "Zeitmanagement",

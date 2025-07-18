@@ -22,3 +22,5 @@ npm run serve
 :heart: [http://localhost:8080](http://localhost:8080) :heart:
 
 Want to easily access to every dev tools on a fancy interface? Have a look on [the doc](https://github.com/c2corg/c2c_ui/wiki/development-environment)! :sunglasses:
+
+Camptocamp.org uses <https://snyk.io/> for secure development.

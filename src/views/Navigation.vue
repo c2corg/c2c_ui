@@ -23,7 +23,7 @@
       class="navigation-item navigation-brand has-text-centered"
       :class="{ 'is-hidden-mobile': !hideSearchInput }"
     >
-      <img src="@/assets/img/logo_noel.png" alt="Camptocamp.org" />
+      <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
     </a>
 
     <dfm-ad-large v-if="!homePage() && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop" />
@@ -354,7 +354,6 @@ nav {
 
   .navigation-item {
     padding: 0.25rem 0.25rem;
-    line-height: auto;
   }
 }
 

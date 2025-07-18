@@ -224,7 +224,7 @@ export default {
         return false;
       }
       if (['i'].includes(this.document.type)) {
-        return this.document.image_type === 'collab';
+        return this.document.image_type === 'collaborative';
       }
       if (['c'].includes(this.document.type)) {
         return this.document.article_type === 'collab';

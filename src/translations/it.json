@@ -98,7 +98,7 @@
     "Block account": "Blocca account",
     "Bolted rock climbing gear": "Arrampicata su vie sportive",
     "Book content": "Breve descrizione del libro",
-    "Books and websites not already associated to this route": "Non ci sono libri o siti web associati a questo itinerario ",
+    "Books and websites not already associated to this route": "Indicare l'origine delle informazioni diverse dalla propria esperienza personale. Un libro (topo)o una rivista devono avere una voce propria ed essere associati al documento (non menzionarli in questo campo). Questo campo è per i link a siti web, topos online, blog, fonti non distribuite (taccuino in un rifugio, bar o campeggio), o informazioni aggiuntive sui topo-libri (falso diagramma, ecc.). Un link deve essere attivato con i galloni < link >.",
     "Both results and map": "Risultati e carta",
     "Bouldering climbing gear": "Attrezzatura per il bouldering   ",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Descrivi le ferite, quello che faresti oggi con l'esperienza... ",
@@ -260,6 +260,7 @@
     "Export": "Esportare",
     "Export route": "Esportare la traccia",
     "Export to CSV": "Esporta in formato CSV",
+    "FF Vol Libre": "FFVL",
     "Fauna protection areas": "Zona di protezione della fauna",
     "Fauna protection site:": "Sito di protezione della fauna: ",
     "Feel free to edit it.": "Edizione libera",
@@ -311,7 +312,7 @@
     "How is my testimony used ? How / why is it useful ?": "Come viene utilizzata la mia testimonianza? Come / perché è utile?",
     "I choose to cancel the outing": "Rinuncio alla gita",
     "I contribute": "Contribuisco",
-    "I have read and agree to the terms of use": "Ho letto ed approvo i termini e condizioni d'uso ",
+    "I have read and agree to the": "Ho letto e accetto le",
     "I must not use slopes > 30°": "Rinuncio agli pendii > 30°",
     "I must not use slopes > 35°": "Rinuncio agli pendii > 35°",
     "I must not use slopes > 40°": "Rinuncio agli pendii > 40°",
@@ -629,6 +630,9 @@
       "Map layer": "SwissTopo ortofoto"
     },
     "Target:": "Documento da conservare (destinazione):",
+    "Terms of Service need to be accepted": {
+      "API message": "I Condizioni Generali d'Uso devono essere accettati"
+    },
     "Terrain": "Terreno ",
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Grazie ai cookie statistici forniti da noi stessi e da altre aziende, possiamo valutare le visite sul nostro sito web e conoscere le fonti di traffico. I dati che otteniamo ci aiutano a capire cosa piace ai visitatori e a migliorare il nostro sito web. Se li rifiutate, non possiamo migliorare la vostra esperienza.",
     "The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.": "Il metodo MRD (principianti) si può usare solo con un grado di pericolo inferiore a 3. ",
@@ -785,7 +789,6 @@
     "admin_limits": {
       "area_types": "confini amministrativi"
     },
-    "advertisement": "pubblicità ",
     "after:": "dopo:",
     "age": "età",
     "aid_rating": "Difficoltà arrampicata artificiale",
@@ -1129,7 +1132,7 @@
       "langs": "francese"
     },
     "frequentation": "Frequentazione ",
-    "garmin": "Garmin",
+    "garmin": "Garmin Connect™",
     "gas_unstaffed": "Gas (non gestito)",
     "gear": {
       "$$noContext": "Materiale",
@@ -1797,6 +1800,7 @@
     "temperature": {
       "weather_station_types": "temperatura"
     },
+    "terms of service": "termini e condizioni d'uso",
     "text to display": "testo da mostrare",
     "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "questa è un'anteprima. La geometria non è stata ancora semplificata. Le interazioni e l'esportazione della mappa sono disabilitate.",
     "time_management": "Gestione della tempistica",

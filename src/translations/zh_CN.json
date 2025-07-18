@@ -138,7 +138,6 @@
     "Block account": "冻结该用户",
     "Bolted rock climbing gear": "多段运动攀岩装备",
     "Book content": "书籍目录的简短描述",
-    "Books and websites not already associated to this route": "还没有关联到这条路线的书籍和网站",
     "Both results and map": "结果和地图",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "简要描述任何受伤。可以在此处输入不适合任何其他地方的评注。",
     "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "默认情况下，路书指南上将显示你的用户名，但你可以在之后的设置中随意更改它。",
@@ -351,7 +350,6 @@
     "How is my testimony used ? How / why is it useful ?": "我的反馈是怎样被使用的？为什么它是有用的？",
     "I choose to cancel the outing": "我选择取消出行",
     "I contribute": "我贡献",
-    "I have read and agree to the terms of use": "我已经阅读和同意使用条款",
     "I must not use slopes > 30°": "我不得使用大于30度的坡",
     "I must not use slopes > 35°": "我不得使用大于35度的坡",
     "I must not use slopes > 40°": "我不得使用大于40度的坡",
@@ -799,7 +797,6 @@
     "admin_limits": {
       "area_types": "行政边界"
     },
-    "advertisement": "宣传",
     "after:": "之后：",
     "age": "年龄",
     "aid_rating": "器械攀登定级",
@@ -1164,7 +1161,7 @@
       "langs": "français"
     },
     "frequentation": "拥挤程度",
-    "garmin": "Garmin",
+    "garmin": "Garmin Connect™",
     "gas_unstaffed": "无看守时是否提供燃气",
     "gear": {
       "$$noContext": "装备",
@@ -1353,7 +1350,6 @@
     },
     "lift_access": "可缆车进入",
     "lift_status": "缆车状态",
-    "link": "链接",
     "loading": "加载中",
     "local_product": {
       "waypoint_types": "当地特产"

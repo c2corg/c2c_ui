@@ -128,7 +128,6 @@
     "Block account": "Fiók blokkolása",
     "Bolted rock climbing gear": "nittelt biztosítás",
     "Book content": "Könyv tartalmának rövid ismertetése",
-    "Books and websites not already associated to this route": "Add meg a bejárt útvonalra vonatkozó információk forrását! Egy kalauzt vagy magazint az útvonalhoz kell társítani (nem pedig ebben a mezőben megadni). Ez a mező az on-line kalauzok, blogok, nem publikált egyéb források (pl. egy menedékházban vagy bárban található füzet) számára van fenntartva, vagy pedig a kalauzokban szereplő információk kiegészítésére (mint például rossz rajz, stb).",
     "Both results and map": "Eredmények és térképek",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Írd le röviden az esetleges sérüléseket, és hogy ma mit tennél ezek elkerülésére. Más mezőbe nem való megjegyzéseket is itt lehet megadni.",
     "By month": "Hónap szerint",
@@ -297,7 +296,6 @@
     "Home page feed parameters": "Weboldal hírfolyam paraméterek",
     "How is my testimony used ? How / why is it useful ?": "Hogyan használják fel a beszámolómat? Miért hasznos?",
     "I choose to cancel the outing": "A kiruccanás lemondása mellett döntök",
-    "I have read and agree to the terms of use": "Elolvastam és egyetértek a felhasználási feltételekkel",
     "I must not use slopes > 30°": "Nem szabad >30°-nál meredekebb lejtöket használnom",
     "I must not use slopes > 35°": "Nem szabad >35°-nál meredekebb lejtöket használnom",
     "I must not use slopes > 40°": "Nem szabad >40°-nál meredekebb lejtöket használnom",
@@ -653,7 +651,6 @@
     "admin_limits": {
       "area_types": "adminisztrációs korlát"
     },
-    "advertisement": "hirdetés",
     "after:": " elteltével",
     "age": "életkor",
     "aid_rating": "Mesterséges mászás besorolása",
@@ -949,7 +946,7 @@
     "focal_length": "fókusz_távolság",
     "forum": "fórum",
     "frequentation": "látogatási gyakoriság",
-    "garmin": "Garmin",
+    "garmin": "Garmin Connect™",
     "gas_unstaffed": "gáz_gazdátlanul",
     "gear": {
       "$$noContext": "felszerelés",

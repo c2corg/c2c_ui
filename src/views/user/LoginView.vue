@@ -27,8 +27,9 @@
         <div class="control">
           <label class="checkbox">
             <input type="checkbox" v-model="loginTermsAgreed" />
-            <span class="has-text-weight-bold" v-translate>
-              I have read and agree to the <router-link :to="termsRoute" v-translate>terms of service</router-link>.
+            <span class="has-text-weight-bold">
+              <span v-translate>I have read and agree to the</span>
+              <router-link :to="termsRoute" v-translate>terms of service</router-link>.
             </span>
           </label>
         </div>
@@ -85,8 +86,9 @@
           <label class="checkbox">
             <input type="checkbox" v-model="termsAgreed" />
             &nbsp;
-            <span class="has-text-weight-bold" v-translate>
-              I have read and agree to the <router-link :to="termsRoute" v-translate>terms of service</router-link>.
+            <span class="has-text-weight-bold">
+              <span v-translate>I have read and agree to the</span>
+              <router-link :to="termsRoute" v-translate>terms of service</router-link>.
             </span>
           </label>
         </div>

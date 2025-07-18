@@ -10,7 +10,6 @@ export default function install(Vue) {
     data() {
       return {
         matchingQueryIndex: -1,
-        hasHeightForAd: false,
       };
     },
 
@@ -49,15 +48,6 @@ export default function install(Vue) {
         }
       });
       this.onBreakpointMediaQueryChange(); // init
-
-      this.heightMediaQueryList = window.matchMedia('only screen and (min-height: 630px');
-      if (this.heightMediaQueryList.addEventListener) {
-        this.heightMediaQueryList.addEventListener('change', this.onHeightMediaQueryChange);
-      } else {
-        // support Safari < 14
-        this.heightMediaQueryList.addListener(this.onHeightMediaQueryChange);
-      }
-      this.onHeightMediaQueryChange(); // init
     },
 
     beforeDestroy() {
@@ -68,20 +58,11 @@ export default function install(Vue) {
           mediaQueryList.removeListener(this.onBreakpointMediaQueryChange);
         }
       });
-      if (heightMediaQueryList.removeEventListener) {
-        heightMediaQueryList.removeEventListener('change', this.onHeightMediaQueryChange);
-      } else {
-        heightMediaQueryList.removeListener(this.onHeightMediaQueryChange);
-      }
     },
 
     methods: {
       onBreakpointMediaQueryChange() {
         this.matchingQueryIndex = this.breakpointsMediaQueryLists.findIndex((mediaQueryList) => mediaQueryList.matches);
-      },
-
-      onHeightMediaQueryChange() {
-        this.hasHeightForAd = this.heightMediaQueryList.matches;
       },
     },
   });
