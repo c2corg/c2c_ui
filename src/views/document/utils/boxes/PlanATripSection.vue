@@ -271,7 +271,7 @@
 
                 <div class="itinerary-details-button">
                   <button class="button is-info is-light" @click="showJourneyDetails(journey)">
-                    {{ $gettext('View details') }}
+                    {{ selectedJourney === journey ? $gettext('Hide details') : $gettext('View details') }}
                   </button>
                 </div>
               </div>
