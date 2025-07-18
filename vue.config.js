@@ -92,7 +92,7 @@ const config = {
   urlsConfigurations: {
     demo: {
       name: 'demo',
-      api: 'https://preprod.c2c.preprod0.smart-origin.com/api',
+      api: 'https://api.demov6.camptocamp.org',
       media: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
       imageBackend: 'https://images.demov6.camptocamp.org',
       tracking: 'https://tracking.demov6.camptocamp.org',
@@ -114,7 +114,7 @@ const config = {
     },
     prod: {
       name: 'prod',
-      api: 'https://preprod.c2c.preprod0.smart-origin.com/api',
+      api: 'https://api.camptocamp.org',
       media: 'https://media.camptocamp.org/c2corg-active',
       imageBackend: 'https://images.camptocamp.org',
       tracking: 'https://tracking.camptocamp.org',
