@@ -282,6 +282,7 @@
     "Dispositions": "Dispositionen",
     "Distance": "Länge",
     "Distance (km)": "Länge (km)",
+    "Distance from the route access point": "Distanz vom Zufahrtsweg",
     "Do you really want to leave? you have unsaved changes!": "Wollen Sie wirklich diese Seite schließen ? Änderungen werden nicht gespeichert !",
     "Document quality": "Dokumentqualität",
     "Donate": "Spenden Sie an den Verein Camptocamp",
@@ -450,6 +451,7 @@
       "$$noContext": "Schichte",
       "Map controls": "Dargestellte Karten"
     },
+    "Leave after": "später abreisen",
     "Leave earlier": "früher abreisen",
     "Leave fullscreen": "Vollbild verlassen",
     "Leave later": "später abreisen",
@@ -771,6 +773,7 @@
     "This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don't forget to mention the route history if you know it.": "Hier können Sie die Route ausführlich beschreiben, möglicherweise mit einer kurzen Zusammenfassung beginnen und dann die Beschreibung entwickeln (einschließlich Anflug, Abstieg usw.). Vergessen Sie nicht, die Routenhistorie zu erwähnen, wenn Sie diese kennen.",
     "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Dieses Bild zeigt ein Buch-Cover. Es ist Eigentum des Herausgebers und/oder Autor. Es wird hier nur zwecks Veranschaulichung vorgestellt.",
     "This profile is only available to authenticated users.": "Dieses Profil ist nur für eingeloggte Benutzern zugänglich.",
+    "This route guide has an estimated theoretical duration of": "die geschätze Dauer dieser Routenführung ist etwa ",
     "This route is partially accessible by public transport.": "diese Strecke kann nur zum Teil mit öffentlichen Verkehrsmitteln gefahren werden",
     "This tool estimates the technical difficulty of a ski route (ski rating).": "Dieses Tool schätzt die technische Schwierigkeit einer Skiroute (Skibewertung).",
     "This version has been masked.": "Diese Version wurde maskiert.",
