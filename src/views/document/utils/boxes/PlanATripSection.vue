@@ -495,8 +495,6 @@ export default {
         isUpdating: false,
         missingDepartureAddress: false,
         missingDestinationAddress: false,
-        limitTransfers: false,
-        maxTransfers: 0,
       },
 
       // Data for return journey
@@ -518,8 +516,6 @@ export default {
         isUpdating: false,
         missingDepartureAddress: false,
         missingDestinationAddress: false,
-        limitTransfers: false,
-        maxTransfers: 0,
       },
 
       userService: new UserProfileService(c2c),
@@ -530,6 +526,8 @@ export default {
       reachableWaypoints: [],
       loadingReachable: false,
       searchTimeout: null,
+      limitTransfers: false,
+      maxTransfers: 0,
     };
   },
 
@@ -751,24 +749,6 @@ export default {
       },
     },
 
-    limitTransfers: {
-      get() {
-        return this.currentData.limitTransfers;
-      },
-      set(value) {
-        this.currentData.limitTransfers = value;
-      },
-    },
-
-    maxTransfers: {
-      get() {
-        return this.limitTransfers ? this.currentData.maxTransfers : null;
-      },
-      set(value) {
-        this.currentData.maxTransfers = value;
-      },
-    },
-
     canAccessReturnTab() {
       return this.outboundData.journeys.length > 0;
     },
@@ -980,13 +960,7 @@ export default {
           });
 
           if (filteredJourneys.length === 0) {
-            if (this.activeTab === 'return') {
-              await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
-              return;
-            }
-
-            this.noResult = true;
-            this.journeys = [];
+            await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
             return;
           }
 
@@ -999,24 +973,11 @@ export default {
             await this.determineReturnWaypoint();
           }
         } else {
-          if (this.activeTab === 'return') {
-            await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
-            return;
-          }
-
-          this.noResult = true;
-          this.journeys = [];
+          await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
         }
       } catch (error) {
         console.error('Error retrieving routes:', error);
-
-        if (this.activeTab === 'return') {
-          await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
-          return;
-        }
-
-        this.noResult = true;
-        this.journeys = [];
+        await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
       } finally {
         this.isUpdating = false;
       }
@@ -1064,6 +1025,10 @@ export default {
             this.journeys = [bestLastJourney];
             this.noResult = true;
             this.selectedRouteJourney = bestLastJourney;
+            if (this.activeTab === 'outbound') {
+              this.calculateReturnParameters();
+              await this.determineReturnWaypoint();
+            }
             this.showTimeButton = true;
 
             this.$emit('calculate-route', {
@@ -1434,7 +1399,6 @@ export default {
       if (!this.outboundData.journeys || this.outboundData.journeys.length === 0) {
         return;
       }
-
       const outboundJourney = this.outboundData.journeys[0];
       const arrivalTime = outboundJourney.arrival_date_time;
 
