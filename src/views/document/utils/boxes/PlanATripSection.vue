@@ -910,7 +910,7 @@ export default {
       if (this.missingDepartureAddress || this.missingDestinationAddress) {
         return;
       }
-      let fromCoords, toCoords, fromAddressDisplay;
+      let fromCoords, toCoords;
 
       if (this.activeTab === 'outbound') {
         // OUTBOUND: From address to waypoint
