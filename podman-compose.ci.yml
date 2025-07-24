@@ -1,0 +1,7 @@
+services:
+  test:
+    image: node:lts-alpine
+    restart: "no"
+    volumes:
+      - ./:/c2c_ci
+    entrypoint: ["sleep", "30m"]
