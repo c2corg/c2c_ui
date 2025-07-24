@@ -194,6 +194,7 @@
     "Dashboard": "Tauler de control:",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Dades tècniques, com l'orientació, el tipus de roca o la configuració general de l'itinerari (aresta, pilar, etc.)",
     "Data-Avalanche": "Info-allaus",
+    "Date": "Data",
     "Delete": {
       "yeti": "Eliminar"
     },
@@ -668,6 +669,7 @@
     "User avatar": "Avatar",
     "Username": "Nom d'usuari",
     "Very complex (steps, narrow sections, ridges...)": "Molt complex (graons, escanyalls, barres...)",
+    "View details": "Mostra els detalls",
     "View in other lang": "Mostra-ho en una altra llengua",
     "View next comments and continue the discussion": "Mostra els comentaris següents i continuar el debat",
     "View xreports": "Mostra els informes",
