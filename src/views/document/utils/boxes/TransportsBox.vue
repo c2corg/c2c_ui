@@ -1,5 +1,5 @@
 <template>
-  <div v-if="accessWaypoint" class="box public-transports-box" id="public-transport">
+  <div v-if="accessWaypoint && isInFrance" class="box public-transports-box" id="public-transport">
     <div class="hidden" id="public-transport-scroll"></div>
     <h2 class="title is-2">
       <span>{{ $gettext('Access by public transport') }}</span>
@@ -83,6 +83,7 @@ export default {
       hasSecondSection: true,
       accessWaypoint: false,
       stopDocuments: [],
+      isInFrance: false,
     };
   },
   computed: {
@@ -129,6 +130,7 @@ export default {
     document: {
       handler() {
         this.checkAccessWaypoints();
+        this.checkIfInFrance();
       },
       deep: true,
       immediate: true,
@@ -154,6 +156,16 @@ export default {
     /** Updates stops */
     handleStopsUpdated(stopDocuments) {
       this.stopDocuments = stopDocuments;
+    },
+
+    /** Check that the route is in France */
+    checkIfInFrance() {
+      try {
+        this.isInFrance =
+          this.document.areas && this.document.areas.length > 0 && this.document.areas[0].document_id === 14274;
+      } catch (e) {
+        this.isInFrance = false;
+      }
     },
   },
 };
