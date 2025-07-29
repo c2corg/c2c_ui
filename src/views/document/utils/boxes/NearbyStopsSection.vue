@@ -1,5 +1,5 @@
 <template>
-  <div class="public-transports-section">
+  <div class="public-transports-section" :class="{ 'public-transports-section-not-served': !showAccessibilityInfo }">
     <div v-if="showAccessibilityInfo" class="public-transports-result">
       <div class="stop-cards" ref="stopCardContainer">
         <div
@@ -62,7 +62,7 @@
       </div>
     </div>
 
-    <div class="public-transports-map">
+    <div class="public-transports-map" v-if="showAccessibilityInfo">
       <map-view
         ref="mapView"
         :documents="filteredDocuments"
@@ -179,6 +179,9 @@ export default {
         }
       },
       deep: true,
+    },
+    showAccessibilityInfo(newVal) {
+      this.$emit('accessibility-info-changed', newVal);
     },
   },
   methods: {
@@ -512,10 +515,10 @@ export default {
     padding: 20px;
     border: 1px solid lightgray;
     border-radius: 4px;
-    margin-top: 20px;
     gap: 30px;
     align-items: center;
     height: fit-content;
+    width: 100%;
 
     .public-transports-no-result-bus {
       margin-left: 20px;
@@ -523,6 +526,11 @@ export default {
       height: 100px;
     }
   }
+}
+
+.public-transports-section-not-served {
+  height: auto;
+  margin-top: 0;
 }
 
 @media only screen and (max-width: 600px) {

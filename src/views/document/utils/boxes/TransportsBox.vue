@@ -1,61 +1,79 @@
 <template>
-  <div v-if="accessWaypoint && isInFrance" class="box public-transports-box" id="public-transport">
+  <div
+    v-if="accessWaypoint && isInFrance"
+    class="box public-transports-box"
+    :class="{ 'no-print': !showAccessibilityInfo }"
+    id="public-transport"
+  >
     <div class="hidden" id="public-transport-scroll"></div>
-    <h2 class="title is-2">
+    <h2 class="title public-transports-box-title is-2" @click="visible = !visible">
       <span>{{ $gettext('Access by public transport') }}</span>
     </h2>
+    <fa-icon
+      class="is-size-6 no-print accordion-icon"
+      icon="angle-down"
+      @click="visible = !visible"
+      :rotation="visible ? 180 : undefined"
+    />
+    <div :class="{ 'hide-box-content': !visible }">
+      <div class="public-transport-buttons">
+        <button
+          v-if="showAccessibilityInfo"
+          class="button is-primary public-transports-button"
+          :class="{ 'is-active': activeSection === 'nearbyStops' }"
+          @click="setActiveSection('nearbyStops')"
+        >
+          <img
+            class="public-transports-bus default-icon"
+            :src="require('@/assets/img/boxes/bus.svg')"
+            alt="transport"
+          />
+          <img
+            class="public-transports-bus hover-icon"
+            :src="require('@/assets/img/boxes/public_transport.svg')"
+            alt="transport"
+          />
+          {{ $gettext('Show nearby stops') }}
+        </button>
 
-    <div class="public-transport-buttons">
-      <button
-        class="button is-primary public-transports-button"
-        :class="{ 'is-active': activeSection === 'nearbyStops' }"
-        @click="setActiveSection('nearbyStops')"
-      >
-        <img class="public-transports-bus default-icon" :src="require('@/assets/img/boxes/bus.svg')" alt="transport" />
-        <img
-          class="public-transports-bus hover-icon"
-          :src="require('@/assets/img/boxes/public_transport.svg')"
-          alt="transport"
-        />
-        {{ $gettext('Show nearby stops') }}
-      </button>
+        <button
+          v-if="showAccessibilityInfo"
+          class="button is-primary public-transports-button"
+          :class="{ 'is-active': activeSection === 'planATrip' }"
+          @click="setActiveSection('planATrip')"
+        >
+          <img
+            class="public-transports-bus default-icon"
+            :src="require('@/assets/img/boxes/itineraire-2.svg')"
+            alt="itinerary"
+          />
+          <img
+            class="public-transports-bus hover-icon"
+            :src="require('@/assets/img/boxes/itineraire.svg')"
+            alt="itinerary"
+          />
+          {{ $gettext('Plan a public transport trip') }}
+        </button>
+      </div>
 
-      <button
-        v-if="hasSecondSection"
-        class="button is-primary public-transports-button"
-        :class="{ 'is-active': activeSection === 'planATrip' }"
-        @click="setActiveSection('planATrip')"
-      >
-        <img
-          class="public-transports-bus default-icon"
-          :src="require('@/assets/img/boxes/itineraire-2.svg')"
-          alt="itinerary"
-        />
-        <img
-          class="public-transports-bus hover-icon"
-          :src="require('@/assets/img/boxes/itineraire.svg')"
-          alt="itinerary"
-        />
-        {{ $gettext('Plan a public transport trip') }}
-      </button>
+      <nearby-stops-section
+        v-if="activeSection === 'nearbyStops'"
+        :document="document"
+        :map-documents="mapDocuments"
+        @highlight-document="handleDocumentHighlight"
+        @has-protection-area="$emit('has-protection-area')"
+        @stops-updated="handleStopsUpdated"
+        @accessibility-info-changed="showAccessibilityInfo = $event"
+      />
+
+      <plan-a-trip-section
+        v-if="activeSection === 'planATrip'"
+        :map-documents="mapDocuments"
+        :document="document"
+        @highlight-document="handleDocumentHighlight"
+        @has-protection-area="$emit('has-protection-area')"
+      />
     </div>
-
-    <nearby-stops-section
-      v-if="activeSection === 'nearbyStops'"
-      :document="document"
-      :map-documents="mapDocuments"
-      @highlight-document="handleDocumentHighlight"
-      @has-protection-area="$emit('has-protection-area')"
-      @stops-updated="handleStopsUpdated"
-    />
-
-    <plan-a-trip-section
-      v-if="activeSection === 'planATrip'"
-      :map-documents="mapDocuments"
-      :document="document"
-      @highlight-document="handleDocumentHighlight"
-      @has-protection-area="$emit('has-protection-area')"
-    />
   </div>
 </template>
 
@@ -80,10 +98,11 @@ export default {
   data() {
     return {
       activeSection: 'nearbyStops',
-      hasSecondSection: true,
       accessWaypoint: false,
       stopDocuments: [],
       isInFrance: false,
+      showAccessibilityInfo: false,
+      visible: false,
     };
   },
   computed: {
@@ -135,6 +154,9 @@ export default {
       deep: true,
       immediate: true,
     },
+    showAccessibilityInfo(newValue) {
+      this.visible = newValue;
+    },
   },
   methods: {
     /** Determines whether the "nearby stop" or "plan a trip" section is active */
@@ -174,6 +196,26 @@ export default {
 <style scoped lang="scss">
 .public-transports-box {
   position: relative;
+
+  .hide-box-content {
+    display: none;
+  }
+
+  .public-transports-box-title {
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+
+  .accordion-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: 17px;
+    height: 15px;
+    margin-top: 25px !important;
+    cursor: pointer;
+  }
+
   .hidden {
     position: absolute;
     top: -100px;
@@ -181,6 +223,7 @@ export default {
   .public-transport-buttons {
     display: flex;
     gap: 10px;
+    margin-top: 24px;
     margin-bottom: 10px;
   }
 
