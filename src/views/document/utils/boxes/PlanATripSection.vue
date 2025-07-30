@@ -926,11 +926,13 @@ export default {
         adjustedDateTime.setTime(originalDateTime.getTime() - 15 * 60 * 1000);
       }
 
-      const dateTimeFormat =
-        adjustedDateTime.toISOString().slice(0, 10).replace(/-/g, '') +
-        'T' +
-        adjustedDateTime.toTimeString().slice(0, 5).replace(':', '') +
-        '00';
+      const year = adjustedDateTime.getFullYear();
+      const month = String(adjustedDateTime.getMonth() + 1).padStart(2, '0');
+      const day = String(adjustedDateTime.getDate()).padStart(2, '0');
+      const hours = String(adjustedDateTime.getHours()).padStart(2, '0');
+      const minutes = String(adjustedDateTime.getMinutes()).padStart(2, '0');
+
+      const dateTimeFormat = `${year}${month}${day}T${hours}${minutes}00`;
       const dateTimeRepresents = this.timePreference === 'arrive-before' ? 'arrival' : 'departure';
 
       try {
