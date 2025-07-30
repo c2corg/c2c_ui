@@ -44,7 +44,7 @@
         <div class="missing-transports-warning-text">
           <strong>{{ $gettext('This route is partially accessible by public transport.') }}</strong>
           <p>
-            {{ $gettext("At least one access point in the route don't have a public transport stop within 5km.") }}
+            {{ $gettext('At least one access point in the route do not have a public transport stop within 5km.') }}
           </p>
         </div>
       </div>
@@ -56,7 +56,9 @@
         <strong>{{ $gettext('Unfortunately, this route may not be deserved by public transport') }}</strong>
         <p>
           {{
-            $gettext("We didn't find any public transport stop point in a 5 km foot range from any route access point.")
+            $gettext(
+              'We did not find any public transport stop point in a 5 km foot range from any route access point.'
+            )
           }}
         </p>
       </div>

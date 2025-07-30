@@ -208,7 +208,7 @@
               <div class="no-itineraries-text">
                 <div class="no-itineraries-found">{{ $gettext('No public transport found') }}</div>
                 <div class="no-itineraries-detail">
-                  {{ $gettext("It seems your trip can't be completed on the selected date and and time") }}
+                  {{ $gettext('It seems your trip can not be completed on the selected date and time') }}
                 </div>
               </div>
             </div>
