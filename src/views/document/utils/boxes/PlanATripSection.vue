@@ -2222,6 +2222,7 @@ export default {
           .journey-steps {
             display: flex;
             margin-top: 8px;
+            flex-wrap: wrap;
 
             .step-wrapper {
               display: flex;
@@ -2313,7 +2314,7 @@ export default {
 
     .plan-trip-map {
       height: 275px !important;
-      width: 319px !important;
+      width: auto !important;
       margin-left: auto;
       margin-right: auto;
     }

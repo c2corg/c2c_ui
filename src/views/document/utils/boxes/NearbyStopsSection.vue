@@ -542,7 +542,7 @@ export default {
     }
     .public-transports-map {
       height: 275px !important;
-      width: 319px !important;
+      width: auto !important;
       margin-left: auto;
       margin-right: auto;
     }
