@@ -1590,7 +1590,7 @@ export default {
       if (this.document.durations.length === 1 && this.document.durations[0] === '10+') {
         return '10+ ' + this.$gettext('Day(s)').toLowerCase();
       }
-      // Priority to the calculated duration if the minimum duration is exactly 1 day
+
       const shouldUseCalculated =
         this.document.durations?.length &&
         Math.min(...this.document.durations) === 1 &&
@@ -1604,8 +1604,14 @@ export default {
 
       if (durationInDays < 1) {
         const hours = durationInDays * 24;
-        const hoursInt = Math.floor(hours);
-        const minutes = Math.round((hours - hoursInt) * 60);
+        let hoursInt = Math.floor(hours);
+        let minutes = Math.round((hours - hoursInt) * 60);
+
+        if (minutes === 60) {
+          hoursInt += 1;
+          minutes = 0;
+        }
+
         return `${hoursInt}h${minutes.toString().padStart(2, '0')}`;
       }
 
