@@ -61,7 +61,6 @@
     </router-link>
 
     <div class="menu-footer is-size-7">
-      <advertisement class="menu-add" v-if="$screen.hasHeightForAd" />
       <div class="has-text-centered menu-links">
         <router-link :to="{ name: 'article', params: { id: 106727 } }" v-translate>contact</router-link>
         <span> &bull; </span>
@@ -101,12 +100,10 @@
 </template>
 
 <script>
-import Advertisement from './Advertisement';
-
 import IconYeti from '@/components/generics/icons/IconYeti';
 
 export default {
-  components: { IconYeti, Advertisement },
+  components: { IconYeti },
 
   data() {
     return {
@@ -200,12 +197,6 @@ aside {
   .menu-links {
     margin-bottom: 15px !important;
     line-height: 1;
-  }
-
-  .menu-ad {
-    height: 320px;
-    margin-left: calc((200px - 160px) / 2);
-    margin-right: calc((200px - 160px) / 2);
   }
 
   .instagram-icon,
