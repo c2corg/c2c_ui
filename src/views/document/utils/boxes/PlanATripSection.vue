@@ -208,7 +208,7 @@
               <div class="no-itineraries-text">
                 <div class="no-itineraries-found">{{ $gettext('No public transport found') }}</div>
                 <div class="no-itineraries-detail">
-                  {{ $gettext("It seems your trip can't be completed on the selected date and and time") }}
+                  {{ $gettext('It seems your trip can not be completed on the selected date and time') }}
                 </div>
               </div>
             </div>
@@ -495,8 +495,6 @@ export default {
         isUpdating: false,
         missingDepartureAddress: false,
         missingDestinationAddress: false,
-        limitTransfers: false,
-        maxTransfers: 0,
       },
 
       // Data for return journey
@@ -518,8 +516,6 @@ export default {
         isUpdating: false,
         missingDepartureAddress: false,
         missingDestinationAddress: false,
-        limitTransfers: false,
-        maxTransfers: 0,
       },
 
       userService: new UserProfileService(c2c),
@@ -530,6 +526,8 @@ export default {
       reachableWaypoints: [],
       loadingReachable: false,
       searchTimeout: null,
+      limitTransfers: false,
+      maxTransfers: 0,
     };
   },
 
@@ -751,24 +749,6 @@ export default {
       },
     },
 
-    limitTransfers: {
-      get() {
-        return this.currentData.limitTransfers;
-      },
-      set(value) {
-        this.currentData.limitTransfers = value;
-      },
-    },
-
-    maxTransfers: {
-      get() {
-        return this.limitTransfers ? this.currentData.maxTransfers : null;
-      },
-      set(value) {
-        this.currentData.maxTransfers = value;
-      },
-    },
-
     canAccessReturnTab() {
       return this.outboundData.journeys.length > 0;
     },
@@ -946,11 +926,13 @@ export default {
         adjustedDateTime.setTime(originalDateTime.getTime() - 15 * 60 * 1000);
       }
 
-      const dateTimeFormat =
-        adjustedDateTime.toISOString().slice(0, 10).replace(/-/g, '') +
-        'T' +
-        adjustedDateTime.toTimeString().slice(0, 5).replace(':', '') +
-        '00';
+      const year = adjustedDateTime.getFullYear();
+      const month = String(adjustedDateTime.getMonth() + 1).padStart(2, '0');
+      const day = String(adjustedDateTime.getDate()).padStart(2, '0');
+      const hours = String(adjustedDateTime.getHours()).padStart(2, '0');
+      const minutes = String(adjustedDateTime.getMinutes()).padStart(2, '0');
+
+      const dateTimeFormat = `${year}${month}${day}T${hours}${minutes}00`;
       const dateTimeRepresents = this.timePreference === 'arrive-before' ? 'arrival' : 'departure';
 
       try {
@@ -980,13 +962,7 @@ export default {
           });
 
           if (filteredJourneys.length === 0) {
-            if (this.activeTab === 'return') {
-              await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
-              return;
-            }
-
-            this.noResult = true;
-            this.journeys = [];
+            await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
             return;
           }
 
@@ -999,24 +975,11 @@ export default {
             await this.determineReturnWaypoint();
           }
         } else {
-          if (this.activeTab === 'return') {
-            await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
-            return;
-          }
-
-          this.noResult = true;
-          this.journeys = [];
+          await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
         }
       } catch (error) {
         console.error('Error retrieving routes:', error);
-
-        if (this.activeTab === 'return') {
-          await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
-          return;
-        }
-
-        this.noResult = true;
-        this.journeys = [];
+        await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
       } finally {
         this.isUpdating = false;
       }
@@ -1064,6 +1027,10 @@ export default {
             this.journeys = [bestLastJourney];
             this.noResult = true;
             this.selectedRouteJourney = bestLastJourney;
+            if (this.activeTab === 'outbound') {
+              this.calculateReturnParameters();
+              await this.determineReturnWaypoint();
+            }
             this.showTimeButton = true;
 
             this.$emit('calculate-route', {
@@ -1434,7 +1401,6 @@ export default {
       if (!this.outboundData.journeys || this.outboundData.journeys.length === 0) {
         return;
       }
-
       const outboundJourney = this.outboundData.journeys[0];
       const arrivalTime = outboundJourney.arrival_date_time;
 
@@ -1624,7 +1590,7 @@ export default {
       if (this.document.durations.length === 1 && this.document.durations[0] === '10+') {
         return '10+ ' + this.$gettext('Day(s)').toLowerCase();
       }
-      // Priority to the calculated duration if the minimum duration is exactly 1 day
+
       const shouldUseCalculated =
         this.document.durations?.length &&
         Math.min(...this.document.durations) === 1 &&
@@ -1638,8 +1604,14 @@ export default {
 
       if (durationInDays < 1) {
         const hours = durationInDays * 24;
-        const hoursInt = Math.floor(hours);
-        const minutes = Math.round((hours - hoursInt) * 60);
+        let hoursInt = Math.floor(hours);
+        let minutes = Math.round((hours - hoursInt) * 60);
+
+        if (minutes === 60) {
+          hoursInt += 1;
+          minutes = 0;
+        }
+
         return `${hoursInt}h${minutes.toString().padStart(2, '0')}`;
       }
 
@@ -2256,6 +2228,7 @@ export default {
           .journey-steps {
             display: flex;
             margin-top: 8px;
+            flex-wrap: wrap;
 
             .step-wrapper {
               display: flex;
@@ -2347,7 +2320,7 @@ export default {
 
     .plan-trip-map {
       height: 275px !important;
-      width: 319px !important;
+      width: auto !important;
       margin-left: auto;
       margin-right: auto;
     }
