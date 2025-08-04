@@ -199,12 +199,6 @@ aside {
     line-height: 1;
   }
 
-  .menu-ad {
-    height: 320px;
-    margin-left: calc((200px - 160px) / 2);
-    margin-right: calc((200px - 160px) / 2);
-  }
-
   .instagram-icon,
   .facebook-icon,
   .donate-icon,
