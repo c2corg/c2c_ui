@@ -54,7 +54,7 @@ jobs:
           labels: ${{ steps.docker_meta.outputs.labels }}
       - name: Get branch name
         id: branch-name
-        uses: tj-actions/branch-names@v8
+        uses: tj-actions/branch-names@v9
       - name: Create clean branch name
         id: clean_branch
         run: echo "CLEAN_BRANCH=${BRANCH/\//-}" >> $GITHUB_OUTPUT
@@ -80,7 +80,7 @@ jobs:
     steps:
       - name: Get branch name
         id: branch-name
-        uses: tj-actions/branch-names@v8
+        uses: tj-actions/branch-names@v9
       - name: Create clean branch name
         id: clean_branch
         run: echo CLEAN_BRANCH=${BRANCH/\//-} >> $GITHUB_OUTPUT
