@@ -19,7 +19,7 @@ jobs:
         node-version: [lts/*]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -87,7 +87,7 @@ jobs:
         env:
           BRANCH: ${{ steps.branch-name.outputs.current_branch || steps.branch-name.outputs.tag }}
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: gh-pages
       - name: Remove current branch files
@@ -117,7 +117,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Create or update release
@@ -135,7 +135,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Push translations to Transifex
         run: |
           echo "::add-mask::$TOKEN"
