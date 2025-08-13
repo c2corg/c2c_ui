@@ -15,6 +15,7 @@
         </div>
         <div class="column is-paddingless">
           <document-title :document="waypoint" />
+          <marker-soft-mobility v-if="$documentUtils.hasSoftMobility(waypoint)" class="icon-link" />
         </div>
         <div class="column is-narrow has-text-grey is-paddingless is-size-7">{{ waypoint.elevation }}&nbsp;m</div>
       </document-link>
