@@ -122,6 +122,7 @@
     "Associated routes cotations": "Schwierigkeitsgrat der verbundenen Routen",
     "Association": "Verein Camptocamp",
     "Associations history": "Geschichte der Verbindungen",
+    "At least one access point in the route do not have a public transport stop within 5km.": "Mindestens ein Zugangspunkt der Wanderung hat keine öffentlichen Transportmitteln näher als 5 km ",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Namensnennung — Sie müssen angemessene Urheber- und Rechteangaben machen, einen Link zur Lizenz beifügen und angeben, ob Änderungen vorgenommen wurden. ",
     "Attributions": {
       "Map controls": "Zuschreibung"
@@ -375,6 +376,7 @@
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Hier ist die Liste der Benutzern, denen Sie folgen. Aktivitäten dieser Benutzern werden in Ihrem persönlichen Feed angezeigt.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Wählen Sie hier die Aktivitäten und Regionen aus, für die Sie Einträge im Feed auf der Startseite sehen möchten.",
     "Hide details": "Details ausblenden",
+    "Hide lines details": "Liniendetails ausblenden",
     "High danger level from the avalanche bulletin": "Hohe Gefahrenstufe aus dem Lawinenbulletin",
     "Hiking gear": "Sommerliches Wandern",
     "History": "Historie",
@@ -436,6 +438,7 @@
     },
     "Invalid value": "Ungültiger Wert",
     "Issue report": "Problembericht",
+    "It seems your trip can not be completed on the selected date and time": "Anscheinend kann Ihre Route nicht zu dem gewünschten Datum und zur gewünschter Zeit ausgeführt werden",
     "Join us": "Machen Sie mit",
     "Know more about SERAC": "Lernen Sie mehr über SERAC.",
     "Large group = 5 people and more": "Große Gruppe = 5 Personen und mehr",
@@ -844,6 +847,7 @@
     "Warning: This action cannot be undone!": "Achtung: Diese Aktion ist unumkehrbar !",
     "Waypoint's main properties": "Hauptdaten des Wegpunkts",
     "Waypoint's textual description": "Textbeschreibung des Wegpunkts",
+    "We did not find any public transport stop point in a 5 km foot range from any route access point.": "wir haben keine Haltestelle fuer öffentliche Verkehrsmitteln weniger als 5km entfernt von einem der Zugangspunkte zur Route gefunden",
     "We sent you an email, please click on the link to reset password.": "Wir haben Ihnen eine Email zu gesendet. Bitten klicken Sie auf den gesendeten Link um das Passwort zurückzusetzen.",
     "Weather & conditions": "Wetter und Verhältnisse",
     "Weather forecast (meteoblue)": "Wetterprognose (Meteoblue)",
