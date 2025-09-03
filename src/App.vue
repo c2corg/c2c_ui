@@ -8,7 +8,7 @@
   >
     <side-menu class="side-menu no-print" :class="{ 'alternative-side-menu': alternativeSideMenu }" />
     <navigation class="navigation no-print" @toggle-side-menu="alternativeSideMenu = !alternativeSideMenu" />
-    <dfm-ad-large v-if="!homePage() && ($screen.isMobile || $screen.isTablet || $screen.isDesktop)" class="ad" />
+    <dfm-ad-small v-if="!homePage() && ($screen.isMobile || $screen.isTablet || $screen.isDesktop)" class="ad" />
     <site-notice ref="siteNotice no-print" class="no-print site-notice" />
     <image-viewer ref="imageViewer" />
     <helper-window ref="helper" />
@@ -28,7 +28,7 @@ import AlertWindow from './components/alert-window/AlertWindow';
 import GdprBanner from './components/gdpr/GdprBanner.vue';
 import HelperWindow from './components/helper/HelperWindow';
 import ImageViewer from './components/image-viewer/ImageViewer';
-import DfmAdLarge from './views/DfmAdLarge.vue';
+import DfmAdSmall from './views/DfmAdSmall.vue';
 import Navigation from './views/Navigation';
 import SideMenu from './views/SideMenu';
 import SiteNotice from './views/SiteNotice';
@@ -37,7 +37,7 @@ export default {
   name: 'App',
 
   components: {
-    DfmAdLarge,
+    DfmAdSmall,
     SideMenu,
     Navigation,
     SiteNotice,
