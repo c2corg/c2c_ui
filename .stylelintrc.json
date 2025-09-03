@@ -1,4 +1,5 @@
 {
+  "rules": {},
   "overrides": [
     {
       "files": ["*.scss", "**/*.scss"],
