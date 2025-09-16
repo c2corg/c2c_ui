@@ -117,7 +117,7 @@ const config = {
       api: 'https://preprod.c2c.preprod0.smart-origin.com/api',
       media: 'https://media.camptocamp.org/c2corg-active',
       imageBackend: 'https://images.camptocamp.org',
-      tracking: 'https://tracking.camptocamp.org',
+      tracking: 'https://tracking.demov6.camptocamp.org',
       miniatures: 'https://media.camptocamp.org/c2corg-tracking',
       forum: 'https://forum.camptocamp.org',
       recaptchaKey: '6Lc9Cw4UAAAAAIKnlar0AOsGX_P5S-bk9u8viuo2',
