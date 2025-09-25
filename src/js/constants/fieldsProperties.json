@@ -690,7 +690,8 @@
     "default": false
   },
   "public_transportation_rating": {
-    "values": "public_transportation_ratings"
+    "values": "public_transportation_ratings",
+    "default": "unknown service"
   },
   "public_transportation_types": {
     "values": "public_transportation_types",
