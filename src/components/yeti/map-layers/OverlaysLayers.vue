@@ -1,12 +1,13 @@
 <template>
   <div>
+    <protected-areas-layer @layer="onLayer($event, 2)" />
     <winter-route-layer @layer="onLayer($event, 1)" />
     <avalanche-bulletins-layer @layer="onLayer($event, 0)" />
-    <data-avalanche-layer @layer="onLayer($event, 2)" />
-    <ffvl-layer @layer="onLayer($event, 6)" />
-    <flowcapt-layer @layer="onLayer($event, 5)" />
-    <nivoses-layer @layer="onLayer($event, 3)" />
-    <romma-layer @layer="onLayer($event, 4)" />
+    <data-avalanche-layer @layer="onLayer($event, 3)" />
+    <ffvl-layer @layer="onLayer($event, 7)" />
+    <flowcapt-layer @layer="onLayer($event, 6)" />
+    <nivoses-layer @layer="onLayer($event, 4)" />
+    <romma-layer @layer="onLayer($event, 5)" />
     <route-layer />
   </div>
 </template>
@@ -20,6 +21,7 @@ import DataAvalancheLayer from '@/components/yeti/map-layers/DataAvalancheLayer.
 import FfvlLayer from '@/components/yeti/map-layers/FfvlLayer.vue';
 import FlowcaptLayer from '@/components/yeti/map-layers/FlowcaptLayer.vue';
 import NivosesLayer from '@/components/yeti/map-layers/NivosesLayer.vue';
+import ProtectedAreasLayer from '@/components/yeti/map-layers/ProtectedAreasLayer.vue';
 import RommaLayer from '@/components/yeti/map-layers/RommaLayer.vue';
 import RouteLayer from '@/components/yeti/map-layers/RouteLayer.vue';
 import WinterRouteLayer from '@/components/yeti/map-layers/WinterRouteLayer.vue';
@@ -32,6 +34,7 @@ export default {
     FfvlLayer,
     FlowcaptLayer,
     NivosesLayer,
+    ProtectedAreasLayer,
     RommaLayer,
     RouteLayer,
     WinterRouteLayer,
@@ -83,12 +86,23 @@ export default {
             },
           })[0];
 
-          // raster layers
-          if (!feature && olLayer instanceof ol.layer.Tile) {
-            let data = olLayer.getData(evt.pixel);
-            if (data && data[3] > 0) {
-              feature = data;
+          // raster layers (or group of raster layers)
+          if (!feature) {
+            let layers = [];
+            if (olLayer instanceof ol.layer.Tile) {
+              layers = [olLayer];
             }
+            if (olLayer instanceof ol.layer.Group) {
+              layers = [...olLayer.getLayers().getArray()].reverse();
+            }
+            layers.every((layer) => {
+              let data = layer.getData(evt.pixel);
+              if (data && data[3] > 0) {
+                feature = data;
+                return false;
+              }
+              return true;
+            });
           }
         }
 
