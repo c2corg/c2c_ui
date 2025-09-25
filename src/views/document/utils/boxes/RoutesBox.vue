@@ -26,14 +26,22 @@
         <span v-translate>Filter results</span>&nbsp;<span class="badge">{{ totalRoutes }}</span>
       </router-link>
       <add-link document-type="route" :query="query" class="button is-primary" />
+      <print-button
+        class="button is-primary"
+        forced-document-type="route"
+        :forced-query="query"
+        :forced-route-name="'routes/print'"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import { requireDocumentProperty } from '@/js/properties-mixins';
+import PrintButton from '@/views/documents/utils/PrintButton';
 
 export default {
+  components: { PrintButton },
   mixins: [requireDocumentProperty],
   props: {
     hideButtons: {
