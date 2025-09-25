@@ -1058,6 +1058,8 @@
     },
     "difficulties_height": "Altitude du début des difficultés",
     "disable_comments": "Désactiver les commentaires",
+    "disable_view_count": "Désactiver le compteur de vues",
+    "view_count": "vues",
     "draft": {
       "quality_types": "ébauche"
     },
