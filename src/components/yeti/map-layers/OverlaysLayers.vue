@@ -1,6 +1,7 @@
 <template>
   <div>
     <protected-areas-layer @layer="onLayer($event, 2)" />
+    <meteo-layer :visible="meteoTab" />
     <winter-route-layer @layer="onLayer($event, 1)" />
     <avalanche-bulletins-layer @layer="onLayer($event, 0)" />
     <data-avalanche-layer @layer="onLayer($event, 3)" />
@@ -20,6 +21,7 @@ import AvalancheBulletinsLayer from '@/components/yeti/map-layers/AvalancheBulle
 import DataAvalancheLayer from '@/components/yeti/map-layers/DataAvalancheLayer.vue';
 import FfvlLayer from '@/components/yeti/map-layers/FfvlLayer.vue';
 import FlowcaptLayer from '@/components/yeti/map-layers/FlowcaptLayer.vue';
+import MeteoLayer from '@/components/yeti/map-layers/MeteoLayer.vue';
 import NivosesLayer from '@/components/yeti/map-layers/NivosesLayer.vue';
 import ProtectedAreasLayer from '@/components/yeti/map-layers/ProtectedAreasLayer.vue';
 import RommaLayer from '@/components/yeti/map-layers/RommaLayer.vue';
@@ -33,6 +35,7 @@ export default {
     DataAvalancheLayer,
     FfvlLayer,
     FlowcaptLayer,
+    MeteoLayer,
     NivosesLayer,
     ProtectedAreasLayer,
     RommaLayer,
@@ -43,6 +46,15 @@ export default {
   computed: {
     editMode() {
       return Yetix.editMode;
+    },
+    activeTab() {
+      return Yetix.activeTab;
+    },
+    tabs() {
+      return Yetix.tabs;
+    },
+    meteoTab() {
+      return this.tabs[this.activeTab].id === 'meteo';
     },
   },
   mounted() {

@@ -18,6 +18,7 @@ import VectorImageLayer from 'ol/layer/VectorImage';
 import { get as getProjection, toLonLat, transformExtent, transform as transformProjection } from 'ol/proj';
 import BingMaps from 'ol/source/BingMaps';
 import ImageStatic from 'ol/source/ImageStatic';
+import ImageTile from 'ol/source/ImageTile';
 import TileWMS from 'ol/source/TileWMS';
 import VectorSource from 'ol/source/Vector';
 import WMTS from 'ol/source/WMTS';
@@ -105,6 +106,7 @@ export default {
   source: {
     BingMaps,
     ImageStatic,
+    ImageTile,
     TileWMS,
     Vector: VectorSource,
     WMTS,

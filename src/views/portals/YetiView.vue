@@ -63,6 +63,10 @@
             <panel :index="2">
               <sub-panel-course />
             </panel>
+
+            <panel :index="3">
+              <sub-panel-meteo />
+            </panel>
           </div>
 
           <div class="box yeti-logos">
@@ -108,6 +112,7 @@ import Panel from '@/components/yeti/Panel';
 import SubPanelBra from '@/components/yeti/SubPanelBra';
 import SubPanelCourse from '@/components/yeti/SubPanelCourse';
 import SubPanelLayers from '@/components/yeti/SubPanelLayers';
+import SubPanelMeteo from '@/components/yeti/SubPanelMeteo';
 import SubPanelMethods from '@/components/yeti/SubPanelMethods';
 import Tabs from '@/components/yeti/Tabs';
 import ValidationButton from '@/components/yeti/ValidationButton';
@@ -127,6 +132,7 @@ export default {
     SubPanelBra,
     SubPanelCourse,
     SubPanelLayers,
+    SubPanelMeteo,
     SubPanelMethods,
     Tabs,
     ValidationButton,
@@ -305,6 +311,14 @@ export default {
         };
       }
       tabs.push(tabRoute);
+
+      // meteo tab
+      let tabMeteo = {
+        id: 'meteo',
+        name: this.$gettext('Meteo'),
+        icon: 'sun',
+      };
+      tabs.push(tabMeteo);
 
       return tabs;
     },
