@@ -185,41 +185,7 @@ export default {
       return Yetix.validSimplifyTolerance;
     },
     tabs() {
-      let tabs = [];
-
-      // layer tab
-      let tabLayer = {
-        icon: 'layer-group',
-        title: this.$gettext('Layers'),
-      };
-      tabs.push(tabLayer);
-
-      // risk tab
-      let tabRisk = {
-        name: this.$gettext('Risk'),
-        icon: 'bolt',
-      };
-      tabs.push(tabRisk);
-
-      // route tab
-      let tabRoute = {
-        name: this.$gettext('My outing'),
-        icon: 'route',
-      };
-      if (this.hasFeatures && !this.validSimplifyTolerance) {
-        tabRoute.counter = {
-          text: this.featuresLength,
-          title: this.$gettext('Route on map'),
-        };
-      }
-      if (this.validSimplifyTolerance) {
-        tabRoute.problemIcon = {
-          title: this.$gettext('Not simplified yet'),
-        };
-      }
-      tabs.push(tabRoute);
-
-      return tabs;
+      return Yetix.tabs;
     },
     errors() {
       return {
@@ -291,6 +257,10 @@ export default {
     Yetix.setDefault();
     // remove all previous events (navigating from other c2c pages)
     Yetix.$off();
+
+    // build tabs
+    let tabs = this.setTabs();
+    Yetix.setTabs(tabs);
   },
 
   mounted() {
@@ -298,6 +268,46 @@ export default {
   },
 
   methods: {
+    setTabs() {
+      let tabs = [];
+
+      // layer tab
+      let tabLayer = {
+        id: 'layer',
+        icon: 'layer-group',
+        title: this.$gettext('Layers'),
+      };
+      tabs.push(tabLayer);
+
+      // risk tab
+      let tabRisk = {
+        id: 'risk',
+        name: this.$gettext('Risk'),
+        icon: 'bolt',
+      };
+      tabs.push(tabRisk);
+
+      // route tab
+      let tabRoute = {
+        id: 'route',
+        name: this.$gettext('My outing'),
+        icon: 'route',
+      };
+      if (this.hasFeatures && !this.validSimplifyTolerance) {
+        tabRoute.counter = {
+          text: this.featuresLength,
+          title: this.$gettext('Route on map'),
+        };
+      }
+      if (this.validSimplifyTolerance) {
+        tabRoute.problemIcon = {
+          title: this.$gettext('Not simplified yet'),
+        };
+      }
+      tabs.push(tabRoute);
+
+      return tabs;
+    },
     check() {
       if (!this.areaOk) {
         this.formError = 'area';

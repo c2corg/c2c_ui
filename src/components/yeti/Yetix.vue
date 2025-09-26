@@ -24,6 +24,7 @@ let defaultState = {
   /* fixed zoom by 0.5 */
   ZOOM_DELTA: 0.5,
 
+  tabs: [],
   activeTab: 0,
 
   bra: {
@@ -136,6 +137,9 @@ export default new Vue({
     },
     ZOOM_DELTA() {
       return state.ZOOM_DELTA;
+    },
+    tabs() {
+      return state.tabs;
     },
     activeTab() {
       return state.activeTab;
@@ -263,6 +267,9 @@ export default new Vue({
   },
   methods: {
     // mutations
+    setTabs(tabs) {
+      state.tabs = tabs;
+    },
     setActiveTab(index) {
       state.activeTab = index;
     },
