@@ -752,6 +752,10 @@ export default {
     canAccessReturnTab() {
       return this.outboundData.journeys.length > 0;
     },
+
+    maxNbTransfers() {
+      return this.limitTransfers ? this.maxTransfers : -1;
+    },
   },
 
   async mounted() {
@@ -947,7 +951,7 @@ export default {
             walking_speed: 1.12,
             max_walking_duration_to_pt: 4464,
             min_nb_journeys: 3,
-            max_nb_transfers: this.maxTransfers,
+            max_nb_transfers: this.maxNbTransfers,
           }
         );
 
@@ -1000,7 +1004,7 @@ export default {
             walking_speed: 1.12,
             max_walking_duration_to_pt: 4464,
             min_nb_journeys: 3,
-            max_nb_transfers: this.maxTransfers,
+            max_nb_transfers: this.maxNbTransfers,
             timeframe_duration: 86400,
           }
         );
