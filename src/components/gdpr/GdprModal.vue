@@ -27,8 +27,6 @@
           a form or define your cookie preferences. If you configure your computer to block these cookies or to warn you
           of their existence, our website will not function fully.
         </p>
-      </div>
-      <div class="column">
         <div class="is-flex is-justify-content-space-between is-align-items-baseline">
           <h2 class="is-size-3" v-translate>Statistical cookies</h2>
           <div class="field">
@@ -46,6 +44,20 @@
           Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our
           website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our
           website. If you reject them, we cannot improve your experience.
+        </p>
+      </div>
+      <div class="column">
+        <div class="is-flex is-justify-content-space-between is-align-items-baseline">
+          <h2 class="is-size-3" v-translate>Advertisement cookies</h2>
+          <div class="field">
+            <input type="checkbox" id="ad" name="ad" class="switch is-rounded" v-model="gdpr.ad" />
+            <label for="ad"></label>
+          </div>
+        </div>
+        <p v-translate>
+          These cookies are used to provide you with personalized advertising based on your browsing on the site. They
+          track your activities on the site in order to display relevant ads tailored to your interests. By disabling
+          these cookies, you will continue to see ads, but they will no longer be tailored to your preferences.
         </p>
         <div class="is-flex is-justify-content-space-between is-align-items-baseline">
           <h2 class="is-size-3" v-translate>Social cookies</h2>
