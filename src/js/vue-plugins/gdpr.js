@@ -41,7 +41,9 @@ export default function install(Vue) {
       },
 
       setAll(accept) {
-        this.set(accept ? { statistics: true, social: true } : { statistics: false, social: false });
+        this.set(
+          accept ? { statistics: true, social: true, ad: true } : { statistics: false, social: false, ad: false }
+        );
       },
     },
   });
