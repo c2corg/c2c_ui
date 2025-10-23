@@ -50,6 +50,12 @@ export default {
         let start = winterRoute.get('start');
         let stop = winterRoute.get('stop');
         let routeTitle = `${this.$gettext('From')} ${start} ${this.$gettext('to')} ${stop}`;
+
+        // swiss route dont have start/stop, but name (based on lang)
+        if (!start || !stop) {
+          routeTitle = winterRoute.get(`name_${this.$language.current}`) ?? winterRoute.get('name');
+        }
+
         winterRoute.set('title', routeTitle);
         return winterRoute;
       });
