@@ -9,7 +9,7 @@ import GeoJSON from 'ol/format/GeoJSON';
 import KML from 'ol/format/KML';
 import { LineString, MultiPolygon, Point, Polygon, GeometryCollection } from 'ol/geom';
 import { fromExtent } from 'ol/geom/Polygon';
-import { DragAndDrop, Draw, Modify, Select, Snap } from 'ol/interaction';
+import { DragAndDrop, Draw, Modify, Pointer, Select, Snap } from 'ol/interaction';
 import GroupLayer from 'ol/layer/Group';
 import ImageLayer from 'ol/layer/Image';
 import TileLayer from 'ol/layer/Tile';
@@ -86,6 +86,7 @@ export default {
     Select,
     Snap,
     DragAndDrop,
+    Pointer,
   },
 
   layer: {
