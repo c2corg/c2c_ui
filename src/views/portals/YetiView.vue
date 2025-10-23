@@ -643,5 +643,9 @@ $yeti-height-ad: calc(100vh - #{$navbarad-height});
   .is-checkradio:focus-visible + label::before {
     box-shadow: 0 0 0 2px $secondary;
   }
+
+  .button.is-small {
+    border-radius: 4px;
+  }
 }
 </style>

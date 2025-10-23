@@ -17,6 +17,7 @@ export default {
     },
     layerSelector() {
       return {
+        id: 'winter-route',
         title: this.$gettext('Winter hiking routes'),
         checked: this.showWinterRoute,
         action: this.onShowWinterRoute,
