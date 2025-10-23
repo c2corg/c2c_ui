@@ -1,16 +1,16 @@
 <template>
   <div class="dropdown-content" :class="{ 'dropdown-content-inverted': inverted }">
     <div>
-      <h3 class="dropdown-content-title" :class="{ 'is-open': opened }" @click="switchOpen">
+      <h3 class="dropdown-content-title" :class="{ 'is-open': localOpen }" @click="switchOpen">
         <slot />
         <fa-icon
           class="dropdown-content-arrow is-size-6 is-pulled-right has-cursor-pointer no-print"
           icon="angle-down"
-          :rotation="opened ? 180 : undefined"
+          :rotation="localOpen ? 180 : undefined"
         />
       </h3>
     </div>
-    <div v-if="opened" class="dropdown-content-content p-3">
+    <div v-if="localOpen" class="dropdown-content-content p-3">
       <slot name="content" />
     </div>
   </div>
@@ -23,15 +23,19 @@ export default {
       type: Boolean,
       default: false,
     },
+    open: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
-      opened: false,
+      localOpen: this.open,
     };
   },
   methods: {
     switchOpen() {
-      this.opened = !this.opened;
+      this.localOpen = !this.localOpen;
     },
   },
 };
