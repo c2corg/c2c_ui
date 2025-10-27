@@ -65,7 +65,7 @@ jobs:
         env:
           GITHUB_PAGES_BRANCH: ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
       - name: Upload artifact for github pages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: github-pages
           path: dist/*
