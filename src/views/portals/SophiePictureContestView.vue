@@ -518,7 +518,7 @@ export default {
       documentId: 1809682,
       winners: [
         {
-          title: 'Rappel de l'Ermite',
+          title: "Rappel de l'Ermite",
           author: 'Emilien Hugon',
           image: { document_id: 1820998 },
           category: 'Action',
