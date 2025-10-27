@@ -516,7 +516,7 @@ export default {
     2025: {
       year: 2025,
       documentId: 1809682,
-       winners: [
+      winners: [
         {
           title: 'Rappel de l'Ermite',
           author: 'Emilien Hugon',
