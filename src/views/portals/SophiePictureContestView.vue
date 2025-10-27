@@ -516,6 +516,32 @@ export default {
     2025: {
       year: 2025,
       documentId: 1809682,
+       winners: [
+        {
+          title: 'Rappel de l'Ermite',
+          author: 'Emilien Hugon',
+          image: { document_id: 1820998 },
+          category: 'Action',
+        },
+        {
+          title: 'Lac, mer de nuage, coucher de soleil',
+          author: 'Gweilus',
+          image: { document_id: 1828515 },
+          category: 'Paysage',
+        },
+        {
+          title: 'Entre les ombres',
+          author: 'Nizon',
+          image: { document_id: 1824474 },
+          category: 'Faune / Flore / Inclassable',
+        },
+        {
+          title: 'Ombres Suisses',
+          author: 'gilles74',
+          image: { document_id: 1703979 },
+          category: 'Topoguide',
+        },
+      ],
     },
   },
 
