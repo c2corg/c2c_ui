@@ -56,11 +56,15 @@ export default {
       type: Object,
       default: null,
     },
+    defaultAddress: {
+      type: Object,
+      default: null,
+    },
   },
   data() {
     return {
       localData: {
-        address: '',
+        address: this.defaultAddress ? this.formatProposition(this.defaultAddress) : '',
         selectedAddress: '',
         addressPropositions: '',
         showAddressPropositions: this.showAddressPropositions,
