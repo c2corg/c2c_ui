@@ -111,31 +111,42 @@
         </div>
         <!-- LIST OF FILTERS WHEN TOO MUCH ROUTE -->
         <div class="centered" v-if="view === 'filter'">
-          <p>votre recherche concerne un nombre d'itinéraires trop grand</p>
-          <p>aidez nous à mieux cibler les itinéraires pouvant vous intéresser en ajoutant un à plusieurs filtres.</p>
-          <div>
-            <button class="button is-primary" @click="() => activateFilterTab('General')">
-              {{ $gettext('General') }} {{ generalActiveCount > 0 ? '(' + generalActiveCount + ')' : '' }}
-            </button>
-            <button class="button is-primary" @click="() => activateFilterTab('ratings')">
-              {{ $gettext('ratings') }} {{ ratingsActiveCount > 0 ? '(' + ratingsActiveCount + ')' : '' }}
-            </button>
-            <button class="button is-primary" @click="() => activateFilterTab('Terrain')">
-              {{ $gettext('Terrain') }} {{ terrainActiveCount > 0 ? '(' + terrainActiveCount + ')' : '' }}
-            </button>
+          <div class="filter-header-section">
+            <p class="too-much-route-label">Votre recherche concerne un nombre d'itinéraires trop important.</p>
+            <p>
+              Aidez-nous à mieux cibler les itinéraires pouvant vous intéresser en ajoutant un ou plusieurs filtres.
+            </p>
           </div>
-          <div v-for="(category, index) in categorizedFields" :key="category.name">
-            <div class="filterTab" v-if="filterTab === category.name">
-              <!-- special case for activities (use formData) -->
-              <div class="form-input" v-if="index === 0">
-                <p class="input-label">Quel(s) activité(s) souhaitez-vous pratiquer ?</p>
+          <div class="filter-button-dropdown">
+            <dropdown-button
+              v-for="(category, index) in categorizedFields"
+              :key="category.name"
+              :disabled="category.fields.length === 0"
+              class="query-item-component"
+            >
+              <span slot="button" class="button is-size-7-mobile" :disabled="category.fields.length === 0">
+                <fa-icon :icon="$options.categoryIcon[category.name]" />
+                <span class="is-hidden-mobile">
+                  <!-- $gettext('General') -->
+                  <!-- $gettext('ratings') -->
+                  <!-- $gettext('Terrain') -->
+                  <!-- $gettext('Miscs') -->
+                  &nbsp;{{ $gettext(category.name) }}
+                </span>
+                <span v-if="activeFields[index]?.length != 0"> &nbsp;({{ activeFields[index]?.length }}) </span>
+                <span>&nbsp;</span>
+                <fa-icon icon="angle-down" aria-hidden="true" />
+              </span>
+              <div class="sub-query-items">
+                <Itinevert-filter-item
+                  v-for="field in category.fields || []"
+                  :key="field.field.name"
+                  :field="field.field"
+                  v-model="field.value"
+                  class="dropdown-item"
+                ></Itinevert-filter-item>
               </div>
-
-              <!-- loop over fields -->
-              <div class="control" v-for="field in category.fields || []" :key="field.field.name">
-                <Itinevert-filter-item :field="field.field" v-model="field.value"></Itinevert-filter-item>
-              </div>
-            </div>
+            </dropdown-button>
           </div>
           <div class="routeCount">
             <p>
@@ -175,6 +186,8 @@
 </template>
 
 <script>
+import DropdownButton from '../generics/DropdownButton.vue';
+
 import ItinevertFilterItem from './ItinevertFilterItem.vue';
 import ItinevertResultView from './ItinevertResultView.vue';
 
@@ -190,6 +203,14 @@ export default {
   components: {
     ItinevertFilterItem,
     ItinevertResultView,
+    DropdownButton,
+  },
+  categoryIcon: {
+    General: 'filter',
+    MultiSearch: 'filter',
+    Miscs: 'database',
+    Terrain: ['waypoint', 'summit'],
+    ratings: 'tachometer-alt',
   },
   props: {
     view: {
@@ -199,8 +220,6 @@ export default {
   },
   data() {
     return {
-      // level 1 tab : only for 'filter' view -> ['General', 'ratings', 'Terrain']
-      filterTab: 'General',
       routeFields: constants.objectDefinitions['route'].fields,
       waypointFields: constants.objectDefinitions['waypoint'].fields,
       // data used in form view and filter view
@@ -253,18 +272,6 @@ export default {
   },
 
   computed: {
-    // for filter view, gives the number of fields active in general category
-    generalActiveCount() {
-      return this.activeFields[0]?.length;
-    },
-    // for filter view, gives the number of fields active in ratings category
-    ratingsActiveCount() {
-      return this.activeFields[1]?.length;
-    },
-    // for filter view, gives the number of fields active in terrain category
-    terrainActiveCount() {
-      return this.activeFields[2]?.length;
-    },
     routeCount() {
       return this.filteredRoutes.total;
     },
@@ -272,7 +279,7 @@ export default {
       return ' / ' + MAX_ROUTE_THRESHOLD + ' itinéraires';
     },
     canDisplayResult() {
-      return this.filteredRoutes.total < MAX_ROUTE_THRESHOLD;
+      return this.filteredRoutes.total < MAX_ROUTE_THRESHOLD && this.filteredRoutes.total !== 0;
     },
     activeFields() {
       return this.categorizedFields.map((category) =>
@@ -376,10 +383,6 @@ export default {
     gettext(key, context) {
       return this.$gettext(key, context);
     },
-    /** Activate different tabs when current view is filter */
-    activateFilterTab(filterTab) {
-      this.filterTab = filterTab;
-    },
     // callback passed to input address
     updateStartingPointAddress(selectedAddress) {
       this.formData.startingPoint.selectedAddress = selectedAddress;
@@ -468,7 +471,7 @@ export default {
           query.a = this.formData.mountainRange.selected.document_id;
         }
 
-        // loop over each category ('General', 'ratings', 'Terrain')
+        // loop over each category ('General', 'ratings', 'Terrain', 'Misc')
         for (let category of Object.keys(this.activeFields)) {
           // loop over each active fields to enhance the query
           for (let field of this.activeFields[category]) {
@@ -545,6 +548,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  max-width: 75%;
 }
 
 .centered > .form-input:first-child {
@@ -665,6 +669,7 @@ export default {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  min-height: 70vh;
 }
 
 .above-max-route {
@@ -686,5 +691,76 @@ export default {
   border-radius: 10px;
   background: #ebebeb;
   border: 1px solid #d1d1d1;
+}
+
+.filter-header-section {
+  padding: 2rem;
+  border-radius: 10px;
+  background: #ebebeb;
+  border: 1px solid #d1d1d1;
+  font-weight: bold;
+  .too-much-route-label {
+    color: #ff3262;
+    padding-bottom: 2rem;
+  }
+}
+.dropdown-item {
+  color: #4a4a4a;
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  padding: 0.375rem 1rem;
+  position: relative;
+}
+
+.query-item-component {
+  margin-bottom: 0.5rem;
+}
+
+.sub-query-items {
+  @media screen and (min-width: $tablet) {
+    min-width: 300px;
+  }
+
+  @media screen and (max-width: $tablet) {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    /*
+      max-height should be calculated:
+      100vh-($navbar-height)-height(.search-infos)
+      but .search-infos height is not fixed
+    */
+    max-height: 70vh;
+
+    scrollbar-width: none; // Firefox
+
+    &::-webkit-scrollbar {
+      display: none; // Chrome, Safari and Opera
+    }
+  }
+}
+
+@media screen and (min-width: $tablet) {
+  .query-item-component {
+    margin-right: 0.75em;
+  }
+}
+
+@media screen and (max-width: $tablet) {
+  .query-item-component {
+    margin-right: 0.25em;
+  }
+
+  .query-items-filters {
+    position: relative; // important, to force drop down on the left
+  }
+
+  .dropdown {
+    position: unset; // important, to force drop down on the left
+  }
+}
+.filter-button-dropdown {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
