@@ -117,6 +117,7 @@
     "Cards mode": "Vue en cards",
     "Change account parameters": "Modifier les paramètres du compte",
     "Change password": "Modifier le mot de passe",
+    "Change your approach: plan your public transport outing" : "Changer d'approche : planifier votre sortie en transports en commun",
     "Checking...": "En cours de vérification…",
     "Child": "Enfant",
     "Choose file": "Choisir un fichier",
@@ -427,6 +428,7 @@
     "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Principales informations sur l'itinéraire, comme le nom, les activités, la géo-localisation, et l'environnement proche.",
     "Main informations about your outing": "Données principales de votre sortie",
     "Make profile page public": "Rendre publique la page de profil",
+    "Itinevert": "Itinévert",
     "Map filter off": "Filtre carte désactivé",
     "Map filter on": "Filtre carte activé",
     "Map only": "Uniquement la carte",
@@ -610,6 +612,7 @@
     "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC est conçu dans un esprit de bienveillance et de partage, merci de l’encourager",
     "SERAC: accidents and incidents in the mountains": "SERAC : accidents et incidents en montagne",
     "Save": "Enregistrer",
+    "Search": "Rechercher",
     "Search ...": "Rechercher…",
     "Search a document to associate...": "Rechercher un document à associer",
     "See lines details": "Voir le détail des lignes",
@@ -940,6 +943,7 @@
     "cave": {
       "waypoint_types": "grotte"
     },
+
     "children_proof": "Enfants",
     "cleared": {
       "access_conditions": "déneigé"
