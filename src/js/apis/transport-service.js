@@ -19,6 +19,16 @@ TransportService.prototype.getStopareas = function (waypointId) {
 };
 
 /**
+ * Get list of waypoint ids that are accessible in TC for a route
+ *
+ * @param {string | number} routeId
+ * @returns {Promise}
+ */
+TransportService.prototype.getWaypointsAccessibleTC = function (routeId) {
+  return this.axios.get(`/routes/${routeId}/stopareaswaypoints`).then((response) => response.data);
+};
+
+/**
  * Check if a waypoint is accessible by public transport
  *
  * @param {string | number} waypointId
