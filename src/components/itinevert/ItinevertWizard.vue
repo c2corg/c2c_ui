@@ -57,7 +57,14 @@
             <!-- input for destination by 'duration' -->
             <p class="input-label">Définissez une durée maximum pour le trajet en transport en commun</p>
             <span>
-              <input type="number" class="maxTripDurationInput" v-model="formData.maxTripDuration" min="15" max="240" />
+              <input
+                type="number"
+                class="maxTripDurationInput"
+                v-model="formData.maxTripDuration"
+                min="15"
+                max="240"
+                step="10"
+              />
               minutes
             </span>
           </div>
