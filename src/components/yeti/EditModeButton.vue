@@ -1,9 +1,12 @@
 <template>
-  <button class="button edit-mode-button ol-control-edit-mode" :class="{ 'is-dark': editMode, 'is-small': isSmall }">
+  <button
+    class="button edit-mode-button ol-control-edit-mode"
+    :class="{ 'is-dark': editMode, 'is-small': isSmall }"
+    :title="$gettext('Enable drawing and editing features on map')"
+    :aria-label="$gettext('Enable drawing and editing features on map')"
+  >
     <input-checkbox @input="onEditMode" :value="editMode" :disabled="validSimplifyTolerance">
-      <span v-if="!iconOnly" v-translate :title="$gettext('Enable drawing and editing features on map')">
-        Edit mode
-      </span>
+      <span v-if="!iconOnly" v-translate> Edit mode </span>
       <fa-icon icon="pen" class="ml-1" />
     </input-checkbox>
   </button>
