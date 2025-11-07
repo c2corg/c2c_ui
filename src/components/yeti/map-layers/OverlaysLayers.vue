@@ -54,7 +54,7 @@ export default {
       return Yetix.tabs;
     },
     meteoTab() {
-      return this.tabs[this.activeTab].id === 'meteo';
+      return this.tabs[this.activeTab]?.id === 'meteo';
     },
   },
   mounted() {
