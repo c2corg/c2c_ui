@@ -248,7 +248,6 @@ export default {
       drawInfo: {
         distance: 0,
         bearing: 0,
-        drawing: false,
       },
     };
   },
