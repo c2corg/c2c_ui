@@ -163,6 +163,12 @@ export default {
         let extent = this.map.getView().calculateExtent(this.map.getSize() || null);
         respecterCestProtegerService
           .identify(evt.coordinate, extent, this.map.getSize()[0], this.map.getSize()[1], this.$language.current)
+          .catch(() => {
+            this.overlayData = {
+              category: this.$gettext('Network error.'),
+            };
+            throw new Error('network error');
+          })
           .then(({ data }) => {
             if (data.results && data.results.length) {
               let result = data.results.find((result) => result.geometry.type === 'MultiPolygon') ?? data.results[0];
@@ -209,7 +215,10 @@ export default {
         axios
           .get(biodivGetFeatureInfoUrl)
           .catch(() => {
-            reject(new Error('network error'));
+            this.overlayData = {
+              category: this.$gettext('Network error.'),
+            };
+            throw new Error('network error');
           })
           .then(({ data }) => {
             if (data.features?.length) {
