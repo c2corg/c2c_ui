@@ -67,15 +67,20 @@ class SplitInteraction extends ol.interaction.Pointer {
             // now, split feature and create an array for two splitted feature
             let sublines = [[], []];
             let i = 0;
+            let splitDone = false;
             coordinates.forEach((coord) => {
               sublines[i].push(coord);
               // if point is less than one meter away = this is the split point
-              if (Math.abs(coord[0] - this.coordinate_[0]) < 1 && Math.abs(coord[1] - this.coordinate_[1]) < 1) {
-                i++;
+              if (
+                !splitDone &&
+                Math.abs(coord[0] - this.coordinate_[0]) < 1 &&
+                Math.abs(coord[1] - this.coordinate_[1]) < 1
+              ) {
+                i = 1;
                 sublines[i].push(coord);
+                splitDone = true;
               }
             });
-
             this.dispatchEvent({
               type: 'split',
               oldFeature: feature,
