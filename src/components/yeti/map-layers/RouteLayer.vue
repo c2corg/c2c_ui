@@ -352,7 +352,7 @@ export default {
     Yetix.$on('fit-map-to-features', this.fitMapToFeatures);
 
     // special event when window loose focus = hanfle ctrl key (when browser shorcuts) for split interaction
-    window.addEventListener('blur', () => this.onKeyup({ key: 'Ctrl' }));
+    window.addEventListener('blur', () => this.onKeyup({ key: 'Control', altKey: false }));
 
     // already features to add?
     // but not a c2c document
