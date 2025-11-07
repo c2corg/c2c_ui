@@ -3,7 +3,7 @@
     class="button edit-mode-button ol-control-edit-mode"
     :class="{ 'is-dark': editMode, 'is-small': isSmall }"
     :title="$gettext('Enable drawing and editing features on map')"
-    :aria-label="$gettext('Enable drawing and editing features on map')"
+    :aria-label="iconOnly ? $gettext('Enable drawing and editing features on map') : null"
   >
     <input-checkbox @input="onEditMode" :value="editMode" :disabled="validSimplifyTolerance">
       <span v-if="!iconOnly" v-translate> Edit mode </span>
