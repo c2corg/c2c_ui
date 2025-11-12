@@ -72,11 +72,11 @@
           <div class="box yeti-logos">
             <div class="columns is-mobile is-vcentered">
               <div class="column has-text-centered">
-                <a href="http://www.ensg.eu">
+                <a href="http://www.geodata-paris.fr">
                   <picture>
-                    <source srcset="@/assets/img/yeti/logo-ensg.webp" type="image/webp" />
-                    <source srcset="@/assets/img/yeti/logo-ensg.avif" type="image/avif" />
-                    <img src="@/assets/img/yeti/logo-ensg.jpg" alt="Logo ENSG" width="120" loading="lazy" />
+                    <source srcset="@/assets/img/yeti/logo-geodataparis.webp" type="image/webp" />
+                    <source srcset="@/assets/img/yeti/logo-geodataparis.avif" type="image/avif" />
+                    <img src="@/assets/img/yeti/logo-geodataparis.jpg" alt="Logo Géodata Paris" loading="lazy" />
                   </picture>
                 </a>
               </div>
@@ -546,10 +546,6 @@ $yeti-height-ad: calc(100vh - #{$navbarad-height});
   box-shadow: none;
   background: none;
   mix-blend-mode: multiply;
-
-  img {
-    max-width: 65%;
-  }
 }
 
 .yeti-overlay {
