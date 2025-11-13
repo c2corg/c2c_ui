@@ -4,20 +4,27 @@
     <!-- Discover view description -->
     <div class="box intro">
       <div class="feed-title has-cursor-pointer">
-        <span class="title is-4" :class="{ 'is-marginless': !visible }" v-translate>
+        <span class="title is-4 itinevert-title" :class="{ 'is-marginless': !visible }" v-translate>
           Change your approach: plan your public transport outing
         </span>
+        <div class="title is-4" v-if="canStartAgain">
+          <button class="start-again-button button" @click="() => changeView('form')">
+            <fa-icon class="back-icon" icon="arrow-left" aria-hidden="true" />
+            <span>Recommencer une recherche</span>
+          </button>
+        </div>
         <fa-icon
+          v-if="!canStartAgain"
           class="is-size-6 no-print accordion-icon mt-2"
           icon="angle-down"
           :rotation="visible ? 180 : undefined"
           @click="toggleProperty('visible')"
         />
       </div>
-      <Itinevert-banner v-show="visible" :can-start-again="canStartAgain" @change-view="changeView" />
+      <itinevert-banner v-show="visible && !canStartAgain" />
     </div>
     <div class="box">
-      <Itinevert-wizard :view="wizardView" @change-view="changeView"></Itinevert-wizard>
+      <itinevert-wizard :view="wizardView" @change-view="changeView"></itinevert-wizard>
     </div>
   </div>
 </template>
@@ -111,6 +118,12 @@ export default {
 
 .feed-title {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0;
+  .itinevert-title {
+    margin-bottom: 0px !important;
+  }
 
   span:first-child {
     flex-grow: 1;
@@ -159,5 +172,14 @@ export default {
 
 .ams-ad {
   margin-bottom: $size-7;
+}
+
+.start-again-button {
+  font-weight: bold;
+  border: 1px solid black;
+}
+
+.back-icon {
+  padding-right: 1rem;
 }
 </style>

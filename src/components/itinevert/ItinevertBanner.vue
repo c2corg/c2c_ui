@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="columns">
-      <div class="column is-12-mobile" v-if="!canStartAgain">
+      <div class="column is-12-mobile">
         <div class="subtitle" v-translate>todo : texte descriptif</div>
         <div class="columns">
           <div class="column is-12-mobile">
@@ -31,9 +31,6 @@
           </div>
         </div>
       </div>
-      <div class="column is-12-mobile" v-if="canStartAgain">
-        <button @click="() => $emit('change-view', 'form')">recommencer une recherche</button>
-      </div>
     </div>
   </section>
 </template>
@@ -41,12 +38,6 @@
 <script>
 export default {
   name: 'ItinevertBanner',
-  props: {
-    canStartAgain: {
-      type: Boolean,
-      default: false,
-    },
-  },
 };
 </script>
 
