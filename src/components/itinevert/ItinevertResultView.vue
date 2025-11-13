@@ -9,7 +9,7 @@
           </span>
           &nbsp;
           <br class="is-hidden-tablet" />
-          <page-selector :documents="documents" />
+          <page-selector :documents="filteredDocuments" />
         </span>
         <span class="is-pulled-right is-flex header-right" v-if="documentType != 'profile'">
           <load-user-preferences-button class="is-hidden-mobile" />
@@ -46,7 +46,13 @@
           </template>
         </span>
       </div>
-      <Itinevert-filter-items class="filter-section" :list-mode="listMode" :fields="fields" />
+      <itinevert-filter-items
+        class="filter-section"
+        :list-mode="listMode"
+        :fields="fields"
+        :document-type="documentType"
+        @new-filter="filterPostNavitiaDocuments"
+      />
     </div>
     <div class="columns result-section" :class="['mobile-mode-' + displayMode, { 'query-has-tags': queryHasTags }]">
       <div
@@ -58,14 +64,14 @@
           'is-8 is-7-widescreen is-6-fullhd': showMap && !listMode,
         }"
       >
-        <image-cards v-if="documents && !listMode && documentType === 'image'" :documents="documents" />
+        <image-cards v-if="filteredDocuments && !listMode && documentType === 'image'" :documents="filteredDocuments" />
 
         <div
-          v-if="documents && !listMode && documentType !== 'image'"
+          v-if="filteredDocuments && !listMode && documentType !== 'image'"
           class="columns is-multiline is-variable is-1 cards-list"
         >
           <div
-            v-for="(document, index) in documents.documents"
+            v-for="(document, index) in filteredDocuments.documents"
             :key="index"
             :class="{
               'is-full-mobile is-half-tablet is-half-desktop is-half-widescreen is-half-fullhd': showMap,
@@ -82,7 +88,7 @@
 
         <documents-table
           v-if="listMode"
-          :documents="documents ? documents : {}"
+          :documents="filteredDocuments ? filteredDocuments : {}"
           :document-type="documentType"
           :highlighted-document="highlightedDocument"
           @highlight-document="highlightedDocument = arguments[0]"
@@ -111,7 +117,7 @@ import PageSelector from '../../views/documents/utils/PageSelector';
 
 import ItinevertFilterItems from './ItinevertFilterItems.vue';
 
-import c2c from '@/js/apis/c2c';
+import itinevertService from '@/js/apis/itinevert-service';
 import constants from '@/js/constants';
 
 export default {
@@ -129,9 +135,13 @@ export default {
       type: Array,
       default: () => [],
     },
+    baseQuery: {
+      type: Object,
+      default: null,
+    },
     documents: {
       type: Object,
-      default: () => {},
+      default: null,
     },
     documentType: {
       type: String,
@@ -148,7 +158,7 @@ export default {
 
       highlightedDocument: null,
 
-      filteredDocuments: [],
+      filteredDocuments: null,
 
       filteredWaypoints: [],
 
@@ -167,12 +177,24 @@ export default {
       return constants.objectDefinitions[this.documentType].geoLocalized === true;
     },
     documentsShownOnMap() {
-      return this.filteredWaypoints.concat(this.documents ? this.documents.documents : []);
+      if (this.filteredDocuments) {
+        return this.filteredWaypoints.concat(this.filteredDocuments.documents);
+      } else {
+        if (this.documents) {
+          return this.filteredWaypoints.concat(this.documents.documents);
+        } else {
+          return [];
+        }
+      }
     },
   },
 
   watch: {
     displayMode: 'updateMapSize',
+  },
+
+  mounted() {
+    this.filteredDocuments = { documents: this.documents.documents, total: this.documents.total };
   },
 
   methods: {
@@ -194,6 +216,38 @@ export default {
     updateMapSize(newValue, oldValue) {
       if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
         this.$nextTick(this.$refs.map.map.updateSize.bind(this.$refs.map.map));
+      }
+    },
+    async filterPostNavitiaDocuments(activeFields, sort) {
+      if (activeFields.filter((category) => Object.keys(category).length > 0).length > 0 || sort) {
+        let query = itinevertService.enhanceQuery(this.baseQuery, activeFields);
+        if (sort) {
+          query.sort = sort;
+        }
+        if (this.documentType === 'route') {
+          let oldRoutesID = this.documents.documents.map((doc) => doc.document_id);
+          this.filteredDocuments.documents = [];
+          let newRoutes = await itinevertService.getAllReachableRoutes(query);
+          for (const newRoute of newRoutes) {
+            if (oldRoutesID.includes(newRoute.document_id)) {
+              this.filteredDocuments.documents.push(newRoute);
+            }
+          }
+        } else if (this.documentType === 'waypoint') {
+          let oldWaypointsID = this.documents.documents.map((doc) => doc.document_id);
+          this.filteredDocuments.documents = [];
+          let newWaypoints = await itinevertService.getAllReachableWaypoints(query);
+          for (const newWaypoint of newWaypoints) {
+            if (oldWaypointsID.includes(newWaypoint.document_id)) {
+              this.filteredDocuments.documents.push(newWaypoint);
+            }
+          }
+        }
+
+        this.filteredDocuments.total = this.filteredDocuments.documents.length;
+      } else {
+        // no filters set -> display all documents
+        this.filteredDocuments = { documents: this.documents.documents, total: this.documents.total };
       }
     },
   },

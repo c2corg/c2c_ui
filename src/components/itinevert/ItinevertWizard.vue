@@ -106,6 +106,7 @@
             </div>
           </div>
           <button class="button is-primary searchButton" :disabled="!isSearchEnabled()" @click="search">
+            <fa-icon class="search-icon" icon="search" aria-hidden="true" />
             {{ $gettext('Search') }}
           </button>
         </div>
@@ -138,13 +139,13 @@
                 <fa-icon icon="angle-down" aria-hidden="true" />
               </span>
               <div class="sub-query-items">
-                <Itinevert-filter-item
+                <itinevert-filter-item
                   v-for="field in category.fields || []"
                   :key="field.field.name"
                   :field="field.field"
                   v-model="field.value"
                   class="dropdown-item"
-                ></Itinevert-filter-item>
+                ></itinevert-filter-item>
               </div>
             </dropdown-button>
           </div>
@@ -162,7 +163,7 @@
             </button>
             <button
               class="button is-primary"
-              @click="() => $emit('change-view', 'result')"
+              @click="() => computeJourneyReachableRoutes()"
               :disabled="!canDisplayResult"
             >
               Afficher les résultats
@@ -171,11 +172,12 @@
         </div>
         <!-- RESULT VIEW -->
         <div class="" v-if="view === 'result'">
-          <Itinevert-result-view
+          <itinevert-result-view
             :fields="categorizedFields"
+            :base-query="baseQuery"
             :documents="formData.searchKind.selected === 'route' ? filteredRoutes : filteredWaypoints"
             :document-type="formData.searchKind.selected"
-          ></Itinevert-result-view>
+          ></itinevert-result-view>
         </div>
       </div>
       <div class="column is-3" v-if="view !== 'result'">
@@ -192,7 +194,7 @@ import ItinevertFilterItem from './ItinevertFilterItem.vue';
 import ItinevertResultView from './ItinevertResultView.vue';
 
 import { default as c2c } from '@/js/apis/c2c';
-import transportService from '@/js/apis/transport-service';
+import itinevertService from '@/js/apis/itinevert-service';
 import constants from '@/js/constants';
 
 /** Constant to define the maximum number of route before going over each of their waypoint and making a Navitia API Call */
@@ -263,10 +265,10 @@ export default {
         // in minutes
         maxTripDuration: 120,
       },
-      filteredRoutes: [],
-      filteredRoutesWaypoints: [],
-      filteredWaypoints: [],
+      filteredRoutes: {},
+      filteredWaypoints: {},
       categorizedFields: [],
+      baseQuery: {},
       isUpdating: false, // flag to prevent infinite loops
     };
   },
@@ -279,11 +281,11 @@ export default {
       return ' / ' + MAX_ROUTE_THRESHOLD + ' itinéraires';
     },
     canDisplayResult() {
-      return this.filteredRoutes.total < MAX_ROUTE_THRESHOLD && this.filteredRoutes.total !== 0;
+      return this.filteredRoutes.total <= MAX_ROUTE_THRESHOLD && this.filteredRoutes.total !== 0;
     },
     activeFields() {
       return this.categorizedFields.map((category) =>
-        category.fields.filter((field) => !this.fieldIsDefault(field.value, field.field))
+        category.fields.filter((field) => !itinevertService.isFieldValueDefault(field.value, field.field))
       );
     },
   },
@@ -323,6 +325,9 @@ export default {
           this.categorizedFields = [];
           // recompute based on formData activities
           this.categorizedFields = this.computeCategorizedFields(this.formData.activities);
+        } else if (newVal === 'result') {
+          this.categorizedFields = [];
+          this.categorizedFields = this.computeCategorizedFields([]);
         }
       },
     },
@@ -410,129 +415,73 @@ export default {
     getTitle(document) {
       return this.$documentUtils.getDocumentTitle(document, c2c.getApiLang(this.$language.current));
     },
-    /** Return default value for a field */
-    initialValue(field) {
-      if (!field) return null;
-      if (field.queryMode === 'activities') return [];
-      if (field.queryMode === 'orientations') return [];
-      if (field.queryMode === 'multiSelect' || field.queryMode === 'tristate') return [];
-      if (field.queryMode === 'checkbox') return false;
-      if (field.queryMode === 'valuesRangeSlider' || field.queryMode === 'numericalRangeSlider') {
-        return [field.values?.[0] ?? 0, field.values?.[field.values.length - 1] ?? 0];
+    buildQuery() {
+      let query = itinevertService.buildQuery(this.activeFields);
+      // filter on activities from form
+      if (
+        this.view === 'form' &&
+        this.formData.searchKind.selected === 'route' &&
+        this.formData.activities.length > 0
+      ) {
+        query.act = this.formData.activities.join(',');
       }
-      return '';
+      // filter on mountain range from form
+      if (this.formData.destinationKind.selected === 'mountain range') {
+        query.a = this.formData.mountainRange.selected.document_id;
+      }
+      this.baseQuery = query;
     },
-    /** Test if a field's value is default value or different */
-    fieldIsDefault(fieldValue, field) {
-      const initialVal = this.initialValue(field);
-
-      // Compare for null
-      if (fieldValue === null) {
-        return true;
-      }
-
-      // Compare for array
-      if (Array.isArray(initialVal)) {
-        return (
-          Array.isArray(fieldValue) &&
-          initialVal.length === fieldValue.length &&
-          initialVal.every((val, index) => val === fieldValue[index])
-        );
-      }
-
-      // Compare for boolean
-      if (typeof initialVal === 'boolean') {
-        return initialVal === fieldValue;
-      }
-
-      // Compare for numerical ranges
-      if (Array.isArray(initialVal) && typeof initialVal[0] === 'number') {
-        return (
-          Array.isArray(fieldValue) &&
-          fieldValue.length === 2 &&
-          initialVal[0] === fieldValue[0] &&
-          initialVal[1] === fieldValue[1]
-        );
-      }
-
-      // General compare for strings
-      return initialVal === fieldValue;
+    async computeJourneyReachableRoutes() {
+      this.buildQuery();
+      // TODO : this.filteredRoutes = (await itinevertService.getJourneyReachableRoutes(query, this.formData.departure)).data;
+      this.filteredRoutes = (await itinevertService.getReachableRoutes(this.baseQuery)).data;
+      this.$emit('change-view', 'result');
     },
     async search() {
+      this.buildQuery();
       // compute filter for routes
       if (this.formData.searchKind.selected === 'route') {
-        let query = {};
-        if (this.view === 'form' && this.formData.activities.length > 0) {
-          // only keep route where activities selected can be made
-          query.act = this.formData.activities.join(',');
-        }
-
+        // using Journey API
         if (this.formData.destinationKind.selected === 'mountain range') {
-          query.a = this.formData.mountainRange.selected.document_id;
-        }
-
-        // loop over each category ('General', 'ratings', 'Terrain', 'Misc')
-        for (let category of Object.keys(this.activeFields)) {
-          // loop over each active fields to enhance the query
-          for (let field of this.activeFields[category]) {
-            query[field.field.url] = field.field.valueToUrl(field.value);
+          this.filteredRoutes = (await itinevertService.getReachableRoutes(this.baseQuery)).data;
+          if (this.filteredRoutes.total > MAX_ROUTE_THRESHOLD) {
+            this.$emit('change-view', 'filter');
           }
         }
-        // download routes and keep only the routes that have at least one waypoint as a stoparea
-        let routes = await c2c.route.fullDownload(query);
+        // using Isochron API
+        else if (this.formData.destinationKind.selected === 'duration') {
+          /* TODO : this.filteredRoutes = (
+            (await itinevertService.getIsochronReachableRoutes(
+              query,
+              this.formData.departure,
+              this.formData.maxTripDuration
+            )
+          )).data;
+          */
+          this.filteredRoutes = (await itinevertService.getReachableRoutes(this.baseQuery)).data;
 
-        let reachableRoutes = await Promise.all(
-          routes.map(async (route) => {
-            const waypoints = await transportService.getWaypointsAccessibleTC(route.document_id);
-            if (waypoints?.length > 0) {
-              return { route: route, waypoints: waypoints }; // return both the route and waypoint IDs
-            } else {
-              return null;
-            }
-          })
-        );
-
-        // remove null items (=== routes that are not reachable)
-        reachableRoutes = reachableRoutes.filter((item) => item !== null);
-
-        // get all waypoints ids from reachable routes and make a unique set of these ids
-        const allWaypoints = reachableRoutes.flatMap((item) => item.waypoints);
-
-        const uniqueWaypointsMap = new Map();
-
-        allWaypoints.forEach((waypoint) => {
-          // use waypoint id for uniqueness criteria
-          if (!uniqueWaypointsMap.has(waypoint.id)) {
-            uniqueWaypointsMap.set(waypoint.id, waypoint);
-          }
-        });
-
-        // convert the map values back to an array to get the unique waypoints
-        this.filteredRoutesWaypoints = Array.from(uniqueWaypointsMap.values());
-        console.log('les waypoints à requêté par navitia');
-        console.log(this.filteredRoutesWaypoints);
-
-        // get all routes that are reachable
-        routes = reachableRoutes.filter((item) => item.route !== null).map((item) => item.route);
-        this.filteredRoutes = { documents: routes, total: routes.length };
-        console.log('les routes filtrés : ');
-        console.log(routes);
-
-        if (this.view === 'form' && this.filteredRoutes.total > MAX_ROUTE_THRESHOLD) {
-          this.$emit('change-view', 'filter');
+          this.$emit('change-view', 'result');
         }
       }
 
       // compute filter for waypoints
       if (this.formData.searchKind.selected === 'waypoint') {
-        let query = {};
-
+        // using Journey API
         if (this.formData.destinationKind.selected === 'mountain range') {
-          query.a = this.formData.mountainRange.selected.document_id;
+          // TODO : this.filteredWaypoints = (await itinevertService.getJourneyReachableWaypoints(query, this.formData.departure)).data;
+          this.filteredWaypoints = (await itinevertService.getReachableWaypoints(this.baseQuery)).data;
         }
-        const docs = await c2c.waypoint.fullDownload(query);
-        this.filteredWaypoints = { documents: docs, total: docs.length };
-        console.log(this.filteredWaypoints);
+        // using Isochron API
+        else if (this.formData.destinationKind.selected === 'duration') {
+          /* TODO : this.filteredWaypoints = (await itinevertService.getIsochronReachableWaypoints
+              query,
+              this.formData.departure,
+              this.formData.maxTripDuration
+          )).data;
+          */
+          this.filteredWaypoints = (await itinevertService.getReachableWaypoints(this.baseQuery)).data;
+        }
+
         this.$emit('change-view', 'result');
       }
     },
@@ -556,8 +505,13 @@ export default {
 }
 
 .searchButton {
+  font-weight: bold;
+  width: 40%;
   margin-top: 5%;
   margin-bottom: 15%;
+  .search-icon {
+    padding-right: 1rem;
+  }
 }
 
 .form-input {

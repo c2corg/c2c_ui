@@ -21,21 +21,53 @@
           <fa-icon icon="angle-down" aria-hidden="true" />
         </span>
         <div class="sub-query-items">
-          <Itinevert-filter-item
+          <itinevert-filter-item
             v-for="field in category.fields || []"
             :key="field.field.name"
             :field="field.field"
             v-model="field.value"
             class="dropdown-item"
-          ></Itinevert-filter-item>
+          ></itinevert-filter-item>
         </div>
       </dropdown-button>
+      <!-- <dropdown-button key="multi-search" class="query-item-component is-hidden-tablet">
+        <span slot="button" class="button is-size-7-mobile">
+          <fa-icon :icon="$options.categoryIcon['MultiSearch']" />
+          <span>&nbsp;</span>
+          <fa-icon icon="angle-down" aria-hidden="true" />
+        </span>
+        <div class="sub-query-items">
+          <association-query-item class="dropdown-item" :document-types="associations" @add="addTag" />
+          <div class="query-items-tags dropdown-item">
+            <query-tags :documents="tags" @remove="removeTag"></query-tags>
+          </div>
+        </div>
+      </dropdown-button> -->
+
+      <itinevert-sort-dropdown
+        v-if="['waypoint', 'route', 'image', 'outing'].includes(documentType)"
+        class="query-item-component"
+        :document-type="documentType"
+        :sort-field="sortField"
+        @sort-query="sortPostNavitiaDocuments"
+      />
+
+      <!-- <association-query-item
+        class="query-item-component is-hidden-mobile"
+        :document-types="associations"
+        @add="addTag"
+      /> -->
     </div>
   </div>
 </template>
 
 <script>
 import ItinevertFilterItem from './ItinevertFilterItem.vue';
+import ItinevertSortDropdown from './ItinevertSortDropdown.vue';
+
+import itinevertService from '@/js/apis/itinevert-service';
+import AssociationQueryItem from '@/views/documents/utils/AssociationQueryItem.vue';
+import QueryTags from '@/views/documents/utils/QueryTags.vue';
 
 export default {
   categoryIcon: {
@@ -48,6 +80,9 @@ export default {
 
   components: {
     ItinevertFilterItem,
+    //AssociationQueryItem,
+    ItinevertSortDropdown,
+    //QueryTags,
   },
 
   props: {
@@ -59,70 +94,86 @@ export default {
       type: Boolean,
       default: false,
     },
+    documentType: {
+      type: String,
+      default: '',
+    },
   },
 
   data() {
-    return {};
+    return {
+      tags: [],
+      sortField: '',
+      postNavitiaActiveFields: [],
+    };
   },
 
   computed: {
     activeFields() {
       return this.fields.map((category) =>
-        category.fields.filter((field) => !this.fieldIsDefault(field.value, field.field))
+        category.fields.filter((field) => !itinevertService.isFieldValueDefault(field.value, field.field))
       );
+    },
+    associations() {
+      if (this.documentType === 'outing') {
+        return ['area', 'route', 'waypoint', 'profile'];
+      }
+
+      if (this.documentType === 'route') {
+        return ['area', 'waypoint'];
+      }
+
+      if (this.documentType === 'waypoint') {
+        return ['area'];
+      }
+
+      return [];
     },
   },
 
-  watch: {},
+  watch: {
+    fields: {
+      handler() {
+        this.$emit('new-filter', this.activeFields, null);
+      },
+      deep: true,
+    },
+  },
+
+  mounted() {
+    // store the first active fields
+    this.postNavitiaActiveFields = this.fields.map((category) =>
+      category.fields.filter((field) => !itinevertService.isFieldValueDefault(field.value, field.field))
+    );
+  },
 
   methods: {
-    /** Return default value for a field */
-    initialValue(field) {
-      if (!field) return null;
-      if (field.queryMode === 'activities') return [];
-      if (field.queryMode === 'orientations') return [];
-      if (field.queryMode === 'multiSelect' || field.queryMode === 'tristate') return [];
-      if (field.queryMode === 'checkbox') return false;
-      if (field.queryMode === 'valuesRangeSlider' || field.queryMode === 'numericalRangeSlider') {
-        return [field.values?.[0] ?? 0, field.values?.[field.values.length - 1] ?? 0];
-      }
-      return '';
+    sortPostNavitiaDocuments(sortField) {
+      this.sortField = sortField.field;
+      let sort = sortField.reversed ? '-' + sortField.field : sortField.field;
+      this.$emit('new-filter', this.activeFields, sort);
     },
-    /** Test if a field's value is default value or different */
-    fieldIsDefault(fieldValue, field) {
-      const initialVal = this.initialValue(field);
+    addTag(document) {
+      const documentType = this.$documentUtils.getDocumentType(document.type);
 
-      // Compare for null
-      if (fieldValue === null) {
-        return true;
+      const value = this.getValue(documentType);
+
+      if (value.includes(document.document_id)) {
+        return;
       }
 
-      // Compare for array
-      if (Array.isArray(initialVal)) {
-        return (
-          Array.isArray(fieldValue) &&
-          initialVal.length === fieldValue.length &&
-          initialVal.every((val, index) => val === fieldValue[index])
-        );
-      }
+      value.push(document.document_id);
 
-      // Compare for boolean
-      if (typeof initialVal === 'boolean') {
-        return initialVal === fieldValue;
-      }
+      this.setValue(documentType, value);
+    },
 
-      // Compare for numerical ranges
-      if (Array.isArray(initialVal) && typeof initialVal[0] === 'number') {
-        return (
-          Array.isArray(fieldValue) &&
-          fieldValue.length === 2 &&
-          initialVal[0] === fieldValue[0] &&
-          initialVal[1] === fieldValue[1]
-        );
-      }
+    removeTag(document) {
+      const documentType = this.$documentUtils.getDocumentType(document.type);
+      const value = this.getValue(documentType);
+      // remove
+      value.splice(value.indexOf(document.document_id), 1);
 
-      // General compare for strings
-      return initialVal === fieldValue;
+      this.setValue(documentType, value);
     },
   },
 };
