@@ -35,7 +35,7 @@ jobs:
       - name: Docker meta
         id: docker_meta
         if: "contains(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master'"
-        uses: docker/metadata-action@v5.8.0
+        uses: docker/metadata-action@v5.9.0
         with:
           # list of Docker images to use as base name for tags
           images: c2corg/c2c_ui
