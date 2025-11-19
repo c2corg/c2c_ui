@@ -93,7 +93,7 @@ jobs:
       - name: Remove current branch files
         run: rm -rf ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
       - name: Retrieve github pages artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: github-pages
           path: ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
