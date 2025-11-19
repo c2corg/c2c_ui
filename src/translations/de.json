@@ -62,12 +62,10 @@
     "4d_to_1m": {
       "severities": "4 Tage bis 1 Monat"
     },
-    "5 months": "5 Monate",
     "50 meters while descending": "50 Meter beim Abstieg",
     "5min": {
       "access_times": "5 min"
     },
-    "8 days": "8 Tagen",
     "A message as been sent to the new address provided. You have to follow the link within to confirm the email address change.": "Eine Nachricht wurde an die angegebene neue Adresse gesendet. Sie müssen dem darin enthaltenen Link folgen, um die Änderung der E-Mail-Adresse zu bestätigen.",
     "Access by public transport": "mit öffentlichen Verkehrsmitteln erreichbar ",
     "Accessible by public transport": "mit öffentlichen Verkehrsmitteln erreichbar",
@@ -380,7 +378,10 @@
     "Hide lines details": "Liniendetails ausblenden",
     "High danger level from the avalanche bulletin": "Hohe Gefahrenstufe aus dem Lawinenbulletin",
     "Hiking gear": "Sommerliches Wandern",
-    "History": "Historie",
+    "History": {
+      "$$noContext": "Historie",
+      "yeti": "Historie"
+    },
     "History is missing, please provide it if you have information.": "Routengeschichte fehlt. Bitte tragen Sie bei, fals Sie etwas wissen.",
     "Home": "Startseite",
     "Home page feed parameters": "Parameter des Feed der Hauptseite",
@@ -787,7 +788,6 @@
     "Title of the book, author, language and date of publication.": "Buchtitel, Autor, Sprache und Veröffentlichungsdatum.",
     "Title, activity and characteristics of the picture": "Titel, Aktivitäten und Spezifikationen des Bilds",
     "To": "nach",
-    "To draw (and edit) directly on the map": "Direkt auf der Karte zeichnen (und bearbeiten)",
     "Toggle elevation profile": "Höhenprofil umschalten",
     "Toggle full-screen": {
       "Map Controls": "Vollbild"
@@ -2082,7 +2082,6 @@
       "$$noContext": "Ja",
       "parking_fee_types": "Ja"
     },
-    "you need to activate edit mode": "Bitte Bearbeitungsmodus aktivieren",
     "zh": {
       "langs": "Chinesisch"
     }

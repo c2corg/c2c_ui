@@ -26,9 +26,7 @@
     "4d_to_1m": {
       "severities": "Meno di un mese"
     },
-    "5 months": "5 mesi",
     "50 meters while descending": "50 metri in discesa",
-    "8 days": "8 giorni",
     "A message as been sent to the new address provided. You have to follow the link within to confirm the email address change.": "Un messaggio è stato inviato al nuovo indirizzo indicato. Sarà necessario cliccare il link in esso contenuto al fine di confermare il cambio di indirizzo mail.",
     "Accident database": "Database degli incidenti",
     "Accidents/Incidents database:": "Database degli incidenti/inconvenienti",
@@ -307,7 +305,10 @@
     "Here you may set activity and region filters that will apply to the homepage feed.": "Puoi selezionare le attività e le regioni che saranno visibili nella sezione Notizie sulla pagina principale",
     "High danger level from the avalanche bulletin": "Grado di pericolo in alta quota del bollettino",
     "Hiking gear": "Escursionismo estivale",
-    "History": "Versioni",
+    "History": {
+      "$$noContext": "Versioni",
+      "yeti": "Versioni"
+    },
     "History is missing, please provide it if you have information.": "Manca lo storico, per favore forniscilo se hai informazioni.",
     "Home page feed parameters": "Parametro per le attualità sulla home",
     "How is my testimony used ? How / why is it useful ?": "Come viene utilizzata la mia testimonianza? Come / perché è utile?",
@@ -665,7 +666,6 @@
     "Time": "Ora",
     "Title of the book, author, language and date of publication.": "Titolo del libro, autore, lingua, data",
     "Title, activity and characteristics of the picture": "Titolo, attività, caratteristiche dell'immagine",
-    "To draw (and edit) directly on the map": "Per disegnare (ed editare) direttamente sulla mappa",
     "Toggle elevation profile": "Visualizzare il profilo altimetrico",
     "Toggle full-screen": {
       "Map Controls": "Schermo intero"
