@@ -290,7 +290,10 @@
     "Here you may set activity and region filters that will apply to the homepage feed.": "Itt állíthatsz be tevékenység vagy terület szerinti szűrőket, amik az oldal hírfolyamára lesznek alkalmazva.",
     "High danger level from the avalanche bulletin": "A lavinajelentés alapján nagy veszély",
     "Hiking gear": "Kiránduló felszerelés",
-    "History": "Történet",
+    "History": {
+      "$$noContext": "Történet",
+      "yeti": "Történet"
+    },
     "History is missing, please provide it if you have information.": "Történet hiányzik, kérlek add meg, ha van információd",
     "Home": "Otthon",
     "Home page feed parameters": "Weboldal hírfolyam paraméterek",
@@ -555,7 +558,6 @@
     "Time": "Idő",
     "Title of the book, author, language and date of publication.": "A könyv címe, szerzője, nyelve, és a megjelenés éve.",
     "Title, activity and characteristics of the picture": "A kép címe, a hozzá tartozó tevékenység és egyéb jellemzői.",
-    "To draw (and edit) directly on the map": "Közvetlenül a térképen történő rajzolás (és szerkesztés)",
     "Toggle elevation profile": "A magasságprofil ki(be)kapcsolása",
     "Toggle full-screen": {
       "Map Controls": "Váltás tejles képernyős módra, vagy vissza"

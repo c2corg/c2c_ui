@@ -29,9 +29,7 @@
     "4d_to_1m": {
       "severities": "4 dni do 1 mesec"
     },
-    "5 months": "5 mesecev",
     "50 meters while descending": "50 metrov dol grede",
-    "8 days": "8 dni",
     "A message as been sent to the new address provided. You have to follow the link within to confirm the email address change.": "Sporočilo je bilo poslano na novi navedeni naslov. Za potrditev spremembe e-poštnega naslova morate slediti povezavi znotraj sporočila. ",
     "Accident database": "Incidenti in nesreče",
     "Accidents/Incidents database:": "Podatkovna baza Nesreče/Incidenti:",
@@ -319,7 +317,10 @@
     "Here you may set activity and region filters that will apply to the homepage feed.": "Tukaj lahko nastavite filtre za jezike, dejavnosti in regije, ki bodo veljali za tok domače strani.",
     "High danger level from the avalanche bulletin": "Visoka stopnja nevarnosti iz plazovnega biltena",
     "Hiking gear": "Planinarjenje",
-    "History": "Različice",
+    "History": {
+      "$$noContext": "Različice",
+      "yeti": "Različice"
+    },
     "History is missing, please provide it if you have information.": "Zgodovina manjka, ne oklevajte in delite vse informacije, ki jih imate",
     "Home": "Domov",
     "Home page feed parameters": "Parametri toka dejavnosti na domači strani",
@@ -691,7 +692,6 @@
     "Time": "Trajanje",
     "Title of the book, author, language and date of publication.": "Naslov dela, avtor, jezik in datum izida",
     "Title, activity and characteristics of the picture": "Naslov, dejavnost, in značilnosti slike",
-    "To draw (and edit) directly on the map": "Za risanje (in posodobitev) direktno na zemljevidu",
     "Toggle elevation profile": "preklopite na profil višine",
     "Toggle full-screen": {
       "Map Controls": "Celozaslonski način"
@@ -1954,7 +1954,6 @@
       "parking_fee_types": "da"
     },
     "yeti": "Yeti",
-    "you need to activate edit mode": "morate aktivirati način urejanja",
     "zh": {
       "langs": "kitajščina"
     }

@@ -264,7 +264,10 @@
     "Here you may set activity and region filters that will apply to the homepage feed.": "Aquí puede establecer filtros de actividades y de regiones que se aplicarán en la página principal.",
     "High danger level from the avalanche bulletin": "peligro fuerte según el boletín de avalancha",
     "Hiking gear": "Excursionismo de verano",
-    "History": "Historia",
+    "History": {
+      "$$noContext": "Historia",
+      "yeti": "Historia"
+    },
     "History is missing, please provide it if you have information.": "Falta el aperturista, gracias por entrarlo si tienes informacion.",
     "Home": "Inicio",
     "How is my testimony used ? How / why is it useful ?": "A que sirve mi testimonio ?",

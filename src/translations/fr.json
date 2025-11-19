@@ -29,9 +29,7 @@
     "4d_to_1m": {
       "severities": "de 4 jours à un mois"
     },
-    "5 months": "5 mois",
     "50 meters while descending": "50 mètres à la descente",
-    "8 days": "8 jours",
     "A message as been sent to the new address provided. You have to follow the link within to confirm the email address change.": "Un message a été envoyé à la nouvelle adresse renseignée. Vous devez cliquer sur le lien qu'il contient pour confirmer le changement d'adresse.",
     "Access by public transport": "Accès en transport en commun",
     "Accessible by public transport": "Accessible en transport en commun",
@@ -45,6 +43,7 @@
     "Add here maps not automatically referenced": "Ajouter ici les cartes non ajoutées automatiquement",
     "Add images": "Ajouter des images",
     "Add more points": "Ajouter des points",
+    "Add or remove point": "Ajouter ou supprimer un point",
     "Add page break before each document": "Ajouter un saut de page entre chaque document",
     "Add the first outing": "Ajouter la première sortie",
     "Add title…": "Ajouter un titre...",
@@ -122,6 +121,7 @@
     "Child": "Enfant",
     "Choose file": "Choisir un fichier",
     "Clear": "Effacer",
+    "Click on the map to get weather forecasts": "Cliquez sur la carte pour afficher les prévisions météo",
     "Close": "Fermer",
     "Collapse": "Replier",
     "Comments": "Commentaires",
@@ -183,6 +183,7 @@
     "Danger rating - very high": "Danger très fort",
     "Danger:": "Danger :",
     "Dashboard": "Tableau de bord",
+    "Data is loading...": "Chargement...",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Données techniques, comme l'orientation, le type de roche ou la configuration générale de l'itinéraire (arête, pilier...)",
     "Day(s)": "Jour(s)",
     "Delete": {
@@ -262,6 +263,7 @@
       "API message": "Ne doit pas contenir un suffixe tel que '.json'"
     },
     "Enter a departure address": "Entrez une adresse de départ",
+    "Error while loading data": "Erreur lors du chargement des données",
     "Everything about ratings : difficulties, exposition...": "Rentrez ici la totalité des cotations de l'itinéraire (difficulté, exposition, qualité de l'équipement…)",
     "Expand": "Déplier",
     "Export route": "Exporter l'itinéraire",
@@ -318,7 +320,10 @@
     "Hide lines details": "Masquer le détail des lignes",
     "High danger level from the avalanche bulletin": "Niveau de danger haut du bulletin d'avalanche",
     "Hiking gear": "Randonnée pédestre estivale",
-    "History": "Versions",
+    "History": {
+      "$$noContext": "Versions",
+      "yeti": "Versions"
+    },
     "History is missing, please provide it if you have information.": "L'historique est manquant, n'hésitez pas à partager toute information en votre possession.",
     "Home": "Accueil",
     "Home page feed parameters": "Paramètre du fil d'activité sur la page d'accueil",
@@ -393,6 +398,7 @@
       "$$noContext": "Couches",
       "Map controls": "Sélection des couches"
     },
+    "Learn more": "En savoir plus",
     "Leave after": "Partir après",
     "Leave earlier": "Partir + tôt",
     "Leave fullscreen": "Quitter le mode plein écran",
@@ -440,6 +446,7 @@
     "Merged regions": "Régions fusionnées",
     "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "Fusionner un document source avec un document cible transfère toutes les associations du document source au document cible, et définit une redirection du document source vers le document cible.",
     "Metaskirando: an aggregator of ski outings in Europe": "Metaskirando : agrégateur de sorties ski en Europe",
+    "Meteo": "Météo",
     "Meter(s)": "mètres",
     "Methods": "Méthodes",
     "Misc data about the waypoint": "Données diverses sur le point de passage",
@@ -454,6 +461,7 @@
       "modification date": "Modifié le"
     },
     "More info": "Plus d'information",
+    "More info on meteoblue.com": "Plus d'infos sur meteoblue.com",
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Plus d'itinéraires sont disponibles. Vous pouvez déplacer la carte, rentrer un nom ou choisir une activité pour les afficher.",
     "Multi-criteria search": "Recherche multi-critère",
     "My account": "Mon compte",
@@ -470,6 +478,7 @@
     "Near-accidents are valuable": "Des incidents et quasi-accidents riches d’enseignements :",
     "Necessary cookies": "Cookies nécessaires",
     "Necessary cookies are essential for the proper functioning of our website and cannot be disabled. They are sent to your computer or device when you ask for a specific action or service, e.g. when you log in, fill out a form or define your cookie preferences. If you configure your computer to block these cookies or to warn you of their existence, our website will not function fully.": "Les cookies nécessaires sont indispensables au bon fonctionnement de notre site Web et ne peuvent pas être désactivés. Ils sont envoyés à votre ordinateur ou à votre appareil lorsque vous demandez une action ou un service spécifiques, par exemple lorsque vous vous connectez, remplissez un formulaire ou définissez vos préférences en matière de cookies. Si vous configurez votre navigateur de façon à bloquer ces cookies ou à vous avertir de l'existence de ces derniers, notre site Web ne fonctionnera pas intégralement.",
+    "Network error.": "Erreur réseau.",
     "New outing": "Nouvelle sortie",
     "New password": "Nouveau mot de passe",
     "New route": "Nouvel itinéraire",
@@ -498,6 +507,7 @@
       "API message": "Il n'existe pas d'utilisateur avec cet email"
     },
     "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Pas de modifications — Dans le cas où vous effectuez un remix, que vous transformez, ou créez à partir du matériel composant l'Oeuvre originale, vous n'êtes pas autorisé à distribuer ou mettre à disposition l'Oeuvre modifiée. ",
+    "Non sensitive period": "Pas de sensibilité",
     "NonCommercial — You may not use the material for commercial purposes.": "Pas d’Utilisation Commerciale — Vous n'êtes pas autorisé à faire un usage commercial de cette Oeuvre, tout ou partie du matériel la composant. ",
     "Not simplified yet": "Non encore simplifié",
     "Note that comments have to be transferred manually in Discourse before merging.": "Les commentaires doivent être transférés manuellement dans Discourse avant de fusionner les documents.",
@@ -569,6 +579,8 @@
     "Printing": "Impression",
     "Professional Reduction Method": "méthode de réduction professionnelle",
     "Protect document": "Protéger ce document",
+    "Protected Areas": "Zones de protection",
+    "Protected areas": "Zones de protection",
     "Protection area:": "Zone de protection :",
     "Protection areas": "Zones de protection",
     "Protection status": "Status de la protection",
@@ -582,6 +594,7 @@
     "Recenter on...": "Recentrer sur…",
     "Refresh": "Rafraîchir",
     "Register": "S'inscrire",
+    "Regulatory zone": "Zone réglementaire",
     "Remove": "Retirer",
     "Report an issue": "Signaler un problème",
     "Report title, activity, linked routes or outings.": "Titre du rapport, activité, liens avec des itinéraires ou sorties.",
@@ -629,6 +642,7 @@
     "Send reset email": "Envoyer l'email de réinitialisation",
     "Sensitive area:": "Zone sensible :",
     "Sensitive areas": "Zones sensibles",
+    "Sensitive period": "Période de sensibilité",
     "Service is inactive right now": "Le service ne fonctionne pas actuellement",
     "Settings": "Paramètres",
     "Several days?": "Plusieurs jours ?",
@@ -658,6 +672,9 @@
     "Sophie Picture Contest": "Concours Photo Sophie",
     "Sort by": "Trier par",
     "Source:": "Document à fusionner (source) :",
+    "Species zone": "Zone espèce",
+    "Split a line": "Couper une ligne",
+    "Split line": "Couper la ligne",
     "Static map images": "Images des cartes statiques",
     "Statistical cookies": "Cookies statistiques",
     "Statistics": "Statistiques",
@@ -714,7 +731,6 @@
     "Title of the book, author, language and date of publication.": "Titre de l'ouvrage, auteur, langue et date.",
     "Title, activity and characteristics of the picture": "Titre, activités et caractéristiques de l\"image",
     "To": "À",
-    "To draw (and edit) directly on the map": "Pour dessiner (et éditer) directement sur la carte",
     "Toggle elevation profile": "Masquer ou afficher le profil altimétrique",
     "Toggle full-screen": {
       "Map Controls": "Mode plein écran"
@@ -757,6 +773,7 @@
     "View next comments and continue the discussion": "Voir les commentaires suivants et continuer la discussion",
     "View xreports": "Voir les compte-rendus",
     "Visibility": "Visibilité",
+    "Visible layer": "Afficher les itinéraires",
     "Visible on map": "Visibles sur la carte",
     "Want to contribute financially (hosting, developing...)? Donate!": "Pour soutenir financièrement (serveurs, développements…) : faites un don",
     "Want to join us? Or donate?": "Faire un don ou adhérer",
@@ -1363,6 +1380,7 @@
     "mollasse_calcaire": {
       "rock_types": "molasse"
     },
+    "months": "mois",
     "more_than_3m": {
       "severities": "supérieur à 3 mois"
     },
@@ -1880,7 +1898,6 @@
       "parking_fee_types": "oui"
     },
     "yeti": "YETI",
-    "you need to activate edit mode": "il vous faut activer le mode édition",
     "zh": {
       "langs": "chinois"
     }
