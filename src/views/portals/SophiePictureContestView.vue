@@ -541,6 +541,12 @@ export default {
           image: { document_id: 1703979 },
           category: 'Topoguide',
         },
+        {
+          title: 'Ailefroide',
+          author: 'Nizon',
+          image: { document_id: 1824475 },
+          category: 'Prix du public',
+        },
       ],
     },
   },
