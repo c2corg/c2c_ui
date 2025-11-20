@@ -9,7 +9,7 @@
           </span>
           &nbsp;
           <br class="is-hidden-tablet" />
-          <page-selector :documents="filteredDocuments" />
+          <itinevert-page-selector :documents="filteredDocuments" @paginate="paginatePostNavitiaDocuments" />
         </span>
         <span class="is-pulled-right is-flex header-right" v-if="documentType != 'profile'">
           <load-user-preferences-button class="is-hidden-mobile" />
@@ -113,9 +113,9 @@
 <script>
 import DisplayModeSwitch from '../../views/documents/utils/DisplayModeSwitch';
 import LoadUserPreferencesButton from '../../views/documents/utils/LoadUserPreferencesButton';
-import PageSelector from '../../views/documents/utils/PageSelector';
 
 import ItinevertFilterItems from './ItinevertFilterItems.vue';
+import ItinevertPageSelector from './ItinevertPageSelector.vue';
 
 import itinevertService from '@/js/apis/itinevert-service';
 import constants from '@/js/constants';
@@ -125,7 +125,7 @@ export default {
 
   components: {
     ItinevertFilterItems,
-    PageSelector,
+    ItinevertPageSelector,
     DisplayModeSwitch,
     LoadUserPreferencesButton,
   },
@@ -163,6 +163,14 @@ export default {
       filteredWaypoints: [],
 
       queryHasTags: false,
+
+      limit: 30,
+
+      offset: 0,
+
+      lastActiveFields: [],
+
+      lastSort: [],
     };
   },
 
@@ -194,7 +202,10 @@ export default {
   },
 
   mounted() {
-    this.filteredDocuments = { documents: this.documents.documents, total: this.documents.total };
+    this.filteredDocuments = {
+      documents: this.documents.documents.slice(this.offset, this.offset + this.limit),
+      total: this.documents.total,
+    };
   },
 
   methods: {
@@ -218,7 +229,16 @@ export default {
         this.$nextTick(this.$refs.map.map.updateSize.bind(this.$refs.map.map));
       }
     },
+    async paginatePostNavitiaDocuments(pagination) {
+      this.offset = pagination[0];
+      this.limit = pagination[1];
+      this.filterPostNavitiaDocuments(this.lastActiveFields, this.lastSort);
+    },
     async filterPostNavitiaDocuments(activeFields, sort) {
+      this.lastActiveFields = activeFields;
+      if (sort) {
+        this.lastSort = sort;
+      }
       if (activeFields.filter((category) => Object.keys(category).length > 0).length > 0 || sort) {
         let query = itinevertService.enhanceQuery(this.baseQuery, activeFields);
         if (sort) {
@@ -249,6 +269,11 @@ export default {
         // no filters set -> display all documents
         this.filteredDocuments = { documents: this.documents.documents, total: this.documents.total };
       }
+      // apply pagination
+      this.filteredDocuments = {
+        documents: this.filteredDocuments.documents.slice(this.offset, this.offset + this.limit),
+        total: this.documents.total,
+      };
     },
   },
 };
