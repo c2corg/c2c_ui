@@ -502,7 +502,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  max-width: 75%;
+  width: 60%;
 }
 
 .centered > .form-input:first-child {
@@ -705,7 +705,44 @@ export default {
   }
 }
 
+@media screen and (max-width: 528px) {
+  .select-date-container {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .date-picker-container:first-child {
+      max-width: none !important;
+    }
+  }
+}
+
 @media screen and (max-width: $tablet) {
+  .centered {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 90%;
+  }
+
+  .searchButton {
+    width: 100%;
+  }
+
+  .banner-img {
+    display: none !important;
+  }
+
+  .filter-buttons {
+    .button {
+      max-width: 45%;
+      white-space: normal;
+      height: auto;
+    }
+  }
+
   .query-item-component {
     margin-right: 0.25em;
   }
