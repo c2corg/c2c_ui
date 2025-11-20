@@ -36,6 +36,7 @@
             <input-radio-button
               v-model="formData.destinationKind.selected"
               :options="formData.destinationKind.options"
+              :disabled-options="formData.destinationKind.disabledOptions"
               :default-value="formData.destinationKind.default"
               :display-vertically="true"
             />
@@ -60,9 +61,9 @@
                 type="number"
                 class="maxTripDurationInput"
                 v-model="formData.maxTripDuration"
-                min="15"
-                max="240"
-                step="10"
+                :min="minTripDuration"
+                :max="maxTripDuration"
+                :step="tripDurationIncrement"
               />
               minutes
             </span>
@@ -194,11 +195,15 @@ import ItinevertFilterItem from './ItinevertFilterItem.vue';
 import ItinevertResultView from './ItinevertResultView.vue';
 
 import { default as c2c } from '@/js/apis/c2c';
-import itinevertService from '@/js/apis/itinevert-service';
+import itinevertService, {
+  MIN_TRIP_DURATION,
+  MAX_TRIP_DURATION,
+  TRIP_DURATION_INCREMENT,
+  MAX_NAVITIA_ISOCHRON_REQUEST_REACHED,
+  MAX_ROUTE_THRESHOLD,
+  DEFAULT_TRIP_DURATION,
+} from '@/js/apis/itinevert-service';
 import constants from '@/js/constants';
-
-/** Constant to define the maximum number of route before going over each of their waypoint and making a Navitia API Call */
-const MAX_ROUTE_THRESHOLD = 50;
 
 export default {
   name: 'ItinevertWizard',
@@ -252,6 +257,7 @@ export default {
               text: 'Définir une durée maximum pour le trajet en transport en commun',
             },
           ],
+          disabledOptions: [],
         },
         mountainRange: {
           selected: null,
@@ -264,7 +270,7 @@ export default {
         },
         otherFilterValues: [],
         // in minutes
-        maxTripDuration: 120,
+        maxTripDuration: DEFAULT_TRIP_DURATION,
       },
       filteredRoutes: {},
       filteredWaypoints: {},
@@ -275,6 +281,15 @@ export default {
   },
 
   computed: {
+    maxTripDuration() {
+      return MAX_TRIP_DURATION;
+    },
+    minTripDuration() {
+      return MIN_TRIP_DURATION;
+    },
+    tripDurationIncrement() {
+      return TRIP_DURATION_INCREMENT;
+    },
     routeCount() {
       return this.filteredRoutes.total;
     },
@@ -341,6 +356,13 @@ export default {
       atyp: 'range',
     });
     this.formData.mountainRange.list = areas.sort((a, b) => this.getTitle(a).localeCompare(this.getTitle(b)));
+
+    if (MAX_NAVITIA_ISOCHRON_REQUEST_REACHED) {
+      this.formData.destinationKind.disabledOptions.push({
+        value: 'duration',
+        reason: 'Fonctionnalité temporairement indisponible',
+      });
+    }
   },
 
   methods: {
@@ -439,6 +461,7 @@ export default {
     async computeJourneyReachableRoutes() {
       this.buildQuery();
       // TODO : this.filteredRoutes = (await itinevertService.getJourneyReachableRoutes(query, this.formData.departure)).data;
+      this.baseQuery.limit = 100;
       this.filteredRoutes = (await itinevertService.getReachableRoutes(this.baseQuery)).data;
       this.$emit('change-view', 'result');
     },

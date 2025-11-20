@@ -2,6 +2,19 @@ import axios from 'axios';
 
 import config from '@/js/config';
 
+/** Constant to define the maximum number of route before going over each of their waypoint and making a Navitia API Call */
+export const MAX_ROUTE_THRESHOLD = 50;
+/** Constant to define the max trip duration for Itinevert in minutes */
+export const MAX_TRIP_DURATION = 240;
+/** Constant to define the min trip duration for Itinevert in minutes */
+export const MIN_TRIP_DURATION = 20;
+/** Constant to define the min trip duration for Itinevert in minutes */
+export const DEFAULT_TRIP_DURATION = 120;
+/** Constant to define by how much the trip duration is incremented in minutes */
+export const TRIP_DURATION_INCREMENT = 10;
+/** Constant to define wether the Navitia Isochron request limit has been reached */
+export const MAX_NAVITIA_ISOCHRON_REQUEST_REACHED = false;
+
 function ItinevertService() {
   this.axios = axios.create({
     baseURL: config.urls.api,
