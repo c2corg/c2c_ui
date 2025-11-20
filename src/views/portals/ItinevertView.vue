@@ -151,13 +151,6 @@ export default {
   cursor: pointer;
 }
 
-.is-active {
-  color: white;
-  border-radius: 20px;
-  background: $color-base-c2c;
-  transition: color 0.3s;
-}
-
 .toggleContainer span {
   padding: 3px 10px;
   text-align: center;

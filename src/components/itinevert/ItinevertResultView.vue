@@ -120,12 +120,15 @@ import ItinevertPageSelector from './ItinevertPageSelector.vue';
 import itinevertService from '@/js/apis/itinevert-service';
 import constants from '@/js/constants';
 
+const DocumentsTable = () => import(/* webpackChunkName: "data-table" */ '@/components/datatable/DocumentsTable');
+
 export default {
   name: 'DocumentsView',
 
   components: {
     ItinevertFilterItems,
     ItinevertPageSelector,
+    DocumentsTable,
     DisplayModeSwitch,
     LoadUserPreferencesButton,
   },
