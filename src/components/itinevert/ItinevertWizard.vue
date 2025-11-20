@@ -43,15 +43,14 @@
           <div v-if="formData.destinationKind.selected === 'mountain range'" class="form-input">
             <!-- input for destination by 'mountain range' -->
             <p class="input-label">Choix du massif</p>
-            <select
-              name="mountainRangeSelector"
-              class="mountainRangeSelector"
-              v-model="formData.mountainRange.selected"
-            >
-              <option v-for="option in formData.mountainRange.list" :value="option" :key="getTitle(option)">
-                {{ getTitle(option) }}
-              </option>
-            </select>
+            <input-autocomplete
+              :fullwidth="true"
+              :placeholder="''"
+              :show-suggestions="true"
+              :suggestions="formData.mountainRange.list"
+              :format-suggestion="getTitle"
+              @update:props="updateSelectedMountainRange"
+            ></input-autocomplete>
           </div>
           <div v-if="formData.destinationKind.selected === 'duration'" class="form-input">
             <!-- input for destination by 'duration' -->
@@ -189,6 +188,7 @@
 
 <script>
 import DropdownButton from '../generics/DropdownButton.vue';
+import InputAutocomplete from '../generics/inputs/InputAutocomplete.vue';
 
 import ItinevertFilterItem from './ItinevertFilterItem.vue';
 import ItinevertResultView from './ItinevertResultView.vue';
@@ -205,6 +205,7 @@ export default {
   components: {
     ItinevertFilterItem,
     ItinevertResultView,
+    InputAutocomplete,
     DropdownButton,
   },
   categoryIcon: {
@@ -339,7 +340,7 @@ export default {
     let areas = await c2c.area.fullDownload({
       atyp: 'range',
     });
-    this.formData.mountainRange.list = areas.sort((a, b) => a.title - b.title);
+    this.formData.mountainRange.list = areas.sort((a, b) => this.getTitle(a).localeCompare(this.getTitle(b)));
   },
 
   methods: {
@@ -391,6 +392,10 @@ export default {
     // callback passed to input address
     updateStartingPointAddress(selectedAddress) {
       this.formData.startingPoint.selectedAddress = selectedAddress;
+    },
+    // callback passed to input autocomplete
+    updateSelectedMountainRange(selectedMountainRange) {
+      this.formData.mountainRange.selected = selectedMountainRange;
     },
     /** Return true if search is enabled (all required form fields are set) */
     isSearchEnabled() {
