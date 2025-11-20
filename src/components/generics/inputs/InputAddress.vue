@@ -57,7 +57,7 @@ export default {
       default: null,
     },
     defaultAddress: {
-      type: Object,
+      type: [Object, String],
       default: null,
     },
   },
@@ -245,49 +245,99 @@ export default {
 <style scoped lang="scss">
 .from-container {
   display: flex;
-  border: 1px solid lightgray;
-  padding: 5px;
-  border-radius: 4px;
+  align-items: center;
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  &:focus-within {
+    border-color: #666;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+  }
+
   .autocomplete-container {
     width: 100%;
     position: relative;
+
     .from-address {
-      padding-left: 10px;
+      width: 100%;
       border: none;
       outline: none;
+      background-color: transparent;
+      padding: 8px 34px 8px 10px;
+      color: #222;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
-      width: inherit;
+
+      &::placeholder {
+        color: #999;
+      }
     }
+
     .autocomplete-results {
       position: absolute;
-      background-color: white;
-      border: 1px solid lightgrey;
-      z-index: 2;
-      margin-top: 5px;
+      top: calc(100% + 5px);
+      left: 0;
+      right: 0;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+      max-height: 220px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #aaa #f9f9f9;
+
       ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
         li {
-          padding: 6px;
-          border-bottom: 1px solid lightgrey;
+          padding: 10px 14px;
+          font-size: 14px;
+          color: #333;
+          transition: background 0.2s ease, color 0.2s ease;
+
+          &:hover {
+            background-color: #f5f5f5;
+            cursor: pointer;
+            color: #000;
+          }
+
+          &:not(:last-child) {
+            border-bottom: 1px solid #eee;
+          }
         }
       }
     }
   }
+
   .geolocalisation {
-    border-radius: 15px;
-    border: 1px solid lightgray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
     background-color: white;
-    height: 25px;
-    position: absolute;
-    width: 29px;
-    right: 0;
-    margin-right: 5px;
-    top: 4px;
+    height: 32px;
+    width: 32px;
+    margin-left: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    border: 0px;
+
+    &:hover {
+      background-color: #efefef;
+    }
+
     .geolocalisation-img {
-      height: 18px;
-      width: 18px;
-      display: flex;
+      height: 16px;
+      width: 16px;
     }
   }
 }
