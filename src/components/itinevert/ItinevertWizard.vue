@@ -149,7 +149,11 @@
               </div>
             </dropdown-button>
           </div>
-          <div class="routeCount">
+          <div
+            class="routeCount"
+            :class="{ 'pulse-red': highlightedRed, 'pulse-green': highlightedGreen }"
+            @animationend="onAnimEnd"
+          >
             <p>
               <span :class="{ 'above-max-route': !canDisplayResult, 'under-max-route': canDisplayResult }">
                 {{ routeCount }}
@@ -277,6 +281,8 @@ export default {
       categorizedFields: [],
       baseQuery: {},
       isUpdating: false, // flag to prevent infinite loops
+      highlightedRed: false,
+      highlightedGreen: false,
     };
   },
 
@@ -311,6 +317,21 @@ export default {
       deep: true,
       handler() {
         this.categorizedFields = this.computeCategorizedFields(this.formData.activities);
+      },
+    },
+    routeCount: {
+      handler(newVal) {
+        const startRed = newVal > MAX_ROUTE_THRESHOLD;
+        // clear both, flush, then enable only the chosen one
+        this.highlightedRed = false;
+        this.highlightedGreen = false;
+        this.$nextTick(() => {
+          // ensure removal applied
+          requestAnimationFrame(() => {
+            if (startRed) this.highlightedRed = true;
+            else this.highlightedGreen = true;
+          });
+        });
       },
     },
     categorizedFields: {
@@ -419,6 +440,10 @@ export default {
         }
       }
       return result;
+    },
+    onAnimEnd(e) {
+      if (e.animationName === 'borderPulseRed') this.highlightedRed = false;
+      if (e.animationName === 'borderPulseGreen') this.highlightedGreen = false;
     },
     gettext(key, context) {
       return this.$gettext(key, context);
@@ -687,6 +712,13 @@ export default {
   border: 1px solid #d1d1d1;
 }
 
+.pulse-green {
+  animation: borderPulseGreen 1s ease;
+}
+.pulse-red {
+  animation: borderPulseRed 1s ease;
+}
+
 .filter-header-section {
   padding: 2rem;
   border-radius: 10px;
@@ -793,5 +825,45 @@ export default {
 .filter-button-dropdown {
   display: flex;
   justify-content: space-between;
+}
+
+/* green pulse */
+@keyframes borderPulseGreen {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 150, 136, 0);
+    border-color: rgba(0, 150, 136, 0);
+  }
+  20% {
+    box-shadow: 0 0 6px 1px rgba(0, 150, 136, 0.18);
+    border-color: rgba(0, 150, 136, 0.45);
+  }
+  60% {
+    box-shadow: 0 0 6px 1px rgba(0, 150, 136, 0.1);
+    border-color: rgba(0, 150, 136, 0.22);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 150, 136, 0);
+    border-color: rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* red pulse */
+@keyframes borderPulseRed {
+  0% {
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+    border-color: rgba(220, 53, 69, 0);
+  }
+  20% {
+    box-shadow: 0 0 6px 1px rgba(220, 53, 69, 0.18);
+    border-color: rgba(220, 53, 69, 0.45);
+  }
+  60% {
+    box-shadow: 0 0 6px 1px rgba(220, 53, 69, 0.1);
+    border-color: rgba(220, 53, 69, 0.22);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+    border-color: rgba(0, 0, 0, 0.12);
+  }
 }
 </style>
