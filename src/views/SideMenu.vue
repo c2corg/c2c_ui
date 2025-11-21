@@ -61,7 +61,7 @@
     </router-link>
     <router-link :to="{ name: 'Itinevert' }" v-if="isTall">
       <span class="menu-item is-ellipsed" :class="{ 'router-link-active': ['Itinevert'].includes($route.name) }">
-        <icon-yeti fixed-width />
+        <icon-itinevert fixed-width />
         <span class="menu-item-text"> {{ $gettext('Itinevert') | uppercaseFirstLetter }} </span>
       </span>
     </router-link>
