@@ -49,6 +49,7 @@
               :placeholder="''"
               :show-suggestions="true"
               :suggestions="formData.mountainRange.list"
+              :default-value="formData.mountainRange.selected"
               :format-suggestion="getTitle"
               @update:props="updateSelectedMountainRange"
             ></input-autocomplete>
