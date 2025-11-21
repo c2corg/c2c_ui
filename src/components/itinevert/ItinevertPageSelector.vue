@@ -12,7 +12,7 @@
       <fa-icon icon="chevron-left" />
     </span>
     <!-- docs showed / total -->
-    {{ firstDocumentPosition + 1 }}-{{ lastDocumentPosition }}
+    {{ total === 0 ? 0 : firstDocumentPosition + 1 }}-{{ lastDocumentPosition }}
     <span v-translate translate-context="1-30 of 200 results">of</span>
     {{ total }}
     <!-- chevron right -->
