@@ -456,10 +456,10 @@
       "$$noContext": "Schichte",
       "Map controls": "Dargestellte Karten"
     },
-    "Leave after": "später abreisen",
-    "Leave earlier": "früher abreisen",
+    "Leave after": "Später abreisen",
+    "Leave earlier": "Früher abreisen",
     "Leave fullscreen": "Vollbild verlassen",
-    "Leave later": "später abreisen",
+    "Leave later": "Später abreisen",
     "Legend": "Legende",
     "Let's make our feedbacks valuable": "Machen wir unsere Feedback wertvoll",
     "Let's preserve our playground! I create an account on Outdoorvision to share my GPS tracks for the preservation and design of my practice sites in France.": "Bewahren wir unseren Spielplatz! Ich erstelle ein Konto auf Outdoorvision, um meine GPS-Tracks für die Erhaltung und Gestaltung meiner Übungsplätze in Frankreich zu teilen.",
@@ -503,6 +503,7 @@
     "Merged regions": "zusammengefasste Regionen",
     "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "Durch das Zusammenführen eines Quelldokuments mit einem Zieldokument werden alle Zuordnungen des Quelldokuments zum Zieldokument übertragen und eine Umleitung vom Quelldokument zum Zieldokument eingerichtet.",
     "Metaskirando: an aggregator of ski outings in Europe": "Metaskirando: eine Suchmaschine für Skitouren in Europa",
+    "Meteo": "Wetter",
     "Meter(s)": "Meter",
     "Methods": "Methoden",
     "Misc data about the waypoint": "Andere Daten über Wegpunkt",
@@ -517,6 +518,7 @@
       "modification date": "bearbeitet am"
     },
     "More info": "Mehr Info",
+    "More info on meteoblue.com": "Mehr auf meteoblue.com",
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Es sind mehr Routen verfügbar. Sie können die Karte verschieben, den Namen angeben oder eine Aktivität festlegen, um sie herauszufiltern.",
     "Multi-criteria search": "Multikriterium Suche",
     "My account": "Mein Konto",
@@ -1522,6 +1524,7 @@
     "mollasse_calcaire": {
       "rock_types": "Kalksandstein"
     },
+    "months": "Monate",
     "more_than_3m": {
       "severities": "mehr als 3m"
     },
