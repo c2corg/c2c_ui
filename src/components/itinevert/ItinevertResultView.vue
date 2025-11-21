@@ -46,13 +46,7 @@
           </template>
         </span>
       </div>
-      <itinevert-filter-items
-        class="filter-section"
-        :list-mode="listMode"
-        :fields="fields"
-        :document-type="documentType"
-        @new-filter="filterPostNavitiaDocuments"
-      />
+      <query-items class="filter-section" :list-mode="listMode" :doc-type="documentType"></query-items>
     </div>
     <div class="columns result-section" :class="['mobile-mode-' + displayMode, { 'query-has-tags': queryHasTags }]">
       <div
@@ -114,11 +108,11 @@
 import DisplayModeSwitch from '../../views/documents/utils/DisplayModeSwitch';
 import LoadUserPreferencesButton from '../../views/documents/utils/LoadUserPreferencesButton';
 
-import ItinevertFilterItems from './ItinevertFilterItems.vue';
 import ItinevertPageSelector from './ItinevertPageSelector.vue';
 
 import itinevertService from '@/js/apis/itinevert-service';
 import constants from '@/js/constants';
+import QueryItems from '@/views/documents/utils/QueryItems.vue';
 
 const DocumentsTable = () => import(/* webpackChunkName: "data-table" */ '@/components/datatable/DocumentsTable');
 
@@ -126,7 +120,7 @@ export default {
   name: 'DocumentsView',
 
   components: {
-    ItinevertFilterItems,
+    QueryItems,
     ItinevertPageSelector,
     DocumentsTable,
     DisplayModeSwitch,
@@ -171,9 +165,7 @@ export default {
 
       offset: 0,
 
-      lastActiveFields: [],
-
-      lastSort: [],
+      lastQuery: {},
     };
   },
 
@@ -202,15 +194,20 @@ export default {
 
   watch: {
     displayMode: 'updateMapSize',
+    '$route.query': {
+      async handler(newQuery) {
+        this.filterPostNavitiaDocuments(newQuery);
+      },
+    },
   },
 
   mounted() {
+    // init filtered documents
     this.filteredDocuments = {
       documents: this.documents.documents.slice(this.offset, this.offset + this.limit),
       total: this.documents.total,
     };
   },
-
   methods: {
     toogleProperty(property) {
       this.setProperty(property, !this[property]);
@@ -235,18 +232,12 @@ export default {
     async paginatePostNavitiaDocuments(pagination) {
       this.offset = pagination[0];
       this.limit = pagination[1];
-      this.filterPostNavitiaDocuments(this.lastActiveFields, this.lastSort);
+      this.filterPostNavitiaDocuments(this.lastQuery);
     },
-    async filterPostNavitiaDocuments(activeFields, sort) {
-      this.lastActiveFields = activeFields;
-      if (sort) {
-        this.lastSort = sort;
-      }
-      if (activeFields.filter((category) => Object.keys(category).length > 0).length > 0 || sort) {
-        let query = itinevertService.enhanceQuery(this.baseQuery, activeFields);
-        if (sort) {
-          query.sort = sort;
-        }
+    async filterPostNavitiaDocuments(newQuery) {
+      let query = itinevertService.enhanceQuery(this.baseQuery, newQuery);
+      this.lastQuery = query;
+      if (Object.keys(query).length > 0) {
         if (this.documentType === 'route') {
           let oldRoutesID = this.documents.documents.map((doc) => doc.document_id);
           this.filteredDocuments.documents = [];
@@ -266,16 +257,17 @@ export default {
             }
           }
         }
-
-        this.filteredDocuments.total = this.filteredDocuments.documents.length;
       } else {
         // no filters set -> display all documents
         this.filteredDocuments = { documents: this.documents.documents, total: this.documents.total };
       }
+
+      this.filteredDocuments.total = this.filteredDocuments.documents.length;
+
       // apply pagination
       this.filteredDocuments = {
         documents: this.filteredDocuments.documents.slice(this.offset, this.offset + this.limit),
-        total: this.documents.total,
+        total: this.filteredDocuments.total,
       };
     },
   },

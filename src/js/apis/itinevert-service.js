@@ -259,16 +259,16 @@ ItinevertService.prototype.buildQuery = function (activeFields) {
  * Enhance a base query with the active fields.
  *
  * @param {Object} baseQuery The base query to be enhanced
- * @param {Array} activeFields The active fields where all the filters are stored
+ * @param {Object} newQuery The new query
  * @returns {Objet} Returns the query with all filters in it
  */
-ItinevertService.prototype.enhanceQuery = function (baseQuery, activeFields) {
+ItinevertService.prototype.enhanceQuery = function (baseQuery, newQuery) {
   let query = { ...baseQuery };
-  // loop over each category ('General', 'ratings', 'Terrain', 'Misc')
-  for (let category of Object.keys(activeFields)) {
-    // loop over each active fields to enhance the query
-    for (let field of activeFields[category]) {
-      query[field.field.url] = field.field.valueToUrl(field.value);
+  // Iterate over each key in newQuery
+  for (let key in newQuery) {
+    if (newQuery.hasOwnProperty(key)) {
+      // Add or update the property in the query
+      query[key] = newQuery[key];
     }
   }
   return query;

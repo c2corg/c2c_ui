@@ -341,9 +341,21 @@ export default {
           this.categorizedFields = [];
           // recompute based on formData activities
           this.categorizedFields = this.computeCategorizedFields(this.formData.activities);
+          // reset url parameters
+          this.$router.replace({
+            path: this.$route.path,
+            query: {},
+          });
         } else if (newVal === 'result') {
           this.categorizedFields = [];
           this.categorizedFields = this.computeCategorizedFields([]);
+          // Initialize URL with document type
+          if (this.$route.query.documentType !== this.formData.searchKind.selected) {
+            this.$router.replace({
+              path: this.$route.path,
+              query: { documentType: this.formData.searchKind.selected },
+            });
+          }
         }
       },
     },
