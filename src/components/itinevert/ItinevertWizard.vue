@@ -10,7 +10,7 @@
             <input-radio-button
               v-model="formData.searchKind.selected"
               :options="formData.searchKind.options"
-              :default-value="formData.searchKind.default"
+              :default-value="formData.searchKind.selected ? formData.searchKind.selected : formData.searchKind.default"
               :display-vertically="true"
             />
           </div>
@@ -37,7 +37,9 @@
               v-model="formData.destinationKind.selected"
               :options="formData.destinationKind.options"
               :disabled-options="formData.destinationKind.disabledOptions"
-              :default-value="formData.destinationKind.default"
+              :default-value="
+                formData.destinationKind.selected ? formData.destinationKind.selected : formData.destinationKind.default
+              "
               :display-vertically="true"
             />
           </div>
@@ -320,6 +322,11 @@ export default {
         this.categorizedFields = this.computeCategorizedFields(this.formData.activities);
       },
     },
+    'formData.searchKind.selected': {
+      handler() {
+        this.categorizedFields = this.computeCategorizedFields([]);
+      },
+    },
     routeCount: {
       handler(newVal) {
         const startRed = newVal > MAX_ROUTE_THRESHOLD;
@@ -362,7 +369,9 @@ export default {
           // erase stored values
           this.categorizedFields = [];
           // recompute based on formData activities
-          this.categorizedFields = this.computeCategorizedFields(this.formData.activities);
+          if (this.searchKind.selected === 'route') {
+            this.categorizedFields = this.computeCategorizedFields(this.formData.activities);
+          }
           // reset url parameters
           this.$router.replace({
             path: this.$route.path,
