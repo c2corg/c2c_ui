@@ -266,8 +266,8 @@ ItinevertService.prototype.enhanceQuery = function (baseQuery, newQuery) {
   let query = { ...baseQuery };
   // Iterate over each key in newQuery
   for (let key in newQuery) {
-    if (newQuery.hasOwnProperty(key)) {
-      // Add or update the property in the query
+    if (newQuery.hasOwnProperty(key) && newQuery[key]) {
+      // Add or update the property in the query, only if defined
       query[key] = newQuery[key];
     }
   }
