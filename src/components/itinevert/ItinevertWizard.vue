@@ -393,6 +393,14 @@ export default {
   },
 
   async mounted() {
+    // reset url parameters
+    if (Object.keys(this.$router.currentRoute.query)?.length > 0) {
+      this.$router.replace({
+        path: this.$route.path,
+        query: {},
+      });
+    }
+
     // get all areas of type "range"
     // so that we can display them in a dropdown
     let areas = await c2c.area.fullDownload({
