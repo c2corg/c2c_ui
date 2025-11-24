@@ -369,7 +369,7 @@ export default {
           // erase stored values
           this.categorizedFields = [];
           // recompute based on formData activities
-          if (this.searchKind.selected === 'route') {
+          if (this.searchKind?.selected === 'route') {
             this.categorizedFields = this.computeCategorizedFields(this.formData.activities);
           }
           // reset url parameters
