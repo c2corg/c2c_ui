@@ -58,6 +58,8 @@
           'is-8 is-7-widescreen is-6-fullhd': showMap && !listMode,
         }"
       >
+        <loading-notification :promise="promise" />
+
         <image-cards v-if="filteredDocuments && !listMode && documentType === 'image'" :documents="filteredDocuments" />
 
         <div
@@ -166,6 +168,8 @@ export default {
       offset: 0,
 
       lastQuery: {},
+
+      promise: { data: this.documents },
     };
   },
 
@@ -235,13 +239,20 @@ export default {
       this.filterPostNavitiaDocuments(this.lastQuery);
     },
     async filterPostNavitiaDocuments(newQuery) {
+      // remove undefined values
+      newQuery = Object.fromEntries(Object.entries(newQuery).filter(([key, value]) => value));
+
       let query = itinevertService.enhanceQuery(this.baseQuery, newQuery);
       this.lastQuery = query;
-      if (Object.keys(query).length > 0) {
+
+      // check that query is different from base query
+      if (Object.keys(newQuery).length > 1) {
         if (this.documentType === 'route') {
           let oldRoutesID = this.documents.documents.map((doc) => doc.document_id);
           this.filteredDocuments.documents = [];
+          this.promise = {};
           let newRoutes = await itinevertService.getAllReachableRoutes(query);
+          this.promise = { data: newRoutes };
           for (const newRoute of newRoutes) {
             if (oldRoutesID.includes(newRoute.document_id)) {
               this.filteredDocuments.documents.push(newRoute);
@@ -250,7 +261,9 @@ export default {
         } else if (this.documentType === 'waypoint') {
           let oldWaypointsID = this.documents.documents.map((doc) => doc.document_id);
           this.filteredDocuments.documents = [];
+          this.promise = {};
           let newWaypoints = await itinevertService.getAllReachableWaypoints(query);
+          this.promise = { data: newWaypoints };
           for (const newWaypoint of newWaypoints) {
             if (oldWaypointsID.includes(newWaypoint.document_id)) {
               this.filteredDocuments.documents.push(newWaypoint);
