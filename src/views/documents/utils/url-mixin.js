@@ -25,7 +25,7 @@ export default {
         return this.$route.query.documentType;
       }
       // else url starts with the doc type
-      return this.$route.split('-')[0].slice(0, -1);
+      return this.$route.name.split('-')[0].slice(0, -1);
     },
   },
 
