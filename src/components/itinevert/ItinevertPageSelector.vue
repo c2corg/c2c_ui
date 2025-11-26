@@ -4,7 +4,7 @@
     <span
       v-if="firstDocumentPosition > 0"
       class="pagination-link button has-text-normal"
-      @click="pageQuery(offset - queryLimit, queryLimit)"
+      @click="pageQuery(offset - limit, limit)"
     >
       <fa-icon icon="chevron-left" />
     </span>
@@ -19,7 +19,7 @@
     <span
       v-if="lastDocumentPosition < total"
       class="pagination-link button has-text-normal"
-      @click="pageQuery(offset + queryLimit, queryLimit)"
+      @click="pageQuery(offset + limit, limit)"
     >
       <fa-icon icon="chevron-right" />
     </span>
@@ -29,7 +29,7 @@
     <span class="limit-selector">
       <dropdown-button class="ml-1 mr-1" ref="limitSelector">
         <span slot="button" class="button is-small">
-          <span>{{ queryLimit }}</span>
+          <span>{{ limit }}</span>
           &nbsp;
           <fa-icon icon="angle-down" aria-hidden="true" />
         </span>
@@ -55,25 +55,28 @@ export default {
       type: Object,
       default: null,
     },
+    offset: {
+      type: Number,
+      default: 0,
+    },
+    limit: {
+      type: Number,
+      default: 30,
+    },
   },
 
   data() {
     return {
       total: 30,
-      offset: 0,
-      limit: 30,
     };
   },
 
   computed: {
-    queryLimit() {
-      return this.limit ?? 30;
-    },
     firstDocumentPosition() {
       return Math.max(this.offset, 0);
     },
     lastDocumentPosition() {
-      return Math.min(this.offset + this.queryLimit, this.total);
+      return Math.min(this.offset + this.limit, this.total);
     },
   },
 
@@ -88,11 +91,9 @@ export default {
       }
     },
 
-    pageQuery(offset, limit) {
-      this.offset = Math.max(offset, 0);
-      this.limit = Math.max(Math.min(limit, 100), 30);
+    pageQuery(off, lim) {
       // emit to parent that offset and limit have changed
-      this.$emit('paginate', [this.offset, this.limit]);
+      this.$emit('paginate', [Math.max(off, 0), lim]);
     },
 
     hideOnclick() {
@@ -100,9 +101,8 @@ export default {
     },
 
     selectLimit(l) {
-      this.limit = l;
       // emit to parent that offset and limit have changed
-      this.$emit('paginate', [this.offset, this.limit]);
+      this.$emit('paginate', [this.offset, l]);
       this.hideOnclick();
     },
   },

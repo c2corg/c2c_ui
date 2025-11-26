@@ -9,7 +9,12 @@
           </span>
           &nbsp;
           <br class="is-hidden-tablet" />
-          <itinevert-page-selector :documents="filteredDocuments" @paginate="paginatePostNavitiaDocuments" />
+          <itinevert-page-selector
+            :documents="filteredDocuments"
+            :limit="limit"
+            :offset="offset"
+            @paginate="paginatePostNavitiaDocuments"
+          />
         </span>
         <span class="is-pulled-right is-flex header-right" v-if="documentType != 'profile'">
           <load-user-preferences-button class="is-hidden-mobile" />
@@ -163,9 +168,9 @@ export default {
 
       queryHasTags: false,
 
-      limit: 30,
-
       offset: 0,
+
+      limit: 30,
 
       lastQuery: {},
 
@@ -276,6 +281,11 @@ export default {
       }
 
       this.filteredDocuments.total = this.filteredDocuments.documents.length;
+
+      // whenever a filter is applied, check if offset is < then total
+      if (this.offset > this.filteredDocuments.total) {
+        this.offset = Math.max(this.filteredDocuments.total - this.limit, 0);
+      }
 
       // apply pagination
       this.filteredDocuments = {
