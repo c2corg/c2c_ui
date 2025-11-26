@@ -102,7 +102,6 @@
           :documents="documentsShownOnMap"
           :highlighted-document="highlightedDocument"
           @highlight-document="highlightedDocument = arguments[0]"
-          show-filter-control
           show-center-on-geolocation
           show-recenter-on
         />
@@ -164,6 +163,8 @@ export default {
 
       filteredDocuments: null,
 
+      filteredDocumentsBeforePagination: null,
+
       filteredWaypoints: [],
 
       queryHasTags: false,
@@ -212,6 +213,10 @@ export default {
 
   mounted() {
     // init filtered documents
+    this.filteredDocumentsBeforePagination = {
+      documents: this.documents.documents,
+      total: this.documents.total,
+    };
     this.filteredDocuments = {
       documents: this.documents.documents.slice(this.offset, this.offset + this.limit),
       total: this.documents.total,
@@ -241,7 +246,16 @@ export default {
     async paginatePostNavitiaDocuments(pagination) {
       this.offset = pagination[0];
       this.limit = pagination[1];
-      this.filterPostNavitiaDocuments(this.lastQuery);
+      // whenever a filter is applied, check if offset is < then total
+      if (this.offset > this.filteredDocuments.total) {
+        this.offset = Math.max(this.filteredDocuments.total - this.limit, 0);
+      }
+
+      // apply pagination
+      this.filteredDocuments = {
+        documents: this.filteredDocumentsBeforePagination.documents.slice(this.offset, this.offset + this.limit),
+        total: this.filteredDocuments.total,
+      };
     },
     async filterPostNavitiaDocuments(newQuery) {
       // remove undefined values
@@ -281,6 +295,8 @@ export default {
       }
 
       this.filteredDocuments.total = this.filteredDocuments.documents.length;
+
+      this.filteredDocumentsBeforePagination = this.filteredDocuments;
 
       // whenever a filter is applied, check if offset is < then total
       if (this.offset > this.filteredDocuments.total) {
