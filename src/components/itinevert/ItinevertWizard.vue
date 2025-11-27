@@ -185,6 +185,7 @@
             :base-query="baseQuery"
             :documents="formData.searchKind.selected === 'route' ? filteredRoutes : filteredWaypoints"
             :document-type="formData.searchKind.selected"
+            :polygon-geometry="polygonGeometry"
           ></itinevert-result-view>
         </div>
       </div>
@@ -211,6 +212,7 @@ import itinevertService, {
   MAX_ROUTE_THRESHOLD,
   DEFAULT_TRIP_DURATION,
   createBboxString,
+  projectCoordinates,
 } from '@/js/apis/itinevert-service';
 import constants from '@/js/constants';
 
@@ -288,6 +290,7 @@ export default {
       isUpdating: false, // flag to prevent infinite loops
       highlightedRed: false,
       highlightedGreen: false,
+      polygonGeometry: null,
     };
   },
 
@@ -486,8 +489,11 @@ export default {
       this.formData.startingPoint.selectedAddress = selectedAddress;
     },
     // callback passed to input autocomplete
-    updateSelectedMountainRange(selectedMountainRange) {
-      this.formData.mountainRange.selected = selectedMountainRange;
+    async updateSelectedMountainRange(selectedMountainRange) {
+      // requery choosen area to get its geometry
+      let prefered_lang = c2c.getApiLang(this.$language.current);
+      let area = (await c2c.area.get(selectedMountainRange.document_id, prefered_lang)).data;
+      this.formData.mountainRange.selected = area;
     },
     /** Return true if search is enabled (all required form fields are set) */
     isSearchEnabled() {
@@ -537,6 +543,7 @@ export default {
           this.formData.startingPoint.selectedAddress
         )
       ).data;
+      this.polygonGeometry = JSON.parse(this.formData.mountainRange.selected.geometry.geom_detail);
       this.$emit('change-view', 'result');
     },
     async search() {
@@ -567,7 +574,9 @@ export default {
           };
 
           // add isochron_geom as bbox to reduce time of request
-          this.baseQuery.bbox = createBboxString(data.isochron_geom.coordinates);
+          let coordinates = projectCoordinates(data.isochron_geom.coordinates);
+          this.polygonGeometry = { type: data.isochron_geom.type, coordinates: coordinates };
+          this.baseQuery.bbox = createBboxString(coordinates);
 
           this.$emit('change-view', 'result');
         }
@@ -584,6 +593,7 @@ export default {
               this.formData.startingPoint.selectedAddress
             )
           ).data;
+          this.polygonGeometry = JSON.parse(this.formData.mountainRange.selected.geometry.geom_detail);
         }
         // using Isochrones API
         else if (this.formData.destinationKind.selected === 'duration') {
@@ -602,9 +612,9 @@ export default {
           };
 
           // add isochron_geom as bbox to reduce time of request
-          this.baseQuery.bbox = createBboxString(data.isochron_geom.coordinates);
-
-          this.$emit('change-view', 'result');
+          let coordinates = projectCoordinates(data.isochron_geom.coordinates);
+          this.polygonGeometry = { type: data.isochron_geom.type, coordinates: coordinates };
+          this.baseQuery.bbox = createBboxString(coordinates);
         }
         this.$emit('change-view', 'result');
       }

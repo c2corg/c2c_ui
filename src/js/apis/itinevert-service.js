@@ -17,6 +17,11 @@ export const DEFAULT_TRIP_DURATION = 90;
 export const TRIP_DURATION_INCREMENT = 10;
 /** Constant to define wether the Navitia Isochrones request limit has been reached */
 export const MAX_NAVITIA_ISOCHRONES_REQUEST_REACHED = false;
+// colors for polygon displayed on map
+export const POLYGON_STYLE = {
+  color: 'rgba(250,150,51,0.3)',
+  strokeColor: 'rgba(250,150,51,1)',
+};
 
 function ItinevertService() {
   this.axios = axios.create({
@@ -408,35 +413,32 @@ ItinevertService.prototype.isFieldValueDefault = function (fieldValue, field) {
   return initialVal === fieldValue;
 };
 
-function collectPairs(node, out) {
-  if (!node) return;
-  if (Array.isArray(node) && node.length >= 2 && typeof node[0] === 'number' && typeof node[1] === 'number') {
-    out.push([node[0], node[1]]);
-    return;
-  }
-  if (Array.isArray(node)) {
-    for (const child of node) collectPairs(child, out);
-  }
+export function projectCoordinates(coords, sourceProj = 'EPSG:4326', targetProj = 'EPSG:3857') {
+  return coords.map(function recur(node) {
+    if (typeof node[0] === 'number' && typeof node[1] === 'number') {
+      return ol.proj.transform([node[0], node[1]], sourceProj, targetProj);
+    }
+    return node.map(recur);
+  });
 }
 
-export function createBboxString(nestedCoords) {
-  const pairs = [];
-  collectPairs(nestedCoords, pairs);
-  if (pairs.length === 0) return null;
-
+export function createBboxString(coords) {
   let minX = Infinity,
     minY = Infinity,
     maxX = -Infinity,
     maxY = -Infinity;
-
-  for (const [lon, lat] of pairs) {
-    const [x, y] = ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
-    if (x < minX) minX = x;
-    if (x > maxX) maxX = x;
-    if (y < minY) minY = y;
-    if (y > maxY) maxY = y;
-  }
-
+  (function recur(node) {
+    if (typeof node[0] === 'number' && typeof node[1] === 'number') {
+      const x = node[0],
+        y = node[1];
+      if (x < minX) minX = x;
+      if (x > maxX) maxX = x;
+      if (y < minY) minY = y;
+      if (y > maxY) maxY = y;
+      return;
+    }
+    node.forEach(recur);
+  })(coords);
   return `${minX},${minY},${maxX},${maxY}`;
 }
 

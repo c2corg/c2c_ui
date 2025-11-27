@@ -116,7 +116,7 @@ import LoadUserPreferencesButton from '../../views/documents/utils/LoadUserPrefe
 
 import ItinevertPageSelector from './ItinevertPageSelector.vue';
 
-import itinevertService from '@/js/apis/itinevert-service';
+import itinevertService, { POLYGON_STYLE } from '@/js/apis/itinevert-service';
 import constants from '@/js/constants';
 import QueryItems from '@/views/documents/utils/QueryItems.vue';
 
@@ -150,6 +150,11 @@ export default {
       type: String,
       default: '',
     },
+    // either the area geometry or the isochrone geometry
+    polygonGeometry: {
+      type: Object,
+      default: null,
+    },
   },
 
   data() {
@@ -164,8 +169,6 @@ export default {
       filteredDocuments: null,
 
       filteredDocumentsBeforePagination: null,
-
-      filteredWaypoints: [],
 
       queryHasTags: false,
 
@@ -190,14 +193,28 @@ export default {
       return constants.objectDefinitions[this.documentType].geoLocalized === true;
     },
     documentsShownOnMap() {
+      const mapDocuments = [];
+      if (this.polygonGeometry !== null) {
+        // create an area document based on polygon geometry
+        const areaDocument = {
+          document_id: 1,
+          type: 'a',
+          geometry: {
+            version: 1,
+            geom: JSON.stringify(this.polygonGeometry),
+            geom_detail: JSON.stringify(this.polygonGeometry),
+          },
+          properties: {
+            ...POLYGON_STYLE,
+            nonInteractive: true,
+          },
+        };
+        mapDocuments.push(areaDocument);
+      }
       if (this.filteredDocuments) {
-        return this.filteredWaypoints.concat(this.filteredDocuments.documents);
+        return this.filteredDocuments.documents.concat(mapDocuments);
       } else {
-        if (this.documents) {
-          return this.filteredWaypoints.concat(this.documents.documents);
-        } else {
-          return [];
-        }
+        return this.documents.documents.concat(mapDocuments);
       }
     },
   },
