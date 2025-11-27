@@ -67,6 +67,7 @@
                 :min="minTripDuration"
                 :max="maxTripDuration"
                 :step="tripDurationIncrement"
+                @blur="formatTripDuration"
               />
               minutes
             </span>
@@ -417,6 +418,19 @@ export default {
   },
 
   methods: {
+    formatTripDuration(event) {
+      const tripDuration = event.target.value;
+      // make sure trip duration is between limits
+      if (tripDuration > this.maxTripDuration) {
+        this.formData.maxTripDuration = this.maxTripDuration;
+      } else {
+        if (tripDuration < this.minTripDuration) {
+          this.formData.maxTripDuration = this.minTripDuration;
+        } else {
+          this.formData.maxTripDuration = tripDuration;
+        }
+      }
+    },
     computeCategorizedFields(activities) {
       const result = [];
 
