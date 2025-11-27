@@ -207,9 +207,10 @@ import itinevertService, {
   MIN_TRIP_DURATION,
   MAX_TRIP_DURATION,
   TRIP_DURATION_INCREMENT,
-  MAX_NAVITIA_ISOCHRON_REQUEST_REACHED,
+  MAX_NAVITIA_ISOCHRONES_REQUEST_REACHED,
   MAX_ROUTE_THRESHOLD,
   DEFAULT_TRIP_DURATION,
+  createBboxString,
 } from '@/js/apis/itinevert-service';
 import constants from '@/js/constants';
 
@@ -409,7 +410,7 @@ export default {
     });
     this.formData.mountainRange.list = areas.sort((a, b) => this.getTitle(a).localeCompare(this.getTitle(b)));
 
-    if (MAX_NAVITIA_ISOCHRON_REQUEST_REACHED) {
+    if (MAX_NAVITIA_ISOCHRONES_REQUEST_REACHED) {
       this.formData.destinationKind.disabledOptions.push({
         value: 'duration',
         reason: 'Fonctionnalité temporairement indisponible',
@@ -529,9 +530,13 @@ export default {
     },
     async computeJourneyReachableRoutes() {
       this.buildQuery();
-      // TODO : this.filteredRoutes = (await itinevertService.getJourneyReachableRoutes(query, this.formData.departure)).data;
-      this.baseQuery.limit = 100;
-      this.filteredRoutes = (await itinevertService.getReachableRoutes(this.baseQuery)).data;
+      this.filteredRoutes = (
+        await itinevertService.getJourneyReachableRoutes(
+          this.baseQuery,
+          this.formData.departure,
+          this.formData.startingPoint.selectedAddress
+        )
+      ).data;
       this.$emit('change-view', 'result');
     },
     async search() {
@@ -545,17 +550,24 @@ export default {
             this.$emit('change-view', 'filter');
           }
         }
-        // using Isochron API
+        // using Isochrones API
         else if (this.formData.destinationKind.selected === 'duration') {
-          /* TODO : this.filteredRoutes = (
-            (await itinevertService.getIsochronReachableRoutes(
-              query,
+          let data = (
+            await itinevertService.getIsochronesReachableRoutes(
+              this.baseQuery,
               this.formData.departure,
-              this.formData.maxTripDuration
+              this.formData.maxTripDuration,
+              this.formData.startingPoint.selectedAddress
             )
-          )).data;
-          */
-          this.filteredRoutes = (await itinevertService.getReachableRoutes(this.baseQuery)).data;
+          ).data;
+
+          this.filteredRoutes = {
+            documents: data.documents,
+            total: data.total,
+          };
+
+          // add isochron_geom as bbox to reduce time of request
+          this.baseQuery.bbox = createBboxString(data.isochron_geom.coordinates);
 
           this.$emit('change-view', 'result');
         }
@@ -565,20 +577,35 @@ export default {
       if (this.formData.searchKind.selected === 'waypoint') {
         // using Journey API
         if (this.formData.destinationKind.selected === 'mountain range') {
-          // TODO : this.filteredWaypoints = (await itinevertService.getJourneyReachableWaypoints(query, this.formData.departure)).data;
-          this.filteredWaypoints = (await itinevertService.getReachableWaypoints(this.baseQuery)).data;
-        }
-        // using Isochron API
-        else if (this.formData.destinationKind.selected === 'duration') {
-          /* TODO : this.filteredWaypoints = (await itinevertService.getIsochronReachableWaypoints
-              query,
+          this.filteredWaypoints = (
+            await itinevertService.getJourneyReachableWaypoints(
+              this.baseQuery,
               this.formData.departure,
-              this.formData.maxTripDuration
-          )).data;
-          */
-          this.filteredWaypoints = (await itinevertService.getReachableWaypoints(this.baseQuery)).data;
+              this.formData.startingPoint.selectedAddress
+            )
+          ).data;
         }
+        // using Isochrones API
+        else if (this.formData.destinationKind.selected === 'duration') {
+          let data = (
+            await itinevertService.getIsochronesReachableWaypoints(
+              this.baseQuery,
+              this.formData.departure,
+              this.formData.maxTripDuration,
+              this.formData.startingPoint.selectedAddress
+            )
+          ).data;
 
+          this.filteredWaypoints = {
+            documents: data.documents,
+            total: data.total,
+          };
+
+          // add isochron_geom as bbox to reduce time of request
+          this.baseQuery.bbox = createBboxString(data.isochron_geom.coordinates);
+
+          this.$emit('change-view', 'result');
+        }
         this.$emit('change-view', 'result');
       }
     },

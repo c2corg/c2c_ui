@@ -1,6 +1,9 @@
 import axios from 'axios';
 
+import navitiaService from './navitia-service';
+
 import config from '@/js/config';
+import ol from '@/js/libs/ol';
 
 /** Constant to define the maximum number of route before going over each of their waypoint and making a Navitia API Call */
 export const MAX_ROUTE_THRESHOLD = 50;
@@ -9,11 +12,11 @@ export const MAX_TRIP_DURATION = 240;
 /** Constant to define the min trip duration for Itinevert in minutes */
 export const MIN_TRIP_DURATION = 20;
 /** Constant to define the min trip duration for Itinevert in minutes */
-export const DEFAULT_TRIP_DURATION = 120;
+export const DEFAULT_TRIP_DURATION = 90;
 /** Constant to define by how much the trip duration is incremented in minutes */
 export const TRIP_DURATION_INCREMENT = 10;
-/** Constant to define wether the Navitia Isochron request limit has been reached */
-export const MAX_NAVITIA_ISOCHRON_REQUEST_REACHED = false;
+/** Constant to define wether the Navitia Isochrones request limit has been reached */
+export const MAX_NAVITIA_ISOCHRONES_REQUEST_REACHED = false;
 
 function ItinevertService() {
   this.axios = axios.create({
@@ -171,16 +174,34 @@ ItinevertService.prototype.getAllReachableWaypoints = function (query, onProgres
  *
  * @param {Object} query The query filters to apply to routes
  * @param {Object} departure The starting point ({ selectedDate, selectedTime, timePreference})
- * @param {Integer} to The destination point (mountain range location)
+ * @param {String} from The starting point {lon, lat}
  * @returns {Promise} Returns {documents: All routes reachable in TC, total: query.count()}
  */
-ItinevertService.prototype.getJourneyReachableRoutes = function (query, departure, to) {
-  const params = new URLSearchParams(query).toString();
-  params.departureDate = departure.selectedDate;
-  params.departureTime = departure.selectedTime;
-  params.timePreference = departure.timePreference;
-  params.to = to;
-  return this.axios.get(`/journeyreachableroutes?${params}`);
+ItinevertService.prototype.getJourneyReachableRoutes = function (query, departure, from) {
+  let newQuery = { ...query };
+
+  // Format datetime for Navitia API
+  const originalDateTime = new Date(`${departure.selectedDate}T${departure.selectedTime}:00`);
+  const adjustedDateTime = new Date(originalDateTime);
+
+  const year = adjustedDateTime.getFullYear();
+  const month = String(adjustedDateTime.getMonth() + 1).padStart(2, '0');
+  const day = String(adjustedDateTime.getDate()).padStart(2, '0');
+  const hours = String(adjustedDateTime.getHours()).padStart(2, '0');
+  const minutes = String(adjustedDateTime.getMinutes()).padStart(2, '0');
+
+  const dateTimeFormat = `${year}${month}${day}T${hours}${minutes}00`;
+  const dateTimeRepresents = departure.timePreference === 'arrive-before' ? 'arrival' : 'departure';
+
+  newQuery.datetime = dateTimeFormat;
+  newQuery.datetime_represents = dateTimeRepresents;
+  newQuery.from = navitiaService.formatCoordinates(from.geometry.coordinates);
+  newQuery.walking_speed = 1.12;
+  newQuery.max_walking_duration_to_pt = 4464;
+  newQuery.max_nb_transfers = -1;
+
+  const params = new URLSearchParams(newQuery).toString();
+  return this.axios.get(`/navitia/journeyreachableroutes?${params}`);
 };
 
 /**
@@ -189,52 +210,104 @@ ItinevertService.prototype.getJourneyReachableRoutes = function (query, departur
  *
  * @param {Object} query The query filters to apply to waypoints
  * @param {Object} departure The starting point ({ selectedDate, selectedTime, timePreference})
- * @param {Integer} to The destination point (mountain range location)
+ * @param {String} from The starting point {lon, lat}
  * @returns {Promise} Returns {documents: All waypoints reachable in TC, total: query.count()}
  */
-ItinevertService.prototype.getJourneyReachableWaypoints = function (query, departure, to) {
-  const params = new URLSearchParams(query).toString();
-  params.departureDate = departure.selectedDate;
-  params.departureTime = departure.selectedTime;
-  params.timePreference = departure.timePreference;
-  params.to = to;
-  return this.axios.get(`/journeyreachablewaypoints?${params}`);
+ItinevertService.prototype.getJourneyReachableWaypoints = function (query, departure, from) {
+  let newQuery = { ...query };
+
+  // Format datetime for Navitia API
+  const originalDateTime = new Date(`${departure.selectedDate}T${departure.selectedTime}:00`);
+  const adjustedDateTime = new Date(originalDateTime);
+
+  const year = adjustedDateTime.getFullYear();
+  const month = String(adjustedDateTime.getMonth() + 1).padStart(2, '0');
+  const day = String(adjustedDateTime.getDate()).padStart(2, '0');
+  const hours = String(adjustedDateTime.getHours()).padStart(2, '0');
+  const minutes = String(adjustedDateTime.getMinutes()).padStart(2, '0');
+
+  const dateTimeFormat = `${year}${month}${day}T${hours}${minutes}00`;
+  const dateTimeRepresents = departure.timePreference === 'arrive-before' ? 'arrival' : 'departure';
+
+  newQuery.datetime = dateTimeFormat;
+  newQuery.datetime_represents = dateTimeRepresents;
+  newQuery.from = navitiaService.formatCoordinates(from.geometry.coordinates);
+  newQuery.walking_speed = 1.12;
+  newQuery.max_walking_duration_to_pt = 4464;
+  newQuery.max_nb_transfers = -1;
+
+  const params = new URLSearchParams(newQuery).toString();
+  return this.axios.get(`/navitia/journeyreachablewaypoints?${params}`);
 };
 
 /**
- * Retrieves routes reachable in the Navitia isochron computed with departure and duration. The route does not support
+ * Retrieves routes reachable in the Navitia isochrones computed with departure and duration. The route does not support
  * offset and limit, it will always return all the routes (count will always be <= MAX_ROUTE_THRESHOLD)
  *
  * @param {Object} query The query filters to apply to routes
  * @param {Object} departure The starting point ({ selectedDate, selectedTime, timePreference})
  * @param {Integer} duration The maximum duration for the trip in minutes
- * @returns {Promise} Returns {documents: All routes reachable in the Navitia isochron, total: query.count()}
+ * @param {String} from The starting point {lon, lat}
+ * @returns {Promise} Returns {documents: All routes reachable in the Navitia isochrones, total: query.count()}
  */
-ItinevertService.prototype.getIsochronReachableRoutes = function (query, departure, duration) {
-  const params = new URLSearchParams(query).toString();
-  params.departureDate = departure.selectedDate;
-  params.departureTime = departure.selectedTime;
-  params.timePreference = departure.timePreference;
-  params.duration = duration;
-  return this.axios.get(`/isochronreachableroutes?${params}`);
+ItinevertService.prototype.getIsochronesReachableRoutes = function (query, departure, duration, from) {
+  let newQuery = { ...query };
+
+  // Format datetime for Navitia API
+  const originalDateTime = new Date(`${departure.selectedDate}T${departure.selectedTime}:00`);
+  const adjustedDateTime = new Date(originalDateTime);
+
+  const year = adjustedDateTime.getFullYear();
+  const month = String(adjustedDateTime.getMonth() + 1).padStart(2, '0');
+  const day = String(adjustedDateTime.getDate()).padStart(2, '0');
+  const hours = String(adjustedDateTime.getHours()).padStart(2, '0');
+  const minutes = String(adjustedDateTime.getMinutes()).padStart(2, '0');
+
+  const dateTimeFormat = `${year}${month}${day}T${hours}${minutes}00`;
+  const dateTimeRepresents = departure.timePreference === 'arrive-before' ? 'arrival' : 'departure';
+
+  newQuery.datetime = dateTimeFormat;
+  newQuery.datetime_represents = dateTimeRepresents;
+  newQuery.from = navitiaService.formatCoordinates(from.geometry.coordinates);
+  newQuery.boundary_duration = [duration * 60]; // (minutes to second)
+
+  const params = new URLSearchParams(newQuery).toString();
+  return this.axios.get(`/navitia/isochronesreachableroutes?${params}`);
 };
 
 /**
- * Retrieves waypoints reachable in the Navitia isochron computed with departure and duration. The route does not
+ * Retrieves waypoints reachable in the Navitia isochrones computed with departure and duration. The route does not
  * support offset and limit, it will always return all the waypoints
  *
  * @param {Object} query The query filters to apply to waypoints
  * @param {Object} departure The starting point ({ selectedDate, selectedTime, timePreference})
  * @param {Integer} duration The maximum duration for the trip in minutes
- * @returns {Promise} Returns {documents: All waypoints reachable in the Navitia isochron, total: query.count()}
+ * @param {String} from The starting point {lon, lat}
+ * @returns {Promise} Returns {documents: All waypoints reachable in the Navitia isochrones, total: query.count()}
  */
-ItinevertService.prototype.getIsochronReachableWaypoints = function (query, departure, duration) {
-  const params = new URLSearchParams(query).toString();
-  params.departureDate = departure.selectedDate;
-  params.departureTime = departure.selectedTime;
-  params.timePreference = departure.timePreference;
-  params.duration = duration;
-  return this.axios.get(`/isochronreachablewaypoints?${params}`);
+ItinevertService.prototype.getIsochronesReachableWaypoints = function (query, departure, duration, from) {
+  let newQuery = { ...query };
+
+  // Format datetime for Navitia API
+  const originalDateTime = new Date(`${departure.selectedDate}T${departure.selectedTime}:00`);
+  const adjustedDateTime = new Date(originalDateTime);
+
+  const year = adjustedDateTime.getFullYear();
+  const month = String(adjustedDateTime.getMonth() + 1).padStart(2, '0');
+  const day = String(adjustedDateTime.getDate()).padStart(2, '0');
+  const hours = String(adjustedDateTime.getHours()).padStart(2, '0');
+  const minutes = String(adjustedDateTime.getMinutes()).padStart(2, '0');
+
+  const dateTimeFormat = `${year}${month}${day}T${hours}${minutes}00`;
+  const dateTimeRepresents = departure.timePreference === 'arrive-before' ? 'arrival' : 'departure';
+
+  newQuery.datetime = dateTimeFormat;
+  newQuery.datetime_represents = dateTimeRepresents;
+  newQuery.from = navitiaService.formatCoordinates(from.geometry.coordinates);
+  newQuery.boundary_duration = [duration * 60]; // (minutes to second)
+
+  const params = new URLSearchParams(newQuery).toString();
+  return this.axios.get(`/navitia/isochronesreachablewaypoints?${params}`);
 };
 
 /**
@@ -334,5 +407,37 @@ ItinevertService.prototype.isFieldValueDefault = function (fieldValue, field) {
   // General compare for strings
   return initialVal === fieldValue;
 };
+
+function collectPairs(node, out) {
+  if (!node) return;
+  if (Array.isArray(node) && node.length >= 2 && typeof node[0] === 'number' && typeof node[1] === 'number') {
+    out.push([node[0], node[1]]);
+    return;
+  }
+  if (Array.isArray(node)) {
+    for (const child of node) collectPairs(child, out);
+  }
+}
+
+export function createBboxString(nestedCoords) {
+  const pairs = [];
+  collectPairs(nestedCoords, pairs);
+  if (pairs.length === 0) return null;
+
+  let minX = Infinity,
+    minY = Infinity,
+    maxX = -Infinity,
+    maxY = -Infinity;
+
+  for (const [lon, lat] of pairs) {
+    const [x, y] = ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
+    if (x < minX) minX = x;
+    if (x > maxX) maxX = x;
+    if (y < minY) minY = y;
+    if (y > maxY) maxY = y;
+  }
+
+  return `${minX},${minY},${maxX},${maxY}`;
+}
 
 export default new ItinevertService();
