@@ -115,7 +115,7 @@
           </button>
         </div>
         <!-- LIST OF FILTERS WHEN TOO MUCH ROUTE -->
-        <div class="centered" v-if="view === 'filter'">
+        <div class="centered filter-view" v-if="view === 'filter'">
           <div class="filter-header-section">
             <p class="too-much-route-label">Votre recherche concerne un nombre d'itinéraires trop important.</p>
             <p>
@@ -189,7 +189,7 @@
           ></itinevert-result-view>
         </div>
         <!-- LOADING VIEW -->
-        <div class="loading-wrapper" v-if="view === 'loading'">
+        <div class="centered loading-wrapper" v-if="view === 'loading'">
           <div class="loading-box">
             <div class="spinner"></div>
             <p class="loading-text">Chargement en cours</p>
@@ -635,24 +635,24 @@ export default {
 
 <style scoped lang="scss">
 .centered {
-  margin-left: auto;
-  margin-right: auto;
-  width: fit-content;
+  margin: auto;
+  min-height: 80vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 24px;
   width: 60%;
 }
 
-.centered > .form-input:first-child {
-  padding-top: 15%;
+.filter-view {
+  padding-top: 16px;
+  justify-content: flex-start !important;
 }
 
 .searchButton {
   font-weight: bold;
   width: 40%;
   margin-top: 5%;
-  margin-bottom: 15%;
   .search-icon {
     padding-right: 1rem;
   }
@@ -760,14 +760,13 @@ export default {
 }
 
 .banner-img {
-  width: 100%;
   height: 100%;
+  width: 100%;
   margin-left: auto;
   background-image: url('https://capdata.centre-valdeloire.fr/apps/media/sites/capdata-v2/Accueil/header_home.svg');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  min-height: 70vh;
 }
 
 .above-max-route {
@@ -948,12 +947,7 @@ export default {
 
 /* fills the entire parent container */
 .loading-wrapper {
-  width: 100%;
-  height: 100%;
-  min-height: 100%;
-  display: flex;
   align-items: center;
-  justify-content: center;
   box-sizing: border-box;
 }
 
