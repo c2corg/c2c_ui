@@ -28,7 +28,7 @@
     "@fortawesome/vue-fontawesome": "2.0.10",
     "@turf/boolean-intersects": "7.3.0",
     "@turf/buffer": "7.3.0",
-    "@turf/difference": "7.3.0",
+    "@turf/difference": "7.3.1",
     "@turf/intersect": "7.3.0",
     "@turf/simplify": "7.3.0",
     "ag-grid-community": "28.2.1",
