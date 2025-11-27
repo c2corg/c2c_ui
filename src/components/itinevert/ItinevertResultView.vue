@@ -17,8 +17,6 @@
           />
         </span>
         <span class="is-pulled-right is-flex header-right" v-if="documentType != 'profile'">
-          <load-user-preferences-button class="is-hidden-mobile" />
-
           <span @click="toogleProperty('listMode')" class="header-item is-size-3 has-cursor-pointer is-hidden-mobile">
             <fa-icon
               v-show="displayMode !== 'map'"
@@ -51,7 +49,12 @@
           </template>
         </span>
       </div>
-      <query-items class="filter-section" :list-mode="listMode" :doc-type="documentType"></query-items>
+      <query-items
+        class="filter-section"
+        :list-mode="listMode"
+        :doc-type="documentType"
+        :show-print-button="false"
+      ></query-items>
     </div>
     <div class="columns result-section" :class="['mobile-mode-' + displayMode, { 'query-has-tags': queryHasTags }]">
       <div
@@ -112,7 +115,6 @@
 
 <script>
 import DisplayModeSwitch from '../../views/documents/utils/DisplayModeSwitch';
-import LoadUserPreferencesButton from '../../views/documents/utils/LoadUserPreferencesButton';
 
 import ItinevertPageSelector from './ItinevertPageSelector.vue';
 
@@ -130,7 +132,6 @@ export default {
     ItinevertPageSelector,
     DocumentsTable,
     DisplayModeSwitch,
-    LoadUserPreferencesButton,
   },
 
   props: {

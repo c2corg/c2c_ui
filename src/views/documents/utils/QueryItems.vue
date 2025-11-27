@@ -65,7 +65,7 @@
       <div class="is-hidden-mobile" style="display: inline">
         <load-user-preferences-button class="is-hidden-tablet query-item-component" />
         <export-csv-button v-if="listMode" class="is-small-mobile query-item-component"></export-csv-button>
-        <print-button />
+        <print-button v-show="showPrintButton" />
         <div class="query-items-tags">
           <query-tags :documents="tags" @remove="removeTag"></query-tags>
         </div>
@@ -76,7 +76,7 @@
         </span>
         <div class="dropdown-items is-flex is-flex-direction-column">
           <load-user-preferences-button display="dropdown" />
-          <print-button display="dropdown" />
+          <print-button display="dropdown" v-show="showPrintButton" />
         </div>
       </dropdown-button>
     </div>
@@ -136,6 +136,10 @@ export default {
     listMode: {
       type: Boolean,
       default: false,
+    },
+    showPrintButton: {
+      type: Boolean,
+      default: true,
     },
   },
 
