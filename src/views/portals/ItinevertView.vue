@@ -8,9 +8,13 @@
           Change your approach: plan your public transport outing
         </span>
         <div class="title is-4" v-if="canStartAgain">
-          <button class="start-again-button button" @click="() => changeView('form')">
+          <button
+            class="start-again-button button"
+            @click="() => changeView('form')"
+            data-tooltip="Les critères actuels seront conservés."
+          >
             <fa-icon class="back-icon" icon="arrow-left" aria-hidden="true" />
-            <span>Recommencer une recherche</span>
+            <span> Recommencer une recherche </span>
           </button>
         </div>
         <fa-icon
@@ -170,6 +174,41 @@ export default {
 .start-again-button {
   font-weight: bold;
   border: 1px solid black;
+}
+
+[data-tooltip] {
+  position: relative;
+  cursor: help;
+  text-decoration: underline;
+
+  &:hover::before {
+    transform: translate(0);
+    opacity: 1;
+  }
+
+  &::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    width: 250px;
+    font-size: 12px;
+    display: block;
+    background: #fff;
+    padding: 10px;
+    top: -50px;
+    box-shadow: 0px 2px 5px #0000008c;
+    border-radius: 3px;
+    text-align: center;
+    left: 0;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: normal;
+    word-wrap: break-word;
+    top: 150%;
+    transform: translateY(-10px);
+  }
 }
 
 .back-icon {
