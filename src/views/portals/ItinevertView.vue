@@ -178,8 +178,6 @@ export default {
 
 [data-tooltip] {
   position: relative;
-  cursor: help;
-  text-decoration: underline;
 
   &:hover::before {
     transform: translate(0);

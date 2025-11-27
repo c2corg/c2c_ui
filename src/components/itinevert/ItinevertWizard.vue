@@ -188,6 +188,13 @@
             :polygon-geometry="polygonGeometry"
           ></itinevert-result-view>
         </div>
+        <!-- LOADING VIEW -->
+        <div class="loading-wrapper" v-if="view === 'loading'">
+          <div class="loading-box">
+            <div class="spinner"></div>
+            <p class="loading-text">Chargement en cours</p>
+          </div>
+        </div>
       </div>
       <div class="column is-3" v-if="view !== 'result'">
         <div class="banner-img"></div>
@@ -535,6 +542,7 @@ export default {
       this.baseQuery = query;
     },
     async computeJourneyReachableRoutes() {
+      this.$emit('change-view', 'loading');
       this.buildQuery();
       this.filteredRoutes = (
         await itinevertService.getJourneyReachableRoutes(
@@ -559,6 +567,7 @@ export default {
         }
         // using Isochrones API
         else if (this.formData.destinationKind.selected === 'duration') {
+          this.$emit('change-view', 'loading');
           let data = (
             await itinevertService.getIsochronesReachableRoutes(
               this.baseQuery,
@@ -584,6 +593,7 @@ export default {
 
       // compute filter for waypoints
       if (this.formData.searchKind.selected === 'waypoint') {
+        this.$emit('change-view', 'loading');
         // using Journey API
         if (this.formData.destinationKind.selected === 'mountain range') {
           this.filteredWaypoints = (
@@ -933,6 +943,53 @@ export default {
   100% {
     box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
     border-color: rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* fills the entire parent container */
+.loading-wrapper {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* centered box */
+.loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  background: #fff;
+  padding: 24px 30px;
+  min-width: 220px;
+}
+
+/* larger spinner with smooth animation */
+.spinner {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 6px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #ff9933;
+  animation: spin 0.8s linear infinite;
+  box-sizing: border-box;
+}
+
+.loading-text {
+  margin: 0;
+  color: #4a4a4a;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>
