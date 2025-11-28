@@ -109,15 +109,18 @@
               </div>
             </div>
           </div>
-          <button class="button is-primary searchButton" :disabled="!isSearchEnabled()" @click="search">
-            <fa-icon class="search-icon" icon="search" aria-hidden="true" />
-            {{ $gettext('Search') }}
-          </button>
+          <div class="searchButton">
+            <button class="button is-primary" :disabled="!isSearchEnabled()" @click="search">
+              <fa-icon class="search-icon" icon="search" aria-hidden="true" />
+              {{ $gettext('Search') }}
+            </button>
+            <span class="no-result-found" v-show="noResultsFound" v-translate>No result found</span>
+          </div>
         </div>
         <!-- LIST OF FILTERS WHEN TOO MUCH ROUTE -->
         <div class="centered filter-view" v-if="view === 'filter'">
           <div class="filter-header-section">
-            <p class="too-much-route-label" v-translate>Your search includes too many routes</p>
+            <p class="too-much-route-label" v-translate>Your search includes too many routes.</p>
             <p v-translate>Help us better target routes that may interest you by adding one or more filters.</p>
           </div>
           <div class="filter-button-dropdown">
@@ -176,7 +179,7 @@
           </div>
         </div>
         <!-- RESULT VIEW -->
-        <div class="" v-if="view === 'result'">
+        <div class="" v-if="view === 'result' && !noResultsFound">
           <itinevert-result-view
             :fields="categorizedFields"
             :base-query="baseQuery"
@@ -184,6 +187,14 @@
             :document-type="formData.searchKind.selected"
             :polygon-geometry="polygonGeometry"
           ></itinevert-result-view>
+        </div>
+        <!-- NO RESULTS FOUND VIEW -->
+        <div class="centered" v-if="view === 'result' && noResultsFound">
+          <div class="no-result-view">
+            <fa-icon :icon="['far', 'face-frown']" size="2xl" aria-hidden="true" />
+            <span class="no-result-view-title" v-translate>No result found</span>
+            <span class="no-result-view-description" v-translate>We can't find any item matching your search.</span>
+          </div>
         </div>
         <!-- LOADING VIEW -->
         <div class="centered loading-wrapper" v-if="view === 'loading'">
@@ -193,7 +204,7 @@
           </div>
         </div>
       </div>
-      <div class="column is-3" v-if="view !== 'result'">
+      <div class="column is-3" v-if="view !== 'result' || noResultsFound">
         <div class="banner-img"></div>
       </div>
     </div>
@@ -299,6 +310,15 @@ export default {
   },
 
   computed: {
+    noResultsFound() {
+      if (this.formData?.searchKind?.selected === 'route') {
+        return this.filteredRoutes?.documents?.length === 0;
+      } else if (this.formData?.searchKind?.selected === 'waypoint') {
+        return this.filteredWaypoints?.documents?.length === 0;
+      } else {
+        return false;
+      }
+    },
     maxTripDuration() {
       return MAX_TRIP_DURATION;
     },
@@ -377,15 +397,19 @@ export default {
         if (newVal === 'form') {
           // erase stored values
           this.categorizedFields = [];
+          this.filteredRoutes = {};
+          this.filteredWaypoints = {};
           // recompute based on formData activities
           if (this.searchKind?.selected === 'route') {
             this.categorizedFields = this.computeCategorizedFields(this.formData.activities);
           }
-          // reset url parameters
-          this.$router.replace({
-            path: this.$route.path,
-            query: {},
-          });
+          if (Object.keys(this.$router.currentRoute.query)?.length > 0) {
+            // reset url parameters
+            this.$router.replace({
+              path: this.$route.path,
+              query: {},
+            });
+          }
         } else if (newVal === 'result') {
           this.categorizedFields = [];
           this.categorizedFields = this.computeCategorizedFields([]);
@@ -554,9 +578,20 @@ export default {
       if (this.formData.searchKind.selected === 'route') {
         // using Journey API
         if (this.formData.destinationKind.selected === 'mountain range') {
+          // save if view is form before loading
+          let isViewForm = false;
+          if (this.view === 'form') {
+            isViewForm = true;
+            this.$emit('change-view', 'loading');
+          }
           this.filteredRoutes = (await itinevertService.getReachableRoutes(this.baseQuery)).data;
           if (this.filteredRoutes.total > MAX_ROUTE_THRESHOLD) {
             this.$emit('change-view', 'filter');
+          } else {
+            // go straight to result, skipping filter screen since < MAX_ROUTE_THRESHOLD
+            if (isViewForm) {
+              this.$emit('change-view', 'result');
+            }
           }
         }
         // using Isochrones API
@@ -644,9 +679,14 @@ export default {
 }
 
 .searchButton {
+  display: flex;
   font-weight: bold;
-  width: 40%;
   margin-top: 5%;
+  align-items: center;
+  gap: 16px;
+  .button {
+    width: 40%;
+  }
   .search-icon {
     padding-right: 1rem;
   }
@@ -675,8 +715,10 @@ export default {
   }
 
   .select-date-container {
+    width: 100%;
     display: flex;
     gap: 15px;
+    flex-wrap: wrap;
     .date-picker-container {
       width: 100%;
       max-width: 150px;
@@ -897,6 +939,7 @@ export default {
 .filter-button-dropdown {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 /* green pulse */
@@ -979,5 +1022,31 @@ export default {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.no-result-found {
+  color: red;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.no-result-view {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-result-view-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.no-result-view-description {
+  color: #7b7b7b;
+  font-size: 14px;
+  margin-bottom: 20px;
 }
 </style>
