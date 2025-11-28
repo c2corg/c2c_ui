@@ -11,10 +11,10 @@
           <button
             class="start-again-button button"
             @click="() => changeView('form')"
-            data-tooltip="Les critères actuels seront conservés."
+            :data-tooltip="$gettext('The current criteria will be retained')"
           >
             <fa-icon class="back-icon" icon="arrow-left" aria-hidden="true" />
-            <span> Recommencer une recherche </span>
+            <span v-translate>Start a search again</span>
           </button>
         </div>
         <fa-icon

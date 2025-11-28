@@ -6,7 +6,7 @@
         <div class="centered" v-if="view === 'form'">
           <!-- input for searchKind (route / waypoint) -->
           <div class="form-input">
-            <p class="input-label">Vous recherchez des _____ accessibles en transports en commun</p>
+            <p class="input-label" v-translate>You are looking for ____ accessible by public transport</p>
             <input-radio-button
               v-model="formData.searchKind.selected"
               :options="formData.searchKind.options"
@@ -16,12 +16,12 @@
           </div>
           <div v-if="formData.searchKind.selected === 'route'" class="form-input">
             <!-- input for activities (only for routes) -->
-            <p class="input-label">Quel(s) activité(s) souhaitez-vous pratiquer ?</p>
+            <p class="input-label" v-translate>What activity(ies) would you like to do?</p>
             <input-activity :document-type="'r'" :show-labels="false" v-model="formData.activities"></input-activity>
           </div>
           <div class="form-input">
             <!-- input for starting point -->
-            <p class="input-label">Quel est votre point de départ ?</p>
+            <p class="input-label" v-translate>What is your starting point?</p>
             <input-address
               :fullwidth="true"
               :placeholder="''"
@@ -32,7 +32,7 @@
           </div>
           <div class="form-input">
             <!-- input for destination kind -->
-            <p class="input-label">Pour définir votre destination, choisissez l'une de ces 2 approches</p>
+            <p class="input-label" v-translate>To define your destination, choose one of these 2 approaches</p>
             <input-radio-button
               v-model="formData.destinationKind.selected"
               :options="formData.destinationKind.options"
@@ -45,7 +45,7 @@
           </div>
           <div v-if="formData.destinationKind.selected === 'mountain range'" class="form-input">
             <!-- input for destination by 'mountain range' -->
-            <p class="input-label">Choix du massif</p>
+            <p class="input-label" v-translate>Choice of massif</p>
             <input-autocomplete
               :fullwidth="true"
               :placeholder="''"
@@ -58,7 +58,7 @@
           </div>
           <div v-if="formData.destinationKind.selected === 'duration'" class="form-input">
             <!-- input for destination by 'duration' -->
-            <p class="input-label">Définissez une durée maximum pour le trajet en transport en commun</p>
+            <p class="input-label" v-translate>Set a maximum duration for the journey by public transport</p>
             <span>
               <input
                 type="number"
@@ -69,12 +69,12 @@
                 :step="tripDurationIncrement"
                 @blur="formatTripDuration"
               />
-              minutes
+              {{ $gettext('minutes') }}
             </span>
           </div>
           <div class="form-input">
             <!-- input for date and time of departure -->
-            <p class="input-label">À quelle date et heure souhaitez-vous partir ?</p>
+            <p class="input-label" v-translate>What date and time would you like to leave?</p>
             <div class="select-date-container">
               <div class="date-picker-container">
                 <label for="date-input">{{ $gettext('Date') }}</label>
@@ -117,10 +117,8 @@
         <!-- LIST OF FILTERS WHEN TOO MUCH ROUTE -->
         <div class="centered filter-view" v-if="view === 'filter'">
           <div class="filter-header-section">
-            <p class="too-much-route-label">Votre recherche concerne un nombre d'itinéraires trop important.</p>
-            <p>
-              Aidez-nous à mieux cibler les itinéraires pouvant vous intéresser en ajoutant un ou plusieurs filtres.
-            </p>
+            <p class="too-much-route-label" v-translate>Your search includes too many routes</p>
+            <p v-translate>Help us better target routes that may interest you by adding one or more filters.</p>
           </div>
           <div class="filter-button-dropdown">
             <dropdown-button
@@ -166,15 +164,14 @@
             </p>
           </div>
           <div class="filter-buttons">
-            <button class="button is-primary" :disabled="!isSearchEnabled()" @click="search">
-              Appliquer les filtres
-            </button>
+            <button class="button is-primary" :disabled="!isSearchEnabled()" @click="search">Apply filters</button>
             <button
               class="button is-primary"
               @click="() => computeJourneyReachableRoutes()"
               :disabled="!canDisplayResult"
+              v-translate
             >
-              Afficher les résultats
+              Show results
             </button>
           </div>
         </div>
@@ -192,7 +189,7 @@
         <div class="centered loading-wrapper" v-if="view === 'loading'">
           <div class="loading-box">
             <div class="spinner"></div>
-            <p class="loading-text">Chargement en cours</p>
+            <p class="loading-text">Loading</p>
           </div>
         </div>
       </div>
@@ -254,8 +251,8 @@ export default {
           selected: 'route',
           default: 'route',
           options: [
-            { value: 'route', text: 'Itinéraires' },
-            { value: 'waypoint', text: "Points d'accès" },
+            { value: 'route', text: this.$gettext('Routes') },
+            { value: 'waypoint', text: this.$gettext('Access points') },
           ],
         },
         activities: [],
@@ -268,11 +265,11 @@ export default {
           options: [
             {
               value: 'mountain range',
-              text: 'Définir le massif dans lequel je souhaite me rendre en transport en commun',
+              text: this.$gettext('Define the mountain range I wish to travel to by public transport'),
             },
             {
               value: 'duration',
-              text: 'Définir une durée maximum pour le trajet en transport en commun',
+              text: this.$gettext('Set a maximum duration for the journey by public transport'),
             },
           ],
           disabledOptions: [],
@@ -315,7 +312,7 @@ export default {
       return this.filteredRoutes.total;
     },
     routeCountMax() {
-      return ' / ' + MAX_ROUTE_THRESHOLD + ' itinéraires';
+      return ' / ' + MAX_ROUTE_THRESHOLD + ' ' + this.$gettext('routes');
     },
     canDisplayResult() {
       return this.filteredRoutes.total <= MAX_ROUTE_THRESHOLD && this.filteredRoutes.total !== 0;
@@ -423,7 +420,7 @@ export default {
     if (MAX_NAVITIA_ISOCHRONES_REQUEST_REACHED) {
       this.formData.destinationKind.disabledOptions.push({
         value: 'duration',
-        reason: 'Fonctionnalité temporairement indisponible',
+        reason: this.$gettext('Feature temporarily unavailable'),
       });
     }
   },
@@ -487,9 +484,6 @@ export default {
     onAnimEnd(e) {
       if (e.animationName === 'borderPulseRed') this.highlightedRed = false;
       if (e.animationName === 'borderPulseGreen') this.highlightedGreen = false;
-    },
-    gettext(key, context) {
-      return this.$gettext(key, context);
     },
     // callback passed to input address
     updateStartingPointAddress(selectedAddress) {
