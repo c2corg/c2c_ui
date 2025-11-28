@@ -757,7 +757,7 @@ export default {
   height: 100%;
   width: 100%;
   margin-left: auto;
-  background-image: url('https://capdata.centre-valdeloire.fr/apps/media/sites/capdata-v2/Accueil/header_home.svg');
+  background-image: url('../../assets/img/itinevert/itinevert-banner.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

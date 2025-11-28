@@ -26,7 +26,11 @@
           <div class="column is-12-mobile">
             <p class="petzl-header" v-translate>This device is supported by the Petzl Foundation</p>
             <router-link :to="{ name: '/' }" class="menu-brand has-text-centered">
-              <img src="@/assets/img/logo_asso.svg" alt="Fondation Petzl" class="logo-fondation-petzl" />
+              <img
+                src="@/assets/img/yeti/logo-fondation-petzl.jpg"
+                alt="Fondation Petzl"
+                class="logo-fondation-petzl"
+              />
             </router-link>
           </div>
         </div>
