@@ -9,12 +9,13 @@
         </span>
         <div class="title is-4" v-if="canStartAgain">
           <button
-            class="start-again-button button"
+            class="start-again-button button tooltip-container"
+            data-tooltip="left"
             @click="() => changeView('form')"
-            :data-tooltip="$gettext('The current criteria will be retained')"
           >
-            <fa-icon class="back-icon" icon="arrow-left" aria-hidden="true" />
+            <fa-icon class="back-icon" icon="arrow-left" aria-hidden="true"></fa-icon>
             <span v-translate>Start a search again</span>
+            <span class="tooltip" v-translate>The current criteria will be retained</span>
           </button>
         </div>
         <fa-icon
@@ -176,37 +177,46 @@ export default {
   border: 1px solid black;
 }
 
-[data-tooltip] {
+.tooltip-container {
   position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
 
-  &:hover::before {
-    transform: translate(0);
-    opacity: 1;
-  }
+/* base tooltip */
+.tooltip {
+  position: absolute;
+  opacity: 0;
+  transition: 0.2s;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+}
 
-  &::before {
-    content: attr(data-tooltip);
-    position: absolute;
-    width: 250px;
-    font-size: 12px;
-    display: block;
-    background: #fff;
-    padding: 10px;
-    top: -50px;
-    box-shadow: 0px 2px 5px #0000008c;
-    border-radius: 3px;
-    text-align: center;
-    left: 0;
-    z-index: 1;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(20px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    white-space: normal;
-    word-wrap: break-word;
-    top: 150%;
-    transform: translateY(-10px);
-  }
+/* show on hover */
+.tooltip-container:hover .tooltip {
+  opacity: 1;
+}
+
+/* LEFT position */
+[data-tooltip='left'] .tooltip {
+  top: 50%;
+  right: calc(100% + 8px);
+  transform: translateY(-50%);
+}
+
+[data-tooltip='left'] .tooltip::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  border-left: 6px solid rgba(0, 0, 0, 0.8);
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
 }
 
 .back-icon {
