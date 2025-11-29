@@ -1,17 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="31" height="30" viewBox="0 0 31 30">
-  <g id="Groupe_69" data-name="Groupe 69" transform="translate(-1117 -3718)">
-    <g id="Groupe_66" data-name="Groupe 66" transform="translate(31 -12)">
-      <g id="Rectangle_697" data-name="Rectangle 697" transform="translate(1086 3733)" fill="#337ab7" stroke="#337ab7" stroke-width="1.5">
-        <rect width="28" height="27" rx="3" stroke="none"/>
-        <rect x="0.75" y="0.75" width="26.5" height="25.5" rx="2.25" fill="none"/>
-      </g>
-      <g id="Rectangle_696" data-name="Rectangle 696" transform="translate(1089 3730)" fill="#fff" stroke="#337ab7" stroke-width="1.5">
-        <rect width="28" height="28" rx="3" stroke="none"/>
-        <rect x="0.75" y="0.75" width="26.5" height="26.5" rx="2.25" fill="none"/>
-      </g>
-    </g>
-    <g id="Groupe_68" data-name="Groupe 68" transform="translate(1126.266 3730.32)">
-      <path id="Tracé_1816" data-name="Tracé 1816" d="M1.5,0H13.8a1.609,1.609,0,0,1,1.521,1.666A1.616,1.616,0,0,1,13.8,3.356H1.5A1.613,1.613,0,0,1,0,1.666,1.606,1.606,0,0,1,1.5,0Z" fill="#337ab7" fill-rule="evenodd"/>
-    </g>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="31" height="30" viewBox="0 0 31 30"><g id="Groupe_69" data-name="Groupe 69" transform="translate(-1117 -3718)"><g id="Groupe_66" data-name="Groupe 66" transform="translate(31 -12)"><g id="Rectangle_697" fill="#337ab7" stroke="#337ab7" stroke-width="1.5" data-name="Rectangle 697" transform="translate(1086 3733)"><rect width="28" height="27" stroke="none" rx="3"/><rect width="26.5" height="25.5" x=".75" y=".75" fill="none" rx="2.25"/></g><g id="Rectangle_696" fill="#fff" stroke="#337ab7" stroke-width="1.5" data-name="Rectangle 696" transform="translate(1089 3730)"><rect width="28" height="28" stroke="none" rx="3"/><rect width="26.5" height="26.5" x=".75" y=".75" fill="none" rx="2.25"/></g></g><g id="Groupe_68" data-name="Groupe 68" transform="translate(1126.266 3730.32)"><path id="Tracé_1816" fill="#337ab7" fill-rule="evenodd" d="M1.5,0H13.8a1.609,1.609,0,0,1,1.521,1.666A1.616,1.616,0,0,1,13.8,3.356H1.5A1.613,1.613,0,0,1,0,1.666,1.606,1.606,0,0,1,1.5,0Z" data-name="Tracé 1816"/></g></g></svg>
