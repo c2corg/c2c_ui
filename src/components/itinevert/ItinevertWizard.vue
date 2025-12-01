@@ -45,7 +45,7 @@
           </div>
           <div v-if="formData.destinationKind.selected === 'mountain range'" class="form-input">
             <!-- input for destination by 'mountain range' -->
-            <p class="input-label" v-translate>Choice of massif</p>
+            <p class="input-label" v-translate>{{ $gettext('Choice of massif') }}</p>
             <input-autocomplete
               :fullwidth="true"
               :placeholder="''"
@@ -58,7 +58,11 @@
           </div>
           <div v-if="formData.destinationKind.selected === 'duration'" class="form-input">
             <!-- input for destination by 'duration' -->
-            <p class="input-label" v-translate>Set a maximum duration for the journey by public transport</p>
+            <div>
+              <p class="input-label" v-translate>
+                {{ $gettext('Set a maximum duration for the journey by public transport') }}
+              </p>
+            </div>
             <span>
               <input
                 type="number"
@@ -400,7 +404,7 @@ export default {
           this.filteredRoutes = {};
           this.filteredWaypoints = {};
           // recompute based on formData activities
-          if (this.searchKind?.selected === 'route') {
+          if (this.formData.searchKind?.selected === 'route') {
             this.categorizedFields = this.computeCategorizedFields(this.formData.activities);
           }
           if (Object.keys(this.$router.currentRoute.query)?.length > 0) {
