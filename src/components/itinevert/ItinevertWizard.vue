@@ -6,7 +6,9 @@
         <div class="centered" v-if="view === 'form'">
           <!-- input for searchKind (route / waypoint) -->
           <div class="form-input">
-            <p class="input-label" v-translate>You are looking for ____ accessible by public transport</p>
+            <p class="input-label">
+              {{ $gettext('You are looking for ____ accessible by public transport') }}
+            </p>
             <input-radio-button
               v-model="formData.searchKind.selected"
               :options="formData.searchKind.options"
@@ -45,7 +47,7 @@
           </div>
           <div v-if="formData.destinationKind.selected === 'mountain range'" class="form-input">
             <!-- input for destination by 'mountain range' -->
-            <p class="input-label" v-translate>{{ $gettext('Choice of massif') }}</p>
+            <p class="input-label">{{ $gettext('Choice of massif') }}</p>
             <input-autocomplete
               :fullwidth="true"
               :placeholder="''"
@@ -59,7 +61,7 @@
           <div v-if="formData.destinationKind.selected === 'duration'" class="form-input">
             <!-- input for destination by 'duration' -->
             <div>
-              <p class="input-label" v-translate>
+              <p class="input-label">
                 {{ $gettext('Set a maximum duration for the journey by public transport') }}
               </p>
             </div>
@@ -171,14 +173,15 @@
             </p>
           </div>
           <div class="filter-buttons">
-            <button class="button is-primary" :disabled="!isSearchEnabled()" @click="search">Apply filters</button>
+            <button class="button is-primary" :disabled="!isSearchEnabled()" @click="search">
+              <span v-translate>Apply filters</span>
+            </button>
             <button
               class="button is-primary"
               @click="() => computeJourneyReachableRoutes()"
               :disabled="!canDisplayResult"
-              v-translate
             >
-              Show results
+              <span v-translate>Show results</span>
             </button>
           </div>
         </div>
@@ -197,14 +200,14 @@
           <div class="no-result-view">
             <fa-icon :icon="['far', 'face-frown']" size="2xl" aria-hidden="true" />
             <span class="no-result-view-title" v-translate>No result found</span>
-            <span class="no-result-view-description" v-translate>We can't find any item matching your search.</span>
+            <span class="no-result-view-description" v-translate>We can't find any results matching your search.</span>
           </div>
         </div>
         <!-- LOADING VIEW -->
         <div class="centered loading-wrapper" v-if="view === 'loading'">
           <div class="loading-box">
             <div class="spinner"></div>
-            <p class="loading-text">Loading</p>
+            <p class="loading-text">{{ $gettext('Loading...') }}</p>
           </div>
         </div>
       </div>
@@ -266,7 +269,7 @@ export default {
           selected: 'route',
           default: 'route',
           options: [
-            { value: 'route', text: this.$gettext('Routes') },
+            { value: 'route', text: this.$gettext('Route') + 's' },
             { value: 'waypoint', text: this.$gettext('Access points') },
           ],
         },
