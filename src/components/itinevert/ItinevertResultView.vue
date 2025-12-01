@@ -179,7 +179,7 @@ export default {
 
       lastQuery: {},
 
-      promise: { data: this.documents },
+      promise: {},
     };
   },
 
@@ -239,6 +239,11 @@ export default {
       documents: this.documents.documents.slice(this.offset, this.offset + this.limit),
       total: this.documents.total,
     };
+    this.promise = {
+      data: this.filteredDocuments,
+      error: null,
+      cancel: () => {},
+    };
   },
   methods: {
     toogleProperty(property) {
@@ -276,6 +281,23 @@ export default {
       };
     },
     async filterPostNavitiaDocuments(newQuery) {
+      let paginateDoc = () => {
+        this.filteredDocuments.total = this.filteredDocuments.documents.length;
+
+        this.filteredDocumentsBeforePagination = this.filteredDocuments;
+
+        // whenever a filter is applied, check if offset is < then total
+        if (this.offset > this.filteredDocuments.total) {
+          this.offset = Math.max(this.filteredDocuments.total - this.limit, 0);
+        }
+
+        // apply pagination
+        this.filteredDocuments = {
+          documents: this.filteredDocuments.documents.slice(this.offset, this.offset + this.limit),
+          total: this.filteredDocuments.total,
+        };
+      };
+
       // remove undefined values
       newQuery = Object.fromEntries(Object.entries(newQuery).filter(([key, value]) => value));
 
@@ -284,48 +306,58 @@ export default {
 
       // check that query is different from base query
       if (Object.keys(newQuery).length > 1) {
-        if (this.documentType === 'route') {
-          let oldRoutesID = this.documents.documents.map((doc) => doc.document_id);
-          this.filteredDocuments.documents = [];
-          this.promise = {};
-          let newRoutes = await itinevertService.getAllReachableRoutes(query);
-          this.promise = { data: newRoutes };
-          for (const newRoute of newRoutes) {
-            if (oldRoutesID.includes(newRoute.document_id)) {
-              this.filteredDocuments.documents.push(newRoute);
+        // Select API function based on document type
+        const functionToFetch =
+          this.documentType === 'route'
+            ? itinevertService.getAllReachableRoutes
+            : itinevertService.getAllReachableWaypoints;
+
+        // get list of previous document IDs
+        const oldIds = this.documents.documents.map((doc) => doc.document_id);
+
+        // reset filtered list
+        this.filteredDocuments.documents = [];
+
+        // cancel ongoing promise
+        this.promise?.cancel?.();
+
+        // launch new API request
+        const p = functionToFetch.call(itinevertService, query);
+
+        // activate loader
+        this.promise = {
+          data: null,
+          error: null,
+          cancel: p.cancel,
+        };
+
+        p.then((data) => {
+          // fill loader data (hides loader)
+          this.promise.data = data;
+
+          // filter only matching old IDsw
+          for (const item of data) {
+            if (oldIds.includes(item.document_id)) {
+              this.filteredDocuments.documents.push(item);
             }
           }
-        } else if (this.documentType === 'waypoint') {
-          let oldWaypointsID = this.documents.documents.map((doc) => doc.document_id);
-          this.filteredDocuments.documents = [];
-          this.promise = {};
-          let newWaypoints = await itinevertService.getAllReachableWaypoints(query);
-          this.promise = { data: newWaypoints };
-          for (const newWaypoint of newWaypoints) {
-            if (oldWaypointsID.includes(newWaypoint.document_id)) {
-              this.filteredDocuments.documents.push(newWaypoint);
-            }
-          }
-        }
+
+          paginateDoc();
+        }).catch((err) => {
+          this.promise.error = err;
+        });
       } else {
-        // no filters set -> display all documents
-        this.filteredDocuments = { documents: this.documents.documents, total: this.documents.total };
+        // no filters set → display all documents
+        this.filteredDocuments = {
+          documents: this.documents.documents,
+          total: this.documents.total,
+        };
+        paginateDoc();
+        if (this.promise) {
+          this.promise.cancel();
+          this.promise.data = this.filteredDocuments;
+        }
       }
-
-      this.filteredDocuments.total = this.filteredDocuments.documents.length;
-
-      this.filteredDocumentsBeforePagination = this.filteredDocuments;
-
-      // whenever a filter is applied, check if offset is < then total
-      if (this.offset > this.filteredDocuments.total) {
-        this.offset = Math.max(this.filteredDocuments.total - this.limit, 0);
-      }
-
-      // apply pagination
-      this.filteredDocuments = {
-        documents: this.filteredDocuments.documents.slice(this.offset, this.offset + this.limit),
-        total: this.filteredDocuments.total,
-      };
     },
   },
 };
