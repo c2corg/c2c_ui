@@ -193,6 +193,54 @@ export default {
     tabs() {
       return Yetix.tabs;
     },
+    localTabs() {
+      let tabs = [];
+
+      // layer tab
+      let tabLayer = {
+        id: 'layer',
+        icon: 'layer-group',
+        title: this.$gettext('Layers'),
+      };
+      tabs.push(tabLayer);
+
+      // risk tab
+      let tabRisk = {
+        id: 'risk',
+        name: this.$gettext('Risk'),
+        icon: 'bolt',
+      };
+      tabs.push(tabRisk);
+
+      // route tab
+      let tabRoute = {
+        id: 'route',
+        name: this.$gettext('My outing'),
+        icon: 'route',
+      };
+      if (this.hasFeatures && !this.validSimplifyTolerance) {
+        tabRoute.counter = {
+          text: this.featuresLength,
+          title: this.$gettext('Route on map'),
+        };
+      }
+      if (this.validSimplifyTolerance) {
+        tabRoute.problemIcon = {
+          title: this.$gettext('Not simplified yet'),
+        };
+      }
+      tabs.push(tabRoute);
+
+      // meteo tab
+      let tabMeteo = {
+        id: 'meteo',
+        name: this.$gettext('Meteo'),
+        icon: 'sun',
+      };
+      tabs.push(tabMeteo);
+
+      return tabs;
+    },
     errors() {
       return {
         area: {
@@ -252,6 +300,13 @@ export default {
     'method.potentialDanger': 'check',
     mapZoom: 'check',
     areaOk: 'check',
+    localTabs: {
+      deep: true, // nested
+      immediate: true, // also when created
+      handler(tabs) {
+        Yetix.setTabs(tabs);
+      },
+    },
   },
 
   created() {
@@ -263,10 +318,6 @@ export default {
     Yetix.setDefault();
     // remove all previous events (navigating from other c2c pages)
     Yetix.$off();
-
-    // build tabs
-    let tabs = this.setTabs();
-    Yetix.setTabs(tabs);
   },
 
   mounted() {
@@ -274,54 +325,6 @@ export default {
   },
 
   methods: {
-    setTabs() {
-      let tabs = [];
-
-      // layer tab
-      let tabLayer = {
-        id: 'layer',
-        icon: 'layer-group',
-        title: this.$gettext('Layers'),
-      };
-      tabs.push(tabLayer);
-
-      // risk tab
-      let tabRisk = {
-        id: 'risk',
-        name: this.$gettext('Risk'),
-        icon: 'bolt',
-      };
-      tabs.push(tabRisk);
-
-      // route tab
-      let tabRoute = {
-        id: 'route',
-        name: this.$gettext('My outing'),
-        icon: 'route',
-      };
-      if (this.hasFeatures && !this.validSimplifyTolerance) {
-        tabRoute.counter = {
-          text: this.featuresLength,
-          title: this.$gettext('Route on map'),
-        };
-      }
-      if (this.validSimplifyTolerance) {
-        tabRoute.problemIcon = {
-          title: this.$gettext('Not simplified yet'),
-        };
-      }
-      tabs.push(tabRoute);
-
-      // meteo tab
-      let tabMeteo = {
-        id: 'meteo',
-        name: this.$gettext('Meteo'),
-        icon: 'sun',
-      };
-      tabs.push(tabMeteo);
-
-      return tabs;
-    },
     check() {
       if (!this.areaOk) {
         this.formError = 'area';

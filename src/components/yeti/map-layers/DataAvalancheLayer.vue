@@ -106,10 +106,12 @@ export default {
       this.overlay.date = null;
     },
     dateValid(date, days) {
-      return (new Date() - new Date(date)) / 1000 < 60 * 60 * 24 * days;
+      let todayString = this.$dateUtils.toLocalizedString(new Date(), 'YYYY-MM-DD');
+      return (new Date(todayString) - new Date(date)) / 1000 < 60 * 60 * 24 * days;
     },
     differenceDays(date) {
-      return Math.round((new Date() - new Date(date)) / 1000 / 60 / 60 / 24);
+      let todayString = this.$dateUtils.toLocalizedString(new Date(), 'YYYY-MM-DD');
+      return Math.round((new Date(todayString) - new Date(date)) / 1000 / 60 / 60 / 24);
     },
     onFeatures(features) {
       this.features = features;
