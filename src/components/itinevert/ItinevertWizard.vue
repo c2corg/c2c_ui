@@ -332,12 +332,14 @@ export default {
           }
         } else if (newVal === 'result') {
           this.categorizedFields = [];
-          this.categorizedFields = this.computeCategorizedFields([]);
-          // Initialize URL with document type
+          this.categorizedFields = this.computeCategorizedFields(this.formData.activities);
+          // build query based on active fields
+          let query = itinevertService.buildQuery(this.activeFields);
+          // Initialize URL with document type & activities
           if (this.$route.query.documentType !== this.formData.searchKind.selected) {
             this.$router.replace({
               path: this.$route.path,
-              query: { documentType: this.formData.searchKind.selected },
+              query: { documentType: this.formData.searchKind.selected, act: query.act },
             });
           }
         }

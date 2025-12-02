@@ -304,8 +304,49 @@ export default {
       let query = itinevertService.enhanceQuery(this.baseQuery, newQuery);
       this.lastQuery = query;
 
-      // check that query is different from base query
-      if (Object.keys(newQuery).length > 1) {
+      let needToQuery = false;
+      // working with routes
+      // the base query has activites choosen during form step
+      // there is no need to query if no extra filters are set
+      // extra filters being other filters (not act), or when you unselect a base activity
+      // if you add more activites than base, we do not query still, since this will never show more documents than all post navitia documents
+      if (this.baseQuery['act']) {
+        if (Object.keys(newQuery).length === 1) {
+          // no activities selected and no extra filters, so we display all documents
+          needToQuery = false;
+        } else if (Object.keys(newQuery).length > 2) {
+          needToQuery = true;
+        } else {
+          let newQueryAct = newQuery['act']?.split(',') ?? [];
+          let baseQueryAct = this.baseQuery['act']?.split(',') ?? [];
+
+          // check if all new activites match base activities
+          for (let index in baseQueryAct) {
+            if (!newQueryAct.includes(baseQueryAct[index])) {
+              needToQuery = true;
+            }
+          }
+        }
+      } else {
+        // working with waypoints
+        // the base query has no filters
+        // there is no need to query if no extra filters are set
+        needToQuery = Object.keys(newQuery).length !== 1; // (1 because documentType)
+      }
+
+      // if no need to query, we just display base documents
+      if (!needToQuery) {
+        // no filters set → display all documents
+        this.filteredDocuments = {
+          documents: this.documents.documents,
+          total: this.documents.total,
+        };
+        paginateDoc();
+        if (this.promise) {
+          this.promise.cancel();
+          this.promise.data = this.filteredDocuments;
+        }
+      } else {
         // Select API function based on document type
         const functionToFetch =
           this.documentType === 'route'
@@ -346,17 +387,6 @@ export default {
         }).catch((err) => {
           this.promise.error = err;
         });
-      } else {
-        // no filters set → display all documents
-        this.filteredDocuments = {
-          documents: this.documents.documents,
-          total: this.documents.total,
-        };
-        paginateDoc();
-        if (this.promise) {
-          this.promise.cancel();
-          this.promise.data = this.filteredDocuments;
-        }
       }
     },
   },
