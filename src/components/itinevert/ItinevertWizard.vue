@@ -124,69 +124,17 @@
           </div>
         </div>
         <!-- LIST OF FILTERS WHEN TOO MUCH ROUTE -->
-        <div class="centered filter-view" v-if="view === 'filter'">
-          <div class="filter-header-section">
-            <p class="too-much-route-label" v-translate>Your search includes too many routes.</p>
-            <p v-translate>Help us better target routes that may interest you by adding one or more filters.</p>
-          </div>
-          <div class="filter-button-dropdown">
-            <dropdown-button
-              v-for="(category, index) in categorizedFields"
-              :key="category.name"
-              :disabled="category.fields.length === 0"
-              class="query-item-component"
-            >
-              <span slot="button" class="button is-size-7-mobile" :disabled="category.fields.length === 0">
-                <fa-icon :icon="$options.categoryIcon[category.name]" />
-                <span class="is-hidden-mobile">
-                  <!-- $gettext('General') -->
-                  <!-- $gettext('ratings') -->
-                  <!-- $gettext('Terrain') -->
-                  <!-- $gettext('Miscs') -->
-                  &nbsp;{{ $gettext(category.name) }}
-                </span>
-                <span v-if="activeFields[index]?.length != 0"> &nbsp;({{ activeFields[index]?.length }}) </span>
-                <span>&nbsp;</span>
-                <fa-icon icon="angle-down" aria-hidden="true" />
-              </span>
-              <div class="sub-query-items">
-                <itinevert-filter-item
-                  v-for="field in category.fields || []"
-                  :key="field.field.name"
-                  :field="field.field"
-                  v-model="field.value"
-                  class="dropdown-item"
-                ></itinevert-filter-item>
-              </div>
-            </dropdown-button>
-          </div>
-          <div
-            class="routeCount"
-            :class="{ 'pulse-red': highlightedRed, 'pulse-green': highlightedGreen }"
-            @animationend="onAnimEnd"
-          >
-            <p>
-              <span :class="{ 'above-max-route': !canDisplayResult, 'under-max-route': canDisplayResult }">
-                {{ routeCount }}
-              </span>
-              {{ routeCountMax }}
-            </p>
-          </div>
-          <div class="filter-buttons">
-            <button class="button is-primary" :disabled="!isSearchEnabled()" @click="search">
-              <span v-translate>Apply filters</span>
-            </button>
-            <button
-              class="button is-primary"
-              @click="() => computeJourneyReachableRoutes()"
-              :disabled="!canDisplayResult"
-            >
-              <span v-translate>Show results</span>
-            </button>
-          </div>
-        </div>
+        <itinevert-filter-view
+          class="centered filter-view"
+          v-if="view === 'filter'"
+          :categorized-fields="categorizedFields"
+          :filtered-routes="filteredRoutes"
+          :is-search-enabled="isSearchEnabled()"
+          @search="search"
+          @computeJourneyReachableRoutes="computeJourneyReachableRoutes"
+        ></itinevert-filter-view>
         <!-- RESULT VIEW -->
-        <div class="" v-if="view === 'result' && !noResultsFound">
+        <div v-if="view === 'result' && !noResultsFound">
           <itinevert-result-view
             :fields="categorizedFields"
             :base-query="baseQuery"
@@ -196,20 +144,9 @@
           ></itinevert-result-view>
         </div>
         <!-- NO RESULTS FOUND VIEW -->
-        <div class="centered" v-if="view === 'result' && noResultsFound">
-          <div class="no-result-view">
-            <fa-icon :icon="['far', 'face-frown']" size="2xl" aria-hidden="true" />
-            <span class="no-result-view-title" v-translate>No result found</span>
-            <span class="no-result-view-description" v-translate>We can't find any results matching your search.</span>
-          </div>
-        </div>
+        <itinevert-no-result-view class="centered" v-show="view === 'result' && noResultsFound" />
         <!-- LOADING VIEW -->
-        <div class="centered loading-wrapper" v-if="view === 'loading'">
-          <div class="loading-box">
-            <div class="spinner"></div>
-            <p class="loading-text">{{ $gettext('Loading...') }}</p>
-          </div>
-        </div>
+        <itinevert-loading-view v-show="view === 'loading'"></itinevert-loading-view>
       </div>
       <div class="column is-3" v-if="view !== 'result' || noResultsFound">
         <div class="banner-img"></div>
@@ -219,10 +156,11 @@
 </template>
 
 <script>
-import DropdownButton from '../generics/DropdownButton.vue';
 import InputAutocomplete from '../generics/inputs/InputAutocomplete.vue';
 
-import ItinevertFilterItem from './ItinevertFilterItem.vue';
+import ItinevertFilterView from './ItinevertFilterView.vue';
+import ItinevertLoadingView from './ItinevertLoadingView.vue';
+import ItinevertNoResultView from './ItinevertNoResultView.vue';
 import ItinevertResultView from './ItinevertResultView.vue';
 
 import { default as c2c } from '@/js/apis/c2c';
@@ -241,10 +179,11 @@ import constants from '@/js/constants';
 export default {
   name: 'ItinevertWizard',
   components: {
-    ItinevertFilterItem,
+    ItinevertFilterView,
     ItinevertResultView,
+    ItinevertNoResultView,
+    ItinevertLoadingView,
     InputAutocomplete,
-    DropdownButton,
   },
   categoryIcon: {
     General: 'filter',
@@ -310,8 +249,6 @@ export default {
       categorizedFields: [],
       baseQuery: {},
       isUpdating: false, // flag to prevent infinite loops
-      highlightedRed: false,
-      highlightedGreen: false,
       polygonGeometry: null,
     };
   },
@@ -335,15 +272,6 @@ export default {
     tripDurationIncrement() {
       return TRIP_DURATION_INCREMENT;
     },
-    routeCount() {
-      return this.filteredRoutes.total;
-    },
-    routeCountMax() {
-      return ' / ' + MAX_ROUTE_THRESHOLD + ' ' + this.$gettext('routes');
-    },
-    canDisplayResult() {
-      return this.filteredRoutes.total <= MAX_ROUTE_THRESHOLD && this.filteredRoutes.total !== 0;
-    },
     activeFields() {
       return this.categorizedFields.map((category) =>
         category.fields.filter((field) => !itinevertService.isFieldValueDefault(field.value, field.field))
@@ -361,21 +289,6 @@ export default {
     'formData.searchKind.selected': {
       handler() {
         this.categorizedFields = this.computeCategorizedFields([]);
-      },
-    },
-    routeCount: {
-      handler(newVal) {
-        const startRed = newVal > MAX_ROUTE_THRESHOLD;
-        // clear both, flush, then enable only the chosen one
-        this.highlightedRed = false;
-        this.highlightedGreen = false;
-        this.$nextTick(() => {
-          // ensure removal applied
-          requestAnimationFrame(() => {
-            if (startRed) this.highlightedRed = true;
-            else this.highlightedGreen = true;
-          });
-        });
       },
     },
     categorizedFields: {
@@ -511,10 +424,6 @@ export default {
         }
       }
       return result;
-    },
-    onAnimEnd(e) {
-      if (e.animationName === 'borderPulseRed') this.highlightedRed = false;
-      if (e.animationName === 'borderPulseGreen') this.highlightedGreen = false;
     },
     // callback passed to input address
     updateStartingPointAddress(selectedAddress) {
@@ -812,87 +721,6 @@ export default {
   background-repeat: no-repeat;
 }
 
-.above-max-route {
-  color: red;
-}
-
-.under-max-route {
-  color: green;
-}
-
-.filter-buttons {
-  display: flex;
-  justify-content: space-between;
-}
-
-.routeCount {
-  padding: 2rem;
-  font-weight: bold;
-  border-radius: 10px;
-  background: #ebebeb;
-  border: 1px solid #d1d1d1;
-}
-
-.pulse-green {
-  animation: borderPulseGreen 1s ease;
-}
-.pulse-red {
-  animation: borderPulseRed 1s ease;
-}
-
-.filter-header-section {
-  padding: 2rem;
-  border-radius: 10px;
-  background: #ebebeb;
-  border: 1px solid #d1d1d1;
-  font-weight: bold;
-  .too-much-route-label {
-    color: #ff3262;
-    padding-bottom: 2rem;
-  }
-}
-.dropdown-item {
-  color: #4a4a4a;
-  display: block;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  padding: 0.375rem 1rem;
-  position: relative;
-}
-
-.query-item-component {
-  margin-bottom: 0.5rem;
-}
-
-.sub-query-items {
-  @media screen and (min-width: $tablet) {
-    min-width: 300px;
-  }
-
-  @media screen and (max-width: $tablet) {
-    overflow-y: scroll;
-    overflow-x: hidden;
-    /*
-      max-height should be calculated:
-      100vh-($navbar-height)-height(.search-infos)
-      but .search-infos height is not fixed
-    */
-    max-height: 70vh;
-
-    scrollbar-width: none; // Firefox
-
-    &::-webkit-scrollbar {
-      display: none; // Chrome, Safari and Opera
-    }
-  }
-}
-
-@media screen and (min-width: $tablet) {
-  .query-item-component {
-    margin-right: 0.75em;
-  }
-}
-
 @media screen and (max-width: 528px) {
   .select-date-container {
     width: 100%;
@@ -922,138 +750,5 @@ export default {
   .banner-img {
     display: none !important;
   }
-
-  .filter-buttons {
-    .button {
-      max-width: 45%;
-      white-space: normal;
-      height: auto;
-    }
-  }
-
-  .query-item-component {
-    margin-right: 0.25em;
-  }
-
-  .query-items-filters {
-    position: relative; // important, to force drop down on the left
-  }
-
-  .dropdown {
-    position: unset; // important, to force drop down on the left
-  }
-}
-.filter-button-dropdown {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-/* green pulse */
-@keyframes borderPulseGreen {
-  0% {
-    box-shadow: 0 0 0 0 rgba(0, 150, 136, 0);
-    border-color: rgba(0, 150, 136, 0);
-  }
-  20% {
-    box-shadow: 0 0 6px 1px rgba(0, 150, 136, 0.18);
-    border-color: rgba(0, 150, 136, 0.45);
-  }
-  60% {
-    box-shadow: 0 0 6px 1px rgba(0, 150, 136, 0.1);
-    border-color: rgba(0, 150, 136, 0.22);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(0, 150, 136, 0);
-    border-color: rgba(0, 0, 0, 0.12);
-  }
-}
-
-/* red pulse */
-@keyframes borderPulseRed {
-  0% {
-    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
-    border-color: rgba(220, 53, 69, 0);
-  }
-  20% {
-    box-shadow: 0 0 6px 1px rgba(220, 53, 69, 0.18);
-    border-color: rgba(220, 53, 69, 0.45);
-  }
-  60% {
-    box-shadow: 0 0 6px 1px rgba(220, 53, 69, 0.1);
-    border-color: rgba(220, 53, 69, 0.22);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
-    border-color: rgba(0, 0, 0, 0.12);
-  }
-}
-
-/* fills the entire parent container */
-.loading-wrapper {
-  align-items: center;
-  box-sizing: border-box;
-}
-
-/* centered box */
-.loading-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  background: #fff;
-  padding: 24px 30px;
-  min-width: 220px;
-}
-
-/* larger spinner with smooth animation */
-.spinner {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: 6px solid rgba(0, 0, 0, 0.1);
-  border-top-color: #ff9933;
-  animation: spin 0.8s linear infinite;
-  box-sizing: border-box;
-}
-
-.loading-text {
-  margin: 0;
-  color: #4a4a4a;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.no-result-found {
-  color: red;
-  font-size: 12px;
-  font-style: italic;
-}
-
-.no-result-view {
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.no-result-view-title {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.no-result-view-description {
-  color: #7b7b7b;
-  font-size: 14px;
-  margin-bottom: 20px;
 }
 </style>
