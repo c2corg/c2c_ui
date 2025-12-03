@@ -39,6 +39,18 @@ function ItinevertService() {
 }
 
 /** --------------- Query to API --------------- */
+ItinevertService.prototype.getCoverage = function (lon, lat) {
+  const params = new URLSearchParams({ lon: lon, lat: lat }).toString();
+  return this.axios.get(`/getcoverage?${params}`);
+};
+
+ItinevertService.prototype.getPolygonCoverage = function (geom_detail) {
+  let geometry = JSON.parse(geom_detail);
+  let coordinates = projectCoordinates(geometry.coordinates, 'EPSG:3857', 'EPSG:4326');
+  geometry.coordinates = coordinates;
+  let wkb = JSON.stringify(geometry);
+  return this.axios.post(`/getpolygoncoverage`, { geom_detail: wkb });
+};
 
 /**
  * Retrieves reachable routes. The route supports all filters on route fields + sort,lang,offset,limit
@@ -96,7 +108,7 @@ ItinevertService.prototype.getAllReachableRoutes = function (query, onProgress) 
           if (data.documents.length === 0 || result.length === data.total || result.length >= limit) {
             resolve(result);
           } else {
-            download(offset + 100);
+            download(offset + API_MAX_LIMIT);
           }
         })
         .catch((error) => {
@@ -168,7 +180,7 @@ ItinevertService.prototype.getAllReachableWaypoints = function (query, onProgres
           if (data.documents.length === 0 || result.length === data.total || result.length >= limit) {
             resolve(result);
           } else {
-            download(offset + 100);
+            download(offset + API_MAX_LIMIT);
           }
         })
         .catch((error) => {
@@ -418,6 +430,16 @@ ItinevertService.prototype.isFieldValueDefault = function (fieldValue, field) {
 
   // General compare for strings
   return initialVal === fieldValue;
+};
+
+/**
+ * Returns the document_id of all areas that intersects coordinates.
+ *
+ * @param {object} coordinates
+ */
+ItinevertService.prototype.getAreaIntersectingIsochrone = function (geometry) {
+  let geom_detail = JSON.stringify(geometry);
+  return this.axios.post(`/navitia/areainisochrone`, { geom_detail: geom_detail });
 };
 
 /** Project geometry's coordinates from sourceProj to targetProj */

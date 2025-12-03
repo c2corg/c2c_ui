@@ -31,6 +31,9 @@
               :default-address="formData.startingPoint.selectedAddress"
               @update:props="updateStartingPointAddress"
             ></input-address>
+            <span v-show="coverageDifferent" class="coverage-different" v-translate>
+              Make sure your starting point is close enough to a train station
+            </span>
           </div>
           <div class="form-input">
             <!-- input for destination kind -->
@@ -215,6 +218,7 @@ export default {
         activities: [],
         startingPoint: {
           selectedAddress: null,
+          coverage: '',
         },
         destinationKind: {
           selected: 'mountain range',
@@ -233,6 +237,7 @@ export default {
         },
         mountainRange: {
           selected: null,
+          coverages: [],
           list: [],
         },
         departure: {
@@ -254,6 +259,27 @@ export default {
   },
 
   computed: {
+    coverageDifferent() {
+      // only check if we are selecting a massif
+      if (
+        this.formData.destinationKind.selected === 'mountain range' &&
+        this.formData.startingPoint.selectedAddress !== null
+      ) {
+        let destCoverage = this.formData.mountainRange.coverages;
+        if (destCoverage.length > 1) {
+          // N destination coverages
+          return true;
+        } else if (destCoverage.length === 1) {
+          // 1 destination coverage
+          return destCoverage[0] !== this.formData.startingPoint.coverage;
+        } else {
+          // 0 destination coverages
+          return false;
+        }
+      } else {
+        return false;
+      }
+    },
     noResultsFound() {
       if (this.formData?.searchKind?.selected === 'route') {
         return this.filteredRoutes?.documents?.length === 0;
@@ -428,8 +454,14 @@ export default {
       return result;
     },
     // callback passed to input address
-    updateStartingPointAddress(selectedAddress) {
+    async updateStartingPointAddress(selectedAddress) {
       this.formData.startingPoint.selectedAddress = selectedAddress;
+      if (selectedAddress?.geometry?.coordinates) {
+        let coordinates = selectedAddress?.geometry?.coordinates;
+        itinevertService.getCoverage(coordinates[0], coordinates[1]).then((resp) => {
+          this.formData.startingPoint.coverage = resp.data;
+        });
+      }
     },
     // callback passed to input autocomplete
     async updateSelectedMountainRange(selectedMountainRange) {
@@ -437,6 +469,8 @@ export default {
       let prefered_lang = c2c.getApiLang(this.$language.current);
       let area = (await c2c.area.get(selectedMountainRange.document_id, prefered_lang)).data;
       this.formData.mountainRange.selected = area;
+      let coverages = (await itinevertService.getPolygonCoverage(area.geometry.geom_detail)).data;
+      this.formData.mountainRange.coverages = coverages;
     },
     /** Return true if search is enabled (all required form fields are set) */
     isSearchEnabled() {
@@ -534,6 +568,9 @@ export default {
           this.polygonGeometry = { type: data.isochron_geom.type, coordinates: coordinates };
           this.baseQuery.bbox = createBboxString(coordinates);
 
+          // add area that intersects isochrone geometry to the base query to reduce time of request
+          this.baseQuery.a = (await itinevertService.getAreaIntersectingIsochrone(this.polygonGeometry)).data.join(',');
+
           this.$emit('change-view', 'result');
         }
       }
@@ -572,6 +609,9 @@ export default {
           let coordinates = projectCoordinates(data.isochron_geom.coordinates);
           this.polygonGeometry = { type: data.isochron_geom.type, coordinates: coordinates };
           this.baseQuery.bbox = createBboxString(coordinates);
+
+          // add area that intersects isochrone geometry to the base query to reduce time of request
+          this.baseQuery.a = (await itinevertService.getAreaIntersectingIsochrone(this.polygonGeometry)).data.join(',');
         }
         this.$emit('change-view', 'result');
       }
@@ -752,5 +792,11 @@ export default {
   .banner-img {
     display: none !important;
   }
+}
+.coverage-different {
+  color: rgb(225, 146, 0);
+  font-size: 12px;
+  font-style: italic;
+  font-weight: bold;
 }
 </style>
