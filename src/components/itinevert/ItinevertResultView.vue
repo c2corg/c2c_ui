@@ -213,9 +213,9 @@ export default {
         mapDocuments.push(areaDocument);
       }
       if (this.filteredDocuments) {
-        return this.filteredDocuments.documents.concat(mapDocuments);
+        return this.filteredDocuments?.documents?.concat(mapDocuments);
       } else {
-        return this.documents.documents.concat(mapDocuments);
+        return this.documents?.documents?.concat(mapDocuments);
       }
     },
   },
@@ -354,7 +354,7 @@ export default {
             : itinevertService.getAllReachableWaypoints;
 
         // get list of previous document IDs
-        const oldIds = this.documents.documents.map((doc) => doc.document_id);
+        const oldIds = this.documents?.documents?.map((doc) => doc.document_id);
 
         // reset filtered list
         this.filteredDocuments.documents = [];
