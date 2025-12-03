@@ -16,9 +16,12 @@ Photon.prototype.constructor = Photon;
 Photon.prototype.getPropositions = function (query, lang, centerWgs84) {
   let params = {
     q: query,
-    lon: centerWgs84[0],
-    lat: centerWgs84[1],
   };
+
+  if (centerWgs84) {
+    params.lon = centerWgs84[0];
+    params.lat = centerWgs84[1];
+  }
   // only english, german and french languages are supported
   if (['en', 'de', 'fr'].includes(lang)) {
     params = { ...params, lang };

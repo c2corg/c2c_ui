@@ -19,6 +19,12 @@ export default {
       // always the document type with a tail "s".
       // the `.slice(0, -1)` removes this "s"
       // it also can be outings-stats => the `.split('-')[0]` remove "-stats"
+
+      // check if it starts with "Itinevert", so that we can retrieve the doc type
+      if (this.$route.name.startsWith('Itinevert')) {
+        return this.$route.query.documentType;
+      }
+      // else url starts with the doc type
       return this.$route.name.split('-')[0].slice(0, -1);
     },
   },

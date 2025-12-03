@@ -6,6 +6,7 @@ import { faInstagram } from '@fortawesome/free-brands-svg-icons/faInstagram';
 import { faYoutube } from '@fortawesome/free-brands-svg-icons/faYoutube';
 import { faCircle as faCircleRegular } from '@fortawesome/free-regular-svg-icons/faCircle';
 import { faClock as faClockRegular } from '@fortawesome/free-regular-svg-icons/faClock';
+import { faFaceFrown as faFaceFrownRegular } from '@fortawesome/free-regular-svg-icons/faFaceFrown';
 import { faHourglass as faHourglassRegular } from '@fortawesome/free-regular-svg-icons/faHourglass';
 import { faTrashAlt as faTrashAltRegular } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
 import { faWindowMaximize as faWindowMaximizeRegular } from '@fortawesome/free-regular-svg-icons/faWindowMaximize';
@@ -359,6 +360,7 @@ export default function install(Vue) {
     // regular icons
     faCircleRegular,
     faClockRegular,
+    faFaceFrownRegular,
     faHourglassRegular,
     faTrashAltRegular,
     faWindowMaximizeRegular,

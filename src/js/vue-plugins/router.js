@@ -16,6 +16,7 @@ import WaypointView from '@/views/document/WaypointView';
 import XreportView from '@/views/document/XreportView';
 import DocumentsPrintingView from '@/views/documents/DocumentsPrintingView';
 import HomeView from '@/views/portals/HomeView';
+import ItinevertView from '@/views/portals/ItinevertView.vue';
 import SophiePictureContestView from '@/views/portals/SophiePictureContestView';
 import OutingsStatsView from '@/views/portals/outings-stats/OutingsStatsView';
 import NotFoundView from '@/views/static-views/NotFoundView';
@@ -52,6 +53,7 @@ const YetiView = () => import(/* webpackChunkName: "yeti" */ `@/views/portals/Ye
 const routes = [
   { path: '/', name: 'home', component: HomeView },
   { path: '/topoguide', name: 'topoguide', component: TopoguideView },
+  { path: '/Itinevert', name: 'Itinevert', component: ItinevertView },
   { path: '/serac', name: 'serac', component: SeracView },
   { path: '/whatsnew', name: 'whatsnew', component: WhatsNewView },
   { path: '/associations-history', name: 'associations-history', component: AssociationsHistoryView },
