@@ -315,7 +315,6 @@ function buildJourneyReachableQuery(query, departure, from) {
   newQuery.from = navitiaService.formatCoordinates(from.geometry.coordinates);
   newQuery.walking_speed = 1.12;
   newQuery.max_walking_duration_to_pt = 4464;
-  newQuery.max_nb_transfers = -1;
 
   return newQuery;
 }
