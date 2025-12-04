@@ -298,9 +298,6 @@ export default {
         };
       };
 
-      // remove undefined values
-      newQuery = Object.fromEntries(Object.entries(newQuery).filter(([key, value]) => value));
-
       let query = itinevertService.enhanceQuery(this.baseQuery, newQuery);
       this.lastQuery = query;
 
@@ -361,6 +358,9 @@ export default {
 
         // cancel ongoing promise
         this.promise?.cancel?.();
+
+        // remove undefined values
+        query = Object.fromEntries(Object.entries(query).filter(([, v]) => v !== undefined));
 
         // launch new API request
         const p = functionToFetch.call(itinevertService, query);
