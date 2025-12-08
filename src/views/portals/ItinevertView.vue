@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     canStartAgain() {
-      return this.wizardView === 'result';
+      return this.wizardView === 'result' || this.wizardView === 'filter';
     },
   },
   methods: {
