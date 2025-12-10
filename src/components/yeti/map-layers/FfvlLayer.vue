@@ -14,7 +14,7 @@
             <img :src="iconHisto" alt="" />
             <fa-icon icon="external-link-alt" class="overlay-link-icon" />
           </div>
-          <p v-translate>History</p>
+          <p v-translate translate-context="yeti">History</p>
         </a>
       </div>
       <p class="footer is-size-7 has-text-left py-1 px-3">

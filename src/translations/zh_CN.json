@@ -62,12 +62,10 @@
     "4d_to_1m": {
       "severities": "4天到1个月"
     },
-    "5 months": "5个月",
     "50 meters while descending": "上升时50米",
     "5min": {
       "access_times": "5分钟"
     },
-    "8 days": "8天",
     "Accident database": "事故数据库",
     "Account": "账号",
     "Action": {
@@ -343,7 +341,10 @@
     "Here you may set activity and region filters that will apply to the homepage feed.": "你可以在这里设置运动和地区过滤，它们将会应用到首页订阅。",
     "High danger level from the avalanche bulletin": "雪崩公告给出的高危险等级",
     "Hiking gear": "徒步装备",
-    "History": "历史",
+    "History": {
+      "$$noContext": "历史",
+      "yeti": "历史"
+    },
     "History is missing, please provide it if you have information.": "缺少历史信息，如果你有相关信息，请补充。",
     "Home": "主页",
     "Home page feed parameters": "主页订阅参数",
@@ -681,7 +682,6 @@
     "Time": "时间",
     "Title of the book, author, language and date of publication.": "书名，作者，语言和出版日期。",
     "Title, activity and characteristics of the picture": "图片的标题，展示的活动和特点",
-    "To draw (and edit) directly on the map": "直接在地图上绘制（和编辑）",
     "Toggle elevation profile": "切换高程剖面",
     "Toggle full-screen": {
       "Map Controls": "切换全屏"

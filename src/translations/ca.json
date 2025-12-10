@@ -26,9 +26,7 @@
     "4d_to_1m": {
       "severities": "Menys d'un mes"
     },
-    "5 months": "5 mesos",
     "50 meters while descending": "50 metres a la baixada",
-    "8 days": "8 dies",
     "A message as been sent to the new address provided. You have to follow the link within to confirm the email address change.": "S'ha enviat un missatge a la nova adreça. Seguiu l'enllaç que hi trobareu per confirmar el canvi d'adreça de correu electrònic.",
     "Access by public transport": "Accés amb transport públic",
     "Accessible by public transport": "Accessible amb transport públic",
@@ -336,7 +334,10 @@
     "Hide details": "Amaga els detalls",
     "High danger level from the avalanche bulletin": "Nivell de perill alt del butlletí d'allaus",
     "Hiking gear": "Excursionisme estival",
-    "History": "Versions",
+    "History": {
+      "$$noContext": "Versions",
+      "yeti": "Versions"
+    },
     "History is missing, please provide it if you have information.": "L'històric no hi consta, no dubteu a aportar la informació que en tingueu",
     "Home": "Pàgina d'inici",
     "Home page feed parameters": "Paràmetre del fil d'activitat a la pàgina d'inici",
@@ -712,7 +713,6 @@
     "Title of the book, author, language and date of publication.": "Títol del llibre, autor, llengua i data de publicació.",
     "Title, activity and characteristics of the picture": "Títol, activitats i característiques de la imatge",
     "To": "A",
-    "To draw (and edit) directly on the map": "Per dibuixar (i editar) fes-ho directament al mapa",
     "Toggle full-screen": {
       "Map Controls": "Mode pantalla completa"
     },
@@ -1920,7 +1920,6 @@
     "yes": {
       "$$noContext": "sí",
       "parking_fee_types": "sí"
-    },
-    "you need to activate edit mode": "necessites activar el mode d'edició "
+    }
   }
 }

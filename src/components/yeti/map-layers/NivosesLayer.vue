@@ -11,14 +11,14 @@
             <img :src="icon" alt="" />
             <fa-icon icon="external-link-alt" class="overlay-link-icon" />
           </div>
-          <p v-translate>5 months</p>
+          <p>3 <span v-translate>months</span></p>
         </a>
         <a :href="overlay.url2" target="_blank">
           <div class="overlay-nivoses-icons-imgs">
             <img :src="icon" alt="" />
             <fa-icon icon="external-link-alt" class="overlay-link-icon" />
           </div>
-          <p v-translate>8 days</p>
+          <p>7 <span v-translate>days</span></p>
         </a>
       </div>
     </template>

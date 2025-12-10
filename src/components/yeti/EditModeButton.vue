@@ -1,7 +1,12 @@
 <template>
-  <button class="button edit-mode-button ol-control-edit-mode" :class="{ 'is-dark': editMode }">
+  <button
+    class="button edit-mode-button ol-control-edit-mode"
+    :class="{ 'is-dark': editMode, 'is-small': isSmall }"
+    :title="$gettext('Enable drawing and editing features on map')"
+    :aria-label="iconOnly ? $gettext('Enable drawing and editing features on map') : null"
+  >
     <input-checkbox @input="onEditMode" :value="editMode" :disabled="validSimplifyTolerance">
-      <span v-translate :title="$gettext('Enable drawing and editing features on map')">Edit mode</span>
+      <span v-if="!iconOnly" v-translate> Edit mode </span>
       <fa-icon icon="pen" class="ml-1" />
     </input-checkbox>
   </button>
@@ -11,6 +16,16 @@
 import Yetix from '@/components/yeti/Yetix';
 
 export default {
+  props: {
+    isSmall: {
+      type: Boolean,
+      default: false,
+    },
+    iconOnly: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
     editMode() {
       return Yetix.editMode;

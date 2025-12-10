@@ -303,7 +303,11 @@ export default {
   },
   watch: {
     showAvalancheBulletins() {
-      this.loadAndUpdateAvalancheBulletins();
+      if (Yetix.mountains.all.length === 0) {
+        Yetix.fetchMountains().then(this.onMountainsResult);
+      } else {
+        this.loadAndUpdateAvalancheBulletins();
+      }
     },
   },
   mounted() {
@@ -331,11 +335,12 @@ export default {
     bulletinsLayer.setVisible(this.showAvalancheBulletins);
 
     // only on first mount, if mountains already loaded
-    if (Yetix.mountains.all.length === 0) {
+    if (this.showAvalancheBulletins && Yetix.mountains.all.length === 0) {
       Yetix.fetchMountains().then(this.onMountainsResult);
-
-      Yetix.$on('map-moveend', this.onMapMoveEnd);
     }
+
+    Yetix.$on('map-moveend', this.onMapMoveEnd);
+
     this.$emit('layer', this.layerSelector);
   },
   methods: {
@@ -355,7 +360,7 @@ export default {
         let turfPolygon = format.writeFeatureObject(mountain);
 
         distances.forEach((distance, i) => {
-          let innerBuffer = turfBuffer(turfPolygon, -distance);
+          let innerBuffer = turfBuffer(turfPolygon, -distance, { steps: 1 });
           let innerDiff;
           if (innerBuffer) {
             innerDiff = turfDifference(turfFeatureCollection([turfPolygon, innerBuffer]));
@@ -690,6 +695,11 @@ export default {
   border-radius: 4px;
   box-shadow: 0 0 3px rgba($black, 0.5), 0 3px 8px rgba($black, 0.5);
   overflow: hidden;
+
+  p,
+  dl {
+    user-select: text;
+  }
 }
 .bulletins-header {
   background: $primary;

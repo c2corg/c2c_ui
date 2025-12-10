@@ -34,7 +34,7 @@
         </button>
       </div>
 
-      <div ref="editMode">
+      <div ref="editMode" style="height: 0">
         <edit-mode-button />
       </div>
     </div>

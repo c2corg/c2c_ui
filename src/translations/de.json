@@ -62,12 +62,10 @@
     "4d_to_1m": {
       "severities": "4 Tage bis 1 Monat"
     },
-    "5 months": "5 Monate",
     "50 meters while descending": "50 Meter beim Abstieg",
     "5min": {
       "access_times": "5 min"
     },
-    "8 days": "8 Tagen",
     "A message as been sent to the new address provided. You have to follow the link within to confirm the email address change.": "Eine Nachricht wurde an die angegebene neue Adresse gesendet. Sie müssen dem darin enthaltenen Link folgen, um die Änderung der E-Mail-Adresse zu bestätigen.",
     "Access by public transport": "mit öffentlichen Verkehrsmitteln erreichbar ",
     "Accessible by public transport": "mit öffentlichen Verkehrsmitteln erreichbar",
@@ -95,6 +93,7 @@
     "Add title…": "Titel hinzufügen ...",
     "Add to my outing": "Meinem Tourenbericht hinzufügen",
     "Additional information": "Weitere Informationen",
+    "Advertisement cookies": "Optionale Cookies",
     "All": "Alles",
     "All in store for you:": "Alles für Sie bereit:",
     "Allow all": "Alles akzeptieren",
@@ -379,7 +378,10 @@
     "Hide lines details": "Liniendetails ausblenden",
     "High danger level from the avalanche bulletin": "Hohe Gefahrenstufe aus dem Lawinenbulletin",
     "Hiking gear": "Sommerliches Wandern",
-    "History": "Historie",
+    "History": {
+      "$$noContext": "Historie",
+      "yeti": "Historie"
+    },
     "History is missing, please provide it if you have information.": "Routengeschichte fehlt. Bitte tragen Sie bei, fals Sie etwas wissen.",
     "Home": "Startseite",
     "Home page feed parameters": "Parameter des Feed der Hauptseite",
@@ -681,6 +683,7 @@
     "Save": "Speichern",
     "Search ...": "Suchen...",
     "Search a document to associate...": "Suchen Sie ein Dokument zu verbinden",
+    "See lines details": "Liniendetails anzeigen",
     "See more": "Mehr dazu",
     "See more results": "Mehr Ergebnisse anzeigen",
     "See other documents nearby": "In der Nähe von ...",
@@ -761,6 +764,7 @@
     "There are sensitive areas on this route. Please refer to the map.": "Auf oder in der Nähe dieser Route gibt es empfindliche Naturgebiete. Bitte sehen Sie sich die Karte an, um sie zu lokalisieren. Sie können auf die Gebiete klicken, um detaillierte Informationen über die zu ergreifenden Maßnahmen zu erhalten.",
     "These are positive experiences that reveal usefull risk-management skills.": "Dies sind positive Erfahrungen, die nützliche Risikomanagementfähigkeiten aufzeigen.",
     "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the &quot;Share&quot; module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.": "Diese Cookies ermöglichen es Ihnen, von der Seite camptocamp.org aus mit den sozialen Modulen zu interagieren und die Inhalte der Seite mit anderen Personen zu teilen oder sie über Ihre Konsultation oder Meinung dazu zu informieren, wenn Sie zum Beispiel auf das Modul \"Teilen\" klicken. Wenn Sie diese Cookies deaktivieren, können Sie die Inhalte der Seite camptocamp.org nicht mehr in sozialen Netzwerken teilen.",
+    "These cookies are used to provide you with personalized advertising based on your browsing on the site. They track your activities on the site in order to display relevant ads tailored to your interests. By disabling these cookies, you will continue to see ads, but they will no longer be tailored to your preferences.": "Diese Cookies werden verwendet, um personalisierte Werbung auf der Seite zeigen zu können, die den besuchten Bereichen und Unterseiten entsprechen. Sie ermöglichen es, mehr über Ihre Interessen zu erfahren und die Inhalte, Angebote und Werbeanzeigen zu personalisieren. Sollten Sie diese Cookies ablehnen, so werden weiterhin Werbungen angezeigt, aber diese werden Ihren Präferenzen nicht mehr angepasst.",
     "This book cover is the property of its editor and/or author": "Dieses Buchcover ist Eigentum des Herausgebers und / oder des Autors",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "Dieser Inhalt unterliegt der Lizenz Creative Commons BY-NC-ND 3.0",
     "This content is licensed under Creative Commons BY-SA 3.0": "Dieser Inhalt unterliegt der Lizenz Creative Commons BY-SA 3.0",
@@ -784,7 +788,6 @@
     "Title of the book, author, language and date of publication.": "Buchtitel, Autor, Sprache und Veröffentlichungsdatum.",
     "Title, activity and characteristics of the picture": "Titel, Aktivitäten und Spezifikationen des Bilds",
     "To": "nach",
-    "To draw (and edit) directly on the map": "Direkt auf der Karte zeichnen (und bearbeiten)",
     "Toggle elevation profile": "Höhenprofil umschalten",
     "Toggle full-screen": {
       "Map Controls": "Vollbild"
@@ -2079,7 +2082,6 @@
       "$$noContext": "Ja",
       "parking_fee_types": "Ja"
     },
-    "you need to activate edit mode": "Bitte Bearbeitungsmodus aktivieren",
     "zh": {
       "langs": "Chinesisch"
     }

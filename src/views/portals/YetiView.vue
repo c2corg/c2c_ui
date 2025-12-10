@@ -63,16 +63,20 @@
             <panel :index="2">
               <sub-panel-course />
             </panel>
+
+            <panel :index="3">
+              <sub-panel-meteo />
+            </panel>
           </div>
 
           <div class="box yeti-logos">
             <div class="columns is-mobile is-vcentered">
               <div class="column has-text-centered">
-                <a href="http://www.ensg.eu">
+                <a href="http://www.geodata-paris.fr">
                   <picture>
-                    <source srcset="@/assets/img/yeti/logo-ensg.webp" type="image/webp" />
-                    <source srcset="@/assets/img/yeti/logo-ensg.avif" type="image/avif" />
-                    <img src="@/assets/img/yeti/logo-ensg.jpg" alt="Logo ENSG" width="120" loading="lazy" />
+                    <source srcset="@/assets/img/yeti/logo-geodataparis.webp" type="image/webp" />
+                    <source srcset="@/assets/img/yeti/logo-geodataparis.avif" type="image/avif" />
+                    <img src="@/assets/img/yeti/logo-geodataparis.jpg" alt="Logo Géodata Paris" loading="lazy" />
                   </picture>
                 </a>
               </div>
@@ -108,6 +112,7 @@ import Panel from '@/components/yeti/Panel';
 import SubPanelBra from '@/components/yeti/SubPanelBra';
 import SubPanelCourse from '@/components/yeti/SubPanelCourse';
 import SubPanelLayers from '@/components/yeti/SubPanelLayers';
+import SubPanelMeteo from '@/components/yeti/SubPanelMeteo';
 import SubPanelMethods from '@/components/yeti/SubPanelMethods';
 import Tabs from '@/components/yeti/Tabs';
 import ValidationButton from '@/components/yeti/ValidationButton';
@@ -127,6 +132,7 @@ export default {
     SubPanelBra,
     SubPanelCourse,
     SubPanelLayers,
+    SubPanelMeteo,
     SubPanelMethods,
     Tabs,
     ValidationButton,
@@ -185,41 +191,7 @@ export default {
       return Yetix.validSimplifyTolerance;
     },
     tabs() {
-      let tabs = [];
-
-      // layer tab
-      let tabLayer = {
-        icon: 'layer-group',
-        title: this.$gettext('Layers'),
-      };
-      tabs.push(tabLayer);
-
-      // risk tab
-      let tabRisk = {
-        name: this.$gettext('Risk'),
-        icon: 'bolt',
-      };
-      tabs.push(tabRisk);
-
-      // route tab
-      let tabRoute = {
-        name: this.$gettext('My outing'),
-        icon: 'route',
-      };
-      if (this.hasFeatures && !this.validSimplifyTolerance) {
-        tabRoute.counter = {
-          text: this.featuresLength,
-          title: this.$gettext('Route on map'),
-        };
-      }
-      if (this.validSimplifyTolerance) {
-        tabRoute.problemIcon = {
-          title: this.$gettext('Not simplified yet'),
-        };
-      }
-      tabs.push(tabRoute);
-
-      return tabs;
+      return Yetix.tabs;
     },
     errors() {
       return {
@@ -291,6 +263,10 @@ export default {
     Yetix.setDefault();
     // remove all previous events (navigating from other c2c pages)
     Yetix.$off();
+
+    // build tabs
+    let tabs = this.setTabs();
+    Yetix.setTabs(tabs);
   },
 
   mounted() {
@@ -298,6 +274,54 @@ export default {
   },
 
   methods: {
+    setTabs() {
+      let tabs = [];
+
+      // layer tab
+      let tabLayer = {
+        id: 'layer',
+        icon: 'layer-group',
+        title: this.$gettext('Layers'),
+      };
+      tabs.push(tabLayer);
+
+      // risk tab
+      let tabRisk = {
+        id: 'risk',
+        name: this.$gettext('Risk'),
+        icon: 'bolt',
+      };
+      tabs.push(tabRisk);
+
+      // route tab
+      let tabRoute = {
+        id: 'route',
+        name: this.$gettext('My outing'),
+        icon: 'route',
+      };
+      if (this.hasFeatures && !this.validSimplifyTolerance) {
+        tabRoute.counter = {
+          text: this.featuresLength,
+          title: this.$gettext('Route on map'),
+        };
+      }
+      if (this.validSimplifyTolerance) {
+        tabRoute.problemIcon = {
+          title: this.$gettext('Not simplified yet'),
+        };
+      }
+      tabs.push(tabRoute);
+
+      // meteo tab
+      let tabMeteo = {
+        id: 'meteo',
+        name: this.$gettext('Meteo'),
+        icon: 'sun',
+      };
+      tabs.push(tabMeteo);
+
+      return tabs;
+    },
     check() {
       if (!this.areaOk) {
         this.formError = 'area';
@@ -522,10 +546,6 @@ $yeti-height-ad: calc(100vh - #{$navbarad-height});
   box-shadow: none;
   background: none;
   mix-blend-mode: multiply;
-
-  img {
-    max-width: 65%;
-  }
 }
 
 .yeti-overlay {
@@ -618,6 +638,10 @@ $yeti-height-ad: calc(100vh - #{$navbarad-height});
   }
   .is-checkradio:focus-visible + label::before {
     box-shadow: 0 0 0 2px $secondary;
+  }
+
+  .button.is-small {
+    border-radius: 4px;
   }
 }
 </style>

@@ -51,7 +51,7 @@ export default {
         date: null,
         localisation: null,
       },
-      daysValidWeeks: 15,
+      daysValidWeeks: 5,
       daysValidSeason: 190,
     };
   },

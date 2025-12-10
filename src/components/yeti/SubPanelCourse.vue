@@ -1,15 +1,18 @@
 <template>
   <div class="yeti-subpanel">
     <sub-panel-title><span v-translate>Route</span></sub-panel-title>
-    <div class="route-buttons" v-if="features.length">
-      <button class="button is-secondary is-small" :title="$gettext('Delete route')" @click="onRemoveFeatures">
-        <fa-icon icon="trash" />
-        <span v-translate class="is-sr-only">Delete route</span>
-      </button>
-      <button class="button is-secondary is-small" :title="$gettext('Fit map to route')" @click="fitMapToFeatures">
-        <fa-icon icon="location-crosshairs" />
-        <span v-translate class="is-sr-only">Fit map to route</span>
-      </button>
+    <div class="route-buttons">
+      <edit-mode-button is-small icon-only />
+      <span v-if="features.length">
+        <button class="button is-secondary is-small" :title="$gettext('Delete route')" @click="onRemoveFeatures">
+          <fa-icon icon="trash" />
+          <span v-translate class="is-sr-only">Delete route</span>
+        </button>
+        <button class="button is-secondary is-small" :title="$gettext('Fit map to route')" @click="fitMapToFeatures">
+          <fa-icon icon="location-crosshairs" />
+          <span v-translate class="is-sr-only">Fit map to route</span>
+        </button>
+      </span>
     </div>
     <div v-if="features.length">
       <div class="columns is-mobile">
@@ -50,33 +53,25 @@
         </template>
       </dropdown-content>
       <simplify-tool ref="simplifyTool" />
-      <info type="help">
-        <p v-translate>Drawing tips</p>
-        <ul class="content-ul">
-          <li><strong v-translate translate-context="yeti">Draw</strong> <span v-translate>new lines chunks</span></li>
-          <li>
-            <strong v-translate translate-context="yeti">Delete</strong>
-            <span v-translate>last point with the Backspace key</span>
-          </li>
-        </ul>
-        <p v-translate>On a drawn line</p>
-        <ul class="content-ul">
-          <li>
-            <strong v-translate translate-context="yeti">Edit</strong> <span v-translate>points by moving them</span>
-          </li>
-          <li>
-            <strong v-translate translate-context="yeti">Create</strong>
-            <span v-translate>a new point on an existing line</span>
-          </li>
-          <li><strong v-translate>Delete a point</strong> <span v-translate>with Alt + clic</span></li>
-        </ul>
-        <p v-translate>From the interface</p>
-        <ul class="content-ul">
-          <li><strong v-translate>Delete a line chunk</strong></li>
-          <li><strong v-translate>Delete route</strong> <span v-translate>to start or load a new one</span></li>
-        </ul>
-      </info>
-      <sub-panel-title><span v-translate>Export</span></sub-panel-title>
+    </div>
+    <div v-else class="columns is-vcentered is-mobile">
+      <div class="column">
+        <p v-translate class="mb-2">No route right now</p>
+      </div>
+    </div>
+
+    <sub-panel-title><span v-translate>Winter routes</span></sub-panel-title>
+    <div v-if="winterRouteLayer" class="columns is-vcentered is-mobile">
+      <div class="column">
+        <input-checkbox v-model="winterRouteLayer.checked" @change="winterRouteLayer.action">
+          <span v-translate>Visible layer</span>
+        </input-checkbox>
+        <component :is="winterRouteLayer.contentComponent" v-if="winterRouteLayer.checked" class="mt-2" />
+      </div>
+    </div>
+
+    <div v-if="features.length">
+      <sub-panel-title><span v-translate key="export">Export</span></sub-panel-title>
       <div class="columns is-vcentered is-mobile">
         <div class="column">
           <ul class="form-export">
@@ -105,32 +100,54 @@
         </div>
       </div>
     </div>
+
     <div v-else>
-      <p v-translate>No route right now</p>
-      <div class="load-gpx">
-        <div class="buttons">
-          <button
-            class="button is-primary mr-2"
-            :class="{ 'is-loading': loading }"
-            :disabled="loading"
-            @click="onLoadGpx"
-            v-translate
-          >
-            Upload a GPS track
-          </button>
-          <edit-mode-button />
-        </div>
-        <div class="control upload-button">
-          <input ref="gpxFileInput" type="file" @change="uploadGpx" accept=".gpx" />
-        </div>
-        <info type="help" class="mt-5">
-          <p>
-            <strong v-translate>To draw (and edit) directly on the map</strong>
-            <span v-translate>you need to activate edit mode</span>
-          </p>
-        </info>
+      <sub-panel-title><span v-translate key="import">Import</span></sub-panel-title>
+      <div class="buttons">
+        <button
+          class="button is-primary mr-2"
+          :class="{ 'is-loading': loading }"
+          :disabled="loading"
+          @click="onLoadGpx"
+          v-translate
+        >
+          Upload a GPS track
+        </button>
+      </div>
+      <div class="control upload-button">
+        <input ref="gpxFileInput" type="file" @change="uploadGpx" accept=".gpx" />
       </div>
     </div>
+
+    <hr />
+
+    <info type="help">
+      <p v-translate>Drawing tips</p>
+      <ul class="content-ul">
+        <li><strong v-translate translate-context="yeti">Draw</strong> <span v-translate>new lines chunks</span></li>
+        <li>
+          <strong v-translate translate-context="yeti">Delete</strong>
+          <span v-translate>last point with the Backspace key</span>
+        </li>
+      </ul>
+      <p v-translate>On a drawn line</p>
+      <ul class="content-ul">
+        <li>
+          <strong v-translate translate-context="yeti">Edit</strong> <span v-translate>points by moving them</span>
+        </li>
+        <li>
+          <strong v-translate translate-context="yeti">Create</strong>
+          <span v-translate>a new point on an existing line</span>
+        </li>
+        <li><strong v-translate>Delete a point</strong> <span v-translate>with Alt + clic</span></li>
+        <li><strong v-translate>Split a line</strong> with Ctrl + clic</li>
+      </ul>
+      <p v-translate>From the interface</p>
+      <ul class="content-ul">
+        <li><strong v-translate>Delete a line chunk</strong></li>
+        <li><strong v-translate>Delete route</strong> <span v-translate>to start or load a new one</span></li>
+      </ul>
+    </info>
   </div>
 </template>
 
@@ -179,6 +196,9 @@ export default {
     },
     hasFeaturesTitle() {
       return !(!this.featuresTitle.length && !this.newFeaturesTitle);
+    },
+    winterRouteLayer() {
+      return Yetix.overlaysLayersSelector.filter((layer) => layer.id === 'winter-route')[0];
     },
   },
   methods: {
@@ -317,10 +337,6 @@ input[type='file'] {
   top: 0;
   left: 0;
   cursor: pointer;
-}
-
-.load-gpx {
-  margin-top: 2rem;
 }
 
 .form-export {

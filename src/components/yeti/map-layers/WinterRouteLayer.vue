@@ -17,6 +17,7 @@ export default {
     },
     layerSelector() {
       return {
+        id: 'winter-route',
         title: this.$gettext('Winter hiking routes'),
         checked: this.showWinterRoute,
         action: this.onShowWinterRoute,
@@ -43,7 +44,6 @@ export default {
   created() {
     this.layer = new ol.layer.Tile({
       name: 'winterRouteLayer',
-      extent: ol.proj.transformExtent([5.44835, 44.18934, 7.1925, 46.30256], 'EPSG:4326', 'EPSG:3857'),
     });
     let pWidth = 4;
     this.selectedLayer = new ol.layer.Vector({

@@ -62,12 +62,10 @@
     "4d_to_1m": {
       "severities": "Менее чем через месяц"
     },
-    "5 months": "5 месяцев",
     "50 meters while descending": "50м во время спуска",
     "5min": {
       "access_times": "5мин"
     },
-    "8 days": "8 дней",
     "Accident database": "База данных неудачных случаев",
     "Account": "Аккаунт",
     "Action": {
@@ -228,7 +226,10 @@
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Вот список участников, на которых вы подписаны, и чьи действия вы увидите в своей личной ленте.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Определите фильтры для видов активности и регионов, которые будут применяться к вашей ленте",
     "Hiking gear": "снаряжение для похода",
-    "History": "Версии",
+    "History": {
+      "$$noContext": "Версии",
+      "yeti": "Версии"
+    },
     "Home page feed parameters": "Настройка вашей ленты на главной странице",
     "How is my testimony used ? How / why is it useful ?": "Для чего будут использованы мои показания? Почему они важны?",
     "I must not use slopes > 30°": "Не показывать склоны круче 30°",

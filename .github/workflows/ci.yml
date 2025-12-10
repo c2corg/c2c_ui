@@ -21,7 +21,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
@@ -35,7 +35,7 @@ jobs:
       - name: Docker meta
         id: docker_meta
         if: "contains(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master'"
-        uses: docker/metadata-action@v5.8.0
+        uses: docker/metadata-action@v5.9.0
         with:
           # list of Docker images to use as base name for tags
           images: c2corg/c2c_ui
@@ -65,7 +65,7 @@ jobs:
         env:
           GITHUB_PAGES_BRANCH: ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
       - name: Upload artifact for github pages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: github-pages
           path: dist/*
@@ -93,7 +93,7 @@ jobs:
       - name: Remove current branch files
         run: rm -rf ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
       - name: Retrieve github pages artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: github-pages
           path: ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}

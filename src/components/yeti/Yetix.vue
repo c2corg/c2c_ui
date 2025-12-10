@@ -24,6 +24,7 @@ let defaultState = {
   /* fixed zoom by 0.5 */
   ZOOM_DELTA: 0.5,
 
+  tabs: [],
   activeTab: 0,
 
   bra: {
@@ -70,11 +71,13 @@ let defaultState = {
     visible: [],
   },
   bulletinsLoaded: false,
-  showAvalancheBulletins: true,
+  showAvalancheBulletins: false,
 
   winterRoutes: [],
   showWinterRoute: false,
   winterRouteLegend: null,
+
+  showProtectedAreas: false,
 
   nivoses: [],
   showNivoses: false,
@@ -134,6 +137,9 @@ export default new Vue({
     },
     ZOOM_DELTA() {
       return state.ZOOM_DELTA;
+    },
+    tabs() {
+      return state.tabs;
     },
     activeTab() {
       return state.activeTab;
@@ -213,6 +219,9 @@ export default new Vue({
     winterRouteLegend() {
       return state.winterRouteLegend;
     },
+    showProtectedAreas() {
+      return state.showProtectedAreas;
+    },
     nivoses() {
       return state.nivoses;
     },
@@ -258,6 +267,9 @@ export default new Vue({
   },
   methods: {
     // mutations
+    setTabs(tabs) {
+      state.tabs = tabs;
+    },
     setActiveTab(index) {
       state.activeTab = index;
     },
@@ -367,6 +379,10 @@ export default new Vue({
     setWinterRouteLegend(winterRouteLegend) {
       state.winterRouteLegend = winterRouteLegend;
     },
+    setShowProtectedAreas(showProtectedAreas) {
+      state.showProtectedAreas = showProtectedAreas;
+      this.setOverlaysToLocalStorage({ protectedAreas: showProtectedAreas });
+    },
     setNivoses(nivoses) {
       state.nivoses = nivoses;
     },
@@ -443,6 +459,7 @@ export default new Vue({
       let mapOverlays = this.$localStorage.get('yeti-map-layers-overlays', {
         avalanche: this.showAvalancheBulletins,
         winterRoute: this.showWinterRoute,
+        protectedAreas: this.showProtectedAreas,
         dataAvalanche: this.showDataAvalanche,
         nivoses: this.showNivoses,
         romma: this.showRomma,
@@ -451,6 +468,7 @@ export default new Vue({
       });
       this.setShowAvalancheBulletins(mapOverlays.avalanche);
       this.setShowWinterRoute(mapOverlays.winterRoute);
+      this.setShowProtectedAreas(mapOverlays.protectedAreas);
       this.setShowDataAvalanche(mapOverlays.dataAvalanche);
       this.setShowNivoses(mapOverlays.nivoses);
       this.setShowRomma(mapOverlays.romma);

@@ -1,10 +1,113 @@
+<template>
+  <div ref="drawInfoOverlay">
+    <p><fa-icon icon="route" transform="shrink-3" /> {{ Number(drawInfo.distance).toLocaleString() }}&nbsp;m</p>
+    <p><fa-icon icon="compass" transform="shrink-3" /> {{ drawInfo.bearing }}°</p>
+  </div>
+</template>
+
 <script>
+import { icon } from '@fortawesome/fontawesome-svg-core';
+
 import layerMixin from './layer';
 import simplify from './simplify';
 
 import Yetix from '@/components/yeti/Yetix';
 import c2c from '@/js/apis/c2c';
 import ol from '@/js/libs/ol';
+
+class SplitInteraction extends ol.interaction.Pointer {
+  constructor(options) {
+    super({
+      handleDownEvent: (evt) => {
+        if (evt.originalEvent.ctrlKey) {
+          const map = evt.map;
+
+          const feature = map.forEachFeatureAtPixel(
+            evt.pixel,
+            function (feature) {
+              return feature;
+            },
+            {
+              layerFilter: (layer) => {
+                return layer === this.layer_;
+              },
+            }
+          );
+
+          if (feature) {
+            this.feature_ = feature;
+            this.coordinate_ = feature.getGeometry().getClosestPoint(evt.coordinate);
+
+            // the split point is surely not on vertex, so find on which segment it is
+            let coordinates = this.feature_.getGeometry().getCoordinates();
+            let insertIndex = undefined;
+            for (let i = 0; i < coordinates.length - 1; i++) {
+              const [x1, y1] = coordinates[i];
+              const [x2, y2] = coordinates[i + 1];
+              if (this.pointOnSegment(this.coordinate_, [x1, y1], [x2, y2])) {
+                insertIndex = i + 1;
+                break;
+              }
+            }
+
+            // then insert a new point on the segment before split
+            // if insertindex is set (point on line)
+            // and coord is not already a vertex
+            // and coord is not the first point
+            if (
+              insertIndex !== undefined &&
+              coordinates[insertIndex][0] !== this.coordinate_[0] &&
+              coordinates[insertIndex][1] !== this.coordinate_[1] &&
+              coordinates[0][0] !== this.coordinate_[0] &&
+              coordinates[0][1] !== this.coordinate_[1]
+            ) {
+              coordinates.splice(insertIndex, 0, this.coordinate_);
+            }
+
+            // now, split feature and create an array for two splitted feature
+            let sublines = [[], []];
+            let i = 0;
+            let splitDone = false;
+            coordinates.forEach((coord) => {
+              sublines[i].push(coord);
+              // if point is less than one meter away = this is the split point
+              if (
+                !splitDone &&
+                Math.abs(coord[0] - this.coordinate_[0]) < 1 &&
+                Math.abs(coord[1] - this.coordinate_[1]) < 1
+              ) {
+                i = 1;
+                sublines[i].push(coord);
+                splitDone = true;
+              }
+            });
+            this.dispatchEvent({
+              type: 'split',
+              oldFeature: feature,
+              newFeatures: sublines.map((line) => new ol.Feature(new ol.geom.LineString(line))),
+            });
+          }
+
+          return false;
+        }
+      },
+    });
+
+    this.layer_ = options.layer;
+    this.coordinate_ = null;
+    this.feature_ = null;
+  }
+
+  pointOnSegment(p, a, b, tol = 1e-3) {
+    const cross = (p[1] - a[1]) * (b[0] - a[0]) - (p[0] - a[0]) * (b[1] - a[1]);
+    if (Math.abs(cross) > tol) return false;
+    const dot = (p[0] - a[0]) * (b[0] - a[0]) + (p[1] - a[1]) * (b[1] - a[1]);
+    if (dot < 0) return false;
+    const sqLen = (b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2;
+    if (dot > sqLen) return false;
+    return true;
+  }
+}
 
 let angle = 60;
 let pColor = `hsl(${angle}, 100%, 50%)`;
@@ -131,11 +234,21 @@ let elevationPointStyle = [
   }),
 ];
 
+let drawInfoOverlay = new ol.Overlay({
+  offset: [10, -10],
+  positioning: 'bottom-left',
+  className: 'draw-info-overlay',
+});
+
 export default {
   mixins: [layerMixin],
   data() {
     return {
       visibleSimplifiedLayer: false,
+      drawInfo: {
+        distance: 0,
+        bearing: 0,
+      },
     };
   },
   computed: {
@@ -162,8 +275,12 @@ export default {
     editMode() {
       if (!this.editMode) {
         this.disableInteractions();
+        document.removeEventListener('keydown', this.onKeydown);
+        document.removeEventListener('keyup', this.onKeyup);
       } else {
         this.enableInteractions();
+        document.addEventListener('keydown', this.onKeydown);
+        document.addEventListener('keyup', this.onKeyup);
       }
       this.updateEditStyle();
     },
@@ -181,6 +298,10 @@ export default {
     this.featuresLayerSource = this.featuresLayer.getSource();
 
     this.map.addLayer(this.featuresLayer);
+
+    // draw info overlay
+    drawInfoOverlay.setElement(this.$refs.drawInfoOverlay);
+    this.map.addOverlay(drawInfoOverlay);
 
     // simplified layer (preview)
     this.simplifiedLayer = new ol.layer.Vector({
@@ -234,6 +355,9 @@ export default {
     Yetix.$on('featureUpdated', this.updateFeaturesFromStore);
     Yetix.$on('fit-map-to-features', this.fitMapToFeatures);
 
+    // special event when window loose focus = hanfle ctrl key (when browser shorcuts) for split interaction
+    window.addEventListener('blur', () => this.onKeyup({ key: 'Control', altKey: false }));
+
     // already features to add?
     // but not a c2c document
     if (!doc && this.features.length) {
@@ -257,8 +381,53 @@ export default {
         source,
         type: 'LineString',
         style: editStyle,
+        geometryFunction: (coords, geom) => {
+          if (!geom) {
+            geom = new ol.geom.LineString([]);
+          }
+
+          if (coords.length <= 1) {
+            drawInfoOverlay.setPosition(undefined);
+          }
+
+          // get 2 last points
+          if (coords.length >= 2) {
+            geom.setCoordinates(coords);
+
+            let geomCoords = geom.getCoordinates();
+            let point1 = geomCoords[geomCoords.length - 2];
+            let point2 = geomCoords[geomCoords.length - 1];
+            let distance = ol.sphere.getDistance(ol.proj.toLonLat(point1), ol.proj.toLonLat(point2));
+
+            let lon1 = (ol.proj.toLonLat(point1)[0] * Math.PI) / 180;
+            let lon2 = (ol.proj.toLonLat(point2)[0] * Math.PI) / 180;
+            let lat1 = (ol.proj.toLonLat(point1)[1] * Math.PI) / 180;
+            let lat2 = (ol.proj.toLonLat(point2)[1] * Math.PI) / 180;
+            let a = Math.sin(lon2 - lon1) * Math.cos(lat2);
+            let b = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
+
+            let angle = Math.atan2(a, b);
+            let bearing = ((angle * 180) / Math.PI + 360) % 360;
+
+            if (distance > 0) {
+              this.drawInfo.distance = Math.round(distance);
+              this.drawInfo.bearing = Math.round(bearing);
+            } else {
+              this.drawInfo.distance = 0;
+              this.drawInfo.bearing = 0;
+            }
+            drawInfoOverlay.setPosition(geomCoords[geomCoords.length - 1]);
+          }
+
+          return geom;
+        },
       });
       this.map.addInteraction(this.drawInteraction);
+
+      this.splitInteraction = new SplitInteraction({
+        layer: this.featuresLayer,
+      });
+      this.map.addInteraction(this.splitInteraction);
 
       this.snapInteraction = new ol.interaction.Snap({ source });
       this.map.addInteraction(this.snapInteraction);
@@ -266,29 +435,44 @@ export default {
       this.drawInteraction.on('drawstart', this.onDrawStart);
       this.drawInteraction.on('drawend', this.onDrawEnd);
       this.modifyInteraction.on('modifyend', this.onModifyEnd);
+      this.splitInteraction.on('split', this.onSplit);
 
       this.disableInteractions();
     },
     enableInteractions() {
       this.drawInteraction.setActive(true);
       this.modifyInteraction.setActive(true);
+      this.splitInteraction.setActive(true);
       this.snapInteraction.setActive(true);
     },
     disableInteractions() {
       this.drawInteraction.setActive(false);
       this.modifyInteraction.setActive(false);
+      this.splitInteraction.setActive(false);
       this.snapInteraction.setActive(false);
+
+      // hide draw info overlay
+      drawInfoOverlay.setPosition(undefined);
     },
     onDrawStart() {
+      this.drawing = true;
       document.addEventListener('keydown', this.onKeyWhileDrawing);
       document.addEventListener('keypress', this.onKeyWhileDrawing);
     },
     onDrawEnd() {
+      this.drawing = false;
       document.removeEventListener('keydown', this.onKeyWhileDrawing);
       document.removeEventListener('keypress', this.onKeyWhileDrawing);
+
+      // hide draw info overlay
+      drawInfoOverlay.setPosition(undefined);
     },
     onModifyEnd() {
       this.updateFeaturesFromStore();
+    },
+    onSplit(evt) {
+      evt.newFeatures.forEach(this.addFeature);
+      this.removeFeature(evt.oldFeature);
     },
     onKeyWhileDrawing(event) {
       event.preventDefault();
@@ -531,9 +715,89 @@ export default {
         this.editMode && this.mapZoom >= this.validMinimumMapZoom ? normalWithEditLineStyle : normalLineStyle
       );
     },
+    onKeydown(evt) {
+      // not when drawing
+      if (this.drawing) {
+        return false;
+      }
+      // not when both alt+ctrl
+      if (evt.ctrlKey && evt.altKey) {
+        return false;
+      }
+      // which key?
+      let tip = null;
+      let svgSource = null;
+      if (evt.ctrlKey) {
+        tip = this.$gettext('Split line');
+        svgSource = icon({ prefix: 'fas', iconName: 'scissors' }).html[0];
+      }
+      if (evt.altKey) {
+        tip = this.$gettext('Add or remove point');
+        svgSource = icon({ prefix: 'fas', iconName: 'plus-minus' }).html[0];
+      }
+
+      // add new icon in editstyle, only if length is 3
+      if (tip && editStyle.length === 3) {
+        svgSource = svgSource.replace('<svg', '<svg width="10" height="10"');
+        svgSource = svgSource.replace('fill="currentColor"', `fill="white" stroke="${pColorDark}" stroke-width="5"`);
+        editStyle.splice(
+          1,
+          0,
+          new ol.style.Style({
+            image: new ol.style.Icon({
+              src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSource),
+              size: [10, 10],
+            }),
+          })
+        );
+        editStyle[0].getImage().setRadius(10);
+        editStyle[0].setText(
+          new ol.style.Text({
+            text: tip,
+            textAlign: 'left',
+            offsetX: 20,
+            offsetY: 0,
+            padding: [5, 5, 5, 5],
+            fill: new ol.style.Fill({
+              color: 'white',
+            }),
+            backgroundFill: new ol.style.Fill({
+              color: pColorDark,
+            }),
+          })
+        );
+        this.drawInteraction.getOverlay().setStyle(editStyle);
+        this.modifyInteraction.getOverlay().setStyle(editStyle);
+      }
+    },
+    onKeyup(evt) {
+      // remove specific icon
+      // only when alt or ctrl, but not both, and icon is already in editstyle
+      if (((evt.key === 'Alt' && !evt.ctrlKey) || (evt.key === 'Control' && !evt.altKey)) && editStyle.length === 4) {
+        editStyle.splice(1, 1);
+        editStyle[0].getImage().setRadius(6);
+        editStyle[0].setText(
+          new ol.style.Text({
+            text: null,
+          })
+        );
+        this.drawInteraction.getOverlay().setStyle(editStyle);
+        this.modifyInteraction.getOverlay().setStyle(editStyle);
+      }
+    },
   },
   render() {
     return null;
   },
 };
 </script>
+
+<style>
+.draw-info-overlay {
+  background: yellow;
+  padding: 2px;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  min-width: 60px;
+}
+</style>
