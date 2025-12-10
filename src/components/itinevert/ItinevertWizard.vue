@@ -778,7 +778,6 @@ export default {
   .centered {
     margin-left: auto;
     margin-right: auto;
-    width: fit-content;
     display: flex;
     flex-direction: column;
     gap: 24px;
