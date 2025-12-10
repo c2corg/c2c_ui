@@ -88,7 +88,13 @@
               <div class="date-picker-container">
                 <label for="date-input">{{ $gettext('Date') }}</label>
                 <div class="input-container">
-                  <input type="date" id="date-input" class="date-input" v-model="formData.departure.selectedDate" />
+                  <input
+                    type="date"
+                    id="date-input"
+                    class="date-input"
+                    :min="twoDaysAgo"
+                    v-model="formData.departure.selectedDate"
+                  />
                   <div class="calendar-icon">
                     <img class="geolocalisation-img" src="@/assets/img/boxes/date.svg" alt="date" />
                   </div>
@@ -255,6 +261,11 @@ export default {
   },
 
   computed: {
+    twoDaysAgo() {
+      const twoDaysAgo = new Date();
+      twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+      return this.formatYMD(twoDaysAgo);
+    },
     // the query based on formData
     formQuery() {
       let query = {};
@@ -595,6 +606,12 @@ export default {
           this.filteredRoutes = (await itinevertService.getReachableRoutes(query)).data;
         }
       }
+    },
+    formatYMD(d) {
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
     },
   },
 };
