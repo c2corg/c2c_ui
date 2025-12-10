@@ -86,7 +86,7 @@
             @mouseenter="highlightedDocument = document"
             @mouseleave="highlightedDocument = null"
           >
-            <document-card :highlighted="highlightedDocument === document" :document="document" />
+            <document-card :highlighted="highlightedDocument === document" :document="document" target="_blank" />
           </div>
         </div>
 
@@ -95,6 +95,7 @@
           :documents="filteredDocuments ? filteredDocuments : {}"
           :document-type="documentType"
           :highlighted-document="highlightedDocument"
+          :open-in-new-tab="true"
           @highlight-document="highlightedDocument = arguments[0]"
           class="documents-table"
         />
@@ -104,6 +105,7 @@
           ref="map"
           :documents="documentsShownOnMap"
           :highlighted-document="highlightedDocument"
+          :open-in-new-tab="true"
           @highlight-document="highlightedDocument = arguments[0]"
           show-center-on-geolocation
           show-recenter-on

@@ -22,6 +22,7 @@ import DocumentActivities from './cell-renderers/DocumentActivities';
 import DocumentAuthor from './cell-renderers/DocumentAuthor';
 import DocumentField from './cell-renderers/DocumentField';
 import DocumentLink from './cell-renderers/DocumentLink';
+import DocumentLinkNewTab from './cell-renderers/DocumentLinkNewTab.vue';
 import MarkerCondition from './cell-renderers/MarkerCondition';
 import MarkerGpsTrace from './cell-renderers/MarkerGpsTrace';
 import MarkerImageCount from './cell-renderers/MarkerImageCount';
@@ -65,6 +66,10 @@ export default {
     highlightedDocument: {
       type: Object,
       default: null,
+    },
+    openInNewTab: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -122,7 +127,10 @@ export default {
 
       if (this.documentType === 'area') {
         this.columnDefs = [
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, _exportFormatter: this.formatTitle }),
+          getColDef(this, fields.title, {
+            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            _exportFormatter: this.formatTitle,
+          }),
           getColDef(this, fields.area_type),
         ];
       }
@@ -130,7 +138,7 @@ export default {
       if (this.documentType === 'article') {
         this.columnDefs = [
           getColDef(this, fields.title, {
-            cellRendererFramework: DocumentLink,
+            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
             _exportFormatter: this.formatTitle,
             width: 300,
           }),
@@ -152,7 +160,10 @@ export default {
 
       if (this.documentType === 'book') {
         this.columnDefs = [
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, _exportFormatter: this.formatTitle }),
+          getColDef(this, fields.title, {
+            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            _exportFormatter: this.formatTitle,
+          }),
           getColDef(this, fields.book_types),
           getColDef(this, fields.author),
           getColDef(this, fields.activities, {
@@ -171,7 +182,10 @@ export default {
 
       if (this.documentType === 'image') {
         this.columnDefs = [
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, _exportFormatter: this.formatTitle }),
+          getColDef(this, fields.title, {
+            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            _exportFormatter: this.formatTitle,
+          }),
           getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, _exportFormatter: this.formatAreas }),
           getColDef(this, fields.author),
           getColDef(this, fields.filename),
@@ -180,7 +194,10 @@ export default {
 
       if (this.documentType === 'map') {
         this.columnDefs = [
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, _exportFormatter: this.formatTitle }),
+          getColDef(this, fields.title, {
+            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            _exportFormatter: this.formatTitle,
+          }),
           getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, _exportFormatter: this.formatAreas }),
           getColDef(this, fields.code),
           getColDef(this, fields.editor),
@@ -200,7 +217,10 @@ export default {
             cellRendererFramework: OutingDate,
             _exportFormatter: this.formatOutingDate,
           }),
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, _exportFormatter: this.formatTitle }),
+          getColDef(this, fields.title, {
+            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            _exportFormatter: this.formatTitle,
+          }),
           getColDef(
             this,
             { name: 'areas' },
@@ -289,7 +309,10 @@ export default {
 
       if (this.documentType === 'route') {
         this.columnDefs = [
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, _exportFormatter: this.formatTitle }),
+          getColDef(this, fields.title, {
+            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            _exportFormatter: this.formatTitle,
+          }),
           getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, _exportFormatter: this.formatAreas }),
           getColDef(this, fields.activities, {
             cellRendererFramework: DocumentActivities,
@@ -345,7 +368,10 @@ export default {
 
       if (this.documentType === 'waypoint') {
         this.columnDefs = [
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, _exportFormatter: this.formatTitle }),
+          getColDef(this, fields.title, {
+            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            _exportFormatter: this.formatTitle,
+          }),
           getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, _exportFormatter: this.formatAreas }),
           getColDef(this, fields.elevation),
           getColDef(this, fields.waypoint_type),
@@ -361,7 +387,10 @@ export default {
       if (this.documentType === 'xreport') {
         this.columnDefs = [
           getColDef(this, fields.date, { width: 100 }),
-          getColDef(this, fields.title, { cellRendererFramework: DocumentLink, _exportFormatter: this.formatTitle }),
+          getColDef(this, fields.title, {
+            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            _exportFormatter: this.formatTitle,
+          }),
           getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, _exportFormatter: this.formatAreas }),
           getColDef(this, fields.event_type, { width: 100 }),
           getColDef(this, fields.event_activity, { width: 100 }),
