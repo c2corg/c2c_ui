@@ -36,6 +36,7 @@ function ItinevertService() {
   this.axios = axios.create({
     baseURL: config.urls.api,
   });
+  this.jobID = null;
 }
 
 /** --------------- Query to API --------------- */
@@ -196,6 +197,20 @@ ItinevertService.prototype.getAllReachableWaypoints = function (query, onProgres
   });
 };
 
+ItinevertService.prototype.getJourneyReachableWaypoints = function () {
+  const data = this.axios.get(`/navitia/journeyreachablewaypoints/result/${this.jobID}`);
+  // job is done, reset job id.
+  this.jobID = null;
+  return data;
+};
+
+ItinevertService.prototype.getJourneyReachableRoutes = function () {
+  const data = this.axios.get(`/navitia/journeyreachableroutes/result/${this.jobID}`);
+  // job is done, reset job id.
+  this.jobID = null;
+  return data;
+};
+
 /**
  * Retrieves routes reachable by a Navitia journey computed with departure and to. The route does not support offset and
  * limit, it will always return all the routes (count will always be <= MAX_ROUTE_THRESHOLD)
@@ -205,23 +220,56 @@ ItinevertService.prototype.getAllReachableWaypoints = function (query, onProgres
  * @param {String} from The starting point {lon, lat}
  * @returns {Promise} Returns {documents: All routes reachable in TC, total: query.count()}
  */
-ItinevertService.prototype.getJourneyReachableRoutes = function (query, departure, from) {
+ItinevertService.prototype.startJourneyReachableRoutesJob = async function (query, departure, from) {
   const params = new URLSearchParams(buildJourneyReachableQuery(query, departure, from)).toString();
-  return this.axios.get(`/navitia/journeyreachableroutes?${params}`);
+  this.jobID = (await this.axios.get(`/navitia/journeyreachableroutes/start?${params}`)).data['job_id'];
 };
 
 /**
  * Retrieves waypoints reachable by a Navitia journey computed with departure and to. The route does not support offset
- * and limit, it will always return all the waypoints
+ * and limit
  *
  * @param {Object} query The query filters to apply to waypoints
  * @param {Object} departure The starting point ({ selectedDate, selectedTime, timePreference})
  * @param {String} from The starting point {lon, lat}
  * @returns {Promise} Returns {documents: All waypoints reachable in TC, total: query.count()}
  */
-ItinevertService.prototype.getJourneyReachableWaypoints = function (query, departure, from) {
+ItinevertService.prototype.startJourneyReachableWaypointsJob = async function (query, departure, from) {
   const params = new URLSearchParams(buildJourneyReachableQuery(query, departure, from)).toString();
-  return this.axios.get(`/navitia/journeyreachablewaypoints?${params}`);
+  this.jobID = (await this.axios.get(`/navitia/journeyreachablewaypoints/start?${params}`)).data['job_id'];
+};
+
+ItinevertService.prototype.monitorProgress = function (onProgress, onDone, onError, type) {
+  if (!this.jobID) {
+    throw new Error('No job started yet');
+  }
+
+  const es = new EventSource(`${config.urls.api}/navitia/journeyreachable${type}/progress/${this.jobID}`);
+
+  // called whenever a progress event is received
+  es.onmessage = (event) => {
+    if (onProgress) {
+      onProgress(event.data);
+    }
+  };
+
+  // called when the job is done
+  es.addEventListener('done', () => {
+    if (onDone) {
+      onDone();
+    }
+    es.close();
+  });
+
+  // called when there is an error
+  es.addEventListener('error', (event) => {
+    if (onError) {
+      onError(event['data']);
+    }
+    es.close();
+  });
+
+  return es;
 };
 
 /**

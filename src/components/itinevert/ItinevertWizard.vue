@@ -123,7 +123,6 @@
               <fa-icon class="search-icon" icon="search" aria-hidden="true" />
               {{ $gettext('Search') }}
             </button>
-            <span class="no-result-found" v-show="noResultsFound" v-translate>No result found</span>
           </div>
         </div>
         <!-- LIST OF FILTERS WHEN TOO MUCH ROUTE -->
@@ -145,9 +144,10 @@
           ></itinevert-result-view>
         </div>
         <!-- NO RESULTS FOUND VIEW -->
-        <itinevert-no-result-view class="centered" v-show="view === 'result' && noResultsFound" />
+        <itinevert-no-result-view class="centered" :error="queryError" v-show="view === 'result' && noResultsFound" />
         <!-- LOADING VIEW -->
-        <itinevert-loading-view v-show="view === 'loading'"></itinevert-loading-view>
+        <itinevert-loading-view v-show="view === 'loading'" :progress="progress" :total="total" :is-spinner="isSpinner">
+        </itinevert-loading-view>
       </div>
       <div class="column is-3" v-if="view !== 'result' || noResultsFound">
         <div class="banner-img"></div>
@@ -172,7 +172,6 @@ import itinevertService, {
   MAX_NAVITIA_ISOCHRONES_REQUEST_REACHED,
   MAX_ROUTE_THRESHOLD,
   DEFAULT_TRIP_DURATION,
-  createBboxString,
   projectCoordinates,
 } from '@/js/apis/itinevert-service';
 import constants from '@/js/constants';
@@ -249,6 +248,9 @@ export default {
       filteredRoutes: {},
       filteredWaypoints: {},
       polygonGeometry: null,
+      progress: 0,
+      total: 0,
+      queryError: {},
     };
   },
 
@@ -293,9 +295,9 @@ export default {
     },
     noResultsFound() {
       if (this.formData?.searchKind?.selected === 'route') {
-        return this.filteredRoutes?.documents?.length === 0;
+        return !this.filteredRoutes.hasOwnProperty('documents') || this.filteredRoutes?.documents?.length === 0;
       } else if (this.formData?.searchKind?.selected === 'waypoint') {
-        return this.filteredWaypoints?.documents?.length === 0;
+        return !this.filteredWaypoints.hasOwnProperty('documents') || this.filteredWaypoints?.documents?.length === 0;
       } else {
         return false;
       }
@@ -308,6 +310,22 @@ export default {
     },
     tripDurationIncrement() {
       return TRIP_DURATION_INCREMENT;
+    },
+    isSpinner() {
+      if (this.formData.destinationKind.selected === 'mountain range') {
+        if (this.formData.searchKind.selected === 'route') {
+          return (
+            !Object.prototype.hasOwnProperty.call(this.filteredRoutes, 'total') ||
+            this.filteredRoutes.total === 0 ||
+            this.filteredRoutes.total > MAX_ROUTE_THRESHOLD
+          );
+        } else {
+          return false;
+        }
+      } else if (this.formData.destinationKind.selected === 'duration') {
+        return true;
+      }
+      return true;
     },
   },
 
@@ -322,7 +340,10 @@ export default {
         if (newVal === 'form') {
           this.filteredRoutes = {};
           this.filteredWaypoints = {};
-          replaceQuery({});
+          this.queryError = {};
+          if (Object.keys(this.$router?.currentRoute?.query)?.length > 0) {
+            replaceQuery({});
+          }
           return;
         }
         if (newVal === 'filter') {
@@ -416,15 +437,36 @@ export default {
     },
     async computeJourneyReachableRoutes() {
       this.$emit('change-view', 'loading');
-      this.filteredRoutes = (
-        await itinevertService.getJourneyReachableRoutes(
-          this.filterQuery,
-          this.formData.departure,
-          this.formData.startingPoint.selectedAddress
-        )
-      ).data;
-      this.polygonGeometry = JSON.parse(this.formData.mountainRange.selected.geometry.geom_detail);
-      this.$emit('change-view', 'result');
+      // start job, ID is stored in itinevert Service
+      await itinevertService.startJourneyReachableRoutesJob(
+        this.filterQuery,
+        this.formData.departure,
+        this.formData.startingPoint.selectedAddress
+      );
+
+      // monitor progress
+      itinevertService.monitorProgress(
+        (res) => {
+          let obj = JSON.parse(res);
+          this.progress = obj.progress;
+          this.total = obj.total;
+        },
+        async () => {
+          const result = await itinevertService.getJourneyReachableRoutes(itinevertService.jobID);
+          this.filteredRoutes = result.data.result;
+          this.polygonGeometry = JSON.parse(this.formData.mountainRange.selected.geometry.geom_detail);
+          this.total = 0;
+          this.progress = 0;
+          this.$emit('change-view', 'result');
+        },
+        (payload) => {
+          this.queryError = JSON.parse(payload);
+          this.filteredRoutes = {};
+          this.filteredWaypoints = {};
+          this.$emit('change-view', 'result');
+        },
+        'routes'
+      );
     },
     async formSearch() {
       let query = Object.fromEntries(Object.entries(this.formQuery).filter(([, v]) => v !== undefined));
@@ -453,17 +495,22 @@ export default {
             )
           ).data;
 
-          this.filteredRoutes = {
-            documents: data.documents,
-            total: data.total,
-          };
+          if (data.hasOwnProperty('documents')) {
+            this.filteredRoutes = {
+              documents: data.documents,
+              total: data.total,
+            };
+            // add area that intersects isochrone geometry to the base query to reduce time of request
+            let coordinates = projectCoordinates(data.isochron_geom.coordinates);
+            this.polygonGeometry = { type: data.isochron_geom.type, coordinates: coordinates };
+            query.a = (await itinevertService.getAreaIntersectingIsochrone(this.polygonGeometry)).data.join(',');
 
-          // add area that intersects isochrone geometry to the base query to reduce time of request
-          let coordinates = projectCoordinates(data.isochron_geom.coordinates);
-          this.polygonGeometry = { type: data.isochron_geom.type, coordinates: coordinates };
-          query.a = (await itinevertService.getAreaIntersectingIsochrone(this.polygonGeometry)).data.join(',');
-
-          this.$router.replace({ path: this.$route.path, query: query });
+            this.$router.replace({ path: this.$route.path, query: query });
+          } else {
+            this.queryError = JSON.parse(data);
+            this.filteredRoutes = {};
+            this.filteredWaypoints = {};
+          }
 
           this.$emit('change-view', 'result');
         }
@@ -474,14 +521,37 @@ export default {
         this.$emit('change-view', 'loading');
         // using Journey API
         if (this.formData.destinationKind.selected === 'mountain range') {
-          this.filteredWaypoints = (
-            await itinevertService.getJourneyReachableWaypoints(
-              query,
-              this.formData.departure,
-              this.formData.startingPoint.selectedAddress
-            )
-          ).data;
-          this.polygonGeometry = JSON.parse(this.formData.mountainRange.selected.geometry.geom_detail);
+          // start job, ID is stored in itinevert Service
+          await itinevertService.startJourneyReachableWaypointsJob(
+            this.formQuery,
+            this.formData.departure,
+            this.formData.startingPoint.selectedAddress
+          );
+
+          // monitor progress
+          itinevertService.monitorProgress(
+            (res) => {
+              let obj = JSON.parse(res);
+              this.progress = obj.progress;
+              this.total = obj.total;
+            },
+            async () => {
+              const result = await itinevertService.getJourneyReachableWaypoints(itinevertService.jobID);
+              this.filteredWaypoints = result.data.result;
+              this.polygonGeometry = JSON.parse(this.formData.mountainRange.selected.geometry.geom_detail);
+              this.total = 0;
+              this.progress = 0;
+              this.$router.replace({ path: this.$route.path, query: query });
+              this.$emit('change-view', 'result');
+            },
+            (payload) => {
+              this.queryError = JSON.parse(payload);
+              this.filteredRoutes = {};
+              this.filteredWaypoints = {};
+              this.$emit('change-view', 'result');
+            },
+            'waypoints'
+          );
         }
         // using Isochrones API
         else if (this.formData.destinationKind.selected === 'duration') {
@@ -494,18 +564,24 @@ export default {
             )
           ).data;
 
-          this.filteredWaypoints = {
-            documents: data.documents,
-            total: data.total,
-          };
+          if (data.hasOwnProperty('documents')) {
+            this.filteredWaypoints = {
+              documents: data.documents,
+              total: data.total,
+            };
+            // add area that intersects isochrone geometry to the base query to reduce time of request
+            let coordinates = projectCoordinates(data.isochron_geom.coordinates);
+            this.polygonGeometry = { type: data.isochron_geom.type, coordinates: coordinates };
+            query.a = (await itinevertService.getAreaIntersectingIsochrone(this.polygonGeometry)).data.join(',');
+            this.$router.replace({ path: this.$route.path, query: query });
+          } else {
+            this.queryError = JSON.parse(data);
+            this.filteredRoutes = {};
+            this.filteredWaypoints = {};
+          }
 
-          // add area that intersects isochrone geometry to the base query to reduce time of request
-          let coordinates = projectCoordinates(data.isochron_geom.coordinates);
-          this.polygonGeometry = { type: data.isochron_geom.type, coordinates: coordinates };
-          query.a = (await itinevertService.getAreaIntersectingIsochrone(this.polygonGeometry)).data.join(',');
+          this.$emit('change-view', 'result');
         }
-        this.$router.replace({ path: this.$route.path, query: query });
-        this.$emit('change-view', 'result');
       }
     },
     // only when searching for routes by massif
