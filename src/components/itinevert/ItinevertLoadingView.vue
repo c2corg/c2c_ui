@@ -13,7 +13,7 @@
           <div class="progress__bar" :style="{ width: computedPercent + '%' }"></div>
         </div>
       </div>
-      <div class="progress__label" v-show="total !== 0">{{ computedPercent + '%' }}</div>
+      <div class="progress__label" v-show="!isSpinner">{{ computedPercent + '%' }}</div>
 
       <p class="loading-text">{{ $gettext('Loading...') }}</p>
     </div>
