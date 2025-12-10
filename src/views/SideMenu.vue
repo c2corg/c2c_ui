@@ -60,7 +60,7 @@
       </span>
     </router-link>
     <!-- use of a href instead of router link so that the page is refreshed if you are already on Itinevert -->
-    <a :href="$router.resolve({ name: 'Itinevert' }).href" v-if="isTall">
+    <a :href="$router.resolve({ name: 'Itinevert' }).href">
       <span class="menu-item is-ellipsed" :class="{ 'router-link-active': ['Itinevert'].includes($route.name) }">
         <icon-itinevert fixed-width />
         <span class="menu-item-text"> {{ $gettext('Itinevert') | uppercaseFirstLetter }} </span>
