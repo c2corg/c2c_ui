@@ -158,6 +158,10 @@ export default {
       type: Object,
       default: null,
     },
+    isochroneBbox: {
+      type: String,
+      default: '',
+    },
   },
 
   data() {
@@ -301,6 +305,9 @@ export default {
       };
 
       let query = itinevertService.enhanceQuery(this.baseQuery, newQuery);
+      if (this.isochroneBbox !== '') {
+        query.bbox = this.isochroneBbox;
+      }
       this.lastQuery = query;
 
       let needToQuery = false;

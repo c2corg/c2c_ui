@@ -147,6 +147,7 @@
             :documents="formData.searchKind.selected === 'route' ? filteredRoutes : filteredWaypoints"
             :document-type="formData.searchKind.selected"
             :polygon-geometry="polygonGeometry"
+            :isochrone-bbox="isochroneBbox"
           ></itinevert-result-view>
         </div>
         <!-- NO RESULTS FOUND VIEW -->
@@ -179,6 +180,7 @@ import itinevertService, {
   MAX_ROUTE_THRESHOLD,
   DEFAULT_TRIP_DURATION,
   projectCoordinates,
+  createBboxString,
 } from '@/js/apis/itinevert-service';
 import constants from '@/js/constants';
 
@@ -257,6 +259,7 @@ export default {
       progress: 0,
       total: 0,
       queryError: {},
+      isochroneBbox: '',
     };
   },
 
@@ -352,6 +355,7 @@ export default {
           this.filteredRoutes = {};
           this.filteredWaypoints = {};
           this.queryError = {};
+          this.isochroneBbox = '';
           if (Object.keys(this.$router?.currentRoute?.query)?.length > 0) {
             replaceQuery({});
           }
@@ -514,8 +518,7 @@ export default {
             // add area that intersects isochrone geometry to the base query to reduce time of request
             let coordinates = projectCoordinates(data.isochron_geom.coordinates);
             this.polygonGeometry = { type: data.isochron_geom.type, coordinates: coordinates };
-            query.a = (await itinevertService.getAreaIntersectingIsochrone(this.polygonGeometry)).data.join(',');
-
+            this.isochroneBbox = createBboxString(coordinates);
             this.$router.replace({ path: this.$route.path, query: query });
           } else {
             this.queryError = JSON.parse(data);
@@ -583,7 +586,7 @@ export default {
             // add area that intersects isochrone geometry to the base query to reduce time of request
             let coordinates = projectCoordinates(data.isochron_geom.coordinates);
             this.polygonGeometry = { type: data.isochron_geom.type, coordinates: coordinates };
-            query.a = (await itinevertService.getAreaIntersectingIsochrone(this.polygonGeometry)).data.join(',');
+            this.isochroneBbox = createBboxString(coordinates);
             this.$router.replace({ path: this.$route.path, query: query });
           } else {
             this.queryError = JSON.parse(data);
