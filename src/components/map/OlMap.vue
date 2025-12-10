@@ -266,6 +266,11 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    openInNewTab: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -1133,7 +1138,7 @@ export default {
           if (this.documents.length === 1 && document.document_id === this.documents[0].document_id) {
             return;
           }
-          if (event.originalEvent.ctrlKey) {
+          if (event.originalEvent.ctrlKey || this.openInNewTab) {
             const href = this.$router.resolve({
               name: this.$documentUtils.getDocumentType(document.type),
               params: { id: document.document_id },

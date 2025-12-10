@@ -86,7 +86,7 @@
             @mouseenter="highlightedDocument = document"
             @mouseleave="highlightedDocument = null"
           >
-            <document-card :highlighted="highlightedDocument === document" :document="document" />
+            <document-card :highlighted="highlightedDocument === document" :document="document" target="_blank" />
           </div>
         </div>
 
@@ -95,6 +95,7 @@
           :documents="filteredDocuments ? filteredDocuments : {}"
           :document-type="documentType"
           :highlighted-document="highlightedDocument"
+          :open-in-new-tab="true"
           @highlight-document="highlightedDocument = arguments[0]"
           class="documents-table"
         />
@@ -104,6 +105,7 @@
           ref="map"
           :documents="documentsShownOnMap"
           :highlighted-document="highlightedDocument"
+          :open-in-new-tab="true"
           @highlight-document="highlightedDocument = arguments[0]"
           show-center-on-geolocation
           show-recenter-on
@@ -155,6 +157,10 @@ export default {
     polygonGeometry: {
       type: Object,
       default: null,
+    },
+    isochroneBbox: {
+      type: String,
+      default: '',
     },
   },
 
@@ -298,10 +304,10 @@ export default {
         };
       };
 
-      // remove undefined values
-      newQuery = Object.fromEntries(Object.entries(newQuery).filter(([key, value]) => value));
-
       let query = itinevertService.enhanceQuery(this.baseQuery, newQuery);
+      if (this.isochroneBbox !== '') {
+        query.bbox = this.isochroneBbox;
+      }
       this.lastQuery = query;
 
       let needToQuery = false;
@@ -361,6 +367,9 @@ export default {
 
         // cancel ongoing promise
         this.promise?.cancel?.();
+
+        // remove undefined values
+        query = Object.fromEntries(Object.entries(query).filter(([, v]) => v !== undefined));
 
         // launch new API request
         const p = functionToFetch.call(itinevertService, query);

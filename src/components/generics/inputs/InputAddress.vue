@@ -78,8 +78,10 @@ export default {
     },
   },
   async mounted() {
-    // Loads a user's address to put it directly into the 'address' field
-    await this.loadUserAddressIfLoggedIn();
+    if (this.defaultAddress === null) {
+      // Loads a user's address to put it directly into the 'address' field
+      await this.loadUserAddressIfLoggedIn();
+    }
 
     // Firefox's date picker calendar has a specific design
     if (navigator.userAgent.toLowerCase().includes('firefox')) {

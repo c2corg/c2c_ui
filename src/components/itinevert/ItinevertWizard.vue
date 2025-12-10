@@ -88,7 +88,13 @@
               <div class="date-picker-container">
                 <label for="date-input">{{ $gettext('Date') }}</label>
                 <div class="input-container">
-                  <input type="date" id="date-input" class="date-input" v-model="formData.departure.selectedDate" />
+                  <input
+                    type="date"
+                    id="date-input"
+                    class="date-input"
+                    :min="twoDaysAgo"
+                    v-model="formData.departure.selectedDate"
+                  />
                   <div class="calendar-icon">
                     <img class="geolocalisation-img" src="@/assets/img/boxes/date.svg" alt="date" />
                   </div>
@@ -119,37 +125,36 @@
             </div>
           </div>
           <div class="searchButton">
-            <button class="button is-primary" :disabled="!isSearchEnabled()" @click="search">
+            <button class="button is-primary" :disabled="!isSearchEnabled()" @click="formSearch">
               <fa-icon class="search-icon" icon="search" aria-hidden="true" />
               {{ $gettext('Search') }}
             </button>
-            <span class="no-result-found" v-show="noResultsFound" v-translate>No result found</span>
           </div>
         </div>
         <!-- LIST OF FILTERS WHEN TOO MUCH ROUTE -->
         <itinevert-filter-view
           class="centered filter-view"
           v-if="view === 'filter'"
-          :categorized-fields="categorizedFields"
           :filtered-routes="filteredRoutes"
           :is-search-enabled="isSearchEnabled()"
-          @search="search"
+          @search="filterSearch"
           @computeJourneyReachableRoutes="computeJourneyReachableRoutes"
         ></itinevert-filter-view>
         <!-- RESULT VIEW -->
         <div v-if="view === 'result' && !noResultsFound">
           <itinevert-result-view
-            :fields="categorizedFields"
-            :base-query="baseQuery"
+            :base-query="filterQuery"
             :documents="formData.searchKind.selected === 'route' ? filteredRoutes : filteredWaypoints"
             :document-type="formData.searchKind.selected"
             :polygon-geometry="polygonGeometry"
+            :isochrone-bbox="isochroneBbox"
           ></itinevert-result-view>
         </div>
         <!-- NO RESULTS FOUND VIEW -->
-        <itinevert-no-result-view class="centered" v-show="view === 'result' && noResultsFound" />
+        <itinevert-no-result-view class="centered" :error="queryError" v-show="view === 'result' && noResultsFound" />
         <!-- LOADING VIEW -->
-        <itinevert-loading-view v-show="view === 'loading'"></itinevert-loading-view>
+        <itinevert-loading-view v-show="view === 'loading'" :progress="progress" :total="total" :is-spinner="isSpinner">
+        </itinevert-loading-view>
       </div>
       <div class="column is-3" v-if="view !== 'result' || noResultsFound">
         <div class="banner-img"></div>
@@ -174,8 +179,8 @@ import itinevertService, {
   MAX_NAVITIA_ISOCHRONES_REQUEST_REACHED,
   MAX_ROUTE_THRESHOLD,
   DEFAULT_TRIP_DURATION,
-  createBboxString,
   projectCoordinates,
+  createBboxString,
 } from '@/js/apis/itinevert-service';
 import constants from '@/js/constants';
 
@@ -245,20 +250,42 @@ export default {
           selectedTime: new Date().toTimeString().slice(0, 5),
           timePreference: 'leave-after',
         },
-        otherFilterValues: [],
         // in minutes
         maxTripDuration: DEFAULT_TRIP_DURATION,
       },
       filteredRoutes: {},
       filteredWaypoints: {},
-      categorizedFields: [],
-      baseQuery: {},
-      isUpdating: false, // flag to prevent infinite loops
       polygonGeometry: null,
+      progress: 0,
+      total: 0,
+      queryError: {},
+      isochroneBbox: '',
     };
   },
 
   computed: {
+    twoDaysAgo() {
+      const twoDaysAgo = new Date();
+      twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+      return this.formatYMD(twoDaysAgo);
+    },
+    // the query based on formData
+    formQuery() {
+      let query = {};
+      query.documentType = this.formData.searchKind.selected;
+      if (this.formData.searchKind.selected === 'route' && this.formData.activities.length > 0) {
+        query.act = this.formData.activities.join(',');
+      }
+
+      if (this.formData.destinationKind.selected === 'mountain range') {
+        query.a = this.formData.mountainRange.selected.document_id;
+      }
+      return query;
+    },
+    // filter query based on URL
+    filterQuery() {
+      return this.$route.query;
+    },
     coverageDifferent() {
       // only check if we are selecting a massif
       if (
@@ -282,9 +309,9 @@ export default {
     },
     noResultsFound() {
       if (this.formData?.searchKind?.selected === 'route') {
-        return this.filteredRoutes?.documents?.length === 0;
+        return !this.filteredRoutes.hasOwnProperty('documents') || this.filteredRoutes?.documents?.length === 0;
       } else if (this.formData?.searchKind?.selected === 'waypoint') {
-        return this.filteredWaypoints?.documents?.length === 0;
+        return !this.filteredWaypoints.hasOwnProperty('documents') || this.filteredWaypoints?.documents?.length === 0;
       } else {
         return false;
       }
@@ -298,78 +325,48 @@ export default {
     tripDurationIncrement() {
       return TRIP_DURATION_INCREMENT;
     },
-    activeFields() {
-      return this.categorizedFields.map((category) =>
-        category.fields.filter((field) => !itinevertService.isFieldValueDefault(field.value, field.field))
-      );
+    isSpinner() {
+      if (this.formData.destinationKind.selected === 'mountain range') {
+        if (this.formData.searchKind.selected === 'route') {
+          return (
+            !Object.prototype.hasOwnProperty.call(this.filteredRoutes, 'total') ||
+            this.filteredRoutes.total === 0 ||
+            this.filteredRoutes.total > MAX_ROUTE_THRESHOLD
+          );
+        } else {
+          return false;
+        }
+      } else if (this.formData.destinationKind.selected === 'duration') {
+        return true;
+      }
+      return true;
     },
   },
 
   watch: {
-    'formData.activities': {
-      deep: true,
-      handler() {
-        this.categorizedFields = this.computeCategorizedFields(this.formData.activities);
-      },
-    },
-    'formData.searchKind.selected': {
-      handler() {
-        this.categorizedFields = this.computeCategorizedFields([]);
-      },
-    },
-    categorizedFields: {
-      deep: true,
-      handler(newVal) {
-        // Prevent infinite loop
-        if (this.isUpdating) return;
-
-        // Check the condition
-        if (newVal.length > 0 && newVal[0].fields[0].field.name === 'activities') {
-          this.isUpdating = true; // Set the flag
-
-          // Update categorizedFields based on the condition
-          this.categorizedFields = this.computeCategorizedFields(newVal[0].fields[0].value);
-
-          // Reset the flag after the update
-          this.$nextTick(() => {
-            this.isUpdating = false;
-          });
-        }
-      },
-    },
-    // when we go back to form view, get rid of filters eventually set in filter view (but keep filters in form).
     view: {
       handler(newVal) {
+        const replaceQuery = (q) => {
+          this.$router.replace({ path: this.$route.path, query: q });
+        };
+
+        // clear storage + URL when entering form
         if (newVal === 'form') {
-          // erase stored values
-          this.categorizedFields = [];
           this.filteredRoutes = {};
           this.filteredWaypoints = {};
-          // recompute based on formData activities
-          if (this.formData.searchKind?.selected === 'route') {
-            this.categorizedFields = this.computeCategorizedFields(this.formData.activities);
+          this.queryError = {};
+          this.isochroneBbox = '';
+          if (Object.keys(this.$router?.currentRoute?.query)?.length > 0) {
+            replaceQuery({});
           }
-          if (Object.keys(this.$router.currentRoute.query)?.length > 0) {
-            // reset url parameters
-            this.$router.replace({
-              path: this.$route.path,
-              query: {},
-            });
-          }
-        } else if (newVal === 'result') {
-          this.categorizedFields = [];
-          this.categorizedFields = this.computeCategorizedFields(this.formData.activities);
-          // build query based on active fields
-          let query = itinevertService.buildQuery(this.activeFields);
-          // Initialize URL with document type & activities
-          if (this.$route.query.documentType !== this.formData.searchKind.selected) {
-            this.$router.replace({
-              path: this.$route.path,
-              query: { documentType: this.formData.searchKind.selected, act: query.act },
-            });
-          }
+          return;
+        }
+        if (newVal === 'filter') {
+          replaceQuery(this.formQuery);
         }
       },
+      deep: false,
+      immediate: false,
     },
   },
 
@@ -410,48 +407,6 @@ export default {
           this.formData.maxTripDuration = tripDuration;
         }
       }
-    },
-    computeCategorizedFields(activities) {
-      const result = [];
-
-      for (const category of Object.keys(constants.categorizedFieldsDefault)) {
-        const temp = {
-          name: category,
-          fields: [],
-        };
-
-        let addCategory = false;
-
-        for (const name of constants.categorizedFieldsDefault[category]) {
-          const field =
-            this.formData.searchKind.selected === 'route' ? this.routeFields[name] : this.waypointFields[name];
-
-          if (field !== undefined) {
-            addCategory = true;
-
-            if (field.isVisibleForActivities(activities)) {
-              if (field?.values?.length > 0) {
-                // Try to find existing field from saved result (if it exists)
-                const existingCategory = this.categorizedFields?.find((c) => c.name === category);
-                const existingField = existingCategory?.fields.find((f) => f.field === field);
-
-                // Reuse existing value if it exists, else initialize new
-                let value = existingField?.value?.length ? existingField.value : null;
-                if (field.name === 'activities') {
-                  value = activities;
-                }
-
-                temp.fields.push({ field: field, value: value });
-              }
-            }
-          }
-        }
-
-        if (addCategory) {
-          result.push(temp);
-        }
-      }
-      return result;
     },
     // callback passed to input address
     async updateStartingPointAddress(selectedAddress) {
@@ -495,55 +450,52 @@ export default {
     getTitle(document) {
       return this.$documentUtils.getDocumentTitle(document, c2c.getApiLang(this.$language.current));
     },
-    buildQuery() {
-      let query = itinevertService.buildQuery(this.activeFields);
-      // filter on activities from form
-      if (
-        this.view === 'form' &&
-        this.formData.searchKind.selected === 'route' &&
-        this.formData.activities.length > 0
-      ) {
-        query.act = this.formData.activities.join(',');
-      }
-      // filter on mountain range from form
-      if (this.formData.destinationKind.selected === 'mountain range') {
-        query.a = this.formData.mountainRange.selected.document_id;
-      }
-      this.baseQuery = query;
-    },
     async computeJourneyReachableRoutes() {
       this.$emit('change-view', 'loading');
-      this.buildQuery();
-      this.filteredRoutes = (
-        await itinevertService.getJourneyReachableRoutes(
-          this.baseQuery,
-          this.formData.departure,
-          this.formData.startingPoint.selectedAddress
-        )
-      ).data;
-      this.polygonGeometry = JSON.parse(this.formData.mountainRange.selected.geometry.geom_detail);
-      this.$emit('change-view', 'result');
+      // start job, ID is stored in itinevert Service
+      await itinevertService.startJourneyReachableRoutesJob(
+        this.filterQuery,
+        this.formData.departure,
+        this.formData.startingPoint.selectedAddress
+      );
+
+      // monitor progress
+      itinevertService.monitorProgress(
+        (res) => {
+          let obj = JSON.parse(res);
+          this.progress = obj.progress;
+          this.total = obj.total;
+        },
+        async () => {
+          const result = await itinevertService.getJourneyReachableRoutes(itinevertService.jobID);
+          this.filteredRoutes = result.data.result;
+          this.polygonGeometry = JSON.parse(this.formData.mountainRange.selected.geometry.geom_detail);
+          this.total = 0;
+          this.progress = 0;
+          this.$emit('change-view', 'result');
+        },
+        (payload) => {
+          this.queryError = JSON.parse(payload);
+          this.filteredRoutes = {};
+          this.filteredWaypoints = {};
+          this.$emit('change-view', 'result');
+        },
+        'routes'
+      );
     },
-    async search() {
-      this.buildQuery();
+    async formSearch() {
+      let query = Object.fromEntries(Object.entries(this.formQuery).filter(([, v]) => v !== undefined));
       // compute filter for routes
       if (this.formData.searchKind.selected === 'route') {
         // using Journey API
         if (this.formData.destinationKind.selected === 'mountain range') {
-          // save if view is form before loading
-          let isViewForm = false;
-          if (this.view === 'form') {
-            isViewForm = true;
-            this.$emit('change-view', 'loading');
-          }
-          this.filteredRoutes = (await itinevertService.getReachableRoutes(this.baseQuery)).data;
+          this.$emit('change-view', 'loading');
+          this.filteredRoutes = (await itinevertService.getReachableRoutes(this.formQuery)).data;
           if (this.filteredRoutes.total > MAX_ROUTE_THRESHOLD) {
             this.$emit('change-view', 'filter');
           } else {
-            // go straight to result, skipping filter screen since < MAX_ROUTE_THRESHOLD
-            if (isViewForm) {
-              this.$emit('change-view', 'result');
-            }
+            this.$router.replace({ path: this.$route.path, query: query });
+            await this.computeJourneyReachableRoutes();
           }
         }
         // using Isochrones API
@@ -551,25 +503,28 @@ export default {
           this.$emit('change-view', 'loading');
           let data = (
             await itinevertService.getIsochronesReachableRoutes(
-              this.baseQuery,
+              this.filterQuery,
               this.formData.departure,
               this.formData.maxTripDuration,
               this.formData.startingPoint.selectedAddress
             )
           ).data;
 
-          this.filteredRoutes = {
-            documents: data.documents,
-            total: data.total,
-          };
-
-          // add isochron_geom as bbox to reduce time of request
-          let coordinates = projectCoordinates(data.isochron_geom.coordinates);
-          this.polygonGeometry = { type: data.isochron_geom.type, coordinates: coordinates };
-          this.baseQuery.bbox = createBboxString(coordinates);
-
-          // add area that intersects isochrone geometry to the base query to reduce time of request
-          this.baseQuery.a = (await itinevertService.getAreaIntersectingIsochrone(this.polygonGeometry)).data.join(',');
+          if (data.hasOwnProperty('documents')) {
+            this.filteredRoutes = {
+              documents: data.documents,
+              total: data.total,
+            };
+            // add area that intersects isochrone geometry to the base query to reduce time of request
+            let coordinates = projectCoordinates(data.isochron_geom.coordinates);
+            this.polygonGeometry = { type: data.isochron_geom.type, coordinates: coordinates };
+            this.isochroneBbox = createBboxString(coordinates);
+            this.$router.replace({ path: this.$route.path, query: query });
+          } else {
+            this.queryError = JSON.parse(data);
+            this.filteredRoutes = {};
+            this.filteredWaypoints = {};
+          }
 
           this.$emit('change-view', 'result');
         }
@@ -580,41 +535,86 @@ export default {
         this.$emit('change-view', 'loading');
         // using Journey API
         if (this.formData.destinationKind.selected === 'mountain range') {
-          this.filteredWaypoints = (
-            await itinevertService.getJourneyReachableWaypoints(
-              this.baseQuery,
-              this.formData.departure,
-              this.formData.startingPoint.selectedAddress
-            )
-          ).data;
-          this.polygonGeometry = JSON.parse(this.formData.mountainRange.selected.geometry.geom_detail);
+          // start job, ID is stored in itinevert Service
+          await itinevertService.startJourneyReachableWaypointsJob(
+            this.formQuery,
+            this.formData.departure,
+            this.formData.startingPoint.selectedAddress
+          );
+
+          // monitor progress
+          itinevertService.monitorProgress(
+            (res) => {
+              let obj = JSON.parse(res);
+              this.progress = obj.progress;
+              this.total = obj.total;
+            },
+            async () => {
+              const result = await itinevertService.getJourneyReachableWaypoints(itinevertService.jobID);
+              this.filteredWaypoints = result.data.result;
+              this.polygonGeometry = JSON.parse(this.formData.mountainRange.selected.geometry.geom_detail);
+              this.total = 0;
+              this.progress = 0;
+              this.$router.replace({ path: this.$route.path, query: query });
+              this.$emit('change-view', 'result');
+            },
+            (payload) => {
+              this.queryError = JSON.parse(payload);
+              this.filteredRoutes = {};
+              this.filteredWaypoints = {};
+              this.$emit('change-view', 'result');
+            },
+            'waypoints'
+          );
         }
         // using Isochrones API
         else if (this.formData.destinationKind.selected === 'duration') {
           let data = (
             await itinevertService.getIsochronesReachableWaypoints(
-              this.baseQuery,
+              query,
               this.formData.departure,
               this.formData.maxTripDuration,
               this.formData.startingPoint.selectedAddress
             )
           ).data;
 
-          this.filteredWaypoints = {
-            documents: data.documents,
-            total: data.total,
-          };
+          if (data.hasOwnProperty('documents')) {
+            this.filteredWaypoints = {
+              documents: data.documents,
+              total: data.total,
+            };
+            // add area that intersects isochrone geometry to the base query to reduce time of request
+            let coordinates = projectCoordinates(data.isochron_geom.coordinates);
+            this.polygonGeometry = { type: data.isochron_geom.type, coordinates: coordinates };
+            this.isochroneBbox = createBboxString(coordinates);
+            this.$router.replace({ path: this.$route.path, query: query });
+          } else {
+            this.queryError = JSON.parse(data);
+            this.filteredRoutes = {};
+            this.filteredWaypoints = {};
+          }
 
-          // add isochron_geom as bbox to reduce time of request
-          let coordinates = projectCoordinates(data.isochron_geom.coordinates);
-          this.polygonGeometry = { type: data.isochron_geom.type, coordinates: coordinates };
-          this.baseQuery.bbox = createBboxString(coordinates);
-
-          // add area that intersects isochrone geometry to the base query to reduce time of request
-          this.baseQuery.a = (await itinevertService.getAreaIntersectingIsochrone(this.polygonGeometry)).data.join(',');
+          this.$emit('change-view', 'result');
         }
-        this.$emit('change-view', 'result');
       }
+    },
+    // only when searching for routes by massif
+    async filterSearch() {
+      // compute filter for routes
+      if (this.formData.searchKind.selected === 'route') {
+        // using Journey API
+        if (this.formData.destinationKind.selected === 'mountain range') {
+          let query = Object.fromEntries(Object.entries(this.filterQuery).filter(([, v]) => v !== undefined));
+
+          this.filteredRoutes = (await itinevertService.getReachableRoutes(query)).data;
+        }
+      }
+    },
+    formatYMD(d) {
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
     },
   },
 };

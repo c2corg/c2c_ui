@@ -6,7 +6,7 @@
     </div>
     <div class="filter-button-dropdown">
       <dropdown-button
-        v-for="(category, index) in categorizedFields"
+        v-for="category in categorizedFields"
         :key="category.name"
         :disabled="category.fields.length === 0"
         class="query-item-component"
@@ -20,18 +20,18 @@
             <!-- $gettext('Miscs') -->
             &nbsp;{{ $gettext(category.name) }}
           </span>
-          <span v-if="activeFields[index]?.length != 0"> &nbsp;({{ activeFields[index]?.length }}) </span>
+          <span v-if="category.activeCount != 0"> &nbsp;({{ category.activeCount }}) </span>
           <span>&nbsp;</span>
           <fa-icon icon="angle-down" aria-hidden="true" />
         </span>
         <div class="sub-query-items">
-          <itinevert-filter-item
-            v-for="field in category.fields || []"
-            :key="field.field.name"
-            :field="field.field"
-            v-model="field.value"
+          <query-item
+            v-for="field of category.fields"
+            :key="field.name"
+            :field="field"
             class="dropdown-item"
-          ></itinevert-filter-item>
+            :class="field.name === 'title' ? 'is-hidden-tablet' : ''"
+          />
         </div>
       </dropdown-button>
     </div>
@@ -61,13 +61,14 @@
 <script>
 import DropdownButton from '../generics/DropdownButton.vue';
 
-import ItinevertFilterItem from './ItinevertFilterItem.vue';
-
 import itinevertService, { MAX_ROUTE_THRESHOLD } from '@/js/apis/itinevert-service';
+import constants from '@/js/constants';
+import QueryItem from '@/views/documents/utils/QueryItem.vue';
+
 export default {
   name: 'ItinevertFilterView',
   components: {
-    ItinevertFilterItem,
+    QueryItem,
     DropdownButton,
   },
   categoryIcon: {
@@ -78,10 +79,6 @@ export default {
     ratings: 'tachometer-alt',
   },
   props: {
-    categorizedFields: {
-      type: Array,
-      default: () => [],
-    },
     filteredRoutes: {
       type: Object,
       default: () => {},
@@ -98,10 +95,40 @@ export default {
     };
   },
   computed: {
-    activeFields() {
-      return this.categorizedFields.map((category) =>
-        category.fields.filter((field) => !itinevertService.isFieldValueDefault(field.value, field.field))
-      );
+    categorizedFields() {
+      const result = [];
+      // do not try to compute categorized fields in form view as not useful
+      // + can't be done since document type might not be set
+      for (const category of Object.keys(constants.categorizedFieldsDefault)) {
+        const temp = {
+          name: category,
+          activeCount: 0,
+          fields: [],
+        };
+
+        let addCategory = false;
+
+        for (const name of constants.categorizedFieldsDefault[category]) {
+          const field = constants.objectDefinitions['route'].fields[name];
+          if (field !== undefined && field.url) {
+            addCategory = true;
+
+            if (this.$route.query[field.url] !== undefined) {
+              temp.activeCount += 1;
+            }
+
+            if (field.isVisibleForActivities((this.$route.query.act ?? '').split(','))) {
+              temp.fields.push(field);
+            }
+          }
+        }
+
+        if (addCategory) {
+          result.push(temp);
+        }
+      }
+
+      return result;
     },
     routeCount() {
       return this.filteredRoutes.total;
