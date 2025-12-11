@@ -782,6 +782,7 @@ export default {
     flex-direction: column;
     gap: 24px;
     width: 90%;
+    min-height: 100%;
   }
 
   .searchButton {

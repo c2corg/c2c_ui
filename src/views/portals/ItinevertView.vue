@@ -2,7 +2,7 @@
   <div class="section">
     <html-header :title="$gettext('Itinevert')" />
     <!-- Discover view description -->
-    <div class="box intro">
+    <div class="box intro" :class="{ 'itinevert-result-header': wizardView === 'result' }">
       <div class="feed-title has-cursor-pointer">
         <span class="title is-4 itinevert-title" :class="{ 'is-marginless': !visible }" v-translate>
           Change your approach: plan your public transport outing
@@ -28,7 +28,7 @@
       </div>
       <itinevert-banner v-show="visible && !canStartAgain" />
     </div>
-    <div class="box">
+    <div class="box wizard">
       <itinevert-wizard :view="wizardView" @change-view="changeView"></itinevert-wizard>
     </div>
   </div>
@@ -80,18 +80,41 @@ export default {
 
 <style scoped lang="scss">
 @media screen and (max-width: $tablet) {
-  .feed-view {
+  .feed-title {
     padding-left: 0;
     padding-right: 0;
+    flex-direction: column !important;
+  }
 
-    .feed-title {
-      padding-left: 0;
-      padding-right: 0;
-    }
+  .section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .itinevert-result-header {
+    height: $itinevert-header-height;
+    position: fixed;
+    top: 3.25rem;
+    left: 0;
+    background: white;
+    z-index: 24;
+  }
+
+  .wizard {
+    flex-grow: 1;
   }
 
   .field {
     flex-direction: column;
+  }
+
+  .title {
+    width: 100%;
+  }
+
+  .start-again-button {
+    width: 100%;
+    margin-top: 16px;
   }
 
   .preference-switch {
@@ -111,10 +134,6 @@ export default {
 }
 
 @media screen and (min-width: $tablet) {
-  .feed-view {
-    margin-top: $size-3;
-  }
-
   .field {
     justify-content: space-between;
     align-items: baseline;

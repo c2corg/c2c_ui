@@ -60,7 +60,6 @@ export default {
   flex-direction: column;
   align-items: center;
   gap: 14px;
-  background: #fff;
   padding: 24px 30px;
   min-width: 220px;
 }

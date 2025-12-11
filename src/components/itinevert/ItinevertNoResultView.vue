@@ -40,6 +40,7 @@ export default {
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding-top: calc($itinevert-header-height);
 }
 
 .no-result-view-title {

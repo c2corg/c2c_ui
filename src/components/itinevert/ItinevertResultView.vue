@@ -444,7 +444,7 @@ $cards-gap: 0.25rem;
 
   .search-infos {
     position: fixed;
-    top: $navbar-height;
+    top: calc($navbar-height + $itinevert-header-height);
     left: 0;
     right: 0;
     z-index: 24;
@@ -453,7 +453,7 @@ $cards-gap: 0.25rem;
   }
 
   .result-section {
-    padding-top: calc(2 * #{$mobile-section-padding} + #{$mobile-header-height} + #{$mobile-filters-height});
+    padding-top: calc($navbar-height + $itinevert-header-height + 2rem);
   }
 
   .documents-view {

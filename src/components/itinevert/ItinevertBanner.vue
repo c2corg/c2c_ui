@@ -62,6 +62,12 @@ export default {
   margin-right: auto;
 }
 
+@media screen and (max-width: 528px) {
+  .subtitle {
+    margin-top: 8px;
+  }
+}
+
 @media screen and (max-width: $tablet) {
   .logo-fondation-petzl {
     max-width: 10%;

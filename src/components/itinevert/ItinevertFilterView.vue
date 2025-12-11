@@ -4,7 +4,7 @@
       <p class="too-much-route-label" v-translate>Your search includes too many routes.</p>
       <p v-translate>Help us better target routes that may interest you by adding one or more filters.</p>
     </div>
-    <div class="filter-button-dropdown">
+    <div class="filter-button-dropdown search-infos">
       <dropdown-button
         v-for="category in categorizedFields"
         :key="category.name"
@@ -233,12 +233,7 @@ export default {
   @media screen and (max-width: $tablet) {
     overflow-y: scroll;
     overflow-x: hidden;
-    /*
-      max-height should be calculated:
-      100vh-($navbar-height)-height(.search-infos)
-      but .search-infos height is not fixed
-    */
-    max-height: 70vh;
+    max-height: 40vh;
 
     scrollbar-width: none; // Firefox
 
@@ -255,8 +250,17 @@ export default {
 }
 
 @media screen and (max-width: $tablet) {
+  .search-infos {
+    position: relative;
+  }
+
   .searchButton {
     width: 100%;
+  }
+
+  .filter-buttons {
+    margin-top: auto;
+    margin-bottom: 0.5rem;
   }
 
   .filter-buttons {
