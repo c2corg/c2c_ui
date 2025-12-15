@@ -157,7 +157,7 @@
         </itinevert-loading-view>
       </div>
       <div class="column is-3" v-if="view !== 'result' || noResultsFound">
-        <div class="banner-img"></div>
+        <div class="banner-img" :style="{ backgroundImage: `url(${bannerImage})` }"></div>
       </div>
     </div>
   </section>
@@ -260,6 +260,7 @@ export default {
       total: 0,
       queryError: {},
       isochroneBbox: '',
+      bannerImage: null,
     };
   },
 
@@ -371,6 +372,18 @@ export default {
   },
 
   async mounted() {
+    // handle banner images
+    // Load every image in the folder
+    const context = require.context('@/assets/img/itinevert', false, /\.(png|jpe?g|webp|svg)$/);
+
+    // Convert to array of resolved URLs
+    const banners = context.keys().map(context);
+
+    if (banners.length) {
+      const randomIndex = Math.floor(Math.random() * banners.length);
+      this.bannerImage = banners[randomIndex];
+    }
+
     // reset url parameters
     if (Object.keys(this.$router.currentRoute.query)?.length > 0) {
       this.$router.replace({
@@ -757,7 +770,6 @@ export default {
   height: 100%;
   width: 100%;
   margin-left: auto;
-  background-image: url('../../assets/img/itinevert/itinevert-banner.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
