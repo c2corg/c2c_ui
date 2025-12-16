@@ -488,7 +488,11 @@ export default {
           this.$emit('change-view', 'result');
         },
         (payload) => {
-          this.queryError = JSON.parse(payload);
+          try {
+            this.queryError = typeof payload === 'string' ? JSON.parse(payload) : payload;
+          } catch (e) {
+            this.queryError = { message: 'Unknown error occurred' };
+          }
           this.filteredRoutes = {};
           this.filteredWaypoints = {};
           this.$emit('change-view', 'result');
@@ -534,7 +538,11 @@ export default {
             this.isochroneBbox = createBboxString(coordinates);
             this.$router.replace({ path: this.$route.path, query: query });
           } else {
-            this.queryError = JSON.parse(data);
+            try {
+              this.queryError = typeof data === 'string' ? JSON.parse(data) : data;
+            } catch (e) {
+              this.queryError = { message: 'Unknown error occurred' };
+            }
             this.filteredRoutes = {};
             this.filteredWaypoints = {};
           }
@@ -572,7 +580,11 @@ export default {
               this.$emit('change-view', 'result');
             },
             (payload) => {
-              this.queryError = JSON.parse(payload);
+              try {
+                this.queryError = typeof payload === 'string' ? JSON.parse(payload) : payload;
+              } catch (e) {
+                this.queryError = { message: 'Unknown error occurred' };
+              }
               this.filteredRoutes = {};
               this.filteredWaypoints = {};
               this.$emit('change-view', 'result');
@@ -602,7 +614,11 @@ export default {
             this.isochroneBbox = createBboxString(coordinates);
             this.$router.replace({ path: this.$route.path, query: query });
           } else {
-            this.queryError = JSON.parse(data);
+            try {
+              this.queryError = typeof data === 'string' ? JSON.parse(data) : data;
+            } catch (e) {
+              this.queryError = { message: 'Unknown error occurred' };
+            }
             this.filteredRoutes = {};
             this.filteredWaypoints = {};
           }

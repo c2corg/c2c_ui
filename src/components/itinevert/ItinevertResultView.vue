@@ -237,6 +237,12 @@ export default {
 
   mounted() {
     // init filtered documents
+    if (!this.documents) {
+      this.filteredDocuments = { documents: [], total: 0 };
+      this.filteredDocumentsBeforePagination = { documents: [], total: 0 };
+      this.promise = { data: this.filteredDocuments, error: null, cancel: () => {} };
+      return;
+    }
     this.filteredDocumentsBeforePagination = {
       documents: this.documents.documents,
       total: this.documents.total,
@@ -403,9 +409,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$section-padding: 1.5rem; //TODO find this variable
+$section-padding: 1.5rem;
 $header-height: 34px;
-$header-padding-bottom: 1.5rem; //TODO find this variable
+$header-padding-bottom: 1.5rem;
 $filter-height: 32px;
 $tags-height: 28px;
 $filter-padding-bottom: 0.5rem;

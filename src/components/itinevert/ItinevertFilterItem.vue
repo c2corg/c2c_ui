@@ -68,11 +68,11 @@
     </div>
 
     <div v-else-if="field.queryMode === 'date'">
-      <date-query-item />
+      <date-query-item v-model="selected" :field="field" />
     </div>
 
     <div v-else-if="field.queryMode === 'dates'">
-      <dates-query-item />
+      <dates-query-item v-model="selected" :field="field" />
     </div>
 
     <div v-else class="notification is-danger">Please fill queryMode for {{ field.name }}</div>
@@ -141,10 +141,6 @@ export default {
     gettext(key) {
       return this.$gettext(key, this.field.i18nContext);
     },
-
-    oninput: debounce(function () {
-      this.selected = this.$refs.input.value;
-    }, 300),
 
     initialValue() {
       if (!this.field) return null;

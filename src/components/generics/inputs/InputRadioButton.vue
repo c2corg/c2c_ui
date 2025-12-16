@@ -6,11 +6,11 @@
         :value="option.value"
         v-model="selected"
         @change="emitSelectedValue"
-        :disabled="disabledOptions.map((option) => option.value).includes(option.value)"
+        :disabled="disabledValues.has(option.value)"
       />
       <div class="option">
         {{ option.text }}
-        <p class="optionDisabled">{{ reasons[option.value] }}</p>
+        <p v-if="reasons[option.value]" class="optionDisabled">{{ reasons[option.value] }}</p>
       </div>
     </label>
   </div>
@@ -35,6 +35,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    value: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -49,11 +53,19 @@ export default {
       });
       return reasons;
     },
+    disabledValues() {
+      return new Set(this.disabledOptions.map((option) => option.value));
+    },
   },
   watch: {
     value(newValue) {
       this.selected = newValue;
     },
+  },
+  mounted() {
+    if (this.selected) {
+      this.$emit('input', this.selected);
+    }
   },
   methods: {
     emitSelectedValue() {
@@ -86,7 +98,7 @@ export default {
 
 .input-radio-vertical {
   display: flex;
-  flex-direction: column !important;
+  flex-direction: column;
   gap: 8px;
 }
 </style>
