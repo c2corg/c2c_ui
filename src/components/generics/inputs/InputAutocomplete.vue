@@ -1,5 +1,5 @@
 <template>
-  <div :class="['control, autocomplete-wrapper', { fullwidth }]">
+  <div :class="['control', 'autocomplete-wrapper', { fullwidth }]">
     <div class="autocomplete-input-container">
       <div class="autocomplete-box">
         <div class="input-wrapper">
@@ -41,14 +41,14 @@ export default {
     showSuggestions: { type: Boolean, default: false },
     defaultValue: { type: Object, default: null },
     suggestions: { type: Array, default: () => [] },
-    formatSuggestion: { type: Function, default: () => {} },
+    formatSuggestion: { type: Function, default: (s) => s ?? '' },
   },
   data() {
     return {
       localData: {
         value: this.defaultValue ? this.formatSuggestion(this.defaultValue) : '',
         selectedValue: '',
-        valueSuggestions: '',
+        valueSuggestions: [],
         showSuggestions: this.showSuggestions,
       },
     };

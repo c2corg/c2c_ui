@@ -148,7 +148,10 @@ export default {
       if (this.field.queryMode === 'multiSelect' || this.field.queryMode === 'tristate') return [];
       if (this.field.queryMode === 'checkbox') return false;
       if (this.field.queryMode === 'valuesRangeSlider' || this.field.queryMode === 'numericalRangeSlider') {
-        return [this.field.values?.[0] ?? 0, this.field.values?.[this.field.values.length - 1] ?? 0];
+        if (this.field.queryMode === 'valuesRangeSlider') {
+          return [this.field.values?.[0] ?? 0, this.field.values?.[this.field.values.length - 1] ?? 0];
+        }
+        return [this.field.min ?? 0, this.field.max ?? 0];
       }
       return '';
     },

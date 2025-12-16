@@ -313,9 +313,9 @@ export const getDocumentPolygonStyle = function (title, highlight, properties) {
       stroke: new ol.style.Stroke({
         color: properties.strokeColor,
         width: 4,
-        zIndex: 1,
       }),
       text: buildTextStyle(properties.name || title, highlight, true),
+      zIndex: 1,
     });
   }
 

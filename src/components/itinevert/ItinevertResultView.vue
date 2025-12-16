@@ -204,7 +204,7 @@ export default {
       if (this.polygonGeometry !== null) {
         // create an area document based on polygon geometry
         const areaDocument = {
-          document_id: 1,
+          document_id: -1, // synthetic ID to avoid conflicts with real documents
           type: 'a',
           geometry: {
             version: 1,
@@ -366,7 +366,7 @@ export default {
             : itinevertService.getAllReachableWaypoints;
 
         // get list of previous document IDs
-        const oldIds = this.documents?.documents?.map((doc) => doc.document_id);
+        const oldIds = this.documents?.documents?.map((doc) => doc.document_id) ?? [];
 
         // reset filtered list
         this.filteredDocuments.documents = [];

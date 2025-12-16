@@ -3,7 +3,9 @@
     <fa-icon :icon="['far', 'face-frown']" size="2xl" aria-hidden="true" />
     <span class="no-result-view-title" v-translate>No result found</span>
     <span class="no-result-view-description" v-translate>We can't find any results matching your search.</span>
-    <span class="no-result-found">{{ errorMessages[error?.id] ?? error?.message }}</span>
+    <span class="no-result-found" v-if="errorMessages[error?.id] ?? error?.message">
+      {{ errorMessages[error?.id] ?? error?.message }}
+    </span>
   </div>
 </template>
 
@@ -13,7 +15,7 @@ export default {
   props: {
     error: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
   },
   data() {

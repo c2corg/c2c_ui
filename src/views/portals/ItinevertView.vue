@@ -63,6 +63,12 @@ export default {
       return this.wizardView === 'result' || this.wizardView === 'filter';
     },
   },
+  mounted() {
+    const stored = this.$localStorage.get('itinevert_visible');
+    if (stored !== null) {
+      this.visible = stored;
+    }
+  },
   methods: {
     changeView(view) {
       this.wizardView = view;
@@ -72,7 +78,7 @@ export default {
     },
     setProperty(property, value) {
       this[property] = value;
-      this.$localStorage.set(`${property}`, this[property]);
+      this.$localStorage.set(`itinevert_${property}`, this[property]);
     },
   },
 };

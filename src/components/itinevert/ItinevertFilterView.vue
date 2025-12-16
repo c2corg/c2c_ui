@@ -131,7 +131,7 @@ export default {
       return result;
     },
     routeCount() {
-      return this.filteredRoutes.total;
+      return this.filteredRoutes?.total ?? 0;
     },
     routeCountMax() {
       return ' / ' + MAX_ROUTE_THRESHOLD + ' ' + this.$gettext('routes');

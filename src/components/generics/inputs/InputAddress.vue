@@ -46,7 +46,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: 'Entrez une adresse',
+      default: () => $gettext('Enter an address'),
     },
     showAddressPropositions: {
       type: Boolean,
@@ -66,7 +66,7 @@ export default {
       localData: {
         address: this.defaultAddress ? this.formatProposition(this.defaultAddress) : '',
         selectedAddress: '',
-        addressPropositions: '',
+        addressPropositions: [],
         showAddressPropositions: this.showAddressPropositions,
         coordinates: null,
       },
@@ -86,6 +86,11 @@ export default {
     // Firefox's date picker calendar has a specific design
     if (navigator.userAgent.toLowerCase().includes('firefox')) {
       document.documentElement.classList.add('is-firefox');
+    }
+  },
+  beforeDestroy() {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
     }
   },
   methods: {

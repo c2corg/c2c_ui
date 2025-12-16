@@ -20,6 +20,7 @@
             If you see any improvements or missing lines, you can provide feedback via the links provided in
           </span>
           <a
+            target="_blank"
             href="https://forum.camptocamp.org/t/la-mobilite-douce-clef-en-main-debarque-sur-camptocamp/351137"
             v-translate
           >
@@ -32,37 +33,38 @@
               <p class="link-header" v-translate>Other tools can complement Itinévert:</p>
               <ul class="links">
                 <li>
-                  <router-link
-                    to="https://www.camptocamp.org/articles/219828/fr/mobilite-douce-sur-camptocamp"
+                  <a
+                    target="_blank"
+                    href="https://www.camptocamp.org/articles/219828/fr/mobilite-douce-sur-camptocamp"
                     v-translate
                     >Sustainable mobility on Camptocamp
-                  </router-link>
+                  </a>
                 </li>
                 <li>
-                  <router-link to="https://www.camptocamp.org/outings?owpt=true" v-translate
+                  <a target="_blank" href="https://www.camptocamp.org/outings?owpt=true" v-translate
                     >Outings using sustainable transportation on Camptocamp
-                  </router-link>
+                  </a>
                 </li>
                 <li>
-                  <router-link to="https://hometosummit.vercel.app/" v-translate
+                  <a target="_blank" href="https://hometosummit.vercel.app/" v-translate
                     >Map of routes accessible by bike-train
-                  </router-link>
+                  </a>
                 </li>
               </ul>
             </div>
           </div>
           <div class="column is-12-mobile">
-            <router-link :to="{ name: '/' }" class="menu-brand has-text-centered">
+            <router-link :to="{ name: 'Itinevert' }" class="menu-brand has-text-centered">
               <img src="@/assets/img/logo_itinévert_orange.svg" alt="Itinévert" class="logo-itinevert" />
             </router-link>
             <p class="petzl-header" v-translate>This device is supported by the Petzl Foundation</p>
-            <router-link :to="{ name: '/' }" class="menu-brand has-text-centered">
+            <a href="https://www.petzl.com/fondation" target="_blank" class="menu-brand has-text-centered">
               <img
                 src="@/assets/img/yeti/logo-fondation-petzl.jpg"
                 alt="Fondation Petzl"
                 class="logo-fondation-petzl"
               />
-            </router-link>
+            </a>
           </div>
         </div>
       </div>

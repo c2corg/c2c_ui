@@ -22,7 +22,7 @@ export default {
 
       // check if it starts with "Itinevert", so that we can retrieve the doc type
       if (this.$route.name.startsWith('Itinevert')) {
-        return this.$route.query.documentType;
+        return this.$route.query.documentType ?? 'route';
       }
       // else url starts with the doc type
       return this.$route.name.split('-')[0].slice(0, -1);
