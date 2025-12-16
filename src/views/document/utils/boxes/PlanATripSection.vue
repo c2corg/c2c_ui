@@ -1163,10 +1163,7 @@ export default {
             type: 'r',
             geometry: {
               version: 1,
-              geom: JSON.stringify({
-                type: 'Point',
-                coordinates: section.geojson.coordinates[0],
-              }),
+              geom: null,
               geom_detail: JSON.stringify({
                 type: 'LineString',
                 coordinates: section.geojson.coordinates.map((coord) => {
