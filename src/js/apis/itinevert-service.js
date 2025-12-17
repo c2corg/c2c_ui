@@ -71,11 +71,7 @@ ItinevertService.prototype.getReachableRoutes = function (query) {
  * @returns {Promise} Returns {documents: All reachable routes, total: query.count()}
  */
 ItinevertService.prototype.getAllReachableRoutes = function (query, onProgress) {
-  return getAllReachable({
-    query,
-    onProgress,
-    queryFunction: (q) => this.getReachableRoutes(q),
-  });
+  return getAllReachable(query, onProgress, (q) => this.getReachableRoutes(q));
 };
 
 /**
@@ -96,11 +92,7 @@ ItinevertService.prototype.getReachableWaypoints = function (query) {
  * @returns {Promise} Returns {documents: All reachable waypoints, total: query.count()}
  */
 ItinevertService.prototype.getAllReachableWaypoints = function (query, onProgress) {
-  return getAllReachable({
-    query,
-    onProgress,
-    queryFunction: (q) => this.getReachableWaypoints(q),
-  });
+  return getAllReachable(query, onProgress, (q) => this.getReachableWaypoints(q));
 };
 
 /**

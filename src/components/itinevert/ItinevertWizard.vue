@@ -258,25 +258,6 @@ export default {
   },
 
   computed: {
-    /** Return true if search is enabled (all required form fields are set) */
-    isSearchEnabled() {
-      if (this.formData.searchKind.selected === 'route' && this.formData.activities.length < 1) {
-        return false;
-      }
-
-      if (
-        this.formData.destinationKind.selected === 'mountain range' &&
-        this.formData.mountainRange.selected === null
-      ) {
-        return false;
-      }
-
-      if (this.formData.startingPoint.selectedAddress === null || this.formData.startingPoint.selectedAddress === '') {
-        return false;
-      }
-
-      return true;
-    },
     twoDaysAgo() {
       const twoDaysAgo = new Date();
       twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
