@@ -15,7 +15,7 @@
           </span>
           <span v-translate>The results displayed take into account your departure date and time.</span>
         </div>
-        <div class="desc" v-translate>
+        <div class="desc">
           <span v-translate>
             If you see any improvements or missing lines, you can provide feedback via the links provided in
           </span>

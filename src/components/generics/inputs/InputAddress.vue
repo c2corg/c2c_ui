@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import { toast } from 'bulma-toast';
+
 import { default as c2c } from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
 import ol from '@/js/libs/ol';
@@ -113,19 +115,36 @@ export default {
               if (data.features && data.features.length > 0) {
                 const location = data.features[0];
                 this.selectAddress(location);
+              } else {
+                // fallback
+                this.selectAddress({
+                  geometry: {
+                    coordinates: coords,
+                    type: 'Point',
+                  },
+                  properties: {},
+                  type: 'Feature',
+                });
               }
             } catch (error) {
-              console.error('Error during reverse geolocation:', error);
-              this.localData.address = `${coords[1]}, ${coords[0]}`;
+              console.warn('Error during reverse geolocation:', error);
+              this.selectAddress({
+                geometry: {
+                  coordinates: coords,
+                  type: 'Point',
+                },
+                properties: {},
+                type: 'Feature',
+              });
             }
           },
           (error) => {
-            console.error('Geolocation error:', error);
-            alert('Unable to get your current location.');
+            console.warn('Geolocation error:', error);
+            toast({ message: this.$gettext('Unable to get your current location.'), type: 'is-warning' });
           }
         );
       } else {
-        alert('Geolocation is not supported by your browser.');
+        toast({ message: this.$gettext('Geolocation is not supported by your browser.'), type: 'is-warning' });
       }
     },
     /** Address auto-complete, launched when the user has not typed anything for 0.6 seconds */
@@ -149,7 +168,7 @@ export default {
           this.localData.addressPropositions = response.data.features.slice(0, 6) || [];
           this.localData.showAddressPropositions = this.localData.addressPropositions?.length > 0;
         } catch (error) {
-          console.error('Error searching for addresses:', error);
+          console.warn('Error searching for addresses:', error);
           this.localData.addressPropositions = [];
         }
       }, 600);
@@ -174,6 +193,10 @@ export default {
     /** Format address proposition rendered by Photon */
     formatProposition(proposition) {
       const props = proposition.properties;
+      if (Object.keys(props).length === 0) {
+        return `${proposition.geometry.coordinates[0].toFixed(4)}, ${proposition.geometry.coordinates[1].toFixed(4)}`;
+      }
+
       let formattedAddress = props.name || '';
 
       if (props.housenumber) {
@@ -220,7 +243,7 @@ export default {
           }
         }
       } catch (error) {
-        console.error('Error loading user location:', error);
+        console.warn('Error loading user location:', error);
       }
     },
 
@@ -239,7 +262,7 @@ export default {
           this.localData.address = `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
         }
       } catch (error) {
-        console.error('Error during reverse geolocation:', error);
+        console.warn('Error during reverse geolocation:', error);
         this.localData.address = `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
       }
     },
