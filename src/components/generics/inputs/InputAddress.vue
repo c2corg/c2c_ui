@@ -4,6 +4,7 @@
       <div class="autocomplete-container">
         <input
           class="from-address"
+          :class="[{ 'prevent-zoom-on-ios': isIos }]"
           v-model="localData.address"
           @input="searchAddressPropositions"
           @focus="localData.showAddressPropositions = true"
@@ -78,6 +79,17 @@ export default {
         coordinates: null,
       },
     };
+  },
+  computed: {
+    isIos() {
+      const ua = navigator.userAgent || '';
+      const platform = navigator.platform || '';
+      // Old iPhones/iPads/iPods
+      if (/iPad|iPhone|iPod/i.test(ua) || /iPad|iPhone|iPod/i.test(platform)) return true;
+      // iPadOS 13+ reports MacIntel but has touch points > 1
+      if (platform === 'MacIntel' && navigator.maxTouchPoints > 1) return true;
+      return false;
+    },
   },
   watch: {
     'localData.selectedAddress'() {
@@ -271,6 +283,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.prevent-zoom-on-ios {
+  font-size: 16px;
+}
+
 .from-container {
   display: flex;
   align-items: center;

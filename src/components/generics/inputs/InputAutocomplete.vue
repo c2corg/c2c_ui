@@ -3,10 +3,13 @@
     <div class="autocomplete-input-container">
       <div class="autocomplete-box">
         <div class="input-wrapper">
+          <!-- use of :value & @input pair to search suggestions every time a character is entered -->
+          <!-- using v-model won't work as intended, see more https://github.com/vuejs/vue/issues/9777#issuecomment-478831263 -->
           <input
             class="autocomplete-input"
-            v-model="localData.value"
-            @input="searchSuggestions"
+            :class="[{ 'prevent-zoom-on-ios': isIos }]"
+            :value="inputValue"
+            @input="(evt) => searchSuggestions(evt.target.value)"
             @focus="showAllSuggestions"
             @blur="handleBlur"
             :placeholder="placeholder"
@@ -46,13 +49,24 @@ export default {
   data() {
     return {
       localData: {
-        value: this.defaultValue ? this.formatSuggestion(this.defaultValue) : '',
         selectedValue: '',
         valueSuggestions: [],
         showSuggestions: this.showSuggestions,
       },
+      inputValue: this.defaultValue ? this.formatSuggestion(this.defaultValue) : '',
       searchTimeout: null,
     };
+  },
+  computed: {
+    isIos() {
+      const ua = navigator.userAgent || '';
+      const platform = navigator.platform || '';
+      // Old iPhones/iPads/iPods
+      if (/iPad|iPhone|iPod/i.test(ua) || /iPad|iPhone|iPod/i.test(platform)) return true;
+      // iPadOS 13+ reports MacIntel but has touch points > 1
+      if (platform === 'MacIntel' && navigator.maxTouchPoints > 1) return true;
+      return false;
+    },
   },
   watch: {
     'localData.selectedValue'() {
@@ -63,10 +77,11 @@ export default {
     notifyParent() {
       this.$emit('update:props', this.localData.selectedValue);
     },
-    async searchSuggestions() {
+    async searchSuggestions(inputValue) {
+      this.inputValue = inputValue;
       if (this.searchTimeout) clearTimeout(this.searchTimeout);
 
-      if (this.localData.value?.length < 1) {
+      if (this.inputValue?.length < 1) {
         this.localData.valueSuggestions = this.suggestions.slice(0, 10);
         this.localData.showSuggestions = true;
         return;
@@ -80,7 +95,7 @@ export default {
               .replace(/[\u0300-\u036f]/g, '')
               .toLowerCase();
             return formattedSuggestion.includes(
-              this.localData.value
+              this.inputValue
                 .normalize('NFD')
                 .replace(/[\u0300-\u036f]/g, '')
                 .toLowerCase()
@@ -108,7 +123,7 @@ export default {
     },
     selectValue(suggestion) {
       this.localData.selectedValue = suggestion;
-      this.localData.value = this.format(suggestion);
+      this.inputValue = this.format(suggestion);
       this.localData.showSuggestions = false;
       this.notifyParent();
     },
@@ -120,6 +135,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.prevent-zoom-on-ios {
+  font-size: 16px;
+}
+
 .autocomplete-wrapper {
   display: flex;
   flex-direction: column;
