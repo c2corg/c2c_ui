@@ -51,6 +51,7 @@ export default {
         valueSuggestions: [],
         showSuggestions: this.showSuggestions,
       },
+      searchTimeout: null,
     };
   },
   watch: {

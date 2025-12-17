@@ -67,7 +67,7 @@ export default {
 
   data() {
     return {
-      total: 30,
+      total: this.documents?.total ?? 0,
     };
   },
 

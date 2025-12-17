@@ -125,7 +125,7 @@
             </div>
           </div>
           <div class="searchButton">
-            <button class="button is-primary" :disabled="!isSearchEnabled()" @click="formSearch">
+            <button class="button is-primary" :disabled="!isSearchEnabled" @click="formSearch">
               <fa-icon class="search-icon" icon="search" aria-hidden="true" />
               {{ $gettext('Search') }}
             </button>
@@ -192,13 +192,6 @@ export default {
     ItinevertNoResultView,
     ItinevertLoadingView,
     InputAutocomplete,
-  },
-  categoryIcon: {
-    General: 'filter',
-    MultiSearch: 'filter',
-    Miscs: 'database',
-    Terrain: ['waypoint', 'summit'],
-    ratings: 'tachometer-alt',
   },
   props: {
     view: {
@@ -310,12 +303,31 @@ export default {
     },
     noResultsFound() {
       if (this.formData?.searchKind?.selected === 'route') {
-        return !this.filteredRoutes.hasOwnProperty('documents') || this.filteredRoutes?.documents?.length === 0;
+        return !this.filteredRoutes?.documents?.length;
       } else if (this.formData?.searchKind?.selected === 'waypoint') {
-        return !this.filteredWaypoints.hasOwnProperty('documents') || this.filteredWaypoints?.documents?.length === 0;
+        return !this.filteredWaypoints?.documents?.length;
       } else {
         return false;
       }
+    },
+    /** Return true if search is enabled (all required form fields are set) */
+    isSearchEnabled() {
+      if (this.formData.searchKind.selected === 'route' && this.formData.activities.length < 1) {
+        return false;
+      }
+
+      if (
+        this.formData.destinationKind.selected === 'mountain range' &&
+        this.formData.mountainRange.selected === null
+      ) {
+        return false;
+      }
+
+      if (this.formData.startingPoint.selectedAddress === null || this.formData.startingPoint.selectedAddress === '') {
+        return false;
+      }
+
+      return true;
     },
     maxTripDuration() {
       return MAX_TRIP_DURATION;
@@ -439,25 +451,6 @@ export default {
       this.formData.mountainRange.selected = area;
       let coverages = (await itinevertService.getPolygonCoverage(area.geometry.geom_detail)).data;
       this.formData.mountainRange.coverages = coverages;
-    },
-    /** Return true if search is enabled (all required form fields are set) */
-    isSearchEnabled() {
-      if (this.formData.searchKind.selected === 'route' && this.formData.activities.length < 1) {
-        return false;
-      }
-
-      if (
-        this.formData.destinationKind.selected === 'mountain range' &&
-        this.formData.mountainRange.selected === null
-      ) {
-        return false;
-      }
-
-      if (this.formData.startingPoint.selectedAddress === null || this.formData.startingPoint.selectedAddress === '') {
-        return false;
-      }
-
-      return true;
     },
     /** Get the title of a document in the current language */
     getTitle(document) {

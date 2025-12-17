@@ -13,13 +13,7 @@
       >
         <span slot="button" class="button is-size-7-mobile" :disabled="category.fields.length === 0">
           <fa-icon :icon="$options.categoryIcon[category.name]" />
-          <span class="is-hidden-mobile">
-            <!-- $gettext('General') -->
-            <!-- $gettext('ratings') -->
-            <!-- $gettext('Terrain') -->
-            <!-- $gettext('Miscs') -->
-            &nbsp;{{ $gettext(category.name) }}
-          </span>
+          <span class="is-hidden-mobile"> &nbsp;{{ $gettext(category.name) }} </span>
           <span v-if="category.activeCount != 0"> &nbsp;({{ category.activeCount }}) </span>
           <span>&nbsp;</span>
           <fa-icon icon="angle-down" aria-hidden="true" />

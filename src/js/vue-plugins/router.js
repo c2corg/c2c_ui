@@ -53,7 +53,7 @@ const YetiView = () => import(/* webpackChunkName: "yeti" */ `@/views/portals/Ye
 const routes = [
   { path: '/', name: 'home', component: HomeView },
   { path: '/topoguide', name: 'topoguide', component: TopoguideView },
-  { path: '/Itinevert', name: 'Itinevert', component: ItinevertView },
+  { path: '/itinevert', name: 'itinevert', component: ItinevertView },
   { path: '/serac', name: 'serac', component: SeracView },
   { path: '/whatsnew', name: 'whatsnew', component: WhatsNewView },
   { path: '/associations-history', name: 'associations-history', component: AssociationsHistoryView },

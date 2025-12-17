@@ -71,57 +71,10 @@ ItinevertService.prototype.getReachableRoutes = function (query) {
  * @returns {Promise} Returns {documents: All reachable routes, total: query.count()}
  */
 ItinevertService.prototype.getAllReachableRoutes = function (query, onProgress) {
-  // will load the entire list of reachable routes (max 2000 docs)
-  const MAX_SIZE = 2000;
-  const API_MAX_LIMIT = 100;
-  let cancelled = false;
-  let limit = MAX_SIZE;
-
-  query.limit = API_MAX_LIMIT;
-
-  class CancelablePromise extends Promise {
-    cancel() {
-      cancelled = true;
-    }
-  }
-
-  return new CancelablePromise((resolve, reject) => {
-    const result = [];
-
-    const download = (offset = 0) => {
-      if (cancelled) {
-        return;
-      }
-      query.offset = offset;
-
-      this.getReachableRoutes(query)
-        .then(({ data }) => {
-          if (cancelled) {
-            return;
-          }
-
-          for (const document of data.documents) {
-            result.push(document);
-          }
-
-          onProgress?.(result.length, data.total);
-
-          if (data.documents.length === 0 || result.length === data.total || result.length >= limit) {
-            resolve(result);
-          } else {
-            download(offset + API_MAX_LIMIT);
-          }
-        })
-        .catch((error) => {
-          if (cancelled) {
-            return;
-          }
-
-          reject(error);
-        });
-    };
-
-    download();
+  return getAllReachable({
+    query,
+    onProgress,
+    queryFunction: (q) => this.getReachableRoutes(q),
   });
 };
 
@@ -143,9 +96,30 @@ ItinevertService.prototype.getReachableWaypoints = function (query) {
  * @returns {Promise} Returns {documents: All reachable waypoints, total: query.count()}
  */
 ItinevertService.prototype.getAllReachableWaypoints = function (query, onProgress) {
-  // will load the entire list of reachable waypoints (max 2000 docs)
+  return getAllReachable({
+    query,
+    onProgress,
+    queryFunction: (q) => this.getReachableWaypoints(q),
+  });
+};
+
+/**
+ * Helper function to download all reachable documents with paginated queries
+ *
+ * Repeatedly calls the provided query function until all documents are retrieved, the maximum size is reached, or the
+ * request is cancelled
+ *
+ * @param {Object} param0
+ * @param {Object} param0.query Query parameters used for pagination and filtering
+ * @param {Function} param0.queryFunction Function to query a page
+ * @param {Function} [param0.onProgress] Optional callback invoked after each page is fetched
+ * @returns {Promise<Array>} A cancelable Promise that resolves with the aggregated list of documents. Call `.cancel()`
+ *   to stop further requests.
+ */
+function getAllReachable(query, onProgress, queryFunction) {
   const MAX_SIZE = 2000;
   const API_MAX_LIMIT = 100;
+
   let cancelled = false;
   let limit = MAX_SIZE;
 
@@ -161,20 +135,15 @@ ItinevertService.prototype.getAllReachableWaypoints = function (query, onProgres
     const result = [];
 
     const download = (offset = 0) => {
-      if (cancelled) {
-        return;
-      }
+      if (cancelled) return;
+
       query.offset = offset;
 
-      this.getReachableWaypoints(query)
+      queryFunction(query)
         .then(({ data }) => {
-          if (cancelled) {
-            return;
-          }
+          if (cancelled) return;
 
-          for (const document of data.documents) {
-            result.push(document);
-          }
+          result.push(...data.documents);
 
           onProgress?.(result.length, data.total);
 
@@ -185,29 +154,23 @@ ItinevertService.prototype.getAllReachableWaypoints = function (query, onProgres
           }
         })
         .catch((error) => {
-          if (cancelled) {
-            return;
+          if (!cancelled) {
+            reject(error);
           }
-
-          reject(error);
         });
     };
 
     download();
   });
-};
+}
 
 ItinevertService.prototype.getJourneyReachableWaypoints = function () {
   const data = this.axios.get(`/navitia/journeyreachablewaypoints/result/${this.jobID}`);
-  // job is done, reset job id.
-  this.jobID = null;
   return data;
 };
 
 ItinevertService.prototype.getJourneyReachableRoutes = function () {
   const data = this.axios.get(`/navitia/journeyreachableroutes/result/${this.jobID}`);
-  // job is done, reset job id.
-  this.jobID = null;
   return data;
 };
 
@@ -259,6 +222,8 @@ ItinevertService.prototype.monitorProgress = function (onProgress, onDone, onErr
       onDone();
     }
     es.close();
+    // job is done, reset job id.
+    this.jobID = null;
   });
 
   // called when there is an error
@@ -267,6 +232,8 @@ ItinevertService.prototype.monitorProgress = function (onProgress, onDone, onErr
       onError(event['data']);
     }
     es.close();
+    // job is done, reset job id.
+    this.jobID = null;
   });
 
   return es;
@@ -333,7 +300,7 @@ ItinevertService.prototype.enhanceQuery = function (baseQuery, newQuery) {
   let query = { ...baseQuery };
   // Iterate over each key in newQuery
   for (let key in newQuery) {
-    if (newQuery.hasOwnProperty(key) && newQuery[key]) {
+    if (Object.hasOwn(newQuery, key) && newQuery[key]) {
       // Add or update the property in the query, only if defined
       query[key] = newQuery[key];
     }
@@ -463,16 +430,6 @@ ItinevertService.prototype.isFieldValueDefault = function (fieldValue, field) {
   // Compare for boolean
   if (typeof initialVal === 'boolean') {
     return initialVal === fieldValue;
-  }
-
-  // Compare for numerical ranges
-  if (Array.isArray(initialVal) && typeof initialVal[0] === 'number') {
-    return (
-      Array.isArray(fieldValue) &&
-      fieldValue.length === 2 &&
-      initialVal[0] === fieldValue[0] &&
-      initialVal[1] === fieldValue[1]
-    );
   }
 
   // General compare for strings

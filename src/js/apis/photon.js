@@ -30,4 +30,8 @@ Photon.prototype.getPropositions = function (query, lang, centerWgs84) {
   return this.get('/', { params });
 };
 
+Photon.prototype.getPropositions = function (lon, lat, lang) {
+  return fetch(`https://photon.komoot.io/reverse?lon=${lon}&lat=${lat}&lang=${lang}`);
+};
+
 export default new Photon();

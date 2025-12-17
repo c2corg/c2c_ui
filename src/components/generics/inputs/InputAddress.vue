@@ -26,7 +26,12 @@
           </ul>
         </div>
       </div>
-      <button class="geolocalisation" @click="useCurrentLocation">
+      <button
+        type="button"
+        class="geolocalisation"
+        @click="useCurrentLocation"
+        :aria-label="$gettext('Use current location')"
+      >
         <img class="geolocalisation-img" src="@/assets/img/boxes/geoloc.svg" alt="geoloc" />
       </button>
     </div>
@@ -82,11 +87,6 @@ export default {
       // Loads a user's address to put it directly into the 'address' field
       await this.loadUserAddressIfLoggedIn();
     }
-
-    // Firefox's date picker calendar has a specific design
-    if (navigator.userAgent.toLowerCase().includes('firefox')) {
-      document.documentElement.classList.add('is-firefox');
-    }
   },
   beforeDestroy() {
     if (this.searchTimeout) {
@@ -106,9 +106,8 @@ export default {
             this.localData.coordinates = coords;
 
             try {
-              const response = await fetch(
-                `https://photon.komoot.io/reverse?lon=${coords[0]}&lat=${coords[1]}&lang=${this.$language.current}`
-              );
+              const response = await photon.reverseGeocodeUserLocation(coords[0], coords[1], this.$language.current);
+
               const data = await response.json();
 
               if (data.features && data.features.length > 0) {
@@ -182,7 +181,7 @@ export default {
       }
 
       if (props.street) {
-        formattedAddress = `${formattedAddress}${' '}${props.street}`;
+        formattedAddress = `${formattedAddress} ${props.street}`;
       }
 
       if (props.city) {
@@ -228,9 +227,8 @@ export default {
     /** Transforms a point's coordinates (longitude and latitude) into an address with photon */
     async reverseGeocodeUserLocation(lon, lat) {
       try {
-        const response = await fetch(
-          `https://photon.komoot.io/reverse?lon=${lon}&lat=${lat}&lang=${this.$language.current}`
-        );
+        const response = await photon.reverseGeocodeUserLocation(lon, lat, this.$language.current);
+
         const data = await response.json();
 
         if (data.features && data.features.length > 0) {

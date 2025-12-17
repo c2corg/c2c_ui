@@ -1,5 +1,5 @@
 <template>
-  <fa-icon icon="bus" :fixed-width="fixedWidth" />
+  <fa-icon icon="bus" :fixed-width="fixedWidth" name="IconItinevert" />
 </template>
 
 <script>
