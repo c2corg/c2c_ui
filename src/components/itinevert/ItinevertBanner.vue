@@ -54,7 +54,7 @@
             </div>
           </div>
           <div class="column is-12-mobile">
-            <router-link :to="{ name: 'Itinevert' }" class="menu-brand has-text-centered">
+            <router-link :to="{ name: 'itinevert' }" class="menu-brand has-text-centered">
               <img src="@/assets/img/logo_itinévert_orange.svg" alt="Itinévert" class="logo-itinevert" />
             </router-link>
             <p class="petzl-header" v-translate>This device is supported by the Petzl Foundation</p>

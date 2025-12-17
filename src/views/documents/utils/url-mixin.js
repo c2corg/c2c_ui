@@ -21,7 +21,7 @@ export default {
       // it also can be outings-stats => the `.split('-')[0]` remove "-stats"
 
       // check if it starts with "Itinevert", so that we can retrieve the doc type
-      if (this.$route.name.startsWith('Itinevert')) {
+      if (this.$route.name.startsWith('itinevert')) {
         return this.$route.query.documentType ?? 'route';
       }
       // else url starts with the doc type

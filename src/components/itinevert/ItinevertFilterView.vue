@@ -55,7 +55,7 @@
 <script>
 import DropdownButton from '../generics/DropdownButton.vue';
 
-import itinevertService, { MAX_ROUTE_THRESHOLD } from '@/js/apis/itinevert-service';
+import { MAX_ROUTE_THRESHOLD } from '@/js/apis/itinevert-service';
 import constants from '@/js/constants';
 import QueryItem from '@/views/documents/utils/QueryItem.vue';
 
