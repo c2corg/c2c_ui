@@ -157,7 +157,7 @@
         </itinevert-loading-view>
       </div>
       <div class="column is-3" v-if="view !== 'result' || noResultsFound">
-        <div class="banner-img" :style="{ backgroundImage: `url(${bannerImage})` }"></div>
+        <div class="banner-img" :style="{ backgroundImage: `url(${bannerImage ?? ''})` }"></div>
       </div>
     </div>
   </section>
