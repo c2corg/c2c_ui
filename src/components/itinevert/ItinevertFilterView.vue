@@ -255,9 +255,6 @@ export default {
   .filter-buttons {
     margin-top: auto;
     margin-bottom: 0.5rem;
-  }
-
-  .filter-buttons {
     .button {
       max-width: 45%;
       white-space: normal;
