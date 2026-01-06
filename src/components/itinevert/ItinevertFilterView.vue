@@ -227,6 +227,7 @@ export default {
   @media screen and (max-width: $tablet) {
     overflow-y: scroll;
     overflow-x: hidden;
+    min-height: 30vh;
     max-height: 40vh;
 
     scrollbar-width: none; // Firefox
