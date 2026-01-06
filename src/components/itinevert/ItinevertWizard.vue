@@ -513,7 +513,7 @@ export default {
           this.$emit('change-view', 'loading');
           let data = (
             await itinevertService.getIsochronesReachableRoutes(
-              this.filterQuery,
+              this.formQuery,
               this.formData.departure,
               this.formData.maxTripDuration,
               this.formData.startingPoint.selectedAddress
@@ -589,7 +589,7 @@ export default {
         else if (this.formData.destinationKind.selected === 'duration') {
           let data = (
             await itinevertService.getIsochronesReachableWaypoints(
-              query,
+              this.formQuery,
               this.formData.departure,
               this.formData.maxTripDuration,
               this.formData.startingPoint.selectedAddress
