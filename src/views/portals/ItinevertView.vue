@@ -87,7 +87,6 @@ export default {
   .feed-title {
     padding-left: 0;
     padding-right: 0;
-    flex-direction: column !important;
   }
 
   .section {
