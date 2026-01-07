@@ -66,10 +66,21 @@ export default {
     if (stored !== null) {
       this.visible = stored;
     }
+    // Listen for back/forward navigation
+    window.addEventListener('popstate', (event) => {
+      // whenever user press back button in itinevert, we go back to form view
+      this.changeView('form');
+    });
   },
   methods: {
     changeView(view) {
       this.wizardView = view;
+      // allow the user to press back button to go back to form view when
+      // he went from form to filter view
+      // he went from form to result view
+      if (view === 'filter' || (this.wizardView === 'form' && view === 'result')) {
+        history.pushState(null, 'Itinevert', window.location.href);
+      }
     },
     toggleProperty(property) {
       this.setProperty(property, !this[property]);
