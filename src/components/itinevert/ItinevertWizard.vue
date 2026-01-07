@@ -101,7 +101,7 @@
                 </div>
               </div>
 
-              <div class="date-picker-container">
+              <div class="date-picker-container preference-container">
                 <label for="date-input">{{ $gettext('Preference') }}</label>
                 <div class="input-container">
                   <select
@@ -118,7 +118,10 @@
 
               <div class="date-picker-container hour-picker-container">
                 <label for="date-input">{{ $gettext('Time') }}</label>
-                <div class="input-container">
+                <div class="input-container input-container-mobile" v-show="$screen.isMobile || $screen.isTablet">
+                  <input-time id="hour-input" class="hour-input-mobile" v-model="formData.departure.selectedTime" />
+                </div>
+                <div class="input-container" v-show="!$screen.isMobile && !$screen.isTablet">
                   <input type="time" id="hour-input" class="hour-input" v-model="formData.departure.selectedTime" />
                 </div>
               </div>
@@ -678,6 +681,10 @@ export default {
   gap: 16px;
   align-items: flex-start;
 
+  .preference-container {
+    align-self: flex-end;
+  }
+
   p {
     font-weight: bold;
   }
@@ -700,6 +707,7 @@ export default {
     gap: 15px;
     flex-wrap: wrap;
     .date-picker-container {
+      align-self: flex-end;
       width: 100%;
       max-width: 150px;
       position: relative;
@@ -715,6 +723,9 @@ export default {
         z-index: 1;
         margin-left: 20px;
         margin-top: -10px;
+      }
+      .input-container-mobile {
+        margin-left: auto;
       }
       .input-container {
         position: relative;
@@ -753,6 +764,22 @@ export default {
           outline: none;
           font-size: 15px;
           color: #333;
+
+          &::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+          }
+        }
+
+        .hour-input-mobile {
+          flex: 1;
+          max-width: 90px;
+          margin-left: auto;
+          margin-right: auto;
+          border: none;
+          outline: none;
+          font-size: 15px;
+          color: #333;
+          padding: 4px 6px;
 
           &::-webkit-calendar-picker-indicator {
             cursor: pointer;
