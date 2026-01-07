@@ -4,9 +4,7 @@
     <!-- Discover view description -->
     <div class="box intro" :class="{ 'itinevert-result-header': wizardView === 'result' }">
       <div class="feed-title has-cursor-pointer">
-        <span class="title is-4 itinevert-title" :class="{ 'is-marginless': !visible }" v-translate>
-          Change your approach: plan your public transport outing
-        </span>
+        <span class="title is-4 itinevert-title" :class="{ 'is-marginless': !visible }" v-translate>Itinevert</span>
         <div class="title is-4" v-if="canStartAgain">
           <button
             class="start-again-button button tooltip-container"

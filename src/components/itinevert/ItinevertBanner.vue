@@ -1,7 +1,7 @@
 <template>
   <section>
-    <div class="columns">
-      <div class="column is-12-mobile">
+    <div class="banner-container">
+      <div class="texts">
         <div class="subtitle" v-translate>
           Welcome to Itinévert, the tool for planning your outing using public transport.
         </div>
@@ -27,46 +27,42 @@
             this message.
           </a>
         </div>
-        <div class="columns">
-          <div class="column is-12-mobile">
-            <div class="left">
-              <p class="link-header" v-translate>Other tools can complement Itinévert:</p>
-              <ul class="links">
-                <li>
-                  <a
-                    target="_blank"
-                    href="https://www.camptocamp.org/articles/219828/fr/mobilite-douce-sur-camptocamp"
-                    v-translate
-                    >Sustainable mobility on Camptocamp
-                  </a>
-                </li>
-                <li>
-                  <a target="_blank" href="https://www.camptocamp.org/outings?owpt=true" v-translate
-                    >Outings using sustainable transportation on Camptocamp
-                  </a>
-                </li>
-                <li>
-                  <a target="_blank" href="https://hometosummit.vercel.app/" v-translate
-                    >Map of routes accessible by bike-train
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="column is-12-mobile">
-            <router-link :to="{ name: 'itinevert' }" class="menu-brand has-text-centered">
-              <img src="@/assets/img/logo_itinévert_orange.svg" alt="Itinévert" class="logo-itinevert" />
-            </router-link>
-            <p class="petzl-header" v-translate>This device is supported by the Petzl Foundation</p>
-            <a href="https://www.petzl.com/fondation" target="_blank" class="menu-brand has-text-centered">
-              <img
-                src="@/assets/img/yeti/logo-fondation-petzl.jpg"
-                alt="Fondation Petzl"
-                class="logo-fondation-petzl"
-              />
-            </a>
-          </div>
+        <div class="left">
+          <p class="link-header" v-translate>Other tools can complement Itinévert:</p>
+          <ul class="links">
+            <li>
+              <a
+                target="_blank"
+                href="https://www.camptocamp.org/articles/219828/fr/mobilite-douce-sur-camptocamp"
+                v-translate
+                >Sustainable mobility on Camptocamp
+              </a>
+            </li>
+            <li>
+              <a target="_blank" href="https://www.camptocamp.org/outings?owpt=true" v-translate
+                >Outings using sustainable transportation on Camptocamp
+              </a>
+            </li>
+            <li>
+              <a target="_blank" href="https://hometosummit.vercel.app/" v-translate
+                >Map of routes accessible by bike-train
+              </a>
+            </li>
+          </ul>
         </div>
+      </div>
+      <div class="logos">
+        <router-link :to="{ name: 'itinevert' }" class="menu-brand has-text-centered logo-itinevert">
+          <img src="@/assets/img/logo_itinévert_orange.svg" alt="Itinévert" />
+        </router-link>
+        <p class="petzl-header" v-translate>This device is supported by the Petzl Foundation</p>
+        <a
+          href="https://www.petzl.com/fondation"
+          target="_blank"
+          class="menu-brand has-text-centered logo-fondation-petzl"
+        >
+          <img src="@/assets/img/yeti/logo-fondation-petzl.jpg" alt="Fondation Petzl" />
+        </a>
       </div>
     </div>
   </section>
@@ -79,6 +75,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.banner-container {
+  display: grid;
+  grid-template-columns: 1fr 25%;
+  align-items: start;
+}
+
 .link-header,
 .petzl-header {
   font-weight: 600;
@@ -86,21 +88,48 @@ export default {
 
 .petzl-header {
   padding-top: 16px;
+  padding-bottom: 8px;
   text-align: center;
 }
 
+.logos {
+  height: 100%;
+  padding: 0.75rem;
+}
+
+.texts {
+  padding: 0.75rem;
+  padding-left: 0;
+}
+
 .logo-fondation-petzl {
-  max-width: 10%;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  position: relative;
+  min-height: 35%;
+  width: 100%;
+}
+
+.logo-fondation-petzl img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .logo-itinevert {
-  max-width: 15%;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  position: relative;
+  min-height: 35%;
+  width: 100%;
+}
+
+.logo-itinevert img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .desc {
@@ -112,10 +141,6 @@ export default {
   flex-direction: column;
 }
 
-.left {
-  height: 100%;
-}
-
 @media screen and (max-width: 528px) {
   .subtitle {
     margin-top: 8px;
@@ -123,8 +148,32 @@ export default {
 }
 
 @media screen and (max-width: $tablet) {
+  .banner-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logos {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .logo-itinevert {
+    height: 50px;
+    width: 100%;
+  }
+
   .logo-fondation-petzl {
-    max-width: 10%;
+    height: 50px;
+    width: 100%;
+  }
+
+  .logo-itinevert img {
+    display: block;
+  }
+
+  .logo-fondation-petzl img {
+    display: block;
   }
 }
 </style>
