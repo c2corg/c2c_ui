@@ -106,8 +106,8 @@ export default {
   }
 
   .itinevert-result-header {
-    height: $itinevert-header-height;
     position: fixed;
+    width: 100%;
     top: 3.25rem;
     left: 0;
     background: white;
@@ -116,6 +116,10 @@ export default {
 
   .wizard {
     flex-grow: 1;
+  }
+
+  .tooltip-container {
+    display: none;
   }
 
   .field {
@@ -127,8 +131,8 @@ export default {
   }
 
   .start-again-button {
-    width: 100%;
-    margin-top: 16px;
+    font-size: 12px;
+    margin-top: 0px;
   }
 
   .preference-switch {

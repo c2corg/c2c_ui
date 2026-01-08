@@ -459,7 +459,7 @@ $cards-gap: 0.25rem;
   }
 
   .result-section {
-    padding-top: calc($navbar-height + $itinevert-header-height + 2rem);
+    padding-top: calc($navbar-height + $itinevert-header-height + 3.75rem);
   }
 
   .documents-view {
