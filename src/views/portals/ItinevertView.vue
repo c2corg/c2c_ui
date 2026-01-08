@@ -54,6 +54,7 @@ export default {
     return {
       visible: state,
       wizardView: 'form',
+      hasStartedAgain: false,
     };
   },
   computed: {
@@ -74,12 +75,22 @@ export default {
   },
   methods: {
     changeView(view) {
-      this.wizardView = view;
-      // allow the user to press back button to go back to form view when
-      // he went from form to filter view
-      // he went from form to result view
-      if (view === 'filter' || (this.wizardView === 'form' && view === 'result')) {
-        history.pushState(null, 'Itinevert', window.location.href);
+      // user has clicked on start again, so we are not pushing a new state to history
+      if (this.hasStartedAgain) {
+        this.wizardView = view;
+      } else {
+        if (view === 'form') {
+          this.hasStartedAgain = true;
+          this.wizardView = view;
+        } else if (view === 'filter' || (this.wizardView === 'form' && view === 'result')) {
+          // allow the user to press back button to go back to form view when
+          // he went from form to filter view
+          // he went from form to result view
+          history.pushState(null, 'Itinevert', window.location.href);
+          this.wizardView = view;
+        } else {
+          this.wizardView = view;
+        }
       }
     },
     toggleProperty(property) {
