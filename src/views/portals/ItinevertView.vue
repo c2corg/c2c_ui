@@ -58,7 +58,7 @@ export default {
   },
   computed: {
     canStartAgain() {
-      return this.wizardView === 'result' || this.wizardView === 'filter';
+      return this.wizardView === 'result' || this.wizardView === 'filter' || this.wizardView === 'loading';
     },
   },
   mounted() {

@@ -501,6 +501,10 @@ export default {
           let obj = JSON.parse(res);
           this.progress = obj.progress;
           this.total = obj.total;
+          // cancel progress if somehow we are no longer waiting for load
+          if (this.view !== 'loading') {
+            itinevertService.cancelProgress();
+          }
         },
         async () => {
           const result = await itinevertService.getJourneyReachableRoutes(itinevertService.jobID);
@@ -559,7 +563,11 @@ export default {
             let coordinates = projectCoordinates(data.isochron_geom.coordinates);
             this.polygonGeometry = { type: data.isochron_geom.type, coordinates: coordinates };
             this.isochroneBbox = createBboxString(coordinates);
-            this.$router.replace({ path: this.$route.path, query: query });
+
+            if (this.view === 'loading') {
+              this.$router.replace({ path: this.$route.path, query: query });
+              this.$emit('change-view', 'result');
+            }
           } else {
             try {
               this.queryError = typeof data === 'string' ? JSON.parse(data) : data;
@@ -568,9 +576,10 @@ export default {
             }
             this.filteredRoutes = {};
             this.filteredWaypoints = {};
+            if (this.view === 'loading') {
+              this.$emit('change-view', 'result');
+            }
           }
-
-          this.$emit('change-view', 'result');
         }
       }
 
@@ -592,6 +601,10 @@ export default {
               let obj = JSON.parse(res);
               this.progress = obj.progress;
               this.total = obj.total;
+              // cancel progress if somehow we are no longer waiting for load
+              if (this.view !== 'loading') {
+                itinevertService.cancelProgress();
+              }
             },
             async () => {
               const result = await itinevertService.getJourneyReachableWaypoints(itinevertService.jobID);
@@ -635,7 +648,11 @@ export default {
             let coordinates = projectCoordinates(data.isochron_geom.coordinates);
             this.polygonGeometry = { type: data.isochron_geom.type, coordinates: coordinates };
             this.isochroneBbox = createBboxString(coordinates);
-            this.$router.replace({ path: this.$route.path, query: query });
+
+            if (this.view === 'loading') {
+              this.$router.replace({ path: this.$route.path, query: query });
+              this.$emit('change-view', 'result');
+            }
           } else {
             try {
               this.queryError = typeof data === 'string' ? JSON.parse(data) : data;
@@ -644,9 +661,11 @@ export default {
             }
             this.filteredRoutes = {};
             this.filteredWaypoints = {};
-          }
 
-          this.$emit('change-view', 'result');
+            if (this.view === 'loading') {
+              this.$emit('change-view', 'result');
+            }
+          }
         }
       }
     },

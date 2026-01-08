@@ -37,6 +37,7 @@ function ItinevertService() {
     baseURL: config.urls.api,
   });
   this.jobID = null;
+  this.eventSource = null;
 }
 
 /** --------------- Query to API --------------- */
@@ -199,36 +200,39 @@ ItinevertService.prototype.monitorProgress = function (onProgress, onDone, onErr
     throw new Error('No job started yet');
   }
 
-  const es = new EventSource(`${config.urls.api}/navitia/journeyreachable${type}/progress/${this.jobID}`);
+  // Close any existing stream just in case
+  this.cancelProgress();
 
-  // called whenever a progress event is received
-  es.onmessage = (event) => {
+  this.eventSource = new EventSource(`${config.urls.api}/navitia/journeyreachable${type}/progress/${this.jobID}`);
+
+  this.eventSource.onmessage = (event) => {
     if (onProgress) {
       onProgress(event.data);
     }
   };
 
-  // called when the job is done
-  es.addEventListener('done', () => {
-    if (onDone) {
-      onDone();
-    }
-    es.close();
-    // job is done, reset job id.
-    this.jobID = null;
+  this.eventSource.addEventListener('done', () => {
+    if (onDone) onDone();
+    this.cancelProgress(true);
   });
 
-  // called when there is an error
-  es.addEventListener('error', (event) => {
-    if (onError) {
-      onError(event['data']);
-    }
-    es.close();
-    // job is done, reset job id.
-    this.jobID = null;
+  this.eventSource.addEventListener('error', (event) => {
+    if (onError) onError(event?.data);
+    this.cancelProgress(true);
   });
 
-  return es;
+  return this.eventSource;
+};
+
+ItinevertService.prototype.cancelProgress = function (resetJob = false) {
+  if (this.eventSource) {
+    this.eventSource.close();
+    this.eventSource = null;
+  }
+
+  if (resetJob) {
+    this.jobID = null;
+  }
 };
 
 /**
