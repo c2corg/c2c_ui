@@ -131,6 +131,13 @@
             <button class="button is-primary" :disabled="!isSearchEnabled" @click="formSearch">
               <fa-icon class="search-icon" icon="search" aria-hidden="true" />
               {{ $gettext('Search') }}
+              {{
+                missingField > 0
+                  ? missingField == 1
+                    ? '(' + missingField + ' ' + $gettext('missing field') + ')'
+                    : '(' + missingField + ' ' + $gettext('missing fields') + ')'
+                  : ''
+              }}
             </button>
           </div>
         </div>
@@ -261,6 +268,26 @@ export default {
   },
 
   computed: {
+    // number of missing field for searchs
+    missingField() {
+      let count = 0;
+      if (this.formData.searchKind.selected === 'route' && this.formData.activities.length < 1) {
+        count++;
+      }
+
+      if (
+        this.formData.destinationKind.selected === 'mountain range' &&
+        this.formData.mountainRange.selected === null
+      ) {
+        count++;
+      }
+
+      if (this.formData.startingPoint.selectedAddress === null || this.formData.startingPoint.selectedAddress === '') {
+        count++;
+      }
+
+      return count;
+    },
     twoDaysAgo() {
       const twoDaysAgo = new Date();
       twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
@@ -668,7 +695,7 @@ export default {
   align-items: center;
   gap: 16px;
   .button {
-    width: 40%;
+    min-width: 40%;
   }
   .search-icon {
     padding-right: 1rem;
