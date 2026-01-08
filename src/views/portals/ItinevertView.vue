@@ -54,7 +54,6 @@ export default {
     return {
       visible: state,
       wizardView: 'form',
-      hasStartedAgain: false,
     };
   },
   computed: {
@@ -70,27 +69,26 @@ export default {
     // Listen for back/forward navigation
     window.addEventListener('popstate', (event) => {
       // whenever user press back button in itinevert, we go back to form view
-      this.changeView('form');
+      if (this.wizardView !== 'form') {
+        this.changeView('form');
+      } else {
+        history.back();
+      }
     });
   },
   methods: {
     changeView(view) {
       // user has clicked on start again, so we are not pushing a new state to history
-      if (this.hasStartedAgain) {
+      if (view === 'form') {
+        this.wizardView = view;
+      } else if (view === 'filter' || (this.wizardView === 'form' && view === 'result')) {
+        // allow the user to press back button to go back to form view when
+        // he went from form to filter view
+        // he went from form to result view
+        history.pushState(null, 'Itinevert', window.location.href);
         this.wizardView = view;
       } else {
-        if (view === 'form') {
-          this.hasStartedAgain = true;
-          this.wizardView = view;
-        } else if (view === 'filter' || (this.wizardView === 'form' && view === 'result')) {
-          // allow the user to press back button to go back to form view when
-          // he went from form to filter view
-          // he went from form to result view
-          history.pushState(null, 'Itinevert', window.location.href);
-          this.wizardView = view;
-        } else {
-          this.wizardView = view;
-        }
+        this.wizardView = view;
       }
     },
     toggleProperty(property) {
