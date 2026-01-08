@@ -389,7 +389,7 @@ export default {
   async mounted() {
     // handle banner images
     // Load every image in the folder
-    const context = require.context('@/assets/img/itinevert', false, /\.(png|jpe?g|webp|svg)$/);
+    const context = require.context('@/assets/img/itinevert/banner-img', false, /\.(png|jpe?g|webp|svg)$/);
 
     // Convert to array of resolved URLs
     const banners = context.keys().map(context);
