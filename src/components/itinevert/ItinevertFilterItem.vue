@@ -86,7 +86,6 @@ import DateQueryItem from '../../views/documents/utils/DateQueryItem';
 import DatesQueryItem from '../../views/documents/utils/DatesQueryItem';
 import QueryItemSliderLabel from '../../views/documents/utils/QueryItemSliderLabel';
 
-import debounce from '@/js/debounce';
 import { requireFieldProperty } from '@/js/properties-mixins';
 
 export default {
