@@ -27,7 +27,7 @@
             this message.
           </a>
         </div>
-        <div class="left">
+        <div>
           <p class="link-header" v-translate>Other tools can complement Itinévert:</p>
           <ul class="links">
             <li>
@@ -48,6 +48,7 @@
                 >Map of routes accessible by bike-train
               </a>
             </li>
+            <!-- more links can be added here -->
           </ul>
         </div>
       </div>
