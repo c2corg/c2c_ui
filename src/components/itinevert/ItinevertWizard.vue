@@ -192,6 +192,7 @@ import itinevertService, {
   projectCoordinates,
   createBboxString,
 } from '@/js/apis/itinevert-service';
+import navitiaService from '@/js/apis/navitia-service';
 import constants from '@/js/constants';
 
 export default {
@@ -514,12 +515,8 @@ export default {
           this.progress = 0;
           this.$emit('change-view', 'result');
         },
-        (payload) => {
-          try {
-            this.queryError = typeof payload === 'string' ? JSON.parse(payload) : payload;
-          } catch (e) {
-            this.queryError = { message: 'Unknown error occurred' };
-          }
+        (data) => {
+          this.queryError = navitiaService.handleQueryError(data);
           this.filteredRoutes = {};
           this.filteredWaypoints = {};
           this.$emit('change-view', 'result');
@@ -569,11 +566,7 @@ export default {
               this.$emit('change-view', 'result');
             }
           } else {
-            try {
-              this.queryError = typeof data === 'string' ? JSON.parse(data) : data;
-            } catch (e) {
-              this.queryError = { message: 'Unknown error occurred' };
-            }
+            this.queryError = navitiaService.handleQueryError(data);
             this.filteredRoutes = {};
             this.filteredWaypoints = {};
             if (this.view === 'loading') {
@@ -615,12 +608,8 @@ export default {
               this.$router.replace({ path: this.$route.path, query: query });
               this.$emit('change-view', 'result');
             },
-            (payload) => {
-              try {
-                this.queryError = typeof payload === 'string' ? JSON.parse(payload) : payload;
-              } catch (e) {
-                this.queryError = { message: 'Unknown error occurred' };
-              }
+            (data) => {
+              this.queryError = navitiaService.handleQueryError(data);
               this.filteredRoutes = {};
               this.filteredWaypoints = {};
               this.$emit('change-view', 'result');
@@ -654,11 +643,7 @@ export default {
               this.$emit('change-view', 'result');
             }
           } else {
-            try {
-              this.queryError = typeof data === 'string' ? JSON.parse(data) : data;
-            } catch (e) {
-              this.queryError = { message: 'Unknown error occurred' };
-            }
+            this.queryError = navitiaService.handleQueryError(data);
             this.filteredRoutes = {};
             this.filteredWaypoints = {};
 

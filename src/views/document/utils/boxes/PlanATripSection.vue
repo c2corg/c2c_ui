@@ -528,11 +528,11 @@ export default {
       searchTimeout: null,
       limitTransfers: false,
       maxTransfers: 0,
-      errorId: null,
+      queryError: null,
       errorMessages: {
         date_out_of_bounds: this.$gettext('Public transport schedules are not yet known for this period.'),
         unknown_object: this.$gettext(
-          "The departure and arrival points are too far apart to find a route. Try choosing a train station in a city closer to the route's access point."
+          "The start and finish points are too far apart to find a route. Choose a start in a city closer to the route's access point."
         ),
       },
     };
@@ -595,8 +595,9 @@ export default {
 
     noResultError() {
       if (this.noResult) {
-        if (this.errorId !== null) {
-          return this.errorMessages[this.errorId];
+        if (this.queryError !== null) {
+          console.log(this.queryError);
+          return this.errorMessages[this.queryError?.id];
         } else {
           return this.$gettext('It seems your trip can not be completed on the selected date and time');
         }
@@ -893,7 +894,7 @@ export default {
 
     /** Call Navitia and store the results */
     async calculateRoute() {
-      this.errorId = null;
+      this.queryError = null;
       this.missingDepartureAddress = false;
       this.missingDestinationAddress = false;
 
@@ -992,7 +993,7 @@ export default {
           await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
         }
       } catch (error) {
-        this.errorId = error?.response?.data?.errors[0]?.description;
+        this.queryError = NavitiaService.handleQueryError(error?.response?.data?.errors[0]?.description);
         console.error('Error retrieving routes:', error);
         await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
       } finally {
@@ -1071,7 +1072,7 @@ export default {
         this.noResult = true;
         this.journeys = [];
       } catch (error) {
-        this.errorId = error?.response?.data?.errors[0]?.description;
+        this.queryError = NavitiaService.handleQueryError(error?.response?.data?.errors[0]?.description);
         console.error('Error retrieving extended timeframe routes:', error);
         this.noResult = true;
         this.journeys = [];

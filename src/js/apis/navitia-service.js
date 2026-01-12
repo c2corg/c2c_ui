@@ -194,4 +194,18 @@ NavitiaService.prototype.getJourneySummary = function (journey) {
   };
 };
 
+NavitiaService.prototype.handleQueryError = function (data) {
+  let queryError = '';
+  if (typeof data === 'string') {
+    try {
+      queryError = JSON.parse(data.replaceAll('"', '').replaceAll("'", '"'));
+    } catch (err) {
+      queryError = { id: 'parse_error', message: String(data) };
+    }
+  } else {
+    queryError = data;
+  }
+  return queryError;
+};
+
 export default new NavitiaService();
