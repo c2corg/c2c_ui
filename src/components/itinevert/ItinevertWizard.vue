@@ -53,7 +53,7 @@
             <p class="input-label">{{ $gettext('Choice of massif') }}</p>
             <input-autocomplete
               :fullwidth="true"
-              :placeholder="''"
+              :placeholder="$gettext('Enter a massif name')"
               :show-suggestions="true"
               :suggestions="formData.mountainRange.list"
               :default-value="formData.mountainRange.selected"

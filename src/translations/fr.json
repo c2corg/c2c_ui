@@ -267,6 +267,7 @@
       "API message": "Ne doit pas contenir un suffixe tel que '.json'"
     },
     "Enter a departure address": "Entrez une adresse de départ",
+    "Enter a massif name": "Entrez le nom d'un massif",
     "Enter an address": "Entrez une adresse",
     "Error while loading data": "Erreur lors du chargement des données",
     "Everything about ratings : difficulties, exposition...": "Rentrez ici la totalité des cotations de l'itinéraire (difficulté, exposition, qualité de l'équipement…)",
