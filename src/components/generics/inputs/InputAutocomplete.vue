@@ -125,7 +125,6 @@ export default {
       this.localData.selectedValue = suggestion;
       this.inputValue = this.format(suggestion);
       this.localData.showSuggestions = false;
-      this.notifyParent();
     },
     format(suggestion) {
       return this.formatSuggestion(suggestion);

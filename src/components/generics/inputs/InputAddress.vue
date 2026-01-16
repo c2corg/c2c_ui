@@ -54,7 +54,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: () => $gettext('Enter an address'),
+      default: '',
     },
     showAddressPropositions: {
       type: Boolean,
@@ -199,7 +199,6 @@ export default {
       this.localData.address = this.formatProposition(proposition);
       this.localData.coordinates = proposition.geometry.coordinates;
       this.localData.showAddressPropositions = false;
-      this.notifyParent();
     },
 
     /** Format address proposition rendered by Photon */

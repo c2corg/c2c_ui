@@ -1,6 +1,6 @@
 <template>
   <div class="time-input">
-    <div class="select hour-container">
+    <div class="hour-container">
       <select v-model="hour">
         <option v-for="i of hours" :key="i">{{ i }}</option>
       </select>
@@ -8,7 +8,7 @@
 
     <span class="time-separator">:</span>
 
-    <div class="select minute-container">
+    <div class="minute-container">
       <select v-model="minute">
         <option v-for="i of minutes" :key="i">{{ i }}</option>
       </select>
@@ -79,11 +79,13 @@ export default {
   box-shadow: none;
 }
 
-.time-input .select {
+.time-input .minute-container,
+.time-input .hour-container {
   border: none;
 }
 
-.time-input .select::after {
+.time-input .minute-container::after,
+.time-input .hour-container::after {
   display: none;
 }
 

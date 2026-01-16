@@ -389,12 +389,14 @@ function formatNavitiaDateTime(date, time, timePreference) {
  */
 ItinevertService.prototype.initialValue = function (field) {
   if (!field) return null;
-  if (field.queryMode === 'activities') return [];
   if (field.queryMode === 'orientations') return [];
   if (field.queryMode === 'multiSelect' || field.queryMode === 'tristate') return [];
   if (field.queryMode === 'checkbox') return false;
   if (field.queryMode === 'valuesRangeSlider' || field.queryMode === 'numericalRangeSlider') {
-    return [field.values?.[0] ?? 0, field.values?.[field.values.length - 1] ?? 0];
+    if (field.queryMode === 'valuesRangeSlider') {
+      return [field.values?.[0] ?? 0, field.values?.[field.values.length - 1] ?? 0];
+    }
+    return [field.min ?? 0, field.max ?? 0];
   }
   return '';
 };

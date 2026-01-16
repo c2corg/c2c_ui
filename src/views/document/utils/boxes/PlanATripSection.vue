@@ -596,8 +596,10 @@ export default {
     noResultError() {
       if (this.noResult) {
         if (this.queryError !== null) {
-          console.log(this.queryError);
-          return this.errorMessages[this.queryError?.id];
+          return (
+            this.errorMessages[this.queryError?.id] ||
+            this.$gettext('It seems your trip can not be completed on the selected date and time')
+          );
         } else {
           return this.$gettext('It seems your trip can not be completed on the selected date and time');
         }

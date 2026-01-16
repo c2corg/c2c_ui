@@ -61,22 +61,26 @@ export default {
       return this.wizardView === 'result' || this.wizardView === 'filter' || this.wizardView === 'loading';
     },
   },
+  beforeDestroy() {
+    window.removeEventListener('popstate', this.handlePopstate);
+  },
   mounted() {
     const stored = this.$localStorage.get('itinevert_visible');
     if (stored !== null) {
       this.visible = stored;
     }
-    // Listen for back/forward navigation
-    window.addEventListener('popstate', (event) => {
+    this.handlePopstate = this.handlePopstate.bind(this);
+    window.addEventListener('popstate', this.handlePopstate);
+  },
+  methods: {
+    handlePopstate(event) {
       // whenever user press back button in itinevert, we go back to form view
       if (this.wizardView !== 'form') {
         this.changeView('form');
       } else {
         history.back();
       }
-    });
-  },
-  methods: {
+    },
     changeView(view) {
       // user has clicked on start again, so we are not pushing a new state to history
       if (view === 'form') {

@@ -127,7 +127,7 @@ import QueryItems from '@/views/documents/utils/QueryItems.vue';
 const DocumentsTable = () => import(/* webpackChunkName: "data-table" */ '@/components/datatable/DocumentsTable');
 
 export default {
-  name: 'DocumentsView',
+  name: 'ItinevertResultView',
 
   components: {
     QueryItems,

@@ -26,7 +26,7 @@
             <p class="input-label" v-translate>What is your starting point?</p>
             <input-address
               :fullwidth="true"
-              :placeholder="''"
+              :placeholder="$gettext('Enter an address')"
               :show-address-propositions="true"
               :default-address="formData.startingPoint.selectedAddress"
               @update:props="updateStartingPointAddress"

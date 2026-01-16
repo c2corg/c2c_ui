@@ -131,7 +131,8 @@ export default {
       return ' / ' + MAX_ROUTE_THRESHOLD + ' ' + this.$gettext('routes');
     },
     canDisplayResult() {
-      return this.filteredRoutes.total <= MAX_ROUTE_THRESHOLD && this.filteredRoutes.total !== 0;
+      const total = this.filteredRoutes?.total;
+      return total !== null && total > 0 && total <= MAX_ROUTE_THRESHOLD;
     },
   },
   watch: {
