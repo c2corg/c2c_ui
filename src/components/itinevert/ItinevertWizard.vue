@@ -65,7 +65,7 @@
             <!-- input for destination by 'duration' -->
             <div>
               <p class="input-label">
-                {{ $gettext('Set a maximum duration for the journey by public transport') }}
+                {{ $gettext('Set a maximum time to reach the access point (from the selected departure time)') }}
               </p>
             </div>
             <span>
@@ -118,10 +118,7 @@
 
               <div class="date-picker-container hour-picker-container">
                 <label for="date-input">{{ $gettext('Time') }}</label>
-                <div class="input-container input-container-mobile" v-show="$screen.isMobile || $screen.isTablet">
-                  <input-time id="hour-input" class="hour-input-mobile" v-model="formData.departure.selectedTime" />
-                </div>
-                <div class="input-container" v-show="!$screen.isMobile && !$screen.isTablet">
+                <div class="input-container">
                   <input type="time" id="hour-input" class="hour-input" v-model="formData.departure.selectedTime" />
                 </div>
               </div>
@@ -239,7 +236,7 @@ export default {
             },
             {
               value: 'duration',
-              text: this.$gettext('Set a maximum duration for the journey by public transport'),
+              text: this.$gettext('Set a maximum time to reach the access point (from the selected departure time)'),
             },
           ],
           disabledOptions: [],
@@ -250,8 +247,12 @@ export default {
           list: [],
         },
         departure: {
-          selectedDate: new Date().toISOString().slice(0, 10),
-          selectedTime: new Date().toTimeString().slice(0, 5),
+          selectedDate: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 7, 30, 0, 0)
+            .toISOString()
+            .slice(0, 10),
+          selectedTime: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 7, 30, 0, 0)
+            .toTimeString()
+            .slice(0, 5),
           timePreference: 'leave-after',
         },
         // in minutes
