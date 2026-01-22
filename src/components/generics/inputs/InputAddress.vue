@@ -203,9 +203,13 @@ export default {
 
     /** Format address proposition rendered by Photon */
     formatProposition(proposition) {
-      const props = proposition.properties;
+      const props = proposition.properties || {};
+      const coords = proposition.geometry?.coordinates;
       if (Object.keys(props).length === 0) {
-        return `${proposition.geometry.coordinates[0].toFixed(4)}, ${proposition.geometry.coordinates[1].toFixed(4)}`;
+        if (coords?.length >= 2) {
+          return `${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}`;
+        }
+        return '';
       }
 
       let formattedAddress = props.name || '';
@@ -266,15 +270,21 @@ export default {
         const data = await response.json();
 
         if (data.features && data.features.length > 0) {
-          const location = data.features[0];
-          this.localData.address = this.formatProposition(location);
-          this.localData.selectedAddress = location;
+          this.selectAddress(data.features[0]);
         } else {
-          this.localData.address = `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+          this.selectAddress({
+            geometry: { coordinates: [lon, lat], type: 'Point' },
+            properties: {},
+            type: 'Feature',
+          });
         }
       } catch (error) {
         console.warn('Error during reverse geolocation:', error);
-        this.localData.address = `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+        this.selectAddress({
+          geometry: { coordinates: [lon, lat], type: 'Point' },
+          properties: {},
+          type: 'Feature',
+        });
       }
     },
   },

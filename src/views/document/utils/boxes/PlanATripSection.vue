@@ -995,7 +995,7 @@ export default {
           await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
         }
       } catch (error) {
-        this.queryError = NavitiaService.handleQueryError(error?.response?.data?.errors[0]?.description);
+        this.queryError = NavitiaService.handleQueryError(error?.response?.data?.errors?.[0]?.description);
         console.error('Error retrieving routes:', error);
         await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
       } finally {
@@ -1074,7 +1074,7 @@ export default {
         this.noResult = true;
         this.journeys = [];
       } catch (error) {
-        this.queryError = NavitiaService.handleQueryError(error?.response?.data?.errors[0]?.description);
+        this.queryError = NavitiaService.handleQueryError(error?.response?.data?.errors?.[0]?.description);
         console.error('Error retrieving extended timeframe routes:', error);
         this.noResult = true;
         this.journeys = [];

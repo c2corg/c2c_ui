@@ -75,7 +75,7 @@ export default {
   props: {
     filteredRoutes: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     isSearchEnabled: {
       type: Boolean,

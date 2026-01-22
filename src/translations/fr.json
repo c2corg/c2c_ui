@@ -306,7 +306,7 @@
     "Generate new elevations": "Générer de nouvelles altitudes",
     "Geographical data could not be retrieved": "La trace de l'activité n'a pas pu être récupérée",
     "Geolocation": "Géolocalisation",
-    "Geolocation is not supported by your browser.": "La géolocalisation n'est pas activé dans votre navigateur",
+    "Geolocation is not supported by your browser.": "La géolocalisation n'est pas activée dans votre navigateur",
     "Get ready for your climb": "Préparer sa course",
     "Go back to YETI": "Retour YETI",
     "Go to the previous page": "Retourner à la page précédente",
@@ -719,7 +719,7 @@
       "API message": "Les Conditions Générales d'Utilisation (CGU) doivent être acceptées"
     },
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Grâce aux cookies statistiques ou analytiques, fournis par nous et d'autres sociétés, nous pouvons compter les visites sur notre site Web et connaître les sources de trafic. Les données que nous obtenons nous aident à comprendre ce que les visiteurs aiment et améliorer le site Web. Si vous ne les acceptez pas, nous ne pourrons pas améliorer votre expérience.",
-    "The current criteria will be retained": "Les critères de recherches seront conservés",
+    "The current criteria will be retained": "Les critères de recherche seront conservés",
     "The destination can be a mountain range or a maximum travel time from your starting point." : "La destination peut être un massif ou une durée maximale autour de votre point de départ.",
     "The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.": "La méthode MRD (débutant) est autorisée avec un niveau de danger de 3 maximum. Choisissez la méthode MRE ou MRP.",
     "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "Le potentiel de danger est calculé à partir du niveau de danger du bulletin d'avalanche. Il peut être affiné en sélectionnant un potentiel dans la plage correspondant au niveau du danger. Par exemple : Le bulletin évoque un danger 3 juste après une période en danger 4. On pourra alors indiquer un potentiel de danger de 12 au lieu de 8. ",
