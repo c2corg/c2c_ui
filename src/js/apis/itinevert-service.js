@@ -434,16 +434,6 @@ ItinevertService.prototype.isFieldValueDefault = function (fieldValue, field) {
   return initialVal === fieldValue;
 };
 
-/**
- * Returns the document_id of all areas that intersects coordinates.
- *
- * @param {object} coordinates
- */
-ItinevertService.prototype.getAreaIntersectingIsochrone = function (geometry) {
-  let geom_detail = JSON.stringify(geometry);
-  return this.axios.post(`/navitia/areainisochrone`, { geom_detail: geom_detail });
-};
-
 /** Project geometry's coordinates from sourceProj to targetProj */
 export function projectCoordinates(coords, sourceProj = 'EPSG:4326', targetProj = 'EPSG:3857') {
   return coords.map(function recur(node) {
