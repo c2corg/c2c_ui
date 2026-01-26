@@ -10,7 +10,6 @@
             :class="[{ 'prevent-zoom-on-ios': isIos }]"
             :value="inputValue"
             @input="(evt) => searchSuggestions(evt.target.value)"
-            @focus="showAllSuggestions"
             @blur="handleBlur"
             :placeholder="placeholder"
             autocomplete="off"
@@ -43,8 +42,9 @@ export default {
     placeholder: { type: String, default: '' },
     showSuggestions: { type: Boolean, default: false },
     defaultValue: { type: Object, default: null },
-    suggestions: { type: Array, default: () => [] },
     formatSuggestion: { type: Function, default: (s) => s ?? '' },
+    fetchSuggestions: { type: Function, required: true },
+    limit: { type: Number, default: 10 },
   },
   data() {
     return {
@@ -70,62 +70,52 @@ export default {
   },
   watch: {
     'localData.selectedValue'() {
-      this.notifyParent();
+      this.$emit('update:props', this.localData.selectedValue);
     },
   },
   methods: {
-    notifyParent() {
-      this.$emit('update:props', this.localData.selectedValue);
-    },
-    async searchSuggestions(inputValue) {
-      this.inputValue = inputValue;
+    async searchSuggestions(value) {
+      this.inputValue = value;
+
       if (this.searchTimeout) clearTimeout(this.searchTimeout);
 
-      if (this.inputValue?.length < 1) {
-        this.localData.valueSuggestions = this.suggestions.slice(0, 10);
-        this.localData.showSuggestions = true;
+      if (!value || value.length < 1) {
+        this.localData.valueSuggestions = [];
+        this.localData.showSuggestions = false;
         return;
       }
 
-      this.searchTimeout = setTimeout(() => {
-        this.localData.valueSuggestions = this.suggestions
-          .filter((suggestion) => {
-            const formattedSuggestion = this.format(suggestion)
-              .normalize('NFD')
-              .replace(/[\u0300-\u036f]/g, '')
-              .toLowerCase();
-            return formattedSuggestion.includes(
-              this.inputValue
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
-                .toLowerCase()
-            );
-          })
-          .slice(0, 10);
-        this.localData.showSuggestions = this.localData.valueSuggestions?.length > 0;
+      this.searchTimeout = setTimeout(async () => {
+        try {
+          const results = await this.fetchSuggestions(value, this.limit);
+
+          this.localData.valueSuggestions = results;
+          this.localData.showSuggestions = results.length > 0;
+        } catch (e) {
+          console.warn(e);
+        }
       }, 300);
     },
-    showAllSuggestions() {
-      this.localData.valueSuggestions = this.suggestions;
-      this.localData.showSuggestions = true;
-    },
+
     toggleSuggestions() {
       if (this.localData.showSuggestions) {
         this.localData.showSuggestions = false;
-      } else {
-        this.showAllSuggestions();
+        return;
       }
     },
+
+    selectValue(suggestion) {
+      this.localData.selectedValue = suggestion;
+      this.inputValue = this.formatSuggestion(suggestion);
+      this.localData.showSuggestions = false;
+    },
+
     handleBlur() {
       setTimeout(() => {
         this.localData.showSuggestions = false;
       }, 200);
     },
-    selectValue(suggestion) {
-      this.localData.selectedValue = suggestion;
-      this.inputValue = this.format(suggestion);
-      this.localData.showSuggestions = false;
-    },
+
     format(suggestion) {
       return this.formatSuggestion(suggestion);
     },

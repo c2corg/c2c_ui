@@ -55,9 +55,10 @@
               :fullwidth="true"
               :placeholder="$gettext('Enter a massif name')"
               :show-suggestions="true"
-              :suggestions="formData.mountainRange.list"
               :default-value="formData.mountainRange.selected"
               :format-suggestion="getTitle"
+              :fetch-suggestions="fetchMountainRanges"
+              :limit="10"
               @update:props="updateSelectedMountainRange"
             ></input-autocomplete>
           </div>
@@ -244,7 +245,6 @@ export default {
         mountainRange: {
           selected: null,
           coverages: [],
-          list: [],
         },
         departure: {
           selectedDate: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 7, 30, 0, 0)
@@ -436,13 +436,6 @@ export default {
       });
     }
 
-    // get all areas of type "range"
-    // so that we can display them in a dropdown
-    let areas = await c2c.area.fullDownload({
-      atyp: 'range',
-    });
-    this.formData.mountainRange.list = areas.sort((a, b) => this.getTitle(a).localeCompare(this.getTitle(b)));
-
     if (MAX_NAVITIA_ISOCHRONES_REQUEST_REACHED) {
       this.formData.destinationKind.disabledOptions.push({
         value: 'duration',
@@ -452,6 +445,23 @@ export default {
   },
 
   methods: {
+    /**
+     * Fetch mountain ranges for autocomplete
+     *
+     * @param value The value entered by user to filter
+     * @param limit The limit set for this autocomplete
+     */
+    async fetchMountainRanges(value, limit) {
+      const promise = c2c.area.getAll({
+        atyp: 'range',
+        q: value,
+        limit: limit,
+      });
+
+      const areas = (await promise)?.data?.documents;
+
+      return areas?.length > 0 ? areas?.sort((a, b) => this.getTitle(a).localeCompare(this.getTitle(b))) : [];
+    },
     formatTripDuration(event) {
       const tripDuration = event.target.value;
       // make sure trip duration is between limits
