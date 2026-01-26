@@ -111,59 +111,88 @@ export default {
     notifyParent() {
       this.$emit('update:props', this.localData.selectedAddress);
     },
-    /** Takes current location and use reverse query with Photon to get location name */
-    useCurrentLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            const coords = [position.coords.longitude, position.coords.latitude];
-            this.localData.coordinates = coords;
 
-            try {
-              const response = await photon.reverseGeocodeUserLocation(coords[0], coords[1], this.$language.current);
+    /**
+     * Build a feature with point geom being lon lat
+     *
+     * @param coords [lon, lat]
+     */
+    buildFeatureFromCoords(coords) {
+      return {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: coords,
+        },
+        properties: {},
+      };
+    },
 
-              const data = await response.json();
+    /** Transforms a point's coordinates (longitude and latitude) into an address with photon */
+    async reverseGeocode(lon, lat) {
+      try {
+        const response = await photon.reverseGeocodeUserLocation(lon, lat, this.$language.current);
+        const data = await response.json();
 
-              if (data.features && data.features.length > 0) {
-                const location = data.features[0];
-                this.selectAddress(location);
-              } else {
-                // fallback
-                this.selectAddress({
-                  geometry: {
-                    coordinates: coords,
-                    type: 'Point',
-                  },
-                  properties: {},
-                  type: 'Feature',
-                });
-              }
-            } catch (error) {
-              console.warn('Error during reverse geolocation:', error);
-              this.selectAddress({
-                geometry: {
-                  coordinates: coords,
-                  type: 'Point',
-                },
-                properties: {},
-                type: 'Feature',
-              });
-            }
-          },
-          (error) => {
-            console.warn('Geolocation error:', error);
-            toast({ message: this.$gettext('Unable to get your current location.'), type: 'is-warning' });
-          }
-        );
-      } else {
-        toast({ message: this.$gettext('Geolocation is not supported by your browser.'), type: 'is-warning' });
+        this.selectAddress(data.features?.[0] ?? this.buildFeatureFromCoords([lon, lat]));
+      } catch (error) {
+        console.warn('Error during reverse geolocation:', error);
+        this.selectAddress(this.buildFeatureFromCoords([lon, lat]));
       }
     },
-    /** Address auto-complete, launched when the user has not typed anything for 0.6 seconds */
-    async searchAddressPropositions() {
-      if (this.searchTimeout) {
-        clearTimeout(this.searchTimeout);
+
+    /** Try to use geolocation from browser */
+    useCurrentLocation() {
+      if (!navigator.geolocation) {
+        toast({
+          message: this.$gettext('Geolocation is not supported by your browser.'),
+          type: 'is-warning',
+        });
+        return;
       }
+
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const coords = [position.coords.longitude, position.coords.latitude];
+
+          this.localData.coordinates = coords;
+          await this.reverseGeocode(coords[0], coords[1]);
+        },
+        (error) => {
+          console.warn('Geolocation error:', error);
+          toast({
+            message: this.$gettext('Unable to get your current location.'),
+            type: 'is-warning',
+          });
+        }
+      );
+    },
+
+    /** If the user is authenticated and has entered their address in their profile, it is put in the address field */
+    async loadUserAddressIfLoggedIn() {
+      if (!this.$user.isLogged) return;
+
+      try {
+        const { data } = await c2c.userProfile.getProfile(this.$user.id);
+        const geom = data.geometry?.geom;
+        if (!geom) return;
+
+        const geomData = JSON.parse(geom);
+        if (geomData.type !== 'Point' || !geomData.coordinates) return;
+
+        const [x, y] = geomData.coordinates;
+        const [lon, lat] = ol.proj.transform([x, y], 'EPSG:3857', 'EPSG:4326');
+
+        this.localData.coordinates = [lon, lat];
+        await this.reverseGeocode(lon, lat);
+      } catch (error) {
+        console.warn('Error loading user location:', error);
+      }
+    },
+
+    /** Look for address propositions to display them for autocompleting */
+    async searchAddressPropositions() {
+      clearTimeout(this.searchTimeout);
 
       if (this.localData.address?.length < 3) {
         this.localData.showAddressPropositions = false;
@@ -235,57 +264,6 @@ export default {
       }
 
       return formattedAddress;
-    },
-    /** If the user is authenticated and has entered their address in their profile, it is put in the address field */
-    async loadUserAddressIfLoggedIn() {
-      if (!this.$user.isLogged) {
-        return;
-      }
-
-      try {
-        const profileResponse = await c2c.userProfile.getProfile(this.$user.id);
-        const profileData = profileResponse.data;
-
-        if (profileData.geometry && profileData.geometry.geom) {
-          const geomData = JSON.parse(profileData.geometry.geom);
-
-          if (geomData.type === 'Point' && geomData.coordinates) {
-            const [x, y] = geomData.coordinates;
-            const [lon, lat] = ol.proj.transform([x, y], 'EPSG:3857', 'EPSG:4326');
-            this.localData.coordinates = [lon, lat];
-
-            await this.reverseGeocodeUserLocation(lon, lat);
-          }
-        }
-      } catch (error) {
-        console.warn('Error loading user location:', error);
-      }
-    },
-
-    /** Transforms a point's coordinates (longitude and latitude) into an address with photon */
-    async reverseGeocodeUserLocation(lon, lat) {
-      try {
-        const response = await photon.reverseGeocodeUserLocation(lon, lat, this.$language.current);
-
-        const data = await response.json();
-
-        if (data.features && data.features.length > 0) {
-          this.selectAddress(data.features[0]);
-        } else {
-          this.selectAddress({
-            geometry: { coordinates: [lon, lat], type: 'Point' },
-            properties: {},
-            type: 'Feature',
-          });
-        }
-      } catch (error) {
-        console.warn('Error during reverse geolocation:', error);
-        this.selectAddress({
-          geometry: { coordinates: [lon, lat], type: 'Point' },
-          properties: {},
-          type: 'Feature',
-        });
-      }
     },
   },
 };
