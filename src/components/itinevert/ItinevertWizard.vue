@@ -553,14 +553,24 @@ export default {
         // using Isochrones API
         else if (this.formData.destinationKind.selected === 'duration') {
           this.$emit('change-view', 'loading');
-          let data = (
-            await itinevertService.getIsochronesReachableRoutes(
-              this.formQuery,
-              this.formData.departure,
-              this.formData.maxTripDuration,
-              this.formData.startingPoint.selectedAddress
-            )
-          ).data;
+          let data;
+          try {
+            data = (
+              await itinevertService.getIsochronesReachableRoutes(
+                this.formQuery,
+                this.formData.departure,
+                this.formData.maxTripDuration,
+                this.formData.startingPoint.selectedAddress
+              )
+            ).data;
+          } catch (e) {
+            this.queryError = { message: e.message || this.$gettext('Error while loading data') };
+            this.filteredRoutes = {};
+            this.filteredWaypoints = {};
+            if (this.view === 'loading') {
+              this.$emit('change-view', 'result');
+            }
+          }
 
           if (data.hasOwnProperty('documents')) {
             this.filteredRoutes = {
@@ -630,14 +640,24 @@ export default {
         }
         // using Isochrones API
         else if (this.formData.destinationKind.selected === 'duration') {
-          let data = (
-            await itinevertService.getIsochronesReachableWaypoints(
-              this.formQuery,
-              this.formData.departure,
-              this.formData.maxTripDuration,
-              this.formData.startingPoint.selectedAddress
-            )
-          ).data;
+          let data;
+          try {
+            data = (
+              await itinevertService.getIsochronesReachableWaypoints(
+                this.formQuery,
+                this.formData.departure,
+                this.formData.maxTripDuration,
+                this.formData.startingPoint.selectedAddress
+              )
+            ).data;
+          } catch (e) {
+            this.queryError = { message: e.message || this.$gettext('Error while loading data') };
+            this.filteredRoutes = {};
+            this.filteredWaypoints = {};
+            if (this.view === 'loading') {
+              this.$emit('change-view', 'result');
+            }
+          }
 
           if (data.hasOwnProperty('documents')) {
             this.filteredWaypoints = {
