@@ -10,6 +10,7 @@
             :class="[{ 'prevent-zoom-on-ios': isIos }]"
             :value="inputValue"
             @input="(evt) => searchSuggestions(evt.target.value)"
+            @focus="toggleSuggestions"
             @blur="handleBlur"
             :placeholder="placeholder"
             autocomplete="off"
@@ -82,6 +83,7 @@ export default {
       if (!value || value.length < 1) {
         this.localData.valueSuggestions = [];
         this.localData.showSuggestions = false;
+        this.localData.selectedValue = '';
         return;
       }
 
@@ -100,7 +102,8 @@ export default {
     toggleSuggestions() {
       if (this.localData.showSuggestions) {
         this.localData.showSuggestions = false;
-        return;
+      } else {
+        this.localData.showSuggestions = true;
       }
     },
 
