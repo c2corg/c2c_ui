@@ -454,7 +454,9 @@ export default {
       const promise = c2c.area.getAll({
         atyp: 'range',
         q: value,
+        offset: 0,
         limit: limit,
+        l: this.$language.current,
       });
 
       const areas = (await promise)?.data?.documents;
