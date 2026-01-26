@@ -54,7 +54,6 @@
             <input-autocomplete
               :fullwidth="true"
               :placeholder="$gettext('Enter a massif name')"
-              :show-suggestions="true"
               :default-value="formData.mountainRange.selected"
               :format-suggestion="getTitle"
               :fetch-suggestions="fetchMountainRanges"

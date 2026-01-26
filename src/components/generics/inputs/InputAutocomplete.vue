@@ -41,7 +41,6 @@ export default {
   props: {
     fullwidth: { type: Boolean, default: false },
     placeholder: { type: String, default: '' },
-    showSuggestions: { type: Boolean, default: false },
     defaultValue: { type: Object, default: null },
     formatSuggestion: { type: Function, default: (s) => s ?? '' },
     fetchSuggestions: { type: Function, required: true },
@@ -52,7 +51,7 @@ export default {
       localData: {
         selectedValue: '',
         valueSuggestions: [],
-        showSuggestions: this.showSuggestions,
+        showSuggestions: false,
       },
       inputValue: this.defaultValue ? this.formatSuggestion(this.defaultValue) : '',
       searchTimeout: null,
