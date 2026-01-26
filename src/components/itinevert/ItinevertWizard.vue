@@ -456,7 +456,6 @@ export default {
         q: value,
         offset: 0,
         limit: limit,
-        l: this.$language.current,
       });
 
       const areas = (await promise)?.data?.documents;
@@ -489,8 +488,7 @@ export default {
     // callback passed to input autocomplete
     async updateSelectedMountainRange(selectedMountainRange) {
       // requery choosen area to get its geometry
-      let prefered_lang = c2c.getApiLang(this.$language.current);
-      let area = (await c2c.area.get(selectedMountainRange.document_id, prefered_lang)).data;
+      let area = (await c2c.area.get(selectedMountainRange.document_id)).data;
       this.formData.mountainRange.selected = area;
       let coverages = (await itinevertService.getPolygonCoverage(area.geometry.geom_detail)).data;
       this.formData.mountainRange.coverages = coverages;
