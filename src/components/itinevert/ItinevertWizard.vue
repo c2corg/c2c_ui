@@ -569,9 +569,10 @@ export default {
             if (this.view === 'loading') {
               this.$emit('change-view', 'result');
             }
+            return;
           }
 
-          if (data.hasOwnProperty('documents')) {
+          if (data && data.hasOwnProperty('documents')) {
             this.filteredRoutes = {
               documents: data.documents,
               total: data.total,
@@ -656,9 +657,10 @@ export default {
             if (this.view === 'loading') {
               this.$emit('change-view', 'result');
             }
+            return;
           }
 
-          if (data.hasOwnProperty('documents')) {
+          if (data && data.hasOwnProperty('documents')) {
             this.filteredWaypoints = {
               documents: data.documents,
               total: data.total,
