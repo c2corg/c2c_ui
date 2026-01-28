@@ -168,6 +168,7 @@ import {
   geoJSONFormat,
   getDocumentLineStyle,
   getDocumentPointStyle,
+  getDocumentPolygonStyle,
   getElevationProfileMarkerStyle,
   isFiniteExtent,
   swissExtent,
@@ -262,6 +263,11 @@ export default {
     },
 
     showPinToTopButton: {
+      type: Boolean,
+      default: false,
+    },
+
+    openInNewTab: {
       type: Boolean,
       default: false,
     },
@@ -845,24 +851,36 @@ export default {
 
       const title = this.$documentUtils.getDocumentTitle(document);
 
-      if (document.geometry.geom) {
-        const feature = this.addFeature(
-          source,
-          JSON.parse(document.geometry.geom),
-          style ?? getDocumentPointStyle(document, title, false),
-          style ? null : getDocumentPointStyle(document, title, true)
-        );
+      // special case for documents of type areas, we want a filled polygon.
+      if (document.type === 'a') {
+        if (document.geometry.geom_detail) {
+          this.addFeature(
+            source,
+            JSON.parse(document.geometry.geom_detail),
+            style ?? getDocumentPolygonStyle(title, false, document.properties),
+            style ? null : getDocumentPolygonStyle(title, true, document.properties)
+          ).set('document', document);
+        }
+      } else {
+        if (document.geometry.geom) {
+          const feature = this.addFeature(
+            source,
+            JSON.parse(document.geometry.geom),
+            style ?? getDocumentPointStyle(document, title, false),
+            style ? null : getDocumentPointStyle(document, title, true)
+          );
 
-        feature.set('document', document);
-        feature.setId(document.document_id);
-      }
-      if (document.geometry.geom_detail) {
-        this.addFeature(
-          source,
-          JSON.parse(document.geometry.geom_detail),
-          style ?? getDocumentLineStyle(title, false, document.properties),
-          style ? null : getDocumentLineStyle(title, true, document.properties)
-        ).set('document', document);
+          feature.set('document', document);
+          feature.setId(document.document_id);
+        }
+        if (document.geometry.geom_detail) {
+          this.addFeature(
+            source,
+            JSON.parse(document.geometry.geom_detail),
+            style ?? getDocumentLineStyle(title, false, document.properties),
+            style ? null : getDocumentLineStyle(title, true, document.properties)
+          ).set('document', document);
+        }
       }
     },
 
@@ -1120,7 +1138,7 @@ export default {
           if (this.documents.length === 1 && document.document_id === this.documents[0].document_id) {
             return;
           }
-          if (event.originalEvent.ctrlKey) {
+          if (event.originalEvent.ctrlKey || this.openInNewTab) {
             const href = this.$router.resolve({
               name: this.$documentUtils.getDocumentType(document.type),
               params: { id: document.document_id },

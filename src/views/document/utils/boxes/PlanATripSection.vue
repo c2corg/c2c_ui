@@ -208,7 +208,7 @@
               <div class="no-itineraries-text">
                 <div class="no-itineraries-found">{{ $gettext('No public transport found') }}</div>
                 <div class="no-itineraries-detail">
-                  {{ $gettext('It seems your trip can not be completed on the selected date and time') }}
+                  {{ noResultError }}
                 </div>
               </div>
             </div>
@@ -528,17 +528,14 @@ export default {
       searchTimeout: null,
       limitTransfers: false,
       maxTransfers: 0,
+      queryError: null,
+      errorMessages: {
+        date_out_of_bounds: this.$gettext('Public transport schedules are not yet known for this period.'),
+        unknown_object: this.$gettext(
+          "The start and finish points are too far apart to find a route. Choose a start in a city closer to the route's access point."
+        ),
+      },
     };
-  },
-
-  async mounted() {
-    // Loads a user's address to put it directly into the 'address' field
-    await this.loadUserAddressIfLoggedIn();
-
-    // Firefox's date picker calendar has a specific design
-    if (navigator.userAgent.toLowerCase().includes('firefox')) {
-      document.documentElement.classList.add('is-firefox');
-    }
   },
 
   computed: {
@@ -594,6 +591,21 @@ export default {
     /** Returns the outbound or return data */
     currentData() {
       return this.activeTab === 'outbound' ? this.outboundData : this.returnData;
+    },
+
+    noResultError() {
+      if (this.noResult) {
+        if (this.queryError !== null) {
+          return (
+            this.errorMessages[this.queryError?.id] ||
+            this.$gettext('It seems your trip can not be completed on the selected date and time')
+          );
+        } else {
+          return this.$gettext('It seems your trip can not be completed on the selected date and time');
+        }
+      } else {
+        return '';
+      }
     },
 
     fromAddress: {
@@ -884,6 +896,7 @@ export default {
 
     /** Call Navitia and store the results */
     async calculateRoute() {
+      this.queryError = null;
       this.missingDepartureAddress = false;
       this.missingDestinationAddress = false;
 
@@ -982,6 +995,7 @@ export default {
           await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
         }
       } catch (error) {
+        this.queryError = NavitiaService.handleQueryError(error?.response?.data?.errors?.[0]?.description);
         console.error('Error retrieving routes:', error);
         await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
       } finally {
@@ -1060,6 +1074,7 @@ export default {
         this.noResult = true;
         this.journeys = [];
       } catch (error) {
+        this.queryError = NavitiaService.handleQueryError(error?.response?.data?.errors?.[0]?.description);
         console.error('Error retrieving extended timeframe routes:', error);
         this.noResult = true;
         this.journeys = [];
@@ -1163,10 +1178,7 @@ export default {
             type: 'r',
             geometry: {
               version: 1,
-              geom: JSON.stringify({
-                type: 'Point',
-                coordinates: section.geojson.coordinates[0],
-              }),
+              geom: null,
               geom_detail: JSON.stringify({
                 type: 'LineString',
                 coordinates: section.geojson.coordinates.map((coord) => {

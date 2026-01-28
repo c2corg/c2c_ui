@@ -59,6 +59,13 @@
         <span class="menu-item-text"> {{ $gettext('yeti') | uppercaseFirstLetter }} </span>
       </span>
     </router-link>
+    <!-- use of a href instead of router link so that the page is refreshed if you are already on Itinevert -->
+    <a :href="$router.resolve({ name: 'itinevert' }).href">
+      <span class="menu-item is-ellipsed" :class="{ 'router-link-active': ['itinevert'].includes($route.name) }">
+        <icon-itinevert fixed-width />
+        <span class="menu-item-text"> {{ $gettext('Itinevert') | uppercaseFirstLetter }} </span>
+      </span>
+    </a>
 
     <div class="menu-footer is-size-7">
       <div class="has-text-centered menu-links">

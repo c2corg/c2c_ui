@@ -303,6 +303,47 @@ export const getDocumentLineStyle = function (title, highlight, properties) {
   }
 };
 
+export const getDocumentPolygonStyle = function (title, highlight, properties) {
+  // Highlighted polygon (properties provided)
+  if (highlight && properties) {
+    return new ol.style.Style({
+      fill: new ol.style.Fill({
+        color: properties.color,
+      }),
+      stroke: new ol.style.Stroke({
+        color: properties.strokeColor,
+        width: 4,
+      }),
+      text: buildTextStyle(properties.name || title, highlight, true),
+      zIndex: 1,
+    });
+  }
+
+  // Non-highlighted polygon with properties
+  if (properties) {
+    return new ol.style.Style({
+      fill: new ol.style.Fill({
+        color: properties.color,
+      }),
+      stroke: new ol.style.Stroke({
+        color: properties.strokeColor,
+        width: 2,
+      }),
+    });
+  }
+
+  // No properties → return nothing special (empty style)
+  return new ol.style.Style({
+    fill: new ol.style.Fill({
+      color: undefined,
+    }),
+    stroke: new ol.style.Stroke({
+      color: undefined,
+      width: 1,
+    }),
+  });
+};
+
 export const getElevationProfileMarkerStyle = function () {
   return [
     new ol.style.Style({

@@ -194,4 +194,25 @@ NavitiaService.prototype.getJourneySummary = function (journey) {
   };
 };
 
+NavitiaService.prototype.handleQueryError = function (data) {
+  let queryError = '';
+  if (typeof data === 'string') {
+    try {
+      // First try parsing as-is (valid JSON)
+      queryError = JSON.parse(data);
+    } catch (err) {
+      try {
+        // Fallback: attempt to handle Python-style single-quoted dicts
+        // Only replace quotes at key/value boundaries, not within strings
+        queryError = JSON.parse(data.replace(/'/g, '"'));
+      } catch (innerErr) {
+        queryError = { id: 'parse_error', message: String(data) };
+      }
+    }
+  } else {
+    queryError = data;
+  }
+  return queryError;
+};
+
 export default new NavitiaService();
