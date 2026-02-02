@@ -107,6 +107,7 @@
           :highlighted-document="highlightedDocument"
           :open-in-new-tab="true"
           @highlight-document="highlightedDocument = arguments[0]"
+          show-filter-control
           show-center-on-geolocation
           show-recenter-on
         />
@@ -311,7 +312,7 @@ export default {
       };
 
       let query = itinevertService.enhanceQuery(this.baseQuery, newQuery);
-      if (this.isochroneBbox !== '') {
+      if (this.isochroneBbox !== '' && !query.bbox) {
         query.bbox = this.isochroneBbox;
       }
       this.lastQuery = query;
