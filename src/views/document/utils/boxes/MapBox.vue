@@ -39,6 +39,14 @@
     </div>
 
     <div class="buttons is-centered">
+      <a
+        v-if="geoUri && $screen.isMobile"
+        :href="geoUri"
+        class="button is-primary is-small"
+        :title="$gettext('Open this location in your map app')"
+      >
+        <fa-icon icon="map-marker-alt" />
+      </a>
       <button v-if="showDownloadTraceButtons" class="button is-primary is-small" @click="downloadGpx">GPX</button>
       <button v-if="showDownloadTraceButtons" class="button is-primary is-small" @click="downloadKml">KML</button>
       <button
@@ -93,6 +101,23 @@ export default {
 
     hasMapLinks() {
       return (this.document.maps && this.document.maps.length !== 0) || this.document.maps_info;
+    },
+
+    geoUri() {
+      if (!this.document.geometry || !this.document.geometry.geom) {
+        return null;
+      }
+      let parsed;
+      try {
+        parsed = JSON.parse(this.document.geometry.geom);
+      } catch {
+        return null;
+      }
+      if (parsed.type !== 'Point' || !Array.isArray(parsed.coordinates)) {
+        return null;
+      }
+      const [lon, lat] = ol.proj.toLonLat(parsed.coordinates);
+      return `geo:${lat.toFixed(6)},${lon.toFixed(6)}?q=${lat.toFixed(6)},${lon.toFixed(6)}`;
     },
   },
 
