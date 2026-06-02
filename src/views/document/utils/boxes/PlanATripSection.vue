@@ -25,31 +25,19 @@
               <template v-if="activeTab === 'outbound'">
                 <div class="from-container">
                   <div class="from-text">{{ $gettext('From') }}</div>
-                  <div class="autocomplete-container">
-                    <input
-                      class="from-address"
-                      v-model="fromAddress"
-                      @input="searchAddressPropositions"
-                      @focus="showAddressPropositions = true"
-                      @blur="handleBlur"
-                      :placeholder="$gettext('Enter a departure address')"
-                      autocomplete="address-line1"
-                    />
-                    <div class="autocomplete-results" v-if="showAddressPropositions && addressPropositions.length > 0">
-                      <ul>
-                        <li
-                          v-for="(proposition, index) in addressPropositions"
-                          :key="index"
-                          @mousedown="selectAddress(proposition)"
-                        >
-                          {{ formatProposition(proposition) }}
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <button class="geolocalisation" @click="useCurrentLocation">
-                    <img class="geolocalisation-img" src="@/assets/img/boxes/geoloc.svg" alt="geoloc" />
-                  </button>
+                  <input-address
+                    class="input-address"
+                    :fullwidth="true"
+                    :placeholder="$gettext('Enter a departure address')"
+                    :show-address-propositions="showAddressPropositions"
+                    :default-address="outboundData.fromAddress"
+                    @update:props="
+                      (address) => {
+                        outboundData.fromAddress = address;
+                        outboundData.fromCoordinates = address?.geometry?.coordinates;
+                      }
+                    "
+                  ></input-address>
                 </div>
                 <div class="to-container">
                   <div class="to-text">{{ $gettext('To') }}</div>
@@ -89,30 +77,19 @@
                 </div>
                 <div class="from-container-return">
                   <div class="from-text">{{ $gettext('To') }}</div>
-                  <div class="autocomplete-container">
-                    <input
-                      class="from-address"
-                      v-model="fromAddress"
-                      @input="searchAddressPropositions"
-                      @focus="showAddressPropositions = true"
-                      @blur="handleBlur"
-                      placeholder="Entrez une adresse de destination"
-                    />
-                    <div class="autocomplete-results" v-if="showAddressPropositions && addressPropositions.length > 0">
-                      <ul>
-                        <li
-                          v-for="(proposition, index) in addressPropositions"
-                          :key="index"
-                          @mousedown="selectAddress(proposition)"
-                        >
-                          {{ formatProposition(proposition) }}
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <button class="geolocalisation geolocalisation-return" @click="useCurrentLocation">
-                    <img class="geolocalisation-img" src="@/assets/img/boxes/geoloc.svg" alt="geoloc" />
-                  </button>
+                  <input-address
+                    class="input-address"
+                    :fullwidth="true"
+                    :placeholder="$gettext('Enter a departure address')"
+                    :show-address-propositions="showAddressPropositions"
+                    :default-address="returnData.fromAddress"
+                    @update:props="
+                      (address) => {
+                        returnData.fromAddress = address;
+                        returnData.fromCoordinates = address?.geometry?.coordinates;
+                      }
+                    "
+                  ></input-address>
                 </div>
               </template>
             </div>
@@ -771,9 +748,6 @@ export default {
   },
 
   async mounted() {
-    // Loads a user's address to put it directly into the 'address' field
-    await this.loadUserAddressIfLoggedIn();
-
     // Firefox's date picker calendar has a specific design
     if (navigator.userAgent.toLowerCase().includes('firefox')) {
       document.documentElement.classList.add('is-firefox');
@@ -791,109 +765,6 @@ export default {
   },
 
   methods: {
-    /** Address auto-complete, launched when the user has not typed anything for 0.6 seconds */
-    async searchAddressPropositions() {
-      if (this.searchTimeout) {
-        clearTimeout(this.searchTimeout);
-      }
-
-      if (this.fromAddress?.length < 3) {
-        this.showAddressPropositions = false;
-        this.addressPropositions = [];
-        return;
-      }
-
-      this.searchTimeout = setTimeout(async () => {
-        const center = this.$refs.mapView?.view?.getCenter();
-        const centerWgs84 = center ? ol.proj.toLonLat(center) : null;
-
-        try {
-          const response = await photon.getPropositions(this.fromAddress, this.$language.current, centerWgs84);
-          this.addressPropositions = response.data.features.slice(0, 6) || [];
-          this.showAddressPropositions = this.addressPropositions.length > 0;
-        } catch (error) {
-          console.error('Error searching for addresses:', error);
-          this.addressPropositions = [];
-        }
-      }, 600);
-    },
-
-    /** Takes selected address proposition */
-    selectAddress(proposition) {
-      this.selectedAddress = proposition;
-      this.fromAddress = this.formatProposition(proposition);
-      this.fromCoordinates = proposition.geometry.coordinates;
-      this.showAddressPropositions = false;
-    },
-
-    /** Format address proposition rendered by Photon */
-    formatProposition(proposition) {
-      const props = proposition.properties;
-      let formattedAddress = props.name || '';
-
-      if (props.housenumber) {
-        formattedAddress = `${formattedAddress} ${props.housenumber}`;
-      }
-
-      if (props.street) {
-        formattedAddress = `${formattedAddress}${' '}${props.street}`;
-      }
-
-      if (props.city) {
-        formattedAddress = `${formattedAddress}${formattedAddress ? ', ' : ''}${props.city}`;
-      }
-
-      if (props.postcode) {
-        formattedAddress = `${formattedAddress} ${props.postcode}`;
-      }
-
-      if (props.country) {
-        formattedAddress = `${formattedAddress}${formattedAddress ? ', ' : ''}${props.country}`;
-      }
-
-      return formattedAddress;
-    },
-
-    /** Short delay to allow selection before hiding suggestions */
-    handleBlur() {
-      setTimeout(() => {
-        this.showAddressPropositions = false;
-      }, 200);
-    },
-
-    /** Takes current location and use reverse query with Photon to get location name */
-    useCurrentLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            const coords = [position.coords.longitude, position.coords.latitude];
-            this.fromCoordinates = coords;
-
-            try {
-              const response = await fetch(
-                `https://photon.komoot.io/reverse?lon=${coords[0]}&lat=${coords[1]}&lang=${this.$language.current}`
-              );
-              const data = await response.json();
-
-              if (data.features && data.features.length > 0) {
-                const location = data.features[0];
-                this.fromAddress = this.formatProposition(location);
-              }
-            } catch (error) {
-              console.error('Error during reverse geolocation:', error);
-              this.fromAddress = `${coords[1]}, ${coords[0]}`;
-            }
-          },
-          (error) => {
-            console.error('Geolocation error:', error);
-            alert('Unable to get your current location.');
-          }
-        );
-      } else {
-        alert('Geolocation is not supported by your browser.');
-      }
-    },
-
     /** Call Navitia and store the results */
     async calculateRoute() {
       this.queryError = null;
@@ -923,12 +794,12 @@ export default {
         // OUTBOUND: From address to waypoint
         fromCoords = NavitiaService.formatCoordinates(this.fromCoordinates);
         toCoords = NavitiaService.formatCoordinates(this.selectedWaypoint.coordinates);
-        this.displayedFromAddress = this.fromAddress;
+        this.displayedFromAddress = this.fromAddress.address;
       } else {
         // RETURN: From waypoint to address
         fromCoords = NavitiaService.formatCoordinates(this.selectedWaypoint.coordinates);
         toCoords = NavitiaService.formatCoordinates(this.fromCoordinates);
-        this.displayedToAddress = this.fromAddress;
+        this.displayedToAddress = this.fromAddress.address;
       }
 
       this.isUpdating = true;
@@ -1478,17 +1349,21 @@ export default {
     async loadReachableWaypoints() {
       this.loadingReachable = true;
       this.reachableWaypoints = [];
-
-      const waypoints = this.document.associations.waypoints || [];
+      let accessPoints = [];
+      if (this.documentType === 'waypoint' && this.document.waypoint_type === 'access') {
+        // access waypoint
+        accessPoints = [this.document];
+      } else {
+        // for other types of documents, return the waypoints of type access associated (if any)
+        accessPoints = this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access');
+      }
       const reachableChecks = [];
 
       // Check the accessibility of each waypoint
-      for (const waypoint of waypoints) {
-        if (waypoint.type === 'w' && waypoint.waypoint_type === 'access') {
-          reachableChecks.push(
-            transportService.isReachable(waypoint.document_id).then((isReachable) => ({ waypoint, isReachable }))
-          );
-        }
+      for (const waypoint of accessPoints) {
+        reachableChecks.push(
+          transportService.isReachable(waypoint.document_id).then((isReachable) => ({ waypoint, isReachable }))
+        );
       }
 
       const results = await Promise.all(reachableChecks);
@@ -1551,53 +1426,6 @@ export default {
         } else {
           this.returnData.selectedWaypoint = null;
         }
-      }
-    },
-
-    /** If the user is authenticated and has entered their address in their profile, it is put in the address field */
-    async loadUserAddressIfLoggedIn() {
-      if (!this.$user.isLogged) {
-        return;
-      }
-
-      try {
-        const profileResponse = await c2c.userProfile.getProfile(this.$user.id);
-        const profileData = profileResponse.data;
-
-        if (profileData.geometry && profileData.geometry.geom) {
-          const geomData = JSON.parse(profileData.geometry.geom);
-
-          if (geomData.type === 'Point' && geomData.coordinates) {
-            const [x, y] = geomData.coordinates;
-            const [lon, lat] = ol.proj.transform([x, y], 'EPSG:3857', 'EPSG:4326');
-            this.fromCoordinates = [lon, lat];
-
-            await this.reverseGeocodeUserLocation(lon, lat);
-          }
-        }
-      } catch (error) {
-        console.error('Error loading user location:', error);
-      }
-    },
-
-    /** Transforms a point's coordinates (longitude and latitude) into an address with photon */
-    async reverseGeocodeUserLocation(lon, lat) {
-      try {
-        const response = await fetch(
-          `https://photon.komoot.io/reverse?lon=${lon}&lat=${lat}&lang=${this.$language.current}`
-        );
-        const data = await response.json();
-
-        if (data.features && data.features.length > 0) {
-          const location = data.features[0];
-          this.fromAddress = this.formatProposition(location);
-          this.selectedAddress = location;
-        } else {
-          this.fromAddress = `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
-        }
-      } catch (error) {
-        console.error('Error during reverse geolocation:', error);
-        this.fromAddress = `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
       }
     },
 
@@ -1753,6 +1581,7 @@ export default {
               border-radius: 4px;
               margin-bottom: 15px;
               .from-text {
+                align-self: center;
                 padding-left: 5px;
                 width: 32px;
                 border-right: 1px solid lightgray;
@@ -1815,6 +1644,7 @@ export default {
               padding: 5px;
               border-radius: 4px;
               .to-text {
+                align-self: center;
                 width: 30px;
                 padding-left: 5px;
                 border-right: 1px solid lightgray;
@@ -2344,5 +2174,9 @@ export default {
 }
 .is-firefox .calendar-icon {
   display: none !important;
+}
+
+.input-address {
+  padding-left: 9px;
 }
 </style>
