@@ -2171,6 +2171,9 @@ export default {
       margin-right: auto;
     }
   }
+  .from-to-container {
+    width: 100% !important;
+  }
 }
 .is-firefox .calendar-icon {
   display: none !important;
