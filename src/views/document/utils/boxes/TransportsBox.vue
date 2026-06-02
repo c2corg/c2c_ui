@@ -37,7 +37,7 @@
         </button>
 
         <button
-          v-if="showAccessibilityInfo"
+          v-if="showAccessibilityInfo && isPlanATripSectionDisplayed"
           class="button is-primary public-transports-button"
           :class="{ 'is-active': activeSection === 'planATrip' }"
           @click="setActiveSection('planATrip')"
@@ -111,11 +111,13 @@ export default {
       let accessWaypoints = [];
       if (this.documentType === 'waypoint' && this.document.waypoint_type === 'access') {
         // access waypoint
-          accessWaypoints = [this.document];
+        accessWaypoints = [this.document];
       }
       // for other types of documents, return the waypoints of type access associated (if any)
       else {
-        accessWaypoints =  this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access');
+        accessWaypoints = this.document?.associations?.waypoints?.filter(
+          (doc) => doc && doc.waypoint_type === 'access'
+        );
       }
 
       const accessPointsCopy = JSON.parse(JSON.stringify(accessWaypoints));
@@ -135,6 +137,13 @@ export default {
       });
 
       return accessPointsCopy;
+    },
+
+    isPlanATripSectionDisplayed() {
+      // plan a trip section is only available for routes and waypoints of type access
+      return (
+        this.documentType === 'route' || (this.documentType === 'waypoint' && this.document.waypoint_type === 'access')
+      );
     },
 
     /** Adds custom points in document */
