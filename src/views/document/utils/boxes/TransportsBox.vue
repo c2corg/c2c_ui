@@ -108,11 +108,17 @@ export default {
   computed: {
     /** Copy access points to customize them */
     accessWaypoints() {
-      if (!this.document.associations.waypoints || !Array.isArray(this.document.associations.waypoints)) {
-        return [];
+      let accessWaypoints = [];
+      if (this.documentType === 'waypoint' && this.document.waypoint_type === 'access') {
+        // access waypoint
+          accessWaypoints = [this.document];
       }
-      const accessPoints = this.document.associations.waypoints.filter((doc) => doc && doc.waypoint_type === 'access');
-      const accessPointsCopy = JSON.parse(JSON.stringify(accessPoints));
+      // for other types of documents, return the waypoints of type access associated (if any)
+      else {
+        accessWaypoints =  this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access');
+      }
+
+      const accessPointsCopy = JSON.parse(JSON.stringify(accessWaypoints));
 
       accessPointsCopy.forEach((doc) => {
         if (doc.type === 'w') {

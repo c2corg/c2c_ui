@@ -17,6 +17,7 @@
     <div v-if="document" class="columns">
       <div class="column is-3 no-print">
         <map-box :document="document" />
+        <is-reachable-by-public-transports-box v-if="showTransportBox" :document="document" />
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
@@ -130,6 +131,7 @@
           <div style="clear: both" />
         </div>
 
+        <transports-box v-if="showTransportBox" :document="document" />
         <fundraiser-banner :document="document" />
 
         <routes-box v-if="!isDraftView && document.waypoint_type !== 'climbing_indoor'" :document="document" />
@@ -163,6 +165,9 @@ export default {
     showMainBox() {
       const { summary, access_period, description, access, external_resources } = this.locale;
       return summary || access_period || description || access || external_resources;
+    },
+    showTransportBox() {
+      return this.document.waypoint_type === 'access' || this.document.waypoint_type === 'hut';
     },
   },
 };

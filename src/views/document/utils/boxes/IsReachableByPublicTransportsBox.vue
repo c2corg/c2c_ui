@@ -32,12 +32,13 @@ export default {
   computed: {
     /** Returns only access points */
     accessWaypoints() {
-      if (Array.isArray(this.document)) {
-        return this.document.filter((doc) => doc && doc.waypoint_type === 'access');
-      } else if (this.document && this.document.waypoint_type === 'access') {
+      if (this.documentType === 'waypoint' && this.document.waypoint_type === 'access') {
+        // access waypoint
         return [this.document];
+      } else {
+        // for other types of documents, return the waypoints of type access associated (if any)
+        return this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access');
       }
-      return [];
     },
   },
   watch: {
