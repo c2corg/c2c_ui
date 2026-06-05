@@ -158,7 +158,7 @@
           <button class="button is-primary plan-trip-search-button" @click="calculateRoute">
             <img class="" src="@/assets/img/boxes/itineraire.svg" alt="itinerary" />
             <p class="plan-trip-search-button-text" v-if="activeTab === 'outbound'">
-              {{ hasReturnTrip ? $gettext('Calculate my outbound trip') : $gettext('Calculate my trip')}}
+              {{ hasReturnTrip ? $gettext('Calculate my outbound trip') : $gettext('Calculate my trip') }}
             </p>
             <p class="plan-trip-search-button-text" v-else>
               {{ $gettext('Calculate my return trip') }}
@@ -530,7 +530,7 @@ export default {
       return this.mapDocuments.concat([mainDocument]);
     },
     hasReturnTrip() {
-      return this.documentType === "route";
+      return this.documentType === 'route';
     },
     /** Determines if a waypoint is accessible by public transport */
     accessWaypoints() {
@@ -1651,7 +1651,7 @@ export default {
                 font-weight: 600;
               }
               .to-address {
-                padding-left: 9px;
+                padding-left: 8px;
                 color: black;
               }
               .chose-waypoint {
@@ -2179,7 +2179,14 @@ export default {
   display: none !important;
 }
 
+.fullwidth {
+  width: 100% !important;
+}
+
 .input-address {
-  padding-left: 9px;
+  ::v-deep .from-container {
+    border: none !important;
+    box-shadow: none !important;
+  }
 }
 </style>
