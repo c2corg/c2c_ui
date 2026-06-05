@@ -89,12 +89,6 @@ export default {
     PlanATripSection,
   },
   mixins: [requireDocumentProperty],
-  props: {
-    document: {
-      type: Object,
-      required: true,
-    },
-  },
   data() {
     return {
       activeSection: 'nearbyStops',

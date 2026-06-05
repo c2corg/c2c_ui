@@ -432,14 +432,12 @@ import NavitiaService from '@/js/apis/navitia-service';
 import photon from '@/js/apis/photon';
 import transportService from '@/js/apis/transport-service';
 import ol from '@/js/libs/ol';
+import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
   name: 'PlanATripSection',
+  mixins: [requireDocumentProperty],
   props: {
-    document: {
-      type: Object,
-      required: true,
-    },
     showElevationProfile: {
       type: Boolean,
       default: false,
