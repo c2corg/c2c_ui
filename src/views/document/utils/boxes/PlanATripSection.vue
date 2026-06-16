@@ -766,7 +766,7 @@ export default {
     },
 
     maxNbTransfers() {
-      return this.limitTransfers ? this.maxTransfers : -1;
+      return this.limitTransfers ? this.maxTransfers : undefined;
     },
   },
 
