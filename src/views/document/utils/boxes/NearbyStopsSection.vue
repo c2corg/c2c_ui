@@ -51,7 +51,9 @@
 
       <div class="missing-transports-information" v-if="missingTransportForWaypoint && documentType !== 'route'">
         <div>
-          <strong class="missing-transports-information-text">{{ $gettext('This waypoint is partially accessible by public transport.') }}</strong>
+          <strong class="missing-transports-information-text">{{
+            $gettext('This waypoint is partially accessible by public transport.')
+          }}</strong>
           <p>
             {{ $gettext('At least one access point in the waypoint do not have a public transport stop within 5km.') }}
           </p>
@@ -529,7 +531,7 @@ export default {
       margin-top: 25px;
       gap: 10px;
       align-items: center;
-      background-color: #3E8ED0;
+      background-color: #3e8ed0;
       color: white;
       .missing-transports-information-text {
         color: white;

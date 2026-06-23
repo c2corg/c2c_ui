@@ -167,7 +167,17 @@ export default {
       return summary || access_period || description || access || external_resources;
     },
     showTransportBox() {
-      return this.document.waypoint_type === 'access' || this.document.waypoint_type === 'hut';
+      const TRANSPORT_BOX_TYPES = [
+        'hut',
+        'gite',
+        'climbing_outdoor',
+        'climbing_indoor',
+        'paragliding_landing',
+        'shelter',
+        'bivouac',
+        'camp_site',
+      ];
+      return TRANSPORT_BOX_TYPES.includes(this.document.waypoint_type);
     },
   },
 };
