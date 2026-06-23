@@ -39,12 +39,21 @@
           </div>
         </div>
       </div>
-      <div class="missing-transports-warning" v-if="missingTransportForWaypoint">
+      <div class="missing-transports-warning" v-if="missingTransportForWaypoint && documentType === 'route'">
         <p class="missing-transports-warning-exclamation">!</p>
-        <div class="missing-transports-warning-text">
+        <div>
           <strong>{{ $gettext('This route is partially accessible by public transport.') }}</strong>
           <p>
             {{ $gettext('At least one access point in the route do not have a public transport stop within 5km.') }}
+          </p>
+        </div>
+      </div>
+
+      <div class="missing-transports-information" v-if="missingTransportForWaypoint && documentType !== 'route'">
+        <div>
+          <strong class="missing-transports-information-text">{{ $gettext('This waypoint is partially accessible by public transport.') }}</strong>
+          <p>
+            {{ $gettext('At least one access point in the waypoint do not have a public transport stop within 5km.') }}
           </p>
         </div>
       </div>
@@ -509,6 +518,21 @@ export default {
         text-align: center;
         flex: none;
         font-size: 18px;
+      }
+    }
+
+    .missing-transports-information {
+      display: flex;
+      padding: 10px;
+      border: 1px solid #4797d8;
+      border-radius: 4px;
+      margin-top: 25px;
+      gap: 10px;
+      align-items: center;
+      background-color: #3E8ED0;
+      color: white;
+      .missing-transports-information-text {
+        color: white;
       }
     }
   }
