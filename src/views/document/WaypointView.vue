@@ -168,6 +168,7 @@ export default {
     },
     showTransportBox() {
       const TRANSPORT_BOX_TYPES = [
+        'access',
         'hut',
         'gite',
         'climbing_outdoor',
