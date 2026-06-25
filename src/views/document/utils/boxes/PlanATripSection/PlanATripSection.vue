@@ -29,7 +29,7 @@
                     class="input-address"
                     :fullwidth="true"
                     :placeholder="$gettext('Enter a departure address')"
-                    :show-address-propositions="showAddressPropositions"
+                    :show-address-propositions="currentData.showAddressPropositions"
                     :default-address="outboundData.fromAddress"
                     @update:props="
                       (address) => {
@@ -42,7 +42,12 @@
                 <div class="to-container">
                   <div class="to-text">{{ $gettext('To') }}</div>
                   <template v-if="accessWaypoints.length > 1">
-                    <select name="chose-waypoint" class="chose-waypoint" id="chose-waypoint" v-model="selectedWaypoint">
+                    <select
+                      name="chose-waypoint"
+                      class="chose-waypoint"
+                      id="chose-waypoint"
+                      v-model="currentData.selectedWaypoint"
+                    >
                       <option v-for="waypoint in accessWaypoints" :key="waypoint.id" :value="waypoint">
                         {{ waypoint.title }}
                       </option>
@@ -68,7 +73,7 @@
                     name="chose-waypoint"
                     class="chose-waypoint"
                     id="chose-waypoint-return"
-                    v-model="selectedWaypoint"
+                    v-model="currentData.selectedWaypoint"
                   >
                     <option v-for="waypoint in accessWaypoints" :key="waypoint.id" :value="waypoint">
                       {{ waypoint.title }}
@@ -81,7 +86,7 @@
                     class="input-address"
                     :fullwidth="true"
                     :placeholder="$gettext('Enter a departure address')"
-                    :show-address-propositions="showAddressPropositions"
+                    :show-address-propositions="currentData.showAddressPropositions"
                     :default-address="returnData.fromAddress"
                     @update:props="
                       (address) => {
@@ -99,7 +104,7 @@
             <div class="date-picker-container">
               <label for="date-input">{{ $gettext('Date') }}</label>
               <div class="input-container">
-                <input type="date" id="date-input" class="date-input" v-model="selectedDate" />
+                <input type="date" id="date-input" class="date-input" v-model="currentData.selectedDate" />
                 <div class="calendar-icon">
                   <img class="geolocalisation-img" src="@/assets/img/boxes/date.svg" alt="date" />
                 </div>
@@ -109,7 +114,7 @@
             <div class="date-picker-container">
               <label for="date-input">{{ $gettext('Preference') }}</label>
               <div class="input-container">
-                <select name="preference" class="date-input" id="preference" v-model="timePreference">
+                <select name="preference" class="date-input" id="preference" v-model="currentData.timePreference">
                   <option value="leave-after">{{ $gettext('Leave after') }}</option>
                   <option value="arrive-before">{{ $gettext('Arrive before') }}</option>
                 </select>
@@ -119,7 +124,7 @@
             <div class="date-picker-container hour-picker-container">
               <label for="date-input">{{ $gettext('Time') }}</label>
               <div class="input-container">
-                <input type="time" id="hour-input" class="hour-input" v-model="selectedTime" />
+                <input type="time" id="hour-input" class="hour-input" v-model="currentData.selectedTime" />
               </div>
             </div>
           </div>
@@ -146,11 +151,14 @@
             </div>
           </div>
 
-          <div v-if="missingDepartureAddress || missingDestinationAddress" class="non-valid-address">
-            <div v-if="missingDepartureAddress">
+          <div
+            v-if="currentData.missingDepartureAddress || currentData.missingDestinationAddress"
+            class="non-valid-address"
+          >
+            <div v-if="currentData.missingDepartureAddress">
               {{ $gettext('Please select a departure address.') }}
             </div>
-            <div v-if="missingDestinationAddress">
+            <div v-if="currentData.missingDestinationAddress">
               {{ $gettext('Please select a destination.') }}
             </div>
           </div>
@@ -175,7 +183,21 @@
             </div>
           </div>
 
-          <div class="no-itineraries-container" :class="{ updating: isUpdating }" v-if="noResult">
+          <plan-a-trip-results
+            :activeTab="activeTab"
+            :currentData="currentData"
+            :isUpdating="currentData.isUpdating"
+            :noResult="currentData.noResult"
+            :displayedFromAddress="displayedFromAddress"
+            :displayedToAddress="displayedToAddress"
+            @selectJourney="setSelectedRouteJourney"
+          />
+
+          <div
+            class="no-itineraries-container"
+            :class="{ updating: currentData.isUpdating }"
+            v-if="currentData.noResult"
+          >
             <div class="no-itineraries">
               <img
                 class="no-itineraries-img"
@@ -191,202 +213,7 @@
             </div>
           </div>
 
-          <div class="itineraries-container" :class="{ updating: isUpdating }" v-if="journeys.length > 0">
-            <div class="last-journey-message" v-if="noResult">
-              {{ $gettext('Here is the last journey of the day :') }}
-            </div>
-            <div class="itinerary-card" v-for="(journey, index) in journeys" :key="index">
-              <div
-                class="itinerary-header"
-                :class="{ selected: selectedRouteJourney === journey }"
-                @click="selectRouteOnly(journey)"
-              >
-                <div class="itinerary-time">
-                  {{ formatTime(journey.departure_date_time) }} — {{ formatTime(journey.arrival_date_time) }}
-                  <span class="journey-duration">{{ formatJourneyDuration(journey.duration) }}</span>
-                </div>
-
-                <div class="itinerary-path">
-                  <div class="journey-steps">
-                    <div v-for="(section, sectionIndex) in journey.sections" :key="sectionIndex" class="step-wrapper">
-                      <div
-                        v-if="
-                          section.type === 'public_transport' ||
-                          section.type === 'transfer' ||
-                          section.type === 'street_network' ||
-                          section.type === 'on_demand_transport'
-                        "
-                        class="journey-step"
-                      >
-                        <div
-                          v-if="section.type === 'public_transport' || section.type === 'on_demand_transport'"
-                          class="transport-icon"
-                          :class="getTransportClass(section)"
-                        >
-                          <img :src="require(`@/assets/img/boxes/${getTransportIcon(section)}.svg`)" alt="walking" />
-                        </div>
-                        <div
-                          v-else-if="
-                            section.type === 'street_network' ||
-                            section.type === 'transfer' ||
-                            section.mode === 'walking'
-                          "
-                          class="transport-icon walking"
-                        >
-                          <img src="@/assets/img/boxes/walk.svg" alt="walking" />
-                        </div>
-                      </div>
-                      <div
-                        v-if="sectionIndex < journey.sections.length - 1 && section.type !== 'waiting'"
-                        class="connector"
-                      >
-                        <img src="@/assets/img/boxes/chevron_right.svg" alt="chevron" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="itinerary-details-button">
-                  <button class="button is-info is-light" @click="showJourneyDetails(journey)">
-                    {{ selectedJourney === journey ? $gettext('Hide details') : $gettext('View details') }}
-                  </button>
-                </div>
-              </div>
-
-              <div class="journey-details" v-if="selectedJourney === journey">
-                <div class="journey-timeline">
-                  <div class="timeline-item">
-                    <div class="timeline-time">{{ formatTime(journey.arrival_date_time) }}</div>
-                    <div class="timeline-icon-end">
-                      <img src="@/assets/img/boxes/end.svg" alt="end" />
-                    </div>
-                    <div class="timeline-content" v-if="activeTab === 'outbound'">
-                      <div class="timeline-address">{{ displayedFromAddress }}</div>
-                    </div>
-                    <div class="timeline-content" v-else>
-                      <div class="timeline-address">{{ selectedWaypoint?.title || 'Destination' }}</div>
-                    </div>
-                  </div>
-
-                  <!-- Affichage des sections de l'itinéraire -->
-                  <div v-for="(section, sectionIndex) in journey.sections" :key="sectionIndex">
-                    <!-- Section marche à pied -->
-                    <div
-                      v-if="
-                        section.type === 'street_network' || section.type === 'transfer' || section.mode === 'walking'
-                      "
-                      class="timeline-item walking"
-                    >
-                      <div class="timeline-time"></div>
-                      <div class="timeline-icon walking">
-                        <img src="@/assets/img/boxes/walk.svg" alt="walking" />
-                      </div>
-                      <div class="timeline-content">
-                        <div class="timeline-walking-info">
-                          {{ getDistance(section) }} {{ $gettext('Meter(s)').toLowerCase() }},
-                          {{ formatDuration(section.duration) }}
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Section transport en commun -->
-                    <div v-else-if="section.type === 'public_transport' || section.type === 'on_demand_transport'">
-                      <!-- Arrêt de départ -->
-                      <div class="timeline-item">
-                        <div class="timeline-time">{{ formatTime(section.departure_date_time) }}</div>
-                        <div class="timeline-icon stop">
-                          <i class="stop-circle"></i>
-                        </div>
-                        <div class="timeline-content">
-                          <div class="timeline-stop-name">
-                            <strong>{{ $gettext('Stop') }} : </strong> {{ section.from?.name || 'Départ' }}
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Ligne de transport -->
-                      <div
-                        class="timeline-item transport"
-                        :class="getTransportColorClass(section)"
-                        :style="{
-                          'border-left': section.display_informations?.color
-                            ? `3px solid #${
-                                section.display_informations.color === 'FFFFFF'
-                                  ? '808080'
-                                  : section.display_informations.color
-                              }`
-                            : '3px solid gray',
-                        }"
-                      >
-                        <div class="timeline-content">
-                          <div class="timeline-line">
-                            <strong>{{ $gettext('Line') }} : </strong> {{ section.display_informations?.code || '' }}
-                            <img
-                              v-if="section.display_informations?.equipments?.includes('has_bike_accepted')"
-                              src="@/assets/img/boxes/velo.svg"
-                              alt="bike accepted"
-                            />
-                            <span v-if="section.type === 'on_demand_transport'" class="on-demand-text">
-                              {{ $gettext('Warning, this transport is on demand ⚠') }}
-                            </span>
-                          </div>
-                          <div class="timeline-direction">
-                            <strong>{{ $gettext('Direction') }} : </strong
-                            >{{ section.display_informations?.direction || '' }}
-                          </div>
-                          <div class="timeline-duration">
-                            <strong>{{ $gettext('Duration') }} : </strong
-                            >{{ formatJourneyDuration(calculateSectionDuration(section)) }}
-                          </div>
-                          <div class="timeline-accessibility" v-if="section.display_informations?.equipments?.length">
-                            <img
-                              v-if="section.display_informations.equipments.includes('has_bike_accepted')"
-                              src="@/assets/img/boxes/velo.svg"
-                              alt="bike"
-                            />
-                            <img
-                              v-if="section.display_informations.equipments.includes('has_wheelchair')"
-                              src="@/assets/img/boxes/handi_accessible.svg"
-                              alt="wheelchair"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Arrêt d'arrivée -->
-                      <div class="timeline-item">
-                        <div class="timeline-time">{{ formatTime(section.arrival_date_time) }}</div>
-                        <div class="timeline-icon stop">
-                          <i class="stop-circle"></i>
-                        </div>
-                        <div class="timeline-content">
-                          <div class="timeline-stop-name">
-                            <strong>{{ $gettext('Stop') }} : </strong>{{ section.to?.name || 'Arrivée' }}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Heure et adresse d'arrivée -->
-                  <div class="timeline-item destination">
-                    <div class="timeline-time">{{ formatTime(journey.arrival_date_time) }}</div>
-                    <div class="timeline-icon-end">
-                      <img src="@/assets/img/boxes/end.svg" alt="end" />
-                    </div>
-                    <div class="timeline-content" v-if="activeTab === 'outbound'">
-                      <div class="timeline-address">{{ selectedWaypoint?.title || 'Destination' }}</div>
-                    </div>
-                    <div class="timeline-content" v-else>
-                      <div class="timeline-address">{{ displayedToAddress }}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="time-modification-buttons" v-if="showTimeButton">
+          <div class="time-modification-buttons" v-if="currentData.showTimeButton">
             <button class="modification-buttons" @click="departEarlier">
               <img src="@/assets/img/boxes/before.svg" alt="earlier" />
               <span>{{ $gettext('Leave earlier') }}</span>
@@ -425,6 +252,9 @@
 <script>
 import { transform } from 'ol/proj';
 
+import PlanATripForm from './PlanATripForm.vue';
+import PlanATripResults from './PlanATripResults.vue';
+
 import start from '@/assets/img/boxes/geoloc-2.svg';
 import { default as c2c } from '@/js/apis/c2c';
 import UserProfileService from '@/js/apis/c2c/UserProfileService';
@@ -437,6 +267,9 @@ import { requireDocumentProperty } from '@/js/properties-mixins';
 export default {
   name: 'PlanATripSection',
   mixins: [requireDocumentProperty],
+  components: {
+    PlanATripResults,
+  },
   props: {
     showElevationProfile: {
       type: Boolean,
@@ -539,6 +372,10 @@ export default {
 
     /** Customizes access points: clicking makes a selection instead of redirecting to a page, and the color is green */
     mapDocuments() {
+      // This computed property depends on the selectedRouteJourney to ensure
+      // route documents update when a journey is selected
+      const selectedRouteJourney = this.currentData.selectedRouteJourney;
+
       const baseDocuments = this.document.associations.waypoints ? [this.document.associations.waypoints] : [];
       const accessWaypointDocuments = this.accessWaypoints.map((waypoint) => {
         return {
@@ -571,7 +408,7 @@ export default {
     },
 
     noResultError() {
-      if (this.noResult) {
+      if (this.currentData.noResult) {
         if (this.queryError !== null) {
           return (
             this.errorMessages[this.queryError?.id] ||
@@ -583,159 +420,6 @@ export default {
       } else {
         return '';
       }
-    },
-
-    fromAddress: {
-      get() {
-        return this.currentData.fromAddress;
-      },
-      set(value) {
-        this.currentData.fromAddress = value;
-      },
-    },
-
-    selectedAddress: {
-      get() {
-        return this.currentData.selectedAddress;
-      },
-      set(value) {
-        this.currentData.selectedAddress = value;
-      },
-    },
-
-    addressPropositions: {
-      get() {
-        return this.currentData.addressPropositions;
-      },
-      set(value) {
-        this.currentData.addressPropositions = value;
-      },
-    },
-
-    showAddressPropositions: {
-      get() {
-        return this.currentData.showAddressPropositions;
-      },
-      set(value) {
-        this.currentData.showAddressPropositions = value;
-      },
-    },
-
-    selectedDate: {
-      get() {
-        return this.currentData.selectedDate;
-      },
-      set(value) {
-        this.currentData.selectedDate = value;
-      },
-    },
-
-    selectedTime: {
-      get() {
-        return this.currentData.selectedTime;
-      },
-      set(value) {
-        this.currentData.selectedTime = value;
-      },
-    },
-
-    timePreference: {
-      get() {
-        return this.currentData.timePreference;
-      },
-      set(value) {
-        this.currentData.timePreference = value;
-      },
-    },
-
-    fromCoordinates: {
-      get() {
-        return this.currentData.fromCoordinates;
-      },
-      set(value) {
-        this.currentData.fromCoordinates = value;
-      },
-    },
-
-    selectedWaypoint: {
-      get() {
-        return this.currentData.selectedWaypoint;
-      },
-      set(value) {
-        this.currentData.selectedWaypoint = value;
-      },
-    },
-
-    journeys: {
-      get() {
-        return this.currentData.journeys;
-      },
-      set(value) {
-        this.currentData.journeys = value;
-      },
-    },
-
-    selectedJourney: {
-      get() {
-        return this.currentData.selectedJourney;
-      },
-      set(value) {
-        this.currentData.selectedJourney = value;
-      },
-    },
-
-    noResult: {
-      get() {
-        return this.currentData.noResult;
-      },
-      set(value) {
-        this.currentData.noResult = value;
-      },
-    },
-
-    selectedRouteJourney: {
-      get() {
-        return this.currentData.selectedRouteJourney;
-      },
-      set(value) {
-        this.currentData.selectedRouteJourney = value;
-      },
-    },
-
-    showTimeButton: {
-      get() {
-        return this.currentData.showTimeButton;
-      },
-      set(value) {
-        this.currentData.showTimeButton = value;
-      },
-    },
-
-    isUpdating: {
-      get() {
-        return this.currentData.isUpdating;
-      },
-      set(value) {
-        this.currentData.isUpdating = value;
-      },
-    },
-
-    missingDepartureAddress: {
-      get() {
-        return this.currentData.missingDepartureAddress;
-      },
-      set(value) {
-        this.currentData.missingDepartureAddress = value;
-      },
-    },
-
-    missingDestinationAddress: {
-      get() {
-        return this.currentData.missingDestinationAddress;
-      },
-      set(value) {
-        this.currentData.missingDestinationAddress = value;
-      },
     },
 
     canAccessReturnTab() {
@@ -760,54 +444,57 @@ export default {
 
     // If only one waypoint served, select it automatically
     if (this.reachableWaypoints.length === 1) {
-      this.selectedWaypoint = this.reachableWaypoints[0];
+      this.currentData.selectedWaypoint = this.reachableWaypoints[0];
     }
   },
 
   methods: {
     // have planATripUtils methods here so they can be used in template
     ...planATripUtils,
+    setSelectedRouteJourney(journey) {
+      this.currentData.selectedRouteJourney = journey;
+    },
     /** Call Navitia and store the results */
     async calculateRoute() {
       this.queryError = null;
-      this.missingDepartureAddress = false;
-      this.missingDestinationAddress = false;
+      this.currentData.missingDepartureAddress = false;
+      this.currentData.missingDestinationAddress = false;
 
       if (
-        (this.activeTab === 'outbound' && !this.fromAddress) ||
-        (this.activeTab === 'return' && !this.selectedWaypoint)
+        (this.activeTab === 'outbound' && !this.currentData.fromAddress) ||
+        (this.activeTab === 'return' && !this.currentData.selectedWaypoint)
       ) {
-        this.missingDepartureAddress = true;
+        this.currentData.missingDepartureAddress = true;
       }
 
       if (
-        (this.activeTab === 'outbound' && !this.selectedWaypoint) ||
-        (this.activeTab === 'return' && !this.fromAddress)
+        (this.activeTab === 'outbound' && !this.currentData.selectedWaypoint) ||
+        (this.activeTab === 'return' && !this.currentData.fromAddress)
       ) {
-        this.missingDestinationAddress = true;
+        this.currentData.missingDestinationAddress = true;
       }
 
-      if (this.missingDepartureAddress || this.missingDestinationAddress) {
+      if (this.currentData.missingDepartureAddress || this.currentData.missingDestinationAddress) {
         return;
       }
       let fromCoords, toCoords;
 
       if (this.activeTab === 'outbound') {
         // OUTBOUND: From address to waypoint
-        fromCoords = NavitiaService.formatCoordinates(this.fromCoordinates);
-        toCoords = NavitiaService.formatCoordinates(this.selectedWaypoint.coordinates);
-        this.displayedFromAddress = this.fromAddress.address;
+        fromCoords = NavitiaService.formatCoordinates(this.currentData.fromCoordinates);
+        toCoords = NavitiaService.formatCoordinates(this.currentData.selectedWaypoint.coordinates);
+        this.displayedFromAddress = this.currentData.fromAddress.address;
       } else {
         // RETURN: From waypoint to address
-        fromCoords = NavitiaService.formatCoordinates(this.selectedWaypoint.coordinates);
-        toCoords = NavitiaService.formatCoordinates(this.fromCoordinates);
-        this.displayedToAddress = this.fromAddress.address;
+        fromCoords = NavitiaService.formatCoordinates(this.currentData.selectedWaypoint.coordinates);
+        toCoords = NavitiaService.formatCoordinates(this.currentData.fromCoordinates);
+        this.displayedToAddress = this.currentData.fromAddress.address;
       }
 
-      this.isUpdating = true;
+      this.currentData.isUpdating = true;
 
       // Format datetime for Navitia API minus 15 minutes
-      const originalDateTime = new Date(`${this.selectedDate}T${this.selectedTime}:00`);
+      const originalDateTime = new Date(`${this.currentData.selectedDate}T${this.currentData.selectedTime}:00`);
       const adjustedDateTime = new Date(originalDateTime);
 
       if (originalDateTime.getHours() === 0 && originalDateTime.getMinutes() < 15) {
@@ -823,7 +510,7 @@ export default {
       const minutes = String(adjustedDateTime.getMinutes()).padStart(2, '0');
 
       const dateTimeFormat = `${year}${month}${day}T${hours}${minutes}00`;
-      const dateTimeRepresents = this.timePreference === 'arrive-before' ? 'arrival' : 'departure';
+      const dateTimeRepresents = this.currentData.timePreference === 'arrive-before' ? 'arrival' : 'departure';
 
       try {
         const response = await NavitiaService.getJourneys(
@@ -842,8 +529,8 @@ export default {
         );
 
         const data = response.data;
-        this.showTimeButton = true;
-        const selectedDateFormatted = this.selectedDate.replace(/-/g, '');
+        this.currentData.showTimeButton = true;
+        const selectedDateFormatted = this.currentData.selectedDate.replace(/-/g, '');
 
         if (data.journeys) {
           const filteredJourneys = data.journeys.filter((journey) => {
@@ -856,9 +543,9 @@ export default {
             return;
           }
 
-          this.journeys = data.journeys.slice(0, 3);
-          this.noResult = false;
-          this.selectedRouteJourney = this.journeys[0];
+          this.currentData.journeys = data.journeys.slice(0, 3);
+          this.currentData.noResult = false;
+          this.currentData.selectedRouteJourney = this.currentData.journeys[0];
 
           if (this.activeTab === 'outbound') {
             this.calculateReturnParameters();
@@ -872,7 +559,7 @@ export default {
         console.error('Error retrieving routes:', error);
         await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
       } finally {
-        this.isUpdating = false;
+        this.currentData.isUpdating = false;
       }
     },
 
@@ -897,7 +584,7 @@ export default {
         );
 
         const data = response.data;
-        const selectedDateFormatted = this.selectedDate.replace(/-/g, '');
+        const selectedDateFormatted = this.currentData.selectedDate.replace(/-/g, '');
 
         if (data.journeys && data.journeys.length > 0) {
           const filteredJourneys = data.journeys.filter((journey) => {
@@ -915,28 +602,40 @@ export default {
               (journey) => journey.departure_date_time.substring(9) === lastDepartureTime
             );
 
-            this.journeys = [bestLastJourney];
-            this.noResult = true;
-            this.selectedRouteJourney = bestLastJourney;
+            this.currentData.journeys = [bestLastJourney];
+            this.currentData.noResult = true;
+            this.currentData.selectedRouteJourney = bestLastJourney;
             if (this.activeTab === 'outbound') {
               this.calculateReturnParameters();
               await this.determineReturnWaypoint();
             }
-            this.showTimeButton = true;
+            this.currentData.showTimeButton = true;
 
             this.$emit('calculate-route', {
               from: {
-                address: this.activeTab === 'outbound' ? this.fromAddress : this.selectedWaypoint?.title,
-                coordinates: this.activeTab === 'outbound' ? this.fromCoordinates : this.selectedWaypoint?.coordinates,
+                address:
+                  this.activeTab === 'outbound'
+                    ? this.currentData.fromAddress
+                    : this.currentData.selectedWaypoint?.title,
+                coordinates:
+                  this.activeTab === 'outbound'
+                    ? this.currentData.fromCoordinates
+                    : this.currentData.selectedWaypoint?.coordinates,
               },
               to: {
-                address: this.activeTab === 'outbound' ? this.selectedWaypoint?.title : this.fromAddress,
-                coordinates: this.activeTab === 'outbound' ? this.selectedWaypoint?.coordinates : this.fromCoordinates,
+                address:
+                  this.activeTab === 'outbound'
+                    ? this.currentData.selectedWaypoint?.title
+                    : this.currentData.fromAddress,
+                coordinates:
+                  this.activeTab === 'outbound'
+                    ? this.currentData.selectedWaypoint?.coordinates
+                    : this.currentData.fromCoordinates,
               },
-              date: this.selectedDate,
-              time: this.selectedTime,
-              preference: this.timePreference,
-              journeys: this.journeys,
+              date: this.currentData.selectedDate,
+              time: this.currentData.selectedTime,
+              preference: this.currentData.timePreference,
+              journeys: this.currentData.journeys,
               isExtendedTimeframe: true,
             });
 
@@ -944,13 +643,13 @@ export default {
           }
         }
 
-        this.noResult = true;
-        this.journeys = [];
+        this.currentData.noResult = true;
+        this.currentData.journeys = [];
       } catch (error) {
         this.queryError = NavitiaService.handleQueryError(error?.response?.data?.errors?.[0]?.description);
         console.error('Error retrieving extended timeframe routes:', error);
-        this.noResult = true;
-        this.journeys = [];
+        this.currentData.noResult = true;
+        this.currentData.journeys = [];
       }
     },
 
@@ -958,16 +657,20 @@ export default {
     handleWaypointClicked(document) {
       const waypoint = this.accessWaypoints.find((w) => w.id === document.document_id);
       if (waypoint) {
-        this.selectedWaypoint = waypoint;
+        this.currentData.selectedWaypoint = waypoint;
       }
     },
 
     /** Displays the routes of different transport on the map */
     prepareRouteDocuments() {
-      if (!this.selectedRouteJourney || !this.journeys || this.journeys.length === 0) return [];
-
+      if (
+        !this.currentData.selectedRouteJourney ||
+        !this.currentData.journeys ||
+        this.currentData.journeys.length === 0
+      )
+        return [];
       const routeDocuments = [];
-      const journey = this.selectedRouteJourney;
+      const journey = this.currentData.selectedRouteJourney;
 
       journey.sections.forEach((section, index) => {
         if (section.geojson) {
@@ -1086,23 +789,12 @@ export default {
       return routeDocuments;
     },
 
-    /** Shows route details */
-    showJourneyDetails(journey) {
-      this.selectedRouteJourney = journey;
-
-      if (this.selectedJourney === journey) {
-        this.selectedJourney = null;
-      } else {
-        this.selectedJourney = journey;
-      }
-    },
-
     /** Retrieves the route position in the list */
     getTransportSectionIndex(currentSection) {
-      if (!this.selectedRouteJourney) return 0;
+      if (!this.currentData.selectedRouteJourney) return 0;
 
       let index = 0;
-      for (const section of this.selectedRouteJourney.sections) {
+      for (const section of this.currentData.selectedRouteJourney.sections) {
         if (section === currentSection) {
           return index;
         }
@@ -1115,54 +807,49 @@ export default {
 
     /** Leaves earlier button */
     departEarlier() {
-      const [hours, minutes] = this.selectedTime.split(':').map(Number);
+      const [hours, minutes] = this.currentData.selectedTime.split(':').map(Number);
       let newHours = hours - 1;
-      let newDate = this.selectedDate;
+      let newDate = this.currentData.selectedDate;
 
       if (newHours < 0) {
         newHours = 23;
-        const currentDate = new Date(this.selectedDate);
+        const currentDate = new Date(this.currentData.selectedDate);
         currentDate.setDate(currentDate.getDate() - 1);
         newDate = currentDate.toISOString().slice(0, 10);
       }
 
-      this.selectedTime = `${newHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-      this.selectedDate = newDate;
+      this.currentData.selectedTime = `${newHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+      this.currentData.selectedDate = newDate;
 
       this.calculateRoute();
     },
 
     /** Leaves later button */
     departLater() {
-      const [hours, minutes] = this.selectedTime.split(':').map(Number);
+      const [hours, minutes] = this.currentData.selectedTime.split(':').map(Number);
       let newHours = hours + 1;
-      let newDate = this.selectedDate;
+      let newDate = this.currentData.selectedDate;
 
       if (newHours > 23) {
         newHours = 0;
-        const currentDate = new Date(this.selectedDate);
+        const currentDate = new Date(this.currentData.selectedDate);
         currentDate.setDate(currentDate.getDate() + 1);
         newDate = currentDate.toISOString().slice(0, 10);
       }
 
-      this.selectedTime = `${newHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-      this.selectedDate = newDate;
+      this.currentData.selectedTime = `${newHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+      this.currentData.selectedDate = newDate;
 
       this.calculateRoute();
     },
 
     /** Next day button */
     nextDay() {
-      const currentDate = new Date(this.selectedDate);
+      const currentDate = new Date(this.currentData.selectedDate);
       currentDate.setDate(currentDate.getDate() + 1);
-      this.selectedDate = currentDate.toISOString().slice(0, 10);
+      this.currentData.selectedDate = currentDate.toISOString().slice(0, 10);
 
       this.calculateRoute();
-    },
-
-    /** Selects a route without opening details */
-    selectRouteOnly(journey) {
-      this.selectedRouteJourney = journey;
     },
 
     /** Switch from the outbound tab to the return tab */
@@ -1615,178 +1302,6 @@ export default {
           }
           .hour-picker-container {
             width: 107px;
-          }
-        }
-
-        // Bouton "Voir le détail"
-        .itinerary-details-button {
-          text-align: left;
-
-          button {
-            background-color: transparent;
-            color: #3273dc;
-            border: none;
-            padding: 0;
-            font-size: 14px;
-            cursor: pointer;
-            text-decoration: underline;
-
-            &:hover {
-              color: #2366d1;
-            }
-          }
-        }
-
-        // Détails du trajet
-        .journey-details {
-          font-family: Arial, sans-serif;
-          max-width: 650px;
-          margin: 0 auto;
-          padding: 15px;
-          border-bottom-left-radius: 6px;
-          border-bottom-right-radius: 6px;
-          border: solid 1px lightgray;
-          border-top: none;
-          background-color: #fff;
-
-          .journey-timeline {
-            position: relative;
-
-            .timeline-item {
-              display: flex;
-              align-items: center;
-              position: relative;
-
-              &.transport-color-default {
-                border-left-color: gray;
-              }
-
-              &.walking {
-                border-left: 3px dotted #0000ff;
-                margin-left: 52px;
-                padding-top: 10px;
-                padding-bottom: 10px;
-              }
-
-              &.transport {
-                padding-left: 22px;
-                margin-left: 52px;
-                padding-top: 10px;
-                padding-bottom: 10px;
-              }
-            }
-
-            .timeline-time {
-              width: 60px;
-              font-weight: bold;
-              font-size: 14px;
-              padding-top: 2px;
-            }
-
-            .timeline-icon,
-            .timeline-icon-beginning,
-            .timeline-icon-end {
-              position: relative;
-              z-index: 2;
-              width: 32px;
-              height: 32px;
-              border-radius: 50%;
-              background-color: #fff;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              margin: 0 15px 0 -45px;
-
-              &.stop {
-                background-color: #fff;
-                width: 15px;
-                height: 15px;
-                border: 2px solid grey;
-                margin-left: -14px;
-              }
-
-              &.walking {
-                border: none;
-                background: none;
-
-                img {
-                  width: 20px;
-                  height: 20px;
-                }
-              }
-
-              &.transport {
-                border: none;
-                color: #fff;
-                width: 32px;
-                height: 32px;
-              }
-
-              i {
-                display: inline-block;
-                width: 12px;
-                height: 12px;
-              }
-            }
-
-            .timeline-icon-beginning,
-            .timeline-icon-end {
-              margin: 0 15px 0 -22px;
-            }
-
-            .timeline-content {
-              flex: 1;
-              padding-top: 2px;
-
-              .timeline-address {
-                font-size: 15px;
-                margin-left: -8px;
-                font-weight: bold;
-              }
-
-              .timeline-walking-info {
-                font-size: 14px;
-                color: #757575;
-                display: flex;
-                align-items: center;
-                margin-left: -14px;
-              }
-
-              .timeline-stop-name {
-                font-size: 15px;
-              }
-
-              .timeline-line {
-                font-size: 14px;
-                .on-demand-text {
-                  background-color: rgba(255, 165, 0, 0.5);
-                  font-style: italic;
-                }
-              }
-
-              .timeline-direction {
-                font-size: 14px;
-                margin-top: 2px;
-              }
-
-              .timeline-accessibility {
-                display: flex;
-                margin-top: 5px;
-
-                img {
-                  width: 20px;
-                  height: 20px;
-                  margin-right: 8px;
-                }
-              }
-            }
-          }
-        }
-
-        .timeline-item:last-child {
-          .timeline-icon {
-            border: none;
-            background: none;
           }
         }
       }

@@ -79,7 +79,7 @@
 
 <script>
 import NearbyStopsSection from './NearbyStopsSection.vue';
-import PlanATripSection from './PlanATripSection.vue';
+import PlanATripSection from './PlanATripSection/PlanATripSection.vue';
 
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
