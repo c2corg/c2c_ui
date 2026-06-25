@@ -1,31 +1,60 @@
 <template>
   <div class="plan-trip-form">
     <div class="plan-trip-from-to">
-      <div class="from-to-container">
-        <!-- Trajet ALLER : De = adresse, À = waypoint -->
-        <template v-if="activeTab === 'outbound'">
-          <div class="from-container">
-            <div class="from-text">{{ $gettext('From') }}</div>
-            <input-address
-              class="input-address"
-              :fullwidth="true"
-              :placeholder="$gettext('Enter a departure address')"
-              :show-address-propositions="currentData.showAddressPropositions"
-              :default-address="currentData.fromAddress"
-              @update:props="
-                (address) => {
-                  $emit('update-from-address', address);
-                }
-              "
-            ></input-address>
-          </div>
-          <div class="to-container">
-            <div class="to-text">{{ $gettext('To') }}</div>
-            <template v-if="accessWaypoints.length > 1">
+      <div class="addresses-container">
+        <div class="from-to-container">
+          <!-- Trajet ALLER : De = adresse, À = waypoint -->
+          <template v-if="activeTab === 'outbound'">
+            <div class="from-container">
+              <div class="from-text">{{ $gettext('From') }}</div>
+              <input-address
+                class="input-address"
+                :fullwidth="true"
+                :placeholder="$gettext('Enter a departure address')"
+                :show-address-propositions="currentData.showAddressPropositions"
+                :default-address="currentData.fromAddress"
+                @update:props="
+                  (address) => {
+                    $emit('update-from-address', address);
+                  }
+                "
+              ></input-address>
+            </div>
+            <div class="to-container">
+              <div class="to-text">{{ $gettext('To') }}</div>
+              <template v-if="accessWaypoints.length > 1">
+                <select
+                  name="chose-waypoint"
+                  class="chose-waypoint"
+                  id="chose-waypoint"
+                  v-model="currentData.selectedWaypoint"
+                  @change="$emit('update-selected-waypoint', currentData.selectedWaypoint)"
+                >
+                  <option v-for="waypoint in accessWaypoints" :key="waypoint.id" :value="waypoint">
+                    {{ waypoint.title }}
+                  </option>
+                </select>
+              </template>
+              <template v-else-if="accessWaypoints.length === 1">
+                <div class="single-waypoint to-address">
+                  {{ accessWaypoints[0].title }}
+                </div>
+              </template>
+              <template v-else>
+                <div class="no-waypoint" v-if="loadingReachable">{{ $gettext('Loading access points...') }}</div>
+                <div class="no-waypoint to-address" v-else>{{ $gettext('No access points available') }}</div>
+              </template>
+            </div>
+          </template>
+
+          <!-- Trajet RETOUR : De = waypoint, À = adresse -->
+          <template v-else>
+            <div class="to-container-return">
+              <div class="to-text">{{ $gettext('From') }}</div>
               <select
                 name="chose-waypoint"
                 class="chose-waypoint"
-                id="chose-waypoint"
+                id="chose-waypoint-return"
                 v-model="currentData.selectedWaypoint"
                 @change="$emit('update-selected-waypoint', currentData.selectedWaypoint)"
               >
@@ -33,51 +62,29 @@
                   {{ waypoint.title }}
                 </option>
               </select>
-            </template>
-            <template v-else-if="accessWaypoints.length === 1">
-              <div class="single-waypoint to-address">
-                {{ accessWaypoints[0].title }}
-              </div>
-            </template>
-            <template v-else>
-              <div class="no-waypoint" v-if="loadingReachable">{{ $gettext('Loading access points...') }}</div>
-              <div class="no-waypoint to-address" v-else>{{ $gettext('No access points available') }}</div>
-            </template>
-          </div>
-        </template>
-
-        <!-- Trajet RETOUR : De = waypoint, À = adresse -->
-        <template v-else>
-          <div class="to-container-return">
-            <div class="to-text">{{ $gettext('From') }}</div>
-            <select
-              name="chose-waypoint"
-              class="chose-waypoint"
-              id="chose-waypoint-return"
-              v-model="currentData.selectedWaypoint"
-              @change="$emit('update-selected-waypoint', currentData.selectedWaypoint)"
-            >
-              <option v-for="waypoint in accessWaypoints" :key="waypoint.id" :value="waypoint">
-                {{ waypoint.title }}
-              </option>
-            </select>
-          </div>
-          <div class="from-container-return">
-            <div class="from-text">{{ $gettext('To') }}</div>
-            <input-address
-              class="input-address"
-              :fullwidth="true"
-              :placeholder="$gettext('Enter a departure address')"
-              :show-address-propositions="currentData.showAddressPropositions"
-              :default-address="currentData.fromAddress"
-              @update:props="
-                (address) => {
-                  $emit('update-from-address', address);
-                }
-              "
-            ></input-address>
-          </div>
-        </template>
+            </div>
+            <div class="from-container-return">
+              <div class="from-text">{{ $gettext('To') }}</div>
+              <input-address
+                class="input-address"
+                :fullwidth="true"
+                :placeholder="$gettext('Enter a departure address')"
+                :show-address-propositions="currentData.showAddressPropositions"
+                :default-address="currentData.fromAddress"
+                @update:props="
+                  (address) => {
+                    $emit('update-from-address', address);
+                  }
+                "
+              ></input-address>
+            </div>
+          </template>
+        </div>
+        <div class="swap-icon" v-if="documentType === 'waypoint' && document.waypoint_type === 'access'">
+          <button class="swap-button" @click="$emit('swap-addresses')">
+            <img class="swap-image" src="@/assets/img/boxes/swap.svg" alt="swap" />
+          </button>
+        </div>
       </div>
     </div>
 
@@ -174,7 +181,10 @@
 </template>
 
 <script>
+import { requireDocumentProperty } from '@/js/properties-mixins';
+
 export default {
+  mixins: [requireDocumentProperty],
   props: {
     activeTab: {
       type: String,
@@ -209,13 +219,8 @@ export default {
     'update-selected-time',
     'update-limit-transfers',
     'update-max-transfers',
+    'swap-addresses',
   ],
-  data() {
-    return {};
-  },
-  computed: {},
-  watch: {},
-  methods: {},
 };
 </script>
 
@@ -225,7 +230,32 @@ export default {
   width: 100%;
   margin-bottom: 18px;
 
+  .addresses-container {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    width: 100%;
+
+    .swap-icon {
+      flex: 0 0 10%;
+      display: flex;
+      .swap-button {
+        margin: auto;
+        padding: 15px;
+        cursor: pointer;
+        background: white;
+        border: none;
+      }
+      .swap-button:hover {
+        .swap-image {
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+
   .from-to-container {
+    flex: 0 0 80%;
     width: 80%;
     position: relative;
     .from-container,

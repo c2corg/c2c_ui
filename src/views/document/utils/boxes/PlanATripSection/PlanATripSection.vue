@@ -1,6 +1,7 @@
 <template>
   <div class="plan-trip-section">
     <div class="plan-trip-info">
+      <!-- the trip tabs -->
       <div class="trip-tabs" v-if="hasReturnTrip">
         <button class="tab-button" :class="{ active: activeTab === 'outbound' }" @click="switchTab('outbound')">
           {{ $gettext('Outbound trip') }}
@@ -19,6 +20,7 @@
       </div>
       <div class="plan-trip-content">
         <div class="plan-trip-details">
+          <!-- the several inputs in the form -->
           <plan-a-trip-form
             :active-tab="activeTab"
             :current-data="currentData"
@@ -26,6 +28,7 @@
             :loading-reachable="loadingReachable"
             :limit-transfers="limitTransfers"
             :max-transfers="maxTransfers"
+            :document="document"
             @update-from-address="handleUpdateFromAddress"
             @update-selected-waypoint="handleUpdateSelectedWaypoint"
             @update-selected-date="handleUpdateSelectedDate"
@@ -33,19 +36,22 @@
             @update-selected-time="handleUpdateSelectedTime"
             @update-limit-transfers="handleUpdateLimitTransfers"
             @update-max-transfers="handleUpdateMaxTransfers"
+            @swap-addresses="swapAddresses"
           />
 
+          <!-- the calculate my trip buttons -->
           <button class="button is-primary plan-trip-search-button" @click="calculateRoute">
             <img class="" src="@/assets/img/boxes/itineraire.svg" alt="itinerary" />
             <p class="plan-trip-search-button-text" v-if="activeTab === 'outbound'">
               {{ hasReturnTrip ? $gettext('Calculate my outbound trip') : $gettext('Calculate my trip') }}
             </p>
             <p class="plan-trip-search-button-text" v-else>
-              {{ $gettext('Calculate my return trip') }}
+              {{ hasReturnTrip ? $gettext('Calculate my return trip') : $gettext('Calculate my trip') }}
             </p>
           </button>
 
-          <div class="calculated-duration" v-if="activeTab === 'return'">
+          <!-- the message regarding the duration of routes (only when document is a route) -->
+          <div class="calculated-duration" v-if="activeTab === 'return' && hasReturnTrip">
             <div class="calculated-duration-number">
               {{ $gettext('This route guide has an estimated theoretical duration of') }}
               {{ formatDurationForDisplay() }}.
@@ -55,6 +61,7 @@
             </div>
           </div>
 
+          <!-- the results journey, with their details -->
           <plan-a-trip-results
             :activeTab="activeTab"
             :currentData="currentData"
@@ -65,6 +72,7 @@
             @selectJourney="setSelectedRouteJourney"
           />
 
+          <!-- the messages displayed when no itineraries were found -->
           <div
             class="no-itineraries-container"
             :class="{ updating: currentData.isUpdating }"
@@ -85,6 +93,7 @@
             </div>
           </div>
 
+          <!-- the shortcut buttons that update day or time -->
           <div class="time-modification-buttons" v-if="currentData.showTimeButton">
             <button class="modification-buttons" @click="departEarlier">
               <img src="@/assets/img/boxes/before.svg" alt="earlier" />
@@ -105,6 +114,7 @@
       </div>
     </div>
 
+    <!-- the map on which documents are displayed -->
     <div class="plan-trip-map">
       <map-view
         ref="mapView"
@@ -350,6 +360,13 @@ export default {
     },
     handleUpdateMaxTransfers(max) {
       this.maxTransfers = max;
+    },
+    swapAddresses() {
+      if (this.activeTab === 'outbound') {
+        this.switchTab('return');
+      } else if (this.activeTab === 'return') {
+        this.switchTab('outbound');
+      }
     },
     setSelectedRouteJourney(journey) {
       this.currentData.selectedRouteJourney = journey;
@@ -752,19 +769,24 @@ export default {
       this.calculateRoute();
     },
 
-    /** Switch from the outbound tab to the return tab */
+    /** Switch between outbound and return tabs */
     switchTab(tab) {
-      if (tab === 'return' && !this.canAccessReturnTab) {
+      if (tab === 'return' && this.hasReturnTrip && !this.canAccessReturnTab) {
         return;
       }
+
       this.activeTab = tab;
 
-      if (tab === 'return' && !this.returnData.fromAddress && this.outboundData.selectedWaypoint) {
-        this.returnData.selectedWaypoint = this.outboundData.selectedWaypoint;
+      const source = tab === 'return' ? this.outboundData : this.returnData;
 
-        if (this.outboundData.fromAddress && this.outboundData.fromCoordinates) {
-          this.returnData.fromAddress = this.outboundData.fromAddress;
-          this.returnData.fromCoordinates = this.outboundData.fromCoordinates;
+      const target = tab === 'return' ? this.returnData : this.outboundData;
+
+      if (!target.fromAddress && source.selectedWaypoint) {
+        target.selectedWaypoint = source.selectedWaypoint;
+
+        if (source.fromAddress && source.fromCoordinates) {
+          target.fromAddress = source.fromAddress;
+          target.fromCoordinates = source.fromCoordinates;
         }
       }
     },
