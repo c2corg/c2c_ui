@@ -145,8 +145,8 @@
             type="checkbox"
             id="btnToggle"
             name="btnToggle"
-            v-model="limitTransfers"
-            @change="$emit('update-limit-transfers', limitTransfers)"
+            :checked="limitTransfers"
+            @change="$emit('update-limit-transfers', $event.target.checked)"
           />
           <span class="slider"></span>
         </label>
@@ -156,8 +156,8 @@
           class="number-dd"
           id="number-dd"
           name="number"
-          v-model="maxTransfers"
-          @change="$emit('update-max-transfers', maxTransfers)"
+          :value="maxTransfers"
+          @change="$emit('update-max-transfers', Number($event.target.value))"
         >
           <option value="0" :selected.attr="'selected'">0 (direct)</option>
           <option value="1">1 max</option>
@@ -241,15 +241,19 @@ export default {
       display: flex;
       .swap-button {
         margin: auto;
-        padding: 15px;
         cursor: pointer;
         background: white;
-        border: none;
+        border: 1px solid lightgray;
+        height: 40px;
+        width: 40px;
+        .swap-image {
+          margin: auto;
+          width: 20px;
+          height: 20px;
+        }
       }
       .swap-button:hover {
-        .swap-image {
-          transform: scale(1.1);
-        }
+        background: #eeeeee;
       }
     }
   }

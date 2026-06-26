@@ -371,6 +371,7 @@
     "If the route does not exists in our base, you can create it.": "Si l'itinéraire n'existe pas, vous pouvez le créer.",
     "If you can't see this email, please check your spam folder.": "Pensez à vérifier dans les spams si vous ne voyez pas ce mail.",
     "If you change your email, a message will be sent to the new address provided. You have to follow the link within to confirm the email address change.": "Si vous changez votre mail, un message sera envoyé à la nouvelle adresse renseignée. Vous devrez cliquer sur le lien qu'il contient pour confirmer le changement d'adresse.",
+    "If you know of a line serving this access point, you can indicate it in this": "Si vous connaissez une ligne desservant cet accès, vous pouvez l'indiquer dans ce ",
     "If you see any improvements or missing lines, you can provide feedback via the links provided in": "Si vous voyez des améliorations ou des lignes manquantes, vous pouvez faire vos retours via les liens indiqués dans",
     "Ignore year": "Ignorer l'année",
     "Image could not be processed": "L'image n'a pas pu être traitée pour le téléversement",
@@ -602,6 +603,7 @@
     "Protection areas": "Zones de protection",
     "Protection status": "Status de la protection",
     "Provide information and improve its quality, following the contribution rules and respecting copyright.": "Vous êtes invité à compléter les informations et améliorer la qualité du document en suivant les règles de contribution et dans le respect du droit d'auteur.",
+    "Public transport data is currently unavailable.": "Les données de transport en commun sont actuellement indisponibles.",
     "Public transport schedules are not yet known for this period." : "Les horaires de transports en commun ne sont pas encore connus pour cette période.",
     "Put it back": "Remettre",
     "Quote": "Citation",
@@ -775,6 +777,7 @@
     "Translate": "Traduire",
     "Transport & road or PT access": "Accès routier/TC",
     "Tricky sections": "Passages délicats",
+    "Try again later or": "Réessayez plus tard ou ",
     "Types and styles": "Types et styles",
     "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "Type d'assurage et de protection, vérifications entre grimpeurs, tests de stabilité du manteau neigeux, test des DVA, etc.",
     "Unblock account": "Débloquer cet utilisateur",
@@ -1055,6 +1058,7 @@
     },
     "contact": "Contact",
     "contributor": "contributeur",
+    "contact us.": "contactez nous.",
     "copyright": {
       "$$noContext": "droit d'auteur",
       "image_types": "droit d'auteur"
@@ -1210,6 +1214,7 @@
     },
     "fnumber": "Ouverture",
     "focal_length": "Focale",
+    "form.": "formulaire.",
     "fr": {
       "langs": "français"
     },
@@ -1387,6 +1392,7 @@
     },
     "lift_access": "Remontées mécaniques",
     "lift_status": "Remontées mécaniques",
+    "lineMissingFormUrl": "https://form.typeform.com/to/xRZnnp6u",
     "loading": "chargement en cours",
     "local_product": {
       "waypoint_types": "produits locaux"

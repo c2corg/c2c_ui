@@ -78,7 +78,7 @@
             :class="{ updating: currentData.isUpdating }"
             v-if="currentData.noResult"
           >
-            <div class="no-itineraries">
+            <div class="no-itineraries" v-if="queryError === null">
               <img
                 class="no-itineraries-img"
                 src="@/assets/img/boxes/transport_not_found.svg"
@@ -87,7 +87,45 @@
               <div class="no-itineraries-text">
                 <div class="no-itineraries-found">{{ $gettext('No public transport found') }}</div>
                 <div class="no-itineraries-detail">
-                  {{ noResultError }}
+                  {{ $gettext('It seems your trip can not be completed on the selected date and time') }}
+                  <br /><br />
+                  {{ $gettext('If you know of a line serving this access point, you can indicate it in this') }}
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    :href="$gettext('https://form.typeform.com/to/xRZnnp6u', 'lineMissingFormUrl')"
+                  >
+                    {{ $gettext('form.') }}
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- the messages displayed when error 500 is returned by /journeys route -->
+            <div class="navitia-unknown-error" v-if="queryError !== null">
+              <img
+                class="navitia-unknown-error-img"
+                src="@/assets/img/boxes/navitia_api_error.svg"
+                alt="navitia unknown error"
+              />
+              <div class="navitia-unknown-error-text">
+                <div class="navitia-unknown-error-title">
+                  {{ $gettext('Public transport data is currently unavailable.') }}
+                </div>
+                <div class="navitia-unknown-error-detail">
+                  {{ $gettext('Try again later or') }}
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    :href="
+                      $gettext(
+                        'https://forum.camptocamp.org/c/site-et-association/site-c2c-suggestions-bugs-et-problemes',
+                        'urlWhenNavitiaUnknownError'
+                      )
+                    "
+                  >
+                    {{ $gettext('contact us.') }}
+                  </a>
                 </div>
               </div>
             </div>
@@ -220,12 +258,6 @@ export default {
       limitTransfers: false,
       maxTransfers: 0,
       queryError: null,
-      errorMessages: {
-        date_out_of_bounds: this.$gettext('Public transport schedules are not yet known for this period.'),
-        unknown_object: this.$gettext(
-          "The start and finish points are too far apart to find a route. Choose a start in a city closer to the route's access point."
-        ),
-      },
     };
   },
 
@@ -288,21 +320,6 @@ export default {
     /** Returns the outbound or return data */
     currentData() {
       return this.activeTab === 'outbound' ? this.outboundData : this.returnData;
-    },
-
-    noResultError() {
-      if (this.currentData.noResult) {
-        if (this.queryError !== null) {
-          return (
-            this.errorMessages[this.queryError?.id] ||
-            this.$gettext('It seems your trip can not be completed on the selected date and time')
-          );
-        } else {
-          return this.$gettext('It seems your trip can not be completed on the selected date and time');
-        }
-      } else {
-        return '';
-      }
     },
 
     canAccessReturnTab() {
@@ -449,7 +466,7 @@ export default {
         this.currentData.showTimeButton = true;
         const selectedDateFormatted = this.currentData.selectedDate.replace(/-/g, '');
 
-        if (data.journeys) {
+        if (data?.journeys) {
           const filteredJourneys = data.journeys.filter((journey) => {
             const journeyDate = journey.departure_date_time.split('T')[0];
             return journeyDate === selectedDateFormatted;
@@ -503,7 +520,7 @@ export default {
         const data = response.data;
         const selectedDateFormatted = this.currentData.selectedDate.replace(/-/g, '');
 
-        if (data.journeys && data.journeys.length > 0) {
+        if (data?.journeys && data.journeys.length > 0) {
           const filteredJourneys = data.journeys.filter((journey) => {
             const journeyDate = journey.departure_date_time.split('T')[0];
             return journeyDate === selectedDateFormatted;
@@ -1093,53 +1110,68 @@ export default {
             }
           }
         }
-      }
-      .itineraries-container {
-        max-width: 490px;
-        flex: 1;
-        padding-right: 16px;
-        transition: background-color 0.3s ease;
-        position: relative;
+        .itineraries-container {
+          max-width: 490px;
+          flex: 1;
+          padding-right: 16px;
+          transition: background-color 0.3s ease;
+          position: relative;
 
-        .itinerary-header {
-          border: 1px solid lightgrey;
-          border-left: 4px solid #337ab7;
-          border-radius: 4px;
-          padding: 10px;
-          margin-top: 12px;
-          cursor: pointer;
-          .itinerary-time {
-            display: flex;
-            .journey-duration {
-              margin-left: auto;
-              margin-right: 5px;
-              font-weight: bold;
-            }
-          }
-
-          .journey-steps {
-            display: flex;
-            margin-top: 8px;
-            flex-wrap: wrap;
-
-            .step-wrapper {
+          .itinerary-header {
+            border: 1px solid lightgrey;
+            border-left: 4px solid #337ab7;
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 12px;
+            cursor: pointer;
+            .itinerary-time {
               display: flex;
-              gap: 15px;
+              .journey-duration {
+                margin-left: auto;
+                margin-right: 5px;
+                font-weight: bold;
+              }
+            }
 
-              .journey-step {
-                .transport-icon {
-                  margin-left: 8px;
+            .journey-steps {
+              display: flex;
+              margin-top: 8px;
+              flex-wrap: wrap;
+
+              .step-wrapper {
+                display: flex;
+                gap: 15px;
+
+                .journey-step {
+                  .transport-icon {
+                    margin-left: 8px;
+                  }
                 }
               }
             }
           }
-        }
-        .selected {
-          border-left: 4px solid #4baf50;
-          background-color: #fbfaf6;
+          .selected {
+            border-left: 4px solid #4baf50;
+            background-color: #fbfaf6;
+          }
         }
       }
-
+      .navitia-unknown-error {
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        .navitia-unknown-error-img {
+          width: 100px;
+          height: 100px;
+          margin-right: 8px;
+        }
+        .navitia-unknown-error-text {
+          .navitia-unknown-error-title {
+            font-weight: bold;
+          }
+        }
+      }
       .itineraries-container.updating::before,
       .no-itineraries-container.updating::before {
         content: '';
