@@ -59,7 +59,7 @@
       <div class="journey-details" v-if="currentData.selectedJourney === journey">
         <div class="journey-timeline">
           <div class="timeline-item">
-            <div class="timeline-time">{{ formatTime(journey.arrival_date_time) }}</div>
+            <div class="timeline-time">{{ formatTime(journey.departure_date_time) }}</div>
             <div class="timeline-icon-end">
               <img src="@/assets/img/boxes/end.svg" alt="end" />
             </div>
