@@ -108,6 +108,8 @@
             </div>
           </markdown-section>
 
+          <fundraiser-banner :document="document" />
+
           <markdown-section :document="document" :field="fields.gear">
             <div class="content automatic-gears" slot="after" v-if="Object.keys(gearArticles).length !== 0">
               <ul>

@@ -1,3 +1,10 @@
+// Identity marker so fundraiser `message` strings get extracted to the .pot file
+// by tools/extract-messages.js. The actual translation is done at render time via
+// the component's `this.$gettext()`. To add a localized message to an entry, just
+// add a `message: $gettext('Your English message')` field; translations are then
+// managed in Transifex.
+const $gettext = (msgid) => msgid;
+
 const mapping = {
   // France
   // 14274: { // FFME - Rockclimber
@@ -7,6 +14,7 @@ const mapping = {
   // Buoux
   102357: {
     url: 'https://www.aptitudes-escalade.com/i-love-buoux/',
+    message: $gettext('Buoux is maintained by local volunteers. Help keep it bolted and open!'),
   },
 
   // Roche de Narse
