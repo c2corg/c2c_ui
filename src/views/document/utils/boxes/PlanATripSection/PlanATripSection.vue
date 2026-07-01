@@ -78,7 +78,7 @@
             :class="{ updating: currentData.isUpdating }"
             v-if="currentData.noResult"
           >
-            <div class="no-itineraries" v-if="queryError === null">
+            <div class="no-itineraries" v-if="queryError === 'no_solution' || queryError === 'unknown_object'">
               <img
                 class="no-itineraries-img"
                 src="@/assets/img/boxes/transport_not_found.svg"
@@ -87,7 +87,7 @@
               <div class="no-itineraries-text">
                 <div class="no-itineraries-found">{{ $gettext('No public transport found') }}</div>
                 <div class="no-itineraries-detail">
-                  {{ $gettext('It seems your trip can not be completed on the selected date and time') }}
+                  {{ queryErrorMessage }}
                   <br /><br />
                   {{ $gettext('If you know of a line serving this access point, you can indicate it in this') }}
                   <a
@@ -102,7 +102,10 @@
             </div>
 
             <!-- the messages displayed when error 500 is returned by /journeys route -->
-            <div class="navitia-unknown-error" v-if="queryError !== null">
+            <div
+              class="navitia-unknown-error"
+              v-if="queryError !== null && queryError !== 'no_solution' && queryError !== 'unknown_object'"
+            >
               <img
                 class="navitia-unknown-error-img"
                 src="@/assets/img/boxes/navitia_api_error.svg"
@@ -110,7 +113,7 @@
               />
               <div class="navitia-unknown-error-text">
                 <div class="navitia-unknown-error-title">
-                  {{ $gettext('Public transport data is currently unavailable.') }}
+                  {{ queryErrorMessage }}
                 </div>
                 <div class="navitia-unknown-error-detail">
                   {{ $gettext('Try again later or') }}
@@ -258,6 +261,18 @@ export default {
       limitTransfers: false,
       maxTransfers: 0,
       queryError: null,
+      errorMessages: {
+        // no solution found
+        no_solution: this.$gettext('It seems your trip can not be completed on the selected date and time'),
+        unknown_object: this.$gettext(
+          "The start and finish points are too far apart to find a route. Choose a start in a city closer to the route's access point."
+        ),
+        // internal server error
+        unknown_error: this.$gettext('An unknown error occured.'),
+        navitia_internal_error: this.$gettext('Public transport data is currently unavailable.'),
+        auth_error: this.$gettext('Authentication to public transport data service error.'),
+        invalid_param: this.$gettext('Invalid parameters were sent to public transport data service.'),
+      },
     };
   },
 
@@ -283,6 +298,17 @@ export default {
     /** Determines if a waypoint is accessible by public transport */
     accessWaypoints() {
       return this.reachableWaypoints.length > 0 ? this.reachableWaypoints : [];
+    },
+
+    queryErrorMessage() {
+      if (this.currentData.noResult) {
+        if (this.queryError !== null) {
+          if (this.queryError in this.errorMessages) {
+            return this.errorMessages[this.queryError];
+          }
+        }
+      }
+      return '';
     },
 
     /** Customizes access points: clicking makes a selection instead of redirecting to a page, and the color is green */
@@ -489,8 +515,10 @@ export default {
           await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
         }
       } catch (error) {
-        this.queryError = NavitiaService.handleQueryError(error?.response?.data?.errors?.[0]?.description);
-        console.error('Error retrieving routes:', error);
+        this.queryError = error?.response?.data?.errors?.[0]?.description;
+        if (!(this.queryError in this.errorMessages)) {
+          console.error('Error retrieving routes:', error);
+        }
         await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
       } finally {
         this.currentData.isUpdating = false;
@@ -580,8 +608,10 @@ export default {
         this.currentData.noResult = true;
         this.currentData.journeys = [];
       } catch (error) {
-        this.queryError = NavitiaService.handleQueryError(error?.response?.data?.errors?.[0]?.description);
-        console.error('Error retrieving extended timeframe routes:', error);
+        this.queryError = error?.response?.data?.errors?.[0]?.description;
+        if (!(this.queryError in this.errorMessages)) {
+          console.error('Error retrieving extended timeframe routes:', error);
+        }
         this.currentData.noResult = true;
         this.currentData.journeys = [];
       }

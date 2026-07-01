@@ -60,6 +60,7 @@
     "An error occurred, couldn't (un)mark route as to do": "Impossible d'ajouter ou d'enlever l'itinéraire des favoris",
     "An error occurred, couldn't (un)mask version": "Erreur : impossible de (dé)masquer la version",
     "An error occurred, couldn't save images": "Impossible de sauvegarder les images",
+    "An unknown error occured.": "Une erreur inconnue est survenue.",
     "Anonymity and confidentiality": "Anonymat et confidentialité",
     "Apply filters": "Appliquer les filtres",
     "Are you sure you want to delete this document?": "Êtes-vous sûr(e) de vouloir supprimer ce document ? \nAttention, les photos associées ne seront pas supprimées et deviendront orphelines. \nSi vous souhaitez juste modifier le titre ou les documents associés (ex : déplacer une sortie vers un autre itinéraire), il suffit de modifier le document.\nSi ce document est un doublon comportant des photos, demandez @Modo_Topo_FR de fusionner les doublons pour déplacer les photos sur le document conservé.",
@@ -80,6 +81,7 @@
     "At least one access point in the route do not have a public transport stop within 5km.": "Au moins un point d'accès du topo ne dispose pas d'arrêt de transport en commun à moins de 5km.",
     "At least one access point in the waypoint do not have a public transport stop within 5km.": "Au moins un point d'accès du point de passage ne dispose pas d'arrêt de transport en commun à moins de 5km.",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Attribution — Vous devez créditer l'Œuvre, intégrer un lien vers la licence et indiquer si des modifications ont été effectuées à l'Oeuvre. ",
+    "Authentication to public transport data service error.": "Erreur d'authentification au service de données des transports en commun.",
     "Avalanche bulletins": "Bulletins d'avalanche",
     "Avalanche risk": "Risque d'avalanche",
     "Avalanche risk evaluation tool:": "Une aide à la gestion du risque d’avalanche :",
@@ -394,6 +396,7 @@
     "Invalid email address": {
       "API message": "Adresse email invalide"
     },
+    "Invalid parameters were sent to public transport data service.": "Des paramètres invalides ont été envoyés au service de données des transports en commun.",
     "Invalid value": "Valeur invalide",
     "Issue report": "Signalement d'un problème",
     "Itinevert": "Itinévert",
