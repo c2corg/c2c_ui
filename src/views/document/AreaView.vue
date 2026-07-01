@@ -23,6 +23,8 @@
           <div style="clear: both" />
         </div>
 
+        <fundraiser-banner :document="document" />
+
         <div class="box no-print">
           <div class="level is-mobile">
             <div

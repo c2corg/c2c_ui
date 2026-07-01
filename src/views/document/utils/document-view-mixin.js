@@ -1,5 +1,6 @@
 import DocumentPrintLicense from './DocumentPrintLicense';
 import DocumentViewHeader from './DocumentViewHeader';
+import FundraiserBanner from './FundraiserBanner';
 import CommentsBox from './boxes/CommentsBox';
 import ImagesBox from './boxes/ImagesBox';
 import IsReachableByPublicTransportsBox from './boxes/IsReachableByPublicTransportsBox';
@@ -27,6 +28,7 @@ import viewModeMixin from '@/js/view-mode-mixin';
 export default {
   components: {
     DocumentViewHeader,
+    FundraiserBanner,
 
     CommentsBox,
     DocumentPrintLicense,
