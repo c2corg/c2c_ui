@@ -209,6 +209,8 @@ export default {
           q: this.searchText,
           t: this.letterTypes.join(','),
           limit: 7,
+          l: this.$language.current,
+          pl: this.$language.current,
         })
         .then((response) => {
           response.data.profiles = response.data.users;
