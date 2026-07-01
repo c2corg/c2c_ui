@@ -105,7 +105,15 @@ export default {
       const text = event.target.value;
 
       if (text.length >= 3) {
-        c2c.search({ q: text, t: this.letterTypes.join(','), limit: 5 }).then(this.computePropositions);
+        c2c
+          .search({
+            q: text,
+            t: this.letterTypes.join(','),
+            limit: 5,
+            l: this.$language.current,
+            pl: this.$language.current,
+          })
+          .then(this.computePropositions);
       }
     },
 
