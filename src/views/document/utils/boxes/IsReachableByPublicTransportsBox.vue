@@ -37,7 +37,7 @@ export default {
         return [this.document];
       } else {
         // for other types of documents, return the waypoints of type access associated (if any)
-        return this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access');
+        return this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access') ?? [];
       }
     },
   },
