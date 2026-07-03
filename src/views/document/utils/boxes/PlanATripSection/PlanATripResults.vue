@@ -103,7 +103,7 @@
                 </div>
                 <div class="timeline-content">
                   <div class="timeline-stop-name">
-                    <strong>{{ $gettext('Stop') }} : </strong> {{ section.from?.name || 'Départ' }}
+                    <strong>{{ $gettext('Stop') }} : </strong> {{ section.from?.name || $gettext('Departure') }}
                   </div>
                 </div>
               </div>
@@ -162,7 +162,7 @@
                 </div>
                 <div class="timeline-content">
                   <div class="timeline-stop-name">
-                    <strong>{{ $gettext('Stop') }} : </strong>{{ section.to?.name || 'Arrivée' }}
+                    <strong>{{ $gettext('Stop') }} : </strong>{{ section.to?.name || $gettext('Arrival') }}
                   </div>
                 </div>
               </div>
@@ -176,7 +176,7 @@
               <img src="@/assets/img/boxes/end.svg" alt="end" />
             </div>
             <div class="timeline-content" v-if="activeTab === 'outbound'">
-              <div class="timeline-address">{{ currentData.selectedWaypoint?.title || 'Destination' }}</div>
+              <div class="timeline-address">{{ currentData.selectedWaypoint?.title || $gettext('Destination') }}</div>
             </div>
             <div class="timeline-content" v-else>
               <div class="timeline-address">{{ displayedToAddress }}</div>
