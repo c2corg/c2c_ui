@@ -31,7 +31,10 @@
                   class="transport-icon"
                   :class="getTransportClass(section)"
                 >
-                  <img :src="require(`@/assets/img/boxes/${getTransportIcon(section)}.svg`)" alt="walking" />
+                  <img
+                    :src="require(`@/assets/img/boxes/${getTransportIcon(section)}.svg`)"
+                    :alt="getTransportClass(section)"
+                  />
                 </div>
                 <div
                   v-else-if="
