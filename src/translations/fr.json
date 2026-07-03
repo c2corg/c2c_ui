@@ -271,6 +271,7 @@
       "API message": "Ne doit pas contenir un suffixe tel que '.json'"
     },
     "Enter a departure address": "Entrez une adresse de départ",
+    "Enter a destination address": "Entrez une adresse de destination",
     "Enter a massif name": "Entrez le nom d'un massif",
     "Enter an address": "Entrez une adresse",
     "Error while loading data": "Erreur lors du chargement des données",

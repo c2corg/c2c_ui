@@ -68,7 +68,7 @@
               <input-address
                 class="input-address"
                 :fullwidth="true"
-                :placeholder="$gettext('Enter a departure address')"
+                :placeholder="$gettext('Enter a destination address')"
                 :show-address-propositions="currentData.showAddressPropositions"
                 :default-address="currentData.fromAddress"
                 @update:props="
