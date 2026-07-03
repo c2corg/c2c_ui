@@ -831,10 +831,19 @@ export default {
 
       this.activeTab = tab;
 
-      const source = tab === 'return' ? this.outboundData : this.returnData;
+      const isReturnTab = tab === 'return';
+      const source = isReturnTab ? this.outboundData : this.returnData;
+      const target = isReturnTab ? this.returnData : this.outboundData;
 
-      const target = tab === 'return' ? this.returnData : this.outboundData;
+      if (!this.hasReturnTrip) {
+        // One-way trip: keep both tabs in sync.
+        target.fromAddress = source.fromAddress;
+        target.fromCoordinates = source.fromCoordinates;
+        target.selectedWaypoint = source.selectedWaypoint;
+        return;
+      }
 
+      // Return trip: only initialize the return tab if it hasn't been set yet.
       if (!target.fromAddress && source.selectedWaypoint) {
         target.selectedWaypoint = source.selectedWaypoint;
 
@@ -917,8 +926,7 @@ export default {
         accessPoints = [this.document];
       } else {
         // for other types of documents, return the waypoints of type access associated (if any)
-        accessPoints =
-          this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access') ?? [];
+        accessPoints = this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access') ?? [];
       }
       const reachableChecks = [];
 
