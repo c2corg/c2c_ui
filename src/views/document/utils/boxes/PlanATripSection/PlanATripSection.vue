@@ -305,6 +305,8 @@ export default {
         if (this.queryError !== null) {
           if (this.queryError in this.errorMessages) {
             return this.errorMessages[this.queryError];
+          } else {
+            return this.$gettext('An unknown error occured.');
           }
         }
       }

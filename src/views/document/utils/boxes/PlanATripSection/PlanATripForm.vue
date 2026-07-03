@@ -159,7 +159,6 @@
           :value="maxTransfers"
           @change="$emit('update-max-transfers', Number($event.target.value))"
         >
-          <option value="-1">-1 (crash)</option>
           <option value="0" :selected.attr="'selected'">0 (direct)</option>
           <option value="1">1 max</option>
           <option value="2">2 max</option>
