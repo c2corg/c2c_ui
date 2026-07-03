@@ -109,9 +109,8 @@ export default {
       }
       // for other types of documents, return the waypoints of type access associated (if any)
       else {
-        accessWaypoints = this.document?.associations?.waypoints?.filter(
-          (doc) => doc && doc.waypoint_type === 'access'
-        );
+        accessWaypoints =
+          this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access') ?? [];
       }
 
       const accessPointsCopy = JSON.parse(JSON.stringify(accessWaypoints));
