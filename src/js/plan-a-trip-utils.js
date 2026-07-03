@@ -102,24 +102,10 @@ export default {
     return `${minutes} min`;
   },
 
-  /** Convert times into calculable format and substract departure to arrival */
+  /** Get section duration directly when available, fallback to 0 */
   calculateSectionDuration(section) {
-    if (section.departure_date_time && section.arrival_date_time) {
-      const departure = section.departure_date_time;
-      const arrival = section.arrival_date_time;
-
-      const depHour = parseInt(departure.substring(9, 11));
-      const depMin = parseInt(departure.substring(11, 13));
-      const depSec = parseInt(departure.substring(13, 15));
-
-      const arrHour = parseInt(arrival.substring(9, 11));
-      const arrMin = parseInt(arrival.substring(11, 13));
-      const arrSec = parseInt(arrival.substring(13, 15));
-
-      const depTotalSec = depHour * 3600 + depMin * 60 + depSec;
-      const arrTotalSec = arrHour * 3600 + arrMin * 60 + arrSec;
-
-      return arrTotalSec - depTotalSec;
+    if (section.duration !== undefined && section.duration !== null) {
+      return section.duration;
     }
     return 0;
   },
