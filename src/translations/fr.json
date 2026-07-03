@@ -60,7 +60,7 @@
     "An error occurred, couldn't (un)mark route as to do": "Impossible d'ajouter ou d'enlever l'itinéraire des favoris",
     "An error occurred, couldn't (un)mask version": "Erreur : impossible de (dé)masquer la version",
     "An error occurred, couldn't save images": "Impossible de sauvegarder les images",
-    "An unknown error occured.": "Une erreur inconnue est survenue.",
+    "An unknown error occurred.": "Une erreur inconnue est survenue.",
     "Anonymity and confidentiality": "Anonymat et confidentialité",
     "Apply filters": "Appliquer les filtres",
     "Are you sure you want to delete this document?": "Êtes-vous sûr(e) de vouloir supprimer ce document ? \nAttention, les photos associées ne seront pas supprimées et deviendront orphelines. \nSi vous souhaitez juste modifier le titre ou les documents associés (ex : déplacer une sortie vers un autre itinéraire), il suffit de modifier le document.\nSi ce document est un doublon comportant des photos, demandez @Modo_Topo_FR de fusionner les doublons pour déplacer les photos sur le document conservé.",

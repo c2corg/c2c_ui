@@ -268,7 +268,7 @@ export default {
           "The start and finish points are too far apart to find a route. Choose a start in a city closer to the route's access point."
         ),
         // internal server error
-        unknown_error: this.$gettext('An unknown error occured.'),
+        unknown_error: this.$gettext('An unknown error occurred.'),
         navitia_internal_error: this.$gettext('Public transport data is currently unavailable.'),
         auth_error: this.$gettext('Authentication to public transport data service error.'),
         invalid_param: this.$gettext('Invalid parameters were sent to public transport data service.'),
