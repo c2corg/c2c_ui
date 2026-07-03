@@ -521,7 +521,12 @@ export default {
         if (!(this.queryError in this.errorMessages)) {
           console.error('Error retrieving routes:', error);
         }
+        if (this.queryError === 'no_solution' || this.queryError === 'unknown_object') {
         await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
+        } else {
+          this.currentData.noResult = true;
+          this.currentData.journeys = [];
+        }
       } finally {
         this.currentData.isUpdating = false;
       }
