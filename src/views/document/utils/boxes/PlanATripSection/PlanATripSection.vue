@@ -917,14 +917,18 @@ export default {
         accessPoints = [this.document];
       } else {
         // for other types of documents, return the waypoints of type access associated (if any)
-        accessPoints = this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access');
+        accessPoints =
+          this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access') ?? [];
       }
       const reachableChecks = [];
 
       // Check the accessibility of each waypoint
       for (const waypoint of accessPoints) {
         reachableChecks.push(
-          transportService.isReachable(waypoint.document_id).then((isReachable) => ({ waypoint, isReachable }))
+          transportService
+            .isReachable(waypoint.document_id)
+            .then((isReachable) => ({ waypoint, isReachable }))
+            .catch(() => ({ waypoint, isReachable: false }))
         );
       }
 
