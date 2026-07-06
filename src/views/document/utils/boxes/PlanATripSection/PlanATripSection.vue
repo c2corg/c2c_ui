@@ -340,7 +340,7 @@ export default {
         };
       });
 
-      const routeDocuments = this.prepareRouteDocuments();
+      const routeDocuments = this.prepareRouteDocuments(false);
 
       return [...baseDocuments, ...accessWaypointDocuments, ...routeDocuments];
     },
@@ -513,6 +513,9 @@ export default {
             this.calculateReturnParameters();
             await this.determineReturnWaypoint();
           }
+
+          // Trigger recenter after journey selection
+          this.recenterMapOnDocuments();
         } else {
           await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
         }
@@ -522,13 +525,16 @@ export default {
           console.error('Error retrieving routes:', error);
         }
         if (this.queryError === 'no_solution' || this.queryError === 'unknown_object') {
-        await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
+          await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
         } else {
           this.currentData.noResult = true;
           this.currentData.journeys = [];
         }
       } finally {
         this.currentData.isUpdating = false;
+
+        // Trigger recenter after processing
+        this.recenterMapOnDocuments();
       }
     },
 
@@ -633,7 +639,7 @@ export default {
     },
 
     /** Displays the routes of different transport on the map */
-    prepareRouteDocuments() {
+    prepareRouteDocuments(scheduleRecenter = true) {
       if (
         !this.currentData.selectedRouteJourney ||
         !this.currentData.journeys ||
@@ -751,11 +757,9 @@ export default {
         }
       });
 
-      this.$nextTick(() => {
-        if (this.$refs.mapView) {
-          this.$refs.mapView.recenterOnDocuments();
-        }
-      });
+      if (scheduleRecenter && this.$refs.mapView) {
+        this.recenterMapOnDocuments();
+      }
 
       return routeDocuments;
     },
@@ -926,7 +930,8 @@ export default {
         accessPoints = [this.document];
       } else {
         // for other types of documents, return the waypoints of type access associated (if any)
-        accessPoints = this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access') ?? [];
+        accessPoints =
+          this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access') ?? [];
       }
       const reachableChecks = [];
 
@@ -1038,6 +1043,26 @@ export default {
       }
 
       return `${durationInDays} ${this.$gettext('Day(s)').toLowerCase()}`;
+    },
+
+    /** Helper method to recenter the map on documents if available */
+    recenterMapOnDocuments() {
+      this.$nextTick(() => {
+        // Only recenter if there are documents to recenter on
+        if (this.$refs.mapView && this.currentData.journeys && this.currentData.journeys.length > 0) {
+          this.$refs.mapView.recenterOnDocuments();
+        }
+      });
+    },
+  },
+
+  watch: {
+    'currentData.selectedRouteJourney': {
+      handler() {
+        // Trigger recenter when selectedRouteJourney changes
+        this.recenterMapOnDocuments();
+      },
+      deep: true,
     },
   },
 };
