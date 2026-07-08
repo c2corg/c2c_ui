@@ -93,6 +93,7 @@
     "Books and websites not already associated to this route": "Indique el origen de la información que no sea su experiencia personal. Un (topo)libro o revista debe tener su propia entrada y estar asociado al documento (no lo mencione en este campo). Este campo es para enlaces a páginas web, topos online, blogs, fuentes no distribuidas (cuaderno en un refugio, bar o camping), o información adicional sobre los topo-libros (falso diagrama, etc.). Un enlace debe activarse con los chevrones < link >.",
     "Both results and map": "Resultados y mapa",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Describe brevemente cualquier lesión. Aquí se pueden introducir comentarios que no encajen en ningún otro campo.",
+    "Buoux is maintained by local volunteers. Help keep it bolted and open!": "Buoux es mantenido por voluntarios locales. ¡Ayúdanos a mantenerlo abierto y en buen estado!",
     "By month": "Por mes",
     "By year": "Por año",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org tiene como objetivo facilitar el intercambio de información entre los adictos a las montañas y contribuir a la seguridad de las actividades de montaña.",
@@ -453,6 +454,7 @@
       "API message": "Campo obligatorio"
     },
     "Show only updates from followed users in the homepage feed": "Mostrar en la página de inicio las actualizaciones relacionadas con los usuarios seguidos.",
+    "Show results": "Mostrar resultados",
     "Simplify": "Simplificar",
     "Skiability": "Esquiabilidad",
     "Skitouring gear": "Esquí y snowboard de montaña, raquetas",
