@@ -37,7 +37,7 @@
         </button>
 
         <button
-          v-if="showAccessibilityInfo"
+          v-if="showAccessibilityInfo && isPlanATripSectionDisplayed"
           class="button is-primary public-transports-button"
           :class="{ 'is-active': activeSection === 'planATrip' }"
           @click="setActiveSection('planATrip')"
@@ -79,7 +79,7 @@
 
 <script>
 import NearbyStopsSection from './NearbyStopsSection.vue';
-import PlanATripSection from './PlanATripSection.vue';
+import PlanATripSection from './PlanATripSection/PlanATripSection.vue';
 
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
@@ -89,12 +89,6 @@ export default {
     PlanATripSection,
   },
   mixins: [requireDocumentProperty],
-  props: {
-    document: {
-      type: Object,
-      required: true,
-    },
-  },
   data() {
     return {
       activeSection: 'nearbyStops',
@@ -108,11 +102,18 @@ export default {
   computed: {
     /** Copy access points to customize them */
     accessWaypoints() {
-      if (!this.document.associations.waypoints || !Array.isArray(this.document.associations.waypoints)) {
-        return [];
+      let accessWaypoints = [];
+      if (this.documentType === 'waypoint' && this.document.waypoint_type === 'access') {
+        // access waypoint
+        accessWaypoints = [this.document];
       }
-      const accessPoints = this.document.associations.waypoints.filter((doc) => doc && doc.waypoint_type === 'access');
-      const accessPointsCopy = JSON.parse(JSON.stringify(accessPoints));
+      // for other types of documents, return the waypoints of type access associated (if any)
+      else {
+        accessWaypoints =
+          this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access') ?? [];
+      }
+
+      const accessPointsCopy = JSON.parse(JSON.stringify(accessWaypoints));
 
       accessPointsCopy.forEach((doc) => {
         if (doc.type === 'w') {
@@ -129,6 +130,13 @@ export default {
       });
 
       return accessPointsCopy;
+    },
+
+    isPlanATripSectionDisplayed() {
+      // plan a trip section is only available for routes and waypoints of type access
+      return (
+        this.documentType === 'route' || (this.documentType === 'waypoint' && this.document.waypoint_type === 'access')
+      );
     },
 
     /** Adds custom points in document */

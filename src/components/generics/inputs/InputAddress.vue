@@ -224,8 +224,9 @@ export default {
 
     /** Takes selected address proposition */
     selectAddress(proposition) {
-      this.localData.selectedAddress = proposition;
       this.localData.address = this.formatProposition(proposition);
+      this.localData.selectedAddress = proposition;
+      this.localData.selectedAddress.address = this.localData.address;
       this.localData.coordinates = proposition.geometry.coordinates;
       this.localData.showAddressPropositions = false;
     },
