@@ -5,6 +5,7 @@
 
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
+import common from '@/js/constants/common.json';
 
 // we need to use a VM, because we need access to Vue.$user.lang
 
@@ -373,6 +374,13 @@ export default function install(Vue) {
             return false;
           }
         }
+      },
+
+      hasSoftMobility(document) {
+        return (
+          document.public_transportation_rating &&
+          common.attributes.public_transportation_ratings.indexOf(document.public_transportation_rating) < 4
+        );
       },
 
       getDocumentsBbox(documents) {
