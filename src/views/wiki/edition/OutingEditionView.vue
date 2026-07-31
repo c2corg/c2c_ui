@@ -149,6 +149,9 @@
         />
         <form-field :document="document" :field="fields.disable_comments" />
       </div>
+      <div class="columns">
+        <form-field :document="document" :field="fields.disable_view_count" />
+      </div>
     </form-section>
 
     <form-section
