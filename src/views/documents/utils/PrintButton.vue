@@ -23,11 +23,27 @@ export default {
       type: String,
       default: 'button',
     },
+    forcedDocumentType: {
+      type: String,
+      default: null,
+    },
+    forcedQuery: {
+      type: Object,
+      default: null,
+    },
+    forcedRouteName: {
+      type: String,
+      default: null,
+    },
   },
 
   computed: {
     path() {
-      return { path: this.documentType + 's/print', query: this.$route.query };
+      return {
+        path: (this.forcedDocumentType ? this.forcedDocumentType : this.documentType) + 's/print',
+        query: this.forcedQuery ? this.forcedQuery : this.$route.query,
+        name: this.forcedRouteName ? this.forcedRouteName : null,
+      };
     },
   },
 };
