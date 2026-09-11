@@ -1,13 +1,17 @@
 // this mixin will prevent pages to be indexed by search engines
 
+import { useHead } from '@unhead/vue';
+
 export default {
-  head: {
-    meta: [
-      {
-        name: 'robots',
-        content: 'noindex',
-        id: 'meta-robots',
-      },
-    ],
+  created() {
+    useHead({
+      meta: [
+        {
+          name: 'robots',
+          content: 'noindex',
+          key: 'meta-robots',
+        },
+      ],
+    });
   },
 };

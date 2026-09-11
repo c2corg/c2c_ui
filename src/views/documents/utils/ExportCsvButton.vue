@@ -7,10 +7,12 @@
 </template>
 
 <script>
+import eventBus from '@/js/event-bus';
+
 export default {
   methods: {
     exportCsv() {
-      this.$root.$emit('table-csv-export');
+      eventBus.emit('table-csv-export');
     },
   },
 };

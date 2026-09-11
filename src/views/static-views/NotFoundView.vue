@@ -22,7 +22,7 @@
         class="is-size-4 has-text-normal has-hover-background has-text-weight-bold"
       >
         <component :is="button.iconComponent || 'fa-icon'" :icon="button.icon" class="has-text-secondary is-size-1" />
-        <div>{{ button.text | uppercaseFirstLetter }}</div>
+        <div>{{ uppercaseFirstLetter(button.text) }}</div>
       </router-link>
     </div>
 

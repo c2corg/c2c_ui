@@ -153,7 +153,7 @@ export default {
     Yetix.$on('showFeature', this.showFeature);
     Yetix.$on('hideFeature', this.hideFeature);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.resizeObserver?.unobserve(this.$refs.graph);
   },
   methods: {

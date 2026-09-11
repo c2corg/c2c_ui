@@ -1,5 +1,5 @@
 <template>
-  <icon-layer :name="name" :color="color" :selector="layerSelector">
+  <icon-layer ref="iconLayer" :name="name" :color="color" :selector="layerSelector">
     <span v-translate>Nivose beacon</span>
     <template #overlay>
       <p class="overlay-title">

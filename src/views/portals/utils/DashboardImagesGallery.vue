@@ -3,7 +3,7 @@
     <h4 class="title is-3">
       <router-link to="images">
         <icon-image />
-        {{ $gettext('images') | uppercaseFirstLetter }}
+        {{ uppercaseFirstLetter($gettext('images')) }}
       </router-link>
     </h4>
     <div class="images-container">

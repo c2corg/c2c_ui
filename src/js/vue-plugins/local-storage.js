@@ -61,8 +61,14 @@ LocalStorage.prototype.getItem = function (key) {
 
 const localStorage = new LocalStorage();
 
-export default function install(Vue) {
-  Object.defineProperty(Vue.prototype, '$localStorage', {
+// Used by plugin store modules (gdpr, user, gettext-plugin) which are not real component
+// instances, so they can't rely on the `this.$options.name`-based $localStorage getter below.
+export function getNamedLocalStorageItem(name) {
+  return localStorage.getItem(`${name}.preferences`);
+}
+
+export default function install(app) {
+  Object.defineProperty(app.config.globalProperties, '$localStorage', {
     get() {
       if (!this.$options.name) {
         throw new Error('Please set name property of your componenent');

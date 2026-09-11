@@ -3,7 +3,7 @@
     <h4 class="title is-3">
       <router-link to="routes">
         <icon-route />
-        {{ $gettext('routes') | uppercaseFirstLetter }}
+        {{ uppercaseFirstLetter($gettext('routes')) }}
       </router-link>
     </h4>
     <loading-notification :promise="routesPromise" />

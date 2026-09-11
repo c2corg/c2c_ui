@@ -2,7 +2,7 @@
   <picture>
     <source v-if="avif" type="image/avif" :srcset="avif" />
     <source v-if="webp" type="image/webp" :srcset="webp" />
-    <img ref="img" v-bind="$attrs" v-on="$listeners" :src="standard" @error.once="onError" />
+    <img ref="img" v-bind="$attrs" :src="standard" @error.once="onError" />
   </picture>
 </template>
 

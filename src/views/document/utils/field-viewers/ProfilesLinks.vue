@@ -6,7 +6,7 @@
       :key="profile.document_id"
       :document="profile"
       class="user-link-label"
-      uppercase-first-letter
+      uppercase
     />
   </span>
 </template>

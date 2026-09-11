@@ -417,10 +417,13 @@ export default {
   async mounted() {
     // handle banner images
     // Load every image in the folder
-    const context = require.context('@/assets/img/itinevert/banner-img', false, /\.(png|jpe?g|webp|svg)$/);
+    const bannerModules = import.meta.glob('@/assets/img/itinevert/banner-img/*.{png,jpg,jpeg,webp,svg}', {
+      eager: true,
+      import: 'default',
+    });
 
     // Convert to array of resolved URLs
-    const banners = context.keys().map(context);
+    const banners = Object.values(bannerModules);
 
     if (banners.length) {
       const randomIndex = Math.floor(Math.random() * banners.length);

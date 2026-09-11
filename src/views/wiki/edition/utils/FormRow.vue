@@ -3,7 +3,7 @@
     <div class="field-label is-normal">
       <label class="label">
         <marker-helper :name="helper" />
-        {{ label | uppercaseFirstLetter }}
+        {{ uppercaseFirstLetter(label) }}
       </label>
     </div>
     <div class="field-body">
@@ -58,7 +58,7 @@ export default {
   },
 
   mounted() {
-    for (const child of this.$children) {
+    for (const child of this.getSlotChildren()) {
       child.$watch('visible', this.checkVisibility);
       child.$watch('hasError', this.checkHasError);
     }
@@ -68,10 +68,16 @@ export default {
   },
 
   methods: {
+    // Vue 3 removed $children; walk our own default slot's VNodes and keep the ones
+    // that resolved to a component instance (skips plain HTML elements, same as $children did).
+    getSlotChildren() {
+      return (this.$slots.default?.() ?? []).map((vnode) => vnode.component?.proxy).filter(Boolean);
+    },
+
     checkVisibility() {
       this.visible = this.alwaysVisible;
 
-      for (const child of this.$children) {
+      for (const child of this.getSlotChildren()) {
         if (child.visible) {
           this.visible = this.visible ?? true;
         }
@@ -80,7 +86,7 @@ export default {
     checkHasError() {
       this.hasError = false;
 
-      for (const child of this.$children) {
+      for (const child of this.getSlotChildren()) {
         if (child.hasError === true) {
           this.hasError = true;
         }

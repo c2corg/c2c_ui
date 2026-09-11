@@ -35,7 +35,7 @@
         :class="{ 'is-hidden-mobile': !hideSearchInput }"
       >
         <icon-help fixed-width />
-        <span class="is-hidden-mobile"> {{ $gettext('help') | uppercaseFirstLetter }} </span>
+        <span class="is-hidden-mobile"> {{ uppercaseFirstLetter($gettext('help')) }} </span>
       </router-link>
       <div ref="searchInputContainer">
         <input-document
@@ -46,7 +46,7 @@
           propose-creation
           show-more-results-link
           clear-input-on-toggle
-          @input="go"
+          @update:model-value="go"
         />
 
         <div class="navigation-item is-hidden-tablet" :class="{ 'is-hidden-mobile': !hideSearchInput }">
@@ -86,7 +86,7 @@
       <div class="navigation-item">
         <join-us-link class="has-text-centered button c2c-color" :class="{ 'is-hidden-mobile': !hideSearchInput }">
           <icon-join-us fixed-width />
-          <span class="is-hidden-mobile">{{ $gettext('Join us') | uppercaseFirstLetter }}</span>
+          <span class="is-hidden-mobile">{{ uppercaseFirstLetter($gettext('Join us')) }}</span>
         </join-us-link>
       </div>
 
@@ -100,11 +100,11 @@
             :key="documentType"
             :document-type="documentType"
             class="dropdown-item is-size-5 is-ellipsed"
-            @click.native="$refs.addDocumentMenu.isActive = false"
+            @click="$refs.addDocumentMenu.isActive = false"
           >
             <icon-document :document-type="documentType" fixed-width />
             <span>
-              {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
+              {{ uppercaseFirstLetter($documentUtils.getCreationTitle(documentType)) }}
             </span>
           </add-link>
         </dropdown-button>
@@ -135,7 +135,7 @@
             :key="item.text"
             :to="item.to"
             class="dropdown-item is-size-5"
-            @click.native="$refs.userMenu.isActive = false"
+            @click="$refs.userMenu.isActive = false"
           >
             <component :is="item.iconComponent || 'fa-icon'" :icon="item.icon" fixed-width />
             <span>
@@ -257,7 +257,7 @@ export default {
     window.addEventListener('click', this.onClick);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('click', this.onClick);
   },
 

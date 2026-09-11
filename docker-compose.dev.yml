@@ -1,0 +1,14 @@
+# Local dev environment with hot-module-reload, via the Vite dev server.
+# Usage: docker compose -f docker-compose.dev.yml up
+services:
+  c2c_ui:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dev
+    ports:
+      - '8080:8080'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - BUILD_ENV=local

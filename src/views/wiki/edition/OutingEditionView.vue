@@ -12,7 +12,7 @@
           :field="fields.date_start"
           :max="showBothDates ? document.date_end : currentDate"
           @input="handleDates"
-          @click.native="setCurrentDate"
+          @click="setCurrentDate"
         />
         <form-field
           class="is-narrow"
@@ -21,7 +21,7 @@
           :field="fields.date_end"
           :min="showBothDates ? document.date_start : undefined"
           :max="currentDate"
-          @click.native="setCurrentDate"
+          @click="setCurrentDate"
         />
         <div class="column is-narrow">
           <input-checkbox v-model="showBothDates">{{ $gettext('Several days?') }}</input-checkbox>
@@ -45,7 +45,7 @@
 
       <div class="field">
         <label class="label">
-          {{ $gettext('routes') | uppercaseFirstLetter }}:
+          {{ uppercaseFirstLetter($gettext('routes')) }}:
           <marker-helper name="1063027#routes" />
         </label>
         <div class="control">
@@ -55,7 +55,10 @@
 
       <div v-if="possibleRoutes && possibleRoutes.length !== 0" class="field">
         <div v-for="route of possibleRoutes" :key="route.document_id">
-          <input-checkbox :value="routeIsAssociated(route.document_id)" @input="changeRouteAssociation($event, route)">
+          <input-checkbox
+            :model-value="routeIsAssociated(route.document_id)"
+            @update:model-value="changeRouteAssociation($event, route)"
+          >
             <activities :activities="route.activities" class="is-size-4 has-text-secondary" />
             <document-title :document="route" />,
             <document-rating :document="route" />

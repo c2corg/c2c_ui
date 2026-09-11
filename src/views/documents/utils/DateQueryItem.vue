@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="control">
-      <label class="label">{{ $gettext('date_start') | uppercaseFirstLetter }}</label>
+      <label class="label">{{ uppercaseFirstLetter($gettext('date_start')) }}</label>
       <input class="input" type="date" v-model="value" />
     </div>
   </div>

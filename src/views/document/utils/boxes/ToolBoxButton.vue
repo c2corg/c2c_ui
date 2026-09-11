@@ -8,7 +8,7 @@
       </slot>
     </span>
     <span>
-      {{ label | uppercaseFirstLetter }}
+      {{ uppercaseFirstLetter(label) }}
     </span>
   </router-link>
   <component v-else :is="href ? 'a' : 'div'" @click="$emit('click')" :href="href" class="toolbox-button">
@@ -18,7 +18,7 @@
       </slot>
     </span>
     <span>
-      {{ label | uppercaseFirstLetter }}
+      {{ uppercaseFirstLetter(label) }}
     </span>
   </component>
 </template>

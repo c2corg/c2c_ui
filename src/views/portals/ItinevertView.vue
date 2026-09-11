@@ -61,7 +61,7 @@ export default {
       return this.wizardView === 'result' || this.wizardView === 'filter' || this.wizardView === 'loading';
     },
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('popstate', this.handlePopstate);
   },
   mounted() {

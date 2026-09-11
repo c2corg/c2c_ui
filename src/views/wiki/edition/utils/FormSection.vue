@@ -53,7 +53,7 @@ export default {
     this.style.type = 'text/css';
     document.getElementsByTagName('head')[0].appendChild(this.style);
 
-    for (const child of this.$children) {
+    for (const child of this.getSlotChildren()) {
       child.$watch('visible', this.checkVisibility);
       child.$watch('hasError', this.checkHasError);
     }
@@ -68,11 +68,17 @@ export default {
     }
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('keyup', this.onKeyup);
   },
 
   methods: {
+    // Vue 3 removed $children; walk our own default slot's VNodes and keep the ones
+    // that resolved to a component instance (skips plain HTML elements, same as $children did).
+    getSlotChildren() {
+      return (this.$slots.default?.() ?? []).map((vnode) => vnode.component?.proxy).filter(Boolean);
+    },
+
     toggleExpandedState() {
       const content = this.$refs.content;
       const className = `section-content-expanded${this._uid}`;
@@ -107,7 +113,7 @@ export default {
     checkVisibility() {
       this.visible = false;
 
-      for (const child of this.$children) {
+      for (const child of this.getSlotChildren()) {
         if (child.visible) {
           this.visible = true;
           return;
@@ -118,7 +124,7 @@ export default {
     checkHasError() {
       this.hasError = false;
 
-      for (const child of this.$children) {
+      for (const child of this.getSlotChildren()) {
         if (child.hasError === true) {
           this.hasError = true;
         }

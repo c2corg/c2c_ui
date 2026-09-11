@@ -6,7 +6,7 @@
     rel="nofollow"
   >
     <slot>
-      {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
+      {{ uppercaseFirstLetter($documentUtils.getCreationTitle(documentType)) }}
     </slot>
   </router-link>
 </template>

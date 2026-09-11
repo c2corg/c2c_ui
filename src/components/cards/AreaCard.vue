@@ -6,7 +6,7 @@
 
     <card-row>
       <span>
-        {{ $gettext(document.area_type, 'area_types') | uppercaseFirstLetter }}
+        {{ uppercaseFirstLetter($gettext(document.area_type, 'area_types')) }}
       </span>
     </card-row>
   </card-container>

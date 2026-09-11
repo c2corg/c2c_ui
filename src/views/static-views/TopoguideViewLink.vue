@@ -2,7 +2,7 @@
   <div class="topoguide-link-view">
     <router-link :to="to">
       <span class="is-size-2"><component :is="icon" /></span>
-      <span class="is-size-4">{{ label | uppercaseFirstLetter }}</span>
+      <span class="is-size-4">{{ uppercaseFirstLetter(label) }}</span>
     </router-link>
   </div>
 </template>

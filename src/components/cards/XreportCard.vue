@@ -1,7 +1,7 @@
 <template>
   <card-container :document="document" :target="target" :highlighted="highlighted">
     <card-title>
-      <document-title :document="document" uppercase-first-letter class="is-ellipsed" />
+      <document-title :document="document" uppercase class="is-ellipsed" />
     </card-title>
 
     <card-row>

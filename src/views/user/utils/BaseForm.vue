@@ -34,20 +34,19 @@ export default {
   },
 
   mounted() {
-    for (const child of this.$children) {
+    for (const child of this.getSlotChildren()) {
       this.inputs[child.name] = child;
-      child.$on('input', this.check);
+      child.$watch('modelValue', this.check);
     }
   },
 
-  // TODO test that
-  // destroyed() {
-  //   for (const child of this.$children) {
-  //     child.$off('input', this.check);
-  //   }
-  // },
-
   methods: {
+    // Vue 3 removed $children; walk our own default slot's VNodes and keep the ones
+    // that resolved to a component instance (skips plain HTML elements, same as $children did).
+    getSlotChildren() {
+      return (this.$slots.default?.() ?? []).map((vnode) => vnode.component?.proxy).filter(Boolean);
+    },
+
     cleanErrors() {
       this.serverMetaErrors = [];
 
@@ -80,7 +79,7 @@ export default {
     },
 
     check() {
-      for (const child of this.$children) {
+      for (const child of this.getSlotChildren()) {
         if (child.hasError) {
           this.hasError = true;
           return;

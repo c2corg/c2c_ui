@@ -1,7 +1,7 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
 
 import config from '@/js/config';
+import eventBus from '@/js/event-bus';
 import constants from '@/js/constants';
 import DocumentsView from '@/views//documents/DocumentsView';
 import AreaView from '@/views/document/AreaView';
@@ -145,59 +145,57 @@ addDocumentTypeView(constants.objectDefinitions.route, RouteView, RouteEditionVi
 addDocumentTypeView(constants.objectDefinitions.waypoint, WaypointView, WaypointEditionView);
 addDocumentTypeView(constants.objectDefinitions.xreport, XreportView, XreportEditionView);
 
-routes.push({ path: '*', name: '404', component: NotFoundView });
+routes.push({ path: '/:pathMatch(.*)*', name: '404', component: NotFoundView });
 
-Vue.use(Router);
+export default function createAppRouter(app) {
+  const router = createRouter({
+    routes,
+    history: config.routerMode === 'history' ? createWebHistory(config.publicPath) : createWebHashHistory(),
 
-const router = new Router({
-  routes,
-  mode: config.routerMode,
+    scrollBehavior(to, from, savedPosition) {
+      // https://router.vuejs.org/guide/advanced/scroll-behavior.html#scroll-behavior
+      // and
+      // https://github.com/vuejs/vue-router/blob/dev/examples/scroll-behavior/app.js
 
-  scrollBehavior(to, from, savedPosition) {
-    // https://router.vuejs.org/guide/advanced/scroll-behavior.html#scroll-behavior
-    // and
-    // https://github.com/vuejs/vue-router/blob/dev/examples/scroll-behavior/app.js
+      let position = {};
 
-    let position = {};
+      if (to.hash) {
+        // actually, scroll behavior is not fired at initial load
+        // so let document-view-mixin handle hash use case, as it's the
+        // only use case for a new-born tab
+        // See https://github.com/vuejs/vue-router/issues/2358
 
-    if (to.hash) {
-      // actually, scroll behavior is not fired at initial load
-      // so let document-view-mixin handle hash use case, as it's the
-      // only use case for a new-born tab
-      // See https://github.com/vuejs/vue-router/issues/2358
+        // when it will be fixed, remove scrollToHash function, and simply replace the return by this two lines :
 
-      // when it will be fixed, remove scrollToHash function, and simply replace the return by this two lines :
+        //   position.selector = to.hash;
+        //   position.offset = { y: 50 }; // navbar height
 
-      //   position.selector = to.hash;
-      //   position.offset = { y: 50 }; // navbar height
+        return false;
+      } else if (savedPosition) {
+        position = savedPosition;
+      } else {
+        // don't need to wait any data, scroll to top
+        return { x: 0, y: 0 };
+      }
 
-      return false;
-    } else if (savedPosition) {
-      position = savedPosition;
-    } else {
-      // don't need to wait any data, scroll to top
-      return { x: 0, y: 0 };
-    }
-
-    // we'll wait for trigger-scroll event
-    return new Promise((resolve) => {
-      // we add an once handler on the event
-      // view will trigger it once data are present
-      this.app.$root.$once('trigger-scroll', () => {
-        resolve(position);
+      // we'll wait for the trigger-scroll event
+      return new Promise((resolve) => {
+        // simulate a `once` handler: view will trigger it once data are present
+        const onTriggerScroll = () => {
+          eventBus.off('trigger-scroll', onTriggerScroll);
+          resolve(position);
+        };
+        eventBus.on('trigger-scroll', onTriggerScroll);
       });
-    });
-  },
-});
+    },
+  });
 
-// authentication guard
-router.beforeEach((to, from, next) => {
-  const vm = router.app;
-  if (to.matched.some((record) => record.meta.requiresAuth) && !vm.$user.isLogged) {
-    next({ name: 'auth', query: { redirect: to.fullPath } });
-  } else {
-    next();
-  }
-});
+  // authentication guard
+  router.beforeEach((to) => {
+    if (to.matched.some((record) => record.meta.requiresAuth) && !app.config.globalProperties.$user.isLogged) {
+      return { name: 'auth', query: { redirect: to.fullPath } };
+    }
+  });
 
-export default router;
+  return router;
+}

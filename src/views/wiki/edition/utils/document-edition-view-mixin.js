@@ -81,7 +81,7 @@ export default {
     window.addEventListener('beforeunload', this.beforeUnload);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('beforeunload', this.beforeUnload);
   },
 

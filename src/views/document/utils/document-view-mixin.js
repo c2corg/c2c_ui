@@ -17,9 +17,12 @@ import LabelValue from './field-viewers/LabelValue';
 import MarkdownSection from './field-viewers/MarkdownSection';
 import ProfilesLinks from './field-viewers/ProfilesLinks';
 
+import { useHead } from '@unhead/vue';
+
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import cooker from '@/js/cooker';
+import eventBus from '@/js/event-bus';
 import { getImageUrl } from '@/js/image-urls';
 import isEditableMixin from '@/js/is-editable-mixin';
 import utils from '@/js/utils';
@@ -63,42 +66,38 @@ export default {
     };
   },
 
-  head: {
-    script: function () {
-      if (!this.document) {
-        return null;
-      }
-      const jsonLd = this.documentType === 'image' ? this.imageJsonLd() : this.documentJsonLd();
-      return [
-        {
-          type: 'application/ld+json',
-          id: 'json-ld',
-          inner: JSON.stringify(jsonLd),
-        },
-      ];
-    },
-    meta: function () {
-      const result = [
-        {
-          name: 'robots',
-          content: 'index',
-          id: 'meta-robots',
-        },
-      ];
+  created() {
+    useHead({
+      script: () => {
+        if (!this.document) {
+          return [];
+        }
+        const jsonLd = this.documentType === 'image' ? this.imageJsonLd() : this.documentJsonLd();
+        return [
+          {
+            type: 'application/ld+json',
+            key: 'json-ld',
+            innerHTML: JSON.stringify(jsonLd),
+          },
+        ];
+      },
+      meta: () => {
+        const result = [
+          {
+            name: 'robots',
+            content: this.isVersionView ? 'noindex' : 'index',
+            key: 'meta-robots',
+          },
+        ];
 
-      if (this.isVersionView) {
-        result[0]['content'] = 'noindex';
-      }
+        if (!this.document) {
+          return result;
+        }
 
-      if (!this.document) {
-        return result;
-      }
-
-      return [...result, ...this.documentOpenGraph()];
-    },
-    link: function () {
-      return [{ rel: 'canonical', href: `https://www.camptocamp.org${this.getCurrentPath()}`, id: 'canonical' }];
-    },
+        return [...result, ...this.documentOpenGraph()];
+      },
+      link: () => [{ rel: 'canonical', href: `https://www.camptocamp.org${this.getCurrentPath()}`, key: 'canonical' }],
+    });
   },
 
   computed: {
@@ -192,7 +191,6 @@ export default {
                 },
               };
             }
-            this.$emit('updateHead');
           });
       } else if (this.isDraftView || this.isPrintingView) {
         this.promise = {};
@@ -218,9 +216,7 @@ export default {
           .getCooked(this.documentId, this.expected_lang)
           .then(this.handleRedirection)
           .then(() => {
-            this.$root.$emit('trigger-scroll');
-            // notify vue-head plugin to update
-            this.$emit('updateHead');
+            eventBus.emit('trigger-scroll');
           })
           .then(this.scrollToHash)
           .then(this.updateUrl);
@@ -324,23 +320,31 @@ export default {
     documentOpenGraph() {
       const title = this.$documentUtils.getDocumentTitle(this.document, this.lang);
       let meta = [
-        { p: 'og:title', c: title, id: 'meta-og-title' },
-        { p: 'og:type', c: this.documentType === 'article' ? 'article' : 'website', id: 'meta-og-type' },
-        { p: 'og:url', c: `https://www.camptocamp.org/${this.documentType}s/${this.documentId}`, id: 'meta-og-url' },
-        { p: 'og:locale', c: this.$language.getIsoLanguageTerritory(this.lang), id: 'meta-og-locale' },
+        { property: 'og:title', content: title, key: 'meta-og-title' },
+        {
+          property: 'og:type',
+          content: this.documentType === 'article' ? 'article' : 'website',
+          key: 'meta-og-type',
+        },
+        {
+          property: 'og:url',
+          content: `https://www.camptocamp.org/${this.documentType}s/${this.documentId}`,
+          key: 'meta-og-url',
+        },
+        { property: 'og:locale', content: this.$language.getIsoLanguageTerritory(this.lang), key: 'meta-og-locale' },
       ];
       const locale = this.$documentUtils.getLocaleSmart(this.document, this.lang);
       if (locale?.summary || locale?.description) {
         const description = utils.stripMarkdown(locale?.summary || locale?.description).substring(0, 200);
         meta = [
           ...meta,
-          { p: 'og:description', c: description, id: 'meta-og-description' },
-          { n: 'description', c: description, id: 'meta-description' },
+          { property: 'og:description', content: description, key: 'meta-og-description' },
+          { name: 'description', content: description, key: 'meta-description' },
         ];
       }
       if (this.document.associations?.images?.length) {
         const image = this.document.associations.images[0];
-        meta = [...meta, { p: 'og:image', c: getImageUrl(image, 'BI'), id: 'meta-og-image' }];
+        meta = [...meta, { property: 'og:image', content: getImageUrl(image, 'BI'), key: 'meta-og-image' }];
       }
       return meta;
     },

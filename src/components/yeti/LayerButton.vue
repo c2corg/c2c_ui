@@ -51,7 +51,7 @@ export default {
       type: String,
       default: null,
     },
-    value: {
+    modelValue: {
       type: [Boolean, Object],
       default: null,
     },
@@ -75,10 +75,10 @@ export default {
   computed: {
     _value: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
       set(value) {
-        this.$emit('input', value);
+        this.$emit('update:modelValue', value);
       },
     },
     backgroundImage() {

@@ -1,5 +1,5 @@
 <template>
-  <icon-layer :name="name" :color="color" :selector="layerSelector" @add-features="onFeatures">
+  <icon-layer ref="iconLayer" :name="name" :color="color" :selector="layerSelector" @add-features="onFeatures">
     <span v-translate>Data-Avalanche</span>
     <template #overlay>
       <div class="data-avalanche-content">

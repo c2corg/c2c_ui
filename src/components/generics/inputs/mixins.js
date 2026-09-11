@@ -33,14 +33,14 @@ export const baseMixin = {
   computed: {
     value_: {
       get() {
-        return this.type !== 'number' || this.divisor === undefined || !this.value
-          ? this.value
-          : this.value / this.divisor;
+        return this.type !== 'number' || this.divisor === undefined || !this.modelValue
+          ? this.modelValue
+          : this.modelValue / this.divisor;
       },
       set(value) {
         if (!this.disabled) {
           value = this.type !== 'number' || this.divisor === undefined || !value ? value : value * this.divisor;
-          this.$emit('input', value);
+          this.$emit('update:modelValue', value);
         }
       },
     },
@@ -49,7 +49,7 @@ export const baseMixin = {
 
 export const arrayMixin = {
   props: {
-    value: {
+    modelValue: {
       type: Array,
       default: null,
     },
@@ -58,11 +58,11 @@ export const arrayMixin = {
   computed: {
     value_: {
       get() {
-        return this.value ? this.value : [];
+        return this.modelValue ? this.modelValue : [];
       },
       set(value) {
         if (!this.disabled) {
-          this.$emit('input', value);
+          this.$emit('update:modelValue', value);
         }
       },
     },

@@ -7,7 +7,7 @@
       class="multi-select-item has-cursor-pointer"
       :checked="value_.includes(option)"
     >
-      {{ (i18n ? $gettext(option, i18nContext) : option) | uppercaseFirstLetter }}
+      {{ uppercaseFirstLetter(i18n ? $gettext(option, i18nContext) : option) }}
     </span>
   </div>
 </template>

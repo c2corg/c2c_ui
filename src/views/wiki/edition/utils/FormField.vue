@@ -3,12 +3,12 @@
     <div class="field">
       <label class="label">
         <marker-helper :name="helper || field.helper" />
-        {{ label || fieldLabel | uppercaseFirstLetter }}
+        {{ uppercaseFirstLetter(label || fieldLabel) }}
         <span v-if="hasError" class="has-text-danger">
           <!-- $gettext('required field') -->
           <!-- $gettext('This field is too short') -->
           <!-- $gettext('This field is too long') -->
-          {{ errorMessage | uppercaseFirstLetter }}
+          {{ uppercaseFirstLetter(errorMessage) }}
         </span>
       </label>
       <form-input

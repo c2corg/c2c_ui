@@ -8,7 +8,7 @@
     </card-row>
 
     <card-row v-if="locale?.summary">
-      <p class="is-max-3-lines-height">{{ locale.summary | stripMarkdown | max300chars }}</p>
+      <p class="is-max-3-lines-height">{{ max300chars(stripMarkdown(locale.summary)) }}</p>
     </card-row>
 
     <card-row v-if="images.length">
@@ -53,7 +53,7 @@
 
       <span v-if="item.document.waypoint_type">
         <icon-waypoint-type :waypoint-type="item.document.waypoint_type" />
-        <span>{{ $gettext(item.document.waypoint_type, 'waypoint_types') | uppercaseFirstLetter }}</span>
+        <span>{{ uppercaseFirstLetter($gettext(item.document.waypoint_type, 'waypoint_types')) }}</span>
       </span>
     </card-row>
 
@@ -86,10 +86,6 @@ import forum from '@/js/apis/forum';
 export default {
   components: {
     Gallery,
-  },
-
-  filters: {
-    max300chars: (value) => (value.length > 300 ? value.substring(0, 300) + '…' : value),
   },
 
   mixins: [cardMixin],
@@ -162,6 +158,12 @@ export default {
     if (this.item.image3) {
       this.images.push(this.item.image3);
     }
+  },
+
+  methods: {
+    max300chars(value) {
+      return value.length > 300 ? value.substring(0, 300) + '…' : value;
+    },
   },
 };
 </script>

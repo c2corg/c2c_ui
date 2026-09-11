@@ -87,7 +87,7 @@
         <div class="column is-12">
           <div class="serac-block">
             <h2 class="title is-2 has-text-light has-text-centered">
-              {{ $gettext('xreports') | uppercaseFirstLetter }}
+              {{ uppercaseFirstLetter($gettext('xreports')) }}
             </h2>
             <div class="columns is-multiline is-mobile serac-activities">
               <topoguide-view-small-link
@@ -98,7 +98,7 @@
               >
                 <span class="is-size-1"><icon-event-activity :event-activity="eventActivity" /></span>
                 <span class="has-text-weight-semibold">
-                  {{ $gettext(eventActivity, 'event_activities') | uppercaseFirstLetter }}
+                  {{ uppercaseFirstLetter($gettext(eventActivity, 'event_activities')) }}
                 </span>
               </topoguide-view-small-link>
             </div>

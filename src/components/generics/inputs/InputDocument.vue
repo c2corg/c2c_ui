@@ -20,7 +20,7 @@
         <div v-for="type of documentTypesWithResults" :key="type">
           <div v-if="documentTypes_.length > 1" class="dropdown-item has-text-weight-bold is-size-5">
             <!-- if several type are requested, add an header -->
-            {{ $gettext(type + 's') | uppercaseFirstLetter }}
+            {{ uppercaseFirstLetter($gettext(type + 's')) }}
           </div>
           <div
             v-for="document of promise.data[type + 's'].documents"
@@ -48,7 +48,7 @@
               </span>
               <span v-if="document.forum_username" class="is-italic"> @{{ document.forum_username }} </span>
               <span v-if="document.area_type" class="is-italic">
-                {{ $gettext(document.area_type, 'area_types') | uppercaseFirstLetter }}
+                {{ uppercaseFirstLetter($gettext(document.area_type, 'area_types')) }}
               </span>
 
               &nbsp;
@@ -65,7 +65,7 @@
             v-if="showMoreResultsLink"
             :to="{ name: type + 's', query: { q: searchText } }"
             class="dropdown-item is-italic has-text-centered"
-            @click.native="closeDropdown"
+            @click="closeDropdown"
             v-translate
           >
             See more results
@@ -102,7 +102,7 @@ export default {
   mixins: [baseMixin, arrayMixin],
 
   props: {
-    value: {
+    modelValue: {
       type: [Array, Object],
       default: null,
     },
@@ -146,11 +146,11 @@ export default {
   computed: {
     value_: {
       get() {
-        return this.multiple ? (this.value ? this.value : []) : this.value;
+        return this.multiple ? (this.modelValue ? this.modelValue : []) : this.modelValue;
       },
       set(value) {
         if (!this.disabled) {
-          this.$emit('input', value);
+          this.$emit('update:modelValue', value);
         }
       },
     },
@@ -174,7 +174,7 @@ export default {
     window.addEventListener('click', this.onWindowClick);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('click', this.onWindowClick);
   },
 
@@ -222,7 +222,7 @@ export default {
       if (this.multiple) {
         return this.$documentUtils.isInArray(this.value_, value);
       } else {
-        return this.value ? this.value.document_id === value.document_id : false;
+        return this.modelValue ? this.modelValue.document_id === value.document_id : false;
       }
     },
 

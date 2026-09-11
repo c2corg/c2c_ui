@@ -10,7 +10,7 @@
         </span>
         <span v-else>
           <html-header :title="$documentUtils.getCreationTitle(documentType)" />
-          {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
+          {{ uppercaseFirstLetter($documentUtils.getCreationTitle(documentType)) }}
           <span>
             <dropdown-button>
               <span slot="button" class="button">

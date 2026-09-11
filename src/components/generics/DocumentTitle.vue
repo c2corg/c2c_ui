@@ -1,6 +1,6 @@
 <template>
   <span>
-    <span v-if="uppercaseFirstLetter">{{ title | uppercaseFirstLetter }}</span>
+    <span v-if="uppercase">{{ uppercaseFirstLetter(title) }}</span>
     <span v-else>{{ title }}</span>
   </span>
 </template>
@@ -12,7 +12,7 @@ export default {
   mixins: [requireDocumentProperty],
 
   props: {
-    uppercaseFirstLetter: {
+    uppercase: {
       type: Boolean,
       default: false,
     },

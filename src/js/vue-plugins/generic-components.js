@@ -1,27 +1,26 @@
 // This module will add components available everywhere
 
-export default function install(Vue) {
-  // add all vue component as globals components, given en require context
-  const addComponents = function (context) {
-    context.keys().forEach((key) => {
-      const component = context(key);
-      let name = key.split('/').slice(-1)[0];
+import DocumentCard from '@/components/cards/DocumentCard';
+import MapView from '@/components/map/OlMap';
 
-      // kebab-case-ification, assuming that all module names are in PascalCase
-      name = name
-        .replace('.vue', '')
-        .replace(/([A-Z])/g, '-$1')
-        .toLowerCase()
-        .substring(1);
+const genericComponents = import.meta.glob('@/components/generics/**/*.vue', { eager: true });
 
-      Vue.component(name, component.default);
-    });
-  };
+export default function install(app) {
+  // add all components in /generics as globals components
+  Object.entries(genericComponents).forEach(([path, module]) => {
+    let name = path.split('/').slice(-1)[0];
 
-  // add all components in /utils
-  addComponents(require.context('@/components/generics', true, /\.vue$/));
+    // kebab-case-ification, assuming that all module names are in PascalCase
+    name = name
+      .replace('.vue', '')
+      .replace(/([A-Z])/g, '-$1')
+      .toLowerCase()
+      .substring(1);
+
+    app.component(name, module.default);
+  });
 
   // other globals components
-  Vue.component('DocumentCard', require('@/components/cards/DocumentCard').default);
-  Vue.component('MapView', require('@/components/map/OlMap').default);
+  app.component('DocumentCard', DocumentCard);
+  app.component('MapView', MapView);
 }

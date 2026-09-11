@@ -4,17 +4,17 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="<%= BASE_URL %>favicon-32x32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="<%= BASE_URL %>favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="%BASE_URL%favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="%BASE_URL%favicon-16x16.png" sizes="16x16" />
     <title>Camptocamp.org</title>
 
     <meta name="theme-color" content="#F93" />
     <meta name="application-name" content="Camptocamp.org" />
-    <link rel="preconnect" href="<%= CAMPTOCAMP_CONFIG.urls.api %>" />
-    <link rel="preconnect" href="<%= CAMPTOCAMP_CONFIG.urls.media %>" />
+    <link rel="preconnect" href="%CAMPTOCAMP_API_URL%" />
+    <link rel="preconnect" href="%CAMPTOCAMP_MEDIA_URL%" />
     <meta property="fb:pages" content="175865161596" />
     <meta property="og:sitename" content="Camptocamp.org" />
-    <link rel="stylesheet" href="<%= BASE_URL %>swiper.css" />
+    <link rel="stylesheet" href="%BASE_URL%swiper.css" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -45,6 +45,6 @@
       </svg>
     </div>
     <div id="app"></div>
-    <!-- built files will be auto injected -->
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>

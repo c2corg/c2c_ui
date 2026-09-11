@@ -95,7 +95,7 @@
         </div>
 
         <div v-for="key of Object.keys(diffProperties)" :key="key">
-          <h2 class="title is-2 has-text-centered">{{ $gettext(key) | uppercaseFirstLetter }}</h2>
+          <h2 class="title is-2 has-text-centered">{{ uppercaseFirstLetter($gettext(key)) }}</h2>
           <div class="columns">
             <div class="column is-6">
               <del v-if="diffProperties[key].old === null" class="is-pulled-right is-italic">null</del>

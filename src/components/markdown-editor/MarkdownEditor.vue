@@ -200,7 +200,7 @@ export default {
   },
 
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: '',
     },
@@ -232,21 +232,21 @@ export default {
 
   watch: {
     preview: 'computePreview',
-    value: 'updateValue',
+    modelValue: 'updateValue',
   },
 
   mounted() {
-    this.$refs.textarea.value = this.value;
+    this.$refs.textarea.value = this.modelValue;
     this.selection = new Selection(this.$refs.textarea, this.onInput);
   },
 
   methods: {
     onInput() {
-      this.$emit('input', this.$refs.textarea.value);
+      this.$emit('update:modelValue', this.$refs.textarea.value);
     },
 
     updateValue() {
-      this.$refs.textarea.value = this.value;
+      this.$refs.textarea.value = this.modelValue;
     },
 
     computePreview() {
@@ -254,7 +254,7 @@ export default {
         return;
       }
 
-      this.cookerPromise = cooker.cook({ value: this.value });
+      this.cookerPromise = cooker.cook({ value: this.modelValue });
     },
 
     handleSimpleMarkdownTag(tag, defaultChunk) {

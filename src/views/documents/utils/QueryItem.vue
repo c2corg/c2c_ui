@@ -20,7 +20,7 @@
 
     <div v-else-if="field.queryMode === 'multiSelect'" class="control">
       <label class="label">
-        {{ $gettext(field.name) | uppercaseFirstLetter }}
+        {{ uppercaseFirstLetter($gettext(field.name)) }}
       </label>
 
       <multiselect
@@ -39,7 +39,7 @@
 
     <div v-else-if="field.queryMode === 'input'" class="control">
       <label class="label" v-if="!hideLabel">
-        {{ $gettext(field.name) | uppercaseFirstLetter }}
+        {{ uppercaseFirstLetter($gettext(field.name)) }}
       </label>
       <input
         ref="input"
@@ -53,7 +53,7 @@
 
     <div v-else-if="field.queryMode === 'tristate'" class="control">
       <label class="label">
-        {{ $gettext(field.name) | uppercaseFirstLetter }}
+        {{ uppercaseFirstLetter($gettext(field.name)) }}
       </label>
 
       <multiselect

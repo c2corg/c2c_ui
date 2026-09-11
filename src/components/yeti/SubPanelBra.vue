@@ -64,8 +64,8 @@
 
         <div>
           <input-checkbox
-            @input="onChange($event, 'isDifferent')"
-            :value="bra.isDifferent"
+            @update:model-value="onChange($event, 'isDifferent')"
+            :model-value="bra.isDifferent"
             class="control--bradifferent"
           >
             <span v-translate>Different high/low danger?</span>
@@ -86,7 +86,7 @@
       <template #content>
         <div v-if="showVisibleMountains">
           <div class="mb-2">
-            <input-checkbox @input="onShowAvalancheBulletins" :value="showAvalancheBulletins">
+            <input-checkbox @update:model-value="onShowAvalancheBulletins" :model-value="showAvalancheBulletins">
               <span v-translate>Visible on map</span>
             </input-checkbox>
           </div>

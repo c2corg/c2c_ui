@@ -28,7 +28,7 @@
 <script>
 export default {
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: null,
     },
@@ -48,7 +48,7 @@ export default {
   },
 
   created() {
-    const levels = this.value ? JSON.parse(this.value) : [];
+    const levels = this.modelValue ? JSON.parse(this.modelValue) : [];
 
     for (const level of levels) {
       if (this.isLevelFilled(level)) {
@@ -63,7 +63,7 @@ export default {
       if (this.isLevelFilled(this.levels[this.levels.length - 1])) {
         this.levels.push({});
       }
-      this.$emit('input', JSON.stringify(this.levels.filter((level) => this.isLevelFilled(level))));
+      this.$emit('update:modelValue', JSON.stringify(this.levels.filter((level) => this.isLevelFilled(level))));
     },
 
     isLevelFilled(level) {

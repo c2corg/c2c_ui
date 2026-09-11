@@ -13,7 +13,7 @@
         <accordion-item>
           <h3 slot="title" class="title is-3">
             <icon-activity :activity="activity" />
-            {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
+            {{ uppercaseFirstLetter($gettext(activity, 'activities')) }}
           </h3>
           <div slot="content" v-for="(route, i) of routes[activity]" :key="i">
             <pretty-route-link :route="route" hide-activities hide-area />

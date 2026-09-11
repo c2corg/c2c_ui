@@ -3,7 +3,7 @@
     <div class="field">
       <label class="label">
         <span>
-          {{ $gettext('quality') | uppercaseFirstLetter }}
+          {{ uppercaseFirstLetter($gettext('quality')) }}
         </span>
         &nbsp;
         <span v-if="!isCollaborative" @click="autoComputeQuality = !autoComputeQuality">

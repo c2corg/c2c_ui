@@ -1,7 +1,15 @@
-export default function install(Vue) {
-  Object.defineProperty(Vue.prototype, '$imageViewer', {
+// Vue 3 removed `$root.$children` — main.js calls setRootVm() with the mounted
+// root instance so this getter can keep reaching App.vue's `ref="imageViewer"`.
+let rootVm = null;
+
+export function setRootVm(vm) {
+  rootVm = vm;
+}
+
+export default function install(app) {
+  Object.defineProperty(app.config.globalProperties, '$imageViewer', {
     get() {
-      return this.$root.$children[0].$refs.imageViewer;
+      return rootVm.$refs.imageViewer;
     },
   });
 }

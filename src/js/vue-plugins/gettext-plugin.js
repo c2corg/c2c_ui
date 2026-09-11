@@ -1,3 +1,6 @@
+import { reactive } from 'vue';
+
+import { getNamedLocalStorageItem } from '@/js/vue-plugins/local-storage';
 import french_translations from '@/translations/fr.json';
 
 /** @typedef {'ca' | 'es' | 'eu' | 'de' | 'fr' | 'hu' | 'it' | 'sl' | 'zh_CN' | 'en'} Lang */
@@ -72,233 +75,224 @@ function getMessages(lang) {
     // and lazy load the others
     return french_translations;
   } else if (lang === 'en') {
-    return import(/* webpackChunkName: "translations-en" */ `@/translations/en.json`);
+    return import(`@/translations/en.json`);
   } else if (lang === 'ca') {
-    return import(/* webpackChunkName: "translations-ca" */ `@/translations/ca.json`);
+    return import(`@/translations/ca.json`);
   } else if (lang === 'eu') {
-    return import(/* webpackChunkName: "translations-eu" */ `@/translations/eu.json`);
+    return import(`@/translations/eu.json`);
   } else if (lang === 'it') {
-    return import(/* webpackChunkName: "translations-it" */ `@/translations/it.json`);
+    return import(`@/translations/it.json`);
   } else if (lang === 'de') {
-    return import(/* webpackChunkName: "translations-de" */ `@/translations/de.json`);
+    return import(`@/translations/de.json`);
   } else if (lang === 'es') {
-    return import(/* webpackChunkName: "translations-es" */ `@/translations/es.json`);
+    return import(`@/translations/es.json`);
   } else if (lang === 'hu') {
-    return import(/* webpackChunkName: "translations-hu" */ `@/translations/hu.json`);
+    return import(`@/translations/hu.json`);
   } else if (lang === 'zh_CN') {
-    return import(/* webpackChunkName: "translations-zh" */ `@/translations/zh_CN.json`);
+    return import(`@/translations/zh_CN.json`);
   } else if (lang === 'sl') {
-    return import(/* webpackChunkName: "translations-sl" */ `@/translations/sl.json`);
+    return import(`@/translations/sl.json`);
   }
 
   throw new Error(`Unsuported language : ${lang}`);
 }
 
-export default function install(Vue) {
-  const languageVm = new Vue({
-    name: 'Language',
+export default function install(app) {
+  // cross-plugin globals are looked up lazily (not captured at install time),
+  // because plugin install order matters (this plugin is installed before the user one).
+  const globals = app.config.globalProperties;
+  const storage = getNamedLocalStorageItem('Language');
 
-    data: {
-      current: null,
+  const language = reactive({
+    current: storage.get('current', 'fr'),
+
+    availableUI: {
+      fr: 'Français',
+      it: 'Italiano',
+      de: 'Deutsch',
+      en: 'English',
+      es: 'Español',
+      ca: 'Català',
+      eu: 'Euskara',
+      hu: 'Magyar',
+      zh_CN: '简体中文',
+      sl: 'Slovenščina',
     },
 
-    created() {
-      // Non-reactive data.
-      this.availableUI = {
-        fr: 'Français',
-        it: 'Italiano',
-        de: 'Deutsch',
-        en: 'English',
-        es: 'Español',
-        ca: 'Català',
-        eu: 'Euskara',
-        hu: 'Magyar',
-        zh_CN: '简体中文',
-        sl: 'Slovenščina',
-      };
-
-      this.availableAPI = {
-        fr: 'Français',
-        it: 'Italiano',
-        de: 'Deutsch',
-        en: 'English',
-        es: 'Español',
-        ca: 'Català',
-        eu: 'Euskara',
-        zh: '简体中文',
-        sl: 'Slovenščina',
-      };
-
-      this.translations = {};
-      this.current = this.$localStorage.get('current', 'fr');
+    availableAPI: {
+      fr: 'Français',
+      it: 'Italiano',
+      de: 'Deutsch',
+      en: 'English',
+      es: 'Español',
+      ca: 'Català',
+      eu: 'Euskara',
+      zh: '简体中文',
+      sl: 'Slovenščina',
     },
 
-    methods: {
-      firstLoad() {
-        const lang = this.current;
-
-        this._getMessages(this.current).then(() => {
-          // dirty : simulate lang update to fire the update of page on load
-          this.current = null;
-          this.current = lang;
-          // set html lang attribute
-          document.documentElement.setAttribute('lang', lang);
-        });
-      },
-
-      /** @param {Lang} lang */
-      setCurrent(lang) {
-        // save in locale storage
-        this.$localStorage.set('current', lang);
-
-        // if user is logged, we need to save in db his preference
-        this.$user.saveLangPreference(lang);
-
-        // then, we must defer lang setter
-        // because we may need to lazy load data
-        this._getMessages(lang).then(() => {
-          this.current = lang;
-          // set html lang attribute
-          document.documentElement.setAttribute('lang', this.getIANALanguageSubtag(lang));
-        });
-      },
-
-      _getMessages(lang) {
-        // TODO : normally, webpack should handle this
-        if (this.translations[lang] !== undefined) {
-          return new Promise((resolve) => {
-            resolve(this.translations[lang]);
-          });
-        }
-
-        const messages = getMessages(lang);
-
-        return new Promise((resolve) => {
-          if (messages.then) {
-            // messages is a promise
-            messages.then((translations) => {
-              this.translations[lang] = translations[lang];
-              resolve(translations[lang]);
-            });
-          } else {
-            this.translations[lang] = messages[lang];
-            resolve(messages[lang]);
-          }
-        });
-      },
-
-      /**
-       * @param {string} msgid
-       * @param {string} msgctxt
-       * @returns {string}
-       */
-      gettext(msgid, msgctxt) {
-        return getTranslation(this.translations[this.current], msgid, msgctxt)
-          .replace(/&quot;/g, '"')
-          .replace(/&#x5C;/gi, '\\');
-      },
-
-      /**
-       * @param {Lang} lang
-       * @returns {string}
-       */
-      getIANALanguageSubtag(lang) {
-        switch (lang) {
-          case 'fr':
-          case 'en':
-          case 'ca':
-          case 'eu':
-          case 'it':
-          case 'de':
-          case 'es':
-          case 'zh':
-          case 'hu':
-          case 'sl':
-            return lang;
-          case 'zh_CN':
-            return 'zh';
-          default:
-            // eslint-disable-next-line no-console
-            console.error(`Unexpected language: ${lang}`);
-            return lang;
-        }
-      },
-
-      /**
-       * @param {Lang} lang
-       * @returns {string}
-       */
-      getIsoLanguageTerritory(lang) {
-        switch (lang) {
-          case 'fr':
-            return 'fr_FR';
-          case 'en':
-            return 'en_UK';
-          case 'ca':
-            return 'ca_ES';
-          case 'eu':
-            return 'eu_ES';
-          case 'it':
-            return 'it_IT';
-          case 'de':
-            return 'de_DE';
-          case 'es':
-            return 'es_ES';
-          case 'hu':
-            return 'hu_HU';
-          case 'zh':
-          case 'zh_CN':
-            return 'zh_CN';
-          case 'sl':
-            return 'sl_SI';
-          default:
-            // eslint-disable-next-line no-console
-            console.error(`Unexpected language: ${lang}`);
-            return lang;
-        }
-      },
-
-      /** @param {HTMLElement} element */
-      updateElement(element) {
-        if (element.dataset.msgid === undefined) {
-          if (element.childNodes.length > 1 || element.firstChild.nodeType !== TEXT_NODE) {
-            // eslint-disable-next-line
-            console.error('v-translate must contains only text', element.childNodes);
-            return;
-          }
-
-          element.dataset.msgid = cleanMessageId(element.innerText);
-
-          const context = element.attributes.getNamedItem('translate-context');
-          if (context) {
-            element.dataset.msgctxt = context.value;
-          }
-        }
-
-        element.innerText = this.gettext(element.dataset.msgid, element.dataset.msgctxt);
-      },
-    },
+    translations: {},
   });
+
+  language.firstLoad = function () {
+    const lang = language.current;
+
+    language._getMessages(language.current).then(() => {
+      // dirty : simulate lang update to fire the update of page on load
+      language.current = null;
+      language.current = lang;
+      // set html lang attribute
+      document.documentElement.setAttribute('lang', lang);
+    });
+  };
+
+  /** @param {Lang} lang */
+  language.setCurrent = function (lang) {
+    // save in locale storage
+    storage.set('current', lang);
+
+    // if user is logged, we need to save in db his preference
+    globals.$user.saveLangPreference(lang);
+
+    // then, we must defer lang setter
+    // because we may need to lazy load data
+    language._getMessages(lang).then(() => {
+      language.current = lang;
+      // set html lang attribute
+      document.documentElement.setAttribute('lang', language.getIANALanguageSubtag(lang));
+    });
+  };
+
+  language._getMessages = function (lang) {
+    if (language.translations[lang] !== undefined) {
+      return new Promise((resolve) => {
+        resolve(language.translations[lang]);
+      });
+    }
+
+    const messages = getMessages(lang);
+
+    return new Promise((resolve) => {
+      if (messages.then) {
+        // messages is a promise
+        messages.then((translations) => {
+          language.translations[lang] = translations[lang];
+          resolve(translations[lang]);
+        });
+      } else {
+        language.translations[lang] = messages[lang];
+        resolve(messages[lang]);
+      }
+    });
+  };
+
+  /**
+   * @param {string} msgid
+   * @param {string} msgctxt
+   * @returns {string}
+   */
+  language.gettext = function (msgid, msgctxt) {
+    return getTranslation(language.translations[language.current], msgid, msgctxt)
+      .replace(/&quot;/g, '"')
+      .replace(/&#x5C;/gi, '\\');
+  };
+
+  /**
+   * @param {Lang} lang
+   * @returns {string}
+   */
+  language.getIANALanguageSubtag = function (lang) {
+    switch (lang) {
+      case 'fr':
+      case 'en':
+      case 'ca':
+      case 'eu':
+      case 'it':
+      case 'de':
+      case 'es':
+      case 'zh':
+      case 'hu':
+      case 'sl':
+        return lang;
+      case 'zh_CN':
+        return 'zh';
+      default:
+        // eslint-disable-next-line no-console
+        console.error(`Unexpected language: ${lang}`);
+        return lang;
+    }
+  };
+
+  /**
+   * @param {Lang} lang
+   * @returns {string}
+   */
+  language.getIsoLanguageTerritory = function (lang) {
+    switch (lang) {
+      case 'fr':
+        return 'fr_FR';
+      case 'en':
+        return 'en_UK';
+      case 'ca':
+        return 'ca_ES';
+      case 'eu':
+        return 'eu_ES';
+      case 'it':
+        return 'it_IT';
+      case 'de':
+        return 'de_DE';
+      case 'es':
+        return 'es_ES';
+      case 'hu':
+        return 'hu_HU';
+      case 'zh':
+      case 'zh_CN':
+        return 'zh_CN';
+      case 'sl':
+        return 'sl_SI';
+      default:
+        // eslint-disable-next-line no-console
+        console.error(`Unexpected language: ${lang}`);
+        return lang;
+    }
+  };
+
+  /** @param {HTMLElement} element */
+  language.updateElement = function (element) {
+    if (element.dataset.msgid === undefined) {
+      if (element.childNodes.length > 1 || element.firstChild.nodeType !== TEXT_NODE) {
+        // eslint-disable-next-line
+        console.error('v-translate must contains only text', element.childNodes);
+        return;
+      }
+
+      element.dataset.msgid = cleanMessageId(element.innerText);
+
+      const context = element.attributes.getNamedItem('translate-context');
+      if (context) {
+        element.dataset.msgctxt = context.value;
+      }
+    }
+
+    element.innerText = language.gettext(element.dataset.msgid, element.dataset.msgctxt);
+  };
 
   // An option to support translation with HTML content: `v-translate`.
-  Vue.directive('translate', {
+  app.directive('translate', {
     /** @param {HTMLElement} el */
-    bind(el) {
-      // console.log("bind", el)
-      languageVm.updateElement(el);
+    beforeMount(el) {
+      language.updateElement(el);
     },
     /** @param {HTMLElement} el */
-    inserted(el) {
-      // console.log("inserted", el)
-      languageVm.updateElement(el);
+    mounted(el) {
+      language.updateElement(el);
     },
     /** @param {HTMLElement} el */
-    update(el) {
-      // console.log("update", el)
-      languageVm.updateElement(el);
+    updated(el) {
+      language.updateElement(el);
     },
   });
 
-  Vue.prototype.$language = languageVm;
-  Vue.prototype.$gettext = languageVm.gettext.bind(languageVm);
+  app.config.globalProperties.$language = language;
+  app.config.globalProperties.$gettext = language.gettext;
 }

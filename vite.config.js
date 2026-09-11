@@ -1,94 +1,24 @@
-const webpack = require('webpack');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+import { fileURLToPath, URL } from 'node:url';
 
-const result = {
-  publicPath: '/',
+import vue from '@vitejs/plugin-vue';
+import { visualizer } from 'rollup-plugin-visualizer';
+import { defineConfig } from 'vite';
 
-  css: {
-    sourceMap: true,
-    loaderOptions: {
-      sass: {
-        additionalData: `
-          @import '@/assets/sass/variables.scss';
-          @import '@/assets/sass/mixins.scss';
-        `,
-      },
-    },
-  },
+const srcDir = fileURLToPath(new URL('./src', import.meta.url)).replace(/\\/g, '/');
 
-  productionSourceMap: true,
-
-  chainWebpack(config) {
-    // remove prefetch plugin, in order to prevent loading of translations
-    // https://github.com/vuejs/vue-cli/issues/979#issuecomment-373310338
-    config.plugins.delete('prefetch');
-
-    // preserveWhitespace option was set to false by default in vue-cli v4
-    // https://cli.vuejs.org/migrating-from-v3/#vue-cli-service
-    // cutomize options
-    config.module
-      .rule('vue')
-      .use('vue-loader')
-      .loader('vue-loader')
-      .tap((options) => {
-        // modify the options...
-        delete options.compilerOptions.preserveWhitespace;
-        options.compilerOptions.whitespace = 'condensed';
-        return options;
-      });
-
-    // also handle avif format
-    config.module.rule('images').test(/\.(png|jpe?g|gif|webp|avif)(\?.*)?$/);
-  },
-
-  configureWebpack: {
-    performance: {
-      hints: 'error',
-      // TODO sizes checks are on compiled files, instead of GZIP sizes
-      // PR is ready on Webpack side :
-      //     https://github.com/webpack/webpack/pull/7910
-      //
-      // And here is THE option :
-      //
-      // compress:true,
-      //
-      // But they did not merge it....
-      // waiting this, we increase the limit by 4
-      // approx the decrease Gzip ratio on a .js minified files
-      maxAssetSize: 300000 * 4,
-
-      // and we allow a entry point of 450 kb gzipped
-      maxEntrypointSize: 500000 * 4,
-
-      assetFilter(assetFilename) {
-        if (/\.map$/.test(assetFilename)) {
-          return false;
-        }
-
-        if (/\.pdf$/.test(assetFilename)) {
-          return false;
-        }
-
-        return true;
-      },
-    },
-
-    plugins: [],
-  },
-};
-
-/* Please note that all key present in this file are public keys
+/* Please note that all key present in this object are public keys
  * They don't need to be hidden.
  * If you need to use a private key, please do NOT add it here
  */
-
 const config = {
   routerMode: 'history', // for pretty urls
   bingApiKey: undefined,
   ordnanceSurveyApiKey: 'eUaDulZ6AqXJo7iyoP2lRsgUjKfZWA71',
   isBackendSelectable: true,
   addthisPublicId: 'ra-58abf6b4f3a680cb',
-  googleAnalyticsKey: 'UA-2814179-1',
+  // GA4 measurement id (format G-XXXXXXXXXX) - fill in once the GA4 property is created.
+  // Universal Analytics (former googleAnalyticsKey) was shut down by Google in July 2023.
+  googleAnalyticsMeasurementId: undefined,
   urlsConfigurations: {
     demo: {
       name: 'demo',
@@ -148,12 +78,27 @@ const config = {
 
 config.urls = config.urlsConfigurations.prod; // default: prod
 
-const bundleAnalyzerConfig = {
-  analyzerMode: 'disabled',
-  openAnalyzer: false,
+const buildEnv = process.env.BUILD_ENV;
+
+let base = '/';
+
+// Substitutes %CAMPTOCAMP_API_URL%/%CAMPTOCAMP_MEDIA_URL% placeholders in index.html
+// (Vite only substitutes %BASE_URL% natively).
+const htmlConfigPlaceholders = {
+  name: 'html-config-placeholders',
+  transformIndexHtml: {
+    order: 'pre',
+    handler(html) {
+      return html
+        .replace(/%CAMPTOCAMP_API_URL%/g, config.urls.api)
+        .replace(/%CAMPTOCAMP_MEDIA_URL%/g, config.urls.media);
+    },
+  },
 };
 
-if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
+const plugins = [vue(), htmlConfigPlaceholders];
+
+if (buildEnv === 'local' || buildEnv === undefined) {
   // add an url conf for local API developers:
   config.urlsConfigurations.localhost = {
     name: 'localhost',
@@ -166,13 +111,7 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   };
 
   config.bingApiKey = 'ApgmUK6zfKqlvU9kNDbXeLFL2KvhC0BF3Jy-nUbcnkFJK_Y7UgMCyRq1NTu_ptyj';
-
-  // dev bundles are huge, no check
-  result.configureWebpack.performance.hints = false;
-
-  // add map for debbuging tools
-  result.configureWebpack.devtool = 'source-map';
-} else if (process.env.BUILD_ENV === 'github') {
+} else if (buildEnv === 'github') {
   // github pages does not support server redirection, can't use pretty urls
   config.routerMode = undefined;
 
@@ -180,36 +119,64 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   // and we will deploy a build on
   // https://c2corg.github.io/c2c_ui/<branch-name>/
   config.branchName = process.env.GITHUB_PAGES_BRANCH;
-  result.publicPath = `/c2c_ui/${config.branchName}/`;
-
-  // set a warning if bundle size is too big
-  result.configureWebpack.performance.hints = 'warning';
+  base = `/c2c_ui/${config.branchName}/`;
 
   // generate a report on bundle size
-  bundleAnalyzerConfig.analyzerMode = 'static';
-  bundleAnalyzerConfig.reportFilename = 'bundle-analyzis.html';
-  bundleAnalyzerConfig.defaultSizes = 'gzip';
-} else if (process.env.BUILD_ENV === 'camptocamp') {
+  plugins.push(
+    visualizer({
+      filename: 'dist/bundle-analyzis.html',
+      open: false,
+      gzipSize: true,
+    })
+  );
+} else if (buildEnv === 'camptocamp') {
   config.urls = config.urlsConfigurations.prod;
 
   config.bingApiKey = 'AudizIfCd3NAdt91ubJMGkMI-swfHxe1R-_U7KiLxCHqepDy70txQ-_-89_eevxc';
 
   config.isBackendSelectable = false; // explicit flag
-
-  // set a warning if bundle size is too big
-  result.configureWebpack.performance.hints = 'warning';
 } else {
   throw new Error('Unknown BUILD_ENV');
 }
 
-config.publicPath = result.publicPath;
+config.publicPath = base;
 
-result.configureWebpack.plugins.push(new BundleAnalyzerPlugin(bundleAnalyzerConfig));
+export default defineConfig({
+  base,
 
-result.configureWebpack.plugins.push(
-  new webpack.DefinePlugin({
+  plugins,
+
+  resolve: {
+    alias: {
+      '@': srcDir,
+    },
+    // this codebase's .vue imports are almost all extensionless (relied on vue-cli's
+    // webpack config, which included .vue here by default).
+    extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json', '.vue'],
+  },
+
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler',
+        additionalData: `
+          @import "${srcDir}/assets/sass/variables.scss";
+          @import "${srcDir}/assets/sass/mixins.scss";
+        `,
+      },
+    },
+  },
+
+  define: {
     CAMPTOCAMP_CONFIG: JSON.stringify(config),
-  })
-);
+  },
 
-module.exports = result;
+  server: {
+    port: 8080,
+    host: true,
+  },
+
+  build: {
+    sourcemap: true,
+  },
+});

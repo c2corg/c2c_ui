@@ -36,7 +36,7 @@
                 <div>
                   <icon-document class="is-size-1" :document-type="documentType.toLowerCase()" />
                 </div>
-                <p>{{ $gettext(documentType + 's') | uppercaseFirstLetter }}</p>
+                <p>{{ uppercaseFirstLetter($gettext(documentType + 's')) }}</p>
               </router-link>
             </div>
           </div>

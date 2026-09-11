@@ -10,7 +10,7 @@
 
       <span class="is-nowrap">
         <fa-icon class="card-icon" icon="pen" />
-        <span> {{ document.author.name | uppercaseFirstLetter }}</span>
+        <span> {{ uppercaseFirstLetter(document.author.name) }}</span>
       </span>
     </card-row>
 

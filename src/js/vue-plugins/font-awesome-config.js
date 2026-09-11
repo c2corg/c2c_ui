@@ -183,7 +183,7 @@ import waypointweather_station from '@/assets/font-awesome-custom/js/waypoint/we
 import waypointwebcam from '@/assets/font-awesome-custom/js/waypoint/webcam';
 
 // registered globally
-export default function install(Vue) {
+export default function install(app) {
   library.add(
     drill,
     paragliding,
@@ -377,6 +377,6 @@ export default function install(Vue) {
     faYoutube
   );
 
-  Vue.component('FaIcon', FontAwesomeIcon);
-  Vue.component('FaLayers', FontAwesomeLayers);
+  app.component('FaIcon', FontAwesomeIcon);
+  app.component('FaLayers', FontAwesomeLayers);
 }

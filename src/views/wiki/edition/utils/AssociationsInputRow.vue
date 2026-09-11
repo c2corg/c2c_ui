@@ -3,7 +3,7 @@
     <div class="columns is-multiline">
       <div class="column is-narrow">
         <label class="label">
-          {{ (label || $gettext(field.name)) | uppercaseFirstLetter }}
+          {{ uppercaseFirstLetter(label || $gettext(field.name)) }}
           <marker-helper :name="helper ? helper : field.helper" />
         </label>
       </div>

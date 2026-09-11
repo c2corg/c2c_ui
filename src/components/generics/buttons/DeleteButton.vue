@@ -17,7 +17,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '~bulma/sass/utilities/initial-variables.sass';
+@import 'bulma/sass/utilities/initial-variables.sass';
 
 div {
   cursor: pointer;

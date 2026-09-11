@@ -178,6 +178,7 @@ import biodivSportsService from '@/js/apis/biodivsports-service';
 import c2c from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
 import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
+import eventBus from '@/js/event-bus';
 import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
 import { TCX } from '@/js/tcx/TCX';
@@ -524,7 +525,7 @@ export default {
     this.updateEditMapLink();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.fullScreenControl.un('enterfullscreen', this.onFullscreenChange);
     this.fullScreenControl.un('leavefullscreen', this.onFullscreenChange);
   },
@@ -737,8 +738,8 @@ export default {
       const elevationProfileMarker = new ol.Feature();
       elevationProfileMarker.setStyle(getElevationProfileMarkerStyle());
       elevationProfileSource.addFeature(elevationProfileMarker);
-      this.$root.$on('elevation_profile', (event, coord) => {
-        switch (event) {
+      eventBus.on('elevation_profile', ({ type, coord }) => {
+        switch (type) {
           case 'cursor_end':
             this.elevationProfileLayer.setVisible(false);
             break;
@@ -1439,7 +1440,7 @@ export default {
 </style>
 
 <style lang="scss">
-@import '~ol/ol.css';
+@import 'ol/ol.css';
 
 :root,
 :host {

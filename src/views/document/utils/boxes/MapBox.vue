@@ -58,6 +58,7 @@
 import ElevationProfile from './ElevationProfile';
 import MapLinks from './MapLinks';
 
+import eventBus from '@/js/event-bus';
 import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 import utils from '@/js/utils';
@@ -97,8 +98,8 @@ export default {
   },
 
   mounted() {
-    this.$root.$on('elevation_profile', (event, hide) => {
-      if (event !== 'toggle_fullscreen') {
+    eventBus.on('elevation_profile', ({ type, hide }) => {
+      if (type !== 'toggle_fullscreen') {
         return;
       }
 
@@ -107,7 +108,7 @@ export default {
     window.addEventListener('resize', this.resizePin);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('resize', this.resizePin);
     if (this.pinnedMode) this.togglePinToSide(true);
     if (this.pinnedMode) this.togglePinToSide(true);
@@ -201,7 +202,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~bulma/sass/utilities/mixins.sass';
+@import 'bulma/sass/utilities/mixins.sass';
 
 .map-container {
   margin-top: 1rem;

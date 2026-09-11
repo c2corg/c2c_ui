@@ -3,7 +3,7 @@
     <div class="columns is-mobile">
       <!--level must be in a single element to remove bottim margin : TODO remove ugly hack -->
       <div class="column query-bound-value-left is-nowrap">
-        <span v-if="field.i18n">{{ $gettext(value[0], field.i18nContext) | uppercaseFirstLetter }}</span>
+        <span v-if="field.i18n">{{ uppercaseFirstLetter($gettext(value[0], field.i18nContext)) }}</span>
         <span v-else>{{ value[0] }}</span>
         <span v-if="field.unit">&nbsp;{{ field.unit }}</span>
       </div>
@@ -14,10 +14,10 @@
           ==> give to field's name all the place it needs with is-narrow helper
       -->
       <div class="column query-label" :class="{ 'is-narrow': !field.i18n, 'is-4': field.i18n }">
-        {{ $gettext(field.name) | uppercaseFirstLetter }}
+        {{ uppercaseFirstLetter($gettext(field.name)) }}
       </div>
       <div class="column query-bound-value-right is-nowrap">
-        <span v-if="field.i18n">{{ $gettext(value[1], field.i18nContext) | uppercaseFirstLetter }}</span>
+        <span v-if="field.i18n">{{ uppercaseFirstLetter($gettext(value[1], field.i18nContext)) }}</span>
         <span v-else>{{ value[1] }}</span>
         <span v-if="field.unit">&nbsp;{{ field.unit }}</span>
       </div>

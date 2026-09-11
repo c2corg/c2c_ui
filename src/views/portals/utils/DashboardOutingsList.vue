@@ -12,7 +12,7 @@
         }"
       >
         <icon-outing />
-        {{ $gettext('outings') | uppercaseFirstLetter }}
+        {{ uppercaseFirstLetter($gettext('outings')) }}
       </router-link>
     </h4>
     <loading-notification :promise="outingsPromise" />
@@ -20,7 +20,7 @@
       <div v-for="(sortedOutings, date) of outingsByDate" :key="date">
         <p class="outing-date-header is-4 is-italic has-text-weight-bold">
           <router-link :to="{ name: 'outings', query: { date: `${date},${date}` } }">
-            {{ $dateUtils.toLocalizedString(date, '@1') | uppercaseFirstLetter }}
+            {{ uppercaseFirstLetter($dateUtils.toLocalizedString(date, '@1')) }}
           </router-link>
         </p>
         <div class="dashboard-list">

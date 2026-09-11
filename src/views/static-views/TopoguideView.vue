@@ -18,7 +18,7 @@
     <div class="section columns is-multiline is-variable is-8">
       <div class="column is-6">
         <h2 class="title is-2 has-text-centered has-background-secondary has-text-light has-rounded-corner">
-          {{ $gettext('outings') | uppercaseFirstLetter }}
+          {{ uppercaseFirstLetter($gettext('outings')) }}
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
           <topoguide-view-small-link
@@ -29,7 +29,7 @@
           >
             <span class="is-size-1"><icon-activity :activity="activity" /></span>
             <span class="has-text-weight-semibold">
-              {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
+              {{ uppercaseFirstLetter($gettext(activity, 'activities')) }}
             </span>
           </topoguide-view-small-link>
 
@@ -44,7 +44,7 @@
       </div>
       <div class="column is-6">
         <h2 class="title is-2 has-text-centered has-background-secondary has-text-light has-rounded-corner">
-          {{ $gettext('routes') | uppercaseFirstLetter }}
+          {{ uppercaseFirstLetter($gettext('routes')) }}
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
           <topoguide-view-small-link
@@ -55,7 +55,7 @@
           >
             <span class="is-size-1"><icon-activity :activity="activity" /></span>
             <span class="has-text-weight-semibold">
-              {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
+              {{ uppercaseFirstLetter($gettext(activity, 'activities')) }}
             </span>
           </topoguide-view-small-link>
 
@@ -70,7 +70,7 @@
       </div>
       <div class="column is-12">
         <h2 class="title is-2 has-text-centered has-background-secondary has-text-light has-rounded-corner">
-          {{ $gettext('waypoints') | uppercaseFirstLetter }}
+          {{ uppercaseFirstLetter($gettext('waypoints')) }}
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
           <topoguide-view-small-link
@@ -81,7 +81,7 @@
           >
             <span class="is-size-1"><icon-waypoint-type :waypoint-type="waypoint_type" /></span>
             <span class="has-text-weight-semibold">
-              {{ $gettext(waypoint_type, 'waypoint_types') | uppercaseFirstLetter }}
+              {{ uppercaseFirstLetter($gettext(waypoint_type, 'waypoint_types')) }}
             </span>
           </topoguide-view-small-link>
 

@@ -2,7 +2,7 @@
   <div class="control" :class="{ 'has-icons-right': postfix, 'has-prefix': prefix, 'is-expanded': isExpanded }">
     <span v-if="prefix" class="button prefix" :class="{ 'is-danger': hasError }" @click="$emit('click-prefix')">
       <span>
-        {{ prefix | uppercaseFirstLetter }}
+        {{ uppercaseFirstLetter(prefix) }}
       </span>
     </span>
 
@@ -48,7 +48,7 @@ export default {
       type: [Number, String], // string is for date
       default: null,
     },
-    value: {
+    modelValue: {
       type: [String, Number, Boolean],
       default: null,
     },

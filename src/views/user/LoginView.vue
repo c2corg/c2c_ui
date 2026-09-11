@@ -204,7 +204,7 @@ export default {
   components: {
     FormField,
     BaseForm,
-    VueRecaptcha: () => import(/* webpackChunkName: "captcha" */ 'vue-recaptcha'),
+    VueRecaptcha: () => import('@/components/generics/Recaptcha.vue'),
   },
 
   mixins: [noRobotsMixin],

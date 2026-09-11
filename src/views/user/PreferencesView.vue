@@ -50,14 +50,14 @@
 
         <h3 v-translate>activities</h3>
         <div class="field is-grouped">
-          <input-activity v-model="preferences.activities" @input="save" />
+          <input-activity v-model="preferences.activities" @update:model-value="save" />
         </div>
 
-        <h3>{{ $gettext('areas') | uppercaseFirstLetter }}</h3>
+        <h3>{{ uppercaseFirstLetter($gettext('areas')) }}</h3>
 
         <div class="columns is-multiline">
           <div class="column is-narrow">
-            <input-document document-type="area" @input="addArea" />
+            <input-document document-type="area" @update:model-value="addArea" />
           </div>
           <div class="column">
             <div class="columns is-multiline">

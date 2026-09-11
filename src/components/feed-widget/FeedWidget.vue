@@ -1,5 +1,5 @@
 <template>
-  <div class="columns" v-infinite-scroll="load" infinite-scroll-disabled="loading" infinite-scroll-distance="500">
+  <div class="columns" v-infinite-scroll="{ load, disabled: loading, distance: 500 }">
     <div v-for="(column, i) of columns" :key="i" :class="'column ' + cssColumnsClass">
       <feed-card v-for="item of column.items" :key="item.id" :item="item" class="feed-card" />
     </div>
@@ -8,10 +8,9 @@
 </template>
 
 <script>
-import infiniteScroll from 'vue-infinite-scroll';
-
 import FeedCard from '@/components/cards/FeedCard';
 import c2c from '@/js/apis/c2c';
+import infiniteScroll from '@/js/directives/infinite-scroll';
 
 export default {
   components: {
@@ -59,7 +58,7 @@ export default {
     this.initialize();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('resize', this.initializeColumns);
   },
 

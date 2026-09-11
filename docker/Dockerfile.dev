@@ -1,0 +1,13 @@
+# Development image: runs the Vite dev server with HMR.
+# Source is mounted as a volume by docker-compose.dev.yml, not copied here.
+FROM node:lts-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+COPY .snyk ./
+RUN npm ci
+
+EXPOSE 8080
+
+CMD ["npm", "run", "serve", "--", "--host", "0.0.0.0"]

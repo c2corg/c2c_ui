@@ -3,7 +3,7 @@
     <accordion-item v-if="field.name != 'summary'">
       <h2 slot="title" v-if="!hideTitle" class="title is-2">
         <span>
-          {{ (title || $gettext(field.name)) | uppercaseFirstLetter }}
+          {{ uppercaseFirstLetter(title || $gettext(field.name)) }}
         </span>
       </h2>
       <div slot="content" :lang="lang">

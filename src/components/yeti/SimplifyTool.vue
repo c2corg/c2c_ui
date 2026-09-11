@@ -91,7 +91,7 @@ export default {
       }
     },
   },
-  destroyed() {
+  unmounted() {
     // set validSimplifyTolerance to false
     // go back to normal case for simplify tool
     // and retrieve default value for edit mode

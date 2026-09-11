@@ -144,7 +144,7 @@ export default {
     window.addEventListener('drop', this.preventDrag, false);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('dragover', this.preventDrag);
     window.removeEventListener('drop', this.preventDrag);
   },

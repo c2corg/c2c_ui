@@ -5,7 +5,7 @@
     :title="$gettext('Enable drawing and editing features on map')"
     :aria-label="iconOnly ? $gettext('Enable drawing and editing features on map') : null"
   >
-    <input-checkbox @input="onEditMode" :value="editMode" :disabled="validSimplifyTolerance">
+    <input-checkbox @update:model-value="onEditMode" :model-value="editMode" :disabled="validSimplifyTolerance">
       <span v-if="!iconOnly" v-translate> Edit mode </span>
       <fa-icon icon="pen" class="ml-1" />
     </input-checkbox>

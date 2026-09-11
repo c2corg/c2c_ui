@@ -7,7 +7,7 @@
           <dropdown-button class="header-item">
             <span slot="button">
               <span class="title is-3 is-ellipsed">
-                {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
+                {{ uppercaseFirstLetter(getDocumentTypeTitle(documentType)) }}
               </span>
               <fa-icon icon="angle-down" aria-hidden="true" />
             </span>
@@ -19,7 +19,7 @@
               :to="{ name: type + 's', query: queryWithoutOffsetAndSort }"
             >
               <icon-document :document-type="type" />
-              <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
+              <span>&nbsp;{{ uppercaseFirstLetter(getDocumentTypeTitle(type)) }}</span>
             </router-link>
           </dropdown-button>
           &nbsp;
@@ -47,8 +47,8 @@
             <display-mode-switch
               class="header-item is-hidden-mobile"
               list-mode="listMode"
-              :value="displayMode"
-              @input="setProperty('displayMode', arguments[0])"
+              :model-value="displayMode"
+              @update:model-value="setProperty('displayMode', arguments[0])"
             />
 
             <span class="is-size-3 is-hidden-tablet">

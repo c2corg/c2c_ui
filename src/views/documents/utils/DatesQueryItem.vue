@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="control">
-      <label class="label">{{ $gettext('date_start') | uppercaseFirstLetter }}</label>
+      <label class="label">{{ uppercaseFirstLetter($gettext('date_start')) }}</label>
       <input class="input" type="date" v-model="value[0]" />
     </div>
     <div class="control">
-      <label class="label">{{ $gettext('date_end') | uppercaseFirstLetter }}</label>
+      <label class="label">{{ uppercaseFirstLetter($gettext('date_end')) }}</label>
       <input class="input" type="date" v-model="value[1]" />
     </div>
     <input-checkbox v-model="usePeriodFilter" class="checkbox">{{ $gettext('Ignore year') }}</input-checkbox>

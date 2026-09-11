@@ -5,7 +5,7 @@
     :title="$documentUtils.getDocumentTitle(document, $route.params.lang)"
   >
     <slot>
-      <document-title :document="document" :uppercase-first-letter="uppercaseFirstLetter" />
+      <document-title :document="document" :uppercase="uppercase" />
     </slot>
   </router-link>
 </template>
@@ -22,7 +22,7 @@ export default {
       default: null,
     },
 
-    uppercaseFirstLetter: {
+    uppercase: {
       type: Boolean,
       default: false,
     },
