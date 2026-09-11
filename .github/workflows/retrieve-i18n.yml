@@ -8,6 +8,9 @@ on:
 jobs:
   retrieve-18n:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # the c2corg/transifex-pull-request-action pushes a branch
+      pull-requests: write # ...and opens/updates a PR from it
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5

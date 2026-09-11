@@ -54,7 +54,11 @@ jobs:
           labels: ${{ steps.docker_meta.outputs.labels }}
       - name: Get branch name
         id: branch-name
-        uses: tj-actions/branch-names@v9
+        # tj-actions/branch-names@v9 (v9.0.2), pinned by commit SHA rather than
+        # the mutable "v9" tag: the tj-actions org suffered a supply-chain
+        # compromise in March 2025 where release tags were rewritten to point
+        # to malicious commits, so trusting a floating tag here is unsafe.
+        uses: tj-actions/branch-names@5250492686b253f06fa55861556d1027b067aeb5 # v9.0.2
       - name: Create clean branch name
         id: clean_branch
         run: echo "CLEAN_BRANCH=${BRANCH/\//-}" >> $GITHUB_OUTPUT
@@ -80,7 +84,9 @@ jobs:
     steps:
       - name: Get branch name
         id: branch-name
-        uses: tj-actions/branch-names@v9
+        # See comment on the other tj-actions/branch-names usage above: pinned
+        # by SHA because of the March 2025 tj-actions supply-chain incident.
+        uses: tj-actions/branch-names@5250492686b253f06fa55861556d1027b067aeb5 # v9.0.2
       - name: Create clean branch name
         id: clean_branch
         run: echo CLEAN_BRANCH=${BRANCH/\//-} >> $GITHUB_OUTPUT
@@ -104,7 +110,11 @@ jobs:
           git add .
           git commit -m "Deploy ${{ steps.branch-name.outputs.current_branch }} branch"
       - name: Push changes
-        uses: ad-m/github-push-action@v1.0.0
+        # ad-m/github-push-action@v1.0.0, pinned by commit SHA rather than the
+        # mutable "v1.0.0" tag, since this action pushes to the repo with
+        # GITHUB_TOKEN and a rewritten tag would let a compromised upstream
+        # account run arbitrary code with that token.
+        uses: ad-m/github-push-action@77c5b412c50b723d2a4fbc6d71fb5723bcd439aa # v1.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages

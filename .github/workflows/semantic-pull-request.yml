@@ -11,6 +11,13 @@ jobs:
   main:
     name: Validate PR title
     runs-on: ubuntu-latest
+    # This workflow runs on pull_request_target, which grants GITHUB_TOKEN
+    # elevated (write) permissions and access to secrets even for PRs coming
+    # from forks. Declare the minimum this job actually needs explicitly,
+    # instead of relying on the repo/org default token permissions.
+    permissions:
+      contents: read
+      pull-requests: write # sticky-pull-request-comment and srvaroa/labeler
     steps:
       - uses: amannn/action-semantic-pull-request@v6
         id: lint_pr_title
