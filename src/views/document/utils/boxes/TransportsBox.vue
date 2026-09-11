@@ -23,16 +23,8 @@
           :class="{ 'is-active': activeSection === 'nearbyStops' }"
           @click="setActiveSection('nearbyStops')"
         >
-          <img
-            class="public-transports-bus default-icon"
-            :src="require('@/assets/img/boxes/bus.svg')"
-            alt="transport"
-          />
-          <img
-            class="public-transports-bus hover-icon"
-            :src="require('@/assets/img/boxes/public_transport.svg')"
-            alt="transport"
-          />
+          <img class="public-transports-bus default-icon" :src="busIcon" alt="transport" />
+          <img class="public-transports-bus hover-icon" :src="publicTransportIcon" alt="transport" />
           {{ $gettext('Show nearby stops') }}
         </button>
 
@@ -42,16 +34,8 @@
           :class="{ 'is-active': activeSection === 'planATrip' }"
           @click="setActiveSection('planATrip')"
         >
-          <img
-            class="public-transports-bus default-icon"
-            :src="require('@/assets/img/boxes/itineraire-2.svg')"
-            alt="itinerary"
-          />
-          <img
-            class="public-transports-bus hover-icon"
-            :src="require('@/assets/img/boxes/itineraire.svg')"
-            alt="itinerary"
-          />
+          <img class="public-transports-bus default-icon" :src="itineraire2Icon" alt="itinerary" />
+          <img class="public-transports-bus hover-icon" :src="itineraireIcon" alt="itinerary" />
           {{ $gettext('Plan a public transport trip') }}
         </button>
       </div>
@@ -81,6 +65,10 @@
 import NearbyStopsSection from './NearbyStopsSection.vue';
 import PlanATripSection from './PlanATripSection/PlanATripSection.vue';
 
+import busIcon from '@/assets/img/boxes/bus.svg';
+import itineraire2Icon from '@/assets/img/boxes/itineraire-2.svg';
+import itineraireIcon from '@/assets/img/boxes/itineraire.svg';
+import publicTransportIcon from '@/assets/img/boxes/public_transport.svg';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
@@ -97,6 +85,10 @@ export default {
       isInFrance: false,
       showAccessibilityInfo: false,
       visible: false,
+      busIcon,
+      publicTransportIcon,
+      itineraire2Icon,
+      itineraireIcon,
     };
   },
   computed: {

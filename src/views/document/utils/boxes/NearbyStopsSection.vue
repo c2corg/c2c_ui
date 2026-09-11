@@ -345,7 +345,7 @@ export default {
       }
 
       const groupId = stopGroup[0].id;
-      this.$set(this.expandedStopGroups, groupId, !this.expandedStopGroups[groupId]);
+      this.expandedStopGroups[groupId] = !this.expandedStopGroups[groupId];
 
       this.selectedStopGroup = stopGroup;
       this.selectedStop = stopGroup[0];

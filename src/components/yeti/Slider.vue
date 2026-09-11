@@ -1,12 +1,12 @@
 <template>
   <div>
-    <span :id="'slider_' + _uid" @click="focus" class="label">
+    <span :id="'slider_' + uid" @click="focus" class="label">
       <slot></slot>
     </span>
     <vue-slider
       ref="slider"
       v-model="_value"
-      :dot-attrs="{ 'aria-labelledby': 'slider_' + _uid }"
+      :dot-attrs="{ 'aria-labelledby': 'slider_' + uid }"
       :min="min"
       :max="max"
       :interval="interval"
@@ -21,6 +21,8 @@
 <script>
 import 'vue-slider-component/theme/default.css';
 import VueSlider from 'vue-slider-component';
+
+import { nextUid } from '@/js/uid';
 
 export default {
   components: {
@@ -43,6 +45,11 @@ export default {
       type: Number,
       default: null,
     },
+  },
+  data() {
+    return {
+      uid: nextUid(),
+    };
   },
   computed: {
     _value: {

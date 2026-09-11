@@ -1,7 +1,7 @@
 <template>
   <div class="layer-button" v-on="disabled?.condition ? { click: warnIfDisabled } : {}">
     <input
-      :id="'layer-checkbox' + _uid"
+      :id="'layer-checkbox' + uid"
       class="is-checkradio is-primary"
       :type="type"
       :name="name"
@@ -10,7 +10,7 @@
       :disabled="disabled?.condition"
       @change="$emit('change')"
     />
-    <label :for="'layer-checkbox' + _uid" class="layer-label">
+    <label :for="'layer-checkbox' + uid" class="layer-label">
       <div
         class="layer-image"
         :style="{
@@ -21,7 +21,7 @@
           class="layer-country"
           :class="'layer-country-' + country"
           v-if="country"
-          :style="{ 'background-image': 'url(' + require('../../assets/img/flags/' + country + '.svg') + ')' }"
+          :style="{ 'background-image': 'url(' + flagUrl(country) + ')' }"
         ></span>
       </div>
       <div class="layer-text" :class="{ 'has-text-primary': model ? model.checked : _value }">
@@ -37,6 +37,11 @@
 
 <script>
 import Toast from '@/components/yeti/Toast';
+import { flagUrl } from '@/js/flag-urls';
+import { nextUid } from '@/js/uid';
+
+// Vite cannot resolve a webpack-style `require('.../yeti/layers/' + this.image)` at build time.
+const layerImages = import.meta.glob('../../assets/img/yeti/layers/*.{jpg,png}', { eager: true, import: 'default' });
 
 export default {
   components: {
@@ -72,6 +77,11 @@ export default {
       default: null,
     },
   },
+  data() {
+    return {
+      uid: nextUid(),
+    };
+  },
   computed: {
     _value: {
       get() {
@@ -82,17 +92,12 @@ export default {
       },
     },
     backgroundImage() {
-      let img;
-      try {
-        img = require('../../assets/img/yeti/layers/' + this.image);
-        img = 'url(' + img + ')';
-      } catch (e) {
-        img = 'none';
-      }
-      return img;
+      const img = layerImages['../../assets/img/yeti/layers/' + this.image];
+      return img ? 'url(' + img + ')' : 'none';
     },
   },
   methods: {
+    flagUrl,
     warnIfDisabled() {
       this.$refs['toast-button'].toast();
     },

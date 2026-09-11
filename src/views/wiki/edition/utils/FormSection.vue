@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import { nextUid } from '@/js/uid';
+
 export default {
   props: {
     title: {
@@ -45,6 +47,7 @@ export default {
       style: null,
       visible: true,
       hasError: false,
+      uid: nextUid(),
     };
   },
 
@@ -81,7 +84,7 @@ export default {
 
     toggleExpandedState() {
       const content = this.$refs.content;
-      const className = `section-content-expanded${this._uid}`;
+      const className = `section-content-expanded${this.uid}`;
 
       if (!this.expanded_) {
         this.style.innerHTML = `.${className} { max-height: ${content.scrollHeight}px!important; }`;

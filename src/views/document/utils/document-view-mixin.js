@@ -198,7 +198,7 @@ export default {
         this.$imageViewer.clear();
         cooker.cook(this.draft.locales[0]).then((response) => {
           this.draft.cooked = response.data;
-          this.$set(this.promise, 'data', this.draft);
+          this.promise.data = this.draft;
         });
       } else {
         // normal mode

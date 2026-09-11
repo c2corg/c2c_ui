@@ -1,21 +1,21 @@
 <template>
   <div class="control">
     <span v-if="prefix !== null"> {{ uppercaseFirstLetter(prefix) }} : </span>
-    <input :id="'c2c-' + _uid + '_yes'" type="radio" :value="true" class="is-checkradio is-primary" v-model="value_" />
-    <label :for="'c2c-' + _uid + '_yes'">{{ uppercaseFirstLetter(labelYes || $gettext('yes')) }}</label>
+    <input :id="'c2c-' + uid + '_yes'" type="radio" :value="true" class="is-checkradio is-primary" v-model="value_" />
+    <label :for="'c2c-' + uid + '_yes'">{{ uppercaseFirstLetter(labelYes || $gettext('yes')) }}</label>
 
-    <input :id="'c2c-' + _uid + '_no'" type="radio" :value="false" class="is-checkradio is-primary" v-model="value_" />
-    <label :for="'c2c-' + _uid + '_no'">{{ uppercaseFirstLetter(labelNo || $gettext('no')) }}</label>
+    <input :id="'c2c-' + uid + '_no'" type="radio" :value="false" class="is-checkradio is-primary" v-model="value_" />
+    <label :for="'c2c-' + uid + '_no'">{{ uppercaseFirstLetter(labelNo || $gettext('no')) }}</label>
 
     <input
       v-if="nullable"
-      :id="'c2c-' + _uid + '_null'"
+      :id="'c2c-' + uid + '_null'"
       type="radio"
       :value="null"
       class="is-checkradio is-primary"
       v-model="value_"
     />
-    <label v-if="nullable" :for="'c2c-' + _uid + '_null'" class="is-italic">
+    <label v-if="nullable" :for="'c2c-' + uid + '_null'" class="is-italic">
       {{ uppercaseFirstLetter($gettext('no info')) }}
     </label>
   </div>

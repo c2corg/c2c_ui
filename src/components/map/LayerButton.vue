@@ -4,14 +4,14 @@
     @click="$emit('click')"
     :class="{ selected, 'show-slider': showSlider }"
     :style="{
-      'background-image': 'url(' + require('../../assets/img/layers/' + (layer.image || layer.get('image'))) + ')',
+      'background-image': 'url(' + layerUrl(layer.image || layer.get('image')) + ')',
     }"
   >
     <span class="layer-button-title">{{ $gettext(layer.title || layer.get?.('title'), titleContext) }}</span>
     <div
       class="layer-button-country"
       v-if="country"
-      :style="{ 'background-image': 'url(' + require('../../assets/img/flags/' + country + '.svg') + ')' }"
+      :style="{ 'background-image': 'url(' + flagUrl(country) + ')' }"
     ></div>
     <div
       class="layer-button-config"
@@ -29,6 +29,11 @@
 </template>
 
 <script>
+import { flagUrl } from '@/js/flag-urls';
+
+// Vite cannot resolve a webpack-style `require('.../layers/' + image)` at build time.
+const layerImages = import.meta.glob('../../assets/img/layers/*.jpg', { eager: true, import: 'default' });
+
 export default {
   name: 'LayerButton',
 
@@ -80,6 +85,13 @@ export default {
 
   mounted() {
     this.opacity = (this.layer.get?.('opacity') ?? 1) * 100;
+  },
+
+  methods: {
+    flagUrl,
+    layerUrl(image) {
+      return layerImages['../../assets/img/layers/' + image];
+    },
   },
 };
 </script>

@@ -174,7 +174,7 @@ export default {
 
     onDeleteImage(image) {
       if (this.images[image.key]) {
-        this.$delete(this.images, image.key);
+        delete this.images[image.key];
       }
 
       this.computeReadyForSaving();
@@ -187,7 +187,7 @@ export default {
         if (this.images[key] === undefined) {
           const image = this.buildImageObject(file, key);
 
-          this.$set(this.images, image.key, image);
+          this.images[image.key] = image;
           this.startUpload(image);
         }
       }

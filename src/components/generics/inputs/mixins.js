@@ -1,4 +1,12 @@
+import { nextUid } from '@/js/uid';
+
 export const baseMixin = {
+  data() {
+    return {
+      uid: nextUid(),
+    };
+  },
+
   props: {
     type: {
       type: String,

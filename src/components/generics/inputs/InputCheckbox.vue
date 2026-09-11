@@ -1,14 +1,14 @@
 <template>
   <span class="input-checkbox">
     <input
-      :id="'c2c-checkbox' + _uid"
+      :id="'c2c-checkbox' + uid"
       class="is-checkradio is-primary"
       type="checkbox"
       v-model="value_"
       :disabled="disabled"
       @change="$emit('change')"
     />
-    <label :for="'c2c-checkbox' + _uid">
+    <label :for="'c2c-checkbox' + uid">
       <slot />
     </label>
   </span>

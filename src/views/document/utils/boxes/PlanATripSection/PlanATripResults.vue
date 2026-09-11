@@ -31,10 +31,7 @@
                   class="transport-icon"
                   :class="getTransportClass(section)"
                 >
-                  <img
-                    :src="require(`@/assets/img/boxes/${getTransportIcon(section)}.svg`)"
-                    :alt="getTransportClass(section)"
-                  />
+                  <img :src="transportIconUrl(getTransportIcon(section))" :alt="getTransportClass(section)" />
                 </div>
                 <div
                   v-else-if="
@@ -191,6 +188,9 @@
 <script>
 import planATripUtils from '@/js/plan-a-trip-utils';
 
+// Vite cannot resolve a webpack-style `require('.../boxes/' + name + '.svg')` at build time.
+const transportIcons = import.meta.glob('/src/assets/img/boxes/*.svg', { eager: true, import: 'default' });
+
 export default {
   components: {},
   mixins: [],
@@ -241,6 +241,9 @@ export default {
   computed: {},
   methods: {
     ...planATripUtils,
+    transportIconUrl(name) {
+      return transportIcons[`/src/assets/img/boxes/${name}.svg`];
+    },
     /** Shows route details */
     showJourneyDetails(journey) {
       this.currentData.selectedRouteJourney = journey;

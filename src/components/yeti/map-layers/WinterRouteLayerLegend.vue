@@ -3,7 +3,7 @@
     <p class="title is-size-5" v-translate>Winter hiking routes</p>
     <ul>
       <li v-for="(item, i) of winterRouteLegend" :key="i">
-        <img class="image" :src="require('@/assets/img/yeti/legends/' + item.image)" />
+        <img class="image" :src="legendImages['/src/assets/img/yeti/legends/' + item.image]" />
         <span class="title">{{ item.title }}</span>
         <span class="text" v-if="item.text">{{ item.text }}</span>
       </li>
@@ -14,7 +14,16 @@
 <script>
 import Yetix from '@/components/yeti/Yetix';
 
+// Vite cannot resolve a webpack-style `require('.../legends/' + item.image)` at build time.
+const legendImages = import.meta.glob('/src/assets/img/yeti/legends/*.png', { eager: true, import: 'default' });
+
 export default {
+  data() {
+    return {
+      legendImages,
+    };
+  },
+
   computed: {
     winterRouteLegend() {
       return Yetix.winterRouteLegend;

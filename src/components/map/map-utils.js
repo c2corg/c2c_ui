@@ -114,15 +114,25 @@ const buildPointStyle = function (title, svgSrc, color, highlight) {
   return [circleStyle, iconStyle];
 };
 
-const svgSrcByDocumentType = {
-  i: icon({ prefix: 'fas', iconName: 'image' }).html[0],
-  o: icon({ prefix: 'document-type', iconName: 'outing' }).html[0],
-  r: icon({ prefix: 'fas', iconName: 'route' }).html[0],
-  u: icon({ prefix: 'fas', iconName: 'user' }).html[0],
-  x: icon({ prefix: 'fas', iconName: 'flag-checkered' }).html[0],
-  s: icon({ prefix: 'fas', iconName: 'bus' }).html[0],
-  z: icon({ prefix: 'waypoint', iconName: 'access' }).html[0],
-};
+// Lazily built: at module-evaluation time the icon library (populated by the
+// font-awesome-config.js Vue plugin's install()) may not have registered its icons yet,
+// since the exact module evaluation order depends on the static import graph.
+let svgSrcByDocumentTypeCache = null;
+
+function svgSrcByDocumentType(type) {
+  if (!svgSrcByDocumentTypeCache) {
+    svgSrcByDocumentTypeCache = {
+      i: icon({ prefix: 'fas', iconName: 'image' }).html[0],
+      o: icon({ prefix: 'document-type', iconName: 'outing' }).html[0],
+      r: icon({ prefix: 'fas', iconName: 'route' }).html[0],
+      u: icon({ prefix: 'fas', iconName: 'user' }).html[0],
+      x: icon({ prefix: 'fas', iconName: 'flag-checkered' }).html[0],
+      s: icon({ prefix: 'fas', iconName: 'bus' }).html[0],
+      z: icon({ prefix: 'waypoint', iconName: 'access' }).html[0],
+    };
+  }
+  return svgSrcByDocumentTypeCache[type];
+}
 
 const colorByConditionRating = {
   excellent: '#008000',
@@ -195,7 +205,7 @@ export const getDocumentPointStyle = function (document, title, highlight) {
   }
 
   if (type === 'i' || type === 'u' || type === 'x' || type === 'o' || type === 'r' || type === 's') {
-    svgSrc = svgSrcByDocumentType[type];
+    svgSrc = svgSrcByDocumentType(type);
   } else if (type === 'w') {
     if (
       (document.waypoint_type === 'access' &&
@@ -207,7 +217,7 @@ export const getDocumentPointStyle = function (document, title, highlight) {
     }
     svgSrc = icon({ prefix: 'waypoint', iconName: document.waypoint_type || 'misc' }).html[0];
   } else if (type === 'z') {
-    svgSrc = svgSrcByDocumentType['z'] || icon({ prefix: 'waypoint', iconName: 'access' }).html[0];
+    svgSrc = svgSrcByDocumentType('z');
 
     if (document.public_transportation_rating && document.public_transportation_rating !== 'no service') {
       color = '#4baf50';

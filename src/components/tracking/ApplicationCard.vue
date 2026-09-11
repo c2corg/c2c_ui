@@ -5,7 +5,7 @@
         <div class="media-left">
           <figure class="image is-48x48">
             <img
-              :src="require(`@/assets/img/tracking/${application.name}.png`)"
+              :src="applicationIcons[`../../assets/img/tracking/${application.name}.png`]"
               :alt="$gettext(application.name)"
               class="rounded"
               :class="{ 'grayed-out': application.status === 'not-configured' }"
@@ -40,12 +40,21 @@
 </template>
 
 <script>
+// Vite cannot resolve a webpack-style `require('.../tracking/' + name + '.png')` at build time.
+const applicationIcons = import.meta.glob('../../assets/img/tracking/*.png', { eager: true, import: 'default' });
+
 export default {
   props: {
     application: {
       type: Object,
       required: true,
     },
+  },
+
+  data() {
+    return {
+      applicationIcons,
+    };
   },
 
   computed: {
