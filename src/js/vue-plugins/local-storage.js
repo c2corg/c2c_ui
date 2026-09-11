@@ -68,22 +68,30 @@ export function getNamedLocalStorageItem(name) {
 }
 
 export default function install(app) {
-  Object.defineProperty(app.config.globalProperties, '$localStorage', {
-    get() {
-      if (!this.$options.name) {
-        throw new Error('Please set name property of your componenent');
-      }
+  // Defined via a `beforeCreate` mixin hook (rather than a getter on
+  // app.config.globalProperties, as Vue 2's `Vue.prototype` equivalent naively translates to)
+  // because Vue 3's proxy resolves global properties as `globalProperties[key]`, which runs
+  // the getter with `this` bound to globalProperties itself, not to the component instance.
+  // `beforeCreate` runs with `this` correctly bound to the component, before `data()` --
+  // some components read `this.$localStorage` from `data()`, so it must exist by then; a
+  // `computed` (evaluated only after `data()`) would be too late for those.
+  app.mixin({
+    beforeCreate() {
+      const instance = this;
 
-      // TODO anti pattern : with this, we can't change any component name
-      // find another way. Maybe this in created() :
-      // this.$localStorage
-      return localStorage.getItem(`${this.$options.name}.preferences`);
-    },
-    clear() {
-      if (!this.$options.name) {
-        throw new Error('Please set name property of your componenent');
-      }
-      localStorage.removeItem(`${this.$options.name}.preferences`);
+      Object.defineProperty(this, '$localStorage', {
+        configurable: true,
+        get() {
+          if (!instance.$options.name) {
+            throw new Error('Please set name property of your componenent');
+          }
+
+          // TODO anti pattern : with this, we can't change any component name
+          // find another way. Maybe this in created() :
+          // this.$localStorage
+          return localStorage.getItem(`${instance.$options.name}.preferences`);
+        },
+      });
     },
   });
 }
