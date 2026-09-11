@@ -27,6 +27,7 @@
 
 <script>
 import c2c from '@/js/apis/c2c';
+import { sanitizeRichHtml } from '@/js/sanitize-html';
 
 export default {
   data() {
@@ -83,8 +84,10 @@ export default {
       this.title = cooked.title;
 
       if (this.helper.anchor) {
+        // cooked.description is HTML converted from a wiki article's user-authored
+        // markdown: sanitize it before injecting it in the DOM to prevent stored XSS.
         const content = document.createElement('div');
-        content.innerHTML = cooked.description;
+        content.innerHTML = sanitizeRichHtml(cooked.description);
 
         const html = [];
         let appending = false;
@@ -107,7 +110,8 @@ export default {
         }
         this.html = html.length !== 0 ? html.join('\n') : content.innerHTML;
       } else {
-        this.html = cooked.description;
+        // same as above: sanitize before it gets bound with v-html
+        this.html = sanitizeRichHtml(cooked.description);
       }
     },
   },

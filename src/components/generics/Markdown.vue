@@ -8,6 +8,7 @@
 import { icon } from '@fortawesome/fontawesome-svg-core';
 
 import config from '@/js/config';
+import { sanitizeRichHtml } from '@/js/sanitize-html';
 
 // copied from vue router : https://github.com/vuejs/vue-router/blob/dev/src/components/link.js
 function guardEvent(e) {
@@ -77,7 +78,9 @@ export default {
         }
       };
 
-      container.innerHTML = this.content;
+      // this.content comes from wiki articles converted from user-authored markdown:
+      // sanitize it before injecting it in the DOM to prevent stored XSS.
+      container.innerHTML = sanitizeRichHtml(this.content);
 
       if (this.content.includes('c2c:role')) {
         this.computeFigures(container.querySelectorAll('figure[c2c\\:role=embedded-figure]'));
@@ -97,6 +100,11 @@ export default {
     computeVideos(iframes) {
       for (const iframe of iframes) {
         iframe.setAttribute('allowfullscreen', true);
+        // Restrict what the embedded video player (YouTube/Vimeo/Dailymotion) iframe
+        // can do: allow-scripts and allow-same-origin are required by these players'
+        // own embed code, allow-presentation is required for fullscreen playback.
+        // Notably missing: allow-top-navigation, allow-popups, allow-forms...
+        iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation');
       }
     },
 
