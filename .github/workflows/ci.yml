@@ -81,6 +81,15 @@ jobs:
     concurrency: github-pages
     permissions:
       contents: write
+    # Une PR ouvre un environnement public (URL c2corg.github.io/c2c_ui/<branche>)
+    # à partir de code non encore relu. On distingue donc :
+    # - pull_request -> environnement "pr-preview", protégé par des reviewers
+    #   requis (à configurer une fois dans Settings > Environments - cf.
+    #   ../../README.md, section "Previews de PR"). Le déploiement attend
+    #   qu'un mainteneur clique "Approve" avant de s'exécuter.
+    # - push (master/tag, donc déjà relu et mergé) -> "github-pages-deploy",
+    #   sans règle de protection : pas de friction pour du code déjà validé.
+    environment: ${{ github.event_name == 'pull_request' && 'pr-preview' || 'github-pages-deploy' }}
     steps:
       - name: Get branch name
         id: branch-name

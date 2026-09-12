@@ -24,3 +24,28 @@ npm run serve
 Want to easily access to every dev tools on a fancy interface? Have a look on [the doc](https://github.com/c2corg/c2c_ui/wiki/development-environment)! :sunglasses:
 
 Camptocamp.org uses <https://snyk.io/> for secure development.
+
+## Previews de PR
+
+Chaque PR (hors PR venant d'un fork) build le front et le publie automatiquement
+sur `gh-pages`, à l'URL `https://c2corg.github.io/c2c_ui/<nom-de-branche>/`
+(cf. `.github/workflows/ci.yml`, job `github-pages`). Depuis que ce job tourne
+dans l'environnement GitHub `pr-preview` pour les événements `pull_request`,
+il attend l'approbation d'un reviewer avant de déployer quoi que ce soit —
+n'importe qui ne peut plus déclencher une publication publique juste en
+poussant sur une branche.
+
+**Configuration à faire une seule fois** (repo Settings, accès admin requis —
+pas quelque chose qu'un commit peut faire) :
+
+1. Settings → Environments → New environment → nommer `pr-preview`.
+2. "Required reviewers" → ajouter les mainteneurs habilités à approuver une
+   preview (l'équipe qui merge d'habitude sur ce repo).
+3. Ne rien configurer sur l'environnement `github-pages-deploy` (utilisé pour
+   les push sur `master`/tags, donc du code déjà relu au moment du merge —
+   pas de friction supplémentaire à ajouter là).
+
+Sans cette étape, GitHub crée l'environnement `pr-preview` sans aucune règle
+de protection au premier run et le déploiement continue de partir sans
+approbation — la protection ne prend effet qu'une fois la règle posée dans
+Settings.
