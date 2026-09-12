@@ -16,8 +16,15 @@ import DOMPurify from 'dompurify';
  *       images, emojis, internal links and figures), which are not part of DOMPurify's default attribute allow-list and
  *       would otherwise be stripped;
  *   - Embeds third-party video players (YouTube/Vimeo/Dailymotion) as `<iframe>` elements, a tag DOMPurify removes by
- *       default. `<iframe>` elements themselves keep going through `sandbox`-hardening in Markdown.vue's
- *       computeVideos() after sanitization.
+ *       default.
+ *
+ * `<iframe>` elements are handled entirely here, not left to callers: the `uponSanitizeElement` hook below drops any
+ * iframe whose `src` isn't one of the known video-player hosts (matching the frame-src CSP directive in
+ * docker/nginx.conf) and forces the sandbox attribute on the ones that remain, whether or not they sit inside the
+ * `div[c2c:role=video]` wrapper the wiki markdown converter normally produces. This is what actually keeps an attacker
+ * from smuggling in an unsandboxed iframe to an arbitrary origin via raw HTML that doesn't go through that wrapper;
+ * Markdown.vue's computeVideos() still runs afterwards for the allowfullscreen attribute, but the security boundary is
+ * here.
  */
 
 const RICH_CONTENT_ATTR_ALLOWLIST = [
@@ -44,6 +51,39 @@ const RICH_CONTENT_CONFIG = {
   ADD_TAGS: ['iframe'],
   ADD_ATTR: RICH_CONTENT_ATTR_ALLOWLIST,
 };
+
+// Video player hosts the wiki markdown converter is allowed to embed. Keep in sync with the frame-src directive
+// in docker/nginx.conf.
+const ALLOWED_IFRAME_HOSTS = ['www.youtube.com', 'www.youtube-nocookie.com', 'player.vimeo.com', 'www.dailymotion.com'];
+
+// Sandbox applied to every surviving iframe, regardless of markup shape - see Markdown.vue's computeVideos() for
+// why exactly these tokens: allow-scripts/allow-same-origin are required by the players' own embed code,
+// allow-presentation is required for fullscreen playback. Notably missing: allow-top-navigation, allow-popups,
+// allow-forms...
+const IFRAME_SANDBOX = 'allow-scripts allow-same-origin allow-presentation';
+
+function isAllowedIframeHost(src) {
+  try {
+    return ALLOWED_IFRAME_HOSTS.includes(new URL(src, window.location.origin).hostname);
+  } catch {
+    return false;
+  }
+}
+
+// Registered once, applies to every DOMPurify.sanitize() call (including plain sanitizeHtml(), which never
+// allow-lists <iframe> in the first place, so this is a no-op there).
+DOMPurify.addHook('uponSanitizeElement', (node, data) => {
+  if (data.tagName !== 'iframe') {
+    return;
+  }
+
+  if (!isAllowedIframeHost(node.getAttribute('src') || '')) {
+    node.remove();
+    return;
+  }
+
+  node.setAttribute('sandbox', IFRAME_SANDBOX);
+});
 
 export function sanitizeHtml(html) {
   if (!html) {
