@@ -370,3 +370,14 @@ export const swissExtent = [663464.1651279106, 5751550.865005549, 1167741.458421
 export const isFiniteExtent = function (extent) {
   return !!extent && extent.filter(isFinite).length === 4;
 };
+
+// minimal debounce: delays calling `fn` until `delay` ms have passed
+// without a new call. Used to avoid firing a map data request on every
+// intermediate step of a pan/zoom gesture.
+export const debounce = function (fn, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn.apply(this, args), delay);
+  };
+};
