@@ -3,9 +3,11 @@
     class="layer-button"
     @click="$emit('click')"
     :class="{ selected, 'show-slider': showSlider }"
-    :style="{
-      'background-image': 'url(' + assetUrl('layers', layer.image || layer.get('image')) + ')',
-    }"
+    :style="
+      image
+        ? { 'background-image': 'url(' + assetUrl('layers', image) + ')' }
+        : { 'background-color': '#333' }
+    "
   >
     <span :id="titleId" class="layer-button-title">{{
       $gettext(layer.title || layer.get?.('title'), titleContext)
@@ -68,6 +70,9 @@ export default {
       return `layer-button-title-${this.uid}`;
     },
 
+    image() {
+      return this.layer.image || this.layer.get?.('image');
+    },
     country() {
       return this.layer.country || this.layer.get?.('country');
     },

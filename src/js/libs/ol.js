@@ -11,6 +11,7 @@ import { LineString, MultiPolygon, Point, Polygon, GeometryCollection } from 'ol
 import { fromExtent } from 'ol/geom/Polygon';
 import { DragAndDrop, Draw, Modify, Pointer, Select, Snap } from 'ol/interaction';
 import GroupLayer from 'ol/layer/Group';
+import HeatmapLayer from 'ol/layer/Heatmap';
 import ImageLayer from 'ol/layer/Image';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
@@ -95,6 +96,7 @@ export default {
     Tile: TileLayer,
     Image: ImageLayer,
     Group: GroupLayer,
+    Heatmap: HeatmapLayer,
   },
 
   proj: {
