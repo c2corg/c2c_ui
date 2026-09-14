@@ -341,8 +341,13 @@ export default {
     },
 
     signin() {
+      // sso/sig are only meaningful when we were sent here by Discourse's
+      // own SSO redirect (see the auth-sso route) - forwarded through to
+      // the API, which verifies the signature server-side.
+      const { sso, sig } = this.$route.name === 'auth-sso' ? this.$route.query : {};
+
       this.promise = this.$user
-        .signIn(this.username, this.password, this.loginTermsAgreed)
+        .signIn(this.username, this.password, this.loginTermsAgreed, sso, sig)
         .then(this.onSuccessSigin)
         .catch((e) => {
           this.loginTermsAgreed = this.isTermsError(e) ? false : undefined;
@@ -350,6 +355,16 @@ export default {
     },
 
     onSuccessSigin(data) {
+      // present when Discourse itself initiated the SSO handshake (see
+      // signin()) - the user came from there and expects to land back on
+      // it, so this must be a real top-level navigation, not the hidden
+      // iframe trick used below (which wouldn't navigate anywhere, and
+      // could hit third-party cookie restrictions on the Discourse side).
+      if (data.data.redirect) {
+        window.location = data.data.redirect;
+        return;
+      }
+
       const discourse_url = data.data.redirect_internal;
 
       if (discourse_url) {

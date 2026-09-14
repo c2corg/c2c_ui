@@ -72,8 +72,8 @@ export default function install(Vue) {
     },
 
     methods: {
-      signIn(username, password, acceptTos) {
-        return c2c.userProfile.login(username, password, acceptTos).then((response) => {
+      signIn(username, password, acceptTos, sso, sig) {
+        return c2c.userProfile.login(username, password, acceptTos, sso, sig).then((response) => {
           this.lang = response.data.lang;
           this.token = response.data.token;
           this.roles = response.data.roles;
