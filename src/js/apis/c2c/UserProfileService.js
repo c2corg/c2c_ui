@@ -64,13 +64,23 @@ function UserProfileService(api) {
   };
 }
 
-UserProfileService.prototype.login = function (username, password, acceptTos) {
-  return this.api.post('/users/login', {
+UserProfileService.prototype.login = function (username, password, acceptTos, sso, sig) {
+  const payload = {
     username,
     password,
     discourse: true,
     accept_tos: acceptTos,
-  });
+  };
+
+  // present when the login was reached via a Discourse-initiated SSO
+  // handshake (see the auth-sso route) - forwarded as-is, the API
+  // verifies the signature server-side.
+  if (sso && sig) {
+    payload.sso = sso;
+    payload.sig = sig;
+  }
+
+  return this.api.post('/users/login', payload);
 };
 
 UserProfileService.prototype.logout = function () {
