@@ -58,6 +58,7 @@ import { protectionAreasLayers } from '@/components/map/map-layers';
 import Yetix from '@/components/yeti/Yetix';
 import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
 import ol from '@/js/libs/ol';
+import { sanitizeHtml } from '@/js/sanitize-html';
 import utils from '@/js/utils';
 
 let overlay = new ol.Overlay({
@@ -291,8 +292,11 @@ export default {
         constraint,
         dates,
         dispositions,
-        additionalInfos,
-        contact,
+        // additionalInfos and contact are HTML fragments coming from third-party geodata
+        // services (respectercestproteger-service / biodiv-sports): sanitize them before
+        // they get bound with v-html.
+        additionalInfos: sanitizeHtml(additionalInfos),
+        contact: sanitizeHtml(contact),
         url,
       };
     },

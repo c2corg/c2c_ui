@@ -8,9 +8,12 @@ on:
 jobs:
   retrieve-18n:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # the c2corg/transifex-pull-request-action pushes a branch
+      pull-requests: write # ...and opens/updates a PR from it
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 0
       - name: Configure git
@@ -18,7 +21,7 @@ jobs:
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
       - name: Retrieve i18n from Transifex and create PR if applies
-        uses: c2corg/transifex-pull-request-action@v5
+        uses: c2corg/transifex-pull-request-action@b0276c82abb5b27be0ab509d8444371745b1c9ee # v5
         with:
           transifex_token: ${{ secrets.TRANSIFEX_TOKEN }}
           transifex_organisation: camptocamp-association

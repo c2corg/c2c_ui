@@ -67,6 +67,7 @@ import SaveDocumentRow from './SaveDocumentRow';
 
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
+import { sanitizeRichHtml } from '@/js/sanitize-html';
 import AreaView from '@/views/document/AreaView';
 import ArticleView from '@/views/document/ArticleView';
 import BookView from '@/views/document/BookView';
@@ -149,8 +150,12 @@ export default {
     computeBanners(response) {
       const cooked = response.data.cooked;
 
+      // cooked.description is HTML converted from a wiki article's user-authored
+      // markdown (banners article): sanitize it before injecting it in the DOM. The
+      // resulting htmlBanners fragments (built from this sanitized DOM's outerHTML
+      // below) stay safe when later bound with v-html.
       const content = document.createElement('div');
-      content.innerHTML = cooked.description;
+      content.innerHTML = sanitizeRichHtml(cooked.description);
 
       let key;
       htmlBanners = { initialized: true, undefined: '' };
