@@ -29,6 +29,10 @@
         :label="$gettext('New password')"
         icon="key"
       />
+      <p class="is-italic is-size-7 mb-4" v-translate>
+        At least 10 characters, with an uppercase letter, a lowercase letter, a digit and a special character. Leave
+        empty to keep your current password.
+      </p>
 
       <form-field name="email" v-model="form.email" type="text" required :label="$gettext('Email')" icon="at" />
       <p class="is-italic is-size-7 mb-4" v-translate>

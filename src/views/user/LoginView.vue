@@ -63,6 +63,9 @@
       <form-field name="email" v-model="email" type="email" :label="$gettext('Email')" icon="at" />
       <form-field name="password" v-model="password" type="password" :label="$gettext('Password')" icon="key" />
       <p class="is-italic is-size-7" v-translate>
+        At least 10 characters, with an uppercase letter, a lowercase letter, a digit and a special character.
+      </p>
+      <p class="is-italic is-size-7" v-translate>
         Username or email combined with the password will allow you to log in. Both username and email remain private.
         Username can not be changed, but email can.
       </p>
@@ -157,6 +160,9 @@
         :label="$gettext('New password')"
         icon="key"
       />
+      <p class="is-italic is-size-7" v-translate>
+        At least 10 characters, with an uppercase letter, a lowercase letter, a digit and a special character.
+      </p>
 
       <div class="buttons is-centered">
         <button type="submit" class="button is-link" :class="{ 'is-loading': promise.loading }" v-translate>

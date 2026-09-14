@@ -16,6 +16,7 @@
       <!-- $gettext('Ended by confusing suffix', 'API message') -->
       <!-- $gettext('already used forum_username', 'API message') -->
       <!-- $gettext('Password too short', 'API message') -->
+      <!-- $gettext('Password must be at least 10 characters long and contain a lowercase letter, an uppercase letter, a digit and a special character', 'API message') -->
       <!-- $gettext('Missing captcha', 'API message') -->
       <!-- $gettext('Required', 'API message') -->
       <!-- $gettext('Login failed', 'API message') -->
