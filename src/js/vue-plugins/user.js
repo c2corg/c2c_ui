@@ -85,6 +85,8 @@ export default function install(Vue) {
 
           this.$language.setCurrent(this.lang);
           this.commitToLocaleStorage_();
+
+          return response;
         });
       },
 
