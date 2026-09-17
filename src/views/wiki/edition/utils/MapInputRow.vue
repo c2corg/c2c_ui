@@ -106,8 +106,11 @@ export default {
           this.hasTrackingActivities = true;
         }
       },
-      () => {
-        // do nothing if errored
+      (error) => {
+        // Falls back to local GPX upload only, but this should not happen silently: a request that
+        // fails here (401, network, ...) looks identical to "no tracker connected" otherwise, which
+        // made a JWT misconfiguration between v6_api and c2c_tracking very hard to notice.
+        console.error('Error retrieving tracking status :', error);
       }
     );
   },
