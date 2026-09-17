@@ -67,6 +67,17 @@
             ></layer-button>
           </div>
         </template>
+        <template v-if="showOutingsDensity">
+          <header v-translate>Outings density</header>
+          <div class="layer-group">
+            <layer-button
+              @click="toggleOutingsDensity"
+              :selected="outingsDensityEnabled"
+              :layer="{ title: 'Outings density' }"
+              title-context="Map outings density layer"
+            ></layer-button>
+          </div>
+        </template>
       </div>
       <div class="ol-control-layer-switcher-close" @click.stop="showLayerSwitcher = !showLayerSwitcher">
         <fa-icon :title="$gettext('Close')" icon="chevron-left" />
@@ -145,6 +156,23 @@
       <a :href="editMapLink" :title="$gettext('Edit and improve map on Openstreetmap.org')"><fa-icon icon="pen" /></a>
     </div>
 
+    <div
+      v-if="showOutingsDensity"
+      ref="outingsDensityMessage"
+      v-show="outingsTracksTruncated"
+      class="ol-control ol-control-outings-density-message"
+    >
+      {{ $gettext('Zoom in to see individual outings', 'Map controls') }}
+    </div>
+
+    <div v-if="showOutingsDensity" ref="trackPicker" class="ol-track-picker" v-show="trackPickerOutings.length">
+      <ul>
+        <li v-for="outing in trackPickerOutings" :key="outing.document_id">
+          <a href="#" @click.prevent="selectTrackPickerOuting(outing)">{{ $documentUtils.getDocumentTitle(outing) }}</a>
+        </li>
+      </ul>
+    </div>
+
     <biodiv-information v-if="protectionAreasVisible" ref="BiodivInformation" :data="biodivData" />
 
     <swiss-protection-area-information
@@ -165,6 +193,7 @@ import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers';
 import {
   buildDiffStyle,
   buildPolygonStyle,
+  debounce,
   geoJSONFormat,
   getDocumentLineStyle,
   getDocumentPointStyle,
@@ -186,6 +215,15 @@ const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
 const DEFAULT_POINT_ZOOM = 14;
 const MAX_ZOOM = 19;
 const TRACKING_INITIAL_ZOOM = 13;
+
+// below this zoom level, outings density is shown as an aggregated
+// heatmap (server-side buckets); at or above it, individual outing
+// tracks are fetched for the current bbox instead.
+const OUTINGS_TRACKS_MIN_ZOOM = 13;
+// how long to wait, after the map stops moving, before fetching new
+// outings density data (avoids firing a request on every intermediate
+// step of a pan/zoom gesture)
+const OUTINGS_DENSITY_FETCH_DEBOUNCE = 400;
 
 const isNotVirtual = (waypoint) => waypoint.waypoint_type !== 'virtual';
 
@@ -218,6 +256,15 @@ export default {
     },
 
     showProtectionAreas: {
+      type: Boolean,
+      default: false,
+    },
+
+    // when true, a "outings density" toggle becomes available in the
+    // layer switcher (heatmap at low/medium zoom, individual tracks at
+    // high zoom). Only meaningful for the outings search map: it is not
+    // enabled by default, the user still has to switch it on.
+    showOutingsDensity: {
       type: Boolean,
       default: false,
     },
@@ -323,6 +370,35 @@ export default {
         source: new ol.source.Vector(),
       }),
 
+      // aggregated outings density (low/medium zoom)
+      outingsHeatmapLayer: new ol.layer.Heatmap({
+        source: new ol.source.Vector(),
+        visible: false,
+        blur: 20,
+        radius: 12,
+        weight: (feature) => feature.get('weight'),
+      }),
+
+      // individual outing tracks for the current bbox (high zoom)
+      outingsTracksLayer: new ol.layer.Vector({
+        source: new ol.source.Vector(),
+        visible: false,
+      }),
+
+      // user-controlled toggle for the outings density layers, off by
+      // default: the heatmap/tracks are an opt-in addition, not a change
+      // to the map's default look
+      outingsDensityEnabled: false,
+
+      // set when the tracks endpoint reports more outings in the bbox
+      // than it is willing to return
+      outingsTracksTruncated: false,
+
+      // outings found under a multi-track click, for the disambiguation
+      // popup ("skitour.fr"-style)
+      trackPickerOutings: [],
+      trackPickerOverlay: null,
+
       isFullscreen: false,
 
       geolocation: null,
@@ -406,6 +482,12 @@ export default {
 
     filterDocumentsWithMap: 'sendBoundsToUrl',
 
+    '$route.query.act'() {
+      if (this.outingsDensityEnabled) {
+        this.updateOutingsMapLayers();
+      }
+    },
+
     highlightedDocument(newValue) {
       if (newValue) {
         this.setHighlightedFeature(this.documentsLayer.getSource().getFeatureById(newValue.document_id));
@@ -449,6 +531,7 @@ export default {
         new ol.control.Control({ element: this.$refs.clearGeometry }),
         new ol.control.Control({ element: this.$refs.editMap }),
         new ol.control.Attribution({ tipLabel: this.$gettext('Attributions', 'Map controls') }),
+        ...(this.showOutingsDensity ? [new ol.control.Control({ element: this.$refs.outingsDensityMessage })] : []),
       ],
 
       layers: [
@@ -456,6 +539,8 @@ export default {
         ...this.dataLayers,
         ...this.protectionAreasLayers,
         this.protectionAreasLayer,
+        this.outingsHeatmapLayer,
+        this.outingsTracksLayer,
         this.imagesLayer, // images icons will be under documents
         this.documentsLayer,
         this.waypointsLayer, // keep waypoint above trace and documents
@@ -479,6 +564,17 @@ export default {
     this.map.on('moveend', this.getProtectionAreas);
     this.map.on('moveend', this.updateEditMapLink);
     this.map.on('moveend', this.emitMoveEvent);
+
+    if (this.showOutingsDensity) {
+      this.trackPickerOverlay = new ol.Overlay({
+        element: this.$refs.trackPicker,
+        positioning: 'bottom-center',
+        offset: [0, -10],
+      });
+      this.map.addOverlay(this.trackPickerOverlay);
+
+      this.map.on('moveend', debounce(this.updateOutingsMapLayers, OUTINGS_DENSITY_FETCH_DEBOUNCE));
+    }
 
     if (this.protectionAreasVisible) {
       this.protectionAreasLayers.forEach((layer) => layer.setVisible(true));
@@ -1106,6 +1202,21 @@ export default {
     },
 
     onClick(event) {
+      if (this.outingsTracksLayer.getVisible()) {
+        const hits = [];
+        this.map.forEachFeatureAtPixel(event.pixel, (f) => hits.push(f), {
+          layerFilter: (layer) => layer === this.outingsTracksLayer,
+          hitTolerance: 6,
+        });
+
+        if (hits.length > 1) {
+          this.trackPickerOutings = hits.map((hit) => hit.get('document'));
+          this.trackPickerOverlay.setPosition(event.coordinate);
+          return;
+        }
+      }
+      this.closeTrackPicker();
+
       const feature = this.map.forEachFeatureAtPixel(event.pixel, (f) => f);
 
       if (feature) {
@@ -1260,6 +1371,83 @@ export default {
           }
         });
       }
+    },
+
+    toggleOutingsDensity() {
+      this.outingsDensityEnabled = !this.outingsDensityEnabled;
+
+      // avoid showing the same outings twice (as paginated markers and
+      // as heatmap/tracks)
+      this.documentsLayer.setVisible(!this.outingsDensityEnabled);
+
+      if (this.outingsDensityEnabled) {
+        this.updateOutingsMapLayers();
+      } else {
+        this.outingsHeatmapLayer.setVisible(false);
+        this.outingsTracksLayer.setVisible(false);
+        this.outingsTracksTruncated = false;
+        this.closeTrackPicker();
+      }
+    },
+
+    async updateOutingsMapLayers() {
+      if (!this.outingsDensityEnabled) {
+        return;
+      }
+
+      const zoom = Math.round(this.view.getZoom());
+      const bbox = this.getExtent().join(',');
+      const act = this.$route.query.act;
+
+      try {
+        if (zoom >= OUTINGS_TRACKS_MIN_ZOOM) {
+          this.outingsHeatmapLayer.setVisible(false);
+          this.outingsTracksLayer.setVisible(true);
+
+          const { data } = await c2c.getOutingsTracks({ bbox, act, pl: this.$language.current });
+          this.outingsTracksTruncated = data.truncated;
+
+          const source = this.outingsTracksLayer.getSource();
+          source.clear();
+          this.closeTrackPicker();
+          for (const outing of data.outings) {
+            this.addDocumentFeature(outing, source);
+          }
+        } else {
+          this.outingsTracksLayer.setVisible(false);
+          this.outingsHeatmapLayer.setVisible(true);
+          this.outingsTracksTruncated = false;
+          this.closeTrackPicker();
+
+          const { data } = await c2c.getOutingsHeatmap({ bbox, act, zoom });
+          const source = this.outingsHeatmapLayer.getSource();
+          source.clear();
+
+          const maxCount = Math.max(1, ...data.buckets.map((bucket) => bucket.count));
+          for (const bucket of data.buckets) {
+            const feature = new ol.Feature(new ol.geom.Point([bucket.x, bucket.y]));
+            feature.set('weight', bucket.count / maxCount);
+            source.addFeature(feature);
+          }
+        }
+      } catch {
+        // the density layers are a non-critical map overlay: on a
+        // network/server error, leave the map usable rather than
+        // surfacing an unhandled rejection
+      }
+    },
+
+    closeTrackPicker() {
+      this.trackPickerOutings = [];
+      this.trackPickerOverlay?.setPosition(undefined);
+    },
+
+    selectTrackPickerOuting(document) {
+      this.closeTrackPicker();
+      this.$router.push({
+        name: this.$documentUtils.getDocumentType(document.type),
+        params: { id: document.document_id },
+      });
     },
 
     clearGeometry() {
@@ -1573,6 +1761,44 @@ $control-margin: 0.5em;
 
 .ol-control-recenter-on-propositions_on-top {
   top: 27px;
+}
+
+.ol-control-outings-density-message {
+  top: $control-margin;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 10px;
+}
+
+.ol-track-picker {
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  padding: 5px 0;
+  max-width: 260px;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    padding: 5px 10px;
+
+    &:hover {
+      background: lightgrey;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 }
 
 .ol-control-reset-geometry {
