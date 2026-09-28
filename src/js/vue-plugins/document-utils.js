@@ -145,7 +145,8 @@ export default function install(Vue) {
           document.mtb_down_rating ||
           document.hiking_mtb_exposition ||
           document.labande_global_rating ||
-          document.labande_ski_rating
+          document.labande_ski_rating ||
+          document.snowshoe_rating
         );
       },
 
