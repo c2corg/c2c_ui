@@ -2,6 +2,14 @@
 User-agent: PetalBot
 Disallow: /
 
+# SEO crawlers: heavy on the API, no value for our audience
+User-agent: AhrefsBot
+User-agent: SemrushBot
+User-agent: MJ12bot
+User-agent: DotBot
+User-agent: BLEXBot
+Disallow: /
+
 User-agent: *
 # Pages that only make sense for a logged-in user
 Disallow: /auth
