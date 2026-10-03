@@ -423,6 +423,7 @@
     <span v-translate translate-context="public_transportation_ratings">seasonal service</span>
     <span v-translate translate-context="public_transportation_ratings">poor service</span>
     <span v-translate translate-context="public_transportation_ratings">nearby service</span>
+    <span v-translate translate-context="public_transportation_ratings">unknown service</span>
     <span v-translate translate-context="public_transportation_ratings">no service</span>
     <!-- public_transportation_types -->
     <span v-translate translate-context="public_transportation_types">train</span>

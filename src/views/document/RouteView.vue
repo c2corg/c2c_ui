@@ -29,6 +29,7 @@
               <field-view :document="document" :field="fields.climbing_outdoor_type" />
               <field-view :document="document" :field="fields.configuration" />
               <field-view :document="document" :field="fields.slackline_type" />
+              <field-view :document="document" :field="fields.public_transportation_rating" />
             </div>
 
             <div class="column is-4">

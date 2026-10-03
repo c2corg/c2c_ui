@@ -462,6 +462,7 @@
       { "id": "mtb_length_trail", "properties": { "url": "mbtrack", "activities": ["mountain_biking"] } },
       { "id": "mtb_up_rating", "properties": { "url": "mbur", "activities": ["mountain_biking"] } },
       { "id": "orientations", "properties": { "url": "fac" } },
+      { "id": "public_transportation_rating" },
       { "id": "quality", "properties": { "url": "qa" } },
       {
         "id": "risk_rating",
