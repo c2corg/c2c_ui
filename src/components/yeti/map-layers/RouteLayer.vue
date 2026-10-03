@@ -628,10 +628,6 @@ export default {
       ol.extent.extend(extent, this.featuresLayerSource.getExtent());
 
       this.view.fit(extent, { size: this.map.getSize() });
-
-      let actualZoom = Math.round(new ol.View().getZoomForResolution(this.map.getView().getResolution()) * 10) / 10;
-      // set a minimum zoom level
-      this.view.setZoom(Math.max(this.validMinimumMapZoom, actualZoom) / this.zoomDelta);
     },
     fitMapToGeom(geom) {
       let feature = new ol.format.GeoJSON().readFeature(geom);

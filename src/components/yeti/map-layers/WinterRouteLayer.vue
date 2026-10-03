@@ -22,7 +22,6 @@ export default {
         checked: this.showWinterRoute,
         action: this.onShowWinterRoute,
         image: 'winter-route.png',
-        country: 'fr',
         contentComponent: WinterRouteLayerContent,
         contentTitleComponent: WinterRouteLayerContentTitle,
       };
