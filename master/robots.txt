@@ -10,12 +10,6 @@ User-agent: DotBot
 User-agent: BLEXBot
 Disallow: /
 
-# Meta AI crawlers (training and Meta AI answers). Link previews when a page
-# is shared on Facebook (facebookexternalhit) are not affected.
-User-agent: meta-externalagent
-User-agent: meta-webindexer
-Disallow: /
-
 User-agent: *
 # Pages that only make sense for a logged-in user
 Disallow: /auth
