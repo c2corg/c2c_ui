@@ -62,9 +62,7 @@
       />
       <form-field name="email" v-model="email" type="email" :label="$gettext('Email')" icon="at" />
       <form-field name="password" v-model="password" type="password" :label="$gettext('Password')" icon="key" />
-      <p class="is-italic is-size-7" v-translate>
-        At least 10 characters, with an uppercase letter, a lowercase letter, a digit and a special character.
-      </p>
+      <password-requirements :password="password" />
       <p class="is-italic is-size-7" v-translate>
         Username or email combined with the password will allow you to log in. Both username and email remain private.
         Username can not be changed, but email can.
@@ -160,9 +158,7 @@
         :label="$gettext('New password')"
         icon="key"
       />
-      <p class="is-italic is-size-7" v-translate>
-        At least 10 characters, with an uppercase letter, a lowercase letter, a digit and a special character.
-      </p>
+      <password-requirements :password="password" />
 
       <div class="buttons is-centered">
         <button type="submit" class="button is-link" :class="{ 'is-loading': promise.loading }" v-translate>
@@ -190,6 +186,7 @@ import { toast } from 'bulma-toast';
 
 import BaseForm from './utils/BaseForm';
 import FormField from './utils/FormField';
+import PasswordRequirements from './utils/PasswordRequirements';
 
 import c2c from '@/js/apis/c2c';
 import config from '@/js/config';
@@ -210,6 +207,7 @@ export default {
   components: {
     FormField,
     BaseForm,
+    PasswordRequirements,
     VueRecaptcha: () => import(/* webpackChunkName: "captcha" */ 'vue-recaptcha'),
   },
 
