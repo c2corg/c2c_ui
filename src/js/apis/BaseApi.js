@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import retryOn429 from './retry-on-429';
+
 /// ////////////////////////////////////////////////////////////////////////////////
 // Technically, we should do this in any API call to enhance promise with response :
 // let result = axios.get(url).then(response => result.response = response)
@@ -45,6 +47,7 @@ const BaseApi = function (apiUrl) {
     headers: { common: {} },
     baseURL: apiUrl,
   });
+  retryOn429(this.axios);
 };
 
 /*
@@ -66,5 +69,7 @@ BaseApi.prototype.put = function (url, body) {
 BaseApi.prototype.delete = function (url, body) {
   return new ApiData(this.axios.delete(url, body));
 };
+
+export { ApiData };
 
 export default BaseApi;
