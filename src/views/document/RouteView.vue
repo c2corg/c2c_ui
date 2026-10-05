@@ -11,7 +11,7 @@
       <div class="column is-3 no-print">
         <map-box :document="document" @has-protection-area="hasProtectionArea = true" />
         <avalanche-box :document="document" v-if="!$screen.isMobile" />
-        <is-reachable-by-public-transports-box :document="document" />
+        <is-reachable-by-public-transports-box v-if="!isPrintingView" :document="document" />
 
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>

@@ -194,6 +194,10 @@ export default {
             }
             this.$emit('updateHead');
           });
+      } else if (this.isPrintingView && this.draft.cooked) {
+        // the printing view loads documents with ?cook=, so they are already cooked
+        this.$imageViewer.clear();
+        this.promise = { data: this.draft };
       } else if (this.isDraftView || this.isPrintingView) {
         this.promise = {};
 

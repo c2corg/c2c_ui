@@ -17,7 +17,7 @@
     <div v-if="document" class="columns">
       <div class="column is-3 no-print">
         <map-box :document="document" />
-        <is-reachable-by-public-transports-box v-if="showTransportBox" :document="document" />
+        <is-reachable-by-public-transports-box v-if="showTransportBox && !isPrintingView" :document="document" />
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
