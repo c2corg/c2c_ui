@@ -49,8 +49,9 @@ import RouteView from '@/views/document/RouteView';
 import WaypointView from '@/views/document/WaypointView';
 import XreportView from '@/views/document/XreportView';
 
-// up to 100 documents per page: loading them all at once trips the API's per-IP rate limit
-const MAX_CONCURRENT_LOADS = 4;
+// Up to 100 documents per page: loading them all at once trips the API's per-IP rate limit.
+// Shared across loads, so a route change while loading can't start a second batch in parallel.
+const limit = concurrencyLimit(4);
 
 export default {
   name: 'DocumentsPrintingView',
@@ -98,7 +99,6 @@ export default {
 
   methods: {
     load() {
-      const limit = concurrencyLimit(MAX_CONCURRENT_LOADS);
       const lang = this.$route.params.lang ?? this.$language.current;
 
       this.promise = c2c[this.documentType].getAll(this.$route.query).then(() => {

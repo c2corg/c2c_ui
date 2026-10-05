@@ -1,7 +1,7 @@
 /*
- * Retries a request once after a 429 Too Many Requests, waiting for the delay given by
- * the Retry-After header. Never retries immediately, which would only extend the burst
- * that triggered the rate limit.
+ * Retries a safe (GET, HEAD, OPTIONS) request once after a 429 Too Many Requests, waiting
+ * for the delay given by the Retry-After header. Never retries immediately, which would
+ * only extend the burst that triggered the rate limit.
  *
  * The header is only readable cross-origin if the response exposes it
  * (Access-Control-Expose-Headers: Retry-After). When it isn't, the delay is read from the
@@ -10,6 +10,10 @@
  */
 
 const MAX_RETRY_DELAY_SECONDS = 30;
+const MIN_RETRY_DELAY_SECONDS = 1;
+
+// The interceptor can't tell whether a write was applied before the 429, so writes are never replayed.
+const RETRYABLE_METHODS = new Set(['get', 'head', 'options']);
 
 const parseRetryAfter = function (value) {
   if (!value) {
@@ -41,7 +45,13 @@ export default function retryOn429(axiosInstance) {
   axiosInstance.interceptors.response.use(undefined, (error) => {
     const { config, response } = error;
 
-    if (!config || !response || response.status !== 429 || config.retriedAfter429) {
+    if (
+      !config ||
+      !response ||
+      response.status !== 429 ||
+      config.retriedAfter429 ||
+      !RETRYABLE_METHODS.has(config.method?.toLowerCase())
+    ) {
       return Promise.reject(error);
     }
 
@@ -51,7 +61,8 @@ export default function retryOn429(axiosInstance) {
     }
 
     config.retriedAfter429 = true;
-    return new Promise((resolve) => setTimeout(resolve, delay * 1000)).then(() => axiosInstance.request(config));
+    const waitMs = Math.max(delay, MIN_RETRY_DELAY_SECONDS) * 1000;
+    return new Promise((resolve) => setTimeout(resolve, waitMs)).then(() => axiosInstance.request(config));
   });
 
   return axiosInstance;
