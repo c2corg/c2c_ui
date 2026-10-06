@@ -334,7 +334,12 @@ export const getDocumentPolygonStyle = function (title, highlight, properties) {
 
   // No properties (regular area documents) → outline only, like other documents.
   // A Fill without color would be rendered black by the canvas.
-  return getDocumentLineStyle(title, highlight);
+  const styles = getDocumentLineStyle(title, highlight);
+  const stylesToUpdate = Array.isArray(styles) ? styles : [styles];
+  stylesToUpdate.forEach((style) =>
+    style.setFill(new ol.style.Fill({ color: 'rgba(0, 0, 0, 0)' }))
+  );
+  return styles;
 };
 
 export const getElevationProfileMarkerStyle = function () {
