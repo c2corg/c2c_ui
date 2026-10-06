@@ -113,6 +113,7 @@
           ref="map"
           :documents="documentsShownOnMap"
           :highlighted-document="highlightedDocument"
+          :show-outings-density="documentType === 'outing'"
           @highlight-document="highlightedDocument = arguments[0]"
           show-filter-control
           show-center-on-geolocation
