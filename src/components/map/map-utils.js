@@ -332,16 +332,9 @@ export const getDocumentPolygonStyle = function (title, highlight, properties) {
     });
   }
 
-  // No properties → return nothing special (empty style)
-  return new ol.style.Style({
-    fill: new ol.style.Fill({
-      color: undefined,
-    }),
-    stroke: new ol.style.Stroke({
-      color: undefined,
-      width: 1,
-    }),
-  });
+  // No properties (regular area documents) → outline only, like other documents.
+  // A Fill without color would be rendered black by the canvas.
+  return getDocumentLineStyle(title, highlight);
 };
 
 export const getElevationProfileMarkerStyle = function () {
