@@ -336,9 +336,7 @@ export const getDocumentPolygonStyle = function (title, highlight, properties) {
   // A Fill without color would be rendered black by the canvas.
   const styles = getDocumentLineStyle(title, highlight);
   const stylesToUpdate = Array.isArray(styles) ? styles : [styles];
-  stylesToUpdate.forEach((style) =>
-    style.setFill(new ol.style.Fill({ color: 'rgba(0, 0, 0, 0)' }))
-  );
+  stylesToUpdate.forEach((style) => style.setFill(new ol.style.Fill({ color: 'rgba(0, 0, 0, 0)' })));
   return styles;
 };
 
