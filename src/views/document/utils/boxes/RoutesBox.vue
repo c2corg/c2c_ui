@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { add_search_queries } from '@/js/add-search-query';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
@@ -55,9 +56,15 @@ export default {
     },
 
     source() {
-      let routes = (this.document.associations.routes || this.document.associations.all_routes.documents)
-        .map((route) => ({ ...route, title: this.$documentUtils.getDocumentTitle(route, this.$route.params.lang) }))
-        .sort((r1, r2) => r1.title.localeCompare(r2.title));
+      let routes = (this.document.associations.routes || this.document.associations.all_routes.documents).map(
+        (route) => ({
+          ...route,
+          title: this.$documentUtils.getDocumentTitle(route, this.$route.params.lang),
+          search_query: this.query,
+        })
+      );
+      add_search_queries(this.query, routes);
+      routes.sort((r1, r2) => r1.title.localeCompare(r2.title));
       if (this.document.type === 'w' && this.document?.waypoint_type !== 'climbing_outdoor') {
         // filter out crags for non climbing sites waypoints
         routes = routes.filter((route) => route?.climbing_outdoor_type !== 'single');
