@@ -163,7 +163,12 @@ export default {
       if (!this.search.documents) {
         return undefined;
       }
-      return this.search.documents.findIndex((d) => d.document_id === this.documentId);
+      let index = this.search.documents.findIndex((d) => d.document_id === this.documentId);
+      // findIndex returns -1 if not index were found...
+      if (index < 0) {
+        return undefined;
+      }
+      return index;
     },
 
     previousDocument() {
