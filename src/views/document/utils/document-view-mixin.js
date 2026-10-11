@@ -295,7 +295,7 @@ export default {
 
     handleRedirection() {
       if (this.document?.redirects_to) {
-        this.$router.push({ params: { id: this.document.redirects_to, query: this.$route.query } });
+        this.$router.push({ params: { id: this.document.redirects_to }, query: this.$route.query });
       }
     },
 
