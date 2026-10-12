@@ -1,5 +1,5 @@
 <template>
-  <div class="box no-print" v-if="isNormalView && documents.length !== 0">
+  <div class="box no-print" v-if="isNormalView && documents.length !== 0 && index !== undefined">
     <div class="title is-2">
       <span v-translate>Associated Search</span>
     </div>
