@@ -5,7 +5,6 @@
       :key="document.document_id"
       :document="document"
       :title="$documentUtils.getDocumentTitle(document)"
-      :query="$route.query"
       class="card-image"
     >
       <thumbnail :img="document" size="MI" height="250" loading="lazy" />
