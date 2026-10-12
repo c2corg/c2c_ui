@@ -56,7 +56,7 @@ export default {
 
     to() {
       // If there are less than 5 results before index, we show more results after
-      return this.documents.length, this.index + 5 + Math.max(0, 5 - this.index);
+      return Math.min(this.documents.length, this.index + 5 + Math.max(0, 5 - this.index));
     },
 
     allResultsQuery() {
