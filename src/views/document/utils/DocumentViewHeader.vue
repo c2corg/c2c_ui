@@ -4,55 +4,75 @@
       <html-header v-if="!isDraftView && !isPrintingView" :title="title" />
 
       <document-version-banner :version="version" :document="document" />
-      <div class="columns">
-        <div class="column is-narrow" v-if="previousDocument">
-          <document-link :document="previousDocument" class="box">&lt;</document-link>
-        </div>
-        <div class="box column">
-          <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
-            <gotop-button v-if="isPrintingView" />
-            <follow-button v-if="!isPrintingView" :document="document" />
-            <tags-button v-if="!isPrintingView" :document="document" />
 
-            <social-network-sharing v-if="documentType != 'profile' && isNormalView" />
+      <div class="box">
+        <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
+          <gotop-button v-if="isPrintingView" />
+          <follow-button v-if="!isPrintingView" :document="document" />
+          <tags-button v-if="!isPrintingView" :document="document" />
 
-            <span
-              :title="$gettext('Add images')"
-              v-if="isEditable && documentType !== 'image'"
-              @click="$refs.imagesUploader.show()"
-            >
-              <fa-layers>
-                <fa-icon icon="image" />
-                <fa-icon icon="circle" :style="{ color: 'white' }" transform="shrink-5 right-5 up-6" />
-                <fa-icon icon="plus-circle" :style="{ color: 'green' }" transform="shrink-5 right-5 up-5" />
-              </fa-layers>
-            </span>
+          <social-network-sharing v-if="documentType != 'profile' && isNormalView" />
 
-            <edit-link v-if="isEditable" :document="document" :lang="lang" :title="$gettext('Edit')">
-              <icon-edit />
-            </edit-link>
+          <span
+            :title="$gettext('Add images')"
+            v-if="isEditable && documentType !== 'image'"
+            @click="$refs.imagesUploader.show()"
+          >
+            <fa-layers>
+              <fa-icon icon="image" />
+              <fa-icon icon="circle" :style="{ color: 'white' }" transform="shrink-5 right-5 up-6" />
+              <fa-icon icon="plus-circle" :style="{ color: 'green' }" transform="shrink-5 right-5 up-5" />
+            </fa-layers>
           </span>
-          <h1 class="column title">
-            <slot name="icon-document">
-              <icon-document :document-type="documentType" />
-            </slot>
-            <document-title :document="document" uppercase-first-letter />
 
-            <!-- outing specific  -->
-            <span v-if="documentType == 'outing'" class="outing-date is-size-5">
-              {{ $documentUtils.getOutingDatesLocalized(document) | uppercaseFirstLetter }}
+          <edit-link v-if="isEditable" :document="document" :lang="lang" :title="$gettext('Edit')">
+            <icon-edit />
+          </edit-link>
+          <span v-if="previousDocument || nextDocument" class="search-navigation no-print">
+            <document-link
+              v-if="previousDocument"
+              :document="previousDocument"
+              :title="$gettext('Previous result')"
+              :aria-label="$gettext('Previous result')"
+              class="button"
+            >
+              <fa-icon icon="chevron-left" />
+            </document-link>
+            <span v-else class="button" disabled>
+              <fa-icon icon="chevron-left" />
             </span>
+            <document-link
+              v-if="nextDocument"
+              :document="nextDocument"
+              :title="$gettext('Next result')"
+              :aria-label="$gettext('Next result')"
+              class="button"
+            >
+              <fa-icon icon="chevron-right" />
+            </document-link>
+            <span v-else class="button" disabled>
+              <fa-icon icon="chevron-right" />
+            </span>
+          </span>
+        </span>
+        <h1 class="title is-1">
+          <slot name="icon-document">
+            <icon-document :document-type="documentType" />
+          </slot>
+          <document-title :document="document" uppercase-first-letter />
 
-            <!-- xreport specific  -->
-            <span v-else-if="documentType == 'xreport'" class="outing-date is-size-5">
-              {{ $dateUtils.toLocalizedString(document.date, 'll') | uppercaseFirstLetter }}
-            </span>
-          </h1>
-        </div>
-        <div class="column is-narrow" v-if="nextDocument">
-          <document-link :document="nextDocument" class="box">&gt;</document-link>
-        </div>
+          <!-- outing specific  -->
+          <span v-if="documentType == 'outing'" class="outing-date is-size-5">
+            {{ $documentUtils.getOutingDatesLocalized(document) | uppercaseFirstLetter }}
+          </span>
+
+          <!-- xreport specific  -->
+          <span v-else-if="documentType == 'xreport'" class="outing-date is-size-5">
+            {{ $dateUtils.toLocalizedString(document.date, 'll') | uppercaseFirstLetter }}
+          </span>
+        </h1>
       </div>
+
       <images-uploader ref="imagesUploader" :lang="lang" :parent-document="document" />
     </div>
   </div>
@@ -132,6 +152,11 @@ export default {
   }
 }
 
+.button-bar > .search-navigation {
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 1px solid lightgray;
+}
 @media print {
   .title {
     font-size: 1.5rem !important;
