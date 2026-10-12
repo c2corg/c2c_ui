@@ -145,11 +145,11 @@ export default {
      * properties computed when search results is loaded
      */
     search() {
-      if (!this.search_promise?.data) {
+      if (!this.search_promise?.data || this.isVersionView) {
         return false;
       }
 
-      const documents = this.isVersionView ? undefined : this.search_promise.data;
+      const documents = this.search_promise.data;
 
       add_search_queries(this.$route.query, documents.documents);
 
