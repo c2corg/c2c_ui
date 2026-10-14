@@ -64,6 +64,7 @@ export default {
     return {
       promise: null,
       search_promise: null,
+      searchKey: null,
     };
   },
 
@@ -268,22 +269,24 @@ export default {
         });
       } else {
         // normal mode
-        // because of updateUrl(), we may have nothing to do
-        if (
+        // because of updateUrl(), we may have nothing to do for the document
+        let sameDocument =
           this.document &&
           parseInt($route.params.id, 10) === this.document.document_id &&
-          this.expected_lang === this.lang
-        ) {
+          this.expected_lang === this.lang;
+
+        // and we also may have nothing to do for the associated search
+        const searchKey = typeof $route.query.offset !== 'undefined' ? JSON.stringify($route.query) : null;
+        if (!sameDocument || searchKey !== this.searchKey) {
+          this.searchKey = searchKey;
+          this.search_promise = searchKey ? c2c[this.documentType].getAll($route.query) : null;
+        }
+
+        if (sameDocument) {
           return;
         }
 
         this.$imageViewer.clear();
-
-        if (typeof this.$route.query.offset !== 'undefined') {
-          this.search_promise = c2c[this.documentType].getAll(this.$route.query);
-        } else {
-          this.search_promise = new Promise(() => []);
-        }
 
         this.promise = c2c[this.documentType]
           .getCooked(this.documentId, this.expected_lang)
