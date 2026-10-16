@@ -48,14 +48,21 @@ export default {
 
   computed: {
     outings() {
-      let outings = this.document.associations.recent_outings?.documents || this.document.associations.outings;
-      let query = this.allOutingsQuery;
-      add_search_queries(query, outings);
-      if (this.includeEmptyOutings) {
-        return outings;
-      } else {
-        return outings.filter((outing) => outing.quality !== 'empty');
+      let outings = (this.document.associations.recent_outings?.documents || this.document.associations.outings).map(
+        (outing) => ({ ...outing })
+      );
+      if (!this.includeEmptyOutings) {
+        outings = outings.filter((outing) => outing.quality !== 'empty');
       }
+      add_search_queries(this.navigationQuery, outings);
+      return outings;
+    },
+
+    navigationQuery() {
+      if (this.includeEmptyOutings) {
+        return this.allOutingsQuery;
+      }
+      return { ...this.allOutingsQuery, qa: 'draft,great' };
     },
 
     totalOutings() {
