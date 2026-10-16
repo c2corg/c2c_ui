@@ -7,6 +7,7 @@ import IsReachableByPublicTransportsBox from './boxes/IsReachableByPublicTranspo
 import MapBox from './boxes/MapBox';
 import RecentOutingsBox from './boxes/RecentOutingsBox';
 import RoutesBox from './boxes/RoutesBox';
+import SearchNavigationBox from './boxes/SearchNavigationBox';
 import ToolBox from './boxes/ToolBox';
 import TransportsBox from './boxes/TransportsBox';
 import ActivitiesField from './field-viewers/ActivitiesField';
@@ -17,6 +18,7 @@ import LabelValue from './field-viewers/LabelValue';
 import MarkdownSection from './field-viewers/MarkdownSection';
 import ProfilesLinks from './field-viewers/ProfilesLinks';
 
+import { add_search_queries } from '@/js/add-search-query';
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import cooker from '@/js/cooker';
@@ -42,6 +44,7 @@ export default {
     MarkdownSection,
     ProfilesLinks,
     RecentOutingsBox,
+    SearchNavigationBox,
     ToolBox,
     RoutesBox,
     ImagesBox,
@@ -60,6 +63,8 @@ export default {
   data() {
     return {
       promise: null,
+      search_promise: null,
+      searchKey: null,
     };
   },
 
@@ -137,6 +142,62 @@ export default {
       return doc;
     },
 
+    /*
+     * properties computed when search results is loaded
+     */
+    search() {
+      if (!this.search_promise?.data || this.isVersionView) {
+        return false;
+      }
+
+      const documents = this.search_promise.data;
+
+      add_search_queries(this.$route.query, documents.documents);
+
+      return documents;
+    },
+
+    index() {
+      if (!this.search) {
+        return undefined;
+      }
+      if (!this.search.documents) {
+        return undefined;
+      }
+      let index = this.search.documents.findIndex((d) => d.document_id === this.documentId);
+      // findIndex returns -1 if not index were found...
+      if (index < 0) {
+        return undefined;
+      }
+      return index;
+    },
+
+    previousDocument() {
+      if (!this.search) {
+        return undefined;
+      }
+      if (!this.search.documents) {
+        return undefined;
+      }
+      if (typeof this.index === 'undefined') {
+        return undefined;
+      }
+      return this.search.documents[this.index - 1];
+    },
+
+    nextDocument() {
+      if (!this.search) {
+        return undefined;
+      }
+      if (!this.search.documents) {
+        return undefined;
+      }
+      if (typeof this.index === 'undefined') {
+        return undefined;
+      }
+      return this.search.documents[this.index + 1];
+    },
+
     version() {
       if (!this.promise.data || !this.isVersionView) {
         return undefined;
@@ -208,16 +269,25 @@ export default {
         });
       } else {
         // normal mode
-        // because of updateUrl(), we may have nothing to do
-        if (
+        // because of updateUrl(), we may have nothing to do for the document
+        let sameDocument =
           this.document &&
           parseInt($route.params.id, 10) === this.document.document_id &&
-          this.expected_lang === this.lang
-        ) {
+          this.expected_lang === this.lang;
+
+        // and we also may have nothing to do for the associated search
+        const searchKey = typeof $route.query.offset !== 'undefined' ? JSON.stringify($route.query) : null;
+        if (!sameDocument || searchKey !== this.searchKey) {
+          this.searchKey = searchKey;
+          this.search_promise = searchKey ? c2c[this.documentType].getAll($route.query) : null;
+        }
+
+        if (sameDocument) {
           return;
         }
 
         this.$imageViewer.clear();
+
         this.promise = c2c[this.documentType]
           .getCooked(this.documentId, this.expected_lang)
           .then(this.handleRedirection)
@@ -233,7 +303,7 @@ export default {
 
     handleRedirection() {
       if (this.document?.redirects_to) {
-        this.$router.push({ params: { id: this.document.redirects_to } });
+        this.$router.push({ params: { id: this.document.redirects_to }, query: this.$route.query });
       }
     },
 
@@ -281,7 +351,7 @@ export default {
 
       const currentPath = this.getCurrentPath();
       if (this.$route.path !== currentPath) {
-        this.$router.replace(currentPath);
+        this.$router.replace({ path: currentPath, query: this.$route.query });
       }
     },
 

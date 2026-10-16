@@ -6,7 +6,13 @@
       :version="version"
       :document-type="documentType"
     ></masked-document-version-info>
-    <document-view-header v-if="document" :document="document" :version="version" />
+    <document-view-header
+      v-if="document"
+      :previous-document="previousDocument"
+      :next-document="nextDocument"
+      :document="document"
+      :version="version"
+    />
     <div v-if="document" class="columns is-block-print">
       <div class="column is-3 no-print">
         <map-box :document="document" @has-protection-area="hasProtectionArea = true" />
@@ -135,6 +141,8 @@
         <recent-outings-box :document="document" />
 
         <avalanche-box :document="document" v-if="$screen.isMobile" />
+
+        <search-navigation-box document-type="route" :documents="search.documents" :index="index" />
 
         <tool-box :document="document" v-if="$screen.isMobile" />
 

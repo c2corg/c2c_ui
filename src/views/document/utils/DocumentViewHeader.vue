@@ -28,6 +28,32 @@
           <edit-link v-if="isEditable" :document="document" :lang="lang" :title="$gettext('Edit')">
             <icon-edit />
           </edit-link>
+          <span v-if="previousDocument || nextDocument" class="search-navigation no-print">
+            <document-link
+              v-if="previousDocument"
+              :document="previousDocument"
+              :title="$gettext('Previous result')"
+              :aria-label="$gettext('Previous result')"
+              class="button"
+            >
+              <fa-icon icon="chevron-left" />
+            </document-link>
+            <span v-else class="button" disabled>
+              <fa-icon icon="chevron-left" />
+            </span>
+            <document-link
+              v-if="nextDocument"
+              :document="nextDocument"
+              :title="$gettext('Next result')"
+              :aria-label="$gettext('Next result')"
+              class="button"
+            >
+              <fa-icon icon="chevron-right" />
+            </document-link>
+            <span v-else class="button" disabled>
+              <fa-icon icon="chevron-right" />
+            </span>
+          </span>
         </span>
         <h1 class="title is-1">
           <slot name="icon-document">
@@ -80,6 +106,14 @@ export default {
       type: Object,
       default: null,
     },
+    previousDocument: {
+      type: Object,
+      default: null,
+    },
+    nextDocument: {
+      type: Object,
+      default: null,
+    },
   },
 
   computed: {
@@ -118,6 +152,11 @@ export default {
   }
 }
 
+.button-bar > .search-navigation {
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 1px solid lightgray;
+}
 @media print {
   .title {
     font-size: 1.5rem !important;
