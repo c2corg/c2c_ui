@@ -64,9 +64,21 @@ export default {
 
   mounted() {
     this.compute();
+    window.addEventListener('beforeprint', this.loadAllImages);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('beforeprint', this.loadAllImages);
   },
 
   methods: {
+    // lazy images that are not loaded yet would be missing in the printout
+    loadAllImages() {
+      for (const image of this.$refs.container.querySelectorAll('img[loading=lazy]')) {
+        image.loading = 'eager';
+      }
+    },
+
     compute() {
       const container = this.$refs.container;
 
@@ -137,7 +149,6 @@ export default {
           type: 'i',
         };
 
-        image.src = config.urls.api + image.attributes['c2c:url-proxy'].value;
         image.addEventListener('click', () => {
           this.$imageViewer.show(image.c2cExtrapoledDocument);
         });
@@ -159,6 +170,18 @@ export default {
         }
         picture.appendChild(image);
         parent.appendChild(picture, image);
+
+        // Some documents embed hundreds of images, each one being a request to the API
+        // image proxy: only load them when they get close to the viewport.
+        // loading must be set before src, and the image needs a size while it is loading,
+        // otherwise all the 0x0 images are considered in the viewport and loaded at once.
+        image.classList.add('is-loading');
+        const onLoaded = () => image.classList.remove('is-loading');
+        image.addEventListener('load', onLoaded, { once: true });
+        image.addEventListener('error', onLoaded, { once: true });
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        image.src = config.urls.api + image.attributes['c2c:url-proxy'].value;
 
         this.$imageViewer.push(image.c2cExtrapoledDocument);
       }
@@ -236,6 +259,12 @@ figure[c2c\:role='embedded-figure'] {
 
   img {
     cursor: pointer;
+  }
+
+  // placeholder size while the lazy image is not loaded
+  img.is-loading {
+    min-width: 100px;
+    min-height: 100px;
   }
 }
 
