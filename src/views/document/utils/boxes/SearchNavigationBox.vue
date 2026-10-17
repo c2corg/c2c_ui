@@ -8,12 +8,8 @@
       <component v-if="i <= to && i >= from" :is="link" :class="current_index(i)" :[documentType]="doc" />
     </div>
 
-    <div v-if="documents.length" class="has-text-centered add-section">
-      <router-link
-        :to="{ name: documentType + 's', query: allResultsQuery }"
-        class="button is-primary"
-        v-if="!hideSeeAllResultsButton && documents.length"
-      >
+    <div class="has-text-centered add-section">
+      <router-link :to="{ name: documentType + 's', query: allResultsQuery }" class="button is-primary">
         <span v-translate>Show search</span>
       </router-link>
     </div>
