@@ -188,6 +188,41 @@ function checkBudgets(options, bundle) {
   }
 }
 
+/**
+ * Puts dependencies needed at startup in a separate "vendor" chunk, as Vue CLI did with chunk-vendors: they change less
+ * often than the app code, so they stay cached across releases. Dependencies only reached through a dynamic import
+ * (ag-grid, d3, slider...) stay in their lazy chunks.
+ */
+function vendorChunk() {
+  const staticallyImportedByEntry = new Map();
+  const isStaticallyImportedByEntry = (id, getModuleInfo, visiting = new Set()) => {
+    if (staticallyImportedByEntry.has(id)) {
+      return staticallyImportedByEntry.get(id);
+    }
+    if (visiting.has(id)) {
+      return false; // import cycle, decided by another path
+    }
+    visiting.add(id);
+    const info = getModuleInfo(id);
+    const result =
+      !!info &&
+      (info.isEntry ||
+        info.importers.some((importer) => isStaticallyImportedByEntry(importer, getModuleInfo, visiting)));
+    staticallyImportedByEntry.set(id, result);
+    return result;
+  };
+
+  return (id, { getModuleInfo }) => {
+    if (
+      id.includes('node_modules') &&
+      !/\.(css|scss|sass)($|\?)/.test(id) &&
+      isStaticallyImportedByEntry(id, getModuleInfo)
+    ) {
+      return 'vendor';
+    }
+  };
+}
+
 /** Injects the backend urls in index.html, which used to be an EJS template */
 function htmlConfig() {
   return {
@@ -268,6 +303,11 @@ export default defineConfig({
     },
     // build.target is derived from modernBrowsers by plugin-legacy
     sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: vendorChunk(),
+      },
+    },
     // translations, wiki tools... are lazy loaded: never preload them. Vite only preloads the
     // static imports of a dynamic chunk when it is requested, so nothing to disable here.
     // sizes are checked by the performanceBudgets plugin, on every asset and not only JS chunks
