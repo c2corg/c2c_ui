@@ -92,6 +92,14 @@ describe('sanitizeRichHtml', () => {
     expect(sanitizeRichHtml(html)).toBe(html);
   });
 
+  it('keeps the direct media url of embedded images', () => {
+    const html =
+      '<img c2c:role="embedded-image" c2c:document-id="123" c2c:size="MI" ' +
+      'c2c:url="https://media.camptocamp.org/c2corg-active/1526229189_1504164474MI.jpg" ' +
+      'c2c:url-proxy="/images/proxy/123?size=MI">';
+    expect(sanitizeRichHtml(html)).toBe(html);
+  });
+
   it('removes c2c: attributes that are not allow-listed', () => {
     expect(sanitizeRichHtml('<div c2c:unknown="x">x</div>')).toBe('<div>x</div>');
   });

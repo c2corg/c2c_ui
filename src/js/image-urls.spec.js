@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { getImageUrl } from './image-urls';
+import { getEmbeddedImageUrl, getImageUrl } from './image-urls';
 
 // '@/js/config' reads CAMPTOCAMP_CONFIG, a constant injected by webpack (see vue.config.js)
 const config = vi.hoisted(() => ({ urls: {} }));
@@ -121,5 +121,53 @@ describe('getImageUrl', () => {
         expect(getImageUrl(image, undefined, 'webp')).toBe(`${API}/images/proxy/42`);
       });
     });
+  });
+});
+
+describe('getEmbeddedImageUrl', () => {
+  const url = `${MEDIA}/1526229189_1504164474MI.jpg`;
+  const urlProxy = '/images/proxy/42?size=MI';
+
+  it('returns the direct media url', () => {
+    expect(getEmbeddedImageUrl({ url, urlProxy })).toBe(url);
+  });
+
+  it.each(['avif', 'webp'])('returns the direct media url in %s', (format) => {
+    expect(getEmbeddedImageUrl({ url, urlProxy }, format)).toBe(`${MEDIA}/1526229189_1504164474MI.${format}`);
+  });
+
+  it('replaces the extension of svg thumbnails', () => {
+    expect(getEmbeddedImageUrl({ url: `${MEDIA}/1588000000_1MI.jpg`, urlProxy }, 'webp')).toBe(
+      `${MEDIA}/1588000000_1MI.webp`
+    );
+  });
+
+  it('falls back to the proxy when the media url is missing', () => {
+    expect(getEmbeddedImageUrl({ urlProxy })).toBe(`${API}${urlProxy}`);
+    expect(getEmbeddedImageUrl({ url: '', urlProxy })).toBe(`${API}${urlProxy}`);
+    expect(getEmbeddedImageUrl({ urlProxy }, 'avif')).toBe(`${API}${urlProxy}&extension=avif`);
+  });
+
+  it.each([
+    'https://evil.example.org/1526229189_1504164474MI.jpg',
+    'https://media.example.org.evil.org/1526229189_1504164474MI.jpg',
+    `${MEDIA}`,
+    '//evil.example.org/x.jpg',
+    'javascript:alert(1)',
+  ])('falls back to the proxy for untrusted url %j', (untrusted) => {
+    expect(getEmbeddedImageUrl({ url: untrusted, urlProxy })).toBe(`${API}${urlProxy}`);
+    expect(getEmbeddedImageUrl({ url: untrusted, urlProxy }, 'webp')).toBe(`${API}${urlProxy}&extension=webp`);
+  });
+
+  it('falls back to the proxy when no media url is configured', () => {
+    config.urls.media = '';
+    expect(getEmbeddedImageUrl({ url: '/1526229189_1504164474MI.jpg', urlProxy })).toBe(`${API}${urlProxy}`);
+  });
+
+  it('falls back to the proxy for a format when the media url has no extension', () => {
+    expect(getEmbeddedImageUrl({ url: `${MEDIA}/noextension`, urlProxy })).toBe(`${MEDIA}/noextension`);
+    expect(getEmbeddedImageUrl({ url: `${MEDIA}/noextension`, urlProxy }, 'avif')).toBe(
+      `${API}${urlProxy}&extension=avif`
+    );
   });
 });
