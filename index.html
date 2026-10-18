@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Camptocamp.org developement builds</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <style>
+    </style>
+  </head>
+  <body>
+    <section id="app" class="section">
+      <div class="container">
+        <div class="columns is-mobile">
+          <div class="column is-6">
+          </div>
+          <div class="column is-6">
+          </div>
+        </div>
+        <h1 class="title">
+          Camptocamp.org UI - Build list
+        </h1>
+        <p class="subtitle">
+          Here is the list of active builds
+        </p>
+        <div class="notification info" v-if="!branches">Loading</div>
+        <ul v-else>
+          <li v-for="branch of branches" :key="branch.name">
+            <span v-if="branch.buildIsReady === undefined" class="icon has-text-warning" key="1">
+              <i class="fas fa-hourglass"></i>
+            </span>
+            <span v-else-if="branch.buildIsReady === false" class="icon has-text-danger"  key="2">
+              <i class="fas fa-skull"></i>
+            </span>
+            <span v-else-if="branch.buildIsReady === true" class="icon has-text-success"  key="3">
+              <i class="fas fa-check-circle"></i>
+            </span>
+            <a :href="branch.githubPageUrl" :class="{'has-text-danger': branch.buildIsReady === false}">
+              <span>{{ branch.name }}</span>
+            </a>
+            <span>
+              ->
+            </span>
+            <em v-if="branch.pull === undefined">Getting pull request</em>
+            <em v-else-if="branch.pull === null" class="has-text-warning">There is no PR for this branch</em>
+            <span v-else>
+              <a :href="branch.pull.html_url">
+                Pull request
+              </a>
+              <span>by</span>
+              <a :href="branch.pull.user.html_url">
+                {{ branch.pull.user.login }} : 
+              </a>
+              <em>
+                {{ branch.pull.title }}
+              </em>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <script>
+      const ORG_NAME = 'c2corg';
+      const REPO_NAME = 'c2c_ui';
+      const REPO_SLUG = `${ORG_NAME}/${REPO_NAME}`;
+
+      var app = new Vue({
+        el: '#app',
+        data: {
+          message: 'Hello Vue!',
+          branches: null,
+          pulls: null,
+          githubPageContent: null,
+        },
+        created(){
+          axios.get(`https://api.github.com/repos/${REPO_SLUG}/branches`)
+            .then((response) => {
+            this.branches = response.data.filter((branch) => branch.name !== 'gh-pages');
+            this.branches.map(this.initBranch);
+            this.dispatchContents();
+            this.dispatchPulls();
+          })
+
+          axios.get(`https://api.github.com/repos/${REPO_SLUG}/contents?ref=gh-pages`)
+            .then((response) => {
+            this.githubPageContent = response.data;
+            this.dispatchContents();
+          })
+
+          axios.get(`https://api.github.com/repos/${REPO_SLUG}/pulls`)
+            .then((response) => {
+            this.pulls = response.data;
+            this.dispatchPulls();
+          })
+        },
+
+        methods: {
+          initBranch(branch){
+            branch.cleanedName = branch.name.replace('/', '-');
+            const url = `https://${ORG_NAME}.github.io/${REPO_NAME}/${branch.cleanedName}`;
+            this.$set(branch, "githubPageUrl", url)
+            this.$set(branch, "buildIsReady", undefined);
+            this.$set(branch, "pull", undefined);
+          },
+
+          dispatchPulls(){
+            if (!this.branches || !this.pulls){
+              return;
+            }
+
+            this.branches.map((branch) => { branch.pull = null });
+            
+            const branches = {}
+            this.branches.map((branch) => { branches[branch.name] = branch });
+
+            for (const pull of this.pulls){
+              if (branches[pull.head.ref] !== undefined) {
+                branches[pull.head.ref].pull = pull;
+              }
+            }
+          },
+
+          dispatchContents(){
+            if (!this.branches || !this.githubPageContent){
+              return;
+            }
+
+            this.branches.map((branch) => { branch.buildIsReady = false });
+
+            const branches = {}
+            this.branches.map((branch) => { branches[branch.cleanedName] = branch });
+
+            for (const item of this.githubPageContent.filter((item) => item.type === 'dir')){
+              if (branches[item.name] !== undefined) {
+                branches[item.name].buildIsReady = true;
+              }
+            }
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
