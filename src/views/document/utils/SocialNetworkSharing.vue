@@ -19,8 +19,6 @@
 </template>
 
 <script>
-import { browser } from 'process';
-
 import config from '@/js/config';
 
 const cdn = '//s7.addthis.com/js/300/addthis_widget.js';
@@ -32,9 +30,6 @@ export default {
 
   computed: {
     addThisEnabled: function () {
-      if (!browser) {
-        return;
-      }
       const enabled = this.$gdpr.get()?.social ?? false;
       enabled ? this.installAddThis() : this.uninstallAddThis();
       return enabled;
