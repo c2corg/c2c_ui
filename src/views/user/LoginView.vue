@@ -119,7 +119,9 @@
     </base-form>
 
     <base-form ref="resetPasswordForm" v-show="mode == 'resetPassword'" :promise="promise" @submit="resetPassword">
-      <h3 slot="header" class="title is-3" v-translate>Reset password</h3>
+      <template #header>
+        <h3 class="title is-3" v-translate>Reset password</h3>
+      </template>
 
       <form-field
         ref="resetPasswordMainInput"
@@ -148,7 +150,9 @@
       :promise="promise"
       @submit="validateNewPassword"
     >
-      <h3 slot="header" class="title is-3" v-translate>Change password</h3>
+      <template #header>
+        <h3 class="title is-3" v-translate>Change password</h3>
+      </template>
 
       <form-field
         ref="changePasswordMainInput"

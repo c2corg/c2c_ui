@@ -1,8 +1,10 @@
 <template>
   <modal-window ref="modalWindow">
-    <div slot="header" class="has-text-centered">
-      <span v-translate>Create the first version in the following lang</span>
-    </div>
+    <template #header>
+      <div class="has-text-centered">
+        <span v-translate>Create the first version in the following lang</span>
+      </div>
+    </template>
     <div v-for="lang in missingLangs" :key="lang" class="has-text-centered">
       <edit-link class="is-size-4" :document="document" :lang="lang">
         {{ $gettext(lang, 'langs') | uppercaseFirstLetter }}

@@ -1,11 +1,13 @@
 <template>
   <dropdown-button>
-    <span slot="button" class="button is-size-7-mobile">
-      <fa-icon :icon="['miscs', 'sort']" />
-      <span class="is-hidden-mobile"> &nbsp;{{ $gettext('Sort by') }} </span>
-      <span>&nbsp;</span>
-      <fa-icon icon="angle-down" aria-hidden="true" />
-    </span>
+    <template #button>
+      <span class="button is-size-7-mobile">
+        <fa-icon :icon="['miscs', 'sort']" />
+        <span class="is-hidden-mobile"> &nbsp;{{ $gettext('Sort by') }} </span>
+        <span>&nbsp;</span>
+        <fa-icon icon="angle-down" aria-hidden="true" />
+      </span>
+    </template>
 
     <div v-if="complexSort">
       <div class="dropdown-item is-italic" v-translate>You are using a custom sort</div>

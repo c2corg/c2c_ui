@@ -13,10 +13,12 @@
           {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
           <span>
             <dropdown-button>
-              <span slot="button" class="button">
-                <span> {{ $language.availableAPI[document.locales[0].lang] }}&nbsp; </span>
-                <fa-icon icon="angle-down" aria-hidden="true" />
-              </span>
+              <template #button>
+                <span class="button">
+                  <span> {{ $language.availableAPI[document.locales[0].lang] }}&nbsp; </span>
+                  <fa-icon icon="angle-down" aria-hidden="true" />
+                </span>
+              </template>
               <div
                 v-for="lang of $options.constants.langs"
                 :key="lang"
