@@ -212,7 +212,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '~ol/ol.css';
+@import 'ol/ol.css';
 @import '@/assets/sass/variables';
 
 $control-margin: 0.52em;

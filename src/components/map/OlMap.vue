@@ -1439,7 +1439,7 @@ export default {
 </style>
 
 <style lang="scss">
-@import '~ol/ol.css';
+@import 'ol/ol.css';
 
 :root,
 :host {
