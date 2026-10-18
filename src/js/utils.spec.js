@@ -147,16 +147,16 @@ describe('stripMarkdown', () => {
     expect(() => utils.stripMarkdown(undefined)).toThrow(TypeError);
   });
 
-  // Suspected bug: the dash regex is written /([\\s\n])-(\\s\n)/, as if it were inside a string
-  // literal. In a regex literal, `\\s` matches a backslash followed by 's', so a dash surrounded
-  // by spaces (as described by the comment in utils.js) is never removed.
-  it.fails('removes a dash surrounded by spaces', () => {
+  it('removes a dash surrounded by spaces or line returns', () => {
     expect(utils.stripMarkdown('Chamonix - Zermatt')).toBe('Chamonix  Zermatt');
+    expect(utils.stripMarkdown('list:\n- one\n- two')).toBe('list:\n one\n two');
   });
 
-  // Suspected bug: the sup/sub regex uses a greedy (.+), so with several tags on one line it
-  // matches from the first opening tag to the last closing tag and leaves inner tags behind.
-  it.fails('unwraps several <sup>/<sub> tags on the same line', () => {
+  it('keeps a dash without a space on both sides', () => {
+    expect(utils.stripMarkdown('-5 °C, 3 -4')).toBe('-5 °C, 3 -4');
+  });
+
+  it('unwraps several <sup>/<sub> tags on the same line', () => {
     expect(utils.stripMarkdown('1<sup>er</sup> et 2<sup>e</sup>')).toBe('1er et 2e');
     expect(utils.stripMarkdown('1<sup>er</sup> mai, H<sub>2</sub>O')).toBe('1er mai, H2O');
   });

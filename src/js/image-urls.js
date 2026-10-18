@@ -29,7 +29,11 @@ export const getImageUrl = function (image, size, format) {
       // Until all images are migrated only images uploaded after a given timestamp
       // or with an id greater than a given one have their webp and avif versions
       const timestamp = Number.parseInt(image.filename.split('_')[0], 10);
-      if (!config.urls.modernThumbnailsTimestamp || timestamp < config.urls.modernThumbnailsTimestamp) {
+      if (
+        !config.urls.modernThumbnailsTimestamp ||
+        Number.isNaN(timestamp) ||
+        timestamp < config.urls.modernThumbnailsTimestamp
+      ) {
         return;
       }
       return `${config.urls.media}/${backendFilename.substring(0, backendFilename.length - 3) + format}`;
