@@ -77,7 +77,9 @@ jobs:
 
   github-pages:
     needs: build
-    if: "!github.event.pull_request.head.repo.fork && github.actor != 'dependabot[bot]'"
+    # Dependabot PRs are never previewed: checking the branch name too, since
+    # github.actor is whoever triggered the run (e.g. a maintainer re-running it).
+    if: "!github.event.pull_request.head.repo.fork && github.actor != 'dependabot[bot]' && !startsWith(github.head_ref, 'dependabot/')"
     runs-on: ubuntu-latest
     concurrency: github-pages
     permissions:
