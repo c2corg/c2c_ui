@@ -14,7 +14,7 @@
           <template #title>
             <h3 class="title is-3">
               <icon-activity :activity="activity" />
-              {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
+              {{ $filters.uppercaseFirstLetter($gettext(activity, 'activities')) }}
             </h3>
           </template>
           <template #content>

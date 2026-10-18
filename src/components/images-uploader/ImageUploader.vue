@@ -38,7 +38,7 @@
           <div v-for="item of imageCategories" :key="item" class="column is-4">
             <label class="checkbox">
               <input type="checkbox" :checked="document.categories.includes(item)" @input="toggleCategory(item)" />
-              {{ $gettext(item, 'image_categories') | uppercaseFirstLetter }}
+              {{ $filters.uppercaseFirstLetter($gettext(item, 'image_categories')) }}
             </label>
           </div>
         </div>
@@ -62,7 +62,7 @@
               :key="licence"
               @click="document.image_type = licence"
             >
-              <label>{{ licences.length }} {{ label | uppercaseFirstLetter }}</label>
+              <label>{{ licences.length }} {{ $filters.uppercaseFirstLetter(label) }}</label>
             </div>
           </div>
         </div>

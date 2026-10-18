@@ -1,11 +1,11 @@
 <template>
   <div class="control">
-    <span v-if="prefix !== null"> {{ prefix | uppercaseFirstLetter }} : </span>
+    <span v-if="prefix !== null"> {{ $filters.uppercaseFirstLetter(prefix) }} : </span>
     <input :id="'c2c-' + _uid + '_yes'" type="radio" :value="true" class="is-checkradio is-primary" v-model="value_" />
-    <label :for="'c2c-' + _uid + '_yes'">{{ labelYes || $gettext('yes') | uppercaseFirstLetter }}</label>
+    <label :for="'c2c-' + _uid + '_yes'">{{ $filters.uppercaseFirstLetter(labelYes || $gettext('yes')) }}</label>
 
     <input :id="'c2c-' + _uid + '_no'" type="radio" :value="false" class="is-checkradio is-primary" v-model="value_" />
-    <label :for="'c2c-' + _uid + '_no'">{{ labelNo || $gettext('no') | uppercaseFirstLetter }}</label>
+    <label :for="'c2c-' + _uid + '_no'">{{ $filters.uppercaseFirstLetter(labelNo || $gettext('no')) }}</label>
 
     <input
       v-if="nullable"
@@ -16,7 +16,7 @@
       v-model="value_"
     />
     <label v-if="nullable" :for="'c2c-' + _uid + '_null'" class="is-italic">
-      {{ $gettext('no info') | uppercaseFirstLetter }}
+      {{ $filters.uppercaseFirstLetter($gettext('no info')) }}
     </label>
   </div>
 </template>

@@ -2,7 +2,7 @@
   <div class="label-value">
     <span class="label-value-label has-text-weight-bold"
       ><!--
-        -->{{ label | uppercaseFirstLetter
+        -->{{ $filters.uppercaseFirstLetter(label)
       }}<!--
     --></span>
     <span>

@@ -2,7 +2,7 @@
   <div>
     <div v-for="(waypointsList, i) of waypointsLists" :key="i" class="associations-list">
       <div class="title">
-        {{ waypointsList.title | uppercaseFirstLetter }}
+        {{ $filters.uppercaseFirstLetter(waypointsList.title) }}
       </div>
       <document-link
         v-for="waypoint of waypointsList.waypoints"
@@ -24,7 +24,7 @@
     <!-- books -->
     <div v-if="associations.books.length != 0" class="associations-list">
       <div class="title">
-        {{ $gettext('books') | uppercaseFirstLetter }}
+        {{ $filters.uppercaseFirstLetter($gettext('books')) }}
       </div>
       <div v-for="book of associations.books" :key="book.document_id" class="is-ellipsed">
         <document-link :document="book">
@@ -38,7 +38,7 @@
     <!-- articles -->
     <div v-if="associations.articles.length != 0" class="associations-list">
       <div class="title">
-        {{ $gettext('articles') | uppercaseFirstLetter }}
+        {{ $filters.uppercaseFirstLetter($gettext('articles')) }}
       </div>
       <div v-for="article of associations.articles" :key="article.document_id" class="is-ellipsed">
         <document-link :document="article">
@@ -52,7 +52,7 @@
     <!-- xreports -->
     <div v-if="associations.xreports && associations.xreports.length != 0" class="associations-list">
       <div class="title">
-        {{ $gettext('xreports') | uppercaseFirstLetter }}
+        {{ $filters.uppercaseFirstLetter($gettext('xreports')) }}
       </div>
       <div v-for="xreport of associations.xreports" :key="xreport.document_id" class="is-ellipsed">
         <document-link :document="xreport">
@@ -69,7 +69,7 @@
       class="associations-list"
     >
       <div class="title">
-        {{ $gettext('outings') | uppercaseFirstLetter }}
+        {{ $filters.uppercaseFirstLetter($gettext('outings')) }}
       </div>
       <div v-for="outing of associations.outings" :key="outing.document_id" class="is-ellipsed">
         <document-link :document="outing">

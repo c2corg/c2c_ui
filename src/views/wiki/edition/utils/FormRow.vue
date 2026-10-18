@@ -3,7 +3,7 @@
     <div class="field-label is-normal">
       <label class="label">
         <marker-helper :name="helper" />
-        {{ label | uppercaseFirstLetter }}
+        {{ $filters.uppercaseFirstLetter(label) }}
       </label>
     </div>
     <div class="field-body">

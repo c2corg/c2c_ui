@@ -4,7 +4,7 @@
       <template v-if="!hideTitle" #title>
         <h2 class="title is-2">
           <span>
-            {{ (title || $gettext(field.name)) | uppercaseFirstLetter }}
+            {{ $filters.uppercaseFirstLetter(title || $gettext(field.name)) }}
           </span>
         </h2>
       </template>

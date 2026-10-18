@@ -35,7 +35,7 @@
         :class="{ 'is-hidden-mobile': !hideSearchInput }"
       >
         <icon-help fixed-width />
-        <span class="is-hidden-mobile"> {{ $gettext('help') | uppercaseFirstLetter }} </span>
+        <span class="is-hidden-mobile"> {{ $filters.uppercaseFirstLetter($gettext('help')) }} </span>
       </router-link>
       <div ref="searchInputContainer">
         <input-document
@@ -86,7 +86,7 @@
       <div class="navigation-item">
         <join-us-link class="has-text-centered button c2c-color" :class="{ 'is-hidden-mobile': !hideSearchInput }">
           <icon-join-us fixed-width />
-          <span class="is-hidden-mobile">{{ $gettext('Join us') | uppercaseFirstLetter }}</span>
+          <span class="is-hidden-mobile">{{ $filters.uppercaseFirstLetter($gettext('Join us')) }}</span>
         </join-us-link>
       </div>
 
@@ -106,7 +106,7 @@
           >
             <icon-document :document-type="documentType" fixed-width />
             <span>
-              {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
+              {{ $filters.uppercaseFirstLetter($documentUtils.getCreationTitle(documentType)) }}
             </span>
           </add-link>
         </dropdown-button>

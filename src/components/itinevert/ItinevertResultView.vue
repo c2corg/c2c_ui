@@ -5,7 +5,7 @@
       <div class="header-section">
         <span>
           <span class="title is-3 is-ellipsed">
-            {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
+            {{ $filters.uppercaseFirstLetter(getDocumentTypeTitle(documentType)) }}
           </span>
           &nbsp;
           <br class="is-hidden-tablet" />

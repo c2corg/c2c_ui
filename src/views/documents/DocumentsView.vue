@@ -8,7 +8,7 @@
             <template #button>
               <span>
                 <span class="title is-3 is-ellipsed">
-                  {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
+                  {{ $filters.uppercaseFirstLetter(getDocumentTypeTitle(documentType)) }}
                 </span>
                 <fa-icon icon="angle-down" aria-hidden="true" />
               </span>
@@ -21,7 +21,7 @@
               :to="{ name: type + 's', query: queryWithoutOffsetAndSort }"
             >
               <icon-document :document-type="type" />
-              <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
+              <span>&nbsp;{{ $filters.uppercaseFirstLetter(getDocumentTypeTitle(type)) }}</span>
             </router-link>
           </dropdown-button>
           &nbsp;

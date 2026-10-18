@@ -45,7 +45,7 @@
 
       <div class="field">
         <label class="label">
-          {{ $gettext('routes') | uppercaseFirstLetter }}:
+          {{ $filters.uppercaseFirstLetter($gettext('routes')) }}:
           <marker-helper name="1063027#routes" />
         </label>
         <div class="control">

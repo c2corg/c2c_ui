@@ -1,6 +1,6 @@
 <template>
   <span>
-    <span v-if="uppercaseFirstLetter">{{ title | uppercaseFirstLetter }}</span>
+    <span v-if="uppercaseFirstLetter">{{ $filters.uppercaseFirstLetter(title) }}</span>
     <span v-else>{{ title }}</span>
   </span>
 </template>
