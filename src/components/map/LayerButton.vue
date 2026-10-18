@@ -35,7 +35,8 @@ export default {
   name: 'LayerButton',
 
   components: {
-    VueSlider: () => import('vue-slider-component'),
+    // the UMD build is a CommonJS module: unwrap its default export (Vue only does it for ES module namespaces)
+    VueSlider: () => import('vue-slider-component').then((module) => module.default),
   },
 
   props: {
