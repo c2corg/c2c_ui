@@ -18,6 +18,11 @@ export default function reloadOnStaleChunk(router, win = window) {
   router.afterEach(() => {
     pendingRoute = null;
   });
+  // afterEach is not called when a navigation fails (the lazy chunk could not be loaded). vite:preloadError is
+  // emitted before the import rejects, so the handler below has already seen the pending route.
+  router.onError(() => {
+    pendingRoute = null;
+  });
 
   win.addEventListener('vite:preloadError', () => {
     try {
@@ -26,7 +31,8 @@ export default function reloadOnStaleChunk(router, win = window) {
       }
       win.sessionStorage.setItem(STORAGE_KEY, String(Date.now()));
     } catch {
-      // no session storage: reload anyway
+      // no session storage: no way to prevent a reload loop, so don't reload
+      return;
     }
     if (pendingRoute) {
       win.location.assign(router.resolve(pendingRoute.fullPath).href);

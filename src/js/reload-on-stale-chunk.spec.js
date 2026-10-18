@@ -101,7 +101,22 @@ describe('reloadOnStaleChunk', () => {
     expect(win.location.reload).toHaveBeenCalledTimes(2);
   });
 
-  it('still reloads when session storage is not available', () => {
+  it('reloads the current page after a failed navigation whose reload was skipped', async () => {
+    const win = fakeWindow();
+    const router = createRouter(win);
+    reloadOnStaleChunk(router, win);
+    await router.push('/');
+
+    win.dispatchEvent(preloadError());
+    await router.push('/yeti/42').catch(() => {}); // within a minute: no reload
+    vi.advanceTimersByTime(61 * 1000);
+    win.dispatchEvent(preloadError());
+
+    expect(win.location.reload).toHaveBeenCalledTimes(2);
+    expect(win.location.assign).not.toHaveBeenCalled();
+  });
+
+  it('does not reload when session storage is not available, as it could loop', () => {
     const throwing = () => {
       throw new DOMException('denied', 'SecurityError');
     };
@@ -110,6 +125,7 @@ describe('reloadOnStaleChunk', () => {
 
     win.dispatchEvent(preloadError());
 
-    expect(win.location.reload).toHaveBeenCalledTimes(1);
+    expect(win.location.reload).not.toHaveBeenCalled();
+    expect(win.location.assign).not.toHaveBeenCalled();
   });
 });
