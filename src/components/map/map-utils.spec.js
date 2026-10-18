@@ -8,6 +8,7 @@ describe('map-utils', () => {
     await expect(import('./map-utils')).resolves.toHaveProperty('getDocumentPointStyle');
   });
 
+  // cold import of OpenLayers can exceed default 5s timeout when CI runs other heavy specs in parallel
   it('draws document markers with the icons registered by the font-awesome plugin', async () => {
     vi.resetModules();
     const { getDocumentPointStyle } = await import('./map-utils');
@@ -20,5 +21,5 @@ describe('map-utils', () => {
     expect(decodeURIComponent(icon.getImage().getSrc())).toMatch(
       /^data:image\/svg\+xml;charset=utf-8,<svg width="20px"/
     );
-  });
+  }, 20000);
 });

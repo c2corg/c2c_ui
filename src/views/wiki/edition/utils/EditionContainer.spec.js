@@ -5,8 +5,6 @@ import EditionContainer from './EditionContainer';
 
 import c2c from '@/js/apis/c2c';
 
-vi.mock('@/js/apis/c2c', () => ({ default: { article: { getCooked: vi.fn() } } }));
-
 const localVue = createLocalVue();
 localVue.directive('translate', {});
 
@@ -31,16 +29,18 @@ describe('EditionContainer', () => {
 
   beforeEach(() => {
     onUnhandledRejection.mockClear();
-    c2c.article.getCooked.mockReset();
+    // stub the HTTP layer only, so that requests go through the real ApiData wrapper
+    vi.spyOn(c2c.axios, 'get');
     process.on('unhandledRejection', onUnhandledRejection);
   });
 
   afterEach(() => {
     process.off('unhandledRejection', onUnhandledRejection);
+    vi.restoreAllMocks();
   });
 
   it('shows the edit form without banners, and throws nothing, when banners request fails', async () => {
-    c2c.article.getCooked.mockRejectedValue(new Error('Request failed with status code 404'));
+    c2c.axios.get.mockRejectedValue(new Error('Request failed with status code 404'));
 
     const wrapper = mountEditionContainer();
     await flush();
@@ -51,20 +51,20 @@ describe('EditionContainer', () => {
   });
 
   it('requests banners again on next edit view after a failure, shows them at once, then caches them', async () => {
-    c2c.article.getCooked.mockResolvedValue({
+    c2c.axios.get.mockResolvedValue({
       data: { cooked: { description: '<h3 id="waypoint">Waypoints</h3><p>Waypoint banner</p>' } },
     });
 
     const wrapper = mountEditionContainer();
     await flush();
 
-    expect(c2c.article.getCooked).toHaveBeenCalledExactlyOnceWith(1110927, 'fr');
+    expect(c2c.axios.get).toHaveBeenCalledExactlyOnceWith('/articles/1110927?cook=fr', undefined);
     expect(wrapper.find('.edition-banner').text()).toBe('Waypoint banner');
 
     const nextWrapper = mountEditionContainer();
     await flush();
 
-    expect(c2c.article.getCooked).toHaveBeenCalledOnce();
+    expect(c2c.axios.get).toHaveBeenCalledOnce();
     expect(nextWrapper.find('.edition-banner').text()).toBe('Waypoint banner');
   });
 });

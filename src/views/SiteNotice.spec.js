@@ -5,8 +5,6 @@ import SiteNotice from './SiteNotice';
 
 import forum from '@/js/apis/forum';
 
-vi.mock('@/js/apis/forum', () => ({ default: { readAnnouncement: vi.fn() } }));
-
 const mountSiteNotice = () =>
   mount(SiteNotice, {
     mocks: {
@@ -23,15 +21,18 @@ describe('SiteNotice', () => {
 
   beforeEach(() => {
     onUnhandledRejection.mockClear();
+    // stub the HTTP layer only, so that requests go through the real ApiData wrapper
+    vi.spyOn(forum.axios, 'get');
     process.on('unhandledRejection', onUnhandledRejection);
   });
 
   afterEach(() => {
     process.off('unhandledRejection', onUnhandledRejection);
+    vi.restoreAllMocks();
   });
 
   it('shows a visible announcement', async () => {
-    forum.readAnnouncement.mockResolvedValue({
+    forum.axios.get.mockResolvedValue({
       data: {
         tags: ['visible'],
         post_stream: { posts: [{ updated_at: '2026-10-18', cooked: '<p>Header</p><p>Content</p>' }] },
@@ -46,7 +47,7 @@ describe('SiteNotice', () => {
   });
 
   it('shows nothing, and throws nothing, when the forum is unreachable', async () => {
-    forum.readAnnouncement.mockRejectedValue(new Error('Network Error'));
+    forum.axios.get.mockRejectedValue(new Error('Network Error'));
 
     const wrapper = mountSiteNotice();
     await flush();

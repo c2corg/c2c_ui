@@ -135,13 +135,10 @@ export default {
 
   mounted() {
     if (!htmlBanners.initialized) {
-      c2c.article
-        .getCooked(BANNERS_ARTICLE_ID, this.$language.current)
-        .then(this.computeBanners)
-        .catch(() => {
-          // banners are optional: the form works without them. Cache is left
-          // uninitialized, so that next edit view tries again.
-        });
+      c2c.article.getCooked(BANNERS_ARTICLE_ID, this.$language.current).then(this.computeBanners, () => {
+        // banners are optional: the form works without them. Cache is left
+        // uninitialized, so that next edit view tries again.
+      });
     }
   },
 
