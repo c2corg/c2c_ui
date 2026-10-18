@@ -48,7 +48,7 @@
   },
   "overrides": [
     {
-      "files": ["vitest.config.js", "src/**/*.spec.js"],
+      "files": ["vitest.config.mjs", "src/**/*.spec.js"],
       "rules": {
         "import/no-unresolved": ["error", { "ignore": ["^vitest(/|$)"] }]
       }
