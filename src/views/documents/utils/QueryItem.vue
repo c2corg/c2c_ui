@@ -103,8 +103,8 @@ import { requireFieldProperty } from '@/js/properties-mixins';
 
 export default {
   components: {
-    Multiselect: () => import(/* webpackChunkName: "multiselect" */ 'vue-multiselect'),
-    VueSlider: () => import(/* webpackChunkName: "slider" */ 'vue-slider-component'),
+    Multiselect: () => import('vue-multiselect'),
+    VueSlider: () => import('vue-slider-component'),
     QueryItemSliderLabel,
     DateQueryItem,
     DatesQueryItem,

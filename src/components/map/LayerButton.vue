@@ -35,7 +35,7 @@ export default {
   name: 'LayerButton',
 
   components: {
-    VueSlider: () => import(/* webpackChunkName: "slider" */ 'vue-slider-component'),
+    VueSlider: () => import('vue-slider-component'),
   },
 
   props: {

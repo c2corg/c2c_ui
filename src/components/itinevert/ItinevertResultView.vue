@@ -125,7 +125,7 @@ import itinevertService, { POLYGON_STYLE } from '@/js/apis/itinevert-service';
 import constants from '@/js/constants';
 import QueryItems from '@/views/documents/utils/QueryItems.vue';
 
-const DocumentsTable = () => import(/* webpackChunkName: "data-table" */ '@/components/datatable/DocumentsTable');
+const DocumentsTable = () => import('@/components/datatable/DocumentsTable');
 
 export default {
   name: 'ItinevertResultView',

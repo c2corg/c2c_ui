@@ -1,6 +1,6 @@
-// CAMPTOCAMP_CONFIG is a placeholder defined in vue.config.js
+// CAMPTOCAMP_CONFIG is a placeholder defined in vite.config.mjs
 // Do not modify this file. If you need another build parameter
-// please go to vue.config.js in root
+// please go to vite.config.mjs in root
 
 const config = CAMPTOCAMP_CONFIG;
 
