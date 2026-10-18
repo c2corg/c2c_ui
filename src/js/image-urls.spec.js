@@ -71,10 +71,7 @@ describe('getImageUrl', () => {
         );
       });
 
-      // Suspected bug (low impact, backend filenames always start with a timestamp): parseInt() returns
-      // NaN, and `NaN < modernThumbnailsTimestamp` is false, so a modern url is returned for an image
-      // whose upload date is unknown, instead of falling back like older images do.
-      it.fails('returns undefined when the filename has no numeric timestamp', () => {
+      it('returns undefined when the filename has no numeric timestamp', () => {
         config.urls.modernThumbnailsTimestamp = 1;
         expect(getImageUrl({ document_id: 1, filename: 'abc.jpg' }, 'SI', 'webp')).toBeUndefined();
       });
