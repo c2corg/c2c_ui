@@ -290,10 +290,10 @@ export default new Vue({
       // we need to fill array first with empty data
       for (let i = 0; i < index; i++) {
         if (!state.yetiLayersSelector[i]) {
-          this.$set(state.yetiLayersSelector, i, {});
+          state.yetiLayersSelector.splice(i, 1, {});
         }
       }
-      this.$set(state.yetiLayersSelector, index, layer);
+      state.yetiLayersSelector.splice(index, 1, layer);
     },
     setShowYeti(showYeti) {
       state.showYeti = showYeti;
@@ -351,10 +351,10 @@ export default new Vue({
       // we need to fill array first with empty data
       for (let i = 0; i < index; i++) {
         if (!state.overlaysLayersSelector[i]) {
-          this.$set(state.overlaysLayersSelector, i, {});
+          state.overlaysLayersSelector.splice(i, 1, {});
         }
       }
-      this.$set(state.overlaysLayersSelector, index, layer);
+      state.overlaysLayersSelector.splice(index, 1, layer);
     },
     setAllMountains(mountains) {
       state.mountains.all = mountains;

@@ -345,7 +345,8 @@ export default {
       }
 
       const groupId = stopGroup[0].id;
-      this.$set(this.expandedStopGroups, groupId, !this.expandedStopGroups[groupId]);
+      // a new object: adding a key to a reactive object is not reactive in Vue 2
+      this.expandedStopGroups = { ...this.expandedStopGroups, [groupId]: !this.expandedStopGroups[groupId] };
 
       this.selectedStopGroup = stopGroup;
       this.selectedStop = stopGroup[0];
