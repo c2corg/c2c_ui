@@ -12,6 +12,7 @@
     "generate-icons": "node tools/generate-icons.js",
     "lint:no-fix": "prettier --check \"**/*.{ts,js,json,css,scss,less,md,html,vue}\" && npm run lint:style && vue-cli-service lint --no-fix",
     "lint:style": "stylelint \"src/**/*.{vue,scss}\"",
+    "test": "vitest run",
     "messages:extract": "node tools/extract-messages.js",
     "prepare": "husky && npm run snyk-protect && npm run prepare-swiper",
     "snyk-protect": "snyk-protect",
