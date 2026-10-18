@@ -32,7 +32,10 @@ const ApiData = function (promise) {
 };
 
 ApiData.prototype.then = function (successCallback, errorCallback) {
-  this.promise_.then(successCallback, errorCallback);
+  // then() returns this, not the derived promise: nobody can catch that one. Without an error callback, a failed
+  // request would reject it unhandled; the error stays available in this.error and through catch().
+  // Errors thrown by the callbacks are still reported.
+  this.promise_.then(successCallback, errorCallback ?? (() => {}));
   return this;
 };
 
