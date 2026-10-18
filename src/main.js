@@ -25,6 +25,34 @@ import user from '@/js/vue-plugins/user';
 // Import the main Sass manifest file
 import './assets/sass/main.scss';
 
+// After a deploy, a page opened before it requests lazy chunks that no longer exist (translations, edition views...).
+// Reload to get the new index.html, at most once a minute so that a chunk really missing can't cause a reload loop.
+// If the chunk was needed by a navigation (e.g. an edition view), reload directly on its target.
+let pendingRoute = null;
+router.beforeEach((to, from, next) => {
+  pendingRoute = to;
+  next();
+});
+router.afterEach(() => {
+  pendingRoute = null;
+});
+window.addEventListener('vite:preloadError', () => {
+  const key = 'c2c.preloadErrorReload';
+  try {
+    if (Date.now() - Number(window.sessionStorage.getItem(key)) < 60 * 1000) {
+      return;
+    }
+    window.sessionStorage.setItem(key, String(Date.now()));
+  } catch {
+    // no session storage: reload anyway
+  }
+  if (pendingRoute) {
+    window.location.assign(router.resolve(pendingRoute.fullPath).href);
+  } else {
+    window.location.reload();
+  }
+});
+
 // web components
 registerSwiper();
 Vue.config.ignoredElements = [/^swiper/];
