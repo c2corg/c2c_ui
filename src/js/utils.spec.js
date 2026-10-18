@@ -147,13 +147,27 @@ describe('stripMarkdown', () => {
     expect(() => utils.stripMarkdown(undefined)).toThrow(TypeError);
   });
 
-  it('removes a dash surrounded by spaces or line returns', () => {
-    expect(utils.stripMarkdown('Chamonix - Zermatt')).toBe('Chamonix  Zermatt');
-    expect(utils.stripMarkdown('list:\n- one\n- two')).toBe('list:\n one\n two');
+  it('removes list markers and their indentation', () => {
+    expect(utils.stripMarkdown('list:\n- one\n  - two\n\t- three')).toBe('list:\none\ntwo\nthree');
   });
 
-  it('keeps a dash without a space on both sides', () => {
-    expect(utils.stripMarkdown('-5 °C, 3 -4')).toBe('-5 °C, 3 -4');
+  it('removes a list marker at the start of the text', () => {
+    expect(utils.stripMarkdown('- one\n- two')).toBe('one\ntwo');
+  });
+
+  it('does not join lines when a dash ends a line', () => {
+    expect(utils.stripMarkdown('a\n-\nb')).toBe('a\n-\nb');
+  });
+
+  it.each(['1500 - 2000 m', '5c - 6a', 'Chamonix - Zermatt', '-5 °C', '-5 °C, 3 -4', 'a\n-5 °C'])(
+    'keeps dashes that are not list markers in %j',
+    (value) => {
+      expect(utils.stripMarkdown(value)).toBe(value);
+    }
+  );
+
+  it('keeps dashes inside a list item', () => {
+    expect(utils.stripMarkdown('- 1500 - 2000 m\n- 5c - 6a')).toBe('1500 - 2000 m\n5c - 6a');
   });
 
   it('unwraps several <sup>/<sub> tags on the same line', () => {

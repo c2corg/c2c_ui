@@ -112,7 +112,7 @@ export default {
     return value
       .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // external links
       .replace(/\[\[[^|]+\|([^\]]+)\]\]/g, '$1') // internal links
-      .replace(/(\s)-(\s)/g, '$1$2') // dash, but only when preceded and followed by a space chare or line return
+      .replace(/^[ \t]*-[ \t]+/gm, '') // list markers, with their indentation; dashes inside a line are kept
       .replace(/[*_\\#~`]/g, '') // emphasis and other similar stuff
       .replace(/<su[bp]>(.+?)<\/su[bp]>/g, '$1'); // sup
   },
