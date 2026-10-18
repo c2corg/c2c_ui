@@ -194,7 +194,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '~bulma/sass/utilities/initial-variables.sass';
+@import 'bulma/sass/utilities/initial-variables.sass';
 
 .img-container {
   width: 100%;

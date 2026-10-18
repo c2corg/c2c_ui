@@ -3,7 +3,7 @@
     <p class="title is-size-5" v-translate>Winter hiking routes</p>
     <ul>
       <li v-for="(item, i) of winterRouteLegend" :key="i">
-        <img class="image" :src="require('@/assets/img/yeti/legends/' + item.image)" />
+        <img class="image" :src="assetUrl('yeti/legends', item.image)" />
         <span class="title">{{ item.title }}</span>
         <span class="text" v-if="item.text">{{ item.text }}</span>
       </li>
@@ -13,12 +13,17 @@
 
 <script>
 import Yetix from '@/components/yeti/Yetix';
+import { assetUrl } from '@/js/asset-urls';
 
 export default {
   computed: {
     winterRouteLegend() {
       return Yetix.winterRouteLegend;
     },
+  },
+
+  methods: {
+    assetUrl,
   },
 };
 </script>

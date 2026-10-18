@@ -3,3 +3,5 @@
 .gitignore
 Dockerfile*
 .travis.yml
+node_modules/
+dist/

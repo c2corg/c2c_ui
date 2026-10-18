@@ -146,7 +146,7 @@ const preProcess = async (file, document, orientation, onDataUrlReady) => {
 
   if (Object.keys(options).length) {
     options = { ...options, canvas: true };
-    const { default: loadImage } = await import(/* webpackChunkName: "wiki-tools" */ 'blueimp-load-image');
+    const { default: loadImage } = await import('blueimp-load-image');
     const { image: canvas } = await loadImage(file, options);
     onDataUrlReady(canvas.toDataURL(file.type)); // send data url to caller
     // and extract modified image for upload
@@ -172,7 +172,7 @@ const orientations = [1, 6, 3, 8];
 const uploadFile = async (file, angle, onDataUrlReady, onUploadProgress, onSuccess, onFailure) => {
   try {
     const document = {};
-    const { default: loadImage } = await import(/* webpackChunkName: "wiki-tools" */ 'blueimp-load-image');
+    const { default: loadImage } = await import('blueimp-load-image');
     const metaData = await loadImage(file, { meta: true });
     let orientation = await parseMetaData(document, metaData);
     if (angle) {

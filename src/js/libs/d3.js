@@ -14,16 +14,16 @@ D3.prototype.resolve_ = function () {
 
   this.resolving_ = true;
 
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-scale'), 'scale');
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-geo'), 'geo');
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-time'), 'time');
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-shape'), 'shape');
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-transition'), 'transition'); // do not forget. d3 has a strange behavior...
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-format'), 'format');
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-time-format'), 'timeFormat');
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-axis'), 'axis');
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-array'), 'array');
-  this.load_(import(/* webpackChunkName: "chunk-d3" */ 'd3-selection'), 'selection');
+  this.load_(import('d3-scale'), 'scale');
+  this.load_(import('d3-geo'), 'geo');
+  this.load_(import('d3-time'), 'time');
+  this.load_(import('d3-shape'), 'shape');
+  this.load_(import('d3-transition'), 'transition'); // do not forget. d3 has a strange behavior...
+  this.load_(import('d3-format'), 'format');
+  this.load_(import('d3-time-format'), 'timeFormat');
+  this.load_(import('d3-axis'), 'axis');
+  this.load_(import('d3-array'), 'array');
+  this.load_(import('d3-selection'), 'selection');
 };
 
 D3.prototype.load_ = function (promise, key) {

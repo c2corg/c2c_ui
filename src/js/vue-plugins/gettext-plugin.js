@@ -72,23 +72,23 @@ function getMessages(lang) {
     // and lazy load the others
     return french_translations;
   } else if (lang === 'en') {
-    return import(/* webpackChunkName: "translations-en" */ `@/translations/en.json`);
+    return import(`@/translations/en.json`);
   } else if (lang === 'ca') {
-    return import(/* webpackChunkName: "translations-ca" */ `@/translations/ca.json`);
+    return import(`@/translations/ca.json`);
   } else if (lang === 'eu') {
-    return import(/* webpackChunkName: "translations-eu" */ `@/translations/eu.json`);
+    return import(`@/translations/eu.json`);
   } else if (lang === 'it') {
-    return import(/* webpackChunkName: "translations-it" */ `@/translations/it.json`);
+    return import(`@/translations/it.json`);
   } else if (lang === 'de') {
-    return import(/* webpackChunkName: "translations-de" */ `@/translations/de.json`);
+    return import(`@/translations/de.json`);
   } else if (lang === 'es') {
-    return import(/* webpackChunkName: "translations-es" */ `@/translations/es.json`);
+    return import(`@/translations/es.json`);
   } else if (lang === 'hu') {
-    return import(/* webpackChunkName: "translations-hu" */ `@/translations/hu.json`);
+    return import(`@/translations/hu.json`);
   } else if (lang === 'zh_CN') {
-    return import(/* webpackChunkName: "translations-zh" */ `@/translations/zh_CN.json`);
+    return import(`@/translations/zh_CN.json`);
   } else if (lang === 'sl') {
-    return import(/* webpackChunkName: "translations-sl" */ `@/translations/sl.json`);
+    return import(`@/translations/sl.json`);
   }
 
   throw new Error(`Unsuported language : ${lang}`);
@@ -164,7 +164,7 @@ export default function install(Vue) {
       },
 
       _getMessages(lang) {
-        // TODO : normally, webpack should handle this
+        // TODO : normally, the bundler should handle this
         if (this.translations[lang] !== undefined) {
           return new Promise((resolve) => {
             resolve(this.translations[lang]);

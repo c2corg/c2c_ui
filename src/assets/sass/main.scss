@@ -12,42 +12,42 @@ $button-border-width: $control-border-width !default;
 $button-padding-vertical: calc(0.375em - #{$button-border-width});
 $button-padding-horizontal: 0.75em;
 
-@import '~bulma/sass/utilities/_all.sass'; /* stylelint-disable-line scss/load-no-partial-leading-underscore */
+@import 'bulma/sass/utilities/_all.sass'; /* stylelint-disable-line scss/load-no-partial-leading-underscore */
 //
-@import '~bulma/sass/base/_all.sass'; /* stylelint-disable-line scss/load-no-partial-leading-underscore */
+@import 'bulma/sass/base/_all.sass'; /* stylelint-disable-line scss/load-no-partial-leading-underscore */
 //
-@import '~bulma/sass/elements/box.sass';
-@import '~bulma/sass/elements/button.sass';
-@import '~bulma/sass/elements/container.sass';
-@import '~bulma/sass/elements/content.sass';
-@import '~bulma/sass/elements/icon.sass';
-@import '~bulma/sass/elements/image.sass';
-@import '~bulma/sass/elements/notification.sass';
-@import '~bulma/sass/elements/progress.sass';
-@import '~bulma/sass/elements/other.sass';
-@import '~bulma/sass/elements/table.sass';
-@import '~bulma/sass/elements/tag.sass';
-@import '~bulma/sass/elements/title.sass';
+@import 'bulma/sass/elements/box.sass';
+@import 'bulma/sass/elements/button.sass';
+@import 'bulma/sass/elements/container.sass';
+@import 'bulma/sass/elements/content.sass';
+@import 'bulma/sass/elements/icon.sass';
+@import 'bulma/sass/elements/image.sass';
+@import 'bulma/sass/elements/notification.sass';
+@import 'bulma/sass/elements/progress.sass';
+@import 'bulma/sass/elements/other.sass';
+@import 'bulma/sass/elements/table.sass';
+@import 'bulma/sass/elements/tag.sass';
+@import 'bulma/sass/elements/title.sass';
 //
-@import '~bulma/sass/form/_all.sass'; /* stylelint-disable-line scss/load-no-partial-leading-underscore */
+@import 'bulma/sass/form/_all.sass'; /* stylelint-disable-line scss/load-no-partial-leading-underscore */
 //
-@import '~bulma/sass/components/card.sass';
-@import '~bulma/sass/components/dropdown.sass';
-@import '~bulma/sass/components/level.sass';
-@import '~bulma/sass/components/media.sass';
-@import '~bulma/sass/components/modal.sass';
-@import '~bulma/sass/components/tabs.sass';
+@import 'bulma/sass/components/card.sass';
+@import 'bulma/sass/components/dropdown.sass';
+@import 'bulma/sass/components/level.sass';
+@import 'bulma/sass/components/media.sass';
+@import 'bulma/sass/components/modal.sass';
+@import 'bulma/sass/components/tabs.sass';
 //
-@import '~bulma/sass/grid/columns.sass';
+@import 'bulma/sass/grid/columns.sass';
 //
-@import '~bulma/sass/helpers/_all.sass'; /* stylelint-disable-line scss/load-no-partial-leading-underscore */
+@import 'bulma/sass/helpers/_all.sass'; /* stylelint-disable-line scss/load-no-partial-leading-underscore */
 //
-@import '~bulma/sass/layout/section.sass';
+@import 'bulma/sass/layout/section.sass';
 
-@import '~bulma-checkradio';
+@import 'bulma-checkradio';
 // bulma checkradio isn't customizable with variables. Overrides its classes
 @import './checkradio-customization';
 //
-@import '~bulma-switch';
+@import 'bulma-switch';
 //
 @import './helpers';

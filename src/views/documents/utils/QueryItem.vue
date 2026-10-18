@@ -103,8 +103,9 @@ import { requireFieldProperty } from '@/js/properties-mixins';
 
 export default {
   components: {
-    Multiselect: () => import(/* webpackChunkName: "multiselect" */ 'vue-multiselect'),
-    VueSlider: () => import(/* webpackChunkName: "slider" */ 'vue-slider-component'),
+    Multiselect: () => import('vue-multiselect'),
+    // the UMD build is a CommonJS module: unwrap its default export (Vue only does it for ES module namespaces)
+    VueSlider: () => import('vue-slider-component').then((module) => module.default),
     QueryItemSliderLabel,
     DateQueryItem,
     DatesQueryItem,

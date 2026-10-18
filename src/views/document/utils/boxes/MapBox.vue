@@ -201,7 +201,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~bulma/sass/utilities/mixins.sass';
+@import 'bulma/sass/utilities/mixins.sass';
 
 .map-container {
   margin-top: 1rem;

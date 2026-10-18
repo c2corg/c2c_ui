@@ -4,14 +4,14 @@
     @click="$emit('click')"
     :class="{ selected, 'show-slider': showSlider }"
     :style="{
-      'background-image': 'url(' + require('../../assets/img/layers/' + (layer.image || layer.get('image'))) + ')',
+      'background-image': 'url(' + assetUrl('layers', layer.image || layer.get('image')) + ')',
     }"
   >
     <span class="layer-button-title">{{ $gettext(layer.title || layer.get?.('title'), titleContext) }}</span>
     <div
       class="layer-button-country"
       v-if="country"
-      :style="{ 'background-image': 'url(' + require('../../assets/img/flags/' + country + '.svg') + ')' }"
+      :style="{ 'background-image': 'url(' + assetUrl('flags', country + '.svg') + ')' }"
     ></div>
     <div
       class="layer-button-config"
@@ -29,11 +29,14 @@
 </template>
 
 <script>
+import { assetUrl } from '@/js/asset-urls';
+
 export default {
   name: 'LayerButton',
 
   components: {
-    VueSlider: () => import(/* webpackChunkName: "slider" */ 'vue-slider-component'),
+    // the UMD build is a CommonJS module: unwrap its default export (Vue only does it for ES module namespaces)
+    VueSlider: () => import('vue-slider-component').then((module) => module.default),
   },
 
   props: {
@@ -80,6 +83,10 @@ export default {
 
   mounted() {
     this.opacity = (this.layer.get?.('opacity') ?? 1) * 100;
+  },
+
+  methods: {
+    assetUrl,
   },
 };
 </script>

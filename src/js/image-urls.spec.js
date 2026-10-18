@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { getEmbeddedImageUrl, getImageUrl } from './image-urls';
 
-// '@/js/config' reads CAMPTOCAMP_CONFIG, a constant injected by webpack (see vue.config.js)
+// '@/js/config' reads CAMPTOCAMP_CONFIG, a constant injected by Vite (see vite.config.mjs)
 const config = vi.hoisted(() => ({ urls: {} }));
 vi.mock('@/js/config', () => ({ default: config }));
 

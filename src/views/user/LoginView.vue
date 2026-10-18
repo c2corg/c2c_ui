@@ -208,7 +208,7 @@ export default {
     FormField,
     BaseForm,
     PasswordRequirements,
-    VueRecaptcha: () => import(/* webpackChunkName: "captcha" */ 'vue-recaptcha'),
+    VueRecaptcha: () => import('vue-recaptcha'),
   },
 
   mixins: [noRobotsMixin],

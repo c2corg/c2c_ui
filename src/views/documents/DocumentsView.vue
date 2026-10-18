@@ -133,7 +133,7 @@ import QueryItems from './utils/QueryItems';
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 
-const DocumentsTable = () => import(/* webpackChunkName: "data-table" */ '@/components/datatable/DocumentsTable');
+const DocumentsTable = () => import('@/components/datatable/DocumentsTable');
 
 export default {
   name: 'DocumentsView',

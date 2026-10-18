@@ -44,13 +44,15 @@
     }
   },
   "parserOptions": {
-    "parser": "@babel/eslint-parser"
+    "parser": "@babel/eslint-parser",
+    "requireConfigFile": false,
+    "sourceType": "module"
   },
   "overrides": [
     {
-      "files": ["vitest.config.js", "src/**/*.spec.js"],
+      "files": ["vite.config.mjs", "vitest.config.mjs", "src/**/*.spec.js"],
       "rules": {
-        "import/no-unresolved": ["error", { "ignore": ["^vitest(/|$)"] }]
+        "import/no-unresolved": ["error", { "ignore": ["^vitest(/|$)", "^@vitejs/plugin-legacy$"] }]
       }
     }
   ]

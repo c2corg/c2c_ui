@@ -66,7 +66,7 @@ const datepickerLocales = {
 
 export default {
   components: {
-    Datepicker: () => import(/* webpackChunkName: "wiki-tools" */ 'vuejs-datepicker'),
+    Datepicker: () => import('vuejs-datepicker'),
   },
 
   mixins: [baseMixin],
