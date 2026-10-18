@@ -96,25 +96,27 @@ describe('checkPasswordRules', () => {
     });
   });
 
-  // Suspected divergences from v6_api: \p{Ll}, \p{Lu} and \p{Nd} are narrower than Python's
-  // str.islower(), str.isupper() and str.isdigit(). The UI is then stricter than the API (it may show
-  // a rule as unmet while the API would accept the password), so these are marked as failing rather
-  // than fixed here.
-  describe('Python parity (suspected bugs)', () => {
-    // Python: '²'.isdigit() is True (Numeric_Type=Digit), but '²' is not \p{Nd}
-    it.fails('accepts superscript digits as digits, like str.isdigit()', () => {
-      expect(checkPasswordRules('²').digit).toBe(true);
+  // Characters where Unicode general categories (\p{Ll}, \p{Lu}, \p{Nd}, \s) differ from Python's
+  // str.islower(), str.isupper(), str.isdigit() and str.isspace()
+  describe('Python parity', () => {
+    it.each(['²', '₃', '①', '❶', '🄂'])('accepts Numeric_Type=Digit %j as a digit, like str.isdigit()', (c) => {
+      expect(checkPasswordRules(c).digit).toBe(true);
     });
 
-    // Python: 'ª'.islower() and 'ʰ'.islower() are True (Other_Lowercase), but they are not \p{Ll}
-    it.fails('accepts Other_Lowercase characters as lowercase, like str.islower()', () => {
-      expect(checkPasswordRules('ª').lower).toBe(true);
-      expect(checkPasswordRules('ʰ').lower).toBe(true);
+    it.each(['ª', 'ʰ', 'ⓐ'])('accepts Other_Lowercase %j as lowercase, like str.islower()', (c) => {
+      expect(checkPasswordRules(c).lower).toBe(true);
     });
 
-    // Python: 'Ⅻ'.isupper() is True (Other_Uppercase), but it is not \p{Lu}
-    it.fails('accepts Other_Uppercase characters as uppercase, like str.isupper()', () => {
-      expect(checkPasswordRules('Ⅻ').upper).toBe(true);
+    it.each(['Ⅻ', 'Ⓐ'])('accepts Other_Uppercase %j as uppercase, like str.isupper()', (c) => {
+      expect(checkPasswordRules(c).upper).toBe(true);
+    });
+
+    it.each(['\x1c', '\x1f', '\x85'])('does not count %j as special, as str.isspace() is true', (c) => {
+      expect(checkPasswordRules(c).special).toBe(false);
+    });
+
+    it('counts U+FEFF as special, as str.isspace() is false', () => {
+      expect(checkPasswordRules('\uFEFF').special).toBe(true);
     });
   });
 });
