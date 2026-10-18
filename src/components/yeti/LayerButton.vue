@@ -21,7 +21,7 @@
           class="layer-country"
           :class="'layer-country-' + country"
           v-if="country"
-          :style="{ 'background-image': 'url(' + require('../../assets/img/flags/' + country + '.svg') + ')' }"
+          :style="{ 'background-image': 'url(' + assetUrl('flags', country + '.svg') + ')' }"
         ></span>
       </div>
       <div class="layer-text" :class="{ 'has-text-primary': model ? model.checked : _value }">
@@ -37,6 +37,7 @@
 
 <script>
 import Toast from '@/components/yeti/Toast';
+import { assetUrl } from '@/js/asset-urls';
 
 export default {
   components: {
@@ -84,7 +85,7 @@ export default {
     backgroundImage() {
       let img;
       try {
-        img = require('../../assets/img/yeti/layers/' + this.image);
+        img = assetUrl('yeti/layers', this.image);
         img = 'url(' + img + ')';
       } catch (e) {
         img = 'none';
@@ -93,6 +94,7 @@ export default {
     },
   },
   methods: {
+    assetUrl,
     warnIfDisabled() {
       this.$refs['toast-button'].toast();
     },
