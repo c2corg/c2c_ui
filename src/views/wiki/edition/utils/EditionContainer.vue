@@ -117,6 +117,7 @@ export default {
   data() {
     return {
       isPreview: false,
+      htmlBanners,
     };
   },
 
@@ -126,10 +127,6 @@ export default {
     documentType() {
       return this.$documentUtils.getDocumentType(this.document.type);
     },
-
-    htmlBanners() {
-      return htmlBanners;
-    },
   },
 
   watch: {
@@ -138,7 +135,13 @@ export default {
 
   mounted() {
     if (!htmlBanners.initialized) {
-      c2c.article.getCooked(BANNERS_ARTICLE_ID, this.$language.current).then(this.computeBanners);
+      c2c.article
+        .getCooked(BANNERS_ARTICLE_ID, this.$language.current)
+        .then(this.computeBanners)
+        .catch(() => {
+          // banners are optional: the form works without them. Cache is left
+          // uninitialized, so that next edit view tries again.
+        });
     }
   },
 
@@ -170,7 +173,7 @@ export default {
           htmlBanners[key] += node.outerHTML;
         }
       }
-      this.$forceUpdate();
+      this.htmlBanners = htmlBanners;
     },
   },
 };
