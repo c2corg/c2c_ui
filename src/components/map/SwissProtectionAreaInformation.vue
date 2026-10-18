@@ -1,13 +1,15 @@
 <template>
   <modal-window ref="modalWindow">
-    <div slot="header" class="has-text-centered">
-      <span>
-        {{ type }}
-      </span>
-      <span>
-        {{ data.properties.label }}
-      </span>
-    </div>
+    <template #header>
+      <div class="has-text-centered">
+        <span>
+          {{ type }}
+        </span>
+        <span>
+          {{ data.properties.label }}
+        </span>
+      </div>
+    </template>
     <table>
       <tbody>
         <tr v-if="protectionStatus">

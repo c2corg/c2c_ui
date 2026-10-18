@@ -1,8 +1,10 @@
 <template>
   <modal-confirmation ref="modalWindow" :promise="promise" @confirm="restoreVersion">
-    <span slot="title">
-      <span v-translate>Restore this version</span>
-    </span>
+    <template #title>
+      <span>
+        <span v-translate>Restore this version</span>
+      </span>
+    </template>
     <span v-translate>Are you sure you want to revert to this version of the document?</span>
   </modal-confirmation>
 </template>

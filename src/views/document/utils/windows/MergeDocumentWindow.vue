@@ -1,8 +1,10 @@
 <template>
   <modal-card ref="modalWindow">
-    <span slot="title">
-      <span v-translate>Merge documents</span>
-    </span>
+    <template #title>
+      <span>
+        <span v-translate>Merge documents</span>
+      </span>
+    </template>
 
     <section>
       <div class="notification is-warning has-text-centered has-text-weight-bold" v-translate>
@@ -52,12 +54,14 @@
       </div>
     </section>
 
-    <footer slot="footer">
-      <button :disabled="targetDocument === null" @click="mergeDocuments" class="button is-success" v-translate>
-        Merge documents
-      </button>
-      <button @click="hide()" class="button" v-translate>Cancel</button>
-    </footer>
+    <template #footer>
+      <footer>
+        <button :disabled="targetDocument === null" @click="mergeDocuments" class="button is-success" v-translate>
+          Merge documents
+        </button>
+        <button @click="hide()" class="button" v-translate>Cancel</button>
+      </footer>
+    </template>
   </modal-card>
 </template>
 

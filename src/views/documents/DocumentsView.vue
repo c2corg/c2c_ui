@@ -5,12 +5,14 @@
       <div class="header-section">
         <span>
           <dropdown-button class="header-item">
-            <span slot="button">
-              <span class="title is-3 is-ellipsed">
-                {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
+            <template #button>
+              <span>
+                <span class="title is-3 is-ellipsed">
+                  {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
+                </span>
+                <fa-icon icon="angle-down" aria-hidden="true" />
               </span>
-              <fa-icon icon="angle-down" aria-hidden="true" />
-            </span>
+            </template>
             <router-link
               v-for="type of documentTypes"
               :key="type"

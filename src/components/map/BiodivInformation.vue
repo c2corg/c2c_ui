@@ -1,11 +1,13 @@
 <template>
   <modal-window ref="modalWindow">
-    <div slot="header" class="has-text-centered">
-      <span v-translate>Sensitive area:</span>
-      <span>
-        {{ data.title }}
-      </span>
-    </div>
+    <template #header>
+      <div class="has-text-centered">
+        <span v-translate>Sensitive area:</span>
+        <span>
+          {{ data.title }}
+        </span>
+      </div>
+    </template>
 
     <p v-if="data.period">
       <span v-translate>sensitive_months:</span>

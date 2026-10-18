@@ -44,26 +44,28 @@
       </div>
     </div>
 
-    <div slot="footer" class="buttons">
-      <button
-        :disabled="documents.length === 0"
-        class="button is-information"
-        @click="categoriesEdition = !categoriesEdition"
-      >
-        <span v-if="categoriesEdition" v-translate>Edit titles</span>
-        <span v-else v-translate>Edit categories</span>
-      </button>
-      <button
-        :disabled="!readyForSaving"
-        class="button is-primary"
-        :class="{ 'is-loading': promise.loading }"
-        @click="save"
-        v-translate
-      >
-        Save
-      </button>
-      <button class="button is-warning" @click="hide" v-translate>Close</button>
-    </div>
+    <template #footer>
+      <div class="buttons">
+        <button
+          :disabled="documents.length === 0"
+          class="button is-information"
+          @click="categoriesEdition = !categoriesEdition"
+        >
+          <span v-if="categoriesEdition" v-translate>Edit titles</span>
+          <span v-else v-translate>Edit categories</span>
+        </button>
+        <button
+          :disabled="!readyForSaving"
+          class="button is-primary"
+          :class="{ 'is-loading': promise.loading }"
+          @click="save"
+          v-translate
+        >
+          Save
+        </button>
+        <button class="button is-warning" @click="hide" v-translate>Close</button>
+      </div>
+    </template>
   </modal-card>
 </template>
 

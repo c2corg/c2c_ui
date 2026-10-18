@@ -56,7 +56,9 @@
       :to="{ name: 'outings', query: { u: document.document_id } }"
       :label="$gettext('outings')"
     >
-      <icon-outing slot="icon" />
+      <template #icon>
+        <icon-outing />
+      </template>
     </tool-box-button>
 
     <tool-box-button

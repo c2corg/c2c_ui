@@ -92,9 +92,11 @@
 
       <div class="navigation-item">
         <dropdown-button class="is-right add-button" ref="addDocumentMenu">
-          <span slot="button" class="button is-success">
-            <fa-icon icon="plus" />
-          </span>
+          <template #button>
+            <span class="button is-success">
+              <fa-icon icon="plus" />
+            </span>
+          </template>
           <add-link
             v-for="documentType of ['outing', 'route', 'waypoint', 'article', 'book', 'xreport']"
             :key="documentType"
@@ -120,15 +122,17 @@
 
       <div v-else class="navigation-item">
         <dropdown-button class="is-right" ref="userMenu">
-          <span slot="button" class="button">
-            <img
-              width="24"
-              height="24"
-              alt="Avatar"
-              :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
-            />
-            <span class="has-text-weight-bold is-hidden-mobile"> &nbsp;{{ $user.name }} </span>
-          </span>
+          <template #button>
+            <span class="button">
+              <img
+                width="24"
+                height="24"
+                alt="Avatar"
+                :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
+              />
+              <span class="has-text-weight-bold is-hidden-mobile"> &nbsp;{{ $user.name }} </span>
+            </span>
+          </template>
 
           <router-link
             v-for="item of userMenuLinks"
@@ -154,9 +158,11 @@
       </div>
       <div v-if="!$user.isLogged" class="navigation-item">
         <dropdown-button class="is-right">
-          <button class="button" slot="button">
-            {{ $language.current }}
-          </button>
+          <template #button>
+            <button class="button">
+              {{ $language.current }}
+            </button>
+          </template>
           <a
             v-for="(language, key) in $language.availableUI"
             :key="key"

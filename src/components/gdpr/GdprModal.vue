@@ -1,9 +1,11 @@
 <template>
   <modal-window ref="modalWindow">
-    <div slot="header" class="has-text-centered">
-      <fa-icon icon="user-shield"></fa-icon>
-      <span v-translate>Configure cookies</span>
-    </div>
+    <template #header>
+      <div class="has-text-centered">
+        <fa-icon icon="user-shield"></fa-icon>
+        <span v-translate>Configure cookies</span>
+      </div>
+    </template>
 
     <div class="columns">
       <div class="column">
@@ -75,10 +77,12 @@
       </div>
     </div>
 
-    <div slot="footer" class="buttons is-flex is-justify-content-flex-end">
-      <button class="button" @click="hide" v-translate>Cancel</button>
-      <button class="button is-primary" @click="submit" v-translate>Submit</button>
-    </div>
+    <template #footer>
+      <div class="buttons is-flex is-justify-content-flex-end">
+        <button class="button" @click="hide" v-translate>Cancel</button>
+        <button class="button is-primary" @click="submit" v-translate>Submit</button>
+      </div>
+    </template>
   </modal-window>
 </template>
 

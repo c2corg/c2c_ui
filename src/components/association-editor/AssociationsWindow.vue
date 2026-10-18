@@ -1,17 +1,19 @@
 <template>
   <modal-card ref="modalCard">
-    <div slot="title">
-      <div class="control">
-        <div class="field">
-          <input
-            class="input"
-            ref="input"
-            :placeholder="$gettext('Search a document to associate...')"
-            @input="search"
-          />
+    <template #title>
+      <div>
+        <div class="control">
+          <div class="field">
+            <input
+              class="input"
+              ref="input"
+              :placeholder="$gettext('Search a document to associate...')"
+              @input="search"
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </template>
 
     <association-items
       v-for="item of data"
@@ -24,9 +26,11 @@
       :propositions="propositions[item.searchArrayName]"
     />
 
-    <div slot="footer">
-      <button class="button is-primary" v-translate @click="$refs.modalCard.hide()">Close</button>
-    </div>
+    <template #footer>
+      <div>
+        <button class="button is-primary" v-translate @click="$refs.modalCard.hide()">Close</button>
+      </div>
+    </template>
   </modal-card>
 </template>
 
