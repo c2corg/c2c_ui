@@ -9,7 +9,7 @@
           :id="'tab' + i"
           ref="tab"
           :aria-selected="activeTab === i"
-          :tabindex="activeTab === i ? false : -1"
+          :tabindex="activeTab === i ? 0 : -1"
           :title="tab.title"
           @click.prevent="setActiveTab(i)"
           @keydown="setActiveTabKeyboard($event, i)"
@@ -104,7 +104,11 @@ export default {
   li,
   a {
     height: 100%;
-    outline: none;
+  }
+
+  a:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: -2px;
   }
 
   li {
