@@ -36,4 +36,15 @@ describe('event-bus', () => {
 
     expect(handler).toHaveBeenCalledTimes(1);
   });
+
+  it('does not call a once() handler removed before the event', () => {
+    const handler = vi.fn();
+    const off = once('trigger-scroll', handler);
+
+    off();
+    bus.emit('trigger-scroll');
+
+    expect(handler).not.toHaveBeenCalled();
+    expect(bus.all.get('trigger-scroll')).toEqual([]);
+  });
 });
