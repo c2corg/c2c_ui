@@ -6,7 +6,7 @@
       <association-history-link :user-id="userId" v-translate>Associations history</association-history-link>
     </div>
 
-    <table v-infinite-scroll="load" infinite-scroll-disabled="disableInfiniteSCroll" infinite-scroll-distance="100">
+    <table v-infinite-scroll="{ load, disabled: disableInfiniteSCroll, distance: 100 }">
       <tr>
         <th v-translate translate-context="modification date">Modified the</th>
         <th v-translate>contributor</th>
@@ -66,11 +66,10 @@
 </template>
 
 <script>
-import infiniteScroll from 'vue-infinite-scroll';
-
 import ColoredIconDocument from './utils/ColoredIconDocument';
 
 import c2c from '@/js/apis/c2c';
+import infiniteScroll from '@/js/directives/infinite-scroll';
 import noRobotsMixin from '@/js/no-robots-mixin';
 
 export default {
