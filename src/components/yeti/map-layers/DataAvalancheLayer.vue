@@ -1,5 +1,16 @@
 <template>
-  <icon-layer :name="name" :color="color" :selector="layerSelector" @add-features="onFeatures">
+  <icon-layer
+    :name="name"
+    :color="color"
+    :selector="layerSelector"
+    ref="iconLayer"
+    :custom-icon-src="iconSrc"
+    :custom-icon-card-src="iconCardSrc"
+    @layer="$emit('layer', $event)"
+    @set-overlay="setOverlay"
+    @unset-overlay="unsetOverlay"
+    @add-features="onFeatures"
+  >
     <span v-translate>Data-Avalanche</span>
     <template #overlay>
       <div class="data-avalanche-content">
@@ -38,6 +49,8 @@ export default {
     IconLayer,
   },
   mixins: [getIconLayerMixin],
+
+  emits: ['layer'],
   data() {
     return {
       name: 'dataAvalanche',

@@ -1,10 +1,12 @@
 import ol from '@/js/libs/ol';
 
 export default {
+  // provided by YetiMap
+  inject: ['yetiMap'],
+
   computed: {
     map() {
-      // store parent map
-      return this.$parent.map || this.$parent.$parent.map;
+      return this.yetiMap.map;
     },
     view() {
       return this.map.getView();
@@ -12,7 +14,7 @@ export default {
   },
   methods: {
     getExtent(projection) {
-      return this.$parent.getExtent(projection);
+      return this.yetiMap.getExtent(projection);
     },
     getFeaturesFromData(data) {
       let features = data.data;

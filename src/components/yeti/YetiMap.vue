@@ -67,6 +67,19 @@ export default {
     YetiLayers,
     YetiMapLegend,
   },
+  // the layers (layer.js mixin) reach the map and its extent through this, at any depth
+  provide() {
+    const yetiMap = this;
+    return {
+      yetiMap: {
+        get map() {
+          return yetiMap.map;
+        },
+        getExtent: (projection) => yetiMap.getExtent(projection),
+      },
+    };
+  },
+
   data() {
     return {
       recenterPropositions: null,
