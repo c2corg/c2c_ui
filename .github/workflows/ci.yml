@@ -9,6 +9,13 @@ on:
     tags:
       - '**'
 
+# A newer push to a PR supersedes the previous run: cancel it, so the
+# superseded build can't deploy its preview after (or instead of) the new one.
+# master and tag runs are never cancelled, so every release completes.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
