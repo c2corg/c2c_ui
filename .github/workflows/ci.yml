@@ -128,7 +128,9 @@ jobs:
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
           git add .
-          git commit -m "Deploy ${{ steps.branch-name.outputs.current_branch }} branch"
+          # Nothing to commit when the build output is unchanged (e.g. a PR
+          # touching only CI config): skip instead of failing the job.
+          git diff --cached --quiet || git commit -m "Deploy ${{ steps.branch-name.outputs.current_branch }} branch"
       - name: Push changes
         # ad-m/github-push-action@v1.0.0, pinned by commit SHA rather than the
         # mutable "v1.0.0" tag, since this action pushes to the repo with
