@@ -1,4 +1,4 @@
-// The ImageViewer of App.vue registers itself here when mounted (no $root.$children, gone in Vue 3)
+// The ImageViewer of App.vue registers itself here when created (no $root.$children, gone in Vue 3)
 let imageViewer = null;
 
 /** @param {import('vue').default | null} vm */

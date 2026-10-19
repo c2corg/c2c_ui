@@ -48,6 +48,7 @@
 import GpsFileUpload from '@/components/map/GpsFileUpload';
 import GpsUploadModal from '@/components/map/GpsUploadModal';
 import trackingService from '@/js/apis/tracking-service';
+import { formField } from '@/js/form-registration';
 import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
@@ -58,7 +59,8 @@ const DATA_PROJ = 'EPSG:3857';
 export default {
   components: { GpsUploadModal, GpsFileUpload },
 
-  mixins: [requireDocumentProperty],
+  // registered with the FormSection containing it
+  mixins: [formField('formSection'), requireDocumentProperty],
 
   props: {
     geomDetailEditable: {

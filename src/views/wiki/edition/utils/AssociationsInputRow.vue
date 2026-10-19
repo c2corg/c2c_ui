@@ -28,6 +28,7 @@
 import FormInput from './FormInput';
 
 import associationRights from '@/js/associations-rights-mixin';
+import { formField } from '@/js/form-registration';
 import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
 
 export default {
@@ -35,7 +36,8 @@ export default {
     FormInput,
   },
 
-  mixins: [requireFieldProperty, requireDocumentProperty, associationRights],
+  // registered with the FormSection containing it
+  mixins: [formField('formSection'), requireFieldProperty, requireDocumentProperty, associationRights],
 
   props: {
     label: {

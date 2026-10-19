@@ -56,7 +56,12 @@
 </template>
 
 <script>
+import { formField } from '@/js/form-registration';
+
 export default {
+  // registered with the BaseForm containing it
+  mixins: [formField('baseForm')],
+
   props: {
     name: {
       type: String,
