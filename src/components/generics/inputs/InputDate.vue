@@ -47,6 +47,7 @@ export default {
 
 <style scoped>
 .input-date {
-  width: auto;
+  /* the width of the former vuejs-datepicker field */
+  width: 193px;
 }
 </style>
