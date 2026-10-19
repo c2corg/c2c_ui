@@ -50,22 +50,31 @@ export default function install(Vue) {
         switch (Vue.prototype.$language.current) {
           case 'ca':
             formatString = 'dddd D MMMM [de] YYYY';
+            break;
           case 'es':
             formatString = 'dddd D [de] MMMM [de] YYYY';
+            break;
           case 'eu':
             formatString = 'dddd YYYY[ko] MMMM[ren] D[a]';
+            break;
           case 'de':
             formatString = 'dddd D. MMMM YYYY';
+            break;
           case 'fr':
             formatString = 'dddd D MMMM YYYY';
+            break;
           case 'it':
             formatString = 'dddd D MMMM YYYY';
+            break;
           case 'hu':
             formatString = 'YYYY. MMMM D., dddd';
+            break;
           case 'zh_CN':
             formatString = 'YYYY年M月D日dddd';
+            break;
           case 'sl':
             formatString = 'dddd D. MMMM YYYY';
+            break;
           case 'en':
           default:
             formatString = 'dddd D MMMM YYYY';

@@ -18,10 +18,19 @@ describe('$dateUtils', () => {
     expect(install('fr').toTechnicalString('2026-07-14T08:05:09')).toBe('2026-07-14 08:05:09');
   });
 
-  it('uses the same @1 format in every language (fall-through in the switch)', () => {
-    // known bug, pinned here so that the refactoring doesn't change it: every case falls through to default
-    expect(install('fr').toLocalizedString('2026-07-14', '@1')).toBe('mardi 14 juillet 2026');
-    expect(install('de').toLocalizedString('2026-07-14', '@1')).toBe('Dienstag 14 Juli 2026');
+  it.each([
+    ['fr', 'mardi 14 juillet 2026'],
+    ['it', 'martedì 14 luglio 2026'],
+    ['en', 'Tuesday 14 July 2026'],
+    ['de', 'Dienstag 14. Juli 2026'],
+    ['sl', 'torek 14. julij 2026'],
+    ['ca', 'Dimarts 14 Juliol de 2026'], // dayjs capitalizes Catalan names
+    ['es', 'martes 14 de julio de 2026'],
+    ['eu', 'asteartea 2026ko uztailaren 14a'],
+    ['hu', '2026. július 14., kedd'],
+    ['zh_CN', '2026年7月14日星期二'],
+  ])('formats @1 dates the way %s writes them', (lang, expected) => {
+    expect(install(lang).toLocalizedString('2026-07-14', '@1')).toBe(expected);
   });
 
   it('names months in the current language', () => {
