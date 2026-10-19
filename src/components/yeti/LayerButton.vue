@@ -73,6 +73,8 @@ export default {
       default: null,
     },
   },
+  emits: ['change', 'input'],
+
   computed: {
     _value: {
       get() {

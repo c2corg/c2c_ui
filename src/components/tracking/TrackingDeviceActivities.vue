@@ -35,6 +35,8 @@ import trackingService from '@/js/apis/tracking-service';
 export default {
   components: { TrackingDeviceActivity },
 
+  emits: ['geojson'],
+
   data() {
     return {
       promise: null,

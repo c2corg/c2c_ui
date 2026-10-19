@@ -73,6 +73,8 @@ export default {
     PlanATripSection,
   },
   mixins: [requireDocumentProperty],
+  emits: ['has-protection-area', 'highlight-document'],
+
   data() {
     return {
       activeSection: 'nearbyStops',

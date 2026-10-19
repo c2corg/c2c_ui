@@ -70,6 +70,8 @@ export default {
     },
   },
 
+  emits: ['set-image-printing', 'set-page-breaks', 'set-summary-visibility'],
+
   data() {
     return {
       totalResolved: 0,

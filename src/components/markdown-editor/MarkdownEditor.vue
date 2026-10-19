@@ -210,6 +210,8 @@ export default {
     },
   },
 
+  emits: ['input'],
+
   data() {
     return {
       selection: null,

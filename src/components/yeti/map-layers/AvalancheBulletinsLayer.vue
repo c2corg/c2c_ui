@@ -243,6 +243,8 @@ export default {
     DropdownContent,
   },
   mixins: [layerMixin],
+  emits: ['layer'],
+
   data() {
     return {
       overlayData: {

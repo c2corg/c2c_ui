@@ -151,6 +151,8 @@ export default {
     },
   },
 
+  emits: ['click-prefix', 'input'],
+
   computed: {
     // earliest and latest selectable dates of a date field, inclusive
     dateMin() {

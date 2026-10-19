@@ -18,6 +18,8 @@ export default {
     },
   },
 
+  emits: ['click'],
+
   methods: {
     click() {
       if (this.disabled) {

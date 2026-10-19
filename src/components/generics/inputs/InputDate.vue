@@ -36,6 +36,8 @@ export default {
     },
   },
 
+  emits: ['input'],
+
   methods: {
     onInput(event) {
       // an empty value is a cleared (or not yet complete) date

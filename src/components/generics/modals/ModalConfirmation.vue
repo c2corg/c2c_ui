@@ -49,6 +49,8 @@ export default {
     },
   },
 
+  emits: ['confirm'],
+
   watch: {
     'promise.error': 'onError',
   },

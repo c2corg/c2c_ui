@@ -84,6 +84,8 @@ export default {
       default: false,
     },
   },
+  emits: ['computeJourneyReachableRoutes', 'search'],
+
   data: function () {
     return {
       highlightedRed: false,

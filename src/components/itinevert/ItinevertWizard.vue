@@ -208,6 +208,8 @@ export default {
       default: 'form',
     },
   },
+  emits: ['change-view'],
+
   data() {
     return {
       routeFields: constants.objectDefinitions['route'].fields,

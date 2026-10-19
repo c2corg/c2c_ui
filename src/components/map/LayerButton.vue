@@ -54,6 +54,8 @@ export default {
     },
   },
 
+  emits: ['click'],
+
   data() {
     return {
       showSlider: false,

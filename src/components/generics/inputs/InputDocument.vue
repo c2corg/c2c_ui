@@ -136,6 +136,8 @@ export default {
     },
   },
 
+  emits: ['add', 'input', 'load-options'],
+
   data() {
     return {
       searchText: '',

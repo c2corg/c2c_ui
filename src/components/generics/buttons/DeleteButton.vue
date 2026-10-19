@@ -13,6 +13,8 @@ export default {
       default: true,
     },
   },
+
+  emits: ['click'],
 };
 </script>
 

@@ -50,6 +50,8 @@ export default {
     },
   },
 
+  emits: ['configure', 'revoke'],
+
   computed: {
     canRefresh() {
       return this.application.status !== 'not-configured';
