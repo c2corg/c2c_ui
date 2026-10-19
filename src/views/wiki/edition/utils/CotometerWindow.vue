@@ -79,6 +79,8 @@
 
 <script>
 export default {
+  emits: ['input'],
+
   data() {
     return {
       skiability: 0,

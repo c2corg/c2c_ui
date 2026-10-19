@@ -81,6 +81,8 @@ export default {
       default: undefined,
     },
   },
+
+  emits: ['click-prefix'],
 };
 </script>
 

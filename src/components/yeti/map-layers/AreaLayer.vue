@@ -20,6 +20,8 @@ export default {
     SlopesLayers,
   },
   mixins: [layerMixin, layerSelectorWatcherMixin],
+  emits: ['layer'],
+
   computed: {
     mapZoom() {
       return Yetix.mapZoom;

@@ -149,6 +149,8 @@ export default {
     },
   },
 
+  emits: ['documents-load'],
+
   data() {
     return {
       tags: [],

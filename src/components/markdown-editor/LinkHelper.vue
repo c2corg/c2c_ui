@@ -30,6 +30,8 @@
 
 <script>
 export default {
+  emits: ['insert'],
+
   data() {
     return {
       chunk: '',

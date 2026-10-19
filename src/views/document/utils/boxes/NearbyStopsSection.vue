@@ -109,6 +109,8 @@ export default {
       default: () => [],
     },
   },
+  emits: ['accessibility-info-changed', 'has-protection-area', 'highlight-document', 'stops-updated'],
+
   data() {
     return {
       stops: [],

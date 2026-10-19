@@ -46,6 +46,8 @@ export default {
     fetchSuggestions: { type: Function, required: true },
     limit: { type: Number, default: 10 },
   },
+  emits: ['update:props'],
+
   data() {
     return {
       localData: {

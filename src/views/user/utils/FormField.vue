@@ -108,6 +108,8 @@ export default {
     },
   },
 
+  emits: ['input'],
+
   data() {
     return {
       errorMessage: null,

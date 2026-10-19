@@ -274,6 +274,15 @@ export default {
     },
   },
 
+  emits: [
+    'has-protection-area',
+    'highlight-document',
+    'move',
+    'pin-to-top-clicked',
+    'stop-clicked',
+    'waypoint-clicked',
+  ],
+
   data() {
     let cartoLayers_ = cartoLayers();
     let dataLayers_ = dataLayers();

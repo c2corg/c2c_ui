@@ -23,6 +23,8 @@ export default {
     },
   },
 
+  emits: ['submit'],
+
   data() {
     return {
       serverMetaErrors: [], // errors that can't be linked to an input

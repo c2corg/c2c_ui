@@ -45,6 +45,8 @@ import { requireDocumentProperty } from '@/js/properties-mixins';
 export default {
   mixins: [requireDocumentProperty],
 
+  emits: ['has-data'],
+
   data() {
     return {
       /** Indicates whether there is any elevation data to display */

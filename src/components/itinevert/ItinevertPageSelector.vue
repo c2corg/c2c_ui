@@ -67,6 +67,8 @@ export default {
     },
   },
 
+  emits: ['paginate'],
+
   data() {
     return {
       total: this.documents?.total ?? 0,

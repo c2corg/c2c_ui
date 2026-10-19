@@ -74,6 +74,8 @@ export default {
     },
   },
 
+  emits: ['highlight-document'],
+
   data() {
     return {
       columnDefs: null,

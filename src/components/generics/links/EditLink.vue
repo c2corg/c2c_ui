@@ -22,5 +22,7 @@ export default {
       required: true,
     },
   },
+
+  emits: ['click'],
 };
 </script>

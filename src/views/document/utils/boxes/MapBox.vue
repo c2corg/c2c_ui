@@ -73,6 +73,8 @@ export default {
 
   mixins: [requireDocumentProperty],
 
+  emits: ['has-protection-area'],
+
   data() {
     return {
       mapLinksAreVisible: false,

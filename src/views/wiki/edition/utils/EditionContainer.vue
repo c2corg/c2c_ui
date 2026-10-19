@@ -114,6 +114,8 @@ export default {
     },
   },
 
+  emits: ['save'],
+
   data() {
     return {
       isPreview: false,

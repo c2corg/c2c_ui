@@ -35,6 +35,8 @@ export default {
     },
   },
 
+  emits: ['input'],
+
   computed: {
     minutes() {
       return range(0, 59);

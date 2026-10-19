@@ -236,6 +236,8 @@ export default {
       default: '',
     },
   },
+  emits: ['selectJourney'],
+
   computed: {},
   methods: {
     assetUrl,

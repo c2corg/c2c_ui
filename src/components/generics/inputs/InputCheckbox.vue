@@ -26,6 +26,8 @@ export default {
       default: null,
     },
   },
+
+  emits: ['change'],
 };
 </script>
 

@@ -195,6 +195,8 @@ export default {
     IconJoinUs,
     JoinUsLink,
   },
+  emits: ['toggle-side-menu'],
+
   data() {
     return {
       searchText: '',

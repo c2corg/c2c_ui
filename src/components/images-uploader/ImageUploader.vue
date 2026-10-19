@@ -129,6 +129,8 @@ export default {
     },
   },
 
+  emits: ['delete-image', 'retry-upload', 'rotate-image'],
+
   data() {
     const result = {
       licences: new Map([

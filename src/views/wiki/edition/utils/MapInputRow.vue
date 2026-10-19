@@ -77,6 +77,8 @@ export default {
     },
   },
 
+  emits: ['move'],
+
   data() {
     return {
       latitude: null,
