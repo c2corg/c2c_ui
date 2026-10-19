@@ -225,7 +225,7 @@ export default {
     },
 
     onGeometryUpdate(to, from) {
-      if (from === null && to !== null) {
+      if (from === null && to) {
         this.$nextTick(() => {
           this.$refs.map.fitMapToDocuments();
         });
@@ -233,6 +233,11 @@ export default {
     },
 
     onWaypointsAssociation() {
+      // the document is null while another one loads (e.g. from add to edit, or another lang)
+      if (!this.document) {
+        return;
+      }
+
       const waypoints = this.document.associations.waypoints;
 
       // clean main waypoint if it is missing from associated waypoints
