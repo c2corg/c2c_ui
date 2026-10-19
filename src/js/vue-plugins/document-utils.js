@@ -20,7 +20,7 @@ export default function install(Vue) {
       if (documentType === 'book') return Vue.prototype.$gettext('add a book');
       if (documentType === 'article') return Vue.prototype.$gettext('add an article');
 
-      throw new Error(`Unexpected type : ${this.documentType}`);
+      throw new Error(`Unexpected type : ${documentType}`);
     },
 
     getDocumentType(letterType) {
@@ -381,14 +381,17 @@ export default function install(Vue) {
         return null;
       }
 
-      let minX, maxX, minY, maxY;
+      let minX = Infinity;
+      let maxX = -Infinity;
+      let minY = Infinity;
+      let maxY = -Infinity;
 
       for (const document of documents) {
         const coordinates = JSON.parse(document.geometry.geom).coordinates;
-        maxX = maxX ? Math.max(maxX, coordinates[0]) : coordinates[0];
-        maxY = maxY ? Math.max(maxY, coordinates[1]) : coordinates[1];
-        minX = minX ? Math.min(minX, coordinates[0]) : coordinates[0];
-        minY = minY ? Math.min(minY, coordinates[1]) : coordinates[1];
+        maxX = Math.max(maxX, coordinates[0]);
+        maxY = Math.max(maxY, coordinates[1]);
+        minX = Math.min(minX, coordinates[0]);
+        minY = Math.min(minY, coordinates[1]);
       }
 
       return [minX, minY, maxX, maxY].map(Math.round);
