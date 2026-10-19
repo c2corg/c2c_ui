@@ -196,7 +196,7 @@ export default {
 
   watch: {
     'document.geometry.geom': function (to, from) {
-      if (from === null && to !== null) {
+      if (from === null && to) {
         this.$nextTick(() => {
           this.$refs.map.fitMapToDocuments();
         });

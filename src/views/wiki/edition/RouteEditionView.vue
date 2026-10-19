@@ -225,7 +225,7 @@ export default {
     },
 
     onGeometryUpdate(to, from) {
-      if (from === null && to !== null) {
+      if (from === null && to) {
         this.$nextTick(() => {
           this.$refs.map.fitMapToDocuments();
         });

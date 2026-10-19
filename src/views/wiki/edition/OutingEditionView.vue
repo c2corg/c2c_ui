@@ -268,7 +268,7 @@ export default {
     },
 
     'document.geometry.geom_detail': function (to, from) {
-      if (from === null && to !== null) {
+      if (from === null && to) {
         this.possibleRoutes = null;
         this.$nextTick(async () => {
           await this.fitMapToDocuments();
