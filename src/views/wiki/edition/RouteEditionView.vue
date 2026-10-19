@@ -250,17 +250,21 @@ export default {
       if (!this.document) {
         return;
       }
-      const documentRating = this.document.rock_free_rating;
-      const ratings = this.fields.rock_free_rating.values;
-      switch (climbingType) {
-        case 'bloc':
-          this.document.rock_free_rating = documentRating.toUpperCase();
-          this.fields.rock_free_rating.values = ratings.map((grade) => grade.toUpperCase());
-          break;
-        default:
-          this.document.rock_free_rating = documentRating.toLowerCase();
-          this.fields.rock_free_rating.values = ratings.map((grade) => grade.toLowerCase());
+      const toCase = climbingType === 'bloc' ? (grade) => grade.toUpperCase() : (grade) => grade.toLowerCase();
+      const field = this.fields.rock_free_rating;
+
+      // rock_free_rating is optional
+      if (this.document.rock_free_rating) {
+        this.document.rock_free_rating = toCase(this.document.rock_free_rating);
       }
+
+      // fields are the definitions shared with the other forms and the search filters:
+      // give this form its own copy of the field instead of changing them
+      const values = field.values.map(toCase);
+      this.fields = {
+        ...this.fields,
+        rock_free_rating: Object.assign(Object.create(Object.getPrototypeOf(field)), field, { values }),
+      };
     },
   },
 };
