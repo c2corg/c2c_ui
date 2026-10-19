@@ -1,69 +1,50 @@
+import { reactive } from 'vue';
+
 const BREAKPOINT_MOBILE = 768;
 const BREAKPOINT_TABLET = 1023;
 const BREAKPOINT_DESKTOP = 1215;
 const BREAKPOINT_WIDESCREEN = 1407;
 
 export default function install(Vue) {
-  Vue.prototype.$screen = new Vue({
-    name: 'Screen',
+  const state = reactive({ matchingQueryIndex: -1 });
 
-    data() {
-      return {
-        matchingQueryIndex: -1,
-      };
-    },
+  const breakpointsMediaQueryLists = [
+    BREAKPOINT_MOBILE,
+    BREAKPOINT_TABLET,
+    BREAKPOINT_DESKTOP,
+    BREAKPOINT_WIDESCREEN,
+  ].map((breakpoint) => window.matchMedia(`only screen and (max-width: ${breakpoint}px)`));
 
-    // https://bulma.io/documentation/modifiers/responsive-helpers/
-    computed: {
-      isMobile() {
-        return this.matchingQueryIndex === 0;
-      },
-      isTablet() {
-        return this.matchingQueryIndex === 1;
-      },
-      isDesktop() {
-        return this.matchingQueryIndex === 2;
-      },
-      isWidescreen() {
-        return this.matchingQueryIndex === 3;
-      },
-      isFullHD() {
-        return this.matchingQueryIndex === -1;
-      },
-    },
+  const onBreakpointMediaQueryChange = () => {
+    state.matchingQueryIndex = breakpointsMediaQueryLists.findIndex((mediaQueryList) => mediaQueryList.matches);
+  };
 
-    created() {
-      this.breakpointsMediaQueryLists = [
-        BREAKPOINT_MOBILE,
-        BREAKPOINT_TABLET,
-        BREAKPOINT_DESKTOP,
-        BREAKPOINT_WIDESCREEN,
-      ].map((breakpoint) => window.matchMedia(`only screen and (max-width: ${breakpoint}px)`));
-      this.breakpointsMediaQueryLists.forEach((mediaQueryList) => {
-        if (mediaQueryList.addEventListener) {
-          mediaQueryList.addEventListener('change', this.onBreakpointMediaQueryChange);
-        } else {
-          // support Safari < 14
-          mediaQueryList.addListener(this.onBreakpointMediaQueryChange);
-        }
-      });
-      this.onBreakpointMediaQueryChange(); // init
-    },
-
-    beforeDestroy() {
-      this.breakpointsMediaQueryLists.forEach((mediaQueryList) => {
-        if (mediaQueryList.removeEventListener) {
-          mediaQueryList.removeEventListener('change', this.onBreakpointMediaQueryChange);
-        } else {
-          mediaQueryList.removeListener(this.onBreakpointMediaQueryChange);
-        }
-      });
-    },
-
-    methods: {
-      onBreakpointMediaQueryChange() {
-        this.matchingQueryIndex = this.breakpointsMediaQueryLists.findIndex((mediaQueryList) => mediaQueryList.matches);
-      },
-    },
+  breakpointsMediaQueryLists.forEach((mediaQueryList) => {
+    if (mediaQueryList.addEventListener) {
+      mediaQueryList.addEventListener('change', onBreakpointMediaQueryChange);
+    } else {
+      // support Safari < 14
+      mediaQueryList.addListener(onBreakpointMediaQueryChange);
+    }
   });
+  onBreakpointMediaQueryChange(); // init
+
+  // https://bulma.io/documentation/modifiers/responsive-helpers/
+  Vue.prototype.$screen = {
+    get isMobile() {
+      return state.matchingQueryIndex === 0;
+    },
+    get isTablet() {
+      return state.matchingQueryIndex === 1;
+    },
+    get isDesktop() {
+      return state.matchingQueryIndex === 2;
+    },
+    get isWidescreen() {
+      return state.matchingQueryIndex === 3;
+    },
+    get isFullHD() {
+      return state.matchingQueryIndex === -1;
+    },
+  };
 }
