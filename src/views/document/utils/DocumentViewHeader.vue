@@ -37,12 +37,12 @@
 
           <!-- outing specific  -->
           <span v-if="documentType == 'outing'" class="outing-date is-size-5">
-            {{ $documentUtils.getOutingDatesLocalized(document) | uppercaseFirstLetter }}
+            {{ $filters.uppercaseFirstLetter($documentUtils.getOutingDatesLocalized(document)) }}
           </span>
 
           <!-- xreport specific  -->
           <span v-else-if="documentType == 'xreport'" class="outing-date is-size-5">
-            {{ $dateUtils.toLocalizedString(document.date, 'll') | uppercaseFirstLetter }}
+            {{ $filters.uppercaseFirstLetter($dateUtils.toLocalizedString(document.date, 'll')) }}
           </span>
         </h1>
       </div>

@@ -5,9 +5,10 @@ import { compileToFunctions } from 'vue-template-compiler';
 import MarkdownSection from './MarkdownSection';
 
 import AccordionItem from '@/components/generics/AccordionItem';
+import filters from '@/js/vue-plugins/filters';
 
 const localVue = createLocalVue();
-localVue.filter('uppercaseFirstLetter', (value) => value);
+localVue.use(filters);
 
 const mountSection = (template, document) =>
   mount(
@@ -39,7 +40,7 @@ describe('MarkdownSection', () => {
       documentWith('Some remarks')
     );
 
-    expect(wrapper.find('.accordion-title h2').text()).toBe('remarks');
+    expect(wrapper.find('.accordion-title h2').text()).toBe('Remarks');
     expect(wrapper.find('.markdown').exists()).toBe(true);
   });
 

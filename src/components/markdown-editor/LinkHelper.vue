@@ -5,7 +5,7 @@
     </template>
     <div class="field">
       <label class="label">
-        {{ $gettext('text to display') | uppercaseFirstLetter }}
+        {{ $filters.uppercaseFirstLetter($gettext('text to display')) }}
       </label>
       <div class="control">
         <input class="input" v-model="chunk" />
@@ -13,7 +13,7 @@
     </div>
     <div class="field">
       <label class="label">
-        {{ $gettext('URL') | uppercaseFirstLetter }}
+        {{ $filters.uppercaseFirstLetter($gettext('URL')) }}
       </label>
       <div class="control">
         <input class="input" v-model="url" />
