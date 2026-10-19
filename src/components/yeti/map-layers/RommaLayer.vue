@@ -1,5 +1,13 @@
 <template>
-  <icon-layer :name="name" :color="color" :selector="layerSelector">
+  <icon-layer
+    :name="name"
+    :color="color"
+    :selector="layerSelector"
+    ref="iconLayer"
+    @layer="$emit('layer', $event)"
+    @set-overlay="setOverlay"
+    @unset-overlay="unsetOverlay"
+  >
     <span v-translate>ROMMA station</span>
     <template #overlay>
       <a :href="overlay.url" target="_blank">
@@ -19,6 +27,8 @@ export default {
     IconLayer,
   },
   mixins: [getIconLayerMixin],
+
+  emits: ['layer'],
   data() {
     return {
       name: 'romma',

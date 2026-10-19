@@ -81,7 +81,7 @@ export default {
         // If the down key is pressed, move focus to the open panel,
         // otherwise switch to the adjacent tab
         dir === 'down'
-          ? this.$parent.$refs['panel' + index].$el.focus()
+          ? document.getElementById('panel' + index)?.focus()
           : this.tabs[dir]
           ? this.setActiveTab(dir)
           : void 0;
