@@ -21,7 +21,7 @@
 
 <script>
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import Yetix from '@/components/yeti/Yetix';
+import yetixEvents from '@/components/yeti/yetix-events';
 
 export default {
   components: {
@@ -69,7 +69,7 @@ export default {
     },
   },
   mounted() {
-    Yetix.$on('lon-lat', (evt) => {
+    yetixEvents.on('lon-lat', (evt) => {
       this.loading = true;
       this.lon = evt.lon;
       this.lat = evt.lat;

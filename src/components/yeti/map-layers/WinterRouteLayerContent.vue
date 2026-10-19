@@ -39,6 +39,7 @@
 <script>
 import Toast from '@/components/yeti/Toast';
 import Yetix from '@/components/yeti/Yetix';
+import yetixEvents from '@/components/yeti/yetix-events';
 
 export default {
   components: {
@@ -64,7 +65,7 @@ export default {
   methods: {
     addToRoute(winterRoutes) {
       winterRoutes.forEach((winterRoute) => {
-        Yetix.$emit('addFeature', winterRoute);
+        yetixEvents.emit('addFeature', winterRoute);
       });
       if (winterRoutes.length === 1) {
         let winterRoute = winterRoutes[0];

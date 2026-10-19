@@ -54,6 +54,7 @@
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
 import Info from '@/components/yeti/Info.vue';
 import Yetix from '@/components/yeti/Yetix';
+import yetixEvents from '@/components/yeti/yetix-events';
 
 export default {
   components: { DropdownContent, Info },
@@ -99,10 +100,10 @@ export default {
   },
   methods: {
     onPreviewSimplify() {
-      Yetix.$emit('previewSimplify', this.toleranceDistance);
+      yetixEvents.emit('previewSimplify', this.toleranceDistance);
     },
     onSimplify() {
-      Yetix.$emit('simplify');
+      yetixEvents.emit('simplify');
       // go back to init
       this.initialize();
     },

@@ -55,6 +55,7 @@ import simplify from './map-layers/simplify';
 
 import Info from '@/components/yeti/Info.vue';
 import Yetix from '@/components/yeti/Yetix';
+import yetixEvents from '@/components/yeti/yetix-events';
 import debounce from '@/js/debounce';
 import d3 from '@/js/libs/d3';
 import ol from '@/js/libs/ol';
@@ -150,8 +151,8 @@ export default {
 
     this.debouncedOnResize = debounce(this.onResize, 100);
 
-    Yetix.$on('showFeature', this.showFeature);
-    Yetix.$on('hideFeature', this.hideFeature);
+    yetixEvents.on('showFeature', this.showFeature);
+    yetixEvents.on('hideFeature', this.hideFeature);
   },
   beforeDestroy() {
     this.resizeObserver?.unobserve(this.$refs.graph);
@@ -203,7 +204,7 @@ export default {
           // stop loading
           this.loading = false;
           // emit featureUpdated: routeLayer will update state.features
-          Yetix.$emit('featureUpdated');
+          yetixEvents.emit('featureUpdated');
 
           // errors ?
           // if we got status=error, concatenate all errors, and alert
@@ -227,7 +228,7 @@ export default {
         });
         feature.getGeometry().setCoordinates(coords);
       });
-      Yetix.$emit('featureUpdated');
+      yetixEvents.emit('featureUpdated');
     },
     showFeature(index) {
       this.container
@@ -522,10 +523,10 @@ export default {
       this.emitCursorMoveEvent(this.concatCoords[d === d0 ? i - 1 : i]);
     },
     emitCursorEndEvent() {
-      Yetix.$emit('elevationProfile', 'cursor_end');
+      yetixEvents.emit('elevationProfile', { action: 'cursor_end' });
     },
     emitCursorMoveEvent(coord) {
-      Yetix.$emit('elevationProfile', 'cursor_move', coord);
+      yetixEvents.emit('elevationProfile', { action: 'cursor_move', coord });
     },
   },
 };

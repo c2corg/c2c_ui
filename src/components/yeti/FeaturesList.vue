@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Yetix from '@/components/yeti/Yetix';
+import yetixEvents from '@/components/yeti/yetix-events';
 
 export default {
   props: {
@@ -25,15 +25,15 @@ export default {
   },
   methods: {
     removeFeature(feature) {
-      Yetix.$emit('removeFeature', feature);
+      yetixEvents.emit('removeFeature', feature);
     },
     showFeature(feature, index) {
       feature.setStyle(feature.get('highlightedStyle'));
-      Yetix.$emit('showFeature', index);
+      yetixEvents.emit('showFeature', index);
     },
     hideFeature(feature, index) {
       feature.setStyle(feature.get('normalStyle'));
-      Yetix.$emit('hideFeature', index);
+      yetixEvents.emit('hideFeature', index);
     },
     nbPointsOnFeature(feature) {
       return feature.getGeometry().getCoordinates().length;
