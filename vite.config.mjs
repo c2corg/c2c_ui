@@ -16,7 +16,8 @@ const config = {
   ordnanceSurveyApiKey: 'eUaDulZ6AqXJo7iyoP2lRsgUjKfZWA71',
   isBackendSelectable: true,
   addthisPublicId: 'ra-58abf6b4f3a680cb',
-  googleAnalyticsKey: 'UA-2814179-1',
+  // Google Analytics 4 measurement ID (G-...). Universal Analytics (UA-2814179-1) stopped collecting in July 2024
+  googleAnalyticsKey: '',
   urlsConfigurations: {
     demo: {
       name: 'demo',
