@@ -39,6 +39,7 @@ describe('$documentUtils', () => {
   it('builds the creation title of each type', () => {
     expect(install().getCreationTitle('outing')).toBe('[add an outing]');
     expect(install().getCreationTitle('xreport')).toBe('[add an incident/accident report]');
+    expect(() => install().getCreationTitle('profile')).toThrow('Unexpected type : profile');
   });
 
   it('gives a document title in the asked language, then the user one, then by order', () => {
@@ -127,6 +128,8 @@ describe('$documentUtils', () => {
       10, 6, 30, 20,
     ]);
     expect(install().getDocumentsBbox([])).toBe(null);
+    expect(install().getDocumentsBbox([at(0, 0), at(-10, -20)])).toEqual([-10, -20, 0, 0]);
+    expect(install().getDocumentsBbox([at(-10, -20), at(0, 0)])).toEqual([-10, -20, 0, 0]);
   });
 
   it('formats lengths and height differences', () => {
