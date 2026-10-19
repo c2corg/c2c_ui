@@ -24,6 +24,13 @@ import config from '@/js/config';
 const cdn = '//s7.addthis.com/js/300/addthis_widget.js';
 
 export default {
+  props: {
+    document: {
+      type: Object,
+      required: true,
+    },
+  },
+
   data() {
     return { addThisVisible: false };
   },
@@ -72,7 +79,7 @@ export default {
 
     webShare() {
       navigator.share({
-        title: this.$documentUtils.getDocumentTitle(this.$parent.document),
+        title: this.$documentUtils.getDocumentTitle(this.document),
         url: window.location.href,
       });
     },

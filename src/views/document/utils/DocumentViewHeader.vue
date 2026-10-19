@@ -11,7 +11,7 @@
           <follow-button v-if="!isPrintingView" :document="document" />
           <tags-button v-if="!isPrintingView" :document="document" />
 
-          <social-network-sharing v-if="documentType != 'profile' && isNormalView" />
+          <social-network-sharing v-if="documentType != 'profile' && isNormalView" :document="document" />
 
           <span
             :title="$gettext('Add images')"

@@ -32,6 +32,7 @@
 <script>
 import c2c from '@/js/apis/c2c';
 import { sanitizeRichHtml } from '@/js/sanitize-html';
+import { registerHelperWindow } from '@/js/vue-plugins/helper-window';
 
 export default {
   data() {
@@ -56,6 +57,15 @@ export default {
           }
         : null;
     },
+  },
+
+  created() {
+    // in created(), not mounted(): pages call it while they are created, before the app tree is mounted
+    registerHelperWindow(this);
+  },
+
+  beforeDestroy() {
+    registerHelperWindow(null);
   },
 
   methods: {
