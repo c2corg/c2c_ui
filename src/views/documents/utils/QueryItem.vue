@@ -2,20 +2,12 @@
   <div v-if="field !== undefined" class="field">
     <div v-if="field.queryMode === 'valuesRangeSlider'" class="control">
       <query-item-slider-label :field="field" :value="value" />
-      <vue-slider
-        v-model="value"
-        :data="field.values"
-        :lazy="true"
-        :marks="field.values"
-        hide-label
-        tooltip="focus"
-        :tooltip-formatter="field.i18n ? gettext : undefined"
-      />
+      <input-slider v-model="valueIndexes" :max="field.values.length - 1" :format="formatValueIndex" marks />
     </div>
 
     <div v-else-if="field.queryMode === 'numericalRangeSlider'" class="control">
       <query-item-slider-label :field="field" :value="value" />
-      <vue-slider v-model="value" :min="field.min" :max="field.max" :interval="interval" :lazy="true" tooltip="focus" />
+      <input-slider v-model="value" :min="field.min" :max="field.max" :step="interval" />
     </div>
 
     <div v-else-if="field.queryMode === 'multiSelect'" class="control">
@@ -91,8 +83,6 @@
 </template>
 
 <script>
-import 'vue-slider-component/theme/default.css';
-
 import DateQueryItem from './DateQueryItem';
 import DatesQueryItem from './DatesQueryItem';
 import QueryItemSliderLabel from './QueryItemSliderLabel';
@@ -104,8 +94,6 @@ import { requireFieldProperty } from '@/js/properties-mixins';
 export default {
   components: {
     Multiselect: () => import('vue-multiselect'),
-    // the UMD build is a CommonJS module: unwrap its default export (Vue only does it for ES module namespaces)
-    VueSlider: () => import('vue-slider-component').then((module) => module.default),
     QueryItemSliderLabel,
     DateQueryItem,
     DatesQueryItem,
@@ -121,6 +109,16 @@ export default {
   },
 
   computed: {
+    // a range of field.values (ratings...): the slider works on their indexes
+    valueIndexes: {
+      get() {
+        return this.value.map((value) => this.field.values.indexOf(value));
+      },
+      set(indexes) {
+        this.value = indexes.map((index) => this.field.values[index]);
+      },
+    },
+
     interval() {
       const scope = this.field.max - this.field.min;
 
@@ -137,6 +135,11 @@ export default {
   },
 
   methods: {
+    formatValueIndex(index) {
+      const value = this.field.values[Math.round(index)];
+      return this.field.i18n ? this.gettext(value) : value;
+    },
+
     gettext(key) {
       return this.$gettext(key, this.field.i18nContext);
     },

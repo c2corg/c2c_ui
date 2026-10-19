@@ -22,7 +22,7 @@
       <fa-icon icon="gear" />
     </div>
     <div class="layer-button-slider" v-if="showSlider" @click.stop>
-      <vue-slider :contained="true" tooltip="none" v-model="opacity"></vue-slider>
+      <input-slider v-model="opacity" :tooltips="false" :lazy="false" />
     </div>
     <div class="layer-button-border"></div>
   </div>
@@ -33,11 +33,6 @@ import { assetUrl } from '@/js/asset-urls';
 
 export default {
   name: 'LayerButton',
-
-  components: {
-    // the UMD build is a CommonJS module: unwrap its default export (Vue only does it for ES module namespaces)
-    VueSlider: () => import('vue-slider-component').then((module) => module.default),
-  },
 
   props: {
     layer: {
@@ -180,6 +175,14 @@ $config-button-height: $config-button-width;
   left: 0;
   width: $button-width - $config-button-width;
   height: $config-button-height;
+}
+
+.layer-button-slider .input-slider {
+  // the handles stay in the box, as with the former vue-slider-component contained option
+  --slider-handle-width: 14px;
+  --slider-handle-height: 14px;
+
+  margin: 6px 7px;
 }
 
 .layer-button.selected .layer-button-slider {

@@ -191,7 +191,7 @@ function checkBudgets(options, bundle) {
 /**
  * Puts dependencies needed at startup in a separate "vendor" chunk, as Vue CLI did with chunk-vendors: they change less
  * often than the app code, so they stay cached across releases. Dependencies only reached through a dynamic import
- * (ag-grid, d3, slider...) stay in their lazy chunks.
+ * (ag-grid, d3...) stay in their lazy chunks.
  */
 function vendorChunk() {
   const staticallyImportedByEntry = new Map();
@@ -271,7 +271,7 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
-      // same alias as Vue CLI: CommonJS dependencies (vue-slider-component UMD...) that require('vue')
+      // same alias as Vue CLI: CommonJS dependencies that require('vue')
       // would otherwise get vue.runtime.common.js, a second Vue copy beside the ESM one
       { find: /^vue$/, replacement: 'vue/dist/vue.runtime.esm.js' },
     ],
