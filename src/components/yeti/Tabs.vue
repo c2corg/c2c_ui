@@ -8,7 +8,7 @@
           :href="'#panel' + i"
           :id="'tab' + i"
           ref="tab"
-          :aria-selected="activeTab === i"
+          :aria-selected="String(activeTab === i)"
           :tabindex="activeTab === i ? 0 : -1"
           :title="tab.title"
           @click.prevent="setActiveTab(i)"
