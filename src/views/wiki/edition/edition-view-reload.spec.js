@@ -112,4 +112,23 @@ describe.each([
       expect(wrapper.vm.document.main_waypoint_id).toBe(3);
     });
   }
+
+  if (view === OutingEditionView) {
+    it('waits for the reloaded document before updating the possible routes', async () => {
+      const { wrapper } = mountView(view, documentType, mapRef);
+      await setDocument(wrapper, newDocument());
+      // the map has been fitted once
+      wrapper.vm.bbox = [600000, 5600000, 800000, 5800000];
+
+      await setDocument(wrapper, null);
+      await setDocument(wrapper, newDocument());
+      expect(errors).toEqual([]);
+
+      // the user changes the activities: no need to really search routes
+      const updateRoutes = vi.spyOn(wrapper.vm, 'updateRoutes').mockImplementation(() => {});
+      wrapper.vm.document.activities = ['skitouring'];
+      await settle();
+      expect(updateRoutes).toHaveBeenCalledWith('activities', false);
+    });
+  }
 });

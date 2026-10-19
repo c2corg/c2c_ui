@@ -261,8 +261,8 @@ export default {
   watch: {
     showBothDates: 'handleDates',
     'document.activities': function (to, from) {
-      if (from === undefined) {
-        return; // initial load
+      if (from === undefined || to === undefined) {
+        return; // initial load, or the document is null while another one loads
       }
       this.updateRoutes('activities', false);
     },
