@@ -178,6 +178,7 @@ import biodivSportsService from '@/js/apis/biodivsports-service';
 import c2c from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
 import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
+import bus from '@/js/event-bus';
 import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
 import { TCX } from '@/js/tcx/TCX';
@@ -525,6 +526,10 @@ export default {
   },
 
   beforeDestroy() {
+    // off() without a handler would remove the handlers of every map
+    if (this.onElevationProfile) {
+      bus.off('elevation_profile', this.onElevationProfile);
+    }
     this.fullScreenControl.un('enterfullscreen', this.onFullscreenChange);
     this.fullScreenControl.un('leavefullscreen', this.onFullscreenChange);
   },
@@ -737,8 +742,8 @@ export default {
       const elevationProfileMarker = new ol.Feature();
       elevationProfileMarker.setStyle(getElevationProfileMarkerStyle());
       elevationProfileSource.addFeature(elevationProfileMarker);
-      this.$root.$on('elevation_profile', (event, coord) => {
-        switch (event) {
+      this.onElevationProfile = ({ action, coord }) => {
+        switch (action) {
           case 'cursor_end':
             this.elevationProfileLayer.setVisible(false);
             break;
@@ -756,7 +761,8 @@ export default {
           case 'toggle_fullscreen':
             setTimeout(() => this.map.updateSize(), 0);
         }
-      });
+      };
+      bus.on('elevation_profile', this.onElevationProfile);
     },
 
     setDocumentGeometry(geometry) {

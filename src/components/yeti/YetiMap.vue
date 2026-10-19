@@ -49,6 +49,7 @@ import YetiLayers from './map-layers/YetiLayers.vue';
 import EditModeButton from '@/components/yeti/EditModeButton';
 import YetiMapLegend from '@/components/yeti/YetiMapLegend';
 import Yetix from '@/components/yeti/Yetix';
+import yetixEvents from '@/components/yeti/yetix-events';
 import photon from '@/js/apis/photon';
 import ol from '@/js/libs/ol';
 
@@ -181,7 +182,7 @@ export default {
         Yetix.setMapZoom(mapZoom);
       }
       // emit an event for map layers
-      Yetix.$emit('map-moveend');
+      yetixEvents.emit('map-moveend');
 
       // store position
       this.$localStorage.set('yeti-map-position', {
@@ -193,10 +194,10 @@ export default {
       // close controls
       this.showRecenterOnPropositions = false;
 
-      Yetix.$emit('map-click', evt);
+      yetixEvents.emit('map-click', evt);
     },
     onMapPointerMove(evt) {
-      Yetix.$emit('map-pointermove', evt);
+      yetixEvents.emit('map-pointermove', evt);
     },
     activateCenterOnGeolocation() {
       this.geolocation.setTracking(true);

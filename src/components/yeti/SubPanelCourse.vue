@@ -160,6 +160,7 @@ import Info from '@/components/yeti/Info.vue';
 import SimplifyTool from '@/components/yeti/SimplifyTool.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 import Yetix from '@/components/yeti/Yetix';
+import yetixEvents from '@/components/yeti/yetix-events';
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
@@ -219,7 +220,7 @@ export default {
     },
     onRemoveFeatures() {
       if (confirm(this.$gettext('Confirm delete'))) {
-        Yetix.$emit('removeFeatures');
+        yetixEvents.emit('removeFeatures');
         // initialize simplify tool (go back to init state)
         this.$refs.simplifyTool.initialize();
       }
@@ -231,7 +232,7 @@ export default {
 
       reader.onload = () => {
         this.loading = false;
-        Yetix.$emit('gpx', reader.result);
+        yetixEvents.emit('gpx', reader.result);
       };
 
       reader.readAsText(event.target.files[0]);
@@ -240,7 +241,7 @@ export default {
       // change event is not fired
       // and emit gpx event
       this.$refs.gpxFileInput.value = '';
-      Yetix.$emit('gpx', null);
+      yetixEvents.emit('gpx', null);
     },
     downloadCourse() {
       if (this.validSimplifyTolerance) {
@@ -272,7 +273,7 @@ export default {
       Yetix.setEditMode(!this.editMode);
     },
     fitMapToFeatures() {
-      Yetix.$emit('fit-map-to-features');
+      yetixEvents.emit('fit-map-to-features');
     },
   },
 };

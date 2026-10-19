@@ -27,6 +27,7 @@ import ProtectedAreasLayer from '@/components/yeti/map-layers/ProtectedAreasLaye
 import RommaLayer from '@/components/yeti/map-layers/RommaLayer.vue';
 import RouteLayer from '@/components/yeti/map-layers/RouteLayer.vue';
 import WinterRouteLayer from '@/components/yeti/map-layers/WinterRouteLayer.vue';
+import yetixEvents from '@/components/yeti/yetix-events';
 import ol from '@/js/libs/ol';
 
 export default {
@@ -66,11 +67,11 @@ export default {
     this.layers = this.$children.reverse();
 
     // add events
-    Yetix.$on('map-click', (evt) => {
+    yetixEvents.on('map-click', (evt) => {
       this.dealWithEventsOnEachLayer(evt, 'onMapClick', 'onMapLooseClick');
     });
 
-    Yetix.$on('map-pointermove', (evt) => {
+    yetixEvents.on('map-pointermove', (evt) => {
       this.dealWithEventsOnEachLayer(evt, 'onMapPointerMove', 'onMapLoosePointerMove');
     });
   },

@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import config from '@/js/config';
 import constants from '@/js/constants';
+import { once } from '@/js/event-bus';
 import DocumentsView from '@/views//documents/DocumentsView';
 import AreaView from '@/views/document/AreaView';
 import ArticleView from '@/views/document/ArticleView';
@@ -181,7 +182,7 @@ const router = new Router({
     return new Promise((resolve) => {
       // we add an once handler on the event
       // view will trigger it once data are present
-      this.app.$root.$once('trigger-scroll', () => {
+      once('trigger-scroll', () => {
         resolve(position);
       });
     });

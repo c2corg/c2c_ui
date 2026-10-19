@@ -12,6 +12,7 @@ import layerMixin from './layer';
 import simplify from './simplify';
 
 import Yetix from '@/components/yeti/Yetix';
+import yetixEvents from '@/components/yeti/yetix-events';
 import c2c from '@/js/apis/c2c';
 import ol from '@/js/libs/ol';
 
@@ -327,7 +328,7 @@ export default {
     this.elevationPoint = new ol.Feature();
     elevationPointSource.addFeature(this.elevationPoint);
     // react to event
-    Yetix.$on('elevationProfile', this.onElevationProfile);
+    yetixEvents.on('elevationProfile', this.onElevationProfile);
 
     // set default featuresTitle
     this.defaultFeaturesTitle = this.$gettext(Yetix.featuresTitle);
@@ -346,14 +347,14 @@ export default {
 
     this.addInteractions();
 
-    Yetix.$on('addFeature', this.addFeature);
-    Yetix.$on('removeFeature', this.removeFeature);
-    Yetix.$on('removeFeatures', this.removeFeatures);
-    Yetix.$on('gpx', this.addFeaturesFromGpx);
-    Yetix.$on('previewSimplify', this.previewSimplify);
-    Yetix.$on('simplify', this.simplify);
-    Yetix.$on('featureUpdated', this.updateFeaturesFromStore);
-    Yetix.$on('fit-map-to-features', this.fitMapToFeatures);
+    yetixEvents.on('addFeature', this.addFeature);
+    yetixEvents.on('removeFeature', this.removeFeature);
+    yetixEvents.on('removeFeatures', this.removeFeatures);
+    yetixEvents.on('gpx', this.addFeaturesFromGpx);
+    yetixEvents.on('previewSimplify', this.previewSimplify);
+    yetixEvents.on('simplify', this.simplify);
+    yetixEvents.on('featureUpdated', this.updateFeaturesFromStore);
+    yetixEvents.on('fit-map-to-features', this.fitMapToFeatures);
 
     // special event when window loose focus = hanfle ctrl key (when browser shorcuts) for split interaction
     window.addEventListener('blur', () => this.onKeyup({ key: 'Control', altKey: false }));
@@ -699,8 +700,8 @@ export default {
       // hide simplified/show features
       this.hideSimplifiedLayer();
     },
-    onElevationProfile(event, coord) {
-      switch (event) {
+    onElevationProfile({ action, coord }) {
+      switch (action) {
         case 'cursor_move':
           this.elevationPointLayer.setVisible(true);
           this.elevationPoint.setGeometry(new ol.geom.Point(coord));

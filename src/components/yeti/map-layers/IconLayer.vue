@@ -14,6 +14,7 @@
 import layerMixin from './layer';
 
 import Yetix from '@/components/yeti/Yetix';
+import yetixEvents from '@/components/yeti/yetix-events';
 import ol from '@/js/libs/ol';
 
 export default {
@@ -124,7 +125,7 @@ export default {
     // prevent event on map when overlay is open
     this.$refs.overlay.addEventListener('pointermove', (evt) => {
       evt.stopImmediatePropagation();
-      Yetix.$emit('map-pointermove', evt);
+      yetixEvents.emit('map-pointermove', evt);
     });
 
     this.activeFeature = false;

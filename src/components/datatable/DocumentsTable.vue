@@ -33,6 +33,7 @@ import OutingRating from './cell-renderers/OutingRating';
 import RouteRating from './cell-renderers/RouteRating';
 
 import constants from '@/js/constants';
+import bus from '@/js/event-bus';
 import { requireDocumentTypeProperty } from '@/js/properties-mixins';
 
 function getColDef(vm, field, options = {}) {
@@ -102,7 +103,11 @@ export default {
   },
 
   mounted() {
-    this.$root.$on('table-csv-export', () => this.exportCsv());
+    bus.on('table-csv-export', this.exportCsv);
+  },
+
+  beforeDestroy() {
+    bus.off('table-csv-export', this.exportCsv);
   },
 
   methods: {

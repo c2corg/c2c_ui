@@ -108,6 +108,7 @@
 
 <script>
 import IconYeti from '@/components/generics/icons/IconYeti';
+import bus from '@/js/event-bus';
 
 export default {
   components: { IconYeti },
@@ -140,7 +141,7 @@ export default {
 
   methods: {
     showGdpr() {
-      this.$root.$emit('show-gdpr');
+      bus.emit('show-gdpr');
     },
 
     onHeightBreakpointChange() {

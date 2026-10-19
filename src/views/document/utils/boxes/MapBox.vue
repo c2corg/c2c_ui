@@ -58,6 +58,7 @@
 import ElevationProfile from './ElevationProfile';
 import MapLinks from './MapLinks';
 
+import bus from '@/js/event-bus';
 import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 import utils from '@/js/utils';
@@ -97,23 +98,24 @@ export default {
   },
 
   mounted() {
-    this.$root.$on('elevation_profile', (event, hide) => {
-      if (event !== 'toggle_fullscreen') {
-        return;
-      }
-
-      this.elevationProfileHidden = hide;
-    });
+    bus.on('elevation_profile', this.onElevationProfile);
     window.addEventListener('resize', this.resizePin);
   },
 
   beforeDestroy() {
+    bus.off('elevation_profile', this.onElevationProfile);
     window.removeEventListener('resize', this.resizePin);
     if (this.pinnedMode) this.togglePinToSide(true);
     if (this.pinnedMode) this.togglePinToSide(true);
   },
 
   methods: {
+    onElevationProfile({ action, hide }) {
+      if (action === 'toggle_fullscreen') {
+        this.elevationProfileHidden = hide;
+      }
+    },
+
     togglePinToSide(toggle) {
       const width = window.innerWidth;
       const height = window.innerHeight;
