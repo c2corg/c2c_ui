@@ -176,7 +176,8 @@ export default {
 
     onDeleteImage(image) {
       if (this.images[image.key]) {
-        this.$delete(this.images, image.key);
+        // new objects: adding or deleting a key of a reactive object is not reactive in Vue 2
+        this.images = Object.fromEntries(Object.entries(this.images).filter(([key]) => key !== image.key));
       }
 
       this.computeReadyForSaving();
@@ -189,7 +190,7 @@ export default {
         if (this.images[key] === undefined) {
           const image = this.buildImageObject(file, key);
 
-          this.$set(this.images, image.key, image);
+          this.images = { ...this.images, [image.key]: image };
           this.startUpload(image);
         }
       }
