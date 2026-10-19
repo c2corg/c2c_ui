@@ -134,6 +134,7 @@ import QueryItems from './utils/QueryItems';
 
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
+import bus from '@/js/event-bus';
 
 const DocumentsTable = () => import('@/components/datatable/DocumentsTable');
 
@@ -225,7 +226,10 @@ export default {
         return;
       }
 
-      this.promise = c2c[this.documentType].getAll(this.$route.query);
+      this.promise = c2c[this.documentType].getAll(this.$route.query).then(() => {
+        // the list has its height: back from a document, the router can restore the scroll position
+        bus.emit('trigger-scroll');
+      });
     },
 
     toogleProperty(property) {

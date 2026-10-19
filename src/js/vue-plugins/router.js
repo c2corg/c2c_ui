@@ -148,6 +148,9 @@ routes.push({ path: '*', name: '404', component: NotFoundView });
 
 Vue.use(Router);
 
+// removes the trigger-scroll handler of the last navigation that waits for its view's data
+let cancelPendingScroll = null;
+
 const router = new Router({
   routes,
   mode: config.routerMode,
@@ -156,6 +159,13 @@ const router = new Router({
     // https://router.vuejs.org/guide/advanced/scroll-behavior.html#scroll-behavior
     // and
     // https://github.com/vuejs/vue-router/blob/dev/examples/scroll-behavior/app.js
+
+    // the previous page left before its view triggered the scroll: forget its position, or the next view to trigger
+    // the scroll would get it
+    if (cancelPendingScroll) {
+      cancelPendingScroll();
+      cancelPendingScroll = null;
+    }
 
     let position = {};
 
@@ -182,7 +192,8 @@ const router = new Router({
     return new Promise((resolve) => {
       // we add an once handler on the event
       // view will trigger it once data are present
-      once('trigger-scroll', () => {
+      cancelPendingScroll = once('trigger-scroll', () => {
+        cancelPendingScroll = null;
         resolve(position);
       });
     });

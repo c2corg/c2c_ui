@@ -28,4 +28,28 @@ describe('router scroll behavior', () => {
     expect(resolved).toEqual({ x: 0, y: 1200 });
     expect(bus.all.get('trigger-scroll')).toEqual([]);
   });
+
+  it('does not give the saved position to the next page when the previous one never triggered the scroll', async () => {
+    let resolved = null;
+    scrollBehavior(route(), route(), { x: 0, y: 1200 }).then((position) => (resolved = position));
+
+    // the user leaves before the view triggers the scroll, for a new page
+    expect(scrollBehavior(route(), route(), null)).toEqual({ x: 0, y: 0 });
+
+    // the new page has its data
+    bus.emit('trigger-scroll');
+    await Promise.resolve();
+    expect(resolved).toBe(null);
+    expect(bus.all.get('trigger-scroll')).toEqual([]);
+  });
+
+  it('restores the position of the last page when several are waiting', async () => {
+    const resolved = [];
+    scrollBehavior(route(), route(), { x: 0, y: 1200 }).then((position) => resolved.push(position));
+    scrollBehavior(route(), route(), { x: 0, y: 300 }).then((position) => resolved.push(position));
+
+    bus.emit('trigger-scroll');
+    await Promise.resolve();
+    expect(resolved).toEqual([{ x: 0, y: 300 }]);
+  });
 });
