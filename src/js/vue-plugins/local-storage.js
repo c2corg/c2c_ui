@@ -61,6 +61,11 @@ LocalStorage.prototype.getItem = function (key) {
 
 const localStorage = new LocalStorage();
 
+/** The preferences stored under a name, as `this.$localStorage` gives them to the component of that name */
+export function getPreferences(name) {
+  return localStorage.getItem(`${name}.preferences`);
+}
+
 export default function install(Vue) {
   Object.defineProperty(Vue.prototype, '$localStorage', {
     get() {
