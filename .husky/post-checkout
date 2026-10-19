@@ -1,0 +1,9 @@
+#!/bin/sh
+# $3 is 1 for branch checkout, 0 for file checkout — skip file checkouts
+if [ "$3" = "1" ]; then
+  if git diff --name-only "$1" "$2" | grep -q "^package-lock.json$"; then
+    echo ""
+    echo "⚠  package-lock.json changed — run: npm install"
+    echo ""
+  fi
+fi
