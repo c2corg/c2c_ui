@@ -8,9 +8,9 @@ describe('map-utils', () => {
     await expect(import('./map-utils')).resolves.toHaveProperty('getDocumentPointStyle');
   });
 
-  // cold import of OpenLayers can exceed default 5s timeout when CI runs other heavy specs in parallel
+  // no resetModules() here: map-utils, imported fresh by the test above, is reused instead of a second cold import
+  // (slow imports: see testTimeout in vitest.config.mjs)
   it('draws document markers with the icons registered by the font-awesome plugin', async () => {
-    vi.resetModules();
     const { getDocumentPointStyle } = await import('./map-utils');
     const { default: installFontAwesome } = await import('@/js/vue-plugins/font-awesome-config');
     installFontAwesome({ component: vi.fn() });
@@ -21,5 +21,5 @@ describe('map-utils', () => {
     expect(decodeURIComponent(icon.getImage().getSrc())).toMatch(
       /^data:image\/svg\+xml;charset=utf-8,<svg width="20px"/
     );
-  }, 20000);
+  });
 });
