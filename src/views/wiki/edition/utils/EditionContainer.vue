@@ -64,7 +64,6 @@
 </template>
 
 <script>
-import FormRow from './FormRow';
 import SaveDocumentRow from './SaveDocumentRow';
 
 import c2c from '@/js/apis/c2c';
@@ -86,7 +85,6 @@ let htmlBanners = { initialized: false }; // cache for banners
 
 export default {
   components: {
-    FormRow,
     AreaView,
     ArticleView,
     BookView,
