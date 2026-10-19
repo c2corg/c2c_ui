@@ -96,7 +96,7 @@
       </div>
 
       <div class="field">
-        <vue-recaptcha
+        <re-captcha
           ref="recaptcha"
           :sitekey="$options.recaptchaKey"
           @expired="onCaptchaExpired"
@@ -192,6 +192,7 @@ import BaseForm from './utils/BaseForm';
 import FormField from './utils/FormField';
 import PasswordRequirements from './utils/PasswordRequirements';
 
+import ReCaptcha from '@/components/recaptcha/ReCaptcha';
 import c2c from '@/js/apis/c2c';
 import config from '@/js/config';
 import noRobotsMixin from '@/js/no-robots-mixin';
@@ -212,7 +213,7 @@ export default {
     FormField,
     BaseForm,
     PasswordRequirements,
-    VueRecaptcha: () => import('vue-recaptcha'),
+    ReCaptcha,
   },
 
   mixins: [noRobotsMixin],
@@ -272,14 +273,6 @@ export default {
   },
 
   mounted() {
-    const recaptchaScript = document.createElement('script');
-    recaptchaScript.async = true;
-    recaptchaScript.setAttribute(
-      'src',
-      'https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit'
-    );
-    document.head.appendChild(recaptchaScript);
-
     this.load();
   },
 
