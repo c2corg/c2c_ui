@@ -179,6 +179,8 @@
 </template>
 
 <script>
+import { isNavigationFailure } from 'vue-router';
+
 import DfmAdLarge from './DfmAdLarge.vue';
 
 import IconHelp from '@/components/generics/icons/IconHelp';
@@ -298,10 +300,21 @@ export default {
     },
 
     signout() {
-      this.$user.signout();
-      if (this.$route.meta.requiresAuth) {
-        this.$router.push({ name: 'home' });
+      if (!this.$route.meta.requiresAuth) {
+        this.$user.signout();
+        return;
       }
+
+      // leave the page first: its leave guard (e.g. unsaved edits) may cancel the
+      // navigation, in which case the user stays logged in on the current page
+      this.$router.push({ name: 'home' }).then(
+        () => this.$user.signout(),
+        (error) => {
+          if (!isNavigationFailure(error)) {
+            throw error;
+          }
+        }
+      );
     },
 
     homePage() {
