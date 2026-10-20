@@ -1,7 +1,7 @@
 <template>
   <div class="layer-button" v-on="disabled?.condition ? { click: warnIfDisabled } : {}">
     <input
-      :id="'layer-checkbox' + _uid"
+      :id="'layer-checkbox' + uid"
       class="is-checkradio is-primary"
       :type="type"
       :name="name"
@@ -10,7 +10,7 @@
       :disabled="disabled?.condition"
       @change="$emit('change')"
     />
-    <label :for="'layer-checkbox' + _uid" class="layer-label">
+    <label :for="'layer-checkbox' + uid" class="layer-label">
       <div
         class="layer-image"
         :style="{
@@ -38,11 +38,13 @@
 <script>
 import Toast from '@/components/yeti/Toast';
 import { assetUrl } from '@/js/asset-urls';
+import { uidMixin } from '@/js/uid';
 
 export default {
   components: {
     Toast,
   },
+  mixins: [uidMixin],
   props: {
     type: {
       type: String,

@@ -24,10 +24,11 @@
 
 <script>
 import { formContainer } from '@/js/form-registration';
+import { uidMixin } from '@/js/uid';
 
 export default {
   // the fields register themselves (FormField, AssociationsInputRow, MapInputRow)
-  mixins: [formContainer('formSection')],
+  mixins: [formContainer('formSection'), uidMixin],
 
   props: {
     title: {
@@ -84,7 +85,7 @@ export default {
   methods: {
     toggleExpandedState() {
       const content = this.$refs.content;
-      const className = `section-content-expanded${this._uid}`;
+      const className = `section-content-expanded${this.uid}`;
 
       if (!this.expanded_) {
         this.style.innerHTML = `.${className} { max-height: ${content.scrollHeight}px!important; }`;

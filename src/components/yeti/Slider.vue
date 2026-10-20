@@ -1,12 +1,12 @@
 <template>
   <div>
-    <span :id="'slider_' + _uid" @click="focus" class="label">
+    <span :id="'slider_' + uid" @click="focus" class="label">
       <slot></slot>
     </span>
     <input-slider
       ref="slider"
       v-model="_value"
-      :aria-labelledby="'slider_' + _uid"
+      :aria-labelledby="'slider_' + uid"
       :min="min"
       :max="max"
       :step="interval"
@@ -18,7 +18,11 @@
 </template>
 
 <script>
+import { uidMixin } from '@/js/uid';
+
 export default {
+  mixins: [uidMixin],
+
   props: {
     value: {
       type: Number,
