@@ -39,18 +39,21 @@ Forum.prototype.getLatest = function (excludeCategoryIds) {
   return result;
 };
 
-// Announcements are forum topics, found from their slug: annonce-<lang> (one per language), publication-ca.
-// Discourse does not resolve a topic from its slug alone (/t/annonce-fr.json) anymore: the id is required,
-// and /t/id_for/<slug> is the endpoint giving it. A new language only needs its topic to be created.
-const BOARD_ANNOUNCEMENT_SLUG = 'publication-ca';
+// Discourse does not resolve a topic from its slug alone (/t/annonce-fr.json) anymore: the id is required.
+// /t/id_for/<slug> could give it, but fails when another topic hidden from visitors uses the same slug,
+// which is the case for annonce-fr and publication-ca: ids are hardcoded instead.
+const ANNOUNCEMENT_TOPIC_IDS = {
+  fr: 198328,
+  it: 198329,
+  en: 198331,
+  de: 198332,
+  es: 198333,
+  ca: 198334,
+  eu: 198335,
+};
 // Languages without their own announcement topic (zh_CN, hu, sl) fall back to the english one
 const ANNOUNCEMENT_FALLBACK_LANG = 'en';
-
-const announcementSlug = (lang) => `annonce-${lang}`;
-
-Forum.prototype.getTopicIdFromSlug = function (slug) {
-  return this.axios.get(`/t/id_for/${slug}.json`).then((response) => response.data.topic_id);
-};
+const BOARD_ANNOUNCEMENT_TOPIC_ID = 323845;
 
 // Resolves with the topic and its last post.
 // Discourse redirects /t/-/<id>/last to a topic window ending with the last post
@@ -61,23 +64,12 @@ Forum.prototype.getLastPost = function (topicId) {
   });
 };
 
-Forum.prototype.getLastPostFromSlug = function (slug) {
-  return this.getTopicIdFromSlug(slug).then((topicId) => this.getLastPost(topicId));
-};
-
-// Unknown slugs answer 403 (or 404), whether the topic is missing or hidden
 Forum.prototype.readAnnouncement = function (lang) {
-  return this.getLastPostFromSlug(announcementSlug(lang)).catch((error) => {
-    const status = error.response && error.response.status;
-    if (lang !== ANNOUNCEMENT_FALLBACK_LANG && (status === 403 || status === 404)) {
-      return this.getLastPostFromSlug(announcementSlug(ANNOUNCEMENT_FALLBACK_LANG));
-    }
-    throw error;
-  });
+  return this.getLastPost(ANNOUNCEMENT_TOPIC_IDS[lang] || ANNOUNCEMENT_TOPIC_IDS[ANNOUNCEMENT_FALLBACK_LANG]);
 };
 
 Forum.prototype.readBoardAnnouncement = function () {
-  return this.getLastPostFromSlug(BOARD_ANNOUNCEMENT_SLUG);
+  return this.getLastPost(BOARD_ANNOUNCEMENT_TOPIC_ID);
 };
 
 // Recent Discourse returns tags as objects ({ id, name, slug }), older ones as plain strings
