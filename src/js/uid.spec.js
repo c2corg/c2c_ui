@@ -31,7 +31,7 @@ describe('uid', () => {
 
   it("is used instead of Vue's internal _uid, which Vue 3 doesn't expose", () => {
     const uses = sourceFiles('src').filter(
-      (file) => !/\/uid(\.spec)?\.js$/.test(file) && /(^|[^\w.])_uid\b|this\._uid\b/.test(readFileSync(file, 'utf8'))
+      (file) => !/\/uid(\.spec)?\.js$/.test(file) && /\b_uid\b/.test(readFileSync(file, 'utf8'))
     );
 
     expect(uses).toEqual([]);
