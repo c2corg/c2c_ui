@@ -9,6 +9,14 @@ on:
     tags:
       - '**'
 
+# A newer push to a PR supersedes the previous run: cancel it, so the
+# superseded build can't deploy its preview after (or instead of) the new one.
+# master and tag runs each get their own group (run_id), so none is ever
+# cancelled or replaced while pending, and every release completes.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,23 +27,24 @@ jobs:
         node-version: [lts/*]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - name: npm install, lint and build
+      - name: npm install, lint, test and build
         run: |
           npm ci
           npm run lint:no-fix
+          npm test
           npm run build
         env:
           CI: ${{ true }}
       - name: Docker meta
         id: docker_meta
         if: "contains(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master'"
-        uses: docker/metadata-action@v5.9.0
+        uses: docker/metadata-action@v6.2.0
         with:
           # list of Docker images to use as base name for tags
           images: c2corg/c2c_ui
@@ -69,14 +78,16 @@ jobs:
         env:
           GITHUB_PAGES_BRANCH: ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
       - name: Upload artifact for github pages
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: github-pages
           path: dist/*
 
   github-pages:
     needs: build
-    if: "!github.event.pull_request.head.repo.fork && github.actor != 'dependabot[bot]'"
+    # Dependabot PRs are never previewed: checking the branch name too, since
+    # github.actor is whoever triggered the run (e.g. a maintainer re-running it).
+    if: "!github.event.pull_request.head.repo.fork && github.actor != 'dependabot[bot]' && !startsWith(github.head_ref, 'dependabot/')"
     runs-on: ubuntu-latest
     concurrency: github-pages
     permissions:
@@ -102,13 +113,13 @@ jobs:
         env:
           BRANCH: ${{ steps.branch-name.outputs.current_branch || steps.branch-name.outputs.tag }}
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           ref: gh-pages
       - name: Remove current branch files
         run: rm -rf ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
       - name: Retrieve github pages artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           name: github-pages
           path: ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
@@ -117,7 +128,9 @@ jobs:
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
           git add .
-          git commit -m "Deploy ${{ steps.branch-name.outputs.current_branch }} branch"
+          # Nothing to commit when the build output is unchanged (e.g. a PR
+          # touching only CI config): skip instead of failing the job.
+          git diff --cached --quiet || git commit -m "Deploy ${{ steps.branch-name.outputs.current_branch }} branch"
       - name: Push changes
         # ad-m/github-push-action@v1.0.0, pinned by commit SHA rather than the
         # mutable "v1.0.0" tag, since this action pushes to the repo with
@@ -136,11 +149,11 @@ jobs:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Create or update release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -154,7 +167,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: Push translations to Transifex
         run: |
           echo "::add-mask::$TOKEN"

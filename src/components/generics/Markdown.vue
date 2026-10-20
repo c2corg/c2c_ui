@@ -8,6 +8,7 @@
 import { icon } from '@fortawesome/fontawesome-svg-core';
 
 import config from '@/js/config';
+import { getEmbeddedImageUrl } from '@/js/image-urls';
 import { sanitizeRichHtml } from '@/js/sanitize-html';
 
 // copied from vue router : https://github.com/vuejs/vue-router/blob/dev/src/components/link.js
@@ -64,9 +65,21 @@ export default {
 
   mounted() {
     this.compute();
+    window.addEventListener('beforeprint', this.loadAllImages);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('beforeprint', this.loadAllImages);
   },
 
   methods: {
+    // lazy images that are not loaded yet would be missing in the printout
+    loadAllImages() {
+      for (const image of this.$refs.container.querySelectorAll('img[loading=lazy]')) {
+        image.loading = 'eager';
+      }
+    },
+
     compute() {
       const container = this.$refs.container;
 
@@ -137,28 +150,49 @@ export default {
           type: 'i',
         };
 
-        image.src = config.urls.api + image.attributes['c2c:url-proxy'].value;
         image.addEventListener('click', () => {
           this.$imageViewer.show(image.c2cExtrapoledDocument);
         });
 
+        const urls = {
+          url: image.getAttribute('c2c:url'),
+          urlProxy: image.getAttribute('c2c:url-proxy'),
+        };
         const parent = image.parentNode;
         const picture = document.createElement('picture');
 
         // Until all images are migrated only images uploaded after a given timestamp
-        // or with an id greater than a given one have their webp and avif versions
-        if (config.urls.modernThumbnailsId && document_id > config.urls.modernThumbnailsId) {
+        // or with an id greater than a given one have their webp and avif versions.
+        // Original images (no size) have no modern versions.
+        if (
+          config.urls.modernThumbnailsId &&
+          document_id > config.urls.modernThumbnailsId &&
+          image.getAttribute('c2c:size')
+        ) {
           const avif = document.createElement('source');
           avif.setAttribute('type', 'image/avif');
-          avif.setAttribute('srcset', config.urls.api + image.attributes['c2c:url-proxy'].value + '&extension=avif');
+          avif.setAttribute('srcset', getEmbeddedImageUrl(urls, 'avif'));
           const webp = document.createElement('source');
           webp.setAttribute('type', 'image/webp');
-          webp.setAttribute('srcset', config.urls.api + image.attributes['c2c:url-proxy'].value + '&extension=webp');
+          webp.setAttribute('srcset', getEmbeddedImageUrl(urls, 'webp'));
           picture.appendChild(avif);
           picture.appendChild(webp);
         }
         picture.appendChild(image);
         parent.appendChild(picture, image);
+
+        // Some documents embed hundreds of images (each one being a request to the API
+        // image proxy when the direct media url is not known): only load them when they get
+        // close to the viewport.
+        // loading must be set before src, and the image needs a size while it is loading,
+        // otherwise all the 0x0 images are considered in the viewport and loaded at once.
+        image.classList.add('is-loading');
+        const onLoaded = () => image.classList.remove('is-loading');
+        image.addEventListener('load', onLoaded, { once: true });
+        image.addEventListener('error', onLoaded, { once: true });
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        image.src = getEmbeddedImageUrl(urls);
 
         this.$imageViewer.push(image.c2cExtrapoledDocument);
       }
@@ -236,6 +270,12 @@ figure[c2c\:role='embedded-figure'] {
 
   img {
     cursor: pointer;
+  }
+
+  // placeholder size while the lazy image is not loaded
+  img.is-loading {
+    min-width: 100px;
+    min-height: 100px;
   }
 }
 

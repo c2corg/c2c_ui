@@ -11,6 +11,7 @@ import layerSelectorWatcherMixin from './layer-selector-watcher';
 import Yetix from '@/components/yeti/Yetix';
 import BaseLayers from '@/components/yeti/map-layers/BaseLayers';
 import SlopesLayers from '@/components/yeti/map-layers/SlopesLayers';
+import yetixEvents from '@/components/yeti/yetix-events';
 import ol from '@/js/libs/ol';
 
 export default {
@@ -19,6 +20,8 @@ export default {
     SlopesLayers,
   },
   mixins: [layerMixin, layerSelectorWatcherMixin],
+  emits: ['layer'],
+
   computed: {
     mapZoom() {
       return Yetix.mapZoom;
@@ -102,7 +105,7 @@ export default {
       // set areas (yeti valid areas)
       Yetix.fetchAreas().then(this.onAreasResult);
       // event
-      Yetix.$on('map-moveend', this.onMapMoveEnd);
+      yetixEvents.on('map-moveend', this.onMapMoveEnd);
     }
   },
   methods: {

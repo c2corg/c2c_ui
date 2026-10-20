@@ -114,14 +114,20 @@ const buildPointStyle = function (title, svgSrc, color, highlight) {
   return [circleStyle, iconStyle];
 };
 
-const svgSrcByDocumentType = {
-  i: icon({ prefix: 'fas', iconName: 'image' }).html[0],
-  o: icon({ prefix: 'document-type', iconName: 'outing' }).html[0],
-  r: icon({ prefix: 'fas', iconName: 'route' }).html[0],
-  u: icon({ prefix: 'fas', iconName: 'user' }).html[0],
-  x: icon({ prefix: 'fas', iconName: 'flag-checkered' }).html[0],
-  s: icon({ prefix: 'fas', iconName: 'bus' }).html[0],
-  z: icon({ prefix: 'waypoint', iconName: 'access' }).html[0],
+// built on first use: icons are only registered when the font-awesome plugin is installed,
+// which happens after this module is evaluated
+let svgSrcByDocumentTypeCache;
+const getSvgSrcByDocumentType = function () {
+  svgSrcByDocumentTypeCache ??= {
+    i: icon({ prefix: 'fas', iconName: 'image' }).html[0],
+    o: icon({ prefix: 'document-type', iconName: 'outing' }).html[0],
+    r: icon({ prefix: 'fas', iconName: 'route' }).html[0],
+    u: icon({ prefix: 'fas', iconName: 'user' }).html[0],
+    x: icon({ prefix: 'fas', iconName: 'flag-checkered' }).html[0],
+    s: icon({ prefix: 'fas', iconName: 'bus' }).html[0],
+    z: icon({ prefix: 'waypoint', iconName: 'access' }).html[0],
+  };
+  return svgSrcByDocumentTypeCache;
 };
 
 const colorByConditionRating = {
@@ -195,7 +201,7 @@ export const getDocumentPointStyle = function (document, title, highlight) {
   }
 
   if (type === 'i' || type === 'u' || type === 'x' || type === 'o' || type === 'r' || type === 's') {
-    svgSrc = svgSrcByDocumentType[type];
+    svgSrc = getSvgSrcByDocumentType()[type];
   } else if (type === 'w') {
     if (
       (document.waypoint_type === 'access' &&
@@ -207,7 +213,7 @@ export const getDocumentPointStyle = function (document, title, highlight) {
     }
     svgSrc = icon({ prefix: 'waypoint', iconName: document.waypoint_type || 'misc' }).html[0];
   } else if (type === 'z') {
-    svgSrc = svgSrcByDocumentType['z'] || icon({ prefix: 'waypoint', iconName: 'access' }).html[0];
+    svgSrc = getSvgSrcByDocumentType()['z'] || icon({ prefix: 'waypoint', iconName: 'access' }).html[0];
 
     if (document.public_transportation_rating && document.public_transportation_rating !== 'no service') {
       color = '#4baf50';
@@ -332,16 +338,12 @@ export const getDocumentPolygonStyle = function (title, highlight, properties) {
     });
   }
 
-  // No properties → return nothing special (empty style)
-  return new ol.style.Style({
-    fill: new ol.style.Fill({
-      color: undefined,
-    }),
-    stroke: new ol.style.Stroke({
-      color: undefined,
-      width: 1,
-    }),
-  });
+  // No properties (regular area documents) → outline only, like other documents.
+  // A Fill without color would be rendered black by the canvas.
+  const styles = getDocumentLineStyle(title, highlight);
+  const stylesToUpdate = Array.isArray(styles) ? styles : [styles];
+  stylesToUpdate.forEach((style) => style.setFill(new ol.style.Fill({ color: 'rgba(0, 0, 0, 0)' })));
+  return styles;
 };
 
 export const getElevationProfileMarkerStyle = function () {

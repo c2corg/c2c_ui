@@ -1,19 +1,23 @@
 <template>
   <div v-if="(document.cooked[field.name] && field.isVisibleFor(document)) || $slots.after" class="markdown-section">
     <accordion-item v-if="field.name != 'summary'">
-      <h2 slot="title" v-if="!hideTitle" class="title is-2">
-        <span>
-          {{ (title || $gettext(field.name)) | uppercaseFirstLetter }}
-        </span>
-      </h2>
-      <div slot="content" :lang="lang">
-        <markdown
-          v-if="document.cooked[field.name]"
-          :class="{ 'is-italic': field.name === 'summary' }"
-          :content="document.cooked[field.name]"
-        />
-        <slot name="after" />
-      </div>
+      <template v-if="!hideTitle" #title>
+        <h2 class="title is-2">
+          <span>
+            {{ $filters.uppercaseFirstLetter(title || $gettext(field.name)) }}
+          </span>
+        </h2>
+      </template>
+      <template #content>
+        <div :lang="lang">
+          <markdown
+            v-if="document.cooked[field.name]"
+            :class="{ 'is-italic': field.name === 'summary' }"
+            :content="document.cooked[field.name]"
+          />
+          <slot name="after" />
+        </div>
+      </template>
     </accordion-item>
     <div v-else :lang="lang">
       <markdown

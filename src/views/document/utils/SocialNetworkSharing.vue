@@ -19,22 +19,24 @@
 </template>
 
 <script>
-import { browser } from 'process';
-
 import config from '@/js/config';
 
 const cdn = '//s7.addthis.com/js/300/addthis_widget.js';
 
 export default {
+  props: {
+    document: {
+      type: Object,
+      required: true,
+    },
+  },
+
   data() {
     return { addThisVisible: false };
   },
 
   computed: {
     addThisEnabled: function () {
-      if (!browser) {
-        return;
-      }
       const enabled = this.$gdpr.get()?.social ?? false;
       enabled ? this.installAddThis() : this.uninstallAddThis();
       return enabled;
@@ -77,7 +79,7 @@ export default {
 
     webShare() {
       navigator.share({
-        title: this.$documentUtils.getDocumentTitle(this.$parent.document),
+        title: this.$documentUtils.getDocumentTitle(this.document),
         url: window.location.href,
       });
     },

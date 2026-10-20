@@ -14,19 +14,21 @@
         class="query-item-component"
         :disabled="category.fields.length === 0"
       >
-        <span slot="button" class="button is-size-7-mobile" :disabled="category.fields.length === 0">
-          <fa-icon :icon="$options.categoryIcon[category.name]" />
-          <span class="is-hidden-mobile">
-            <!-- $gettext('General') -->
-            <!-- $gettext('ratings') -->
-            <!-- $gettext('Terrain') -->
-            <!-- $gettext('Miscs') -->
-            &nbsp;{{ $gettext(category.name) }}
+        <template #button>
+          <span class="button is-size-7-mobile" :disabled="category.fields.length === 0">
+            <fa-icon :icon="$options.categoryIcon[category.name]" />
+            <span class="is-hidden-mobile">
+              <!-- $gettext('General') -->
+              <!-- $gettext('ratings') -->
+              <!-- $gettext('Terrain') -->
+              <!-- $gettext('Miscs') -->
+              &nbsp;{{ $gettext(category.name) }}
+            </span>
+            <span v-if="category.activeCount != 0"> &nbsp;({{ category.activeCount }}) </span>
+            <span>&nbsp;</span>
+            <fa-icon icon="angle-down" aria-hidden="true" />
           </span>
-          <span v-if="category.activeCount != 0"> &nbsp;({{ category.activeCount }}) </span>
-          <span>&nbsp;</span>
-          <fa-icon icon="angle-down" aria-hidden="true" />
-        </span>
+        </template>
 
         <div class="sub-query-items">
           <query-item
@@ -39,11 +41,13 @@
         </div>
       </dropdown-button>
       <dropdown-button key="multi-search" class="query-item-component is-hidden-tablet">
-        <span slot="button" class="button is-size-7-mobile">
-          <fa-icon :icon="$options.categoryIcon['MultiSearch']" />
-          <span>&nbsp;</span>
-          <fa-icon icon="angle-down" aria-hidden="true" />
-        </span>
+        <template #button>
+          <span class="button is-size-7-mobile">
+            <fa-icon :icon="$options.categoryIcon['MultiSearch']" />
+            <span>&nbsp;</span>
+            <fa-icon icon="angle-down" aria-hidden="true" />
+          </span>
+        </template>
         <div class="sub-query-items">
           <association-query-item class="dropdown-item" :document-types="associations" @add="addTag" />
           <div class="query-items-tags dropdown-item">
@@ -71,9 +75,11 @@
         </div>
       </div>
       <dropdown-button class="is-hidden-tablet is-pulled-right">
-        <span slot="button" class="button is-white is-size-7-mobile">
-          <fa-icon icon="ellipsis-vertical" />
-        </span>
+        <template #button>
+          <span class="button is-white is-size-7-mobile">
+            <fa-icon icon="ellipsis-vertical" />
+          </span>
+        </template>
         <div class="dropdown-items is-flex is-flex-direction-column">
           <load-user-preferences-button display="dropdown" />
           <print-button display="dropdown" v-show="showPrintButton" />
@@ -142,6 +148,8 @@ export default {
       default: true,
     },
   },
+
+  emits: ['documents-load'],
 
   data() {
     return {

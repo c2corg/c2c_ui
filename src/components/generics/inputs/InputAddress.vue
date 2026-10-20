@@ -69,6 +69,8 @@ export default {
       default: null,
     },
   },
+  emits: ['update:props'],
+
   data() {
     return {
       localData: {

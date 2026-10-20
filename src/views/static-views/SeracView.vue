@@ -87,7 +87,7 @@
         <div class="column is-12">
           <div class="serac-block">
             <h2 class="title is-2 has-text-light has-text-centered">
-              {{ $gettext('xreports') | uppercaseFirstLetter }}
+              {{ $filters.uppercaseFirstLetter($gettext('xreports')) }}
             </h2>
             <div class="columns is-multiline is-mobile serac-activities">
               <topoguide-view-small-link
@@ -98,7 +98,7 @@
               >
                 <span class="is-size-1"><icon-event-activity :event-activity="eventActivity" /></span>
                 <span class="has-text-weight-semibold">
-                  {{ $gettext(eventActivity, 'event_activities') | uppercaseFirstLetter }}
+                  {{ $filters.uppercaseFirstLetter($gettext(eventActivity, 'event_activities')) }}
                 </span>
               </topoguide-view-small-link>
             </div>
@@ -125,16 +125,16 @@ export default {
 
 <style scoped lang="scss">
 .serac-view {
-  background-image: url('~@/assets/img/backgrounds/cermygian-crevasse-800w.jpg');
+  background-image: url('@/assets/img/backgrounds/cermygian-crevasse-800w.jpg');
   background-size: cover;
   background-position: center;
   min-height: 100%;
   // 1224px because after 1024px breakpoint, we have an additional 200px wide menu on the left
   @media (min-width: 800px) and (max-width: 1224px) {
-    background-image: url('~@/assets/img/backgrounds/cermygian-crevasse-1024w.jpg');
+    background-image: url('@/assets/img/backgrounds/cermygian-crevasse-1024w.jpg');
   }
   @media (min-width: 1224px) {
-    background-image: url('~@/assets/img/backgrounds/cermygian-crevasse-1200w.jpg');
+    background-image: url('@/assets/img/backgrounds/cermygian-crevasse-1200w.jpg');
   }
 
   .serac-view-content {

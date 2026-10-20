@@ -1,100 +1,55 @@
 <template>
-  <datepicker
-    monday-first
-    :input-class="hasError ? 'input is-danger' : 'input'"
-    class="intput-date"
-    :language="$options.datepickerLocales[$language.current]"
-    :highlighted="{ dates: [new Date()] }"
-    :disabled-dates="disabledDates"
-    :required="required"
-    @input="onInput"
+  <!-- native date input: the browser's own picker (system picker on mobile), in the browser's language -->
+  <input
+    type="date"
+    class="input input-date"
+    :class="{ 'is-danger': hasError }"
     :value="value"
+    :min="min"
+    :max="max"
+    :required="required"
+    :disabled="disabled"
+    @input="onInput"
   />
 </template>
 
 <script>
-import ca from 'vuejs-datepicker/dist/locale/translations/ca';
-import de from 'vuejs-datepicker/dist/locale/translations/de';
-import en from 'vuejs-datepicker/dist/locale/translations/en';
-import es from 'vuejs-datepicker/dist/locale/translations/es';
-import fr from 'vuejs-datepicker/dist/locale/translations/fr';
-import hu from 'vuejs-datepicker/dist/locale/translations/hu';
-import it from 'vuejs-datepicker/dist/locale/translations/it';
-
 import { baseMixin } from './mixins';
 
-const datepickerLocales = {
-  fr,
-  en,
-  es,
-  eu: {
-    language: 'Euskara',
-    months: [
-      'Urtarrila',
-      'Otsaila',
-      'Martxoa',
-      'Apirila',
-      'Maiatza',
-      'Ekaina',
-      'Uztaila',
-      'Abuztua',
-      'Iraila',
-      'Urria',
-      'Azaroa',
-      'Abendua',
-    ],
-    monthsAbbr: ['Urt', 'Ots', 'Mar', 'Api', 'Mai', 'Eka', 'Uzt', 'Abu', 'Ira', 'Urr', 'Aza', 'Abe'],
-    days: ['Iga', 'Ast', 'Ast', 'Ast', 'Ost', 'Ost', 'Lar'],
-    rtl: false,
-    ymd: false,
-    yearSuffix: 'ko',
-  },
-  ca,
-  de,
-  it,
-  hu,
-  zh_Cn: {
-    language: 'Chinese',
-    months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-    monthsAbbr: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-    days: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
-    rtl: false,
-    ymd: false,
-    yearSuffix: '',
-  },
-};
-
 export default {
-  components: {
-    Datepicker: () => import(/* webpackChunkName: "wiki-tools" */ 'vuejs-datepicker'),
-  },
-
   mixins: [baseMixin],
 
   props: {
+    // YYYY-MM-DD, as stored by the API
     value: {
       type: String,
       default: null,
     },
-    disabledDates: {
-      type: Object,
+    // earliest and latest selectable dates (inclusive), YYYY-MM-DD
+    min: {
+      type: String,
+      default: undefined,
+    },
+    max: {
+      type: String,
       default: undefined,
     },
   },
 
+  emits: ['input'],
+
   methods: {
-    onInput(value) {
-      value = this.$dateUtils.toLocalizedString(value, 'YYYY-MM-DD');
-      this.$emit('input', value);
+    onInput(event) {
+      // an empty value is a cleared (or not yet complete) date
+      this.$emit('input', event.target.value || null);
     },
   },
-
-  datepickerLocales,
 };
 </script>
 
 <style scoped>
-.intput-date {
-  display: inline-block;
+.input-date {
+  /* the width of the former vuejs-datepicker field */
+  width: 193px;
 }
 </style>

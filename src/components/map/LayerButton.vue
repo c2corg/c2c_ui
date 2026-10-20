@@ -4,14 +4,16 @@
     @click="$emit('click')"
     :class="{ selected, 'show-slider': showSlider }"
     :style="{
-      'background-image': 'url(' + require('../../assets/img/layers/' + (layer.image || layer.get('image'))) + ')',
+      'background-image': 'url(' + assetUrl('layers', layer.image || layer.get('image')) + ')',
     }"
   >
-    <span class="layer-button-title">{{ $gettext(layer.title || layer.get?.('title'), titleContext) }}</span>
+    <span :id="titleId" class="layer-button-title">{{
+      $gettext(layer.title || layer.get?.('title'), titleContext)
+    }}</span>
     <div
       class="layer-button-country"
       v-if="country"
-      :style="{ 'background-image': 'url(' + require('../../assets/img/flags/' + country + '.svg') + ')' }"
+      :style="{ 'background-image': 'url(' + assetUrl('flags', country + '.svg') + ')' }"
     ></div>
     <div
       class="layer-button-config"
@@ -22,19 +24,19 @@
       <fa-icon icon="gear" />
     </div>
     <div class="layer-button-slider" v-if="showSlider" @click.stop>
-      <vue-slider :contained="true" tooltip="none" v-model="opacity"></vue-slider>
+      <input-slider v-model="opacity" :aria-labelledby="titleId" :tooltips="false" :lazy="false" />
     </div>
     <div class="layer-button-border"></div>
   </div>
 </template>
 
 <script>
+import { assetUrl } from '@/js/asset-urls';
+import { uidMixin } from '@/js/uid';
+
 export default {
   name: 'LayerButton',
-
-  components: {
-    VueSlider: () => import(/* webpackChunkName: "slider" */ 'vue-slider-component'),
-  },
+  mixins: [uidMixin],
 
   props: {
     layer: {
@@ -51,6 +53,8 @@ export default {
     },
   },
 
+  emits: ['click'],
+
   data() {
     return {
       showSlider: false,
@@ -59,6 +63,11 @@ export default {
   },
 
   computed: {
+    // the layer title names the opacity slider handle for assistive technologies
+    titleId() {
+      return `layer-button-title-${this.uid}`;
+    },
+
     country() {
       return this.layer.country || this.layer.get?.('country');
     },
@@ -80,6 +89,10 @@ export default {
 
   mounted() {
     this.opacity = (this.layer.get?.('opacity') ?? 1) * 100;
+  },
+
+  methods: {
+    assetUrl,
   },
 };
 </script>
@@ -171,6 +184,14 @@ $config-button-height: $config-button-width;
   left: 0;
   width: $button-width - $config-button-width;
   height: $config-button-height;
+}
+
+.layer-button-slider .input-slider {
+  // the handles stay in the box, as with the former vue-slider-component contained option
+  --slider-handle-width: 14px;
+  --slider-handle-height: 14px;
+
+  margin: 6px 7px;
 }
 
 .layer-button.selected .layer-button-slider {

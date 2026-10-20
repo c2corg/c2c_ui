@@ -7,8 +7,10 @@ import VueHead from 'vue-head';
 
 import App from '@/App.vue';
 import config from '@/js/config';
+import reloadOnStaleChunk from '@/js/reload-on-stale-chunk';
 import dateUtils from '@/js/vue-plugins/date-utils';
 import documentUtils from '@/js/vue-plugins/document-utils';
+import filters from '@/js/vue-plugins/filters';
 import fontAwesome from '@/js/vue-plugins/font-awesome-config';
 import gdpr from '@/js/vue-plugins/gdpr';
 import globalComponents from '@/js/vue-plugins/generic-components';
@@ -18,12 +20,12 @@ import imageViewer from '@/js/vue-plugins/image-viewer';
 import localStorage from '@/js/vue-plugins/local-storage';
 import router from '@/js/vue-plugins/router';
 import screen from '@/js/vue-plugins/screen';
-import stripMarkdown from '@/js/vue-plugins/strip-markdown';
-import upperCaseFirstLetter from '@/js/vue-plugins/uppercase-first-letter';
 import user from '@/js/vue-plugins/user';
 
-// Require the main Sass manifest file
-require('./assets/sass/main.scss');
+// Import the main Sass manifest file
+import './assets/sass/main.scss';
+
+reloadOnStaleChunk(router);
 
 // web components
 registerSwiper();
@@ -74,8 +76,7 @@ Vue.use(helperWindow); // vm.$helper property
 Vue.use(imageViewer);
 Vue.use(globalComponents); // Components available everywhere
 Vue.use(screen); // screen reactives properties
-Vue.use(stripMarkdown); // stripMarkdown filter
-Vue.use(upperCaseFirstLetter); // upperCaseFirstLetter filter
+Vue.use(filters); // $filters.uppercaseFirstLetter(), $filters.stripMarkdown()
 Vue.use(user); // vm.$user property
 
 new Vue({

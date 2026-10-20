@@ -44,26 +44,28 @@
       </div>
     </div>
 
-    <div slot="footer" class="buttons">
-      <button
-        :disabled="documents.length === 0"
-        class="button is-information"
-        @click="categoriesEdition = !categoriesEdition"
-      >
-        <span v-if="categoriesEdition" v-translate>Edit titles</span>
-        <span v-else v-translate>Edit categories</span>
-      </button>
-      <button
-        :disabled="!readyForSaving"
-        class="button is-primary"
-        :class="{ 'is-loading': promise.loading }"
-        @click="save"
-        v-translate
-      >
-        Save
-      </button>
-      <button class="button is-warning" @click="hide" v-translate>Close</button>
-    </div>
+    <template #footer>
+      <div class="buttons">
+        <button
+          :disabled="documents.length === 0"
+          class="button is-information"
+          @click="categoriesEdition = !categoriesEdition"
+        >
+          <span v-if="categoriesEdition" v-translate>Edit titles</span>
+          <span v-else v-translate>Edit categories</span>
+        </button>
+        <button
+          :disabled="!readyForSaving"
+          class="button is-primary"
+          :class="{ 'is-loading': promise.loading }"
+          @click="save"
+          v-translate
+        >
+          Save
+        </button>
+        <button class="button is-warning" @click="hide" v-translate>Close</button>
+      </div>
+    </template>
   </modal-card>
 </template>
 
@@ -174,7 +176,8 @@ export default {
 
     onDeleteImage(image) {
       if (this.images[image.key]) {
-        this.$delete(this.images, image.key);
+        // new objects: adding or deleting a key of a reactive object is not reactive in Vue 2
+        this.images = Object.fromEntries(Object.entries(this.images).filter(([key]) => key !== image.key));
       }
 
       this.computeReadyForSaving();
@@ -187,7 +190,7 @@ export default {
         if (this.images[key] === undefined) {
           const image = this.buildImageObject(file, key);
 
-          this.$set(this.images, image.key, image);
+          this.images = { ...this.images, [image.key]: image };
           this.startUpload(image);
         }
       }

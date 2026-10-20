@@ -5,7 +5,7 @@
       <div class="header-section">
         <span>
           <span class="title is-3 is-ellipsed">
-            {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
+            {{ $filters.uppercaseFirstLetter(getDocumentTypeTitle(documentType)) }}
           </span>
           &nbsp;
           <br class="is-hidden-tablet" />
@@ -125,7 +125,7 @@ import itinevertService, { POLYGON_STYLE } from '@/js/apis/itinevert-service';
 import constants from '@/js/constants';
 import QueryItems from '@/views/documents/utils/QueryItems.vue';
 
-const DocumentsTable = () => import(/* webpackChunkName: "data-table" */ '@/components/datatable/DocumentsTable');
+const DocumentsTable = () => import('@/components/datatable/DocumentsTable');
 
 export default {
   name: 'ItinevertResultView',

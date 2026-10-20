@@ -42,6 +42,8 @@ export default {
     },
   },
 
+  emits: ['preview', 'save'],
+
   data() {
     return {
       comment: '',

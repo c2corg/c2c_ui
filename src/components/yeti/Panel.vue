@@ -2,6 +2,7 @@
   <div
     class="yeti-panel"
     role="tabpanel"
+    tabindex="0"
     :id="'panel' + index"
     :aria-labelledby="'tab' + index"
     :hidden="activeTab !== index"

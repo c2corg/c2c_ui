@@ -5,6 +5,8 @@ import ol from '@/js/libs/ol';
 
 export default {
   name: 'Yeti',
+  emits: ['layers'],
+
   computed: {
     baseLayersSelector() {
       return Yetix.baseLayersSelector;

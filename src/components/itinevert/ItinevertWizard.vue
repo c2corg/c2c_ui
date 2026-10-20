@@ -190,6 +190,7 @@ import itinevertService, {
   createBboxString,
 } from '@/js/apis/itinevert-service';
 import navitiaService from '@/js/apis/navitia-service';
+import { itinevertBanners } from '@/js/asset-urls';
 import constants from '@/js/constants';
 
 export default {
@@ -207,6 +208,8 @@ export default {
       default: 'form',
     },
   },
+  emits: ['change-view'],
+
   data() {
     return {
       routeFields: constants.objectDefinitions['route'].fields,
@@ -416,15 +419,9 @@ export default {
 
   async mounted() {
     // handle banner images
-    // Load every image in the folder
-    const context = require.context('@/assets/img/itinevert/banner-img', false, /\.(png|jpe?g|webp|svg)$/);
-
-    // Convert to array of resolved URLs
-    const banners = context.keys().map(context);
-
-    if (banners.length) {
-      const randomIndex = Math.floor(Math.random() * banners.length);
-      this.bannerImage = banners[randomIndex];
+    if (itinevertBanners.length) {
+      const randomIndex = Math.floor(Math.random() * itinevertBanners.length);
+      this.bannerImage = itinevertBanners[randomIndex];
     }
 
     // reset url parameters

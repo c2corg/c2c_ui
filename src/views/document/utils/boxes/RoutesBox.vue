@@ -11,13 +11,17 @@
     <template v-else>
       <div v-for="activity of Object.keys(routes)" :key="activity">
         <accordion-item>
-          <h3 slot="title" class="title is-3">
-            <icon-activity :activity="activity" />
-            {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
-          </h3>
-          <div slot="content" v-for="(route, i) of routes[activity]" :key="i">
-            <pretty-route-link :route="route" hide-activities hide-area />
-          </div>
+          <template #title>
+            <h3 class="title is-3">
+              <icon-activity :activity="activity" />
+              {{ $filters.uppercaseFirstLetter($gettext(activity, 'activities')) }}
+            </h3>
+          </template>
+          <template #content>
+            <div v-for="(route, i) of routes[activity]" :key="i">
+              <pretty-route-link :route="route" hide-activities hide-area />
+            </div>
+          </template>
         </accordion-item>
       </div>
     </template>

@@ -243,6 +243,8 @@ const DANGER = {
 
 export default {
   components: { Info, SubPanelTitle },
+  emits: ['warn-about-method-bra'],
+
   data() {
     return {
       methods: {

@@ -37,12 +37,15 @@
 
 <script>
 import debounce from '@/js/debounce';
+import bus from '@/js/event-bus';
 import d3 from '@/js/libs/d3';
 import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
   mixins: [requireDocumentProperty],
+
+  emits: ['has-data'],
 
   data() {
     return {
@@ -476,15 +479,15 @@ export default {
     },
 
     emitCursorEndEvent() {
-      this.$root.$emit('elevation_profile', 'cursor_end');
+      bus.emit('elevation_profile', { action: 'cursor_end' });
     },
 
     emitCursorMoveEvent(coord) {
-      this.$root.$emit('elevation_profile', 'cursor_move', coord);
+      bus.emit('elevation_profile', { action: 'cursor_move', coord });
     },
 
     emitToggleFullScreenEvent(hide = true) {
-      this.$root.$emit('elevation_profile', 'toggle_fullscreen', hide);
+      bus.emit('elevation_profile', { action: 'toggle_fullscreen', hide });
     },
   },
 };

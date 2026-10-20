@@ -13,7 +13,7 @@
         }"
       >
         <icon-topoguide fixed-width />
-        <span class="menu-item-text"> {{ $gettext('Topoguide') | uppercaseFirstLetter }} </span>
+        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('Topoguide')) }} </span>
       </span>
     </router-link>
     <router-link :to="{ name: 'outings', query: { qa: 'draft,great', bbox: '-431698,3115462,1931123,8442818' } }">
@@ -24,13 +24,13 @@
         }"
       >
         <icon-outing fixed-width />
-        <span class="menu-item-text"> {{ $gettext('outings') | uppercaseFirstLetter }} </span>
+        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('outings')) }} </span>
       </span>
     </router-link>
     <router-link :to="{ name: 'forum' }">
       <span class="menu-item is-ellipsed">
         <icon-forum />
-        <span class="menu-item-text"> {{ $gettext('Forum') | uppercaseFirstLetter }} </span>
+        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('Forum')) }} </span>
       </span>
     </router-link>
     <router-link :to="{ name: 'serac' }">
@@ -41,7 +41,7 @@
         }"
       >
         <icon-xreport fixed-width />
-        <span class="menu-item-text"> {{ $gettext('Accident database') | uppercaseFirstLetter }} </span>
+        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('Accident database')) }} </span>
       </span>
     </router-link>
     <router-link :to="{ name: 'articles' }">
@@ -50,20 +50,20 @@
         :class="{ 'router-link-active': ['articles', 'article'].includes($route.name) }"
       >
         <icon-article fixed-width />
-        <span class="menu-item-text"> {{ $gettext('articles') | uppercaseFirstLetter }} </span>
+        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('articles')) }} </span>
       </span>
     </router-link>
     <router-link :to="{ name: 'yeti' }" v-if="isTall">
       <span class="menu-item is-ellipsed" :class="{ 'router-link-active': ['yeti'].includes($route.name) }">
         <icon-yeti fixed-width />
-        <span class="menu-item-text"> {{ $gettext('yeti') | uppercaseFirstLetter }} </span>
+        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('yeti')) }} </span>
       </span>
     </router-link>
     <!-- use of a href instead of router link so that the page is refreshed if you are already on Itinevert -->
     <a :href="$router.resolve({ name: 'itinevert' }).href">
       <span class="menu-item is-ellipsed" :class="{ 'router-link-active': ['itinevert'].includes($route.name) }">
         <icon-itinevert fixed-width />
-        <span class="menu-item-text"> {{ $gettext('Itinevert') | uppercaseFirstLetter }} </span>
+        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('Itinevert')) }} </span>
       </span>
     </a>
 
@@ -108,6 +108,7 @@
 
 <script>
 import IconYeti from '@/components/generics/icons/IconYeti';
+import bus from '@/js/event-bus';
 
 export default {
   components: { IconYeti },
@@ -140,7 +141,7 @@ export default {
 
   methods: {
     showGdpr() {
-      this.$root.$emit('show-gdpr');
+      bus.emit('show-gdpr');
     },
 
     onHeightBreakpointChange() {

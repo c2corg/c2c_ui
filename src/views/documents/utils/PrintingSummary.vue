@@ -31,6 +31,8 @@ export default {
     },
   },
 
+  emits: ['summary-click'],
+
   methods: {
     sendSummaryClick(index) {
       this.$emit('summary-click', index);

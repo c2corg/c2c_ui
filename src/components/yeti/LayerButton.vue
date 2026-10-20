@@ -1,7 +1,7 @@
 <template>
   <div class="layer-button" v-on="disabled?.condition ? { click: warnIfDisabled } : {}">
     <input
-      :id="'layer-checkbox' + _uid"
+      :id="'layer-checkbox' + uid"
       class="is-checkradio is-primary"
       :type="type"
       :name="name"
@@ -10,7 +10,7 @@
       :disabled="disabled?.condition"
       @change="$emit('change')"
     />
-    <label :for="'layer-checkbox' + _uid" class="layer-label">
+    <label :for="'layer-checkbox' + uid" class="layer-label">
       <div
         class="layer-image"
         :style="{
@@ -21,7 +21,7 @@
           class="layer-country"
           :class="'layer-country-' + country"
           v-if="country"
-          :style="{ 'background-image': 'url(' + require('../../assets/img/flags/' + country + '.svg') + ')' }"
+          :style="{ 'background-image': 'url(' + assetUrl('flags', country + '.svg') + ')' }"
         ></span>
       </div>
       <div class="layer-text" :class="{ 'has-text-primary': model ? model.checked : _value }">
@@ -37,11 +37,14 @@
 
 <script>
 import Toast from '@/components/yeti/Toast';
+import { assetUrl } from '@/js/asset-urls';
+import { uidMixin } from '@/js/uid';
 
 export default {
   components: {
     Toast,
   },
+  mixins: [uidMixin],
   props: {
     type: {
       type: String,
@@ -72,6 +75,8 @@ export default {
       default: null,
     },
   },
+  emits: ['change', 'input'],
+
   computed: {
     _value: {
       get() {
@@ -84,7 +89,7 @@ export default {
     backgroundImage() {
       let img;
       try {
-        img = require('../../assets/img/yeti/layers/' + this.image);
+        img = assetUrl('yeti/layers', this.image);
         img = 'url(' + img + ')';
       } catch (e) {
         img = 'none';
@@ -93,6 +98,7 @@ export default {
     },
   },
   methods: {
+    assetUrl,
     warnIfDisabled() {
       this.$refs['toast-button'].toast();
     },

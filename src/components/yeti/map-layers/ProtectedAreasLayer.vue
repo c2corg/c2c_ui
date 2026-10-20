@@ -76,6 +76,8 @@ let overlayPanOptions = {
 
 export default {
   mixins: [layerMixin],
+  emits: ['layer'],
+
   data() {
     return {
       overlayData: null,

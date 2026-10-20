@@ -34,7 +34,9 @@
 import PrintingOptions from './utils/PrintingOptions';
 import PrintingSummary from './utils/PrintingSummary';
 
+import { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
+import concurrencyLimit from '@/js/concurrency-limit';
 import constants from '@/js/constants';
 import AreaView from '@/views/document/AreaView';
 import ArticleView from '@/views/document/ArticleView';
@@ -46,6 +48,10 @@ import ProfileView from '@/views/document/ProfileView';
 import RouteView from '@/views/document/RouteView';
 import WaypointView from '@/views/document/WaypointView';
 import XreportView from '@/views/document/XreportView';
+
+// Up to 100 documents per page: loading them all at once trips the API's per-IP rate limit.
+// Shared across loads, so a route change while loading can't start a second batch in parallel.
+const limit = concurrencyLimit(4);
 
 export default {
   name: 'DocumentsPrintingView',
@@ -93,9 +99,18 @@ export default {
 
   methods: {
     load() {
+      const lang = this.$route.params.lang ?? this.$language.current;
+
       this.promise = c2c[this.documentType].getAll(this.$route.query).then(() => {
         this.promises = this.promise.data.documents.map((doc) => ({
-          promise: c2c[this.documentType].getCooked(doc.document_id, this.$route.params.lang ?? this.$language.current),
+          promise: new ApiData(
+            limit(
+              () =>
+                new Promise((resolve, reject) => {
+                  c2c[this.documentType].getCooked(doc.document_id, lang).then(resolve, reject);
+                })
+            )
+          ),
           documentId: doc.document_id,
           expectedLang: this.$route.params.lang ?? this.$language.current,
           documentType: this.documentType,

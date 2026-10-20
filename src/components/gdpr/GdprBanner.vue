@@ -22,6 +22,8 @@
 <script>
 import GdprModal from './GdprModal.vue';
 
+import bus from '@/js/event-bus';
+
 export default {
   components: { GdprModal },
 
@@ -45,7 +47,11 @@ export default {
   },
 
   mounted() {
-    this.$root.$on('show-gdpr', () => this.showGdprModal());
+    bus.on('show-gdpr', this.showGdprModal);
+  },
+
+  beforeDestroy() {
+    bus.off('show-gdpr', this.showGdprModal);
   },
 
   methods: {

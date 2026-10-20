@@ -21,11 +21,13 @@
     </component>
     <span class="limit-selector">
       <dropdown-button class="ml-1 mr-1" ref="limitSelector">
-        <span slot="button" class="button is-small">
-          <span>{{ queryLimit }}</span>
-          &nbsp;
-          <fa-icon icon="angle-down" aria-hidden="true" />
-        </span>
+        <template #button>
+          <span class="button is-small">
+            <span>{{ queryLimit }}</span>
+            &nbsp;
+            <fa-icon icon="angle-down" aria-hidden="true" />
+          </span>
+        </template>
         <component
           v-for="l in [30, 50, 100]"
           :key="l"

@@ -14,11 +14,21 @@
 import layerMixin from './layer';
 
 import Yetix from '@/components/yeti/Yetix';
+import yetixEvents from '@/components/yeti/yetix-events';
 import ol from '@/js/libs/ol';
 
 export default {
   mixins: [layerMixin],
   props: {
+    // icons of the layer built on this one, if it has its own
+    customIconSrc: {
+      type: String,
+      default: undefined,
+    },
+    customIconCardSrc: {
+      type: String,
+      default: undefined,
+    },
     name: {
       type: String,
       required: true,
@@ -32,6 +42,8 @@ export default {
       required: true,
     },
   },
+
+  emits: ['layer', 'add-features', 'set-overlay', 'unset-overlay'],
   computed: {
     letter() {
       return this.name.charAt(0).toUpperCase();
@@ -82,7 +94,7 @@ export default {
     };
 
     // style
-    this.iconSrc = this.$parent.iconSrc || this.createIcon(this.color);
+    this.iconSrc = this.customIconSrc || this.createIcon(this.color);
     this.style = new ol.style.Style({
       image: new ol.style.Icon({
         src: this.iconSrc,
@@ -96,7 +108,7 @@ export default {
     this.hoveredStyle.getImage().setScale(1.3);
 
     // "selected" style (only for card)
-    this.iconCardSrc = this.$parent.iconCardSrc || this.createIcon();
+    this.iconCardSrc = this.customIconCardSrc || this.createIcon();
     this.selectedStyle = new ol.style.Style({
       image: new ol.style.Icon({
         src: this.iconCardSrc,
@@ -124,7 +136,7 @@ export default {
     // prevent event on map when overlay is open
     this.$refs.overlay.addEventListener('pointermove', (evt) => {
       evt.stopImmediatePropagation();
-      Yetix.$emit('map-pointermove', evt);
+      yetixEvents.emit('map-pointermove', evt);
     });
 
     this.activeFeature = false;
@@ -140,8 +152,8 @@ export default {
       this.fetch().then(this.onResult);
     }
 
-    // emit event on parent (this component is not instanciated)
-    this.$parent.$emit('layer', this.layerSelector);
+    // the layer built on this one emits it again
+    this.$emit('layer', this.layerSelector);
   },
   methods: {
     onResult(data) {
@@ -179,7 +191,7 @@ export default {
       }
     },
     onMapClick(evt, feature) {
-      this.$parent.setOverlay(feature);
+      this.$emit('set-overlay', feature);
       this.activeFeature = feature;
       this.openOverlay(feature);
 
@@ -211,7 +223,7 @@ export default {
       this.overlay.setPosition(undefined);
 
       if (force) {
-        this.$parent.unsetOverlay();
+        this.$emit('unset-overlay');
         this.activeFeature = false;
       }
     },

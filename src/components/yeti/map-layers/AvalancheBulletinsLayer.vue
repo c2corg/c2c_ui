@@ -66,6 +66,7 @@ import layerMixin from './layer';
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
 import Yetix from '@/components/yeti/Yetix';
 import DangerLevel from '@/components/yeti/map-layers/DangerLevel';
+import yetixEvents from '@/components/yeti/yetix-events';
 import ol from '@/js/libs/ol';
 
 // min and max zooms for layers styles
@@ -242,6 +243,8 @@ export default {
     DropdownContent,
   },
   mixins: [layerMixin],
+  emits: ['layer'],
+
   data() {
     return {
       overlayData: {
@@ -326,7 +329,7 @@ export default {
     // prevent event on map when overlay is open
     this.$refs.bulletinsOverlay.addEventListener('pointermove', (evt) => {
       evt.stopImmediatePropagation();
-      Yetix.$emit('map-pointermove', evt);
+      yetixEvents.emit('map-pointermove', evt);
     });
 
     this.map.addLayer(mountainsLayerGroup);
@@ -339,7 +342,7 @@ export default {
       Yetix.fetchMountains().then(this.onMountainsResult);
     }
 
-    Yetix.$on('map-moveend', this.onMapMoveEnd);
+    yetixEvents.on('map-moveend', this.onMapMoveEnd);
 
     this.$emit('layer', this.layerSelector);
   },

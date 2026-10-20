@@ -18,6 +18,8 @@ export default {
       required: true,
     },
   },
+
+  emits: ['remove'],
 };
 </script>
 

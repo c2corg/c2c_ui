@@ -3,12 +3,12 @@
     <div class="field">
       <label class="label">
         <marker-helper :name="helper || field.helper" />
-        {{ label || fieldLabel | uppercaseFirstLetter }}
+        {{ $filters.uppercaseFirstLetter(label || fieldLabel) }}
         <span v-if="hasError" class="has-text-danger">
           <!-- $gettext('required field') -->
           <!-- $gettext('This field is too short') -->
           <!-- $gettext('This field is too long') -->
-          {{ errorMessage | uppercaseFirstLetter }}
+          {{ $filters.uppercaseFirstLetter(errorMessage) }}
         </span>
       </label>
       <form-input
@@ -30,6 +30,7 @@
 <script>
 import FormInput from './FormInput';
 
+import { formField } from '@/js/form-registration';
 import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
 
 export default {
@@ -37,7 +38,8 @@ export default {
     FormInput,
   },
 
-  mixins: [requireFieldProperty, requireDocumentProperty],
+  // registered with the FormSection containing it
+  mixins: [formField('formSection'), requireFieldProperty, requireDocumentProperty],
 
   props: {
     isExpanded: {

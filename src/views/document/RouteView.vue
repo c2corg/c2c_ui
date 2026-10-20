@@ -11,7 +11,7 @@
       <div class="column is-3 no-print">
         <map-box :document="document" @has-protection-area="hasProtectionArea = true" />
         <avalanche-box :document="document" v-if="!$screen.isMobile" />
-        <is-reachable-by-public-transports-box :document="document" />
+        <is-reachable-by-public-transports-box v-if="!isPrintingView" :document="document" />
 
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
@@ -102,24 +102,28 @@
           <markdown-section :document="document" :field="fields.slackline_anchor2" />
 
           <markdown-section :document="document" :field="fields.remarks">
-            <div slot="after" v-if="hasProtectionArea" class="notification is-info protection-area-info no-print">
-              <strong v-translate>Sensitive areas</strong>
-              <p v-translate>There are sensitive areas on this route. Please refer to the map.</p>
-            </div>
+            <template v-if="hasProtectionArea" #after>
+              <div class="notification is-info protection-area-info no-print">
+                <strong v-translate>Sensitive areas</strong>
+                <p v-translate>There are sensitive areas on this route. Please refer to the map.</p>
+              </div>
+            </template>
           </markdown-section>
 
           <fundraiser-banner :document="document" />
 
           <markdown-section :document="document" :field="fields.gear">
-            <div class="content automatic-gears" slot="after" v-if="Object.keys(gearArticles).length !== 0">
-              <ul>
-                <li v-for="(label, articleId) of gearArticles" :key="articleId">
-                  <router-link :to="{ name: 'article', params: { id: articleId } }">
-                    {{ label }}
-                  </router-link>
-                </li>
-              </ul>
-            </div>
+            <template v-if="Object.keys(gearArticles).length !== 0" #after>
+              <div class="content automatic-gears">
+                <ul>
+                  <li v-for="(label, articleId) of gearArticles" :key="articleId">
+                    <router-link :to="{ name: 'article', params: { id: articleId } }">
+                      {{ label }}
+                    </router-link>
+                  </li>
+                </ul>
+              </div>
+            </template>
           </markdown-section>
 
           <markdown-section :document="document" :field="fields.external_resources" />

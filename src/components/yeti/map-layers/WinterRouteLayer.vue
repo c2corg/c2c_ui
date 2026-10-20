@@ -8,6 +8,8 @@ import ol from '@/js/libs/ol';
 
 export default {
   mixins: [layerMixin],
+  emits: ['layer'],
+
   computed: {
     showWinterRoute() {
       return Yetix.showWinterRoute;

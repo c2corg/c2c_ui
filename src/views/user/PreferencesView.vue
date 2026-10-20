@@ -53,7 +53,7 @@
           <input-activity v-model="preferences.activities" @input="save" />
         </div>
 
-        <h3>{{ $gettext('areas') | uppercaseFirstLetter }}</h3>
+        <h3>{{ $filters.uppercaseFirstLetter($gettext('areas')) }}</h3>
 
         <div class="columns is-multiline">
           <div class="column is-narrow">

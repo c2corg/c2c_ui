@@ -31,10 +31,7 @@
                   class="transport-icon"
                   :class="getTransportClass(section)"
                 >
-                  <img
-                    :src="require(`@/assets/img/boxes/${getTransportIcon(section)}.svg`)"
-                    :alt="getTransportClass(section)"
-                  />
+                  <img :src="assetUrl('boxes', `${getTransportIcon(section)}.svg`)" :alt="getTransportClass(section)" />
                 </div>
                 <div
                   v-else-if="
@@ -189,6 +186,7 @@
 </template>
 
 <script>
+import { assetUrl } from '@/js/asset-urls';
 import planATripUtils from '@/js/plan-a-trip-utils';
 
 export default {
@@ -238,8 +236,11 @@ export default {
       default: '',
     },
   },
+  emits: ['selectJourney'],
+
   computed: {},
   methods: {
+    assetUrl,
     ...planATripUtils,
     /** Shows route details */
     showJourneyDetails(journey) {

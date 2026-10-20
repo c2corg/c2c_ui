@@ -17,6 +17,8 @@ export default {
       required: true,
     },
   },
+
+  emits: ['add'],
 };
 </script>
 <style scoped lang="scss">

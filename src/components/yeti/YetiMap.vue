@@ -49,6 +49,7 @@ import YetiLayers from './map-layers/YetiLayers.vue';
 import EditModeButton from '@/components/yeti/EditModeButton';
 import YetiMapLegend from '@/components/yeti/YetiMapLegend';
 import Yetix from '@/components/yeti/Yetix';
+import yetixEvents from '@/components/yeti/yetix-events';
 import photon from '@/js/apis/photon';
 import ol from '@/js/libs/ol';
 
@@ -66,6 +67,19 @@ export default {
     YetiLayers,
     YetiMapLegend,
   },
+  // the layers (layer.js mixin) reach the map and its extent through this, at any depth
+  provide() {
+    const yetiMap = this;
+    return {
+      yetiMap: {
+        get map() {
+          return yetiMap.map;
+        },
+        getExtent: (projection) => yetiMap.getExtent(projection),
+      },
+    };
+  },
+
   data() {
     return {
       recenterPropositions: null,
@@ -181,7 +195,7 @@ export default {
         Yetix.setMapZoom(mapZoom);
       }
       // emit an event for map layers
-      Yetix.$emit('map-moveend');
+      yetixEvents.emit('map-moveend');
 
       // store position
       this.$localStorage.set('yeti-map-position', {
@@ -193,10 +207,10 @@ export default {
       // close controls
       this.showRecenterOnPropositions = false;
 
-      Yetix.$emit('map-click', evt);
+      yetixEvents.emit('map-click', evt);
     },
     onMapPointerMove(evt) {
-      Yetix.$emit('map-pointermove', evt);
+      yetixEvents.emit('map-pointermove', evt);
     },
     activateCenterOnGeolocation() {
       this.geolocation.setTracking(true);
@@ -212,7 +226,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '~ol/ol.css';
+@import 'ol/ol.css';
 @import '@/assets/sass/variables';
 
 $control-margin: 0.52em;

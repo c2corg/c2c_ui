@@ -29,6 +29,8 @@ import TrackingDeviceActivities from '@/components/tracking/TrackingDeviceActivi
 export default {
   components: { TrackingDeviceActivities, GpsFileUpload },
 
+  emits: ['data'],
+
   data() {
     return {
       activeTab: 'tracking-devices',

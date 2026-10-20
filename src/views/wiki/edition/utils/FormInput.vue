@@ -64,7 +64,8 @@
   <input-date
     v-else-if="field.type === 'date'"
     :has-error="hasError"
-    :disabled-dates="disabledDates"
+    :min="dateMin"
+    :max="dateMax"
     :required="field.required"
     v-model="object[field.name]"
   />
@@ -150,15 +151,18 @@ export default {
     },
   },
 
-  computed: {
-    disabledDates() {
-      const min = this.min || this.field.min;
-      const max = this.max || this.field.max;
+  emits: ['click-prefix', 'input'],
 
-      return {
-        to: min ? dayjs(min).toDate() : undefined,
-        from: max ? dayjs(max).add(1, 'day').toDate() : undefined,
-      };
+  computed: {
+    // earliest and latest selectable dates of a date field, inclusive
+    dateMin() {
+      const min = this.min || this.field.min;
+      return min ? dayjs(min).format('YYYY-MM-DD') : undefined;
+    },
+
+    dateMax() {
+      const max = this.max || this.field.max;
+      return max ? dayjs(max).format('YYYY-MM-DD') : undefined;
     },
 
     editedLocale() {

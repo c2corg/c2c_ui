@@ -45,7 +45,7 @@
 
       <div class="field">
         <label class="label">
-          {{ $gettext('routes') | uppercaseFirstLetter }}:
+          {{ $filters.uppercaseFirstLetter($gettext('routes')) }}:
           <marker-helper name="1063027#routes" />
         </label>
         <div class="control">
@@ -261,14 +261,14 @@ export default {
   watch: {
     showBothDates: 'handleDates',
     'document.activities': function (to, from) {
-      if (from === undefined) {
-        return; // initial load
+      if (from === undefined || to === undefined) {
+        return; // initial load, or the document is null while another one loads
       }
       this.updateRoutes('activities', false);
     },
 
     'document.geometry.geom_detail': function (to, from) {
-      if (from === null && to !== null) {
+      if (from === null && to) {
         this.possibleRoutes = null;
         this.$nextTick(async () => {
           await this.fitMapToDocuments();

@@ -40,6 +40,8 @@ export default {
       default: '',
     },
   },
+  emits: ['input'],
+
   data() {
     return {
       selected: this.value || this.defaultValue,

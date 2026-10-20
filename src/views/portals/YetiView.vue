@@ -118,6 +118,7 @@ import Tabs from '@/components/yeti/Tabs';
 import ValidationButton from '@/components/yeti/ValidationButton';
 import YetiMap from '@/components/yeti/YetiMap';
 import Yetix from '@/components/yeti/Yetix';
+import yetixEvents from '@/components/yeti/yetix-events';
 import ol from '@/js/libs/ol';
 
 const YETI_URL_BASE =
@@ -262,7 +263,7 @@ export default {
     // tmp: set default values for persistent state
     Yetix.setDefault();
     // remove all previous events (navigating from other c2c pages)
-    Yetix.$off();
+    yetixEvents.all.clear();
 
     // build tabs
     let tabs = this.setTabs();

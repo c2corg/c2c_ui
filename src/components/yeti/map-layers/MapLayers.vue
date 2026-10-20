@@ -11,6 +11,7 @@ import layerMixin from './layer';
 import Yetix from '@/components/yeti/Yetix';
 import BaseLayers from '@/components/yeti/map-layers/BaseLayers';
 import SlopesLayers from '@/components/yeti/map-layers/SlopesLayers';
+import yetixEvents from '@/components/yeti/yetix-events';
 
 export default {
   components: {
@@ -36,7 +37,7 @@ export default {
     this.slopesLayers = [];
   },
   mounted() {
-    Yetix.$on('map-moveend', this.onMapMoveEnd);
+    yetixEvents.on('map-moveend', this.onMapMoveEnd);
   },
   methods: {
     onBaseLayers(baseLayers) {

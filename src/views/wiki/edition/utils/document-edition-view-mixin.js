@@ -4,7 +4,6 @@ import AssociationsInputRow from './AssociationsInputRow';
 import EditionContainer from './EditionContainer';
 import FormField from './FormField';
 import FormInput from './FormInput';
-import FormRow from './FormRow';
 import FormSection from './FormSection';
 import MapInputRow from './MapInputRow';
 import QualityField from './QualityField';
@@ -20,8 +19,6 @@ const DATA_PROJ = 'EPSG:3857';
 
 export default {
   components: {
-    FormRow,
-
     FormSection,
     FormField,
     QualityField,

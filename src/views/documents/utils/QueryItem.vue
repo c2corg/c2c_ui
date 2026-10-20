@@ -1,26 +1,30 @@
 <template>
   <div v-if="field !== undefined" class="field">
     <div v-if="field.queryMode === 'valuesRangeSlider'" class="control">
-      <query-item-slider-label :field="field" :value="value" />
-      <vue-slider
-        v-model="value"
-        :data="field.values"
-        :lazy="true"
-        :marks="field.values"
-        hide-label
-        tooltip="focus"
-        :tooltip-formatter="field.i18n ? gettext : undefined"
+      <query-item-slider-label :field="field" :value="value" :label-id="sliderLabelId" />
+      <input-slider
+        v-model="valueIndexes"
+        :max="field.values.length - 1"
+        :format="formatValueIndex"
+        :aria-labelledby="sliderLabelId"
+        marks
       />
     </div>
 
     <div v-else-if="field.queryMode === 'numericalRangeSlider'" class="control">
-      <query-item-slider-label :field="field" :value="value" />
-      <vue-slider v-model="value" :min="field.min" :max="field.max" :interval="interval" :lazy="true" tooltip="focus" />
+      <query-item-slider-label :field="field" :value="value" :label-id="sliderLabelId" />
+      <input-slider
+        v-model="value"
+        :min="field.min"
+        :max="field.max"
+        :step="interval"
+        :aria-labelledby="sliderLabelId"
+      />
     </div>
 
     <div v-else-if="field.queryMode === 'multiSelect'" class="control">
       <label class="label">
-        {{ $gettext(field.name) | uppercaseFirstLetter }}
+        {{ $filters.uppercaseFirstLetter($gettext(field.name)) }}
       </label>
 
       <multiselect
@@ -39,7 +43,7 @@
 
     <div v-else-if="field.queryMode === 'input'" class="control">
       <label class="label" v-if="!hideLabel">
-        {{ $gettext(field.name) | uppercaseFirstLetter }}
+        {{ $filters.uppercaseFirstLetter($gettext(field.name)) }}
       </label>
       <input
         ref="input"
@@ -53,7 +57,7 @@
 
     <div v-else-if="field.queryMode === 'tristate'" class="control">
       <label class="label">
-        {{ $gettext(field.name) | uppercaseFirstLetter }}
+        {{ $filters.uppercaseFirstLetter($gettext(field.name)) }}
       </label>
 
       <multiselect
@@ -91,8 +95,6 @@
 </template>
 
 <script>
-import 'vue-slider-component/theme/default.css';
-
 import DateQueryItem from './DateQueryItem';
 import DatesQueryItem from './DatesQueryItem';
 import QueryItemSliderLabel from './QueryItemSliderLabel';
@@ -100,17 +102,17 @@ import queryItemMixin from './query-item-mixin';
 
 import debounce from '@/js/debounce';
 import { requireFieldProperty } from '@/js/properties-mixins';
+import { uidMixin } from '@/js/uid';
 
 export default {
   components: {
-    Multiselect: () => import(/* webpackChunkName: "multiselect" */ 'vue-multiselect'),
-    VueSlider: () => import(/* webpackChunkName: "slider" */ 'vue-slider-component'),
+    Multiselect: () => import('vue-multiselect'),
     QueryItemSliderLabel,
     DateQueryItem,
     DatesQueryItem,
   },
 
-  mixins: [requireFieldProperty, queryItemMixin],
+  mixins: [requireFieldProperty, queryItemMixin, uidMixin],
 
   props: {
     hideLabel: {
@@ -120,6 +122,21 @@ export default {
   },
 
   computed: {
+    // the field name names the slider handles for assistive technologies
+    sliderLabelId() {
+      return `query-slider-label-${this.uid}`;
+    },
+
+    // a range of field.values (ratings...): the slider works on their indexes
+    valueIndexes: {
+      get() {
+        return this.value.map((value) => this.field.values.indexOf(value));
+      },
+      set(indexes) {
+        this.value = indexes.map((index) => this.field.values[index]);
+      },
+    },
+
     interval() {
       const scope = this.field.max - this.field.min;
 
@@ -136,6 +153,11 @@ export default {
   },
 
   methods: {
+    formatValueIndex(index) {
+      const value = this.field.values[Math.round(index)];
+      return this.field.i18n ? this.gettext(value) : value;
+    },
+
     gettext(key) {
       return this.$gettext(key, this.field.i18nContext);
     },

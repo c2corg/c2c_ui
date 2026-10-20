@@ -1,31 +1,28 @@
 <template>
   <div>
-    <span :id="'slider_' + _uid" @click="focus" class="label">
+    <span :id="'slider_' + uid" @click="focus" class="label">
       <slot></slot>
     </span>
-    <vue-slider
+    <input-slider
       ref="slider"
       v-model="_value"
-      :dot-attrs="{ 'aria-labelledby': 'slider_' + _uid }"
+      :aria-labelledby="'slider_' + uid"
       :min="min"
       :max="max"
-      :interval="interval"
-      tooltip="none"
-      :duration="0"
-      :contained="true"
+      :step="interval"
+      :tooltips="false"
+      :lazy="false"
       @change="$emit('change')"
     />
   </div>
 </template>
 
 <script>
-import 'vue-slider-component/theme/default.css';
-import VueSlider from 'vue-slider-component';
+import { uidMixin } from '@/js/uid';
 
 export default {
-  components: {
-    VueSlider,
-  },
+  mixins: [uidMixin],
+
   props: {
     value: {
       type: Number,
@@ -44,6 +41,8 @@ export default {
       default: null,
     },
   },
+  emits: ['change', 'input'],
+
   computed: {
     _value: {
       get() {
@@ -56,7 +55,7 @@ export default {
   },
   methods: {
     focus() {
-      this.$refs.slider.$el.querySelector('.vue-slider-dot').focus({ focusVisible: true });
+      this.$refs.slider.$el.querySelector('[role=slider]').focus({ focusVisible: true });
     },
   },
 };
@@ -64,28 +63,24 @@ export default {
 
 <style lang="scss">
 .yeti-app {
-  /* customization of vue-slider */
-  $dotSize: 14px;
-  .vue-slider-process {
-    background: $primary;
-    box-shadow: calc(-1 * $dotSize / 2) 0 $primary;
-  }
-  .vue-slider-rail {
-    background: $grey-lighter;
-    box-shadow: calc(-1 * $dotSize / 2) 0 $grey-lighter, calc($dotSize / 2) 0 $grey-lighter;
-  }
-  .vue-slider-dot-handle {
-    box-shadow: 0 0 0 2px $primary;
-  }
-  .vue-slider-dot:focus-visible {
-    box-shadow: 0 0 0 4px $secondary;
-    border-radius: $dotSize;
+  /* customization of the slider (@vueform/slider) */
+  .input-slider {
+    --slider-connect-bg: #{$primary};
+    --slider-bg: #{$grey-lighter};
+    --slider-handle-shadow: 0 0 0 2px #{$primary};
+    --slider-handle-ring-color: #{$secondary};
+    --slider-handle-ring-width: 4px;
+    --slider-handle-width: 14px;
+    --slider-handle-height: 14px;
   }
 }
 </style>
 
 <style scoped>
+/* the spacing of the former vue-slider-component */
 .label {
+  display: inline-block;
+  margin-bottom: 7px;
   cursor: pointer;
   font-weight: normal;
 }

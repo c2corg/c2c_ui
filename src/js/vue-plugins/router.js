@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import config from '@/js/config';
 import constants from '@/js/constants';
+import { once } from '@/js/event-bus';
 import DocumentsView from '@/views//documents/DocumentsView';
 import AreaView from '@/views/document/AreaView';
 import ArticleView from '@/views/document/ArticleView';
@@ -32,23 +33,21 @@ import TrackersView from '@/views/user/TrackersView';
 // lazy-load components
 // actually, only diff is quite big, because of diff computation
 // but lets group together this three views.
-const AreaEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/AreaEditionView');
-const ArticleEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/ArticleEditionView');
-const BookEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/BookEditionView');
-const ImageEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/ImageEditionView');
-const MapEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/MapEditionView');
-const OutingEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/OutingEditionView');
-const ProfileEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/ProfileEditionView');
-const RouteEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/RouteEditionView');
-const WaypointEditionView = () =>
-  import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/WaypointEditionView');
-const XreportEditionView = () => import(/* webpackChunkName: "wiki-tools" */ '@/views/wiki/edition/XreportEditionView');
-const WhatsNewView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/WhatsNewView.vue`);
-const HistoryView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/HistoryView.vue`);
-const AssociationsHistoryView = () =>
-  import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/AssociationsHistoryView.vue`);
-const DiffView = () => import(/* webpackChunkName: "wiki-tools" */ `@/views/wiki/DiffView.vue`);
-const YetiView = () => import(/* webpackChunkName: "yeti" */ `@/views/portals/YetiView.vue`);
+const AreaEditionView = () => import('@/views/wiki/edition/AreaEditionView');
+const ArticleEditionView = () => import('@/views/wiki/edition/ArticleEditionView');
+const BookEditionView = () => import('@/views/wiki/edition/BookEditionView');
+const ImageEditionView = () => import('@/views/wiki/edition/ImageEditionView');
+const MapEditionView = () => import('@/views/wiki/edition/MapEditionView');
+const OutingEditionView = () => import('@/views/wiki/edition/OutingEditionView');
+const ProfileEditionView = () => import('@/views/wiki/edition/ProfileEditionView');
+const RouteEditionView = () => import('@/views/wiki/edition/RouteEditionView');
+const WaypointEditionView = () => import('@/views/wiki/edition/WaypointEditionView');
+const XreportEditionView = () => import('@/views/wiki/edition/XreportEditionView');
+const WhatsNewView = () => import(`@/views/wiki/WhatsNewView.vue`);
+const HistoryView = () => import(`@/views/wiki/HistoryView.vue`);
+const AssociationsHistoryView = () => import(`@/views/wiki/AssociationsHistoryView.vue`);
+const DiffView = () => import(`@/views/wiki/DiffView.vue`);
+const YetiView = () => import(`@/views/portals/YetiView.vue`);
 
 const routes = [
   { path: '/', name: 'home', component: HomeView },
@@ -149,6 +148,9 @@ routes.push({ path: '*', name: '404', component: NotFoundView });
 
 Vue.use(Router);
 
+// removes the trigger-scroll handler of the last navigation that waits for its view's data
+let cancelPendingScroll = null;
+
 const router = new Router({
   routes,
   mode: config.routerMode,
@@ -157,6 +159,13 @@ const router = new Router({
     // https://router.vuejs.org/guide/advanced/scroll-behavior.html#scroll-behavior
     // and
     // https://github.com/vuejs/vue-router/blob/dev/examples/scroll-behavior/app.js
+
+    // the previous page left before its view triggered the scroll: forget its position, or the next view to trigger
+    // the scroll would get it
+    if (cancelPendingScroll) {
+      cancelPendingScroll();
+      cancelPendingScroll = null;
+    }
 
     let position = {};
 
@@ -183,7 +192,8 @@ const router = new Router({
     return new Promise((resolve) => {
       // we add an once handler on the event
       // view will trigger it once data are present
-      this.app.$root.$once('trigger-scroll', () => {
+      cancelPendingScroll = once('trigger-scroll', () => {
+        cancelPendingScroll = null;
         resolve(position);
       });
     });

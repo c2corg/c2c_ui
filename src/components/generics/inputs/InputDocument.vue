@@ -20,7 +20,7 @@
         <div v-for="type of documentTypesWithResults" :key="type">
           <div v-if="documentTypes_.length > 1" class="dropdown-item has-text-weight-bold is-size-5">
             <!-- if several type are requested, add an header -->
-            {{ $gettext(type + 's') | uppercaseFirstLetter }}
+            {{ $filters.uppercaseFirstLetter($gettext(type + 's')) }}
           </div>
           <div
             v-for="document of promise.data[type + 's'].documents"
@@ -48,7 +48,7 @@
               </span>
               <span v-if="document.forum_username" class="is-italic"> @{{ document.forum_username }} </span>
               <span v-if="document.area_type" class="is-italic">
-                {{ $gettext(document.area_type, 'area_types') | uppercaseFirstLetter }}
+                {{ $filters.uppercaseFirstLetter($gettext(document.area_type, 'area_types')) }}
               </span>
 
               &nbsp;
@@ -135,6 +135,8 @@ export default {
       default: false,
     },
   },
+
+  emits: ['add', 'input', 'load-options'],
 
   data() {
     return {

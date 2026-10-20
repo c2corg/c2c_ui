@@ -23,7 +23,13 @@
 </template>
 
 <script>
+import { formContainer } from '@/js/form-registration';
+import { uidMixin } from '@/js/uid';
+
 export default {
+  // the fields register themselves (FormField, AssociationsInputRow, MapInputRow)
+  mixins: [formContainer('formSection'), uidMixin],
+
   props: {
     title: {
       type: String,
@@ -43,23 +49,27 @@ export default {
     return {
       expanded_: false,
       style: null,
-      visible: true,
-      hasError: false,
+      isMounted: false,
     };
   },
 
+  computed: {
+    // hidden when none of its fields is visible. Shown until mounted, as the fields register while it renders:
+    // a map inside must not initialize in a hidden (0 size) section
+    visible() {
+      return !this.isMounted || this.formFields.some((field) => field.visible);
+    },
+
+    hasError() {
+      return this.formFields.some((field) => field.hasError === true);
+    },
+  },
+
   mounted() {
+    this.isMounted = true;
     this.style = document.createElement('style');
     this.style.type = 'text/css';
     document.getElementsByTagName('head')[0].appendChild(this.style);
-
-    for (const child of this.$children) {
-      child.$watch('visible', this.checkVisibility);
-      child.$watch('hasError', this.checkHasError);
-    }
-
-    this.checkVisibility();
-    this.checkHasError();
 
     window.addEventListener('keyup', this.onKeyup);
 
@@ -75,7 +85,7 @@ export default {
   methods: {
     toggleExpandedState() {
       const content = this.$refs.content;
-      const className = `section-content-expanded${this._uid}`;
+      const className = `section-content-expanded${this.uid}`;
 
       if (!this.expanded_) {
         this.style.innerHTML = `.${className} { max-height: ${content.scrollHeight}px!important; }`;
@@ -100,27 +110,6 @@ export default {
       if (event.altKey && event.shiftKey) {
         if ((event.key === 'ArrowUp' && this.expanded_) || (event.key === 'ArrowDown' && !this.expanded_)) {
           this.toggleExpandedState();
-        }
-      }
-    },
-
-    checkVisibility() {
-      this.visible = false;
-
-      for (const child of this.$children) {
-        if (child.visible) {
-          this.visible = true;
-          return;
-        }
-      }
-    },
-
-    checkHasError() {
-      this.hasError = false;
-
-      for (const child of this.$children) {
-        if (child.hasError === true) {
-          this.hasError = true;
         }
       }
     },

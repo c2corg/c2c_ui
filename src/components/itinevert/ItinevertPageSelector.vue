@@ -28,11 +28,13 @@
     </span>
     <span class="limit-selector">
       <dropdown-button class="ml-1 mr-1" ref="limitSelector">
-        <span slot="button" class="button is-small">
-          <span>{{ limit }}</span>
-          &nbsp;
-          <fa-icon icon="angle-down" aria-hidden="true" />
-        </span>
+        <template #button>
+          <span class="button is-small">
+            <span>{{ limit }}</span>
+            &nbsp;
+            <fa-icon icon="angle-down" aria-hidden="true" />
+          </span>
+        </template>
         <span
           v-for="l in [30, 50, 100]"
           :key="l"
@@ -64,6 +66,8 @@ export default {
       default: 30,
     },
   },
+
+  emits: ['paginate'],
 
   data() {
     return {

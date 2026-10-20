@@ -7,17 +7,15 @@
       :document-type="documentType"
     ></masked-document-version-info>
     <document-view-header v-if="document" :document="document" :version="version">
-      <icon-waypoint-type
-        v-if="document && document.waypoint_type"
-        slot="icon-document"
-        :waypoint-type="document.waypoint_type"
-      />
+      <template v-if="document && document.waypoint_type" #icon-document>
+        <icon-waypoint-type :waypoint-type="document.waypoint_type" />
+      </template>
     </document-view-header>
 
     <div v-if="document" class="columns">
       <div class="column is-3 no-print">
         <map-box :document="document" />
-        <is-reachable-by-public-transports-box v-if="showTransportBox" :document="document" />
+        <is-reachable-by-public-transports-box v-if="showTransportBox && !isPrintingView" :document="document" />
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 

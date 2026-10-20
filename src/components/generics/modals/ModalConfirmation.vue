@@ -1,8 +1,10 @@
 <template>
   <modal-card ref="modalWindow">
-    <div slot="title">
-      <slot name="title" />
-    </div>
+    <template #title>
+      <div>
+        <slot name="title" />
+      </div>
+    </template>
     <div>
       <div v-if="showUncancelableWarning" class="notification is-warning has-text-centered">
         <strong v-translate>Warning: This action cannot be undone!</strong>
@@ -10,21 +12,27 @@
 
       <slot />
     </div>
-    <div slot="footer">
-      <button @click="$emit('confirm')" class="button is-danger" :class="{ 'is-loading': promise && promise.loading }">
-        <slot name="confirm-label">
-          <span v-translate>Confirm</span>
-        </slot>
-      </button>
-      <button
-        @click="$refs.modalWindow.hide()"
-        class="button is-success"
-        :disabled="promise && promise.loading"
-        v-translate
-      >
-        Cancel
-      </button>
-    </div>
+    <template #footer>
+      <div>
+        <button
+          @click="$emit('confirm')"
+          class="button is-danger"
+          :class="{ 'is-loading': promise && promise.loading }"
+        >
+          <slot name="confirm-label">
+            <span v-translate>Confirm</span>
+          </slot>
+        </button>
+        <button
+          @click="$refs.modalWindow.hide()"
+          class="button is-success"
+          :disabled="promise && promise.loading"
+          v-translate
+        >
+          Cancel
+        </button>
+      </div>
+    </template>
   </modal-card>
 </template>
 
@@ -40,6 +48,8 @@ export default {
       default: null,
     },
   },
+
+  emits: ['confirm'],
 
   watch: {
     'promise.error': 'onError',

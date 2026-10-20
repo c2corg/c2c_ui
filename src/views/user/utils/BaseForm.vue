@@ -10,7 +10,12 @@
 </template>
 
 <script>
+import { formContainer } from '@/js/form-registration';
+
 export default {
+  // the form fields register themselves (user FormField)
+  mixins: [formContainer('baseForm')],
+
   props: {
     promise: {
       type: Object,
@@ -18,12 +23,22 @@ export default {
     },
   },
 
+  emits: ['submit'],
+
   data() {
     return {
-      hasError: false,
-      inputs: {},
       serverMetaErrors: [], // errors that can't be linked to an input
     };
+  },
+
+  computed: {
+    inputs() {
+      return Object.fromEntries(this.formFields.map((field) => [field.name, field]));
+    },
+
+    hasError() {
+      return this.formFields.some((field) => field.hasError);
+    },
   },
 
   watch: {
@@ -32,20 +47,6 @@ export default {
       deep: true,
     },
   },
-
-  mounted() {
-    for (const child of this.$children) {
-      this.inputs[child.name] = child;
-      child.$on('input', this.check);
-    }
-  },
-
-  // TODO test that
-  // destroyed() {
-  //   for (const child of this.$children) {
-  //     child.$off('input', this.check);
-  //   }
-  // },
 
   methods: {
     cleanErrors() {
@@ -79,21 +80,8 @@ export default {
       }
     },
 
-    check() {
-      for (const child of this.$children) {
-        if (child.hasError) {
-          this.hasError = true;
-          return;
-        }
-      }
-
-      this.hasError = false;
-    },
-
     submit(event) {
       event.preventDefault();
-
-      this.check(); // must recheck, because auto-fill may not fire good events
 
       if (this.hasError) {
         return;

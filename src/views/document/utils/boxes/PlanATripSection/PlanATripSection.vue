@@ -204,6 +204,8 @@ export default {
       default: false,
     },
   },
+  emits: ['calculate-route', 'has-protection-area'],
+
   data() {
     return {
       activeTab: 'outbound',

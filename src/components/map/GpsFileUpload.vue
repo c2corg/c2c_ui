@@ -14,6 +14,8 @@
 
 <script>
 export default {
+  emits: ['click'],
+
   methods: {
     uploadGeoFile(event) {
       const reader = new FileReader();

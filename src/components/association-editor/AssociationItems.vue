@@ -1,7 +1,7 @@
 <template>
   <div class="association-items">
     <h2 class="title is-2">
-      {{ $gettext(arrayName) | uppercaseFirstLetter }}
+      {{ $filters.uppercaseFirstLetter($gettext(arrayName)) }}
     </h2>
 
     <div

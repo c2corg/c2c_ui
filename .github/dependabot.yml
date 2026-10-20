@@ -7,15 +7,24 @@ updates:
     open-pull-requests-limit: 99
     labels:
       - dependabot
+    commit-message:
+      prefix: chore
+      include: scope
   - package-ecosystem: docker
     directory: '/'
     schedule:
       interval: 'weekly'
     labels:
       - dependabot
+    commit-message:
+      prefix: chore
+      include: scope
   - package-ecosystem: github-actions
     directory: '/'
     schedule:
       interval: 'weekly'
     labels:
       - dependabot
+    commit-message:
+      prefix: chore
+      include: scope

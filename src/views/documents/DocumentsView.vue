@@ -5,12 +5,14 @@
       <div class="header-section">
         <span>
           <dropdown-button class="header-item">
-            <span slot="button">
-              <span class="title is-3 is-ellipsed">
-                {{ getDocumentTypeTitle(documentType) | uppercaseFirstLetter }}
+            <template #button>
+              <span>
+                <span class="title is-3 is-ellipsed">
+                  {{ $filters.uppercaseFirstLetter(getDocumentTypeTitle(documentType)) }}
+                </span>
+                <fa-icon icon="angle-down" aria-hidden="true" />
               </span>
-              <fa-icon icon="angle-down" aria-hidden="true" />
-            </span>
+            </template>
             <router-link
               v-for="type of documentTypes"
               :key="type"
@@ -19,7 +21,7 @@
               :to="{ name: type + 's', query: queryWithoutOffsetAndSort }"
             >
               <icon-document :document-type="type" />
-              <span>&nbsp;{{ getDocumentTypeTitle(type) | uppercaseFirstLetter }}</span>
+              <span>&nbsp;{{ $filters.uppercaseFirstLetter(getDocumentTypeTitle(type)) }}</span>
             </router-link>
           </dropdown-button>
           &nbsp;
@@ -132,8 +134,9 @@ import QueryItems from './utils/QueryItems';
 
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
+import bus from '@/js/event-bus';
 
-const DocumentsTable = () => import(/* webpackChunkName: "data-table" */ '@/components/datatable/DocumentsTable');
+const DocumentsTable = () => import('@/components/datatable/DocumentsTable');
 
 export default {
   name: 'DocumentsView',
@@ -223,7 +226,10 @@ export default {
         return;
       }
 
-      this.promise = c2c[this.documentType].getAll(this.$route.query);
+      this.promise = c2c[this.documentType].getAll(this.$route.query).then(() => {
+        // the list has its height: back from a document, the router can restore the scroll position
+        bus.emit('trigger-scroll');
+      });
     },
 
     toogleProperty(property) {

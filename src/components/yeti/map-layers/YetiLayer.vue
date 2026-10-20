@@ -7,6 +7,8 @@ import ol from '@/js/libs/ol';
 
 export default {
   mixins: [layerMixin, layerSelectorWatcherMixin],
+  emits: ['layer'],
+
   computed: {
     yetiData() {
       return Yetix.yetiData;

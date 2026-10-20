@@ -35,7 +35,7 @@
         :class="{ 'is-hidden-mobile': !hideSearchInput }"
       >
         <icon-help fixed-width />
-        <span class="is-hidden-mobile"> {{ $gettext('help') | uppercaseFirstLetter }} </span>
+        <span class="is-hidden-mobile"> {{ $filters.uppercaseFirstLetter($gettext('help')) }} </span>
       </router-link>
       <div ref="searchInputContainer">
         <input-document
@@ -86,15 +86,17 @@
       <div class="navigation-item">
         <join-us-link class="has-text-centered button c2c-color" :class="{ 'is-hidden-mobile': !hideSearchInput }">
           <icon-join-us fixed-width />
-          <span class="is-hidden-mobile">{{ $gettext('Join us') | uppercaseFirstLetter }}</span>
+          <span class="is-hidden-mobile">{{ $filters.uppercaseFirstLetter($gettext('Join us')) }}</span>
         </join-us-link>
       </div>
 
       <div class="navigation-item">
         <dropdown-button class="is-right add-button" ref="addDocumentMenu">
-          <span slot="button" class="button is-success">
-            <fa-icon icon="plus" />
-          </span>
+          <template #button>
+            <span class="button is-success">
+              <fa-icon icon="plus" />
+            </span>
+          </template>
           <add-link
             v-for="documentType of ['outing', 'route', 'waypoint', 'article', 'book', 'xreport']"
             :key="documentType"
@@ -104,7 +106,7 @@
           >
             <icon-document :document-type="documentType" fixed-width />
             <span>
-              {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
+              {{ $filters.uppercaseFirstLetter($documentUtils.getCreationTitle(documentType)) }}
             </span>
           </add-link>
         </dropdown-button>
@@ -120,15 +122,17 @@
 
       <div v-else class="navigation-item">
         <dropdown-button class="is-right" ref="userMenu">
-          <span slot="button" class="button">
-            <img
-              width="24"
-              height="24"
-              alt="Avatar"
-              :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
-            />
-            <span class="has-text-weight-bold is-hidden-mobile"> &nbsp;{{ $user.name }} </span>
-          </span>
+          <template #button>
+            <span class="button">
+              <img
+                width="24"
+                height="24"
+                alt="Avatar"
+                :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
+              />
+              <span class="has-text-weight-bold is-hidden-mobile"> &nbsp;{{ $user.name }} </span>
+            </span>
+          </template>
 
           <router-link
             v-for="item of userMenuLinks"
@@ -154,9 +158,11 @@
       </div>
       <div v-if="!$user.isLogged" class="navigation-item">
         <dropdown-button class="is-right">
-          <button class="button" slot="button">
-            {{ $language.current }}
-          </button>
+          <template #button>
+            <button class="button">
+              {{ $language.current }}
+            </button>
+          </template>
           <a
             v-for="(language, key) in $language.availableUI"
             :key="key"
@@ -173,6 +179,8 @@
 </template>
 
 <script>
+import { isNavigationFailure } from 'vue-router';
+
 import DfmAdLarge from './DfmAdLarge.vue';
 
 import IconHelp from '@/components/generics/icons/IconHelp';
@@ -187,6 +195,8 @@ export default {
     IconJoinUs,
     JoinUsLink,
   },
+  emits: ['toggle-side-menu'],
+
   data() {
     return {
       searchText: '',
@@ -292,10 +302,21 @@ export default {
     },
 
     signout() {
-      this.$user.signout();
-      if (this.$route.meta.requiresAuth) {
-        this.$router.push({ name: 'home' });
+      if (!this.$route.meta.requiresAuth) {
+        this.$user.signout();
+        return;
       }
+
+      // leave the page first: its leave guard (e.g. unsaved edits) may cancel the
+      // navigation, in which case the user stays logged in on the current page
+      this.$router.push({ name: 'home' }).then(
+        () => this.$user.signout(),
+        (error) => {
+          if (!isNavigationFailure(error)) {
+            throw error;
+          }
+        }
+      );
     },
 
     homePage() {

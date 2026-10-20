@@ -10,13 +10,15 @@
         </span>
         <span v-else>
           <html-header :title="$documentUtils.getCreationTitle(documentType)" />
-          {{ $documentUtils.getCreationTitle(documentType) | uppercaseFirstLetter }}
+          {{ $filters.uppercaseFirstLetter($documentUtils.getCreationTitle(documentType)) }}
           <span>
             <dropdown-button>
-              <span slot="button" class="button">
-                <span> {{ $language.availableAPI[document.locales[0].lang] }}&nbsp; </span>
-                <fa-icon icon="angle-down" aria-hidden="true" />
-              </span>
+              <template #button>
+                <span class="button">
+                  <span> {{ $language.availableAPI[document.locales[0].lang] }}&nbsp; </span>
+                  <fa-icon icon="angle-down" aria-hidden="true" />
+                </span>
+              </template>
               <div
                 v-for="lang of $options.constants.langs"
                 :key="lang"
@@ -62,7 +64,6 @@
 </template>
 
 <script>
-import FormRow from './FormRow';
 import SaveDocumentRow from './SaveDocumentRow';
 
 import c2c from '@/js/apis/c2c';
@@ -84,7 +85,6 @@ let htmlBanners = { initialized: false }; // cache for banners
 
 export default {
   components: {
-    FormRow,
     AreaView,
     ArticleView,
     BookView,
@@ -114,9 +114,12 @@ export default {
     },
   },
 
+  emits: ['save'],
+
   data() {
     return {
       isPreview: false,
+      htmlBanners,
     };
   },
 
@@ -126,10 +129,6 @@ export default {
     documentType() {
       return this.$documentUtils.getDocumentType(this.document.type);
     },
-
-    htmlBanners() {
-      return htmlBanners;
-    },
   },
 
   watch: {
@@ -138,7 +137,10 @@ export default {
 
   mounted() {
     if (!htmlBanners.initialized) {
-      c2c.article.getCooked(BANNERS_ARTICLE_ID, this.$language.current).then(this.computeBanners);
+      c2c.article.getCooked(BANNERS_ARTICLE_ID, this.$language.current).then(this.computeBanners, () => {
+        // banners are optional: the form works without them. Cache is left
+        // uninitialized, so that next edit view tries again.
+      });
     }
   },
 
@@ -170,7 +172,7 @@ export default {
           htmlBanners[key] += node.outerHTML;
         }
       }
-      this.$forceUpdate();
+      this.htmlBanners = htmlBanners;
     },
   },
 };

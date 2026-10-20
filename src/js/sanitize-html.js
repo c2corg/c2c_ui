@@ -32,6 +32,7 @@ const RICH_CONTENT_ATTR_ALLOWLIST = [
   'c2c:role',
   'c2c:document-id',
   'c2c:document-type',
+  'c2c:url',
   'c2c:url-proxy',
   'c2c:size',
   'c2c:position',

@@ -1,11 +1,19 @@
 import axios from 'axios';
 
+import retryOn429 from './retry-on-429';
+
+import concurrencyLimit from '@/js/concurrency-limit';
 import config from '@/js/config';
+
+// A document with many access waypoints, or the printing view showing up to 100 documents,
+// would otherwise send one request per waypoint at once.
+const limit = concurrencyLimit(4);
 
 function TransportService() {
   this.axios = axios.create({
     baseURL: config.urls.api,
   });
+  retryOn429(this.axios);
 }
 
 /**
@@ -15,7 +23,7 @@ function TransportService() {
  * @returns {Promise}
  */
 TransportService.prototype.getStopareas = function (waypointId) {
-  return this.axios.get(`/waypoints/${waypointId}/stopareas`);
+  return limit(() => this.axios.get(`/waypoints/${waypointId}/stopareas`));
 };
 
 /**
@@ -35,7 +43,7 @@ TransportService.prototype.getWaypointsAccessibleTC = function (routeId) {
  * @returns {Promise<boolean>}
  */
 TransportService.prototype.isReachable = function (waypointId) {
-  return this.axios.get(`/waypoints/${waypointId}/isReachable`).then((response) => response.data);
+  return limit(() => this.axios.get(`/waypoints/${waypointId}/isReachable`)).then((response) => response.data);
 };
 
 /**

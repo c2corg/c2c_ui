@@ -48,6 +48,7 @@
 import GpsFileUpload from '@/components/map/GpsFileUpload';
 import GpsUploadModal from '@/components/map/GpsUploadModal';
 import trackingService from '@/js/apis/tracking-service';
+import { formField } from '@/js/form-registration';
 import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
@@ -58,7 +59,8 @@ const DATA_PROJ = 'EPSG:3857';
 export default {
   components: { GpsUploadModal, GpsFileUpload },
 
-  mixins: [requireDocumentProperty],
+  // registered with the FormSection containing it
+  mixins: [formField('formSection'), requireDocumentProperty],
 
   props: {
     geomDetailEditable: {
@@ -74,6 +76,8 @@ export default {
       default: null,
     },
   },
+
+  emits: ['move'],
 
   data() {
     return {
@@ -106,8 +110,11 @@ export default {
           this.hasTrackingActivities = true;
         }
       },
-      () => {
-        // do nothing if errored
+      (error) => {
+        // Falls back to local GPX upload only, but this should not happen silently: a request that
+        // fails here (401, network, ...) looks identical to "no tracker connected" otherwise, which
+        // made a JWT misconfiguration between v6_api and c2c_tracking very hard to notice.
+        console.error('Error retrieving tracking status :', error);
       }
     );
   },

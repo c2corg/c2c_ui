@@ -1,6 +1,8 @@
 <template>
   <modal-confirmation ref="modalWindow" show-uncancelable-warning :promise="promise" @confirm="executeDelete">
-    <span slot="title" v-translate>Delete this locale</span>
+    <template #title>
+      <span v-translate>Delete this locale</span>
+    </template>
 
     <span v-translate>Are you sure you want to delete this locale?</span>
   </modal-confirmation>

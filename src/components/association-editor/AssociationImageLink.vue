@@ -4,21 +4,23 @@
       <thumbnail :img="image" size="SI" :title="image.locales[0].title" :alt="image.locales[0].title" loading="lazy" />
     </figure>
     <span class="association-image-link-child">
-      {{ image.locales[0].title | max50chars }}
+      {{ max50chars(image.locales[0].title) }}
     </span>
   </document-link>
 </template>
 
 <script>
 export default {
-  filters: {
-    max50chars: (value) => (value && value.length > 50 ? value.substring(0, 50) + '…' : value),
-  },
-
   props: {
     image: {
       type: Object,
       required: true,
+    },
+  },
+
+  methods: {
+    max50chars(value) {
+      return value && value.length > 50 ? value.substring(0, 50) + '…' : value;
     },
   },
 };

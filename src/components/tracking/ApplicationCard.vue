@@ -5,7 +5,7 @@
         <div class="media-left">
           <figure class="image is-48x48">
             <img
-              :src="require(`@/assets/img/tracking/${application.name}.png`)"
+              :src="assetUrl('tracking', `${application.name}.png`)"
               :alt="$gettext(application.name)"
               class="rounded"
               :class="{ 'grayed-out': application.status === 'not-configured' }"
@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import { assetUrl } from '@/js/asset-urls';
+
 export default {
   props: {
     application: {
@@ -47,6 +49,8 @@ export default {
       required: true,
     },
   },
+
+  emits: ['configure', 'revoke'],
 
   computed: {
     canRefresh() {
@@ -63,6 +67,7 @@ export default {
   },
 
   methods: {
+    assetUrl,
     revoke() {
       this.$emit('revoke');
     },

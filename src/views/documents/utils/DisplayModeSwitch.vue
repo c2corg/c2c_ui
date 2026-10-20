@@ -1,10 +1,12 @@
 <template>
   <dropdown-button class="is-right" ref="displayModeSwitch">
-    <span slot="button" class="button is-small">
-      <fa-icon :icon="['fas', 'eye']" class="is-size-4" />
-      <span>&nbsp;</span>
-      <fa-icon icon="angle-down" aria-hidden="true" />
-    </span>
+    <template #button>
+      <span class="button is-small">
+        <fa-icon :icon="['fas', 'eye']" class="is-size-4" />
+        <span>&nbsp;</span>
+        <fa-icon icon="angle-down" aria-hidden="true" />
+      </span>
+    </template>
     <a
       class="dropdown-item is-size-6"
       :class="{ 'is-active': value === 'result' }"
@@ -60,6 +62,8 @@ export default {
       required: true,
     },
   },
+
+  emits: ['input'],
 };
 </script>
 

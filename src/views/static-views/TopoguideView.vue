@@ -18,7 +18,7 @@
     <div class="section columns is-multiline is-variable is-8">
       <div class="column is-6">
         <h2 class="title is-2 has-text-centered has-background-secondary has-text-light has-rounded-corner">
-          {{ $gettext('outings') | uppercaseFirstLetter }}
+          {{ $filters.uppercaseFirstLetter($gettext('outings')) }}
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
           <topoguide-view-small-link
@@ -29,7 +29,7 @@
           >
             <span class="is-size-1"><icon-activity :activity="activity" /></span>
             <span class="has-text-weight-semibold">
-              {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
+              {{ $filters.uppercaseFirstLetter($gettext(activity, 'activities')) }}
             </span>
           </topoguide-view-small-link>
 
@@ -44,7 +44,7 @@
       </div>
       <div class="column is-6">
         <h2 class="title is-2 has-text-centered has-background-secondary has-text-light has-rounded-corner">
-          {{ $gettext('routes') | uppercaseFirstLetter }}
+          {{ $filters.uppercaseFirstLetter($gettext('routes')) }}
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
           <topoguide-view-small-link
@@ -55,7 +55,7 @@
           >
             <span class="is-size-1"><icon-activity :activity="activity" /></span>
             <span class="has-text-weight-semibold">
-              {{ $gettext(activity, 'activities') | uppercaseFirstLetter }}
+              {{ $filters.uppercaseFirstLetter($gettext(activity, 'activities')) }}
             </span>
           </topoguide-view-small-link>
 
@@ -70,7 +70,7 @@
       </div>
       <div class="column is-12">
         <h2 class="title is-2 has-text-centered has-background-secondary has-text-light has-rounded-corner">
-          {{ $gettext('waypoints') | uppercaseFirstLetter }}
+          {{ $filters.uppercaseFirstLetter($gettext('waypoints')) }}
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
           <topoguide-view-small-link
@@ -81,7 +81,7 @@
           >
             <span class="is-size-1"><icon-waypoint-type :waypoint-type="waypoint_type" /></span>
             <span class="has-text-weight-semibold">
-              {{ $gettext(waypoint_type, 'waypoint_types') | uppercaseFirstLetter }}
+              {{ $filters.uppercaseFirstLetter($gettext(waypoint_type, 'waypoint_types')) }}
             </span>
           </topoguide-view-small-link>
 
@@ -123,7 +123,7 @@ export default {
 
 <style scoped lang="scss">
 .topoguide {
-  background-image: url('~@/assets/img/backgrounds/laurentf-sajama-800w.jpg');
+  background-image: url('@/assets/img/backgrounds/laurentf-sajama-800w.jpg');
   background-position-x: center;
   background-size: cover;
   padding-top: 90px; //keep the header on a deep color zone
@@ -131,10 +131,10 @@ export default {
   justify-content: center;
   // 1224px because after 1024px breakpoint, we have an additional 200px wide menu on the left
   @media (min-width: 800px) and (max-width: 1224px) {
-    background-image: url('~@/assets/img/backgrounds/laurentf-sajama-1024w.jpg');
+    background-image: url('@/assets/img/backgrounds/laurentf-sajama-1024w.jpg');
   }
   @media (min-width: 1224px) {
-    background-image: url('~@/assets/img/backgrounds/laurentf-sajama-1200w.jpg');
+    background-image: url('@/assets/img/backgrounds/laurentf-sajama-1200w.jpg');
   }
 
   h1 {

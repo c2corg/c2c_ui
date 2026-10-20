@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import retryOn429 from './retry-on-429';
+
 /// ////////////////////////////////////////////////////////////////////////////////
 // Technically, we should do this in any API call to enhance promise with response :
 // let result = axios.get(url).then(response => result.response = response)
@@ -30,7 +32,10 @@ const ApiData = function (promise) {
 };
 
 ApiData.prototype.then = function (successCallback, errorCallback) {
-  this.promise_.then(successCallback, errorCallback);
+  // then() returns this, not the derived promise: nobody can catch that one. Without an error callback, a failed
+  // request would reject it unhandled; the error stays available in this.error and through catch().
+  // Errors thrown by the callbacks are still reported.
+  this.promise_.then(successCallback, errorCallback ?? (() => {}));
   return this;
 };
 
@@ -45,6 +50,7 @@ const BaseApi = function (apiUrl) {
     headers: { common: {} },
     baseURL: apiUrl,
   });
+  retryOn429(this.axios);
 };
 
 /*
@@ -66,5 +72,7 @@ BaseApi.prototype.put = function (url, body) {
 BaseApi.prototype.delete = function (url, body) {
   return new ApiData(this.axios.delete(url, body));
 };
+
+export { ApiData };
 
 export default BaseApi;

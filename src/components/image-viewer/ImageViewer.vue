@@ -75,6 +75,7 @@ import ImageInfo from './ImageInfo';
 
 import { getImageUrl } from '@/js/image-urls';
 import throttle from '@/js/throttle';
+import { registerImageViewer } from '@/js/vue-plugins/image-viewer';
 
 const requestFullscreen = function (wrapper) {
   if (wrapper.requestFullscreen) {
@@ -113,8 +114,14 @@ export default {
   },
 
   created() {
+    // in created(), not mounted(): pages call it while they are created, before the app tree is mounted
+    registerImageViewer(this);
     // this component is never destroyed, don't need a call to removeListener
     window.addEventListener('keydown', this.onKeydown);
+  },
+
+  beforeDestroy() {
+    registerImageViewer(null);
   },
 
   methods: {

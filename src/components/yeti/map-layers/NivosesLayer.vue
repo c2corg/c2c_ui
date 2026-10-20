@@ -1,5 +1,13 @@
 <template>
-  <icon-layer :name="name" :color="color" :selector="layerSelector">
+  <icon-layer
+    :name="name"
+    :color="color"
+    :selector="layerSelector"
+    ref="iconLayer"
+    @layer="$emit('layer', $event)"
+    @set-overlay="setOverlay"
+    @unset-overlay="unsetOverlay"
+  >
     <span v-translate>Nivose beacon</span>
     <template #overlay>
       <p class="overlay-title">
@@ -34,6 +42,8 @@ export default {
     IconLayer,
   },
   mixins: [getIconLayerMixin],
+
+  emits: ['layer'],
   data() {
     return {
       name: 'nivoses',

@@ -1,8 +1,10 @@
 <template>
   <modal-card ref="modalWindow">
-    <span slot="title">
-      <span v-translate>This tool estimates the technical difficulty of a ski route (ski rating).</span>
-    </span>
+    <template #title>
+      <span>
+        <span v-translate>This tool estimates the technical difficulty of a ski route (ski rating).</span>
+      </span>
+    </template>
 
     <div class="field">
       <label class="label" v-translate>Skiability</label>
@@ -66,15 +68,19 @@
       </span>
     </h1>
 
-    <footer slot="footer">
-      <button class="button is-success" type="button" @click="setResult" :disabled="!rating" v-translate>Ok</button>
-      <button class="button is-default" type="button" @click="$refs.modalWindow.hide()" v-translate>Cancel</button>
-    </footer>
+    <template #footer>
+      <footer>
+        <button class="button is-success" type="button" @click="setResult" :disabled="!rating" v-translate>Ok</button>
+        <button class="button is-default" type="button" @click="$refs.modalWindow.hide()" v-translate>Cancel</button>
+      </footer>
+    </template>
   </modal-card>
 </template>
 
 <script>
 export default {
+  emits: ['input'],
+
   data() {
     return {
       skiability: 0,

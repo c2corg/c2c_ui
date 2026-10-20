@@ -1,15 +1,15 @@
 <template>
   <div>
-    <protected-areas-layer @layer="onLayer($event, 2)" />
-    <meteo-layer :visible="meteoTab" />
-    <winter-route-layer @layer="onLayer($event, 1)" />
-    <avalanche-bulletins-layer @layer="onLayer($event, 0)" />
-    <data-avalanche-layer @layer="onLayer($event, 3)" />
-    <ffvl-layer @layer="onLayer($event, 7)" />
-    <flowcapt-layer @layer="onLayer($event, 6)" />
-    <nivoses-layer @layer="onLayer($event, 4)" />
-    <romma-layer @layer="onLayer($event, 5)" />
-    <route-layer />
+    <protected-areas-layer ref="protectedAreasLayer" @layer="onLayer($event, 2)" />
+    <meteo-layer ref="meteoLayer" :visible="meteoTab" />
+    <winter-route-layer ref="winterRouteLayer" @layer="onLayer($event, 1)" />
+    <avalanche-bulletins-layer ref="avalancheBulletinsLayer" @layer="onLayer($event, 0)" />
+    <data-avalanche-layer ref="dataAvalancheLayer" @layer="onLayer($event, 3)" />
+    <ffvl-layer ref="ffvlLayer" @layer="onLayer($event, 7)" />
+    <flowcapt-layer ref="flowcaptLayer" @layer="onLayer($event, 6)" />
+    <nivoses-layer ref="nivosesLayer" @layer="onLayer($event, 4)" />
+    <romma-layer ref="rommaLayer" @layer="onLayer($event, 5)" />
+    <route-layer ref="routeLayer" />
   </div>
 </template>
 
@@ -27,6 +27,7 @@ import ProtectedAreasLayer from '@/components/yeti/map-layers/ProtectedAreasLaye
 import RommaLayer from '@/components/yeti/map-layers/RommaLayer.vue';
 import RouteLayer from '@/components/yeti/map-layers/RouteLayer.vue';
 import WinterRouteLayer from '@/components/yeti/map-layers/WinterRouteLayer.vue';
+import yetixEvents from '@/components/yeti/yetix-events';
 import ol from '@/js/libs/ol';
 
 export default {
@@ -63,14 +64,27 @@ export default {
     // if layer is on top, it should prevent layers beneath to also react
 
     // layers, in click order
-    this.layers = this.$children.reverse();
+    this.layers = [
+      'protectedAreasLayer',
+      'meteoLayer',
+      'winterRouteLayer',
+      'avalancheBulletinsLayer',
+      'dataAvalancheLayer',
+      'ffvlLayer',
+      'flowcaptLayer',
+      'nivosesLayer',
+      'rommaLayer',
+      'routeLayer',
+    ]
+      .map((ref) => this.$refs[ref])
+      .reverse();
 
     // add events
-    Yetix.$on('map-click', (evt) => {
+    yetixEvents.on('map-click', (evt) => {
       this.dealWithEventsOnEachLayer(evt, 'onMapClick', 'onMapLooseClick');
     });
 
-    Yetix.$on('map-pointermove', (evt) => {
+    yetixEvents.on('map-pointermove', (evt) => {
       this.dealWithEventsOnEachLayer(evt, 'onMapPointerMove', 'onMapLoosePointerMove');
     });
   },

@@ -20,6 +20,7 @@ import ProfilesLinks from './field-viewers/ProfilesLinks';
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import cooker from '@/js/cooker';
+import bus from '@/js/event-bus';
 import { getImageUrl } from '@/js/image-urls';
 import isEditableMixin from '@/js/is-editable-mixin';
 import utils from '@/js/utils';
@@ -194,13 +195,17 @@ export default {
             }
             this.$emit('updateHead');
           });
+      } else if (this.isPrintingView && this.draft.cooked) {
+        // the printing view loads documents with ?cook=, so they are already cooked
+        this.$imageViewer.clear();
+        this.promise = { data: this.draft };
       } else if (this.isDraftView || this.isPrintingView) {
         this.promise = {};
 
         this.$imageViewer.clear();
         cooker.cook(this.draft.locales[0]).then((response) => {
           this.draft.cooked = response.data;
-          this.$set(this.promise, 'data', this.draft);
+          this.promise = { data: this.draft };
         });
       } else {
         // normal mode
@@ -218,7 +223,7 @@ export default {
           .getCooked(this.documentId, this.expected_lang)
           .then(this.handleRedirection)
           .then(() => {
-            this.$root.$emit('trigger-scroll');
+            bus.emit('trigger-scroll');
             // notify vue-head plugin to update
             this.$emit('updateHead');
           })

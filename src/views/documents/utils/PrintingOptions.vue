@@ -34,7 +34,13 @@
       </div>
       <div class="column printing-option-section">
         <h2 class="title is-2" v-translate>Printing</h2>
-        <button :disabled="isLoading" class="button is-primary print-button" onclick="window.print()" v-translate>
+        <button
+          :disabled="isLoading || isPreparingPrint"
+          :class="{ 'is-loading': isPreparingPrint }"
+          class="button is-primary print-button"
+          @click="print"
+          v-translate
+        >
           Print
         </button>
         <template v-if="isLoading"><span v-translate>Loading...</span>({{ totalResolved }} / {{ total }})</template>
@@ -45,6 +51,8 @@
 
 <script>
 import PageSelector from './PageSelector';
+
+const PRINT_IMAGES_TIMEOUT = 15000; // ms
 
 export default {
   components: {
@@ -62,12 +70,15 @@ export default {
     },
   },
 
+  emits: ['set-image-printing', 'set-page-breaks', 'set-summary-visibility'],
+
   data() {
     return {
       totalResolved: 0,
       pageBreaks: false,
       imagePrinting: false,
       summaryVisibility: true,
+      isPreparingPrint: false,
     };
   },
 
@@ -99,6 +110,30 @@ export default {
     },
     setSummaryVisibility() {
       this.$emit('set-summary-visibility', this.summaryVisibility);
+    },
+    // Images embedded in markdown are lazy loaded: the ones that were never scrolled into
+    // view would be blank in the printout (some browsers don't load them when printing).
+    // Load them first, and wait for them (at most PRINT_IMAGES_TIMEOUT) before printing.
+    async print() {
+      this.isPreparingPrint = true;
+
+      const images = [...document.querySelectorAll('img[c2c\\:role=embedded-image]')].filter(
+        (image) => !image.complete && image.offsetParent !== null
+      );
+
+      const loaded = images.map(
+        (image) =>
+          new Promise((resolve) => {
+            image.addEventListener('load', resolve, { once: true });
+            image.addEventListener('error', resolve, { once: true });
+            image.loading = 'eager';
+          })
+      );
+      const timeout = new Promise((resolve) => setTimeout(resolve, PRINT_IMAGES_TIMEOUT));
+      await Promise.race([Promise.all(loaded), timeout]);
+
+      this.isPreparingPrint = false;
+      window.print();
     },
     trackResolve() {
       this.totalResolved = 0;

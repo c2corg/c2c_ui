@@ -62,9 +62,7 @@
       />
       <form-field name="email" v-model="email" type="email" :label="$gettext('Email')" icon="at" />
       <form-field name="password" v-model="password" type="password" :label="$gettext('Password')" icon="key" />
-      <p class="is-italic is-size-7" v-translate>
-        At least 10 characters, with an uppercase letter, a lowercase letter, a digit and a special character.
-      </p>
+      <password-requirements :password="password" />
       <p class="is-italic is-size-7" v-translate>
         Username or email combined with the password will allow you to log in. Both username and email remain private.
         Username can not be changed, but email can.
@@ -98,7 +96,7 @@
       </div>
 
       <div class="field">
-        <vue-recaptcha
+        <re-captcha
           ref="recaptcha"
           :sitekey="$options.recaptchaKey"
           @expired="onCaptchaExpired"
@@ -121,7 +119,9 @@
     </base-form>
 
     <base-form ref="resetPasswordForm" v-show="mode == 'resetPassword'" :promise="promise" @submit="resetPassword">
-      <h3 slot="header" class="title is-3" v-translate>Reset password</h3>
+      <template #header>
+        <h3 class="title is-3" v-translate>Reset password</h3>
+      </template>
 
       <form-field
         ref="resetPasswordMainInput"
@@ -150,7 +150,9 @@
       :promise="promise"
       @submit="validateNewPassword"
     >
-      <h3 slot="header" class="title is-3" v-translate>Change password</h3>
+      <template #header>
+        <h3 class="title is-3" v-translate>Change password</h3>
+      </template>
 
       <form-field
         ref="changePasswordMainInput"
@@ -160,9 +162,7 @@
         :label="$gettext('New password')"
         icon="key"
       />
-      <p class="is-italic is-size-7" v-translate>
-        At least 10 characters, with an uppercase letter, a lowercase letter, a digit and a special character.
-      </p>
+      <password-requirements :password="password" />
 
       <div class="buttons is-centered">
         <button type="submit" class="button is-link" :class="{ 'is-loading': promise.loading }" v-translate>
@@ -190,7 +190,9 @@ import { toast } from 'bulma-toast';
 
 import BaseForm from './utils/BaseForm';
 import FormField from './utils/FormField';
+import PasswordRequirements from './utils/PasswordRequirements';
 
+import ReCaptcha from '@/components/recaptcha/ReCaptcha';
 import c2c from '@/js/apis/c2c';
 import config from '@/js/config';
 import noRobotsMixin from '@/js/no-robots-mixin';
@@ -210,7 +212,8 @@ export default {
   components: {
     FormField,
     BaseForm,
-    VueRecaptcha: () => import(/* webpackChunkName: "captcha" */ 'vue-recaptcha'),
+    PasswordRequirements,
+    ReCaptcha,
   },
 
   mixins: [noRobotsMixin],
@@ -270,14 +273,6 @@ export default {
   },
 
   mounted() {
-    const recaptchaScript = document.createElement('script');
-    recaptchaScript.async = true;
-    recaptchaScript.setAttribute(
-      'src',
-      'https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit'
-    );
-    document.head.appendChild(recaptchaScript);
-
     this.load();
   },
 

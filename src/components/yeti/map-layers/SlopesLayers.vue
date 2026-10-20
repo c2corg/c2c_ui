@@ -4,6 +4,8 @@ import Yetix from '@/components/yeti/Yetix';
 
 export default {
   name: 'Yeti',
+  emits: ['layers'],
+
   computed: {
     slopesLayersSelector() {
       return Yetix.slopesLayersSelector;

@@ -1,7 +1,7 @@
 <script>
 import layerMixin from './layer';
 
-import Yetix from '@/components/yeti/Yetix';
+import yetixEvents from '@/components/yeti/yetix-events';
 import ol from '@/js/libs/ol';
 
 /* create a faketile source, that draws transparent images, so that click are working only on layer */
@@ -102,7 +102,7 @@ export default {
       this.markerLayer.getSource().clear();
       this.markerLayer.getSource().addFeature(marker);
 
-      Yetix.$emit('lon-lat', { lon: this.lon, lat: this.lat });
+      yetixEvents.emit('lon-lat', { lon: this.lon, lat: this.lat });
     },
   },
   render() {

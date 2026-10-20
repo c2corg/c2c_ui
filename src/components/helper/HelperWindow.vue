@@ -1,33 +1,38 @@
 <template>
   <modal-card ref="modalCard">
-    <div slot="title">
-      <p :class="{ 'has-text-danger': !headerFound }">
-        {{ title }}
-      </p>
-      <p class="buttons" />
-    </div>
+    <template #title>
+      <div>
+        <p :class="{ 'has-text-danger': !headerFound }">
+          {{ title }}
+        </p>
+        <p class="buttons" />
+      </div>
+    </template>
 
     <!-- eslint-disable-next-line vue/no-v-html -->
     <section class="content" v-html="html" />
 
-    <div slot="footer">
-      <div class="buttons" v-if="helper">
-        <button class="button is-primary" @click="$refs.modalCard.hide()" v-translate>Close</button>
-        <router-link
-          v-if="$user.isLogged && showModifyButton"
-          :to="{ name: 'article', params: { id: helper.documentId } }"
-          target="_blank"
-        >
-          <span class="button is-info" v-translate>Edit</span>
-        </router-link>
+    <template #footer>
+      <div>
+        <div class="buttons" v-if="helper">
+          <button class="button is-primary" @click="$refs.modalCard.hide()" v-translate>Close</button>
+          <router-link
+            v-if="$user.isLogged && showModifyButton"
+            :to="{ name: 'article', params: { id: helper.documentId } }"
+            target="_blank"
+          >
+            <span class="button is-info" v-translate>Edit</span>
+          </router-link>
+        </div>
       </div>
-    </div>
+    </template>
   </modal-card>
 </template>
 
 <script>
 import c2c from '@/js/apis/c2c';
 import { sanitizeRichHtml } from '@/js/sanitize-html';
+import { registerHelperWindow } from '@/js/vue-plugins/helper-window';
 
 export default {
   data() {
@@ -52,6 +57,15 @@ export default {
           }
         : null;
     },
+  },
+
+  created() {
+    // in created(), not mounted(): pages call it while they are created, before the app tree is mounted
+    registerHelperWindow(this);
+  },
+
+  beforeDestroy() {
+    registerHelperWindow(null);
   },
 
   methods: {
