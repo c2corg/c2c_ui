@@ -64,3 +64,40 @@ describe('QueryItem ratings range', () => {
     );
   });
 });
+
+describe('slider labels', () => {
+  const mocks = { $gettext: (key) => key, $filters: { uppercaseFirstLetter: (text) => text } };
+  // the accessible name of a handle: the text of the element its aria-labelledby points to
+  const handleName = (wrapper) =>
+    document.getElementById(handles(wrapper).at(0).attributes('aria-labelledby'))?.textContent.trim();
+
+  it.each([
+    ['valuesRangeSlider', { values: ['F', 'PD', 'AD'], urlToValue: () => ['F', 'AD'] }],
+    ['numericalRangeSlider', { min: 0, max: 9000, unit: 'm', urlToValue: () => [0, 9000] }],
+  ])('names the %s handles after the field', (queryMode, field) => {
+    const wrapper = mount(QueryItem, {
+      propsData: { field: { queryMode, name: 'Global rating', url: 'grat', ...field } },
+      mocks: { ...mocks, $route: { query: {} } },
+      stubs: { InputSlider },
+      attachTo: document.body,
+    });
+
+    expect(handleName(wrapper)).toBe('Global rating');
+  });
+
+  it('names the map opacity handle after the layer', async () => {
+    const { default: LayerButton } = await import('@/components/map/LayerButton');
+    const props = { title: 'IGN slopes', image: 'ignslopes.jpg', configurable: true, opacity: 0.7 };
+    const layer = { get: (key) => props[key], set: () => {} };
+    const wrapper = mount(LayerButton, {
+      propsData: { layer, selected: true },
+      mocks,
+      stubs: { InputSlider, FaIcon: true },
+      attachTo: document.body,
+    });
+
+    await wrapper.find('.layer-button-config').trigger('click');
+
+    expect(handleName(wrapper)).toBe('IGN slopes');
+  });
+});

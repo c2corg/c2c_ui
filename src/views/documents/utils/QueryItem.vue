@@ -1,13 +1,25 @@
 <template>
   <div v-if="field !== undefined" class="field">
     <div v-if="field.queryMode === 'valuesRangeSlider'" class="control">
-      <query-item-slider-label :field="field" :value="value" />
-      <input-slider v-model="valueIndexes" :max="field.values.length - 1" :format="formatValueIndex" marks />
+      <query-item-slider-label :field="field" :value="value" :label-id="sliderLabelId" />
+      <input-slider
+        v-model="valueIndexes"
+        :max="field.values.length - 1"
+        :format="formatValueIndex"
+        :aria-labelledby="sliderLabelId"
+        marks
+      />
     </div>
 
     <div v-else-if="field.queryMode === 'numericalRangeSlider'" class="control">
-      <query-item-slider-label :field="field" :value="value" />
-      <input-slider v-model="value" :min="field.min" :max="field.max" :step="interval" />
+      <query-item-slider-label :field="field" :value="value" :label-id="sliderLabelId" />
+      <input-slider
+        v-model="value"
+        :min="field.min"
+        :max="field.max"
+        :step="interval"
+        :aria-labelledby="sliderLabelId"
+      />
     </div>
 
     <div v-else-if="field.queryMode === 'multiSelect'" class="control">
@@ -109,6 +121,11 @@ export default {
   },
 
   computed: {
+    // the field name names the slider handles for assistive technologies
+    sliderLabelId() {
+      return `query-slider-label-${this._uid}`;
+    },
+
     // a range of field.values (ratings...): the slider works on their indexes
     valueIndexes: {
       get() {

@@ -7,7 +7,9 @@
       'background-image': 'url(' + assetUrl('layers', layer.image || layer.get('image')) + ')',
     }"
   >
-    <span class="layer-button-title">{{ $gettext(layer.title || layer.get?.('title'), titleContext) }}</span>
+    <span :id="titleId" class="layer-button-title">{{
+      $gettext(layer.title || layer.get?.('title'), titleContext)
+    }}</span>
     <div
       class="layer-button-country"
       v-if="country"
@@ -22,7 +24,7 @@
       <fa-icon icon="gear" />
     </div>
     <div class="layer-button-slider" v-if="showSlider" @click.stop>
-      <input-slider v-model="opacity" :tooltips="false" :lazy="false" />
+      <input-slider v-model="opacity" :aria-labelledby="titleId" :tooltips="false" :lazy="false" />
     </div>
     <div class="layer-button-border"></div>
   </div>
@@ -59,6 +61,11 @@ export default {
   },
 
   computed: {
+    // the layer title names the opacity slider handle for assistive technologies
+    titleId() {
+      return `layer-button-title-${this._uid}`;
+    },
+
     country() {
       return this.layer.country || this.layer.get?.('country');
     },

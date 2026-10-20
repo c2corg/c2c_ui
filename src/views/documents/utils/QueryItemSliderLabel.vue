@@ -13,7 +13,7 @@
         * but of values are numeric (like elevation), then we know that there textual representation is small
           ==> give to field's name all the place it needs with is-narrow helper
       -->
-      <div class="column query-label" :class="{ 'is-narrow': !field.i18n, 'is-4': field.i18n }">
+      <div :id="labelId" class="column query-label" :class="{ 'is-narrow': !field.i18n, 'is-4': field.i18n }">
         {{ $filters.uppercaseFirstLetter($gettext(field.name)) }}
       </div>
       <div class="column query-bound-value-right is-nowrap">
@@ -35,6 +35,11 @@ export default {
     value: {
       type: Array,
       required: true,
+    },
+    // id of the field name, which names the slider
+    labelId: {
+      type: String,
+      default: undefined,
     },
   },
 };
