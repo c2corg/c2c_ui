@@ -46,11 +46,10 @@ export default {
 
   methods: {
     loadAnnouncement() {
-      forum.readAnnouncement(this.lang).then(
-        (response) => {
-          const data = response['data'];
-          if (data['tags'].indexOf('visible') > -1) {
-            const post = data.post_stream.posts[0];
+      forum
+        .readAnnouncement(this.lang)
+        .then(({ topic, post }) => {
+          if (forum.hasTag(topic, 'visible')) {
             this.updatedAt = post.updated_at;
 
             if (this.readdenPostKey === post.updated_at) {
@@ -72,11 +71,10 @@ export default {
               this.$refs.content.appendChild(p);
             }
           }
-        },
-        () => {
-          // forum is unreachable, or has no announcement: show nothing
-        }
-      );
+        })
+        .catch((error) => {
+          console.error('Error retrieving site announcement :', error);
+        });
     },
 
     hide() {

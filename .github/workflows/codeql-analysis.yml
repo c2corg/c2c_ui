@@ -2,9 +2,9 @@ name: 'Github Code scanning'
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
   schedule:
     - cron: '0 5 * * 3'
 
