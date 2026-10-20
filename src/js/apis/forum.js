@@ -18,7 +18,7 @@ Object.defineProperty(Forum.prototype, 'url', {
 });
 
 Forum.prototype.getTopic = function (topicId) {
-  return this.get('/t/title/' + topicId + '.json');
+  return this.get('/t/' + topicId + '.json');
 };
 
 Forum.prototype.getLatest = function (excludeCategoryIds) {
@@ -39,13 +39,50 @@ Forum.prototype.getLatest = function (excludeCategoryIds) {
   return result;
 };
 
+// Announcements are forum topics, found from their slug: annonce-<lang> (one per language), publication-ca.
+// Discourse does not resolve a topic from its slug alone (/t/annonce-fr.json) anymore: the id is required,
+// and /t/id_for/<slug> is the endpoint giving it. A new language only needs its topic to be created.
+const BOARD_ANNOUNCEMENT_SLUG = 'publication-ca';
+// Languages without their own announcement topic (zh_CN, hu, sl) fall back to the english one
+const ANNOUNCEMENT_FALLBACK_LANG = 'en';
+
+const announcementSlug = (lang) => `annonce-${lang}`;
+
+Forum.prototype.getTopicIdFromSlug = function (slug) {
+  return this.axios.get(`/t/id_for/${slug}.json`).then((response) => response.data.topic_id);
+};
+
+// Resolves with the topic and its last post.
+// Discourse redirects /t/-/<id>/last to a topic window ending with the last post
+Forum.prototype.getLastPost = function (topicId) {
+  return this.axios.get(`/t/-/${topicId}/last.json`).then(({ data: topic }) => {
+    const { posts } = topic.post_stream;
+    return { topic, post: posts[posts.length - 1] };
+  });
+};
+
+Forum.prototype.getLastPostFromSlug = function (slug) {
+  return this.getTopicIdFromSlug(slug).then((topicId) => this.getLastPost(topicId));
+};
+
+// Unknown slugs answer 403 (or 404), whether the topic is missing or hidden
 Forum.prototype.readAnnouncement = function (lang) {
-  lang = ['zh_CN', 'hu', 'sl'].includes(lang) ? 'en' : lang;
-  return this.get('/t/annonce-' + lang + '.json');
+  return this.getLastPostFromSlug(announcementSlug(lang)).catch((error) => {
+    const status = error.response && error.response.status;
+    if (lang !== ANNOUNCEMENT_FALLBACK_LANG && (status === 403 || status === 404)) {
+      return this.getLastPostFromSlug(announcementSlug(ANNOUNCEMENT_FALLBACK_LANG));
+    }
+    throw error;
+  });
 };
 
 Forum.prototype.readBoardAnnouncement = function () {
-  return this.get('/t/publication-ca.json');
+  return this.getLastPostFromSlug(BOARD_ANNOUNCEMENT_SLUG);
+};
+
+// Recent Discourse returns tags as objects ({ id, name, slug }), older ones as plain strings
+Forum.prototype.hasTag = function (topic, name) {
+  return (topic.tags || []).some((tag) => (typeof tag === 'string' ? tag : tag.name) === name);
 };
 
 // Technically not part of the API, but this helper
