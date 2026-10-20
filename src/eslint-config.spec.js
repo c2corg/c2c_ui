@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { ESLint } from 'eslint';
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 // The Vue 3 deprecation rules are warnings: they list what is left to migrate, without failing the lint
 const eslint = new ESLint({ cwd: process.cwd() });
@@ -22,6 +22,9 @@ const lintComponent = async (source) => {
 };
 
 describe('eslint config', () => {
+  // the first lint loads the parsers and plugins: under the load of the full suite, it can take over a minute
+  beforeAll(() => lintComponent('<template><div /></template>'), 180000);
+
   it('warns on code that breaks in Vue 3', async () => {
     const messages = await lintComponent(`<template>
   <div>
