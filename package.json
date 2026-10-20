@@ -30,7 +30,7 @@
     "@turf/boolean-intersects": "7.3.0",
     "@turf/buffer": "7.3.0",
     "@turf/difference": "7.3.0",
-    "@turf/intersect": "7.3.0",
+    "@turf/intersect": "7.4.0",
     "@turf/simplify": "7.3.0",
     "@vueform/slider": "2.1.10",
     "ag-grid-community": "28.2.1",
