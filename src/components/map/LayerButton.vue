@@ -32,9 +32,11 @@
 
 <script>
 import { assetUrl } from '@/js/asset-urls';
+import { uidMixin } from '@/js/uid';
 
 export default {
   name: 'LayerButton',
+  mixins: [uidMixin],
 
   props: {
     layer: {
@@ -63,7 +65,7 @@ export default {
   computed: {
     // the layer title names the opacity slider handle for assistive technologies
     titleId() {
-      return `layer-button-title-${this._uid}`;
+      return `layer-button-title-${this.uid}`;
     },
 
     country() {

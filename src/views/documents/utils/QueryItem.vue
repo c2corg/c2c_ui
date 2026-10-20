@@ -102,6 +102,7 @@ import queryItemMixin from './query-item-mixin';
 
 import debounce from '@/js/debounce';
 import { requireFieldProperty } from '@/js/properties-mixins';
+import { uidMixin } from '@/js/uid';
 
 export default {
   components: {
@@ -111,7 +112,7 @@ export default {
     DatesQueryItem,
   },
 
-  mixins: [requireFieldProperty, queryItemMixin],
+  mixins: [requireFieldProperty, queryItemMixin, uidMixin],
 
   props: {
     hideLabel: {
@@ -123,7 +124,7 @@ export default {
   computed: {
     // the field name names the slider handles for assistive technologies
     sliderLabelId() {
-      return `query-slider-label-${this._uid}`;
+      return `query-slider-label-${this.uid}`;
     },
 
     // a range of field.values (ratings...): the slider works on their indexes
