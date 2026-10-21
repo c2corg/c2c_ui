@@ -2,12 +2,12 @@ import { setDefaults as toastDefaults } from 'bulma-toast';
 // eslint-disable-next-line import/no-unresolved
 import { register as registerSwiper } from 'swiper/element';
 import Vue from 'vue';
-import VueAnalytics from 'vue-analytics';
 import VueHead from 'vue-head';
 
 import App from '@/App.vue';
 import config from '@/js/config';
 import reloadOnStaleChunk from '@/js/reload-on-stale-chunk';
+import analytics from '@/js/vue-plugins/analytics';
 import dateUtils from '@/js/vue-plugins/date-utils';
 import documentUtils from '@/js/vue-plugins/document-utils';
 import filters from '@/js/vue-plugins/filters';
@@ -37,35 +37,7 @@ Vue.config.silent = false;
 Vue.use(localStorage); // First, vm.$localStorage property
 
 Vue.use(gdpr);
-Vue.use(VueAnalytics, {
-  id: config.googleAnalyticsKey,
-  disabled: true,
-  beforeFirstHit() {
-    if (Vue.prototype.$gdpr.gdprValue?.statistics) {
-      Vue.prototype.$ga.enable();
-    }
-  },
-  router,
-  autoTracking: {
-    // do not send updates if query parameter has changed
-    // note that skipSamePath does not do the job, as document's titles is part of route
-    // https://github.com/MatteoGabriele/vue-analytics/blob/master/docs/page-tracking.md#customize-router-updates
-    shouldRouterUpdate(to, from) {
-      return to.name !== from.name || String(to.params.id) !== String(from.params.id);
-    },
-    pageviewTemplate(route) {
-      return {
-        page: route.path,
-        title: 'Camptocamp.org',
-        location: window.location.href,
-      };
-    },
-  },
-  set: [{ field: 'anonymizeIp', value: true }],
-  fields: {
-    cookieDomain: window.location.host === 'localhost:8080' ? 'none' : window.location.host,
-  },
-});
+Vue.use(analytics, { id: config.googleAnalyticsKey, router }); // after $gdpr: follows the statistics choice
 Vue.use(VueHead);
 
 Vue.use(dateUtils); // date functions
