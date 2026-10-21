@@ -40,9 +40,9 @@ describe('uid', () => {
   it('links each checkbox label to its own input', async () => {
     const wrappers = [1, 2].map(() =>
       mount(InputCheckbox, {
-        propsData: { value: false },
+        props: { value: false },
         slots: { default: 'Accept' },
-        mocks,
+        global: { mocks },
         attachTo: document.body,
       })
     );
@@ -53,18 +53,23 @@ describe('uid', () => {
   });
 
   it('links the yes / no / unknown labels to their radio buttons', () => {
-    const wrapper = mount(InputYesNo, { propsData: { value: null, nullable: true }, mocks, attachTo: document.body });
+    const wrapper = mount(InputYesNo, {
+      props: { value: null, nullable: true },
+      global: { mocks },
+      attachTo: document.body,
+    });
 
-    const labels = wrapper.findAll('label').wrappers;
+    const labels = wrapper.findAll('label');
     expect(labels).toHaveLength(3);
-    expect(labels.map((label) => labelledInput(wrapper, label).attributes('value'))).toEqual(['true', 'false', '']);
+    // the value each radio sets through v-model (Vue 3 renders no value attribute for null)
+    expect(labels.map((label) => labelledInput(wrapper, label).element._value)).toEqual([true, false, null]);
   });
 
   it('names the Yeti slider handle after its label', () => {
     const wrapper = mount(YetiSlider, {
-      propsData: { value: 0.5, min: 0, max: 1, interval: 0.1 },
+      props: { value: 0.5, min: 0, max: 1, interval: 0.1 },
       slots: { default: 'Opacity' },
-      stubs: { InputSlider },
+      global: { stubs: { InputSlider } },
       attachTo: document.body,
     });
 

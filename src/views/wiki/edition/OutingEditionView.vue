@@ -261,7 +261,8 @@ export default {
   watch: {
     showBothDates: 'handleDates',
     'document.activities': function (to, from) {
-      if (from === undefined || to === undefined) {
+      // Vue 3 gives null, not undefined, for the activities of a null document
+      if (from == null || to == null) {
         return; // initial load, or the document is null while another one loads
       }
       this.updateRoutes('activities', false);

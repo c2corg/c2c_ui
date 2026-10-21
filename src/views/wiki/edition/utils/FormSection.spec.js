@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
-import { compileToFunctions } from 'vue-template-compiler';
+import { h } from 'vue';
 
 import FormSection from './FormSection';
 
@@ -10,19 +10,20 @@ import { formField } from '@/js/form-registration';
 const Field = {
   mixins: [formField('formSection')],
   props: { visible: Boolean, hasError: Boolean },
-  render: (h) => h('div'),
+  render: () => h('div'),
 };
 
 const mountSection = (fields) =>
   mount(
     {
-      ...compileToFunctions(`<form-section title="Conditions">
+      template: `<form-section title="Conditions">
         <div class="columns"><field v-for="field of fields" :key="field.id" v-bind="field" /></div>
-      </form-section>`),
+      </form-section>`,
       components: { FormSection, Field },
       data: () => ({ fields }),
     },
-    { mocks: { $gettext: (s) => s }, stubs: { FaIcon: true, MarkerHelper: true } }
+    // attached: isVisible() reads the computed style, which needs the element in the document
+    { attachTo: document.body, global: { mocks: { $gettext: (s) => s }, stubs: { FaIcon: true, MarkerHelper: true } } }
   );
 
 const section = (wrapper) => wrapper.findComponent(FormSection);
@@ -36,15 +37,15 @@ describe('FormSection', () => {
       mounted() {
         displayedOnMount = this.$el.closest('.section-item').style.display !== 'none';
       },
-      render: (h) => h('div'),
+      render: () => h('div'),
     };
 
     mount(
       {
-        ...compileToFunctions(`<form-section title="Map"><map-like /></form-section>`),
+        template: `<form-section title="Map"><map-like /></form-section>`,
         components: { FormSection, MapLike },
       },
-      { mocks: { $gettext: (s) => s }, attachTo: document.body }
+      { global: { mocks: { $gettext: (s) => s } }, attachTo: document.body }
     );
 
     expect(displayedOnMount).toBe(true);

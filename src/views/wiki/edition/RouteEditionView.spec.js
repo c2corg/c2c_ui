@@ -1,5 +1,6 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { h } from 'vue';
 
 import RouteEditionView from './RouteEditionView';
 
@@ -10,8 +11,7 @@ const sharedValues = [...sharedField.values];
 
 // Vue reports errors thrown in watchers to this handler instead of throwing them
 let errors;
-const localVue = createLocalVue();
-localVue.config.errorHandler = (error) => errors.push(error);
+const errorHandler = (error) => errors.push(error);
 
 // only the climbing type watcher and the save hooks are under test: leave out the mixin (loading, routing, user)
 const mountView = () =>
@@ -20,9 +20,9 @@ const mountView = () =>
       watch: RouteEditionView.watch,
       methods: RouteEditionView.methods,
       data: () => ({ document: null, fields: constants.objectDefinitions.route.fields }),
-      render: (h) => h('div'),
+      render: () => h('div'),
     },
-    { localVue }
+    { global: { config: { errorHandler } } }
   );
 
 const openRoute = async (properties) => {

@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { afterEach, describe, expect, it } from 'vitest';
-import { nextTick } from 'vue';
+import { h, nextTick } from 'vue';
 
 import headMixin from './head-mixin';
 import noRobotsMixin from './no-robots-mixin';
@@ -23,10 +23,10 @@ const DocumentPage = {
     },
     link: [{ r: 'canonical', h: 'https://www.camptocamp.org/routes/12', id: 'canonical' }],
   },
-  render: (h) => h('div'),
+  render: () => h('div'),
 };
 
-const NoRobotsPage = { mixins: [noRobotsMixin], render: (h) => h('div') };
+const NoRobotsPage = { mixins: [noRobotsMixin], render: () => h('div') };
 
 describe('head mixin', () => {
   const wrappers = [];
@@ -36,10 +36,10 @@ describe('head mixin', () => {
     return wrapper;
   };
 
-  afterEach(() => wrappers.splice(0).forEach((wrapper) => wrapper.destroy()));
+  afterEach(() => wrappers.splice(0).forEach((wrapper) => wrapper.unmount()));
 
   it('adds the tags of the page, with their attributes and content', () => {
-    mountPage(DocumentPage, { propsData: { document: { title: 'Arête', description: 'A ridge' } } });
+    mountPage(DocumentPage, { props: { document: { title: 'Arête', description: 'A ridge' } } });
 
     expect(headTag('meta-robots').outerHTML).toBe('<meta name="robots" content="index" id="meta-robots">');
     expect(headTag('meta-og-description').getAttribute('property')).toBe('og:description');
@@ -68,16 +68,16 @@ describe('head mixin', () => {
   });
 
   it('removes the tags when the page is left', async () => {
-    const wrapper = mountPage(DocumentPage, { propsData: { document: { title: 'Arête' } } });
+    const wrapper = mountPage(DocumentPage, { props: { document: { title: 'Arête' } } });
 
-    wrapper.destroy();
+    wrapper.unmount();
     await nextTick();
 
     expect(document.head.querySelectorAll('#json-ld, #meta-robots, #canonical')).toHaveLength(0);
   });
 
   it('replaces the tag with the same id that another page set', () => {
-    mountPage(DocumentPage, { propsData: { document: { title: 'Arête' } } });
+    mountPage(DocumentPage, { props: { document: { title: 'Arête' } } });
     mountPage(NoRobotsPage);
 
     expect(document.head.querySelectorAll('#meta-robots')).toHaveLength(1);
@@ -85,10 +85,10 @@ describe('head mixin', () => {
   });
 
   it('leaves the next page tags when the previous page is destroyed after it', () => {
-    const previous = mountPage(DocumentPage, { propsData: { document: { title: 'Arête' } } });
+    const previous = mountPage(DocumentPage, { props: { document: { title: 'Arête' } } });
     mountPage(NoRobotsPage);
 
-    previous.destroy();
+    previous.unmount();
 
     expect(headTag('meta-robots').getAttribute('content')).toBe('noindex');
   });
@@ -96,7 +96,7 @@ describe('head mixin', () => {
   it('does nothing for components without head', () => {
     const before = document.head.children.length;
 
-    mountPage({ mixins: [headMixin], render: (h) => h('div') });
+    mountPage({ mixins: [headMixin], render: () => h('div') });
 
     expect(document.head.children.length).toBe(before);
   });

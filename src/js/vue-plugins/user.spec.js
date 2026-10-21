@@ -37,16 +37,17 @@ const installUser = async () => {
   const { default: c2c } = await import('@/js/apis/c2c');
   const { default: trackingService } = await import('@/js/apis/tracking-service');
   const { default: config } = await import('@/js/config');
-  const { createLocalVue, mount } = await import('@vue/test-utils');
-  const { nextTick } = await import('vue');
+  const { mount } = await import('@vue/test-utils');
+  const { createApp, h, nextTick } = await import('vue');
 
-  const localVue = createLocalVue();
+  const app = createApp({});
+  const globals = app.config.globalProperties;
   // $language is installed before $user by main.js
-  localVue.prototype.$language = { current: 'fr', setCurrent: vi.fn() };
-  localVue.use(user);
+  globals.$language = { current: 'fr', setCurrent: vi.fn() };
+  app.use(user);
 
   const stored = () => JSON.parse(window.localStorage.getItem('User.preferences') ?? '{}')[config.urls.api];
-  return { $user: localVue.prototype.$user, localVue, c2c, trackingService, config, mount, nextTick, stored };
+  return { $user: globals.$user, globals, c2c, trackingService, config, h, mount, nextTick, stored };
 };
 
 const storeSession = async (session) => {
@@ -110,7 +111,7 @@ describe('$user', () => {
   });
 
   it('signs in: stores the session, sets the language and the API token', async () => {
-    const { $user, c2c, localVue, stored } = await installUser();
+    const { $user, c2c, globals, stored } = await installUser();
     c2c.userProfile.login.mockResolvedValue(loginResponse);
 
     const response = await $user.signIn('alice', 'secret', true);
@@ -118,7 +119,7 @@ describe('$user', () => {
     expect(response).toBe(loginResponse);
     expect(c2c.userProfile.login).toHaveBeenCalledWith('alice', 'secret', true, undefined, undefined);
     expect($user).toMatchObject({ isLogged: true, isModerator: true, id: 42, userName: 'alice', lang: 'de' });
-    expect(localVue.prototype.$language.setCurrent).toHaveBeenCalledWith('de');
+    expect(globals.$language.setCurrent).toHaveBeenCalledWith('de');
     expect(stored()).toEqual({
       userName: 'alice',
       id: 42,
@@ -193,9 +194,13 @@ describe('$user', () => {
   });
 
   it('updates the components showing it', async () => {
-    const { $user, c2c, localVue, mount, nextTick } = await installUser();
+    const { $user, c2c, h, mount, nextTick } = await installUser();
     c2c.userProfile.login.mockResolvedValue(loginResponse);
-    const wrapper = mount({ render: (h) => h('p', $user.isLogged ? `hello ${$user.name}` : 'login') }, { localVue });
+    const wrapper = mount({
+      render() {
+        return h('p', $user.isLogged ? `hello ${$user.name}` : 'login');
+      },
+    });
     expect(wrapper.text()).toBe('login');
 
     await $user.signIn('alice', 'secret', true);

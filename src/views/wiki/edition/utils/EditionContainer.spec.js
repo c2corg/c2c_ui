@@ -1,23 +1,22 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import EditionContainer from './EditionContainer';
 
 import c2c from '@/js/apis/c2c';
 
-const localVue = createLocalVue();
-localVue.directive('translate', {});
-
 const mountEditionContainer = () =>
   shallowMount(EditionContainer, {
-    localVue,
-    propsData: { document: { type: 'w', locales: [{ lang: 'fr' }] }, mode: 'edit', isLoading: false },
+    props: { document: { type: 'w', locales: [{ lang: 'fr' }] }, mode: 'edit', isLoading: false },
     slots: { default: '<form class="edit-form" />' },
-    mocks: {
-      $documentUtils: { getDocumentType: () => 'waypoint' },
-      $language: { current: 'fr', availableAPI: {} },
-      $route: { params: { lang: 'fr' } },
-      $gettext: (msg) => msg,
+    global: {
+      directives: { translate: {} },
+      mocks: {
+        $documentUtils: { getDocumentType: () => 'waypoint' },
+        $language: { current: 'fr', availableAPI: {} },
+        $route: { params: { lang: 'fr' } },
+        $gettext: (msg) => msg,
+      },
     },
   });
 

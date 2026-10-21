@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { h } from 'vue';
 
 import ImagesUploader from './ImagesUploader';
 
@@ -11,25 +12,30 @@ const file = (name) => ({ name, lastModified: 1, size: 1000 });
 
 const mountUploader = () =>
   mount(ImagesUploader, {
-    propsData: { lang: 'fr', parentDocument: { type: 'o', document_id: 1, activities: ['skitouring'] } },
-    stubs: {
-      ModalCard: {
-        render(h) {
-          return h('div', this.$slots.default);
+    props: { lang: 'fr', parentDocument: { type: 'o', document_id: 1, activities: ['skitouring'] } },
+    global: {
+      stubs: {
+        ModalCard: {
+          compatConfig: { MODE: 3 },
+          render() {
+            return h('div', this.$slots.default?.());
+          },
+        },
+        ImageUploader: {
+          compatConfig: { MODE: 3 },
+          props: ['status'],
+          render() {
+            return h('div', { class: 'image-uploader', 'data-status': this.status });
+          },
         },
       },
-      ImageUploader: {
-        props: ['status'],
-        render(h) {
-          return h('div', { class: 'image-uploader', attrs: { 'data-status': this.status } });
+      directives: { translate: {} },
+      mocks: {
+        $gettext: (value) => value,
+        $documentUtils: {
+          buildDocument: () => ({ geometry: {}, associations: {} }),
+          getAssociationArrayName: () => 'outings',
         },
-      },
-    },
-    mocks: {
-      $gettext: (value) => value,
-      $documentUtils: {
-        buildDocument: () => ({ geometry: {}, associations: {} }),
-        getAssociationArrayName: () => 'outings',
       },
     },
   });

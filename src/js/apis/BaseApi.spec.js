@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { toRaw } from 'vue';
 
 import BaseApi from './BaseApi';
 import forum from './forum';
@@ -99,7 +100,8 @@ describe('forum.getLatest', () => {
       '/latest.json?exclude_category_ids[]=29&exclude_category_ids[]=40',
       undefined
     );
-    expect(result.data.topic_list.topics[0].last_poster_user).toBe(user);
+    // result is reactive: what it holds is read through reactive proxies of the response objects
+    expect(toRaw(result.data.topic_list.topics[0].last_poster_user)).toBe(user);
   });
 
   it('keeps the error, without an unhandled rejection, when the forum is unreachable', async () => {
