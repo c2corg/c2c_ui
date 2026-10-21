@@ -3,7 +3,7 @@
 import DocumentCard from '@/components/cards/DocumentCard';
 import OlMap from '@/components/map/OlMap';
 
-export default function install(Vue) {
+export default function install(app) {
   // add all vue component as globals components, given an import.meta.glob result
   const addComponents = function (modules) {
     Object.entries(modules).forEach(([path, component]) => {
@@ -16,7 +16,7 @@ export default function install(Vue) {
         .toLowerCase()
         .substring(1);
 
-      Vue.component(name, component.default);
+      app.component(name, component.default);
     });
   };
 
@@ -24,6 +24,6 @@ export default function install(Vue) {
   addComponents(import.meta.glob('@/components/generics/**/*.vue', { eager: true }));
 
   // other globals components
-  Vue.component('DocumentCard', DocumentCard);
-  Vue.component('MapView', OlMap);
+  app.component('DocumentCard', DocumentCard);
+  app.component('MapView', OlMap);
 }

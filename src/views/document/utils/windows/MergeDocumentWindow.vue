@@ -34,7 +34,7 @@
             :document-type="documentType"
             v-model="targetDocument"
             :show-options="false"
-            @load-options="options = arguments[0]"
+            @load-options="options = $event"
             is-small
           />
         </div>

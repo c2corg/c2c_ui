@@ -6,8 +6,8 @@ export function registerImageViewer(vm) {
   imageViewer = vm;
 }
 
-export default function install(Vue) {
-  Object.defineProperty(Vue.prototype, '$imageViewer', {
+export default function install(app) {
+  Object.defineProperty(app.config.globalProperties, '$imageViewer', {
     get() {
       return imageViewer;
     },

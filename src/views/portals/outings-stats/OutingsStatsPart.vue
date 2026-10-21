@@ -262,8 +262,7 @@ export default {
       }
 
       // build target route object, and return the full path
-      const route = this.$router.resolve({ name: 'outings', query }).route;
-      return route.fullPath;
+      return this.$router.resolve({ name: 'outings', query }).fullPath;
     },
 
     createGraphs() {

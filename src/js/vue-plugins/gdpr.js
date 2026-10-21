@@ -4,7 +4,7 @@ import { getPreferences } from './local-storage';
 
 const ONE_YEAR = 1000 * 60 * 60 * 24 * 365;
 
-export default function install(Vue) {
+export default function install(app) {
   // stored under the name of the former Gdpr component, so that existing choices are kept
   const preferences = getPreferences('Gdpr');
   const state = reactive({ gdprValue: undefined });
@@ -21,7 +21,7 @@ export default function install(Vue) {
     state.gdprValue = undefined;
   }
 
-  Vue.prototype.$gdpr = {
+  app.config.globalProperties.$gdpr = {
     get gdprValue() {
       return state.gdprValue;
     },
@@ -39,9 +39,9 @@ export default function install(Vue) {
       }
 
       if (newValue?.statistics) {
-        Vue.prototype.$ga.enable();
+        app.config.globalProperties.$ga.enable();
       } else {
-        Vue.prototype.$ga.disable();
+        app.config.globalProperties.$ga.disable();
       }
     },
 

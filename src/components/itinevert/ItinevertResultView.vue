@@ -36,7 +36,7 @@
               class="header-item is-hidden-mobile"
               :list-mode="'listMode'"
               :value="displayMode"
-              @input="setProperty('displayMode', arguments[0])"
+              @input="setProperty('displayMode', $event)"
             />
 
             <span class="is-size-3 is-hidden-tablet">
@@ -96,7 +96,7 @@
           :document-type="documentType"
           :highlighted-document="highlightedDocument"
           :open-in-new-tab="true"
-          @highlight-document="highlightedDocument = arguments[0]"
+          @highlight-document="highlightedDocument = $event"
           class="documents-table"
         />
       </div>
@@ -106,7 +106,7 @@
           :documents="documentsShownOnMap"
           :highlighted-document="highlightedDocument"
           :open-in-new-tab="true"
-          @highlight-document="highlightedDocument = arguments[0]"
+          @highlight-document="highlightedDocument = $event"
           show-filter-control
           show-center-on-geolocation
           show-recenter-on

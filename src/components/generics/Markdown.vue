@@ -202,7 +202,7 @@ export default {
       for (const anchor of anchors) {
         const attributes = anchor.attributes;
 
-        const { location, href } = this.$router.resolve({
+        const { fullPath, href } = this.$router.resolve({
           name: attributes['c2c:document-type'].value.slice(0, -1),
           params: {
             id: parseInt(attributes['c2c:document-id'].value, 10),
@@ -215,7 +215,7 @@ export default {
         anchor.href = href;
         anchor.addEventListener('click', (e) => {
           if (guardEvent(e)) {
-            this.$router.push(location);
+            this.$router.push(fullPath);
           }
         });
       }

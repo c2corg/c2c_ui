@@ -5,7 +5,7 @@ const BREAKPOINT_TABLET = 1023;
 const BREAKPOINT_DESKTOP = 1215;
 const BREAKPOINT_WIDESCREEN = 1407;
 
-export default function install(Vue) {
+export default function install(app) {
   const state = reactive({ matchingQueryIndex: -1 });
 
   const breakpointsMediaQueryLists = [
@@ -30,7 +30,7 @@ export default function install(Vue) {
   onBreakpointMediaQueryChange(); // init
 
   // https://bulma.io/documentation/modifiers/responsive-helpers/
-  Vue.prototype.$screen = {
+  app.config.globalProperties.$screen = {
     get isMobile() {
       return state.matchingQueryIndex === 0;
     },

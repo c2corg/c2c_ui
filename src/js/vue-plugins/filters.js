@@ -9,6 +9,6 @@ export const uppercaseFirstLetter = (value) => value.charAt(0).toUpperCase() + v
 // A very basic (a.k.a not bullet-proof) way to remove markdown content from summary
 export const stripMarkdown = (value) => utils.stripMarkdown(value);
 
-export default function install(Vue) {
-  Vue.prototype.$filters = { uppercaseFirstLetter, stripMarkdown };
+export default function install(app) {
+  app.config.globalProperties.$filters = { uppercaseFirstLetter, stripMarkdown };
 }

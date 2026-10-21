@@ -6,8 +6,8 @@ export function registerHelperWindow(vm) {
   helperWindow = vm;
 }
 
-export default function install(Vue) {
-  Object.defineProperty(Vue.prototype, '$helper', {
+export default function install(app) {
+  Object.defineProperty(app.config.globalProperties, '$helper', {
     get() {
       return helperWindow;
     },

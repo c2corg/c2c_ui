@@ -6,19 +6,19 @@
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 
-export default function install(Vue) {
-  // $gettext, $user and $dateUtils are read from Vue.prototype when called: they may be installed after this plugin
+export default function install(app) {
+  // $gettext, $user and $dateUtils are read from app.config.globalProperties when called: they may be installed after this plugin
   const documentUtils = {
     getCreationTitle(documentType) {
-      if (documentType === 'outing') return Vue.prototype.$gettext('add an outing');
-      if (documentType === 'route') return Vue.prototype.$gettext('add a route');
-      if (documentType === 'image') return Vue.prototype.$gettext('add an image');
-      if (documentType === 'waypoint') return Vue.prototype.$gettext('add a waypoint');
-      if (documentType === 'map') return Vue.prototype.$gettext('add a map');
-      if (documentType === 'xreport') return Vue.prototype.$gettext('add an incident/accident report');
-      if (documentType === 'area') return Vue.prototype.$gettext('add an area');
-      if (documentType === 'book') return Vue.prototype.$gettext('add a book');
-      if (documentType === 'article') return Vue.prototype.$gettext('add an article');
+      if (documentType === 'outing') return app.config.globalProperties.$gettext('add an outing');
+      if (documentType === 'route') return app.config.globalProperties.$gettext('add a route');
+      if (documentType === 'image') return app.config.globalProperties.$gettext('add an image');
+      if (documentType === 'waypoint') return app.config.globalProperties.$gettext('add a waypoint');
+      if (documentType === 'map') return app.config.globalProperties.$gettext('add a map');
+      if (documentType === 'xreport') return app.config.globalProperties.$gettext('add an incident/accident report');
+      if (documentType === 'area') return app.config.globalProperties.$gettext('add an area');
+      if (documentType === 'book') return app.config.globalProperties.$gettext('add a book');
+      if (documentType === 'article') return app.config.globalProperties.$gettext('add an article');
 
       throw new Error(`Unexpected type : ${documentType}`);
     },
@@ -108,7 +108,7 @@ export default function install(Vue) {
       }
 
       // else, search user lang
-      result = this.getLocaleStupid(document, Vue.prototype.$user.lang);
+      result = this.getLocaleStupid(document, app.config.globalProperties.$user.lang);
       if (result) {
         return result;
       }
@@ -316,17 +316,17 @@ export default function install(Vue) {
       const date_end = document.date_end || date_start;
 
       if (!date_start) {
-        return Vue.prototype.$gettext('Invalid date');
+        return app.config.globalProperties.$gettext('Invalid date');
       }
 
-      const start = Vue.prototype.$dateUtils.parseDate(date_start);
-      const end = Vue.prototype.$dateUtils.parseDate(date_end);
+      const start = app.config.globalProperties.$dateUtils.parseDate(date_start);
+      const end = app.config.globalProperties.$dateUtils.parseDate(date_end);
 
-      if (!Vue.prototype.$dateUtils.isSameYear(start, end)) {
+      if (!app.config.globalProperties.$dateUtils.isSameYear(start, end)) {
         return this.formatDate(start, 'll') + ' - ' + this.formatDate(end, 'll');
-      } else if (!Vue.prototype.$dateUtils.isSameMonth(start, end)) {
+      } else if (!app.config.globalProperties.$dateUtils.isSameMonth(start, end)) {
         return this.formatDate(start, 'D MMMM') + ' - ' + this.formatDate(end, 'll');
-      } else if (!Vue.prototype.$dateUtils.isSameDay(start, end)) {
+      } else if (!app.config.globalProperties.$dateUtils.isSameDay(start, end)) {
         return this.formatDate(start, 'D') + ' - ' + this.formatDate(end, 'll');
       } else {
         return this.formatDate(end, '@1');
@@ -334,7 +334,7 @@ export default function install(Vue) {
     },
 
     formatDate(arg, formatString) {
-      return Vue.prototype.$dateUtils.toLocalizedString(arg, formatString);
+      return app.config.globalProperties.$dateUtils.toLocalizedString(arg, formatString);
     },
 
     // Returns true if both documents has same geolocalization point
@@ -403,16 +403,16 @@ export default function install(Vue) {
       }
       if (length > 1000) {
         const l = (length / 1000.0).toFixed(1);
-        return `${l}&nbsp;${Vue.prototype.$gettext('kilometers')}`;
+        return `${l}&nbsp;${app.config.globalProperties.$gettext('kilometers')}`;
       }
-      return `${length}&nbsp;${Vue.prototype.$gettext('meters')}`;
+      return `${length}&nbsp;${app.config.globalProperties.$gettext('meters')}`;
     },
 
     heightDiffUpWithUnit(hdu) {
       if (!hdu) {
         return undefined;
       }
-      return `${hdu}&nbsp;${Vue.prototype.$gettext('meters')}`;
+      return `${hdu}&nbsp;${app.config.globalProperties.$gettext('meters')}`;
     },
   };
 
@@ -421,5 +421,5 @@ export default function install(Vue) {
     documentUtils[name] = method.bind(documentUtils);
   }
 
-  Vue.prototype.$documentUtils = documentUtils;
+  app.config.globalProperties.$documentUtils = documentUtils;
 }
