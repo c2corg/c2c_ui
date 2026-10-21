@@ -21,6 +21,7 @@ import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import cooker from '@/js/cooker';
 import bus from '@/js/event-bus';
+import headMixin from '@/js/head-mixin';
 import { getImageUrl } from '@/js/image-urls';
 import isEditableMixin from '@/js/is-editable-mixin';
 import utils from '@/js/utils';
@@ -49,7 +50,7 @@ export default {
     TransportsBox,
   },
 
-  mixins: [viewModeMixin, isEditableMixin],
+  mixins: [viewModeMixin, isEditableMixin, headMixin],
 
   props: {
     draft: {
@@ -64,6 +65,7 @@ export default {
     };
   },
 
+  // <head> tags, updated when the document is loaded
   head: {
     script: function () {
       if (!this.document) {
@@ -193,7 +195,6 @@ export default {
                 },
               };
             }
-            this.$emit('updateHead');
           });
       } else if (this.isPrintingView && this.draft.cooked) {
         // the printing view loads documents with ?cook=, so they are already cooked
@@ -224,8 +225,6 @@ export default {
           .then(this.handleRedirection)
           .then(() => {
             bus.emit('trigger-scroll');
-            // notify vue-head plugin to update
-            this.$emit('updateHead');
           })
           .then(this.scrollToHash)
           .then(this.updateUrl);
