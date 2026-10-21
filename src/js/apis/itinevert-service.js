@@ -83,46 +83,25 @@ function roundTripJobFamily(documentType) {
 /** --------------- Query to API --------------- */
 
 /**
- * Retrieves the document IDs (routes or waypoints) reachable by public transport for a round trip, along with the
- * outbound/return/intersection isochrone geometries.
+ * Retrieves the outbound/return/intersection isochrones of a public transport search. The API computes them once per
+ * search (the topoguide filters on the same search, with its parameters in the query string, see `transport-query`).
  *
- * @param {Object} query Extra filters to merge into the request (currently unused server-side, kept for
- *   forward-compatibility with `enhanceQuery`)
- * @param {String} date The departure date, "YYYY-MM-DD"
- * @param {String} minDeparture The minimum departure time, "HH:MM"
- * @param {String} maxReturn The maximum return time, "HH:MM"
- * @param {Object | Array | String} from The starting point (address selection object, `[lon, lat]`, or "lon;lat")
- * @param {'route' | 'waypoint'} documentType The type of document to search for
- * @param {Number} [maxDurationMinutes] Optional max one-way transport duration override, in minutes
- * @param {Number} [hikingDurationMinutes] Optional hiking duration budget, in minutes
- * @returns {Promise} Resolves to `{ document_ids, aller_geom, retour_geom, intersection_geom }`
+ * @param {Object} search `{ from, date, minDeparture, maxReturn, maxDuration, hikingDuration }`, `from` being "lon;lat"
+ *   and the last two optional
+ * @returns {Promise} Resolves to `{ aller_geom, retour_geom, intersection_geom }`
  */
-ItinevertService.prototype.getReachableDocumentIds = function (
-  query,
-  date,
-  minDeparture,
-  maxReturn,
-  from,
-  documentType,
-  maxDurationMinutes,
-  hikingDurationMinutes
-) {
+ItinevertService.prototype.getTransportIsochrones = function (search) {
   const params = this.enhanceQuery(
     {
-      ...query,
-      from: formatFromCoordinates(from),
-      date,
-      min_departure: minDeparture,
-      max_return: maxReturn,
-      document_type: documentType,
+      from: formatFromCoordinates(search.from),
+      date: search.date,
+      min_departure: search.minDeparture,
+      max_return: search.maxReturn,
     },
-    {
-      max_duration: maxDurationMinutes,
-      hiking_duration: hikingDurationMinutes,
-    }
+    { max_duration: search.maxDuration }
   );
 
-  return this.axios.get('/navitia/reachabledocumentids', { params });
+  return this.axios.get('/navitia/transportisochrones', { params });
 };
 
 /**
@@ -315,8 +294,8 @@ export function createBboxString(coords) {
 }
 
 /**
- * Projects a GeoJSON geometry (as returned by the reachabledocumentids/roundtrip endpoints, in EPSG:4326) into
- * EPSG:3857 so it can be fed straight into a synthetic map document's `geom`.
+ * Projects a GeoJSON geometry (as returned by the transportisochrones/roundtrip endpoints, in EPSG:4326) into EPSG:3857
+ * so it can be fed straight into a synthetic map document's `geom`.
  *
  * @param {Object | String} geometry A GeoJSON geometry object, or "" / null / undefined when absent
  * @returns {Object | null}

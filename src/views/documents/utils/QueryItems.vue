@@ -128,7 +128,7 @@ import urlMixin from './url-mixin';
 import TransportFilterForm from '@/components/itinevert/TransportFilterForm.vue';
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
-import { getPreferences } from '@/js/vue-plugins/local-storage';
+import { hasTransportQuery, withoutTransportQuery } from '@/js/transport-query';
 
 const documentsCache = {};
 
@@ -240,7 +240,7 @@ export default {
     },
 
     transportActiveCount() {
-      return this.$route.query.reachable_ids ? 1 : 0;
+      return hasTransportQuery(this.$route.query) ? 1 : 0;
     },
   },
 
@@ -341,12 +341,9 @@ export default {
       this.$emit('documents-load', this.tags);
     },
 
-    /** Clears the transport (`reachable_ids`) filter and the stashed Itinevert search context */
+    /** Clears the transport filter. The form keeps its last values (and starting points) for the next search */
     resetTransportFilter() {
-      const query = { ...this.$route.query };
-      delete query.reachable_ids;
-      this.$router.push({ query });
-      getPreferences('itinevert').clear();
+      this.$router.push({ query: withoutTransportQuery(this.$route.query) });
     },
   },
 };

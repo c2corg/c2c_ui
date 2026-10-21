@@ -165,6 +165,7 @@ import itinevertService, { MAX_ROUTE_THRESHOLD, buildIsochroneOverlayDocuments }
 import navitiaService from '@/js/apis/navitia-service';
 import constants from '@/js/constants';
 import bus from '@/js/event-bus';
+import { hasTransportQuery, parseTransportQuery, transportSearchKey } from '@/js/transport-query';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 
 const DocumentsTable = () => import('@/components/datatable/DocumentsTable');
@@ -199,8 +200,9 @@ export default {
 
       queryHasTags: false,
 
-      // transport search context: stashed itinevert context (address/date/window/geometries) + batch verify results
+      // transport search context: search of the url (address/date/window) + its isochrones + batch verify results
       transportContext: null,
+      transportSearchKey: null,
       batchVerifying: false,
       batchProgress: 0,
       batchTotal: 0,
@@ -210,7 +212,7 @@ export default {
 
   computed: {
     hasTransportContext() {
-      return Boolean(this.$route.query.reachable_ids);
+      return ['route', 'waypoint'].includes(this.documentType) && hasTransportQuery(this.$route.query);
     },
     canVerifyBatch() {
       return (
@@ -290,21 +292,54 @@ export default {
       this.loadTransportContext();
     },
 
-    /** Reads the transport search context stashed by TransportFilterForm when `reachable_ids` is active */
+    /**
+     * Reads the transport search of the url (see `transport-query`), with its isochrones for the map. They are asked to
+     * the API, which computes them once per search: the other filters change the url, not the search.
+     */
     loadTransportContext() {
-      if (!this.hasTransportContext) {
+      const search = this.hasTransportContext ? parseTransportQuery(this.$route.query) : null;
+      const key = search ? transportSearchKey(search) : null;
+
+      if (key === this.transportSearchKey) {
+        return;
+      }
+
+      this.transportSearchKey = key;
+
+      if (!search) {
         this.transportContext = null;
         return;
       }
 
-      const storedContext = getPreferences('itinevert').get('context', null);
-      if (!storedContext) {
-        this.transportContext = null;
-        return;
-      }
+      this.transportContext = {
+        fromAddress: search.from,
+        date: search.date,
+        minDeparture: search.minDeparture,
+        maxReturn: search.maxReturn,
+        hikingDuration: search.hikingDuration,
+        allerGeom: null,
+        retourGeom: null,
+        intersectionGeom: null,
+        results: null,
+      };
 
-      // keep any batch verification results already fetched for this session
-      this.transportContext = { ...storedContext, results: this.transportContext?.results ?? null };
+      itinevertService
+        .getTransportIsochrones(search)
+        .then(({ data }) => {
+          // the search may have changed meanwhile
+          if (this.transportSearchKey === key) {
+            this.transportContext = {
+              ...this.transportContext,
+              allerGeom: data.aller_geom || null,
+              retourGeom: data.retour_geom || null,
+              intersectionGeom: data.intersection_geom || null,
+            };
+          }
+        })
+        .catch((error) => {
+          // the isochrones are only shown on the map
+          console.warn('Error while loading the transport isochrones:', error);
+        });
     },
 
     /**

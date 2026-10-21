@@ -15,12 +15,21 @@
     <div class="form-input">
       <p class="input-label" v-translate>What is your starting point?</p>
       <input-address
+        v-if="addressReady"
+        :key="addressKey"
         :fullwidth="true"
         :placeholder="$gettext('Enter an address')"
         :show-address-propositions="true"
         :default-address="fromAddress"
         @update:props="updateFromAddress"
       ></input-address>
+      <ul v-if="otherRecentAddresses.length" class="recent-addresses">
+        <li v-for="address in otherRecentAddresses" :key="addressLabel(address)">
+          <button type="button" class="button is-small is-light" @click="selectRecentAddress(address)">
+            {{ addressLabel(address) }}
+          </button>
+        </li>
+      </ul>
     </div>
 
     <div class="form-input">
@@ -108,18 +117,33 @@ import itinevertService, {
   DEFAULT_TRIP_DURATION,
 } from '@/js/apis/itinevert-service';
 import navitiaService from '@/js/apis/navitia-service';
+import photon from '@/js/apis/photon';
+import {
+  addRecentAddress,
+  buildTransportQuery,
+  formatTransportFrom,
+  parseTransportFrom,
+  parseTransportQuery,
+  transportSearchKey,
+  withoutTransportQuery,
+} from '@/js/transport-query';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 
-/** Shared local storage entry used to pass the transport search context between Itinevert and the Topoguide pages */
+/**
+ * Shared local storage entry remembering the last values of the form (`context`) and the starting points already used
+ * (`recentAddresses`), so that they are not typed again
+ */
 const itinevertStorage = getPreferences('itinevert');
+
+const today = () => new Date().toISOString().slice(0, 10);
 
 export default {
   name: 'TransportFilterForm',
 
   props: {
     /**
-     * 'navigate': resolves the reachable document IDs then navigates to the corresponding Topoguide page. 'patch':
-     * resolves the reachable document IDs then patches `reachable_ids` on the current route, in place.
+     * 'navigate': checks the search then navigates to the corresponding Topoguide page. 'patch': patches the
+     * `transport_*` parameters on the current route, in place.
      */
     mode: {
       type: String,
@@ -137,8 +161,24 @@ export default {
   emits: ['loading', 'error', 'applied'],
 
   data() {
-    const now = new Date();
     const storedContext = itinevertStorage.get('context', null);
+    const recentAddresses = itinevertStorage.get('recentAddresses', []);
+    // the search of the url (a shared link, the back button...) prevails over the last values of the form
+    const urlSearch = parseTransportQuery(this.$route?.query);
+    const search = urlSearch ?? {
+      date: storedContext?.date,
+      minDeparture: storedContext?.minDeparture,
+      maxReturn: storedContext?.maxReturn,
+      maxDuration: storedContext?.maxDuration,
+      hikingDuration: storedContext?.hikingDuration,
+    };
+
+    // only the coordinates are in the url: the label comes from the addresses already used, if any
+    const fromAddress = urlSearch
+      ? [storedContext?.fromAddress, ...recentAddresses].find(
+          (address) => address && formatTransportFrom(address) === urlSearch.from
+        ) ?? null
+      : storedContext?.fromAddress ?? null;
 
     return {
       documentType: this.fixedDocumentType ?? 'route',
@@ -146,12 +186,17 @@ export default {
         { value: 'route', text: this.$gettext('Route') + 's' },
         { value: 'waypoint', text: this.$gettext('Access points') },
       ],
-      fromAddress: storedContext?.fromAddress ?? null,
-      date: storedContext?.date ?? now.toISOString().slice(0, 10),
-      minDeparture: storedContext?.minDeparture ?? '07:30',
-      maxReturn: storedContext?.maxReturn ?? '19:00',
-      maxDuration: null,
-      hikingDuration: storedContext?.hikingDuration ?? null,
+      fromAddress,
+      // the input only reads its address when it is created
+      addressReady: !urlSearch || fromAddress !== null,
+      addressKey: 0,
+      recentAddresses,
+      // a past date is of no use: timetables are for the days to come
+      date: search.date && search.date >= today() ? search.date : today(),
+      minDeparture: search.minDeparture ?? '07:30',
+      maxReturn: search.maxReturn ?? '19:00',
+      maxDuration: search.maxDuration ?? null,
+      hikingDuration: search.hikingDuration ?? null,
       showAdvanced: false,
       loading: false,
       errorMessage: null,
@@ -173,7 +218,17 @@ export default {
       return this.fixedDocumentType ?? this.documentType;
     },
     isSearchEnabled() {
-      return Boolean(this.fromAddress && this.date && this.minDeparture && this.maxReturn);
+      return Boolean(formatTransportFrom(this.fromAddress) && this.date && this.minDeparture && this.maxReturn);
+    },
+    /** The recent starting points, but the selected one */
+    otherRecentAddresses() {
+      const current = formatTransportFrom(this.fromAddress);
+      return this.recentAddresses.filter((address) => formatTransportFrom(address) !== current);
+    },
+    /** Identifies the transport search of the url: the form follows it when it changes by other means than the form */
+    urlSearchKey() {
+      const search = parseTransportQuery(this.$route?.query);
+      return search ? transportSearchKey(search) : null;
     },
     twoDaysAgo() {
       const d = new Date();
@@ -197,9 +252,101 @@ export default {
     },
   },
 
+  watch: {
+    urlSearchKey(key) {
+      const search = parseTransportQuery(this.$route.query);
+      if (key !== null && key !== this.formSearchKey()) {
+        this.applySearch(search);
+      }
+    },
+  },
+
+  mounted() {
+    if (!this.addressReady) {
+      this.resolveAddress(parseTransportFrom(parseTransportQuery(this.$route.query).from));
+    }
+  },
+
   methods: {
     updateFromAddress(address) {
       this.fromAddress = address;
+    },
+
+    addressLabel(address) {
+      const { name, street, city, country } = address.properties ?? {};
+      return [name ?? street, city, country].filter(Boolean).join(', ') || formatTransportFrom(address);
+    },
+
+    selectRecentAddress(address) {
+      this.fromAddress = address;
+      this.addressKey++;
+    },
+
+    /** The key of the search the form describes (null when it is not valid) */
+    formSearchKey() {
+      const from = formatTransportFrom(this.fromAddress);
+      return from
+        ? transportSearchKey({
+            from,
+            date: this.date,
+            minDeparture: this.minDeparture,
+            maxReturn: this.maxReturn,
+            maxDuration: this.maxDuration || null,
+            hikingDuration: this.effectiveDocumentType === 'route' ? this.hikingDuration || null : null,
+          })
+        : null;
+    },
+
+    /** Fills the form with the search of the url */
+    applySearch(search) {
+      this.date = search.date;
+      this.minDeparture = search.minDeparture;
+      this.maxReturn = search.maxReturn;
+      this.maxDuration = search.maxDuration;
+      this.hikingDuration = search.hikingDuration;
+
+      const known = [this.fromAddress, ...this.recentAddresses].find(
+        (address) => address && formatTransportFrom(address) === search.from
+      );
+      if (known) {
+        this.selectRecentAddress(known);
+      } else {
+        this.addressReady = false;
+        this.resolveAddress(parseTransportFrom(search.from));
+      }
+    },
+
+    /** Finds the address of coordinates (a shared link only has them), to show it as any other starting point */
+    async resolveAddress([lon, lat]) {
+      let address = { type: 'Feature', geometry: { type: 'Point', coordinates: [lon, lat] }, properties: {} };
+
+      try {
+        const response = await photon.reverseGeocodeUserLocation(lon, lat, this.$language.current);
+        const data = await response.json();
+        // the coordinates stay the ones of the search: the address is only the label
+        address = { ...(data.features?.[0] ?? address), geometry: address.geometry };
+      } catch (error) {
+        console.warn('Error during reverse geolocation:', error);
+      }
+
+      this.fromAddress = address;
+      this.addressKey++;
+      this.addressReady = true;
+    },
+
+    /** Remembers the values of the form and its starting point for the next searches */
+    rememberSearch() {
+      itinevertStorage.set('context', {
+        fromAddress: this.fromAddress,
+        date: this.date,
+        minDeparture: this.minDeparture,
+        maxReturn: this.maxReturn,
+        maxDuration: this.maxDuration || null,
+        hikingDuration: this.hikingDuration || null,
+      });
+
+      this.recentAddresses = addRecentAddress(this.recentAddresses, this.fromAddress);
+      itinevertStorage.set('recentAddresses', this.recentAddresses);
     },
 
     async submit() {
@@ -211,18 +358,20 @@ export default {
       this.loading = true;
       this.$emit('loading', true);
 
-      let response;
+      const search = {
+        from: formatTransportFrom(this.fromAddress),
+        date: this.date,
+        minDeparture: this.minDeparture,
+        maxReturn: this.maxReturn,
+        maxDuration: this.maxDuration || null,
+        hikingDuration: this.effectiveDocumentType === 'route' ? this.hikingDuration || null : null,
+      };
+
       try {
-        response = await itinevertService.getReachableDocumentIds(
-          {},
-          this.date,
-          this.minDeparture,
-          this.maxReturn,
-          this.fromAddress,
-          this.effectiveDocumentType,
-          this.maxDuration || undefined,
-          this.effectiveDocumentType === 'route' ? this.hikingDuration || undefined : undefined
-        );
+        // the API computes the isochrones of this search once, and keeps them: the list of documents, which is
+        // filtered with the same parameters, does not compute them again. It also tells now if the search is not
+        // possible.
+        await itinevertService.getTransportIsochrones(search);
       } catch (error) {
         this.errorMessage = this.formatError(error);
         this.$emit('error', error);
@@ -231,32 +380,22 @@ export default {
         return;
       }
 
-      const data = response.data;
+      this.rememberSearch();
 
-      const context = {
-        fromAddress: this.fromAddress,
-        date: this.date,
-        minDeparture: this.minDeparture,
-        maxReturn: this.maxReturn,
-        hikingDuration: this.hikingDuration || null,
-        allerGeom: data.aller_geom || null,
-        retourGeom: data.retour_geom || null,
-        intersectionGeom: data.intersection_geom || null,
-      };
-      itinevertStorage.set('context', context);
-
-      const ids = data.document_ids ?? [];
-      const query = { reachable_ids: ids.join(',') };
+      const query = buildTransportQuery(search);
 
       if (this.mode === 'navigate') {
         this.$router.push({ name: this.effectiveDocumentType + 's', query });
       } else {
-        this.$router.push({ query: { ...this.$route.query, ...query } });
+        // another search: back to the first page
+        const currentQuery = withoutTransportQuery(this.$route.query);
+        delete currentQuery.offset;
+        this.$router.push({ query: { ...currentQuery, ...query } });
       }
 
       this.loading = false;
       this.$emit('loading', false);
-      this.$emit('applied', { documentType: this.effectiveDocumentType, ids, context });
+      this.$emit('applied', { documentType: this.effectiveDocumentType, search });
     },
 
     formatError(error) {
@@ -274,6 +413,15 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.recent-addresses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .form-input {
