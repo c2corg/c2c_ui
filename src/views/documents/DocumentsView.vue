@@ -32,7 +32,7 @@
           <span
             v-if="hasTransportContext"
             class="header-item verify-accessibility-batch tooltip-container"
-            :data-tooltip="!canVerifyBatch ? 'top' : null"
+            :data-tooltip="!canVerifyBatch && !batchVerifying ? 'top' : null"
           >
             <button
               type="button"
@@ -43,11 +43,11 @@
               <fa-icon v-if="batchVerifying" icon="circle-notch" spin aria-hidden="true" />
               <span v-else>
                 {{ $gettext('Check schedules') }}
-                <template v-if="documents">({{ documents.total }})</template>
+                <template v-if="documents">({{ documentsToVerify.length }})</template>
               </span>
             </button>
             <span v-if="!canVerifyBatch" class="tooltip">
-              {{ $gettext('Please narrow down your search before checking schedules in detail') }}
+              {{ $gettext('The schedules of the documents of this page are already checked') }}
             </span>
             <span v-if="batchError" class="batch-error">{{ $gettext('Unable to check schedules right now.') }}</span>
           </span>
@@ -214,13 +214,16 @@ export default {
     hasTransportContext() {
       return ['route', 'waypoint'].includes(this.documentType) && hasTransportQuery(this.$route.query);
     },
+    /** The documents of the page which schedules are not checked yet. Results are kept while the search is the same. */
+    documentsToVerify() {
+      const results = this.transportContext?.results ?? {};
+
+      return (this.documents?.documents ?? [])
+        .filter((document) => !results[document.document_id])
+        .slice(0, MAX_ROUTE_THRESHOLD);
+    },
     canVerifyBatch() {
-      return (
-        this.hasTransportContext &&
-        !!this.transportContext &&
-        this.documents &&
-        this.documents.total <= MAX_ROUTE_THRESHOLD
-      );
+      return this.hasTransportContext && !!this.transportContext && this.documentsToVerify.length > 0;
     },
     showMap() {
       return ['both', 'map'].includes(this.displayMode);
@@ -343,9 +346,9 @@ export default {
     },
 
     /**
-     * Starts the batch round-trip verification job for the current shortlist of matching documents (re-fetched with a
-     * high-enough limit to make sure we cover the whole shortlist, not just the current page), then monitors its
-     * progress and stores the per-document results once done.
+     * Starts the batch round-trip verification job for the documents of the current page which are not checked yet,
+     * then monitors its progress and adds the per-document results to the ones already known. The page is the unit: the
+     * wait is short and the user sees the results of what is on screen, then checks the next page if wanted.
      */
     async verifyBatchAccessibility() {
       if (!this.canVerifyBatch || this.batchVerifying) {
@@ -358,12 +361,7 @@ export default {
       this.batchError = null;
 
       try {
-        const shortlist = await c2c[this.documentType].getAll({
-          ...this.$route.query,
-          limit: MAX_ROUTE_THRESHOLD,
-          offset: 0,
-        });
-        const ids = shortlist.data.documents.map((document) => document.document_id);
+        const ids = this.documentsToVerify.map((document) => document.document_id);
 
         await itinevertService.startRoundTripJob(
           ids,
@@ -386,7 +384,10 @@ export default {
           async () => {
             const response = await itinevertService.getRoundTripJobResult(this.documentType);
             const results = response.data?.result?.results ?? {};
-            this.transportContext = { ...this.transportContext, results };
+            this.transportContext = {
+              ...this.transportContext,
+              results: { ...this.transportContext.results, ...results },
+            };
             this.batchVerifying = false;
           },
           (raw) => {
