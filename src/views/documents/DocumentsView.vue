@@ -70,6 +70,7 @@
     <div class="columns result-section" :class="['mobile-mode-' + displayMode, { 'query-has-tags': queryHasTags }]">
       <div
         v-if="showResults"
+        ref="documentsContainer"
         class="column documents-container"
         :class="{
           'is-12': !showMap,
@@ -79,7 +80,11 @@
       >
         <loading-notification :promise="promise" />
 
-        <image-cards v-if="documents && !listMode && documentType === 'image'" :documents="documents" />
+        <image-cards
+          v-if="documents && !listMode && documentType === 'image'"
+          :documents="documents"
+          class="documents-image-cards"
+        />
 
         <div
           v-if="documents && !listMode && documentType !== 'image'"
@@ -109,6 +114,8 @@
           @highlight-document="highlightedDocument = $event"
           class="documents-table"
         />
+
+        <page-navigation v-if="documents" :documents="documents" class="documents-navigation" />
       </div>
       <div v-if="showMap" class="column map-container">
         <map-view
@@ -129,8 +136,10 @@
 import DisplayModeSwitch from './utils/DisplayModeSwitch';
 import ImageCards from './utils/ImageCards';
 import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton';
+import PageNavigation from './utils/PageNavigation';
 import PageSelector from './utils/PageSelector';
 import QueryItems from './utils/QueryItems';
+import pageQueryMixin from './utils/page-query-mixin';
 
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
@@ -148,11 +157,14 @@ export default {
   components: {
     QueryItems,
     PageSelector,
+    PageNavigation,
     DocumentsTable,
     ImageCards,
     DisplayModeSwitch,
     LoadUserPreferencesButton,
   },
+
+  mixins: [pageQueryMixin],
 
   data() {
     return {
@@ -213,6 +225,9 @@ export default {
       immediate: true,
     },
     displayMode: 'updateMapSize',
+    // scroll as soon as a page is asked for, not once its results are loaded (panning the map changes the route too)
+    '$route.query.offset': 'scrollResultsToTop',
+    '$route.query.limit': 'scrollResultsToTop',
   },
 
   methods: {
@@ -230,10 +245,33 @@ export default {
         return;
       }
 
-      this.promise = c2c[this.documentType].getAll(this.$route.query).then(() => {
+      // offset in the middle of a page (old link...): go to the page it belongs to before loading anything
+      const pageQuery = this.normalizedPageQuery(0);
+      if (pageQuery) {
+        this.$router.replace(pageQuery);
+        // $route watcher will call load
+        return;
+      }
+
+      const route = this.$route.fullPath;
+      this.promise = c2c[this.documentType].getAll(this.$route.query).then((response) => {
         // the list has its height: back from a document, the router can restore the scroll position
         bus.emit('trigger-scroll');
+
+        // past the last page, which happens when the map is moved to a sparser area: show the last page instead
+        const lastPageQuery = this.normalizedPageQuery(response.data.total);
+        if (lastPageQuery && this.$route.fullPath === route) {
+          this.$router.replace(lastPageQuery);
+        }
       });
+    },
+
+    // on large screens the list scrolls in its own container, which the router knows nothing about
+    scrollResultsToTop() {
+      const container = this.$refs.documentsContainer;
+      if (container) {
+        container.scrollTop = 0;
+      }
     },
 
     toogleProperty(property) {
@@ -378,16 +416,28 @@ $cards-gap: 0.25rem;
     .documents-container {
       height: 100%;
       overflow: auto;
+      display: flex;
+      flex-direction: column;
       padding-top: 0;
       padding-bottom: 0;
 
       .cards-list {
         padding-top: 2px;
-        height: 100%;
       }
 
+      .cards-list,
+      .documents-image-cards {
+        flex: 0 0 auto;
+      }
+
+      // the table scrolls by itself: it takes the room left by the navigation
       .documents-table {
-        height: 100%;
+        flex: 1 1 auto;
+        min-height: 0;
+      }
+
+      .documents-navigation {
+        flex: 0 0 auto;
       }
     }
 
