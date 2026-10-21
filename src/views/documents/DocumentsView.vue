@@ -70,6 +70,7 @@
     <div class="columns result-section" :class="['mobile-mode-' + displayMode, { 'query-has-tags': queryHasTags }]">
       <div
         v-if="showResults"
+        ref="documentsContainer"
         class="column documents-container"
         :class="{
           'is-12': !showMap,
@@ -109,6 +110,8 @@
           @highlight-document="highlightedDocument = $event"
           class="documents-table"
         />
+
+        <page-navigation v-if="documents" :documents="documents" class="documents-navigation" />
       </div>
       <div v-if="showMap" class="column map-container">
         <map-view
@@ -129,6 +132,7 @@
 import DisplayModeSwitch from './utils/DisplayModeSwitch';
 import ImageCards from './utils/ImageCards';
 import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton';
+import PageNavigation from './utils/PageNavigation';
 import PageSelector from './utils/PageSelector';
 import QueryItems from './utils/QueryItems';
 
@@ -148,6 +152,7 @@ export default {
   components: {
     QueryItems,
     PageSelector,
+    PageNavigation,
     DocumentsTable,
     ImageCards,
     DisplayModeSwitch,
@@ -233,7 +238,16 @@ export default {
       this.promise = c2c[this.documentType].getAll(this.$route.query).then(() => {
         // the list has its height: back from a document, the router can restore the scroll position
         bus.emit('trigger-scroll');
+        this.scrollResultsToTop();
       });
+    },
+
+    // on large screens the list scrolls in its own container, which the router knows nothing about
+    scrollResultsToTop() {
+      const container = this.$refs.documentsContainer;
+      if (container) {
+        container.scrollTop = 0;
+      }
     },
 
     toogleProperty(property) {
@@ -378,16 +392,24 @@ $cards-gap: 0.25rem;
     .documents-container {
       height: 100%;
       overflow: auto;
+      display: flex;
+      flex-direction: column;
       padding-top: 0;
       padding-bottom: 0;
 
       .cards-list {
         padding-top: 2px;
-        height: 100%;
+        flex: 0 0 auto;
       }
 
+      // the table scrolls by itself: it takes the room left by the navigation
       .documents-table {
-        height: 100%;
+        flex: 1 1 auto;
+        min-height: 0;
+      }
+
+      .documents-navigation {
+        flex: 0 0 auto;
       }
     }
 
