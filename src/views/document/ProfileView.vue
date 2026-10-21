@@ -18,7 +18,7 @@
           <activities-field v-if="document.activities && document.activities.length" :document="document" />
 
           <label-value :label="$gettext('forum')">
-            <a :href="$options.forumUrl + '/users/' + document.forum_username + '/activity'">
+            <a :href="$options.forumUrl + '/u/' + document.forum_username + '/activity'">
               @{{ document.forum_username }}
             </a>
           </label-value>
