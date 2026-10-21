@@ -26,14 +26,48 @@ TransportService.prototype.getStopareas = function (waypointId) {
   return limit(() => this.axios.get(`/waypoints/${waypointId}/stopareas`));
 };
 
+const bbox = (extent) => extent.map(Math.round).join(',');
+
 /**
- * Retrieves public transport stops located in an extent, with their lines and the waypoints they are associated with
+ * Retrieves the public transport stops located in an extent: the GTFS stops (the ones linked to a waypoint, or all of
+ * them), and the Navitia stops that are not matched with a GTFS stop (with their lines and waypoints)
+ *
+ * @param {number[]} extent - [xmin, ymin, xmax, ymax] in EPSG:3857
+ * @param {boolean} [all] - Also the GTFS stops that are not linked to a waypoint
+ * @returns {Promise}
+ */
+TransportService.prototype.getStopsInExtent = function (extent, all = false) {
+  return this.axios.get('/stopareas', { params: { bbox: bbox(extent), all: all ? 1 : undefined } });
+};
+
+/**
+ * Retrieves the public transport lines (GeoJSON, EPSG:3857) located in an extent
  *
  * @param {number[]} extent - [xmin, ymin, xmax, ymax] in EPSG:3857
  * @returns {Promise}
  */
-TransportService.prototype.getStopareasInExtent = function (extent) {
-  return this.axios.get('/stopareas', { params: { bbox: extent.map(Math.round).join(',') } });
+TransportService.prototype.getLinesInExtent = function (extent) {
+  return this.axios.get('/transport-lines', { params: { bbox: bbox(extent) } });
+};
+
+/**
+ * Retrieves a public transport stop: timetable of its lines and the waypoints it is associated with
+ *
+ * @param {number} stopId
+ * @returns {Promise}
+ */
+TransportService.prototype.getStop = function (stopId) {
+  return this.axios.get(`/transport-stops/${stopId}`);
+};
+
+/**
+ * Retrieves a public transport line: directions, stops and timetable
+ *
+ * @param {number} lineId
+ * @returns {Promise}
+ */
+TransportService.prototype.getLine = function (lineId) {
+  return this.axios.get(`/transport-lines/${lineId}`);
 };
 
 /**
