@@ -9,7 +9,6 @@ const mountSiteNotice = () =>
   mount(SiteNotice, {
     mocks: {
       $user: { lang: 'fr' },
-      $localStorage: { get: vi.fn(), set: vi.fn() },
     },
   });
 
@@ -54,5 +53,27 @@ describe('SiteNotice', () => {
 
     expect(onUnhandledRejection).not.toHaveBeenCalled();
     expect(wrapper.isVisible()).toBe(false);
+  });
+
+  it('remembers a closed announcement, under the key existing users have', async () => {
+    forum.axios.get.mockResolvedValue({
+      data: {
+        tags: ['visible'],
+        post_stream: { posts: [{ updated_at: '2026-10-19', cooked: '<p>Closed header</p>' }] },
+      },
+    });
+    const wrapper = mountSiteNotice();
+    await flush();
+
+    await wrapper.find('button.delete').trigger('click');
+
+    expect(wrapper.isVisible()).toBe(false);
+    expect(JSON.parse(window.localStorage.getItem('SiteNotice.preferences'))).toMatchObject({
+      'readdenPostKey.fr': '2026-10-19',
+    });
+
+    const next = mountSiteNotice();
+    await flush();
+    expect(next.isVisible()).toBe(false);
   });
 });

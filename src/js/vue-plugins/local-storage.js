@@ -61,28 +61,7 @@ LocalStorage.prototype.getItem = function (key) {
 
 const localStorage = new LocalStorage();
 
-/** The preferences stored under a name, as `this.$localStorage` gives them to the component of that name */
+/** The preferences stored under a name ("<name>.preferences" in window.localStorage) */
 export function getPreferences(name) {
   return localStorage.getItem(`${name}.preferences`);
-}
-
-export default function install(Vue) {
-  Object.defineProperty(Vue.prototype, '$localStorage', {
-    get() {
-      if (!this.$options.name) {
-        throw new Error('Please set name property of your componenent');
-      }
-
-      // TODO anti pattern : with this, we can't change any component name
-      // find another way. Maybe this in created() :
-      // this.$localStorage
-      return localStorage.getItem(`${this.$options.name}.preferences`);
-    },
-    clear() {
-      if (!this.$options.name) {
-        throw new Error('Please set name property of your componenent');
-      }
-      localStorage.removeItem(`${this.$options.name}.preferences`);
-    },
-  });
 }

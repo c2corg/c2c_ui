@@ -2,6 +2,10 @@
 import { cartoLayers } from '@/components/map/map-layers';
 import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
+import { getPreferences } from '@/js/vue-plugins/local-storage';
+
+// stored under the component name, as before: existing preferences are kept
+const preferences = getPreferences('Yeti');
 
 export default {
   name: 'Yeti',
@@ -121,7 +125,7 @@ export default {
 
     // create layers selector
     // first, get stored map layer
-    let storedLayerName = this.$localStorage.get(
+    let storedLayerName = preferences.get(
       'yeti-map-layers-base',
       this.baseLayers.find((layer) => layer.get('visible')).get('title')
     );

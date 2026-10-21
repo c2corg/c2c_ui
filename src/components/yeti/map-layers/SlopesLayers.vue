@@ -1,6 +1,10 @@
 <script>
 import { dataLayers } from '@/components/map/map-layers';
 import Yetix from '@/components/yeti/Yetix';
+import { getPreferences } from '@/js/vue-plugins/local-storage';
+
+// stored under the component name, as before: existing preferences are kept
+const preferences = getPreferences('Yeti');
 
 export default {
   name: 'Yeti',
@@ -33,7 +37,7 @@ export default {
     });
 
     // first, get stored map layer
-    let storedLayerNames = this.$localStorage.get('yeti-map-layers-slopes', []);
+    let storedLayerNames = preferences.get('yeti-map-layers-slopes', []);
 
     let slopesLayersSelector = this.slopesLayers.map((layer) => {
       return {

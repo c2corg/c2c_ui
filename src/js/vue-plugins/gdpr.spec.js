@@ -6,12 +6,10 @@ const NOW = new Date('2026-10-19T12:00:00Z').getTime();
 // the local-storage plugin caches what it read: fresh modules for each test, as for each page load
 const installGdpr = async () => {
   vi.resetModules();
-  const { default: localStorage } = await import('./local-storage');
   const { default: gdpr } = await import('./gdpr');
   // and the same Vue copy as the plugin
   const { createLocalVue } = await import('@vue/test-utils');
   const localVue = createLocalVue();
-  localVue.use(localStorage);
   localVue.prototype.$ga = { enable: vi.fn(), disable: vi.fn() };
   localVue.use(gdpr);
   return localVue;

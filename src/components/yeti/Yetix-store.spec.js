@@ -7,11 +7,7 @@ const stored = () => JSON.parse(window.localStorage.getItem('Yeti.preferences') 
 // fresh modules for each test, as for each page load: Yetix is a singleton, and local-storage caches what it read
 const loadYetix = async () => {
   vi.resetModules();
-  const { default: localStorage } = await import('@/js/vue-plugins/local-storage');
   const { createLocalVue, mount } = await import('@vue/test-utils');
-  const Vue = (await import('vue')).default;
-  // Yetix reads $localStorage through Vue.prototype, as main.js installs it
-  Vue.use(localStorage);
   const { default: Yetix } = await import('./Yetix');
   const { default: ol } = await import('@/js/libs/ol');
   const { default: axios } = await import('axios');

@@ -33,7 +33,6 @@ const loginResponse = {
 // fresh modules for each test, as for each page load: the local-storage plugin caches what it read
 const installUser = async () => {
   vi.resetModules();
-  const { default: localStorage } = await import('./local-storage');
   const { default: user } = await import('./user');
   const { default: c2c } = await import('@/js/apis/c2c');
   const { default: trackingService } = await import('@/js/apis/tracking-service');
@@ -42,7 +41,6 @@ const installUser = async () => {
   const { nextTick } = await import('vue');
 
   const localVue = createLocalVue();
-  localVue.use(localStorage);
   // $language is installed before $user by main.js
   localVue.prototype.$language = { current: 'fr', setCurrent: vi.fn() };
   localVue.use(user);

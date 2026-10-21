@@ -10,6 +10,10 @@
 <script>
 import forum from '@/js/apis/forum';
 import { sanitizeHtml } from '@/js/sanitize-html';
+import { getPreferences } from '@/js/vue-plugins/local-storage';
+
+// stored under the component name, as before: existing preferences are kept
+const preferences = getPreferences('BoardAnnouncementWidget');
 
 export default {
   name: 'BoardAnnouncementWidget',
@@ -25,10 +29,10 @@ export default {
   computed: {
     readdenPostKey: {
       get() {
-        return this.$localStorage.get('readdenPostKey');
+        return preferences.get('readdenPostKey');
       },
       set(value) {
-        this.$localStorage.set('readdenPostKey', value);
+        preferences.set('readdenPostKey', value);
       },
     },
   },

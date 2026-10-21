@@ -3,13 +3,11 @@ import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from 
 // fresh modules for each test, as for each page load: the local-storage plugin caches what it read
 const installLanguage = async () => {
   vi.resetModules();
-  const { default: localStorage } = await import('./local-storage');
   const { default: gettext } = await import('./gettext-plugin');
   const { createLocalVue, mount } = await import('@vue/test-utils');
   const { nextTick } = await import('vue');
 
   const localVue = createLocalVue();
-  localVue.use(localStorage);
   localVue.prototype.$user = { saveLangPreference: vi.fn() };
   localVue.use(gettext);
 
