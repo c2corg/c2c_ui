@@ -170,6 +170,20 @@ describe('TransportStopInformation', () => {
     expect(items.at(1).find('a').attributes('href')).toBe('/waypoint/10');
   });
 
+  it('shows the sources of all the feeds of the place', async () => {
+    const answer = response();
+    answer.data.feeds = [
+      answer.data.feed,
+      { attribution: 'Other attribution', license: 'ODbL', imported_at: '2026-10-19T03:00:00+00:00' },
+    ];
+    const wrapper = await show(gtfsStop, answer);
+
+    const sources = wrapper.findAll('.transport-stop-source');
+    expect(sources).toHaveLength(2);
+    expect(sources.at(1).text()).toContain('Other attribution (ODbL)');
+    expect(sources.at(1).text()).toContain('2026-10-19');
+  });
+
   it('shows the source of the data', async () => {
     const wrapper = await show();
 

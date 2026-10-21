@@ -85,9 +85,9 @@
           </ul>
         </template>
 
-        <p v-if="feed" class="help transport-stop-source">
+        <p v-for="feed of feeds" :key="feed.attribution" class="help transport-stop-source">
           <span v-translate>Source</span> : {{ feed.attribution }} ({{ feed.license }}) &middot;
-          <span v-translate>Updated</span> : {{ updatedAt }}
+          <span v-translate>Updated</span> : {{ feed.imported_at ? feed.imported_at.slice(0, 10) : '' }}
         </p>
       </template>
     </template>
@@ -131,12 +131,9 @@ export default {
       return this.details?.details ?? null;
     },
 
-    feed() {
-      return this.details?.feed ?? null;
-    },
-
-    updatedAt() {
-      return this.feed?.imported_at ? this.feed.imported_at.slice(0, 10) : '';
+    // the feeds of the stops of the place (the first one is the one of the main stop)
+    feeds() {
+      return this.details?.feeds ?? (this.details?.feed ? [this.details.feed] : []);
     },
 
     // waypoints are sorted by distance, the first one is the nearest
