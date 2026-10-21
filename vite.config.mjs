@@ -1,6 +1,7 @@
 import { fileURLToPath, URL } from 'node:url';
 
 import legacy from '@vitejs/plugin-legacy';
+// eslint-disable-next-line import/no-unresolved -- exports-only package, which eslint-plugin-import can't resolve
 import vue from '@vitejs/plugin-vue';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
