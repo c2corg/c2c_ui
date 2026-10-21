@@ -11,7 +11,7 @@
       <router-link :to="{ name: 'whatsnew', query: { u: contributor.user_id } }" rel="nofollow">c</router-link>
       <span v-if="contributor.forum_username">
         <span>|</span>
-        <a :href="$options.forumUrl + '/users/' + contributor.forum_username + '/activity'">d</a>
+        <a :href="$options.forumUrl + '/u/' + contributor.forum_username + '/activity'">d</a>
       </span>
       <span>)</span>
     </span>

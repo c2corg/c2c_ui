@@ -28,7 +28,7 @@
           <div class="column">
             <div class="discourse-post-header">
               <a
-                :href="$options.forumUrl + '/users/' + post.username"
+                :href="$options.forumUrl + '/u/' + post.username"
                 :title="post.username"
                 class="discourse-post-header-username"
               >
