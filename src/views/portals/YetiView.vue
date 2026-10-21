@@ -120,9 +120,13 @@ import YetiMap from '@/components/yeti/YetiMap';
 import Yetix from '@/components/yeti/Yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import ol from '@/js/libs/ol';
+import { getPreferences } from '@/js/vue-plugins/local-storage';
 
 const YETI_URL_BASE =
   'https://api.ensg.eu/yeti-wps?request=Execute&service=WPS&version=1.0.0&identifier=Yeti&datainputs=';
+
+// stored under the component name, as before: existing preferences are kept
+const preferences = getPreferences('Yeti');
 
 export default {
   name: 'Yeti',
@@ -257,7 +261,7 @@ export default {
 
   created() {
     // show disclaimer if not already validated
-    if (!this.$localStorage.get('yeti-disclaimer')) {
+    if (!preferences.get('yeti-disclaimer')) {
       this.showDisclaimer = true;
     }
     // tmp: set default values for persistent state
@@ -469,7 +473,7 @@ export default {
 
     onSubmitDisclaimer() {
       this.showDisclaimer = false;
-      this.$localStorage.set('yeti-disclaimer', 'validated');
+      preferences.set('yeti-disclaimer', 'validated');
     },
   },
 };

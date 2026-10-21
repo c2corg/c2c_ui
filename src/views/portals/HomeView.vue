@@ -95,6 +95,10 @@ import ForumWidget from './utils/ForumWidget';
 import UsefulLinks from './utils/UsefulLinks';
 
 import FeedWidget from '@/components/feed-widget/FeedWidget';
+import { getPreferences } from '@/js/vue-plugins/local-storage';
+
+// stored under the component name, as before: existing preferences are kept
+const preferences = getPreferences('HomeView');
 
 export default {
   name: 'HomeView',
@@ -119,8 +123,8 @@ export default {
       state = false;
     }
     return {
-      isPersonal: this.$localStorage.get('isPersonal', false),
-      feed: this.$localStorage.get('feed', false),
+      isPersonal: preferences.get('isPersonal', false),
+      feed: preferences.get('feed', false),
       visible: state,
     };
   },
@@ -131,7 +135,7 @@ export default {
     },
     setProperty(property, value) {
       this[property] = value;
-      this.$localStorage.set(`${property}`, this[property]);
+      preferences.set(`${property}`, this[property]);
     },
   },
 };

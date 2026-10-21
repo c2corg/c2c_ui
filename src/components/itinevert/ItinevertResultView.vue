@@ -123,9 +123,13 @@ import ItinevertPageSelector from './ItinevertPageSelector.vue';
 
 import itinevertService, { POLYGON_STYLE } from '@/js/apis/itinevert-service';
 import constants from '@/js/constants';
+import { getPreferences } from '@/js/vue-plugins/local-storage';
 import QueryItems from '@/views/documents/utils/QueryItems.vue';
 
 const DocumentsTable = () => import('@/components/datatable/DocumentsTable');
+
+// stored under the component name, as before: existing preferences are kept
+const preferences = getPreferences('ItinevertResultView');
 
 export default {
   name: 'ItinevertResultView',
@@ -265,7 +269,7 @@ export default {
 
     setProperty(property, value) {
       this[property] = value;
-      this.$localStorage.set(`${this.documentType}.${property}`, this[property]);
+      preferences.set(`${this.documentType}.${property}`, this[property]);
     },
 
     getDocumentTypeTitle(documentType) {

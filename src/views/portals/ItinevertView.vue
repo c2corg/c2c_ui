@@ -36,6 +36,11 @@
 import ItinevertBanner from '../../components/itinevert/ItinevertBanner.vue';
 import ItinevertWizard from '../../components/itinevert/ItinevertWizard.vue';
 
+import { getPreferences } from '@/js/vue-plugins/local-storage';
+
+// stored under the component name, as before: existing preferences are kept
+const preferences = getPreferences('ItinevertView');
+
 export default {
   name: 'ItinevertView',
 
@@ -65,7 +70,7 @@ export default {
     window.removeEventListener('popstate', this.handlePopstate);
   },
   mounted() {
-    const stored = this.$localStorage.get('itinevert_visible');
+    const stored = preferences.get('itinevert_visible');
     if (stored !== null) {
       this.visible = stored;
     }
@@ -100,7 +105,7 @@ export default {
     },
     setProperty(property, value) {
       this[property] = value;
-      this.$localStorage.set(`itinevert_${property}`, this[property]);
+      preferences.set(`itinevert_${property}`, this[property]);
     },
   },
 };

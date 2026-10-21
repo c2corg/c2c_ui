@@ -17,7 +17,6 @@ import globalComponents from '@/js/vue-plugins/generic-components';
 import getText from '@/js/vue-plugins/gettext-plugin';
 import helperWindow from '@/js/vue-plugins/helper-window';
 import imageViewer from '@/js/vue-plugins/image-viewer';
-import localStorage from '@/js/vue-plugins/local-storage';
 import router from '@/js/vue-plugins/router';
 import screen from '@/js/vue-plugins/screen';
 import user from '@/js/vue-plugins/user';
@@ -33,8 +32,6 @@ Vue.config.ignoredElements = [/^swiper/];
 
 Vue.config.productionTip = false;
 Vue.config.silent = false;
-
-Vue.use(localStorage); // First, vm.$localStorage property
 
 Vue.use(gdpr);
 Vue.use(VueAnalytics, {

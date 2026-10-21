@@ -126,6 +126,10 @@ import LayerButton from '@/components/yeti/LayerButton';
 import Slider from '@/components/yeti/Slider.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 import Yetix from '@/components/yeti/Yetix';
+import { getPreferences } from '@/js/vue-plugins/local-storage';
+
+// stored under the component name, as before: existing preferences are kept
+const preferences = getPreferences('Yeti');
 
 export default {
   name: 'Yeti',
@@ -156,7 +160,7 @@ export default {
         layer.checked = true;
 
         // store current map layers base
-        this.$localStorage.set('yeti-map-layers-base', layer.title);
+        preferences.set('yeti-map-layers-base', layer.title);
       },
     },
     slopesLayersSelector() {
@@ -219,7 +223,7 @@ export default {
     },
     slopesLayersSelectorChecked(layers) {
       // store current slope layers
-      this.$localStorage.set(
+      preferences.set(
         'yeti-map-layers-slopes',
         layers.map((layer) => layer.title)
       );

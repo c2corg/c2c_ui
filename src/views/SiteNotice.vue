@@ -15,6 +15,10 @@
 <script>
 import forum from '@/js/apis/forum';
 import { sanitizeHtml } from '@/js/sanitize-html';
+import { getPreferences } from '@/js/vue-plugins/local-storage';
+
+// stored under the component name, as before: existing preferences are kept
+const preferences = getPreferences('SiteNotice');
 
 export default {
   name: 'SiteNotice',
@@ -32,10 +36,10 @@ export default {
   computed: {
     readdenPostKey: {
       get() {
-        return this.$localStorage.get('readdenPostKey.' + this.lang);
+        return preferences.get('readdenPostKey.' + this.lang);
       },
       set(value) {
-        this.$localStorage.set('readdenPostKey.' + this.lang, value);
+        preferences.set('readdenPostKey.' + this.lang, value);
       },
     },
   },

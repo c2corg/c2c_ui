@@ -52,11 +52,15 @@ import Yetix from '@/components/yeti/Yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import photon from '@/js/apis/photon';
 import ol from '@/js/libs/ol';
+import { getPreferences } from '@/js/vue-plugins/local-storage';
 
 const DEFAULT_CENTER = [6.25, 45.15];
 const DEFAULT_ZOOM = 6;
 const MAX_ZOOM = 19;
 const TRACKING_INITIAL_ZOOM = 13;
+
+// stored under the component name, as before: existing preferences are kept
+const preferences = getPreferences('Yeti');
 
 export default {
   name: 'Yeti',
@@ -118,8 +122,8 @@ export default {
     this.view = this.map.getView();
 
     // if already a stored map position
-    if (this.$localStorage.get('yeti-map-position')) {
-      let { center, zoom } = this.$localStorage.get('yeti-map-position');
+    if (preferences.get('yeti-map-position')) {
+      let { center, zoom } = preferences.get('yeti-map-position');
       this.view.setCenter(center);
       this.view.setZoom(zoom / this.zoomDelta);
     }
@@ -198,7 +202,7 @@ export default {
       yetixEvents.emit('map-moveend');
 
       // store position
-      this.$localStorage.set('yeti-map-position', {
+      preferences.set('yeti-map-position', {
         center: this.map.getView().getCenter(),
         zoom: mapZoom,
       });
