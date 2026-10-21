@@ -457,9 +457,9 @@ export default {
     },
 
     // the tracks / routes overlays are available on every map, except
-    // while editing a document
+    // while editing a document or comparing two versions of it
     showDensityOverlays() {
-      return !this.editable;
+      return !this.editable && !this.oldDocument && !this.newDocument;
     },
 
     densityOverlayButtons() {
