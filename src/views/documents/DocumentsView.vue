@@ -205,17 +205,9 @@ export default {
       return result;
     },
     // filters of the "Tracks" (outings) and "Routes" map overlays: they
-    // follow the search being made. The activities are the only filter
-    // shared by outings and routes, so they are the only one applied to
-    // the overlay of the other type.
+    // follow the search being made
     mapLayersFilters() {
-      const { offset, limit, sort, bbox, pl, ...filters } = this.$route.query;
-      const sharedFilters = filters.act ? { act: filters.act } : null;
-
-      return {
-        tracks: this.documentType === 'outing' ? filters : this.documentType === 'route' ? sharedFilters : null,
-        routes: this.documentType === 'route' ? filters : this.documentType === 'outing' ? sharedFilters : null,
-      };
+      return this.$documentUtils.getSearchOverlayFilters(this.documentType, this.$route.query);
     },
     documentsShownOnMap() {
       return this.filteredWaypoints.concat(this.documents ? this.documents.documents : []);

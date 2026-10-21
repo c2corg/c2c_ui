@@ -38,9 +38,30 @@ export default function install(Vue) {
           return { tracks: { a: id }, routes: { a: id } };
         case 'u':
           return { tracks: { u: id }, routes: null };
+        case 'o':
+          // only the routes of the outing (an empty list matches nothing)
+          return {
+            tracks: null,
+            routes: { ids: (document.associations?.routes ?? []).map((r) => r.document_id).join(',') },
+          };
         default:
           return { tracks: null, routes: null };
       }
+    },
+
+    // same, when the map displays the results of a search of `documentType`
+    // documents: the overlays follow the search filters. The activities are
+    // the only filter shared by outings and routes, so they are the only one
+    // applied to the overlay of the other type.
+    getSearchOverlayFilters(documentType, query) {
+      // eslint-disable-next-line no-unused-vars
+      const { offset, limit, sort, bbox, pl, documentType: _, ...filters } = query;
+      const sharedFilters = filters.act ? { act: filters.act } : null;
+
+      return {
+        tracks: documentType === 'outing' ? filters : documentType === 'route' ? sharedFilters : null,
+        routes: documentType === 'route' ? filters : documentType === 'outing' ? sharedFilters : null,
+      };
     },
 
     getDocumentType(letterType) {

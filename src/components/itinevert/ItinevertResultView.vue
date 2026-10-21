@@ -95,6 +95,8 @@
           :documents="filteredDocuments ? filteredDocuments : {}"
           :document-type="documentType"
           :highlighted-document="highlightedDocument"
+          :tracks-filters="mapLayersFilters.tracks"
+          :routes-filters="mapLayersFilters.routes"
           :open-in-new-tab="true"
           @highlight-document="highlightedDocument = arguments[0]"
           class="documents-table"
@@ -203,6 +205,12 @@ export default {
     },
     documentAreGeoLocalized() {
       return constants.objectDefinitions[this.documentType].geoLocalized === true;
+    },
+    // the "Tracks" and "Routes" map overlays follow the filters of the
+    // displayed results (the activities chosen in the form, unless changed)
+    mapLayersFilters() {
+      const query = { ...(this.baseQuery?.act ? { act: this.baseQuery.act } : {}), ...this.$route.query };
+      return this.$documentUtils.getSearchOverlayFilters(this.documentType, query);
     },
     documentsShownOnMap() {
       const mapDocuments = [];
