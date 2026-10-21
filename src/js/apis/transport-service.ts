@@ -36,6 +36,11 @@ class TransportService {
     return limit(() => this.axios.get<{ stopareas?: Stoparea[] }>(`/waypoints/${waypointId}/stopareas`));
   }
 
+  /** Retrieves the public transport stops located in an extent ([xmin, ymin, xmax, ymax], EPSG:3857), with their lines and the waypoints they are associated with */
+  getStopareasInExtent(extent: number[]) {
+    return this.axios.get('/stopareas', { params: { bbox: extent.map(Math.round).join(',') } });
+  }
+
   /** Get list of waypoint ids that are accessible in TC for a route */
   getWaypointsAccessibleTC(routeId: DocumentId) {
     return this.axios.get(`/routes/${routeId}/stopareaswaypoints`).then((response) => response.data);
