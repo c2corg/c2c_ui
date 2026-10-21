@@ -46,6 +46,15 @@
 
       <marker-quality :quality="document.quality" />
     </card-row>
+
+    <card-row v-if="transportContext" class="accessibility-row">
+      <accessibility-badge :result="displayedAccessibilityResult" />
+      <verify-accessibility-button
+        :document="document"
+        :transport-context="transportContext"
+        @verified="unitAccessibilityResult = $event"
+      />
+    </card-row>
   </card-container>
 </template>
 
@@ -54,5 +63,24 @@ import { documentCardMixin } from './utils/mixins';
 
 export default {
   mixins: [documentCardMixin],
+
+  data() {
+    return {
+      unitAccessibilityResult: null,
+    };
+  },
+
+  computed: {
+    displayedAccessibilityResult() {
+      return this.unitAccessibilityResult ?? this.transportContext?.results?.[this.document.document_id] ?? null;
+    },
+  },
 };
 </script>
+
+<style scoped lang="scss">
+.accessibility-row {
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+</style>

@@ -29,6 +29,29 @@
           <page-selector :documents="documents" />
         </span>
         <span class="is-pulled-right is-flex header-right" v-if="documentType != 'profile'">
+          <span
+            v-if="hasTransportContext"
+            class="header-item verify-accessibility-batch tooltip-container"
+            :data-tooltip="!canVerifyBatch ? 'top' : null"
+          >
+            <button
+              type="button"
+              class="button is-small is-primary"
+              :disabled="!canVerifyBatch || batchVerifying"
+              @click="verifyBatchAccessibility"
+            >
+              <fa-icon v-if="batchVerifying" icon="circle-notch" spin aria-hidden="true" />
+              <span v-else>
+                {{ $gettext('Check schedules') }}
+                <template v-if="documents">({{ documents.total }})</template>
+              </span>
+            </button>
+            <span v-if="!canVerifyBatch" class="tooltip">
+              {{ $gettext('Please narrow down your search before checking schedules in detail') }}
+            </span>
+            <span v-if="batchError" class="batch-error">{{ $gettext('Unable to check schedules right now.') }}</span>
+          </span>
+
           <load-user-preferences-button class="is-hidden-mobile" />
 
           <span @click="toogleProperty('listMode')" class="header-item is-size-3 has-cursor-pointer is-hidden-mobile">
@@ -97,7 +120,11 @@
             @mouseenter="highlightedDocument = document"
             @mouseleave="highlightedDocument = null"
           >
-            <document-card :highlighted="highlightedDocument === document" :document="document" />
+            <document-card
+              :highlighted="highlightedDocument === document"
+              :document="document"
+              :transport-context="transportContext"
+            />
           </div>
         </div>
 
@@ -106,6 +133,7 @@
           :documents="documents ? documents : {}"
           :document-type="documentType"
           :highlighted-document="highlightedDocument"
+          :transport-context="transportContext"
           @highlight-document="highlightedDocument = arguments[0]"
           class="documents-table"
         />
@@ -133,6 +161,8 @@ import PageSelector from './utils/PageSelector';
 import QueryItems from './utils/QueryItems';
 
 import c2c from '@/js/apis/c2c';
+import itinevertService, { MAX_ROUTE_THRESHOLD, buildIsochroneOverlayDocuments } from '@/js/apis/itinevert-service';
+import navitiaService from '@/js/apis/navitia-service';
 import constants from '@/js/constants';
 import bus from '@/js/event-bus';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
@@ -168,10 +198,28 @@ export default {
       filteredWaypoints: [],
 
       queryHasTags: false,
+
+      // transport search context: stashed itinevert context (address/date/window/geometries) + batch verify results
+      transportContext: null,
+      batchVerifying: false,
+      batchProgress: 0,
+      batchTotal: 0,
+      batchError: null,
     };
   },
 
   computed: {
+    hasTransportContext() {
+      return Boolean(this.$route.query.reachable_ids);
+    },
+    canVerifyBatch() {
+      return (
+        this.hasTransportContext &&
+        !!this.transportContext &&
+        this.documents &&
+        this.documents.total <= MAX_ROUTE_THRESHOLD
+      );
+    },
     showMap() {
       return ['both', 'map'].includes(this.displayMode);
     },
@@ -203,7 +251,11 @@ export default {
       return result;
     },
     documentsShownOnMap() {
-      return this.filteredWaypoints.concat(this.documents ? this.documents.documents : []);
+      const base = this.filteredWaypoints.concat(this.documents ? this.documents.documents : []);
+      if (!this.transportContext) {
+        return base;
+      }
+      return base.concat(buildIsochroneOverlayDocuments(this.transportContext));
     },
   },
 
@@ -234,6 +286,84 @@ export default {
         // the list has its height: back from a document, the router can restore the scroll position
         bus.emit('trigger-scroll');
       });
+
+      this.loadTransportContext();
+    },
+
+    /** Reads the transport search context stashed by TransportFilterForm when `reachable_ids` is active */
+    loadTransportContext() {
+      if (!this.hasTransportContext) {
+        this.transportContext = null;
+        return;
+      }
+
+      const storedContext = getPreferences('itinevert').get('context', null);
+      if (!storedContext) {
+        this.transportContext = null;
+        return;
+      }
+
+      // keep any batch verification results already fetched for this session
+      this.transportContext = { ...storedContext, results: this.transportContext?.results ?? null };
+    },
+
+    /**
+     * Starts the batch round-trip verification job for the current shortlist of matching documents (re-fetched with a
+     * high-enough limit to make sure we cover the whole shortlist, not just the current page), then monitors its
+     * progress and stores the per-document results once done.
+     */
+    async verifyBatchAccessibility() {
+      if (!this.canVerifyBatch || this.batchVerifying) {
+        return;
+      }
+
+      this.batchVerifying = true;
+      this.batchProgress = 0;
+      this.batchTotal = 0;
+      this.batchError = null;
+
+      try {
+        const shortlist = await c2c[this.documentType].getAll({
+          ...this.$route.query,
+          limit: MAX_ROUTE_THRESHOLD,
+          offset: 0,
+        });
+        const ids = shortlist.data.documents.map((document) => document.document_id);
+
+        await itinevertService.startRoundTripJob(
+          ids,
+          this.documentType,
+          this.transportContext.date,
+          this.transportContext.minDeparture,
+          this.transportContext.maxReturn,
+          this.transportContext.fromAddress,
+          this.transportContext.hikingDuration || undefined
+        );
+
+        const family = this.documentType === 'waypoint' ? 'journeyroundtripwaypoints' : 'journeyroundtriproutes';
+
+        itinevertService.monitorProgress(
+          (raw) => {
+            const progress = JSON.parse(raw);
+            this.batchProgress = progress.progress;
+            this.batchTotal = progress.total;
+          },
+          async () => {
+            const response = await itinevertService.getRoundTripJobResult(this.documentType);
+            const results = response.data?.result?.results ?? {};
+            this.transportContext = { ...this.transportContext, results };
+            this.batchVerifying = false;
+          },
+          (raw) => {
+            this.batchError = navitiaService.handleQueryError(raw);
+            this.batchVerifying = false;
+          },
+          family
+        );
+      } catch (error) {
+        this.batchError = { message: error.message };
+        this.batchVerifying = false;
+      }
     },
 
     toogleProperty(property) {
@@ -296,6 +426,40 @@ $cards-gap: 0.25rem;
 .header-item:not(:first-child) {
   margin-bottom: 0;
   margin-left: 0.75rem;
+}
+
+.verify-accessibility-batch {
+  position: relative;
+  display: inline-block;
+
+  .tooltip {
+    position: absolute;
+    opacity: 0;
+    transition: 0.2s;
+    top: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    white-space: normal;
+    width: 220px;
+    text-align: center;
+    pointer-events: none;
+    z-index: 30;
+  }
+
+  &:hover .tooltip {
+    opacity: 1;
+  }
+
+  .batch-error {
+    display: block;
+    color: #c62828;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
 }
 
 .filter-section {
