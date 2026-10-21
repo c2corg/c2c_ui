@@ -1,4 +1,4 @@
-import { reactive } from 'vue';
+import { reactive, watch } from 'vue';
 
 import { getPreferences } from './local-storage';
 
@@ -286,18 +286,25 @@ export default function install(app) {
   };
 
   // An option to support translation with HTML content: `v-translate`.
+  // The elements are translated again when the language changes: in Vue 3, a directive is updated only when its
+  // component renders again, which a slot content (in <router-link>, <login-button>...) doesn't do
+  const translatedElements = new Set();
+  // (the state itself, not its value: firstLoad() sets the same language again once its messages are loaded)
+  watch(state, () => translatedElements.forEach((element) => language.updateElement(element)));
+
   app.directive('translate', {
     /** @param {HTMLElement} el */
     beforeMount(el) {
       language.updateElement(el);
-    },
-    /** @param {HTMLElement} el */
-    mounted(el) {
-      language.updateElement(el);
+      translatedElements.add(el);
     },
     /** @param {HTMLElement} el */
     updated(el) {
       language.updateElement(el);
+    },
+    /** @param {HTMLElement} el */
+    unmounted(el) {
+      translatedElements.delete(el);
     },
   });
 

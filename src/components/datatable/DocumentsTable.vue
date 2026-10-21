@@ -4,6 +4,7 @@
     class="ag-theme-balham"
     theme="legacy"
     :column-defs="columnDefs"
+    :default-col-def="defaultColDef"
     :row-data="documents.documents"
     :get-row-class="getRowClass"
     :get-row-id="getRowId"
@@ -57,6 +58,10 @@ function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+// as ag-grid 28 did: headers of columns outside a group don't span the group header row, and cell data types aren't
+// inferred (the arrays of areas or activities have their own renderers)
+const defaultColDef = { suppressSpanHeaderHeight: true, cellDataType: false };
+
 export default {
   components: {
     AgGridVue: vue3(AgGridVue),
@@ -82,6 +87,7 @@ export default {
 
   data() {
     return {
+      defaultColDef,
       columnDefs: null,
     };
   },

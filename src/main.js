@@ -48,7 +48,7 @@ addAuthenticationGuard(app.config.globalProperties.$user);
 app.use(router);
 
 app.config.globalProperties.$language.firstLoad();
-app.mount('#app');
+app.mount('#app-mount');
 
 // configure toast defaults
 toastDefaults({
