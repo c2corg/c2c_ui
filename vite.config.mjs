@@ -1,7 +1,8 @@
 import { fileURLToPath, URL } from 'node:url';
 
 import legacy from '@vitejs/plugin-legacy';
-import vue from '@vitejs/plugin-vue2';
+// eslint-disable-next-line import/no-unresolved -- exports-only package, which eslint-plugin-import can't resolve
+import vue from '@vitejs/plugin-vue';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
 
@@ -249,7 +250,11 @@ export default defineConfig({
     vue({
       template: {
         compilerOptions: {
-          whitespace: 'condensed',
+          whitespace: 'preserve',
+          // Vue 3 with the Vue 2 behaviours (@vue/compat): each one warns, to be migrated one by one
+          compatConfig: { MODE: 2 },
+          // web components
+          isCustomElement: (tag) => tag.startsWith('swiper-'),
         },
       },
     }),
@@ -272,9 +277,8 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
-      // same alias as Vue CLI: CommonJS dependencies that require('vue')
-      // would otherwise get vue.runtime.common.js, a second Vue copy beside the ESM one
-      { find: /^vue$/, replacement: 'vue/dist/vue.runtime.esm.js' },
+      // the migration build: Vue 3 with a Vue 2 compatible API (@vue/compat), for the app and its dependencies
+      { find: /^vue$/, replacement: '@vue/compat' },
     ],
     // imports of .vue files without extension, as webpack allowed
     extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json', '.vue'],
@@ -298,10 +302,6 @@ export default defineConfig({
   },
 
   build: {
-    commonjsOptions: {
-      // require('vue') from CommonJS dependencies must return Vue itself, not the ES module namespace
-      requireReturnsDefault: (id) => id.endsWith('/vue/dist/vue.runtime.esm.js'),
-    },
     // build.target is derived from modernBrowsers by plugin-legacy
     sourcemap: true,
     rollupOptions: {

@@ -1,5 +1,6 @@
-import { createLocalVue, mount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { h } from 'vue';
 
 import ImageEditionView from './ImageEditionView';
 import OutingEditionView from './OutingEditionView';
@@ -12,8 +13,7 @@ import constants from '@/js/constants';
 
 // Vue reports errors thrown in watchers and in $nextTick callbacks to this handler instead of throwing them
 let errors;
-const localVue = createLocalVue();
-localVue.config.errorHandler = (error) => errors.push(error);
+const errorHandler = (error) => errors.push(error);
 // async $nextTick callbacks reject instead
 const onRejection = (error) => errors.push(error);
 
@@ -45,12 +45,12 @@ const mountView = (view, documentType, mapRef = 'map') => {
           return this.promise.data;
         },
       },
-      render(h) {
-        const map = { methods: { fitMapToDocuments }, render: (h) => h('div') };
+      render() {
+        const map = { methods: { fitMapToDocuments }, render: () => h('div') };
         return this.document ? h(map, { ref: mapRef }) : h('div');
       },
     },
-    { localVue }
+    { global: { config: { errorHandler } } }
   );
   return { wrapper, fitMapToDocuments };
 };

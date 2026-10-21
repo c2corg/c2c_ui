@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it, vi } from 'vitest';
+import { h } from 'vue';
 
 import DataAvalancheLayer from './DataAvalancheLayer.vue';
 import NivosesLayer from './NivosesLayer.vue';
@@ -15,14 +16,15 @@ const fakeMap = () => ({ addLayer: vi.fn(), addOverlay: vi.fn(), getView: () => 
 const provideFrom = (map) =>
   YetiMap.provide.call({ map, getExtent: (projection) => ['extent', projection], $gettext: (s) => s });
 
-const mountInMap = (component, options = {}) => {
+const mountInMap = (component, { stubs = {} } = {}) => {
   const map = fakeMap();
   const wrapper = mount(component, {
-    provide: provideFrom(map),
-    stubs: { FaIcon: true },
-    mocks: { $gettext: (s) => s },
-    directives: { translate: {} },
-    ...options,
+    global: {
+      provide: provideFrom(map),
+      stubs: { FaIcon: true, ...stubs },
+      mocks: { $gettext: (s) => s },
+      directives: { translate: {} },
+    },
   });
   return { wrapper, map };
 };
@@ -30,10 +32,10 @@ const mountInMap = (component, options = {}) => {
 describe('yeti map layers', () => {
   it('reach the map and its extent from YetiMap, at any depth', () => {
     const map = fakeMap();
-    const Leaf = { mixins: [layerMixin], render: (h) => h('div') };
-    const Container = { mixins: [layerMixin], render: (h) => h(Leaf) };
+    const Leaf = { mixins: [layerMixin], render: () => h('div') };
+    const Container = { mixins: [layerMixin], render: () => h(Leaf) };
 
-    const wrapper = mount(Container, { provide: provideFrom(map) });
+    const wrapper = mount(Container, { global: { provide: provideFrom(map) } });
     const leaf = wrapper.findComponent(Leaf).vm;
 
     expect(wrapper.vm.map).toBe(map);
@@ -78,7 +80,7 @@ describe('yeti map layers', () => {
 
   it('dispatches map events from the top layer down, as the template orders them', () => {
     const names = [];
-    const stub = (name) => ({ render: (h) => h('div'), methods: { name: () => name } });
+    const stub = (name) => ({ render: () => h('div'), methods: { name: () => name } });
     const layers = [
       'ProtectedAreasLayer',
       'MeteoLayer',
@@ -107,9 +109,8 @@ describe('yeti tabs', () => {
     panel.tabIndex = 0;
     document.body.appendChild(panel);
     const wrapper = mount(Tabs, {
-      propsData: { tabs: [{ id: 'layers', title: 'Layers' }] },
-      mocks: { $gettext: (s) => s },
-      stubs: { FaIcon: true },
+      props: { tabs: [{ id: 'layers', title: 'Layers' }] },
+      global: { mocks: { $gettext: (s) => s }, stubs: { FaIcon: true } },
       attachTo: document.body.appendChild(document.createElement('div')),
     });
 
@@ -120,7 +121,7 @@ describe('yeti tabs', () => {
     await wrapper.vm.$nextTick();
 
     expect(document.activeElement).toBe(panel);
-    wrapper.destroy();
+    wrapper.unmount();
     panel.remove();
   });
 });

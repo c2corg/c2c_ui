@@ -8,7 +8,7 @@ export function shouldTrack(to, from) {
   return to.name !== from.name || String(to.params.id) !== String(from.params.id);
 }
 
-export default function install(Vue, { id, router }) {
+export default function install(app, { id, router }) {
   // a GA4 measurement ID; anything else (an empty key, a former Universal Analytics UA- key) turns analytics off
   const valid = /^G-[A-Z0-9]+$/.test(id ?? '');
   let enabled = false;
@@ -55,7 +55,7 @@ export default function install(Vue, { id, router }) {
     }
   });
 
-  Vue.prototype.$ga = {
+  app.config.globalProperties.$ga = {
     enable() {
       if (!valid || enabled) {
         return;
@@ -81,7 +81,7 @@ export default function install(Vue, { id, router }) {
     },
   };
 
-  if (Vue.prototype.$gdpr?.gdprValue?.statistics) {
-    Vue.prototype.$ga.enable();
+  if (app.config.globalProperties.$gdpr?.gdprValue?.statistics) {
+    app.config.globalProperties.$ga.enable();
   }
 }

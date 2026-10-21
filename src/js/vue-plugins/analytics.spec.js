@@ -1,6 +1,6 @@
-import { createLocalVue } from '@vue/test-utils';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import VueRouter from 'vue-router';
+import { createApp } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
 
 import analytics, { shouldTrack } from './analytics';
 
@@ -14,20 +14,21 @@ const pageViews = () =>
     .map(([, , params]) => params.page_location);
 
 const install = async ({ id = ID, statistics } = {}) => {
-  const localVue = createLocalVue();
-  localVue.use(VueRouter);
-  const router = new VueRouter({
-    mode: 'history',
+  const app = createApp({});
+  // vue-router 4+ records need a component
+  const component = { render: () => null };
+  const router = createRouter({
+    history: createWebHistory(),
     routes: [
-      { path: '/', name: 'home' },
-      { path: '/routes', name: 'routes' },
-      { path: '/routes/:id', name: 'route' },
+      { path: '/', name: 'home', component },
+      { path: '/routes', name: 'routes', component },
+      { path: '/routes/:id', name: 'route', component },
     ],
   });
-  localVue.prototype.$gdpr = { gdprValue: statistics === undefined ? undefined : { statistics } };
-  localVue.use(analytics, { id, router });
+  app.config.globalProperties.$gdpr = { gdprValue: statistics === undefined ? undefined : { statistics } };
+  app.use(analytics, { id, router });
   await router.push('/').catch(() => {});
-  return { $ga: localVue.prototype.$ga, router };
+  return { $ga: app.config.globalProperties.$ga, router };
 };
 
 describe('analytics', () => {

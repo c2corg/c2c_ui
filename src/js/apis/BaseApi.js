@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { reactive } from 'vue';
 
 import retryOn429 from './retry-on-429';
 
@@ -10,13 +11,15 @@ import retryOn429 from './retry-on-429';
 // So let's polyfill it, whith a Promise-like object
 
 const ApiData = function (promise) {
-  const self = this;
+  // reactive itself: components show its loading, data and error. Vue 3 tracks changes made through the reactive
+  // proxy only, not through the object it wraps: the request callbacks below must set them on the proxy
+  const self = reactive(this);
 
-  this.response = null;
-  this.error = null;
-  this.promise_ = promise;
-  this.data = null;
-  this.loading = true;
+  self.response = null;
+  self.error = null;
+  self.promise_ = promise;
+  self.data = null;
+  self.loading = true;
 
   promise.then(
     (response) => {
@@ -29,6 +32,8 @@ const ApiData = function (promise) {
       self.error = error;
     }
   );
+
+  return self;
 };
 
 ApiData.prototype.then = function (successCallback, errorCallback) {

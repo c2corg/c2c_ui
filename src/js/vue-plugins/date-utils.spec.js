@@ -1,14 +1,14 @@
-import { createLocalVue } from '@vue/test-utils';
 import { describe, expect, it, vi } from 'vitest';
+import { createApp } from 'vue';
 
 import dateUtils from './date-utils';
 
 const install = (lang = 'fr') => {
-  const localVue = createLocalVue();
-  localVue.use(dateUtils);
+  const app = createApp({});
+  app.use(dateUtils);
   // $language is installed after $dateUtils by main.js: read when called
-  localVue.prototype.$language = { current: lang };
-  return localVue.prototype.$dateUtils;
+  app.config.globalProperties.$language = { current: lang };
+  return app.config.globalProperties.$dateUtils;
 };
 
 describe('$dateUtils', () => {

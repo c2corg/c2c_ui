@@ -3,12 +3,11 @@
 </template>
 
 <script>
-import Vue from 'vue';
-
-export default Vue.extend({});
+export default {};
 </script>
 
-<style lang="scss" scoped>
+<!-- not scoped: ag-grid-vue3 mounts the renderer through a wrapper component, which drops its scope id -->
+<style lang="scss">
 .cell-activities {
   font-size: 26px;
 }

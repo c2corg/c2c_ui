@@ -56,7 +56,7 @@
 
       <slot> ... </slot>
 
-      <save-document-row @save="$emit('save', arguments[0])" @preview="isPreview = true" :is-loading="isLoading" />
+      <save-document-row @save="$emit('save', $event)" @preview="isPreview = true" :is-loading="isLoading" />
       <!-- eslint-disable-next-line vue/no-v-html -->
       <div v-if="htmlBanners && htmlBanners[documentType]" v-html="htmlBanners[documentType]" class="edition-banner" />
     </div>

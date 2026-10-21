@@ -7,8 +7,10 @@ import forum from '@/js/apis/forum';
 
 const mountSiteNotice = () =>
   mount(SiteNotice, {
-    mocks: {
-      $user: { lang: 'fr' },
+    global: {
+      mocks: {
+        $user: { lang: 'fr' },
+      },
     },
   });
 

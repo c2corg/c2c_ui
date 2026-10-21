@@ -191,7 +191,8 @@ export default {
           const image = this.buildImageObject(file, key);
 
           this.images = { ...this.images, [image.key]: image };
-          this.startUpload(image);
+          // the reactive image: the upload callbacks update its status and progress
+          this.startUpload(this.images[image.key]);
         }
       }
 

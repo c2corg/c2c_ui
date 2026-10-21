@@ -25,7 +25,7 @@
           :geom-detail-editable="geomDetailEditable"
           show-center-on-geolocation
           show-recenter-on
-          @move="$emit('move', arguments[0])"
+          @move="$emit('move', $event)"
         />
       </div>
       <div class="column is-6">

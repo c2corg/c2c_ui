@@ -233,8 +233,8 @@ export default {
     },
 
     onWaypointsAssociation() {
-      // the document is null while another one loads (e.g. from add to edit, or another lang)
-      if (!this.document) {
+      // the document is null while another one loads (e.g. from add to edit, or another lang), or has no associations
+      if (!this.document?.associations?.waypoints) {
         return;
       }
 

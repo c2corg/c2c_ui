@@ -8,11 +8,11 @@ const installGdpr = async () => {
   vi.resetModules();
   const { default: gdpr } = await import('./gdpr');
   // and the same Vue copy as the plugin
-  const { createLocalVue } = await import('@vue/test-utils');
-  const localVue = createLocalVue();
-  localVue.prototype.$ga = { enable: vi.fn(), disable: vi.fn() };
-  localVue.use(gdpr);
-  return localVue;
+  const { createApp } = await import('vue');
+  const app = createApp({});
+  app.config.globalProperties.$ga = { enable: vi.fn(), disable: vi.fn() };
+  app.use(gdpr);
+  return app.config.globalProperties;
 };
 
 const stored = () => JSON.parse(window.localStorage.getItem('Gdpr.preferences') ?? '{}').choice;
@@ -27,58 +27,62 @@ describe('$gdpr', () => {
   afterEach(() => vi.useRealTimers());
 
   it('has no choice before the user makes one', async () => {
-    const { prototype } = await installGdpr();
+    const globals = await installGdpr();
 
-    expect(prototype.$gdpr.get()).toBe(null);
+    expect(globals.$gdpr.get()).toBe(null);
   });
 
   it('stores the choice with its date, under the key existing users already have', async () => {
-    const { prototype } = await installGdpr();
+    const globals = await installGdpr();
 
-    prototype.$gdpr.set({ statistics: true, social: false, ad: false });
+    globals.$gdpr.set({ statistics: true, social: false, ad: false });
 
     const choice = { statistics: true, social: false, ad: false, date: NOW };
-    expect(prototype.$gdpr.get()).toEqual(choice);
-    expect(prototype.$gdpr.gdprValue).toEqual(choice);
+    expect(globals.$gdpr.get()).toEqual(choice);
+    expect(globals.$gdpr.gdprValue).toEqual(choice);
     expect(stored()).toEqual(choice);
-    expect(prototype.$ga.enable).toHaveBeenCalled();
+    expect(globals.$ga.enable).toHaveBeenCalled();
   });
 
   it('accepts or denies everything, and turns analytics on or off', async () => {
-    const { prototype } = await installGdpr();
+    const globals = await installGdpr();
 
-    prototype.$gdpr.setAll(false);
-    expect(prototype.$gdpr.get()).toEqual({ statistics: false, social: false, ad: false, date: NOW });
-    expect(prototype.$ga.disable).toHaveBeenCalled();
+    globals.$gdpr.setAll(false);
+    expect(globals.$gdpr.get()).toEqual({ statistics: false, social: false, ad: false, date: NOW });
+    expect(globals.$ga.disable).toHaveBeenCalled();
 
-    prototype.$gdpr.setAll(true);
-    expect(prototype.$gdpr.get()).toMatchObject({ statistics: true, social: true, ad: true });
-    expect(prototype.$ga.enable).toHaveBeenCalled();
+    globals.$gdpr.setAll(true);
+    expect(globals.$gdpr.get()).toMatchObject({ statistics: true, social: true, ad: true });
+    expect(globals.$ga.enable).toHaveBeenCalled();
   });
 
   it('restores a choice made less than a year ago', async () => {
     const choice = { statistics: false, social: true, ad: false, date: NOW - YEAR + 1000 };
     window.localStorage.setItem('Gdpr.preferences', JSON.stringify({ choice }));
 
-    expect((await installGdpr()).prototype.$gdpr.get()).toEqual(choice);
+    expect((await installGdpr()).$gdpr.get()).toEqual(choice);
   });
 
   it('asks again after a year', async () => {
     const choice = { statistics: true, social: true, ad: true, date: NOW - YEAR - 1000 };
     window.localStorage.setItem('Gdpr.preferences', JSON.stringify({ choice }));
 
-    expect((await installGdpr()).prototype.$gdpr.get()).toBe(null);
+    expect((await installGdpr()).$gdpr.get()).toBe(null);
     expect(stored()).toBeUndefined();
   });
 
   it('updates the components showing it', async () => {
-    const localVue = await installGdpr();
+    const globals = await installGdpr();
     const { mount } = await import('@vue/test-utils');
-    const { nextTick } = await import('vue');
-    const wrapper = mount({ render: (h) => h('p', localVue.prototype.$gdpr.get() ? 'chosen' : 'ask') }, { localVue });
+    const { h, nextTick } = await import('vue');
+    const wrapper = mount({
+      render() {
+        return h('p', globals.$gdpr.get() ? 'chosen' : 'ask');
+      },
+    });
     expect(wrapper.text()).toBe('ask');
 
-    localVue.prototype.$gdpr.setAll(true);
+    globals.$gdpr.setAll(true);
     await nextTick();
 
     expect(wrapper.text()).toBe('chosen');

@@ -1,13 +1,13 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
-import { compileToFunctions } from 'vue-template-compiler';
 
 import ModalCard from './ModalCard';
 import ModalWindow from './ModalWindow';
 
 // The parent templates are compiled like the app's: named slots are passed with <template #name>
+// (Vue 3 condenses whitespace by default)
 const parent = (template) => ({
-  ...compileToFunctions(template, { whitespace: 'condensed' }),
+  template,
   components: { ModalCard, ModalWindow },
 });
 

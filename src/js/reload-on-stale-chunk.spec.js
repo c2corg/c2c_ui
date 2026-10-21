@@ -1,10 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import { h } from 'vue';
+import { createMemoryHistory, createRouter as createVueRouter } from 'vue-router';
 
 import reloadOnStaleChunk from './reload-on-stale-chunk';
-
-Vue.use(VueRouter);
 
 const fakeWindow = ({ sessionStorage } = {}) => {
   const win = new EventTarget();
@@ -21,10 +19,10 @@ const preloadError = () => new Event('vite:preloadError');
 
 // a lazy route whose chunk is gone: Vite emits vite:preloadError, then the import rejects
 const createRouter = (win) =>
-  new VueRouter({
-    mode: 'abstract',
+  createVueRouter({
+    history: createMemoryHistory(),
     routes: [
-      { path: '/', component: { render: (h) => h('div') } },
+      { path: '/', component: { render: () => h('div') } },
       {
         path: '/yeti/:id?',
         component: () => {

@@ -2,20 +2,22 @@
   <ag-grid-vue
     style="width: 100%"
     class="ag-theme-balham"
+    theme="legacy"
     :column-defs="columnDefs"
-    suppress-property-names-check
+    :default-col-def="defaultColDef"
     :row-data="documents.documents"
     :get-row-class="getRowClass"
-    :get-row-node-id="getRowNodeId"
+    :get-row-id="getRowId"
     :ensure-dom-order="true"
     :enable-cell-text-selection="true"
     @grid-ready="onGridReady"
-    @cellMouseOver="onHover"
+    @cell-mouse-over="onHover"
   />
 </template>
 
 <script>
-import { AgGridVue } from 'ag-grid-vue';
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+import { AgGridVue } from 'ag-grid-vue3';
 
 import AreaList from './cell-renderers/AreaList';
 import DocumentActivities from './cell-renderers/DocumentActivities';
@@ -35,13 +37,16 @@ import RouteRating from './cell-renderers/RouteRating';
 import constants from '@/js/constants';
 import bus from '@/js/event-bus';
 import { requireDocumentTypeProperty } from '@/js/properties-mixins';
+import vue3 from '@/js/vue3-component';
+
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 function getColDef(vm, field, options = {}) {
   const result = {
     headerName: capitalize(vm.$gettext(field.name)),
     field: field.name,
     _fieldDefinition: field,
-    cellRendererFramework: options.cellRendererFramework ?? DocumentField,
+    cellRenderer: options.cellRenderer ?? DocumentField,
     _exportRenderer: options._exportRendered,
     resizable: true,
   };
@@ -53,9 +58,13 @@ function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+// as ag-grid 28 did: headers of columns outside a group don't span the group header row, and cell data types aren't
+// inferred (the arrays of areas or activities have their own renderers)
+const defaultColDef = { suppressSpanHeaderHeight: true, cellDataType: false };
+
 export default {
   components: {
-    AgGridVue,
+    AgGridVue: vue3(AgGridVue),
   },
   mixins: [requireDocumentTypeProperty],
 
@@ -78,6 +87,7 @@ export default {
 
   data() {
     return {
+      defaultColDef,
       columnDefs: null,
     };
   },
@@ -121,8 +131,8 @@ export default {
       this.$emit('highlight-document', event.data);
     },
 
-    getRowNodeId(document) {
-      return String(document.document_id);
+    getRowId(params) {
+      return String(params.data.document_id);
     },
 
     getRowClass(params) {
@@ -135,7 +145,7 @@ export default {
       if (this.documentType === 'area') {
         this.columnDefs = [
           getColDef(this, fields.title, {
-            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            cellRenderer: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
             _exportFormatter: this.formatTitle,
           }),
           getColDef(this, fields.area_type),
@@ -145,19 +155,19 @@ export default {
       if (this.documentType === 'article') {
         this.columnDefs = [
           getColDef(this, fields.title, {
-            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            cellRenderer: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
             _exportFormatter: this.formatTitle,
             width: 300,
           }),
           getColDef(this, fields.activities, {
-            cellRendererFramework: DocumentActivities,
+            cellRenderer: DocumentActivities,
             _exportFormatter: this.formatActivities,
             width: 300,
           }),
           getColDef(this, fields.categories, { width: 120 }),
           getColDef(this, fields.article_type, { width: 120 }),
           {
-            cellRendererFramework: MarkerQuality,
+            cellRenderer: MarkerQuality,
             _exportFormatter: this.formatQuality,
             _headerName: capitalize(this.$gettext('Document quality')),
             width: 30,
@@ -168,18 +178,18 @@ export default {
       if (this.documentType === 'book') {
         this.columnDefs = [
           getColDef(this, fields.title, {
-            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            cellRenderer: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
             _exportFormatter: this.formatTitle,
           }),
           getColDef(this, fields.book_types),
           getColDef(this, fields.author),
           getColDef(this, fields.activities, {
-            cellRendererFramework: DocumentActivities,
+            cellRenderer: DocumentActivities,
             _exportFormatter: this.formatActivities,
             width: 100,
           }),
           {
-            cellRendererFramework: MarkerQuality,
+            cellRenderer: MarkerQuality,
             _exportFormatter: this.formatQuality,
             _headerName: capitalize(this.$gettext('Document quality')),
             width: 30,
@@ -190,10 +200,10 @@ export default {
       if (this.documentType === 'image') {
         this.columnDefs = [
           getColDef(this, fields.title, {
-            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            cellRenderer: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
             _exportFormatter: this.formatTitle,
           }),
-          getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, _exportFormatter: this.formatAreas }),
+          getColDef(this, { name: 'areas' }, { cellRenderer: AreaList, _exportFormatter: this.formatAreas }),
           getColDef(this, fields.author),
           getColDef(this, fields.filename),
         ];
@@ -202,14 +212,14 @@ export default {
       if (this.documentType === 'map') {
         this.columnDefs = [
           getColDef(this, fields.title, {
-            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            cellRenderer: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
             _exportFormatter: this.formatTitle,
           }),
-          getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, _exportFormatter: this.formatAreas }),
+          getColDef(this, { name: 'areas' }, { cellRenderer: AreaList, _exportFormatter: this.formatAreas }),
           getColDef(this, fields.code),
           getColDef(this, fields.editor),
           {
-            cellRendererFramework: MarkerQuality,
+            cellRenderer: MarkerQuality,
             _exportFormatter: this.formatQuality,
             _headerName: capitalize(this.$gettext('Document quality')),
             width: 30,
@@ -221,28 +231,28 @@ export default {
         this.columnDefs = [
           getColDef(this, fields.date_end, {
             width: 90,
-            cellRendererFramework: OutingDate,
+            cellRenderer: OutingDate,
             _exportFormatter: this.formatOutingDate,
           }),
           getColDef(this, fields.title, {
-            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            cellRenderer: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
             _exportFormatter: this.formatTitle,
           }),
           getColDef(
             this,
             { name: 'areas' },
             {
-              cellRendererFramework: AreaList,
+              cellRenderer: AreaList,
               _exportFormatter: this.formatAreas,
             }
           ),
           getColDef(
             this,
             { name: 'contributor' },
-            { cellRendererFramework: DocumentAuthor, _exportFormatter: this.formatAuthor, width: 100 }
+            { cellRenderer: DocumentAuthor, _exportFormatter: this.formatAuthor, width: 100 }
           ),
           getColDef(this, fields.activities, {
-            cellRendererFramework: DocumentActivities,
+            cellRenderer: DocumentActivities,
             _exportFormatter: this.formatActivities,
             width: 100,
           }),
@@ -260,7 +270,7 @@ export default {
             children: [
               {
                 headerName: capitalize(this.$gettext('ratings')),
-                cellRendererFramework: OutingRating,
+                cellRenderer: OutingRating,
                 _exportFormatter: this.formatRating,
                 columnGroupShow: 'closed',
                 resizable: true,
@@ -282,31 +292,31 @@ export default {
           },
 
           {
-            cellRendererFramework: MarkerGpsTrace,
+            cellRenderer: MarkerGpsTrace,
             _exportFormatter: this.formatGpsTrace,
             _headerName: capitalize(this.$gettext('Trace')),
             width: 20,
           },
           {
-            cellRendererFramework: MarkerImageCount,
+            cellRenderer: MarkerImageCount,
             _exportFormatter: this.formatImagesCount,
             _headerName: capitalize(this.$gettext('Image count')),
             width: 20,
           },
           {
-            cellRendererFramework: MarkerSoftMobility,
+            cellRenderer: MarkerSoftMobility,
             _exportFormatter: this.formatSoftMobility,
             _headerName: capitalize(this.$gettext('Soft mobility outing')),
             width: 20,
           },
           {
-            cellRendererFramework: MarkerCondition,
+            cellRenderer: MarkerCondition,
             _exportFormatter: this.formatConditions,
             _headerName: capitalize(this.$gettext('Conditions')),
             width: 20,
           },
           {
-            cellRendererFramework: MarkerQuality,
+            cellRenderer: MarkerQuality,
             _exportFormatter: this.formatQuality,
             _headerName: capitalize(this.$gettext('Document quality')),
             width: 20,
@@ -317,12 +327,12 @@ export default {
       if (this.documentType === 'route') {
         this.columnDefs = [
           getColDef(this, fields.title, {
-            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            cellRenderer: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
             _exportFormatter: this.formatTitle,
           }),
-          getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, _exportFormatter: this.formatAreas }),
+          getColDef(this, { name: 'areas' }, { cellRenderer: AreaList, _exportFormatter: this.formatAreas }),
           getColDef(this, fields.activities, {
-            cellRendererFramework: DocumentActivities,
+            cellRenderer: DocumentActivities,
             _exportFormatter: this.formatActivities,
             width: 100,
           }),
@@ -342,7 +352,7 @@ export default {
             children: [
               {
                 headerName: this.$gettext('ratings'),
-                cellRendererFramework: RouteRating,
+                cellRenderer: RouteRating,
                 _exportFormatter: this.formatRating,
                 columnGroupShow: 'closed',
                 resizable: true,
@@ -359,13 +369,13 @@ export default {
             ],
           },
           {
-            cellRendererFramework: MarkerGpsTrace,
+            cellRenderer: MarkerGpsTrace,
             _exportFormatter: this.formatGpsTrace,
             _headerName: capitalize(this.$gettext('Trace')),
             width: 30,
           },
           {
-            cellRendererFramework: MarkerQuality,
+            cellRenderer: MarkerQuality,
             _exportFormatter: this.formatQuality,
             _headerName: capitalize(this.$gettext('Document quality')),
             width: 30,
@@ -376,14 +386,14 @@ export default {
       if (this.documentType === 'waypoint') {
         this.columnDefs = [
           getColDef(this, fields.title, {
-            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            cellRenderer: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
             _exportFormatter: this.formatTitle,
           }),
-          getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, _exportFormatter: this.formatAreas }),
+          getColDef(this, { name: 'areas' }, { cellRenderer: AreaList, _exportFormatter: this.formatAreas }),
           getColDef(this, fields.elevation),
           getColDef(this, fields.waypoint_type),
           {
-            cellRendererFramework: MarkerQuality,
+            cellRenderer: MarkerQuality,
             _exportFormatter: this.formatQuality,
             _headerName: capitalize(this.$gettext('Document quality')),
             width: 30,
@@ -395,10 +405,10 @@ export default {
         this.columnDefs = [
           getColDef(this, fields.date, { width: 100 }),
           getColDef(this, fields.title, {
-            cellRendererFramework: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
+            cellRenderer: this.openInNewTab ? DocumentLinkNewTab : DocumentLink,
             _exportFormatter: this.formatTitle,
           }),
-          getColDef(this, { name: 'areas' }, { cellRendererFramework: AreaList, _exportFormatter: this.formatAreas }),
+          getColDef(this, { name: 'areas' }, { cellRenderer: AreaList, _exportFormatter: this.formatAreas }),
           getColDef(this, fields.event_type, { width: 100 }),
           getColDef(this, fields.event_activity, { width: 100 }),
           {
@@ -418,7 +428,7 @@ export default {
             ],
           },
           {
-            cellRendererFramework: MarkerQuality,
+            cellRenderer: MarkerQuality,
             _exportFormatter: this.formatQuality,
             _headerName: capitalize(this.$gettext('Document quality')),
             width: 30,
@@ -542,8 +552,8 @@ export default {
 };
 </script>
 
-<style src="ag-grid-community/dist/styles/ag-grid.css" />
-<style src="ag-grid-community/dist/styles/ag-theme-balham.css" />
+<style src="ag-grid-community/styles/ag-grid.css" />
+<style src="ag-grid-community/styles/ag-theme-balham.css" />
 <style lang="scss">
 .ag-theme-balham .ag-cell {
   padding-left: 0;

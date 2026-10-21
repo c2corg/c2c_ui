@@ -5,7 +5,7 @@
     :title="tooltip"
     :target="target"
     :href="href"
-    @click="!disabled ? $emit('click', arguments[0]) : {}"
+    @click="!disabled ? $emit('click', $event) : {}"
   >
     <span v-if="icon" class="icon">
       <fa-icon :icon="icon" />

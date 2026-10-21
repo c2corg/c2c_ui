@@ -1,18 +1,19 @@
-import { createLocalVue } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
+import { createApp } from 'vue';
 
 import dateUtils from './date-utils';
 import documentUtils from './document-utils';
 
 const install = ({ userLang = 'fr' } = {}) => {
-  const localVue = createLocalVue();
-  localVue.use(dateUtils);
-  localVue.use(documentUtils);
+  const app = createApp({});
+  app.use(dateUtils);
+  app.use(documentUtils);
+  const globals = app.config.globalProperties;
   // installed after $documentUtils by main.js: read when called
-  localVue.prototype.$gettext = (msgid) => `[${msgid}]`;
-  localVue.prototype.$language = { current: 'fr' };
-  localVue.prototype.$user = { lang: userLang };
-  return localVue.prototype.$documentUtils;
+  globals.$gettext = (msgid) => `[${msgid}]`;
+  globals.$language = { current: 'fr' };
+  globals.$user = { lang: userLang };
+  return globals.$documentUtils;
 };
 
 const route = {

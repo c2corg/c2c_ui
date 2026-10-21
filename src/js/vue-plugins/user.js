@@ -23,13 +23,13 @@ function isExpired(expire, token) {
   return false;
 }
 
-export default function install(Vue) {
+export default function install(app) {
   // stored under the name of the former User component, so that existing sessions are kept
   const preferences = getPreferences('User');
   const data = preferences.get(config.urls.api, {});
 
   // user lang, read write property everywhere : this.$user.lang
-  const lang = data['lang'] ?? Vue.prototype.$language.current;
+  const lang = data['lang'] ?? app.config.globalProperties.$language.current;
   const expired = isExpired(data['expire'] ?? null, data['token'] ?? null);
 
   const user = reactive({
@@ -68,7 +68,7 @@ export default function install(Vue) {
         this.forumUsername = response.data.forum_username;
         this.expire = response.data.expire;
 
-        Vue.prototype.$language.setCurrent(this.lang);
+        app.config.globalProperties.$language.setCurrent(this.lang);
         commitToLocalStorage();
 
         return response;
@@ -124,5 +124,5 @@ export default function install(Vue) {
 
   commitToLocalStorage();
 
-  Vue.prototype.$user = user;
+  app.config.globalProperties.$user = user;
 }

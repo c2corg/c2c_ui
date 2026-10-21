@@ -12,9 +12,7 @@ const mountList = (options) =>
     {
       directives: { infiniteScroll },
       data: () => ({ options }),
-      render(h) {
-        return h('div', { directives: [{ name: 'infinite-scroll', value: this.options }], class: 'list' });
-      },
+      template: '<div v-infinite-scroll="options" class="list"></div>',
     },
     { attachTo: document.body }
   );
@@ -84,7 +82,7 @@ describe('v-infinite-scroll', () => {
     const load = vi.fn();
     const wrapper = mountList({ load, distance: 100 });
 
-    wrapper.destroy();
+    wrapper.unmount();
     listBottom = 850;
     vi.advanceTimersByTime(200);
     window.dispatchEvent(new Event('scroll'));
@@ -100,8 +98,8 @@ describe('v-infinite-scroll', () => {
     const wrapper = mount(
       {
         directives: { infiniteScroll },
-        render: (h) =>
-          h('div', { directives: [{ name: 'infinite-scroll', value: { load, distance: 0 } }], class: 'list' }),
+        data: () => ({ options: { load, distance: 0 } }),
+        template: '<div v-infinite-scroll="options" class="list"></div>',
       },
       { attachTo: container.appendChild(document.createElement('div')) }
     );
@@ -115,7 +113,7 @@ describe('v-infinite-scroll', () => {
     container.dispatchEvent(new Event('scroll'));
     expect(load).toHaveBeenCalledTimes(1);
 
-    wrapper.destroy();
+    wrapper.unmount();
     container.remove();
   });
 });

@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
 
 import config from '@/js/config';
 import constants from '@/js/constants';
@@ -144,16 +143,14 @@ addDocumentTypeView(constants.objectDefinitions.route, RouteView, RouteEditionVi
 addDocumentTypeView(constants.objectDefinitions.waypoint, WaypointView, WaypointEditionView);
 addDocumentTypeView(constants.objectDefinitions.xreport, XreportView, XreportEditionView);
 
-routes.push({ path: '*', name: '404', component: NotFoundView });
-
-Vue.use(Router);
+routes.push({ path: '/:pathMatch(.*)*', name: '404', component: NotFoundView });
 
 // removes the trigger-scroll handler of the last navigation that waits for its view's data
 let cancelPendingScroll = null;
 
-const router = new Router({
+const router = createRouter({
   routes,
-  mode: config.routerMode,
+  history: config.routerMode === 'history' ? createWebHistory(import.meta.env.BASE_URL) : createWebHashHistory(),
 
   scrollBehavior(to, from, savedPosition) {
     // https://router.vuejs.org/guide/advanced/scroll-behavior.html#scroll-behavior
@@ -185,7 +182,7 @@ const router = new Router({
       position = savedPosition;
     } else {
       // don't need to wait any data, scroll to top
-      return { x: 0, y: 0 };
+      return { left: 0, top: 0 };
     }
 
     // we'll wait for trigger-scroll event
@@ -200,14 +197,14 @@ const router = new Router({
   },
 });
 
-// authentication guard
-router.beforeEach((to, from, next) => {
-  const vm = router.app;
-  if (to.matched.some((record) => record.meta.requiresAuth) && !vm.$user.isLogged) {
-    next({ name: 'auth', query: { redirect: to.fullPath } });
-  } else {
-    next();
-  }
-});
+// authentication guard. $user is installed on the app after the router is created: main.js adds it, before the
+// router starts the first navigation
+export function addAuthenticationGuard(user) {
+  router.beforeEach((to) => {
+    if (to.matched.some((record) => record.meta.requiresAuth) && !user.isLogged) {
+      return { name: 'auth', query: { redirect: to.fullPath } };
+    }
+  });
+}
 
 export default router;

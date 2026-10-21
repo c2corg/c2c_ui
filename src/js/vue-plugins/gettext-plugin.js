@@ -1,4 +1,4 @@
-import { reactive } from 'vue';
+import { reactive, watch } from 'vue';
 
 import { getPreferences } from './local-storage';
 
@@ -98,7 +98,7 @@ function getMessages(lang) {
   throw new Error(`Unsuported language : ${lang}`);
 }
 
-export default function install(Vue) {
+export default function install(app) {
   // stored under the name of the former Language component, so that the chosen language is kept
   const preferences = getPreferences('Language');
   // only the current language is reactive: translations are big, and read through it
@@ -158,7 +158,7 @@ export default function install(Vue) {
       preferences.set('current', lang);
 
       // if user is logged, we need to save in db his preference
-      Vue.prototype.$user.saveLangPreference(lang);
+      app.config.globalProperties.$user.saveLangPreference(lang);
 
       // then, we must defer lang setter
       // because we may need to lazy load data
@@ -286,24 +286,28 @@ export default function install(Vue) {
   };
 
   // An option to support translation with HTML content: `v-translate`.
-  Vue.directive('translate', {
+  // The elements are translated again when the language changes: in Vue 3, a directive is updated only when its
+  // component renders again, which a slot content (in <router-link>, <login-button>...) doesn't do
+  const translatedElements = new Set();
+  // (the state itself, not its value: firstLoad() sets the same language again once its messages are loaded)
+  watch(state, () => translatedElements.forEach((element) => language.updateElement(element)));
+
+  app.directive('translate', {
     /** @param {HTMLElement} el */
-    bind(el) {
-      // console.log("bind", el)
+    beforeMount(el) {
+      language.updateElement(el);
+      translatedElements.add(el);
+    },
+    /** @param {HTMLElement} el */
+    updated(el) {
       language.updateElement(el);
     },
     /** @param {HTMLElement} el */
-    inserted(el) {
-      // console.log("inserted", el)
-      language.updateElement(el);
-    },
-    /** @param {HTMLElement} el */
-    update(el) {
-      // console.log("update", el)
-      language.updateElement(el);
+    unmounted(el) {
+      translatedElements.delete(el);
     },
   });
 
-  Vue.prototype.$language = language;
-  Vue.prototype.$gettext = language.gettext.bind(language);
+  app.config.globalProperties.$language = language;
+  app.config.globalProperties.$gettext = language.gettext.bind(language);
 }

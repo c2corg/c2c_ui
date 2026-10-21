@@ -31,11 +31,11 @@ const locales = {
   zh_CN: 'zh-cn',
   en: 'en-gb',
 };
-export default function install(Vue) {
+export default function install(app) {
   // $language is installed after this plugin: read it when called
-  const current = () => locales[Vue.prototype.$language.current];
+  const current = () => locales[app.config.globalProperties.$language.current];
 
-  Vue.prototype.$dateUtils = {
+  app.config.globalProperties.$dateUtils = {
     parseDate(arg, formatString) {
       return dayjs(arg, formatString).toDate();
     },
@@ -47,7 +47,7 @@ export default function install(Vue) {
     toLocalizedString(arg, formatString) {
       // add some custom formats
       if (formatString === '@1') {
-        switch (Vue.prototype.$language.current) {
+        switch (app.config.globalProperties.$language.current) {
           case 'ca':
             formatString = 'dddd D MMMM [de] YYYY';
             break;

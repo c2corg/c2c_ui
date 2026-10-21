@@ -1,13 +1,10 @@
-import { createLocalVue, mount, RouterLinkStub } from '@vue/test-utils';
+import { mount, RouterLinkStub } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
+import { h } from 'vue';
 
 import DocumentRating from './DocumentRating';
 import DocumentRatingValues from './DocumentRatingValues';
 import DropdownButton from './DropdownButton';
-
-const localVue = createLocalVue();
-localVue.component('DocumentRatingValues', DocumentRatingValues);
-localVue.component('DropdownButton', DropdownButton);
 
 const route = {
   type: 'r',
@@ -17,14 +14,16 @@ const route = {
   engagement_rating: 'II',
 };
 
-const mountRating = (propsData) =>
+const mountRating = (props) =>
   mount(DocumentRating, {
-    localVue,
-    propsData,
-    stubs: { FaIcon: { render: (h) => h('i', { class: 'fa-icon' }) }, RouterLink: RouterLinkStub },
-    mocks: {
-      $gettext: (value) => value,
-      $documentUtils: { getDocumentType: () => 'route' },
+    props,
+    global: {
+      components: { DocumentRatingValues, DropdownButton },
+      stubs: { FaIcon: { render: () => h('i', { class: 'fa-icon' }) }, RouterLink: RouterLinkStub },
+      mocks: {
+        $gettext: (value) => value,
+        $documentUtils: { getDocumentType: () => 'route' },
+      },
     },
   });
 
@@ -49,13 +48,13 @@ describe('DocumentRating', () => {
     expect(trigger.find('.fa-icon').exists()).toBe(true);
 
     const links = wrapper.findAllComponents(RouterLinkStub);
-    expect(links.wrappers.map((link) => link.text().replace(/\s+/g, ' '))).toEqual([
+    expect(links.map((link) => link.text().replace(/\s+/g, ' '))).toEqual([
       'AD global_rating',
       '5c rock_free_rating',
       '5a rock_required_rating',
       'II engagement_rating',
     ]);
-    expect(links.at(0).props('to')).toMatchObject({ name: 'article' });
+    expect(links[0].props('to')).toMatchObject({ name: 'article' });
   });
 
   it('upper-cases the rock rating of boulders', () => {
