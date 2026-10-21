@@ -284,18 +284,18 @@ export const cartoLayers = function () {
     }),
   });
 
-  // $gettext('Freemap Outdoor', 'Map layer')
-  const freemapOutdoor = new ol.layer.Tile({
-    title: 'Freemap Outdoor',
-    image: 'freemap.jpg',
+  // $gettext('Public transport', 'Map layer')
+  const publicTransport = new ol.layer.Tile({
+    title: 'Public transport',
+    image: 'publictransport.jpg',
     type: 'base',
     visible: false,
     source: new ol.source.XYZ({
-      url: 'https://outdoor.tiles.freemap.sk/{z}/{x}/{y}',
+      url: 'https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png',
       attributions:
         '© <a href="//openstreetmap.org/copyright" target="_blank" rel="noreferrer noopener">OpenStreetMap</a> | ' +
-        '© <a href="//www.freemap.sk" target="_blank" rel="noreferrer noopener">Freemap Slovakia</a>',
-      maxZoom: 19,
+        '© <a href="//memomaps.de" target="_blank" rel="noreferrer noopener">ÖPNVKarte</a>',
+      maxZoom: 18,
     }),
   });
 
@@ -338,7 +338,7 @@ export const cartoLayers = function () {
     openTopoMap,
     /* esri, */
     esriImagery,
-    freemapOutdoor,
+    publicTransport,
     /* bingMap, */
     ignFrMaps,
     ignFrOrtho,
