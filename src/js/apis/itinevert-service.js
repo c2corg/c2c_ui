@@ -6,31 +6,45 @@ import config from '@/js/config';
 import ol from '@/js/libs/ol';
 
 /**
- * Constant to define the maximum number of route before going over each of their waypoint and making a Navitia API Call
- * If you update this constant, make sure to edit the back too -> navitia.py
+ * Constant to define the maximum number of documents that can go through the batch round-trip verification job (one
+ * Navitia call per document). If you update this constant, make sure to edit the back too -> navitia.py
  */
 export const MAX_ROUTE_THRESHOLD = 50;
-/**
- * Constant to define the max trip duration for Itinevert in minutes. If you update this constant, make sure to edit the
- * back too -> navitia.py
- */
+/** Constant to define the max transport duration override in minutes for the transport search form (advanced field) */
 export const MAX_TRIP_DURATION = 240;
-/**
- * Constant to define the min trip duration for Itinevert in minutes. If you update this constant, make sure to edit the
- * back too -> navitia.py
- */
+/** Constant to define the min transport duration override in minutes for the transport search form (advanced field) */
 export const MIN_TRIP_DURATION = 20;
-/** Constant to define the min trip duration for Itinevert in minutes */
+/** Constant to define the default transport duration override in minutes for the transport search form */
 export const DEFAULT_TRIP_DURATION = 90;
-/** Constant to define by how much the trip duration is incremented in minutes */
+/** Constant to define by how much the transport duration override is incremented in minutes */
 export const TRIP_DURATION_INCREMENT = 10;
-/** Constant to define wether the Navitia Isochrones request limit has been reached */
-export const MAX_NAVITIA_ISOCHRONES_REQUEST_REACHED = false;
-// colors for polygon displayed on map
+
+// colors for polygons displayed on map
+/** Legacy/default polygon style, kept for compatibility with any remaining single-polygon usage */
 export const POLYGON_STYLE = {
   color: 'rgba(250,150,51,0.3)',
   strokeColor: 'rgba(250,150,51,1)',
 };
+/** Style for the "aller" (outbound) isochrone polygon */
+export const ALLER_POLYGON_STYLE = {
+  color: 'rgba(51,143,250,0.25)',
+  strokeColor: 'rgba(51,143,250,1)',
+};
+/** Style for the "retour" (return) isochrone polygon */
+export const RETOUR_POLYGON_STYLE = {
+  color: 'rgba(155,89,222,0.25)',
+  strokeColor: 'rgba(155,89,222,1)',
+};
+/** Style for the intersection (aller ∩ retour) polygon, the actual filter applied to the search */
+export const INTERSECTION_POLYGON_STYLE = {
+  color: 'rgba(250,150,51,0.35)',
+  strokeColor: 'rgba(250,150,51,1)',
+};
+
+/** Synthetic negative document IDs used for the 3 isochrone overlays shown on the Topoguide map */
+export const ALLER_SYNTHETIC_ID = -1;
+export const RETOUR_SYNTHETIC_ID = -2;
+export const INTERSECTION_SYNTHETIC_ID = -3;
 
 function ItinevertService() {
   this.axios = axios.create({
@@ -40,162 +54,154 @@ function ItinevertService() {
   this.eventSource = null;
 }
 
-/** --------------- Query to API --------------- */
-ItinevertService.prototype.getCoverage = function (lon, lat) {
-  const params = new URLSearchParams({ lon: lon, lat: lat }).toString();
-  return this.axios.get(`/getcoverage?${params}`);
-};
-
-ItinevertService.prototype.getPolygonCoverage = function (geom_detail) {
-  let geometry = JSON.parse(geom_detail);
-  let coordinates = projectCoordinates(geometry.coordinates, 'EPSG:3857', 'EPSG:4326');
-  geometry.coordinates = coordinates;
-  let wkb = JSON.stringify(geometry);
-  return this.axios.post(`/getpolygoncoverage`, { geom_detail: wkb });
-};
-
 /**
- * Retrieves reachable routes. The route supports all filters on route fields + sort,lang,offset,limit
+ * Formats a "from" input into the Navitia "lon;lat" coordinates string.
  *
- * @param {Object} query The query filters to apply to routes
- * @returns {Promise} Returns {documents: All reachable routes, total: query.count()}
+ * Accepts either an address selection object (as returned by `input-address`, with `geometry.coordinates`), a plain
+ * `[lon, lat]` array, or an already-formatted string.
+ *
+ * @param {Object | Array | String} from
+ * @returns {String}
  */
-ItinevertService.prototype.getReachableRoutes = function (query) {
-  const params = new URLSearchParams(query).toString();
-  return this.axios.get(`/reachableroutes?${params}`);
-};
-
-/**
- * Retrieves all reachable routes.
- *
- * @param {Object} query The query filters to apply to routes
- * @returns {Promise} Returns {documents: All reachable routes, total: query.count()}
- */
-ItinevertService.prototype.getAllReachableRoutes = function (query, onProgress) {
-  return getAllReachable(query, onProgress, (q) => this.getReachableRoutes(q));
-};
-
-/**
- * Retrieves reachable waypoints. The route supports all filters on waypoint fields + sort,lang,offset,limit
- *
- * @param {Object} query The query filters to apply to waypoints
- * @returns {Promise} Returns {documents: All reachable waypoints, total: query.count()}
- */
-ItinevertService.prototype.getReachableWaypoints = function (query) {
-  const params = new URLSearchParams(query).toString();
-  return this.axios.get(`/reachablewaypoints?${params}`);
-};
-
-/**
- * Retrieves all reachable waypoints.
- *
- * @param {Object} query The query filters to apply to waypoints
- * @returns {Promise} Returns {documents: All reachable waypoints, total: query.count()}
- */
-ItinevertService.prototype.getAllReachableWaypoints = function (query, onProgress) {
-  return getAllReachable(query, onProgress, (q) => this.getReachableWaypoints(q));
-};
-
-/**
- * Helper function to download all reachable documents with paginated queries
- *
- * Repeatedly calls the provided query function until all documents are retrieved, the maximum size is reached, or the
- * request is cancelled
- *
- * @param {Object} param0
- * @param {Object} param0.query Query parameters used for pagination and filtering
- * @param {Function} param0.queryFunction Function to query a page
- * @param {Function} [param0.onProgress] Optional callback invoked after each page is fetched
- * @returns {Promise<Array>} A cancelable Promise that resolves with the aggregated list of documents. Call `.cancel()`
- *   to stop further requests.
- */
-function getAllReachable(query, onProgress, queryFunction) {
-  const MAX_SIZE = 2000;
-  const API_MAX_LIMIT = 100;
-
-  let cancelled = false;
-  let limit = MAX_SIZE;
-
-  query.limit = API_MAX_LIMIT;
-
-  class CancelablePromise extends Promise {
-    cancel() {
-      cancelled = true;
-    }
-  }
-
-  return new CancelablePromise((resolve, reject) => {
-    const result = [];
-
-    const download = (offset = 0) => {
-      if (cancelled) return;
-
-      query.offset = offset;
-
-      queryFunction(query)
-        .then(({ data }) => {
-          if (cancelled) return;
-
-          result.push(...data.documents);
-
-          onProgress?.(result.length, data.total);
-
-          if (data.documents.length === 0 || result.length === data.total || result.length >= limit) {
-            resolve(result);
-          } else {
-            download(offset + API_MAX_LIMIT);
-          }
-        })
-        .catch((error) => {
-          if (!cancelled) {
-            reject(error);
-          }
-        });
-    };
-
-    download();
-  });
+function formatFromCoordinates(from) {
+  if (typeof from === 'string') return from;
+  const coordinates = Array.isArray(from) ? from : from?.geometry?.coordinates;
+  if (!coordinates) return '';
+  return navitiaService.formatCoordinates(coordinates);
 }
 
-ItinevertService.prototype.getJourneyReachableWaypoints = function () {
-  const data = this.axios.get(`/navitia/journeyreachablewaypoints/result/${this.jobID}`);
-  return data;
-};
+/**
+ * Resolve which job family (route segment) to use depending on the document type.
+ *
+ * @param {'route' | 'waypoint'} documentType
+ * @returns {String}
+ */
+function roundTripJobFamily(documentType) {
+  return documentType === 'waypoint' ? 'journeyroundtripwaypoints' : 'journeyroundtriproutes';
+}
 
-ItinevertService.prototype.getJourneyReachableRoutes = function () {
-  const data = this.axios.get(`/navitia/journeyreachableroutes/result/${this.jobID}`);
-  return data;
+/** --------------- Query to API --------------- */
+
+/**
+ * Retrieves the outbound/return/intersection isochrones of a public transport search. The API computes them once per
+ * search (the topoguide filters on the same search, with its parameters in the query string, see `transport-query`).
+ *
+ * @param {Object} search `{ from, date, minDeparture, maxReturn, maxDuration, hikingDuration }`, `from` being "lon;lat"
+ *   and the last two optional
+ * @returns {Promise} Resolves to `{ aller_geom, retour_geom, intersection_geom }`
+ */
+ItinevertService.prototype.getTransportIsochrones = function (search) {
+  const params = this.enhanceQuery(
+    {
+      from: formatFromCoordinates(search.from),
+      date: search.date,
+      min_departure: search.minDeparture,
+      max_return: search.maxReturn,
+    },
+    { max_duration: search.maxDuration }
+  );
+
+  return this.axios.get('/navitia/transportisochrones', { params });
 };
 
 /**
- * Retrieves routes reachable by a Navitia journey computed with departure and to. The route does not support offset and
- * limit, it will always return all the routes (count will always be <= MAX_ROUTE_THRESHOLD)
+ * Synchronously checks whether a single document is reachable both ways (aller + retour) by public transport.
  *
- * @param {Object} query The query filters to apply to routes
- * @param {Object} departure The starting point ({ selectedDate, selectedTime, timePreference})
- * @param {String} from The starting point {lon, lat}
- * @returns {Promise} Returns {documents: All routes reachable in TC, total: query.count()}
+ * @param {Number} documentId
+ * @param {'route' | 'waypoint'} documentType
+ * @param {String} date The departure date, "YYYY-MM-DD"
+ * @param {String} minDeparture The minimum departure time, "HH:MM"
+ * @param {String} maxReturn The maximum return time, "HH:MM"
+ * @param {Object | Array | String} from The starting point
+ * @param {Number} [hikingDurationMinutes] Optional hiking duration, in minutes, used to check the compatibility of the
+ *   aller/retour margin against the actual course duration
+ * @returns {Promise} Resolves to `{ aller: {found, departure, arrival}, retour: {...}, compatible }`
  */
-ItinevertService.prototype.startJourneyReachableRoutesJob = async function (query, departure, from) {
-  const params = new URLSearchParams(buildJourneyReachableQuery(query, departure, from)).toString();
-  this.jobID = (await this.axios.get(`/navitia/journeyreachableroutes/start?${params}`)).data['job_id'];
+ItinevertService.prototype.getRoundTripReachable = function (
+  documentId,
+  documentType,
+  date,
+  minDeparture,
+  maxReturn,
+  from,
+  hikingDurationMinutes
+) {
+  const params = this.enhanceQuery(
+    {
+      document_id: documentId,
+      document_type: documentType,
+      from: formatFromCoordinates(from),
+      date,
+      min_departure: minDeparture,
+      max_return: maxReturn,
+    },
+    { hiking_duration: hikingDurationMinutes }
+  );
+
+  return this.axios.get('/navitia/roundtripreachable', { params });
 };
 
 /**
- * Retrieves waypoints reachable by a Navitia journey computed with departure and to. The route does not support offset
- * and limit
+ * Starts a batch round-trip verification job for a shortlist of documents (capped at MAX_ROUTE_THRESHOLD).
  *
- * @param {Object} query The query filters to apply to waypoints
- * @param {Object} departure The starting point ({ selectedDate, selectedTime, timePreference})
- * @param {String} from The starting point {lon, lat}
- * @returns {Promise} Returns {documents: All waypoints reachable in TC, total: query.count()}
+ * @param {Number[]} documentIds The shortlist of document IDs to verify
+ * @param {'route' | 'waypoint'} documentType
+ * @param {String} date The departure date, "YYYY-MM-DD"
+ * @param {String} minDeparture The minimum departure time, "HH:MM"
+ * @param {String} maxReturn The maximum return time, "HH:MM"
+ * @param {Object | Array | String} from The starting point
+ * @param {Number} [hikingDurationMinutes] Optional hiking duration, in minutes
+ * @returns {Promise<String>} Resolves to the job ID (also stored in `this.jobID`)
  */
-ItinevertService.prototype.startJourneyReachableWaypointsJob = async function (query, departure, from) {
-  const params = new URLSearchParams(buildJourneyReachableQuery(query, departure, from)).toString();
-  this.jobID = (await this.axios.get(`/navitia/journeyreachablewaypoints/start?${params}`)).data['job_id'];
+ItinevertService.prototype.startRoundTripJob = async function (
+  documentIds,
+  documentType,
+  date,
+  minDeparture,
+  maxReturn,
+  from,
+  hikingDurationMinutes
+) {
+  const params = this.enhanceQuery(
+    {
+      ids: documentIds.join(','),
+      from: formatFromCoordinates(from),
+      date,
+      min_departure: minDeparture,
+      max_return: maxReturn,
+    },
+    { hiking_duration: hikingDurationMinutes }
+  );
+
+  const family = roundTripJobFamily(documentType);
+  this.jobID = (await this.axios.get(`/navitia/${family}/start`, { params })).data['job_id'];
+  return this.jobID;
 };
 
-ItinevertService.prototype.monitorProgress = function (onProgress, onDone, onError, type) {
+/**
+ * Retrieves the result of a batch round-trip verification job.
+ *
+ * @param {'route' | 'waypoint'} documentType
+ * @param {String} [jobId] Defaults to the last job started with `startRoundTripJob`
+ * @returns {Promise} Resolves to `{ status, result: { results: { <document_id>: {aller, retour, compatible} }, total }
+ *   }`
+ */
+ItinevertService.prototype.getRoundTripJobResult = function (documentType, jobId = this.jobID) {
+  const family = roundTripJobFamily(documentType);
+  return this.axios.get(`/navitia/${family}/result/${jobId}`);
+};
+
+/**
+ * Opens an SSE connection to monitor the progress of a background job (either the round-trip verification job families
+ * above, or any other `/navitia/<family>/progress/<jobId>` route following the same protocol).
+ *
+ * @param {Function} onProgress Callback invoked with the raw SSE message data on each progress event
+ * @param {Function} onDone Callback invoked once the job is done
+ * @param {Function} onError Callback invoked with the raw SSE error data if the job fails
+ * @param {String} family The route segment identifying the job family, e.g. "journeyroundtriproutes"
+ * @returns {EventSource}
+ */
+ItinevertService.prototype.monitorProgress = function (onProgress, onDone, onError, family) {
   if (!this.jobID) {
     throw new Error('No job started yet');
   }
@@ -203,7 +209,7 @@ ItinevertService.prototype.monitorProgress = function (onProgress, onDone, onErr
   // Close any existing stream just in case
   this.cancelProgress();
 
-  this.eventSource = new EventSource(`${config.urls.api}/navitia/journeyreachable${type}/progress/${this.jobID}`);
+  this.eventSource = new EventSource(`${config.urls.api}/navitia/${family}/progress/${this.jobID}`);
 
   this.eventSource.onmessage = (event) => {
     if (onProgress) {
@@ -235,62 +241,14 @@ ItinevertService.prototype.cancelProgress = function (resetJob = false) {
   }
 };
 
-/**
- * Retrieves routes reachable in the Navitia isochrones computed with departure and duration. The route does not support
- * offset and limit, it will always return all the routes (count will always be <= MAX_ROUTE_THRESHOLD)
- *
- * @param {Object} query The query filters to apply to routes
- * @param {Object} departure The starting point ({ selectedDate, selectedTime, timePreference})
- * @param {Integer} duration The maximum duration for the trip in minutes
- * @param {String} from The starting point {lon, lat}
- * @returns {Promise} Returns {documents: All routes reachable in the Navitia isochrones, total: query.count()}
- */
-ItinevertService.prototype.getIsochronesReachableRoutes = function (query, departure, duration, from) {
-  const params = new URLSearchParams(buildIsochroneReachableQuery(query, departure, duration, from)).toString();
-  return this.axios.get(`/navitia/isochronesreachableroutes?${params}`);
-};
-
-/**
- * Retrieves waypoints reachable in the Navitia isochrones computed with departure and duration. The route does not
- * support offset and limit, it will always return all the waypoints
- *
- * @param {Object} query The query filters to apply to waypoints
- * @param {Object} departure The starting point ({ selectedDate, selectedTime, timePreference})
- * @param {Integer} duration The maximum duration for the trip in minutes
- * @param {String} from The starting point {lon, lat}
- * @returns {Promise} Returns {documents: All waypoints reachable in the Navitia isochrones, total: query.count()}
- */
-ItinevertService.prototype.getIsochronesReachableWaypoints = function (query, departure, duration, from) {
-  const params = new URLSearchParams(buildIsochroneReachableQuery(query, departure, duration, from)).toString();
-  return this.axios.get(`/navitia/isochronesreachablewaypoints?${params}`);
-};
-
 /** --------------- Helper functions for queries --------------- */
 
 /**
- * Take all filters in active fields and build the query with each of them
- *
- * @param {Array} activeFields The active fields where all the filters are stored
- * @returns {Objet} Returns the query with all filters in it
- */
-ItinevertService.prototype.buildQuery = function (activeFields) {
-  let query = {};
-  // loop over each category ('General', 'ratings', 'Terrain', 'Misc')
-  for (let category of Object.keys(activeFields)) {
-    // loop over each active fields to enhance the query
-    for (let field of activeFields[category]) {
-      query[field.field.url] = field.field.valueToUrl(field.value);
-    }
-  }
-  return query;
-};
-
-/**
- * Enhance a base query with the active fields.
+ * Enhance a base query with extra fields, skipping keys that are undefined/null/empty.
  *
  * @param {Object} baseQuery The base query to be enhanced
- * @param {Object} newQuery The new query
- * @returns {Objet} Returns the query with all filters in it
+ * @param {Object} newQuery The new fields to merge in
+ * @returns {Object} Returns the query with all filters in it
  */
 ItinevertService.prototype.enhanceQuery = function (baseQuery, newQuery) {
   let query = { ...baseQuery };
@@ -302,136 +260,6 @@ ItinevertService.prototype.enhanceQuery = function (baseQuery, newQuery) {
     }
   }
   return query;
-};
-
-/**
- * Build a query for journey reachable documents
- *
- * @param {Object} query The query filters to apply to docs
- * @param {Object} departure The starting point ({ selectedDate, selectedTime, timePreference})
- * @param {String} from The starting point {lon, lat}
- * @returns
- */
-function buildJourneyReachableQuery(query, departure, from) {
-  const newQuery = { ...query };
-
-  const { dateTimeFormat, dateTimeRepresents } = formatNavitiaDateTime(
-    departure.selectedDate,
-    departure.selectedTime,
-    departure.timePreference
-  );
-
-  newQuery.datetime = dateTimeFormat;
-  newQuery.datetime_represents = dateTimeRepresents;
-  newQuery.from = navitiaService.formatCoordinates(from.geometry.coordinates);
-  newQuery.walking_speed = 1.12;
-  newQuery.max_walking_duration_to_pt = 4464;
-
-  return newQuery;
-}
-
-/**
- * Build a query for isochrone reachable documents
- *
- * @param {Object} query The query filters to apply to docs
- * @param {Object} departure The starting point ({ selectedDate, selectedTime, timePreference})
- * @param {Integer} duration The maximum duration for the trip in minutes
- * @param {String} from The starting point {lon, lat}
- * @returns
- */
-function buildIsochroneReachableQuery(query, departure, duration, from) {
-  let newQuery = { ...query };
-
-  const { dateTimeFormat, dateTimeRepresents } = formatNavitiaDateTime(
-    departure.selectedDate,
-    departure.selectedTime,
-    departure.timePreference
-  );
-
-  newQuery.datetime = dateTimeFormat;
-  newQuery.datetime_represents = dateTimeRepresents;
-  newQuery.from = navitiaService.formatCoordinates(from.geometry.coordinates);
-  newQuery.boundary_duration = [duration * 60]; // (minutes to second)
-
-  return newQuery;
-}
-
-/**
- * Format a departure/arrival date+time for Navitia API.
- *
- * @param {string} date - Date in "YYYY-MM-DD" (e.g., "2025-12-01").
- * @param {string} time - Time in "HH:MM" (24h, e.g., "08:30").
- * @param {'arrive-before' | 'leave-after' | string} timePreference - If 'arrive-before' the result represents arrival,
- *   otherwise departure.
- * @returns {{ dateTimeFormat: string; dateTimeRepresents: 'arrival' | 'departure' }}
- */
-function formatNavitiaDateTime(date, time, timePreference) {
-  const originalDateTime = new Date(`${date}T${time}:00`);
-  const y = originalDateTime.getFullYear();
-  const m = String(originalDateTime.getMonth() + 1).padStart(2, '0');
-  const d = String(originalDateTime.getDate()).padStart(2, '0');
-  const hh = String(originalDateTime.getHours()).padStart(2, '0');
-  const mm = String(originalDateTime.getMinutes()).padStart(2, '0');
-
-  const dateTimeFormat = `${y}${m}${d}T${hh}${mm}00`;
-  const dateTimeRepresents = timePreference === 'arrive-before' ? 'arrival' : 'departure';
-
-  return { dateTimeFormat, dateTimeRepresents };
-}
-
-/** --------------- Helper functions for Itinevert tool UI --------------- */
-
-/**
- * Get the initial value for a field, based on its queryMode
- *
- * @param {Object} field The field
- * @returns {Object} Returns initial value for the field
- */
-ItinevertService.prototype.initialValue = function (field) {
-  if (!field) return null;
-  if (field.queryMode === 'orientations') return [];
-  if (field.queryMode === 'multiSelect' || field.queryMode === 'tristate') return [];
-  if (field.queryMode === 'checkbox') return false;
-  if (field.queryMode === 'valuesRangeSlider' || field.queryMode === 'numericalRangeSlider') {
-    if (field.queryMode === 'valuesRangeSlider') {
-      return [field.values?.[0] ?? 0, field.values?.[field.values.length - 1] ?? 0];
-    }
-    return [field.min ?? 0, field.max ?? 0];
-  }
-  return '';
-};
-
-/**
- * Test if a value is equal to field's default value
- *
- * @param {Object} field The field
- * @param {Object} fieldValue The value to compare with the default value of field
- * @returns {Boolean} Returns true if the value is equal to the default value of the field
- */
-ItinevertService.prototype.isFieldValueDefault = function (fieldValue, field) {
-  const initialVal = this.initialValue(field);
-
-  // Compare for null
-  if (fieldValue === null) {
-    return true;
-  }
-
-  // Compare for array
-  if (Array.isArray(initialVal)) {
-    return (
-      Array.isArray(fieldValue) &&
-      initialVal.length === fieldValue.length &&
-      initialVal.every((val, index) => val === fieldValue[index])
-    );
-  }
-
-  // Compare for boolean
-  if (typeof initialVal === 'boolean') {
-    return initialVal === fieldValue;
-  }
-
-  // General compare for strings
-  return initialVal === fieldValue;
 };
 
 /** Project geometry's coordinates from sourceProj to targetProj */
@@ -463,6 +291,59 @@ export function createBboxString(coords) {
     node.forEach(recur);
   })(coords);
   return `${minX},${minY},${maxX},${maxY}`;
+}
+
+/**
+ * Projects a GeoJSON geometry (as returned by the transportisochrones/roundtrip endpoints, in EPSG:4326) into EPSG:3857
+ * so it can be fed straight into a synthetic map document's `geom`.
+ *
+ * @param {Object | String} geometry A GeoJSON geometry object, or "" / null / undefined when absent
+ * @returns {Object | null}
+ */
+export function projectGeometry(geometry) {
+  if (!geometry || typeof geometry !== 'object' || !geometry.coordinates) {
+    return null;
+  }
+  return { type: geometry.type, coordinates: projectCoordinates(geometry.coordinates) };
+}
+
+/**
+ * Builds the up-to-3 synthetic "area" map documents used to overlay the aller/retour/intersection isochrones on the
+ * Topoguide map, following the same synthetic-document pattern as the rest of the app (negative `document_id`, `type:
+ * 'a'`, `nonInteractive` property).
+ *
+ * @param {Object} context The stashed Itinevert search context: `{ allerGeom, retourGeom, intersectionGeom }`
+ * @returns {Object[]}
+ */
+export function buildIsochroneOverlayDocuments(context) {
+  if (!context) return [];
+
+  const overlays = [
+    { id: ALLER_SYNTHETIC_ID, geometry: context.allerGeom, style: ALLER_POLYGON_STYLE },
+    { id: RETOUR_SYNTHETIC_ID, geometry: context.retourGeom, style: RETOUR_POLYGON_STYLE },
+    { id: INTERSECTION_SYNTHETIC_ID, geometry: context.intersectionGeom, style: INTERSECTION_POLYGON_STYLE },
+  ];
+
+  return overlays
+    .map(({ id, geometry, style }) => {
+      const projected = projectGeometry(geometry);
+      if (!projected) return null;
+
+      return {
+        document_id: id,
+        type: 'a',
+        geometry: {
+          version: 1,
+          geom: JSON.stringify(projected),
+          geom_detail: JSON.stringify(projected),
+        },
+        properties: {
+          ...style,
+          nonInteractive: true,
+        },
+      };
+    })
+    .filter((doc) => doc !== null);
 }
 
 export default new ItinevertService();

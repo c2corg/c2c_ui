@@ -6,6 +6,7 @@
       class="document-card"
       :target="target"
       :highlighted="highlighted"
+      :transport-context="transportContext"
     />
     <delete-button v-if="showDeleteButton" @click="$emit('delete')" class="delete-button" />
   </div>
@@ -53,6 +54,16 @@ export default {
     highlighted: {
       type: Boolean,
       default: false,
+    },
+
+    /**
+     * Active transport search context (`{ fromAddress, date, minDeparture, maxReturn, hikingDuration, results }`),
+     * forwarded to route/waypoint cards to display accessibility badges and the unit verification button. `null` (the
+     * default) has no effect on any card.
+     */
+    transportContext: {
+      type: Object,
+      default: null,
     },
   },
 

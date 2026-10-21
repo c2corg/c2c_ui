@@ -3,6 +3,7 @@
     style="width: 100%"
     class="ag-theme-balham"
     :column-defs="columnDefs"
+    :context="gridContext"
     suppress-property-names-check
     :row-data="documents.documents"
     :get-row-class="getRowClass"
@@ -17,6 +18,7 @@
 <script>
 import { AgGridVue } from 'ag-grid-vue';
 
+import AccessibilityCellRenderer from './cell-renderers/AccessibilityCellRenderer.vue';
 import AreaList from './cell-renderers/AreaList';
 import DocumentActivities from './cell-renderers/DocumentActivities';
 import DocumentAuthor from './cell-renderers/DocumentAuthor';
@@ -72,6 +74,15 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    /**
+     * Active transport search context (`{ fromAddress, date, minDeparture, maxReturn, hikingDuration, results }`),
+     * forwarded to an extra "accessibility" column for routes/waypoints. `null` (the default) hides that column.
+     */
+    transportContext: {
+      type: Object,
+      default: null,
+    },
   },
 
   emits: ['highlight-document'],
@@ -82,10 +93,21 @@ export default {
     };
   },
 
+  computed: {
+    gridContext() {
+      return { transportContext: this.transportContext };
+    },
+  },
+
   watch: {
     documentType: {
       handler: 'computeColumnDefs',
       immediate: true,
+    },
+    transportContext() {
+      // whether the column shows up depends on transportContext, and its own cells depend on transportContext.results
+      this.computeColumnDefs();
+      this.gridApi?.refreshCells({ force: true });
     },
     highlightedDocument(newValue, oldValue) {
       const rows = [];
@@ -370,6 +392,7 @@ export default {
             _headerName: capitalize(this.$gettext('Document quality')),
             width: 30,
           },
+          ...(this.transportContext ? [this.getAccessibilityColDef()] : []),
         ];
       }
 
@@ -388,6 +411,7 @@ export default {
             _headerName: capitalize(this.$gettext('Document quality')),
             width: 30,
           },
+          ...(this.transportContext ? [this.getAccessibilityColDef()] : []),
         ];
       }
 
@@ -425,6 +449,16 @@ export default {
           },
         ];
       }
+    },
+
+    getAccessibilityColDef() {
+      return {
+        headerName: capitalize(this.$gettext('Public transport')),
+        cellRenderer: AccessibilityCellRenderer,
+        sortable: false,
+        filter: false,
+        width: 260,
+      };
     },
 
     exportCsv() {
