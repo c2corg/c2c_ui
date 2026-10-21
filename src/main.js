@@ -2,7 +2,6 @@ import { setDefaults as toastDefaults } from 'bulma-toast';
 // eslint-disable-next-line import/no-unresolved
 import { register as registerSwiper } from 'swiper/element';
 import Vue from 'vue';
-import VueHead from 'vue-head';
 
 import App from '@/App.vue';
 import config from '@/js/config';
@@ -35,7 +34,6 @@ Vue.config.silent = false;
 
 Vue.use(gdpr);
 Vue.use(analytics, { id: config.googleAnalyticsKey, router }); // after $gdpr: follows the statistics choice
-Vue.use(VueHead);
 
 Vue.use(dateUtils); // date functions
 Vue.use(documentUtils); // getDocumentType, getLocale functions
