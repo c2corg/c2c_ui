@@ -284,6 +284,21 @@ export const cartoLayers = function () {
     }),
   });
 
+  // $gettext('Public transport', 'Map layer')
+  const publicTransport = new ol.layer.Tile({
+    title: 'Public transport',
+    image: 'publictransport.jpg',
+    type: 'base',
+    visible: false,
+    source: new ol.source.XYZ({
+      url: 'https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png',
+      attributions:
+        '© <a href="//openstreetmap.org/copyright" target="_blank" rel="noreferrer noopener">OpenStreetMap</a> | ' +
+        '© <a href="//memomaps.de" target="_blank" rel="noreferrer noopener">ÖPNVKarte</a>',
+      maxZoom: 18,
+    }),
+  });
+
   // $gettext('IGN maps', 'Map layer')
   const ignFrMaps = createIgnFrSource('IGN maps', 'ign.jpg', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
   // $gettext('IGN ortho', 'Map layer')
@@ -323,6 +338,7 @@ export const cartoLayers = function () {
     openTopoMap,
     /* esri, */
     esriImagery,
+    publicTransport,
     /* bingMap, */
     ignFrMaps,
     ignFrOrtho,
