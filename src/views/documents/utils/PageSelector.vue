@@ -46,7 +46,11 @@
 </template>
 
 <script>
+import pageQueryMixin from './page-query-mixin';
+
 export default {
+  mixins: [pageQueryMixin],
+
   props: {
     documents: {
       type: Object,
@@ -61,12 +65,6 @@ export default {
   },
 
   computed: {
-    offset() {
-      return parseInt(this.$route.query.offset ?? 0);
-    },
-    queryLimit() {
-      return parseInt(this.$route.query.limit ?? 30);
-    },
     firstDocumentPosition() {
       return this.offset + 1;
     },
@@ -84,13 +82,6 @@ export default {
       if (this.documents) {
         this.total = this.documents.total;
       }
-    },
-
-    pageQuery(offset, limit) {
-      const query = Object.assign({}, this.$route.query);
-      query.offset = Math.max(offset, 0);
-      query.limit = Math.max(Math.min(limit, 100), 30);
-      return { name: this.$route.name, params: this.$route.params, query };
     },
 
     hideOnclick() {

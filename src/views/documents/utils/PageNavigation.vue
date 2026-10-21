@@ -4,7 +4,8 @@
       :is="currentPage > 1 ? 'router-link' : 'span'"
       class="button has-text-normal"
       :disabled="currentPage <= 1"
-      :to="pageQuery(currentPage - 1)"
+      :aria-disabled="currentPage <= 1 ? 'true' : null"
+      :to="pageQuery((currentPage - 2) * queryLimit, queryLimit)"
       :aria-label="$gettext('Previous page')"
     >
       <fa-icon icon="chevron-left" />
@@ -18,7 +19,7 @@
         :is="page === currentPage ? 'span' : 'router-link'"
         class="button"
         :class="{ 'is-primary': page === currentPage }"
-        :to="pageQuery(page)"
+        :to="pageQuery((page - 1) * queryLimit, queryLimit)"
         :aria-current="page === currentPage ? 'page' : null"
       >
         {{ page }}
@@ -29,7 +30,8 @@
       :is="currentPage < pageCount ? 'router-link' : 'span'"
       class="button has-text-normal"
       :disabled="currentPage >= pageCount"
-      :to="pageQuery(currentPage + 1)"
+      :aria-disabled="currentPage >= pageCount ? 'true' : null"
+      :to="pageQuery(currentPage * queryLimit, queryLimit)"
       :aria-label="$gettext('Next page')"
     >
       <fa-icon icon="chevron-right" />
@@ -38,9 +40,12 @@
 </template>
 
 <script>
+import pageQueryMixin from './page-query-mixin';
 import { getPages } from './pagination';
 
 export default {
+  mixins: [pageQueryMixin],
+
   props: {
     documents: {
       type: Object,
@@ -49,32 +54,17 @@ export default {
   },
 
   computed: {
-    offset() {
-      return parseInt(this.$route.query.offset ?? 0);
-    },
-    limit() {
-      return parseInt(this.$route.query.limit ?? 30);
-    },
     total() {
       return this.documents?.total ?? 0;
     },
     pageCount() {
-      return Math.ceil(this.total / this.limit);
+      return Math.ceil(this.total / this.queryLimit);
     },
     currentPage() {
-      return Math.floor(this.offset / this.limit) + 1;
+      return Math.floor(this.offset / this.queryLimit) + 1;
     },
     pages() {
       return getPages(this.currentPage, this.pageCount);
-    },
-  },
-
-  methods: {
-    pageQuery(page) {
-      const query = Object.assign({}, this.$route.query);
-      query.offset = (page - 1) * this.limit;
-      query.limit = this.limit;
-      return { name: this.$route.name, params: this.$route.params, query };
     },
   },
 };

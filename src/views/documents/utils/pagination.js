@@ -6,6 +6,11 @@ const ELLIPSIS = null;
  */
 export function getPages(currentPage, pageCount, around = 1) {
   const pages = [];
+
+  if (!Number.isFinite(pageCount)) {
+    return pages;
+  }
+
   let previous = 0;
 
   for (let page = 1; page <= pageCount; page++) {

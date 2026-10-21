@@ -80,7 +80,11 @@
       >
         <loading-notification :promise="promise" />
 
-        <image-cards v-if="documents && !listMode && documentType === 'image'" :documents="documents" />
+        <image-cards
+          v-if="documents && !listMode && documentType === 'image'"
+          :documents="documents"
+          class="documents-image-cards"
+        />
 
         <div
           v-if="documents && !listMode && documentType !== 'image'"
@@ -218,6 +222,9 @@ export default {
       immediate: true,
     },
     displayMode: 'updateMapSize',
+    // scroll as soon as a page is asked for, not once its results are loaded (panning the map changes the route too)
+    '$route.query.offset': 'scrollResultsToTop',
+    '$route.query.limit': 'scrollResultsToTop',
   },
 
   methods: {
@@ -238,7 +245,6 @@ export default {
       this.promise = c2c[this.documentType].getAll(this.$route.query).then(() => {
         // the list has its height: back from a document, the router can restore the scroll position
         bus.emit('trigger-scroll');
-        this.scrollResultsToTop();
       });
     },
 
@@ -399,6 +405,10 @@ $cards-gap: 0.25rem;
 
       .cards-list {
         padding-top: 2px;
+      }
+
+      .cards-list,
+      .documents-image-cards {
         flex: 0 0 auto;
       }
 
