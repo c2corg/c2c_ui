@@ -1,10 +1,11 @@
 <template>
   <span class="page-selector ml-1">
     <component
-      :is="firstDocumentPosition > 0 ? 'router-link' : 'span'"
+      :is="previousPageQuery ? 'router-link' : 'span'"
       class="pagination-link button has-text-normal"
-      :disabled="firstDocumentPosition === 1"
-      :to="pageQuery(offset - queryLimit, queryLimit)"
+      :disabled="!previousPageQuery"
+      :aria-disabled="!previousPageQuery ? 'true' : null"
+      :to="previousPageQuery"
     >
       <fa-icon icon="chevron-left" />
     </component>
@@ -12,10 +13,11 @@
     <span v-translate translate-context="1-30 of 200 results">of</span>
     {{ total }}
     <component
-      :is="lastDocumentPosition < total ? 'router-link' : 'span'"
+      :is="nextPageQuery ? 'router-link' : 'span'"
       class="pagination-link button has-text-normal"
-      :disabled="lastDocumentPosition >= total"
-      :to="pageQuery(offset + queryLimit, queryLimit)"
+      :disabled="!nextPageQuery"
+      :aria-disabled="!nextPageQuery ? 'true' : null"
+      :to="nextPageQuery"
     >
       <fa-icon icon="chevron-right" />
     </component>
@@ -34,7 +36,7 @@
           :is="'router-link'"
           class="dropdown-item is-small"
           :class="{ 'is-active': queryLimit === l }"
-          :to="pageQuery(offset, l)"
+          :to="limitQuery(l)"
           @click.native="hideOnclick"
         >
           <span>{{ l }}</span>
@@ -66,10 +68,10 @@ export default {
 
   computed: {
     firstDocumentPosition() {
-      return this.offset + 1;
+      return this.pageStart + 1;
     },
     lastDocumentPosition() {
-      return Math.min(this.offset + this.queryLimit, this.total);
+      return Math.min(this.pageStart + this.queryLimit, this.total);
     },
   },
 

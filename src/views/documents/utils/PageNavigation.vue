@@ -1,11 +1,11 @@
 <template>
   <nav v-if="pageCount > 1" class="page-navigation" :aria-label="$gettext('Pagination')">
     <component
-      :is="currentPage > 1 ? 'router-link' : 'span'"
+      :is="previousPageQuery ? 'router-link' : 'span'"
       class="button has-text-normal"
-      :disabled="currentPage <= 1"
-      :aria-disabled="currentPage <= 1 ? 'true' : null"
-      :to="pageQuery((currentPage - 2) * queryLimit, queryLimit)"
+      :disabled="!previousPageQuery"
+      :aria-disabled="!previousPageQuery ? 'true' : null"
+      :to="previousPageQuery"
       :aria-label="$gettext('Previous page')"
     >
       <fa-icon icon="chevron-left" />
@@ -27,11 +27,11 @@
     </template>
 
     <component
-      :is="currentPage < pageCount ? 'router-link' : 'span'"
+      :is="nextPageQuery ? 'router-link' : 'span'"
       class="button has-text-normal"
-      :disabled="currentPage >= pageCount"
-      :aria-disabled="currentPage >= pageCount ? 'true' : null"
-      :to="pageQuery(currentPage * queryLimit, queryLimit)"
+      :disabled="!nextPageQuery"
+      :aria-disabled="!nextPageQuery ? 'true' : null"
+      :to="nextPageQuery"
       :aria-label="$gettext('Next page')"
     >
       <fa-icon icon="chevron-right" />
@@ -61,7 +61,7 @@ export default {
       return Math.ceil(this.total / this.queryLimit);
     },
     currentPage() {
-      return Math.floor(this.offset / this.queryLimit) + 1;
+      return this.pageStart / this.queryLimit + 1;
     },
     pages() {
       return getPages(this.currentPage, this.pageCount);

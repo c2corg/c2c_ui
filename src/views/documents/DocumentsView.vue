@@ -245,13 +245,21 @@ export default {
         return;
       }
 
+      // offset in the middle of a page (old link...): go to the page it belongs to before loading anything
+      const pageQuery = this.normalizedPageQuery(0);
+      if (pageQuery) {
+        this.$router.replace(pageQuery);
+        // $route watcher will call load
+        return;
+      }
+
       const route = this.$route.fullPath;
       this.promise = c2c[this.documentType].getAll(this.$route.query).then((response) => {
         // the list has its height: back from a document, the router can restore the scroll position
         bus.emit('trigger-scroll');
 
         // past the last page, which happens when the map is moved to a sparser area: show the last page instead
-        const lastPageQuery = this.lastPageQuery(response.data.total);
+        const lastPageQuery = this.normalizedPageQuery(response.data.total);
         if (lastPageQuery && this.$route.fullPath === route) {
           this.$router.replace(lastPageQuery);
         }
