@@ -103,9 +103,9 @@ import QueryItemSliderLabel from './QueryItemSliderLabel';
 import queryItemMixin from './query-item-mixin';
 
 import debounce from '@/js/debounce';
-import vue3 from '@/js/vue3-component';
 import { requireFieldProperty } from '@/js/properties-mixins';
 import { uidMixin } from '@/js/uid';
+import vue3 from '@/js/vue3-component';
 
 export default {
   components: {
