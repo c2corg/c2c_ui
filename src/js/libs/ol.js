@@ -24,6 +24,7 @@ import ImageLayer from 'ol/layer/Image';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
 import VectorImageLayer from 'ol/layer/VectorImage';
+import { tile as tileLoadingStrategy } from 'ol/loadingstrategy';
 import { get as getProjection, toLonLat, transformExtent, transform as transformProjection } from 'ol/proj';
 import BingMaps from 'ol/source/BingMaps';
 import ImageStatic from 'ol/source/ImageStatic';
@@ -34,6 +35,7 @@ import WMTS from 'ol/source/WMTS';
 import XYZ from 'ol/source/XYZ';
 import { getDistance } from 'ol/sphere';
 import { Circle, Fill, Icon, Stroke, Style, Text } from 'ol/style';
+import { createXYZ } from 'ol/tilegrid';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
 
 // build our own ol module
@@ -107,6 +109,10 @@ export default {
     Group: GroupLayer,
   },
 
+  loadingstrategy: {
+    tile: tileLoadingStrategy,
+  },
+
   proj: {
     get: getProjection,
     transform: transformProjection,
@@ -138,6 +144,7 @@ export default {
   },
 
   tilegrid: {
+    createXYZ,
     WMTS: WMTSTileGrid,
   },
 };

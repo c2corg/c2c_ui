@@ -69,12 +69,12 @@
         </template>
         <template v-if="!editable">
           <header v-translate>Public transport</header>
-          <!-- $gettext('Stops near routes') -->
+          <!-- $gettext('Transports') -->
           <div class="layer-group">
             <layer-button
-              @click="toggleStops"
-              :selected="stopsVisible"
-              :layer="{ title: 'Stops near routes', image: 'stops.jpg' }"
+              @click="toggleTransport"
+              :selected="transportVisible"
+              :layer="{ title: 'Transports', image: 'stops.jpg' }"
             ></layer-button>
           </div>
         </template>
@@ -164,7 +164,21 @@
       :data="swissProtectionAreaData"
     />
 
-    <stop-information v-if="!editable" ref="StopInformation" :data="stopData" />
+    <transport-stop-information
+      v-if="!editable"
+      ref="transportStopInformation"
+      @show-line="showTransportLines([$event])"
+      @show-waypoint="showAssociatedWaypoint"
+    />
+
+    <transport-line-information
+      v-if="!editable"
+      ref="transportLineInformation"
+      @line-selected="selectTransportLine"
+      @line-loaded="showTransportLineStops"
+      @hide="unselectTransportLine"
+      @show-stop="showTransportStop"
+    />
   </div>
 </template>
 
@@ -173,8 +187,9 @@ import { toast } from 'bulma-toast';
 
 import BiodivInformation from './BiodivInformation';
 import LayerButton from './LayerButton';
-import StopInformation from './StopInformation';
 import SwissProtectionAreaInformation from './SwissProtectionAreaInformation';
+import TransportLineInformation from './TransportLineInformation';
+import TransportStopInformation from './TransportStopInformation';
 import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers';
 import {
   buildDiffStyle,
@@ -187,12 +202,12 @@ import {
   isFiniteExtent,
   swissExtent,
 } from './map-utils';
+import { LINES_HIT_TOLERANCE, createTransportLayers, updateHiddenStops } from './transport-layers';
 
 import biodivSportsService from '@/js/apis/biodivsports-service';
 import c2c from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
 import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
-import transportService from '@/js/apis/transport-service';
 import bus from '@/js/event-bus';
 import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
@@ -202,7 +217,6 @@ const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
 const DEFAULT_POINT_ZOOM = 14;
 const MAX_ZOOM = 19;
 const TRACKING_INITIAL_ZOOM = 13;
-const STOPS_MIN_ZOOM = 12; // public transport stops are only requested from this zoom
 
 const isNotVirtual = (waypoint) => waypoint.waypoint_type !== 'virtual';
 
@@ -210,7 +224,8 @@ export default {
   components: {
     BiodivInformation,
     LayerButton,
-    StopInformation,
+    TransportLineInformation,
+    TransportStopInformation,
     SwissProtectionAreaInformation,
   },
 
@@ -325,10 +340,12 @@ export default {
       // protection areas layers
       protectionAreasLayers: protectionAreasLayers(),
 
-      // public transport stops layer, only visible from STOPS_MIN_ZOOM
-      stopsLayer: new ol.layer.Vector({
+      // public transport: lines and stops (requested by tiles, from a zoom)
+      transportLayers: createTransportLayers((coordinates) => this.isStopDrawnByDocuments(coordinates)),
+
+      // public transport: stops of the selected line, waypoint associated with a stop
+      transportSelectionLayer: new ol.layer.Vector({
         source: new ol.source.Vector(),
-        minZoom: STOPS_MIN_ZOOM - 0.01,
       }),
 
       // layer for document icons and paths
@@ -372,10 +389,8 @@ export default {
       protectionAreasVisible: this.showProtectionAreas && !this.editedDocument,
       hasProtectionAreas: null,
 
-      stopData: { stoparea_name: '', lines: [], waypoints: [] },
-      stopsVisible: !this.editedDocument,
-      stopsLoadedExtent: null,
-      stopsRequestId: 0,
+      transportVisible: !this.editedDocument,
+      hoveredLines: [],
 
       // on editable mode, there a button reset
       // we must save initial geometry
@@ -494,7 +509,11 @@ export default {
         ...this.dataLayers,
         ...this.protectionAreasLayers,
         this.protectionAreasLayer,
-        this.stopsLayer, // under documents, so that their markers stay clickable
+        // under documents, so that their markers stay clickable
+        this.transportLayers.lines,
+        this.transportLayers.otherStops,
+        this.transportLayers.stops,
+        this.transportSelectionLayer,
         this.imagesLayer, // images icons will be under documents
         this.documentsLayer,
         this.waypointsLayer, // keep waypoint above trace and documents
@@ -516,14 +535,13 @@ export default {
 
     this.map.on('moveend', this.sendBoundsToUrl);
     this.map.on('moveend', this.getProtectionAreas);
-    this.map.on('moveend', this.getStops);
     this.map.on('moveend', this.updateEditMapLink);
     this.map.on('moveend', this.emitMoveEvent);
 
     if (this.protectionAreasVisible) {
       this.protectionAreasLayers.forEach((layer) => layer.setVisible(true));
     }
-    this.stopsLayer.setVisible(this.stopsVisible);
+    this.setTransportVisible(this.transportVisible);
 
     this.geolocation = new ol.Geolocation({
       trackingOptions: {
@@ -888,6 +906,9 @@ export default {
           }
         }
       }
+
+      // the stops drawn as documents (stops near an access point) are not drawn by the transport layers
+      updateHiddenStops(this.transportLayers, (coordinates) => this.isStopDrawnByDocuments(coordinates));
     },
 
     addDocumentFeature(document, source, style) {
@@ -1123,12 +1144,18 @@ export default {
     onPointerMove(event) {
       let resultFeature = null;
 
-      this.map.forEachFeatureAtPixel(event.pixel, function (feature) {
-        resultFeature = feature;
-        return true;
-      });
+      // lines are thin: they are looked for apart, with a tolerance
+      this.map.forEachFeatureAtPixel(
+        event.pixel,
+        function (feature) {
+          resultFeature = feature;
+          return true;
+        },
+        { layerFilter: (layer) => layer !== this.transportLayers.lines }
+      );
       this.setHighlightedFeature(resultFeature);
       this.$emit('highlight-document', resultFeature ? resultFeature.get('document') : null);
+      this.setHoveredLines(resultFeature ? [] : this.linesAtPixel(event.pixel));
     },
 
     setHighlightedFeature(feature) {
@@ -1152,7 +1179,9 @@ export default {
     },
 
     onClick(event) {
-      const feature = this.map.forEachFeatureAtPixel(event.pixel, (f) => f);
+      const feature = this.map.forEachFeatureAtPixel(event.pixel, (f) => f, {
+        layerFilter: (layer) => layer !== this.transportLayers.lines,
+      });
 
       if (feature) {
         const document = feature.get('document');
@@ -1200,10 +1229,15 @@ export default {
           this.biodivData = feature.get('biodivData');
           this.$refs.BiodivInformation.show();
         } else if (feature.get('stopData')) {
-          this.stopData = feature.get('stopData');
-          this.$refs.StopInformation.show();
+          this.showTransportStop(feature.get('stopData'));
         }
       } else {
+        const lines = this.linesAtPixel(event.pixel);
+        if (lines.length) {
+          this.showTransportLines(lines.map((line) => line.getProperties()));
+          return;
+        }
+
         // handle clicks on enabled layers
         if (this.protectionAreasVisible) {
           const extent = this.view.calculateExtent(this.map.getSize() || null);
@@ -1311,65 +1345,176 @@ export default {
       }
     },
 
-    toggleStops() {
-      this.stopsVisible = !this.stopsVisible;
-      this.stopsLayer.setVisible(this.stopsVisible);
-      this.getStops();
+    toggleTransport() {
+      this.transportVisible = !this.transportVisible;
+      this.setTransportVisible(this.transportVisible);
     },
 
-    getStops() {
-      if (!this.stopsVisible || this.view.getZoom() < STOPS_MIN_ZOOM) {
-        return;
+    setTransportVisible(visible) {
+      Object.values(this.transportLayers).forEach((layer) => layer.setVisible(visible));
+      this.transportSelectionLayer.setVisible(visible);
+      if (!visible) {
+        this.setHoveredLines([]);
       }
-
-      const extent = this.view.calculateExtent(this.map.getSize() || null);
-      if (this.stopsLoadedExtent && ol.extent.containsExtent(this.stopsLoadedExtent, extent)) {
-        return;
-      }
-
-      // request more than the visible area, to limit the requests when panning
-      const requestedExtent = ol.extent.buffer(extent, ol.extent.getWidth(extent) * 0.25);
-      const requestId = ++this.stopsRequestId;
-
-      transportService
-        .getStopareasInExtent(requestedExtent)
-        .then(({ data }) => {
-          this.addStops(data.documents);
-          if (requestId === this.stopsRequestId) {
-            this.stopsLoadedExtent = requestedExtent;
-          }
-        })
-        .catch(() => {
-          // stops are an optional layer, the map stays usable without them
-        });
     },
 
-    addStops(stops) {
-      const source = this.stopsLayer.getSource();
-      const documentsSource = this.documentsLayer.getSource();
-      const normalStyle = getDocumentPointStyle({ type: 's' }, '', false);
-      const highlightedStyle = getDocumentPointStyle({ type: 's' }, '', true);
+    /** Is a stop already drawn by the map as a document (stops near an access point)? */
+    isStopDrawnByDocuments({ x, y }) {
+      // about 50 m
+      const extent = ol.extent.buffer([x, y, x, y], 70);
+      return this.documentsLayer
+        .getSource()
+        .getFeaturesInExtent(extent)
+        .some((feature) => feature.get('document')?.type === 's');
+    },
 
-      for (const stop of stops) {
-        const id = 'stop_' + stop.navitia_id;
-        // stops already drawn as documents (stops near an access point) must not be duplicated
-        const isDrawn = stop.lines.some(
-          (line) => documentsSource.getFeatureById(line.id)?.get('document')?.type === 's'
-        );
-        if (isDrawn || source.getFeatureById(id)) {
-          continue;
+    /** The lines under the pixel (they are thin) */
+    linesAtPixel(pixel) {
+      return this.map.getFeaturesAtPixel(pixel, {
+        layerFilter: (layer) => layer === this.transportLayers.lines,
+        hitTolerance: LINES_HIT_TOLERANCE,
+      });
+    },
+
+    /** Highlights the lines under the cursor */
+    setHoveredLines(lines) {
+      if (!lines.length && !this.hoveredLines.length) {
+        return;
+      }
+      const ids = new Set(lines.map((line) => line.getId()));
+      this.hoveredLines.filter((line) => !ids.has(line.getId())).forEach((line) => line.set('hover', false));
+      lines.forEach((line) => line.set('hover', true));
+      this.hoveredLines = lines;
+      this.map.getTargetElement().style.cursor = lines.length ? 'pointer' : '';
+    },
+
+    /** Shows a stop (light, from the map or from a line): its information in a modal */
+    showTransportStop(stop) {
+      this.clearTransportSelection('association');
+      this.$refs.transportLineInformation.hide();
+      this.$refs.transportStopInformation.show(stop);
+    },
+
+    /** Shows lines (light, properties of the features of the map): the information of the first one in a modal */
+    showTransportLines(lines) {
+      this.clearTransportSelection('association');
+      this.$refs.transportStopInformation.hide();
+      this.$refs.transportLineInformation.show(
+        lines.map(({ line_id, short_name, long_name, mode, color, text_color }) => ({
+          line_id,
+          short_name,
+          long_name,
+          mode,
+          color,
+          text_color,
+        }))
+      );
+    },
+
+    /** The line of the modal stays highlighted */
+    selectTransportLine(line) {
+      this.unselectTransportLine();
+      this.transportLayers.lines.getSource().getFeatureById(line.line_id)?.set('selected', true);
+    },
+
+    unselectTransportLine() {
+      this.transportLayers.lines.getSource().forEachFeature((feature) => {
+        if (feature.get('selected')) {
+          feature.set('selected', false);
         }
+      });
+      this.clearTransportSelection('line');
+    },
 
-        const feature = new ol.Feature({
-          geometry: new ol.geom.Point([stop.coordinates.x, stop.coordinates.y]),
-          stopData: stop,
+    /** Removes the features of the selection layer of a group: 'line' (stops of a line) or 'association' */
+    clearTransportSelection(group) {
+      const source = this.transportSelectionLayer.getSource();
+      source
+        .getFeatures()
+        .filter((feature) => feature.get('group') === group)
+        .forEach((feature) => source.removeFeature(feature));
+    },
+
+    /** Draws the stops of the line of the modal, whatever the zoom */
+    showTransportLineStops(line) {
+      this.clearTransportSelection('line');
+      const source = this.transportSelectionLayer.getSource();
+      const color = line.color && line.color !== 'FFFFFF' ? `#${line.color}` : '#4a6fa5';
+      const circle = (radius) =>
+        new ol.style.Style({
+          image: new ol.style.Circle({
+            radius,
+            fill: new ol.style.Fill({ color: '#ffffff' }),
+            stroke: new ol.style.Stroke({ color, width: 3 }),
+          }),
+          zIndex: radius,
         });
-        feature.setId(id);
+      const [normalStyle, highlightedStyle] = [circle(6), circle(9)];
+
+      const stops = new Map();
+      line.details.directions.forEach((direction) =>
+        direction.stops.forEach((stop) => stop.stop_pk && stops.set(stop.stop_id, stop))
+      );
+      for (const stop of stops.values()) {
+        const [x, y] = ol.proj.transform([stop.lon, stop.lat], 'EPSG:4326', 'EPSG:3857');
+        const feature = new ol.Feature({
+          geometry: new ol.geom.Point([x, y]),
+          group: 'line',
+          stopData: {
+            kind: 'gtfs',
+            id: stop.stop_pk,
+            stoparea_name: stop.name,
+            coordinates: { x, y },
+            linked: stop.linked,
+          },
+        });
         feature.set('normalStyle', normalStyle);
         feature.set('highlightedStyle', highlightedStyle);
         feature.setStyle(normalStyle);
         source.addFeature(feature);
       }
+    },
+
+    /**
+     * Shows the waypoint a stop is associated with: its marker, linked to the stop by a dotted line, and the map fits
+     * both. The association stays until another stop or line is shown.
+     */
+    async showAssociatedWaypoint({ waypoint, stop }) {
+      this.clearTransportSelection('association');
+      this.$refs.transportStopInformation.hide();
+
+      let document;
+      try {
+        document = (await c2c.waypoint.get(waypoint.document_id)).data;
+      } catch (e) {
+        return;
+      }
+      if (!document.geometry?.geom) {
+        return;
+      }
+
+      const source = this.transportSelectionLayer.getSource();
+      this.addDocumentFeature(document, source);
+      source.getFeatureById(document.document_id)?.set('group', 'association');
+
+      const waypointPoint = geoJSONFormat.readGeometry(JSON.parse(document.geometry.geom));
+      const link = new ol.Feature({
+        geometry: new ol.geom.LineString([[stop.coordinates.x, stop.coordinates.y], waypointPoint.getCoordinates()]),
+        group: 'association',
+      });
+      link.setStyle(
+        new ol.style.Style({
+          stroke: new ol.style.Stroke({ color: '#337ab7', width: 3, lineDash: [8, 8] }),
+          zIndex: 100,
+        })
+      );
+      source.addFeature(link);
+
+      this.view.fit(ol.extent.buffer(link.getGeometry().getExtent(), 150), {
+        size: this.map.getSize(),
+        duration: 300,
+        maxZoom: 17,
+      });
     },
 
     clearGeometry() {
