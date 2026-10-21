@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import InputSlider from './InputSlider';
 
+import LayerButton from '@/components/map/LayerButton';
 import QueryItem from '@/views/documents/utils/QueryItem';
 
 const handles = (wrapper) => wrapper.findAll('[role=slider]');
@@ -86,7 +87,6 @@ describe('slider labels', () => {
   });
 
   it('names the map opacity handle after the layer', async () => {
-    const { default: LayerButton } = await import('@/components/map/LayerButton');
     const props = { title: 'IGN slopes', image: 'ignslopes.jpg', configurable: true, opacity: 0.7 };
     const layer = { get: (key) => props[key], set: () => {} };
     const wrapper = mount(LayerButton, {
