@@ -23,6 +23,26 @@ export default function install(Vue) {
       throw new Error(`Unexpected type : ${documentType}`);
     },
 
+    // filters of the "Tracks" (outings) and "Routes" map overlays when the
+    // map displays a document: only what is linked to it is shown (the
+    // parameters are the search filters of the documents listing).
+    getMapOverlayFilters(document) {
+      const id = document.document_id;
+
+      switch (document.type) {
+        case 'r':
+          return { tracks: { r: id }, routes: null };
+        case 'w':
+          return { tracks: { w: id }, routes: { w: id } };
+        case 'a':
+          return { tracks: { a: id }, routes: { a: id } };
+        case 'u':
+          return { tracks: { u: id }, routes: null };
+        default:
+          return { tracks: null, routes: null };
+      }
+    },
+
     getDocumentType(letterType) {
       return constants.letterToDocumentType[letterType];
     },

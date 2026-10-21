@@ -80,6 +80,14 @@ CamptocampApi.prototype.getOutingsTracks = function (params) {
   return this.get('/outings/map/tracks', { params });
 };
 
+CamptocampApi.prototype.getRoutesHeatmap = function (params) {
+  return this.get('/routes/map/heatmap', { params });
+};
+
+CamptocampApi.prototype.getRoutesTracks = function (params) {
+  return this.get('/routes/map/tracks', { params });
+};
+
 /* image service, I'm lazy. TODO :
  * uploadImage() must be a dedicated API in @/js/uploadFileApi.js
  * createImages() may not deserve a dedicated service, and can stay here

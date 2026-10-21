@@ -6,7 +6,7 @@
     :style="
       image
         ? { 'background-image': 'url(' + assetUrl('layers', image) + ')' }
-        : { 'background-color': '#333' }
+        : { 'background-color': layer.color || '#333' }
     "
   >
     <span :id="titleId" class="layer-button-title">{{

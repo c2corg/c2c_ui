@@ -67,14 +67,17 @@
             ></layer-button>
           </div>
         </template>
-        <template v-if="showOutingsDensity">
-          <header v-translate>Outings density</header>
+        <template v-if="showDensityOverlays">
+          <header v-translate>Overlays</header>
+          <!-- $gettext('Tracks') $gettext('Routes') -->
           <div class="layer-group">
             <layer-button
-              @click="toggleOutingsDensity"
-              :selected="outingsDensityEnabled"
-              :layer="{ title: 'Outings density' }"
-              title-context="Map outings density layer"
+              v-for="overlay of densityOverlayButtons"
+              :key="overlay.type"
+              @click="toggleDensityOverlay(overlay.type)"
+              :selected="densityEnabled[overlay.type]"
+              :layer="{ title: overlay.title, color: overlay.color }"
+              title-context="Map overlay layer"
             ></layer-button>
           </div>
         </template>
@@ -157,18 +160,20 @@
     </div>
 
     <div
-      v-if="showOutingsDensity"
-      ref="outingsDensityMessage"
-      v-show="outingsTracksTruncated"
-      class="ol-control ol-control-outings-density-message"
+      v-if="showDensityOverlays"
+      ref="densityMessage"
+      v-show="densityTruncated"
+      class="ol-control ol-control-density-message"
     >
-      {{ $gettext('Zoom in to see individual outings', 'Map controls') }}
+      {{ $gettext('Zoom in to see all tracks', 'Map controls') }}
     </div>
 
-    <div v-if="showOutingsDensity" ref="trackPicker" class="ol-track-picker" v-show="trackPickerOutings.length">
+    <div v-if="showDensityOverlays" ref="trackPicker" class="ol-track-picker" v-show="trackPickerDocuments.length">
       <ul>
-        <li v-for="outing in trackPickerOutings" :key="outing.document_id">
-          <a href="#" @click.prevent="selectTrackPickerOuting(outing)">{{ $documentUtils.getDocumentTitle(outing) }}</a>
+        <li v-for="document in trackPickerDocuments" :key="document.type + document.document_id">
+          <a href="#" @click.prevent="selectTrackPickerDocument(document)">{{
+            $documentUtils.getDocumentTitle(document)
+          }}</a>
         </li>
       </ul>
     </div>
@@ -217,14 +222,36 @@ const DEFAULT_POINT_ZOOM = 14;
 const MAX_ZOOM = 19;
 const TRACKING_INITIAL_ZOOM = 13;
 
-// below this zoom level, outings density is shown as an aggregated
-// heatmap (server-side buckets); at or above it, individual outing
+// below this zoom level, the tracks / routes overlays are shown as an
+// aggregated heatmap (server-side buckets); at or above it, individual
 // tracks are fetched for the current bbox instead.
-const OUTINGS_TRACKS_MIN_ZOOM = 13;
+const DENSITY_TRACKS_MIN_ZOOM = 13;
 // how long to wait, after the map stops moving, before fetching new
-// outings density data (avoids firing a request on every intermediate
-// step of a pan/zoom gesture)
-const OUTINGS_DENSITY_FETCH_DEBOUNCE = 400;
+// overlay data (avoids firing a request on every intermediate step of a
+// pan/zoom gesture)
+const DENSITY_FETCH_DEBOUNCE = 400;
+
+// the overlays that can be switched on from the layer switcher. Each one
+// is a heatmap (low/medium zoom) and a vector layer of individual tracks
+// (high zoom), fed by the `/<documents>/map/{heatmap,tracks}` endpoints
+const DENSITY_OVERLAYS = {
+  outing: {
+    title: 'Tracks',
+    getHeatmap: (params) => c2c.getOutingsHeatmap(params),
+    getTracks: (params) => c2c.getOutingsTracks(params),
+    heatmapGradient: ['#00f', '#0ff', '#0f0', '#ff0', '#f00'],
+    trackColor: '#e8412c',
+  },
+  route: {
+    title: 'Routes',
+    getHeatmap: (params) => c2c.getRoutesHeatmap(params),
+    getTracks: (params) => c2c.getRoutesTracks(params),
+    heatmapGradient: ['#9ecae1', '#4292c6', '#2171b5', '#08519c', '#08306b'],
+    trackColor: '#1f6fd1',
+  },
+};
+
+const buildDensityTrackStyle = (color) => new ol.style.Style({ stroke: new ol.style.Stroke({ color, width: 2 }) });
 
 const isNotVirtual = (waypoint) => waypoint.waypoint_type !== 'virtual';
 
@@ -261,13 +288,16 @@ export default {
       default: false,
     },
 
-    // when true, a "outings density" toggle becomes available in the
-    // layer switcher (heatmap at low/medium zoom, individual tracks at
-    // high zoom). Only meaningful for the outings search map: it is not
-    // enabled by default, the user still has to switch it on.
-    showOutingsDensity: {
-      type: Boolean,
-      default: false,
+    // search filters (same parameters as the documents listing) applied to
+    // the "Tracks" (outings) and "Routes" overlays. `null` means no filter.
+    tracksFilters: {
+      type: Object,
+      default: null,
+    },
+
+    routesFilters: {
+      type: Object,
+      default: null,
     },
 
     biodivSportsActivities: {
@@ -380,34 +410,18 @@ export default {
         source: new ol.source.Vector(),
       }),
 
-      // aggregated outings density (low/medium zoom)
-      outingsHeatmapLayer: new ol.layer.Heatmap({
-        source: new ol.source.Vector(),
-        visible: false,
-        blur: 20,
-        radius: 12,
-        weight: (feature) => feature.get('weight'),
-      }),
+      // user-controlled toggles of the tracks / routes overlays, off by
+      // default: they are an opt-in addition, not a change to the map's
+      // default look
+      densityEnabled: { outing: false, route: false },
 
-      // individual outing tracks for the current bbox (high zoom)
-      outingsTracksLayer: new ol.layer.Vector({
-        source: new ol.source.Vector(),
-        visible: false,
-      }),
-
-      // user-controlled toggle for the outings density layers, off by
-      // default: the heatmap/tracks are an opt-in addition, not a change
-      // to the map's default look
-      outingsDensityEnabled: false,
-
-      // set when the tracks endpoint reports more outings in the bbox
+      // set when the tracks endpoint reports more documents in the bbox
       // than it is willing to return
-      outingsTracksTruncated: false,
+      densityTruncatedByType: { outing: false, route: false },
 
-      // outings found under a multi-track click, for the disambiguation
+      // documents found under a multi-track click, for the disambiguation
       // popup ("skitour.fr"-style)
-      trackPickerOutings: [],
-      trackPickerOverlay: null,
+      trackPickerDocuments: [],
 
       isFullscreen: false,
 
@@ -440,6 +454,32 @@ export default {
   computed: {
     editable() {
       return !!this.editedDocument;
+    },
+
+    // the tracks / routes overlays are available on every map, except
+    // while editing a document
+    showDensityOverlays() {
+      return !this.editable;
+    },
+
+    densityOverlayButtons() {
+      return Object.entries(DENSITY_OVERLAYS).map(([type, overlay]) => ({
+        type,
+        title: overlay.title,
+        color: overlay.trackColor,
+      }));
+    },
+
+    tracksFiltersKey() {
+      return JSON.stringify(this.tracksFilters);
+    },
+
+    routesFiltersKey() {
+      return JSON.stringify(this.routesFilters);
+    },
+
+    densityTruncated() {
+      return Object.values(this.densityTruncatedByType).some(Boolean);
     },
 
     urlValue: {
@@ -492,10 +532,14 @@ export default {
 
     filterDocumentsWithMap: 'sendBoundsToUrl',
 
-    '$route.query.act'() {
-      if (this.outingsDensityEnabled) {
-        this.updateOutingsMapLayers();
-      }
+    // compare the content, not the reference: the parent may give a new
+    // (but identical) object every time the route changes
+    tracksFiltersKey() {
+      this.updateDensityOverlay('outing');
+    },
+
+    routesFiltersKey() {
+      this.updateDensityOverlay('route');
     },
 
     highlightedDocument(newValue) {
@@ -513,6 +557,33 @@ export default {
       this.fullScreenControl = this.createFullScreenController(newValue || this.$el);
       this.map.addControl(this.fullScreenControl);
     },
+  },
+
+  created() {
+    // not declared in `data`: OpenLayers objects must not be made reactive
+    this.densityLayers = Object.fromEntries(
+      Object.entries(DENSITY_OVERLAYS).map(([type, overlay]) => [
+        type,
+        {
+          // aggregated density (low/medium zoom)
+          heatmap: new ol.layer.Heatmap({
+            source: new ol.source.Vector(),
+            visible: false,
+            blur: 20,
+            radius: 12,
+            gradient: overlay.heatmapGradient,
+            weight: (feature) => feature.get('weight'),
+          }),
+          // individual tracks for the current bbox (high zoom)
+          tracks: new ol.layer.Vector({
+            source: new ol.source.Vector(),
+            visible: false,
+          }),
+          trackStyle: buildDensityTrackStyle(overlay.trackColor),
+        },
+      ])
+    );
+    this.densityRequestIds = { outing: 0, route: 0 };
   },
 
   mounted() {
@@ -541,7 +612,7 @@ export default {
         new ol.control.Control({ element: this.$refs.clearGeometry }),
         new ol.control.Control({ element: this.$refs.editMap }),
         new ol.control.Attribution({ tipLabel: this.$gettext('Attributions', 'Map controls') }),
-        ...(this.showOutingsDensity ? [new ol.control.Control({ element: this.$refs.outingsDensityMessage })] : []),
+        ...(this.showDensityOverlays ? [new ol.control.Control({ element: this.$refs.densityMessage })] : []),
       ],
 
       layers: [
@@ -549,8 +620,7 @@ export default {
         ...this.dataLayers,
         ...this.protectionAreasLayers,
         this.protectionAreasLayer,
-        this.outingsHeatmapLayer,
-        this.outingsTracksLayer,
+        ...Object.values(this.densityLayers).flatMap((layers) => [layers.heatmap, layers.tracks]),
         this.imagesLayer, // images icons will be under documents
         this.documentsLayer,
         this.waypointsLayer, // keep waypoint above trace and documents
@@ -575,7 +645,7 @@ export default {
     this.map.on('moveend', this.updateEditMapLink);
     this.map.on('moveend', this.emitMoveEvent);
 
-    if (this.showOutingsDensity) {
+    if (this.showDensityOverlays) {
       this.trackPickerOverlay = new ol.Overlay({
         element: this.$refs.trackPicker,
         positioning: 'bottom-center',
@@ -583,7 +653,7 @@ export default {
       });
       this.map.addOverlay(this.trackPickerOverlay);
 
-      this.map.on('moveend', debounce(this.updateOutingsMapLayers, OUTINGS_DENSITY_FETCH_DEBOUNCE));
+      this.map.on('moveend', debounce(this.updateDensityOverlays, DENSITY_FETCH_DEBOUNCE));
     }
 
     if (this.protectionAreasVisible) {
@@ -1217,18 +1287,17 @@ export default {
     },
 
     onClick(event) {
-      if (this.outingsTracksLayer.getVisible()) {
-        const hits = [];
-        this.map.forEachFeatureAtPixel(event.pixel, (f) => hits.push(f), {
-          layerFilter: (layer) => layer === this.outingsTracksLayer,
-          hitTolerance: 6,
-        });
+      const tracksLayers = Object.values(this.densityLayers).map((layers) => layers.tracks);
+      const hits = [];
+      this.map.forEachFeatureAtPixel(event.pixel, (f) => hits.push(f.get('document')), {
+        layerFilter: (layer) => tracksLayers.includes(layer) && layer.getVisible(),
+        hitTolerance: 6,
+      });
 
-        if (hits.length > 1) {
-          this.trackPickerOutings = hits.map((hit) => hit.get('document'));
-          this.trackPickerOverlay.setPosition(event.coordinate);
-          return;
-        }
+      if (hits.length > 1) {
+        this.trackPickerDocuments = hits;
+        this.trackPickerOverlay.setPosition(event.coordinate);
+        return;
       }
       this.closeTrackPicker();
 
@@ -1388,54 +1457,68 @@ export default {
       }
     },
 
-    toggleOutingsDensity() {
-      this.outingsDensityEnabled = !this.outingsDensityEnabled;
+    toggleDensityOverlay(type) {
+      this.densityEnabled[type] = !this.densityEnabled[type];
 
-      // avoid showing the same outings twice (as paginated markers and
-      // as heatmap/tracks)
-      this.documentsLayer.setVisible(!this.outingsDensityEnabled);
-
-      if (this.outingsDensityEnabled) {
-        this.updateOutingsMapLayers();
+      if (this.densityEnabled[type]) {
+        this.updateDensityOverlay(type);
       } else {
-        this.outingsHeatmapLayer.setVisible(false);
-        this.outingsTracksLayer.setVisible(false);
-        this.outingsTracksTruncated = false;
+        this.densityLayers[type].heatmap.setVisible(false);
+        this.densityLayers[type].tracks.setVisible(false);
+        this.densityTruncatedByType[type] = false;
         this.closeTrackPicker();
       }
     },
 
-    async updateOutingsMapLayers() {
-      if (!this.outingsDensityEnabled) {
+    updateDensityOverlays() {
+      Object.keys(this.densityLayers).forEach((type) => this.updateDensityOverlay(type));
+    },
+
+    async updateDensityOverlay(type) {
+      if (!this.densityEnabled[type]) {
         return;
       }
 
+      const layers = this.densityLayers[type];
+      const overlay = DENSITY_OVERLAYS[type];
       const zoom = Math.round(this.view.getZoom());
-      const bbox = this.getExtent().join(',');
-      const act = this.$route.query.act;
+      const filters = (type === 'outing' ? this.tracksFilters : this.routesFilters) ?? {};
+      const params = { ...filters, bbox: this.getExtent().join(',') };
+
+      // only the response to the latest request is displayed: moving the
+      // map quickly can make the responses arrive out of order
+      const requestId = (this.densityRequestIds[type] += 1);
 
       try {
-        if (zoom >= OUTINGS_TRACKS_MIN_ZOOM) {
-          this.outingsHeatmapLayer.setVisible(false);
-          this.outingsTracksLayer.setVisible(true);
+        if (zoom >= DENSITY_TRACKS_MIN_ZOOM) {
+          const { data } = await overlay.getTracks({ ...params, pl: this.$language.current });
+          if (requestId !== this.densityRequestIds[type] || !this.densityEnabled[type]) {
+            return;
+          }
 
-          const { data } = await c2c.getOutingsTracks({ bbox, act, pl: this.$language.current });
-          this.outingsTracksTruncated = data.truncated;
+          layers.heatmap.setVisible(false);
+          layers.tracks.setVisible(true);
+          this.densityTruncatedByType[type] = data.truncated;
 
-          const source = this.outingsTracksLayer.getSource();
+          const source = layers.tracks.getSource();
           source.clear();
           this.closeTrackPicker();
-          for (const outing of data.outings) {
-            this.addDocumentFeature(outing, source);
+          for (const document of data.documents) {
+            const feature = this.addFeature(source, JSON.parse(document.geometry.geom_detail), layers.trackStyle);
+            feature.set('document', document);
           }
         } else {
-          this.outingsTracksLayer.setVisible(false);
-          this.outingsHeatmapLayer.setVisible(true);
-          this.outingsTracksTruncated = false;
+          const { data } = await overlay.getHeatmap({ ...params, zoom });
+          if (requestId !== this.densityRequestIds[type] || !this.densityEnabled[type]) {
+            return;
+          }
+
+          layers.tracks.setVisible(false);
+          layers.heatmap.setVisible(true);
+          this.densityTruncatedByType[type] = false;
           this.closeTrackPicker();
 
-          const { data } = await c2c.getOutingsHeatmap({ bbox, act, zoom });
-          const source = this.outingsHeatmapLayer.getSource();
+          const source = layers.heatmap.getSource();
           source.clear();
 
           const maxCount = Math.max(1, ...data.buckets.map((bucket) => bucket.count));
@@ -1446,18 +1529,17 @@ export default {
           }
         }
       } catch {
-        // the density layers are a non-critical map overlay: on a
-        // network/server error, leave the map usable rather than
-        // surfacing an unhandled rejection
+        // the overlays are non-critical: on a network/server error, leave
+        // the map usable rather than surfacing an unhandled rejection
       }
     },
 
     closeTrackPicker() {
-      this.trackPickerOutings = [];
+      this.trackPickerDocuments = [];
       this.trackPickerOverlay?.setPosition(undefined);
     },
 
-    selectTrackPickerOuting(document) {
+    selectTrackPickerDocument(document) {
       this.closeTrackPicker();
       this.$router.push({
         name: this.$documentUtils.getDocumentType(document.type),
@@ -1778,7 +1860,7 @@ $control-margin: 0.5em;
   top: 27px;
 }
 
-.ol-control-outings-density-message {
+.ol-control-density-message {
   top: $control-margin;
   left: 50%;
   transform: translateX(-50%);

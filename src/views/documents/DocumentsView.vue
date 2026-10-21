@@ -115,7 +115,8 @@
           ref="map"
           :documents="documentsShownOnMap"
           :highlighted-document="highlightedDocument"
-          :show-outings-density="documentType === 'outing'"
+          :tracks-filters="mapLayersFilters.tracks"
+          :routes-filters="mapLayersFilters.routes"
           @highlight-document="highlightedDocument = arguments[0]"
           show-filter-control
           show-center-on-geolocation
@@ -202,6 +203,19 @@ export default {
       delete result.sort;
 
       return result;
+    },
+    // filters of the "Tracks" (outings) and "Routes" map overlays: they
+    // follow the search being made. The activities are the only filter
+    // shared by outings and routes, so they are the only one applied to
+    // the overlay of the other type.
+    mapLayersFilters() {
+      const { offset, limit, sort, bbox, pl, ...filters } = this.$route.query;
+      const sharedFilters = filters.act ? { act: filters.act } : null;
+
+      return {
+        tracks: this.documentType === 'outing' ? filters : this.documentType === 'route' ? sharedFilters : null,
+        routes: this.documentType === 'route' ? filters : this.documentType === 'outing' ? sharedFilters : null,
+      };
     },
     documentsShownOnMap() {
       return this.filteredWaypoints.concat(this.documents ? this.documents.documents : []);

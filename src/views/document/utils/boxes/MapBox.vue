@@ -25,6 +25,8 @@
           ref="mapView"
           :documents="new Array(document)"
           :show-protection-areas="['r', 'w'].includes(document.type)"
+          :tracks-filters="$documentUtils.getMapOverlayFilters(document).tracks"
+          :routes-filters="$documentUtils.getMapOverlayFilters(document).routes"
           :biodiv-sports-activities="document.activities"
           :full-screen-element-id="
             !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
