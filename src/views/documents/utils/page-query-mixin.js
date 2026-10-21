@@ -20,9 +20,18 @@ export default {
   methods: {
     pageQuery(offset, limit) {
       const query = Object.assign({}, this.$route.query);
-      query.offset = Math.max(offset, 0);
       query.limit = Math.max(Math.min(limit, LIMIT_MAX), LIMIT_MIN);
+      // always on a page boundary, so that both page selectors agree once the limit changes
+      query.offset = Math.floor(Math.max(offset, 0) / query.limit) * query.limit;
       return { name: this.$route.name, params: this.$route.params, query };
+    },
+
+    // query of the last page holding documents, when the current offset is past the total
+    lastPageQuery(total) {
+      if (total <= 0 || this.offset < total) {
+        return null;
+      }
+      return this.pageQuery(total - 1, this.queryLimit);
     },
   },
 };

@@ -139,6 +139,7 @@ import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton';
 import PageNavigation from './utils/PageNavigation';
 import PageSelector from './utils/PageSelector';
 import QueryItems from './utils/QueryItems';
+import pageQueryMixin from './utils/page-query-mixin';
 
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
@@ -162,6 +163,8 @@ export default {
     DisplayModeSwitch,
     LoadUserPreferencesButton,
   },
+
+  mixins: [pageQueryMixin],
 
   data() {
     return {
@@ -242,9 +245,16 @@ export default {
         return;
       }
 
-      this.promise = c2c[this.documentType].getAll(this.$route.query).then(() => {
+      const route = this.$route.fullPath;
+      this.promise = c2c[this.documentType].getAll(this.$route.query).then((response) => {
         // the list has its height: back from a document, the router can restore the scroll position
         bus.emit('trigger-scroll');
+
+        // past the last page, which happens when the map is moved to a sparser area: show the last page instead
+        const lastPageQuery = this.lastPageQuery(response.data.total);
+        if (lastPageQuery && this.$route.fullPath === route) {
+          this.$router.replace(lastPageQuery);
+        }
       });
     },
 
