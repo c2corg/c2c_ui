@@ -12,7 +12,7 @@
           :field="fields.date_start"
           :max="showBothDates ? document.date_end : currentDate"
           @input="handleDates"
-          @click.native="setCurrentDate"
+          @click="setCurrentDate"
         />
         <form-field
           class="is-narrow"
@@ -21,7 +21,7 @@
           :field="fields.date_end"
           :min="showBothDates ? document.date_start : undefined"
           :max="currentDate"
-          @click.native="setCurrentDate"
+          @click="setCurrentDate"
         />
         <div class="column is-narrow">
           <input-checkbox v-model="showBothDates">{{ $gettext('Several days?') }}</input-checkbox>

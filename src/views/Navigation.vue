@@ -102,7 +102,7 @@
             :key="documentType"
             :document-type="documentType"
             class="dropdown-item is-size-5 is-ellipsed"
-            @click.native="$refs.addDocumentMenu.isActive = false"
+            @click="$refs.addDocumentMenu.isActive = false"
           >
             <icon-document :document-type="documentType" fixed-width />
             <span>
@@ -139,7 +139,7 @@
             :key="item.text"
             :to="item.to"
             class="dropdown-item is-size-5"
-            @click.native="$refs.userMenu.isActive = false"
+            @click="$refs.userMenu.isActive = false"
           >
             <component :is="item.iconComponent || 'fa-icon'" :icon="item.icon" fixed-width />
             <span>

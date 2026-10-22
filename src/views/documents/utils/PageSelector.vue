@@ -35,7 +35,7 @@
           class="dropdown-item is-small"
           :class="{ 'is-active': queryLimit === l }"
           :to="pageQuery(offset, l)"
-          @click.native="hideOnclick"
+          @click="hideOnclick"
         >
           <span>{{ l }}</span>
         </component>
