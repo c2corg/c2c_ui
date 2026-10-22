@@ -64,7 +64,7 @@ export default {
     registerHelperWindow(this);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     registerHelperWindow(null);
   },
 

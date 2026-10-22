@@ -120,7 +120,7 @@ export default {
     window.addEventListener('keydown', this.onKeydown);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     registerImageViewer(null);
   },
 

@@ -50,7 +50,7 @@ export default {
     bus.on('show-gdpr', this.showGdprModal);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     bus.off('show-gdpr', this.showGdprModal);
   },
 

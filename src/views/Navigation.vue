@@ -267,7 +267,7 @@ export default {
     window.addEventListener('click', this.onClick);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('click', this.onClick);
   },
 

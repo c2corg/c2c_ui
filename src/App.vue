@@ -63,7 +63,7 @@ export default {
     window.addEventListener('resize', this.updateWidth);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('resize', this.updateWidth);
   },
 

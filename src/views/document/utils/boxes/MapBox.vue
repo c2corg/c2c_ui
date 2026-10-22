@@ -104,7 +104,7 @@ export default {
     window.addEventListener('resize', this.resizePin);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     bus.off('elevation_profile', this.onElevationProfile);
     window.removeEventListener('resize', this.resizePin);
     if (this.pinnedMode) this.togglePinToSide(true);

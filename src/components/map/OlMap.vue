@@ -534,7 +534,7 @@ export default {
     this.updateEditMapLink();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     // off() without a handler would remove the handlers of every map
     if (this.onElevationProfile) {
       bus.off('elevation_profile', this.onElevationProfile);

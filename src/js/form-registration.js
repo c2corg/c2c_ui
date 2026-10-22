@@ -36,7 +36,7 @@ export function formField(key) {
       this[key]?.register(this);
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
       this[key]?.unregister(this);
     },
   };
