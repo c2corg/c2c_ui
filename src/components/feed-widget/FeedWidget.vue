@@ -58,7 +58,7 @@ export default {
     this.initialize();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('resize', this.initializeColumns);
   },
 

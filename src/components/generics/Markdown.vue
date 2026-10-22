@@ -68,7 +68,7 @@ export default {
     window.addEventListener('beforeprint', this.loadAllImages);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('beforeprint', this.loadAllImages);
   },
 

@@ -118,7 +118,7 @@ export default {
     bus.on('table-csv-export', this.exportCsv);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     bus.off('table-csv-export', this.exportCsv);
   },
 

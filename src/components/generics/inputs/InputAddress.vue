@@ -104,7 +104,7 @@ export default {
       await this.loadUserAddressIfLoggedIn();
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.searchTimeout) {
       clearTimeout(this.searchTimeout);
     }

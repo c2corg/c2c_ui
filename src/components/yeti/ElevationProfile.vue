@@ -154,7 +154,7 @@ export default {
     yetixEvents.on('showFeature', this.showFeature);
     yetixEvents.on('hideFeature', this.hideFeature);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.resizeObserver?.unobserve(this.$refs.graph);
   },
   methods: {

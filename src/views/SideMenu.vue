@@ -130,7 +130,7 @@ export default {
     this.onHeightBreakpointChange();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.mediaQueryList.removeEventListener) {
       this.mediaQueryList.removeEventListener('change', this.onHeightBreakpointChange);
     } else {

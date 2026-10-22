@@ -133,7 +133,7 @@ export default {
     this.debouncedOnResize = debounce(this.onResize, 100);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.resizeObserver?.unobserve(this.$refs.graph);
   },
 
