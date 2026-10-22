@@ -10,6 +10,8 @@ import { baseMixin } from './mixins';
 import MarkdownEditor from '@/components/markdown-editor/MarkdownEditor';
 
 export default {
+  compatConfig: { COMPONENT_V_MODEL: false },
+
   components: {
     MarkdownEditor,
   },
@@ -17,7 +19,7 @@ export default {
   mixins: [baseMixin],
 
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: null,
     },

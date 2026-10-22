@@ -1,4 +1,8 @@
+// v-model of the inputs: modelValue prop, update:modelValue event (each input also opts out of the Vue 2 v-model of
+// @vue/compat, with compatConfig: compat reads it on the component itself, not on its mixins)
 export const baseMixin = {
+  emits: ['update:modelValue'],
+
   props: {
     type: {
       type: String,
@@ -33,14 +37,14 @@ export const baseMixin = {
   computed: {
     value_: {
       get() {
-        return this.type !== 'number' || this.divisor === undefined || !this.value
-          ? this.value
-          : this.value / this.divisor;
+        return this.type !== 'number' || this.divisor === undefined || !this.modelValue
+          ? this.modelValue
+          : this.modelValue / this.divisor;
       },
       set(value) {
         if (!this.disabled) {
           value = this.type !== 'number' || this.divisor === undefined || !value ? value : value * this.divisor;
-          this.$emit('input', value);
+          this.$emit('update:modelValue', value);
         }
       },
     },
@@ -49,7 +53,7 @@ export const baseMixin = {
 
 export const arrayMixin = {
   props: {
-    value: {
+    modelValue: {
       type: Array,
       default: null,
     },
@@ -58,11 +62,11 @@ export const arrayMixin = {
   computed: {
     value_: {
       get() {
-        return this.value ? this.value : [];
+        return this.modelValue ? this.modelValue : [];
       },
       set(value) {
         if (!this.disabled) {
-          this.$emit('input', value);
+          this.$emit('update:modelValue', value);
         }
       },
     },

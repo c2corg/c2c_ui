@@ -46,7 +46,7 @@
           propose-creation
           show-more-results-link
           clear-input-on-toggle
-          @input="go"
+          @update:model-value="go"
         />
 
         <div class="navigation-item is-hidden-tablet" :class="{ 'is-hidden-mobile': !hideSearchInput }">

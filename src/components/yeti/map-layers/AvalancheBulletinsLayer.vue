@@ -27,7 +27,7 @@
       </p>
       <div class="is-flex is-justify-content-space-around is-align-items-center px-3">
         <danger-level :danger="overlayData.danger" />
-        <input-orientation disabled :value="overlayOrientations" />
+        <input-orientation disabled :model-value="overlayOrientations" />
       </div>
       <dl v-if="overlayDangerComment || overlayOrientationsComment" class="is-size-6 px-3 pt-3">
         <template v-if="overlayDangerComment">

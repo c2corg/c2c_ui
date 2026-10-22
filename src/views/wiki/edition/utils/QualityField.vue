@@ -17,7 +17,7 @@
         :options="$options.quality_types"
         i18n
         i18n-context="quality_types"
-        :value="computedQuality"
+        :model-value="computedQuality"
         disabled
       />
       <input-simple

@@ -89,7 +89,7 @@
     :i18n-context="field.i18nContext"
     :options="field.values"
     :has-error="hasError"
-    @input="$emit('input', $event)"
+    @update:model-value="$emit('input', $event)"
     v-model="object[field.name]"
   />
 
