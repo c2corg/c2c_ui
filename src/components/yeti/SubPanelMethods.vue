@@ -75,8 +75,8 @@
       </p>
 
       <input-orientation
-        :value="method.orientation"
-        @input="onChange($event, 'orientation')"
+        :model-value="method.orientation"
+        @update:model-value="onChange($event, 'orientation')"
         class="has-text-centered mb-2"
       />
 
@@ -178,7 +178,7 @@
       </info>
 
       <p>
-        <input-checkbox :value="method.wetSnow" @input="onChange($event, 'wetSnow')">
+        <input-checkbox :model-value="method.wetSnow" @update:model-value="onChange($event, 'wetSnow')">
           <span v-translate>Wet snow: orientation not taken into account</span>
         </input-checkbox>
       </p>

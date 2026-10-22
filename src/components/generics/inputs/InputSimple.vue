@@ -37,6 +37,8 @@
 import { baseMixin } from './mixins';
 
 export default {
+  compatConfig: { COMPONENT_V_MODEL: false },
+
   mixins: [baseMixin],
 
   props: {
@@ -48,7 +50,7 @@ export default {
       type: [Number, String], // string is for date
       default: null,
     },
-    value: {
+    modelValue: {
       type: [String, Number, Boolean],
       default: null,
     },

@@ -99,10 +99,12 @@ import constants from '@/js/constants';
 import debounce from '@/js/debounce';
 
 export default {
+  compatConfig: { COMPONENT_V_MODEL: false },
+
   mixins: [baseMixin, arrayMixin],
 
   props: {
-    value: {
+    modelValue: {
       type: [Array, Object],
       default: null,
     },
@@ -136,7 +138,7 @@ export default {
     },
   },
 
-  emits: ['add', 'input', 'load-options'],
+  emits: ['add', 'update:modelValue', 'load-options'],
 
   data() {
     return {
@@ -148,11 +150,11 @@ export default {
   computed: {
     value_: {
       get() {
-        return this.multiple ? (this.value ? this.value : []) : this.value;
+        return this.multiple ? (this.modelValue ? this.modelValue : []) : this.modelValue;
       },
       set(value) {
         if (!this.disabled) {
-          this.$emit('input', value);
+          this.$emit('update:modelValue', value);
         }
       },
     },
@@ -224,7 +226,7 @@ export default {
       if (this.multiple) {
         return this.$documentUtils.isInArray(this.value_, value);
       } else {
-        return this.value ? this.value.document_id === value.document_id : false;
+        return this.modelValue ? this.modelValue.document_id === value.document_id : false;
       }
     },
 

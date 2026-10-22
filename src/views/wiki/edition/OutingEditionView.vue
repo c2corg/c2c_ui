@@ -55,7 +55,10 @@
 
       <div v-if="possibleRoutes && possibleRoutes.length !== 0" class="field">
         <div v-for="route of possibleRoutes" :key="route.document_id">
-          <input-checkbox :value="routeIsAssociated(route.document_id)" @input="changeRouteAssociation($event, route)">
+          <input-checkbox
+            :model-value="routeIsAssociated(route.document_id)"
+            @update:model-value="changeRouteAssociation($event, route)"
+          >
             <activities :activities="route.activities" class="is-size-4 has-text-secondary" />
             <document-title :document="route" />,
             <document-rating :document="route" />

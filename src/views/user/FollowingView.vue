@@ -9,7 +9,7 @@
       </div>
 
       <div class="column is-narrow">
-        <input-document document-type="profile" @input="add" />
+        <input-document document-type="profile" @update:model-value="add" />
       </div>
       <div class="column">
         <div v-if="following.data" class="columns is-multiline">

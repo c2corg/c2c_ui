@@ -26,16 +26,18 @@ import { baseMixin } from './mixins';
 const range = (from, to) => [...Array(to - from + 1).keys()].map((i) => i + from);
 
 export default {
+  compatConfig: { COMPONENT_V_MODEL: false },
+
   mixins: [baseMixin],
 
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: null,
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   computed: {
     minutes() {
@@ -46,18 +48,18 @@ export default {
     },
     value_: {
       get() {
-        return this.$dateUtils.parseDate(this.value);
+        return this.$dateUtils.parseDate(this.modelValue);
       },
       set(value) {
         if (!this.disabled) {
           value = this.type !== 'number' || this.divisor === undefined || !value ? value : value * this.divisor;
-          this.$emit('input', value);
+          this.$emit('update:modelValue', value);
         }
       },
     },
     date: {
       get() {
-        return this.value ? this.$dateUtils.toLocalizedString(this.value_, 'YYYY-MM-DD') : null;
+        return this.modelValue ? this.$dateUtils.toLocalizedString(this.value_, 'YYYY-MM-DD') : null;
       },
       set(value) {
         const d = this.value_;
@@ -72,7 +74,7 @@ export default {
     },
     hour: {
       get() {
-        return this.value ? this.value_.getHours() : null;
+        return this.modelValue ? this.value_.getHours() : null;
       },
       set(value) {
         const d = this.value_;
@@ -82,7 +84,7 @@ export default {
     },
     minute: {
       get() {
-        return this.value ? this.value_.getMinutes() : null;
+        return this.modelValue ? this.value_.getMinutes() : null;
       },
       set(value) {
         const d = this.value_;
@@ -94,7 +96,7 @@ export default {
 
   methods: {
     onInput(valueAsObject) {
-      this.$emit('input', this.$dateUtils.toLocalizedString(valueAsObject, `YYYY-MM-DD[T]HH:mm:ssZ`));
+      this.$emit('update:modelValue', this.$dateUtils.toLocalizedString(valueAsObject, `YYYY-MM-DD[T]HH:mm:ssZ`));
     },
   },
 };
