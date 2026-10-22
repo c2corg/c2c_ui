@@ -251,6 +251,9 @@ export default defineConfig({
       template: {
         compilerOptions: {
           whitespace: 'preserve',
+          // no comments in dev either, as in production: a comment at the root of a template would make it a fragment,
+          // which doesn't inherit the parent attributes (class, listeners)
+          comments: false,
           // Vue 3 with the Vue 2 behaviours (@vue/compat): each one warns, to be migrated one by one
           compatConfig: { MODE: 2 },
           // web components
