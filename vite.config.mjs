@@ -296,6 +296,11 @@ export default defineConfig({
     },
   },
 
+  html: {
+    // replaced by a per-request nonce in docker/nginx.conf, see the Content-Security-Policy there
+    cspNonce: '__CSP_NONCE__',
+  },
+
   server: {
     port: 8080,
     strictPort: true,
