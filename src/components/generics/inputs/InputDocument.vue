@@ -65,7 +65,7 @@
             v-if="showMoreResultsLink"
             :to="{ name: type + 's', query: { q: searchText } }"
             class="dropdown-item is-italic has-text-centered"
-            @click.native="closeDropdown"
+            @click="closeDropdown"
             v-translate
           >
             See more results
