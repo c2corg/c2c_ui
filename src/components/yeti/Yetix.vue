@@ -9,7 +9,7 @@
  */
 
 import axios from 'axios';
-import { reactive } from 'vue';
+import { markRaw, reactive } from 'vue';
 
 import ol from '@/js/libs/ol';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
@@ -325,7 +325,8 @@ const Yetix = {
     state.showAreas = showAreas;
   },
   setFeatures(features) {
-    state.features = features;
+    // OpenLayers features, kept out of reactivity (as the map layers): the array is replaced, never changed in place
+    state.features = markRaw(features);
 
     // store features in localstorage
     let coords = features.map((feature) => {

@@ -78,6 +78,8 @@
 </template>
 
 <script>
+import { markRaw } from 'vue';
+
 import EditorButton from './EditorButton';
 import LinkHelper from './LinkHelper';
 
@@ -241,7 +243,8 @@ export default {
 
   mounted() {
     this.$refs.textarea.value = this.modelValue;
-    this.selection = new Selection(this.$refs.textarea, this.onInput);
+    // a helper around the textarea, not state to observe
+    this.selection = markRaw(new Selection(this.$refs.textarea, this.onInput));
   },
 
   methods: {

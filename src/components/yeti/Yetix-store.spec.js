@@ -67,6 +67,22 @@ describe('Yetix store', () => {
     expect(stored()['yeti-map-features-title']).toBe('Pointe Percée');
   });
 
+  it('keeps the OpenLayers features of the route as they are, not proxied', async () => {
+    const { Yetix, ol } = await loadYetix();
+    const { isProxy } = await import('vue');
+    const feature = new ol.Feature(
+      new ol.geom.LineString([
+        [650000, 5750000, 1200],
+        [650100, 5750100, 1300],
+      ])
+    );
+
+    Yetix.setFeatures([feature]);
+
+    expect(isProxy(Yetix.features[0])).toBe(false);
+    expect(Yetix.features[0]).toBe(feature);
+  });
+
   it('stores the overlays shown', async () => {
     const { Yetix } = await loadYetix();
 

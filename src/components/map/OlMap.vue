@@ -1136,7 +1136,8 @@ export default {
         this.highlightedFeature.setStyle(this.highlightedFeature.get('normalStyle'));
       }
 
-      this.highlightedFeature = feature;
+      // as is: a proxy would never equal the feature hovered, and OpenLayers objects must stay out of reactivity
+      this.highlightedFeature = feature && markRaw(feature);
 
       if (feature && feature.get('highlightedStyle')) {
         feature.setStyle(feature.get('highlightedStyle'));
