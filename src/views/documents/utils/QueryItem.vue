@@ -105,12 +105,10 @@ import queryItemMixin from './query-item-mixin';
 import debounce from '@/js/debounce';
 import { requireFieldProperty } from '@/js/properties-mixins';
 import { uidMixin } from '@/js/uid';
-import vue3 from '@/js/vue3-component';
 
 export default {
   components: {
-    // the async wrapper too is a Vue 3 component (v-model as modelValue), as the library it loads
-    Multiselect: vue3(defineAsyncComponent(() => import('vue-multiselect').then((module) => vue3(module.default)))),
+    Multiselect: defineAsyncComponent(() => import('vue-multiselect')),
     QueryItemSliderLabel,
     DateQueryItem,
     DatesQueryItem,

@@ -27,8 +27,6 @@ import { baseMixin } from './mixins';
 import { uidMixin } from '@/js/uid';
 
 export default {
-  compatConfig: { COMPONENT_V_MODEL: false },
-
   mixins: [baseMixin, uidMixin],
 
   props: {

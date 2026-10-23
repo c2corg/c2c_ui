@@ -234,9 +234,6 @@ import documentEditionViewMixin from './utils/document-edition-view-mixin';
 import c2c from '@/js/apis/c2c';
 
 export default {
-  // Vue 3 array watchers (compat made them deep: true); the deep option of each watcher applies
-  compatConfig: { WATCH_ARRAY: false },
-
   components: { CotometerWindow },
 
   mixins: [documentEditionViewMixin],

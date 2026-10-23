@@ -16,13 +16,11 @@ const mountUploader = () =>
     global: {
       stubs: {
         ModalCard: {
-          compatConfig: { MODE: 3 },
           render() {
             return h('div', this.$slots.default?.());
           },
         },
         ImageUploader: {
-          compatConfig: { MODE: 3 },
           props: ['status'],
           render() {
             return h('div', { class: 'image-uploader', 'data-status': this.status });

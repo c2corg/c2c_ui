@@ -21,8 +21,6 @@
 import { uidMixin } from '@/js/uid';
 
 export default {
-  compatConfig: { COMPONENT_V_MODEL: false },
-
   mixins: [uidMixin],
 
   props: {

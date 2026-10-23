@@ -1,5 +1,4 @@
-// v-model of the inputs: modelValue prop, update:modelValue event (each input also opts out of the Vue 2 v-model of
-// @vue/compat, with compatConfig: compat reads it on the component itself, not on its mixins)
+// v-model of the inputs: modelValue prop, update:modelValue event
 export const baseMixin = {
   emits: ['update:modelValue'],
 

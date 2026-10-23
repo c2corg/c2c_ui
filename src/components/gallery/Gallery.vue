@@ -15,9 +15,6 @@
 
 <script>
 export default {
-  // Vue 3 array watchers (compat made them deep: true); the deep option of each watcher applies
-  compatConfig: { WATCH_ARRAY: false },
-
   props: {
     images: {
       type: Array,

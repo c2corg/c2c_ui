@@ -5,8 +5,7 @@ import { nextTick, reactive } from 'vue';
 import Gallery from './gallery/Gallery';
 import OlMap from './map/OlMap';
 
-// Vue 2 array watchers ran when the array was changed in place: the watchers below must still run then (deep: 1), now
-// that @vue/compat no longer makes them deep
+// Vue 2 array watchers ran when the array was changed in place: the watchers below must still run then (deep: 1)
 vi.stubGlobal(
   'ResizeObserver',
   class {

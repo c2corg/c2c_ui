@@ -178,9 +178,6 @@
 import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
 export default {
-  // Vue 3 array watchers (compat made them deep: true); the deep option of each watcher applies
-  compatConfig: { WATCH_ARRAY: false },
-
   mixins: [documentEditionViewMixin],
 
   computed: {

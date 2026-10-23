@@ -12,15 +12,16 @@ export default mergeConfig(
       // Skip CSS processing: specs don't need styles
       css: false,
       include: ['src/**/*.spec.js'],
-      // the specs run with the Vue 3 behaviours, as the app
-      setupFiles: ['src/js/vue-compat-mode.js'],
       // some specs import OpenLayers, Font Awesome or ESLint inside a test: when the whole suite runs in parallel,
       // that first import alone takes up to ~15s (vs < 1s alone), well over the default 5s
       testTimeout: 60000,
-      // @vue/test-utils must run on the app's Vue (@vue/compat, aliased as vue): processed by vite, as an ES module.
-      // Left in node_modules, its CommonJS build requires the plain vue: a second Vue, where components never update
+      // @vue/test-utils must run on the same Vue as the specs: processed by vite, as an ES module. Left in
+      // node_modules, its CommonJS build requires vue's CommonJS build: a second Vue, where components never update
       server: { deps: { inline: [/@vue\/test-utils/] } },
       alias: [
+        // the specs mount components with template strings: the full build of Vue, with the template compiler (the
+        // app is compiled ahead of time and uses the runtime only)
+        { find: /^vue$/, replacement: 'vue/dist/vue.esm-bundler.js' },
         {
           find: /^@vue\/test-utils$/,
           replacement: fileURLToPath(

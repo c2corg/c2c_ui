@@ -41,8 +41,6 @@ import { assetUrl } from '@/js/asset-urls';
 import { uidMixin } from '@/js/uid';
 
 export default {
-  compatConfig: { COMPONENT_V_MODEL: false },
-
   components: {
     Toast,
   },

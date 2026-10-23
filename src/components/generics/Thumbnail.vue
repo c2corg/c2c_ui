@@ -12,8 +12,6 @@ import { getImageUrl } from '@/js/image-urls';
 export default {
   // the classes and style stay on the picture, the other attributes and the listeners go to the image
   inheritAttrs: false,
-  // Vue 3 $attrs, with class, style and listeners (without the Vue 2 behaviour of @vue/compat)
-  compatConfig: { INSTANCE_ATTRS_CLASS_STYLE: false, INSTANCE_LISTENERS: false },
   props: {
     img: {
       type: Object,

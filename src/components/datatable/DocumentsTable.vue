@@ -37,7 +37,6 @@ import RouteRating from './cell-renderers/RouteRating';
 import constants from '@/js/constants';
 import bus from '@/js/event-bus';
 import { requireDocumentTypeProperty } from '@/js/properties-mixins';
-import vue3 from '@/js/vue3-component';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -64,7 +63,7 @@ const defaultColDef = { suppressSpanHeaderHeight: true, cellDataType: false };
 
 export default {
   components: {
-    AgGridVue: vue3(AgGridVue),
+    AgGridVue,
   },
   mixins: [requireDocumentTypeProperty],
 

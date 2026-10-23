@@ -27,9 +27,6 @@
 
 <script>
 export default {
-  // Vue 3 v-model; and Vue 3 array watchers (compat made them deep: true): the deep option of each watcher applies
-  compatConfig: { COMPONENT_V_MODEL: false, WATCH_ARRAY: false },
-
   props: {
     modelValue: {
       type: String,

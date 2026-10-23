@@ -26,8 +26,6 @@ import { baseMixin } from './mixins';
 const range = (from, to) => [...Array(to - from + 1).keys()].map((i) => i + from);
 
 export default {
-  compatConfig: { COMPONENT_V_MODEL: false },
-
   mixins: [baseMixin],
 
   props: {

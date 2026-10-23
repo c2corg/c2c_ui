@@ -79,8 +79,6 @@
 
 <script>
 export default {
-  compatConfig: { COMPONENT_V_MODEL: false },
-
   emits: ['update:modelValue'],
 
   data() {
