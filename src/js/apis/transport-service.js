@@ -27,6 +27,16 @@ TransportService.prototype.getStopareas = function (waypointId) {
 };
 
 /**
+ * Retrieves public transport stops located in an extent, with their lines and the waypoints they are associated with
+ *
+ * @param {number[]} extent - [xmin, ymin, xmax, ymax] in EPSG:3857
+ * @returns {Promise}
+ */
+TransportService.prototype.getStopareasInExtent = function (extent) {
+  return this.axios.get('/stopareas', { params: { bbox: extent.map(Math.round).join(',') } });
+};
+
+/**
  * Get list of waypoint ids that are accessible in TC for a route
  *
  * @param {string | number} routeId
