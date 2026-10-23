@@ -36,7 +36,7 @@
               contenteditable
               spellcheck="false"
               @blur="onEditFeaturesTitle"
-              @keypress.13.prevent
+              @keypress.enter.prevent
               >{{ featuresTitle }}</span
             >
           </p>
