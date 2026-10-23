@@ -109,7 +109,8 @@ import vue3 from '@/js/vue3-component';
 
 export default {
   components: {
-    Multiselect: defineAsyncComponent(() => import('vue-multiselect').then((module) => vue3(module.default))),
+    // the async wrapper too is a Vue 3 component (v-model as modelValue), as the library it loads
+    Multiselect: vue3(defineAsyncComponent(() => import('vue-multiselect').then((module) => vue3(module.default)))),
     QueryItemSliderLabel,
     DateQueryItem,
     DatesQueryItem,

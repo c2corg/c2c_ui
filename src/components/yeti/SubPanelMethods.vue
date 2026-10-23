@@ -149,8 +149,10 @@
         <li
           v-for="label of potentialDangerLabels"
           :key="label.text"
-          :disabled="!bra.high || label.text < potentialDangerOptions.min || label.text > potentialDangerOptions.max"
-          :selected="method.potentialDanger == label.text"
+          :disabled="
+            !bra.high || label.text < potentialDangerOptions.min || label.text > potentialDangerOptions.max || null
+          "
+          :selected="method.potentialDanger == label.text || null"
           class="potential-danger-label is-size-5"
           @click="onChange(label.text, 'potentialDanger')"
         >
