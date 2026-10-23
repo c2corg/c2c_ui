@@ -84,7 +84,14 @@
               <span>{{ line.direction }}</span>
             </div>
             <div class="transport-times">
-              <span v-for="time of line.departures" :key="time" class="transport-time">{{ time }}</span>
+              <span
+                v-for="time of line.departures"
+                :key="time"
+                class="transport-time"
+                :class="{ 'is-on-demand': isOnDemand(line, time) }"
+                :title="isOnDemand(line, time) ? $gettext('On demand') : null"
+                >{{ time }}</span
+              >
               <em v-if="!line.departures.length" v-translate>No service this day.</em>
             </div>
           </li>
@@ -95,10 +102,20 @@
             <h4 v-if="direction.direction">→ {{ direction.direction }}</h4>
             <div v-if="direction.trips.length" class="transport-trips-scroll">
               <table class="transport-trips">
+                <thead v-if="direction.trips.some((trip) => trip.on_demand)">
+                  <tr>
+                    <td></td>
+                    <td v-for="(trip, tripIndex) of direction.trips" :key="tripIndex">
+                      <small v-if="trip.on_demand" class="transport-on-demand" v-translate>On demand</small>
+                    </td>
+                  </tr>
+                </thead>
                 <tbody>
                   <tr v-for="(stop, stopIndex) of direction.stops" :key="stop.id || stopIndex">
                     <th scope="row">{{ stop.name }}</th>
-                    <td v-for="(trip, tripIndex) of direction.trips" :key="tripIndex">{{ trip[stopIndex] || '' }}</td>
+                    <td v-for="(trip, tripIndex) of direction.trips" :key="tripIndex">
+                      {{ trip.times[stopIndex] || '' }}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -122,6 +139,9 @@
         </div>
       </template>
 
+      <p v-if="hasOnDemand" class="transport-source">
+        <span v-translate>On-demand trips usually have to be booked beforehand: check with the operator.</span>
+      </p>
       <p class="transport-source">
         <span v-translate>Planned timetable, from Navitia.</span>
       </p>
@@ -269,6 +289,15 @@ export default {
       ];
     },
 
+    hasOnDemand() {
+      if (!this.schedule) {
+        return false;
+      }
+      return this.isLine
+        ? this.schedule.directions.some((direction) => direction.trips.some((trip) => trip.on_demand))
+        : this.schedule.lines.some((line) => line.on_demand?.length);
+    },
+
     visibleSections() {
       return this.linkedSections.filter((section) => section.items.length);
     },
@@ -291,6 +320,10 @@ export default {
     goTo(day) {
       this.date = day;
       this.load();
+    },
+
+    isOnDemand(line, time) {
+      return !!line.on_demand?.includes(time);
     },
 
     formatDay(day) {
@@ -449,6 +482,11 @@ export default {
 
 .transport-time {
   padding: 0 0.4em;
+
+  &.is-on-demand {
+    border: 1px dashed #718096;
+    font-style: italic;
+  }
   border-radius: 3px;
   background-color: #edf2f7;
   font-variant-numeric: tabular-nums;
@@ -487,6 +525,11 @@ export default {
   tr:nth-child(even) > * {
     background-color: #f7fafc;
   }
+}
+
+.transport-on-demand {
+  font-style: italic;
+  color: #4a5568;
 }
 
 .transport-linked {

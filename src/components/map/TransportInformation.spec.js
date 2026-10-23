@@ -157,8 +157,8 @@ describe('TransportInformation', () => {
             { id: 'b', name: 'Sixt' },
           ],
           trips: [
-            ['06:05', '07:45'],
-            ['17:05', null],
+            { times: ['06:05', '07:45'], on_demand: false },
+            { times: ['17:05', null], on_demand: true },
           ],
         },
       ],
@@ -178,12 +178,43 @@ describe('TransportInformation', () => {
       network: 'Cars Région Haute-Savoie',
       lang: 'en',
     });
-    const rows = wrapper.findAll('.transport-trips tr').map((row) => row.findAll('th, td').map((cell) => cell.text()));
+    const rows = wrapper
+      .findAll('.transport-trips tbody tr')
+      .map((row) => row.findAll('th, td').map((cell) => cell.text()));
     expect(rows).toEqual([
       ['Annemasse', '06:05', '17:05'],
       ['Sixt', '07:45', ''],
     ]);
     expect(wrapper.find('.transport-direction h4').text()).toBe('→ Sixt');
+    // the second trip runs on demand
+    expect(wrapper.findAll('.transport-trips thead td').map((cell) => cell.text())).toEqual(['', '', 'On demand']);
+    expect(wrapper.text()).toContain('booked beforehand');
+  });
+
+  it('marks the departures of a stop that run on demand', async () => {
+    transportService.getStopSchedules.mockResolvedValue(
+      stopSchedule(['06:05', '17:00'], {
+        lines: [{ code: 'Y02', route_id: 'r', departures: ['06:05', '17:00'], on_demand: ['17:00'] }],
+      })
+    );
+    const wrapper = mountInformation(stop);
+
+    wrapper.vm.show();
+    await flushPromises();
+
+    const times = wrapper.findAll('.transport-time');
+    expect(times.map((time) => time.classes('is-on-demand'))).toEqual([false, true]);
+    expect(wrapper.text()).toContain('booked beforehand');
+  });
+
+  it('says nothing about booking when no trip runs on demand', async () => {
+    transportService.getStopSchedules.mockResolvedValue(stopSchedule(['06:05']));
+    const wrapper = mountInformation(stop);
+
+    wrapper.vm.show();
+    await flushPromises();
+
+    expect(wrapper.text()).not.toContain('booked beforehand');
   });
 
   it('links to the routes and outings the stop leads to', async () => {
