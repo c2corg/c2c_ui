@@ -178,6 +178,9 @@
 import documentEditionViewMixin from './utils/document-edition-view-mixin';
 
 export default {
+  // Vue 3 array watchers (compat made them deep: true); the deep option of each watcher applies
+  compatConfig: { WATCH_ARRAY: false },
+
   mixins: [documentEditionViewMixin],
 
   computed: {
@@ -193,7 +196,8 @@ export default {
   },
 
   watch: {
-    'document.associations.waypoints': 'onWaypointsAssociation',
+    // deep 1: also when a waypoint is added to the array, as Vue 2 array watchers did
+    'document.associations.waypoints': { handler: 'onWaypointsAssociation', deep: 1 },
     'document.geometry.geom': 'onGeometryUpdate',
     'document.geometry.geom_detail': 'onGeometryUpdate',
     'document.climbing_outdoor_type': {

@@ -14,6 +14,9 @@
 
 <script>
 export default {
+  // Vue 3 array watchers (compat made them deep: true); the deep option of each watcher applies
+  compatConfig: { WATCH_ARRAY: false },
+
   data() {
     return {
       value: [null, null],
@@ -28,7 +31,8 @@ export default {
   },
 
   watch: {
-    value: 'updateDateInUrl',
+    // deep 1: also when a date of the array changes, as Vue 2 array watchers did
+    value: { handler: 'updateDateInUrl', deep: 1 },
     usePeriodFilter: 'switchFilterInUrl',
   },
 

@@ -234,6 +234,9 @@ import documentEditionViewMixin from './utils/document-edition-view-mixin';
 import c2c from '@/js/apis/c2c';
 
 export default {
+  // Vue 3 array watchers (compat made them deep: true); the deep option of each watcher applies
+  compatConfig: { WATCH_ARRAY: false },
+
   components: { CotometerWindow },
 
   mixins: [documentEditionViewMixin],
@@ -263,12 +266,16 @@ export default {
 
   watch: {
     showBothDates: 'handleDates',
-    'document.activities': function (to, from) {
-      // Vue 3 gives null, not undefined, for the activities of a null document
-      if (from == null || to == null) {
-        return; // initial load, or the document is null while another one loads
-      }
-      this.updateRoutes('activities', false);
+    // deep 1: also when an activity is added to the array, as Vue 2 array watchers did
+    'document.activities': {
+      handler(to, from) {
+        // Vue 3 gives null, not undefined, for the activities of a null document
+        if (from == null || to == null) {
+          return; // initial load, or the document is null while another one loads
+        }
+        this.updateRoutes('activities', false);
+      },
+      deep: 1,
     },
 
     'document.geometry.geom_detail': function (to, from) {
