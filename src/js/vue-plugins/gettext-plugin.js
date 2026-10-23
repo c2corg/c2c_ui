@@ -266,14 +266,18 @@ export default function install(app) {
 
     /** @param {HTMLElement} element */
     updateElement(element) {
-      if (element.dataset.msgid === undefined) {
-        if (element.childNodes.length > 1 || element.firstChild.nodeType !== TEXT_NODE) {
-          // eslint-disable-next-line
-          console.error('v-translate must contains only text', element.childNodes);
-          return;
-        }
+      // the text to translate, translated in place: on a component, a slot comes between the empty text nodes Vue 3
+      // marks fragments with, which must stay
+      const nodes = [...element.childNodes].filter((node) => node.nodeType !== TEXT_NODE || node.textContent !== '');
+      if (nodes.length !== 1 || nodes[0].nodeType !== TEXT_NODE) {
+        // eslint-disable-next-line
+        console.error('v-translate must contains only text', element.childNodes);
+        return;
+      }
+      const [text] = nodes;
 
-        element.dataset.msgid = cleanMessageId(element.innerText);
+      if (element.dataset.msgid === undefined) {
+        element.dataset.msgid = cleanMessageId(text.textContent);
 
         const context = element.attributes.getNamedItem('translate-context');
         if (context) {
@@ -281,7 +285,7 @@ export default function install(app) {
         }
       }
 
-      element.innerText = this.gettext(element.dataset.msgid, element.dataset.msgctxt);
+      text.textContent = this.gettext(element.dataset.msgid, element.dataset.msgctxt);
     },
   };
 

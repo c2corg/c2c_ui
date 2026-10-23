@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // fresh modules for each test, as for each page load: the local-storage plugin caches what it read
 const installLanguage = async () => {
@@ -138,23 +138,6 @@ describe('$language / $gettext', () => {
   });
 
   it('translates v-translate elements', async () => {
-    // jsdom has no innerText, which v-translate reads and writes
-    const innerText = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'innerText');
-    Object.defineProperty(HTMLElement.prototype, 'innerText', {
-      configurable: true,
-      get() {
-        return this.textContent;
-      },
-      set(value) {
-        this.textContent = value;
-      },
-    });
-    onTestFinished(() =>
-      innerText
-        ? Object.defineProperty(HTMLElement.prototype, 'innerText', innerText)
-        : delete HTMLElement.prototype.innerText
-    );
-
     const { $language, mount, settle } = await installLanguage();
     $language.firstLoad();
     await settle();
@@ -164,5 +147,26 @@ describe('$language / $gettext', () => {
     });
 
     expect(wrapper.findAll('span').map((span) => span.text())).toEqual(['Enregistrer', 'P1']);
+  });
+
+  it('translates v-translate on a component rendering its slot, and keeps the slot in place', async () => {
+    const { $language, mount, nextTick, settle } = await installLanguage();
+    $language.firstLoad();
+    await settle();
+
+    // as <login-button>, <edit-link>, <association-history-link>...: Vue 3 renders the slot between two empty text
+    // nodes, which it later inserts and removes content around
+    const SlotLink = { template: '<a><slot /></a>' };
+    const wrapper = mount({
+      components: { SlotLink },
+      data: () => ({ shown: true }),
+      template: `<div><slot-link v-if="shown" v-translate>Save</slot-link><span>after</span></div>`,
+    });
+
+    expect(wrapper.find('a').text()).toBe('Enregistrer');
+
+    await wrapper.setData({ shown: false });
+    await nextTick();
+    expect(wrapper.text()).toBe('after');
   });
 });
