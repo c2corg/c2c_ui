@@ -4,6 +4,8 @@ import { isProxy, nextTick } from 'vue';
 
 import OlMap from './OlMap';
 
+import ol from '@/js/libs/ol';
+
 // not implemented in jsdom, needed by ol.Map
 vi.stubGlobal(
   'ResizeObserver',
@@ -52,6 +54,18 @@ describe('OlMap', () => {
     });
     expect(isProxy(wrapper.vm.mapLayers[0])).toBe(false);
     expect(isProxy(wrapper.vm.geolocation)).toBe(false);
+
+    wrapper.unmount();
+  });
+
+  it('keeps the highlighted feature as is, not proxied', () => {
+    const wrapper = mountMap();
+    const feature = new ol.Feature();
+
+    wrapper.vm.setHighlightedFeature(feature);
+
+    expect(isProxy(wrapper.vm.highlightedFeature)).toBe(false);
+    expect(wrapper.vm.highlightedFeature).toBe(feature);
 
     wrapper.unmount();
   });
