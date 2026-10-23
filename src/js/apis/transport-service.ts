@@ -21,6 +21,51 @@ export type DocumentsStopareas = {
   documentResults: Record<string, boolean>;
 };
 
+type LinkedDocument = { document_id: number; title?: string | null };
+
+/** The waypoints, routes and outings that a stop or a line leads to */
+export type LinkedDocuments = {
+  waypoints: (LinkedDocument & { distance: number })[];
+  // all the waypoints, nearest first: the lists of routes and outings filter on them
+  waypoint_ids: number[];
+  routes: LinkedDocument[];
+  outings: (LinkedDocument & { date_end: string })[];
+};
+
+export type StopSchedules = {
+  stop_area: { id: string; name?: string | null; lon: number; lat: number };
+  date: string;
+  lines: {
+    line_id: string | null;
+    route_id: string | null;
+    code: string | null;
+    name: string | null;
+    color: string | null;
+    text_color: string | null;
+    network: string | null;
+    mode: string | null;
+    direction: string | null;
+    departures: string[];
+    on_demand: string[];
+  }[];
+  // the next day with a departure, when there is none on `date`
+  next_date: string | null;
+  associations: LinkedDocuments;
+};
+
+export type LineSchedules = {
+  line: { line_id: string; name: string | null };
+  date: string;
+  directions: {
+    direction: string | null;
+    stops: { id: string | null; name: string | null; stop_area_id: string | null }[];
+    // the time at each stop, null where the trip does not call
+    trips: { times: (string | null)[]; on_demand: boolean }[];
+  }[];
+  next_date: string | null;
+  associations: LinkedDocuments;
+};
+
 class TransportService {
   axios: AxiosInstance;
 
@@ -39,6 +84,44 @@ class TransportService {
   /** Retrieves the public transport stops located in an extent ([xmin, ymin, xmax, ymax], EPSG:3857), with their lines and the waypoints they are associated with */
   getStopareasInExtent(extent: number[]) {
     return this.axios.get('/stopareas', { params: { bbox: extent.map(Math.round).join(',') } });
+  }
+
+  /** Retrieves the planned departures of a stop of the transport map on a day, and the documents it leads to */
+  getStopSchedules(query: {
+    lon: number;
+    lat: number;
+    date: string;
+    navitiaId?: string;
+    name?: string;
+    lang?: string;
+  }) {
+    const params: Record<string, unknown> = { lon: query.lon, lat: query.lat, date: query.date, lang: query.lang };
+    if (query.navitiaId) {
+      params.navitia_id = query.navitiaId;
+    }
+    if (query.name) {
+      params.name = query.name;
+    }
+    return this.axios
+      .get<StopSchedules>('/transport/stops/schedules', { params })
+      .then((response) => response.data);
+  }
+
+  /** Retrieves the planned timetable of a line of the transport map on a day, and the documents its stops lead to */
+  getLineSchedules(query: { lon: number; lat: number; date: string; ref: string; network?: string; lang?: string }) {
+    const params: Record<string, unknown> = {
+      lon: query.lon,
+      lat: query.lat,
+      date: query.date,
+      ref: query.ref,
+      lang: query.lang,
+    };
+    if (query.network) {
+      params.network = query.network;
+    }
+    return this.axios
+      .get<LineSchedules>('/transport/lines/schedules', { params })
+      .then((response) => response.data);
   }
 
   /** Get list of waypoint ids that are accessible in TC for a route */

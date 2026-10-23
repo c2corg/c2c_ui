@@ -198,8 +198,15 @@ export function setTransportHighlight(layer, changes) {
   layer.changed();
 }
 
-/** What a click on a feature of the tiles shows: its kind, and its properties. */
-export function describeTransportFeature(feature) {
+/**
+ * What a click on a feature of the tiles shows: its kind, its properties and its position in degrees: the stop itself,
+ * or the place that was clicked on a line.
+ */
+export function describeTransportFeature(feature, coordinate) {
   const properties = feature.getProperties();
-  return { ...properties, kind: properties.layer === 'stops' ? 'stop' : 'line', id: feature.getId() };
+  const kind = properties.layer === 'stops' ? 'stop' : 'line';
+  const flat = kind === 'stop' ? feature.getFlatCoordinates?.() : null;
+  const position = flat?.length === 2 && flat.every(Number.isFinite) ? flat : coordinate;
+  const [lon, lat] = ol.proj.toLonLat(position);
+  return { ...properties, kind, id: feature.getId(), lon, lat };
 }

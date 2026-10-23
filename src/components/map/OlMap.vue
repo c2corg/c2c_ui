@@ -1318,7 +1318,7 @@ export default {
           selectedId: transportFeature?.get('layer') === 'lines' ? transportFeature.getId() : null,
         });
         if (transportFeature) {
-          this.transportData = describeTransportFeature(transportFeature);
+          this.transportData = describeTransportFeature(transportFeature, event.coordinate);
           // the modal is rendered with the new data on the next tick
           this.$nextTick(() => this.$refs.TransportInformation.show());
           return;

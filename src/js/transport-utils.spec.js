@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  addDays,
+  formatDay,
   formatInterval,
+  isoDate,
   normalizeColour,
   readableTextColour,
   safeWebsite,
@@ -66,5 +69,17 @@ describe('transport-utils', () => {
     expect(safeWebsite('https://example.org/a')).toBe('https://example.org/a');
     expect(safeWebsite('javascript:alert(1)')).toBeNull();
     expect(safeWebsite('not a url')).toBeNull();
+  });
+
+  it('writes and moves days', () => {
+    expect(isoDate(new Date(2026, 9, 26))).toBe('2026-10-26');
+    expect(addDays('2026-10-31', 1)).toBe('2026-11-01');
+    expect(addDays('2026-01-01', -1)).toBe('2025-12-31');
+    expect(addDays('2026-02-27', 2)).toBe('2026-03-01');
+  });
+
+  it('names a day in the language of the page', () => {
+    expect(formatDay('2026-10-26', 'en')).toBe('Monday, October 26');
+    expect(formatDay('2026-10-26', 'fr')).toBe('lundi 26 octobre');
   });
 });

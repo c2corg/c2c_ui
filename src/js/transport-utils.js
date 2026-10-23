@@ -102,3 +102,25 @@ export function safeWebsite(value) {
     return null;
   }
 }
+
+/** A local date as YYYY-MM-DD, the way the API takes days. */
+export function isoDate(date) {
+  const pad = (number) => String(number).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+/** The day `days` days after (or before) a YYYY-MM-DD day. */
+export function addDays(day, days) {
+  const [year, month, date] = day.split('-').map(Number);
+  return isoDate(new Date(year, month - 1, date + days));
+}
+
+/** "Monday, October 26" in the given language. */
+export function formatDay(day, language) {
+  const [year, month, date] = day.split('-').map(Number);
+  return new Date(year, month - 1, date).toLocaleDateString(language, {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  });
+}
