@@ -68,19 +68,29 @@ UserProfileService.prototype.login = function (username, password, acceptTos, ss
   const payload = {
     username,
     password,
-    discourse: true,
     accept_tos: acceptTos,
   };
 
   // present when the login was reached via a Discourse-initiated SSO
   // handshake (see the auth-sso route) - forwarded as-is, the API
-  // verifies the signature server-side.
+  // verifies the signature server-side. Without them, `discourse` would
+  // make the API fetch a nonce for the forum server-side, which Discourse
+  // no longer accepts from the browser: the UI opens the forum session
+  // itself after login instead (see LoginView onSuccessSigin()).
   if (sso && sig) {
+    payload.discourse = true;
     payload.sso = sso;
     payload.sig = sig;
   }
 
   return this.api.post('/users/login', payload);
+};
+
+// answers a Discourse SSO handshake started by the browser (see the auth-sso
+// route) for an already logged-in user: returns the signed forum URL that
+// opens the forum session.
+UserProfileService.prototype.discourseRedirect = function (sso, sig) {
+  return this.api.post('/users/discourse-redirect', { sso, sig });
 };
 
 UserProfileService.prototype.logout = function () {

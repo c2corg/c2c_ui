@@ -1,6 +1,10 @@
 <template>
   <div class="login-view is-flex">
     <html-header :title="$gettext('Login')" />
+    <div v-if="mode == 'forum'" class="forum-sso has-text-centered">
+      <span class="button is-white is-large is-loading" aria-hidden="true" />
+      <p v-translate>Loading...</p>
+    </div>
     <base-form v-show="mode == 'signin'" :promise="promise" @submit="signin">
       <form-field
         ref="signinMainInput"
@@ -245,7 +249,6 @@ export default {
       termsAgreed: false,
 
       from: null,
-      redirectionStillDone: false,
 
       promise: {},
       loginTermsAgreed: undefined,
@@ -329,6 +332,19 @@ export default {
         this.promise = c2c.userProfile
           .validateRegisterEmail(this.$route.query.validate_register_email)
           .then(() => this.$router.push({ name: 'home' }));
+      } else if (this.$route.name === 'auth-sso' && this.$route.query.sso && this.$user.isLogged) {
+        // already logged in (e.g. sent here by onSuccessSigin() below): answer
+        // the forum's SSO handshake without asking for the password again. On
+        // failure the sign in form shows, and signing in answers it instead.
+        this.mode = 'forum';
+        c2c.userProfile
+          .discourseRedirect(this.$route.query.sso, this.$route.query.sig)
+          .then(({ data }) => {
+            window.location = data.redirect;
+          })
+          .catch(() => {
+            this.mode = 'signin';
+          });
       } else {
         this.mode = 'signin';
       }
@@ -361,42 +377,21 @@ export default {
       // it, so this must be a real top-level navigation, not the hidden
       // iframe trick used below (which wouldn't navigate anywhere, and
       // could hit third-party cookie restrictions on the Discourse side).
+      this.mode = 'forum';
       if (data.data.redirect) {
         window.location = data.data.redirect;
         return;
       }
 
-      const discourse_url = data.data.redirect_internal;
-
-      if (discourse_url) {
-        // dirty way to SSO...
-        // if somebody wants to implement a better solution, feel free
-        // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/auth/auth.js
-        const iframe = document.createElement('iframe');
-        const sandbox = document.createAttribute('sandbox');
-
-        sandbox.value = 'allow-same-origin';
-        iframe.style.display = 'none';
-        iframe.setAttributeNode(sandbox);
-        iframe.src = discourse_url;
-
-        // 10s to complete discourse authentication
-        window.setTimeout(this.redirect, 10000);
-        iframe.addEventListener('load', this.redirect);
-
-        this.promise.loading = true;
-        document.body.appendChild(iframe);
-      } else {
-        this.redirect();
-      }
-    },
-
-    redirect() {
-      // redirect() may be called twice
-      if (!this.redirectionStillDone) {
-        this.redirectionStillDone = true;
-        this.$router.push(this.to?.query?.redirect ?? '/');
-      }
+      // Open the forum session as well. Discourse binds the SSO nonce to the
+      // browser session that asked for it (discourse_connect_csrf_protection),
+      // so the browser has to start the handshake itself: the forum sends it
+      // to the auth-sso route (see created()), then to its own sso_login, which
+      // sends it back to return_path - provided the forum lists this host in
+      // discourse_connect_allowed_redirect_domains, else it lands on the forum.
+      const target = this.$router.resolve(this.to?.query?.redirect ?? '/').href;
+      const returnPath = new URL(target, window.location.origin).href;
+      window.location = `${config.urls.forum}/session/sso?return_path=${encodeURIComponent(returnPath)}`;
     },
 
     signup() {
@@ -459,6 +454,17 @@ export default {
   form {
     width: 100%;
     padding: 1.5rem;
+  }
+}
+
+.forum-sso {
+  width: 100%;
+  padding: 1.5rem;
+
+  .button {
+    border: none;
+    background: transparent;
+    pointer-events: none;
   }
 }
 </style>
