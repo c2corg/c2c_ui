@@ -62,7 +62,7 @@ export default {
   }
 }
 
-.success-indicator-enter,
+.success-indicator-enter-from,
 .success-indicator-leave-to {
   opacity: 0;
 }

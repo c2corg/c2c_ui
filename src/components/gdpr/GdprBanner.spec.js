@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { h } from 'vue';
 
 import GdprBanner from './GdprBanner';
 
@@ -10,7 +11,7 @@ const show = vi.fn();
 const mountBanner = () =>
   mount(GdprBanner, {
     global: {
-      stubs: { GdprModal: { methods: { show }, render: (h) => h('div') } },
+      stubs: { GdprModal: { methods: { show }, render: () => h('div') } },
       mocks: { $gdpr: { get: () => null, setAll: vi.fn() } },
       directives: { translate: {} },
     },

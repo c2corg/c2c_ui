@@ -82,16 +82,10 @@ export default {
     window.removeEventListener('beforeunload', this.beforeUnload);
   },
 
-  beforeRouteLeave(to, from, next) {
-    if (this.modified) {
-      const answer = window.confirm(this.$gettext('Do you really want to leave? you have unsaved changes!'));
-      if (answer) {
-        next();
-      } else {
-        next(false);
-      }
-    } else {
-      next();
+  // returning false cancels the navigation (vue-router 5 deprecates the next() callback)
+  beforeRouteLeave() {
+    if (this.modified && !window.confirm(this.$gettext('Do you really want to leave? you have unsaved changes!'))) {
+      return false;
     }
   },
 

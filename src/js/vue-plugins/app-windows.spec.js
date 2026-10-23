@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { h } from 'vue';
 
 import helperWindow, { registerHelperWindow } from './helper-window';
 import imageViewer, { registerImageViewer } from './image-viewer';
@@ -21,7 +22,7 @@ describe('$helper and $imageViewer', () => {
     registerHelperWindow(helper);
     registerImageViewer(viewer);
 
-    const wrapper = mount({ render: (h) => h('div') }, { global: { plugins } });
+    const wrapper = mount({ render: () => h('div') }, { global: { plugins } });
 
     expect(wrapper.vm.$helper).toBe(helper);
     expect(wrapper.vm.$imageViewer).toBe(viewer);
@@ -32,7 +33,7 @@ describe('$helper and $imageViewer', () => {
     const window = mount(HelperWindow, {
       global: { plugins, stubs: { ModalCard: true }, mocks: { $gettext: (s) => s } },
     });
-    const component = mount({ render: (h) => h('div') }, { global: { plugins } });
+    const component = mount({ render: () => h('div') }, { global: { plugins } });
 
     expect(component.vm.$helper).toBe(window.vm);
 
@@ -52,13 +53,13 @@ describe('$helper and $imageViewer in App.vue', () => {
       created() {
         seenByPage = this.$helper;
       },
-      render: (h) => h('div'),
+      render: () => h('div'),
     };
 
     mount(
       {
         components: { HelperWindow, Page },
-        render: (h) => h('div', [h('helper-window', { ref: 'helper' }), h('page')]),
+        render: () => h('div', [h(HelperWindow, { ref: 'helper' }), h(Page)]),
       },
       { global: { plugins, stubs: { ModalCard: true }, mocks: { $gettext: (s) => s } } }
     );

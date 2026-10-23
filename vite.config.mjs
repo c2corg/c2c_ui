@@ -254,8 +254,8 @@ export default defineConfig({
           // no comments in dev either, as in production: a comment at the root of a template would make it a fragment,
           // which doesn't inherit the parent attributes (class, listeners)
           comments: false,
-          // Vue 3 with the Vue 2 behaviours (@vue/compat): each one warns, to be migrated one by one
-          compatConfig: { MODE: 2 },
+          // templates compiled with the Vue 3 behaviours (the runtime: src/js/vue-compat-mode.js)
+          compatConfig: { MODE: 3 },
           // web components
           isCustomElement: (tag) => tag.startsWith('swiper-'),
         },
