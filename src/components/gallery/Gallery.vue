@@ -15,6 +15,9 @@
 
 <script>
 export default {
+  // Vue 3 array watchers (compat made them deep: true); the deep option of each watcher applies
+  compatConfig: { WATCH_ARRAY: false },
+
   props: {
     images: {
       type: Array,
@@ -23,8 +26,12 @@ export default {
   },
 
   watch: {
-    images: function () {
-      this.images.forEach(this.$imageViewer.push);
+    // deep 1: also when images are added to the array (uploads), as Vue 2 array watchers did
+    images: {
+      handler() {
+        this.images.forEach(this.$imageViewer.push);
+      },
+      deep: 1,
     },
   },
 

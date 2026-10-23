@@ -33,6 +33,33 @@ const openRoute = async (properties) => {
 };
 
 describe('RouteEditionView', () => {
+  it('takes the first associated waypoint as main, when one is added (in place) to a new route', async () => {
+    const wrapper = shallowMount(
+      {
+        compatConfig: RouteEditionView.compatConfig,
+        watch: RouteEditionView.watch,
+        methods: RouteEditionView.methods,
+        data: () => ({ document: null, mode: 'add', fields: constants.objectDefinitions.route.fields }),
+        render: () => h('div'),
+      },
+      { global: { config: { errorHandler } } }
+    );
+    await wrapper.setData({
+      document: {
+        climbing_outdoor_type: null,
+        rock_free_rating: null,
+        main_waypoint_id: null,
+        associations: { waypoints: [] },
+      },
+    });
+
+    // the associations editor adds to the array
+    wrapper.vm.document.associations.waypoints.push({ document_id: 5 });
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm.document.main_waypoint_id).toBe(5);
+  });
+
   beforeEach(() => {
     errors = [];
   });
