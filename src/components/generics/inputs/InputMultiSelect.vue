@@ -51,7 +51,10 @@ export default {
   margin-bottom: 0.5rem;
   user-select: None;
 
-  transition: box-shadow 100ms, background-color 200ms, color 100ms;
+  transition:
+    box-shadow 100ms,
+    background-color 200ms,
+    color 100ms;
 }
 
 .multi-select-item:hover {

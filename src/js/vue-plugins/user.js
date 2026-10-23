@@ -34,20 +34,20 @@ export default function install(app) {
 
   const user = reactive({
     // The unique name, used to login
-    userName: expired ? null : data['userName'] ?? null,
+    userName: expired ? null : (data['userName'] ?? null),
     // unique numerical ID
-    id: expired ? null : data['id'] ?? null,
+    id: expired ? null : (data['id'] ?? null),
     lang,
     // list of roles
-    roles: expired ? [] : data['roles'] ?? [],
+    roles: expired ? [] : (data['roles'] ?? []),
     // public name, a simple label
-    name: expired ? null : data['name'] ?? null,
+    name: expired ? null : (data['name'] ?? null),
     // forum name
-    forumUsername: expired ? null : data['forumUsername'] ?? null,
+    forumUsername: expired ? null : (data['forumUsername'] ?? null),
     // private token used for API auth
-    token: expired ? null : data['token'] ?? null,
+    token: expired ? null : (data['token'] ?? null),
     // token expiration date
-    expire: expired ? null : data['expire'] ?? null,
+    expire: expired ? null : (data['expire'] ?? null),
 
     get isModerator() {
       return this.roles.includes('moderator');

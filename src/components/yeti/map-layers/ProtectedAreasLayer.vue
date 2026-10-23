@@ -321,7 +321,9 @@ export default {
   max-width: 100%;
   background: #fff;
   border-radius: 4px;
-  box-shadow: 0 0 3px rgba($black, 0.5), 0 3px 8px rgba($black, 0.5);
+  box-shadow:
+    0 0 3px rgba($black, 0.5),
+    0 3px 8px rgba($black, 0.5);
   overflow: hidden;
 
   p {

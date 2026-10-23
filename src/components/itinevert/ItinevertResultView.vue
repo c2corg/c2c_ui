@@ -497,7 +497,8 @@ $cards-gap: 0.25rem;
     margin-top: 0;
     .map-container {
       height: calc(
-        100vh - #{$navbar-height} - 3 * #{$mobile-section-padding} - #{$mobile-header-height} - #{$mobile-filters-height}
+        100vh - #{$navbar-height} - 3 * #{$mobile-section-padding} - #{$mobile-header-height} -
+          #{$mobile-filters-height}
       );
     }
 

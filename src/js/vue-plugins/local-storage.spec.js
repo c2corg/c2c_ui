@@ -8,8 +8,8 @@ const sourceFiles = (dir) =>
     entry.isDirectory()
       ? sourceFiles(join(dir, entry.name))
       : /\.(js|vue)$/.test(entry.name)
-      ? [join(dir, entry.name)]
-      : []
+        ? [join(dir, entry.name)]
+        : []
   );
 
 // the preferences each component reads and writes, as existing users have them in their browser

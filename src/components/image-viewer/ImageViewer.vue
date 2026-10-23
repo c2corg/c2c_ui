@@ -363,7 +363,9 @@ $paginationHeight: 30px;
   .image-viewer-buttons {
     visibility: visible;
     opacity: 1;
-    transition: visibility 1s, opacity 1s;
+    transition:
+      visibility 1s,
+      opacity 1s;
   }
 
   &.hide-buttons {

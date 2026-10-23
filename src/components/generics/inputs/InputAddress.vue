@@ -336,7 +336,9 @@ export default {
           padding: 10px 14px;
           font-size: 14px;
           color: #333;
-          transition: background 0.2s ease, color 0.2s ease;
+          transition:
+            background 0.2s ease,
+            color 0.2s ease;
 
           &:hover {
             background-color: #f5f5f5;

@@ -17,8 +17,8 @@ const sourceFiles = (dir) =>
     entry.isDirectory()
       ? sourceFiles(join(dir, entry.name))
       : /\.(js|vue)$/.test(entry.name)
-      ? [join(dir, entry.name)]
-      : []
+        ? [join(dir, entry.name)]
+        : []
   );
 
 // the input a label points to, by its for attribute
