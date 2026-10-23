@@ -2,7 +2,6 @@
 FROM node:lts-alpine AS build-stage
 WORKDIR /
 COPY package*.json ./
-COPY .snyk ./
 RUN mkdir -p public
 RUN npm install
 COPY . .
