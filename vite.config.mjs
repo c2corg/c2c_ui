@@ -250,6 +250,8 @@ export default defineConfig({
     vue({
       template: {
         compilerOptions: {
+          // as the browser does, and as Vue 2 rendered: Vue 3's default (condense) drops spaces next to interpolations,
+          // e.g. route ratings rendered "AD5c>5aII" instead of "AD 5c>5a II"
           whitespace: 'preserve',
           // no comments in dev either, as in production: a comment at the root of a template would make it a fragment,
           // which doesn't inherit the parent attributes (class, listeners)
