@@ -22,6 +22,8 @@
         :min="min"
         :divisor="divisor"
         :is-expanded="isExpanded"
+        :prefix="prefix"
+        @click-prefix="$emit('click-prefix')"
       />
     </div>
   </div>
@@ -82,7 +84,14 @@ export default {
       type: String,
       default: undefined,
     },
+    // a button before the input (the cotometer of the ski rating), emits click-prefix
+    prefix: {
+      type: String,
+      default: null,
+    },
   },
+
+  emits: ['click-prefix'],
 
   data() {
     return {
