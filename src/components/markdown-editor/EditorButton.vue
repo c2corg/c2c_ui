@@ -1,7 +1,7 @@
 <template>
   <a
     class="button has-text-primary"
-    :disabled="disabled"
+    :disabled="disabled || null"
     :title="tooltip"
     :target="target"
     :href="href"

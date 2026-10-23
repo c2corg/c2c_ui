@@ -5,7 +5,7 @@
       :key="option"
       @click="toggle(option)"
       class="multi-select-item has-cursor-pointer"
-      :checked="value_.includes(option)"
+      :checked="value_.includes(option) || null"
     >
       {{ $filters.uppercaseFirstLetter(i18n ? $gettext(option, i18nContext) : option) }}
     </span>
