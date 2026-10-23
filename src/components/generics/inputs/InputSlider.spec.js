@@ -10,9 +10,9 @@ const handles = (wrapper) => wrapper.findAll('[role=slider]');
 
 describe('InputSlider', () => {
   it('shows one handle for a value, two for a range, within its bounds', () => {
-    const single = mount(InputSlider, { props: { value: 40 }, attachTo: document.body });
+    const single = mount(InputSlider, { props: { modelValue: 40 }, attachTo: document.body });
     const range = mount(InputSlider, {
-      props: { value: [100, 3000], min: 0, max: 9000, step: 25 },
+      props: { modelValue: [100, 3000], min: 0, max: 9000, step: 25 },
       attachTo: document.body,
     });
 
@@ -27,18 +27,23 @@ describe('InputSlider', () => {
 
   it('moves by its step with the keyboard, and emits the new value', async () => {
     const wrapper = mount(InputSlider, {
-      props: { value: [100, 3000], max: 9000, step: 25 },
+      props: { modelValue: [100, 3000], max: 9000, step: 25 },
       attachTo: document.body,
     });
 
     await handles(wrapper)[0].trigger('keydown', { key: 'ArrowRight' });
 
-    const values = [...(wrapper.emitted('input') ?? []), ...(wrapper.emitted('change') ?? [])].map(([value]) => value);
+    const values = [...(wrapper.emitted('update:modelValue') ?? []), ...(wrapper.emitted('change') ?? [])].map(
+      ([value]) => value
+    );
     expect(values).toContainEqual([125, 3000]);
   });
 
   it('labels its handles for assistive technologies', () => {
-    const wrapper = mount(InputSlider, { props: { value: 1, ariaLabelledby: 'label-1' }, attachTo: document.body });
+    const wrapper = mount(InputSlider, {
+      props: { modelValue: 1, ariaLabelledby: 'label-1' },
+      attachTo: document.body,
+    });
 
     expect(handles(wrapper)[0].attributes('aria-labelledby')).toBe('label-1');
   });

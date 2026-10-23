@@ -194,13 +194,15 @@ Selection.prototype.addLinePrefix = function (tag) {
 };
 
 export default {
+  compatConfig: { COMPONENT_V_MODEL: false },
+
   components: {
     EditorButton,
     LinkHelper,
   },
 
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: '',
     },
@@ -210,7 +212,7 @@ export default {
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   data() {
     return {
@@ -234,21 +236,21 @@ export default {
 
   watch: {
     preview: 'computePreview',
-    value: 'updateValue',
+    modelValue: 'updateValue',
   },
 
   mounted() {
-    this.$refs.textarea.value = this.value;
+    this.$refs.textarea.value = this.modelValue;
     this.selection = new Selection(this.$refs.textarea, this.onInput);
   },
 
   methods: {
     onInput() {
-      this.$emit('input', this.$refs.textarea.value);
+      this.$emit('update:modelValue', this.$refs.textarea.value);
     },
 
     updateValue() {
-      this.$refs.textarea.value = this.value;
+      this.$refs.textarea.value = this.modelValue;
     },
 
     computePreview() {
@@ -256,7 +258,7 @@ export default {
         return;
       }
 
-      this.cookerPromise = cooker.cook({ value: this.value });
+      this.cookerPromise = cooker.cook({ value: this.modelValue });
     },
 
     handleSimpleMarkdownTag(tag, defaultChunk) {
