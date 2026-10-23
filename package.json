@@ -14,8 +14,7 @@
     "lint:style": "stylelint \"src/**/*.{vue,scss}\"",
     "test": "vitest run",
     "messages:extract": "node tools/extract-messages.js",
-    "prepare": "husky && npm run snyk-protect && npm run prepare-swiper",
-    "snyk-protect": "snyk-protect",
+    "prepare": "husky && npm run prepare-swiper",
     "update-c2c-common": "python3 tools/update-c2c-common.py",
     "prepare-swiper": "concat -o ./public/swiper.css ./node_modules/swiper/modules/pagination/pagination-element.min.css ./node_modules/swiper/modules/navigation/navigation-element.min.css ./node_modules/swiper/modules/virtual/virtual-element.min.css ./node_modules/swiper/modules/zoom/zoom-element.min.css"
   },
@@ -59,7 +58,6 @@
   "devDependencies": {
     "@babel/core": "7.29.7",
     "@babel/eslint-parser": "7.28.5",
-    "@snyk/protect": "1.1308.1",
     "@vitejs/plugin-legacy": "7.2.1",
     "@vitejs/plugin-vue": "6.0.10",
     "@vue/test-utils": "2.5.1",
@@ -102,6 +100,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/c2corg/c2c_ui.git"
-  },
-  "snyk": true
+  }
 }
