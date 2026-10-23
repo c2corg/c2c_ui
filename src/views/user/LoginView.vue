@@ -225,14 +225,7 @@ export default {
   // here is the trick : all auth action are on the same component.
   // vue won't reload it, even on route modification.
   // watch on $route will perform any action needed by url state.
-  // but this function will be called only once : at the very first load of component
-  // so we'll keep the page to go back
-  // that's all !
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.to = to;
-    });
-  },
+  // created() keeps the route entered, to go back to it after login
 
   data() {
     return {
@@ -268,6 +261,9 @@ export default {
   },
 
   created() {
+    // the route entered (vue-router 5 deprecates the next() callback of beforeRouteEnter); a snapshot, as $route
+    // would follow the next navigations
+    this.to = this.$router.currentRoute.value;
     if (this.$route.name === 'auth-sso') {
       if (this.$route.query.logout !== undefined) {
         this.$user.signout();

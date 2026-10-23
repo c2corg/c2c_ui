@@ -1,3 +1,5 @@
+import '@/js/vue-compat-mode'; // first: Vue 3 behaviours, before any component is defined
+
 import { setDefaults as toastDefaults } from 'bulma-toast';
 // eslint-disable-next-line import/no-unresolved
 import { register as registerSwiper } from 'swiper/element';

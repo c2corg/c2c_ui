@@ -117,6 +117,8 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue';
+
 import DisplayModeSwitch from '../../views/documents/utils/DisplayModeSwitch';
 
 import ItinevertPageSelector from './ItinevertPageSelector.vue';
@@ -126,7 +128,8 @@ import constants from '@/js/constants';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 import QueryItems from '@/views/documents/utils/QueryItems.vue';
 
-const DocumentsTable = () => import('@/components/datatable/DocumentsTable');
+// lazy (ag-grid is big): an async component, as Vue 3 no longer takes a plain function returning the import
+const DocumentsTable = defineAsyncComponent(() => import('@/components/datatable/DocumentsTable'));
 
 // stored under the component name, as before: existing preferences are kept
 const preferences = getPreferences('ItinevertResultView');

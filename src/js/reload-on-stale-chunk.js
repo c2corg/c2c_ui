@@ -11,9 +11,8 @@ const MIN_DELAY_BETWEEN_RELOADS = 60 * 1000;
  */
 export default function reloadOnStaleChunk(router, win = window) {
   let pendingRoute = null;
-  router.beforeEach((to, from, next) => {
+  router.beforeEach((to) => {
     pendingRoute = to;
-    next();
   });
   router.afterEach(() => {
     pendingRoute = null;
