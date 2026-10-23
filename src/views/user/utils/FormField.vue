@@ -59,8 +59,6 @@
 import { formField } from '@/js/form-registration';
 
 export default {
-  compatConfig: { COMPONENT_V_MODEL: false },
-
   // registered with the BaseForm containing it
   mixins: [formField('baseForm')],
 

@@ -192,9 +192,6 @@ const TRACKING_INITIAL_ZOOM = 13;
 const isNotVirtual = (waypoint) => waypoint.waypoint_type !== 'virtual';
 
 export default {
-  // Vue 3 array watchers (compat made them deep: true); the deep option of each watcher applies
-  compatConfig: { WATCH_ARRAY: false },
-
   components: {
     BiodivInformation,
     LayerButton,

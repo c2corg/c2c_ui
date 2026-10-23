@@ -17,8 +17,6 @@
 import { baseMixin } from './mixins';
 
 export default {
-  compatConfig: { COMPONENT_V_MODEL: false },
-
   mixins: [baseMixin],
 
   props: {

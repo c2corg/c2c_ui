@@ -254,8 +254,6 @@ export default defineConfig({
           // no comments in dev either, as in production: a comment at the root of a template would make it a fragment,
           // which doesn't inherit the parent attributes (class, listeners)
           comments: false,
-          // templates compiled with the Vue 3 behaviours (the runtime: src/js/vue-compat-mode.js)
-          compatConfig: { MODE: 3 },
           // web components
           isCustomElement: (tag) => tag.startsWith('swiper-'),
         },
@@ -278,11 +276,7 @@ export default defineConfig({
   ],
 
   resolve: {
-    alias: [
-      { find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
-      // the migration build: Vue 3 with a Vue 2 compatible API (@vue/compat), for the app and its dependencies
-      { find: /^vue$/, replacement: '@vue/compat' },
-    ],
+    alias: [{ find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) }],
     // imports of .vue files without extension, as webpack allowed
     extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json', '.vue'],
   },

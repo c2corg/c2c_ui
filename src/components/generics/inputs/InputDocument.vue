@@ -99,8 +99,6 @@ import constants from '@/js/constants';
 import debounce from '@/js/debounce';
 
 export default {
-  compatConfig: { COMPONENT_V_MODEL: false },
-
   mixins: [baseMixin, arrayMixin],
 
   props: {

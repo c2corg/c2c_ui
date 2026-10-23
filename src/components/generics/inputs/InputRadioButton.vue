@@ -18,8 +18,6 @@
 
 <script>
 export default {
-  compatConfig: { COMPONENT_V_MODEL: false },
-
   props: {
     options: {
       type: Array,

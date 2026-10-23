@@ -20,13 +20,9 @@
 import Slider from '@vueform/slider';
 import '@vueform/slider/themes/default.css';
 
-import vue3 from '@/js/vue3-component';
-
 // A slider for one value, or a range when the value is an array of two
 export default {
-  compatConfig: { COMPONENT_V_MODEL: false },
-
-  components: { Slider: vue3(Slider) },
+  components: { Slider },
 
   props: {
     modelValue: {

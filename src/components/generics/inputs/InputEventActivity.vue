@@ -23,8 +23,6 @@ import { baseMixin } from './mixins';
 import constants from '@/js/constants';
 
 export default {
-  compatConfig: { COMPONENT_V_MODEL: false },
-
   mixins: [baseMixin],
 
   props: {

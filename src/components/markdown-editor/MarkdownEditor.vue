@@ -196,8 +196,6 @@ Selection.prototype.addLinePrefix = function (tag) {
 };
 
 export default {
-  compatConfig: { COMPONENT_V_MODEL: false },
-
   components: {
     EditorButton,
     LinkHelper,

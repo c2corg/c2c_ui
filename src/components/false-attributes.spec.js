@@ -1,4 +1,3 @@
-import { configureCompat } from '@vue/compat'; // the vue alias: the same Vue the components run on
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
@@ -9,9 +8,7 @@ import EditorButton from '@/components/markdown-editor/EditorButton';
 import PageSelector from '@/views/documents/utils/PageSelector';
 
 // Vue 3 renders attr="false" for an attribute bound to false (Vue 2 removed it), which CSS selectors such as
-// [checked] or Bulma's .button[disabled] then match. With the Vue 3 behaviour (no compat for it in this file), the
-// attributes must still be absent when false.
-configureCompat({ ATTR_FALSE_VALUE: false });
+// [checked] or Bulma's .button[disabled] then match: the attributes must be absent when false.
 
 const global = {
   mocks: { $gettext: (text) => text, $filters: { uppercaseFirstLetter: (text) => text }, $route: { query: {} } },

@@ -10,8 +10,6 @@ import { baseMixin } from './mixins';
 import MarkdownEditor from '@/components/markdown-editor/MarkdownEditor';
 
 export default {
-  compatConfig: { COMPONENT_V_MODEL: false },
-
   components: {
     MarkdownEditor,
   },

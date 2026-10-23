@@ -20,8 +20,7 @@ export default {
     },
   },
 
-  // no DOM: it only sets document.title (a Vue 3 render function, without the h argument of Vue 2)
-  compatConfig: { RENDER_FUNCTION: false },
+  // no DOM: it only sets document.title
   render() {
     return null;
   },

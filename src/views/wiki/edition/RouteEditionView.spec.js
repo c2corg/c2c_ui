@@ -36,7 +36,6 @@ describe('RouteEditionView', () => {
   it('takes the first associated waypoint as main, when one is added (in place) to a new route', async () => {
     const wrapper = shallowMount(
       {
-        compatConfig: RouteEditionView.compatConfig,
         watch: RouteEditionView.watch,
         methods: RouteEditionView.methods,
         data: () => ({ document: null, mode: 'add', fields: constants.objectDefinitions.route.fields }),
