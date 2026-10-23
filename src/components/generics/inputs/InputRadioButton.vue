@@ -18,6 +18,8 @@
 
 <script>
 export default {
+  compatConfig: { COMPONENT_V_MODEL: false },
+
   props: {
     options: {
       type: Array,
@@ -35,16 +37,16 @@ export default {
       type: Boolean,
       default: false,
     },
-    value: {
+    modelValue: {
       type: String,
       default: '',
     },
   },
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   data() {
     return {
-      selected: this.value || this.defaultValue,
+      selected: this.modelValue || this.defaultValue,
     };
   },
   computed: {
@@ -60,18 +62,18 @@ export default {
     },
   },
   watch: {
-    value(newValue) {
+    modelValue(newValue) {
       this.selected = newValue;
     },
   },
   mounted() {
     if (this.selected) {
-      this.$emit('input', this.selected);
+      this.$emit('update:modelValue', this.selected);
     }
   },
   methods: {
     emitSelectedValue() {
-      this.$emit('input', this.selected);
+      this.$emit('update:modelValue', this.selected);
     },
   },
 };

@@ -35,8 +35,8 @@
             <display-mode-switch
               class="header-item is-hidden-mobile"
               :list-mode="'listMode'"
-              :value="displayMode"
-              @input="setProperty('displayMode', $event)"
+              :model-value="displayMode"
+              @update:model-value="setProperty('displayMode', $event)"
             />
 
             <span class="is-size-3 is-hidden-tablet">

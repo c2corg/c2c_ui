@@ -1,7 +1,7 @@
 <template>
   <slider
     class="input-slider"
-    :value="value"
+    :value="modelValue"
     :min="min"
     :max="max"
     :step="step"
@@ -11,7 +11,7 @@
     :format="format"
     :aria-labelledby="ariaLabelledby"
     :options="options"
-    @input="$emit('input', $event)"
+    @input="$emit('update:modelValue', $event)"
     @change="$emit('change', $event)"
   />
 </template>
@@ -24,10 +24,12 @@ import vue3 from '@/js/vue3-component';
 
 // A slider for one value, or a range when the value is an array of two
 export default {
+  compatConfig: { COMPONENT_V_MODEL: false },
+
   components: { Slider: vue3(Slider) },
 
   props: {
-    value: {
+    modelValue: {
       type: [Number, Array],
       required: true,
     },
@@ -73,7 +75,7 @@ export default {
     },
   },
 
-  emits: ['input', 'change'],
+  emits: ['update:modelValue', 'change'],
 
   computed: {
     options() {

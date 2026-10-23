@@ -40,7 +40,7 @@ describe('uid', () => {
   it('links each checkbox label to its own input', async () => {
     const wrappers = [1, 2].map(() =>
       mount(InputCheckbox, {
-        props: { value: false },
+        props: { modelValue: false },
         slots: { default: 'Accept' },
         global: { mocks },
         attachTo: document.body,
@@ -54,7 +54,7 @@ describe('uid', () => {
 
   it('links the yes / no / unknown labels to their radio buttons', () => {
     const wrapper = mount(InputYesNo, {
-      props: { value: null, nullable: true },
+      props: { modelValue: null, nullable: true },
       global: { mocks },
       attachTo: document.body,
     });
@@ -67,7 +67,7 @@ describe('uid', () => {
 
   it('names the Yeti slider handle after its label', () => {
     const wrapper = mount(YetiSlider, {
-      props: { value: 0.5, min: 0, max: 1, interval: 0.1 },
+      props: { modelValue: 0.5, min: 0, max: 1, interval: 0.1 },
       slots: { default: 'Opacity' },
       global: { stubs: { InputSlider } },
       attachTo: document.body,
