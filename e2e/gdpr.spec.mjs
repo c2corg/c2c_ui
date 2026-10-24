@@ -2,11 +2,11 @@ import { expect, test } from './fixtures.mjs';
 
 test.use({ gdprChosen: false });
 
-test('the GDPR banner shows after the first interaction, and not again once the user chose', async ({ page }) => {
+test('the GDPR banner shows on an interaction, and not again once the user chose', async ({ page }) => {
   const banner = page.locator('.gdpr-content');
+  // not checked before the first interaction: a scroll event shows the banner too, and a page can scroll by itself
+  // while it loads
   await page.goto('/');
-  await expect(banner).not.toHaveClass(/active/);
-
   await page.mouse.wheel(0, 200);
   await expect(banner).toHaveClass(/active/);
 
