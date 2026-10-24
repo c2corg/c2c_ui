@@ -4,6 +4,7 @@ import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import { createNodeResolver, flatConfigs as importX } from 'eslint-plugin-import-x';
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 import pluginVue from 'eslint-plugin-vue';
+import globals from 'globals';
 
 export default [
   { ignores: ['node_modules/', 'dist/', 'tools/', 'src/assets/font-awesome-custom/'] },
@@ -18,6 +19,13 @@ export default [
   {
     files: ['**/*.{js,mjs,vue}'],
     linterOptions: { reportUnusedDisableDirectives: 'error' },
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        // replaced at build time (vite.config.mjs define)
+        CAMPTOCAMP_CONFIG: 'readonly',
+      },
+    },
     settings: {
       'import-x/extensions': ['.js', '.mjs', '.vue'],
       // to read the exports of the imported components
@@ -31,6 +39,7 @@ export default [
     },
     rules: {
       'prettier/prettier': ['warn', { endOfLine: 'auto' }],
+      'no-undef': 'error',
       'no-unused-vars': 'warn',
       'no-console': 'warn',
       'vue/no-v-html': 'off',
@@ -51,6 +60,12 @@ export default [
         { 'newlines-between': 'always', alphabetize: { order: 'asc', caseInsensitive: false } },
       ],
     },
+  },
+
+  // run by Node (the specs by Vitest)
+  {
+    files: ['*.mjs', 'src/**/*.spec.js'],
+    languageOptions: { globals: globals.node },
   },
 
   {

@@ -70,6 +70,8 @@
 </template>
 
 <script>
+import { toast } from 'bulma-toast';
+
 import ImageUploader from './ImageUploader';
 
 import c2c from '@/js/apis/c2c';
