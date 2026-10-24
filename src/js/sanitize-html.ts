@@ -1,4 +1,4 @@
-import DOMPurify from 'dompurify';
+import DOMPurify, { type Config } from 'dompurify';
 
 /**
  * Central place to sanitize any HTML coming from a source we don't fully control (wiki articles converted from
@@ -48,7 +48,7 @@ const RICH_CONTENT_ATTR_ALLOWLIST = [
   'sandbox',
 ];
 
-const RICH_CONTENT_CONFIG = {
+const RICH_CONTENT_CONFIG: Config = {
   ADD_TAGS: ['iframe'],
   ADD_ATTR: RICH_CONTENT_ATTR_ALLOWLIST,
 };
@@ -63,7 +63,7 @@ const ALLOWED_IFRAME_HOSTS = ['www.youtube.com', 'www.youtube-nocookie.com', 'pl
 // allow-forms...
 const IFRAME_SANDBOX = 'allow-scripts allow-same-origin allow-presentation';
 
-function isAllowedIframeHost(src) {
+function isAllowedIframeHost(src: string): boolean {
   try {
     return ALLOWED_IFRAME_HOSTS.includes(new URL(src, window.location.origin).hostname);
   } catch {
@@ -78,28 +78,29 @@ DOMPurify.addHook('uponSanitizeElement', (node, data) => {
     return;
   }
 
-  if (!isAllowedIframeHost(node.getAttribute('src') || '')) {
-    node.remove();
+  const element = node as Element;
+  if (!isAllowedIframeHost(element.getAttribute('src') || '')) {
+    element.remove();
     return;
   }
 
-  node.setAttribute('sandbox', IFRAME_SANDBOX);
+  element.setAttribute('sandbox', IFRAME_SANDBOX);
 });
 
-export function sanitizeHtml(html) {
+export function sanitizeHtml<T extends string | null | undefined>(html: T): T {
   if (!html) {
     return html;
   }
 
-  return DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+  return DOMPurify.sanitize(html, { USE_PROFILES: { html: true } }) as T;
 }
 
-export function sanitizeRichHtml(html) {
+export function sanitizeRichHtml<T extends string | null | undefined>(html: T): T {
   if (!html) {
     return html;
   }
 
-  return DOMPurify.sanitize(html, RICH_CONTENT_CONFIG);
+  return DOMPurify.sanitize(html, RICH_CONTENT_CONFIG) as T;
 }
 
 export default DOMPurify;

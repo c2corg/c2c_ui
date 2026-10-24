@@ -3,8 +3,12 @@
  * Used where a page would otherwise fire one API request per document at once
  * (printing view, public transport boxes) and trip the API's per-IP rate limit.
  */
-export default function concurrencyLimit(max) {
-  const queue = [];
+type Task<T> = () => T | PromiseLike<T>;
+
+type Queued = { task: Task<unknown>; resolve: (value: unknown) => void; reject: (reason: unknown) => void };
+
+export default function concurrencyLimit(max: number): <T>(task: Task<T>) => Promise<T> {
+  const queue: Queued[] = [];
   let active = 0;
 
   const next = () => {
@@ -12,7 +16,7 @@ export default function concurrencyLimit(max) {
       return;
     }
 
-    const { task, resolve, reject } = queue.shift();
+    const { task, resolve, reject } = queue.shift() as Queued;
     active++;
 
     Promise.resolve()
@@ -24,9 +28,9 @@ export default function concurrencyLimit(max) {
       });
   };
 
-  return (task) =>
-    new Promise((resolve, reject) => {
-      queue.push({ task, resolve, reject });
+  return <T>(task: Task<T>) =>
+    new Promise<T>((resolve, reject) => {
+      queue.push({ task, resolve: resolve as (value: unknown) => void, reject });
       next();
     });
 }
