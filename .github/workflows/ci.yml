@@ -89,9 +89,11 @@ jobs:
     # github.actor is whoever triggered the run (e.g. a maintainer re-running it).
     if: "!github.event.pull_request.head.repo.fork && github.actor != 'dependabot[bot]' && !startsWith(github.head_ref, 'dependabot/')"
     runs-on: ubuntu-latest
-    concurrency: github-pages
+    # No concurrency group shared with gh-pages-cleanup.yml: GitHub keeps one pending run per group and cancels the
+    # older one, which dropped previews and clean-ups of other pull requests. Pushes are retried instead (below)
     permissions:
       contents: write
+      pull-requests: read
     # Une PR ouvre un environnement public (URL c2corg.github.io/c2c_ui/<branche>)
     # à partir de code non encore relu. On distingue donc :
     # - pull_request -> environnement "pr-preview", protégé par des reviewers
@@ -102,44 +104,61 @@ jobs:
     #   sans règle de protection : pas de friction pour du code déjà validé.
     environment: ${{ github.event_name == 'pull_request' && 'pr-preview' || 'github-pages-deploy' }}
     steps:
+      - name: Check the pull request is still open
+        # A preview waits for a maintainer's approval: approved after the pull request was merged or closed, it would
+        # come back after gh-pages-cleanup.yml removed it
+        id: pr
+        if: github.event_name == 'pull_request'
+        run: echo "state=$(gh pr view "$PR" --repo "$REPO" --json state --jq .state)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
       - name: Get branch name
+        if: steps.pr.outputs.state != 'MERGED' && steps.pr.outputs.state != 'CLOSED'
         id: branch-name
         # See comment on the other tj-actions/branch-names usage above: pinned
         # by SHA because of the March 2025 tj-actions supply-chain incident.
         uses: tj-actions/branch-names@5250492686b253f06fa55861556d1027b067aeb5 # v9.0.2
       - name: Create clean branch name
+        if: steps.branch-name.outcome == 'success'
         id: clean_branch
         run: echo CLEAN_BRANCH=${BRANCH/\//-} >> $GITHUB_OUTPUT
         env:
           BRANCH: ${{ steps.branch-name.outputs.current_branch || steps.branch-name.outputs.tag }}
       - name: Checkout repository
+        if: steps.branch-name.outcome == 'success'
         uses: actions/checkout@v7
         with:
           ref: gh-pages
       - name: Remove current branch files
+        if: steps.branch-name.outcome == 'success'
         run: rm -rf ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
       - name: Retrieve github pages artifact
+        if: steps.branch-name.outcome == 'success'
         uses: actions/download-artifact@v8
         with:
           name: github-pages
           path: ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
-      - name: Commit files
+      - name: Commit and push files
+        if: steps.branch-name.outcome == 'success'
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
           git add .
           # Nothing to commit when the build output is unchanged (e.g. a PR
           # touching only CI config): skip instead of failing the job.
-          git diff --cached --quiet || git commit -m "Deploy ${{ steps.branch-name.outputs.current_branch }} branch"
-      - name: Push changes
-        # ad-m/github-push-action@v1.0.0, pinned by commit SHA rather than the
-        # mutable "v1.0.0" tag, since this action pushes to the repo with
-        # GITHUB_TOKEN and a rewritten tag would let a compromised upstream
-        # account run arbitrary code with that token.
-        uses: ad-m/github-push-action@881a6320fdb16eb5318c5054f31c218aec2b324c # v1.3.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages
+          git diff --cached --quiet && exit 0
+          git commit -m "Deploy $BRANCH branch"
+          # another deploy or clean-up may have pushed meanwhile (each in its own folder): rebase on it and retry
+          for attempt in 1 2 3 4 5; do
+            git push origin gh-pages && exit 0
+            sleep $((attempt * 5))
+            git pull --rebase origin gh-pages
+          done
+          exit 1
+        env:
+          BRANCH: ${{ steps.branch-name.outputs.current_branch || steps.branch-name.outputs.tag }}
 
   create-release:
     needs: build
