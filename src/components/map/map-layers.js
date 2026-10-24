@@ -1,3 +1,5 @@
+import { swissExtent } from './map-utils';
+
 import config from '@/js/config';
 import ol from '@/js/libs/ol';
 
@@ -10,6 +12,8 @@ function createSwisstopoLayer(title, image, layer, format = 'jpeg', time = 'curr
     country: 'ch',
     type: 'base',
     visible: false,
+    // no tile requests outside Switzerland, where swisstopo serves blank tiles
+    extent: swissExtent,
     source: new ol.source.XYZ({
       attributions: ['© <a target="_blank" rel="noreferrer noopener" href="//www.swisstopo.admin.ch">Swisstopo</a>'],
       urls: ['10', '11', '12', '13', '14'].map((i) => {
