@@ -1,21 +1,15 @@
 import BaseApi from '@/js/apis/BaseApi';
 import config from '@/js/config';
 
-function Forum() {
-  BaseApi.call(this, config.urls.forum);
-}
+class Forum extends BaseApi {
+  constructor() {
+    super(config.urls.forum);
+  }
 
-// inherits prototype
-Forum.prototype = Object.create(BaseApi.prototype);
-
-// restore good contructor
-Forum.prototype.constructor = Forum;
-
-Object.defineProperty(Forum.prototype, 'url', {
-  get() {
+  get url() {
     return config.urls.forum;
-  },
-});
+  }
+}
 
 Forum.prototype.getTopic = function (topicId) {
   return this.get('/t/' + topicId + '.json');

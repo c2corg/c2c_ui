@@ -1,8 +1,11 @@
+/// <reference types="node" />
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { toRaw } from 'vue';
 
-import BaseApi from './BaseApi';
+import BaseApi, { ApiData } from './BaseApi';
+import c2c from './c2c';
 import forum from './forum';
+import photon from './photon';
 
 // let pending promises settle, and node report unhandled rejections
 const flush = () => new Promise((resolve) => setTimeout(resolve));
@@ -113,5 +116,19 @@ describe('forum.getLatest', () => {
 
     expect(result.error).toBe(error);
     expect(onUnhandledRejection).not.toHaveBeenCalled();
+  });
+});
+
+describe('the API clients', () => {
+  // classes extending BaseApi: they were constructor functions calling BaseApi.call(this), which a class forbids
+  it.each([
+    ['c2c', c2c],
+    ['forum', forum],
+    ['photon', photon],
+  ])('%s is a BaseApi, whose requests give an ApiData', (name, api) => {
+    expect(api).toBeInstanceOf(BaseApi);
+    vi.spyOn(api.axios, 'get').mockResolvedValue({ data: {} });
+    expect(api.get('/')).toBeInstanceOf(ApiData);
+    vi.restoreAllMocks();
   });
 });

@@ -5,6 +5,7 @@ import { createNodeResolver, flatConfigs as importX } from 'eslint-plugin-import
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 import pluginVue from 'eslint-plugin-vue';
 import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 export default [
   { ignores: ['node_modules/', 'dist/', 'tools/', 'src/assets/font-awesome-custom/'] },
@@ -13,11 +14,13 @@ export default [
   ...pluginVue.configs['flat/recommended'],
   importX.errors,
   importX.warnings,
+  // TypeScript: its own parser and recommended rules, for the .ts files only (the JavaScript code is not typed yet)
+  ...tseslint.configs.recommended.map((config) => ({ ...config, files: ['**/*.ts'] })),
   eslintPluginPrettier,
   eslintConfigPrettier,
 
   {
-    files: ['**/*.{js,mjs,vue}'],
+    files: ['**/*.{js,mjs,ts,vue}'],
     linterOptions: { reportUnusedDisableDirectives: 'error' },
     languageOptions: {
       globals: {
@@ -27,12 +30,12 @@ export default [
       },
     },
     settings: {
-      'import-x/extensions': ['.js', '.mjs', '.vue'],
-      // to read the exports of the imported components
-      'import-x/parsers': { 'vue-eslint-parser': ['.vue'] },
+      'import-x/extensions': ['.js', '.mjs', '.ts', '.vue'],
+      // to read the exports of the imported components and TypeScript modules
+      'import-x/parsers': { 'vue-eslint-parser': ['.vue'], '@typescript-eslint/parser': ['.ts'] },
       'import-x/resolver-next': [
         createNodeResolver({
-          extensions: ['.js', '.vue', '.json'],
+          extensions: ['.js', '.ts', '.vue', '.json'],
           alias: { '@': [fileURLToPath(new URL('./src', import.meta.url))] },
         }),
       ],
@@ -62,9 +65,18 @@ export default [
     },
   },
 
+  // TypeScript checks undefined names and unused variables itself, with types
+  {
+    files: ['**/*.ts'],
+    rules: {
+      'no-undef': 'off',
+      'no-unused-vars': 'off',
+    },
+  },
+
   // run by Node (the specs by Vitest)
   {
-    files: ['*.mjs', 'src/**/*.spec.js'],
+    files: ['*.mjs', 'src/**/*.spec.{js,ts}'],
     languageOptions: { globals: globals.node },
   },
 
@@ -75,7 +87,7 @@ export default [
   },
 
   {
-    files: ['vite.config.mjs', 'vitest.config.mjs', 'eslint.config.mjs', 'src/**/*.spec.js'],
+    files: ['vite.config.mjs', 'vitest.config.mjs', 'eslint.config.mjs', 'src/**/*.spec.{js,ts}'],
     rules: {
       'import-x/no-unresolved': ['error', { ignore: ['^vitest(/|$)', '^@vitejs/plugin-legacy$'] }],
     },

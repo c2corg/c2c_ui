@@ -1,3 +1,5 @@
+import type { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+
 /*
  * Retries a safe (GET, HEAD, OPTIONS) request once after a 429 Too Many Requests, waiting
  * for the delay given by the Retry-After header. Never retries immediately, which would
@@ -15,7 +17,9 @@ const MIN_RETRY_DELAY_SECONDS = 1;
 // The interceptor can't tell whether a write was applied before the 429, so writes are never replayed.
 const RETRYABLE_METHODS = new Set(['get', 'head', 'options']);
 
-const parseRetryAfter = function (value) {
+type RetriableConfig = InternalAxiosRequestConfig & { retriedAfter429?: boolean };
+
+const parseRetryAfter = function (value: unknown): number | null {
   if (!value) {
     return null;
   }
@@ -26,7 +30,7 @@ const parseRetryAfter = function (value) {
   }
 
   // HTTP-date form
-  const date = Date.parse(value);
+  const date = Date.parse(String(value));
   if (Number.isNaN(date)) {
     return null;
   }
@@ -35,22 +39,23 @@ const parseRetryAfter = function (value) {
 
 const RETRY_AFTER_IN_BODY = /retry after (\d+) seconds?/i;
 
-const parseRetryAfterFromBody = function (data) {
+const parseRetryAfterFromBody = function (data: unknown): number | null {
   const text = typeof data === 'string' ? data : JSON.stringify(data ?? '');
   const match = RETRY_AFTER_IN_BODY.exec(text);
   return match ? Number(match[1]) : null;
 };
 
-export default function retryOn429(axiosInstance) {
-  axiosInstance.interceptors.response.use(undefined, (error) => {
-    const { config, response } = error;
+export default function retryOn429(axiosInstance: AxiosInstance): AxiosInstance {
+  axiosInstance.interceptors.response.use(undefined, (error: AxiosError) => {
+    const { response } = error;
+    const config = error.config as RetriableConfig | undefined;
 
     if (
       !config ||
       !response ||
       response.status !== 429 ||
       config.retriedAfter429 ||
-      !RETRYABLE_METHODS.has(config.method?.toLowerCase())
+      !RETRYABLE_METHODS.has(config.method?.toLowerCase() ?? '')
     ) {
       return Promise.reject(error);
     }
