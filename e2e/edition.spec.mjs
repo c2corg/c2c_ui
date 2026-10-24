@@ -36,7 +36,9 @@ test('the outing form limits the dates, and saves them', async ({ page, data }) 
   expect(await dates.first().getAttribute('max')).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   expect((await dates.first().getAttribute('max')) <= today).toBe(true);
 
-  const start = `2026-0${1 + Math.floor(Math.random() * 8)}-05`;
+  // another date than the stored one: a save that changes nothing would pass too
+  const stored = await dates.first().inputValue();
+  const start = ['2026-01-05', '2026-02-05'].find((date) => date !== stored);
   const end = start.replace(/05$/, '07');
   await dates.first().fill(start);
   if (!(await dates.nth(1).isVisible())) {
@@ -48,7 +50,10 @@ test('the outing form limits the dates, and saves them', async ({ page, data }) 
 
   await Promise.all([
     page.waitForResponse(
-      (response) => response.url().endsWith(`/outings/${data.editedOuting}`) && response.request().method() === 'PUT'
+      (response) =>
+        response.url().endsWith(`/outings/${data.editedOuting}`) &&
+        response.request().method() === 'PUT' &&
+        response.ok()
     ),
     save.click(),
   ]);

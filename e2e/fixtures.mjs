@@ -1,10 +1,11 @@
 // The page every test gets:
-// - API answers carry the CORS headers for the UI's origin (the local API allows only http://localhost:6553)
+// - the UI's API requests (to http://localhost:6543, set at build time) go to E2E_API, and its answers carry the CORS
+//   headers for the UI's origin (the local API allows only http://localhost:6553)
 // - the UI uses the local API (BUILD_ENV=local builds default to production's); production's and the demo's APIs are
 //   blocked, so that no test reaches them
 // - ads, analytics and the forum are blocked; the forum SSO after a login goes straight back to the UI
 // - the other external requests (map tiles, Yeti layers) go through: blocking them hid the blank maps of #4728
-// - page errors, console errors and Vue warnings fail the test
+// - page errors, console errors, Vue warnings, and failed requests to the UI or the API fail the test
 import { test as base, expect } from '@playwright/test';
 
 import { API, readData } from './api.mjs';
@@ -12,12 +13,19 @@ import { API, readData } from './api.mjs';
 const BLOCKED =
   /^https?:\/\/([^/]*\.)?(googletagmanager|google-analytics|doubleclick|admysports|forum\.camptocamp|forum\.demov6\.camptocamp|api\.camptocamp|api\.demov6\.camptocamp)\./;
 
-// errors from what is blocked above, and from reCAPTCHA (login page), which has no key in local builds
+// the API of BUILD_ENV=local builds (vite.config.mjs)
+const UI_API = 'http://localhost:6543';
+
+// errors from what is blocked above, and from reCAPTCHA (login page), which has no key in local builds. A failed
+// request to the UI or the API is reported by the response listener below, with its URL
 const IGNORED = [
   /Failed to load resource/,
   /Error retrieving (site|board) announcement/,
   /Missing required parameters: sitekey/,
 ];
+
+// documents the UI asks for by id, which only production has: the edit forms' banners (EditionContainer.vue)
+const PRODUCTION_ONLY = /\/articles\/1110927\b/;
 
 export const test = base.extend({
   // the documents created by global-setup.mjs, and the logged in e2e user
@@ -38,7 +46,7 @@ export const test = base.extend({
         headers: { location: new URL(route.request().url()).searchParams.get('return_path') },
       })
     );
-    await page.route(`${API}/**`, async (route) => {
+    await page.route(`${UI_API}/**`, async (route) => {
       const request = route.request();
       const cors = {
         'access-control-allow-origin': origin,
@@ -51,10 +59,10 @@ export const test = base.extend({
         return;
       }
       // a request still running when the test ends (e.g. the logout's) is dropped
-      const response = await route.fetch().catch(() => null);
-      if (response) {
-        await route.fulfill({ response, headers: { ...response.headers(), ...cors } }).catch(() => {});
-      }
+      const response = await route.fetch({ url: request.url().replace(UI_API, API) }).catch(() => null);
+      await (response ? route.fulfill({ response, headers: { ...response.headers(), ...cors } }) : route.abort()).catch(
+        () => {}
+      );
     });
 
     await page.addInitScript(
@@ -84,7 +92,7 @@ export const test = base.extend({
           window.localStorage.setItem('User.preferences', JSON.stringify({ [api]: session }));
         }
       },
-      { api: API, user: data.user, loggedIn, gdprChosen }
+      { api: UI_API, user: data.user, loggedIn, gdprChosen }
     );
 
     const problems = [];
@@ -100,6 +108,18 @@ export const test = base.extend({
       }
     });
 
+    const isOwn = (url) => url.startsWith(origin) || url.startsWith(UI_API);
+    page.on('response', (response) => {
+      if (isOwn(response.url()) && response.status() >= 400 && !PRODUCTION_ONLY.test(response.url())) {
+        problems.push(`${response.status()} ${response.request().method()} ${response.url()}`);
+      }
+    });
+    page.on('requestfailed', (request) => {
+      if (isOwn(request.url()) && !page.isClosed()) {
+        problems.push(`failed ${request.method()} ${request.url()}: ${request.failure()?.errorText}`);
+      }
+    });
+
     await use(page);
 
     expect(problems, 'page errors, console errors and Vue warnings').toEqual([]);
@@ -112,8 +132,9 @@ export { expect };
 export const logIn = async (page, { username, password }) => {
   await page.getByPlaceholder('Identifiant (ou email)').fill(username);
   await page.getByPlaceholder('Mot de passe', { exact: true }).first().fill(password);
-  await Promise.all([
+  const [response] = await Promise.all([
     page.waitForResponse((response) => response.url().endsWith('/users/login') && response.ok()),
     page.getByRole('button', { name: 'Se connecter' }).first().click(),
   ]);
+  return response;
 };

@@ -4,7 +4,7 @@ import { expect, logIn, test } from './fixtures.mjs';
 const userMenu = (page) =>
   page.locator('.navigation .dropdown-trigger').filter({ has: page.locator('img[alt=Avatar]') });
 
-test('logs in, keeps the session after a reload, and logs out', async ({ page, data }) => {
+test('logs in, keeps the session after a reload, and logs out', async ({ page }) => {
   await page.goto('/auth');
   await logIn(page, credentials);
   await expect(userMenu(page)).toBeVisible();
@@ -12,12 +12,15 @@ test('logs in, keeps the session after a reload, and logs out', async ({ page, d
   await page.reload();
   await expect(userMenu(page)).toBeVisible();
 
-  // the API requests carry the token
-  const [request] = await Promise.all([
-    page.waitForRequest((request) => request.url().includes(`/outings/${data.outing}`) && request.method() === 'GET'),
-    page.goto(`/outings/edit/${data.outing}/fr`),
+  // the API accepts the stored token: the account page needs it
+  const token = await page.evaluate(() => Object.values(JSON.parse(localStorage.getItem('User.preferences')))[0].token);
+  expect(token).toMatch(/^[\w-]+\.[\w-]+\.[\w-]+$/); // a JWT
+  const [account] = await Promise.all([
+    page.waitForResponse((response) => response.url().endsWith('/users/account')),
+    page.goto('/account'),
   ]);
-  expect(request.headers()['authorization']).toMatch(/^JWT token=/);
+  expect(account.ok()).toBe(true);
+  expect(account.request().headers()['authorization']).toBe(`JWT token="${token}"`);
 
   await page.goto('/');
   await userMenu(page).click();
