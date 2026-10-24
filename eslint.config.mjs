@@ -68,6 +68,12 @@ export default [
     languageOptions: { globals: globals.node },
   },
 
+  // Playwright: run by Node, with code run in the page (page.evaluate, addInitScript)
+  {
+    files: ['e2e/**/*.mjs'],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+  },
+
   {
     files: ['vite.config.mjs', 'vitest.config.mjs', 'eslint.config.mjs', 'src/**/*.spec.js'],
     rules: {
