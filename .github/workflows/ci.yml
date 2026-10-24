@@ -90,7 +90,8 @@ jobs:
     if: "!github.event.pull_request.head.repo.fork && github.actor != 'dependabot[bot]' && !startsWith(github.head_ref, 'dependabot/')"
     runs-on: ubuntu-latest
     # No concurrency group shared with gh-pages-cleanup.yml: GitHub keeps one pending run per group and cancels the
-    # older one, which dropped previews and clean-ups of other pull requests. Pushes are retried instead (below)
+    # older one, which dropped previews and clean-ups of other pull requests. Pushes are retried instead (below). Not
+    # a group per pull request either: a deploy waiting for its approval would hold the clean-up back
     permissions:
       contents: write
       pull-requests: read
@@ -151,14 +152,28 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "Deploy $BRANCH branch"
           # another deploy or clean-up may have pushed meanwhile (each in its own folder): rebase on it and retry
-          for attempt in 1 2 3 4 5; do
-            git push origin gh-pages && exit 0
-            sleep $((attempt * 5))
-            git pull --rebase origin gh-pages
-          done
-          exit 1
+          push() {
+            for attempt in 1 2 3 4 5; do
+              git push origin gh-pages && return 0
+              sleep $((attempt * 5))
+              git pull --rebase origin gh-pages
+            done
+            return 1
+          }
+          push
+          # the pull request closed since the check above: its clean-up may have run before this push, found no
+          # folder, and left this one behind. Remove it
+          if [ -n "$PR" ] && [ "$(gh pr view "$PR" --repo "$REPO" --json state --jq .state)" != OPEN ]; then
+            git rm -rq -- "$FOLDER"
+            git commit -m "Remove $BRANCH branch preview (pull request closed during the deploy)"
+            push
+          fi
         env:
           BRANCH: ${{ steps.branch-name.outputs.current_branch || steps.branch-name.outputs.tag }}
+          FOLDER: ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
 
   create-release:
     needs: build
