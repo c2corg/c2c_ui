@@ -104,7 +104,7 @@ describe('forum.getLatest', () => {
       undefined
     );
     // result is reactive: what it holds is read through reactive proxies of the response objects
-    expect(toRaw(result.data.topic_list.topics[0].last_poster_user)).toBe(user);
+    expect(toRaw(result.data?.topic_list.topics[0].last_poster_user)).toBe(user);
   });
 
   it('keeps the error, without an unhandled rejection, when the forum is unreachable', async () => {
