@@ -33,7 +33,7 @@ import { simplify as turfSimplify } from '@turf/simplify';
 
 import IconBra from '../../../../components/generics/icons/IconBra';
 
-import yetiService from '@/js/apis/yeti-service.js';
+import yetiService from '@/js/apis/yeti-service';
 import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
