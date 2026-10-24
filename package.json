@@ -7,12 +7,13 @@
   "scripts": {
     "serve": "cross-env BUILD_ENV=local vite",
     "build": "cross-env BUILD_ENV=camptocamp vite build",
-    "lint": "prettier --write \"**/*.{ts,js,mjs,json,css,scss,less,md,html,vue}\" && npm run lint:style && eslint --fix src \"*.mjs\"",
+    "lint": "prettier --write \"**/*.{ts,js,mjs,json,css,scss,less,md,html,vue}\" && npm run lint:style && eslint --fix src e2e \"*.mjs\"",
     "build:github": "cross-env BUILD_ENV=github vite build",
     "generate-icons": "node tools/generate-icons.js",
-    "lint:no-fix": "prettier --check \"**/*.{ts,js,mjs,json,css,scss,less,md,html,vue}\" && npm run lint:style && eslint src \"*.mjs\"",
+    "lint:no-fix": "prettier --check \"**/*.{ts,js,mjs,json,css,scss,less,md,html,vue}\" && npm run lint:style && eslint src e2e \"*.mjs\"",
     "lint:style": "stylelint \"src/**/*.{vue,scss}\"",
     "test": "vitest run",
+    "e2e": "playwright test",
     "messages:extract": "node tools/extract-messages.js",
     "prepare": "husky && npm run prepare-swiper",
     "update-c2c-common": "python3 tools/update-c2c-common.py",
@@ -56,6 +57,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.29.7",
+    "@playwright/test": "1.64.1",
     "@vitejs/plugin-legacy": "7.2.1",
     "@vitejs/plugin-vue": "6.0.10",
     "@vue/test-utils": "2.5.1",
