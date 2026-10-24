@@ -138,3 +138,11 @@ export const logIn = async (page, { username, password }) => {
   ]);
   return response;
 };
+
+// expands the collapsed sections of an edit form, as a user does before editing them
+export const expandSections = async (page) => {
+  const expand = page.getByRole('button', { name: 'Déplier' });
+  while (await expand.count()) {
+    await expand.first().click();
+  }
+};
