@@ -191,7 +191,7 @@ const uploadFile = async (file, angle, onDataUrlReady, onUploadProgress, onSucce
       },
       onFailure
     );
-  } catch (error) {
+  } catch {
     onFailure();
   }
 };

@@ -91,7 +91,7 @@ export default {
       try {
         img = assetUrl('yeti/layers', this.image);
         img = 'url(' + img + ')';
-      } catch (e) {
+      } catch {
         img = 'none';
       }
       return img;

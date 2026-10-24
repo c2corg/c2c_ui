@@ -7,7 +7,7 @@ function LocalStorageItem(key) {
   this.key = key;
   try {
     this.data_ = JSON.parse(window.localStorage.getItem(key) ?? '{}');
-  } catch (err) {
+  } catch {
     this.data_ = {};
   }
 }

@@ -17,7 +17,7 @@ export default function install(app) {
       storedValue = null;
     }
     state.gdprValue = storedValue;
-  } catch (err) {
+  } catch {
     state.gdprValue = undefined;
   }
 

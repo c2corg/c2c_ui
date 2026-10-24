@@ -179,7 +179,7 @@ export default {
       try {
         this.isInFrance =
           this.document.areas && this.document.areas.length > 0 && this.document.areas[0].document_id === 14274;
-      } catch (e) {
+      } catch {
         this.isInFrance = false;
       }
     },

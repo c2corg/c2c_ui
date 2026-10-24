@@ -67,10 +67,11 @@ export default {
       return Yetix.mapZoom;
     },
     layerSelector() {
-      return Object.assign(this.selector, {
+      return {
+        ...this.selector,
         checked: this.showLayer,
         action: this.onShowLayer,
-      });
+      };
     },
   },
   watch: {

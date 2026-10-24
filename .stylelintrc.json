@@ -7,7 +7,8 @@
       "rules": {
         "no-descending-specificity": null,
         "scss/at-import-no-partial-leading-underscore": null,
-        "scss/comment-no-empty": null
+        "scss/comment-no-empty": null,
+        "scss/operator-no-newline-after": null
       }
     },
     {
@@ -17,7 +18,8 @@
         "no-descending-specificity": null,
         "declaration-property-value-no-unknown": null,
         "scss/at-import-no-partial-leading-underscore": null,
-        "scss/comment-no-empty": null
+        "scss/comment-no-empty": null,
+        "scss/operator-no-newline-after": null
       }
     }
   ]

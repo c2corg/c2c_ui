@@ -247,7 +247,7 @@ export default {
                   .split(':')[1]
                   .split(',')
                   .map(Number);
-              } catch (e) {
+              } catch {
                 period = '---';
               }
 

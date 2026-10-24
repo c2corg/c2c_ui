@@ -1,5 +1,4 @@
 import { flushPromises, mount } from '@vue/test-utils';
-// eslint-disable-next-line import/no-unresolved
 import { register } from 'swiper/element';
 import { afterEach, describe, expect, it } from 'vitest';
 
