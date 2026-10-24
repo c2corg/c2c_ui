@@ -27,7 +27,9 @@ npx playwright show-report e2e-report    # the last report, with traces of the f
   any other)
 - `E2E_REUSE_SERVER=1`: test the UI already served on that port, e.g. `npm run serve -- --port 6553`, instead of
   building
-- `E2E_API`, `E2E_USERNAME`, `E2E_PASSWORD`: another API or user
+- `E2E_API`: another API, over HTTP (the UI calls `http://localhost:6543`, which the tests forward to it, with the
+  same protocol)
+- `E2E_USERNAME`, `E2E_PASSWORD`: another user
 
 ## What the tests get
 
