@@ -10,38 +10,33 @@ import BaseApi from '@/js/apis/BaseApi';
 import config from '@/js/config';
 import constants from '@/js/constants';
 
-function CamptocampApi() {
-  // inherits properties
-  BaseApi.call(this, config.urls.api);
+class CamptocampApi extends BaseApi {
+  constructor() {
+    super(config.urls.api);
 
-  this.userProfile = new UserProfileService(this);
-  this.moderator = new ModeratorService(this);
-  this.association = new AssociationService(this);
-  this.feed = new FeedService(this);
-  this.forum = new ForumService(this);
-  this.tags = new TagsService(this);
+    this.userProfile = new UserProfileService(this);
+    this.moderator = new ModeratorService(this);
+    this.association = new AssociationService(this);
+    this.feed = new FeedService(this);
+    this.forum = new ForumService(this);
+    this.tags = new TagsService(this);
 
-  for (const type of constants.documentTypes) {
-    this[type] = new DocumentService(this, type);
+    for (const type of constants.documentTypes) {
+      this[type] = new DocumentService(this, type);
+    }
+
+    // TODO
+    // once https://github.com/c2corg/v6_api/issues/730 is fixed
+    // add an intercpetor on 401 responses (not authorized), and if
+    // user is logged, log-out it
+    // this.axios.interceptors.response.use(
+    //     response => response,
+    //     function(error){
+    //         return Promise.reject(error)
+    //     }
+    // )
   }
-
-  // TODO
-  // once https://github.com/c2corg/v6_api/issues/730 is fixed
-  // add an intercpetor on 401 responses (not authorized), and if
-  // user is logged, log-out it
-  // this.axios.interceptors.response.use(
-  //     response => response,
-  //     function(error){
-  //         return Promise.reject(error)
-  //     }
-  // )
 }
-
-// inherits prototype
-CamptocampApi.prototype = Object.create(BaseApi.prototype);
-
-// restore good contructor
-CamptocampApi.prototype.constructor = CamptocampApi;
 
 CamptocampApi.prototype.getApiLang = function (lang) {
   // some UI langs may not yet be present in API

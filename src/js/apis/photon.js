@@ -3,15 +3,11 @@
 
 import BaseApi from '@/js/apis/BaseApi';
 
-function Photon() {
-  BaseApi.call(this, 'https://photon.komoot.io/api/');
+class Photon extends BaseApi {
+  constructor() {
+    super('https://photon.komoot.io/api/');
+  }
 }
-
-// inherits prototype
-Photon.prototype = Object.create(BaseApi.prototype);
-
-// restore good contructor
-Photon.prototype.constructor = Photon;
 
 Photon.prototype.getPropositions = function (query, lang, centerWgs84) {
   let params = {
