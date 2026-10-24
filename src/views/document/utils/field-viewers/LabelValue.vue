@@ -2,8 +2,7 @@
   <div class="label-value">
     <span class="label-value-label has-text-weight-bold"
       ><!--
-        -->{{ $filters.uppercaseFirstLetter(label)
-      }}<!--
+        -->{{ $filters.uppercaseFirstLetter(label) }}<!--
     --></span>
     <span>
       <slot />

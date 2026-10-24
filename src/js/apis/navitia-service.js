@@ -200,12 +200,12 @@ NavitiaService.prototype.handleQueryError = function (data) {
     try {
       // First try parsing as-is (valid JSON)
       queryError = JSON.parse(data);
-    } catch (err) {
+    } catch {
       try {
         // Fallback: attempt to handle Python-style single-quoted dicts
         // Only replace quotes at key/value boundaries, not within strings
         queryError = JSON.parse(data.replace(/'/g, '"'));
-      } catch (innerErr) {
+      } catch {
         queryError = { id: 'parse_error', message: String(data) };
       }
     }

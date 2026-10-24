@@ -1,5 +1,4 @@
 import { setDefaults as toastDefaults } from 'bulma-toast';
-// eslint-disable-next-line import/no-unresolved
 import { register as registerSwiper } from 'swiper/element';
 import { createApp } from 'vue';
 

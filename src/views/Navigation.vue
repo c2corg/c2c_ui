@@ -477,7 +477,9 @@ nav {
   .search-input {
     width: 250px;
     margin-right: 50px;
-    transition: width 0.5s ease, margin-right 0.5s ease;
+    transition:
+      width 0.5s ease,
+      margin-right 0.5s ease;
   }
 
   .search-input:hover {

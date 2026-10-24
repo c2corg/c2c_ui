@@ -1,12 +1,15 @@
-import { mount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
+import { toast } from 'bulma-toast';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { h } from 'vue';
 
 import ImagesUploader from './ImagesUploader';
 
+import c2c from '@/js/apis/c2c';
 import uploadFile from '@/js/upload-file';
 
 vi.mock('@/js/upload-file', () => ({ default: vi.fn() }));
+vi.mock('bulma-toast', () => ({ toast: vi.fn() }));
 
 const file = (name) => ({ name, lastModified: 1, size: 1000 });
 
@@ -16,6 +19,7 @@ const mountUploader = () =>
     global: {
       stubs: {
         ModalCard: {
+          methods: { show() {}, hide() {} },
           render() {
             return h('div', this.$slots.default?.());
           },
@@ -86,5 +90,15 @@ describe('ImagesUploader', () => {
 
     expect(wrapper.findAll('.image-uploader')).toHaveLength(1);
     expect(Object.keys(wrapper.vm.images)).toEqual(['b.jpg#1']);
+  });
+
+  it('tells the user when the images could not be saved', async () => {
+    vi.spyOn(c2c, 'createImages').mockRejectedValue(new Error('500'));
+    const wrapper = mountUploader();
+
+    wrapper.vm.save();
+    await flushPromises();
+
+    expect(toast).toHaveBeenCalledWith(expect.objectContaining({ type: 'is-danger' }));
   });
 });

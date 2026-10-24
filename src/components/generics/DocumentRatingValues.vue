@@ -10,8 +10,7 @@
 
     <span>
       <span v-if="document.rock_free_rating" :title="$gettext('rock_free_rating')">
-        {{ rockFreeRating
-        }}<!--
+        {{ rockFreeRating }}<!--
           --></span
       ><!--
           --><span v-if="document.rock_required_rating" :title="$gettext('rock_required_rating')"

@@ -42,7 +42,7 @@ export default {
           ? c2c.moderator.unmaskVersion(this.id, this.lang, this.version.version_id)
           : c2c.moderator.maskVersion(this.id, this.lang, this.version.version_id));
         this.version.masked = !this.version.masked;
-      } catch (error) {
+      } catch {
         toast({
           message: this.$gettext(`An error occurred, couldn't (un)mask version`),
           type: 'is-danger',

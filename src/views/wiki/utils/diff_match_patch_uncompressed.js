@@ -1311,7 +1311,7 @@ diffMatchPatch.diff_fromDelta = function (text1, delta) {
       case '+':
         try {
           diffs[diffsLength++] = [DIFF_INSERT, decodeURI(param)];
-        } catch (ex) {
+        } catch {
           // Malformed URI sequence.
           throw new Error('Illegal escape in diff_fromDelta: ' + param);
         }
@@ -2022,7 +2022,7 @@ diffMatchPatch.patch_fromText = function (textline) {
       var sign = text[textPointer].charAt(0);
       try {
         var line = decodeURI(text[textPointer].substring(1));
-      } catch (ex) {
+      } catch {
         // Malformed URI sequence.
         throw new Error('Illegal escape in patch_fromText: ' + line);
       }

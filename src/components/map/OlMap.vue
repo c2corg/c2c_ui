@@ -658,7 +658,7 @@ export default {
     tryReadFeaturesFromGeoFile(file, format, options) {
       try {
         return format.readFeatures(file, options);
-      } catch (e) {
+      } catch {
         return null;
       }
     },

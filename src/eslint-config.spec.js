@@ -2,7 +2,7 @@
 import { ESLint } from 'eslint';
 import { beforeAll, describe, expect, it } from 'vitest';
 
-// The Vue 3 deprecation rules are warnings: they list what is left to migrate, without failing the lint
+// The Vue 3 rules (eslint-plugin-vue's recommended preset): the Vue 2 syntax, removed in Vue 3, fails the lint
 const eslint = new ESLint({ cwd: process.cwd() });
 
 const lintComponent = async (source) => {
@@ -14,7 +14,7 @@ describe('eslint config', () => {
   // the first lint loads the parsers and plugins: under the load of the full suite, it can take over a minute
   beforeAll(() => lintComponent('<template><div /></template>'), 180000);
 
-  it('warns on code that breaks in Vue 3', async () => {
+  it('fails on code that breaks in Vue 3', async () => {
     const messages = await lintComponent(`<template>
   <div>
     {{ name | uppercaseFirstLetter }}
@@ -42,15 +42,19 @@ export default {
 </script>
 `);
 
-    expect(messages.filter((message) => message.severity === 2)).toEqual([]);
-    expect(messages.map((message) => message.ruleId).sort()).toEqual([
+    const rules = (severity) =>
+      messages
+        .filter((message) => message.severity === severity)
+        .map((message) => message.ruleId)
+        .sort();
+    expect(rules(2)).toEqual([
       'vue/no-deprecated-delete-set',
       'vue/no-deprecated-destroyed-lifecycle',
       'vue/no-deprecated-filter',
       'vue/no-deprecated-slot-attribute',
       'vue/no-deprecated-v-on-native-modifier',
-      'vue/require-explicit-emits',
     ]);
+    expect(rules(1)).toEqual(['vue/require-explicit-emits']);
   });
 
   it('accepts the Vue 3 compatible syntax', async () => {

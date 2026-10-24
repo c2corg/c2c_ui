@@ -45,7 +45,7 @@ export default {
       try {
         await (this.todo ? c2c.tags.remove(this.document) : c2c.tags.add(this.document));
         this.todo = !this.todo;
-      } catch (error) {
+      } catch {
         toast({
           message: this.$gettext(`An error occurred, couldn't (un)mark route as to do`),
           type: 'is-danger',
