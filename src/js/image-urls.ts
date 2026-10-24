@@ -1,6 +1,13 @@
 import config from '@/js/config';
 
-const getImageProxyUrl = function (image, size, format) {
+// the image documents of the API, with what the URLs need
+type Image = { document_id: number; filename?: string };
+
+export type ImageSize = 'SI' | 'MI' | 'BI';
+
+export type ImageFormat = 'webp' | 'avif';
+
+const getImageProxyUrl = function (image: Image, size?: ImageSize, format?: ImageFormat): string | undefined {
   // Until all images are migrated only images uploaded after a given timestamp
   // or with an id greater than a given one have their webp and avif versions
   if (format && (!config.urls.modernThumbnailsId || image.document_id < config.urls.modernThumbnailsId)) {
@@ -12,7 +19,7 @@ const getImageProxyUrl = function (image, size, format) {
   return `${config.urls.api}/images/proxy/${image.document_id}${sizeArg}${formatArg}`;
 };
 
-export const getImageUrl = function (image, size, format) {
+export const getImageUrl = function (image: Image, size?: ImageSize, format?: ImageFormat): string | undefined {
   if (!image.filename) {
     return getImageProxyUrl(image, size, format);
   }
@@ -52,7 +59,10 @@ export const getImageUrl = function (image, size, format) {
  * to our media server, so that documents embedding hundreds of images do not send hundreds of requests to the API.
  * Otherwise (older API, or another media host), the API image proxy `urlProxy` (c2c:url-proxy) is used.
  */
-export const getEmbeddedImageUrl = function ({ url, urlProxy }, format) {
+export const getEmbeddedImageUrl = function (
+  { url, urlProxy }: { url?: string | null; urlProxy: string },
+  format?: ImageFormat
+): string {
   if (url && config.urls.media && url.startsWith(`${config.urls.media}/`)) {
     if (!format) {
       return url;

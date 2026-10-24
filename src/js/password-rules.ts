@@ -13,11 +13,9 @@ const PYTHON_DIGIT =
 // \uFEFF, which JS's \s matches.
 const PYTHON_ALNUM_OR_SPACE = /[\p{L}\p{N}\s\x1c-\x1f\x85]/u;
 
-/**
- * @param {string} password
- * @returns {{ length: boolean; lower: boolean; upper: boolean; digit: boolean; special: boolean }}
- */
-export default function checkPasswordRules(password) {
+export type PasswordRules = { length: boolean; lower: boolean; upper: boolean; digit: boolean; special: boolean };
+
+export default function checkPasswordRules(password: string | null | undefined): PasswordRules {
   const chars = [...(password || '')]; // code points, like Python's len()
 
   return {

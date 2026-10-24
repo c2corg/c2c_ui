@@ -2,7 +2,7 @@
 // unique DOM ids (label for, aria-labelledby...)
 let lastUid = 0;
 
-export function nextUid() {
+export function nextUid(): number {
   return ++lastUid;
 }
 
