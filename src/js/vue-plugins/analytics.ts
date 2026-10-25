@@ -1,23 +1,46 @@
 // Google Analytics 4 through gtag.js. The script is loaded only once the user accepts statistics cookies (GDPR),
 // and page views are sent on route changes. vm.$ga.enable() / vm.$ga.disable() follow the user's choice.
 
+import type { App } from 'vue';
+import type { RouteLocationNormalized, Router } from 'vue-router';
+
 const GTAG_URL = 'https://www.googletagmanager.com/gtag/js';
 
+export type Analytics = { enable(): void; disable(): void };
+
+declare module 'vue' {
+  interface ComponentCustomProperties {
+    $ga: Analytics;
+  }
+}
+
+declare global {
+  interface Window {
+    dataLayer: unknown[];
+    // gtag.js stops sending hits while ga-disable-<measurement ID> is true
+    [gaDisable: `ga-disable-${string}`]: boolean;
+  }
+}
+
 // do not send a page view if only the query has changed: the document title is part of the route
-export function shouldTrack(to, from) {
+export function shouldTrack(
+  to: Pick<RouteLocationNormalized, 'name' | 'params'>,
+  from: Pick<RouteLocationNormalized, 'name' | 'params'>
+): boolean {
   return to.name !== from.name || String(to.params.id) !== String(from.params.id);
 }
 
-export default function install(app, { id, router }) {
+export default function install(app: App, { id, router }: { id?: string; router: Router }) {
   // a GA4 measurement ID; anything else (an empty key, a former Universal Analytics UA- key) turns analytics off
   const valid = /^G-[A-Z0-9]+$/.test(id ?? '');
   let enabled = false;
   let loaded = false;
-  let pendingRoute = null;
+  let pendingRoute: RouteLocationNormalized | null = null;
 
-  function gtag() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  function gtag(..._args: unknown[]) {
     // gtag.js reads the arguments objects pushed in dataLayer
-
+    // eslint-disable-next-line prefer-rest-params
     window.dataLayer.push(arguments);
   }
 
@@ -37,7 +60,7 @@ export default function install(app, { id, router }) {
     loaded = true;
   }
 
-  function sendPageView(route) {
+  function sendPageView(route: RouteLocationNormalized) {
     gtag('event', 'page_view', {
       page_title: 'Camptocamp.org',
       page_location: window.location.origin + router.resolve(route.fullPath).href,
@@ -55,7 +78,7 @@ export default function install(app, { id, router }) {
     }
   });
 
-  app.config.globalProperties.$ga = {
+  const analytics: Analytics = {
     enable() {
       if (!valid || enabled) {
         return;
@@ -80,6 +103,7 @@ export default function install(app, { id, router }) {
       enabled = false;
     },
   };
+  app.config.globalProperties.$ga = analytics;
 
   if (app.config.globalProperties.$gdpr?.gdprValue?.statistics) {
     app.config.globalProperties.$ga.enable();
