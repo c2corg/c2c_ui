@@ -92,6 +92,12 @@ jobs:
     # No concurrency group shared with gh-pages-cleanup.yml: GitHub keeps one pending run per group and cancels the
     # older one, which dropped previews and clean-ups of other pull requests. Pushes are retried instead (below). Not
     # a group per pull request either: a deploy waiting for its approval would hold the clean-up back
+    # Pushes to the same branch or tag (e.g. master merges in a row) deploy one at a time, the latest last: run in
+    # parallel, an older build could finish after a newer one and overwrite it. Pull requests are already handled by
+    # the workflow concurrency group above
+    concurrency:
+      group: github-pages-${{ github.event_name == 'pull_request' && github.run_id || github.ref }}
+      cancel-in-progress: false
     permissions:
       contents: write
       pull-requests: read
@@ -132,45 +138,45 @@ jobs:
         uses: actions/checkout@v7
         with:
           ref: gh-pages
-      - name: Remove current branch files
-        if: steps.branch-name.outcome == 'success'
-        run: rm -rf ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
       - name: Retrieve github pages artifact
         if: steps.branch-name.outcome == 'success'
         uses: actions/download-artifact@v8
         with:
           name: github-pages
-          path: ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
+          path: ${{ runner.temp }}/site
       - name: Commit and push files
         if: steps.branch-name.outcome == 'success'
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-          git add .
-          # Nothing to commit when the build output is unchanged (e.g. a PR
-          # touching only CI config): skip instead of failing the job.
-          git diff --cached --quiet && exit 0
-          git commit -m "Deploy $BRANCH branch"
-          # another deploy or clean-up may have pushed meanwhile (each in its own folder): rebase on it and retry
-          push() {
+          # another deploy or clean-up may have pushed meanwhile (each in its own folder): start again from it and
+          # redo this folder only. No rebase: two deploys of the same folder rewrite the same hashed assets and conflict
+          publish() { # $1: commit message, $2: "remove" to delete the folder instead of deploying the build
             for attempt in 1 2 3 4 5; do
+              rm -rf -- "$FOLDER"
+              [ "$2" = remove ] || cp -r "$SITE" "$FOLDER"
+              git add -A .
+              # Nothing to commit when the build output is unchanged (e.g. a PR
+              # touching only CI config): skip instead of failing the job.
+              git diff --cached --quiet && return 0
+              git commit -qm "$1"
               git push origin gh-pages && return 0
               sleep $((attempt * 5))
-              git pull --rebase origin gh-pages
+              git fetch origin gh-pages
+              git reset -q --hard origin/gh-pages
             done
             return 1
           }
-          push
+          publish "Deploy $BRANCH branch"
           # the pull request closed since the check above: its clean-up may have run before this push, found no
           # folder, and left this one behind. Remove it
           if [ -n "$PR" ] && [ "$(gh pr view "$PR" --repo "$REPO" --json state --jq .state)" != OPEN ]; then
-            git rm -rq -- "$FOLDER"
-            git commit -m "Remove $BRANCH branch preview (pull request closed during the deploy)"
-            push
+            publish "Remove $BRANCH branch preview (pull request closed during the deploy)" remove
           fi
         env:
           BRANCH: ${{ steps.branch-name.outputs.current_branch || steps.branch-name.outputs.tag }}
           FOLDER: ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
+          SITE: ${{ runner.temp }}/site
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
