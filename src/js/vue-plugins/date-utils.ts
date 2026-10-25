@@ -1,8 +1,9 @@
-import dayjs from 'dayjs';
+import dayjs, { type ConfigType } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import localeData from 'dayjs/plugin/localeData';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import type { App } from 'vue';
 import 'dayjs/locale/ca';
 import 'dayjs/locale/es';
 import 'dayjs/locale/eu';
@@ -19,7 +20,7 @@ dayjs.extend(localeData);
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
 
-const locales = {
+const locales: Record<string, string> = {
   ca: 'ca',
   es: 'es',
   eu: 'eu',
@@ -31,23 +32,35 @@ const locales = {
   zh_CN: 'zh-cn',
   en: 'en-gb',
 };
-export default function install(app) {
-  // $language is installed after this plugin: read it when called
-  const current = () => locales[app.config.globalProperties.$language.current];
+export type DateUtils = ReturnType<typeof dateUtils>;
 
-  app.config.globalProperties.$dateUtils = {
-    parseDate(arg, formatString) {
+declare module 'vue' {
+  interface ComponentCustomProperties {
+    $dateUtils: DateUtils;
+  }
+}
+
+// $language, from the gettext plugin, not typed yet: what this plugin uses of it
+type Language = { current: string; setCurrent(lang: string): void };
+const languageOf = (app: App) => (app.config.globalProperties as unknown as { $language: Language }).$language;
+
+const dateUtils = (app: App) => {
+  // $language is installed after this plugin: read it when called
+  const current = () => locales[languageOf(app).current];
+
+  return {
+    parseDate(arg: ConfigType, formatString?: string) {
       return dayjs(arg, formatString).toDate();
     },
 
-    timeAgo(arg) {
+    timeAgo(arg: ConfigType) {
       return dayjs(arg).locale(current()).fromNow();
     },
 
-    toLocalizedString(arg, formatString) {
+    toLocalizedString(arg: ConfigType, formatString?: string) {
       // add some custom formats
       if (formatString === '@1') {
-        switch (app.config.globalProperties.$language.current) {
+        switch (languageOf(app).current) {
           case 'ca':
             formatString = 'dddd D MMMM [de] YYYY';
             break;
@@ -83,21 +96,21 @@ export default function install(app) {
       return dayjs(arg).locale(current()).format(formatString);
     },
 
-    toTechnicalString(arg) {
+    toTechnicalString(arg: ConfigType) {
       return dayjs(arg).locale(current()).format('YYYY-MM-DD HH:mm:ss');
     },
 
-    month(monthNumber) {
+    month(monthNumber: number) {
       return dayjs().locale(current()).localeData().months()[monthNumber];
     },
 
-    hasSinglePeriod(period) {
+    hasSinglePeriod(period: unknown[]) {
       if (period.filter((month) => !!month).length < 2) {
         // a period corresponds to at least 2 successive months
         return false;
       }
       return (
-        period.reduce((acc, curr) => {
+        period.reduce<unknown[]>((acc, curr) => {
           if (!acc.length) {
             return [curr];
           }
@@ -109,29 +122,33 @@ export default function install(app) {
       );
     },
 
-    durationToTimeString(duration) {
+    durationToTimeString(duration: number) {
       const hours = Math.floor(duration / 3600);
       const minutes = Math.floor((duration - hours * 3600) / 60);
       const seconds = duration - hours * 3600 - minutes * 60;
       return (
-        hours.toString().padStart(2, 0) +
+        hours.toString().padStart(2, '0') +
         ':' +
-        minutes.toString().padStart(2, 0) +
+        minutes.toString().padStart(2, '0') +
         ':' +
-        seconds.toString().padStart(2, 0)
+        seconds.toString().padStart(2, '0')
       );
     },
 
-    isSameYear(start, end) {
+    isSameYear(start: ConfigType, end: ConfigType) {
       return dayjs(start).isSame(dayjs(end), 'year');
     },
 
-    isSameMonth(start, end) {
+    isSameMonth(start: ConfigType, end: ConfigType) {
       return dayjs(start).isSame(dayjs(end), 'month');
     },
 
-    isSameDay(start, end) {
+    isSameDay(start: ConfigType, end: ConfigType) {
       return dayjs(start).isSame(dayjs(end), 'day');
     },
   };
+};
+
+export default function install(app: App) {
+  app.config.globalProperties.$dateUtils = dateUtils(app);
 }

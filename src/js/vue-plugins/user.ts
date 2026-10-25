@@ -1,14 +1,67 @@
-import { reactive, watch } from 'vue';
+import { type App, reactive, watch } from 'vue';
 
 import { getPreferences } from './local-storage';
 
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import trackingService from '@/js/apis/tracking-service';
 import config from '@/js/config';
 
-const STORED_FIELDS = ['userName', 'id', 'lang', 'roles', 'name', 'forumUsername', 'token', 'expire'];
+const STORED_FIELDS = ['userName', 'id', 'lang', 'roles', 'name', 'forumUsername', 'token', 'expire'] as const;
 
-function isExpired(expire, token) {
+// what the API answers to a login
+type LoginResponse = {
+  lang: string;
+  token: string;
+  roles: string[];
+  id: number;
+  username: string;
+  name: string;
+  forum_username: string;
+  expire: number;
+};
+
+export type User = {
+  // The unique name, used to login
+  userName: string | null;
+  // unique numerical ID
+  id: number | null;
+  lang: string;
+  roles: string[];
+  // public name, a simple label
+  name: string | null;
+  forumUsername: string | null;
+  // private token used for API auth
+  token: string | null;
+  // token expiration date, in seconds
+  expire: number | null;
+  readonly isModerator: boolean;
+  readonly isLogged: boolean;
+  // ApiData: the request, thenable; its then() returns the request itself, not the callback's promise
+  signIn(username: string, password: string, acceptTos: boolean, sso?: string, sig?: string): ApiData;
+  signout(): void;
+  updateAccount(
+    currentpassword: string,
+    name: string | null,
+    forum_username: string | null,
+    email: string | null,
+    is_profile_public: boolean | null,
+    newpassword: string | null
+  ): ApiData;
+  saveLangPreference(lang: string): void;
+};
+
+declare module 'vue' {
+  interface ComponentCustomProperties {
+    $user: User;
+  }
+}
+
+// $language, from the gettext plugin, not typed yet: what this plugin uses of it
+type Language = { current: string; setCurrent(lang: string): void };
+const languageOf = (app: App) => (app.config.globalProperties as unknown as { $language: Language }).$language;
+
+function isExpired(expire: number | null, token: string | null): boolean {
   if (!expire) {
     return true;
   }
@@ -16,23 +69,23 @@ function isExpired(expire, token) {
   const now = Date.now() / 1000; // in seconds
 
   if (now > expire) {
-    c2c.userProfile.expiredTokenLogout(token);
+    c2c.userProfile.expiredTokenLogout(token ?? '');
     return true;
   }
 
   return false;
 }
 
-export default function install(app) {
+export default function install(app: App) {
   // stored under the name of the former User component, so that existing sessions are kept
   const preferences = getPreferences('User');
-  const data = preferences.get(config.urls.api, {});
+  const data = preferences.get<Partial<Record<(typeof STORED_FIELDS)[number], never>>>(config.urls.api, {});
 
   // user lang, read write property everywhere : this.$user.lang
-  const lang = data['lang'] ?? app.config.globalProperties.$language.current;
+  const lang: string = data['lang'] ?? languageOf(app).current;
   const expired = isExpired(data['expire'] ?? null, data['token'] ?? null);
 
-  const user = reactive({
+  const user: User = reactive<User>({
     // The unique name, used to login
     userName: expired ? null : (data['userName'] ?? null),
     // unique numerical ID
@@ -59,16 +112,17 @@ export default function install(app) {
 
     signIn(username, password, acceptTos, sso, sig) {
       return c2c.userProfile.login(username, password, acceptTos, sso, sig).then((response) => {
-        this.lang = response.data.lang;
-        this.token = response.data.token;
-        this.roles = response.data.roles;
-        this.id = response.data.id;
-        this.userName = response.data.username;
-        this.name = response.data.name;
-        this.forumUsername = response.data.forum_username;
-        this.expire = response.data.expire;
+        const data = response.data as LoginResponse;
+        this.lang = data.lang;
+        this.token = data.token;
+        this.roles = data.roles;
+        this.id = data.id;
+        this.userName = data.username;
+        this.name = data.name;
+        this.forumUsername = data.forum_username;
+        this.expire = data.expire;
 
-        app.config.globalProperties.$language.setCurrent(this.lang);
+        languageOf(app).setCurrent(this.lang);
         commitToLocalStorage();
 
         return response;

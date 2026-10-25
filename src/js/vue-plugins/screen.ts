@@ -1,11 +1,26 @@
-import { reactive } from 'vue';
+import { type App, reactive } from 'vue';
 
 const BREAKPOINT_MOBILE = 768;
 const BREAKPOINT_TABLET = 1023;
 const BREAKPOINT_DESKTOP = 1215;
 const BREAKPOINT_WIDESCREEN = 1407;
 
-export default function install(app) {
+// https://bulma.io/documentation/modifiers/responsive-helpers/
+export type Screen = {
+  readonly isMobile: boolean;
+  readonly isTablet: boolean;
+  readonly isDesktop: boolean;
+  readonly isWidescreen: boolean;
+  readonly isFullHD: boolean;
+};
+
+declare module 'vue' {
+  interface ComponentCustomProperties {
+    $screen: Screen;
+  }
+}
+
+export default function install(app: App) {
   const state = reactive({ matchingQueryIndex: -1 });
 
   const breakpointsMediaQueryLists = [
@@ -30,7 +45,7 @@ export default function install(app) {
   onBreakpointMediaQueryChange(); // init
 
   // https://bulma.io/documentation/modifiers/responsive-helpers/
-  app.config.globalProperties.$screen = {
+  const screen: Screen = {
     get isMobile() {
       return state.matchingQueryIndex === 0;
     },
@@ -47,4 +62,5 @@ export default function install(app) {
       return state.matchingQueryIndex === -1;
     },
   };
+  app.config.globalProperties.$screen = screen;
 }
