@@ -1,11 +1,13 @@
 // This module will add components available everywhere
 
-import DocumentCard from '@/components/cards/DocumentCard';
-import OlMap from '@/components/map/OlMap';
+import type { App, Component } from 'vue';
 
-export default function install(app) {
+import DocumentCard from '@/components/cards/DocumentCard.vue';
+import OlMap from '@/components/map/OlMap.vue';
+
+export default function install(app: App) {
   // add all vue component as globals components, given an import.meta.glob result
-  const addComponents = function (modules) {
+  const addComponents = function (modules: Record<string, { default: Component }>) {
     Object.entries(modules).forEach(([path, component]) => {
       let name = path.split('/').slice(-1)[0];
 
@@ -21,7 +23,7 @@ export default function install(app) {
   };
 
   // add all components in /utils
-  addComponents(import.meta.glob('@/components/generics/**/*.vue', { eager: true }));
+  addComponents(import.meta.glob<{ default: Component }>('@/components/generics/**/*.vue', { eager: true }));
 
   // other globals components
   app.component('DocumentCard', DocumentCard);
