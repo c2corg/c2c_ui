@@ -1,9 +1,9 @@
 /*
- * Extract untranslated string from .vue and .js files  and save them into a .pot file :
+ * Extract untranslated string from .vue, .js and .ts files  and save them into a .pot file :
  *
  * https://www.gnu.org/software/gettext/manual/gettext.html
  *
- * Supported patterns in .vue and .js files :
+ * Supported patterns in .vue, .js and .ts files :
  *
  *    $gettext('msgid')
  *    $gettext('msgid', 'msgctx')
@@ -156,7 +156,7 @@ Process.prototype.compute = function (file_or_dir) {
   } else if (file_or_dir.endsWith('.vue')) {
     const data = fs.readFileSync(file_or_dir, 'utf8');
     this.addVueComponent(file_or_dir, data);
-  } else if (file_or_dir.endsWith('.js')) {
+  } else if ((file_or_dir.endsWith('.js') || file_or_dir.endsWith('.ts')) && !file_or_dir.endsWith('.d.ts')) {
     const data = fs.readFileSync(file_or_dir, 'utf8');
     this.addScript(file_or_dir, data);
   }
