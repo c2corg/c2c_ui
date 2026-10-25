@@ -33,7 +33,7 @@ export class CamptocampApi extends BaseApi {
     this.forum = new ForumService(this);
     this.tags = new TagsService(this);
 
-    for (const type of constants.documentTypes as string[]) {
+    for (const type of constants.documentTypes) {
       this[type] = new DocumentService(this, type);
     }
 
