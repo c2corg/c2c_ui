@@ -51,7 +51,11 @@ describe('EditionContainer', () => {
 
   it('requests banners again on next edit view after a failure, shows them at once, then caches them', async () => {
     c2c.axios.get.mockResolvedValue({
-      data: { cooked: { description: '<h3 id="waypoint">Waypoints</h3><p>Waypoint banner</p>' } },
+      // as the API answers: the cooked article, with its id (its schema requires it)
+      data: {
+        document_id: 1110927,
+        cooked: { description: '<h3 id="waypoint">Waypoints</h3><p>Waypoint banner</p>' },
+      },
     });
 
     const wrapper = mountEditionContainer();
