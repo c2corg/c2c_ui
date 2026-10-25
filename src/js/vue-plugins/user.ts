@@ -9,18 +9,6 @@ import config from '@/js/config';
 
 const STORED_FIELDS = ['userName', 'id', 'lang', 'roles', 'name', 'forumUsername', 'token', 'expire'] as const;
 
-// what the API answers to a login
-type LoginResponse = {
-  lang: string;
-  token: string;
-  roles: string[];
-  id: number;
-  username: string;
-  name: string;
-  forum_username: string;
-  expire: number;
-};
-
 export type User = {
   // The unique name, used to login
   userName: string | null;
@@ -111,7 +99,7 @@ export default function install(app: App) {
 
     signIn(username, password, acceptTos, sso, sig) {
       return c2c.userProfile.login(username, password, acceptTos, sso, sig).then((response) => {
-        const data = response.data as LoginResponse;
+        const { data } = response;
         this.lang = data.lang;
         this.token = data.token;
         this.roles = data.roles;

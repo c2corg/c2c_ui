@@ -1,11 +1,25 @@
+import { z } from 'zod';
+
 import BaseApi from '@/js/apis/BaseApi';
+import { checkResponse } from '@/js/apis/check-response';
 import config from '@/js/config';
 
-// what the UI reads of Discourse's answers
-type ForumUser = { username: string; avatar_template: string };
-type Topic = { last_poster_username: string; last_poster_user?: ForumUser; tags?: (string | { name: string })[] };
-type LatestTopics = { users: ForumUser[]; topic_list: { topics: Topic[] } };
-type TopicWithPosts = { post_stream: { posts: unknown[] } };
+// what the UI reads of Discourse's answers, checked when they arrive (check-response.ts)
+const forumUser = z.object({ username: z.string(), avatar_template: z.string() });
+type ForumUser = z.infer<typeof forumUser>;
+
+const topic = z.object({
+  last_poster_username: z.string(),
+  // recent Discourse gives tags as objects ({ id, name, slug }), older ones as plain strings
+  tags: z.array(z.union([z.string(), z.object({ name: z.string() })])).optional(),
+  // not from Discourse: linked by getLatest()
+  last_poster_user: forumUser.optional(),
+});
+type Topic = z.infer<typeof topic>;
+
+const latestTopics = z.object({ users: z.array(forumUser), topic_list: z.object({ topics: z.array(topic) }) });
+
+const topicWithPosts = z.object({ post_stream: z.object({ posts: z.array(z.unknown()) }) });
 
 // Discourse does not resolve a topic from its slug alone (/t/annonce-fr.json) anymore: the id is required.
 // /t/id_for/<slug> could give it, but fails when another topic hidden from visitors uses the same slug,
@@ -41,7 +55,7 @@ class Forum extends BaseApi {
       ? '?' + excludeCategoryIds.map((id) => `exclude_category_ids[]=${id}`).join('&')
       : '';
 
-    const result = this.get<LatestTopics>(`/latest.json${query}`);
+    const result = this.getValidated(`/latest.json${query}`, latestTopics);
 
     result.then(function (response) {
       const users: Record<string, ForumUser> = {};
@@ -55,7 +69,8 @@ class Forum extends BaseApi {
   // Resolves with the topic and its last post.
   // Discourse redirects /t/-/<id>/last to a topic window ending with the last post
   getLastPost(topicId: number) {
-    return this.axios.get<TopicWithPosts>(`/t/-/${topicId}/last.json`).then(({ data: topic }) => {
+    return this.axios.get(`/t/-/${topicId}/last.json`).then(({ data }) => {
+      const topic = checkResponse(topicWithPosts, data, `GET /t/-/${topicId}/last.json`);
       const { posts } = topic.post_stream;
       return { topic, post: posts[posts.length - 1] };
     });
