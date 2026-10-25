@@ -8,14 +8,27 @@ import ol from '@/js/libs/ol';
 
 dayjs.extend(customParseFormat);
 
+// what this module reads of the image metadata (blueimp-load-image): its types have no getAll()
+type MetadataTags = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getAll(): Record<string, any>;
+  get(tagName: string): unknown;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Tags = Record<string, any> | null;
+
+// the image document being built from the file
+type ImageDocument = Record<string, unknown>;
+
 // get all world extent. sometimes, geoloc in exif is outside this extent.
-const worldExtent = ol.proj.get('EPSG:4326').getExtent();
+const worldExtent = ol.proj.get('EPSG:4326')!.getExtent();
 
 // this worker will handle network upload : only on upload at a time
 const worker = new Worker();
 
 // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/utils.js#L273
-const convertDMSToDecimal = (degrees, minutes, seconds, direction) => {
+const convertDMSToDecimal = (degrees: string, minutes: string, seconds: string, direction?: string) => {
   let decimal = Number(degrees) + Number(minutes) / 60 + parseFloat(seconds) / 3600;
 
   // Don't do anything for N or E
@@ -26,7 +39,7 @@ const convertDMSToDecimal = (degrees, minutes, seconds, direction) => {
   return decimal;
 };
 
-const parseDate = (exif, iptc) => {
+const parseDate = (exif: Tags, iptc: Tags) => {
   const iptcDate = iptc?.DateCreated;
   const exifDate = exif?.Exif?.DateTimeOriginal ?? exif?.DateTime;
 
@@ -50,16 +63,16 @@ const parseDate = (exif, iptc) => {
   return date && date.isValid() ? date.format() : null;
 };
 
-const parseExifGeometry = (exif) => {
+const parseExifGeometry = (exif: Tags) => {
   if (!exif?.GPSInfo?.GPSLatitude || !exif?.GPSInfo?.GPSLongitude) {
     return undefined;
   }
 
-  let lat = exif.GPSInfo.GPSLatitude.split(',');
-  let lon = exif.GPSInfo.GPSLongitude.split(',');
+  const latDMS = exif.GPSInfo.GPSLatitude.split(',');
+  const lonDMS = exif.GPSInfo.GPSLongitude.split(',');
 
-  lat = convertDMSToDecimal(lat[0], lat[1], lat[2], exif.GPSInfo?.GPSLatitudeRef);
-  lon = convertDMSToDecimal(lon[0], lon[1], lon[2], exif.GPSInfo?.GPSLongitudeRef);
+  const lat = convertDMSToDecimal(latDMS[0], latDMS[1], latDMS[2], exif.GPSInfo?.GPSLatitudeRef);
+  const lon = convertDMSToDecimal(lonDMS[0], lonDMS[1], lonDMS[2], exif.GPSInfo?.GPSLongitudeRef);
 
   if (Number.isNaN(lat) || Number.isNaN(lon) || !ol.extent.containsXY(worldExtent, lon, lat)) {
     return undefined;
@@ -71,7 +84,7 @@ const parseExifGeometry = (exif) => {
   return { geom: JSON.stringify(geom) };
 };
 
-const parseExifElevation = (exif) => {
+const parseExifElevation = (exif: Tags) => {
   if (!exif?.GPSInfo?.GPSAltitude) {
     return undefined;
   }
@@ -80,40 +93,42 @@ const parseExifElevation = (exif) => {
   return isNaN(elevation) ? undefined : elevation;
 };
 
-const setIfDefined = (document, name, value) => {
+const setIfDefined = (document: ImageDocument, name: string, value: unknown) => {
   if (value !== undefined) {
     document[name] = value;
   }
 };
 
-const readFile = async (file) => {
-  return new Promise((resolve, reject) => {
+const readFile = async (file: Blob) => {
+  return new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
-      resolve(reader.result);
+      resolve(reader.result as string);
     };
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
 };
 
-const extractDimensions = async (dataUrl) => {
-  return new Promise((resolve) => {
+const extractDimensions = async (dataUrl: string) => {
+  return new Promise<{ dataUrl: string; width: number; height: number }>((resolve) => {
     const img = new Image();
     img.onload = () => resolve({ dataUrl, width: img.width, height: img.height });
     img.src = dataUrl;
   });
 };
 
-const parseMetaData = (document, metaData) => {
-  const exif = metaData.exif?.getAll() ?? null;
-  const iptc = metaData.iptc?.getAll() ?? null;
+// exported for the specs
+export const parseMetaData = (document: ImageDocument, metaData: { exif?: unknown; iptc?: unknown }) => {
+  const exifTags = metaData.exif as MetadataTags | undefined;
+  const exif = exifTags?.getAll() ?? null;
+  const iptc = (metaData.iptc as MetadataTags | undefined)?.getAll() ?? null;
   let orientation = 0;
 
   setIfDefined(document, 'date_time', parseDate(exif, iptc));
 
   if (exif) {
-    orientation = metaData.exif.get('Orientation');
+    orientation = exifTags!.get('Orientation') as number;
 
     setIfDefined(document, 'exposure_time', exif?.Exif?.ExposureTime);
     setIfDefined(document, 'iso_speed', exif?.Exif?.PhotographicSensitivity);
@@ -126,8 +141,13 @@ const parseMetaData = (document, metaData) => {
   return orientation;
 };
 
-const preProcess = async (file, document, orientation, onDataUrlReady) => {
-  let options = {};
+const preProcess = async (
+  file: File,
+  document: ImageDocument,
+  orientation: number | undefined,
+  onDataUrlReady: (dataUrl: string) => void
+): Promise<Blob> => {
+  let options: Record<string, unknown> = {};
   // fix orientation
   if (orientation) {
     options = { ...options, orientation };
@@ -147,15 +167,16 @@ const preProcess = async (file, document, orientation, onDataUrlReady) => {
   if (Object.keys(options).length) {
     options = { ...options, canvas: true };
     const { default: loadImage } = await import('blueimp-load-image');
-    const { image: canvas } = await loadImage(file, options);
+    const { image } = await loadImage(file, options);
+    const canvas = image as HTMLCanvasElement;
     onDataUrlReady(canvas.toDataURL(file.type)); // send data url to caller
     // and extract modified image for upload
     return new Promise((resolve) => {
       canvas.toBlob((file) => {
-        document.file_size = file.size;
+        document.file_size = file!.size;
         document.width = canvas.width;
         document.height = canvas.height;
-        resolve(file);
+        resolve(file as Blob);
       }, file.type);
     });
   } else {
@@ -169,12 +190,23 @@ const preProcess = async (file, document, orientation, onDataUrlReady) => {
 const orientations = [1, 6, 3, 8];
 
 // angle should be one of 0, 90, 180, 270 (in degrees)
-const uploadFile = async (file, angle, onDataUrlReady, onUploadProgress, onSuccess, onFailure) => {
+const uploadFile = async (
+  file: File,
+  angle: number,
+  onDataUrlReady: (dataUrl: string) => void,
+  onUploadProgress: (event: unknown) => void,
+  onSuccess: (document: ImageDocument) => void,
+  onFailure: (error?: unknown) => void
+) => {
   try {
-    const document = {};
+    const document: ImageDocument = {};
     const { default: loadImage } = await import('blueimp-load-image');
-    const metaData = await loadImage(file, { meta: true });
-    let orientation = await parseMetaData(document, metaData);
+    // the meta option (metadata only) is missing from the types of blueimp-load-image
+    const metaData = (await loadImage(file, { meta: true } as unknown as Parameters<typeof loadImage>[1])) as {
+      exif?: unknown;
+      iptc?: unknown;
+    };
+    let orientation: number | undefined = await parseMetaData(document, metaData);
     if (angle) {
       // if no orientation has been retrieved, consider value 1 (no rotation)
       orientation = orientations[(orientations.indexOf(orientation || 1) + angle / 90) % 4];
@@ -185,7 +217,7 @@ const uploadFile = async (file, angle, onDataUrlReady, onUploadProgress, onSucce
       c2c.uploadImage.bind(c2c),
       data,
       onUploadProgress,
-      (event) => {
+      (event: { data: { filename: string } }) => {
         document.filename = event.data.filename;
         onSuccess(document);
       },

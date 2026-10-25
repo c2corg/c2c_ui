@@ -1,12 +1,22 @@
+// a section of a Navitia journey, as far as the UI reads it
+export type Section = {
+  type?: string;
+  mode?: string;
+  duration?: number | null;
+  distance?: number;
+  path?: { length?: number }[];
+  display_informations?: { commercial_mode?: string; color?: string; equipments?: string[] };
+};
+
 export default {
   /** Format time for displaying : YYYYMMDDTHHMMSS -> HH:MM */
-  formatTime(dateTimeString) {
+  formatTime(dateTimeString?: string): string {
     if (!dateTimeString) return '';
     return dateTimeString.substring(9, 11) + ':' + dateTimeString.substring(11, 13);
   },
 
   /** Format duration for displaying : h / min */
-  formatDuration(seconds) {
+  formatDuration(seconds?: number | null): string {
     if (!seconds && seconds !== 0) return '';
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -18,7 +28,7 @@ export default {
   },
 
   /** Gets icons according to the nature of the transport */
-  getTransportIcon(section) {
+  getTransportIcon(section: Section): string {
     if (!section.display_informations) return '';
 
     const mode = section.display_informations.commercial_mode?.toLowerCase() || '';
@@ -32,7 +42,7 @@ export default {
   },
 
   /** Manage different spellings of transports */
-  getTransportClass(section) {
+  getTransportClass(section: Section): string {
     if (!section.display_informations) return '';
 
     const mode = section.display_informations.commercial_mode?.toLowerCase() || '';
@@ -47,7 +57,7 @@ export default {
   },
 
   /** Method to calculate distance in meters */
-  getDistance(section) {
+  getDistance(section: Section): number {
     if (section.distance) {
       return Math.round(section.distance);
     }
@@ -57,7 +67,7 @@ export default {
   },
 
   /** Method to get accessibility icons */
-  getAccessibilityIcon(section) {
+  getAccessibilityIcon(section: Section): { bike: boolean; wheelchair: boolean } {
     if (!section.display_informations || !section.display_informations.equipments) {
       return {
         bike: false,
@@ -72,7 +82,7 @@ export default {
   },
 
   /** Each route follows the same sequence of colors */
-  getRouteColor(section) {
+  getRouteColor(section: Section): string {
     if (section.mode === 'walking') return '00008B';
     if (section.type === 'public_transport' || section.type === 'on_demand_transport') {
       const color = section.display_informations?.color;
@@ -82,7 +92,7 @@ export default {
   },
 
   /** Creates the class based on color */
-  getTransportColorClass(section) {
+  getTransportColorClass(section: Section): string {
     if (section.display_informations?.color) {
       return 'transport-color-' + section.display_informations.color.replace('#', '');
     }
@@ -90,7 +100,7 @@ export default {
   },
 
   /** Formats the journey time in minutes and hours */
-  formatJourneyDuration(seconds) {
+  formatJourneyDuration(seconds?: number | null): string {
     if (!seconds && seconds !== 0) return '';
 
     const hours = Math.floor(seconds / 3600);
@@ -103,7 +113,7 @@ export default {
   },
 
   /** Get section duration directly when available, fallback to 0 */
-  calculateSectionDuration(section) {
+  calculateSectionDuration(section: Section): number {
     if (section.duration !== undefined && section.duration !== null) {
       return section.duration;
     }
