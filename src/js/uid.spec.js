@@ -16,7 +16,7 @@ const sourceFiles = (dir) =>
   readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
     entry.isDirectory()
       ? sourceFiles(join(dir, entry.name))
-      : /\.(js|vue)$/.test(entry.name)
+      : /\.(js|ts|vue)$/.test(entry.name)
         ? [join(dir, entry.name)]
         : []
   );
@@ -31,7 +31,7 @@ describe('uid', () => {
 
   it("is used instead of Vue's internal _uid, which Vue 3 doesn't expose", () => {
     const uses = sourceFiles('src').filter(
-      (file) => !/\/uid(\.spec)?\.js$/.test(file) && /\b_uid\b/.test(readFileSync(file, 'utf8'))
+      (file) => !/\/uid(\.spec)?\.(js|ts)$/.test(file) && /\b_uid\b/.test(readFileSync(file, 'utf8'))
     );
 
     expect(uses).toEqual([]);

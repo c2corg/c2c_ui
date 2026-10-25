@@ -12,7 +12,9 @@ class LocalStorageItem {
   constructor(key: string) {
     this.key = key;
     try {
-      this.data_ = JSON.parse(window.localStorage.getItem(key) ?? '{}');
+      const data = JSON.parse(window.localStorage.getItem(key) ?? '{}');
+      // anything but an object (e.g. null, stored by another script or a former version) is no preferences record
+      this.data_ = data !== null && typeof data === 'object' && !Array.isArray(data) ? data : {};
     } catch {
       this.data_ = {};
     }
@@ -22,11 +24,15 @@ class LocalStorageItem {
     window.localStorage.setItem(this.key, JSON.stringify(this.data_));
   }
 
-  // the stored values are what the callers stored: they read them back with the type they know
+  // the stored values are what the callers stored: they read them back with the type they know. Without a default, a
+  // value never stored is undefined
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  get<T = any>(propertyName: string, defaultIfUndefined?: T): T {
+  get<T = any>(propertyName: string): T | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  get<T = any>(propertyName: string, defaultIfUndefined: T): T;
+  get<T>(propertyName: string, defaultIfUndefined?: T): T | undefined {
     const result = this.data_[propertyName];
-    return (result === undefined ? defaultIfUndefined : result) as T;
+    return (result === undefined ? defaultIfUndefined : result) as T | undefined;
   }
 
   set(propertyName: string, value: unknown) {

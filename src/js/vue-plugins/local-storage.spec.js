@@ -7,7 +7,7 @@ const sourceFiles = (dir) =>
   readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
     entry.isDirectory()
       ? sourceFiles(join(dir, entry.name))
-      : /\.(js|vue)$/.test(entry.name)
+      : /\.(js|ts|vue)$/.test(entry.name)
         ? [join(dir, entry.name)]
         : []
   );
@@ -50,6 +50,20 @@ describe('local storage', () => {
 
     preferences.set('isPersonal', true);
     expect(JSON.parse(window.localStorage.getItem('HomeView.preferences'))).toEqual({ feed: true, isPersonal: true });
+  });
+
+  it('starts empty from what is not a preferences record', async () => {
+    window.localStorage.setItem('Yeti.preferences', 'null');
+    window.localStorage.setItem('HomeView.preferences', '[1, 2]');
+    window.localStorage.setItem('SiteNotice.preferences', '{not json');
+    const { getPreferences } = await import('./local-storage');
+
+    for (const name of ['Yeti', 'HomeView', 'SiteNotice']) {
+      expect(getPreferences(name).get('anything')).toBeUndefined();
+      expect(getPreferences(name).get('anything', 'default')).toBe('default');
+    }
+    getPreferences('Yeti').set('yeti-disclaimer', 'validated');
+    expect(JSON.parse(window.localStorage.getItem('Yeti.preferences'))).toEqual({ 'yeti-disclaimer': 'validated' });
   });
 
   it('gives the same preferences to everyone using a name', async () => {
