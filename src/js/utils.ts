@@ -1,8 +1,11 @@
 import saveAs from 'file-saver';
 
+// how a CSV column reads its value from an object
+type Getter = (object: Record<string, unknown>, key: string) => unknown;
+
 export default {
   // from https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/utils.js#L194
-  stringDivider(str, width, spaceReplacer) {
+  stringDivider(str: string, width: number, spaceReplacer: string): string {
     if (str && str.length > width) {
       let p = width;
       while (p > 0 && str[p] !== ' ' && str[p] !== '-') {
@@ -23,7 +26,7 @@ export default {
     return str;
   },
 
-  download(content, fileName, opt_fileType) {
+  download(content: BlobPart, fileName: string, opt_fileType?: string) {
     const fileType = opt_fileType ?? 'text/plain;charset=utf-8';
     const blob = new Blob([content], { type: fileType });
 
@@ -32,10 +35,10 @@ export default {
 
   // transform a list of c2c object to a CSV content, and download it
 
-  downloadCsv(objects, fileName, keys) {
-    const defaultGetter = (object, key) => object[key];
+  downloadCsv(objects: Record<string, unknown>[] | null | undefined, fileName: string, keys: Map<string, Getter>) {
+    const defaultGetter: Getter = (object, key) => object[key];
 
-    const convertToCsv = function (value) {
+    const convertToCsv = function (value: unknown) {
       if (value === null || value === undefined) {
         return '';
       }
@@ -75,7 +78,7 @@ export default {
     const lines = [[...keys.keys()].join(';')];
 
     for (const object of objects) {
-      const line = [];
+      const line: unknown[] = [];
       for (const [key, getter] of keys) {
         line.push(convertToCsv(getter(object, key)));
       }
@@ -87,7 +90,7 @@ export default {
   },
 
   // does the intersection of two arrays is empty ?
-  intersectionIsNotNull(arrayA, arrayB) {
+  intersectionIsNotNull(arrayA: readonly unknown[], arrayB: readonly unknown[]): boolean {
     for (const itemA of arrayA) {
       if (arrayB.includes(itemA)) {
         return true;
@@ -98,7 +101,7 @@ export default {
   },
 
   // decode html entities in a text. Remove any html markup
-  decodeHtmlEntities(input) {
+  decodeHtmlEntities(input: string): string | null {
     if (!DOMParser) {
       // prevent errors on old browsers
       return input;
@@ -108,7 +111,7 @@ export default {
     return doc.documentElement.textContent;
   },
 
-  stripMarkdown(value) {
+  stripMarkdown(value: string): string {
     return value
       .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // external links
       .replace(/\[\[[^|]+\|([^\]]+)\]\]/g, '$1') // internal links

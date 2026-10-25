@@ -5,12 +5,10 @@
 const STORAGE_KEY = 'c2c.preloadErrorReload';
 const MIN_DELAY_BETWEEN_RELOADS = 60 * 1000;
 
-/**
- * @param {import('vue-router').default} router
- * @param {Window} win
- */
-export default function reloadOnStaleChunk(router, win = window) {
-  let pendingRoute = null;
+import type { RouteLocationNormalized, Router } from 'vue-router';
+
+export default function reloadOnStaleChunk(router: Router, win: Window = window) {
+  let pendingRoute: RouteLocationNormalized | null = null;
   router.beforeEach((to) => {
     pendingRoute = to;
   });
