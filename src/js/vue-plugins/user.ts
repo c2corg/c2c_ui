@@ -57,9 +57,7 @@ declare module 'vue' {
   }
 }
 
-// $language, from the gettext plugin, not typed yet: what this plugin uses of it
-type Language = { current: string; setCurrent(lang: string): void };
-const languageOf = (app: App) => (app.config.globalProperties as unknown as { $language: Language }).$language;
+const languageOf = (app: App) => app.config.globalProperties.$language;
 
 function isExpired(expire: number | null, token: string | null): boolean {
   if (!expire) {
@@ -79,10 +77,11 @@ function isExpired(expire: number | null, token: string | null): boolean {
 export default function install(app: App) {
   // stored under the name of the former User component, so that existing sessions are kept
   const preferences = getPreferences('User');
-  const data = preferences.get<Partial<Record<(typeof STORED_FIELDS)[number], never>>>(config.urls.api, {});
+  const data = preferences.get<Partial<Pick<User, (typeof STORED_FIELDS)[number]>>>(config.urls.api, {});
 
   // user lang, read write property everywhere : this.$user.lang
-  const lang: string = data['lang'] ?? languageOf(app).current;
+  // ($language.current is null only while the page updates after the first load)
+  const lang = data['lang'] ?? (languageOf(app).current as string);
   const expired = isExpired(data['expire'] ?? null, data['token'] ?? null);
 
   const user: User = reactive<User>({

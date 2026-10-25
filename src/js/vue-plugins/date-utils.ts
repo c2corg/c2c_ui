@@ -40,13 +40,11 @@ declare module 'vue' {
   }
 }
 
-// $language, from the gettext plugin, not typed yet: what this plugin uses of it
-type Language = { current: string; setCurrent(lang: string): void };
-const languageOf = (app: App) => (app.config.globalProperties as unknown as { $language: Language }).$language;
+const languageOf = (app: App) => app.config.globalProperties.$language;
 
 const dateUtils = (app: App) => {
   // $language is installed after this plugin: read it when called
-  const current = () => locales[languageOf(app).current];
+  const current = () => locales[languageOf(app).current ?? ''];
 
   return {
     parseDate(arg: ConfigType, formatString?: string) {
