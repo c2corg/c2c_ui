@@ -1,4 +1,4 @@
-import { loginResponse } from './schemas';
+import { account, loginResponse } from './schemas';
 import type { Api, DocumentId } from './types';
 
 // what the account form changes: the current password, and the fields not left null
@@ -56,7 +56,7 @@ export default class UserProfileService {
 
     this.account = {
       get() {
-        return api.get('/users/account');
+        return api.getValidated('/users/account', account);
       },
 
       post(

@@ -1,3 +1,4 @@
+import { document, documentsPage } from './schemas';
 import type { Api, DocumentId, Params } from './types';
 
 export default class DocumentService {
@@ -7,7 +8,7 @@ export default class DocumentService {
   ) {}
 
   getAll(params?: Params) {
-    return this.api.get('/' + this.documentType + 's', { params });
+    return this.api.getValidated('/' + this.documentType + 's', documentsPage, { params });
   }
 
   fullDownload(params: Params, limit?: number, onProgress?: (loaded: number, total: number) => void) {
@@ -67,12 +68,14 @@ export default class DocumentService {
   }
 
   get(id: DocumentId, lang: string) {
-    return this.api.get('/' + this.documentType + 's/' + id, { params: { l: this.api.getApiLang(lang) } });
+    return this.api.getValidated('/' + this.documentType + 's/' + id, document, {
+      params: { l: this.api.getApiLang(lang) },
+    });
   }
 
   getCooked(id: DocumentId, prefered_lang: string) {
     prefered_lang = this.api.getApiLang(prefered_lang);
-    const promise = this.api.get('/' + this.documentType + 's/' + id + `?cook=${prefered_lang}`);
+    const promise = this.api.getValidated('/' + this.documentType + 's/' + id + `?cook=${prefered_lang}`, document);
 
     return promise;
   }

@@ -7,6 +7,7 @@ import ForumService from './ForumService';
 import ModeratorService from './ModeratorService';
 import TagsService from './TagsService';
 import UserProfileService from './UserProfileService';
+import { documentChanges, searchResults } from './schemas';
 import type { Params } from './types';
 
 import BaseApi from '@/js/apis/BaseApi';
@@ -71,11 +72,11 @@ export class CamptocampApi extends BaseApi {
   /* some function that not belong to a dedicated service */
 
   search(params?: Params) {
-    return this.get('/search', { params });
+    return this.getValidated('/search', searchResults, { params });
   }
 
   getRecentChanges(params?: Params) {
-    return this.get('/documents/changes', { params });
+    return this.getValidated('/documents/changes', documentChanges, { params });
   }
 
   /* image service, I'm lazy. TODO :

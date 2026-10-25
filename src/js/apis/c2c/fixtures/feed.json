@@ -1,0 +1,103 @@
+{
+  "feed": [
+    {
+      "id": 56,
+      "time": "2026-10-24T14:41:40.092659+00:00",
+      "user": {
+        "document_id": 1,
+        "version": 1,
+        "locales": [{ "version": 1, "lang": "fr" }],
+        "activities": null,
+        "categories": ["amateur"],
+        "available_langs": ["fr"],
+        "areas": [],
+        "protected": false,
+        "type": "u",
+        "name": "E2E Tester",
+        "forum_username": "e2etester"
+      },
+      "participants": [],
+      "change_type": "created",
+      "document": {
+        "document_id": 59,
+        "version": 13,
+        "locales": [{ "version": 2, "lang": "fr", "title": "E2E sortie modifi\u00e9e", "summary": null }],
+        "geometry": {
+          "version": 1,
+          "geom": "{\"type\": \"Point\", \"coordinates\": [635956.0, 5723604.0]}",
+          "has_geom_detail": false
+        },
+        "quality": "empty",
+        "activities": ["skitouring"],
+        "condition_rating": null,
+        "date_end": "2026-02-07",
+        "date_start": "2026-02-05",
+        "elevation_max": null,
+        "height_diff_up": null,
+        "public_transport": null,
+        "ski_rating": null,
+        "labande_global_rating": null,
+        "available_langs": ["fr"],
+        "areas": [],
+        "author": { "name": "E2E Tester", "user_id": 1 },
+        "protected": false,
+        "type": "o",
+        "img_count": 0
+      },
+      "image1": null,
+      "image2": null,
+      "image3": null,
+      "more_images": false
+    },
+    {
+      "id": 55,
+      "time": "2026-10-24T14:41:39.867980+00:00",
+      "user": {
+        "document_id": 1,
+        "version": 1,
+        "locales": [{ "version": 1, "lang": "fr" }],
+        "activities": null,
+        "categories": ["amateur"],
+        "available_langs": ["fr"],
+        "areas": [],
+        "protected": false,
+        "type": "u",
+        "name": "E2E Tester",
+        "forum_username": "e2etester"
+      },
+      "participants": [],
+      "change_type": "created",
+      "document": {
+        "document_id": 58,
+        "version": 1,
+        "locales": [{ "version": 1, "lang": "fr", "title": "E2E sortie", "summary": null }],
+        "geometry": {
+          "version": 1,
+          "geom": "{\"type\": \"Point\", \"coordinates\": [635956.0, 5723604.0]}",
+          "has_geom_detail": false
+        },
+        "quality": "medium",
+        "activities": ["skitouring"],
+        "condition_rating": null,
+        "date_end": "2026-01-10",
+        "date_start": "2026-01-10",
+        "elevation_max": null,
+        "height_diff_up": null,
+        "public_transport": null,
+        "ski_rating": null,
+        "labande_global_rating": null,
+        "available_langs": ["fr"],
+        "areas": [],
+        "author": { "name": "E2E Tester", "user_id": 1 },
+        "protected": false,
+        "type": "o",
+        "img_count": 0
+      },
+      "image1": null,
+      "image2": null,
+      "image3": null,
+      "more_images": false
+    }
+  ],
+  "pagination_token": "55,2026-10-24T14%3A41%3A39.867980%2B00%3A00"
+}
