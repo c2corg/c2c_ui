@@ -88,7 +88,7 @@ import FormSubmitSuccessIndicator from './utils/FormSubmitSuccessIndicator.vue';
 import PasswordRequirements from './utils/PasswordRequirements';
 
 import c2c from '@/js/apis/c2c';
-import noRobotsMixin from '@/js/no-robots-mixin';
+import { useNoRobots } from '@/js/composables/head';
 
 export default {
   components: {
@@ -98,7 +98,9 @@ export default {
     PasswordRequirements,
   },
 
-  mixins: [noRobotsMixin],
+  setup() {
+    useNoRobots();
+  },
 
   data() {
     return {

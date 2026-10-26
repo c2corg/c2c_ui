@@ -1,21 +1,24 @@
+// for the mixins that include it (document-view-mixin, is-editable-mixin): the components use useViewMode()
+import { viewMode } from '@/js/composables/view-mode';
+
 export default {
   computed: {
     isVersionView() {
-      return this.$route.name.endsWith('-version');
+      return viewMode(this.$route.name).isVersionView;
     },
 
     isDraftView() {
       // means preview for edit and add mode
-      return this.$route.name.endsWith('-edit') || this.$route.name.endsWith('-add');
+      return viewMode(this.$route.name).isDraftView;
     },
 
     isPrintingView() {
       // means in a list of document to print
-      return this.$route.name.endsWith('-print');
+      return viewMode(this.$route.name).isPrintingView;
     },
 
     isNormalView() {
-      return !this.isDraftView && !this.isVersionView && !this.isPrintingView;
+      return viewMode(this.$route.name).isNormalView;
     },
   },
 };

@@ -69,15 +69,17 @@
 import ColoredIconDocument from './utils/ColoredIconDocument';
 
 import c2c from '@/js/apis/c2c';
+import { useNoRobots } from '@/js/composables/head';
 import infiniteScroll from '@/js/directives/infinite-scroll';
-import noRobotsMixin from '@/js/no-robots-mixin';
 
 export default {
   components: { ColoredIconDocument },
 
   directives: { infiniteScroll },
 
-  mixins: [noRobotsMixin],
+  setup() {
+    useNoRobots();
+  },
 
   data() {
     return {

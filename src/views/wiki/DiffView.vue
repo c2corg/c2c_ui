@@ -179,8 +179,8 @@ import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import { diffMatchPatch } from './utils/diff_match_patch_uncompressed';
 
 import c2c from '@/js/apis/c2c';
+import { useNoRobots } from '@/js/composables/head';
 import constants from '@/js/constants';
-import noRobotsMixin from '@/js/no-robots-mixin';
 
 const hasChanged = function (oldVal, newVal) {
   // does oldVal equals to newVal ?
@@ -368,7 +368,9 @@ export default {
     MaskedDocumentVersionInfo,
   },
 
-  mixins: [noRobotsMixin],
+  setup() {
+    useNoRobots();
+  },
 
   data() {
     return {
