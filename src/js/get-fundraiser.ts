@@ -3,9 +3,25 @@
 // the component's `this.$gettext()`. To add a localized message to an entry, just
 // add a `message: $gettext('Your English message')` field; translations are then
 // managed in Transifex.
-const $gettext = (msgid) => msgid;
+const $gettext = (msgid: string) => msgid;
 
-const mapping = {
+export type Fundraiser = { url: string; message?: string };
+
+// the documents getFundraiser() reads
+type FundraiserDocument = {
+  type?: string;
+  document_id?: number;
+  activities?: string[];
+  equipment_rating?: string | null;
+  equipment_ratings?: string[] | null;
+  waypoint_type?: string | null;
+  main_waypoint_id?: number | null;
+  area_type?: string;
+  associations?: { waypoints: FundraiserDocument[] };
+  areas?: FundraiserDocument[];
+};
+
+const mapping: Record<number, Fundraiser> = {
   // France
   // 14274: { // FFME - Rockclimber
   //   url: ' https://www.helloasso.com/associations/rockclimber/formulaires/1/widget'
@@ -185,7 +201,7 @@ const mapping = {
   },
 };
 
-const intersection = function (array1, array2) {
+const intersection = function (array1: string[] | null | undefined, array2: string[]) {
   if (!array1 || !array2) {
     return [];
   }
@@ -193,9 +209,9 @@ const intersection = function (array1, array2) {
   return array1.filter((value) => array2.includes(value));
 };
 
-export default function (document) {
+export default function (document: FundraiserDocument): Fundraiser | null {
   // Only areas, waypoints, routes
-  if (!['r', 'w', 'a'].includes(document.type)) {
+  if (!['r', 'w', 'a'].includes(document.type ?? '')) {
     return null;
   }
 
@@ -207,7 +223,7 @@ export default function (document) {
     }
 
     // only P1 and P1+ routes
-    if (!['P1', 'P1+'].includes(document.equipment_rating)) {
+    if (!['P1', 'P1+'].includes(document.equipment_rating ?? '')) {
       return null;
     }
   } else if (document.type === 'w') {
@@ -232,12 +248,12 @@ export default function (document) {
   // 3. then areas of type range
   // 4. then areas of type admin_limits
   // 5. then areas of type country
-  const documents = [];
+  const documents: FundraiserDocument[] = [];
 
   documents.push(document);
 
   if (document.type === 'r') {
-    const mainWaypoint = document.associations.waypoints.find((w) => w.document_id === document.main_waypoint_id);
+    const mainWaypoint = document.associations?.waypoints.find((w) => w.document_id === document.main_waypoint_id);
 
     if (mainWaypoint) {
       documents.push(mainWaypoint);
@@ -251,7 +267,7 @@ export default function (document) {
   }
 
   for (const document of documents) {
-    if (mapping[document.document_id]) {
+    if (document.document_id && mapping[document.document_id]) {
       return mapping[document.document_id];
     }
   }

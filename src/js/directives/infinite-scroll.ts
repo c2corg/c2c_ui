@@ -4,14 +4,22 @@
  * Calls `load()` when the bottom of the element is less than `distance` px (default 0) below the bottom of its
  * scrolling container (its nearest ancestor with overflow-y auto or scroll, else the window): on mount, on scroll and
  * resize (throttled), and when `disabled` turns false. Same behaviour as vue-infinite-scroll, which only exists for Vue
- * 2 and reads its options from the component by name; the hooks of both Vue 2 and Vue 3 are defined.
+ * 2 and reads its options from the component by name.
  */
+
+import type { DirectiveBinding, ObjectDirective } from 'vue';
+
+export type InfiniteScrollOptions = { load: () => void; disabled?: boolean; distance?: number };
+
+type Throttled = (() => void) & { cancel(): void };
+
+type State = { options: InfiniteScrollOptions; container: HTMLElement | Window; listener: Throttled };
 
 const THROTTLE_DELAY = 200;
 
-const states = new WeakMap();
+const states = new WeakMap<HTMLElement, State>();
 
-function getScrollContainer(el) {
+function getScrollContainer(el: HTMLElement): HTMLElement | Window {
   for (let node = el.parentElement; node && node !== document.body; node = node.parentElement) {
     const { overflowY } = getComputedStyle(node);
     if (overflowY === 'auto' || overflowY === 'scroll') {
@@ -21,21 +29,21 @@ function getScrollContainer(el) {
   return window;
 }
 
-function check(el) {
+function check(el: HTMLElement) {
   const state = states.get(el);
   if (!state || state.options.disabled) {
     return;
   }
   const containerBottom =
-    state.container === window ? window.innerHeight : state.container.getBoundingClientRect().bottom;
+    state.container === window ? window.innerHeight : (state.container as HTMLElement).getBoundingClientRect().bottom;
   if (el.getBoundingClientRect().bottom - containerBottom <= (state.options.distance ?? 0)) {
     state.options.load();
   }
 }
 
 // at most one check every THROTTLE_DELAY ms, the last scroll of a burst included
-function throttle(fn) {
-  let timer = null;
+function throttle(fn: () => void): Throttled {
+  let timer: ReturnType<typeof setTimeout> | null = null;
   let pending = false;
   const run = () => {
     timer = setTimeout(() => {
@@ -55,11 +63,11 @@ function throttle(fn) {
     fn();
     run();
   };
-  throttled.cancel = () => clearTimeout(timer);
+  throttled.cancel = () => clearTimeout(timer ?? undefined);
   return throttled;
 }
 
-function mount(el, { value }) {
+function mount(el: HTMLElement, { value }: DirectiveBinding<InfiniteScrollOptions>) {
   const container = getScrollContainer(el);
   const listener = throttle(() => check(el));
   states.set(el, { options: value, container, listener });
@@ -68,7 +76,7 @@ function mount(el, { value }) {
   check(el);
 }
 
-function update(el, { value }) {
+function update(el: HTMLElement, { value }: DirectiveBinding<InfiniteScrollOptions>) {
   const state = states.get(el);
   if (!state) {
     return;
@@ -80,7 +88,7 @@ function update(el, { value }) {
   }
 }
 
-function unmount(el) {
+function unmount(el: HTMLElement) {
   const state = states.get(el);
   if (!state) {
     return;
@@ -91,13 +99,10 @@ function unmount(el) {
   states.delete(el);
 }
 
-export default {
-  // Vue 2
-  inserted: mount,
-  componentUpdated: update,
-  unbind: unmount,
-  // Vue 3
+const infiniteScroll: ObjectDirective<HTMLElement, InfiniteScrollOptions> = {
   mounted: mount,
   updated: update,
   unmounted: unmount,
 };
+
+export default infiniteScroll;

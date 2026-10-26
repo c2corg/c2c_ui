@@ -1,4 +1,4 @@
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { type IconDefinition, library } from '@fortawesome/fontawesome-svg-core';
 import { faCreativeCommons } from '@fortawesome/free-brands-svg-icons/faCreativeCommons';
 import { faFacebook } from '@fortawesome/free-brands-svg-icons/faFacebook';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons/faGoogle';
@@ -127,6 +127,7 @@ import { faUserShield } from '@fortawesome/free-solid-svg-icons/faUserShield';
 import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome';
+import type { App } from 'vue';
 
 import activityHiking from '@/assets/font-awesome-custom/js/activity/hiking';
 import activityIce_climbing from '@/assets/font-awesome-custom/js/activity/ice_climbing';
@@ -183,8 +184,9 @@ import waypointweather_station from '@/assets/font-awesome-custom/js/waypoint/we
 import waypointwebcam from '@/assets/font-awesome-custom/js/waypoint/webcam';
 
 // registered globally
-export default function install(app) {
-  library.add(
+export default function install(app: App) {
+  // generated JavaScript (tools/generate-icons.js): TypeScript infers their icon arrays too loosely for IconDefinition
+  const customIcons = [
     drill,
     paragliding,
     sort,
@@ -242,6 +244,10 @@ export default function install(app) {
     qualityMedium,
     qualityFine,
     qualityGreat,
+  ] as unknown as IconDefinition[];
+
+  library.add(
+    ...customIcons,
 
     // solid icons
     faAngleDown,

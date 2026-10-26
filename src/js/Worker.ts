@@ -2,11 +2,10 @@
 // Push promise functions, and they will be called sequentially.
 
 class Worker {
-  constructor() {
-    this._stack = [];
-    this._working = false;
-  }
-  push(func, ...args) {
+  _stack: (() => Promise<unknown>)[] = [];
+  _working = false;
+
+  push<Args extends unknown[]>(func: (...args: Args) => Promise<unknown>, ...args: Args) {
     const partial = () => func(...args);
     this._stack.push(partial);
     this._work();
@@ -19,7 +18,7 @@ class Worker {
     if (this._working || this._stack.length === 0) {
       return;
     }
-    const partial = this._stack.shift();
+    const partial = this._stack.shift() as () => Promise<unknown>;
     this._working = true;
     partial().then(this._next.bind(this)).catch(this._next.bind(this));
   }
