@@ -6,6 +6,12 @@ import OlMap from './OlMap';
 
 import ol from '@/js/libs/ol';
 
+// the real source reads the header of a remote file as soon as it is created
+vi.mock('ol-pmtiles', async () => {
+  const { default: VectorTileSource } = await import('ol/source/VectorTile');
+  return { PMTilesVectorSource: class extends VectorTileSource {} };
+});
+
 // not implemented in jsdom, needed by ol.Map
 vi.stubGlobal(
   'ResizeObserver',
@@ -28,7 +34,13 @@ const mountMap = () =>
         $documentUtils: { getDocumentTitle: () => '', hasSameGeolocation: () => false },
         $dateUtils: {},
       },
-      stubs: { FaIcon: true, InputSlider: true, BiodivInformation: true, SwissProtectionAreaInformation: true },
+      stubs: {
+        FaIcon: true,
+        InputSlider: true,
+        BiodivInformation: true,
+        SwissProtectionAreaInformation: true,
+        TransportInformation: true,
+      },
       directives: { translate: {} },
     },
   });
@@ -90,5 +102,46 @@ describe('OlMap', () => {
     expect(selectedTitles(wrapper)[1]).toBe('');
 
     wrapper.unmount();
+  });
+
+  describe('public transport layer', () => {
+    const transportButton = (wrapper) =>
+      wrapper.findAll('.ol-control-layer-switcher .layer-group')[2].findAll(':scope > *')[0];
+
+    it('is shown by default, without opening the tiles file until the map is zoomed in', () => {
+      const wrapper = mountMap();
+
+      expect(wrapper.vm.transportsVisible).toBe(true);
+      expect(wrapper.vm.transportLayer.getVisible()).toBe(true);
+      expect(wrapper.vm.map.getLayers().getArray()).toContain(wrapper.vm.transportLayer);
+      expect(wrapper.vm.transportLayer.getSource()).toBeNull();
+      expect(isProxy(wrapper.vm.transportLayer)).toBe(false);
+
+      wrapper.vm.view.setZoom(4);
+      wrapper.vm.openTransportTiles();
+      expect(wrapper.vm.transportLayer.getSource()).toBeNull();
+
+      wrapper.vm.view.setZoom(9);
+      wrapper.vm.openTransportTiles();
+      expect(wrapper.vm.transportLayer.getSource()).not.toBeNull();
+      expect(isProxy(wrapper.vm.transportLayer.getSource())).toBe(false);
+
+      wrapper.unmount();
+    });
+
+    it('is switched on and off from the layer switcher', async () => {
+      const wrapper = mountMap();
+
+      expect(transportButton(wrapper).classes()).toContain('selected');
+
+      await transportButton(wrapper).trigger('click');
+      expect(wrapper.vm.transportLayer.getVisible()).toBe(false);
+      expect(transportButton(wrapper).classes()).not.toContain('selected');
+
+      await transportButton(wrapper).trigger('click');
+      expect(wrapper.vm.transportLayer.getVisible()).toBe(true);
+
+      wrapper.unmount();
+    });
   });
 });

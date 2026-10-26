@@ -47,6 +47,16 @@
             title-context="Map slopes layer"
           ></layer-button>
         </div>
+        <template v-if="showTransports && !editable">
+          <header v-translate>Public transport</header>
+          <div class="layer-group">
+            <layer-button
+              @click="toggleTransports"
+              :selected="transportsVisible"
+              :layer="{ title: 'Public transport lines and stops', image: 'transport.svg' }"
+            ></layer-button>
+          </div>
+        </template>
         <template v-if="showProtectionAreas && !editable">
           <header v-translate>Protection areas</header>
           <!-- $gettext('Fauna protection areas') -->
@@ -165,6 +175,7 @@
     />
 
     <stop-information v-if="!editable" ref="StopInformation" :data="stopData" />
+    <transport-information v-if="transportsVisible" ref="TransportInformation" :data="transportData" />
   </div>
 </template>
 
@@ -176,6 +187,7 @@ import BiodivInformation from './BiodivInformation';
 import LayerButton from './LayerButton';
 import StopInformation from './StopInformation';
 import SwissProtectionAreaInformation from './SwissProtectionAreaInformation';
+import TransportInformation from './TransportInformation';
 import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers';
 import {
   buildDiffStyle,
@@ -188,6 +200,14 @@ import {
   isFiniteExtent,
   swissExtent,
 } from './map-utils';
+import {
+  TRANSPORT_HIT_TOLERANCE,
+  TRANSPORT_MIN_ZOOM,
+  createTransportTilesLayer,
+  describeTransportFeature,
+  ensureTransportSource,
+  setTransportHighlight,
+} from './transport-tiles-layer';
 
 import biodivSportsService from '@/js/apis/biodivsports-service';
 import c2c from '@/js/apis/c2c';
@@ -214,6 +234,7 @@ export default {
     LayerButton,
     StopInformation,
     SwissProtectionAreaInformation,
+    TransportInformation,
   },
 
   props: {
@@ -240,6 +261,12 @@ export default {
     showProtectionAreas: {
       type: Boolean,
       default: false,
+    },
+
+    // public transport lines and stops, offered in the layer switcher
+    showTransports: {
+      type: Boolean,
+      default: true,
     },
 
     biodivSportsActivities: {
@@ -341,6 +368,8 @@ export default {
           minZoom: STOPS_MIN_ZOOM - 0.01,
         })
       ),
+      // public transport lines and stops, vector tiles
+      transportLayer: markRaw(createTransportTilesLayer()),
 
       // layer for document icons and paths
       documentsLayer: markRaw(
@@ -392,6 +421,8 @@ export default {
       swissProtectionAreaData: { properties: {} },
       protectionAreasVisible: this.showProtectionAreas && !this.editedDocument,
       hasProtectionAreas: null,
+      transportData: { kind: 'line' },
+      transportsVisible: this.showTransports && !this.editedDocument,
 
       stopData: { stoparea_name: '', lines: [], waypoints: [] },
       stopsVisible: !this.editedDocument,
@@ -517,6 +548,7 @@ export default {
         ...this.protectionAreasLayers,
         this.protectionAreasLayer,
         this.stopsLayer, // under documents, so that their markers stay clickable
+        this.transportLayer,
         this.imagesLayer, // images icons will be under documents
         this.documentsLayer,
         this.waypointsLayer, // keep waypoint above trace and documents
@@ -539,6 +571,7 @@ export default {
     this.map.on('moveend', this.sendBoundsToUrl);
     this.map.on('moveend', this.getProtectionAreas);
     this.map.on('moveend', this.getStops);
+    this.map.on('moveend', this.openTransportTiles);
     this.map.on('moveend', this.updateEditMapLink);
     this.map.on('moveend', this.emitMoveEvent);
 
@@ -548,6 +581,8 @@ export default {
       this.protectionAreasLayers.forEach((layer) => layer.setVisible(true));
     }
     this.stopsLayer.setVisible(this.stopsVisible);
+
+    this.transportLayer.setVisible(this.transportsVisible);
 
     this.geolocation = markRaw(
       new ol.Geolocation({
@@ -1151,15 +1186,56 @@ export default {
       return extent;
     },
 
+    // the features of the transport tiles are not documents: they are looked for apart
+    isNotTransportLayer(layer) {
+      return layer !== this.transportLayer;
+    },
+
+    getTransportFeatureAt(pixel) {
+      if (!this.transportsVisible || !this.transportLayer.getSource()) {
+        return null;
+      }
+      return this.map.forEachFeatureAtPixel(pixel, (feature) => feature, {
+        layerFilter: (layer) => layer === this.transportLayer,
+        hitTolerance: TRANSPORT_HIT_TOLERANCE,
+      });
+    },
+
+    // the file of the transport tiles is only opened once the map is zoomed in far enough
+    openTransportTiles() {
+      if (this.transportsVisible && this.view.getZoom() > TRANSPORT_MIN_ZOOM) {
+        ensureTransportSource(this.transportLayer);
+      }
+    },
+
+    toggleTransports() {
+      this.transportsVisible = !this.transportsVisible;
+      this.transportLayer.setVisible(this.transportsVisible);
+      setTransportHighlight(this.transportLayer, { hoveredId: null, selectedId: null });
+      this.openTransportTiles();
+    },
+
     onPointerMove(event) {
       let resultFeature = null;
 
-      this.map.forEachFeatureAtPixel(event.pixel, function (feature) {
-        resultFeature = feature;
-        return true;
-      });
+      this.map.forEachFeatureAtPixel(
+        event.pixel,
+        function (feature) {
+          resultFeature = feature;
+          return true;
+        },
+        { layerFilter: this.isNotTransportLayer }
+      );
       this.setHighlightedFeature(resultFeature);
       this.$emit('highlight-document', resultFeature ? resultFeature.get('document') : null);
+
+      if (this.transportsVisible) {
+        const transportFeature = resultFeature ? null : this.getTransportFeatureAt(event.pixel);
+        setTransportHighlight(this.transportLayer, {
+          hoveredId: transportFeature?.get('layer') === 'lines' ? transportFeature.getId() : null,
+        });
+        this.map.getTargetElement().style.cursor = transportFeature ? 'pointer' : '';
+      }
     },
 
     setHighlightedFeature(feature) {
@@ -1184,7 +1260,7 @@ export default {
     },
 
     onClick(event) {
-      const feature = this.map.forEachFeatureAtPixel(event.pixel, (f) => f);
+      const feature = this.map.forEachFeatureAtPixel(event.pixel, (f) => f, { layerFilter: this.isNotTransportLayer });
 
       if (feature) {
         const document = feature.get('document');
@@ -1237,6 +1313,17 @@ export default {
         }
       } else {
         // handle clicks on enabled layers
+        const transportFeature = this.getTransportFeatureAt(event.pixel);
+        setTransportHighlight(this.transportLayer, {
+          selectedId: transportFeature?.get('layer') === 'lines' ? transportFeature.getId() : null,
+        });
+        if (transportFeature) {
+          this.transportData = describeTransportFeature(transportFeature, event.coordinate);
+          // the modal is rendered with the new data on the next tick
+          this.$nextTick(() => this.$refs.TransportInformation.show());
+          return;
+        }
+
         if (this.protectionAreasVisible) {
           const extent = this.view.calculateExtent(this.map.getSize() || null);
           if (!this.intersectsWithSwitzerland(extent)) {
