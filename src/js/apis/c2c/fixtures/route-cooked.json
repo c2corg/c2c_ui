@@ -1,0 +1,145 @@
+{
+  "document_id": 57,
+  "version": 1,
+  "locales": [
+    {
+      "version": 1,
+      "lang": "fr",
+      "title": "E2E voie",
+      "description": null,
+      "summary": null,
+      "slope": null,
+      "remarks": null,
+      "gear": null,
+      "external_resources": null,
+      "route_history": null,
+      "title_prefix": "E2E sommet",
+      "topic_id": null
+    }
+  ],
+  "geometry": {
+    "version": 1,
+    "geom": "{\"type\": \"Point\", \"coordinates\": [635956.0, 5723604.0]}",
+    "geom_detail": null
+  },
+  "quality": "draft",
+  "main_waypoint_id": 56,
+  "activities": ["skitouring"],
+  "elevation_min": null,
+  "elevation_max": null,
+  "height_diff_up": null,
+  "height_diff_down": null,
+  "route_length": null,
+  "durations": null,
+  "calculated_duration": null,
+  "height_diff_access": null,
+  "height_diff_difficulties": null,
+  "route_types": null,
+  "orientations": null,
+  "glacier_gear": "no",
+  "configuration": null,
+  "lift_access": null,
+  "ski_rating": null,
+  "ski_exposition": null,
+  "labande_ski_rating": null,
+  "labande_global_rating": null,
+  "public_transportation_rating": "unknown service",
+  "available_langs": ["fr"],
+  "associations": {
+    "waypoints": [
+      {
+        "document_id": 56,
+        "version": 1,
+        "locales": [{ "version": 1, "lang": "fr", "title": "E2E sommet", "summary": null }],
+        "geometry": { "version": 1, "geom": "{\"type\": \"Point\", \"coordinates\": [635956.0, 5723604.0]}" },
+        "quality": "draft",
+        "waypoint_type": "summit",
+        "elevation": 2500,
+        "available_langs": ["fr"],
+        "areas": [],
+        "protected": false,
+        "type": "w"
+      }
+    ],
+    "routes": [],
+    "images": [],
+    "articles": [],
+    "books": [],
+    "xreports": [],
+    "recent_outings": {
+      "documents": [
+        {
+          "document_id": 59,
+          "version": 13,
+          "locales": [{ "version": 2, "lang": "fr", "title": "E2E sortie modifi\u00e9e", "summary": null }],
+          "geometry": {
+            "version": 1,
+            "geom": "{\"type\": \"Point\", \"coordinates\": [635956.0, 5723604.0]}",
+            "has_geom_detail": false
+          },
+          "quality": "empty",
+          "activities": ["skitouring"],
+          "condition_rating": null,
+          "date_end": "2026-02-07",
+          "date_start": "2026-02-05",
+          "elevation_max": null,
+          "height_diff_up": null,
+          "public_transport": null,
+          "ski_rating": null,
+          "labande_global_rating": null,
+          "available_langs": ["fr"],
+          "areas": [],
+          "author": { "name": "E2E Tester", "user_id": 1 },
+          "protected": false,
+          "type": "o",
+          "img_count": 0
+        },
+        {
+          "document_id": 58,
+          "version": 1,
+          "locales": [{ "version": 1, "lang": "fr", "title": "E2E sortie", "summary": null }],
+          "geometry": {
+            "version": 1,
+            "geom": "{\"type\": \"Point\", \"coordinates\": [635956.0, 5723604.0]}",
+            "has_geom_detail": false
+          },
+          "quality": "medium",
+          "activities": ["skitouring"],
+          "condition_rating": null,
+          "date_end": "2026-01-10",
+          "date_start": "2026-01-10",
+          "elevation_max": null,
+          "height_diff_up": null,
+          "public_transport": null,
+          "ski_rating": null,
+          "labande_global_rating": null,
+          "available_langs": ["fr"],
+          "areas": [],
+          "author": { "name": "E2E Tester", "user_id": 1 },
+          "protected": false,
+          "type": "o",
+          "img_count": 0
+        }
+      ],
+      "total": 2
+    }
+  },
+  "maps": [],
+  "areas": [],
+  "protected": false,
+  "type": "r",
+  "cooked": {
+    "version": 1,
+    "lang": "fr",
+    "title": "E2E voie",
+    "description": null,
+    "summary": null,
+    "slope": null,
+    "remarks": null,
+    "gear": null,
+    "external_resources": null,
+    "route_history": null,
+    "title_prefix": "<p>E2E sommet</p>",
+    "topic_id": null
+  }
+}

@@ -1,3 +1,4 @@
+import { account, loginResponse } from './schemas';
 import type { Api, DocumentId } from './types';
 
 // what the account form changes: the current password, and the fields not left null
@@ -55,7 +56,7 @@ export default class UserProfileService {
 
     this.account = {
       get() {
-        return api.get('/users/account');
+        return api.getValidated('/users/account', account);
       },
 
       post(
@@ -114,7 +115,7 @@ export default class UserProfileService {
       payload.sig = sig;
     }
 
-    return this.api.post('/users/login', payload);
+    return this.api.postValidated('/users/login', loginResponse, payload);
   }
 
   // answers a Discourse SSO handshake started by the browser (see the auth-sso

@@ -1,0 +1,31 @@
+{
+  "documents": [
+    {
+      "document_id": 44,
+      "version": 1,
+      "locales": [{ "version": 1, "lang": "fr", "title": "Sortie date native", "summary": null }],
+      "geometry": {
+        "version": 1,
+        "geom": "{\"type\": \"Point\", \"coordinates\": [765000.0, 5772000.0]}",
+        "has_geom_detail": false
+      },
+      "quality": "empty",
+      "activities": ["skitouring"],
+      "condition_rating": null,
+      "date_end": "2026-10-07",
+      "date_start": "2026-10-05",
+      "elevation_max": null,
+      "height_diff_up": null,
+      "public_transport": false,
+      "ski_rating": null,
+      "labande_global_rating": null,
+      "available_langs": ["fr"],
+      "areas": [],
+      "author": { "name": "E2E Tester", "user_id": 1 },
+      "protected": false,
+      "type": "o",
+      "img_count": 0
+    }
+  ],
+  "total": 45
+}

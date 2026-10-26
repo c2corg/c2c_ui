@@ -1,6 +1,8 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 import { reactive } from 'vue';
+import type { z } from 'zod';
 
+import { checkResponse } from './check-response';
 import retryOn429 from './retry-on-429';
 
 /// ////////////////////////////////////////////////////////////////////////////////
@@ -80,6 +82,27 @@ export default class BaseApi {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   post<T = any>(url: string, body?: unknown): ApiData<T> {
     return new ApiData(this.axios.post<T>(url, body));
+  }
+
+  // the same requests, whose response is checked against its schema (check-response.ts), and typed by it: the data
+  // is the API's, so it has the schema's input type
+  getValidated<S extends z.ZodType>(url: string, schema: S, params?: AxiosRequestConfig): ApiData<z.input<S>> {
+    return new ApiData(this.validated(this.axios.get(url, params), schema, `GET ${url}`));
+  }
+
+  postValidated<S extends z.ZodType>(url: string, schema: S, body?: unknown): ApiData<z.input<S>> {
+    return new ApiData(this.validated(this.axios.post(url, body), schema, `POST ${url}`));
+  }
+
+  private validated<S extends z.ZodType>(
+    request: Promise<AxiosResponse>,
+    schema: S,
+    description: string
+  ): Promise<AxiosResponse<z.input<S>>> {
+    return request.then((response) => {
+      checkResponse(schema, response.data, description);
+      return response;
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
