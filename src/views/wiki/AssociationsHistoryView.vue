@@ -61,12 +61,14 @@ import AssociationHistoryPagination from './utils/AssociationHistoryPagination';
 import ColoredIconDocument from './utils/ColoredIconDocument';
 
 import c2c from '@/js/apis/c2c';
-import noRobotsMixin from '@/js/no-robots-mixin';
+import { useNoRobots } from '@/js/composables/head';
 
 export default {
   components: { ColoredIconDocument, AssociationHistoryPagination },
 
-  mixins: [noRobotsMixin],
+  setup() {
+    useNoRobots();
+  },
 
   data() {
     return {

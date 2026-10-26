@@ -84,10 +84,10 @@
 <script>
 import c2c from '@/js/apis/c2c';
 import forum from '@/js/apis/forum';
+import { useViewMode } from '@/js/composables/view-mode';
 import config from '@/js/config';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 import { sanitizeHtml } from '@/js/sanitize-html';
-import viewModeMixin from '@/js/view-mode-mixin';
 
 const computeCooked = function (cooked) {
   cooked = cooked.replace(/<a class="mention" href="/g, '<a class="mention" href="' + forum.url);
@@ -100,7 +100,11 @@ const computeCooked = function (cooked) {
 export default {
   isProduction: config.urls.name === 'prod',
 
-  mixins: [requireDocumentProperty, viewModeMixin],
+  mixins: [requireDocumentProperty],
+
+  setup() {
+    return useViewMode();
+  },
 
   data() {
     return {

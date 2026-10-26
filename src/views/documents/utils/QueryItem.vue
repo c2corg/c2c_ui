@@ -100,8 +100,8 @@ import { defineAsyncComponent } from 'vue';
 import DateQueryItem from './DateQueryItem';
 import DatesQueryItem from './DatesQueryItem';
 import QueryItemSliderLabel from './QueryItemSliderLabel';
-import queryItemMixin from './query-item-mixin';
 
+import { useQueryItem } from '@/js/composables/query-item';
 import debounce from '@/js/debounce';
 import { requireFieldProperty } from '@/js/properties-mixins';
 import { uidMixin } from '@/js/uid';
@@ -114,13 +114,17 @@ export default {
     DatesQueryItem,
   },
 
-  mixins: [requireFieldProperty, queryItemMixin, uidMixin],
+  mixins: [requireFieldProperty, uidMixin],
 
   props: {
     hideLabel: {
       type: Boolean,
       default: false,
     },
+  },
+
+  setup(props) {
+    return useQueryItem(() => props.field);
   },
 
   computed: {

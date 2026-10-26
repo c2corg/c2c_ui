@@ -10,12 +10,9 @@
 </template>
 
 <script>
-import { formContainer } from '@/js/form-registration';
+import { useFormContainer } from '@/js/composables/form-registration';
 
 export default {
-  // the form fields register themselves (user FormField)
-  mixins: [formContainer('baseForm')],
-
   props: {
     promise: {
       type: Object,
@@ -24,6 +21,11 @@ export default {
   },
 
   emits: ['submit'],
+  // the form fields register themselves (user FormField)
+
+  setup() {
+    return useFormContainer('baseForm');
+  },
 
   data() {
     return {

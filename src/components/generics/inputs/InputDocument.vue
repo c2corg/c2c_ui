@@ -92,16 +92,16 @@
 </template>
 
 <script>
-import { arrayMixin, baseMixin } from './mixins';
+import { arrayInputProps, baseInputProps } from './input-value';
 
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 import debounce from '@/js/debounce';
 
 export default {
-  mixins: [baseMixin, arrayMixin],
-
   props: {
+    ...baseInputProps,
+    ...arrayInputProps,
     modelValue: {
       type: [Array, Object],
       default: null,

@@ -195,7 +195,6 @@ import getFundraiser from '@/js/get-fundraiser';
 import isEditableMixin from '@/js/is-editable-mixin';
 import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
-import viewModeMixin from '@/js/view-mode-mixin';
 
 const GeoJSON = new ol.format.GeoJSON();
 
@@ -212,7 +211,8 @@ export default {
     TranslateWindow,
   },
 
-  mixins: [requireDocumentProperty, viewModeMixin, isEditableMixin],
+  // isEditableMixin brings isDraftView, isVersionView...
+  mixins: [requireDocumentProperty, isEditableMixin],
 
   data() {
     return {

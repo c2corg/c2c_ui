@@ -48,7 +48,7 @@
 import GpsFileUpload from '@/components/map/GpsFileUpload';
 import GpsUploadModal from '@/components/map/GpsUploadModal';
 import trackingService from '@/js/apis/tracking-service';
-import { formField } from '@/js/form-registration';
+import { useFormField } from '@/js/composables/form-registration';
 import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
@@ -60,7 +60,7 @@ export default {
   components: { GpsUploadModal, GpsFileUpload },
 
   // registered with the FormSection containing it
-  mixins: [formField('formSection'), requireDocumentProperty],
+  mixins: [requireDocumentProperty],
 
   props: {
     geomDetailEditable: {
@@ -78,6 +78,10 @@ export default {
   },
 
   emits: ['move'],
+
+  setup() {
+    useFormField('formSection');
+  },
 
   data() {
     return {

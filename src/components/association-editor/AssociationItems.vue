@@ -64,15 +64,13 @@ import AssociationImageLink from './AssociationImageLink';
 import AssociationOutingLink from './AssociationOutingLink';
 
 import c2c from '@/js/apis/c2c';
-import associationRights from '@/js/associations-rights-mixin';
+import { useAssociationRights } from '@/js/composables/association-rights';
 
 export default {
   components: {
     AssociationOutingLink,
     AssociationImageLink,
   },
-
-  mixins: [associationRights],
 
   props: {
     parent: {
@@ -99,6 +97,10 @@ export default {
       type: Array,
       default: null,
     },
+  },
+
+  setup() {
+    return useAssociationRights();
   },
 
   data() {

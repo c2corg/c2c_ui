@@ -34,12 +34,11 @@
 </template>
 
 <script>
-import { baseMixin } from './mixins';
+import { baseInputProps, useInputValue } from './input-value';
 
 export default {
-  mixins: [baseMixin],
-
   props: {
+    ...baseInputProps,
     min: {
       type: Number,
       default: null,
@@ -82,7 +81,10 @@ export default {
     },
   },
 
-  emits: ['click-prefix'],
+  emits: ['update:modelValue', 'click-prefix'],
+  setup(props, { emit }) {
+    return useInputValue(props, emit);
+  },
 };
 </script>
 

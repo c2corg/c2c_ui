@@ -198,8 +198,8 @@ import PasswordRequirements from './utils/PasswordRequirements';
 
 import ReCaptcha from '@/components/recaptcha/ReCaptcha';
 import c2c from '@/js/apis/c2c';
+import { useNoRobots } from '@/js/composables/head';
 import config from '@/js/config';
-import noRobotsMixin from '@/js/no-robots-mixin';
 
 // possible mode values :
 //
@@ -220,7 +220,9 @@ export default {
     ReCaptcha,
   },
 
-  mixins: [noRobotsMixin],
+  setup() {
+    useNoRobots();
+  },
 
   // here is the trick : all auth action are on the same component.
   // vue won't reload it, even on route modification.

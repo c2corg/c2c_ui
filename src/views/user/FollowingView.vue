@@ -24,10 +24,12 @@
 
 <script>
 import c2c from '@/js/apis/c2c';
-import noRobotsMixin from '@/js/no-robots-mixin';
+import { useNoRobots } from '@/js/composables/head';
 
 export default {
-  mixins: [noRobotsMixin],
+  setup() {
+    useNoRobots();
+  },
 
   data() {
     return {

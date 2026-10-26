@@ -18,14 +18,13 @@
 </template>
 
 <script>
-import { baseMixin } from './mixins';
+import { baseInputProps, useInputValue } from './input-value';
 
 import constants from '@/js/constants';
 
 export default {
-  mixins: [baseMixin],
-
   props: {
+    ...baseInputProps,
     modelValue: {
       type: String,
       default: null,
@@ -35,6 +34,10 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  emits: ['update:modelValue'],
+  setup(props, { emit }) {
+    return useInputValue(props, emit);
   },
 
   computed: {
