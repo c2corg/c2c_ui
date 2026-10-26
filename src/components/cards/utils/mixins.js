@@ -29,6 +29,16 @@ export const cardMixin = {
       type: Boolean,
       default: false,
     },
+
+    /**
+     * Active transport search context (`{ fromAddress, date, minDeparture, maxReturn, hikingDuration, results }`). Only
+     * used by RouteCard/WaypointCard to display accessibility badges and the unit verification button; has no effect on
+     * other card types.
+     */
+    transportContext: {
+      type: Object,
+      default: null,
+    },
   },
 };
 

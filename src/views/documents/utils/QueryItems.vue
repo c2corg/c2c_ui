@@ -56,6 +56,32 @@
         </div>
       </dropdown-button>
 
+      <dropdown-button v-if="['route', 'waypoint'].includes(documentType)" key="transport" class="query-item-component">
+        <template #button>
+          <span class="button is-size-7-mobile">
+            <fa-icon :icon="$options.categoryIcon['Transport']" />
+            <span class="is-hidden-mobile"> &nbsp;{{ $gettext('Public transport') }} </span>
+            <span v-if="transportActiveCount != 0"> &nbsp;({{ transportActiveCount }}) </span>
+            <span>&nbsp;</span>
+            <fa-icon icon="angle-down" aria-hidden="true" />
+          </span>
+        </template>
+        <div class="sub-query-items">
+          <div class="dropdown-item">
+            <button
+              v-if="transportActiveCount != 0"
+              type="button"
+              class="button is-small is-text transport-reset-button"
+              @click="resetTransportFilter"
+            >
+              <fa-icon icon="undo-alt" aria-hidden="true" />
+              {{ $gettext('Reset') }}
+            </button>
+            <transport-filter-form mode="patch" :fixed-document-type="documentType" />
+          </div>
+        </div>
+      </dropdown-button>
+
       <query-sort-dropdown
         v-if="['waypoint', 'route', 'image', 'outing'].includes(documentType)"
         class="query-item-component"
@@ -99,8 +125,10 @@ import QuerySortDropdown from './QuerySortDropdown';
 import QueryTags from './QueryTags';
 import urlMixin from './url-mixin';
 
+import TransportFilterForm from '@/components/itinevert/TransportFilterForm.vue';
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
+import { hasTransportQuery, withoutTransportQuery } from '@/js/transport-query';
 
 const documentsCache = {};
 
@@ -124,6 +152,7 @@ export default {
     Miscs: 'database',
     Terrain: ['waypoint', 'summit'],
     ratings: 'tachometer-alt',
+    Transport: 'bus',
   },
 
   components: {
@@ -134,6 +163,7 @@ export default {
     QueryTags,
     ExportCsvButton,
     LoadUserPreferencesButton,
+    TransportFilterForm,
   },
 
   mixins: [urlMixin],
@@ -207,6 +237,10 @@ export default {
       }
 
       return result;
+    },
+
+    transportActiveCount() {
+      return hasTransportQuery(this.$route.query) ? 1 : 0;
     },
   },
 
@@ -306,6 +340,11 @@ export default {
     emitDocumentsLoad() {
       this.$emit('documents-load', this.tags);
     },
+
+    /** Clears the transport filter. The form keeps its last values (and starting points) for the next search */
+    resetTransportFilter() {
+      this.$router.push({ query: withoutTransportQuery(this.$route.query) });
+    },
   },
 };
 </script>
@@ -326,6 +365,10 @@ export default {
 .title-input {
   display: inline-flex;
   margin-bottom: 0 !important;
+}
+
+.transport-reset-button {
+  margin-bottom: 0.75rem;
 }
 
 .sub-query-items {
