@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { afterEach, describe, expect, it } from 'vitest';
-import { h, nextTick, ref } from 'vue';
+import { h, nextTick, reactive, ref } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
 
 import { type HeadTags, useHead, useNoRobots } from './head';
@@ -38,6 +38,16 @@ describe('useHead', () => {
     wrappers.pop();
     expect(headTag('meta-og-title')).toBeNull();
     expect(headTag('canonical')).toBeNull();
+  });
+
+  it('follows the changes in place of a reactive tag', async () => {
+    const description = reactive({ p: 'og:description', c: 'Rocher', id: 'meta-og-description' });
+    mountWith(() => useHead((): HeadTags => ({ meta: [description] })));
+
+    description.c = 'Rocher et neige';
+    await nextTick();
+
+    expect(headTag('meta-og-description')?.getAttribute('content')).toBe('Rocher et neige');
   });
 
   it('keeps search engines out while mounted (useNoRobots)', () => {

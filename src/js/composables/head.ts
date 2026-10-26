@@ -56,7 +56,8 @@ export function watchHead(getTags: () => HeadTags): () => void {
   };
 
   const unwatch = watch(
-    () => TAGS.flatMap((tag) => (getTags()[tag] ?? []).map((attributes) => ({ tag, attributes }))),
+    // the attributes copied here, so that their changes in place (in a reactive tag object) are tracked too
+    () => TAGS.flatMap((tag) => (getTags()[tag] ?? []).map((attributes) => ({ tag, attributes: { ...attributes } }))),
     (tags) => {
       remove();
       elements = tags.map(({ tag, attributes }) => {
