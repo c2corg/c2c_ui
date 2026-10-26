@@ -80,12 +80,16 @@
 </template>
 
 <script>
-import documentEditionViewMixin from './utils/document-edition-view-mixin';
+import { documentEditionComponents, useDocumentEdition } from './utils/document-edition';
 
 import uploadFile from '@/js/upload-file';
 
 export default {
-  mixins: [documentEditionViewMixin],
+  components: { ...documentEditionComponents },
+
+  setup() {
+    return useDocumentEdition();
+  },
 
   data() {
     return {

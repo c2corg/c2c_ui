@@ -18,7 +18,7 @@ export type C2cDocument = {
   document_id?: number;
   locales?: Locale[];
   associations?: Record<string, C2cDocument[]>;
-  geometry?: { geom: string | null; geom_detail?: string | null };
+  geometry?: { geom?: string | null; geom_detail?: string | null } | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [property: string]: any;
 };

@@ -190,9 +190,9 @@ import ToolBoxButton from './ToolBoxButton';
 
 import AssociationsWindow from '@/components/association-editor/AssociationsWindow';
 import c2c from '@/js/apis/c2c';
+import { useEditable } from '@/js/composables/editable';
 import constants from '@/js/constants';
 import getFundraiser from '@/js/get-fundraiser';
-import isEditableMixin from '@/js/is-editable-mixin';
 import ol from '@/js/libs/ol';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
@@ -211,8 +211,12 @@ export default {
     TranslateWindow,
   },
 
-  // isEditableMixin brings isDraftView, isVersionView...
-  mixins: [requireDocumentProperty, isEditableMixin],
+  mixins: [requireDocumentProperty],
+
+  setup(props) {
+    // the view mode too: isDraftView, isVersionView...
+    return useEditable(() => props.document);
+  },
 
   data() {
     return {

@@ -147,7 +147,7 @@
 import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import { documentViewComponents, documentViewProps, useDocumentView } from './utils/document-view';
 
-import waypointLabels from '@/js/waypoint-labels-mixin';
+import { useWaypointLabels } from '@/js/composables/waypoint-labels';
 
 export default {
   components: {
@@ -155,12 +155,11 @@ export default {
     MaskedDocumentVersionInfo,
   },
 
-  mixins: [waypointLabels],
-
   props: documentViewProps,
 
   setup(props) {
-    return useDocumentView(props);
+    const view = useDocumentView(props);
+    return { ...view, ...useWaypointLabels(() => view.document.value) };
   },
 
   computed: {

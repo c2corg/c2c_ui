@@ -229,14 +229,16 @@
 
 <script>
 import CotometerWindow from './utils/CotometerWindow';
-import documentEditionViewMixin from './utils/document-edition-view-mixin';
+import { documentEditionComponents, useDocumentEdition } from './utils/document-edition';
 
 import c2c from '@/js/apis/c2c';
 
 export default {
-  components: { CotometerWindow },
+  components: { ...documentEditionComponents, CotometerWindow },
 
-  mixins: [documentEditionViewMixin],
+  setup() {
+    return useDocumentEdition();
+  },
 
   data() {
     return {

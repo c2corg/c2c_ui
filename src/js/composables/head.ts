@@ -1,5 +1,4 @@
-// Tags of the page <head> set by a component: the composable for the Composition API (useHead), and the watcher both it
-// and head-mixin use (watchHead).
+// Tags of the page <head> set by a component (useHead).
 //
 //   useHead(() => ({
 //     meta: [{ n: 'robots', c: 'noindex', id: 'meta-robots' }],
@@ -48,7 +47,7 @@ function createElement(tag: string, attributes: HeadTag) {
 }
 
 /** Adds the tags to the page <head>, and keeps them up to date; the function returned removes them */
-export function watchHead(getTags: () => HeadTags): () => void {
+function watchHead(getTags: () => HeadTags): () => void {
   let elements: HTMLElement[] = [];
   const remove = () => {
     elements.forEach((element) => element.remove());

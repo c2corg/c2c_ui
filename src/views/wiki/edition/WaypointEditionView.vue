@@ -160,12 +160,17 @@
 </template>
 
 <script>
-import documentEditionViewMixin from './utils/document-edition-view-mixin';
+import { documentEditionComponents, useDocumentEdition } from './utils/document-edition';
 
-import waypointLabels from '@/js/waypoint-labels-mixin';
+import { useWaypointLabels } from '@/js/composables/waypoint-labels';
 
 export default {
-  mixins: [documentEditionViewMixin, waypointLabels],
+  components: { ...documentEditionComponents },
+
+  setup() {
+    const edition = useDocumentEdition();
+    return { ...edition, ...useWaypointLabels(() => edition.document.value) };
+  },
 
   computed: {
     capacityContext() {

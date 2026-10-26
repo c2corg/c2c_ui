@@ -60,7 +60,7 @@ import SocialNetworkSharing from './SocialNetworkSharing';
 import TagsButton from './TagsButton';
 
 import ImagesUploader from '@/components/images-uploader/ImagesUploader';
-import isEditableMixin from '@/js/is-editable-mixin';
+import { useEditable } from '@/js/composables/editable';
 import { requireDocumentProperty } from '@/js/properties-mixins';
 
 export default {
@@ -73,13 +73,18 @@ export default {
     DocumentVersionBanner,
   },
 
-  mixins: [isEditableMixin, requireDocumentProperty],
+  mixins: [requireDocumentProperty],
 
   props: {
     version: {
       type: Object,
       default: null,
     },
+  },
+
+  setup(props) {
+    // the view mode too: isDraftView, isNormalView...
+    return useEditable(() => props.document);
   },
 
   computed: {
