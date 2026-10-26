@@ -1,5 +1,7 @@
 import { flushPromises, mount } from '@vue/test-utils';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { h } from 'vue';
+import { createMemoryHistory, createRouter } from 'vue-router';
 
 import CommentsBox from './CommentsBox';
 
@@ -27,15 +29,25 @@ const topic = () => ({
   },
 });
 
-const mountCommentsBox = (isLogged) =>
+// on a route page: the box reads its view mode from the router (useViewMode)
+const routeRouter = async () => {
+  const router = createRouter({
+    history: createMemoryHistory(),
+    routes: [{ path: '/routes/:id', name: 'route', component: { render: () => h('div') } }],
+  });
+  await router.push('/routes/1');
+  return router;
+};
+
+const mountCommentsBox = async (isLogged) =>
   mount(CommentsBox, {
     props: { document: { type: 'r', document_id: 1, cooked: { lang: 'fr', topic_id: 370873 } } },
     global: {
+      plugins: [await routeRouter()],
       stubs: { LoginButton: true },
       directives: { translate: {} },
       mocks: {
         $gettext: (value) => value,
-        $route: { name: 'route' },
         $user: { isLogged },
         $dateUtils: { timeAgo: () => '' },
       },
@@ -52,7 +64,7 @@ describe('CommentsBox', () => {
     vi.spyOn(forum, 'getTopic').mockReturnValue({ data });
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-    const wrapper = mountCommentsBox(isLogged);
+    const wrapper = await mountCommentsBox(isLogged);
     await flushPromises();
 
     // a computed that mutated the topic re-rendered endlessly, prepending the forum url each time
