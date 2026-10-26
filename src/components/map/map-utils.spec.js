@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 describe('map-utils', () => {
   it('can be imported before the font awesome icons are registered', async () => {
-    // generic-components imports OlMap, hence this module, before main.js installs the font-awesome plugin
+    // generic-components imports OlMap, hence this module, before main.ts installs the font-awesome plugin
     vi.resetModules();
 
     await expect(import('./map-utils')).resolves.toHaveProperty('getDocumentPointStyle');

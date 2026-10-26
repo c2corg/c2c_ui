@@ -207,7 +207,7 @@ const router = createRouter({
   },
 });
 
-// authentication guard. $user is installed on the app after the router is created: main.js adds it, before the
+// authentication guard. $user is installed on the app after the router is created: main.ts adds it, before the
 // router starts the first navigation
 export function addAuthenticationGuard(user: { readonly isLogged: boolean }) {
   router.beforeEach((to) => {

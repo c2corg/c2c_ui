@@ -42,7 +42,7 @@ const installUser = async () => {
 
   const app = createApp({});
   const globals = app.config.globalProperties;
-  // $language is installed before $user by main.js
+  // $language is installed before $user by main.ts
   globals.$language = { current: 'fr', setCurrent: vi.fn() };
   app.use(user);
 
