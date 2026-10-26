@@ -1,6 +1,6 @@
 <template>
   <div class="accessibility-cell">
-    <accessibility-badge :result="displayedResult" />
+    <accessibility-badge :result="displayedResult" :duration-unknown="params.data.duration_unknown === true" />
     <verify-accessibility-button
       :document="params.data"
       :transport-context="params.context.transportContext"

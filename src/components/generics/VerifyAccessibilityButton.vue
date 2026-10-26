@@ -1,6 +1,6 @@
 <template>
   <div class="verify-accessibility-button" @click.stop @mousedown.stop>
-    <div v-if="isRoute && !result" class="hiking-duration-field">
+    <div v-if="isRoute && !result && !durationUnknown" class="hiking-duration-field">
       <label :for="hikingDurationInputId">{{ $gettext('Hiking duration') }}</label>
       <input
         :id="hikingDurationInputId"
@@ -17,15 +17,23 @@
       type="button"
       class="button is-small is-outlined verify-button"
       :disabled="!canVerify || loading"
-      :title="!canVerify ? $gettext('No transport search context available') : ''"
+      :title="disabledReason"
       @click.stop.prevent="verify"
     >
       <fa-icon v-if="loading" icon="circle-notch" spin aria-hidden="true" />
       <span v-else>{{ $gettext('Check schedules') }}</span>
     </button>
 
+    <p v-if="durationUnknown" class="duration-unknown-message">
+      {{
+        $gettext(
+          'The schedules cannot be checked: the duration of this route is unknown. You can still open the route.'
+        )
+      }}
+    </p>
+
     <button
-      v-if="result"
+      v-if="result && !durationUnknown"
       type="button"
       class="button is-small is-text detail-toggle"
       @click.stop.prevent="expanded = !expanded"
@@ -35,7 +43,7 @@
 
     <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
 
-    <div v-if="result && expanded" class="verify-detail">
+    <div v-if="result && expanded && !durationUnknown" class="verify-detail">
       <div class="verify-detail-row">
         <strong>{{ $gettext('Outbound') }}</strong>
         <span v-if="result.aller?.found">
@@ -68,6 +76,7 @@
 <script>
 import itinevertService from '@/js/apis/itinevert-service';
 import planATripUtils from '@/js/plan-a-trip-utils';
+import { formatResultDateTime, isDurationUnknown, marginMinutes } from '@/js/transport-accessibility';
 
 let uid = 0;
 
@@ -81,8 +90,8 @@ export default {
       required: true,
     },
     /**
-     * The active transport search context: `{ fromAddress, date, minDeparture, maxReturn, hikingDuration }`, as stashed
-     * in local storage by TransportFilterForm. `null` when no transport search is active.
+     * The active transport search context: `{ fromAddress, date, returnDate, minDeparture, maxReturn, hikingDuration
+     * }`, as read from the url. `null` when no transport search is active.
      */
     transportContext: {
       type: Object,
@@ -112,8 +121,21 @@ export default {
       return this.documentType === 'route';
     },
 
+    /** The duration of the route is unknown: its accessibility cannot be verified (the API lists those routes last) */
+    durationUnknown() {
+      return isDurationUnknown(this.document, this.result);
+    },
+
     canVerify() {
-      return Boolean(this.transportContext?.fromAddress && this.transportContext?.date);
+      return Boolean(this.transportContext?.fromAddress && this.transportContext?.date) && !this.durationUnknown;
+    },
+
+    /** Why the button is disabled (the tooltip), empty when it is not */
+    disabledReason() {
+      if (this.durationUnknown) {
+        return this.$gettext('The duration of this route is unknown: its accessibility cannot be verified');
+      }
+      return this.canVerify ? '' : this.$gettext('No transport search context available');
     },
 
     hikingDurationInputId() {
@@ -121,17 +143,7 @@ export default {
     },
 
     marginMinutes() {
-      if (!this.result?.aller?.found || !this.result?.retour?.found) {
-        return null;
-      }
-      const allerArrival = this.toMinutes(this.result.aller.arrival);
-      const retourDeparture = this.toMinutes(this.result.retour.departure);
-      if (allerArrival === null || retourDeparture === null) {
-        return null;
-      }
-      let diff = retourDeparture - allerArrival;
-      if (diff < 0) diff += 24 * 60; // handles a return that crosses midnight
-      return diff;
+      return marginMinutes(this.result);
     },
 
     marginOverHikingDuration() {
@@ -153,27 +165,9 @@ export default {
       return this.transportContext?.hikingDuration ?? null;
     },
 
-    /**
-     * Converts either a full Navitia datetime ("YYYYMMDDTHHMMSS") or a plain "HH:MM[:SS]" string to minutes past
-     * midnight
-     */
-    toMinutes(value) {
-      if (!value) return null;
-      const digits = value.includes('T') ? value.slice(9, 13) : value.replace(/:/g, '').slice(0, 4);
-      if (digits.length < 4) return null;
-      const hours = parseInt(digits.slice(0, 2), 10);
-      const minutes = parseInt(digits.slice(2, 4), 10);
-      if (Number.isNaN(hours) || Number.isNaN(minutes)) return null;
-      return hours * 60 + minutes;
-    },
-
-    /** Formats either a full Navitia datetime or a plain "HH:MM[:SS]" string down to "HH:MM" for display */
+    /** Formats a Navitia datetime or a plain "HH:MM[:SS]" string for display, with the day when it is not the departure */
     formatResultTime(value) {
-      if (!value) return '';
-      if (value.includes('T')) {
-        return this.formatTime(value);
-      }
-      return value.slice(0, 5);
+      return formatResultDateTime(value, this.transportContext?.date);
     },
 
     async verify() {
@@ -192,7 +186,8 @@ export default {
           this.transportContext.minDeparture,
           this.transportContext.maxReturn,
           this.transportContext.fromAddress,
-          this.isRoute ? this.hikingDurationMinutes || undefined : undefined
+          this.isRoute ? this.hikingDurationMinutes || undefined : undefined,
+          this.transportContext.returnDate
         );
         this.result = data;
         this.expanded = true;
@@ -239,6 +234,12 @@ export default {
 .error-message {
   color: #c62828;
   width: 100%;
+}
+
+.duration-unknown-message {
+  width: 100%;
+  color: #666;
+  font-style: italic;
 }
 
 .verify-detail {

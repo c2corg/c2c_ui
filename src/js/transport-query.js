@@ -16,6 +16,7 @@ export const COORDINATE_DECIMALS = 3;
 const FIELDS = {
   from: 'from',
   date: 'date',
+  returnDate: 'return_date',
   minDeparture: 'min_departure',
   maxReturn: 'max_return',
   maxDuration: 'max_duration',
@@ -54,17 +55,54 @@ export function parseTransportFrom(from) {
 }
 
 /**
+ * The return date of a search when it is another day than the departure (a trip of several days), null otherwise: the
+ * return date is optional, and the API takes the departure date for it when it is not sent
+ *
+ * @param {Object} search `{ date, returnDate }`
+ * @returns {String | null}
+ */
+export function laterReturnDate(search) {
+  return search.returnDate && search.returnDate !== search.date ? search.returnDate : null;
+}
+
+/**
+ * Checks the dates and times of a search
+ *
+ * @param {Object} search `{ date, returnDate, minDeparture, maxReturn }`
+ * @returns {'return-before-departure' | 'return-time-before-departure-time' | null} The problem, if any: a return date
+ *   before the departure date, or (for a return the same day) a return time that is not after the departure time
+ */
+export function transportDatesError(search) {
+  if (search.returnDate && search.date && search.returnDate < search.date) {
+    return 'return-before-departure';
+  }
+
+  if (!laterReturnDate(search) && search.minDeparture && search.maxReturn && search.maxReturn <= search.minDeparture) {
+    return 'return-time-before-departure-time';
+  }
+
+  return null;
+}
+
+/**
  * Builds the query string parameters of a transport search
  *
- * @param {Object} search `{ from, date, minDeparture, maxReturn, maxDuration, hikingDuration }`, the last two being
- *   optional
+ * @param {Object} search `{ from, date, returnDate, minDeparture, maxReturn, maxDuration, hikingDuration }`, the return
+ *   date and the last two being optional
  * @returns {Object} The `transport_*` parameters
  */
 export function buildTransportQuery(search) {
   const query = {};
 
   for (const [key, name] of Object.entries(FIELDS)) {
-    const value = key === 'from' ? formatTransportFrom(search.from) : search[key];
+    let value;
+    if (key === 'from') {
+      value = formatTransportFrom(search.from);
+    } else if (key === 'returnDate') {
+      value = laterReturnDate(search);
+    } else {
+      value = search[key];
+    }
     if (value !== undefined && value !== null && value !== '') {
       query[TRANSPORT_QUERY_PREFIX + name] = String(value);
     }
@@ -81,8 +119,8 @@ export function hasTransportQuery(query) {
 /**
  * Reads the transport search of a query string
  *
- * @returns {Object | null} `{ from, date, minDeparture, maxReturn, maxDuration, hikingDuration }`, or null if the query
- *   does not contain a complete search
+ * @returns {Object | null} `{ from, date, returnDate, minDeparture, maxReturn, maxDuration, hikingDuration }` (the
+ *   return date being null for a return the same day), or null if the query does not contain a complete search
  */
 export function parseTransportQuery(query) {
   const read = (key) => {
@@ -105,6 +143,7 @@ export function parseTransportQuery(query) {
   return {
     from,
     date,
+    returnDate: laterReturnDate({ date, returnDate: read('returnDate') }),
     minDeparture,
     maxReturn,
     maxDuration: maxDuration > 0 ? maxDuration : null,
@@ -117,6 +156,7 @@ export function transportSearchKey(search) {
   return JSON.stringify([
     search.from,
     search.date,
+    laterReturnDate(search),
     search.minDeparture,
     search.maxReturn,
     search.maxDuration ?? null,

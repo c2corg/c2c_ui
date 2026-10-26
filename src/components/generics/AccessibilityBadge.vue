@@ -18,10 +18,22 @@ export default {
       type: Object,
       default: null,
     },
+    /**
+     * The duration of the route is unknown: its accessibility cannot be verified (also the case of a result flagged
+     * `duration_unknown` by the API)
+     */
+    durationUnknown: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
     state() {
+      if (this.durationUnknown || this.result?.duration_unknown) {
+        return 'duration-unknown';
+      }
+
       if (!this.result) {
         return 'unverified';
       }
@@ -52,6 +64,7 @@ export default {
       return (
         {
           unverified: 'question-circle',
+          'duration-unknown': 'question-circle',
           both: 'check-circle',
           'partial-aller': 'exclamation-circle',
           'partial-retour': 'exclamation-circle',
@@ -70,6 +83,8 @@ export default {
           return this.$gettext('Verified: return only');
         case 'none':
           return this.$gettext('No compatible trip found');
+        case 'duration-unknown':
+          return this.$gettext('Duration unknown: not verifiable');
         default:
           return this.$gettext('Estimated area match');
       }
@@ -94,6 +109,12 @@ export default {
     border: 1px dashed #999;
     color: #666;
     background: transparent;
+  }
+
+  &.is-duration-unknown {
+    border: 1px solid #999;
+    background: #f0f0f0;
+    color: #555;
   }
 
   &.is-both {

@@ -20,7 +20,10 @@
     </card-row>
 
     <card-row v-if="transportContext" class="accessibility-row">
-      <accessibility-badge :result="displayedAccessibilityResult" />
+      <accessibility-badge
+        :result="displayedAccessibilityResult"
+        :duration-unknown="document.duration_unknown === true"
+      />
       <verify-accessibility-button
         :document="document"
         :transport-context="transportContext"

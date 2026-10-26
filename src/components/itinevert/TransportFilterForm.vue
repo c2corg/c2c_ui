@@ -48,6 +48,19 @@
           </div>
         </div>
         <div class="date-picker-container">
+          <label for="transport-return-date-input">{{ $gettext('Return date (optional)') }}</label>
+          <div class="input-container">
+            <input
+              type="date"
+              id="transport-return-date-input"
+              class="date-input"
+              :min="date"
+              v-model="returnDate"
+              :aria-describedby="datesErrorMessage ? 'transport-dates-error' : null"
+            />
+          </div>
+        </div>
+        <div class="date-picker-container">
           <label for="transport-max-return-input">{{ $gettext('Return before') }}</label>
           <div class="input-container">
             <input type="time" id="transport-max-return-input" class="hour-input" v-model="maxReturn" />
@@ -55,6 +68,11 @@
         </div>
       </div>
     </div>
+
+    <p class="hint-message" v-if="returnDate && returnDate !== date">
+      {{ $gettext('Trip of several days: the outbound is on the departure date, the return on the return date.') }}
+    </p>
+    <p class="error-message" id="transport-dates-error" v-if="datesErrorMessage">{{ datesErrorMessage }}</p>
 
     <div class="form-input advanced-section">
       <button type="button" class="advanced-toggle" @click="showAdvanced = !showAdvanced">
@@ -122,8 +140,10 @@ import {
   addRecentAddress,
   buildTransportQuery,
   formatTransportFrom,
+  laterReturnDate,
   parseTransportFrom,
   parseTransportQuery,
+  transportDatesError,
   transportSearchKey,
   withoutTransportQuery,
 } from '@/js/transport-query';
@@ -168,6 +188,7 @@ export default {
     const search = urlSearch ?? {
       date: storedContext?.date,
       minDeparture: storedContext?.minDeparture,
+      returnDate: storedContext?.returnDate,
       maxReturn: storedContext?.maxReturn,
       maxDuration: storedContext?.maxDuration,
       hikingDuration: storedContext?.hikingDuration,
@@ -193,6 +214,8 @@ export default {
       recentAddresses,
       // a past date is of no use: timetables are for the days to come
       date: search.date && search.date >= today() ? search.date : today(),
+      // optional: empty for a return the same day as the departure
+      returnDate: search.returnDate && search.returnDate >= today() ? search.returnDate : '',
       minDeparture: search.minDeparture ?? '07:30',
       maxReturn: search.maxReturn ?? '19:00',
       maxDuration: search.maxDuration ?? null,
@@ -218,7 +241,32 @@ export default {
       return this.fixedDocumentType ?? this.documentType;
     },
     isSearchEnabled() {
-      return Boolean(formatTransportFrom(this.fromAddress) && this.date && this.minDeparture && this.maxReturn);
+      return Boolean(
+        formatTransportFrom(this.fromAddress) &&
+          this.date &&
+          this.minDeparture &&
+          this.maxReturn &&
+          !transportDatesError(this.datesSearch)
+      );
+    },
+    /** The dates and times of the form, as checked by `transportDatesError` */
+    datesSearch() {
+      return {
+        date: this.date,
+        returnDate: this.returnDate,
+        minDeparture: this.minDeparture,
+        maxReturn: this.maxReturn,
+      };
+    },
+    datesErrorMessage() {
+      switch (transportDatesError(this.datesSearch)) {
+        case 'return-before-departure':
+          return this.$gettext('The return date must not be before the departure date.');
+        case 'return-time-before-departure-time':
+          return this.$gettext('For a return the same day, the return time must be after the departure time.');
+        default:
+          return null;
+      }
     },
     /** The recent starting points, but the selected one */
     otherRecentAddresses() {
@@ -289,6 +337,7 @@ export default {
         ? transportSearchKey({
             from,
             date: this.date,
+            returnDate: this.returnDate,
             minDeparture: this.minDeparture,
             maxReturn: this.maxReturn,
             maxDuration: this.maxDuration || null,
@@ -300,6 +349,7 @@ export default {
     /** Fills the form with the search of the url */
     applySearch(search) {
       this.date = search.date;
+      this.returnDate = search.returnDate ?? '';
       this.minDeparture = search.minDeparture;
       this.maxReturn = search.maxReturn;
       this.maxDuration = search.maxDuration;
@@ -339,6 +389,7 @@ export default {
       itinevertStorage.set('context', {
         fromAddress: this.fromAddress,
         date: this.date,
+        returnDate: laterReturnDate(this.datesSearch),
         minDeparture: this.minDeparture,
         maxReturn: this.maxReturn,
         maxDuration: this.maxDuration || null,
@@ -361,6 +412,7 @@ export default {
       const search = {
         from: formatTransportFrom(this.fromAddress),
         date: this.date,
+        returnDate: laterReturnDate(this.datesSearch),
         minDeparture: this.minDeparture,
         maxReturn: this.maxReturn,
         maxDuration: this.maxDuration || null,
@@ -521,6 +573,11 @@ export default {
 .error-message {
   color: #ff3262;
   font-weight: bold;
+}
+
+.hint-message {
+  color: #555;
+  font-size: 0.85rem;
 }
 
 .searchButton {
