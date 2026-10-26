@@ -9,7 +9,7 @@ const install = ({ userLang = 'fr' } = {}) => {
   app.use(dateUtils);
   app.use(documentUtils);
   const globals = app.config.globalProperties;
-  // installed after $documentUtils by main.js: read when called
+  // installed after $documentUtils by main.ts: read when called
   globals.$gettext = (msgid) => `[${msgid}]`;
   globals.$language = { current: 'fr' };
   globals.$user = { lang: userLang };

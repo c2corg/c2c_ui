@@ -6,7 +6,7 @@ import dateUtils from './date-utils';
 const install = (lang = 'fr') => {
   const app = createApp({});
   app.use(dateUtils);
-  // $language is installed after $dateUtils by main.js: read when called
+  // $language is installed after $dateUtils by main.ts: read when called
   app.config.globalProperties.$language = { current: lang };
   return app.config.globalProperties.$dateUtils;
 };

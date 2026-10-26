@@ -45,7 +45,7 @@ describe('$language / $gettext', () => {
 
   afterEach(() => vi.restoreAllMocks());
 
-  it('starts in French, translated once firstLoad() has run (main.js calls it)', async () => {
+  it('starts in French, translated once firstLoad() has run (main.ts calls it)', async () => {
     const { globals, $language, settle } = await installLanguage();
     expect($language.current).toBe('fr');
     expect(globals.$gettext('Login')).toBe('Login');

@@ -1,4 +1,4 @@
-import { setDefaults as toastDefaults } from 'bulma-toast';
+import { type Options as ToastOptions, setDefaults as toastDefaults } from 'bulma-toast';
 import { register as registerSwiper } from 'swiper/element';
 import { createApp } from 'vue';
 
@@ -49,8 +49,8 @@ app.use(router);
 app.config.globalProperties.$language.firstLoad();
 app.mount('#app-mount');
 
-// configure toast defaults
+// configure toast defaults (no message: bulma-toast's types require one, defaults have none)
 toastDefaults({
   duration: 3000,
   pauseOnHover: true,
-});
+} as ToastOptions);
