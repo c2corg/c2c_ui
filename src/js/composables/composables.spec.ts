@@ -4,7 +4,12 @@ import { h, nextTick, reactive, ref } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
 
 import { type HeadTags, useHead, useNoRobots } from './head';
+import { useModal } from './modal';
+import { useQueryItem } from './query-item';
+import { useUrlFilters } from './url-filters';
 import { useViewMode, viewMode } from './view-mode';
+
+import constants from '@/js/constants';
 
 const headTag = (id: string) => document.getElementById(id);
 
@@ -94,3 +99,92 @@ describe('view mode', () => {
     expect(mode?.isNormalView.value).toBe(false);
   });
 });
+
+// a router with a documents list and the itinevert pages, at the given URL
+const routerAt = async (url: string) => {
+  const component = { render: () => h('div') };
+  const router = createRouter({
+    history: createMemoryHistory(),
+    routes: [
+      { path: '/routes', name: 'routes', component },
+      { path: '/waypoints', name: 'waypoints', component },
+      { path: '/outings-stats', name: 'outings-stats', component },
+      { path: '/itinevert', name: 'itinevert', component },
+    ],
+  });
+  await router.push(url);
+  return router;
+};
+
+// the values a composable gives, mounted with the router
+const withRouter = async <T>(url: string, composable: () => T) => {
+  const router = await routerAt(url);
+  let result: T | undefined;
+  mount({ setup: () => void (result = composable()), render: () => h('div') }, { global: { plugins: [router] } });
+  return { router, result: result as T };
+};
+
+describe('useModal', () => {
+  it('shows and hides, telling its parent', () => {
+    const events: string[] = [];
+    const modal = useModal((event) => events.push(event));
+
+    modal.show();
+    expect(modal.visible.value).toBe(true);
+    modal.hide();
+    expect(modal.visible.value).toBe(false);
+    expect(events).toEqual(['show', 'hide']);
+  });
+});
+
+describe('useUrlFilters', () => {
+  it('reads the document type of the list, and its filters, from the route', async () => {
+    expect((await withRouter('/routes?act=skitouring,hiking', useUrlFilters)).result.documentType.value).toBe('route');
+    expect((await withRouter('/outings-stats', useUrlFilters)).result.documentType.value).toBe('outing');
+    expect((await withRouter('/itinevert?documentType=waypoint', useUrlFilters)).result.documentType.value).toBe(
+      'waypoint'
+    );
+    expect((await withRouter('/itinevert', useUrlFilters)).result.documentType.value).toBe('route');
+
+    const { result } = await withRouter('/routes?act=skitouring,hiking', useUrlFilters);
+    expect(result.urlActivities.value).toEqual(['skitouring', 'hiking']);
+    expect(result.fields.value).toBe(constants.objectDefinitions.route.fields);
+  });
+
+  it('shows the fields of the activities, or of the waypoint types, in the URL', async () => {
+    const routes = (await withRouter('/routes?act=skitouring', useUrlFilters)).result;
+    expect(routes.fieldIsVisible(constants.objectDefinitions.route.fields.ski_rating)).toBe(true);
+    expect(routes.fieldIsVisible(constants.objectDefinitions.route.fields.rock_free_rating)).toBe(false);
+
+    const waypoints = (await withRouter('/waypoints?wtyp=climbing_outdoor', useUrlFilters)).result;
+    const { fields } = constants.objectDefinitions.waypoint;
+    expect(waypoints.fieldIsVisible(fields.climbing_outdoor_types)).toBe(true);
+    expect(waypoints.fieldIsVisible(fields.capacity)).toBe(false);
+  });
+});
+
+describe('useQueryItem', () => {
+  const elevation = constants.objectDefinitions.route.fields.elevation_max; // url rmaxa, default 0,9000
+
+  it('reads the value of a filter from the URL, and writes it back to the first page', async () => {
+    const { router, result } = await withRouter('/routes?rmaxa=500,3000&offset=60', () =>
+      useQueryItem(() => elevation)
+    );
+    expect(result.value.value).toEqual([500, 3000]);
+
+    result.value.value = [1000, 4000];
+    await flushRouter(router);
+    expect(router.currentRoute.value.query).toEqual({ rmaxa: '1000,4000' });
+  });
+
+  it('leaves the default value out of the URL', async () => {
+    const { router, result } = await withRouter('/routes?rmaxa=500,3000', () => useQueryItem(() => elevation));
+
+    result.value.value = [0, 9000];
+    await flushRouter(router);
+    expect(router.currentRoute.value.query).toEqual({});
+  });
+});
+
+const flushRouter = (router: { isReady(): Promise<void> }) =>
+  router.isReady().then(() => new Promise((r) => setTimeout(r)));

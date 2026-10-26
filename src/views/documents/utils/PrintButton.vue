@@ -13,16 +13,17 @@
 </template>
 
 <script>
-import urlMixin from './url-mixin';
+import { useUrlFilters } from '@/js/composables/url-filters';
 
 export default {
-  mixins: [urlMixin],
-
   props: {
     display: {
       type: String,
       default: 'button',
     },
+  },
+  setup() {
+    return useUrlFilters();
   },
 
   computed: {

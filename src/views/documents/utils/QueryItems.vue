@@ -97,9 +97,9 @@ import PrintButton from './PrintButton';
 import QueryItem from './QueryItem';
 import QuerySortDropdown from './QuerySortDropdown';
 import QueryTags from './QueryTags';
-import urlMixin from './url-mixin';
 
 import c2c from '@/js/apis/c2c';
+import { useUrlFilters } from '@/js/composables/url-filters';
 import constants from '@/js/constants';
 
 const documentsCache = {};
@@ -136,8 +136,6 @@ export default {
     LoadUserPreferencesButton,
   },
 
-  mixins: [urlMixin],
-
   props: {
     listMode: {
       type: Boolean,
@@ -150,6 +148,10 @@ export default {
   },
 
   emits: ['documents-load'],
+
+  setup() {
+    return useUrlFilters();
+  },
 
   data() {
     return {

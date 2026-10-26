@@ -23,6 +23,9 @@ export default [
     files: ['**/*.{js,mjs,ts,vue}'],
     linterOptions: { reportUnusedDisableDirectives: 'error' },
     languageOptions: {
+      // in components, <script lang="ts"> read by typescript-eslint's parser, the others by ESLint's; set for every file,
+      // as import-x reads the imported components with the parser options of the importing file
+      parserOptions: { parser: { ts: tseslint.parser, js: 'espree' } },
       globals: {
         ...globals.browser,
         // replaced at build time (vite.config.mjs define)
@@ -33,6 +36,8 @@ export default [
       'import-x/extensions': ['.js', '.mjs', '.ts', '.vue'],
       // to read the exports of the imported components and TypeScript modules
       'import-x/parsers': { 'vue-eslint-parser': ['.vue'], '@typescript-eslint/parser': ['.ts'] },
+      // a component's only export is its default one, which Vue's compiler generates for <script setup>, unseen by import-x
+      'import-x/ignore': ['\\.vue$'],
       'import-x/resolver-next': [
         createNodeResolver({
           extensions: ['.js', '.ts', '.vue', '.json'],

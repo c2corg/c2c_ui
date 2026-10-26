@@ -53,12 +53,13 @@
 </template>
 
 <script>
-import urlMixin from './url-mixin';
-
+import { useUrlFilters } from '@/js/composables/url-filters';
 import constants from '@/js/constants';
 
 export default {
-  mixins: [urlMixin],
+  setup() {
+    return useUrlFilters();
+  },
 
   data() {
     return {
