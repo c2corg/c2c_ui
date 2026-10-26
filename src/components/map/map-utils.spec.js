@@ -21,5 +21,5 @@ describe('map-utils', () => {
     expect(decodeURIComponent(icon.getImage().getSrc())).toMatch(
       /^data:image\/svg\+xml;charset=utf-8,<svg width="20px"/
     );
-  });
+  }, 180000); // a cold import of all the Font Awesome icons: over a minute under the load of the full suite
 });

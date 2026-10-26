@@ -4,7 +4,7 @@
     clear-input-on-toggle
     class="input-document"
     :document-type="documentTypes"
-    @add="$emit('add', arguments[0])"
+    @add="$emit('add', $event)"
     :placeholder="$gettext('Multi-criteria search')"
   />
 </template>

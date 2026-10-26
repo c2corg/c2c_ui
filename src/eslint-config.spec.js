@@ -2,19 +2,8 @@
 import { ESLint } from 'eslint';
 import { beforeAll, describe, expect, it } from 'vitest';
 
-// The Vue 3 deprecation rules are warnings: they list what is left to migrate, without failing the lint
+// The Vue 3 rules (eslint-plugin-vue's recommended preset): the Vue 2 syntax, removed in Vue 3, fails the lint
 const eslint = new ESLint({ cwd: process.cwd() });
-
-// `npm run lint` runs eslint --fix. These rules' fixes produce code that still works on Vue 2.7; the fixes of
-// no-deprecated-destroyed-lifecycle (beforeUnmount), no-deprecated-dollar-scopedslots-api ($slots) and
-// no-deprecated-v-bind-sync (v-model:prop) don't, so those rules must stay off until the switch to Vue 3.
-const VUE2_SAFE_FIXES = [
-  'vue/no-deprecated-data-object-declaration', // data() function
-  'vue/no-deprecated-scope-attribute', // slot-scope
-  'vue/no-deprecated-slot-attribute', // v-slot
-  'vue/no-deprecated-slot-scope-attribute', // v-slot
-  'vue/no-deprecated-v-on-number-modifiers', // key names
-];
 
 const lintComponent = async (source) => {
   const [result] = await eslint.lintText(source, { filePath: 'src/components/Example.vue' });
@@ -25,7 +14,7 @@ describe('eslint config', () => {
   // the first lint loads the parsers and plugins: under the load of the full suite, it can take over a minute
   beforeAll(() => lintComponent('<template><div /></template>'), 180000);
 
-  it('warns on code that breaks in Vue 3', async () => {
+  it('fails on code that breaks in Vue 3', async () => {
     const messages = await lintComponent(`<template>
   <div>
     {{ name | uppercaseFirstLetter }}
@@ -53,14 +42,19 @@ export default {
 </script>
 `);
 
-    expect(messages.filter((message) => message.severity === 2)).toEqual([]);
-    expect(messages.map((message) => message.ruleId).sort()).toEqual([
+    const rules = (severity) =>
+      messages
+        .filter((message) => message.severity === severity)
+        .map((message) => message.ruleId)
+        .sort();
+    expect(rules(2)).toEqual([
       'vue/no-deprecated-delete-set',
+      'vue/no-deprecated-destroyed-lifecycle',
       'vue/no-deprecated-filter',
       'vue/no-deprecated-slot-attribute',
       'vue/no-deprecated-v-on-native-modifier',
-      'vue/require-explicit-emits',
     ]);
+    expect(rules(1)).toEqual(['vue/require-explicit-emits']);
   });
 
   it('accepts the Vue 3 compatible syntax', async () => {
@@ -88,19 +82,7 @@ export default {
     expect(messages).toEqual([]);
   });
 
-  it('only enables Vue 3 rules whose autofix keeps the code working on Vue 2.7', async () => {
-    const { rules: allRules } = await import('eslint-plugin-vue');
-    const config = await eslint.calculateConfigForFile('src/components/Example.vue');
-
-    const fixable = Object.entries(config.rules)
-      .filter(([id, setting]) => id.startsWith('vue/no-deprecated-') && [setting].flat()[0] !== 'off')
-      .map(([id]) => id)
-      .filter((id) => allRules[id.slice('vue/'.length)].meta.fixable);
-
-    expect(fixable.filter((id) => !VUE2_SAFE_FIXES.includes(id))).toEqual([]);
-  });
-
-  it('keeps Vue 2 lifecycle hooks, $scopedSlots and .sync when fixing', async () => {
+  it('fixes Vue 2 lifecycle hooks, $scopedSlots and .sync into their Vue 3 forms', async () => {
     const fixer = new ESLint({ cwd: process.cwd(), fix: true });
     const source = `<template>
   <child-component :value.sync="value" />
@@ -127,11 +109,10 @@ export default {
 `;
 
     const [result] = await fixer.lintText(source, { filePath: 'src/components/Example.vue' });
-    const output = result.output ?? source;
 
-    expect(output).toContain('beforeDestroy()');
-    expect(output).toContain('destroyed()');
-    expect(output).toContain('this.$scopedSlots.title');
-    expect(output).toContain(':value.sync="value"');
+    expect(result.output).toContain('beforeUnmount()');
+    expect(result.output).toContain('unmounted()');
+    expect(result.output).toContain('this.$slots.title');
+    expect(result.output).toContain('v-model:value="value"');
   });
 });

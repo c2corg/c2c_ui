@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { h } from 'vue';
 
 import GdprBanner from './GdprBanner';
 
@@ -9,9 +10,11 @@ const show = vi.fn();
 
 const mountBanner = () =>
   mount(GdprBanner, {
-    stubs: { GdprModal: { methods: { show }, render: (h) => h('div') } },
-    mocks: { $gdpr: { get: () => null, setAll: vi.fn() } },
-    directives: { translate: {} },
+    global: {
+      stubs: { GdprModal: { methods: { show }, render: () => h('div') } },
+      mocks: { $gdpr: { get: () => null, setAll: vi.fn() } },
+      directives: { translate: {} },
+    },
   });
 
 describe('GdprBanner', () => {
@@ -30,7 +33,7 @@ describe('GdprBanner', () => {
 
   it('stops listening once destroyed', () => {
     const first = mountBanner();
-    first.destroy();
+    first.unmount();
     mountBanner();
 
     bus.emit('show-gdpr');

@@ -95,6 +95,8 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue';
+
 import DateQueryItem from './DateQueryItem';
 import DatesQueryItem from './DatesQueryItem';
 import QueryItemSliderLabel from './QueryItemSliderLabel';
@@ -106,7 +108,7 @@ import { uidMixin } from '@/js/uid';
 
 export default {
   components: {
-    Multiselect: () => import('vue-multiselect'),
+    Multiselect: defineAsyncComponent(() => import('vue-multiselect')),
     QueryItemSliderLabel,
     DateQueryItem,
     DatesQueryItem,
@@ -170,7 +172,7 @@ export default {
 };
 </script>
 
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
 
 <style scoped>
 /*

@@ -4,7 +4,8 @@
       <icon-area />
       <span>&nbsp;</span>
       <span v-for="area of document.areas" :key="area.document_id" class="area-link">
-        <document-link :document="area" />&#0032;
+        <!-- the space as an expression: Vue 3 drops a whitespace-only text at the end of an element, &#0032; included -->
+        <document-link :document="area" />{{ ' ' }}
       </span>
     </div>
 
@@ -104,7 +105,7 @@ export default {
     window.addEventListener('resize', this.resizePin);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     bus.off('elevation_profile', this.onElevationProfile);
     window.removeEventListener('resize', this.resizePin);
     if (this.pinnedMode) this.togglePinToSide(true);

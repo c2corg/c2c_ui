@@ -214,7 +214,9 @@ export default {
         li {
           padding: 10px 14px;
           font-size: 14px;
-          transition: background 0.2s ease, color 0.2s ease;
+          transition:
+            background 0.2s ease,
+            color 0.2s ease;
 
           &:hover {
             background-color: #f5f5f5;
@@ -235,7 +237,7 @@ export default {
 .fade-leave-active {
   transition: opacity 0.2s ease;
 }
-.fade-enter,
+.fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }

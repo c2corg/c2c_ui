@@ -140,9 +140,10 @@ export default {
         posts = posts.slice(1);
       }
 
+      // copy the posts: mutating the reactive topic here would invalidate this computed again, and the
+      // mention links would get the forum url prepended on each evaluation, in an endless render loop
       for (const post of posts) {
-        post.cooked = computeCooked(post.cooked);
-        result.push(post);
+        result.push({ ...post, cooked: computeCooked(post.cooked) });
       }
 
       return result;

@@ -23,7 +23,7 @@ export default {
   mixins: [baseMixin, uidMixin],
 
   props: {
-    value: {
+    modelValue: {
       type: Boolean,
       default: null,
     },

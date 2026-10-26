@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -44,7 +44,8 @@
         />
       </svg>
     </div>
-    <div id="app"></div>
+    <!-- Vue 3 mounts App.vue inside this element (Vue 2 replaced it): App.vue keeps the id="app" -->
+    <div id="app-mount"></div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

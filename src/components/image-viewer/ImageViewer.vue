@@ -26,8 +26,6 @@
 
     <swiper-container
       init="false"
-      keyboard="true"
-      zoom="true"
       :slides-per-view="1"
       ref="swiper"
       class="image-viewer-swiper"
@@ -120,7 +118,7 @@ export default {
     window.addEventListener('keydown', this.onKeydown);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     registerImageViewer(null);
   },
 
@@ -157,6 +155,10 @@ export default {
             '/swiper/zoom-element.min.css',
           ],
           initialSlide,
+          // here and not as attributes: Vue 3 sets them as properties of <swiper-container>, as strings ("true"), which
+          // Swiper doesn't take as enabled
+          keyboard: true,
+          zoom: true,
 
           // virtual because it may be too slow if there are too many images, e.g. /articles/1058594/fr/concours-photo-sophie-2018
           virtual: true,
@@ -361,7 +363,9 @@ $paginationHeight: 30px;
   .image-viewer-buttons {
     visibility: visible;
     opacity: 1;
-    transition: visibility 1s, opacity 1s;
+    transition:
+      visibility 1s,
+      opacity 1s;
   }
 
   &.hide-buttons {

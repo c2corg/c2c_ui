@@ -78,6 +78,8 @@
 </template>
 
 <script>
+import { markRaw } from 'vue';
+
 import EditorButton from './EditorButton';
 import LinkHelper from './LinkHelper';
 
@@ -200,7 +202,7 @@ export default {
   },
 
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: '',
     },
@@ -210,7 +212,7 @@ export default {
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   data() {
     return {
@@ -234,21 +236,22 @@ export default {
 
   watch: {
     preview: 'computePreview',
-    value: 'updateValue',
+    modelValue: 'updateValue',
   },
 
   mounted() {
-    this.$refs.textarea.value = this.value;
-    this.selection = new Selection(this.$refs.textarea, this.onInput);
+    this.$refs.textarea.value = this.modelValue;
+    // a helper around the textarea, not state to observe
+    this.selection = markRaw(new Selection(this.$refs.textarea, this.onInput));
   },
 
   methods: {
     onInput() {
-      this.$emit('input', this.$refs.textarea.value);
+      this.$emit('update:modelValue', this.$refs.textarea.value);
     },
 
     updateValue() {
-      this.$refs.textarea.value = this.value;
+      this.$refs.textarea.value = this.modelValue;
     },
 
     computePreview() {
@@ -256,7 +259,7 @@ export default {
         return;
       }
 
-      this.cookerPromise = cooker.cook({ value: this.value });
+      this.cookerPromise = cooker.cook({ value: this.modelValue });
     },
 
     handleSimpleMarkdownTag(tag, defaultChunk) {
@@ -433,7 +436,9 @@ export default {
 
 .is-active {
   border: 1px solid #66afe9;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow:
+    inset 0 1px 1px rgba(0, 0, 0, 0.075),
+    0 0 8px rgba(102, 175, 233, 0.6);
   transition: 300ms;
 }
 

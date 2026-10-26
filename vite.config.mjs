@@ -1,7 +1,7 @@
 import { fileURLToPath, URL } from 'node:url';
 
 import legacy from '@vitejs/plugin-legacy';
-import vue from '@vitejs/plugin-vue2';
+import vue from '@vitejs/plugin-vue';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
 
@@ -249,7 +249,14 @@ export default defineConfig({
     vue({
       template: {
         compilerOptions: {
-          whitespace: 'condensed',
+          // as the browser does, and as Vue 2 rendered: Vue 3's default (condense) drops spaces next to interpolations,
+          // e.g. route ratings rendered "AD5c>5aII" instead of "AD 5c>5a II"
+          whitespace: 'preserve',
+          // no comments in dev either, as in production: a comment at the root of a template would make it a fragment,
+          // which doesn't inherit the parent attributes (class, listeners)
+          comments: false,
+          // web components
+          isCustomElement: (tag) => tag.startsWith('swiper-'),
         },
       },
     }),
@@ -270,12 +277,7 @@ export default defineConfig({
   ],
 
   resolve: {
-    alias: [
-      { find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
-      // same alias as Vue CLI: CommonJS dependencies that require('vue')
-      // would otherwise get vue.runtime.common.js, a second Vue copy beside the ESM one
-      { find: /^vue$/, replacement: 'vue/dist/vue.runtime.esm.js' },
-    ],
+    alias: [{ find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) }],
     // imports of .vue files without extension, as webpack allowed
     extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json', '.vue'],
   },
@@ -292,16 +294,17 @@ export default defineConfig({
     },
   },
 
+  html: {
+    // replaced by a per-request nonce in docker/nginx.conf, see the Content-Security-Policy there
+    cspNonce: '__CSP_NONCE__',
+  },
+
   server: {
     port: 8080,
     strictPort: true,
   },
 
   build: {
-    commonjsOptions: {
-      // require('vue') from CommonJS dependencies must return Vue itself, not the ES module namespace
-      requireReturnsDefault: (id) => id.endsWith('/vue/dist/vue.runtime.esm.js'),
-    },
     // build.target is derived from modernBrowsers by plugin-legacy
     sourcemap: true,
     rollupOptions: {

@@ -23,8 +23,12 @@ export default {
   },
 
   watch: {
-    images: function () {
-      this.images.forEach(this.$imageViewer.push);
+    // deep 1: also when images are added to the array (uploads), as Vue 2 array watchers did
+    images: {
+      handler() {
+        this.images.forEach(this.$imageViewer.push);
+      },
+      deep: 1,
     },
   },
 

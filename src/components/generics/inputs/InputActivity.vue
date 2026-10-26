@@ -3,7 +3,7 @@
     <span
       v-for="activity of activities"
       :key="activity"
-      :checked="value_.includes(activity)"
+      :checked="value_.includes(activity) || null"
       :class="{ 'with-labels': showLabels }"
       class="input-item has-cursor-pointer"
       :title="showLabels ? null : $gettext(activity, 'activities')"

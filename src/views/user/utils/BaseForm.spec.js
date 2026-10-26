@@ -1,6 +1,5 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
-import { compileToFunctions } from 'vue-template-compiler';
 
 import BaseForm from './BaseForm';
 import FormField from './FormField';
@@ -9,18 +8,18 @@ import FormField from './FormField';
 const mountForm = ({ promise = null } = {}) =>
   mount(
     {
-      ...compileToFunctions(`<base-form :promise="promise" @submit="submitted++">
+      template: `<base-form :promise="promise" @submit="submitted++">
         <form-field name="username" label="Username" type="text" icon="user" required v-model="username" />
         <form-field name="password" label="Password" type="password" icon="key" required v-model="password" />
-      </base-form>`),
+      </base-form>`,
       components: { BaseForm, FormField },
       data: () => ({ promise, username: '', password: '', submitted: 0 }),
     },
-    { stubs: { FaIcon: true }, mocks: { $gettext: (s) => s } }
+    { global: { stubs: { FaIcon: true }, mocks: { $gettext: (s) => s } } }
   );
 
 const errorOf = (wrapper, name) =>
-  wrapper.findAllComponents(FormField).wrappers.find((field) => field.props('name') === name).vm.errorMessage;
+  wrapper.findAllComponents(FormField).find((field) => field.props('name') === name).vm.errorMessage;
 
 describe('BaseForm', () => {
   it('does not submit while a required field is empty', async () => {
@@ -33,8 +32,8 @@ describe('BaseForm', () => {
 
   it('submits once the required fields are filled', async () => {
     const wrapper = mountForm();
-    await wrapper.findAll('input').at(0).setValue('alice');
-    await wrapper.findAll('input').at(1).setValue('secret');
+    await wrapper.findAll('input')[0].setValue('alice');
+    await wrapper.findAll('input')[1].setValue('secret');
 
     await wrapper.find('form').trigger('submit');
 
@@ -65,8 +64,8 @@ describe('BaseForm', () => {
     const wrapper = mountForm({ promise: { error: null } });
     wrapper.vm.promise.error = { response: { data: { errors: [{ name: 'username', description: 'Required' }] } } };
     await wrapper.vm.$nextTick();
-    await wrapper.findAll('input').at(0).setValue('alice');
-    await wrapper.findAll('input').at(1).setValue('secret');
+    await wrapper.findAll('input')[0].setValue('alice');
+    await wrapper.findAll('input')[1].setValue('secret');
 
     await wrapper.find('form').trigger('submit');
 

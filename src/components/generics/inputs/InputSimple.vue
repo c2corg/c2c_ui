@@ -48,7 +48,7 @@ export default {
       type: [Number, String], // string is for date
       default: null,
     },
-    value: {
+    modelValue: {
       type: [String, Number, Boolean],
       default: null,
     },

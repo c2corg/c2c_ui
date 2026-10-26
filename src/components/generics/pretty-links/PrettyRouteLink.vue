@@ -5,7 +5,7 @@
       :hide-activities="hideActivities"
       :hide-area="hideArea"
       :hide-orientation="hideOrientation"
-      :hide-height-difficulties="hideHeightDiffDifficulties"
+      :hide-height-diff-difficulties="hideHeightDiffDifficulties"
     />
   </document-link>
 </template>

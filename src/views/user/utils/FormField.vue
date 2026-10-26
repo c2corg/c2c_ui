@@ -67,7 +67,7 @@ export default {
       type: String,
       required: true,
     },
-    value: {
+    modelValue: {
       type: [String, Number, Boolean],
       default: null,
     },
@@ -108,7 +108,7 @@ export default {
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   data() {
     return {
@@ -120,15 +120,15 @@ export default {
   computed: {
     value_: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
       set(value) {
-        this.$emit('input', value);
+        this.$emit('update:modelValue', value);
       },
     },
 
     hasError() {
-      if (this.required && !this.value) {
+      if (this.required && !this.modelValue) {
         return true;
       }
 

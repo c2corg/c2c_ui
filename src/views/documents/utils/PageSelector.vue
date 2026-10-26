@@ -3,7 +3,7 @@
     <component
       :is="firstDocumentPosition > 0 ? 'router-link' : 'span'"
       class="pagination-link button has-text-normal"
-      :disabled="firstDocumentPosition === 1"
+      :disabled="firstDocumentPosition === 1 || null"
       :to="pageQuery(offset - queryLimit, queryLimit)"
     >
       <fa-icon icon="chevron-left" />
@@ -14,7 +14,7 @@
     <component
       :is="lastDocumentPosition < total ? 'router-link' : 'span'"
       class="pagination-link button has-text-normal"
-      :disabled="lastDocumentPosition >= total"
+      :disabled="lastDocumentPosition >= total || null"
       :to="pageQuery(offset + queryLimit, queryLimit)"
     >
       <fa-icon icon="chevron-right" />
@@ -35,7 +35,7 @@
           class="dropdown-item is-small"
           :class="{ 'is-active': queryLimit === l }"
           :to="pageQuery(offset, l)"
-          @click.native="hideOnclick"
+          @click="hideOnclick"
         >
           <span>{{ l }}</span>
         </component>

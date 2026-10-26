@@ -1,5 +1,6 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { h } from 'vue';
 
 import RouteEditionView from './RouteEditionView';
 
@@ -10,8 +11,7 @@ const sharedValues = [...sharedField.values];
 
 // Vue reports errors thrown in watchers to this handler instead of throwing them
 let errors;
-const localVue = createLocalVue();
-localVue.config.errorHandler = (error) => errors.push(error);
+const errorHandler = (error) => errors.push(error);
 
 // only the climbing type watcher and the save hooks are under test: leave out the mixin (loading, routing, user)
 const mountView = () =>
@@ -20,9 +20,9 @@ const mountView = () =>
       watch: RouteEditionView.watch,
       methods: RouteEditionView.methods,
       data: () => ({ document: null, fields: constants.objectDefinitions.route.fields }),
-      render: (h) => h('div'),
+      render: () => h('div'),
     },
-    { localVue }
+    { global: { config: { errorHandler } } }
   );
 
 const openRoute = async (properties) => {
@@ -33,6 +33,32 @@ const openRoute = async (properties) => {
 };
 
 describe('RouteEditionView', () => {
+  it('takes the first associated waypoint as main, when one is added (in place) to a new route', async () => {
+    const wrapper = shallowMount(
+      {
+        watch: RouteEditionView.watch,
+        methods: RouteEditionView.methods,
+        data: () => ({ document: null, mode: 'add', fields: constants.objectDefinitions.route.fields }),
+        render: () => h('div'),
+      },
+      { global: { config: { errorHandler } } }
+    );
+    await wrapper.setData({
+      document: {
+        climbing_outdoor_type: null,
+        rock_free_rating: null,
+        main_waypoint_id: null,
+        associations: { waypoints: [] },
+      },
+    });
+
+    // the associations editor adds to the array
+    wrapper.vm.document.associations.waypoints.push({ document_id: 5 });
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm.document.main_waypoint_id).toBe(5);
+  });
+
   beforeEach(() => {
     errors = [];
   });

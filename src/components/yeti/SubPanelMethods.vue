@@ -75,8 +75,8 @@
       </p>
 
       <input-orientation
-        :value="method.orientation"
-        @input="onChange($event, 'orientation')"
+        :model-value="method.orientation"
+        @update:model-value="onChange($event, 'orientation')"
         class="has-text-centered mb-2"
       />
 
@@ -149,8 +149,10 @@
         <li
           v-for="label of potentialDangerLabels"
           :key="label.text"
-          :disabled="!bra.high || label.text < potentialDangerOptions.min || label.text > potentialDangerOptions.max"
-          :selected="method.potentialDanger == label.text"
+          :disabled="
+            !bra.high || label.text < potentialDangerOptions.min || label.text > potentialDangerOptions.max || null
+          "
+          :selected="method.potentialDanger == label.text || null"
           class="potential-danger-label is-size-5"
           @click="onChange(label.text, 'potentialDanger')"
         >
@@ -178,7 +180,7 @@
       </info>
 
       <p>
-        <input-checkbox :value="method.wetSnow" @input="onChange($event, 'wetSnow')">
+        <input-checkbox :model-value="method.wetSnow" @update:model-value="onChange($event, 'wetSnow')">
           <span v-translate>Wet snow: orientation not taken into account</span>
         </input-checkbox>
       </p>

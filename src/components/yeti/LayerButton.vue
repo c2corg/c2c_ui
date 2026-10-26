@@ -54,7 +54,7 @@ export default {
       type: String,
       default: null,
     },
-    value: {
+    modelValue: {
       type: [Boolean, Object],
       default: null,
     },
@@ -75,15 +75,15 @@ export default {
       default: null,
     },
   },
-  emits: ['change', 'input'],
+  emits: ['change', 'update:modelValue'],
 
   computed: {
     _value: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
       set(value) {
-        this.$emit('input', value);
+        this.$emit('update:modelValue', value);
       },
     },
     backgroundImage() {
@@ -91,7 +91,7 @@ export default {
       try {
         img = assetUrl('yeti/layers', this.image);
         img = 'url(' + img + ')';
-      } catch (e) {
+      } catch {
         img = 'none';
       }
       return img;
@@ -115,7 +115,9 @@ $height: calc(50 / 14 * 1rem);
   width: $width;
   min-height: $height;
   background: #dbdbdb;
-  box-shadow: 0 0 0 2px white, 0 0 0 3px #dbdbdb;
+  box-shadow:
+    0 0 0 2px white,
+    0 0 0 3px #dbdbdb;
   border-radius: 4px;
   margin-bottom: 0.5rem;
   background-position: center;
@@ -162,10 +164,14 @@ $height: calc(50 / 14 * 1rem);
     left: calc(50% - ($width / 2) + 0.5rem) !important;
   }
   .is-checkradio:hover:not([disabled]) + label .layer-image {
-    box-shadow: 0 0 0 2px $white, 0 0 0 4px $primary;
+    box-shadow:
+      0 0 0 2px $white,
+      0 0 0 4px $primary;
   }
   .is-checkradio:focus-visible + label .layer-image {
-    box-shadow: 0 0 0 2px $white, 0 0 0 4px $primary;
+    box-shadow:
+      0 0 0 2px $white,
+      0 0 0 4px $primary;
   }
   .is-checkradio:checked:not([disabled]) + label::before {
     box-shadow: 0 0 0 2px $white;
@@ -183,10 +189,15 @@ $height: calc(50 / 14 * 1rem);
     box-shadow: none;
   }
   .is-checkradio:checked:not([disabled]) + label .layer-image {
-    box-shadow: 0 0 0 2px $white, 0 0 0 4px $primary;
+    box-shadow:
+      0 0 0 2px $white,
+      0 0 0 4px $primary;
   }
   .is-checkradio:checked:focus-visible + label .layer-image {
-    box-shadow: 0 0 0 2px $white, 0 0 0 4px $primary, 0 0 0 6px $secondary !important;
+    box-shadow:
+      0 0 0 2px $white,
+      0 0 0 4px $primary,
+      0 0 0 6px $secondary !important;
   }
 }
 .is-small {

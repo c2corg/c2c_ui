@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import NearbyStopsSection from './NearbyStopsSection';
 
@@ -7,12 +7,14 @@ const stop = (id, stoparea_name, line) => ({ id, stoparea_name, line, operator: 
 
 const mountSection = async () => {
   const wrapper = mount(NearbyStopsSection, {
-    propsData: { document: { type: 'r', document_id: 1, activities: [], associations: { waypoints: [] } } },
-    stubs: { MapView: true },
-    mocks: {
-      $gettext: (value) => value,
-      $documentUtils: { getDocumentType: () => 'route' },
-      $screen: { isMobile: false },
+    props: { document: { type: 'r', document_id: 1, activities: [], associations: { waypoints: [] } } },
+    global: {
+      stubs: { MapView: true },
+      mocks: {
+        $gettext: (value) => value,
+        $documentUtils: { getDocumentType: () => 'route' },
+        $screen: { isMobile: false },
+      },
     },
   });
   await wrapper.setData({
@@ -23,9 +25,18 @@ const mountSection = async () => {
 };
 
 describe('NearbyStopsSection', () => {
+  // jsdom has no scrollIntoView, which a click on a stop calls: Vue 3 reports its error instead of logging it
+  beforeEach(() => {
+    Element.prototype.scrollIntoView = vi.fn();
+  });
+
+  afterEach(() => {
+    delete Element.prototype.scrollIntoView;
+  });
+
   it('expands and collapses the lines of a stop on click', async () => {
     const wrapper = await mountSection();
-    const [gare, village] = wrapper.findAll('.stop-card').wrappers;
+    const [gare, village] = wrapper.findAll('.stop-card');
 
     await gare.trigger('click');
     expect(gare.findAll('.line-details')).toHaveLength(2);
@@ -39,7 +50,7 @@ describe('NearbyStopsSection', () => {
 
   it('keeps each stop expanded independently', async () => {
     const wrapper = await mountSection();
-    const [gare, village] = wrapper.findAll('.stop-card').wrappers;
+    const [gare, village] = wrapper.findAll('.stop-card');
 
     await gare.trigger('click');
     await village.trigger('click');

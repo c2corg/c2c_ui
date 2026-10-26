@@ -15,7 +15,7 @@
         :disabled="category.fields.length === 0"
       >
         <template #button>
-          <span class="button is-size-7-mobile" :disabled="category.fields.length === 0">
+          <span class="button is-size-7-mobile" :disabled="category.fields.length === 0 || null">
             <fa-icon :icon="$options.categoryIcon[category.name]" />
             <span class="is-hidden-mobile">
               <!-- $gettext('General') -->

@@ -1,28 +1,38 @@
-import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // fresh modules for each test, as for each page load: the local-storage plugin caches what it read
 const installLanguage = async () => {
   vi.resetModules();
   const { default: gettext } = await import('./gettext-plugin');
-  const { createLocalVue, mount } = await import('@vue/test-utils');
-  const { nextTick } = await import('vue');
+  const { mount: mountComponent } = await import('@vue/test-utils');
+  const { createApp, h, nextTick } = await import('vue');
 
-  const localVue = createLocalVue();
-  localVue.prototype.$user = { saveLangPreference: vi.fn() };
-  localVue.use(gettext);
+  const app = createApp({});
+  const globals = app.config.globalProperties;
+  globals.$user = { saveLangPreference: vi.fn() };
+  app.use(gettext);
+
+  // components mounted with what the plugin installed in the app
+  const mount = (component) =>
+    mountComponent(component, {
+      global: {
+        mocks: { $language: globals.$language, $gettext: globals.$gettext },
+        directives: { translate: app.directive('translate') },
+      },
+    });
 
   // firstLoad() and setCurrent() apply the language once its translations are loaded (lazily, except French),
   // and set the page language last
   const settle = (lang = 'fr') =>
     vi.waitFor(
       () => {
-        if (document.documentElement.lang !== localVue.prototype.$language.getIANALanguageSubtag(lang)) {
+        if (document.documentElement.lang !== globals.$language.getIANALanguageSubtag(lang)) {
           throw new Error(`${lang} not applied yet`);
         }
       },
       { timeout: 5000 }
     );
-  return { localVue, $language: localVue.prototype.$language, mount, nextTick, settle };
+  return { globals, $language: globals.$language, h, mount, nextTick, settle };
 };
 
 const storedLanguage = () => JSON.parse(window.localStorage.getItem('Language.preferences') ?? '{}').current;
@@ -36,16 +46,16 @@ describe('$language / $gettext', () => {
   afterEach(() => vi.restoreAllMocks());
 
   it('starts in French, translated once firstLoad() has run (main.js calls it)', async () => {
-    const { localVue, $language, settle } = await installLanguage();
+    const { globals, $language, settle } = await installLanguage();
     expect($language.current).toBe('fr');
-    expect(localVue.prototype.$gettext('Login')).toBe('Login');
+    expect(globals.$gettext('Login')).toBe('Login');
 
     $language.firstLoad();
     await settle();
 
-    expect(localVue.prototype.$gettext('Login')).toBe('Se connecter');
-    expect(localVue.prototype.$gettext('1', 'paragliding_ratings')).toBe('P1');
-    expect(localVue.prototype.$gettext('Not a known message')).toBe('Not a known message');
+    expect(globals.$gettext('Login')).toBe('Se connecter');
+    expect(globals.$gettext('1', 'paragliding_ratings')).toBe('P1');
+    expect(globals.$gettext('Not a known message')).toBe('Not a known message');
   });
 
   it('starts in the stored language, under the key existing users already have', async () => {
@@ -58,26 +68,26 @@ describe('$language / $gettext', () => {
 
   it('loads the translations of the first language, and sets the page language', async () => {
     window.localStorage.setItem('Language.preferences', JSON.stringify({ current: 'de' }));
-    const { localVue, $language, settle } = await installLanguage();
+    const { globals, $language, settle } = await installLanguage();
 
     $language.firstLoad();
     await settle('de');
 
     expect($language.current).toBe('de');
-    expect(localVue.prototype.$gettext('Login')).toBe('Einloggen');
+    expect(globals.$gettext('Login')).toBe('Einloggen');
     expect(document.documentElement.getAttribute('lang')).toBe('de');
   });
 
   it('switches language: loads it, stores it, saves the user preference', async () => {
-    const { localVue, $language, settle } = await installLanguage();
+    const { globals, $language, settle } = await installLanguage();
 
     $language.setCurrent('de');
     await settle('de');
 
     expect($language.current).toBe('de');
-    expect(localVue.prototype.$gettext('Save')).toBe('Speichern');
+    expect(globals.$gettext('Save')).toBe('Speichern');
     expect(storedLanguage()).toBe('de');
-    expect(localVue.prototype.$user.saveLangPreference).toHaveBeenCalledWith('de');
+    expect(globals.$user.saveLangPreference).toHaveBeenCalledWith('de');
     expect(document.documentElement.getAttribute('lang')).toBe('de');
   });
 
@@ -109,10 +119,14 @@ describe('$language / $gettext', () => {
   });
 
   it('updates the components using $gettext on a language switch', async () => {
-    const { localVue, $language, mount, nextTick, settle } = await installLanguage();
+    const { $language, h, mount, nextTick, settle } = await installLanguage();
     $language.firstLoad();
     await settle();
-    const wrapper = mount({ render: (h) => h('p', localVue.prototype.$gettext('Save')) }, { localVue });
+    const wrapper = mount({
+      render() {
+        return h('p', this.$gettext('Save'));
+      },
+    });
     expect(wrapper.text()).toBe('Enregistrer');
 
     document.documentElement.removeAttribute('lang');
@@ -124,35 +138,35 @@ describe('$language / $gettext', () => {
   });
 
   it('translates v-translate elements', async () => {
-    // jsdom has no innerText, which v-translate reads and writes
-    const innerText = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'innerText');
-    Object.defineProperty(HTMLElement.prototype, 'innerText', {
-      configurable: true,
-      get() {
-        return this.textContent;
-      },
-      set(value) {
-        this.textContent = value;
-      },
-    });
-    onTestFinished(() =>
-      innerText
-        ? Object.defineProperty(HTMLElement.prototype, 'innerText', innerText)
-        : delete HTMLElement.prototype.innerText
-    );
-
-    const { localVue, $language, mount, settle } = await installLanguage();
+    const { $language, mount, settle } = await installLanguage();
     $language.firstLoad();
     await settle();
-    const { compileToFunctions } = await import('vue-template-compiler');
 
-    const wrapper = mount(
-      compileToFunctions(
-        `<div><span v-translate>Save</span><span v-translate translate-context="paragliding_ratings">1</span></div>`
-      ),
-      { localVue }
-    );
+    const wrapper = mount({
+      template: `<div><span v-translate>Save</span><span v-translate translate-context="paragliding_ratings">1</span></div>`,
+    });
 
-    expect(wrapper.findAll('span').wrappers.map((span) => span.text())).toEqual(['Enregistrer', 'P1']);
+    expect(wrapper.findAll('span').map((span) => span.text())).toEqual(['Enregistrer', 'P1']);
+  });
+
+  it('translates v-translate on a component rendering its slot, and keeps the slot in place', async () => {
+    const { $language, mount, nextTick, settle } = await installLanguage();
+    $language.firstLoad();
+    await settle();
+
+    // as <login-button>, <edit-link>, <association-history-link>...: Vue 3 renders the slot between two empty text
+    // nodes, which it later inserts and removes content around
+    const SlotLink = { template: '<a><slot /></a>' };
+    const wrapper = mount({
+      components: { SlotLink },
+      data: () => ({ shown: true }),
+      template: `<div><slot-link v-if="shown" v-translate>Save</slot-link><span>after</span></div>`,
+    });
+
+    expect(wrapper.find('a').text()).toBe('Enregistrer');
+
+    await wrapper.setData({ shown: false });
+    await nextTick();
+    expect(wrapper.text()).toBe('after');
   });
 });

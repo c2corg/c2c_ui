@@ -28,7 +28,8 @@ export default {
   },
 
   watch: {
-    value: 'updateDateInUrl',
+    // deep 1: also when a date of the array changes, as Vue 2 array watchers did
+    value: { handler: 'updateDateInUrl', deep: 1 },
     usePeriodFilter: 'switchFilterInUrl',
   },
 

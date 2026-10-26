@@ -1024,8 +1024,8 @@ export default {
       const durationInDays = shouldUseCalculated
         ? this.document.calculated_duration
         : this.document.durations?.length
-        ? Math.min(...this.document.durations)
-        : this.document.calculated_duration;
+          ? Math.min(...this.document.durations)
+          : this.document.calculated_duration;
 
       if (durationInDays < 1) {
         const hours = durationInDays * 24;

@@ -79,7 +79,7 @@
 
 <script>
 export default {
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   data() {
     return {
@@ -232,7 +232,7 @@ export default {
     },
 
     setResult() {
-      this.$emit('input', this.rating);
+      this.$emit('update:modelValue', this.rating);
       this.$refs.modalWindow.hide();
     },
   },

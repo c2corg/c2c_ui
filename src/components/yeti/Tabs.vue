@@ -70,10 +70,10 @@ export default {
         event.which === ARROW_LEFT
           ? index - 1
           : event.which === ARROW_RIGHT
-          ? index + 1
-          : event.which === ARROW_DOWN
-          ? 'down'
-          : null;
+            ? index + 1
+            : event.which === ARROW_DOWN
+              ? 'down'
+              : null;
 
       if (dir !== null) {
         event.preventDefault();
@@ -83,8 +83,8 @@ export default {
         dir === 'down'
           ? document.getElementById('panel' + index)?.focus()
           : this.tabs[dir]
-          ? this.setActiveTab(dir)
-          : void 0;
+            ? this.setActiveTab(dir)
+            : void 0;
       }
     },
   },

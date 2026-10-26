@@ -5,7 +5,7 @@
       :key="option"
       @click="toggle(option)"
       class="multi-select-item has-cursor-pointer"
-      :checked="value_.includes(option)"
+      :checked="value_.includes(option) || null"
     >
       {{ $filters.uppercaseFirstLetter(i18n ? $gettext(option, i18nContext) : option) }}
     </span>
@@ -51,7 +51,10 @@ export default {
   margin-bottom: 0.5rem;
   user-select: None;
 
-  transition: box-shadow 100ms, background-color 200ms, color 100ms;
+  transition:
+    box-shadow 100ms,
+    background-color 200ms,
+    color 100ms;
 }
 
 .multi-select-item:hover {

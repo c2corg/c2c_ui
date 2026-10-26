@@ -9,10 +9,10 @@
     </template>
     <a
       class="dropdown-item is-size-6"
-      :class="{ 'is-active': value === 'result' }"
+      :class="{ 'is-active': modelValue === 'result' }"
       @click="
         $refs.displayModeSwitch.isActive = false;
-        $emit('input', 'result');
+        $emit('update:modelValue', 'result');
       "
     >
       <span class="has-text-centered item-icons">
@@ -22,10 +22,10 @@
     </a>
     <a
       class="dropdown-item is-size-6"
-      :class="{ 'is-active': value === 'both' }"
+      :class="{ 'is-active': modelValue === 'both' }"
       @click="
         $refs.displayModeSwitch.isActive = false;
-        $emit('input', 'both');
+        $emit('update:modelValue', 'both');
       "
     >
       <span class="is-nowrap item-icons">
@@ -36,10 +36,10 @@
     </a>
     <a
       class="dropdown-item is-size-6"
-      :class="{ 'is-active': value === 'map' }"
+      :class="{ 'is-active': modelValue === 'map' }"
       @click="
         $refs.displayModeSwitch.isActive = false;
-        $emit('input', 'map');
+        $emit('update:modelValue', 'map');
       "
     >
       <span class="has-text-centered item-icons">
@@ -53,7 +53,7 @@
 <script>
 export default {
   props: {
-    value: {
+    modelValue: {
       type: String,
       required: true,
     },
@@ -63,7 +63,7 @@ export default {
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 };
 </script>
 

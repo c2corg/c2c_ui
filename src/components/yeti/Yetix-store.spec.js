@@ -7,12 +7,12 @@ const stored = () => JSON.parse(window.localStorage.getItem('Yeti.preferences') 
 // fresh modules for each test, as for each page load: Yetix is a singleton, and local-storage caches what it read
 const loadYetix = async () => {
   vi.resetModules();
-  const { createLocalVue, mount } = await import('@vue/test-utils');
+  const { mount } = await import('@vue/test-utils');
   const { default: Yetix } = await import('./Yetix');
   const { default: ol } = await import('@/js/libs/ol');
   const { default: axios } = await import('axios');
-  const { nextTick } = await import('vue');
-  return { Yetix, ol, axios, createLocalVue, mount, nextTick };
+  const { h, nextTick } = await import('vue');
+  return { Yetix, ol, axios, h, mount, nextTick };
 };
 
 describe('Yetix store', () => {
@@ -65,6 +65,22 @@ describe('Yetix store', () => {
       ],
     ]);
     expect(stored()['yeti-map-features-title']).toBe('Pointe Percée');
+  });
+
+  it('keeps the OpenLayers features of the route as they are, not proxied', async () => {
+    const { Yetix, ol } = await loadYetix();
+    const { isProxy } = await import('vue');
+    const feature = new ol.Feature(
+      new ol.geom.LineString([
+        [650000, 5750000, 1200],
+        [650100, 5750100, 1300],
+      ])
+    );
+
+    Yetix.setFeatures([feature]);
+
+    expect(isProxy(Yetix.features[0])).toBe(false);
+    expect(Yetix.features[0]).toBe(feature);
   });
 
   it('stores the overlays shown', async () => {
@@ -129,11 +145,8 @@ describe('Yetix store', () => {
   });
 
   it('updates the components using it', async () => {
-    const { Yetix, createLocalVue, mount, nextTick } = await loadYetix();
-    const wrapper = mount(
-      { render: (h) => h('p', Yetix.showYeti ? `zoom ${Yetix.mapZoom}` : 'off') },
-      { localVue: createLocalVue() }
-    );
+    const { Yetix, h, mount, nextTick } = await loadYetix();
+    const wrapper = mount({ render: () => h('p', Yetix.showYeti ? `zoom ${Yetix.mapZoom}` : 'off') });
     expect(wrapper.text()).toBe('off');
 
     Yetix.setShowYeti(true);

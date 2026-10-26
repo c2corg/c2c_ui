@@ -70,6 +70,8 @@
 </template>
 
 <script>
+import { toast } from 'bulma-toast';
+
 import ImageUploader from './ImageUploader';
 
 import c2c from '@/js/apis/c2c';
@@ -146,7 +148,7 @@ export default {
     window.addEventListener('drop', this.preventDrag, false);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('dragover', this.preventDrag);
     window.removeEventListener('drop', this.preventDrag);
   },
@@ -191,7 +193,8 @@ export default {
           const image = this.buildImageObject(file, key);
 
           this.images = { ...this.images, [image.key]: image };
-          this.startUpload(image);
+          // the reactive image: the upload callbacks update its status and progress
+          this.startUpload(this.images[image.key]);
         }
       }
 

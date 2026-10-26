@@ -46,7 +46,7 @@
           propose-creation
           show-more-results-link
           clear-input-on-toggle
-          @input="go"
+          @update:model-value="go"
         />
 
         <div class="navigation-item is-hidden-tablet" :class="{ 'is-hidden-mobile': !hideSearchInput }">
@@ -102,7 +102,7 @@
             :key="documentType"
             :document-type="documentType"
             class="dropdown-item is-size-5 is-ellipsed"
-            @click.native="$refs.addDocumentMenu.isActive = false"
+            @click="$refs.addDocumentMenu.isActive = false"
           >
             <icon-document :document-type="documentType" fixed-width />
             <span>
@@ -139,7 +139,7 @@
             :key="item.text"
             :to="item.to"
             class="dropdown-item is-size-5"
-            @click.native="$refs.userMenu.isActive = false"
+            @click="$refs.userMenu.isActive = false"
           >
             <component :is="item.iconComponent || 'fa-icon'" :icon="item.icon" fixed-width />
             <span>
@@ -267,7 +267,7 @@ export default {
     window.addEventListener('click', this.onClick);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('click', this.onClick);
   },
 
@@ -477,7 +477,9 @@ nav {
   .search-input {
     width: 250px;
     margin-right: 50px;
-    transition: width 0.5s ease, margin-right 0.5s ease;
+    transition:
+      width 0.5s ease,
+      margin-right 0.5s ease;
   }
 
   .search-input:hover {

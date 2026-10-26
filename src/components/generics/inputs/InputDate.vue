@@ -4,7 +4,7 @@
     type="date"
     class="input input-date"
     :class="{ 'is-danger': hasError }"
-    :value="value"
+    :value="modelValue"
     :min="min"
     :max="max"
     :required="required"
@@ -21,7 +21,7 @@ export default {
 
   props: {
     // YYYY-MM-DD, as stored by the API
-    value: {
+    modelValue: {
       type: String,
       default: null,
     },
@@ -36,12 +36,12 @@ export default {
     },
   },
 
-  emits: ['input'],
+  emits: ['update:modelValue'],
 
   methods: {
     onInput(event) {
       // an empty value is a cleared (or not yet complete) date
-      this.$emit('input', event.target.value || null);
+      this.$emit('update:modelValue', event.target.value || null);
     },
   },
 };

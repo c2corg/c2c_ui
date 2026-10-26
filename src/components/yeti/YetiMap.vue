@@ -307,7 +307,8 @@ $box-padding: 1.25rem; //TODO find this variable
 $header-height: 34px;
 $box-margin: 1.5rem; //TODO find this variable
 $yeti-height: calc(
-  100vh - #{$navbar-height} - #{$section-padding} - 2 * #{$box-padding} - #{$header-height} - #{$box-margin} - #{$box-margin}
+  100vh - #{$navbar-height} - #{$section-padding} - 2 * #{$box-padding} - #{$header-height} - #{$box-margin} -
+    #{$box-margin}
 );
 
 .map-container {

@@ -193,7 +193,8 @@ export default {
   },
 
   watch: {
-    'document.associations.waypoints': 'onWaypointsAssociation',
+    // deep 1: also when a waypoint is added to the array, as Vue 2 array watchers did
+    'document.associations.waypoints': { handler: 'onWaypointsAssociation', deep: 1 },
     'document.geometry.geom': 'onGeometryUpdate',
     'document.geometry.geom_detail': 'onGeometryUpdate',
     'document.climbing_outdoor_type': {
@@ -233,8 +234,8 @@ export default {
     },
 
     onWaypointsAssociation() {
-      // the document is null while another one loads (e.g. from add to edit, or another lang)
-      if (!this.document) {
+      // the document is null while another one loads (e.g. from add to edit, or another lang), or has no associations
+      if (!this.document?.associations?.waypoints) {
         return;
       }
 

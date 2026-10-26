@@ -51,7 +51,7 @@ export default {
     }
 
     // reset url parameters
-    if (Object.keys(this.$router.currentRoute.query)?.length > 0) {
+    if (Object.keys(this.$route.query)?.length > 0) {
       this.$router.replace({
         path: this.$route.path,
         query: {},

@@ -28,11 +28,15 @@ $cb-skin: skin4;
 
 @if ($cb-skin == skin1) {
   //no border, small shadow
-  $cb-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+  $cb-shadow:
+    0 2px 3px rgba(10, 10, 10, 0.1),
+    0 0 0 1px rgba(10, 10, 10, 0.1);
   $cb-margin-bottom: 1rem;
 } @else if ($cb-skin == skin2) {
   //primary big border top, small shadow
-  $cb-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+  $cb-shadow:
+    0 2px 3px rgba(10, 10, 10, 0.1),
+    0 0 0 1px rgba(10, 10, 10, 0.1);
   $cb-border-top: 4px solid $primary;
   $cb-margin-bottom: 1rem;
 } @else if ($cb-skin == skin3) {

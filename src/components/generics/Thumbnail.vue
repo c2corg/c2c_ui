@@ -1,8 +1,8 @@
 <template>
-  <picture>
+  <picture :class="$attrs.class" :style="$attrs.style">
     <source v-if="avif" type="image/avif" :srcset="avif" />
     <source v-if="webp" type="image/webp" :srcset="webp" />
-    <img ref="img" v-bind="$attrs" v-on="$listeners" :src="standard" @error.once="onError" />
+    <img ref="img" v-bind="imgAttrs" :src="standard" @error.once="onError" />
   </picture>
 </template>
 
@@ -10,6 +10,7 @@
 import { getImageUrl } from '@/js/image-urls';
 
 export default {
+  // the classes and style stay on the picture, the other attributes and the listeners go to the image
   inheritAttrs: false,
   props: {
     img: {
@@ -22,6 +23,12 @@ export default {
     },
   },
   computed: {
+    imgAttrs() {
+      // eslint-disable-next-line no-unused-vars
+      const { class: className, style, ...attrs } = this.$attrs;
+      return attrs;
+    },
+
     avif() {
       return getImageUrl(this.img, this.size, 'avif');
     },

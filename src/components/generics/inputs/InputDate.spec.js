@@ -5,7 +5,7 @@ import InputDate from './InputDate';
 
 describe('InputDate', () => {
   it('is a native date input showing the value', () => {
-    const input = mount(InputDate, { propsData: { value: '2026-10-01' } }).find('input');
+    const input = mount(InputDate, { props: { modelValue: '2026-10-01' } }).find('input');
 
     expect(input.attributes('type')).toBe('date');
     expect(input.element.value).toBe('2026-10-01');
@@ -13,22 +13,24 @@ describe('InputDate', () => {
   });
 
   it('emits the chosen date as YYYY-MM-DD, and null once cleared', async () => {
-    const wrapper = mount(InputDate, { propsData: { value: null } });
+    const wrapper = mount(InputDate, { props: { modelValue: null } });
     const input = wrapper.find('input');
 
     await input.setValue('2026-07-14');
     input.element.value = '';
     await input.trigger('input');
 
-    expect(wrapper.emitted('input')).toEqual([['2026-07-14'], [null]]);
+    expect(wrapper.emitted('update:modelValue')).toEqual([['2026-07-14'], [null]]);
   });
 
   it('limits the selectable dates, and shows errors', () => {
     const input = mount(InputDate, {
-      propsData: { value: null, min: '2026-10-01', max: '2026-10-19', required: true, hasError: true },
+      props: { modelValue: null, min: '2026-10-01', max: '2026-10-19', required: true, hasError: true },
     }).find('input');
 
-    expect(input.attributes()).toMatchObject({ min: '2026-10-01', max: '2026-10-19', required: 'required' });
+    expect(input.attributes()).toMatchObject({ min: '2026-10-01', max: '2026-10-19' });
+    // Vue 3 renders boolean attributes as required="" (Vue 2: required="required")
+    expect(input.element.required).toBe(true);
     expect(input.classes()).toContain('is-danger');
   });
 });

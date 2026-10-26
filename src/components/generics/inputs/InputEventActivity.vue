@@ -3,7 +3,7 @@
     <span
       v-for="event_activity of event_activities"
       :key="event_activity"
-      :checked="value_ === event_activity"
+      :checked="value_ === event_activity || null"
       :class="{ 'with-labels': showLabels }"
       class="input-item has-cursor-pointer"
       :title="showLabels ? null : $gettext(event_activity, 'event_activities')"
@@ -26,7 +26,7 @@ export default {
   mixins: [baseMixin],
 
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: null,
     },

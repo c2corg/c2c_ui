@@ -25,19 +25,19 @@
           :geom-detail-editable="geomDetailEditable"
           show-center-on-geolocation
           show-recenter-on
-          @move="$emit('move', arguments[0])"
+          @move="$emit('move', $event)"
         />
       </div>
       <div class="column is-6">
         <div class="field">
           <label class="label">{{ $gettext('Longitude') }}</label>
-          <input-simple type="number" postfix="°E" v-model="longitude" @input="setGeometryPoint" />
+          <input-simple type="number" postfix="°E" v-model="longitude" @update:model-value="setGeometryPoint" />
         </div>
       </div>
       <div class="column is-6">
         <div class="field">
           <label class="label">{{ $gettext('Latitude') }}</label>
-          <input-simple type="number" postfix="°N" v-model="latitude" @input="setGeometryPoint" />
+          <input-simple type="number" postfix="°N" v-model="latitude" @update:model-value="setGeometryPoint" />
         </div>
       </div>
     </div>

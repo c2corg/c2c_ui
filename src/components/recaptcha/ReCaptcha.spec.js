@@ -32,8 +32,8 @@ describe('ReCaptcha', () => {
   afterEach(() => delete window.grecaptcha);
 
   it('loads Google script once, explicit rendering, whatever the number of captchas', () => {
-    mount(ReCaptcha, { propsData: { sitekey: 'key' } });
-    mount(ReCaptcha, { propsData: { sitekey: 'key' } });
+    mount(ReCaptcha, { props: { sitekey: 'key' } });
+    mount(ReCaptcha, { props: { sitekey: 'key' } });
 
     expect(scripts()).toHaveLength(1);
     expect(scripts()[0].src).toBe('https://www.google.com/recaptcha/api.js?onload=c2cRecaptchaLoaded&render=explicit');
@@ -41,7 +41,7 @@ describe('ReCaptcha', () => {
   });
 
   it('renders the widget with the site key once the script is loaded', async () => {
-    const wrapper = mount(ReCaptcha, { propsData: { sitekey: 'site-key' } });
+    const wrapper = mount(ReCaptcha, { props: { sitekey: 'site-key' } });
     expect(google.grecaptcha.render).not.toHaveBeenCalled();
 
     google.load();
@@ -54,7 +54,7 @@ describe('ReCaptcha', () => {
   });
 
   it('emits the token once solved, and expired', async () => {
-    const wrapper = mount(ReCaptcha, { propsData: { sitekey: 'key' } });
+    const wrapper = mount(ReCaptcha, { props: { sitekey: 'key' } });
     google.load();
     await flush();
     const options = google.grecaptcha.render.mock.calls[0][1];
@@ -67,7 +67,7 @@ describe('ReCaptcha', () => {
   });
 
   it('resets its own widget', async () => {
-    const wrapper = mount(ReCaptcha, { propsData: { sitekey: 'key' } });
+    const wrapper = mount(ReCaptcha, { props: { sitekey: 'key' } });
     wrapper.vm.reset(); // before the script: nothing to reset
     google.load();
     await flush();
@@ -79,8 +79,8 @@ describe('ReCaptcha', () => {
   });
 
   it('does not render once destroyed before the script loaded', async () => {
-    const wrapper = mount(ReCaptcha, { propsData: { sitekey: 'key' } });
-    wrapper.destroy();
+    const wrapper = mount(ReCaptcha, { props: { sitekey: 'key' } });
+    wrapper.unmount();
 
     google.load();
     await flush();

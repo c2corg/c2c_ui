@@ -1,7 +1,7 @@
 <template>
   <slider
     class="input-slider"
-    :value="value"
+    :value="modelValue"
     :min="min"
     :max="max"
     :step="step"
@@ -11,14 +11,13 @@
     :format="format"
     :aria-labelledby="ariaLabelledby"
     :options="options"
-    @input="$emit('input', $event)"
+    @input="$emit('update:modelValue', $event)"
     @change="$emit('change', $event)"
   />
 </template>
 
 <script>
-// @vueform/slider runs on Vue 2.7 and Vue 3: at the switch, import '@vueform/slider' instead of its Vue 2 build
-import Slider from '@vueform/slider/dist/slider.vue2.js';
+import Slider from '@vueform/slider';
 import '@vueform/slider/themes/default.css';
 
 // A slider for one value, or a range when the value is an array of two
@@ -26,7 +25,7 @@ export default {
   components: { Slider },
 
   props: {
-    value: {
+    modelValue: {
       type: [Number, Array],
       required: true,
     },
@@ -72,7 +71,7 @@ export default {
     },
   },
 
-  emits: ['input', 'change'],
+  emits: ['update:modelValue', 'change'],
 
   computed: {
     options() {

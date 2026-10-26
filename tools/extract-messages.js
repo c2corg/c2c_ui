@@ -1,9 +1,9 @@
 /*
- * Extract untranslated string from .vue and .js files  and save them into a .pot file :
+ * Extract untranslated string from .vue, .js and .ts files  and save them into a .pot file :
  *
  * https://www.gnu.org/software/gettext/manual/gettext.html
  *
- * Supported patterns in .vue and .js files :
+ * Supported patterns in .vue, .js and .ts files :
  *
  *    $gettext('msgid')
  *    $gettext('msgid', 'msgctx')
@@ -22,11 +22,13 @@
  */
 
 const fs = require('fs');
-const compiler = require('vue-template-compiler');
+const { parse } = require('vue/compiler-sfc');
 
-const NODETYPE_TEXT = 3;
-
-const template_regex = /(<template>[\s\S]*<\/template>)/;
+// node types of the template AST (@vue/compiler-core NodeTypes)
+const NODETYPE_ELEMENT = 1;
+const NODETYPE_TEXT = 2;
+const NODETYPE_ATTRIBUTE = 6;
+const NODETYPE_DIRECTIVE = 7;
 const gettext_template1 = /\$gettext\(\s*'((?:[^']|\\')*?)'\s*\)/gm;
 const gettext_template1b = /\$gettext\(\s*`((?:[^`$])*?)`\s*\)/gm;
 const gettext_template2 = /\$gettext\(\s*'((?:[^']|\\')*?)',\s*'([^']*?)'\s*\)/gm;
@@ -106,18 +108,7 @@ Process.prototype.parseScript = function (file, data, regex) {
 };
 
 Process.prototype.parseTemplate = function (file, data) {
-  // we need line number, but compiler does not provide it.
-  // let use a trick : we do not use directive argument, so
-  // we will modifiy our script by adding v-translate:N
-  // where N is the line number
-  data = data.split('\n');
-  for (let i = 0; i < data.length; i++) {
-    data[i] = data[i].replace(/v-translate/g, 'v-translate:' + (i + 1));
-  }
-  data = data.join('\n');
-
-  // get template part
-  const template = template_regex.exec(data);
+  const template = parse(data, { filename: file }).descriptor.template;
 
   if (template === null) {
     // eslint-disable-next-line no-console
@@ -125,34 +116,34 @@ Process.prototype.parseTemplate = function (file, data) {
     return;
   }
 
-  const parseTranslateDirective = function (node, directiveMeta) {
-    const line = directiveMeta.arg; // the trick: arg is the line number
-    let msgctxt;
-
-    if (node.children.length !== 1) {
-      throw new Error(`${file}: on line ${line}\nNodes with v-translate directive must contains only one child`);
+  const visit = (node) => {
+    if (node.type !== NODETYPE_ELEMENT) {
+      return;
     }
 
-    if (node.children[0].type !== NODETYPE_TEXT) {
-      throw new Error(`${file}: on line ${line}\nInterpolation is not yet supported. Please use $gettext`);
+    const directive = node.props.find((prop) => prop.type === NODETYPE_DIRECTIVE && prop.name === 'translate');
+    if (directive) {
+      this.parseTranslateDirective(file, node, directive.loc.start.line);
     }
 
-    for (const attribute of node.attrsList) {
-      if (attribute.name === 'translate-context') {
-        msgctxt = attribute.value;
-      }
-    }
-
-    const msgid = node.children[0].text;
-    this.push(file, line, msgctxt, msgid);
+    node.children.forEach(visit);
   };
 
-  compiler.compile(template[1], {
-    preserveWhitespace: false,
-    directives: {
-      translate: parseTranslateDirective.bind(this),
-    },
-  });
+  template.ast.children.forEach(visit);
+};
+
+Process.prototype.parseTranslateDirective = function (file, node, line) {
+  if (node.children.length !== 1) {
+    throw new Error(`${file}: on line ${line}\nNodes with v-translate directive must contains only one child`);
+  }
+
+  if (node.children[0].type !== NODETYPE_TEXT) {
+    throw new Error(`${file}: on line ${line}\nInterpolation is not yet supported. Please use $gettext`);
+  }
+
+  const context = node.props.find((prop) => prop.type === NODETYPE_ATTRIBUTE && prop.name === 'translate-context');
+
+  this.push(file, line, context?.value?.content, node.children[0].content);
 };
 
 Process.prototype.compute = function (file_or_dir) {
@@ -165,7 +156,7 @@ Process.prototype.compute = function (file_or_dir) {
   } else if (file_or_dir.endsWith('.vue')) {
     const data = fs.readFileSync(file_or_dir, 'utf8');
     this.addVueComponent(file_or_dir, data);
-  } else if (file_or_dir.endsWith('.js')) {
+  } else if ((file_or_dir.endsWith('.js') || file_or_dir.endsWith('.ts')) && !file_or_dir.endsWith('.d.ts')) {
     const data = fs.readFileSync(file_or_dir, 'utf8');
     this.addScript(file_or_dir, data);
   }

@@ -42,7 +42,7 @@
             v-for="layer of dataLayers"
             :key="layer.get('title')"
             @click="toogleMapLayer(layer)"
-            :selected="layer.getVisible()"
+            :selected="isLayerVisible(layer)"
             :layer="layer"
             title-context="Map slopes layer"
           ></layer-button>
@@ -157,6 +157,7 @@
 
 <script>
 import { toast } from 'bulma-toast';
+import { markRaw } from 'vue';
 
 import BiodivInformation from './BiodivInformation';
 import LayerButton from './LayerButton';
@@ -293,45 +294,62 @@ export default {
       dataLayers_ = dataLayers_.filter((layer) => !layer.get('restricted'));
     }
 
+    // OpenLayers objects must not be wrapped in Vue 3 reactive proxies, or OpenLayers
+    // does not render them. Their visibility is tracked through layersRevision instead.
     return {
+      // bumped on each layer visibility change, so that computed values and the layer switcher update
+      layersRevision: 0,
+
       // map layers, only one of them is visible
-      mapLayers: cartoLayers_,
+      mapLayers: markRaw(cartoLayers_.map(markRaw)),
 
       // slope layers
-      dataLayers: dataLayers_,
+      dataLayers: markRaw(dataLayers_.map(markRaw)),
 
       // protection areas layer as features
-      protectionAreasLayer: new ol.layer.Vector({
-        source: new ol.source.Vector(),
-      }),
+      protectionAreasLayer: markRaw(
+        new ol.layer.Vector({
+          source: new ol.source.Vector(),
+        })
+      ),
 
       // protection areas layers
-      protectionAreasLayers: protectionAreasLayers(),
+      protectionAreasLayers: markRaw(protectionAreasLayers().map(markRaw)),
 
       // layer for document icons and paths
-      documentsLayer: new ol.layer.Vector({
-        source: new ol.source.Vector(),
-      }),
+      documentsLayer: markRaw(
+        new ol.layer.Vector({
+          source: new ol.source.Vector(),
+        })
+      ),
 
       // layer edited document
-      editionLayer: new ol.layer.Vector({
-        source: new ol.source.Vector(),
-      }),
+      editionLayer: markRaw(
+        new ol.layer.Vector({
+          source: new ol.source.Vector(),
+        })
+      ),
 
       // layer for associated waypoints
-      waypointsLayer: new ol.layer.Vector({
-        source: new ol.source.Vector(),
-      }),
+      waypointsLayer: markRaw(
+        new ol.layer.Vector({
+          source: new ol.source.Vector(),
+        })
+      ),
 
       // layer for associated images
-      imagesLayer: new ol.layer.Vector({
-        source: new ol.source.Vector(),
-      }),
+      imagesLayer: markRaw(
+        new ol.layer.Vector({
+          source: new ol.source.Vector(),
+        })
+      ),
 
       // layer for displaying the elevation profile current point
-      elevationProfileLayer: new ol.layer.Vector({
-        source: new ol.source.Vector(),
-      }),
+      elevationProfileLayer: markRaw(
+        new ol.layer.Vector({
+          source: new ol.source.Vector(),
+        })
+      ),
 
       isFullscreen: false,
 
@@ -384,7 +402,7 @@ export default {
 
     visibleLayer: {
       get() {
-        return this.mapLayers.find((layer) => layer.getVisible() === true);
+        return this.mapLayers.find((layer) => this.isLayerVisible(layer));
       },
       set(layer) {
         this.visibleLayer.setVisible(false);
@@ -398,7 +416,8 @@ export default {
   },
 
   watch: {
-    documents: 'drawDocumentMarkers',
+    // deep 1: also when documents are added to or removed from the array, as Vue 2 array watchers did
+    documents: { handler: 'drawDocumentMarkers', deep: 1 },
     'editedDocument.condition_rating': 'drawDocumentMarkers',
     'editedDocument.waypoint_type': 'drawDocumentMarkers',
 
@@ -490,17 +509,21 @@ export default {
     this.map.on('moveend', this.updateEditMapLink);
     this.map.on('moveend', this.emitMoveEvent);
 
+    [...this.mapLayers, ...this.dataLayers].forEach((layer) => layer.on('change:visible', () => this.layersRevision++));
+
     if (this.protectionAreasVisible) {
       this.protectionAreasLayers.forEach((layer) => layer.setVisible(true));
     }
 
-    this.geolocation = new ol.Geolocation({
-      trackingOptions: {
-        enableHighAccuracy: true,
-      },
+    this.geolocation = markRaw(
+      new ol.Geolocation({
+        trackingOptions: {
+          enableHighAccuracy: true,
+        },
 
-      projection: this.view.getProjection(),
-    });
+        projection: this.view.getProjection(),
+      })
+    );
 
     this.geolocation.on('change:position', this.setCenterOnGeoLocation);
 
@@ -534,7 +557,7 @@ export default {
     this.updateEditMapLink();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     // off() without a handler would remove the handlers of every map
     if (this.onElevationProfile) {
       bus.off('elevation_profile', this.onElevationProfile);
@@ -635,7 +658,7 @@ export default {
     tryReadFeaturesFromGeoFile(file, format, options) {
       try {
         return format.readFeatures(file, options);
-      } catch (e) {
+      } catch {
         return null;
       }
     },
@@ -1077,6 +1100,11 @@ export default {
       return this.fit(extent);
     },
 
+    isLayerVisible(layer) {
+      // reading layersRevision makes callers re-evaluate when a layer visibility changes
+      return this.layersRevision >= 0 && layer.getVisible();
+    },
+
     toogleMapLayer(layer) {
       layer.setVisible(!layer.getVisible());
     },
@@ -1109,7 +1137,8 @@ export default {
         this.highlightedFeature.setStyle(this.highlightedFeature.get('normalStyle'));
       }
 
-      this.highlightedFeature = feature;
+      // as is: a proxy would never equal the feature hovered, and OpenLayers objects must stay out of reactivity
+      this.highlightedFeature = feature && markRaw(feature);
 
       if (feature && feature.get('highlightedStyle')) {
         feature.setStyle(feature.get('highlightedStyle'));

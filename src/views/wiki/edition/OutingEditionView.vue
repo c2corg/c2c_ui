@@ -12,7 +12,7 @@
           :field="fields.date_start"
           :max="showBothDates ? document.date_end : currentDate"
           @input="handleDates"
-          @click.native="setCurrentDate"
+          @click="setCurrentDate"
         />
         <form-field
           class="is-narrow"
@@ -21,7 +21,7 @@
           :field="fields.date_end"
           :min="showBothDates ? document.date_start : undefined"
           :max="currentDate"
-          @click.native="setCurrentDate"
+          @click="setCurrentDate"
         />
         <div class="column is-narrow">
           <input-checkbox v-model="showBothDates">{{ $gettext('Several days?') }}</input-checkbox>
@@ -55,7 +55,10 @@
 
       <div v-if="possibleRoutes && possibleRoutes.length !== 0" class="field">
         <div v-for="route of possibleRoutes" :key="route.document_id">
-          <input-checkbox :value="routeIsAssociated(route.document_id)" @input="changeRouteAssociation($event, route)">
+          <input-checkbox
+            :model-value="routeIsAssociated(route.document_id)"
+            @update:model-value="changeRouteAssociation($event, route)"
+          >
             <activities :activities="route.activities" class="is-size-4 has-text-secondary" />
             <document-title :document="route" />,
             <document-rating :document="route" />
@@ -260,11 +263,16 @@ export default {
 
   watch: {
     showBothDates: 'handleDates',
-    'document.activities': function (to, from) {
-      if (from === undefined || to === undefined) {
-        return; // initial load, or the document is null while another one loads
-      }
-      this.updateRoutes('activities', false);
+    // deep 1: also when an activity is added to the array, as Vue 2 array watchers did
+    'document.activities': {
+      handler(to, from) {
+        // Vue 3 gives null, not undefined, for the activities of a null document
+        if (from == null || to == null) {
+          return; // initial load, or the document is null while another one loads
+        }
+        this.updateRoutes('activities', false);
+      },
+      deep: 1,
     },
 
     'document.geometry.geom_detail': function (to, from) {

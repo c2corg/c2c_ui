@@ -20,8 +20,9 @@ export default {
     },
   },
 
+  // no DOM: it only sets document.title
   render() {
-    return '';
+    return null;
   },
 };
 </script>

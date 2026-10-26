@@ -1,6 +1,6 @@
-import { createLocalVue, mount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { nextTick } from 'vue';
+import { createApp, h, nextTick } from 'vue';
 
 import screen from './screen';
 
@@ -31,9 +31,9 @@ const fakeScreen = (initialWidth) => {
 };
 
 const installScreen = () => {
-  const localVue = createLocalVue();
-  localVue.use(screen);
-  return localVue;
+  const app = createApp({});
+  app.use(screen);
+  return app.config.globalProperties;
 };
 
 describe('$screen', () => {
@@ -48,7 +48,7 @@ describe('$screen', () => {
     [1600, 'isFullHD'],
   ])('at %ipx, only %s is true', (width, expected) => {
     fakeScreen(width);
-    const { $screen } = installScreen().prototype;
+    const { $screen } = installScreen();
 
     const flags = ['isMobile', 'isTablet', 'isDesktop', 'isWidescreen', 'isFullHD'];
     expect(flags.filter((flag) => $screen[flag])).toEqual([expected]);
@@ -56,17 +56,20 @@ describe('$screen', () => {
 
   it('follows the window size, and updates the components using it', async () => {
     const browser = fakeScreen(1600);
-    const localVue = installScreen();
     const wrapper = mount(
-      { render: (h) => h('p', localVue.prototype.$screen.isMobile ? 'mobile' : 'large') },
-      { localVue }
+      {
+        render() {
+          return h('p', this.$screen.isMobile ? 'mobile' : 'large');
+        },
+      },
+      { global: { plugins: [screen] } }
     );
     expect(wrapper.text()).toBe('large');
 
     browser.resize(400);
     await nextTick();
 
-    expect(localVue.prototype.$screen.isMobile).toBe(true);
+    expect(wrapper.vm.$screen.isMobile).toBe(true);
     expect(wrapper.text()).toBe('mobile');
   });
 });
