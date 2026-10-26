@@ -32,7 +32,7 @@
 <script>
 import FormInput from './FormInput';
 
-import { formField } from '@/js/form-registration';
+import { useFormField } from '@/js/composables/form-registration';
 import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
 
 export default {
@@ -41,7 +41,7 @@ export default {
   },
 
   // registered with the FormSection containing it
-  mixins: [formField('formSection'), requireFieldProperty, requireDocumentProperty],
+  mixins: [requireFieldProperty, requireDocumentProperty],
 
   props: {
     isExpanded: {
@@ -92,6 +92,10 @@ export default {
   },
 
   emits: ['click-prefix'],
+
+  setup() {
+    useFormField('formSection');
+  },
 
   data() {
     return {

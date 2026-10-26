@@ -56,12 +56,9 @@
 </template>
 
 <script>
-import { formField } from '@/js/form-registration';
+import { useFormField } from '@/js/composables/form-registration';
 
 export default {
-  // registered with the BaseForm containing it
-  mixins: [formField('baseForm')],
-
   props: {
     name: {
       type: String,
@@ -109,6 +106,11 @@ export default {
   },
 
   emits: ['update:modelValue'],
+  // registered with the BaseForm containing it
+
+  setup() {
+    useFormField('baseForm');
+  },
 
   data() {
     return {

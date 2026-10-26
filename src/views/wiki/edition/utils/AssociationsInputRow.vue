@@ -27,8 +27,8 @@
 <script>
 import FormInput from './FormInput';
 
-import associationRights from '@/js/associations-rights-mixin';
-import { formField } from '@/js/form-registration';
+import { useAssociationRights } from '@/js/composables/association-rights';
+import { useFormField } from '@/js/composables/form-registration';
 import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
 
 export default {
@@ -37,7 +37,7 @@ export default {
   },
 
   // registered with the FormSection containing it
-  mixins: [formField('formSection'), requireFieldProperty, requireDocumentProperty, associationRights],
+  mixins: [requireFieldProperty, requireDocumentProperty],
 
   props: {
     label: {
@@ -49,6 +49,11 @@ export default {
       type: String,
       default: undefined, // default must be undefined. null means explicit no helper
     },
+  },
+
+  setup() {
+    useFormField('formSection');
+    return useAssociationRights();
   },
 
   computed: {

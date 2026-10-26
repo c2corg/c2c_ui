@@ -1,19 +1,26 @@
-import { mount } from '@vue/test-utils';
+import { mount, type VueWrapper } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 import { h } from 'vue';
 
-import FormSection from './FormSection';
+import FormSection from './FormSection.vue';
 
-import { formField } from '@/js/form-registration';
+import { useFormField } from '@/js/composables/form-registration';
 
 // a field as FormField, AssociationsInputRow and MapInputRow are: visible and hasError, registered with the section
 const Field = {
-  mixins: [formField('formSection')],
+  setup() {
+    useFormField('formSection');
+  },
   props: { visible: Boolean, hasError: Boolean },
   render: () => h('div'),
 };
 
-const mountSection = (fields) =>
+type TestField = { id: number; visible: boolean; hasError?: boolean };
+
+// the test page, its fields changed by the tests
+type Page = { fields: TestField[] };
+
+const mountSection = (fields: TestField[]) =>
   mount(
     {
       template: `<form-section title="Conditions">
@@ -23,19 +30,30 @@ const mountSection = (fields) =>
       data: () => ({ fields }),
     },
     // attached: isVisible() reads the computed style, which needs the element in the document
-    { attachTo: document.body, global: { mocks: { $gettext: (s) => s }, stubs: { FaIcon: true, MarkerHelper: true } } }
-  );
+    {
+      attachTo: document.body,
+      global: { mocks: { $gettext: (s: string) => s }, stubs: { FaIcon: true, MarkerHelper: true } },
+    }
+  ) as unknown as VueWrapper<Page>;
 
-const section = (wrapper) => wrapper.findComponent(FormSection);
+// its visible, hasError and formFields read as the template does
+const section = (wrapper: VueWrapper) =>
+  wrapper.findComponent(FormSection) as unknown as VueWrapper<{
+    visible: boolean;
+    hasError: boolean;
+    formFields: unknown[];
+  }>;
 
 describe('FormSection', () => {
   it('is displayed while its fields are mounted (a map inside needs a size)', async () => {
-    let displayedOnMount;
+    let displayedOnMount: boolean | undefined;
     const MapLike = {
-      mixins: [formField('formSection')],
+      setup() {
+        useFormField('formSection');
+      },
       data: () => ({ visible: true, hasError: false }),
-      mounted() {
-        displayedOnMount = this.$el.closest('.section-item').style.display !== 'none';
+      mounted(this: { $el: HTMLElement }) {
+        displayedOnMount = (this.$el.closest('.section-item') as HTMLElement).style.display !== 'none';
       },
       render: () => h('div'),
     };
@@ -45,7 +63,7 @@ describe('FormSection', () => {
         template: `<form-section title="Map"><map-like /></form-section>`,
         components: { FormSection, MapLike },
       },
-      { global: { mocks: { $gettext: (s) => s } }, attachTo: document.body }
+      { global: { mocks: { $gettext: (s: string) => s } }, attachTo: document.body }
     );
 
     expect(displayedOnMount).toBe(true);
