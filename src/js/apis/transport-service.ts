@@ -81,7 +81,10 @@ class TransportService {
     return limit(() => this.axios.get<{ stopareas?: Stoparea[] }>(`/waypoints/${waypointId}/stopareas`));
   }
 
-  /** Retrieves the public transport stops located in an extent ([xmin, ymin, xmax, ymax], EPSG:3857), with their lines and the waypoints they are associated with */
+  /**
+   * Retrieves the public transport stops located in an extent ([xmin, ymin, xmax, ymax], EPSG:3857), with their lines
+   * and the waypoints they are associated with
+   */
   getStopareasInExtent(extent: number[]) {
     return this.axios.get('/stopareas', { params: { bbox: extent.map(Math.round).join(',') } });
   }
@@ -102,9 +105,7 @@ class TransportService {
     if (query.name) {
       params.name = query.name;
     }
-    return this.axios
-      .get<StopSchedules>('/transport/stops/schedules', { params })
-      .then((response) => response.data);
+    return this.axios.get<StopSchedules>('/transport/stops/schedules', { params }).then((response) => response.data);
   }
 
   /** Retrieves the planned timetable of a line of the transport map on a day, and the documents its stops lead to */
@@ -119,9 +120,7 @@ class TransportService {
     if (query.network) {
       params.network = query.network;
     }
-    return this.axios
-      .get<LineSchedules>('/transport/lines/schedules', { params })
-      .then((response) => response.data);
+    return this.axios.get<LineSchedules>('/transport/lines/schedules', { params }).then((response) => response.data);
   }
 
   /** Get list of waypoint ids that are accessible in TC for a route */

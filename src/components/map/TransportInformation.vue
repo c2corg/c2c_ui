@@ -2,7 +2,7 @@
   <modal-window ref="modalWindow">
     <template #header>
       <div class="transport-header">
-        <span v-if="isLine && data.ref" class="transport-badge" :style="badgeStyle">{{ data.ref }}</span>
+        <transport-badge v-if="isLine && data.ref" :label="data.ref" :mode="data.mode" :colour="lineColour" />
         <span>{{ title }}</span>
       </div>
     </template>
@@ -57,15 +57,7 @@
     </table>
 
     <section v-if="canLoad" class="transport-schedule">
-      <div class="transport-day">
-        <button class="button is-small" type="button" :title="$gettext('Previous day')" @click="shiftDay(-1)">
-          <fa-icon icon="chevron-left" />
-        </button>
-        <strong class="transport-day-label">{{ dayLabel }}</strong>
-        <button class="button is-small" type="button" :title="$gettext('Next day')" @click="shiftDay(1)">
-          <fa-icon icon="chevron-right" />
-        </button>
-      </div>
+      <transport-day-navigation :model-value="date" @update:model-value="goTo" />
 
       <p v-if="loading" class="transport-message" v-translate>Loading...</p>
       <p v-else-if="error" class="transport-message has-text-danger">{{ error }}</p>
@@ -77,30 +69,41 @@
           </a>
         </p>
 
-        <ul v-if="!isLine" class="transport-departures">
-          <li v-for="line of schedule.lines" :key="line.route_id || line.line_id">
-            <div class="transport-departures-line">
-              <span class="transport-badge" :style="navitiaLineStyle(line)">{{ line.code }}</span>
-              <span>{{ line.direction }}</span>
-            </div>
-            <div class="transport-times">
-              <span
-                v-for="time of line.departures"
-                :key="time"
-                class="transport-time"
-                :class="{ 'is-on-demand': isOnDemand(line, time) }"
-                :title="isOnDemand(line, time) ? $gettext('On demand') : null"
-                >{{ time }}</span
-              >
-              <em v-if="!line.departures.length" v-translate>No service this day.</em>
-            </div>
-          </li>
-        </ul>
+        <div v-if="!isLine && schedule.lines.length" class="transport-scroll">
+          <table class="transport-departures">
+            <thead>
+              <tr>
+                <th v-translate>Line</th>
+                <th v-translate>Direction</th>
+                <th v-translate>Departures</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="line of schedule.lines" :key="line.route_id || line.line_id">
+                <td>
+                  <transport-badge :label="line.code || ''" :mode="mode(line)" :colour="navitiaColour(line)" />
+                </td>
+                <td>{{ line.direction }}</td>
+                <td>
+                  <span
+                    v-for="time of line.departures"
+                    :key="time"
+                    class="transport-time"
+                    :class="{ 'is-on-demand': isOnDemand(line, time) }"
+                    :title="isOnDemand(line, time) ? $gettext('On demand') : null"
+                    >{{ time }}</span
+                  >
+                  <em v-if="!line.departures.length">–</em>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-        <template v-else>
+        <template v-if="isLine">
           <div v-for="(direction, index) of schedule.directions" :key="index" class="transport-direction">
             <h4 v-if="direction.direction">→ {{ direction.direction }}</h4>
-            <div v-if="direction.trips.length" class="transport-trips-scroll">
+            <div v-if="direction.trips.length" class="transport-scroll">
               <table class="transport-trips">
                 <thead v-if="direction.trips.some((trip) => trip.on_demand)">
                   <tr>
@@ -135,6 +138,7 @@
                 <small v-if="item.date_end"> · {{ item.date_end }}</small>
               </li>
             </ul>
+            <router-link v-if="section.all" :to="section.all" class="transport-all">{{ section.allLabel }}</router-link>
           </div>
         </div>
       </template>
@@ -156,22 +160,24 @@
 </template>
 
 <script>
+import TransportBadge from './TransportBadge';
+import TransportDayNavigation from './TransportDayNavigation';
 import { transportLineColour } from './transport-tiles-layer';
 
 import transportService from '@/js/apis/transport-service';
 import {
-  addDays,
   formatDay,
   formatInterval,
   isoDate,
   normalizeColour,
-  readableTextColour,
   safeWebsite,
   seasonalKind,
   splitLines,
 } from '@/js/transport-utils';
 
 export default {
+  components: { TransportBadge, TransportDayNavigation },
+
   props: {
     // a line or a stop of the transport tiles, see describeTransportFeature
     data: {
@@ -200,9 +206,8 @@ export default {
       return this.data.name || this.data.ref || '';
     },
 
-    badgeStyle() {
-      const background = transportLineColour(this.data);
-      return { backgroundColor: background, color: readableTextColour(background) };
+    lineColour() {
+      return transportLineColour(this.data);
     },
 
     modeLabel() {
@@ -267,10 +272,6 @@ export default {
       return Number.isFinite(this.data.lon) && Number.isFinite(this.data.lat) && (!this.isLine || !!this.data.ref);
     },
 
-    dayLabel() {
-      return formatDay(this.date, this.$language.current);
-    },
-
     hasService() {
       if (!this.schedule) {
         return false;
@@ -278,15 +279,6 @@ export default {
       return this.isLine
         ? this.schedule.directions.some((direction) => direction.trips.length)
         : this.schedule.lines.some((line) => line.departures.length);
-    },
-
-    linkedSections() {
-      const linked = this.schedule?.associations ?? {};
-      return [
-        { key: 'waypoints', type: 'w', title: this.$gettext('Waypoints near a stop'), items: linked.waypoints ?? [] },
-        { key: 'routes', type: 'r', title: this.$gettext('Routes you can reach'), items: linked.routes ?? [] },
-        { key: 'outings', type: 'o', title: this.$gettext('Recent outings'), items: linked.outings ?? [] },
-      ];
     },
 
     hasOnDemand() {
@@ -298,8 +290,34 @@ export default {
         : this.schedule.lines.some((line) => line.on_demand?.length);
     },
 
+    // the lists of routes and outings filter on the waypoints that the stops lead to
+    waypointsFilter() {
+      const ids = this.schedule?.associations?.waypoint_ids ?? [];
+      return ids.length ? { w: ids.join(',') } : null;
+    },
+
     visibleSections() {
-      return this.linkedSections.filter((section) => section.items.length);
+      const linked = this.schedule?.associations ?? {};
+      const filter = this.waypointsFilter;
+      return [
+        { key: 'waypoints', type: 'w', title: this.$gettext('Waypoints near a stop'), items: linked.waypoints ?? [] },
+        {
+          key: 'routes',
+          type: 'r',
+          title: this.$gettext('Routes you can reach'),
+          items: linked.routes ?? [],
+          all: filter && { name: 'routes', query: filter },
+          allLabel: this.$gettext('See all routes'),
+        },
+        {
+          key: 'outings',
+          type: 'o',
+          title: this.$gettext('Recent outings'),
+          items: linked.outings ?? [],
+          all: filter && { name: 'outings', query: filter },
+          allLabel: this.$gettext('See all outings'),
+        },
+      ].filter((section) => section.items.length);
     },
   },
 
@@ -312,28 +330,27 @@ export default {
       this.load();
     },
 
-    shiftDay(days) {
-      this.date = addDays(this.date, days);
-      this.load();
-    },
-
     goTo(day) {
       this.date = day;
       this.load();
-    },
-
-    isOnDemand(line, time) {
-      return !!line.on_demand?.includes(time);
     },
 
     formatDay(day) {
       return formatDay(day, this.$language.current);
     },
 
-    navitiaLineStyle(line) {
-      const background = normalizeColour(line.color ? '#' + line.color : '', '#4a5568');
-      const text = normalizeColour(line.text_color ? '#' + line.text_color : '', readableTextColour(background));
-      return { backgroundColor: background, color: text };
+    mode(line) {
+      const mode = (line.mode || '').toLowerCase();
+      // Navitia calls the buses of the long distance coaches
+      return mode === 'coach' ? 'bus' : mode;
+    },
+
+    navitiaColour(line) {
+      return normalizeColour(line.color ? '#' + line.color : '', '#4a5568');
+    },
+
+    isOnDemand(line, time) {
+      return !!line.on_demand?.includes(time);
     },
 
     documentLink(type, id) {
@@ -406,20 +423,16 @@ export default {
   gap: 0.6em;
 }
 
-.transport-badge,
 .transport-line {
   display: inline-block;
   min-width: 2em;
+  margin: 0 0.3em 0.3em 0;
   padding: 0 0.5em;
   border-radius: 1em;
-  font-weight: 600;
-  text-align: center;
-}
-
-.transport-line {
-  margin: 0 0.3em 0.3em 0;
   background-color: #e2e8f0;
   color: #1a202c;
+  font-weight: 600;
+  text-align: center;
 }
 
 .transport-table td:first-child {
@@ -434,20 +447,6 @@ export default {
   border-top: 1px solid #e2e8f0;
 }
 
-.transport-day {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1em;
-  margin-bottom: 0.8em;
-}
-
-.transport-day-label {
-  min-width: 11em;
-  text-align: center;
-  text-transform: capitalize;
-}
-
 .transport-message {
   margin-bottom: 0.8em;
   text-align: center;
@@ -457,49 +456,47 @@ export default {
   }
 }
 
-.transport-departures {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.transport-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
 
-  > li {
-    margin-bottom: 0.8em;
+.transport-departures {
+  border-collapse: collapse;
+  width: 100%;
+
+  th {
+    padding: 0.2em 0.6em 0.2em 0;
+    text-align: left;
+  }
+
+  td {
+    padding: 0.3em 0.6em 0.3em 0;
+    vertical-align: top;
+  }
+
+  tbody tr + tr > * {
+    border-top: 1px solid #edf2f7;
   }
 }
 
-.transport-departures-line {
-  display: flex;
-  align-items: center;
-  gap: 0.6em;
-  margin-bottom: 0.3em;
-}
-
-.transport-times {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3em;
-}
-
 .transport-time {
+  display: inline-block;
+  margin: 0 0.3em 0.3em 0;
   padding: 0 0.4em;
+  border-radius: 3px;
+  background-color: #edf2f7;
+  font-variant-numeric: tabular-nums;
 
   &.is-on-demand {
     border: 1px dashed #718096;
     font-style: italic;
   }
-  border-radius: 3px;
-  background-color: #edf2f7;
-  font-variant-numeric: tabular-nums;
 }
 
 .transport-direction h4 {
   margin: 0.8em 0 0.3em;
   font-weight: 600;
-}
-
-.transport-trips-scroll {
-  max-width: 100%;
-  overflow-x: auto;
 }
 
 .transport-trips {
@@ -544,6 +541,12 @@ export default {
     margin: 0;
     padding-left: 1.2em;
   }
+}
+
+.transport-all {
+  display: inline-block;
+  margin-top: 0.3em;
+  font-weight: 600;
 }
 
 .transport-source {

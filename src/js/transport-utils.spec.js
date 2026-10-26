@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import {
   addDays,
+  modeIcon,
+  timetableDays,
   formatDay,
   formatInterval,
   isoDate,
@@ -81,5 +83,18 @@ describe('transport-utils', () => {
   it('names a day in the language of the page', () => {
     expect(formatDay('2026-10-26', 'en')).toBe('Monday, October 26');
     expect(formatDay('2026-10-26', 'fr')).toBe('lundi 26 octobre');
+  });
+
+  it('picks the icon of a mode, a generic one for the others', () => {
+    expect(modeIcon('bus')).toBe('bus');
+    expect(modeIcon('trolleybus')).toBe('bus');
+    expect(modeIcon('light_rail')).toBe('tram');
+    expect(modeIcon('train')).toBe('train');
+    expect(modeIcon('aerialway')).toBe('public_transport');
+    expect(modeIcon(undefined)).toBe('public_transport');
+  });
+
+  it('gives the days that the timetables can be asked for', () => {
+    expect(timetableDays('2026-10-26')).toEqual(['2026-10-26', '2027-10-26']);
   });
 });

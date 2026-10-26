@@ -19,14 +19,13 @@ const mountInformation = (data) =>
       mocks: {
         $gettext: (text) => text,
         $language: { current: 'en' },
-        $documentUtils: { getDocumentType: (type) => ({ w: 'waypoint', r: 'route', o: 'outing' }[type]) },
+        $documentUtils: { getDocumentType: (type) => ({ w: 'waypoint', r: 'route', o: 'outing' })[type] },
       },
       stubs: {
         ModalWindow: {
           template: '<div><slot name="header" /><slot /></div>',
           methods: { show() {} },
         },
-        FaIcon: true,
         RouterLink: {
           props: ['to'],
           template: '<a class="router-link" :data-to="JSON.stringify(to)"><slot /></a>',
@@ -58,6 +57,8 @@ const line = {
   lat: 46.1,
 };
 
+const noAssociations = { waypoints: [], waypoint_ids: [], routes: [], outings: [] };
+
 const stopSchedule = (departures, extra = {}) => ({
   stop_area: { id: 'stop_area:R74:1141485' },
   date: today,
@@ -68,21 +69,25 @@ const stopSchedule = (departures, extra = {}) => ({
       code: 'Y02',
       color: 'AFCA0B',
       text_color: 'FFFFFF',
+      mode: 'Coach',
       direction: 'Annemasse',
       departures,
+      on_demand: [],
     },
   ],
   next_date: null,
-  associations: { waypoints: [], routes: [], outings: [] },
+  associations: noAssociations,
   ...extra,
 });
+
+const dayButtons = (wrapper) => wrapper.findAll('.transport-day button');
 
 describe('TransportInformation', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('asks for the departures of the stop of the day and shows them', async () => {
+  it('asks for the departures of the stop of the day and shows them in a table', async () => {
     transportService.getStopSchedules.mockResolvedValue(stopSchedule(['06:05', '17:00']));
     const wrapper = mountInformation(stop);
 
@@ -97,31 +102,36 @@ describe('TransportInformation', () => {
       name: 'Gare Routière',
       lang: 'en',
     });
-    expect(wrapper.findAll('.transport-time').map((time) => time.text())).toEqual(['06:05', '17:00']);
-    expect(wrapper.find('.transport-departures .transport-badge').text()).toBe('Y02');
-    expect(wrapper.find('.transport-departures .transport-badge').attributes('style')).toContain('rgb(175, 202, 11)');
+    const headers = wrapper.findAll('.transport-departures thead th').map((cell) => cell.text());
+    expect(headers).toEqual(['Line', 'Direction', 'Departures']);
+    const [badge, direction, departures] = wrapper.findAll('.transport-departures tbody td');
+    expect(badge.text()).toBe('Y02');
+    expect(badge.find('.transport-badge').attributes('style')).toContain('rgb(175, 202, 11)');
+    expect(badge.find('img').attributes('src')).toContain('bus');
+    expect(direction.text()).toBe('Annemasse');
+    expect(departures.findAll('.transport-time').map((time) => time.text())).toEqual(['06:05', '17:00']);
   });
 
-  it('moves from a day to the next', async () => {
+  it('moves from a day to the next, and not before today', async () => {
     transportService.getStopSchedules.mockResolvedValue(stopSchedule(['06:05']));
     const wrapper = mountInformation(stop);
     wrapper.vm.show();
     await flushPromises();
 
-    await wrapper.findAll('.transport-day button')[1].trigger('click');
+    expect(dayButtons(wrapper)[0].attributes('disabled')).toBeDefined();
+
+    await dayButtons(wrapper)[1].trigger('click');
     await flushPromises();
 
     expect(transportService.getStopSchedules).toHaveBeenLastCalledWith(
       expect.objectContaining({ date: addDays(today, 1) })
     );
+    expect(dayButtons(wrapper)[0].attributes('disabled')).toBeUndefined();
 
-    await wrapper.findAll('.transport-day button')[0].trigger('click');
-    await wrapper.findAll('.transport-day button')[0].trigger('click');
+    await dayButtons(wrapper)[0].trigger('click');
     await flushPromises();
 
-    expect(transportService.getStopSchedules).toHaveBeenLastCalledWith(
-      expect.objectContaining({ date: addDays(today, -1) })
-    );
+    expect(transportService.getStopSchedules).toHaveBeenLastCalledWith(expect.objectContaining({ date: today }));
   });
 
   it('says when nothing runs and offers the next day of service', async () => {
@@ -145,7 +155,7 @@ describe('TransportInformation', () => {
     expect(wrapper.findAll('.transport-time').map((time) => time.text())).toEqual(['08:00']);
   });
 
-  it('shows the timetable of a line, stop by stop', async () => {
+  it('shows the timetable of a line, stop by stop, with its direction', async () => {
     transportService.getLineSchedules.mockResolvedValue({
       date: today,
       line: { line_id: 'line:Y02' },
@@ -163,7 +173,7 @@ describe('TransportInformation', () => {
         },
       ],
       next_date: null,
-      associations: { waypoints: [], routes: [], outings: [] },
+      associations: noAssociations,
     });
     const wrapper = mountInformation(line);
 
@@ -217,29 +227,67 @@ describe('TransportInformation', () => {
     expect(wrapper.text()).not.toContain('booked beforehand');
   });
 
-  it('links to the routes and outings the stop leads to', async () => {
-    transportService.getStopSchedules.mockResolvedValue(
-      stopSchedule(['06:05'], {
-        associations: {
-          waypoints: [{ document_id: 11, title: 'Parking du lac', distance: 0.4 }],
-          routes: [{ document_id: 22, title: 'Tour du lac' }],
-          outings: [{ document_id: 33, title: 'Tour du lac en hiver', date_end: '2026-01-02' }],
-        },
-      })
-    );
-    const wrapper = mountInformation(stop);
+  describe('what a stop or a line leads to', () => {
+    const associations = {
+      waypoints: [{ document_id: 11, title: 'Parking du lac', distance: 0.4 }],
+      waypoint_ids: [11, 12, 13],
+      routes: [{ document_id: 22, title: 'Tour du lac' }],
+      outings: [{ document_id: 33, title: 'Tour du lac en hiver', date_end: '2026-01-02' }],
+    };
 
-    wrapper.vm.show();
-    await flushPromises();
+    it('links to the routes and outings, and to the lists of all of them', async () => {
+      transportService.getStopSchedules.mockResolvedValue(stopSchedule(['06:05'], { associations }));
+      const wrapper = mountInformation(stop);
 
-    const links = wrapper.findAll('.transport-linked .router-link');
-    expect(links.map((link) => link.text())).toEqual(['Parking du lac', 'Tour du lac', 'Tour du lac en hiver']);
-    expect(links.map((link) => JSON.parse(link.attributes('data-to')))).toEqual([
-      { name: 'waypoint', params: { id: 11 } },
-      { name: 'route', params: { id: 22 } },
-      { name: 'outing', params: { id: 33 } },
-    ]);
-    expect(wrapper.find('.transport-linked').text()).toContain('0.4 km');
+      wrapper.vm.show();
+      await flushPromises();
+
+      const items = wrapper.findAll('.transport-linked li .router-link');
+      expect(items.map((link) => link.text())).toEqual(['Parking du lac', 'Tour du lac', 'Tour du lac en hiver']);
+      expect(items.map((link) => JSON.parse(link.attributes('data-to')))).toEqual([
+        { name: 'waypoint', params: { id: 11 } },
+        { name: 'route', params: { id: 22 } },
+        { name: 'outing', params: { id: 33 } },
+      ]);
+      expect(wrapper.find('.transport-linked').text()).toContain('0.4 km');
+
+      const all = wrapper.findAll('.transport-all');
+      expect(all.map((link) => link.text())).toEqual(['See all routes', 'See all outings']);
+      expect(all.map((link) => JSON.parse(link.attributes('data-to')))).toEqual([
+        { name: 'routes', query: { w: '11,12,13' } },
+        { name: 'outings', query: { w: '11,12,13' } },
+      ]);
+    });
+
+    it('offers the lists of a line too', async () => {
+      transportService.getLineSchedules.mockResolvedValue({
+        date: today,
+        line: { line_id: 'line:Y02' },
+        directions: [],
+        next_date: null,
+        associations,
+      });
+      const wrapper = mountInformation(line);
+
+      wrapper.vm.show();
+      await flushPromises();
+
+      expect(wrapper.findAll('.transport-all')).toHaveLength(2);
+    });
+
+    it('does not offer the list of routes when the stop leads to none', async () => {
+      transportService.getStopSchedules.mockResolvedValue(
+        stopSchedule(['06:05'], {
+          associations: { ...associations, routes: [] },
+        })
+      );
+      const wrapper = mountInformation(stop);
+
+      wrapper.vm.show();
+      await flushPromises();
+
+      expect(wrapper.findAll('.transport-all').map((link) => link.text())).toEqual(['See all outings']);
+    });
   });
 
   it.each([
@@ -277,7 +325,7 @@ describe('TransportInformation', () => {
     const wrapper = mountInformation(stop);
     wrapper.vm.show();
 
-    await wrapper.findAll('.transport-day button')[1].trigger('click');
+    await dayButtons(wrapper)[1].trigger('click');
     await flushPromises();
     answerFirst(stopSchedule(['06:05']));
     await flushPromises();
@@ -294,5 +342,6 @@ describe('TransportInformation', () => {
     expect(text).toContain('30 min');
     expect(text).toContain('Dec-Apr');
     expect(wrapper.find('a[href="https://www.openstreetmap.org/relation/123"]').exists()).toBe(true);
+    expect(wrapper.find('.transport-header .transport-badge').text()).toBe('Y02');
   });
 });

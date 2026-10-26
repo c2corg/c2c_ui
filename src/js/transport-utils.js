@@ -124,3 +124,27 @@ export function formatDay(day, language) {
     month: 'long',
   });
 }
+
+const MODE_ICONS = {
+  bus: 'bus',
+  trolleybus: 'bus',
+  tram: 'tram',
+  light_rail: 'tram',
+  subway: 'tram',
+  monorail: 'tram',
+  train: 'train',
+};
+
+/** The name of the icon (in assets/img/boxes) of a mode of transport */
+export function modeIcon(mode) {
+  return MODE_ICONS[mode] ?? 'public_transport';
+}
+
+// the API gives the timetable from today, on a year ahead
+const FIRST_DAY = 0;
+const LAST_DAY = 365;
+
+/** The first and the last day that the timetables can be asked for, as YYYY-MM-DD */
+export function timetableDays(today = isoDate(new Date())) {
+  return [addDays(today, FIRST_DAY), addDays(today, LAST_DAY)];
+}
