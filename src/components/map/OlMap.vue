@@ -335,10 +335,12 @@ export default {
       protectionAreasLayers: markRaw(protectionAreasLayers().map(markRaw)),
 
       // public transport stops layer, only visible from STOPS_MIN_ZOOM
-      stopsLayer: new ol.layer.Vector({
-        source: new ol.source.Vector(),
-        minZoom: STOPS_MIN_ZOOM - 0.01,
-      }),
+      stopsLayer: markRaw(
+        new ol.layer.Vector({
+          source: new ol.source.Vector(),
+          minZoom: STOPS_MIN_ZOOM - 0.01,
+        })
+      ),
 
       // layer for document icons and paths
       documentsLayer: markRaw(
