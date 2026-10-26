@@ -14,4 +14,5 @@ export const loginResponse = z.object({
   roles: z.array(z.string()),
 });
 
-export type LoginResponse = z.infer<typeof loginResponse>;
+// the data as the API gives it (check-response.ts): the schema's input type
+export type LoginResponse = z.input<typeof loginResponse>;

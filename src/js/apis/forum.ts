@@ -6,7 +6,7 @@ import config from '@/js/config';
 
 // what the UI reads of Discourse's answers, checked when they arrive (check-response.ts)
 const forumUser = z.object({ username: z.string(), avatar_template: z.string() });
-type ForumUser = z.infer<typeof forumUser>;
+type ForumUser = z.input<typeof forumUser>;
 
 const topic = z.object({
   last_poster_username: z.string(),
@@ -15,7 +15,7 @@ const topic = z.object({
   // not from Discourse: linked by getLatest()
   last_poster_user: forumUser.optional(),
 });
-type Topic = z.infer<typeof topic>;
+type Topic = z.input<typeof topic>;
 
 const latestTopics = z.object({ users: z.array(forumUser), topic_list: z.object({ topics: z.array(topic) }) });
 

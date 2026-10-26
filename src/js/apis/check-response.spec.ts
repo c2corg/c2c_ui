@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
 import { z } from 'zod';
 
 import BaseApi from './BaseApi';
@@ -17,6 +17,13 @@ describe('checkResponse', () => {
     const data = { id: 1, name: 'Mont Blanc', extra: true };
 
     expect(checkResponse(schema, data, 'GET /x', true)).toBe(data);
+  });
+
+  it("types the data as the schema's input, as it is the API's and not zod's parsed copy", () => {
+    const transformed = z.object({ id: z.string().transform(Number) });
+
+    expectTypeOf(checkResponse(transformed, { id: '7' }, 'GET /x', true)).toEqualTypeOf<{ id: string }>();
+    expect(checkResponse(transformed, { id: '7' }, 'GET /x', true)).toEqual({ id: '7' });
   });
 
   it('fails loudly in development and tests, and only reports in production', () => {

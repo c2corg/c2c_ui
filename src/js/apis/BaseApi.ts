@@ -84,12 +84,13 @@ export default class BaseApi {
     return new ApiData(this.axios.post<T>(url, body));
   }
 
-  // the same requests, whose response is checked against its schema (check-response.ts), and typed by it
-  getValidated<S extends z.ZodType>(url: string, schema: S, params?: AxiosRequestConfig): ApiData<z.infer<S>> {
+  // the same requests, whose response is checked against its schema (check-response.ts), and typed by it: the data
+  // is the API's, so it has the schema's input type
+  getValidated<S extends z.ZodType>(url: string, schema: S, params?: AxiosRequestConfig): ApiData<z.input<S>> {
     return new ApiData(this.validated(this.axios.get(url, params), schema, `GET ${url}`));
   }
 
-  postValidated<S extends z.ZodType>(url: string, schema: S, body?: unknown): ApiData<z.infer<S>> {
+  postValidated<S extends z.ZodType>(url: string, schema: S, body?: unknown): ApiData<z.input<S>> {
     return new ApiData(this.validated(this.axios.post(url, body), schema, `POST ${url}`));
   }
 
@@ -97,7 +98,7 @@ export default class BaseApi {
     request: Promise<AxiosResponse>,
     schema: S,
     description: string
-  ): Promise<AxiosResponse<z.infer<S>>> {
+  ): Promise<AxiosResponse<z.input<S>>> {
     return request.then((response) => {
       checkResponse(schema, response.data, description);
       return response;
