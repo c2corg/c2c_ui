@@ -15,21 +15,25 @@
 </template>
 
 <script>
-import { baseMixin } from './mixins';
+import { baseInputProps, useInputValue } from './input-value';
 
 import { uidMixin } from '@/js/uid';
 
 export default {
-  mixins: [baseMixin, uidMixin],
+  mixins: [uidMixin],
 
   props: {
+    ...baseInputProps,
     modelValue: {
       type: Boolean,
       default: null,
     },
   },
 
-  emits: ['change'],
+  emits: ['update:modelValue', 'change'],
+  setup(props, { emit }) {
+    return useInputValue(props, emit);
+  },
 };
 </script>
 

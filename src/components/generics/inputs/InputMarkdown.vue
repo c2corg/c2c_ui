@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { baseMixin } from './mixins';
+import { baseInputProps, useInputValue } from './input-value';
 
 import MarkdownEditor from '@/components/markdown-editor/MarkdownEditor';
 
@@ -14,13 +14,17 @@ export default {
     MarkdownEditor,
   },
 
-  mixins: [baseMixin],
-
   props: {
+    ...baseInputProps,
     modelValue: {
       type: String,
       default: null,
     },
+  },
+
+  emits: ['update:modelValue'],
+  setup(props, { emit }) {
+    return useInputValue(props, emit);
   },
 };
 </script>

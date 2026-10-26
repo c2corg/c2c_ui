@@ -14,12 +14,11 @@
 </template>
 
 <script>
-import { baseMixin } from './mixins';
+import { baseInputProps } from './input-value';
 
 export default {
-  mixins: [baseMixin],
-
   props: {
+    ...baseInputProps,
     // YYYY-MM-DD, as stored by the API
     modelValue: {
       type: String,

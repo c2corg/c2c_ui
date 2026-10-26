@@ -21,14 +21,13 @@
 </template>
 
 <script>
-import { baseMixin } from './mixins';
+import { baseInputProps } from './input-value';
 
 const range = (from, to) => [...Array(to - from + 1).keys()].map((i) => i + from);
 
 export default {
-  mixins: [baseMixin],
-
   props: {
+    ...baseInputProps,
     modelValue: {
       type: String,
       default: null,

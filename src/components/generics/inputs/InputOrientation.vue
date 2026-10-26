@@ -49,12 +49,12 @@
 </template>
 
 <script>
-import { arrayMixin, baseMixin } from './mixins';
+import { arrayInputProps, baseInputProps, useArrayInputValue } from './input-value';
 
 export default {
-  mixins: [baseMixin, arrayMixin],
-
   props: {
+    ...baseInputProps,
+    ...arrayInputProps,
     size: {
       type: Number,
       required: false,
@@ -65,6 +65,10 @@ export default {
       required: false,
       default: false,
     },
+  },
+  emits: ['update:modelValue'],
+  setup(props, { emit }) {
+    return useArrayInputValue(props, emit);
   },
 };
 </script>
