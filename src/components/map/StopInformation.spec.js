@@ -17,22 +17,25 @@ const stop = {
 
 const mountInformation = (data = stop) =>
   mount(StopInformation, {
-    propsData: { data },
-    stubs: {
-      ModalWindow: { template: '<div><slot name="header" /><slot /></div>', methods: { show() {}, hide() {} } },
-      // render the link like vue-router does with `custom`
-      RouterLink: {
-        props: ['to'],
-        render(h) {
-          return this.$scopedSlots.default({
-            href: `/${this.to.name}/${this.to.params.id}`,
-            navigate: (event) => this.$emit('navigate', event),
-          });
+    props: { data },
+    global: {
+      stubs: {
+        ModalWindow: { template: '<div><slot name="header" /><slot /></div>', methods: { show() {}, hide() {} } },
+        // render the link like vue-router does with `custom`
+        RouterLink: {
+          props: ['to'],
+          emits: ['navigate'],
+          render() {
+            return this.$slots.default({
+              href: `/${this.to.name}/${this.to.params.id}`,
+              navigate: (event) => this.$emit('navigate', event),
+            });
+          },
         },
       },
+      mocks: { $documentUtils: { getDocumentTitle: (document) => document.locales[0].title } },
+      directives: { translate: {} },
     },
-    mocks: { $documentUtils: { getDocumentTitle: (document) => document.locales[0].title } },
-    directives: { translate: {} },
   });
 
 describe('StopInformation', () => {
