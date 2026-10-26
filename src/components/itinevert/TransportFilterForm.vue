@@ -196,10 +196,10 @@ export default {
 
     // only the coordinates are in the url: the label comes from the addresses already used, if any
     const fromAddress = urlSearch
-      ? [storedContext?.fromAddress, ...recentAddresses].find(
+      ? ([storedContext?.fromAddress, ...recentAddresses].find(
           (address) => address && formatTransportFrom(address) === urlSearch.from
-        ) ?? null
-      : storedContext?.fromAddress ?? null;
+        ) ?? null)
+      : (storedContext?.fromAddress ?? null);
 
     return {
       documentType: this.fixedDocumentType ?? 'route',
@@ -243,10 +243,10 @@ export default {
     isSearchEnabled() {
       return Boolean(
         formatTransportFrom(this.fromAddress) &&
-          this.date &&
-          this.minDeparture &&
-          this.maxReturn &&
-          !transportDatesError(this.datesSearch)
+        this.date &&
+        this.minDeparture &&
+        this.maxReturn &&
+        !transportDatesError(this.datesSearch)
       );
     },
     /** The dates and times of the form, as checked by `transportDatesError` */
@@ -453,7 +453,7 @@ export default {
     formatError(error) {
       const rawData = error?.response?.data?.errors?.[0]?.description ?? error?.response?.data ?? error?.message;
       const parsed = navitiaService.handleQueryError(rawData);
-      const id = typeof parsed === 'string' ? parsed : parsed?.id ?? parsed?.message;
+      const id = typeof parsed === 'string' ? parsed : (parsed?.id ?? parsed?.message);
       return this.errorMessages[id] || this.errorMessages.unknown_error;
     },
   },

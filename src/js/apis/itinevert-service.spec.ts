@@ -11,7 +11,7 @@ import itinevert, {
 const from = { geometry: { coordinates: [5.72, 45.19] } };
 
 // the params of the last request sent through the mocked axios `get`
-const paramsOf = (get: ReturnType<typeof vi.spyOn>) => get.mock.calls[0][1].params;
+const paramsOf = (get: ReturnType<typeof vi.spyOn>, call = 0) => get.mock.calls[call][1].params;
 
 describe('itinevert', () => {
   afterEach(() => {
@@ -101,7 +101,7 @@ describe('itinevert', () => {
 
       await itinevert.startRoundTripJob([3], 'waypoint', '2026-01-16', '08:00', '18:00', from, null, '2026-01-17');
       expect(get.mock.calls[1][0]).toBe('/navitia/journeyroundtripwaypoints/start');
-      expect(get.mock.calls[1][1].params.return_date).toBe('2026-01-17');
+      expect(paramsOf(get, 1).return_date).toBe('2026-01-17');
     });
 
     it('reads the result of a job of the family of the document type', async () => {
