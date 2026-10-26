@@ -153,7 +153,7 @@
 import LowDocumentQualityBanner from './utils/LowDocumentQualityBanner';
 import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import AvalancheBox from './utils/boxes/AvalancheBox';
-import documentViewMixin from './utils/document-view-mixin';
+import { documentViewComponents, documentViewProps, useDocumentView } from './utils/document-view';
 
 const historyWorthActivities = [
   'snow_ice_mixed',
@@ -166,11 +166,16 @@ const historyWorthActivities = [
 
 export default {
   components: {
+    ...documentViewComponents,
     LowDocumentQualityBanner,
     MaskedDocumentVersionInfo,
     AvalancheBox,
   },
-  mixins: [documentViewMixin],
+  props: documentViewProps,
+
+  setup(props) {
+    return useDocumentView(props);
+  },
 
   data() {
     return {

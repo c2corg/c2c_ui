@@ -1,7 +1,7 @@
 import config from '@/js/config';
 
 // the image documents of the API, with what the URLs need
-type Image = { document_id: number; filename?: string };
+export type Image = { document_id: number; filename?: string };
 
 export type ImageSize = 'SI' | 'MI' | 'BI';
 

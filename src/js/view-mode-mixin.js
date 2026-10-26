@@ -1,4 +1,4 @@
-// for the mixins that include it (document-view-mixin, is-editable-mixin): the components use useViewMode()
+// for the mixin that includes it (is-editable-mixin): the components use useViewMode()
 import { viewMode } from '@/js/composables/view-mode';
 
 export default {

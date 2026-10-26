@@ -52,19 +52,24 @@
 <script>
 import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
 import OutingsDownloader from './utils/OutingsDownloader';
-import documentViewMixin from './utils/document-view-mixin';
+import { documentViewComponents, documentViewProps, useDocumentView } from './utils/document-view';
 
 import FeedWidget from '@/components/feed-widget/FeedWidget';
 import config from '@/js/config';
 
 export default {
   components: {
+    ...documentViewComponents,
     FeedWidget,
     OutingsDownloader,
     MaskedDocumentVersionInfo,
   },
 
-  mixins: [documentViewMixin],
+  props: documentViewProps,
+
+  setup(props) {
+    return useDocumentView(props);
+  },
 
   forumUrl: config.urls.forum,
 };

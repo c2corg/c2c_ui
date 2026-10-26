@@ -115,15 +115,20 @@
 
 <script>
 import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import documentViewMixin from './utils/document-view-mixin';
+import { documentViewComponents, documentViewProps, useDocumentView } from './utils/document-view';
 import ConditionLevels from './utils/field-viewers/ConditionLevels';
 
 export default {
   components: {
+    ...documentViewComponents,
     ConditionLevels,
     MaskedDocumentVersionInfo,
   },
 
-  mixins: [documentViewMixin],
+  props: documentViewProps,
+
+  setup(props) {
+    return useDocumentView(props);
+  },
 };
 </script>

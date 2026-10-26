@@ -178,7 +178,7 @@ const router = createRouter({
 
     if (to.hash) {
       // actually, scroll behavior is not fired at initial load
-      // so let document-view-mixin handle hash use case, as it's the
+      // so let useDocumentView() (views/document/utils/document-view.ts) handle hash use case, as it's the
       // only use case for a new-born tab
       // See https://github.com/vuejs/vue-router/issues/2358
 

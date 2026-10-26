@@ -145,16 +145,23 @@
 
 <script>
 import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import documentViewMixin from './utils/document-view-mixin';
+import { documentViewComponents, documentViewProps, useDocumentView } from './utils/document-view';
 
 import waypointLabels from '@/js/waypoint-labels-mixin';
 
 export default {
   components: {
+    ...documentViewComponents,
     MaskedDocumentVersionInfo,
   },
 
-  mixins: [documentViewMixin, waypointLabels],
+  mixins: [waypointLabels],
+
+  props: documentViewProps,
+
+  setup(props) {
+    return useDocumentView(props);
+  },
 
   computed: {
     capacityContext() {
