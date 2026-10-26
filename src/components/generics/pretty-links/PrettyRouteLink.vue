@@ -10,37 +10,29 @@
   </document-link>
 </template>
 
-<script>
-export default {
-  props: {
-    route: {
-      type: Object,
-      required: true,
-    },
-    hideActivities: {
-      type: Boolean,
-      default: false,
-    },
-    hideArea: {
-      type: Boolean,
-      default: false,
-    },
-    hideOrientation: {
-      type: Boolean,
-      default: false,
-    },
-    hideHeightDiffDifficulties: {
-      type: Boolean,
-      default: false,
-    },
+<script setup lang="ts">
+defineProps({
+  route: {
+    type: Object,
+    required: true,
   },
-
-  computed: {
-    rangeAreas() {
-      return this.route.areas.filter((area) => area.area_type === 'range');
-    },
+  hideActivities: {
+    type: Boolean,
+    default: false,
   },
-};
+  hideArea: {
+    type: Boolean,
+    default: false,
+  },
+  hideOrientation: {
+    type: Boolean,
+    default: false,
+  },
+  hideHeightDiffDifficulties: {
+    type: Boolean,
+    default: false,
+  },
+});
 </script>
 
 <style scoped lang="scss">

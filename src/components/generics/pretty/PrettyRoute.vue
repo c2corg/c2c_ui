@@ -32,67 +32,68 @@
   </span>
 </template>
 
-<script>
-export default {
-  props: {
-    route: {
-      type: Object,
-      required: true,
-    },
-    hideActivities: {
-      type: Boolean,
-      default: false,
-    },
-    hideArea: {
-      type: Boolean,
-      default: false,
-    },
-    hideOrientation: {
-      type: Boolean,
-      default: false,
-    },
-    hideHeightDiffDifficulties: {
-      type: Boolean,
-      default: false,
-    },
-  },
+<script setup lang="ts">
+import { computed } from 'vue';
 
-  computed: {
-    rangeAreas() {
-      return this.route.areas.filter((area) => area.area_type === 'range');
-    },
-    heightUpText() {
-      if (
-        this.route.activities &&
-        (this.route.activities.includes('skitouring') ||
-          this.route.activities.includes('snowshoeing') ||
-          this.route.activities.includes('hiking'))
-      ) {
-        if (this.route.height_diff_up) return '+' + this.route.height_diff_up;
-        if (this.route.height_diff_down) return '-' + this.route.height_diff_down;
-      }
-      return '';
-    },
-    heightDiffText() {
-      if (this.hideHeightDiffDifficulties) return '';
-      const act = this.route.activities;
-      if (!act) return;
-      const is_alpinism =
-        act.includes('snow_ice_mixed') ||
-        act.includes('mountain_climbing') ||
-        act.includes('rock_climbing') ||
-        act.includes('ice_climbing') ||
-        act.includes('skitouring');
-      // don't clutter with difficulties for "easy" activities
-      if (this.heightUpText && !is_alpinism) return '';
-      const dd = this.route.height_diff_difficulties;
-      if (!dd || (this.heightUpText && dd === this.route.height_diff_up)) return '';
-      // to differentiate the 2 heights, use parenthesis
-      const ddstr = dd + '\u200am';
-      return this.heightUpText ? '(' + ddstr + ')' : ddstr;
-    },
+const props = defineProps({
+  route: {
+    type: Object,
+    required: true,
   },
-};
+  hideActivities: {
+    type: Boolean,
+    default: false,
+  },
+  hideArea: {
+    type: Boolean,
+    default: false,
+  },
+  hideOrientation: {
+    type: Boolean,
+    default: false,
+  },
+  hideHeightDiffDifficulties: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const rangeAreas = computed(() =>
+  (props.route.areas as { document_id: number; area_type: string }[]).filter((area) => area.area_type === 'range')
+);
+
+const heightUpText = computed(() => {
+  const route = props.route;
+  if (
+    route.activities &&
+    (route.activities.includes('skitouring') ||
+      route.activities.includes('snowshoeing') ||
+      route.activities.includes('hiking'))
+  ) {
+    if (route.height_diff_up) return '+' + route.height_diff_up;
+    if (route.height_diff_down) return '-' + route.height_diff_down;
+  }
+  return '';
+});
+
+const heightDiffText = computed(() => {
+  if (props.hideHeightDiffDifficulties) return '';
+  const act: string[] | undefined = props.route.activities;
+  if (!act) return;
+  const is_alpinism =
+    act.includes('snow_ice_mixed') ||
+    act.includes('mountain_climbing') ||
+    act.includes('rock_climbing') ||
+    act.includes('ice_climbing') ||
+    act.includes('skitouring');
+  // don't clutter with difficulties for "easy" activities
+  if (heightUpText.value && !is_alpinism) return '';
+  const dd = props.route.height_diff_difficulties;
+  if (!dd || (heightUpText.value && dd === props.route.height_diff_up)) return '';
+  // to differentiate the 2 heights, use parenthesis
+  const ddstr = dd + '\u200am';
+  return heightUpText.value ? '(' + ddstr + ')' : ddstr;
+});
 </script>
 
 <style scoped lang="scss">

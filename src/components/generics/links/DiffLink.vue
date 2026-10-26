@@ -10,28 +10,26 @@
   </router-link>
 </template>
 
-<script>
+<script setup lang="ts">
 import { documentTypeProperty } from '@/js/properties';
 
-export default {
-  props: {
-    ...documentTypeProperty,
-    lang: {
-      type: String,
-      required: true,
-    },
-    id: {
-      type: Number,
-      required: true,
-    },
-    versionFrom: {
-      type: [Number, String],
-      required: true,
-    },
-    versionTo: {
-      type: [Number, String],
-      required: true,
-    },
+defineProps({
+  ...documentTypeProperty,
+  lang: {
+    type: String,
+    required: true,
   },
-};
+  id: {
+    type: Number,
+    required: true,
+  },
+  versionFrom: {
+    type: [Number, String],
+    required: true,
+  },
+  versionTo: {
+    type: [Number, String],
+    required: true,
+  },
+});
 </script>

@@ -11,23 +11,22 @@
       <router-link :to="{ name: 'whatsnew', query: { u: contributor.user_id } }" rel="nofollow">c</router-link>
       <span v-if="contributor.forum_username">
         <span>|</span>
-        <a :href="$options.forumUrl + '/u/' + contributor.forum_username + '/activity'">d</a>
+        <a :href="forumUrl + '/u/' + contributor.forum_username + '/activity'">d</a>
       </span>
       <span>)</span>
     </span>
   </span>
 </template>
 
-<script>
+<script setup lang="ts">
 import config from '@/js/config';
 
-export default {
-  forumUrl: config.urls.forum,
-  props: {
-    contributor: {
-      type: Object,
-      required: true,
-    },
+defineProps({
+  contributor: {
+    type: Object,
+    required: true,
   },
-};
+});
+
+const forumUrl = config.urls.forum;
 </script>

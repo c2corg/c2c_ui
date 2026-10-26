@@ -7,20 +7,16 @@
   </router-link>
 </template>
 
-<script>
+<script setup lang="ts">
 import { documentProperty, useDocumentType } from '@/js/properties';
 
-export default {
-  props: {
-    ...documentProperty,
-    lang: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  ...documentProperty,
+  lang: {
+    type: String,
+    required: true,
   },
+});
 
-  setup(props) {
-    return useDocumentType(props);
-  },
-};
+const { documentType } = useDocumentType(props);
 </script>

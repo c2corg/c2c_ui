@@ -8,47 +8,45 @@
   </span>
 </template>
 
-<script>
+<script setup lang="ts">
 import { toast } from 'bulma-toast';
+import { computed } from 'vue';
 
 import c2c from '@/js/apis/c2c';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 
-export default {
-  props: {
-    version: {
-      type: Object,
-      required: true,
-    },
-    lang: {
-      type: String,
-      required: true,
-    },
-    id: {
-      type: Number,
-      required: true,
-    },
+const props = defineProps({
+  version: {
+    type: Object,
+    required: true,
   },
+  lang: {
+    type: String,
+    required: true,
+  },
+  id: {
+    type: Number,
+    required: true,
+  },
+});
 
-  computed: {
-    masked() {
-      return this.version.masked;
-    },
-  },
+const { $gettext } = useGlobalProperties();
 
-  methods: {
-    async toggleMask() {
-      try {
-        await (this.version.masked
-          ? c2c.moderator.unmaskVersion(this.id, this.lang, this.version.version_id)
-          : c2c.moderator.maskVersion(this.id, this.lang, this.version.version_id));
-        this.version.masked = !this.version.masked;
-      } catch {
-        toast({
-          message: this.$gettext(`An error occurred, couldn't (un)mask version`),
-          type: 'is-danger',
-        });
-      }
-    },
-  },
-};
+const masked = computed(() => props.version.masked);
+
+async function toggleMask() {
+  const version = props.version;
+  try {
+    await (version.masked
+      ? c2c.moderator.unmaskVersion(props.id, props.lang, version.version_id)
+      : c2c.moderator.maskVersion(props.id, props.lang, version.version_id));
+    // the version object belongs to the parent, which shows it too
+    version.masked = !version.masked;
+  } catch {
+    toast({
+      message: $gettext(`An error occurred, couldn't (un)mask version`),
+      type: 'is-danger',
+    });
+  }
+}
 </script>

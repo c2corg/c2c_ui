@@ -5,17 +5,14 @@
   </fa-layers>
 </template>
 
-<script>
-export default {
-  props: {
-    visible: {
-      type: Boolean,
-      default: true,
-    },
+<script setup lang="ts">
+defineProps({
+  visible: {
+    type: Boolean,
+    default: true,
   },
-
-  emits: ['click'],
-};
+});
+defineEmits(['click']);
 </script>
 
 <style scoped lang="scss">
