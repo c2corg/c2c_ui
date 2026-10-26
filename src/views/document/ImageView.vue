@@ -65,16 +65,21 @@
 
 <script>
 import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import documentViewMixin from './utils/document-view-mixin';
+import { documentViewComponents, documentViewProps, useDocumentView } from './utils/document-view';
 
 import { getImageUrl } from '@/js/image-urls';
 
 export default {
   components: {
+    ...documentViewComponents,
     MaskedDocumentVersionInfo,
   },
 
-  mixins: [documentViewMixin],
+  props: documentViewProps,
+
+  setup(props) {
+    return useDocumentView(props);
+  },
 
   methods: {
     getOriginalImageUrl: getImageUrl,
