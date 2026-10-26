@@ -197,6 +197,7 @@ import transportService from '@/js/apis/transport-service';
 import bus from '@/js/event-bus';
 import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
+import { getExtentToLoad } from '@/js/load-extent';
 import { TCX } from '@/js/tcx/TCX';
 
 const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
@@ -1356,8 +1357,8 @@ export default {
         return;
       }
 
-      // request more than the visible area, to limit the requests when panning
-      const requestedExtent = ol.extent.buffer(extent, ol.extent.getWidth(extent) * 0.25);
+      // request more than the visible area, on a fixed grid: few requests when panning, and urls that come back
+      const requestedExtent = getExtentToLoad(extent, this.view.getZoom());
       const requestId = ++this.stopsRequestId;
 
       transportService
