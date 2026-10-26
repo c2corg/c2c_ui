@@ -1,19 +1,27 @@
 import { mount } from '@vue/test-utils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import NearbyStopsSection from './NearbyStopsSection';
+import NearbyStopsSection from './NearbyStopsSection.vue';
 
-const stop = (id, stoparea_name, line) => ({ id, stoparea_name, line, operator: 'TER', distance: 1.2 });
+const stop = (id: number, stoparea_name: string, line: string) => ({
+  id,
+  stoparea_name,
+  line,
+  operator: 'TER',
+  distance: 1.2,
+});
 
 const mountSection = async () => {
   const wrapper = mount(NearbyStopsSection, {
     props: { document: { type: 'r', document_id: 1, activities: [], associations: { waypoints: [] } } },
     global: {
       stubs: { MapView: true },
-      mocks: {
-        $gettext: (value) => value,
-        $documentUtils: { getDocumentType: () => 'route' },
-        $screen: { isMobile: false },
+      config: {
+        globalProperties: {
+          $gettext: (value: string) => value,
+          $documentUtils: { getDocumentType: () => 'route' },
+          $screen: { isMobile: false },
+        } as never,
       },
     },
   });
@@ -31,7 +39,7 @@ describe('NearbyStopsSection', () => {
   });
 
   afterEach(() => {
-    delete Element.prototype.scrollIntoView;
+    delete (Element.prototype as Partial<Element>).scrollIntoView;
   });
 
   it('expands and collapses the lines of a stop on click', async () => {

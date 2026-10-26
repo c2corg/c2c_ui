@@ -194,7 +194,7 @@ import { useEditable } from '@/js/composables/editable';
 import constants from '@/js/constants';
 import getFundraiser from '@/js/get-fundraiser';
 import ol from '@/js/libs/ol';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
 const GeoJSON = new ol.format.GeoJSON();
 
@@ -211,11 +211,11 @@ export default {
     TranslateWindow,
   },
 
-  mixins: [requireDocumentProperty],
+  props: { ...documentProperty },
 
   setup(props) {
     // the view mode too: isDraftView, isVersionView...
-    return useEditable(() => props.document);
+    return { ...useEditable(() => props.document), ...useDocumentType(props) };
   },
 
   data() {

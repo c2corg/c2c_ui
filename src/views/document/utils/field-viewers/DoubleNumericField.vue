@@ -12,7 +12,7 @@
 import FieldView from './FieldView';
 import LabelValue from './LabelValue';
 
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty } from '@/js/properties';
 
 export default {
   components: {
@@ -20,9 +20,8 @@ export default {
     FieldView,
   },
 
-  mixins: [requireDocumentProperty],
-
   props: {
+    ...documentProperty,
     field1: {
       type: Object,
       required: true,

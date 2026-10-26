@@ -13,9 +13,13 @@
 </template>
 
 <script>
-import { documentCardMixin } from './utils/mixins';
+import { cardComponents, cardProps } from './utils/card';
+
+import { documentProperty } from '@/js/properties';
 
 export default {
-  mixins: [documentCardMixin],
+  components: { ...cardComponents },
+
+  props: { ...cardProps, ...documentProperty },
 };
 </script>

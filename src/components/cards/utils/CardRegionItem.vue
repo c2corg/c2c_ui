@@ -6,10 +6,10 @@
 </template>
 
 <script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty } from '@/js/properties';
 
 export default {
-  mixins: [requireDocumentProperty],
+  props: { ...documentProperty },
 
   computed: {
     text() {

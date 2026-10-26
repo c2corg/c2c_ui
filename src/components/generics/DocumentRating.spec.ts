@@ -1,10 +1,10 @@
-import { mount, RouterLinkStub } from '@vue/test-utils';
+import { mount, RouterLinkStub, type VueWrapper } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 import { h } from 'vue';
 
-import DocumentRating from './DocumentRating';
-import DocumentRatingValues from './DocumentRatingValues';
-import DropdownButton from './DropdownButton';
+import DocumentRating from './DocumentRating.vue';
+import DocumentRatingValues from './DocumentRatingValues.vue';
+import DropdownButton from './DropdownButton.vue';
 
 const route = {
   type: 'r',
@@ -14,20 +14,22 @@ const route = {
   engagement_rating: 'II',
 };
 
-const mountRating = (props) =>
+const mountRating = (props: { document: typeof route & { climbing_outdoor_type?: string }; showHelper?: boolean }) =>
   mount(DocumentRating, {
     props,
     global: {
       components: { DocumentRatingValues, DropdownButton },
       stubs: { FaIcon: { render: () => h('i', { class: 'fa-icon' }) }, RouterLink: RouterLinkStub },
-      mocks: {
-        $gettext: (value) => value,
-        $documentUtils: { getDocumentType: () => 'route' },
+      config: {
+        globalProperties: {
+          $gettext: (value: string) => value,
+          $documentUtils: { getDocumentType: () => 'route' },
+        } as never,
       },
     },
   });
 
-const ratingsText = (wrapper) => wrapper.text().replace(/\s+/g, ' ').trim();
+const ratingsText = (wrapper: VueWrapper) => wrapper.text().replace(/\s+/g, ' ').trim();
 
 describe('DocumentRating', () => {
   it('shows the ratings, without dropdown, by default', () => {

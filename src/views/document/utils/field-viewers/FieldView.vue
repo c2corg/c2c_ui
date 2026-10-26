@@ -14,14 +14,14 @@
 <script>
 import LabelValue from './LabelValue';
 
-import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
+import { documentProperty, fieldProperty } from '@/js/properties';
 
 export default {
   components: { LabelValue },
 
-  mixins: [requireDocumentProperty, requireFieldProperty],
-
   props: {
+    ...documentProperty,
+    ...fieldProperty,
     unit: {
       type: String,
       default: null,

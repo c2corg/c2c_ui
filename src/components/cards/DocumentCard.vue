@@ -22,7 +22,7 @@ import RouteCard from './RouteCard';
 import WaypointCard from './WaypointCard';
 import XreportCard from './XreportCard';
 
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
 export default {
   components: {
@@ -37,9 +37,8 @@ export default {
     XreportCard,
   },
 
-  mixins: [requireDocumentProperty],
-
   props: {
+    ...documentProperty,
     showDeleteButton: {
       type: Boolean,
       default: false,
@@ -57,6 +56,10 @@ export default {
   },
 
   emits: ['delete'],
+
+  setup(props) {
+    return useDocumentType(props);
+  },
 };
 </script>
 

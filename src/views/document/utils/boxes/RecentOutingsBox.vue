@@ -29,12 +29,11 @@
 
 <script>
 import { useViewMode } from '@/js/composables/view-mode';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
 export default {
-  mixins: [requireDocumentProperty],
-
   props: {
+    ...documentProperty,
     hideSeeAllResultsButton: {
       type: Boolean,
       default: false,
@@ -45,8 +44,8 @@ export default {
     },
   },
 
-  setup() {
-    return useViewMode();
+  setup(props) {
+    return { ...useViewMode(), ...useDocumentType(props) };
   },
 
   computed: {

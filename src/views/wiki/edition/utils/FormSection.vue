@@ -24,12 +24,10 @@
 
 <script>
 import { useFormContainer } from '@/js/composables/form-registration';
-import { uidMixin } from '@/js/uid';
+import { useUid } from '@/js/uid';
 
 export default {
   // the fields register themselves (FormField, AssociationsInputRow, MapInputRow)
-  mixins: [uidMixin],
-
   props: {
     title: {
       type: String,
@@ -46,7 +44,7 @@ export default {
   },
 
   setup() {
-    return useFormContainer('formSection');
+    return { ...useFormContainer('formSection'), ...useUid() };
   },
 
   data() {

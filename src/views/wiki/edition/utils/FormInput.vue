@@ -113,14 +113,14 @@ import dayjs from 'dayjs';
 
 import InputConditionsLevels from './InputConditionsLevels';
 
-import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
+import { documentProperty, fieldProperty, useDocumentType } from '@/js/properties';
 
 export default {
   components: { InputConditionsLevels },
 
-  mixins: [requireFieldProperty, requireDocumentProperty],
-
   props: {
+    ...fieldProperty,
+    ...documentProperty,
     prefix: {
       type: String,
       default: null,
@@ -152,6 +152,10 @@ export default {
   },
 
   emits: ['click-prefix', 'input'],
+
+  setup(props) {
+    return useDocumentType(props);
+  },
 
   computed: {
     // earliest and latest selectable dates of a date field, inclusive

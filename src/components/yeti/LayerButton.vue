@@ -38,13 +38,12 @@
 <script>
 import Toast from '@/components/yeti/Toast';
 import { assetUrl } from '@/js/asset-urls';
-import { uidMixin } from '@/js/uid';
+import { useUid } from '@/js/uid';
 
 export default {
   components: {
     Toast,
   },
-  mixins: [uidMixin],
   props: {
     type: {
       type: String,
@@ -76,6 +75,10 @@ export default {
     },
   },
   emits: ['change', 'update:modelValue'],
+
+  setup() {
+    return useUid();
+  },
 
   computed: {
     _value: {

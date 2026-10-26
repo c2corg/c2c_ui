@@ -61,7 +61,7 @@ import TagsButton from './TagsButton';
 
 import ImagesUploader from '@/components/images-uploader/ImagesUploader';
 import { useEditable } from '@/js/composables/editable';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
 export default {
   components: {
@@ -73,9 +73,8 @@ export default {
     DocumentVersionBanner,
   },
 
-  mixins: [requireDocumentProperty],
-
   props: {
+    ...documentProperty,
     version: {
       type: Object,
       default: null,
@@ -84,7 +83,7 @@ export default {
 
   setup(props) {
     // the view mode too: isDraftView, isNormalView...
-    return useEditable(() => props.document);
+    return { ...useEditable(() => props.document), ...useDocumentType(props) };
   },
 
   computed: {

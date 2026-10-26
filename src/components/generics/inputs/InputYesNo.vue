@@ -24,11 +24,9 @@
 <script>
 import { baseInputProps, useInputValue } from './input-value';
 
-import { uidMixin } from '@/js/uid';
+import { useUid } from '@/js/uid';
 
 export default {
-  mixins: [uidMixin],
-
   props: {
     ...baseInputProps,
     modelValue: {
@@ -55,7 +53,7 @@ export default {
 
   emits: ['update:modelValue'],
   setup(props, { emit }) {
-    return useInputValue(props, emit);
+    return { ...useInputValue(props, emit), ...useUid() };
   },
 };
 </script>

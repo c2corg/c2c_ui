@@ -33,7 +33,7 @@
 import FormInput from './FormInput';
 
 import { useFormField } from '@/js/composables/form-registration';
-import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
+import { documentProperty, fieldProperty } from '@/js/properties';
 
 export default {
   components: {
@@ -41,9 +41,9 @@ export default {
   },
 
   // registered with the FormSection containing it
-  mixins: [requireFieldProperty, requireDocumentProperty],
-
   props: {
+    ...fieldProperty,
+    ...documentProperty,
     isExpanded: {
       type: Boolean,
       default: false,

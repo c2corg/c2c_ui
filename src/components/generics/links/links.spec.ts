@@ -2,8 +2,8 @@ import { mount } from '@vue/test-utils';
 import { describe, expect, it, vi } from 'vitest';
 import { createMemoryHistory, createRouter } from 'vue-router';
 
-import AddLink from './AddLink';
-import EditLink from './EditLink';
+import AddLink from './AddLink.vue';
+import EditLink from './EditLink.vue';
 
 const router = createRouter({
   history: createMemoryHistory(),
@@ -16,10 +16,12 @@ const router = createRouter({
 
 const global = {
   plugins: [router],
-  mocks: {
-    $language: { current: 'fr' },
-    $documentUtils: { getDocumentType: () => 'route', getCreationTitle: () => 'add an outing' },
-    $filters: { uppercaseFirstLetter: (text) => text },
+  config: {
+    globalProperties: {
+      $language: { current: 'fr' },
+      $documentUtils: { getDocumentType: () => 'route', getCreationTitle: () => 'add an outing' },
+      $filters: { uppercaseFirstLetter: (text: string) => text },
+    } as never,
   },
   directives: { translate: {} },
 };

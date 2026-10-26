@@ -28,16 +28,19 @@
 
 <script>
 import constants from '@/js/constants';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
 export default {
-  mixins: [requireDocumentProperty],
-
   props: {
+    ...documentProperty,
     showHelper: {
       type: Boolean,
       default: false,
     },
+  },
+
+  setup(props) {
+    return useDocumentType(props);
   },
 
   ratings: [

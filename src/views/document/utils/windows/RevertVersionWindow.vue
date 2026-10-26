@@ -11,16 +11,19 @@
 
 <script>
 import c2c from '@/js/apis/c2c';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
 export default {
-  mixins: [requireDocumentProperty],
-
   props: {
+    ...documentProperty,
     lang: {
       type: String,
       required: true,
     },
+  },
+
+  setup(props) {
+    return useDocumentType(props);
   },
 
   data() {

@@ -8,16 +8,19 @@
 </template>
 
 <script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
 export default {
-  mixins: [requireDocumentProperty],
-
   props: {
+    ...documentProperty,
     lang: {
       type: String,
       required: true,
     },
+  },
+
+  setup(props) {
+    return useDocumentType(props);
   },
 };
 </script>

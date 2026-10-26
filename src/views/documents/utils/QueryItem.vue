@@ -103,8 +103,8 @@ import QueryItemSliderLabel from './QueryItemSliderLabel';
 
 import { useQueryItem } from '@/js/composables/query-item';
 import debounce from '@/js/debounce';
-import { requireFieldProperty } from '@/js/properties-mixins';
-import { uidMixin } from '@/js/uid';
+import { fieldProperty } from '@/js/properties';
+import { useUid } from '@/js/uid';
 
 export default {
   components: {
@@ -114,9 +114,8 @@ export default {
     DatesQueryItem,
   },
 
-  mixins: [requireFieldProperty, uidMixin],
-
   props: {
+    ...fieldProperty,
     hideLabel: {
       type: Boolean,
       default: false,
@@ -124,7 +123,7 @@ export default {
   },
 
   setup(props) {
-    return useQueryItem(() => props.field);
+    return { ...useQueryItem(() => props.field), ...useUid() };
   },
 
   computed: {

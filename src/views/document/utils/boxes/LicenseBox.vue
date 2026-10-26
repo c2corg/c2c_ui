@@ -76,10 +76,10 @@
 </template>
 
 <script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty } from '@/js/properties';
 
 export default {
-  mixins: [requireDocumentProperty],
+  props: { ...documentProperty },
 
   computed: {
     // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/templates/utils/__init__.py#L47

@@ -6,10 +6,10 @@
 
 <script>
 import Gallery from '@/components/gallery/Gallery';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty } from '@/js/properties';
 
 export default {
   components: { Gallery },
-  mixins: [requireDocumentProperty],
+  props: { ...documentProperty },
 };
 </script>

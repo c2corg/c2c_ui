@@ -65,15 +65,20 @@
 import NearbyStopsSection from './NearbyStopsSection.vue';
 import PlanATripSection from './PlanATripSection/PlanATripSection.vue';
 
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
 export default {
   components: {
     NearbyStopsSection,
     PlanATripSection,
   },
-  mixins: [requireDocumentProperty],
+  props: { ...documentProperty },
+
   emits: ['has-protection-area', 'highlight-document'],
+
+  setup(props) {
+    return useDocumentType(props);
+  },
 
   data() {
     return {

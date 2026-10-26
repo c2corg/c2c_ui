@@ -6,10 +6,10 @@
 
 <script>
 import c2c from '@/js/apis/c2c';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty } from '@/js/properties';
 
 export default {
-  mixins: [requireDocumentProperty],
+  props: { ...documentProperty },
 
   data() {
     return {

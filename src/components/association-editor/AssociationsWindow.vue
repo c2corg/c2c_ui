@@ -39,11 +39,15 @@ import AssociationItems from './AssociationItems';
 
 import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
 export default {
   components: { AssociationItems },
-  mixins: [requireDocumentProperty],
+  props: { ...documentProperty },
+
+  setup(props) {
+    return useDocumentType(props);
+  },
 
   data() {
     return {

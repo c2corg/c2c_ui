@@ -63,13 +63,13 @@
 
           <!-- the results journey, with their details -->
           <plan-a-trip-results
-            :activeTab="activeTab"
-            :currentData="currentData"
-            :isUpdating="currentData.isUpdating"
-            :noResult="currentData.noResult"
-            :displayedFromAddress="displayedFromAddress"
-            :displayedToAddress="displayedToAddress"
-            @selectJourney="setSelectedRouteJourney"
+            :active-tab="activeTab"
+            :current-data="currentData"
+            :is-updating="currentData.isUpdating"
+            :no-result="currentData.noResult"
+            :displayed-from-address="displayedFromAddress"
+            :displayed-to-address="displayedToAddress"
+            @select-journey="setSelectedRouteJourney"
           />
 
           <!-- the messages displayed when no itineraries were found -->
@@ -185,16 +185,16 @@ import NavitiaService from '@/js/apis/navitia-service';
 import transportService from '@/js/apis/transport-service';
 import ol from '@/js/libs/ol';
 import planATripUtils from '@/js/plan-a-trip-utils';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
 export default {
   name: 'PlanATripSection',
-  mixins: [requireDocumentProperty],
   components: {
     PlanATripForm,
     PlanATripResults,
   },
   props: {
+    ...documentProperty,
     showElevationProfile: {
       type: Boolean,
       default: false,
@@ -205,6 +205,10 @@ export default {
     },
   },
   emits: ['calculate-route', 'has-protection-area'],
+
+  setup(props) {
+    return useDocumentType(props);
+  },
 
   data() {
     return {
@@ -358,6 +362,16 @@ export default {
 
     maxNbTransfers() {
       return this.limitTransfers ? this.maxTransfers : undefined;
+    },
+  },
+
+  watch: {
+    'currentData.selectedRouteJourney': {
+      handler() {
+        // Trigger recenter when selectedRouteJourney changes
+        this.recenterMapOnDocuments();
+      },
+      deep: true,
     },
   },
 
@@ -1055,16 +1069,6 @@ export default {
           this.$refs.mapView.recenterOnDocuments();
         }
       });
-    },
-  },
-
-  watch: {
-    'currentData.selectedRouteJourney': {
-      handler() {
-        // Trigger recenter when selectedRouteJourney changes
-        this.recenterMapOnDocuments();
-      },
-      deep: true,
     },
   },
 };
