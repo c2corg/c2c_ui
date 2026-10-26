@@ -5,8 +5,7 @@
   </div>
 </template>
 <script>
-import layerMixin from './layer';
-import layerSelectorWatcherMixin from './layer-selector-watcher';
+import { useLayer } from './layer';
 
 import Yetix from '@/components/yeti/Yetix';
 import BaseLayers from '@/components/yeti/map-layers/BaseLayers';
@@ -19,8 +18,11 @@ export default {
     BaseLayers,
     SlopesLayers,
   },
-  mixins: [layerMixin, layerSelectorWatcherMixin],
+
   emits: ['layer'],
+  setup() {
+    return useLayer();
+  },
 
   computed: {
     mapZoom() {
@@ -47,6 +49,12 @@ export default {
     },
   },
   watch: {
+    layerSelector: {
+      handler(layer) {
+        this.$emit('layer', layer);
+      },
+      deep: true,
+    },
     showAreas() {
       this.updateVisibility();
     },

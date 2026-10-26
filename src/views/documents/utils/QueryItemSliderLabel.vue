@@ -26,12 +26,11 @@
 </template>
 
 <script>
-import { requireFieldProperty } from '@/js/properties-mixins';
+import { fieldProperty } from '@/js/properties';
 
 export default {
-  mixins: [requireFieldProperty],
-
   props: {
+    ...fieldProperty,
     value: {
       type: Array,
       required: true,

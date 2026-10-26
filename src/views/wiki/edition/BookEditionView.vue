@@ -38,9 +38,13 @@
 </template>
 
 <script>
-import documentEditionViewMixin from './utils/document-edition-view-mixin';
+import { documentEditionComponents, useDocumentEdition } from './utils/document-edition';
 
 export default {
-  mixins: [documentEditionViewMixin],
+  components: { ...documentEditionComponents },
+
+  setup() {
+    return useDocumentEdition();
+  },
 };
 </script>

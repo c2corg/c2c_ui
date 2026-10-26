@@ -50,7 +50,9 @@ export class CamptocampApi extends BaseApi {
     // )
   }
 
-  getApiLang(lang: string): string {
+  getApiLang(lang: string): string;
+  getApiLang(lang?: string): string | undefined;
+  getApiLang(lang?: string): string | undefined {
     // some UI langs may not yet be present in API
     // some UI langs may also be more precise than API lang (zh for instance)
 

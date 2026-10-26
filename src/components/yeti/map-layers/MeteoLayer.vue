@@ -1,5 +1,5 @@
 <script>
-import layerMixin from './layer';
+import { useLayer } from './layer';
 
 import yetixEvents from '@/components/yeti/yetix-events';
 import ol from '@/js/libs/ol';
@@ -30,13 +30,15 @@ class FakeTile extends ol.source.ImageTile {
 }
 
 export default {
-  mixins: [layerMixin],
   props: {
     visible: {
       type: Boolean,
       default: false,
       required: true,
     },
+  },
+  setup() {
+    return useLayer();
   },
   data() {
     return {
@@ -89,6 +91,10 @@ export default {
     this.updateVisibility();
   },
   methods: {
+    getLayer() {
+      return this.layer;
+    },
+
     updateVisibility() {
       this.layer.setVisible(this.visible);
       this.markerLayer.setVisible(this.visible);

@@ -18,11 +18,9 @@
 </template>
 
 <script>
-import { uidMixin } from '@/js/uid';
+import { useUid } from '@/js/uid';
 
 export default {
-  mixins: [uidMixin],
-
   props: {
     modelValue: {
       type: Number,
@@ -42,6 +40,10 @@ export default {
     },
   },
   emits: ['change', 'update:modelValue'],
+
+  setup() {
+    return useUid();
+  },
 
   computed: {
     _value: {

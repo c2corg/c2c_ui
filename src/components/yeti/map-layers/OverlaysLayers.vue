@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import layerMixin from './layer';
+import { useLayer } from './layer';
 
 import Yetix from '@/components/yeti/Yetix';
 import AvalancheBulletinsLayer from '@/components/yeti/map-layers/AvalancheBulletinsLayer.vue';
@@ -43,7 +43,10 @@ export default {
     RouteLayer,
     WinterRouteLayer,
   },
-  mixins: [layerMixin],
+  setup() {
+    return useLayer();
+  },
+
   computed: {
     editMode() {
       return Yetix.editMode;

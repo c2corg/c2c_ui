@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import { requireDocumentTypeProperty } from '@/js/properties-mixins';
+import { documentTypeProperty } from '@/js/properties';
 
 export default {
-  mixins: [requireDocumentTypeProperty],
+  props: { ...documentTypeProperty },
 };
 </script>

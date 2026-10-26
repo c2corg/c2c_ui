@@ -36,15 +36,17 @@
 
 <script>
 import IconLayer from './IconLayer.vue';
-import getIconLayerMixin from './getIconLayer';
+import { useIconLayer } from './icon-layer';
 
 export default {
   components: {
     IconLayer,
   },
-  mixins: [getIconLayerMixin],
 
   emits: ['layer'],
+  setup() {
+    return useIconLayer();
+  },
   data() {
     return {
       name: 'ffvl',

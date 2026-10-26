@@ -37,7 +37,7 @@
 
 <script>
 import IconLayer from './IconLayer.vue';
-import getIconLayerMixin from './getIconLayer';
+import { useIconLayer } from './icon-layer';
 
 import Yetix from '@/components/yeti/Yetix';
 import DataAvalancheLayerContent from '@/components/yeti/map-layers/DataAvalancheLayerContent';
@@ -48,9 +48,11 @@ export default {
   components: {
     IconLayer,
   },
-  mixins: [getIconLayerMixin],
 
   emits: ['layer'],
+  setup() {
+    return useIconLayer();
+  },
   data() {
     return {
       name: 'dataAvalanche',

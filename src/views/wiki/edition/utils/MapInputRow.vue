@@ -50,7 +50,7 @@ import GpsUploadModal from '@/components/map/GpsUploadModal';
 import trackingService from '@/js/apis/tracking-service';
 import { useFormField } from '@/js/composables/form-registration';
 import ol from '@/js/libs/ol';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty } from '@/js/properties';
 
 const geoJSONFormat = new ol.format.GeoJSON();
 const FORM_PROJ = 'EPSG:4326';
@@ -60,9 +60,8 @@ export default {
   components: { GpsUploadModal, GpsFileUpload },
 
   // registered with the FormSection containing it
-  mixins: [requireDocumentProperty],
-
   props: {
+    ...documentProperty,
     geomDetailEditable: {
       type: Boolean,
       default: false,

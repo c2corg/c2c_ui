@@ -14,15 +14,19 @@
 
 <script>
 import transportService from '@/js/apis/transport-service';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
 export default {
-  mixins: [requireDocumentProperty],
   props: {
+    ...documentProperty,
     document: {
       type: [Object, Array],
       required: true,
     },
+  },
+
+  setup(props) {
+    return useDocumentType(props);
   },
   data() {
     return {

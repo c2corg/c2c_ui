@@ -76,18 +76,21 @@
 <script>
 import RevertVersionWindow from './windows/RevertVersionWindow';
 
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
 export default {
   components: { RevertVersionWindow },
 
-  mixins: [requireDocumentProperty],
-
   props: {
+    ...documentProperty,
     version: {
       type: Object,
       default: null,
     },
+  },
+
+  setup(props) {
+    return useDocumentType(props);
   },
 
   computed: {

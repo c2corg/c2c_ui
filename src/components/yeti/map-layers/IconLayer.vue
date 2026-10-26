@@ -11,14 +11,13 @@
 </template>
 
 <script>
-import layerMixin from './layer';
+import { useLayer } from './layer';
 
 import Yetix from '@/components/yeti/Yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import ol from '@/js/libs/ol';
 
 export default {
-  mixins: [layerMixin],
   props: {
     // icons of the layer built on this one, if it has its own
     customIconSrc: {
@@ -44,6 +43,9 @@ export default {
   },
 
   emits: ['layer', 'add-features', 'set-overlay', 'unset-overlay'],
+  setup() {
+    return useLayer();
+  },
   computed: {
     letter() {
       return this.name.charAt(0).toUpperCase();
@@ -157,6 +159,10 @@ export default {
     this.$emit('layer', this.layerSelector);
   },
   methods: {
+    getLayer() {
+      return this.layer;
+    },
+
     onResult(data) {
       let features = this.getFeaturesFromData(data);
       let props = this.getPropertiesFromFeatures(features);

@@ -181,11 +181,11 @@
 </template>
 
 <script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
 export default {
-  mixins: [requireDocumentProperty],
   props: {
+    ...documentProperty,
     activeTab: {
       type: String,
       required: true,
@@ -221,6 +221,10 @@ export default {
     'update-max-transfers',
     'swap-addresses',
   ],
+
+  setup(props) {
+    return useDocumentType(props);
+  },
 };
 </script>
 

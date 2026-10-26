@@ -78,19 +78,19 @@
 </template>
 
 <script>
-import { cardMixin } from './utils/mixins';
+import { cardComponents, cardProps } from './utils/card';
 
 import Gallery from '@/components/gallery/Gallery';
 import forum from '@/js/apis/forum';
 
 export default {
   components: {
+    ...cardComponents,
     Gallery,
   },
 
-  mixins: [cardMixin],
-
   props: {
+    ...cardProps,
     item: {
       type: Object,
       required: true,

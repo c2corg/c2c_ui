@@ -32,12 +32,10 @@
 
 <script>
 import { assetUrl } from '@/js/asset-urls';
-import { uidMixin } from '@/js/uid';
+import { useUid } from '@/js/uid';
 
 export default {
   name: 'LayerButton',
-  mixins: [uidMixin],
-
   props: {
     layer: {
       type: Object,
@@ -54,6 +52,10 @@ export default {
   },
 
   emits: ['click'],
+
+  setup() {
+    return useUid();
+  },
 
   data() {
     return {

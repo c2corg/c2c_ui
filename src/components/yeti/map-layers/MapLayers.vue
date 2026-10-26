@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import layerMixin from './layer';
+import { useLayer } from './layer';
 
 import Yetix from '@/components/yeti/Yetix';
 import BaseLayers from '@/components/yeti/map-layers/BaseLayers';
@@ -18,7 +18,10 @@ export default {
     BaseLayers,
     SlopesLayers,
   },
-  mixins: [layerMixin],
+  setup() {
+    return useLayer();
+  },
+
   computed: {
     mapZoom() {
       return Yetix.mapZoom;

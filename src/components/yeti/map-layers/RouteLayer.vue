@@ -8,7 +8,7 @@
 <script>
 import { icon } from '@fortawesome/fontawesome-svg-core';
 
-import layerMixin from './layer';
+import { useLayer } from './layer';
 import simplify from './simplify';
 
 import Yetix from '@/components/yeti/Yetix';
@@ -242,7 +242,10 @@ let drawInfoOverlay = new ol.Overlay({
 });
 
 export default {
-  mixins: [layerMixin],
+  setup() {
+    return useLayer();
+  },
+
   data() {
     return {
       visibleSimplifiedLayer: false,

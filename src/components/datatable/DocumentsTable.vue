@@ -36,7 +36,7 @@ import RouteRating from './cell-renderers/RouteRating';
 
 import constants from '@/js/constants';
 import bus from '@/js/event-bus';
-import { requireDocumentTypeProperty } from '@/js/properties-mixins';
+import { documentTypeProperty } from '@/js/properties';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -65,9 +65,8 @@ export default {
   components: {
     AgGridVue,
   },
-  mixins: [requireDocumentTypeProperty],
-
   props: {
+    ...documentTypeProperty,
     documents: {
       type: Object,
       required: true,

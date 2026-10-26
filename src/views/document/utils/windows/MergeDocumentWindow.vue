@@ -69,12 +69,16 @@
 import MergeDocumentLink from './MergeDocumentLink';
 
 import c2c from '@/js/apis/c2c';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
 export default {
   components: { MergeDocumentLink },
 
-  mixins: [requireDocumentProperty],
+  props: { ...documentProperty },
+
+  setup(props) {
+    return useDocumentType(props);
+  },
 
   data() {
     return {

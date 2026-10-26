@@ -100,7 +100,8 @@ describe('slider labels', () => {
     ['numericalRangeSlider', { min: 0, max: 9000, unit: 'm', urlToValue: () => [0, 9000] }],
   ])('names the %s handles after the field', async (queryMode, field) => {
     const wrapper = mount(QueryItem, {
-      props: { field: { queryMode, name: 'Global rating', url: 'grat', ...field } },
+      // a field as far as QueryItem reads it
+      props: { field: { queryMode, name: 'Global rating', url: 'grat', ...field } as never },
       global: { plugins: [await listRouter()], mocks, stubs: { InputSlider } },
       attachTo: document.body,
     });

@@ -1,5 +1,9 @@
 // Whether the user can edit or delete a document. If the user is not logged, a document may still be editable: the
-// edit button is shown, and leads to the login. The document views use them through useDocumentView().
+// edit button is shown, and leads to the login. The document views use them through useDocumentView(), the components
+// given a document through useEditable().
+import { computed, getCurrentInstance } from 'vue';
+
+import { useViewMode } from '@/js/composables/view-mode';
 
 // what the rules read of a document
 type Document = {
@@ -101,4 +105,17 @@ export function isDeletable(document: Document, documentType: string, user: User
 
   // finally, moderator can delete everything but profile and areas
   return documentType !== 'profile' && documentType !== 'area' && user.isModerator;
+}
+
+/** The view mode, and whether the user can edit or delete the document (with a type letter) */
+export function useEditable(getDocument: () => Document & { type?: string }) {
+  const globals = getCurrentInstance()!.appContext.config.globalProperties;
+  const viewMode = useViewMode();
+  const documentType = () => globals.$documentUtils.getDocumentType(getDocument().type);
+
+  return {
+    ...viewMode,
+    isEditable: computed(() => isEditable(getDocument(), documentType(), globals.$user, viewMode.isNormalView.value)),
+    isDeletable: computed(() => isDeletable(getDocument(), documentType(), globals.$user, viewMode.isNormalView.value)),
+  };
 }

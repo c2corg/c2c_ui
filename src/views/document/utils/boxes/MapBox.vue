@@ -61,7 +61,7 @@ import MapLinks from './MapLinks';
 
 import bus from '@/js/event-bus';
 import ol from '@/js/libs/ol';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 import utils from '@/js/utils';
 
 const GeoJSON = new ol.format.GeoJSON();
@@ -72,9 +72,13 @@ export default {
     MapLinks,
   },
 
-  mixins: [requireDocumentProperty],
+  props: { ...documentProperty },
 
   emits: ['has-protection-area'],
+
+  setup(props) {
+    return useDocumentType(props);
+  },
 
   data() {
     return {

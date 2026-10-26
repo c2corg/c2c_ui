@@ -83,10 +83,14 @@
 </template>
 
 <script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
 export default {
-  mixins: [requireDocumentProperty],
+  props: { ...documentProperty },
+
+  setup(props) {
+    return useDocumentType(props);
+  },
 
   computed: {
     associations() {

@@ -31,11 +31,12 @@
 </template>
 
 <script>
-import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
+import { documentProperty, fieldProperty } from '@/js/properties';
 
 export default {
-  mixins: [requireDocumentProperty, requireFieldProperty],
   props: {
+    ...documentProperty,
+    ...fieldProperty,
     hideTitle: {
       type: Boolean,
       default: false,

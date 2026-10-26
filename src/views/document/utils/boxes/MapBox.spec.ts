@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
-import MapBox from './MapBox';
+import MapBox from './MapBox.vue';
 
 describe('MapBox', () => {
   it('separates the areas with spaces', () => {
@@ -17,10 +17,12 @@ describe('MapBox', () => {
           ElevationProfile: true,
           FaIcon: true,
         },
-        mocks: {
-          $gettext: (value) => value,
-          $documentUtils: { getDocumentType: () => 'route' },
-          $screen: { isMobile: false },
+        config: {
+          globalProperties: {
+            $gettext: (value: string) => value,
+            $documentUtils: { getDocumentType: () => 'route' },
+            $screen: { isMobile: false },
+          } as never,
         },
       },
     });

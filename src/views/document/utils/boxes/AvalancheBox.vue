@@ -35,7 +35,7 @@ import IconBra from '../../../../components/generics/icons/IconBra';
 
 import yetiService from '@/js/apis/yeti-service';
 import ol from '@/js/libs/ol';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty } from '@/js/properties';
 
 const GeoJSON = new ol.format.GeoJSON();
 
@@ -44,7 +44,7 @@ export default {
     IconBra,
   },
 
-  mixins: [requireDocumentProperty],
+  props: { ...documentProperty },
 
   data() {
     return {

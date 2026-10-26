@@ -191,7 +191,6 @@ import planATripUtils from '@/js/plan-a-trip-utils';
 
 export default {
   components: {},
-  mixins: [],
   props: {
     activeTab: {
       type: String,

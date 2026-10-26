@@ -67,7 +67,7 @@ export default class DocumentService {
     });
   }
 
-  get(id: DocumentId, lang: string) {
+  get(id: DocumentId, lang?: string) {
     return this.api.getValidated('/' + this.documentType + 's/' + id, document, {
       params: { l: this.api.getApiLang(lang) },
     });

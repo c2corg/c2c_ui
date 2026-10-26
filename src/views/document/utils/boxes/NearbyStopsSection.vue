@@ -94,12 +94,12 @@
 
 <script>
 import transportService from '@/js/apis/transport-service';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
 export default {
   name: 'NearbyStopsSection',
-  mixins: [requireDocumentProperty],
   props: {
+    ...documentProperty,
     document: {
       type: Object,
       required: true,
@@ -110,6 +110,10 @@ export default {
     },
   },
   emits: ['accessibility-info-changed', 'has-protection-area', 'highlight-document', 'stops-updated'],
+
+  setup(props) {
+    return useDocumentType(props);
+  },
 
   data() {
     return {

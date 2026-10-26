@@ -40,10 +40,10 @@ import debounce from '@/js/debounce';
 import bus from '@/js/event-bus';
 import d3 from '@/js/libs/d3';
 import ol from '@/js/libs/ol';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty } from '@/js/properties';
 
 export default {
-  mixins: [requireDocumentProperty],
+  props: { ...documentProperty },
 
   emits: ['has-data'],
 
