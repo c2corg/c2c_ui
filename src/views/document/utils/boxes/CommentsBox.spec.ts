@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { h } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
 
-import CommentsBox from './CommentsBox';
+import CommentsBox from './CommentsBox.vue';
 
 import forum from '@/js/apis/forum';
 
@@ -39,7 +39,7 @@ const routeRouter = async () => {
   return router;
 };
 
-const mountCommentsBox = async (isLogged) =>
+const mountCommentsBox = async (isLogged: boolean) =>
   mount(CommentsBox, {
     props: { document: { type: 'r', document_id: 1, cooked: { lang: 'fr', topic_id: 370873 } } },
     global: {
@@ -47,7 +47,7 @@ const mountCommentsBox = async (isLogged) =>
       stubs: { LoginButton: true },
       directives: { translate: {} },
       mocks: {
-        $gettext: (value) => value,
+        $gettext: (value: string) => value,
         $user: { isLogged },
         $dateUtils: { timeAgo: () => '' },
       },
@@ -61,7 +61,8 @@ describe('CommentsBox', () => {
 
   it.each([false, true])('links the mentions to the forum once, logged in: %s', async (isLogged) => {
     const data = topic();
-    vi.spyOn(forum, 'getTopic').mockReturnValue({ data });
+    // the answer, as the API client gives it (only its data is read)
+    vi.spyOn(forum, 'getTopic').mockReturnValue({ data } as unknown as ReturnType<typeof forum.getTopic>);
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     const wrapper = await mountCommentsBox(isLogged);
