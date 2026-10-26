@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import layerMixin from './layer';
+import { useLayer } from './layer';
 
 import Yetix from '@/components/yeti/Yetix';
 import AreaLayer from '@/components/yeti/map-layers/AreaLayer.vue';
@@ -17,7 +17,10 @@ export default {
     AreaLayer,
     YetiLayer,
   },
-  mixins: [layerMixin],
+  setup() {
+    return useLayer();
+  },
+
   methods: {
     onLayer(layer, index) {
       Yetix.addLayerToYetiLayersSelector(layer, index);

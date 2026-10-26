@@ -61,7 +61,7 @@ import { difference as turfDifference } from '@turf/difference';
 import { featureCollection as turfFeatureCollection } from '@turf/helpers';
 import { intersect as turfIntersect } from '@turf/intersect';
 
-import layerMixin from './layer';
+import { useLayer } from './layer';
 
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
 import Yetix from '@/components/yeti/Yetix';
@@ -242,8 +242,11 @@ export default {
     DangerLevel,
     DropdownContent,
   },
-  mixins: [layerMixin],
+
   emits: ['layer'],
+  setup() {
+    return useLayer();
+  },
 
   data() {
     return {

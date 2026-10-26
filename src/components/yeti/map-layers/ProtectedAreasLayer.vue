@@ -52,7 +52,7 @@
 <script>
 import axios from 'axios';
 
-import layerMixin from './layer';
+import { useLayer } from './layer';
 
 import { protectionAreasLayers } from '@/components/map/map-layers';
 import Yetix from '@/components/yeti/Yetix';
@@ -75,8 +75,10 @@ let overlayPanOptions = {
 };
 
 export default {
-  mixins: [layerMixin],
   emits: ['layer'],
+  setup() {
+    return useLayer();
+  },
 
   data() {
     return {
@@ -140,6 +142,10 @@ export default {
     this.$emit('layer', this.layerSelector);
   },
   methods: {
+    getLayer() {
+      return this.layer;
+    },
+
     onShowProtectedAreas() {
       Yetix.setShowProtectedAreas(!this.showProtectedAreas);
     },

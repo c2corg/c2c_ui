@@ -1,13 +1,14 @@
 <script>
-import layerMixin from './layer';
-import layerSelectorWatcherMixin from './layer-selector-watcher';
+import { useLayer } from './layer';
 
 import Yetix from '@/components/yeti/Yetix';
 import ol from '@/js/libs/ol';
 
 export default {
-  mixins: [layerMixin, layerSelectorWatcherMixin],
   emits: ['layer'],
+  setup() {
+    return useLayer();
+  },
 
   computed: {
     yetiData() {
@@ -45,6 +46,12 @@ export default {
     },
   },
   watch: {
+    layerSelector: {
+      handler(layer) {
+        this.$emit('layer', layer);
+      },
+      deep: true,
+    },
     yetiData() {
       if (!this.yetiData) {
         this.clearLayers();
@@ -115,6 +122,10 @@ export default {
     this.$emit('layer', this.layerSelector);
   },
   methods: {
+    getLayer() {
+      return this.layer;
+    },
+
     onShowYeti() {
       Yetix.setShowYeti(!this.showYeti);
     },

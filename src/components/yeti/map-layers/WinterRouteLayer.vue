@@ -1,5 +1,5 @@
 <script>
-import layerMixin from './layer';
+import { useLayer } from './layer';
 
 import Yetix from '@/components/yeti/Yetix';
 import WinterRouteLayerContent from '@/components/yeti/map-layers/WinterRouteLayerContent';
@@ -7,8 +7,10 @@ import WinterRouteLayerContentTitle from '@/components/yeti/map-layers/WinterRou
 import ol from '@/js/libs/ol';
 
 export default {
-  mixins: [layerMixin],
   emits: ['layer'],
+  setup() {
+    return useLayer();
+  },
 
   computed: {
     showWinterRoute() {
@@ -85,6 +87,10 @@ export default {
     this.$emit('layer', this.layerSelector);
   },
   methods: {
+    getLayer() {
+      return this.layer;
+    },
+
     onShowWinterRoute() {
       Yetix.setShowWinterRoute(!this.showWinterRoute);
     },
