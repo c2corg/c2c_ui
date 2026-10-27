@@ -13,29 +13,28 @@
   </swiper-container>
 </template>
 
-<script>
-export default {
-  props: {
-    images: {
-      type: Array,
-      required: true,
-    },
-  },
+<script setup lang="ts">
+import { watch, type PropType } from 'vue';
 
-  watch: {
-    // deep 1: also when images are added to the array (uploads), as Vue 2 array watchers did
-    images: {
-      handler() {
-        this.images.forEach(this.$imageViewer.push);
-      },
-      deep: 1,
-    },
-  },
+import { useGlobalProperties } from '@/js/composables/global-properties';
 
-  created() {
-    this.images.forEach(this.$imageViewer.push);
+type GalleryImage = { document_id: number; filename?: string; locales: { title?: string | null }[] };
+
+const props = defineProps({
+  images: {
+    type: Array as PropType<GalleryImage[]>,
+    required: true,
   },
-};
+});
+
+const { $imageViewer } = useGlobalProperties();
+
+// deep 1: also when images are added to the array (uploads), as Vue 2 array watchers did
+watch(
+  () => props.images,
+  () => props.images.forEach($imageViewer.push),
+  { deep: 1, immediate: true }
+);
 </script>
 
 <style scoped lang="scss">

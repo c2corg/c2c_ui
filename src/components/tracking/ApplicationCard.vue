@@ -39,44 +39,31 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
 import { assetUrl } from '@/js/asset-urls';
 
-export default {
-  props: {
-    application: {
-      type: Object,
-      required: true,
-    },
+const props = defineProps({
+  application: {
+    type: Object,
+    required: true,
   },
+});
 
-  emits: ['configure', 'revoke'],
+const emit = defineEmits(['configure', 'revoke']);
 
-  computed: {
-    canRefresh() {
-      return this.application.status !== 'not-configured';
-    },
+const canRefresh = computed(() => props.application.status !== 'not-configured');
+const canConnect = computed(() => props.application.status === 'not-configured');
+const canRevoke = computed(() => props.application.status !== 'not-configured');
 
-    canConnect() {
-      return this.application.status === 'not-configured';
-    },
+function revoke() {
+  emit('revoke');
+}
 
-    canRevoke() {
-      return this.application.status !== 'not-configured';
-    },
-  },
-
-  methods: {
-    assetUrl,
-    revoke() {
-      this.$emit('revoke');
-    },
-
-    configure() {
-      this.$emit('configure');
-    },
-  },
-};
+function configure() {
+  emit('configure');
+}
 </script>
 
 <style scoped lang="scss">

@@ -1,5 +1,5 @@
 <template>
-  <modal-card ref="modalWindow">
+  <modal-card ref="modal">
     <template #title>
       <div v-translate>Insert a link</div>
     </template>
@@ -22,33 +22,39 @@
     <template #footer>
       <div class="buttons">
         <button class="button is-success" @click="insert" v-translate>Insert link</button>
-        <button class="button is-danger" @click="$refs.modalWindow.hide()" v-translate>Cancel</button>
+        <button class="button is-danger" @click="hide" v-translate>Cancel</button>
       </div>
     </template>
   </modal-card>
 </template>
 
-<script>
-export default {
-  emits: ['insert'],
+<script setup lang="ts">
+import { ref, useTemplateRef } from 'vue';
 
-  data() {
-    return {
-      chunk: '',
-      url: '',
-    };
-  },
+import { useGlobalProperties } from '@/js/composables/global-properties';
 
-  methods: {
-    show(chunk, url) {
-      this.chunk = chunk ?? this.$gettext('text to display');
-      this.url = url ?? 'https:\\\\';
-      this.$refs.modalWindow.show();
-    },
-    insert() {
-      this.$emit('insert', this.chunk, this.url);
-      this.$refs.modalWindow.hide();
-    },
-  },
-};
+const emit = defineEmits(['insert']);
+
+const { $gettext } = useGlobalProperties();
+
+const chunk = ref('');
+const url = ref('');
+const modal = useTemplateRef<{ show(): void; hide(): void }>('modal');
+
+function show(newChunk?: string | null, newUrl?: string | null) {
+  chunk.value = newChunk ?? $gettext('text to display');
+  url.value = newUrl ?? 'https:\\\\';
+  modal.value!.show();
+}
+
+function hide() {
+  modal.value!.hide();
+}
+
+function insert() {
+  emit('insert', chunk.value, url.value);
+  hide();
+}
+
+defineExpose({ show });
 </script>
