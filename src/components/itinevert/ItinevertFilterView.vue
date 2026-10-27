@@ -13,7 +13,7 @@
       >
         <template #button>
           <span class="button is-size-7-mobile" :disabled="category.fields.length === 0 || null">
-            <fa-icon :icon="$options.categoryIcon[category.name]" />
+            <fa-icon :icon="CATEGORY_ICON[category.name]" />
             <span class="is-hidden-mobile"> &nbsp;{{ $gettext(category.name) }} </span>
             <span v-if="category.activeCount != 0"> &nbsp;({{ category.activeCount }}) </span>
             <span>&nbsp;</span>
@@ -54,121 +54,118 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, nextTick, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+
 import DropdownButton from '../generics/DropdownButton.vue';
 
 import { MAX_ROUTE_THRESHOLD } from '@/js/apis/itinevert-service';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
+import type Field from '@/js/constants/Field';
 import QueryItem from '@/views/documents/utils/QueryItem.vue';
 
-export default {
-  name: 'ItinevertFilterView',
-  components: {
-    QueryItem,
-    DropdownButton,
-  },
-  categoryIcon: {
-    General: 'filter',
-    MultiSearch: 'filter',
-    Miscs: 'database',
-    Terrain: ['waypoint', 'summit'],
-    ratings: 'tachometer-alt',
-  },
-  props: {
-    filteredRoutes: {
-      type: Object,
-      default: () => ({}),
-    },
-    isSearchEnabled: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  emits: ['computeJourneyReachableRoutes', 'search'],
+const CATEGORY_ICON: Record<string, string | string[]> = {
+  General: 'filter',
+  MultiSearch: 'filter',
+  Miscs: 'database',
+  Terrain: ['waypoint', 'summit'],
+  ratings: 'tachometer-alt',
+};
 
-  data: function () {
-    return {
-      highlightedRed: false,
-      highlightedGreen: false,
+const props = defineProps({
+  filteredRoutes: {
+    type: Object,
+    default: () => ({}),
+  },
+  isSearchEnabled: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const emit = defineEmits(['computeJourneyReachableRoutes', 'search']);
+
+const route = useRoute();
+const { $gettext } = useGlobalProperties();
+
+const highlightedRed = ref(false);
+const highlightedGreen = ref(false);
+
+const routeFields = (constants.objectDefinitions as unknown as Record<string, { fields: Record<string, Field> }>).route
+  .fields;
+const categorizedFieldsDefault = constants.categorizedFieldsDefault as Record<string, string[]>;
+
+const categorizedFields = computed(() => {
+  const result = [];
+  // do not try to compute categorized fields in form view as not useful
+  // + can't be done since document type might not be set
+  for (const category of Object.keys(categorizedFieldsDefault)) {
+    const temp = {
+      name: category,
+      activeCount: 0,
+      fields: [] as Field[],
     };
-  },
-  computed: {
-    categorizedFields() {
-      const result = [];
-      // do not try to compute categorized fields in form view as not useful
-      // + can't be done since document type might not be set
-      for (const category of Object.keys(constants.categorizedFieldsDefault)) {
-        const temp = {
-          name: category,
-          activeCount: 0,
-          fields: [],
-        };
 
-        let addCategory = false;
+    let addCategory = false;
 
-        for (const name of constants.categorizedFieldsDefault[category]) {
-          const field = constants.objectDefinitions['route'].fields[name];
-          if (field !== undefined && field.url) {
-            addCategory = true;
+    for (const name of categorizedFieldsDefault[category]) {
+      const field = routeFields[name];
+      if (field !== undefined && field.url) {
+        addCategory = true;
 
-            if (this.$route.query[field.url] !== undefined) {
-              temp.activeCount += 1;
-            }
-
-            if (field.isVisibleForActivities((this.$route.query.act ?? '').split(','))) {
-              temp.fields.push(field);
-            }
-          }
+        if (route.query[field.url] !== undefined) {
+          temp.activeCount += 1;
         }
 
-        if (addCategory) {
-          result.push(temp);
+        if (field.isVisibleForActivities(((route.query.act as string | undefined) ?? '').split(','))) {
+          temp.fields.push(field);
         }
       }
+    }
 
-      return result;
-    },
-    routeCount() {
-      return this.filteredRoutes?.total ?? 0;
-    },
-    routeCountMax() {
-      return ' / ' + MAX_ROUTE_THRESHOLD + ' ' + this.$gettext('routes');
-    },
-    canDisplayResult() {
-      const total = this.filteredRoutes?.total;
-      return total !== null && total > 0 && total <= MAX_ROUTE_THRESHOLD;
-    },
-  },
-  watch: {
-    routeCount: {
-      handler(newVal) {
-        const startRed = newVal > MAX_ROUTE_THRESHOLD;
-        // clear both, flush, then enable only the chosen one
-        this.highlightedRed = false;
-        this.highlightedGreen = false;
-        this.$nextTick(() => {
-          // ensure removal applied
-          requestAnimationFrame(() => {
-            if (startRed) this.highlightedRed = true;
-            else this.highlightedGreen = true;
-          });
-        });
-      },
-    },
-  },
-  methods: {
-    search() {
-      this.$emit('search');
-    },
-    computeJourneyReachableRoutes() {
-      this.$emit('computeJourneyReachableRoutes');
-    },
-    onAnimEnd(e) {
-      if (e.animationName === 'borderPulseRed') this.highlightedRed = false;
-      if (e.animationName === 'borderPulseGreen') this.highlightedGreen = false;
-    },
-  },
-};
+    if (addCategory) {
+      result.push(temp);
+    }
+  }
+
+  return result;
+});
+
+const routeCount = computed(() => props.filteredRoutes?.total ?? 0);
+const routeCountMax = computed(() => ' / ' + MAX_ROUTE_THRESHOLD + ' ' + $gettext('routes'));
+const canDisplayResult = computed(() => {
+  const total = props.filteredRoutes?.total;
+  return total !== null && total > 0 && total <= MAX_ROUTE_THRESHOLD;
+});
+
+watch(routeCount, (newVal) => {
+  const startRed = newVal > MAX_ROUTE_THRESHOLD;
+  // clear both, flush, then enable only the chosen one
+  highlightedRed.value = false;
+  highlightedGreen.value = false;
+  nextTick(() => {
+    // ensure removal applied
+    requestAnimationFrame(() => {
+      if (startRed) highlightedRed.value = true;
+      else highlightedGreen.value = true;
+    });
+  });
+});
+
+function search() {
+  emit('search');
+}
+
+function computeJourneyReachableRoutes() {
+  emit('computeJourneyReachableRoutes');
+}
+
+function onAnimEnd(e: AnimationEvent) {
+  if (e.animationName === 'borderPulseRed') highlightedRed.value = false;
+  if (e.animationName === 'borderPulseGreen') highlightedGreen.value = false;
+}
 </script>
 
 <style scoped lang="scss">

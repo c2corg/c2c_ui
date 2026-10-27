@@ -69,12 +69,6 @@
   </section>
 </template>
 
-<script>
-export default {
-  name: 'ItinevertBanner',
-};
-</script>
-
 <style scoped lang="scss">
 .banner-container {
   display: grid;

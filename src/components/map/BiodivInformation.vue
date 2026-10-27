@@ -1,5 +1,5 @@
 <template>
-  <modal-window ref="modalWindow">
+  <modal-window ref="modal">
     <template #header>
       <div class="has-text-centered">
         <span v-translate>Sensitive area:</span>
@@ -21,62 +21,57 @@
   </modal-window>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, useTemplateRef } from 'vue';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import utils from '@/js/utils';
 
-export default {
-  props: {
-    data: {
-      type: Object,
-      required: true,
-    },
+const props = defineProps({
+  data: {
+    type: Object,
+    required: true,
   },
+});
 
-  computed: {
-    descriptionParagraphs() {
-      // keep line breaks for better readability
-      const paragraphList = (this.data.description ?? '').split(/<br ?\/?>/);
-      // decode html entities
-      for (let i in paragraphList) {
-        paragraphList[i] = utils.decodeHtmlEntities(paragraphList[i]);
-      }
-      return paragraphList;
-    },
+const { $dateUtils, $gettext } = useGlobalProperties();
+const modal = useTemplateRef<{ show(): void }>('modal');
 
-    period() {
-      if (this.data.period.every((month) => !!month)) {
-        return this.$gettext('whole year', 'period');
-      }
-      if (this.$dateUtils.hasSinglePeriod(this.data.period)) {
-        let start, end;
-        if (this.data.period[0] && this.data.period[11]) {
-          start = this.data.period.lastIndexOf(false) + 1;
-          end = this.data.period.indexOf(false) - 1;
-        } else {
-          start = this.data.period.indexOf(true);
-          end = this.data.period.lastIndexOf(true);
-        }
-        return (
-          this.$dateUtils.month(parseInt(start, 10)) +
-          ' ' +
-          this.$gettext('to', 'period') +
-          ' ' +
-          this.$dateUtils.month(parseInt(end, 10))
-        );
-      }
+// keep line breaks for better readability, and decode html entities
+const descriptionParagraphs = computed(() =>
+  ((props.data.description as string | undefined) ?? '')
+    .split(/<br ?\/?>/)
+    .map((paragraph) => utils.decodeHtmlEntities(paragraph))
+);
 
-      // default case, enumerate months
-      return this.data.period
-        .map((included, index) => (included ? this.$dateUtils.month(parseInt(index, 10)) : undefined))
-        .filter((month) => !!month)
-        .join(', ');
-    },
-  },
+const period = computed(() => {
+  const months = props.data.period as boolean[];
+  if (months.every((month) => !!month)) {
+    return $gettext('whole year', 'period');
+  }
+  if ($dateUtils.hasSinglePeriod(months)) {
+    let start, end;
+    if (months[0] && months[11]) {
+      start = months.lastIndexOf(false) + 1;
+      end = months.indexOf(false) - 1;
+    } else {
+      start = months.indexOf(true);
+      end = months.lastIndexOf(true);
+    }
+    return $dateUtils.month(start) + ' ' + $gettext('to', 'period') + ' ' + $dateUtils.month(end);
+  }
 
-  methods: {
-    show() {
-      this.$refs.modalWindow.show();
-    },
-  },
-};
+  // default case, enumerate months
+  return months
+    .map((included, index) => (included ? $dateUtils.month(index) : undefined))
+    .filter((month) => !!month)
+    .join(', ');
+});
+
+function show() {
+  modal.value!.show();
+}
+
+// the map shows it for the clicked area
+defineExpose({ show });
 </script>
