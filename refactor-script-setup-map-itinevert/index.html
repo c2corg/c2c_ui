@@ -12,8 +12,11 @@
 
     <meta name="theme-color" content="#F93" />
     <meta name="application-name" content="Camptocamp.org" />
-    <link rel="preconnect" href="https://api.camptocamp.org" />
-    <link rel="preconnect" href="https://media.camptocamp.org/c2corg-active" />
+    <!-- runtime configuration (backend urls), before the app: replaced when the container starts, empty otherwise -->
+    <script src="/c2c_ui/refactor-script-setup-map-itinevert/config.js" nonce="__CSP_NONCE__"></script>
+    <!-- data-c2c-url: updated when the container starts if the matching C2C_*_URL variable is set (docker/runtime-config.sh) -->
+    <link rel="preconnect" href="https://api.camptocamp.org" data-c2c-url="api" />
+    <link rel="preconnect" href="https://media.camptocamp.org/c2corg-active" data-c2c-url="media" />
     <meta property="fb:pages" content="175865161596" />
     <meta property="og:sitename" content="Camptocamp.org" />
     <link rel="stylesheet" href="/c2c_ui/refactor-script-setup-map-itinevert/swiper.css"  nonce="__CSP_NONCE__"/>
@@ -26,9 +29,9 @@
       }
     </script>
     <meta property="csp-nonce" nonce="__CSP_NONCE__">
-    <script type="module" crossorigin src="/c2c_ui/refactor-script-setup-map-itinevert/assets/index-ByYygJMx.js" nonce="__CSP_NONCE__"></script>
+    <script type="module" crossorigin src="/c2c_ui/refactor-script-setup-map-itinevert/assets/index-ByUCMPBN.js" nonce="__CSP_NONCE__"></script>
     <link rel="modulepreload" crossorigin href="/c2c_ui/refactor-script-setup-map-itinevert/assets/vendor-Dwzx_Q6T.js" nonce="__CSP_NONCE__">
-    <link rel="stylesheet" crossorigin href="/c2c_ui/refactor-script-setup-map-itinevert/assets/index-D2PrHV2R.css" nonce="__CSP_NONCE__">
+    <link rel="stylesheet" crossorigin href="/c2c_ui/refactor-script-setup-map-itinevert/assets/index-BS2et9zi.css" nonce="__CSP_NONCE__">
   </head>
   <body style="background-color: #fbfaf6">
     <noscript>
