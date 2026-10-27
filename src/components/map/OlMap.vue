@@ -67,6 +67,17 @@
             ></layer-button>
           </div>
         </template>
+        <template v-if="!editable">
+          <header v-translate>Public transport</header>
+          <!-- $gettext('Stops near routes') -->
+          <div class="layer-group">
+            <layer-button
+              @click="toggleStops"
+              :selected="stopsVisible"
+              :layer="{ title: 'Stops near routes', image: 'stops.jpg' }"
+            ></layer-button>
+          </div>
+        </template>
       </div>
       <div class="ol-control-layer-switcher-close" @click.stop="showLayerSwitcher = !showLayerSwitcher">
         <fa-icon :title="$gettext('Close')" icon="chevron-left" />
@@ -152,6 +163,8 @@
       ref="SwissProtectionAreaInformation"
       :data="swissProtectionAreaData"
     />
+
+    <stop-information v-if="!editable" ref="StopInformation" :data="stopData" />
   </div>
 </template>
 
@@ -161,6 +174,7 @@ import { markRaw } from 'vue';
 
 import BiodivInformation from './BiodivInformation';
 import LayerButton from './LayerButton';
+import StopInformation from './StopInformation';
 import SwissProtectionAreaInformation from './SwissProtectionAreaInformation';
 import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers';
 import {
@@ -179,15 +193,18 @@ import biodivSportsService from '@/js/apis/biodivsports-service';
 import c2c from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
 import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
+import transportService from '@/js/apis/transport-service';
 import bus from '@/js/event-bus';
 import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
+import { getExtentToLoad } from '@/js/load-extent';
 import { TCX } from '@/js/tcx/TCX';
 
 const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
 const DEFAULT_POINT_ZOOM = 14;
 const MAX_ZOOM = 19;
 const TRACKING_INITIAL_ZOOM = 13;
+const STOPS_MIN_ZOOM = 12; // public transport stops are only requested from this zoom
 
 const isNotVirtual = (waypoint) => waypoint.waypoint_type !== 'virtual';
 
@@ -195,6 +212,7 @@ export default {
   components: {
     BiodivInformation,
     LayerButton,
+    StopInformation,
     SwissProtectionAreaInformation,
   },
 
@@ -316,6 +334,14 @@ export default {
       // protection areas layers
       protectionAreasLayers: markRaw(protectionAreasLayers().map(markRaw)),
 
+      // public transport stops layer, only visible from STOPS_MIN_ZOOM
+      stopsLayer: markRaw(
+        new ol.layer.Vector({
+          source: new ol.source.Vector(),
+          minZoom: STOPS_MIN_ZOOM - 0.01,
+        })
+      ),
+
       // layer for document icons and paths
       documentsLayer: markRaw(
         new ol.layer.Vector({
@@ -366,6 +392,11 @@ export default {
       swissProtectionAreaData: { properties: {} },
       protectionAreasVisible: this.showProtectionAreas && !this.editedDocument,
       hasProtectionAreas: null,
+
+      stopData: { stoparea_name: '', lines: [], waypoints: [] },
+      stopsVisible: !this.editedDocument,
+      stopsLoadedExtent: null,
+      stopsRequestId: 0,
 
       // on editable mode, there a button reset
       // we must save initial geometry
@@ -485,6 +516,7 @@ export default {
         ...this.dataLayers,
         ...this.protectionAreasLayers,
         this.protectionAreasLayer,
+        this.stopsLayer, // under documents, so that their markers stay clickable
         this.imagesLayer, // images icons will be under documents
         this.documentsLayer,
         this.waypointsLayer, // keep waypoint above trace and documents
@@ -506,6 +538,7 @@ export default {
 
     this.map.on('moveend', this.sendBoundsToUrl);
     this.map.on('moveend', this.getProtectionAreas);
+    this.map.on('moveend', this.getStops);
     this.map.on('moveend', this.updateEditMapLink);
     this.map.on('moveend', this.emitMoveEvent);
 
@@ -514,6 +547,7 @@ export default {
     if (this.protectionAreasVisible) {
       this.protectionAreasLayers.forEach((layer) => layer.setVisible(true));
     }
+    this.stopsLayer.setVisible(this.stopsVisible);
 
     this.geolocation = markRaw(
       new ol.Geolocation({
@@ -1197,6 +1231,9 @@ export default {
         } else if (feature.get('biodivData')) {
           this.biodivData = feature.get('biodivData');
           this.$refs.BiodivInformation.show();
+        } else if (feature.get('stopData')) {
+          this.stopData = feature.get('stopData');
+          this.$refs.StopInformation.show();
         }
       } else {
         // handle clicks on enabled layers
@@ -1303,6 +1340,67 @@ export default {
             this.$emit('has-protection-area');
           }
         });
+      }
+    },
+
+    toggleStops() {
+      this.stopsVisible = !this.stopsVisible;
+      this.stopsLayer.setVisible(this.stopsVisible);
+      this.getStops();
+    },
+
+    getStops() {
+      if (!this.stopsVisible || this.view.getZoom() < STOPS_MIN_ZOOM) {
+        return;
+      }
+
+      const extent = this.view.calculateExtent(this.map.getSize() || null);
+      if (this.stopsLoadedExtent && ol.extent.containsExtent(this.stopsLoadedExtent, extent)) {
+        return;
+      }
+
+      // request more than the visible area, on a fixed grid: few requests when panning, and urls that come back
+      const requestedExtent = getExtentToLoad(extent, this.view.getZoom());
+      const requestId = ++this.stopsRequestId;
+
+      transportService
+        .getStopareasInExtent(requestedExtent)
+        .then(({ data }) => {
+          this.addStops(data.documents);
+          if (requestId === this.stopsRequestId) {
+            this.stopsLoadedExtent = requestedExtent;
+          }
+        })
+        .catch(() => {
+          // stops are an optional layer, the map stays usable without them
+        });
+    },
+
+    addStops(stops) {
+      const source = this.stopsLayer.getSource();
+      const documentsSource = this.documentsLayer.getSource();
+      const normalStyle = getDocumentPointStyle({ type: 's' }, '', false);
+      const highlightedStyle = getDocumentPointStyle({ type: 's' }, '', true);
+
+      for (const stop of stops) {
+        const id = 'stop_' + stop.navitia_id;
+        // stops already drawn as documents (stops near an access point) must not be duplicated
+        const isDrawn = stop.lines.some(
+          (line) => documentsSource.getFeatureById(line.id)?.get('document')?.type === 's'
+        );
+        if (isDrawn || source.getFeatureById(id)) {
+          continue;
+        }
+
+        const feature = new ol.Feature({
+          geometry: new ol.geom.Point([stop.coordinates.x, stop.coordinates.y]),
+          stopData: stop,
+        });
+        feature.setId(id);
+        feature.set('normalStyle', normalStyle);
+        feature.set('highlightedStyle', highlightedStyle);
+        feature.setStyle(normalStyle);
+        source.addFeature(feature);
       }
     },
 
