@@ -12,11 +12,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, type PropType } from 'vue';
 
 const props = defineProps({
   activities: {
-    type: Array,
+    type: Array as PropType<string[]>,
     default: null, // many object can contains null array for this...
   },
 });

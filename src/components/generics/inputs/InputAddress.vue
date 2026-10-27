@@ -39,237 +39,239 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { toast } from 'bulma-toast';
+import { onBeforeUnmount, onMounted, reactive, watch } from 'vue';
 
 import { default as c2c } from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
 
-export default {
-  props: {
-    fullwidth: {
-      type: Boolean,
-      default: false,
-    },
-    placeholder: {
-      type: String,
-      default: '',
-    },
-    showAddressPropositions: {
-      type: Boolean,
-      default: false,
-    },
-    mapView: {
-      type: Object,
-      default: null,
-    },
-    defaultAddress: {
-      type: [Object, String],
-      default: null,
-    },
-  },
-  emits: ['update:props'],
-
-  data() {
-    return {
-      localData: {
-        address: this.defaultAddress ? this.formatProposition(this.defaultAddress) : '',
-        selectedAddress: '',
-        addressPropositions: [],
-        showAddressPropositions: this.showAddressPropositions,
-        coordinates: null,
-      },
-    };
-  },
-  computed: {
-    isIos() {
-      const ua = navigator.userAgent || '';
-      const platform = navigator.platform || '';
-      // Old iPhones/iPads/iPods
-      if (/iPad|iPhone|iPod/i.test(ua) || /iPad|iPhone|iPod/i.test(platform)) return true;
-      // iPadOS 13+ reports MacIntel but has touch points > 1
-      if (platform === 'MacIntel' && navigator.maxTouchPoints > 1) return true;
-      return false;
-    },
-  },
-  watch: {
-    'localData.selectedAddress'() {
-      this.notifyParent();
-    },
-  },
-  async mounted() {
-    if (this.defaultAddress === null) {
-      // Loads a user's address to put it directly into the 'address' field
-      await this.loadUserAddressIfLoggedIn();
-    }
-  },
-  beforeUnmount() {
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout);
-    }
-  },
-  methods: {
-    notifyParent() {
-      this.$emit('update:props', this.localData.selectedAddress);
-    },
-
-    /**
-     * Build a feature with point geom being lon lat
-     *
-     * @param coords [lon, lat]
-     */
-    buildFeatureFromCoords(coords) {
-      return {
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: coords,
-        },
-        properties: {},
-      };
-    },
-
-    /** Transforms a point's coordinates (longitude and latitude) into an address with photon */
-    async reverseGeocode(lon, lat) {
-      try {
-        const response = await photon.reverseGeocodeUserLocation(lon, lat, this.$language.current);
-        const data = await response.json();
-
-        this.selectAddress(data.features?.[0] ?? this.buildFeatureFromCoords([lon, lat]));
-      } catch (error) {
-        console.warn('Error during reverse geolocation:', error);
-        this.selectAddress(this.buildFeatureFromCoords([lon, lat]));
-      }
-    },
-
-    /** Try to use geolocation from browser */
-    useCurrentLocation() {
-      if (!navigator.geolocation) {
-        toast({
-          message: this.$gettext('Geolocation is not supported by your browser.'),
-          type: 'is-warning',
-        });
-        return;
-      }
-
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const coords = [position.coords.longitude, position.coords.latitude];
-
-          this.localData.coordinates = coords;
-          await this.reverseGeocode(coords[0], coords[1]);
-        },
-        (error) => {
-          console.warn('Geolocation error:', error);
-          toast({
-            message: this.$gettext('Unable to get your current location.'),
-            type: 'is-warning',
-          });
-        }
-      );
-    },
-
-    /** If the user is authenticated and has entered their address in their profile, it is put in the address field */
-    async loadUserAddressIfLoggedIn() {
-      if (!this.$user.isLogged) return;
-
-      try {
-        const { data } = await c2c.userProfile.getProfile(this.$user.id);
-        const geom = data.geometry?.geom;
-        if (!geom) return;
-
-        const geomData = JSON.parse(geom);
-        if (geomData.type !== 'Point' || !geomData.coordinates) return;
-
-        const [x, y] = geomData.coordinates;
-        const [lon, lat] = ol.proj.transform([x, y], 'EPSG:3857', 'EPSG:4326');
-
-        this.localData.coordinates = [lon, lat];
-        await this.reverseGeocode(lon, lat);
-      } catch (error) {
-        console.warn('Error loading user location:', error);
-      }
-    },
-
-    /** Look for address propositions to display them for autocompleting */
-    async searchAddressPropositions() {
-      clearTimeout(this.searchTimeout);
-
-      if (this.localData.address?.length < 3) {
-        this.localData.showAddressPropositions = false;
-        this.localData.addressPropositions = [];
-        this.localData.selectedAddress = '';
-        return;
-      }
-
-      this.searchTimeout = setTimeout(async () => {
-        try {
-          const center = this.mapView?.view?.getCenter();
-          const centerWgs84 = center ? ol.proj.toLonLat(center) : null;
-          const response = await photon.getPropositions(this.localData.address, this.$language.current, centerWgs84);
-          this.localData.addressPropositions = response.data.features.slice(0, 6) || [];
-          this.localData.showAddressPropositions = this.localData.addressPropositions?.length > 0;
-        } catch (error) {
-          console.warn('Error searching for addresses:', error);
-          this.localData.addressPropositions = [];
-        }
-      }, 600);
-    },
-
-    /** Short delay to allow selection before hiding suggestions */
-    handleBlur() {
-      setTimeout(() => {
-        this.localData.showAddressPropositions = false;
-      }, 200);
-    },
-
-    /** Takes selected address proposition */
-    selectAddress(proposition) {
-      this.localData.address = this.formatProposition(proposition);
-      this.localData.selectedAddress = proposition;
-      this.localData.selectedAddress.address = this.localData.address;
-      this.localData.coordinates = proposition.geometry.coordinates;
-      this.localData.showAddressPropositions = false;
-    },
-
-    /** Format address proposition rendered by Photon */
-    formatProposition(proposition) {
-      const props = proposition.properties || {};
-      const coords = proposition.geometry?.coordinates;
-      if (Object.keys(props).length === 0) {
-        if (coords?.length >= 2) {
-          return `${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}`;
-        }
-        return '';
-      }
-
-      let formattedAddress = props.name || '';
-
-      if (props.housenumber) {
-        formattedAddress = `${formattedAddress} ${props.housenumber}`;
-      }
-
-      if (props.street) {
-        formattedAddress = `${formattedAddress} ${props.street}`;
-      }
-
-      if (props.city) {
-        formattedAddress = `${formattedAddress}${formattedAddress ? ', ' : ''}${props.city}`;
-      }
-
-      if (props.postcode) {
-        formattedAddress = `${formattedAddress} ${props.postcode}`;
-      }
-
-      if (props.country) {
-        formattedAddress = `${formattedAddress}${formattedAddress ? ', ' : ''}${props.country}`;
-      }
-
-      return formattedAddress;
-    },
-  },
+type Proposition = {
+  type?: string;
+  geometry: { type?: string; coordinates: number[] };
+  properties?: Record<string, string | undefined>;
+  address?: string;
 };
+
+const props = defineProps({
+  fullwidth: {
+    type: Boolean,
+    default: false,
+  },
+  placeholder: {
+    type: String,
+    default: '',
+  },
+  showAddressPropositions: {
+    type: Boolean,
+    default: false,
+  },
+  mapView: {
+    type: Object,
+    default: null,
+  },
+  defaultAddress: {
+    type: [Object, String],
+    default: null,
+  },
+});
+
+const emit = defineEmits(['update:props']);
+
+const { $gettext, $language, $user } = useGlobalProperties();
+
+/** Format address proposition rendered by Photon */
+function formatProposition(proposition: Proposition) {
+  const properties = proposition.properties || {};
+  const coords = proposition.geometry?.coordinates;
+  if (Object.keys(properties).length === 0) {
+    if (coords?.length >= 2) {
+      return `${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}`;
+    }
+    return '';
+  }
+
+  let formattedAddress = properties.name || '';
+
+  if (properties.housenumber) {
+    formattedAddress = `${formattedAddress} ${properties.housenumber}`;
+  }
+
+  if (properties.street) {
+    formattedAddress = `${formattedAddress} ${properties.street}`;
+  }
+
+  if (properties.city) {
+    formattedAddress = `${formattedAddress}${formattedAddress ? ', ' : ''}${properties.city}`;
+  }
+
+  if (properties.postcode) {
+    formattedAddress = `${formattedAddress} ${properties.postcode}`;
+  }
+
+  if (properties.country) {
+    formattedAddress = `${formattedAddress}${formattedAddress ? ', ' : ''}${properties.country}`;
+  }
+
+  return formattedAddress;
+}
+
+const localData = reactive({
+  address: props.defaultAddress ? formatProposition(props.defaultAddress as Proposition) : '',
+  selectedAddress: '' as Proposition | '',
+  addressPropositions: [] as Proposition[],
+  showAddressPropositions: props.showAddressPropositions,
+  coordinates: null as number[] | null,
+});
+let searchTimeout: ReturnType<typeof setTimeout> | undefined;
+
+const isIos = (() => {
+  const ua = navigator.userAgent || '';
+  const platform = navigator.platform || '';
+  // Old iPhones/iPads/iPods
+  if (/iPad|iPhone|iPod/i.test(ua) || /iPad|iPhone|iPod/i.test(platform)) return true;
+  // iPadOS 13+ reports MacIntel but has touch points > 1
+  if (platform === 'MacIntel' && navigator.maxTouchPoints > 1) return true;
+  return false;
+})();
+
+function notifyParent() {
+  emit('update:props', localData.selectedAddress);
+}
+
+watch(() => localData.selectedAddress, notifyParent);
+
+/**
+ * Build a feature with point geom being lon lat
+ *
+ * @param coords [lon, lat]
+ */
+function buildFeatureFromCoords(coords: number[]): Proposition {
+  return {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: coords,
+    },
+    properties: {},
+  };
+}
+
+/** Transforms a point's coordinates (longitude and latitude) into an address with photon */
+async function reverseGeocode(lon: number, lat: number) {
+  try {
+    const response = await photon.reverseGeocodeUserLocation(lon, lat, $language.current!);
+    const data = await response.json();
+
+    selectAddress(data.features?.[0] ?? buildFeatureFromCoords([lon, lat]));
+  } catch (error) {
+    console.warn('Error during reverse geolocation:', error);
+    selectAddress(buildFeatureFromCoords([lon, lat]));
+  }
+}
+
+/** Try to use geolocation from browser */
+function useCurrentLocation() {
+  if (!navigator.geolocation) {
+    toast({
+      message: $gettext('Geolocation is not supported by your browser.'),
+      type: 'is-warning',
+    });
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const coords = [position.coords.longitude, position.coords.latitude];
+
+      localData.coordinates = coords;
+      await reverseGeocode(coords[0], coords[1]);
+    },
+    (error) => {
+      console.warn('Geolocation error:', error);
+      toast({
+        message: $gettext('Unable to get your current location.'),
+        type: 'is-warning',
+      });
+    }
+  );
+}
+
+/** If the user is authenticated and has entered their address in their profile, it is put in the address field */
+async function loadUserAddressIfLoggedIn() {
+  if (!$user.isLogged) return;
+
+  try {
+    const { data } = await c2c.userProfile.getProfile($user.id!);
+    const geom = data.geometry?.geom;
+    if (!geom) return;
+
+    const geomData = JSON.parse(geom);
+    if (geomData.type !== 'Point' || !geomData.coordinates) return;
+
+    const [x, y] = geomData.coordinates;
+    const [lon, lat] = ol.proj.transform([x, y], 'EPSG:3857', 'EPSG:4326');
+
+    localData.coordinates = [lon, lat];
+    await reverseGeocode(lon, lat);
+  } catch (error) {
+    console.warn('Error loading user location:', error);
+  }
+}
+
+/** Look for address propositions to display them for autocompleting */
+function searchAddressPropositions() {
+  clearTimeout(searchTimeout);
+
+  if (localData.address?.length < 3) {
+    localData.showAddressPropositions = false;
+    localData.addressPropositions = [];
+    localData.selectedAddress = '';
+    return;
+  }
+
+  searchTimeout = setTimeout(async () => {
+    try {
+      const center = props.mapView?.view?.getCenter();
+      const centerWgs84 = center ? (ol.proj.toLonLat(center) as [number, number]) : undefined;
+      const response = await photon.getPropositions(localData.address, $language.current!, centerWgs84);
+      localData.addressPropositions = response.data.features.slice(0, 6) || [];
+      localData.showAddressPropositions = localData.addressPropositions?.length > 0;
+    } catch (error) {
+      console.warn('Error searching for addresses:', error);
+      localData.addressPropositions = [];
+    }
+  }, 600);
+}
+
+/** Short delay to allow selection before hiding suggestions */
+function handleBlur() {
+  setTimeout(() => {
+    localData.showAddressPropositions = false;
+  }, 200);
+}
+
+/** Takes selected address proposition */
+function selectAddress(proposition: Proposition) {
+  localData.address = formatProposition(proposition);
+  localData.selectedAddress = proposition;
+  localData.selectedAddress.address = localData.address;
+  localData.coordinates = proposition.geometry.coordinates;
+  localData.showAddressPropositions = false;
+}
+
+onMounted(async () => {
+  if (props.defaultAddress === null) {
+    // Loads a user's address to put it directly into the 'address' field
+    await loadUserAddressIfLoggedIn();
+  }
+});
+
+onBeforeUnmount(() => {
+  clearTimeout(searchTimeout);
+});
 </script>
 
 <style scoped lang="scss">

@@ -7,11 +7,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, type PropType } from 'vue';
 
 const props = defineProps({
   array: {
-    type: Array,
+    type: Array as PropType<string[]>,
     default: null,
   },
   i18n: {

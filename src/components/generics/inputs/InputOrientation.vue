@@ -48,29 +48,26 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { arrayInputProps, baseInputProps, useArrayInputValue } from './input-value';
 
-export default {
-  props: {
-    ...baseInputProps,
-    ...arrayInputProps,
-    size: {
-      type: Number,
-      required: false,
-      default: 100,
-    },
-    blackWhite: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
+const props = defineProps({
+  ...baseInputProps,
+  ...arrayInputProps,
+  size: {
+    type: Number,
+    required: false,
+    default: 100,
   },
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    return useArrayInputValue(props, emit);
+  blackWhite: {
+    type: Boolean,
+    required: false,
+    default: false,
   },
-};
+});
+const emit = defineEmits(['update:modelValue']);
+
+const { value_, toggle } = useArrayInputValue(props, emit);
 </script>
 
 <style scoped lang="scss">

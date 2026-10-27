@@ -6,7 +6,7 @@
       :checked="value_ === event_activity || null"
       :class="{ 'with-labels': showLabels }"
       class="input-item has-cursor-pointer"
-      :title="showLabels ? null : $gettext(event_activity, 'event_activities')"
+      :title="showLabels ? undefined : $gettext(event_activity, 'event_activities')"
       @click="value_ = event_activity"
     >
       <icon-event-activity :event-activity="event_activity" />
@@ -17,35 +17,30 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
 import { baseInputProps, useInputValue } from './input-value';
 
 import constants from '@/js/constants';
 
-export default {
-  props: {
-    ...baseInputProps,
-    modelValue: {
-      type: String,
-      default: null,
-    },
-
-    showLabels: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    return useInputValue(props, emit);
+const props = defineProps({
+  ...baseInputProps,
+  modelValue: {
+    type: String,
+    default: null,
   },
 
-  computed: {
-    event_activities() {
-      return constants.event_activities;
-    },
+  showLabels: {
+    type: Boolean,
+    default: false,
   },
-};
+});
+const emit = defineEmits(['update:modelValue']);
+
+const { value_ } = useInputValue(props, emit);
+
+const event_activities = computed(() => constants.event_activities);
 </script>
 
 <style scoped lang="scss">

@@ -1,30 +1,30 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
-import { nextTick } from 'vue';
+import { defineComponent, nextTick, type Component } from 'vue';
 
-import InputActivity from './InputActivity';
-import InputCheckbox from './InputCheckbox';
-import InputDate from './InputDate';
-import InputEventActivity from './InputEventActivity';
-import InputMultiSelect from './InputMultiSelect';
-import InputOrientation from './InputOrientation';
-import InputSimple from './InputSimple';
-import InputYesNo from './InputYesNo';
+import InputActivity from './InputActivity.vue';
+import InputCheckbox from './InputCheckbox.vue';
+import InputDate from './InputDate.vue';
+import InputEventActivity from './InputEventActivity.vue';
+import InputMultiSelect from './InputMultiSelect.vue';
+import InputOrientation from './InputOrientation.vue';
+import InputSimple from './InputSimple.vue';
+import InputYesNo from './InputYesNo.vue';
 
 const global = {
-  mocks: { $gettext: (text) => text, $filters: { uppercaseFirstLetter: (text) => text } },
+  mocks: { $gettext: (text: string) => text, $filters: { uppercaseFirstLetter: (text: string) => text } },
   stubs: { IconActivity: true, IconEventActivity: true, FaIcon: true },
 };
 
 // the input in a parent, bound with v-model as the forms do: the input shows the parent value, and the parent gets the
 // value chosen in the input
-const mountWithVModel = (component, value, attrs = '') =>
+const mountWithVModel = (component: Component, value: unknown, attrs = '') =>
   mount(
-    {
+    defineComponent({
       components: { TheInput: component },
       template: `<the-input v-model="value" ${attrs} />`,
       data: () => ({ value }),
-    },
+    }),
     { global, attachTo: document.body }
   );
 
@@ -32,33 +32,33 @@ describe('inputs v-model', () => {
   it('InputCheckbox', async () => {
     const wrapper = mountWithVModel(InputCheckbox, false);
     const checkbox = wrapper.find('input[type=checkbox]');
-    expect(checkbox.element.checked).toBe(false);
+    expect((checkbox.element as HTMLInputElement).checked).toBe(false);
 
     await checkbox.setValue(true);
     expect(wrapper.vm.value).toBe(true);
 
     wrapper.vm.value = false;
     await nextTick();
-    expect(checkbox.element.checked).toBe(false);
+    expect((checkbox.element as HTMLInputElement).checked).toBe(false);
   });
 
   it('InputYesNo', async () => {
     const wrapper = mountWithVModel(InputYesNo, true, 'nullable');
     const radios = wrapper.findAll('input[type=radio]');
-    expect(radios.map((radio) => radio.element.checked)).toEqual([true, false, false]);
+    expect(radios.map((radio) => (radio.element as HTMLInputElement).checked)).toEqual([true, false, false]);
 
     await radios[1].setValue(true);
     expect(wrapper.vm.value).toBe(false);
 
     wrapper.vm.value = null;
     await nextTick();
-    expect(radios.map((radio) => radio.element.checked)).toEqual([false, false, true]);
+    expect(radios.map((radio) => (radio.element as HTMLInputElement).checked)).toEqual([false, false, true]);
   });
 
   it('InputSimple, with a divisor', async () => {
     const wrapper = mountWithVModel(InputSimple, 2500, 'type="number" :divisor="1000"');
     const input = wrapper.find('input');
-    expect(input.element.value).toBe('2.5');
+    expect((input.element as HTMLInputElement).value).toBe('2.5');
 
     await input.setValue('3'); // v-model.lazy: on change
     expect(wrapper.vm.value).toBe(3000);
@@ -67,7 +67,7 @@ describe('inputs v-model', () => {
   it('InputDate', async () => {
     const wrapper = mountWithVModel(InputDate, '2026-10-01');
     const input = wrapper.find('input');
-    expect(input.element.value).toBe('2026-10-01');
+    expect((input.element as HTMLInputElement).value).toBe('2026-10-01');
 
     await input.setValue('2026-10-05');
     expect(wrapper.vm.value).toBe('2026-10-05');

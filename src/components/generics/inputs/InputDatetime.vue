@@ -20,83 +20,67 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
 import { baseInputProps } from './input-value';
 
-const range = (from, to) => [...Array(to - from + 1).keys()].map((i) => i + from);
+import { useGlobalProperties } from '@/js/composables/global-properties';
 
-export default {
-  props: {
-    ...baseInputProps,
-    modelValue: {
-      type: String,
-      default: null,
-    },
+const range = (from: number, to: number) => [...Array(to - from + 1).keys()].map((i) => i + from);
+
+const props = defineProps({
+  ...baseInputProps,
+  modelValue: {
+    type: String,
+    default: null,
   },
+});
 
-  emits: ['update:modelValue'],
+const emit = defineEmits(['update:modelValue']);
 
-  computed: {
-    minutes() {
-      return range(0, 59);
-    },
-    hours() {
-      return range(0, 23);
-    },
-    value_: {
-      get() {
-        return this.$dateUtils.parseDate(this.modelValue);
-      },
-      set(value) {
-        if (!this.disabled) {
-          value = this.type !== 'number' || this.divisor === undefined || !value ? value : value * this.divisor;
-          this.$emit('update:modelValue', value);
-        }
-      },
-    },
-    date: {
-      get() {
-        return this.modelValue ? this.$dateUtils.toLocalizedString(this.value_, 'YYYY-MM-DD') : null;
-      },
-      set(value) {
-        const d = this.value_;
-        value = this.$dateUtils.parseDate(value);
+const { $dateUtils } = useGlobalProperties();
 
-        d.setYear(value.getFullYear());
-        d.setMonth(value.getMonth());
-        d.setDate(value.getDate());
+const minutes = range(0, 59);
+const hours = range(0, 23);
 
-        this.onInput(d);
-      },
-    },
-    hour: {
-      get() {
-        return this.modelValue ? this.value_.getHours() : null;
-      },
-      set(value) {
-        const d = this.value_;
-        d.setHours(value);
-        this.onInput(d);
-      },
-    },
-    minute: {
-      get() {
-        return this.modelValue ? this.value_.getMinutes() : null;
-      },
-      set(value) {
-        const d = this.value_;
-        d.setMinutes(value);
-        this.onInput(d);
-      },
-    },
+const value_ = computed(() => $dateUtils.parseDate(props.modelValue));
+
+function onInput(valueAsObject: Date) {
+  emit('update:modelValue', $dateUtils.toLocalizedString(valueAsObject, `YYYY-MM-DD[T]HH:mm:ssZ`));
+}
+
+const date = computed({
+  get: () => (props.modelValue ? $dateUtils.toLocalizedString(value_.value, 'YYYY-MM-DD') : null),
+  set(value: string | null) {
+    const d = value_.value;
+    const parsed = $dateUtils.parseDate(value);
+
+    d.setFullYear(parsed.getFullYear());
+    d.setMonth(parsed.getMonth());
+    d.setDate(parsed.getDate());
+
+    onInput(d);
   },
+});
 
-  methods: {
-    onInput(valueAsObject) {
-      this.$emit('update:modelValue', this.$dateUtils.toLocalizedString(valueAsObject, `YYYY-MM-DD[T]HH:mm:ssZ`));
-    },
+const hour = computed({
+  get: () => (props.modelValue ? value_.value.getHours() : null),
+  set(value: number) {
+    const d = value_.value;
+    d.setHours(value);
+    onInput(d);
   },
-};
+});
+
+const minute = computed({
+  get: () => (props.modelValue ? value_.value.getMinutes() : null),
+  set(value: number) {
+    const d = value_.value;
+    d.setMinutes(value);
+    onInput(d);
+  },
+});
 </script>
 
 <style scoped lang="scss">

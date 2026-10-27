@@ -23,5 +23,5 @@ const props = defineProps({
 const { $documentUtils } = useGlobalProperties();
 const route = useRoute();
 
-const title = computed(() => $documentUtils.getDocumentTitle(props.document, route.params.lang));
+const title = computed(() => $documentUtils.getDocumentTitle(props.document, route.params.lang as string));
 </script>
