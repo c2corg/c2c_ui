@@ -1,5 +1,5 @@
 <template>
-  <div class="columns" v-infinite-scroll="{ load, disabled: loading, distance: 500 }">
+  <div ref="root" class="columns" v-infinite-scroll="{ load, disabled: loading, distance: 500 }">
     <div v-for="(column, i) of columns" :key="i" :class="'column ' + cssColumnsClass">
       <feed-card v-for="item of column.items" :key="item.id" :item="item" class="feed-card" />
     </div>
@@ -7,196 +7,192 @@
   </div>
 </template>
 
-<script>
-import FeedCard from '@/components/cards/FeedCard';
+<script setup lang="ts">
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import type { z } from 'zod';
+
+import FeedCard from '@/components/cards/FeedCard.vue';
 import c2c from '@/js/apis/c2c';
-import infiniteScroll from '@/js/directives/infinite-scroll';
+import type { feed } from '@/js/apis/c2c/schemas';
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import vInfiniteScroll from '@/js/directives/infinite-scroll';
 
-export default {
-  components: {
-    FeedCard,
-  },
-
-  directives: { infiniteScroll },
-
-  props: {
-    type: {
-      // valid input : personal Default Profile
-      type: String,
-      required: true,
-    },
-    hideEmptyDocuments: {
-      type: Boolean,
-      default: false,
-    },
-  },
-
-  data() {
-    return {
-      promise: null,
-      feed: [],
-      paginationToken: null,
-      endOfFeed: false,
-      columns: null,
-      cssColumnsClass: null,
-    };
-  },
-
-  computed: {
-    loading() {
-      return this.promise ? this.promise.loading : false;
-    },
-  },
-
-  watch: {
-    $route: 'initialize',
-    type: 'initialize',
-  },
-
-  mounted() {
-    window.addEventListener('resize', this.initializeColumns);
-    this.initialize();
-  },
-
-  beforeUnmount() {
-    window.removeEventListener('resize', this.initializeColumns);
-  },
-
-  methods: {
-    initialize() {
-      this.paginationToken = undefined;
-      this.endOfFeed = false;
-      this.feed = [];
-
-      this.initializeColumns();
-
-      this.load();
-    },
-
-    initializeColumns() {
-      const availableWidth = this.$el.clientWidth;
-      const cardLargestWidth = 400;
-
-      let columnCount;
-
-      if (availableWidth < 2 * cardLargestWidth) {
-        this.cssColumnsClass = 'is-full';
-        columnCount = 1;
-      } else if (availableWidth < 3 * cardLargestWidth) {
-        this.cssColumnsClass = 'is-half';
-        columnCount = 2;
-      } else if (availableWidth < 4 * cardLargestWidth) {
-        this.cssColumnsClass = 'is-one-third';
-        columnCount = 3;
-      } else if (availableWidth < 5 * cardLargestWidth) {
-        this.cssColumnsClass = 'is-one-quarter';
-        columnCount = 4;
-      } else if (availableWidth < 6 * cardLargestWidth) {
-        this.cssColumnsClass = 'is-two-fifths';
-        columnCount = 5;
-      } else {
-        this.cssColumnsClass = 'is-2';
-        columnCount = 6;
-      }
-
-      this.columns = [];
-
-      for (let i = 0; i < columnCount; i++) {
-        this.columns.push({
-          items: [],
-          height: 0,
-        });
-      }
-
-      this.dispatchToColumns(this.feed);
-    },
-
-    load() {
-      if (this.promise && this.promise.loading) {
-        return;
-      }
-
-      if (this.endOfFeed) {
-        return;
-      }
-
-      const params = {
-        pl: c2c.getApiLang(this.$language.current),
-        token: this.paginationToken,
-        u: this.$route.params.id,
-      };
-
-      if (this.type === 'personal') {
-        this.promise = c2c.feed.getPersonalFeed(params).then(this.onLoad);
-      } else if (this.type === 'default') {
-        this.promise = c2c.feed.getDefaultFeed(params).then(this.onLoad);
-      } else if (this.type === 'profile') {
-        this.promise = c2c.feed.getProfileFeed(params).then(this.onLoad);
-      }
-    },
-
-    onLoad(response) {
-      this.paginationToken = response.data.pagination_token;
-
-      for (const item of response.data.feed) {
-        this.feed.push(item);
-      }
-
-      this.endOfFeed = response.data.feed.length === 0;
-
-      this.dispatchToColumns(response.data.feed);
-    },
-
-    dispatchToColumns(items) {
-      let destColumn = this.columns[0];
-
-      if (this.hideEmptyDocuments) {
-        items = items.filter((item) => item.document.quality !== 'empty');
-      }
-
-      for (const item of items) {
-        for (const column of this.columns) {
-          if (column.height < destColumn.height) {
-            destColumn = column;
-          }
-        }
-
-        destColumn.items.push(item);
-        destColumn.height += this.estimateSize(item);
-      }
-    },
-
-    estimateSize(item) {
-      const headerSize = 47;
-      const titleSize = 29;
-      const summarySize = 30;
-      const figuresSize = 30;
-      const areaSize = 29;
-      const footerSize = 38;
-      const gallerySize = 223;
-      const marginSize = 22;
-
-      let size = headerSize + titleSize + areaSize + footerSize + marginSize;
-
-      if (item.document.locales[0].summary) {
-        size += summarySize;
-      }
-      if (
-        document.elevation_max ||
-        document.elevation ||
-        document.height_diff_up ||
-        document.height_diff_difficulties
-      ) {
-        size += figuresSize;
-      }
-      if (item.image1 !== null) {
-        size += gallerySize;
-      }
-
-      return size;
-    },
-  },
+// the documents of the feed have more than the schema checks: their summary, figures and images
+type FeedItem = z.infer<typeof feed>['feed'][number] & {
+  document: Record<string, unknown> & { quality?: string; locales?: { summary?: string | null }[] };
+  image1?: unknown;
 };
+type FeedResponse = { data: { feed: FeedItem[]; pagination_token?: string } };
+type Column = { items: FeedItem[]; height: number };
+
+const props = defineProps({
+  type: {
+    // valid input : personal Default Profile
+    type: String,
+    required: true,
+  },
+  hideEmptyDocuments: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const route = useRoute();
+const { $language } = useGlobalProperties();
+
+const promise = ref<{ loading?: boolean } | null>(null);
+let feedItems: FeedItem[] = [];
+let paginationToken: string | undefined;
+let endOfFeed = false;
+const columns = ref<Column[]>([]);
+const cssColumnsClass = ref<string | null>(null);
+const root = useTemplateRef<HTMLElement>('root');
+
+const loading = computed(() => (promise.value ? Boolean(promise.value.loading) : false));
+
+function estimateSize(item: FeedItem) {
+  const headerSize = 47;
+  const titleSize = 29;
+  const summarySize = 30;
+  const figuresSize = 30;
+  const areaSize = 29;
+  const footerSize = 38;
+  const gallerySize = 223;
+  const marginSize = 22;
+
+  let size = headerSize + titleSize + areaSize + footerSize + marginSize;
+  const document = item.document;
+
+  if (document.locales?.[0]?.summary) {
+    size += summarySize;
+  }
+  // the figures of the document (it read the figures of window.document, which has none)
+  if (document.elevation_max || document.elevation || document.height_diff_up || document.height_diff_difficulties) {
+    size += figuresSize;
+  }
+  if (item.image1 !== null) {
+    size += gallerySize;
+  }
+
+  return size;
+}
+
+function dispatchToColumns(items: FeedItem[]) {
+  let destColumn = columns.value[0];
+
+  if (props.hideEmptyDocuments) {
+    items = items.filter((item) => item.document.quality !== 'empty');
+  }
+
+  for (const item of items) {
+    for (const column of columns.value) {
+      if (column.height < destColumn.height) {
+        destColumn = column;
+      }
+    }
+
+    destColumn.items.push(item);
+    destColumn.height += estimateSize(item);
+  }
+}
+
+function initializeColumns() {
+  const availableWidth = root.value!.clientWidth;
+  const cardLargestWidth = 400;
+
+  let columnCount;
+
+  if (availableWidth < 2 * cardLargestWidth) {
+    cssColumnsClass.value = 'is-full';
+    columnCount = 1;
+  } else if (availableWidth < 3 * cardLargestWidth) {
+    cssColumnsClass.value = 'is-half';
+    columnCount = 2;
+  } else if (availableWidth < 4 * cardLargestWidth) {
+    cssColumnsClass.value = 'is-one-third';
+    columnCount = 3;
+  } else if (availableWidth < 5 * cardLargestWidth) {
+    cssColumnsClass.value = 'is-one-quarter';
+    columnCount = 4;
+  } else if (availableWidth < 6 * cardLargestWidth) {
+    cssColumnsClass.value = 'is-two-fifths';
+    columnCount = 5;
+  } else {
+    cssColumnsClass.value = 'is-2';
+    columnCount = 6;
+  }
+
+  columns.value = [];
+
+  for (let i = 0; i < columnCount; i++) {
+    columns.value.push({
+      items: [],
+      height: 0,
+    });
+  }
+
+  dispatchToColumns(feedItems);
+}
+
+function onLoad(response: FeedResponse) {
+  paginationToken = response.data.pagination_token;
+
+  for (const item of response.data.feed) {
+    feedItems.push(item);
+  }
+
+  endOfFeed = response.data.feed.length === 0;
+
+  dispatchToColumns(response.data.feed);
+}
+
+function load() {
+  if (promise.value && promise.value.loading) {
+    return;
+  }
+
+  if (endOfFeed) {
+    return;
+  }
+
+  const params = {
+    pl: c2c.getApiLang($language.current ?? undefined),
+    token: paginationToken,
+    u: route.params.id,
+  };
+
+  const getFeed = {
+    personal: () => c2c.feed.getPersonalFeed(params),
+    default: () => c2c.feed.getDefaultFeed(params),
+    profile: () => c2c.feed.getProfileFeed(params),
+  }[props.type];
+
+  if (getFeed) {
+    promise.value = getFeed().then((response) => onLoad(response as FeedResponse));
+  }
+}
+
+function initialize() {
+  paginationToken = undefined;
+  endOfFeed = false;
+  feedItems = [];
+
+  initializeColumns();
+
+  load();
+}
+
+watch([() => route.fullPath, () => props.type], initialize);
+
+onMounted(() => {
+  window.addEventListener('resize', initializeColumns);
+  initialize();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', initializeColumns);
+});
 </script>
 
 <style scoped lang="scss">

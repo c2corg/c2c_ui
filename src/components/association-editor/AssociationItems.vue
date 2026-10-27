@@ -59,133 +59,131 @@
   </div>
 </template>
 
-<script>
-import AssociationImageLink from './AssociationImageLink';
-import AssociationOutingLink from './AssociationOutingLink';
+<script setup lang="ts">
+import { computed, ref, type PropType } from 'vue';
+
+import AssociationImageLink from './AssociationImageLink.vue';
+import AssociationOutingLink from './AssociationOutingLink.vue';
 
 import c2c from '@/js/apis/c2c';
+import type { DocumentRef } from '@/js/apis/c2c/types';
 import { useAssociationRights } from '@/js/composables/association-rights';
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  components: {
-    AssociationOutingLink,
-    AssociationImageLink,
-  },
-
-  props: {
-    parent: {
-      type: Object,
-      required: true,
-    },
-    arrayName: {
-      type: String,
-      required: true,
-    },
-    childType: {
-      type: String,
-      required: true,
-    },
-    current: {
-      type: Array,
-      required: true,
-    },
-    propositions: {
-      type: Object,
-      default: null,
-    },
-    forbiddenChildren: {
-      type: Array,
-      default: null,
-    },
-  },
-
-  setup() {
-    return useAssociationRights();
-  },
-
-  data() {
-    return {
-      promise: {},
-      deleted: [],
-    };
-  },
-
-  computed: {
-    children() {
-      const uniqueDocuments = new Map();
-
-      const append = function (array, status, buttonLabel) {
-        for (const document of array ?? []) {
-          if (!uniqueDocuments.has(document.document_id)) {
-            uniqueDocuments.set(document.document_id, {
-              sortKey: this.$documentUtils.getDocumentTitle(document).toLowerCase() + document.document_id,
-              document,
-              status,
-              buttonLabel,
-              disabled:
-                status === 'current'
-                  ? !this.canRemove(this.parent, document)
-                  : !this.canAdd(this.parent, document, this.forbiddenChildren),
-            });
-          }
-        }
-      }.bind(this);
-
-      append(this.current, 'current', this.$gettext('Remove'));
-      append(this.deleted, 'deleted', this.$gettext('Put it back'));
-      append(this.propositions ? this.propositions.documents : undefined, 'proposition', this.$gettext('Add'));
-
-      const result = [...uniqueDocuments.values()];
-      result.sort((a, b) => (a.sortKey === b.sortKey ? 0 : a.sortKey < b.sortKey ? -1 : 1));
-
-      return result;
-    },
-  },
-
-  methods: {
-    onclick(child) {
-      if (child.status === 'current') {
-        this.remove(child.document);
-      } else {
-        this.add(child.document);
-      }
-    },
-
-    add(child) {
-      // for waypoint/waypoint insertion, child/parent order is important :
-      // if array name is waypoint_children, then it must be added with
-      //
-      //     add(parent, child)
-      //
-      // otherwise, it's inversed : parent document will be the child. So :
-      //
-      //     add(child, parent)
-
-      let p, c;
-
-      if (this.parent.type === 'w' && this.arrayName === 'waypoints') {
-        p = child;
-        c = this.parent;
-      } else {
-        // in all other case, it's the good way
-        p = this.parent;
-        c = child;
-      }
-
-      this.promise = c2c.association.create(p, c).then(() => {
-        this.current.push(child);
-        this.deleted = this.deleted.filter((doc) => doc.document_id !== child.document_id);
-      });
-    },
-
-    remove(child) {
-      this.promise = c2c.association.remove(this.parent, child).then(() => {
-        this.current.splice(this.current.indexOf(child), 1);
-        this.deleted.push(child);
-      });
-    },
-  },
+type Child = {
+  sortKey: string;
+  document: C2cDocument;
+  status: 'current' | 'deleted' | 'proposition';
+  buttonLabel: string;
+  disabled: boolean;
 };
+
+const props = defineProps({
+  parent: {
+    type: Object as PropType<C2cDocument>,
+    required: true,
+  },
+  arrayName: {
+    type: String,
+    required: true,
+  },
+  childType: {
+    type: String,
+    required: true,
+  },
+  current: {
+    type: Array as PropType<C2cDocument[]>,
+    required: true,
+  },
+  propositions: {
+    type: Object as PropType<{ total: number; documents: C2cDocument[] }>,
+    default: null,
+  },
+  forbiddenChildren: {
+    type: Array as PropType<C2cDocument[]>,
+    default: null,
+  },
+});
+
+const { canAdd, canRemove } = useAssociationRights();
+const { $documentUtils, $gettext } = useGlobalProperties();
+
+const promise = ref<{ loading?: boolean }>({});
+const deleted = ref<C2cDocument[]>([]);
+
+const children = computed(() => {
+  const uniqueDocuments = new Map<number, Child>();
+
+  const append = (array: C2cDocument[] | undefined, status: Child['status'], buttonLabel: string) => {
+    for (const document of array ?? []) {
+      if (!uniqueDocuments.has(document.document_id!)) {
+        uniqueDocuments.set(document.document_id!, {
+          sortKey: $documentUtils.getDocumentTitle(document).toLowerCase() + document.document_id,
+          document,
+          status,
+          buttonLabel,
+          disabled:
+            status === 'current'
+              ? !canRemove(props.parent, document)
+              : !canAdd(props.parent, document, props.forbiddenChildren),
+        });
+      }
+    }
+  };
+
+  append(props.current, 'current', $gettext('Remove'));
+  append(deleted.value, 'deleted', $gettext('Put it back'));
+  append(props.propositions ? props.propositions.documents : undefined, 'proposition', $gettext('Add'));
+
+  const result = [...uniqueDocuments.values()];
+  result.sort((a, b) => (a.sortKey === b.sortKey ? 0 : a.sortKey < b.sortKey ? -1 : 1));
+
+  return result;
+});
+
+function add(child: C2cDocument) {
+  // for waypoint/waypoint insertion, child/parent order is important :
+  // if array name is waypoint_children, then it must be added with
+  //
+  //     add(parent, child)
+  //
+  // otherwise, it's inversed : parent document will be the child. So :
+  //
+  //     add(child, parent)
+
+  let p, c;
+
+  if (props.parent.type === 'w' && props.arrayName === 'waypoints') {
+    p = child;
+    c = props.parent;
+  } else {
+    // in all other case, it's the good way
+    p = props.parent;
+    c = child;
+  }
+
+  promise.value = c2c.association.create(p as DocumentRef, c as DocumentRef).then(() => {
+    // the association lists of the document are changed in place: the document view shows them
+    props.current.push(child);
+    deleted.value = deleted.value.filter((doc) => doc.document_id !== child.document_id);
+  });
+}
+
+function remove(child: C2cDocument) {
+  promise.value = c2c.association.remove(props.parent as DocumentRef, child as DocumentRef).then(() => {
+    props.current.splice(props.current.indexOf(child), 1);
+    deleted.value.push(child);
+  });
+}
+
+function onclick(child: Child) {
+  if (child.status === 'current') {
+    remove(child.document);
+  } else {
+    add(child.document);
+  }
+}
 </script>
 
 <style scoped lang="scss">

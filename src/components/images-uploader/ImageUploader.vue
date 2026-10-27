@@ -62,7 +62,7 @@
               :key="licence"
               @click="document.image_type = licence"
             >
-              <label>{{ licences.length }} {{ $filters.uppercaseFirstLetter(label) }}</label>
+              <label>{{ $filters.uppercaseFirstLetter(label) }}</label>
             </div>
           </div>
         </div>
@@ -76,123 +76,105 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/imageuploader.js
-import RotateButton from './RotateButton';
+import { computed, ref, watch } from 'vue';
 
+import RotateButton from './RotateButton.vue';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
 
-export default {
-  components: {
-    RotateButton,
+const props = defineProps({
+  categoriesEdition: {
+    type: Boolean,
+    required: true,
   },
-  props: {
-    categoriesEdition: {
-      type: Boolean,
-      required: true,
-    },
-    dataUrl: {
-      type: String,
-      default: null,
-    },
-    status: {
-      type: String,
-      required: true,
-    },
-    percentCompleted: {
-      type: Number,
-      required: true,
-    },
-    document: {
-      type: Object,
-      required: true,
-    },
-    isInitial: {
-      type: Boolean,
-      required: true,
-    },
-    isSaving: {
-      type: Boolean,
-      required: true,
-    },
-    isSuccess: {
-      type: Boolean,
-      required: true,
-    },
-    isFailed: {
-      type: Boolean,
-      required: true,
-    },
-    canRotate: {
-      type: Boolean,
-      default: false,
-    },
+  dataUrl: {
+    type: String,
+    default: null,
   },
-
-  emits: ['delete-image', 'retry-upload', 'rotate-image'],
-
-  data() {
-    const result = {
-      licences: new Map([
-        ['collaborative', this.$gettext('collab')],
-        ['personal', this.$gettext('personal')],
-      ]),
-      rotate: 0,
-      rotateClicked: false,
-    };
-
-    if (this.$user.isModerator) {
-      result.licences.set('copyright', this.$gettext('copyright'));
-    }
-
-    return result;
+  status: {
+    type: String,
+    required: true,
   },
-
-  computed: {
-    imageCategories() {
-      return constants.objectDefinitions.image.fields.categories.values;
-    },
-
-    disabled() {
-      return this.isSaving || this.isFailed;
-    },
+  percentCompleted: {
+    type: Number,
+    required: true,
   },
-
-  watch: {
-    isSaving: function () {
-      this.rotateClicked = false;
-    },
-    isFailed: function () {
-      this.rotateClicked = false;
-    },
+  document: {
+    type: Object,
+    required: true,
   },
-
-  methods: {
-    toggleCategory(category) {
-      const newValue = this.document.categories.slice(0);
-
-      if (!newValue.includes(category)) {
-        newValue.push(category);
-      } else {
-        newValue.splice(newValue.indexOf(category), 1);
-      }
-
-      this.document.categories = newValue;
-    },
-
-    applyRotation(angle) {
-      if (this.rotateClicked || this.disabled) {
-        return;
-      }
-      this.rotateClicked = true;
-      this.rotate = (this.rotate + angle) % 360;
-      if (this.rotate < 0) {
-        this.rotate += 360;
-      }
-      this.$emit('rotate-image', this.rotate);
-    },
+  isInitial: {
+    type: Boolean,
+    required: true,
   },
-};
+  isSaving: {
+    type: Boolean,
+    required: true,
+  },
+  isSuccess: {
+    type: Boolean,
+    required: true,
+  },
+  isFailed: {
+    type: Boolean,
+    required: true,
+  },
+  canRotate: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const emit = defineEmits(['delete-image', 'retry-upload', 'rotate-image']);
+
+const { $gettext, $user } = useGlobalProperties();
+
+const licences = new Map([
+  ['collaborative', $gettext('collab')],
+  ['personal', $gettext('personal')],
+]);
+if ($user.isModerator) {
+  licences.set('copyright', $gettext('copyright'));
+}
+
+const rotate = ref(0);
+const rotateClicked = ref(false);
+
+const imageCategories = constants.objectDefinitions.image.fields.categories.values as string[];
+const disabled = computed(() => props.isSaving || props.isFailed);
+
+watch([() => props.isSaving, () => props.isFailed], () => {
+  rotateClicked.value = false;
+});
+
+function toggleCategory(category: string) {
+  const newValue = props.document.categories.slice(0);
+
+  if (!newValue.includes(category)) {
+    newValue.push(category);
+  } else {
+    newValue.splice(newValue.indexOf(category), 1);
+  }
+
+  // the document of the upload, shared with ImagesUploader: changed in place
+
+  props.document.categories = newValue;
+}
+
+function applyRotation(angle: number) {
+  if (rotateClicked.value || disabled.value) {
+    return;
+  }
+  rotateClicked.value = true;
+  rotate.value = (rotate.value + angle) % 360;
+  if (rotate.value < 0) {
+    rotate.value += 360;
+  }
+  emit('rotate-image', rotate.value);
+}
 </script>
 
 <style scoped lang="scss">

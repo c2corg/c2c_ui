@@ -1,11 +1,11 @@
 import { mount } from '@vue/test-utils';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { h } from 'vue';
+import { defineComponent, h } from 'vue';
 
 import helperWindow, { registerHelperWindow } from './helper-window';
 import imageViewer, { registerImageViewer } from './image-viewer';
 
-import SocialNetworkSharing from '@/views/document/utils/SocialNetworkSharing';
+import SocialNetworkSharing from '@/views/document/utils/SocialNetworkSharing.vue';
 
 const plugins = [helperWindow, imageViewer];
 
@@ -18,7 +18,7 @@ describe('$helper and $imageViewer', () => {
 
   it('give the registered window to every component', () => {
     const helper = { show: vi.fn() };
-    const viewer = { push: vi.fn() };
+    const viewer = { push: vi.fn(), show: vi.fn(), clear: vi.fn() };
     registerHelperWindow(helper);
     registerImageViewer(viewer);
 
@@ -29,13 +29,18 @@ describe('$helper and $imageViewer', () => {
   });
 
   it('are registered by the windows themselves while mounted', async () => {
-    const { default: HelperWindow } = await import('@/components/helper/HelperWindow');
+    const { default: HelperWindow } = await import('@/components/helper/HelperWindow.vue');
     const window = mount(HelperWindow, {
-      global: { plugins, stubs: { ModalCard: true }, mocks: { $gettext: (s) => s } },
+      global: {
+        plugins,
+        stubs: { ModalCard: true },
+        config: { globalProperties: { $gettext: (s: string) => s, $language: { current: 'fr' } } as never },
+      },
     });
     const component = mount({ render: () => h('div') }, { global: { plugins } });
 
-    expect(component.vm.$helper).toBe(window.vm);
+    // what the window offers to the pages: show()
+    expect(component.vm.$helper).toEqual({ show: expect.any(Function) });
 
     window.unmount();
     expect(component.vm.$helper).toBe(null);
@@ -46,22 +51,28 @@ describe('$helper and $imageViewer in App.vue', () => {
   afterEach(() => registerHelperWindow(null));
 
   it('are usable by the pages while they are created, as in App.vue', async () => {
-    const { default: HelperWindow } = await import('@/components/helper/HelperWindow');
-    let seenByPage;
+    const { default: HelperWindow } = await import('@/components/helper/HelperWindow.vue');
+    let seenByPage: unknown;
     // App.vue: the windows, then the router view; document views use $imageViewer in their created()
-    const Page = {
+    const Page = defineComponent({
       created() {
         seenByPage = this.$helper;
       },
       render: () => h('div'),
-    };
+    });
 
     mount(
       {
         components: { HelperWindow, Page },
         render: () => h('div', [h(HelperWindow, { ref: 'helper' }), h(Page)]),
       },
-      { global: { plugins, stubs: { ModalCard: true }, mocks: { $gettext: (s) => s } } }
+      {
+        global: {
+          plugins,
+          stubs: { ModalCard: true },
+          config: { globalProperties: { $gettext: (s: string) => s, $language: { current: 'fr' } } as never },
+        },
+      }
     );
 
     expect(seenByPage).not.toBe(null);
@@ -79,9 +90,11 @@ describe('SocialNetworkSharing', () => {
       global: {
         stubs: { FaIcon: true },
         mocks: {
-          $gettext: (s) => s,
+          $gettext: (s: string) => s,
           $gdpr: { get: () => null },
-          $documentUtils: { getDocumentTitle: (document) => document.locales[0].title },
+          $documentUtils: {
+            getDocumentTitle: (document: { locales: { title: string }[] }) => document.locales[0].title,
+          },
         },
       },
     });

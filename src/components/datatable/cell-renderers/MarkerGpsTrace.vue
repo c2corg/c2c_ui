@@ -1,5 +1,5 @@
 <template>
-  <generic-marker-gps-trace v-show="params.data.geometry.has_geom_detail" />
+  <generic-marker-gps-trace v-show="params.data.geometry?.has_geom_detail" />
 </template>
 
 <script setup lang="ts">

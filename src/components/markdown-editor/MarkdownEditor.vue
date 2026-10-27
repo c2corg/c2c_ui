@@ -73,320 +73,196 @@
       </div>
     </div>
 
-    <link-helper ref="linkHelper" @insert="insertLink" />
+    <link-helper ref="linkWindow" @insert="insertLink" />
   </div>
 </template>
 
-<script>
-import { markRaw } from 'vue';
+<script setup lang="ts">
+import { computed, markRaw, onMounted, ref, useTemplateRef, watch } from 'vue';
 
-import EditorButton from './EditorButton';
-import LinkHelper from './LinkHelper';
+import EditorButton from './EditorButton.vue';
+import LinkHelper from './LinkHelper.vue';
+import Selection from './selection';
 
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import cooker from '@/js/cooker';
 
-function Selection(textarea, onInput) {
-  this.textarea = textarea;
-  this.onInput = onInput;
-}
-
-Object.defineProperty(Selection.prototype, 'start', {
-  get() {
-    return this.textarea.selectionStart;
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: '',
   },
-  set(value) {
-    this.textarea.selectionStart = value;
+  placeholder: {
+    type: String,
+    default: undefined,
   },
 });
 
-Object.defineProperty(Selection.prototype, 'end', {
-  get() {
-    return this.textarea.selectionEnd;
-  },
-  set(value) {
-    this.textarea.selectionEnd = value;
-  },
-});
+const emit = defineEmits(['update:modelValue']);
 
-Object.defineProperty(Selection.prototype, 'length', {
-  get() {
-    return this.end - this.start;
-  },
-});
+const { $gettext } = useGlobalProperties();
 
-Object.defineProperty(Selection.prototype, 'text', {
-  get() {
-    return this.textarea.value.substr(this.start, this.length);
-  },
-});
+const focus = ref(false);
+const preview = ref(false);
+const fullScreen = ref(false);
+const cookerPromise = ref<ReturnType<typeof cooker.cook> & { loading?: boolean; error?: unknown }>(
+  {} as ReturnType<typeof cooker.cook>
+);
+const textarea = useTemplateRef<HTMLTextAreaElement>('textarea');
+const linkWindow = useTemplateRef<{ show(chunk?: string | null, url?: string | null): void }>('linkWindow');
+// a helper around the textarea, not state to observe
+let selection: Selection;
 
-Object.defineProperty(Selection.prototype, 'isEmpty', {
-  get() {
-    return this.start === this.end;
-  },
-});
-
-Selection.prototype.set = function (start, end) {
-  this.start = start;
-  this.end = end ?? start;
-};
-
-// TODO : remove before and after, and rewite calls with f-strings
-Selection.prototype.setText = function (text, before = '', after = '') {
-  const chunk = before + text + after;
-
-  const start = this.start;
-  this.textarea.value =
-    this.textarea.value.substr(0, this.start) +
-    chunk +
-    this.textarea.value.substr(this.end, this.textarea.value.length);
-  this.set(start + before.length, start + before.length + text.length);
-
-  this.onInput(this.textarea.value);
-};
-
-Selection.prototype.replace = function (pattern, replacement) {
-  this.setText(this.text.replace(pattern, replacement));
-};
-
-Selection.prototype.isSurroundedBy = function (before, after) {
-  const beforeLength = before.length;
-  const afterLength = after.length;
-  const content = this.textarea.value;
-
-  return (
-    content.substr(this.start - beforeLength, beforeLength) === before &&
-    content.substr(this.end, afterLength) === after
-  );
-};
-
-Selection.prototype.expandToEntireLine = function () {
-  const start = this.textarea.value.lastIndexOf('\n', this.start);
-  this.start = start + 1;
-  const end = this.textarea.value.indexOf('\n', this.end);
-  this.end = end === -1 ? this.textarea.value.length : end;
-};
-
-Selection.prototype.linesStartsWith = function (tag) {
-  for (const line of this.text.split('\n')) {
-    if (!line.startsWith(tag)) {
-      return false;
-    }
+const cooked = computed(() => {
+  if (!cookerPromise.value) {
+    return null;
   }
 
-  return true;
-};
+  return cookerPromise.value.loading ? '<em>Loading...</em>' : (cookerPromise.value.response?.data.value as string);
+});
 
-Selection.prototype.removeLinePrefix = function (tag) {
-  this.setText(
-    this.text
-      .split('\n')
-      .map((line) => line.substr(tag.length))
-      .join('\n')
-  );
-};
+function onInput() {
+  emit('update:modelValue', textarea.value!.value);
+}
 
-Selection.prototype.addLinePrefix = function (tag) {
-  this.setText(
-    this.text
-      .split('\n')
-      .map((line) => tag + line)
-      .join('\n')
-  );
-};
+watch(preview, () => {
+  if (!preview.value) {
+    return;
+  }
 
-export default {
-  components: {
-    EditorButton,
-    LinkHelper,
-  },
+  cookerPromise.value = cooker.cook({ value: props.modelValue });
+});
 
-  props: {
-    modelValue: {
-      type: String,
-      default: '',
-    },
-    placeholder: {
-      type: String,
-      default: undefined,
-    },
-  },
+watch(
+  () => props.modelValue,
+  () => {
+    textarea.value!.value = props.modelValue;
+  }
+);
 
-  emits: ['update:modelValue'],
+onMounted(() => {
+  textarea.value!.value = props.modelValue;
+  selection = markRaw(new Selection(textarea.value!, onInput));
+});
 
-  data() {
-    return {
-      selection: null,
-      focus: false,
-      preview: false,
-      fullScreen: false,
-      cookerPromise: {},
-    };
-  },
+// give back focus to textarea: event may have given focus to a button
+function focusTextarea() {
+  textarea.value!.focus();
+}
 
-  computed: {
-    cooked() {
-      if (!this.cookerPromise) {
-        return null;
-      }
+function handleSimpleMarkdownTag(tag: string, defaultChunk: string) {
+  const tagLength = tag.length;
 
-      return this.cookerPromise.loading ? '<em>Loading...</em>' : this.cookerPromise.response.data.value;
-    },
-  },
+  if (selection.isSurroundedBy(tag, tag)) {
+    // remove tag
+    const chunk = selection.text;
+    selection.set(selection.start - tagLength, selection.end + tagLength);
+    selection.setText(chunk);
+  } else {
+    // add tag
+    const chunk = selection.isEmpty ? defaultChunk : selection.text;
+    selection.setText(chunk, tag, tag);
+  }
 
-  watch: {
-    preview: 'computePreview',
-    modelValue: 'updateValue',
-  },
+  focusTextarea();
+}
 
-  mounted() {
-    this.$refs.textarea.value = this.modelValue;
-    // a helper around the textarea, not state to observe
-    this.selection = markRaw(new Selection(this.$refs.textarea, this.onInput));
-  },
+function handleBlockMarkdownTag(tag: string, defaultChunk = '') {
+  selection.expandToEntireLine();
 
-  methods: {
-    onInput() {
-      this.$emit('update:modelValue', this.$refs.textarea.value);
-    },
+  if (selection.isEmpty) {
+    selection.setText(defaultChunk);
+    selection.set(selection.start + tag.length);
+  } else if (selection.linesStartsWith(tag)) {
+    selection.removeLinePrefix(tag);
+    selection.set(selection.start);
+  } else {
+    selection.addLinePrefix(tag);
+    selection.set(selection.start + tag.length);
+  }
 
-    updateValue() {
-      this.$refs.textarea.value = this.modelValue;
-    },
+  focusTextarea();
+}
 
-    computePreview() {
-      if (!this.preview) {
-        return;
-      }
+function handleBold() {
+  handleSimpleMarkdownTag('**', $gettext('strong text'));
+}
 
-      this.cookerPromise = cooker.cook({ value: this.modelValue });
-    },
+function handleItalic() {
+  handleSimpleMarkdownTag('_', $gettext('emphasized text'));
+}
 
-    handleSimpleMarkdownTag(tag, defaultChunk) {
-      const tagLength = tag.length;
+function handleHeading() {
+  const defaultChunk = $gettext('heading text');
 
-      if (this.selection.isSurroundedBy(tag, tag)) {
-        // remove tag
-        const chunk = this.selection.text;
-        this.selection.set(this.selection.start - tagLength, this.selection.end + tagLength);
-        this.selection.setText(chunk);
-      } else {
-        // add tag
-        const chunk = this.selection.isEmpty ? defaultChunk : this.selection.text;
-        this.selection.setText(chunk, tag, tag);
-      }
+  selection.expandToEntireLine();
 
-      // give back focus to textarea
-      // event may have given focus to a button
-      this.$refs.textarea.focus();
-    },
+  if (selection.text.startsWith('#')) {
+    selection.replace(/^#+ */, '');
+  } else {
+    const chunk = selection.isEmpty ? defaultChunk : selection.text;
+    selection.setText(chunk, '## ');
+  }
 
-    handleBlockMarkdownTag(tag, defaultChunk) {
-      this.selection.expandToEntireLine();
+  focusTextarea();
+}
 
-      if (this.selection.isEmpty) {
-        this.selection.setText(defaultChunk);
-        this.selection.set(this.selection.start + tag.length);
-      } else if (this.selection.linesStartsWith(tag)) {
-        this.selection.removeLinePrefix(tag);
-        this.selection.set(this.selection.start);
-      } else {
-        this.selection.addLinePrefix(tag);
-        this.selection.set(this.selection.start + tag.length);
-      }
+function handleLink() {
+  linkWindow.value!.show(selection.text, '');
+}
 
-      this.$refs.textarea.focus();
-    },
+function insertLink(chunk: string, url: string) {
+  selection.setText(`[${chunk}](${url})`);
+  focusTextarea();
+}
 
-    handleBold() {
-      this.handleSimpleMarkdownTag('**', this.$gettext('strong text'));
-    },
+function handleImage() {
+  selection.set(selection.start, selection.start);
+  selection.setText('IMAGE_ID', '\n\n[img=', ' right]Legend[/img]\n\n');
+  focusTextarea();
+}
 
-    handleItalic() {
-      this.handleSimpleMarkdownTag('_', this.$gettext('emphasized text'));
-    },
+function handleEmoji() {
+  selection.set(selection.start, selection.start);
+  selection.setText('smile', ':', ':');
+  focusTextarea();
+}
 
-    handleHeading() {
-      const defaultChunk = this.$gettext('heading text');
+function handleHashtag() {
+  selection.expandToEntireLine();
 
-      this.selection.expandToEntireLine();
+  if (selection.isEmpty) {
+    selection.setText(
+      'L# | cotation | length | description\nL# | cotation | length | description\nL# | cotation | length | description'
+    );
+    selection.set(selection.start + 5);
+  } else {
+    selection.addLinePrefix('L# | ');
+  }
 
-      if (this.selection.text.startsWith('#')) {
-        this.selection.replace(/^#+ */, '');
-      } else {
-        const chunk = this.selection.isEmpty ? defaultChunk : this.selection.text;
-        this.selection.setText(chunk, '## ');
-      }
+  focusTextarea();
+}
 
-      this.$refs.textarea.focus();
-    },
+function handleListUl() {
+  handleBlockMarkdownTag('* ', '* item 1\n* item 2\n* item 3');
+}
 
-    handleLink() {
-      this.$refs.linkHelper.show(this.selection.text, '');
-    },
+function handleListOl() {
+  handleBlockMarkdownTag('1. ', '1. item 1\n2. item 2\n3. item 3');
+}
 
-    insertLink(chunk, url) {
-      this.selection.setText(`[${chunk}](${url})`);
-      // give back focus to textarea
-      // event may have given focus to a button
-      this.$refs.textarea.focus();
-    },
+function handleCode() {
+  if (selection.text.includes('\n')) {
+    handleBlockMarkdownTag('    ');
+  } else {
+    // inline code mode
+    handleSimpleMarkdownTag('`', $gettext('Unformatted text'));
+  }
+}
 
-    handleImage() {
-      this.selection.set(this.selection.start, this.selection.start);
-      this.selection.setText('IMAGE_ID', '\n\n[img=', ' right]Legend[/img]\n\n');
-
-      // give back focus to textarea
-      // event may have given focus to a button
-      this.$refs.textarea.focus();
-    },
-
-    handleEmoji() {
-      this.selection.set(this.selection.start, this.selection.start);
-      this.selection.setText('smile', ':', ':');
-
-      // give back focus to textarea
-      // event may have given focus to a button
-      this.$refs.textarea.focus();
-    },
-
-    handleHashtag() {
-      this.selection.expandToEntireLine();
-
-      if (this.selection.isEmpty) {
-        this.selection.setText(
-          'L# | cotation | length | description\nL# | cotation | length | description\nL# | cotation | length | description'
-        );
-        this.selection.set(this.selection.start + 5);
-      } else {
-        this.selection.addLinePrefix('L# | ');
-      }
-
-      this.$refs.textarea.focus();
-    },
-
-    handleListUl() {
-      this.handleBlockMarkdownTag('* ', '* item 1\n* item 2\n* item 3');
-    },
-
-    handleListOl() {
-      this.handleBlockMarkdownTag('1. ', '1. item 1\n2. item 2\n3. item 3');
-    },
-
-    handleCode() {
-      if (this.selection.text.includes('\n')) {
-        this.handleBlockMarkdownTag('    ');
-      } else {
-        // inline code mode
-        this.handleSimpleMarkdownTag('`', this.$gettext('Unformatted text'));
-      }
-    },
-
-    handleQuote() {
-      this.handleBlockMarkdownTag('> ', '> Citation');
-    },
-  },
-};
+function handleQuote() {
+  handleBlockMarkdownTag('> ', '> Citation');
+}
 </script>
 
 <style scoped lang="scss">
