@@ -11,24 +11,22 @@
   </span>
 </template>
 
-<script>
+<script setup lang="ts">
 import { documentTypeProperty } from '@/js/properties';
 
-export default {
-  props: {
-    ...documentTypeProperty,
-    version: {
-      type: Number,
-      required: true,
-    },
-    lang: {
-      type: String,
-      required: true,
-    },
-    id: {
-      type: Number,
-      required: true,
-    },
+defineProps({
+  ...documentTypeProperty,
+  version: {
+    type: Number,
+    required: true,
   },
-};
+  lang: {
+    type: String,
+    required: true,
+  },
+  id: {
+    type: Number,
+    required: true,
+  },
+});
 </script>

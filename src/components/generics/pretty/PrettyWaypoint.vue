@@ -9,13 +9,11 @@
   </span>
 </template>
 
-<script>
-export default {
-  props: {
-    waypoint: {
-      type: Object,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  waypoint: {
+    type: Object,
+    required: true,
   },
-};
+});
 </script>

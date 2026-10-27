@@ -2,13 +2,11 @@
   <fa-icon icon="newspaper" :fixed-width="fixedWidth" />
 </template>
 
-<script>
-export default {
-  props: {
-    fixedWidth: {
-      type: Boolean,
-      default: false,
-    },
+<script setup lang="ts">
+defineProps({
+  fixedWidth: {
+    type: Boolean,
+    default: false,
   },
-};
+});
 </script>

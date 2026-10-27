@@ -4,10 +4,8 @@
   </span>
 </template>
 
-<script>
+<script setup lang="ts">
 import { documentTypeProperty } from '@/js/properties';
 
-export default {
-  props: { ...documentTypeProperty },
-};
+defineProps({ ...documentTypeProperty });
 </script>

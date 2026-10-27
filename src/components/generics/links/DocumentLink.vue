@@ -10,30 +10,26 @@
   </router-link>
 </template>
 
-<script>
+<script setup lang="ts">
 import { documentProperty, useDocumentType } from '@/js/properties';
 
-export default {
-  props: {
-    ...documentProperty,
-    lang: {
-      type: String,
-      default: null,
-    },
-
-    uppercaseFirstLetter: {
-      type: Boolean,
-      default: false,
-    },
-
-    target: {
-      type: String,
-      default: undefined,
-    },
+const props = defineProps({
+  ...documentProperty,
+  lang: {
+    type: String,
+    default: null,
   },
 
-  setup(props) {
-    return useDocumentType(props);
+  uppercaseFirstLetter: {
+    type: Boolean,
+    default: false,
   },
-};
+
+  target: {
+    type: String,
+    default: undefined,
+  },
+});
+
+const { documentType } = useDocumentType(props);
 </script>

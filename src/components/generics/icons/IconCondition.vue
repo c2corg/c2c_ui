@@ -2,16 +2,14 @@
   <fa-icon :class="'icon-condition-' + condition" :icon="[condition !== null ? 'fas' : 'far', 'circle']" />
 </template>
 
-<script>
-export default {
-  props: {
-    condition: {
-      type: String,
-      required: false,
-      default: null,
-    },
+<script setup lang="ts">
+defineProps({
+  condition: {
+    type: String,
+    required: false,
+    default: null,
   },
-};
+});
 </script>
 
 <style scoped lang="scss">

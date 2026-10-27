@@ -4,13 +4,11 @@
   </span>
 </template>
 
-<script>
-export default {
-  props: {
-    condition: {
-      type: String,
-      default: null,
-    },
+<script setup lang="ts">
+defineProps({
+  condition: {
+    type: String,
+    default: null,
   },
-};
+});
 </script>

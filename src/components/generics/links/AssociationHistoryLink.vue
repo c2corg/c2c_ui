@@ -8,53 +8,51 @@
   </component>
 </template>
 
-<script>
-export default {
-  props: {
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    documentId: {
-      type: Number,
-      default: null,
-    },
-    userId: {
-      type: Number,
-      default: null,
-    },
-    limit: {
-      type: Number,
-      default: null,
-    },
-    offset: {
-      type: Number,
-      default: null,
-    },
+<script setup lang="ts">
+import { computed } from 'vue';
+
+const props = defineProps({
+  disabled: {
+    type: Boolean,
+    default: false,
   },
-
-  computed: {
-    query() {
-      const result = {};
-
-      if (this.offset) {
-        result.offset = this.offset;
-      }
-
-      if (this.limit) {
-        result.limit = this.limit;
-      }
-
-      if (this.documentId) {
-        result.d = this.documentId;
-      }
-
-      if (this.userId) {
-        result.u = this.userId;
-      }
-
-      return result;
-    },
+  documentId: {
+    type: Number,
+    default: null,
   },
-};
+  userId: {
+    type: Number,
+    default: null,
+  },
+  limit: {
+    type: Number,
+    default: null,
+  },
+  offset: {
+    type: Number,
+    default: null,
+  },
+});
+
+const query = computed(() => {
+  const result: Record<string, number> = {};
+
+  if (props.offset) {
+    result.offset = props.offset;
+  }
+
+  if (props.limit) {
+    result.limit = props.limit;
+  }
+
+  if (props.documentId) {
+    result.d = props.documentId;
+  }
+
+  if (props.userId) {
+    result.u = props.userId;
+  }
+
+  return result;
+});
 </script>
