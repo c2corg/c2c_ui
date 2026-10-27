@@ -68,7 +68,7 @@ function onError() {
   if (!props.promise.error.response || !props.promise.error.response.data) {
     window.alert('Unexpected error');
   } else if (!props.promise.error.response.data.errors) {
-    window.alert(!props.promise.error.response.data);
+    window.alert(props.promise.error.response.data);
   } else {
     // $gettext('Only document less than 24h old can be deleted', 'API message')
     window.alert($gettext(props.promise.error.response.data.errors[0].description));

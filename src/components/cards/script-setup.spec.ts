@@ -198,4 +198,15 @@ describe('ModalConfirmation', () => {
     expect(alert).toHaveBeenCalledWith('Only document less than 24h old');
     alert.mockRestore();
   });
+
+  it('alerts an API error without errors list as it is', async () => {
+    const alert = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    const wrapper = mountModal();
+
+    await wrapper.setProps({ promise: { error: { response: { data: 'Bad gateway' } } } });
+
+    // not its negation: the user saw "false"
+    expect(alert).toHaveBeenCalledWith('Bad gateway');
+    alert.mockRestore();
+  });
 });
