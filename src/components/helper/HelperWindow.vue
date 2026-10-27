@@ -1,5 +1,5 @@
 <template>
-  <modal-card ref="modalCard">
+  <modal-card ref="modal">
     <template #title>
       <div>
         <p :class="{ 'has-text-danger': !headerFound }">
@@ -15,7 +15,7 @@
     <template #footer>
       <div>
         <div class="buttons" v-if="helper">
-          <button class="button is-primary" @click="$refs.modalCard.hide()" v-translate>Close</button>
+          <button class="button is-primary" @click="hide" v-translate>Close</button>
           <router-link
             v-if="$user.isLogged && showModifyButton"
             :to="{ name: 'article', params: { id: helper.documentId } }"
@@ -29,105 +29,108 @@
   </modal-card>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, onBeforeUnmount, ref, useTemplateRef } from 'vue';
+
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { sanitizeRichHtml } from '@/js/sanitize-html';
 import { registerHelperWindow } from '@/js/vue-plugins/helper-window';
 
-export default {
-  data() {
-    return {
-      title: null,
-      html: null,
-      showModifyButton: false,
-      lang: null,
-      helperId: '',
-      headerFound: false,
-    };
-  },
+const { $gettext, $language } = useGlobalProperties();
 
-  computed: {
-    helper() {
-      const match = this.helperId.match(/^(\d+)(#([a-z0-9-_]+))?$/);
+const title = ref<string | null>(null);
+const html = ref<string | null>(null);
+const showModifyButton = ref(false);
+const helperId = ref('');
+const headerFound = ref(false);
+let lang: string | null = null;
+const modal = useTemplateRef<{ show(): void; hide(): void }>('modal');
 
-      return match
-        ? {
-            documentId: match[1],
-            anchor: match[3],
-          }
-        : null;
-    },
-  },
+const helper = computed(() => {
+  const match = helperId.value.match(/^(\d+)(#([a-z0-9-_]+))?$/);
 
-  created() {
-    // in created(), not mounted(): pages call it while they are created, before the app tree is mounted
-    registerHelperWindow(this);
-  },
-
-  beforeUnmount() {
-    registerHelperWindow(null);
-  },
-
-  methods: {
-    show(helperId) {
-      this.lang = this.$language.current;
-      this.helperId = helperId;
-      this.load();
-    },
-
-    load(lang) {
-      if (!this.helper) {
-        return;
+  return match
+    ? {
+        documentId: match[1],
+        anchor: match[3],
       }
+    : null;
+});
 
-      this.showModifyButton = false;
+type CookedArticle = { protected?: boolean; cooked: { title: string; description: string } };
 
-      // if the lang is specified, use it and save it.
-      // otherwise, use the previously used lang
-      this.lang = lang ?? this.lang;
+function computeHtml(article: CookedArticle) {
+  showModifyButton.value = !article.protected;
+  const cooked = article.cooked;
 
-      this.html = this.$gettext('loading');
-      c2c.article.getCooked(this.helper.documentId, c2c.getApiLang(this.lang)).then(this.computeHtml);
-      this.$refs.modalCard.show();
-    },
+  title.value = cooked.title;
 
-    computeHtml(response) {
-      this.showModifyButton = !response.data.protected;
-      const cooked = response.data.cooked;
+  if (helper.value!.anchor) {
+    // cooked.description is HTML converted from a wiki article's user-authored
+    // markdown: sanitize it before injecting it in the DOM to prevent stored XSS.
+    const content = document.createElement('div');
+    content.innerHTML = sanitizeRichHtml(cooked.description);
 
-      this.title = cooked.title;
+    const parts = [];
+    let appending = false;
+    let mainNodeTag: string | null = null;
+    headerFound.value = false;
 
-      if (this.helper.anchor) {
-        // cooked.description is HTML converted from a wiki article's user-authored
-        // markdown: sanitize it before injecting it in the DOM to prevent stored XSS.
-        const content = document.createElement('div');
-        content.innerHTML = sanitizeRichHtml(cooked.description);
+    for (const node of content.children) {
+      const isHeader = node.nodeName.match(/^[hH]\d$/);
 
-        const html = [];
-        let appending = false;
-        let mainNodeTag = null;
-        this.headerFound = false;
-
-        for (const node of content.children) {
-          const isHeader = node.nodeName.match(/^[hH]\d$/);
-
-          if (isHeader && !appending && node.id === this.helper.anchor) {
-            appending = true;
-            mainNodeTag = node.nodeName;
-            this.title = node.innerHTML;
-            this.headerFound = true;
-          } else if (isHeader && appending && node.nodeName <= mainNodeTag) {
-            appending = false;
-          } else if (appending) {
-            html.push(node.outerHTML);
-          }
-        }
-        this.html = html.length !== 0 ? html.join('\n') : content.innerHTML;
-      } else {
-        // same as above: sanitize before it gets bound with v-html
-        this.html = sanitizeRichHtml(cooked.description);
+      if (isHeader && !appending && node.id === helper.value!.anchor) {
+        appending = true;
+        mainNodeTag = node.nodeName;
+        title.value = node.innerHTML;
+        headerFound.value = true;
+      } else if (isHeader && appending && node.nodeName <= mainNodeTag!) {
+        appending = false;
+      } else if (appending) {
+        parts.push(node.outerHTML);
       }
-    },
-  },
-};
+    }
+    html.value = parts.length !== 0 ? parts.join('\n') : content.innerHTML;
+  } else {
+    // same as above: sanitize before it gets bound with v-html
+    html.value = sanitizeRichHtml(cooked.description);
+  }
+}
+
+function load(newLang?: string) {
+  if (!helper.value) {
+    return;
+  }
+
+  showModifyButton.value = false;
+
+  // if the lang is specified, use it and save it.
+  // otherwise, use the previously used lang
+  lang = newLang ?? lang;
+
+  html.value = $gettext('loading');
+  (c2c.article as DocumentService)
+    .getCooked(Number(helper.value.documentId), c2c.getApiLang(lang ?? undefined)!)
+    .then((response) => computeHtml(response.data as unknown as CookedArticle));
+  modal.value!.show();
+}
+
+function show(newHelperId: string) {
+  lang = $language.current;
+  helperId.value = newHelperId;
+  load();
+}
+
+function hide() {
+  modal.value!.hide();
+}
+
+// in setup, not mounted(): pages call it while they are created, before the app tree is mounted
+registerHelperWindow({ show });
+
+onBeforeUnmount(() => {
+  registerHelperWindow(null);
+});
 </script>

@@ -1,17 +1,18 @@
-import type { App, ComponentPublicInstance } from 'vue';
+import type { App } from 'vue';
+
+// What HelperWindow offers to the pages: $helper.show('<article id>#<anchor>')
+export type Helper = { show(helperId: string): void };
 
 // The HelperWindow of App.vue registers itself here when created (no $root.$children, gone in Vue 3)
-let helperWindow: ComponentPublicInstance | null = null;
+let helperWindow: Helper | null = null;
 
-export function registerHelperWindow(vm: ComponentPublicInstance | null) {
-  helperWindow = vm;
+export function registerHelperWindow(helper: Helper | null) {
+  helperWindow = helper;
 }
 
 declare module 'vue' {
   interface ComponentCustomProperties {
-    // the component's methods are not typed yet
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    $helper: any;
+    $helper: Helper | null;
   }
 }
 

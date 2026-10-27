@@ -1,5 +1,5 @@
 <template>
-  <fa-icon v-if="name" icon="info-circle" class="marker-helper has-text-info" @click="$helper.show(name)" />
+  <fa-icon v-if="name" icon="info-circle" class="marker-helper has-text-info" @click="$helper?.show(name)" />
 </template>
 
 <script setup lang="ts">

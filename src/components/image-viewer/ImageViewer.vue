@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" class="image-viewer" :class="{ 'hide-buttons': hideButtons }">
+  <div v-if="visible && activeDocument" ref="root" class="image-viewer" :class="{ 'hide-buttons': hideButtons }">
     <div class="is-flex has-text-grey-lighter image-viewer-header">
       <span class="is-size-4 is-ellipsed-tablet image-viewer-title">
         {{ activeDocument.locales[0].title }}
@@ -11,7 +11,7 @@
 
         <edit-link
           :document="activeDocument"
-          :lang="activeDocument.available_langs[0]"
+          :lang="activeDocument.available_langs?.[0]"
           class="has-text-grey-lighter"
           @click="close()"
         >
@@ -36,7 +36,7 @@
           <picture>
             <source v-if="image.avifSrc" type="image/avif" :srcset="image.avifSrc" />
             <source v-if="image.webpSrc" type="image/webp" :srcset="image.webpSrc" />
-            <img :src="image.imgSrc" :alt="image.locales[0].title" loading="lazy" />
+            <img :src="image.imgSrc" :alt="image.locales[0].title ?? undefined" loading="lazy" />
           </picture>
         </div>
       </swiper-slide>
@@ -55,27 +55,34 @@
         :key="image.document_id"
         class="image-viewer-bullet has-cursor-pointer"
         :class="{ 'image-viewer-bullet-active': image === activeDocument }"
-        :title="image.locales[0].title"
+        :title="image.locales[0].title ?? undefined"
         @click="onPaginationClick(index)"
         :style="`width: calc((100vw - 1.5rem) / ${images.length});`"
       />
     </div>
 
-    <image-info ref="imageInfo" class="image-viewer-info" />
+    <image-info ref="infoPanel" class="image-viewer-info" />
   </div>
 </template>
 
-<script>
-import { Keyboard, Navigation, Pagination, Virtual, Zoom } from 'swiper';
+<script setup lang="ts">
+import Swiper, { Keyboard, Navigation, Pagination, Virtual, Zoom } from 'swiper';
+import { nextTick, onBeforeUnmount, ref, useTemplateRef } from 'vue';
 import ZingTouch from 'zingtouch';
 
-import ImageInfo from './ImageInfo';
+import ImageInfo from './ImageInfo.vue';
 
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { getImageUrl } from '@/js/image-urls';
 import throttle from '@/js/throttle';
-import { registerImageViewer } from '@/js/vue-plugins/image-viewer';
+import { registerImageViewer, type ViewerImage } from '@/js/vue-plugins/image-viewer';
 
-const requestFullscreen = function (wrapper) {
+type SwiperContainer = HTMLElement & { swiper: Swiper; initialize(): void };
+type ShownImage = ViewerImage & { imgSrc?: string; avifSrc?: string; webpSrc?: string };
+// Safari
+type WebkitFullscreen = { webkitRequestFullscreen?(): void; webkitExitFullscreen?(): void };
+
+const requestFullscreen = function (wrapper: HTMLElement & WebkitFullscreen) {
   if (wrapper.requestFullscreen) {
     wrapper.requestFullscreen();
   } else if (wrapper.webkitRequestFullscreen) {
@@ -85,173 +92,168 @@ const requestFullscreen = function (wrapper) {
 };
 
 const exitFullscreen = function () {
-  if (document.exitFullscreen) {
-    document.exitFullscreen();
-  } else if (document.webkitExitFullscreen) {
+  const doc = document as Document & WebkitFullscreen;
+  if (doc.exitFullscreen) {
+    doc.exitFullscreen();
+  } else if (doc.webkitExitFullscreen) {
     /* Safari */
-    document.webkitExitFullscreen();
+    doc.webkitExitFullscreen();
   }
 };
 
-export default {
-  swiper: null,
-  zt: null,
+const { $screen } = useGlobalProperties();
 
-  components: {
-    ImageInfo,
-  },
+const visible = ref(false);
+const images = ref<ShownImage[]>([]);
+const activeDocument = ref<ShownImage | null>(null);
+const isFullscreen = ref(false);
+const hideButtons = ref(false);
 
-  data() {
-    return {
-      visible: false,
-      images: [],
-      activeDocument: null,
-      isFullscreen: false,
-      hideButtons: false,
+const root = useTemplateRef<HTMLElement>('root');
+const swiper = useTemplateRef<SwiperContainer>('swiper');
+const infoPanel = useTemplateRef<{ hide(): void; toggle(documentId: number): void }>('infoPanel');
+let zt: InstanceType<typeof ZingTouch.Region> | null = null;
+
+function push(image: ViewerImage) {
+  if (images.value.findIndex((item) => item.document_id === image.document_id) === -1) {
+    images.value.push({
+      ...image,
+      imgSrc: getImageUrl(image, 'BI'),
+      avifSrc: getImageUrl(image, 'BI', 'avif'),
+      webpSrc: getImageUrl(image, 'BI', 'webp'),
+    });
+  }
+}
+
+function close() {
+  visible.value = false;
+  // clean handlers
+  window.removeEventListener('popstate', close);
+  window.removeEventListener('wheel', close);
+  if (zt) {
+    // the swiper element, still there until the viewer is hidden (was $refs.container, which did not exist)
+    if (swiper.value) {
+      zt.unbind(swiper.value);
+    }
+    zt = null;
+  }
+  hideButtons.value = false;
+}
+
+function toggleButtons() {
+  hideButtons.value = !hideButtons.value;
+}
+
+function show(image: ViewerImage) {
+  let initialSlide = images.value.findIndex((item) => item.document_id === image.document_id);
+
+  if (initialSlide === -1) {
+    initialSlide = images.value.length;
+    push(image);
+  }
+
+  activeDocument.value = images.value[initialSlide];
+  visible.value = true;
+
+  nextTick(() => {
+    const element = swiper.value!;
+    const swiperParams = {
+      modules: [Keyboard, Navigation, Pagination, Virtual, Zoom],
+      injectStylesUrls: [
+        '/swiper/navigation-element.min.css',
+        '/swiper/pagination-element.min.css',
+        '/swiper/virtual-element.min.css',
+        '/swiper/zoom-element.min.css',
+      ],
+      initialSlide,
+      // here and not as attributes: Vue 3 sets them as properties of <swiper-container>, as strings ("true"), which
+      // Swiper doesn't take as enabled
+      keyboard: true,
+      zoom: true,
+
+      // virtual because it may be too slow if there are too many images, e.g. /articles/1058594/fr/concours-photo-sophie-2018
+      virtual: true,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      pagination: {
+        el: '.image-viewer-pagination',
+        type: 'custom',
+      },
     };
-  },
 
-  created() {
-    // in created(), not mounted(): pages call it while they are created, before the app tree is mounted
-    registerImageViewer(this);
-    // this component is never destroyed, don't need a call to removeListener
-    window.addEventListener('keydown', this.onKeydown);
-  },
-
-  beforeUnmount() {
-    registerImageViewer(null);
-  },
-
-  methods: {
-    push(image) {
-      if (this.images.findIndex((item) => item.document_id === image.document_id) === -1) {
-        this.images.push({
-          ...image,
-          imgSrc: getImageUrl(image, 'BI'),
-          avifSrc: getImageUrl(image, 'BI', 'avif'),
-          webpSrc: getImageUrl(image, 'BI', 'webp'),
-        });
-      }
-    },
-
-    show(image) {
-      let initialSlide = this.images.findIndex((item) => item.document_id === image.document_id);
-
-      if (initialSlide === -1) {
-        initialSlide = this.images.length;
-        this.push(image);
-      }
-
-      this.activeDocument = this.images[initialSlide];
-      this.visible = true;
-
-      this.$nextTick(function () {
-        const swiperParams = {
-          modules: [Keyboard, Navigation, Pagination, Virtual, Zoom],
-          injectStylesUrls: [
-            '/swiper/navigation-element.min.css',
-            '/swiper/pagination-element.min.css',
-            '/swiper/virtual-element.min.css',
-            '/swiper/zoom-element.min.css',
-          ],
-          initialSlide,
-          // here and not as attributes: Vue 3 sets them as properties of <swiper-container>, as strings ("true"), which
-          // Swiper doesn't take as enabled
-          keyboard: true,
-          zoom: true,
-
-          // virtual because it may be too slow if there are too many images, e.g. /articles/1058594/fr/concours-photo-sophie-2018
-          virtual: true,
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+    element.addEventListener('init', () => {
+      // close when the user goes back in history
+      window.addEventListener('popstate', close);
+      // close on mouse wheel
+      window.addEventListener('wheel', close);
+      // close on vertical swipe
+      zt = new ZingTouch.Region(element);
+      zt.bind(element, 'swipe', (event) => {
+        const {
+          detail: {
+            data: [{ currentDirection }],
           },
-          pagination: {
-            el: '.image-viewer-pagination',
-            type: 'custom',
-          },
-        };
-
-        this.$refs.swiper.addEventListener('init', () => {
-          // close when the user goes back in history
-          window.addEventListener('popstate', this.close);
-          // close on mouse wheel
-          window.addEventListener('wheel', this.close);
-          // close on vertical swipe
-          this.zt = new ZingTouch.Region(this.$refs.swiper);
-          this.zt.bind(this.$refs.swiper, 'swipe', (event) => {
-            const {
-              detail: {
-                data: [{ currentDirection }],
-              },
-            } = event;
-            const isSwipeTop = currentDirection > 60 && currentDirection < 120;
-            const isSwipeBottom = currentDirection > 240 && currentDirection < 300;
-            if (isSwipeTop || isSwipeBottom) {
-              this.close();
-            }
-          });
-        });
-        if (this.$screen.isMobile) {
-          // no idea why toggleButtons is called twice, so we throttle...
-          this.$refs.swiper.addEventListener('click', throttle(this.toggleButtons, 150));
+        } = event;
+        const isSwipeTop = currentDirection > 60 && currentDirection < 120;
+        const isSwipeBottom = currentDirection > 240 && currentDirection < 300;
+        if (isSwipeTop || isSwipeBottom) {
+          close();
         }
-        Object.assign(this.$refs.swiper, swiperParams);
-        this.$refs.swiper.initialize();
       });
-    },
+    });
+    if ($screen.isMobile) {
+      // no idea why toggleButtons is called twice, so we throttle...
+      element.addEventListener('click', throttle(toggleButtons, 150));
+    }
+    Object.assign(element, swiperParams);
+    element.initialize();
+  });
+}
 
-    onPaginationClick(index) {
-      this.$refs.swiper.swiper.slideTo(index, 0, false);
-    },
+function onPaginationClick(index: number) {
+  swiper.value!.swiper.slideTo(index, 0, false);
+}
 
-    clear() {
-      this.images = [];
-      this.close();
-    },
+function clear() {
+  images.value = [];
+  close();
+}
 
-    close() {
-      this.visible = false;
-      // clean handlers
-      window.removeEventListener('popstate', this.close);
-      window.removeEventListener('wheel', this.close);
-      if (this.zt) {
-        this.zt.unbind(this.$refs.container);
-        this.zt = null;
-      }
-      this.hideButtons = false;
-    },
+function onKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape') {
+    close();
+  }
+}
 
-    onKeydown(event) {
-      if (event.key === 'Escape') {
-        this.close();
-      }
-    },
+function toggleImageInfo(image: ShownImage) {
+  infoPanel.value!.toggle(image.document_id);
+}
 
-    toggleButtons() {
-      this.hideButtons = !this.hideButtons;
-    },
+function onSlideChange() {
+  infoPanel.value!.hide();
+  activeDocument.value = images.value[swiper.value!.swiper.activeIndex];
+}
 
-    toggleImageInfo(image) {
-      this.$refs.imageInfo.toggle(image.document_id);
-    },
+function toggleFullscreen() {
+  if (isFullscreen.value) {
+    exitFullscreen();
+  } else {
+    requestFullscreen(root.value!);
+  }
 
-    onSlideChange() {
-      this.$refs.imageInfo.hide();
-      this.activeDocument = this.images[this.$refs.swiper.swiper.activeIndex];
-    },
+  isFullscreen.value = !isFullscreen.value;
+}
 
-    toggleFullscreen() {
-      if (this.isFullscreen) {
-        exitFullscreen();
-      } else {
-        requestFullscreen(this.$el);
-      }
+// in setup, not mounted(): pages call it while they are created, before the app tree is mounted
+registerImageViewer({ push, show, clear });
+// this component is never destroyed, don't need a call to removeListener
+window.addEventListener('keydown', onKeydown);
 
-      this.isFullscreen = !this.isFullscreen;
-    },
-  },
-};
+onBeforeUnmount(() => {
+  registerImageViewer(null);
+});
 </script>
 
 <style scoped lang="scss">
