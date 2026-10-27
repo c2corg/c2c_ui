@@ -5,30 +5,25 @@
   </fa-layers>
 </template>
 
-<script>
-export default {
-  props: {
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    direction: {
-      type: String,
-      default: 'right',
-    },
+<script setup lang="ts">
+const props = defineProps({
+  disabled: {
+    type: Boolean,
+    default: false,
   },
-
-  emits: ['click'],
-
-  methods: {
-    click() {
-      if (this.disabled) {
-        return;
-      }
-      this.$emit('click');
-    },
+  direction: {
+    type: String,
+    default: 'right',
   },
-};
+});
+const emit = defineEmits(['click']);
+
+function click() {
+  if (props.disabled) {
+    return;
+  }
+  emit('click');
+}
 </script>
 
 <style scoped lang="scss">

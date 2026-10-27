@@ -9,21 +9,17 @@
   </document-link>
 </template>
 
-<script>
-export default {
-  props: {
-    image: {
-      type: Object,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  image: {
+    type: Object,
+    required: true,
   },
+});
 
-  methods: {
-    max50chars(value) {
-      return value && value.length > 50 ? value.substring(0, 50) + '…' : value;
-    },
-  },
-};
+function max50chars(value: string) {
+  return value && value.length > 50 ? value.substring(0, 50) + '…' : value;
+}
 </script>
 
 <style scoped lang="scss">

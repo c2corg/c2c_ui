@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { h } from 'vue';
 
-import GdprBanner from './GdprBanner';
+import GdprBanner from './GdprBanner.vue';
 
 import bus from '@/js/event-bus';
 
@@ -12,7 +12,7 @@ const mountBanner = () =>
   mount(GdprBanner, {
     global: {
       stubs: { GdprModal: { methods: { show }, render: () => h('div') } },
-      mocks: { $gdpr: { get: () => null, setAll: vi.fn() } },
+      config: { globalProperties: { $gdpr: { get: () => null, setAll: vi.fn() } } as never },
       directives: { translate: {} },
     },
   });

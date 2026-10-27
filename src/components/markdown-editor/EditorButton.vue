@@ -16,35 +16,32 @@
   </a>
 </template>
 
-<script>
-export default {
-  props: {
-    text: {
-      type: String,
-      default: null,
-    },
-    icon: {
-      type: String,
-      default: null,
-    },
-    tooltip: {
-      type: String,
-      default: null,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    target: {
-      type: String,
-      default: null,
-    },
-    href: {
-      type: String,
-      default: null,
-    },
+<script setup lang="ts">
+defineProps({
+  text: {
+    type: String,
+    default: null,
   },
-
-  emits: ['click'],
-};
+  icon: {
+    type: String,
+    default: null,
+  },
+  tooltip: {
+    type: String,
+    default: null,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  target: {
+    type: String,
+    default: null,
+  },
+  href: {
+    type: String,
+    default: null,
+  },
+});
+defineEmits(['click']);
 </script>

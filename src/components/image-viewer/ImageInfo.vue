@@ -50,45 +50,41 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 
-export default {
-  data() {
-    return {
-      promise: {},
-      visible: false,
-    };
-  },
+const { $language } = useGlobalProperties();
 
-  computed: {
-    document() {
-      return this.promise.data ? this.promise.data : null;
-    },
-    author() {
-      return this.document.author ? this.document.author : this.document.creator?.name;
-    },
-  },
+const promise = ref<Partial<ApiData>>({});
+const visible = ref(false);
 
-  methods: {
-    show(documentId) {
-      this.visible = true;
-      this.promise = c2c.image.getCooked(documentId, c2c.getApiLang(this.$language.current));
-    },
+const document = computed(() => promise.value.data ?? null);
+const author = computed(() => (document.value!.author ? document.value!.author : document.value!.creator?.name));
 
-    hide() {
-      this.visible = false;
-    },
+function show(documentId: number) {
+  visible.value = true;
+  promise.value = (c2c.image as DocumentService).getCooked(documentId, c2c.getApiLang($language.current ?? undefined)!);
+}
 
-    toggle(documentId) {
-      if (this.visible) {
-        this.hide();
-      } else {
-        this.show(documentId);
-      }
-    },
-  },
-};
+function hide() {
+  visible.value = false;
+}
+
+function toggle(documentId: number) {
+  if (visible.value) {
+    hide();
+  } else {
+    show(documentId);
+  }
+}
+
+// the image viewer shows and hides the infos of its current image
+defineExpose({ show, hide, toggle });
 </script>
 
 <style scoped lang="scss">

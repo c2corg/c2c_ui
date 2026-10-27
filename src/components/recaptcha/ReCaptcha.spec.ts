@@ -1,9 +1,12 @@
 import { mount } from '@vue/test-utils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import ReCaptcha from './ReCaptcha';
+import ReCaptcha from './ReCaptcha.vue';
 
 import { resetRecaptchaLoader } from '@/js/recaptcha';
+
+type GoogleWindow = { grecaptcha?: unknown; c2cRecaptchaLoaded(): void };
+const googleWindow = window as unknown as GoogleWindow;
 
 // what Google's script does once loaded: window.grecaptcha, then the onload callback
 const fakeGoogleScript = () => {
@@ -11,17 +14,17 @@ const fakeGoogleScript = () => {
   return {
     grecaptcha,
     load() {
-      window.grecaptcha = grecaptcha;
-      window.c2cRecaptchaLoaded();
+      googleWindow.grecaptcha = grecaptcha;
+      googleWindow.c2cRecaptchaLoaded();
     },
   };
 };
 
-const scripts = () => [...document.head.querySelectorAll('script[src*="recaptcha/api.js"]')];
+const scripts = () => [...document.head.querySelectorAll<HTMLScriptElement>('script[src*="recaptcha/api.js"]')];
 const flush = () => new Promise((resolve) => setTimeout(resolve));
 
 describe('ReCaptcha', () => {
-  let google;
+  let google: ReturnType<typeof fakeGoogleScript>;
 
   beforeEach(() => {
     resetRecaptchaLoader();
@@ -29,7 +32,7 @@ describe('ReCaptcha', () => {
     google = fakeGoogleScript();
   });
 
-  afterEach(() => delete window.grecaptcha);
+  afterEach(() => delete googleWindow.grecaptcha);
 
   it('loads Google script once, explicit rendering, whatever the number of captchas', () => {
     mount(ReCaptcha, { props: { sitekey: 'key' } });
@@ -57,7 +60,10 @@ describe('ReCaptcha', () => {
     const wrapper = mount(ReCaptcha, { props: { sitekey: 'key' } });
     google.load();
     await flush();
-    const options = google.grecaptcha.render.mock.calls[0][1];
+    const options = (google.grecaptcha.render.mock.calls[0] as unknown[])[1] as {
+      callback(token: string): void;
+      'expired-callback'(): void;
+    };
 
     options.callback('token-123');
     options['expired-callback']();
@@ -68,11 +74,11 @@ describe('ReCaptcha', () => {
 
   it('resets its own widget', async () => {
     const wrapper = mount(ReCaptcha, { props: { sitekey: 'key' } });
-    wrapper.vm.reset(); // before the script: nothing to reset
+    (wrapper.vm as unknown as { reset(): void }).reset(); // before the script: nothing to reset
     google.load();
     await flush();
 
-    wrapper.vm.reset();
+    (wrapper.vm as unknown as { reset(): void }).reset();
 
     expect(google.grecaptcha.reset).toHaveBeenCalledTimes(1);
     expect(google.grecaptcha.reset).toHaveBeenCalledWith(7);

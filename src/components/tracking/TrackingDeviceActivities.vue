@@ -26,57 +26,46 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { toast } from 'bulma-toast';
+import { onMounted, ref } from 'vue';
 
-import TrackingDeviceActivity from '@/components/tracking/TrackingDeviceActivity';
+import TrackingDeviceActivity from '@/components/tracking/TrackingDeviceActivity.vue';
 import trackingService from '@/js/apis/tracking-service';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 
-export default {
-  components: { TrackingDeviceActivity },
+const emit = defineEmits(['geojson']);
 
-  emits: ['geojson'],
+const { $gettext, $user } = useGlobalProperties();
 
-  data() {
-    return {
-      promise: null,
-      activities: [],
-      fetching: null,
-    };
-  },
+const promise = ref<unknown>(null);
+const activities = ref<{ id: number }[]>([]);
+const fetching = ref<number | null>(null);
 
-  mounted() {
-    this.loadActivities();
-  },
+function loadActivities() {
+  promise.value = trackingService.getActivities($user.id!, $user.lang).then((response) => {
+    activities.value = response.data;
+  });
+}
 
-  methods: {
-    async loadActivities() {
-      if (this.promise) {
-        this.promise.cancel();
+function fetch(activityId: number) {
+  fetching.value = activityId;
+  trackingService
+    .getActivityGeometry($user.id!, activityId)
+    .then(
+      ({ data }) => {
+        emit('geojson', data);
+      },
+      () => {
+        toast({
+          message: $gettext('Geographical data could not be retrieved'),
+          type: 'is-danger',
+          position: 'center',
+        });
       }
-      this.promise = trackingService.getActivities(this.$user.id, this.$user.lang).then((response) => {
-        this.activities = response.data;
-      });
-    },
+    )
+    .finally(() => (fetching.value = null));
+}
 
-    fetch(activityId) {
-      this.fetching = activityId;
-      trackingService
-        .getActivityGeometry(this.$user.id, activityId)
-        .then(
-          ({ data }) => {
-            this.$emit('geojson', data);
-          },
-          () => {
-            toast({
-              message: this.$gettext('Geographical data could not be retrieved'),
-              type: 'is-danger',
-              position: 'center',
-            });
-          }
-        )
-        .finally(() => (this.fetching = null));
-    },
-  },
-};
+onMounted(loadActivities);
 </script>

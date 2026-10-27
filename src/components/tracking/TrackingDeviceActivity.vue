@@ -38,46 +38,29 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
 
-export default {
-  name: 'TrackingDeviceActivity',
-
-  props: {
-    activity: {
-      type: Object,
-      required: true,
-    },
+const props = defineProps({
+  activity: {
+    type: Object,
+    required: true,
   },
+});
 
-  data() {
-    return {
-      hover: false,
-    };
-  },
+const { $dateUtils, $documentUtils } = useGlobalProperties();
 
-  computed: {
-    duration() {
-      if (!this.activity.duration) {
-        return undefined;
-      }
-      return this.$dateUtils.durationToTimeString(this.activity.duration);
-    },
+const hover = ref(false);
+const miniaturesBaseUrl = config.urls.miniatures;
 
-    heightDiffUp() {
-      return this.$documentUtils.heightDiffUpWithUnit(this.activity.heightDiffUp);
-    },
-
-    length() {
-      return this.$documentUtils.lengthWithUnit(this.activity.length);
-    },
-
-    miniaturesBaseUrl() {
-      return config.urls.miniatures;
-    },
-  },
-};
+const duration = computed(() =>
+  props.activity.duration ? $dateUtils.durationToTimeString(props.activity.duration) : undefined
+);
+const heightDiffUp = computed(() => $documentUtils.heightDiffUpWithUnit(props.activity.heightDiffUp));
+const length = computed(() => $documentUtils.lengthWithUnit(props.activity.length));
 </script>
 
 <style lang="scss" scoped>
