@@ -5,22 +5,23 @@
   </span>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { documentProperty } from '@/js/properties';
 
-export default {
-  props: {
-    ...documentProperty,
-    uppercaseFirstLetter: {
-      type: Boolean,
-      default: false,
-    },
+const props = defineProps({
+  ...documentProperty,
+  uppercaseFirstLetter: {
+    type: Boolean,
+    default: false,
   },
+});
 
-  computed: {
-    title() {
-      return this.$documentUtils.getDocumentTitle(this.document, this.$route.params.lang);
-    },
-  },
-};
+const { $documentUtils } = useGlobalProperties();
+const route = useRoute();
+
+const title = computed(() => $documentUtils.getDocumentTitle(props.document, route.params.lang));
 </script>

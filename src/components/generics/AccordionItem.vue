@@ -15,14 +15,10 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      visible: true,
-    };
-  },
-};
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const visible = ref(true);
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 <template>
-  <modal-card ref="modalWindow">
+  <modal-card ref="modal">
     <template #title>
       <div>
         <slot name="title" />
@@ -23,12 +23,7 @@
             <span v-translate>Confirm</span>
           </slot>
         </button>
-        <button
-          @click="$refs.modalWindow.hide()"
-          class="button is-success"
-          :disabled="promise && promise.loading"
-          v-translate
-        >
+        <button @click="hide" class="button is-success" :disabled="promise && promise.loading" v-translate>
           Cancel
         </button>
       </div>
@@ -36,46 +31,51 @@
   </modal-card>
 </template>
 
-<script>
-export default {
-  props: {
-    showUncancelableWarning: {
-      type: Boolean,
-      default: false,
-    },
-    promise: {
-      type: Object,
-      default: null,
-    },
+<script setup lang="ts">
+import { useTemplateRef, watch } from 'vue';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
+
+const props = defineProps({
+  showUncancelableWarning: {
+    type: Boolean,
+    default: false,
   },
-
-  emits: ['confirm'],
-
-  watch: {
-    'promise.error': 'onError',
+  promise: {
+    type: Object,
+    default: null,
   },
+});
 
-  methods: {
-    show() {
-      this.$refs.modalWindow.show();
-    },
-    hide() {
-      this.$refs.modalWindow.hide();
-    },
-    onError() {
-      if (!this.promise.error) {
-        return;
-      }
+defineEmits(['confirm']);
 
-      if (!this.promise.error.response || !this.promise.error.response.data) {
-        window.alert('Unexpected error');
-      } else if (!this.promise.error.response.data.errors) {
-        window.alert(!this.promise.error.response.data);
-      } else {
-        // $gettext('Only document less than 24h old can be deleted', 'API message')
-        window.alert(this.$gettext(this.promise.error.response.data.errors[0].description));
-      }
-    },
-  },
-};
+const { $gettext } = useGlobalProperties();
+const modalWindow = useTemplateRef<{ show(): void; hide(): void }>('modal');
+
+function show() {
+  modalWindow.value!.show();
+}
+
+function hide() {
+  modalWindow.value!.hide();
+}
+
+function onError() {
+  if (!props.promise.error) {
+    return;
+  }
+
+  if (!props.promise.error.response || !props.promise.error.response.data) {
+    window.alert('Unexpected error');
+  } else if (!props.promise.error.response.data.errors) {
+    window.alert(!props.promise.error.response.data);
+  } else {
+    // $gettext('Only document less than 24h old can be deleted', 'API message')
+    window.alert($gettext(props.promise.error.response.data.errors[0].description));
+  }
+}
+
+watch(() => props.promise?.error, onError);
+
+defineExpose({ show, hide });
 </script>

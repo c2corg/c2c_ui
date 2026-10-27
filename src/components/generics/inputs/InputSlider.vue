@@ -16,71 +16,66 @@
   />
 </template>
 
-<script>
+<script setup lang="ts">
 import Slider from '@vueform/slider';
+import { computed } from 'vue';
 import '@vueform/slider/themes/default.css';
 
 // A slider for one value, or a range when the value is an array of two
-export default {
-  components: { Slider },
 
-  props: {
-    modelValue: {
-      type: [Number, Array],
-      required: true,
-    },
-    min: {
-      type: Number,
-      default: 0,
-    },
-    max: {
-      type: Number,
-      default: 100,
-    },
-    step: {
-      type: Number,
-      default: 1,
-    },
-    // emit the value once the handle is released, not while dragging
-    lazy: {
-      type: Boolean,
-      default: true,
-    },
-    tooltips: {
-      type: Boolean,
-      default: true,
-    },
-    // 'always', 'focus' or 'drag'
-    showTooltip: {
-      type: String,
-      default: 'focus',
-    },
-    // text of the tooltips, from the value
-    format: {
-      type: Function,
-      default: undefined,
-    },
-    ariaLabelledby: {
-      type: String,
-      default: undefined,
-    },
-    // a dot on the rail at each step
-    marks: {
-      type: Boolean,
-      default: false,
-    },
+const props = defineProps({
+  modelValue: {
+    type: [Number, Array],
+    required: true,
   },
-
-  emits: ['update:modelValue', 'change'],
-
-  computed: {
-    options() {
-      // noUiSlider pips: filter 0 = a marker without its value, -1 = none (the density markers between steps)
-      const filter = (value) => (Math.abs(value - Math.round(value)) < 1e-6 ? 0 : -1);
-      return this.marks ? { pips: { mode: 'steps', filter } } : {};
-    },
+  min: {
+    type: Number,
+    default: 0,
   },
-};
+  max: {
+    type: Number,
+    default: 100,
+  },
+  step: {
+    type: Number,
+    default: 1,
+  },
+  // emit the value once the handle is released, not while dragging
+  lazy: {
+    type: Boolean,
+    default: true,
+  },
+  tooltips: {
+    type: Boolean,
+    default: true,
+  },
+  // 'always', 'focus' or 'drag'
+  showTooltip: {
+    type: String,
+    default: 'focus',
+  },
+  // text of the tooltips, from the value
+  format: {
+    type: Function,
+    default: undefined,
+  },
+  ariaLabelledby: {
+    type: String,
+    default: undefined,
+  },
+  // a dot on the rail at each step
+  marks: {
+    type: Boolean,
+    default: false,
+  },
+});
+defineEmits(['update:modelValue', 'change']);
+
+const options = computed(() => {
+  // noUiSlider pips: filter 0 = a marker without its value, -1 = none (the density markers between steps)
+  const filter = (value: number) => (Math.abs(value - Math.round(value)) < 1e-6 ? 0 : -1);
+  return props.marks ? { pips: { mode: 'steps', filter } } : {};
+});
 </script>
 
 <style lang="scss" scoped>

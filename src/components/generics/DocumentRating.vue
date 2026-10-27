@@ -26,76 +26,58 @@
   </span>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
 import constants from '@/js/constants';
 import { documentProperty, useDocumentType } from '@/js/properties';
 
-export default {
-  props: {
-    ...documentProperty,
-    showHelper: {
-      type: Boolean,
-      default: false,
-    },
+const props = defineProps({
+  ...documentProperty,
+  showHelper: {
+    type: Boolean,
+    default: false,
   },
+});
 
-  setup(props) {
-    return useDocumentType(props);
-  },
+const { documentType } = useDocumentType(props);
 
-  ratings: [
-    'global_rating',
-    'via_ferrata_rating',
-    'rock_free_rating',
-    'rock_required_rating',
-    'aid_rating',
-    'engagement_rating',
-    'risk_rating',
-    'equipment_rating',
-    'exposition_rock_rating',
-    'ice_rating',
-    'mixed_rating',
-    'ski_rating',
-    'ski_exposition',
-    'labande_global_rating',
-    'labande_ski_rating',
-    'snowshoe_rating',
-    'hiking_rating',
-    'mtb_up_rating',
-    'mtb_down_rating',
-    'hiking_mtb_exposition',
-  ],
+const RATINGS = [
+  'global_rating',
+  'via_ferrata_rating',
+  'rock_free_rating',
+  'rock_required_rating',
+  'aid_rating',
+  'engagement_rating',
+  'risk_rating',
+  'equipment_rating',
+  'exposition_rock_rating',
+  'ice_rating',
+  'mixed_rating',
+  'ski_rating',
+  'ski_exposition',
+  'labande_global_rating',
+  'labande_ski_rating',
+  'snowshoe_rating',
+  'hiking_rating',
+  'mtb_up_rating',
+  'mtb_down_rating',
+  'hiking_mtb_exposition',
+];
 
-  computed: {
-    fields() {
-      return constants.objectDefinitions[this.documentType].fields;
+const fields = computed(() => constants.objectDefinitions[documentType.value].fields);
+
+const displayed_ratings = computed(() => RATINGS.filter((rating) => props.document[rating]));
+
+function getHelperLink(helper?: string | null) {
+  const items = (helper ?? '').split('#');
+
+  return {
+    name: 'article',
+    hash: `#${items[1]}`,
+    params: {
+      id: parseInt(items[0]),
     },
-
-    displayed_ratings() {
-      const result = [];
-
-      for (const rating of this.$options.ratings) {
-        if (this.document[rating]) {
-          result.push(rating);
-        }
-      }
-
-      return result;
-    },
-  },
-
-  methods: {
-    getHelperLink(helper) {
-      const items = helper.split('#');
-
-      return {
-        name: 'article',
-        hash: `#${items[1]}`,
-        params: {
-          id: parseInt(items[0]),
-        },
-      };
-    },
-  },
-};
+  };
+}
 </script>

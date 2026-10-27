@@ -6,23 +6,21 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    document: {
-      type: Object,
-      default: null,
-    },
-    target: {
-      type: String,
-      default: undefined,
-    },
-    highlighted: {
-      type: Boolean,
-      default: false,
-    },
+<script setup lang="ts">
+defineProps({
+  document: {
+    type: Object,
+    default: null,
   },
-};
+  target: {
+    type: String,
+    default: undefined,
+  },
+  highlighted: {
+    type: Boolean,
+    default: false,
+  },
+});
 </script>
 
 <style scoped lang="scss">

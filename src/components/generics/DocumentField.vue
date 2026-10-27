@@ -48,59 +48,39 @@
   </span>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
 import { documentProperty, fieldProperty } from '@/js/properties';
 
-export default {
-  props: {
-    ...documentProperty,
-    ...fieldProperty,
-    unit: {
-      type: String,
-      default: null,
-    },
-    divisor: {
-      type: Number,
-      default: null,
-    },
-    sortValues: {
-      type: Boolean,
-      default: false,
-    },
-    prefix: {
-      type: String,
-      default: null,
-    },
+const props = defineProps({
+  ...documentProperty,
+  ...fieldProperty,
+  unit: {
+    type: String,
+    default: null,
   },
-
-  computed: {
-    value() {
-      return this.document[this.field.name];
-    },
-
-    isArray() {
-      return Array.isArray(this.value);
-    },
-
-    showUnit() {
-      return (this.unit || this.field.unit) && this.value !== null && this.value !== undefined;
-    },
-
-    showPrefix() {
-      return (this.prefix || this.field.prefix) && this.value !== null && this.value !== undefined;
-    },
-
-    license() {
-      switch (this.value) {
-        case 'personal':
-          return 'by-nc-nd';
-        case 'copyright':
-          return;
-        case 'colaborative':
-        default:
-          return 'by-sa';
-      }
-    },
+  divisor: {
+    type: Number,
+    default: null,
   },
-};
+  sortValues: {
+    type: Boolean,
+    default: false,
+  },
+  prefix: {
+    type: String,
+    default: null,
+  },
+});
+
+const value = computed(() => props.document[props.field.name]);
+
+const isArray = computed(() => Array.isArray(value.value));
+
+const showUnit = computed(() => (props.unit || props.field.unit) && value.value !== null && value.value !== undefined);
+
+const showPrefix = computed(
+  () => (props.prefix || props.field.prefix) && value.value !== null && value.value !== undefined
+);
 </script>
