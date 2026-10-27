@@ -10,8 +10,11 @@
 
     <meta name="theme-color" content="#F93" />
     <meta name="application-name" content="Camptocamp.org" />
-    <link rel="preconnect" href="%CAMPTOCAMP_API_URL%" />
-    <link rel="preconnect" href="%CAMPTOCAMP_MEDIA_URL%" />
+    <!-- runtime configuration (backend urls), before the app: replaced when the container starts, empty otherwise -->
+    <script src="%BASE_URL%config.js" nonce="__CSP_NONCE__"></script>
+    <!-- data-c2c-url: updated when the container starts if the matching C2C_*_URL variable is set (docker/runtime-config.sh) -->
+    <link rel="preconnect" href="%CAMPTOCAMP_API_URL%" data-c2c-url="api" />
+    <link rel="preconnect" href="%CAMPTOCAMP_MEDIA_URL%" data-c2c-url="media" />
     <meta property="fb:pages" content="175865161596" />
     <meta property="og:sitename" content="Camptocamp.org" />
     <link rel="stylesheet" href="%BASE_URL%swiper.css" />

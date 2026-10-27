@@ -40,3 +40,14 @@ interface BuildConfiguration {
 }
 
 declare const CAMPTOCAMP_CONFIG: BuildConfiguration;
+
+// Backend urls given when the container starts, over the ones of the build: see src/js/runtime-config.ts
+interface RuntimeConfiguration {
+  // one of the urlsConfigurations of the build, as the starting point
+  backend?: string;
+  urls?: Partial<UrlsConfiguration>;
+}
+
+interface Window {
+  CAMPTOCAMP_RUNTIME_CONFIG?: RuntimeConfiguration;
+}
