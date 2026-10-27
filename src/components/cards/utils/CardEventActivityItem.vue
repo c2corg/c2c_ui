@@ -5,15 +5,13 @@
   />
 </template>
 
-<script>
-export default {
-  props: {
-    eventActivity: {
-      type: String,
-      default: null,
-    },
+<script setup lang="ts">
+defineProps({
+  eventActivity: {
+    type: String,
+    default: null,
   },
-};
+});
 </script>
 
 <style scoped lang="scss">

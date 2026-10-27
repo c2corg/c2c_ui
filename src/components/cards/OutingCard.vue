@@ -35,7 +35,7 @@
       <span class="card-icon is-nowrap">
         <marker-soft-mobility v-if="document.public_transport" />
         &nbsp;
-        <marker-gps-trace v-if="document.geometry.has_geom_detail" />
+        <marker-gps-trace v-if="document.geometry?.has_geom_detail" />
         &nbsp;
         <marker-image-count :image-count="document.img_count" />
       </span>
@@ -49,14 +49,16 @@
   </card-container>
 </template>
 
-<script>
-import { cardComponents, cardProps } from './utils/card';
+<script setup lang="ts">
+import CardActivitiesItem from './utils/CardActivitiesItem.vue';
+import CardContainer from './utils/CardContainer.vue';
+import CardElevationItem from './utils/CardElevationItem.vue';
+import CardRegionItem from './utils/CardRegionItem.vue';
+import CardRow from './utils/CardRow.vue';
+import CardTitle from './utils/CardTitle.vue';
+import { cardProps } from './utils/card';
 
 import { documentProperty } from '@/js/properties';
 
-export default {
-  components: { ...cardComponents },
-
-  props: { ...cardProps, ...documentProperty },
-};
+defineProps({ ...cardProps, ...documentProperty });
 </script>

@@ -79,22 +79,20 @@
   </span>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
 // The ratings of a document, as one line: shown by DocumentRating, alone or as the button of its helper dropdown
-export default {
-  props: {
-    document: {
-      type: Object,
-      required: true,
-    },
-  },
 
-  computed: {
-    rockFreeRating() {
-      const rating = this.document.rock_free_rating;
-      if (this.document.climbing_outdoor_type !== 'bloc') return rating;
-      return rating.toUpperCase();
-    },
+const props = defineProps({
+  document: {
+    type: Object,
+    required: true,
   },
-};
+});
+
+const rockFreeRating = computed(() => {
+  const rating = props.document.rock_free_rating;
+  if (props.document.climbing_outdoor_type !== 'bloc') return rating;
+  return rating.toUpperCase();
+});
 </script>

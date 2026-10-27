@@ -2,7 +2,7 @@
   <router-link
     :to="{ name: documentType, params: { id: document.document_id, lang: lang } }"
     :target="target"
-    :title="$documentUtils.getDocumentTitle(document, $route.params.lang)"
+    :title="$documentUtils.getDocumentTitle(document, $route.params.lang as string)"
   >
     <slot>
       <document-title :document="document" :uppercase-first-letter="uppercaseFirstLetter" />

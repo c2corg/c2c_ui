@@ -1,14 +1,14 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
-import InputDate from './InputDate';
+import InputDate from './InputDate.vue';
 
 describe('InputDate', () => {
   it('is a native date input showing the value', () => {
     const input = mount(InputDate, { props: { modelValue: '2026-10-01' } }).find('input');
 
     expect(input.attributes('type')).toBe('date');
-    expect(input.element.value).toBe('2026-10-01');
+    expect((input.element as HTMLInputElement).value).toBe('2026-10-01');
     expect(input.classes()).toContain('input');
   });
 
@@ -17,7 +17,7 @@ describe('InputDate', () => {
     const input = wrapper.find('input');
 
     await input.setValue('2026-07-14');
-    input.element.value = '';
+    (input.element as HTMLInputElement).value = '';
     await input.trigger('input');
 
     expect(wrapper.emitted('update:modelValue')).toEqual([['2026-07-14'], [null]]);
@@ -30,14 +30,16 @@ describe('InputDate', () => {
 
     expect(input.attributes()).toMatchObject({ min: '2026-10-01', max: '2026-10-19' });
     // Vue 3 renders boolean attributes as required="" (Vue 2: required="required")
-    expect(input.element.required).toBe(true);
+    expect((input.element as HTMLInputElement).required).toBe(true);
     expect(input.classes()).toContain('is-danger');
   });
 });
 
 describe('FormInput date limits', async () => {
-  const { default: FormInput } = await import('@/views/wiki/edition/utils/FormInput');
-  const { dateMin, dateMax } = FormInput.computed;
+  const { default: FormInput } = await import('@/views/wiki/edition/utils/FormInput.vue');
+  type DateLimit = (this: { min?: string; max?: string; field: { name: string } }) => string | undefined;
+  const { dateMin, dateMax } = (FormInput as unknown as { computed: Record<'dateMin' | 'dateMax', DateLimit> })
+    .computed;
 
   it('passes the min and max of the outing form as inclusive YYYY-MM-DD limits', () => {
     // OutingEditionView: date_end can't be before date_start, nor after today

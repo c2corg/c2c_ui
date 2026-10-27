@@ -6,48 +6,44 @@
   </picture>
 </template>
 
-<script>
-import { getImageUrl } from '@/js/image-urls';
+<script setup lang="ts">
+import { computed, useAttrs, type PropType } from 'vue';
 
-export default {
-  // the classes and style stay on the picture, the other attributes and the listeners go to the image
-  inheritAttrs: false,
-  props: {
-    img: {
-      type: Object,
-      required: true,
-    },
-    size: {
-      type: String,
-      default: null,
-    },
-  },
-  computed: {
-    imgAttrs() {
-      // eslint-disable-next-line no-unused-vars
-      const { class: className, style, ...attrs } = this.$attrs;
-      return attrs;
-    },
+import { getImageUrl, type Image, type ImageSize } from '@/js/image-urls';
 
-    avif() {
-      return getImageUrl(this.img, this.size, 'avif');
-    },
-    webp() {
-      return getImageUrl(this.img, this.size, 'webp');
-    },
-    standard() {
-      return getImageUrl(this.img, this.size);
-    },
+// the classes and style stay on the picture, the other attributes and the listeners go to the image
+defineOptions({ inheritAttrs: false });
+
+const props = defineProps({
+  img: {
+    type: Object as PropType<Image>,
+    required: true,
   },
-  methods: {
-    // In case the "modern" thumbnail is not available, be sure
-    // to switch to the "basic" version.
-    onError(event) {
-      if (this.avif) {
-        const img = event.target;
-        img.parentNode.children[0].srcset = img.parentNode.children[1].srcset = img.src;
-      }
-    },
+  size: {
+    type: String as PropType<ImageSize>,
+    default: null,
   },
-};
+});
+
+const attrs = useAttrs();
+
+const imgAttrs = computed(() => {
+  // eslint-disable-next-line no-unused-vars
+  const { class: className, style, ...imgAttrs } = attrs;
+  return imgAttrs;
+});
+
+const avif = computed(() => getImageUrl(props.img, props.size, 'avif'));
+const webp = computed(() => getImageUrl(props.img, props.size, 'webp'));
+const standard = computed(() => getImageUrl(props.img, props.size));
+
+// In case the "modern" thumbnail is not available, be sure
+// to switch to the "basic" version.
+function onError(event: Event) {
+  if (avif.value) {
+    const img = event.target as HTMLImageElement;
+    const [first, second] = img.parentElement!.children as unknown as HTMLSourceElement[];
+    first.srcset = second.srcset = img.src;
+  }
+}
 </script>

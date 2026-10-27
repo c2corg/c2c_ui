@@ -12,31 +12,30 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import type { PropType } from 'vue';
+
 import { arrayInputProps, baseInputProps, useArrayInputValue } from './input-value';
 
-export default {
-  props: {
-    ...baseInputProps,
-    ...arrayInputProps,
-    options: {
-      type: Array,
-      required: true,
-    },
-    i18n: {
-      type: Boolean,
-      default: false,
-    },
-    i18nContext: {
-      type: String,
-      default: undefined,
-    },
+const props = defineProps({
+  ...baseInputProps,
+  ...arrayInputProps,
+  options: {
+    type: Array as PropType<string[]>,
+    required: true,
   },
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    return useArrayInputValue(props, emit);
+  i18n: {
+    type: Boolean,
+    default: false,
   },
-};
+  i18nContext: {
+    type: String,
+    default: undefined,
+  },
+});
+const emit = defineEmits(['update:modelValue']);
+
+const { value_, toggle } = useArrayInputValue(props, emit);
 </script>
 
 <style scoped lang="scss">

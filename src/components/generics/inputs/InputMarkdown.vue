@@ -1,30 +1,22 @@
 <template>
   <div class="control">
-    <markdown-editor v-model="value_" :placeholder="placeholder" />
+    <markdown-editor :model-value="value_ as string" @update:model-value="value_ = $event" :placeholder="placeholder" />
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { baseInputProps, useInputValue } from './input-value';
 
-import MarkdownEditor from '@/components/markdown-editor/MarkdownEditor';
+import MarkdownEditor from '@/components/markdown-editor/MarkdownEditor.vue';
 
-export default {
-  components: {
-    MarkdownEditor,
+const props = defineProps({
+  ...baseInputProps,
+  modelValue: {
+    type: String,
+    default: null,
   },
+});
+const emit = defineEmits(['update:modelValue']);
 
-  props: {
-    ...baseInputProps,
-    modelValue: {
-      type: String,
-      default: null,
-    },
-  },
-
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    return useInputValue(props, emit);
-  },
-};
+const { value_ } = useInputValue(props, emit);
 </script>

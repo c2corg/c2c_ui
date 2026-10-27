@@ -19,7 +19,7 @@
       v-else
       :type="type"
       :min="divisor ? min / divisor : min"
-      :max="divisor ? max / divisor : max"
+      :max="divisor ? Number(max) / divisor : max"
       :disabled="disabled"
       :placeholder="placeholder"
       v-model.lazy="value_"
@@ -33,59 +33,57 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import type { PropType } from 'vue';
+
 import { baseInputProps, useInputValue } from './input-value';
 
-export default {
-  props: {
-    ...baseInputProps,
-    min: {
-      type: Number,
-      default: null,
-    },
-    max: {
-      type: [Number, String], // string is for date
-      default: null,
-    },
-    modelValue: {
-      type: [String, Number, Boolean],
-      default: null,
-    },
-    prefix: {
-      type: String,
-      default: null,
-    },
-    postfix: {
-      type: String,
-      default: null,
-    },
-    options: {
-      type: Array,
-      default: null,
-    },
-    isExpanded: {
-      type: Boolean,
-      default: null,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    i18n: {
-      type: Boolean,
-      default: false,
-    },
-    i18nContext: {
-      type: String,
-      default: undefined,
-    },
+const props = defineProps({
+  ...baseInputProps,
+  min: {
+    type: Number,
+    default: null,
   },
+  max: {
+    type: [Number, String], // string is for date
+    default: null,
+  },
+  modelValue: {
+    type: [String, Number, Boolean],
+    default: null,
+  },
+  prefix: {
+    type: String,
+    default: null,
+  },
+  postfix: {
+    type: String,
+    default: null,
+  },
+  options: {
+    type: Array as PropType<string[]>,
+    default: null,
+  },
+  isExpanded: {
+    type: Boolean,
+    default: null,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  i18n: {
+    type: Boolean,
+    default: false,
+  },
+  i18nContext: {
+    type: String,
+    default: undefined,
+  },
+});
+const emit = defineEmits(['update:modelValue', 'click-prefix']);
 
-  emits: ['update:modelValue', 'click-prefix'],
-  setup(props, { emit }) {
-    return useInputValue(props, emit);
-  },
-};
+const { value_ } = useInputValue(props, emit);
 </script>
 
 <style scoped lang="scss">

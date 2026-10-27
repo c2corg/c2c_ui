@@ -6,7 +6,7 @@
       :checked="value_.includes(activity) || null"
       :class="{ 'with-labels': showLabels }"
       class="input-item has-cursor-pointer"
-      :title="showLabels ? null : $gettext(activity, 'activities')"
+      :title="showLabels ? undefined : $gettext(activity, 'activities')"
       @click="toggle(activity)"
     >
       <icon-activity :activity="activity" />
@@ -17,39 +17,36 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
 import { arrayInputProps, baseInputProps, useArrayInputValue } from './input-value';
 
 import constants from '@/js/constants';
 
-export default {
-  props: {
-    ...baseInputProps,
-    ...arrayInputProps,
-    showLabels: {
-      type: Boolean,
-      default: false,
-    },
-    documentType: {
-      type: String,
-      default: undefined,
-    },
+const props = defineProps({
+  ...baseInputProps,
+  ...arrayInputProps,
+  showLabels: {
+    type: Boolean,
+    default: false,
   },
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    return useArrayInputValue(props, emit);
+  documentType: {
+    type: String,
+    default: undefined,
   },
+});
+const emit = defineEmits(['update:modelValue']);
 
-  computed: {
-    activities() {
-      if (this.documentType === 'r') {
-        // remove paragliding for routes
-        return constants.activities.filter((act) => act !== 'paragliding');
-      }
-      return constants.activities;
-    },
-  },
-};
+const { value_, toggle } = useArrayInputValue(props, emit);
+
+const activities = computed(() => {
+  if (props.documentType === 'r') {
+    // remove paragliding for routes
+    return constants.activities.filter((act) => act !== 'paragliding');
+  }
+  return constants.activities;
+});
 </script>
 
 <style scoped lang="scss">

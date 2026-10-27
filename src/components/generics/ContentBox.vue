@@ -4,16 +4,12 @@
   </div>
 </template>
 
-<script>
-export default {
-  emits: ['click'],
+<script setup lang="ts">
+const emit = defineEmits(['click']);
 
-  methods: {
-    click() {
-      this.$emit('click');
-    },
-  },
-};
+function click() {
+  emit('click');
+}
 </script>
 
 <style scoped lang="scss">

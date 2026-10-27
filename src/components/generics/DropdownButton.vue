@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'is-active': isActive }" class="dropdown">
+  <div ref="root" :class="{ 'is-active': isActive }" class="dropdown">
     <div class="dropdown-trigger" @click="isActive = !isActive && !disabled">
       <span aria-haspopup="true" :aria-controls="'dropdown-menu-' + id">
         <slot name="button" />
@@ -14,40 +14,35 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    disabled: {
-      type: Boolean,
-      default: null,
-    },
-  },
+<script setup lang="ts">
+import { onBeforeUnmount, ref, useTemplateRef } from 'vue';
 
-  data() {
-    return {
-      isActive: false,
-      id: 0,
-    };
+defineProps({
+  disabled: {
+    type: Boolean,
+    default: null,
   },
+});
 
-  created() {
-    this.id = Math.random().toString().substring(2, 6);
-    window.addEventListener('click', this.onClick);
-  },
+const isActive = ref(false);
+const id = Math.random().toString().substring(2, 6);
+const rootElement = useTemplateRef<HTMLElement>('root');
 
-  beforeUnmount() {
-    window.removeEventListener('click', this.onClick);
-  },
+function onClick(event: MouseEvent) {
+  // close dropdown when clicked outside
+  if (!rootElement.value?.contains(event.target as Node)) {
+    isActive.value = false;
+  }
+}
 
-  methods: {
-    onClick(event) {
-      // close dropdown when clicked outside
-      if (!this.$el.contains(event.target)) {
-        this.isActive = false;
-      }
-    },
-  },
-};
+window.addEventListener('click', onClick);
+
+onBeforeUnmount(() => {
+  window.removeEventListener('click', onClick);
+});
+
+// the menus close themselves when one of their items is clicked: $refs.menu.isActive = false
+defineExpose({ isActive });
 </script>
 <style scoped lang="scss">
 .dropdown-menu {

@@ -5,16 +5,15 @@
   </span>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { documentProperty } from '@/js/properties';
 
-export default {
-  props: { ...documentProperty },
+const props = defineProps({ ...documentProperty });
 
-  computed: {
-    text() {
-      return this.$documentUtils.getSortedAreaList(this.document);
-    },
-  },
-};
+const { $documentUtils } = useGlobalProperties();
+
+const text = computed(() => $documentUtils.getSortedAreaList(props.document));
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="dropdown control" :class="{ 'is-active': promise.data }">
+  <div ref="root" class="dropdown control" :class="{ 'is-active': promise.data }">
     <div class="control has-icons-left input-container">
       <input
         ref="input"
@@ -23,7 +23,7 @@
             {{ $filters.uppercaseFirstLetter($gettext(type + 's')) }}
           </div>
           <div
-            v-for="document of promise.data[type + 's'].documents"
+            v-for="document of promise.data[type + 's']!.documents"
             :key="document.document_id"
             @mousedown="toggle(document)"
             class="dropdown-item dropdown-item-option columns is-gapless has-cursor-pointer"
@@ -91,175 +91,175 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, onBeforeUnmount, ref, useTemplateRef } from 'vue';
+
 import { arrayInputProps, baseInputProps } from './input-value';
 
 import c2c from '@/js/apis/c2c';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
 import debounce from '@/js/debounce';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  props: {
-    ...baseInputProps,
-    ...arrayInputProps,
-    modelValue: {
-      type: [Array, Object],
-      default: null,
-    },
-    multiple: {
-      type: Boolean,
-      default: false,
-    },
-    documentType: {
-      type: [Array, String],
-      required: true,
-    },
-    proposeCreation: {
-      type: Boolean,
-      default: false,
-    },
-    showMoreResultsLink: {
-      type: Boolean,
-      default: false,
-    },
-    showOptions: {
-      type: Boolean,
-      default: true,
-    },
-    isSmall: {
-      type: Boolean,
-      default: false,
-    },
-    clearInputOnToggle: {
-      type: Boolean,
-      default: false,
-    },
+type SearchResults = Record<string, { documents: C2cDocument[] } | undefined>;
+
+const props = defineProps({
+  ...baseInputProps,
+  ...arrayInputProps,
+  modelValue: {
+    type: [Array, Object],
+    default: null,
   },
-
-  emits: ['add', 'update:modelValue', 'load-options'],
-
-  data() {
-    return {
-      searchText: '',
-      promise: {},
-    };
+  multiple: {
+    type: Boolean,
+    default: false,
   },
-
-  computed: {
-    value_: {
-      get() {
-        return this.multiple ? (this.modelValue ? this.modelValue : []) : this.modelValue;
-      },
-      set(value) {
-        if (!this.disabled) {
-          this.$emit('update:modelValue', value);
-        }
-      },
-    },
-
-    documentTypes_() {
-      return Array.isArray(this.documentType) ? this.documentType : [this.documentType];
-    },
-
-    documentTypesWithResults() {
-      const result = this.promise.data;
-
-      return this.documentTypes_.filter((type) => result[type + 's'] && result[type + 's'].documents.length !== 0);
-    },
-
-    letterTypes() {
-      return this.documentTypes_.map((item) => constants.objectDefinitions[item].letter);
-    },
+  documentType: {
+    type: [Array, String],
+    required: true,
   },
-
-  created() {
-    window.addEventListener('click', this.onWindowClick);
+  proposeCreation: {
+    type: Boolean,
+    default: false,
   },
-
-  beforeUnmount() {
-    window.removeEventListener('click', this.onWindowClick);
+  showMoreResultsLink: {
+    type: Boolean,
+    default: false,
   },
+  showOptions: {
+    type: Boolean,
+    default: true,
+  },
+  isSmall: {
+    type: Boolean,
+    default: false,
+  },
+  clearInputOnToggle: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-  methods: {
-    focus() {
-      this.$refs.input.focus();
-    },
+const emit = defineEmits(['add', 'update:modelValue', 'load-options']);
 
-    closeDropdown() {
-      this.promise = {};
-    },
+const { $documentUtils, $language } = useGlobalProperties();
 
-    onWindowClick(event) {
-      // close dropdown when clicked outside
-      if (!this.$el.contains(event.target)) {
-        this.closeDropdown();
-      }
-    },
+const searchText = ref('');
+const promise = ref<{ data?: SearchResults | null }>({});
+const input = useTemplateRef<HTMLInputElement>('input');
+const rootElement = useTemplateRef<HTMLElement>('root');
 
-    onInput: debounce(function () {
-      if (!this.searchText || this.searchText.length < 3) {
-        this.promise = {};
-        return;
-      }
+const value_ = computed({
+  get: () => (props.multiple ? (props.modelValue ?? []) : props.modelValue) as C2cDocument[] | C2cDocument | null,
+  set(value) {
+    if (!props.disabled) {
+      emit('update:modelValue', value);
+    }
+  },
+});
 
-      this.loadOptions();
-    }, 300),
+const documentTypes_ = computed(
+  () => (Array.isArray(props.documentType) ? props.documentType : [props.documentType]) as string[]
+);
 
-    loadOptions() {
-      this.promise = c2c
-        .search({
-          q: this.searchText,
-          t: this.letterTypes.join(','),
-          limit: 7,
-          l: this.$language.current,
-          pl: this.$language.current,
-        })
-        .then((response) => {
-          response.data.profiles = response.data.users;
-          this.$emit('load-options', response.data);
-        });
-    },
+const documentTypesWithResults = computed(() => {
+  const result = promise.value.data!;
 
-    isSelected(value) {
-      if (this.multiple) {
-        return this.$documentUtils.isInArray(this.value_, value);
+  return documentTypes_.value.filter((type) => result[type + 's'] && result[type + 's']!.documents.length !== 0);
+});
+
+const letterTypes = computed(() =>
+  documentTypes_.value.map(
+    (item) => constants.objectDefinitions[item as keyof typeof constants.objectDefinitions].letter
+  )
+);
+
+function focus() {
+  input.value!.focus();
+}
+
+function closeDropdown() {
+  promise.value = {};
+}
+
+function onWindowClick(event: MouseEvent) {
+  // close dropdown when clicked outside
+  if (!rootElement.value?.contains(event.target as Node)) {
+    closeDropdown();
+  }
+}
+
+function loadOptions() {
+  promise.value = c2c
+    .search({
+      q: searchText.value,
+      t: letterTypes.value.join(','),
+      limit: 7,
+      l: $language.current,
+      pl: $language.current,
+    })
+    .then((response) => {
+      response.data.profiles = response.data.users;
+      emit('load-options', response.data);
+    });
+}
+
+const onInput = debounce(() => {
+  if (!searchText.value || searchText.value.length < 3) {
+    promise.value = {};
+    return;
+  }
+
+  loadOptions();
+}, 300);
+
+function isSelected(value: C2cDocument) {
+  if (props.multiple) {
+    return $documentUtils.isInArray(value_.value as C2cDocument[], value);
+  } else {
+    return props.modelValue ? (props.modelValue as C2cDocument).document_id === value.document_id : false;
+  }
+}
+
+function toggle(value: C2cDocument) {
+  if (!props.multiple) {
+    value_.value = value;
+    if (value) {
+      emit('add', value);
+    }
+  } else {
+    const newValue = [];
+    let removed = false;
+
+    for (const document of value_.value as C2cDocument[]) {
+      if (document.document_id === value.document_id) {
+        removed = true;
       } else {
-        return this.modelValue ? this.modelValue.document_id === value.document_id : false;
+        newValue.push(document);
       }
-    },
+    }
 
-    toggle(value) {
-      if (!this.multiple) {
-        this.value_ = value;
-        if (value) {
-          this.$emit('add', value);
-        }
-      } else {
-        const newValue = [];
-        let removed = false;
+    if (!removed) {
+      newValue.push(value);
+      emit('add', value);
+    }
 
-        for (const document of this.value_) {
-          if (document.document_id === value.document_id) {
-            removed = true;
-          } else {
-            newValue.push(document);
-          }
-        }
+    value_.value = newValue;
+  }
+  closeDropdown();
+  if (props.clearInputOnToggle) {
+    searchText.value = '';
+  }
+}
 
-        if (!removed) {
-          newValue.push(value);
-          this.$emit('add', value);
-        }
+window.addEventListener('click', onWindowClick);
 
-        this.value_ = newValue;
-      }
-      this.closeDropdown();
-      if (this.clearInputOnToggle) {
-        this.searchText = '';
-      }
-    },
-  },
-};
+onBeforeUnmount(() => {
+  window.removeEventListener('click', onWindowClick);
+});
+
+defineExpose({ focus });
 </script>
 
 <style scoped>

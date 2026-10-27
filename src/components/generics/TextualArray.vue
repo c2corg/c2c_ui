@@ -6,31 +6,27 @@
   >
 </template>
 
-<script>
-export default {
-  props: {
-    array: {
-      type: Array,
-      default: null,
-    },
-    i18n: {
-      type: Boolean,
-      default: true,
-    },
-    i18nContext: {
-      type: String,
-      default: undefined,
-    },
-    sortValues: {
-      type: Boolean,
-      default: false,
-    },
-  },
+<script setup lang="ts">
+import { computed, type PropType } from 'vue';
 
-  computed: {
-    displayedArray() {
-      return this.sortValues ? [...this.array].sort() : this.array;
-    },
+const props = defineProps({
+  array: {
+    type: Array as PropType<string[]>,
+    default: null,
   },
-};
+  i18n: {
+    type: Boolean,
+    default: true,
+  },
+  i18nContext: {
+    type: String,
+    default: undefined,
+  },
+  sortValues: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const displayedArray = computed(() => (props.sortValues ? [...props.array].sort() : props.array));
 </script>
