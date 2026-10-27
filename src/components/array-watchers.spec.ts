@@ -1,9 +1,16 @@
 import { mount } from '@vue/test-utils';
+import type VectorLayer from 'ol/layer/Vector';
 import { describe, expect, it, vi } from 'vitest';
 import { nextTick, reactive } from 'vue';
 
 import Gallery from './gallery/Gallery.vue';
-import OlMap from './map/OlMap.vue';
+import { mountMap } from './map/test-utils';
+
+// the point markers draw Font Awesome icons, which the specs don't load: plain styles instead
+vi.mock('@/components/map/map-utils', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/components/map/map-utils')>()),
+  getDocumentPointStyle: () => [],
+}));
 
 // Vue 2 array watchers ran when the array was changed in place: the watchers below must still run then (deep: 1)
 vi.stubGlobal(
@@ -35,27 +42,13 @@ describe('array watchers', () => {
 
   it('OlMap: a document added to the list is drawn', async () => {
     const documents = reactive<Record<string, unknown>[]>([]);
-    const draw = vi
-      .spyOn((OlMap as unknown as { methods: { drawDocumentMarkers(): void } }).methods, 'drawDocumentMarkers')
-      .mockImplementation(() => {});
-    const wrapper = mount(OlMap, {
-      props: { documents },
-      attachTo: document.body,
-      global: {
-        mocks: {
-          $gettext: (text: string) => text,
-          $user: { isLogged: false },
-          $route: { name: 'routes', query: {} },
-          $router: { push: () => {}, resolve: () => ({ href: '' }) },
-          $language: { current: 'fr' },
-          $documentUtils: { getDocumentTitle: () => '', hasSameGeolocation: () => false },
-          $dateUtils: {},
-        },
-        stubs: { FaIcon: true, InputSlider: true, BiodivInformation: true, SwissProtectionAreaInformation: true },
-        directives: { translate: {} },
-      },
-    });
-    draw.mockClear();
+    const { wrapper, vm } = await mountMap({ documents });
+    const drawn = () =>
+      vm.map
+        .getLayers()
+        .getArray()
+        .some((layer) => (layer as VectorLayer).getSource?.()?.getFeatureById?.(1));
+    expect(drawn()).toBe(false);
 
     documents.push({
       document_id: 1,
@@ -64,8 +57,7 @@ describe('array watchers', () => {
     });
     await nextTick();
 
-    expect(draw).toHaveBeenCalled();
+    expect(drawn()).toBe(true);
     wrapper.unmount();
-    draw.mockRestore();
   });
 });
