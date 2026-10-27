@@ -6,6 +6,7 @@ import { createMemoryHistory, createRouter } from 'vue-router';
 
 import AssociationItems from './association-editor/AssociationItems.vue';
 import DocumentsTable from './datatable/DocumentsTable.vue';
+import MarkerGpsTrace from './datatable/cell-renderers/MarkerGpsTrace.vue';
 import FeedWidget from './feed-widget/FeedWidget.vue';
 import HelperWindow from './helper/HelperWindow.vue';
 
@@ -52,13 +53,13 @@ describe('FeedWidget', () => {
     document: { locales: [{}], ...document },
   });
 
-  it('puts each card in the shortest column, the figures of its document making it longer', async () => {
+  const mountFeed = async (items: ReturnType<typeof item>[]) => {
     // two columns
     vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(1000);
     vi.spyOn(c2c.feed, 'getDefaultFeed')
       // the infinite scroll asks for the next page at once: there is none
       .mockReturnValue(apiData({ feed: [] }))
-      .mockReturnValueOnce(apiData({ feed: [item(1, {}), item(2, { elevation_max: 4000 }), item(3, {})] }));
+      .mockReturnValueOnce(apiData({ feed: items }));
     const router = createRouter({
       history: createMemoryHistory(),
       routes: [{ path: '/', component: { render: () => null } }],
@@ -76,9 +77,27 @@ describe('FeedWidget', () => {
       },
     });
     await flushPromises();
+    return wrapper.findAll('.column').map((column) => column.text());
+  };
 
+  it('puts each card in the shortest column, the figures of its document making it longer', async () => {
     // 1 in the first column, 2 (with figures, longer) in the second: 3 goes to the first, now the shortest
-    expect(wrapper.findAll('.column').map((column) => column.text())).toEqual(['13', '2']);
+    expect(await mountFeed([item(1, {}), item(2, { elevation_max: 4000 }), item(3, {})])).toEqual(['13', '2']);
+  });
+
+  it('shows the documents without locale too', async () => {
+    expect(await mountFeed([item(1, { locales: [] }), item(2, {})])).toEqual(['1', '2']);
+  });
+});
+
+describe('cell renderers', () => {
+  it('shows no GPS trace marker for a document without geometry', () => {
+    const wrapper = mount(MarkerGpsTrace, {
+      props: { params: { data: { geometry: null } } as never },
+      global: { stubs: { GenericMarkerGpsTrace: { template: '<i class="trace" />' } } },
+    });
+
+    expect(wrapper.find('.trace').isVisible()).toBe(false);
   });
 });
 

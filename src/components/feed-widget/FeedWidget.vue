@@ -64,7 +64,7 @@ function estimateSize(item: FeedItem) {
   let size = headerSize + titleSize + areaSize + footerSize + marginSize;
   const document = item.document;
 
-  if (document.locales?.[0].summary) {
+  if (document.locales?.[0]?.summary) {
     size += summarySize;
   }
   // the figures of the document (it read the figures of window.document, which has none)
