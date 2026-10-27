@@ -94,13 +94,14 @@ const budgets = {
 let bundleReport = false;
 
 if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
-  // add an url conf for local API developers:
+  // add an url conf for local API developers: the API runs on localhost:6543 unless told otherwise, with the same
+  // variables as the Docker container (see docker/runtime-config.sh), e.g. C2C_API_URL=http://localhost:8080 npm run serve
   config.urlsConfigurations.localhost = {
     name: 'localhost',
-    api: 'http://localhost:6543',
-    media: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
-    imageBackend: 'https://images.demov6.camptocamp.org',
-    forum: 'https://forum.demov6.camptocamp.org',
+    api: process.env.C2C_API_URL ?? 'http://localhost:6543',
+    media: process.env.C2C_MEDIA_URL ?? 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
+    imageBackend: process.env.C2C_IMAGE_BACKEND_URL ?? 'https://images.demov6.camptocamp.org',
+    forum: process.env.C2C_FORUM_URL ?? 'https://forum.demov6.camptocamp.org',
     modernThumbnailsTimestamp: 0,
     modernThumbnailsId: 0,
   };
