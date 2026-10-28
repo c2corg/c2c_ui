@@ -6,7 +6,7 @@ import { nextTick } from 'vue';
 
 import YetiView from './YetiView.vue';
 
-import Yetix from '@/components/yeti/Yetix.vue';
+import Yetix from '@/components/yeti/yetix';
 
 const mountView = () =>
   shallowMount(YetiView, {

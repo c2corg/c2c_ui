@@ -1,9 +1,9 @@
 <script>
 import { useLayer } from './layer';
 
-import Yetix from '@/components/yeti/Yetix';
 import WinterRouteLayerContent from '@/components/yeti/map-layers/WinterRouteLayerContent';
 import WinterRouteLayerContentTitle from '@/components/yeti/map-layers/WinterRouteLayerContentTitle';
+import Yetix from '@/components/yeti/yetix';
 import ol from '@/js/libs/ol';
 
 export default {

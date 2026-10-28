@@ -5,7 +5,7 @@ import type RenderEvent from 'ol/render/Event';
 import { computed, onMounted, watch } from 'vue';
 
 import { dataLayers } from '@/components/map/map-layers';
-import Yetix from '@/components/yeti/Yetix.vue';
+import Yetix from '@/components/yeti/yetix';
 import type { SelectorLayer } from '@/components/yeti/yetix-types';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 

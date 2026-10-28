@@ -42,9 +42,9 @@ import { computed, ref, watch } from 'vue';
 import IconLayer from './IconLayer.vue';
 import { useIconLayer } from './icon-layer';
 
-import Yetix from '@/components/yeti/Yetix.vue';
 import DataAvalancheLayerContent from '@/components/yeti/map-layers/DataAvalancheLayerContent.vue';
 import DataAvalancheLayerContentTitle from '@/components/yeti/map-layers/DataAvalancheLayerContentTitle.vue';
+import Yetix from '@/components/yeti/yetix';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
 

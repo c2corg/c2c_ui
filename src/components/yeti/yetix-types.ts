@@ -1,4 +1,5 @@
-// The shapes of the Yetix state that the components read (Yetix.vue is not typed yet)
+// The shapes of the Yetix state
+import type MultiPolygon from 'ol/geom/MultiPolygon';
 import type { Component } from 'vue';
 
 // a layer of the base, slopes, overlays or yeti selectors: its button, and the layer it shows
@@ -17,5 +18,25 @@ export type SelectorLayer = {
   contentTitleComponent?: Component;
 };
 
-// a mountain of an avalanche bulletin, by massif
-export type BulletinMountain = { name: string; urls: { url: string }[] };
+// a mountain of the avalanche bulletins (its properties), by massif
+export type BulletinMountain = { mountain: string; name: string; geometry: MultiPolygon; urls: { url: string }[] };
+
+// the legend of the yeti risk, from the yeti API: texts by language
+export type YetiLegend = {
+  items: { color: string; text: Record<string, string> }[];
+  attributions: string[];
+  comment: Record<string, string>;
+};
+
+// an item of the legend of the winter routes
+export type WinterRouteLegendItem = { image: string; title: string; text?: string };
+
+// a tab of the side panel
+export type YetiTab = {
+  id?: string;
+  name?: string;
+  title?: string;
+  icon: string | string[];
+  counter?: { title: string; text: string | number };
+  problemIcon?: { title: string };
+};

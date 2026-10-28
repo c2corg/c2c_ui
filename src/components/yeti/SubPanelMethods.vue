@@ -232,7 +232,7 @@ import { computed, watch } from 'vue';
 
 import Info from '@/components/yeti/Info.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import Yetix from '@/components/yeti/Yetix.vue';
+import Yetix from '@/components/yeti/yetix';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 
 const DANGER = {
@@ -284,7 +284,7 @@ const potentialDangerOptions = computed(() =>
   bra.value.high ? DANGER.bra[bra.value.high - 1] : { val: undefined, min: 1, max: 16 }
 );
 
-function onChange(event: unknown, prop: string) {
+function onChange(event: unknown, prop: Parameters<typeof Yetix.setMethod>[0]) {
   const value =
     prop === 'orientation' || prop === 'wetSnow' || prop === 'potentialDanger'
       ? event

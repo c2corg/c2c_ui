@@ -8,7 +8,7 @@ const stored = () => JSON.parse(window.localStorage.getItem('Yeti.preferences') 
 const loadYetix = async () => {
   vi.resetModules();
   const { mount } = await import('@vue/test-utils');
-  const { default: Yetix } = await import('./Yetix');
+  const { default: Yetix } = await import('./yetix');
   const { default: ol } = await import('@/js/libs/ol');
   const { default: axios } = await import('axios');
   const { h, nextTick } = await import('vue');
@@ -30,12 +30,12 @@ describe('Yetix store', () => {
   });
 
   it('changes its state through its setters', async () => {
-    const { Yetix } = await loadYetix();
+    const { Yetix, ol } = await loadYetix();
 
     Yetix.setMethod('groupSize', 4);
     Yetix.setBra('high', 3);
     Yetix.setYetiOk(true);
-    Yetix.setWinterRoutes([{ id: 1 }]);
+    Yetix.setWinterRoutes([new ol.Feature()]);
 
     expect(Yetix.method.groupSize).toBe(4);
     expect(Yetix.bra.high).toBe(3);
@@ -119,11 +119,24 @@ describe('Yetix store', () => {
     expect(Yetix.showRomma).toBe(true);
     expect(Yetix.showNivoses).toBe(undefined);
     expect(Yetix.features).toHaveLength(1);
-    expect(Yetix.features[0].getGeometry().getCoordinates()).toEqual([
+    expect(Yetix.features[0].getGeometry()!.getCoordinates()).toEqual([
       [1, 2, 3],
       [4, 5, 6],
     ]);
     expect(Yetix.featuresTitle).toBe('Saved route');
+  });
+
+  it('resets the state left by the previous visit', async () => {
+    const { Yetix } = await loadYetix();
+    Yetix.addLayerToYetiLayersSelector({ title: 'Risk', checked: true }, 0);
+    Yetix.setYetiData('<xml />');
+    Yetix.setYetiLegend({ items: [], attributions: [], comment: {} });
+    Yetix.setDefault();
+
+    // the defaults were shared, and changed in place by the selectors; the values null by default were kept
+    expect(Yetix.yetiLayersSelector).toEqual([]);
+    expect(Yetix.yetiData).toBe(null);
+    expect(Yetix.yetiLegend).toBe(null);
   });
 
   it('turns edit mode off while simplifying, and back on after', async () => {

@@ -78,9 +78,10 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, wa
 import { useLayer } from './layer';
 
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
-import Yetix from '@/components/yeti/Yetix.vue';
 import DangerLevel from '@/components/yeti/map-layers/DangerLevel.vue';
+import Yetix from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
+import type { BulletinMountain } from '@/components/yeti/yetix-types';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
 
@@ -98,8 +99,6 @@ type OverlayData = {
   orientations: Record<string, boolean | string>;
   urls: { title: string; url: string }[];
 };
-// a mountain of the bulletins, as its properties
-type Mountain = { mountain: string; name: string; geometry: MultiPolygon };
 
 const mountainsStyle = (feature?: Feature, mapZoom?: number, danger?: number | null) => {
   const MIN_OPACITY = 0;
@@ -351,7 +350,7 @@ function onMountainsResult(data: { data: unknown }) {
     });
   });
 
-  Yetix.setAllMountains(sortMountainsByMassif(getPropertiesFromFeatures(mountainsFeatures) as Mountain[]));
+  Yetix.setAllMountains(sortMountainsByMassif(getPropertiesFromFeatures(mountainsFeatures) as BulletinMountain[]));
 
   setVisibleMountains();
 
@@ -360,9 +359,9 @@ function onMountainsResult(data: { data: unknown }) {
   }
 }
 
-function sortMountainsByMassif(mountains: Mountain[]) {
+function sortMountainsByMassif(mountains: BulletinMountain[]) {
   // first, order mountains by massifs
-  const sortedMountains: Record<string, Mountain[]> = {};
+  const sortedMountains: Record<string, BulletinMountain[]> = {};
   for (let i = 0; i < mountains.length; i++) {
     if (!sortedMountains[mountains[i].mountain]) {
       sortedMountains[mountains[i].mountain] = [];
@@ -373,7 +372,7 @@ function sortMountainsByMassif(mountains: Mountain[]) {
   // then sort by massif
   const byMassif = Object.keys(sortedMountains)
     .sort()
-    .reduce((obj: Record<string, Mountain[]>, key) => {
+    .reduce((obj: Record<string, BulletinMountain[]>, key) => {
       obj[key] = sortedMountains[key];
       return obj;
     }, {});
@@ -394,11 +393,14 @@ function sortMountainsByMassif(mountains: Mountain[]) {
 function setVisibleMountains() {
   let mapExtent = getExtent('EPSG:3857');
   // clone this.mountains first, with no reference
-  const visibleMountains: Record<string, Mountain[]> = Object.assign({}, Yetix.mountains.all);
+  const visibleMountains: Record<string, BulletinMountain[]> = Object.assign(
+    {},
+    Yetix.mountains.all as Record<string, BulletinMountain[]>
+  );
 
   // then filter if polygon isn’t in view
   for (let massif in visibleMountains) {
-    visibleMountains[massif] = visibleMountains[massif].filter((mountain: Mountain) => {
+    visibleMountains[massif] = visibleMountains[massif].filter((mountain: BulletinMountain) => {
       let polygon = mountain.geometry;
       return polygon.intersectsExtent(mapExtent);
     });

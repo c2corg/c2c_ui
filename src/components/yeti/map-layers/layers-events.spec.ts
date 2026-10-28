@@ -10,7 +10,7 @@ import { mountInMap } from './test-utils';
 import ElevationProfile from '@/components/yeti/ElevationProfile.vue';
 import yetixEvents from '@/components/yeti/yetix-events';
 
-vi.mock('@/components/yeti/Yetix.vue', async (importOriginal) => {
+vi.mock('@/components/yeti/yetix', async (importOriginal) => {
   const { default: Yetix } = await importOriginal<{ default: Record<string, unknown> }>();
   // no request for the areas
   Yetix.fetchAreas = () => new Promise(() => {});

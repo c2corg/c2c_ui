@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import Yetix from '@/components/yeti/Yetix.vue';
+import Yetix from '@/components/yeti/yetix';
 
 const dataAvalancheAll = computed({
   get: () => Yetix.dataAvalancheAll as boolean,
