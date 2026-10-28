@@ -1,5 +1,4 @@
-import { icon } from '@fortawesome/fontawesome-svg-core';
-
+import iconSvg from '@/js/icon-svg';
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
@@ -119,13 +118,13 @@ const buildPointStyle = function (title, svgSrc, color, highlight) {
 let svgSrcByDocumentTypeCache;
 const getSvgSrcByDocumentType = function () {
   svgSrcByDocumentTypeCache ??= {
-    i: icon({ prefix: 'fas', iconName: 'image' }).html[0],
-    o: icon({ prefix: 'document-type', iconName: 'outing' }).html[0],
-    r: icon({ prefix: 'fas', iconName: 'route' }).html[0],
-    u: icon({ prefix: 'fas', iconName: 'user' }).html[0],
-    x: icon({ prefix: 'fas', iconName: 'flag-checkered' }).html[0],
-    s: icon({ prefix: 'fas', iconName: 'bus' }).html[0],
-    z: icon({ prefix: 'waypoint', iconName: 'access' }).html[0],
+    i: iconSvg({ prefix: 'fas', iconName: 'image' }),
+    o: iconSvg({ prefix: 'document-type', iconName: 'outing' }),
+    r: iconSvg({ prefix: 'fas', iconName: 'route' }),
+    u: iconSvg({ prefix: 'fas', iconName: 'user' }),
+    x: iconSvg({ prefix: 'fas', iconName: 'flag-checkered' }),
+    s: iconSvg({ prefix: 'fas', iconName: 'bus' }),
+    z: iconSvg({ prefix: 'waypoint', iconName: 'access' }),
   };
   return svgSrcByDocumentTypeCache;
 };
@@ -211,9 +210,9 @@ export const getDocumentPointStyle = function (document, title, highlight) {
     ) {
       color = '#4baf50';
     }
-    svgSrc = icon({ prefix: 'waypoint', iconName: document.waypoint_type || 'misc' }).html[0];
+    svgSrc = iconSvg({ prefix: 'waypoint', iconName: document.waypoint_type || 'misc' });
   } else if (type === 'z') {
-    svgSrc = getSvgSrcByDocumentType()['z'] || icon({ prefix: 'waypoint', iconName: 'access' }).html[0];
+    svgSrc = getSvgSrcByDocumentType()['z'] || iconSvg({ prefix: 'waypoint', iconName: 'access' });
 
     if (document.public_transportation_rating && document.public_transportation_rating !== 'no service') {
       color = '#4baf50';

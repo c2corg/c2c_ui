@@ -247,16 +247,6 @@ export const cartoLayers = function () {
     })
   }); */
 
-  // $gettext('Bing', 'Map layer')
-  /* const bingMap = new ol.layer.Tile({
-    title: 'Bing',
-    source: new ol.source.BingMaps({
-      key: config.bingApiKey,
-      imagerySet: 'AerialWithLabels'
-    }),
-    visible: false
-  }); */
-
   // $gettext('OpenTopoMap', 'Map layer')
   const openTopoMap = new ol.layer.Tile({
     title: 'OpenTopoMap',
@@ -327,7 +317,6 @@ export const cartoLayers = function () {
     openTopoMap,
     /* esri, */
     esriImagery,
-    /* bingMap, */
     ignFrMaps,
     ignFrOrtho,
     swissTopo,

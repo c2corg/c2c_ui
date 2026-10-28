@@ -28,6 +28,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+      - name: Check the tag matches the package.json version
+        # health.json reports the package.json version: a tag pushed without `npm version` (see the wiki's "Make a
+        # release") would ship an image reporting the previous one. Fail before the image and the release are made
+        if: "startsWith(github.ref, 'refs/tags/v')"
+        run: |
+          version=$(node -p "require('./package.json').version")
+          if [ "v$version" != "$TAG" ]; then
+            echo "::error::Tag $TAG does not match package.json version $version: release with \`npm version (major|minor|patch)\`"
+            exit 1
+          fi
+        env:
+          TAG: ${{ github.ref_name }}
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v7
         with:

@@ -3,7 +3,6 @@ src/translations/
 dist/
 node_modules/
 .husky/
-public/swiper.css
 dist-e2e/
 e2e-report/
 e2e-results/

@@ -6,7 +6,6 @@
 </template>
 
 <script setup lang="ts">
-import { icon } from '@fortawesome/fontawesome-svg-core';
 import type { Handler } from 'mitt';
 import type Feature from 'ol/Feature';
 import type { Coordinate } from 'ol/coordinate';
@@ -35,6 +34,7 @@ import yetixEvents from '@/components/yeti/yetix-events';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import iconSvg from '@/js/icon-svg';
 import ol from '@/js/libs/ol';
 
 type Line = Feature<LineString>;
@@ -580,11 +580,11 @@ function onKeydown(evt: KeyboardEvent) {
   let svgSource = '';
   if (evt.ctrlKey) {
     tip = $gettext('Split line');
-    svgSource = icon({ prefix: 'fas', iconName: 'scissors' })!.html[0];
+    svgSource = iconSvg({ prefix: 'fas', iconName: 'scissors' });
   }
   if (evt.altKey) {
     tip = $gettext('Add or remove point');
-    svgSource = icon({ prefix: 'fas', iconName: 'plus-minus' })!.html[0];
+    svgSource = iconSvg({ prefix: 'fas', iconName: 'plus-minus' });
   }
 
   // add new icon in editstyle, only if length is 3

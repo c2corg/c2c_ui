@@ -5,9 +5,8 @@
 </template>
 
 <script>
-import { icon } from '@fortawesome/fontawesome-svg-core';
-
 import config from '@/js/config';
+import iconSvg from '@/js/icon-svg';
 import { getEmbeddedImageUrl } from '@/js/image-urls';
 import { sanitizeRichHtml } from '@/js/sanitize-html';
 
@@ -32,7 +31,7 @@ function guardEvent(e) {
 }
 
 const getFontAwesomeSrc = function (prefix, iconeName) {
-  let svgSource = icon({ prefix, iconName: iconeName }).html[0];
+  let svgSource = iconSvg({ prefix, iconName: iconeName });
   svgSource = svgSource.replace('fill="currentColor"', 'fill="#F93"');
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSource);
 };

@@ -3,7 +3,12 @@
     <button @click="toggleMask" class="button is-small is-ghost">
       <!-- $gettext('Masked') -->
       <!-- $gettext('Visible') -->
-      <fa-icon :icon="masked ? 'eye-slash' : 'eye'" :title="$gettext(masked ? 'Masked' : 'Visible')" />
+      <span
+        role="img"
+        :title="$gettext(masked ? 'Masked' : 'Visible')"
+        :aria-label="$gettext(masked ? 'Masked' : 'Visible')"
+        ><fa-icon :icon="masked ? 'eye-slash' : 'eye'"
+      /></span>
     </button>
   </span>
 </template>
