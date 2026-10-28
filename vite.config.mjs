@@ -12,7 +12,6 @@ import { defineConfig } from 'vite';
 
 const config = {
   routerMode: 'history', // for pretty urls
-  bingApiKey: undefined,
   ordnanceSurveyApiKey: 'eUaDulZ6AqXJo7iyoP2lRsgUjKfZWA71',
   isBackendSelectable: true,
   addthisPublicId: 'ra-58abf6b4f3a680cb',
@@ -106,8 +105,6 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
     modernThumbnailsId: 0,
   };
 
-  config.bingApiKey = 'ApgmUK6zfKqlvU9kNDbXeLFL2KvhC0BF3Jy-nUbcnkFJK_Y7UgMCyRq1NTu_ptyj';
-
   // dev bundles are huge, no check
   budgets.enabled = false;
 } else if (process.env.BUILD_ENV === 'github') {
@@ -124,8 +121,6 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   bundleReport = true;
 } else if (process.env.BUILD_ENV === 'camptocamp') {
   config.urls = config.urlsConfigurations.prod;
-
-  config.bingApiKey = 'AudizIfCd3NAdt91ubJMGkMI-swfHxe1R-_U7KiLxCHqepDy70txQ-_-89_eevxc';
 
   config.isBackendSelectable = false; // explicit flag
 } else {

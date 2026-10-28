@@ -27,7 +27,6 @@ interface UrlsConfiguration {
 
 interface BuildConfiguration {
   routerMode?: 'history';
-  bingApiKey?: string;
   ordnanceSurveyApiKey: string;
   isBackendSelectable: boolean;
   addthisPublicId: string;
