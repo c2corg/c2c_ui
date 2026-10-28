@@ -31,7 +31,11 @@ const mountInMap = (component: object, { stubs = {} } = {}) => {
     global: {
       provide: provideFrom(map),
       stubs: { FaIcon: true, ...stubs },
-      mocks: { $gettext: (s: string) => s },
+      mocks: {
+        $gettext: (s: string) => s,
+        // DataAvalancheLayer dates its avalanches from today
+        $dateUtils: { toLocalizedString: (date: Date) => date.toISOString().slice(0, 10) },
+      },
       directives: { translate: {} },
     },
   });
