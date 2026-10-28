@@ -210,6 +210,19 @@ class NavitiaService {
     }
     return queryError;
   }
+
+  /** Read the query error of a failed request: the error the API answered, or the failure itself. */
+  handleRequestError(error: unknown): { id?: string; message?: string } {
+    // The API answers {status: 'error', errors: [{location, name, description}]}. For an
+    // error of Navitia, the description is its id (e.g. no_solution), which
+    // ItinevertNoResultView may translate.
+    const response = (error as { response?: { data?: { errors?: { description?: unknown }[] } } })?.response;
+    const description = response?.data?.errors?.[0]?.description;
+    if (typeof description === 'string' && /^\w+$/.test(description)) {
+      return { id: description, message: description };
+    }
+    return { message: (error as Error)?.message };
+  }
 }
 
 export default new NavitiaService();

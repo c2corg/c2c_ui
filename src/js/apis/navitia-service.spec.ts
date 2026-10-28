@@ -66,4 +66,21 @@ describe('navitia', () => {
     expect(navitia.handleQueryError('Bad gateway')).toEqual({ id: 'parse_error', message: 'Bad gateway' });
     expect(navitia.handleQueryError({ id: 'unknown' })).toEqual({ id: 'unknown' });
   });
+
+  it('reads the error the API answered to a failed request', () => {
+    const answered = (description: string) => ({
+      message: 'Request failed with status code 404',
+      response: { data: { status: 'error', errors: [{ location: 'body', name: 'Not Found', description }] } },
+    });
+    // an error id of Navitia, which the no-result view may translate
+    expect(navitia.handleRequestError(answered('date_out_of_bounds'))).toEqual({
+      id: 'date_out_of_bounds',
+      message: 'date_out_of_bounds',
+    });
+    // another description, or no answer: the message of the failure
+    expect(navitia.handleRequestError(answered('please consult the server logs'))).toEqual({
+      message: 'Request failed with status code 404',
+    });
+    expect(navitia.handleRequestError(new Error('Network Error'))).toEqual({ message: 'Network Error' });
+  });
 });

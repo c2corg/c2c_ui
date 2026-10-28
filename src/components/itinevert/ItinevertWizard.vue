@@ -504,7 +504,8 @@ async function formSearch() {
           )
         ).data;
       } catch (e) {
-        queryError.value = { message: (e as Error).message || $gettext('Error while loading data') };
+        const error = navitiaService.handleRequestError(e);
+        queryError.value = { ...error, message: error.message || $gettext('Error while loading data') };
         filteredRoutes.value = {};
         filteredWaypoints.value = {};
         if (props.view === 'loading') {
@@ -592,7 +593,8 @@ async function formSearch() {
           )
         ).data;
       } catch (e) {
-        queryError.value = { message: (e as Error).message || $gettext('Error while loading data') };
+        const error = navitiaService.handleRequestError(e);
+        queryError.value = { ...error, message: error.message || $gettext('Error while loading data') };
         filteredRoutes.value = {};
         filteredWaypoints.value = {};
         if (props.view === 'loading') {
