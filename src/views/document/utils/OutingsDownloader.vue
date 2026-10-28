@@ -4,50 +4,51 @@
   </button>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import utils from '@/js/utils';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  props: {
-    profileId: {
-      type: Number,
-      required: true,
-    },
+const props = defineProps({
+  profileId: {
+    type: Number,
+    required: true,
   },
+});
 
-  data() {
-    return {
-      isLoading: false,
-    };
-  },
+const router = useRouter();
+const { $documentUtils } = useGlobalProperties();
 
-  methods: {
-    downloadOutings() {
-      this.isLoading = true;
+const isLoading = ref(false);
 
-      const extraKeys = new Map([
-        ['title', this.$documentUtils.getDocumentTitle],
-        [
-          'url',
-          (object) => {
-            const href = this.$router.resolve({ name: 'outing', params: { id: object.document_id } }).href;
-            return `https://www.camptocamp.org${href}`;
-          },
-        ],
-      ]);
+function downloadOutings() {
+  isLoading.value = true;
 
-      c2c.outing
-        .fullDownload({ u: this.profileId }, 1000)
-        .then((outings) => {
-          utils.downloadCsv(outings, 'outings.csv', extraKeys);
-          this.isLoading = false;
-        })
-        .catch((error) => {
-          this.isLoading = false;
-          window.alert(error.response?.data?.errors?.[0]?.description);
-        });
-    },
-  },
-};
+  const extraKeys = new Map([
+    ['title', $documentUtils.getDocumentTitle],
+    [
+      'url',
+      (object: C2cDocument) => {
+        const href = router.resolve({ name: 'outing', params: { id: object.document_id } }).href;
+        return `https://www.camptocamp.org${href}`;
+      },
+    ],
+  ]);
+
+  (c2c.outing as DocumentService)
+    .fullDownload({ u: props.profileId }, 1000)
+    .then((outings) => {
+      utils.downloadCsv(outings as C2cDocument[], 'outings.csv', extraKeys);
+      isLoading.value = false;
+    })
+    .catch((error: { response?: { data?: { errors?: { description: string }[] } } }) => {
+      isLoading.value = false;
+      window.alert(error.response?.data?.errors?.[0]?.description);
+    });
+}
 </script>

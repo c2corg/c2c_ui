@@ -8,7 +8,7 @@
     </h4>
     <div class="images-container">
       <loading-notification :promise="imagesPromise" />
-      <gallery v-if="images" :images="images.documents" />
+      <gallery v-if="images" :images="images" />
     </div>
     <hr />
     <h6 class="title is-6 has-text-centered">
@@ -19,36 +19,23 @@
   </div>
 </template>
 
-<script>
-import Gallery from '@/components/gallery/Gallery';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+
+import Gallery from '@/components/gallery/Gallery.vue';
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
 
-export default {
-  name: 'DashboardImagesGallery',
+// the images come from the API: they have their ids
+type GalleryImages = InstanceType<typeof Gallery>['$props']['images'];
 
-  components: {
-    Gallery,
-  },
+const imagesPromise = ref(
+  (c2c.image as DocumentService).getAll({
+    limit: 10,
+  })
+);
 
-  data() {
-    return {
-      imagesPromise: null,
-    };
-  },
-
-  computed: {
-    images() {
-      return this.imagesPromise?.data;
-    },
-  },
-
-  created(query = {}) {
-    this.imagesPromise = c2c.image.getAll({
-      ...query,
-      limit: 10,
-    });
-  },
-};
+const images = computed(() => imagesPromise.value.data?.documents as GalleryImages | undefined);
 </script>
 
 <style scoped lang="scss">

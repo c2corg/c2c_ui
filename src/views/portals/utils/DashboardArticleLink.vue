@@ -9,15 +9,13 @@
   </li>
 </template>
 
-<script>
-export default {
-  props: {
-    article: {
-      type: Object,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  article: {
+    type: Object,
+    required: true,
   },
-};
+});
 </script>
 
 <style scoped lang="scss">

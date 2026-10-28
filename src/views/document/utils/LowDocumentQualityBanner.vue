@@ -10,16 +10,12 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
 import { documentProperty } from '@/js/properties';
 
-export default {
-  props: { ...documentProperty },
+const props = defineProps({ ...documentProperty });
 
-  computed: {
-    lang() {
-      return this.document ? this.document.cooked.lang : null;
-    },
-  },
-};
+const lang = computed(() => (props.document ? props.document.cooked.lang : null));
 </script>

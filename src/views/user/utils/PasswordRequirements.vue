@@ -9,32 +9,33 @@
   </ul>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import checkPasswordRules from '@/js/password-rules';
 
-export default {
-  props: {
-    password: {
-      type: String,
-      default: '',
-    },
+const props = defineProps({
+  password: {
+    type: String,
+    default: '',
   },
+});
 
-  computed: {
-    rules() {
-      const checks = checkPasswordRules(this.password);
+const { $gettext } = useGlobalProperties();
 
-      return [
-        // literal string (not built from MINIMUM_PASSWORD_LENGTH) so it can be extracted for translation
-        { key: 'length', ok: checks.length, label: this.$gettext('At least 10 characters') },
-        { key: 'lower', ok: checks.lower, label: this.$gettext('A lowercase letter') },
-        { key: 'upper', ok: checks.upper, label: this.$gettext('An uppercase letter') },
-        { key: 'digit', ok: checks.digit, label: this.$gettext('A digit') },
-        { key: 'special', ok: checks.special, label: this.$gettext('A special character (e.g. ! ? - _ @ #)') },
-      ];
-    },
-  },
-};
+const rules = computed(() => {
+  const checks = checkPasswordRules(props.password);
+
+  return [
+    // literal string (not built from MINIMUM_PASSWORD_LENGTH) so it can be extracted for translation
+    { key: 'length', ok: checks.length, label: $gettext('At least 10 characters') },
+    { key: 'lower', ok: checks.lower, label: $gettext('A lowercase letter') },
+    { key: 'upper', ok: checks.upper, label: $gettext('An uppercase letter') },
+    { key: 'digit', ok: checks.digit, label: $gettext('A digit') },
+    { key: 'special', ok: checks.special, label: $gettext('A special character (e.g. ! ? - _ @ #)') },
+  ];
+});
 </script>
 
 <style scoped lang="scss">

@@ -2,12 +2,12 @@ import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 import { h } from 'vue';
 
-import MarkdownSection from './MarkdownSection';
+import MarkdownSection from './MarkdownSection.vue';
 
-import AccordionItem from '@/components/generics/AccordionItem';
+import AccordionItem from '@/components/generics/AccordionItem.vue';
 import filters from '@/js/vue-plugins/filters';
 
-const mountSection = (template, document) =>
+const mountSection = (template: string, document: object) =>
   mount(
     {
       template, // Vue 3 condenses whitespace by default
@@ -22,15 +22,18 @@ const mountSection = (template, document) =>
           FaIcon: true,
           Markdown: { props: ['content'], render: () => h('div', { class: 'markdown' }) },
         },
-        mocks: {
-          $gettext: (value) => value,
-          $language: { current: 'fr', getIANALanguageSubtag: (lang) => lang },
+        // read by the <script setup> section: global properties, not mocks
+        config: {
+          globalProperties: {
+            $gettext: (value: string) => value,
+            $language: { current: 'fr', getIANALanguageSubtag: (lang: string) => lang },
+          } as never,
         },
       },
     }
   );
 
-const documentWith = (remarks) => ({ cooked: { lang: 'fr', remarks } });
+const documentWith = (remarks: string) => ({ cooked: { lang: 'fr', remarks } });
 
 describe('MarkdownSection', () => {
   it('renders the field in the accordion title and content slots', () => {

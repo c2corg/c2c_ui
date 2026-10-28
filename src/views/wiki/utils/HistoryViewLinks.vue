@@ -21,31 +21,29 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    documentId: {
-      type: Number,
-      required: true,
-    },
-    documentType: {
-      type: String,
-      required: true,
-    },
-    lang: {
-      type: String,
-      required: true,
-    },
-    versionFrom: {
-      type: Number,
-      required: true,
-    },
-    versionTo: {
-      type: Number,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  documentId: {
+    type: Number,
+    required: true,
   },
-};
+  documentType: {
+    type: String,
+    required: true,
+  },
+  lang: {
+    type: String,
+    required: true,
+  },
+  versionFrom: {
+    type: Number,
+    required: true,
+  },
+  versionTo: {
+    type: Number,
+    required: true,
+  },
+});
 </script>
 
 <style scoped lang="scss">

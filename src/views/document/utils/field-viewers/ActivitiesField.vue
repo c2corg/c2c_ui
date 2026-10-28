@@ -4,15 +4,12 @@
   </label-value>
 </template>
 
-<script>
-import LabelValue from './LabelValue';
+<script setup lang="ts">
+import LabelValue from './LabelValue.vue';
 
 import { documentProperty } from '@/js/properties';
 
-export default {
-  components: { LabelValue },
-  props: { ...documentProperty },
-};
+defineProps({ ...documentProperty });
 </script>
 
 <style lang="scss" scoped>

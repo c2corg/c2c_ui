@@ -8,57 +8,44 @@
   <field-view v-else-if="hasValue2" :document="document" :field="field2" />
 </template>
 
-<script>
-import FieldView from './FieldView';
-import LabelValue from './LabelValue';
+<script setup lang="ts">
+import { type PropType, computed } from 'vue';
 
+import FieldView from './FieldView.vue';
+import LabelValue from './LabelValue.vue';
+
+import type Field from '@/js/constants/Field';
 import { documentProperty } from '@/js/properties';
 
-export default {
-  components: {
-    LabelValue,
-    FieldView,
+const props = defineProps({
+  ...documentProperty,
+  field1: {
+    type: Object as PropType<Field>,
+    required: true,
   },
+  field2: {
+    type: Object as PropType<Field>,
+    required: true,
+  },
+  label: {
+    type: String,
+    required: true,
+  },
+  showSigns: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-  props: {
-    ...documentProperty,
-    field1: {
-      type: Object,
-      required: true,
-    },
-    field2: {
-      type: Object,
-      required: true,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    showSigns: {
-      type: Boolean,
-      default: false,
-    },
-  },
+const value1 = computed(() => props.document[props.field1.name]);
 
-  computed: {
-    value1() {
-      return this.document[this.field1.name];
-    },
-    value2() {
-      return this.document[this.field2.name];
-    },
-    hasValue1() {
-      return this.value1 !== null && this.value1 !== undefined;
-    },
-    hasValue2() {
-      return this.value2 !== null && this.value2 !== undefined;
-    },
-    signPlus() {
-      return this.showSigns ? '+' : '';
-    },
-    signMinus() {
-      return this.showSigns ? '-' : '';
-    },
-  },
-};
+const value2 = computed(() => props.document[props.field2.name]);
+
+const hasValue1 = computed(() => value1.value !== null && value1.value !== undefined);
+
+const hasValue2 = computed(() => value2.value !== null && value2.value !== undefined);
+
+const signPlus = computed(() => (props.showSigns ? '+' : ''));
+
+const signMinus = computed(() => (props.showSigns ? '-' : ''));
 </script>

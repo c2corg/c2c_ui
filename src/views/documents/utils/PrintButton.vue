@@ -12,24 +12,22 @@
   </router-link>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
 import { useUrlFilters } from '@/js/composables/url-filters';
 
-export default {
-  props: {
-    display: {
-      type: String,
-      default: 'button',
-    },
+defineProps({
+  display: {
+    type: String,
+    default: 'button',
   },
-  setup() {
-    return useUrlFilters();
-  },
+});
 
-  computed: {
-    path() {
-      return { path: this.documentType + 's/print', query: this.$route.query };
-    },
-  },
-};
+const route = useRoute();
+
+const { documentType } = useUrlFilters();
+
+const path = computed(() => ({ path: documentType.value + 's/print', query: route.query }));
 </script>

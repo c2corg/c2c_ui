@@ -4,55 +4,49 @@
   </a>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+
 import c2c from '@/js/apis/c2c';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { documentProperty } from '@/js/properties';
 
-export default {
-  props: { ...documentProperty },
+const props = defineProps({ ...documentProperty });
 
-  data() {
-    return {
-      followed: null,
-    };
-  },
+const { $gettext, $user } = useGlobalProperties();
 
-  computed: {
-    canFollow() {
-      return this.document.type === 'u' && this.$user.isLogged && this.$user.id !== this.document.document_id;
-    },
+const followed = ref<boolean | null>(null);
 
-    tooltip() {
-      if (this.followed) {
-        return this.$gettext('Stop following this contributor');
-      } else {
-        return this.$gettext('See the activity of this contributor in your feed');
-      }
-    },
-  },
+const canFollow = computed(
+  () => props.document.type === 'u' && $user.isLogged && $user.id !== props.document.document_id
+);
 
-  created() {
-    if (this.canFollow) {
-      c2c.userProfile.following.isFollowing(this.document.document_id).then((response) => {
-        this.followed = response.data.is_following;
-      });
-    }
-  },
+const tooltip = computed(() => {
+  if (followed.value) {
+    return $gettext('Stop following this contributor');
+  } else {
+    return $gettext('See the activity of this contributor in your feed');
+  }
+});
 
-  methods: {
-    onClick() {
-      if (this.followed) {
-        c2c.userProfile.following.remove(this.document.document_id).then(() => {
-          this.followed = false;
-        });
-      } else {
-        c2c.userProfile.following.add(this.document.document_id).then(() => {
-          this.followed = true;
-        });
-      }
-    },
-  },
-};
+function onClick() {
+  if (followed.value) {
+    c2c.userProfile.following.remove(props.document.document_id!).then(() => {
+      followed.value = false;
+    });
+  } else {
+    c2c.userProfile.following.add(props.document.document_id!).then(() => {
+      followed.value = true;
+    });
+  }
+}
+
+// created
+if (canFollow.value) {
+  c2c.userProfile.following.isFollowing(props.document.document_id!).then((response) => {
+    followed.value = response.data.is_following;
+  });
+}
 </script>
 
 <style scoped lang="scss">

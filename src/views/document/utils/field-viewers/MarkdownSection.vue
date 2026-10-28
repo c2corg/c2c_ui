@@ -30,30 +30,32 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { documentProperty, fieldProperty } from '@/js/properties';
 
-export default {
-  props: {
-    ...documentProperty,
-    ...fieldProperty,
-    hideTitle: {
-      type: Boolean,
-      default: false,
-    },
-    title: {
-      type: String,
-      default: null,
-    },
+const props = defineProps({
+  ...documentProperty,
+  ...fieldProperty,
+  hideTitle: {
+    type: Boolean,
+    default: false,
   },
-  computed: {
-    lang() {
-      const current_lang = this.$language.current;
-      const document_lang = this.document ? this.document.cooked.lang : null;
-      return document_lang === current_lang ? undefined : this.$language.getIANALanguageSubtag(document_lang);
-    },
+  title: {
+    type: String,
+    default: null,
   },
-};
+});
+
+const { $language } = useGlobalProperties();
+
+const lang = computed(() => {
+  const current_lang = $language.current;
+  const document_lang = props.document ? props.document.cooked.lang : null;
+  return document_lang === current_lang ? undefined : $language.getIANALanguageSubtag(document_lang);
+});
 </script>
 
 <style lang="scss" scoped>
