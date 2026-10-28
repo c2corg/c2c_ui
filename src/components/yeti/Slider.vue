@@ -17,50 +17,45 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, useTemplateRef } from 'vue';
+
 import { useUid } from '@/js/uid';
 
-export default {
-  props: {
-    modelValue: {
-      type: Number,
-      default: null,
-    },
-    min: {
-      type: Number,
-      default: null,
-    },
-    max: {
-      type: Number,
-      default: null,
-    },
-    interval: {
-      type: Number,
-      default: null,
-    },
+const props = defineProps({
+  modelValue: {
+    type: Number,
+    default: null,
   },
-  emits: ['change', 'update:modelValue'],
+  min: {
+    type: Number,
+    default: null,
+  },
+  max: {
+    type: Number,
+    default: null,
+  },
+  interval: {
+    type: Number,
+    default: null,
+  },
+});
 
-  setup() {
-    return useUid();
-  },
+const emit = defineEmits(['change', 'update:modelValue']);
 
-  computed: {
-    _value: {
-      get() {
-        return this.modelValue;
-      },
-      set(value) {
-        this.$emit('update:modelValue', value);
-      },
-    },
+const { uid } = useUid();
+const slider = useTemplateRef<{ $el: HTMLElement }>('slider');
+
+const _value = computed({
+  get: () => props.modelValue,
+  set(value) {
+    emit('update:modelValue', value);
   },
-  methods: {
-    focus() {
-      this.$refs.slider.$el.querySelector('[role=slider]').focus({ focusVisible: true });
-    },
-  },
-};
+});
+
+function focus() {
+  slider.value!.$el.querySelector<HTMLElement>('[role=slider]')!.focus({ focusVisible: true });
+}
 </script>
 
 <style lang="scss">

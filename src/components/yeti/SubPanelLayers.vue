@@ -120,116 +120,75 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
-import LayerButton from '@/components/yeti/LayerButton';
+import LayerButton from '@/components/yeti/LayerButton.vue';
 import Slider from '@/components/yeti/Slider.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import Yetix from '@/components/yeti/Yetix';
+import Yetix from '@/components/yeti/Yetix.vue';
+import type { SelectorLayer } from '@/components/yeti/yetix-types';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 
-// stored under the component name, as before: existing preferences are kept
+// stored under the name the component had, as before: existing preferences are kept
 const preferences = getPreferences('Yeti');
 
-export default {
-  name: 'Yeti',
-  components: {
-    DropdownContent,
-    LayerButton,
-    Slider,
-    SubPanelTitle,
-  },
-  data() {
-    return {
-      showAreasWasTrue: null,
-    };
-  },
-  computed: {
-    mapZoom() {
-      return Yetix.mapZoom;
-    },
-    baseLayersSelector() {
-      return Yetix.baseLayersSelector;
-    },
-    selectedBaseLayer: {
-      get() {
-        return this.baseLayersSelector.find((layer) => layer.checked);
-      },
-      set(layer) {
-        this.baseLayersSelector.map((layer) => (layer.checked = false));
-        layer.checked = true;
+const { $gettext } = useGlobalProperties();
 
-        // store current map layers base
-        preferences.set('yeti-map-layers-base', layer.title);
-      },
-    },
-    slopesLayersSelector() {
-      return Yetix.slopesLayersSelector;
-    },
-    slopesLayersSelectorChecked() {
-      return this.slopesLayersSelector.filter((layer) => {
-        return layer.checked;
-      });
-    },
-    overlaysLayersSelector() {
-      return Yetix.overlaysLayersSelector;
-    },
-    overlaysLayersLarge() {
-      return this.overlaysLayersSelector.filter((layer) => {
-        return !layer.small;
-      });
-    },
-    overlaysLayersSmall() {
-      return this.overlaysLayersSelector.filter((layer) => {
-        return layer.small;
-      });
-    },
-    overlaysLayersLargeCheckedAndNeedContent() {
-      return this.overlaysLayersLarge.filter((layer) => {
-        return layer.checked && layer.contentComponent;
-      });
-    },
-    overlaysLayersSmallCheckedAndNeedContent() {
-      return this.overlaysLayersSmall.filter((layer) => {
-        return layer.checked && layer.contentComponent;
-      });
-    },
-    yetiLayersSelector() {
-      return Yetix.yetiLayersSelector;
-    },
-    yetiLayersSelectorChecked() {
-      return this.yetiLayersSelector.filter((layer) => {
-        return layer.checked && layer.title !== this.$gettext('Extent');
-      });
-    },
-    showAreas() {
-      return Yetix.showAreas;
-    },
+const showAreasWasTrue = ref<boolean | null>(null);
+
+const mapZoom = computed(() => Yetix.mapZoom as number);
+const baseLayersSelector = computed(() => Yetix.baseLayersSelector as SelectorLayer[]);
+const selectedBaseLayer = computed({
+  get: () => baseLayersSelector.value.find((layer) => layer.checked),
+  set(layer) {
+    baseLayersSelector.value.forEach((other) => (other.checked = false));
+    layer!.checked = true;
+    // store current map layers base
+    preferences.set('yeti-map-layers-base', layer!.title);
   },
-  watch: {
-    mapZoom() {
-      // uncheck yeti extent checkbox when zoom is reached
-      // store old state if true, and revert back when zoom is valid
-      // (good for perf because only 2 layers max will be visible instead of 4)
-      if (this.mapZoom > Yetix.BLEND_MODES_MAX_ZOOM) {
-        if (this.showAreas) {
-          this.showAreasWasTrue = this.showAreas;
-        }
-        Yetix.setShowAreas(false);
-      } else if (this.showAreasWasTrue) {
-        Yetix.setShowAreas(true);
-        this.showAreasWasTrue = null;
-      }
-    },
-    slopesLayersSelectorChecked(layers) {
-      // store current slope layers
-      preferences.set(
-        'yeti-map-layers-slopes',
-        layers.map((layer) => layer.title)
-      );
-    },
-  },
-};
+});
+const slopesLayersSelector = computed(() => Yetix.slopesLayersSelector as SelectorLayer[]);
+const slopesLayersSelectorChecked = computed(() => slopesLayersSelector.value.filter((layer) => layer.checked));
+const overlaysLayersSelector = computed(() => Yetix.overlaysLayersSelector as SelectorLayer[]);
+const overlaysLayersLarge = computed(() => overlaysLayersSelector.value.filter((layer) => !layer.small));
+const overlaysLayersSmall = computed(() => overlaysLayersSelector.value.filter((layer) => layer.small));
+const overlaysLayersLargeCheckedAndNeedContent = computed(() =>
+  overlaysLayersLarge.value.filter((layer) => layer.checked && layer.contentComponent)
+);
+const overlaysLayersSmallCheckedAndNeedContent = computed(() =>
+  overlaysLayersSmall.value.filter((layer) => layer.checked && layer.contentComponent)
+);
+const yetiLayersSelector = computed(() => Yetix.yetiLayersSelector as SelectorLayer[]);
+const yetiLayersSelectorChecked = computed(() =>
+  yetiLayersSelector.value.filter((layer) => layer.checked && layer.title !== $gettext('Extent'))
+);
+const showAreas = computed(() => Yetix.showAreas as boolean);
+
+// uncheck yeti extent checkbox when zoom is reached
+// store old state if true, and revert back when zoom is valid
+// (good for perf because only 2 layers max will be visible instead of 4)
+watch(mapZoom, () => {
+  if (mapZoom.value > Yetix.BLEND_MODES_MAX_ZOOM) {
+    if (showAreas.value) {
+      showAreasWasTrue.value = showAreas.value;
+    }
+    Yetix.setShowAreas(false);
+  } else if (showAreasWasTrue.value) {
+    Yetix.setShowAreas(true);
+    showAreasWasTrue.value = null;
+  }
+});
+
+// store current slope layers
+watch(slopesLayersSelectorChecked, (layers) => {
+  preferences.set(
+    'yeti-map-layers-slopes',
+    layers.map((layer) => layer.title)
+  );
+});
 </script>
 
 <style scoped lang="scss">

@@ -5,62 +5,41 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, onMounted, ref, watch } from 'vue';
+
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
-import MarkdownSection from '@/views/document/utils/field-viewers/MarkdownSection';
+import MarkdownSection from '@/views/document/utils/field-viewers/MarkdownSection.vue';
 
-export default {
-  components: {
-    SubPanelTitle,
-    MarkdownSection,
+const props = defineProps({
+  article: {
+    type: Object,
+    required: true,
   },
-  props: {
-    article: {
-      type: Object,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      promise: null,
-    };
-  },
-  computed: {
-    id() {
-      return this.article.id;
-    },
-    title() {
-      return this.article.title;
-    },
-    document() {
-      return this.promise?.data ?? null;
-    },
-    fields() {
-      return constants.objectDefinitions.article.fields;
-    },
-    lang() {
-      return this.$language.current;
-    },
-  },
-  watch: {
-    lang() {
-      this.cookDocument();
-    },
-  },
-  mounted() {
-    this.cookDocument();
-  },
-  methods: {
-    cookDocument() {
-      // get document, and set promise only in then (no FOIT)
-      c2c.article.getCooked(this.id, this.$language.current).then((result) => {
-        this.promise = result;
-      });
-    },
-  },
-};
+});
+
+const { $language } = useGlobalProperties();
+
+const promise = ref<{ data?: unknown } | null>(null);
+
+const title = computed(() => props.article.title);
+const document = computed(() => promise.value?.data ?? null);
+const fields = constants.objectDefinitions.article.fields;
+
+function cookDocument() {
+  // get document, and set promise only in then (no FOIT)
+  (c2c.article as DocumentService).getCooked(props.article.id, $language.current!).then((result) => {
+    promise.value = result;
+  });
+}
+
+watch(() => $language.current, cookDocument);
+
+onMounted(cookDocument);
 </script>
 
 <style scoped lang="scss">

@@ -16,29 +16,25 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    inverted: {
-      type: Boolean,
-      default: false,
-    },
-    open: {
-      type: Boolean,
-      default: false,
-    },
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const props = defineProps({
+  inverted: {
+    type: Boolean,
+    default: false,
   },
-  data() {
-    return {
-      localOpen: this.open,
-    };
+  open: {
+    type: Boolean,
+    default: false,
   },
-  methods: {
-    switchOpen() {
-      this.localOpen = !this.localOpen;
-    },
-  },
-};
+});
+
+const localOpen = ref(props.open);
+
+function switchOpen() {
+  localOpen.value = !localOpen.value;
+}
 </script>
 
 <style scoped lang="scss">

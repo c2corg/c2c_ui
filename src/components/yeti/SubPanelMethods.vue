@@ -227,10 +227,13 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, watch } from 'vue';
+
 import Info from '@/components/yeti/Info.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import Yetix from '@/components/yeti/Yetix';
+import Yetix from '@/components/yeti/Yetix.vue';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 
 const DANGER = {
   min: 1,
@@ -243,85 +246,60 @@ const DANGER = {
   ],
 };
 
-export default {
-  components: { Info, SubPanelTitle },
-  emits: ['warn-about-method-bra'],
+const emit = defineEmits(['warn-about-method-bra']);
 
-  data() {
-    return {
-      methods: {
-        mrd: ['MRD', this.$gettext('Beginner')],
-        mre: ['MRE', this.$gettext('Elementary')],
-        mrp: ['MRP', this.$gettext('Expert')],
-      },
-      groupSizes: [
-        {
-          value: 1,
-          text: this.$gettext('No reduction factor'),
-        },
-        {
-          value: 2.1,
-          text: this.$gettext('Large group with load shedding distance'),
-        },
-        {
-          value: 2.2,
-          text: this.$gettext('Small group without distance'),
-        },
-        {
-          value: 3,
-          text: this.$gettext('Small group with load shedding distance'),
-        },
-      ],
-    };
-  },
-  computed: {
-    bra() {
-      return Yetix.bra;
-    },
-    method() {
-      return Yetix.method;
-    },
-    potentialDangerLabels() {
-      const result = [];
-      for (let i = DANGER.min; i <= DANGER.max; i++) {
-        const data = { text: i };
-        if (i === 2 || i === 4 || i === 8 || i === 16) {
-          data.val = i;
-        }
-        result.push(data);
-      }
+const { $gettext } = useGlobalProperties();
 
-      return result;
-    },
-    potentialDangerOptions() {
-      if (!this.bra.high) {
-        return { val: undefined, min: 1, max: 16 };
-      }
-
-      return DANGER.bra[this.bra.high - 1];
-    },
-  },
-  watch: {
-    'bra.high': 'onBraChange',
-  },
-  methods: {
-    onChange(event, prop) {
-      let value = null;
-      if (prop === 'orientation' || prop === 'wetSnow' || prop === 'potentialDanger') {
-        value = event;
-      } else {
-        value = event.target.value;
-      }
-      Yetix.setMethod(prop, value);
-    },
-    warnAboutMethodBra(item) {
-      this.$emit('warn-about-method-bra', item);
-    },
-    onBraChange() {
-      this.onChange(this.potentialDangerOptions.val, 'potentialDanger');
-    },
-  },
+const methods: Record<string, [string, string]> = {
+  mrd: ['MRD', $gettext('Beginner')],
+  mre: ['MRE', $gettext('Elementary')],
+  mrp: ['MRP', $gettext('Expert')],
 };
+const groupSizes = [
+  {
+    value: 1,
+    text: $gettext('No reduction factor'),
+  },
+  {
+    value: 2.1,
+    text: $gettext('Large group with load shedding distance'),
+  },
+  {
+    value: 2.2,
+    text: $gettext('Small group without distance'),
+  },
+  {
+    value: 3,
+    text: $gettext('Small group with load shedding distance'),
+  },
+];
+
+const bra = computed(() => Yetix.bra);
+const method = computed(() => Yetix.method);
+const potentialDangerLabels = Array.from({ length: DANGER.max - DANGER.min + 1 }, (_, index) => {
+  const i = DANGER.min + index;
+  return [2, 4, 8, 16].includes(i) ? { text: i, val: i } : { text: i };
+});
+const potentialDangerOptions = computed(() =>
+  bra.value.high ? DANGER.bra[bra.value.high - 1] : { val: undefined, min: 1, max: 16 }
+);
+
+function onChange(event: unknown, prop: string) {
+  const value =
+    prop === 'orientation' || prop === 'wetSnow' || prop === 'potentialDanger'
+      ? event
+      : (event as Event & { target: HTMLInputElement }).target.value;
+  Yetix.setMethod(prop, value);
+}
+
+function warnAboutMethodBra(item: unknown) {
+  emit('warn-about-method-bra', item);
+}
+
+watch(
+  () => bra.value.high,
+  () => onChange(potentialDangerOptions.value.val, 'potentialDanger')
+);
 </script>
 
 <style scoped lang="scss">

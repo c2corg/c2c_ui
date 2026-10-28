@@ -28,85 +28,74 @@
         <slot />
       </div>
     </label>
-    <toast ref="toast-button">
+    <toast ref="disabledToast">
       <template #title>{{ disabled?.title }}</template>
       {{ disabled?.message }}
     </toast>
   </div>
 </template>
 
-<script>
-import Toast from '@/components/yeti/Toast';
+<script setup lang="ts">
+import { computed, useTemplateRef } from 'vue';
+
+import Toast from '@/components/yeti/Toast.vue';
 import { assetUrl } from '@/js/asset-urls';
 import { useUid } from '@/js/uid';
 
-export default {
-  components: {
-    Toast,
+const props = defineProps({
+  type: {
+    type: String,
+    default: 'checkbox',
   },
-  props: {
-    type: {
-      type: String,
-      default: 'checkbox',
-    },
-    name: {
-      type: String,
-      default: null,
-    },
-    modelValue: {
-      type: [Boolean, Object],
-      default: null,
-    },
-    model: {
-      type: Object,
-      default: null,
-    },
-    disabled: {
-      type: Object,
-      default: null,
-    },
-    image: {
-      type: String,
-      default: null,
-    },
-    country: {
-      type: String,
-      default: null,
-    },
+  name: {
+    type: String,
+    default: null,
   },
-  emits: ['change', 'update:modelValue'],
+  modelValue: {
+    type: [Boolean, Object],
+    default: null,
+  },
+  model: {
+    type: Object,
+    default: null,
+  },
+  disabled: {
+    type: Object,
+    default: null,
+  },
+  image: {
+    type: String,
+    default: null,
+  },
+  country: {
+    type: String,
+    default: null,
+  },
+});
 
-  setup() {
-    return useUid();
-  },
+const emit = defineEmits(['change', 'update:modelValue']);
 
-  computed: {
-    _value: {
-      get() {
-        return this.modelValue;
-      },
-      set(value) {
-        this.$emit('update:modelValue', value);
-      },
-    },
-    backgroundImage() {
-      let img;
-      try {
-        img = assetUrl('yeti/layers', this.image);
-        img = 'url(' + img + ')';
-      } catch {
-        img = 'none';
-      }
-      return img;
-    },
+const { uid } = useUid();
+const disabledToast = useTemplateRef<{ toast(options?: object): void }>('disabledToast');
+
+const _value = computed({
+  get: () => props.modelValue,
+  set(value) {
+    emit('update:modelValue', value);
   },
-  methods: {
-    assetUrl,
-    warnIfDisabled() {
-      this.$refs['toast-button'].toast();
-    },
-  },
-};
+});
+
+const backgroundImage = computed(() => {
+  try {
+    return 'url(' + assetUrl('yeti/layers', props.image) + ')';
+  } catch {
+    return 'none';
+  }
+});
+
+function warnIfDisabled() {
+  disabledToast.value!.toast();
+}
 </script>
 
 <style scoped lang="scss">
