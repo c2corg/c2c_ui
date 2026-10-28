@@ -127,7 +127,7 @@ import DropdownContent from '@/components/yeti/DropdownContent.vue';
 import LayerButton from '@/components/yeti/LayerButton.vue';
 import Slider from '@/components/yeti/Slider.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import Yetix from '@/components/yeti/Yetix.vue';
+import Yetix from '@/components/yeti/yetix';
 import type { SelectorLayer } from '@/components/yeti/yetix-types';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { getPreferences } from '@/js/vue-plugins/local-storage';

@@ -51,7 +51,7 @@ import YetiLayers from './map-layers/YetiLayers.vue';
 
 import EditModeButton from '@/components/yeti/EditModeButton.vue';
 import YetiMapLegend from '@/components/yeti/YetiMapLegend.vue';
-import Yetix from '@/components/yeti/Yetix.vue';
+import Yetix from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import photon from '@/js/apis/photon';
 import { useGlobalProperties } from '@/js/composables/global-properties';

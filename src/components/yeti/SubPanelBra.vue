@@ -121,7 +121,7 @@ import Counter from '@/components/yeti/Counter.vue';
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
 import Info from '@/components/yeti/Info.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import Yetix from '@/components/yeti/Yetix.vue';
+import Yetix from '@/components/yeti/yetix';
 import type { BulletinMountain } from '@/components/yeti/yetix-types';
 
 const showMountainsList = ref(false);
@@ -135,7 +135,7 @@ const countVisibleMountains = computed(() =>
 );
 const showVisibleMountains = computed(() => countVisibleMountains.value >= 0);
 
-function onChange(event: unknown, prop: string) {
+function onChange(event: unknown, prop: Parameters<typeof Yetix.setBra>[0]) {
   const value = prop === 'isDifferent' ? event : (event as Event & { target: HTMLInputElement }).target.value;
   Yetix.setBra(prop, value);
 }

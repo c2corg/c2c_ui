@@ -10,7 +10,7 @@
 import { computed } from 'vue';
 
 import Counter from '@/components/yeti/Counter.vue';
-import Yetix from '@/components/yeti/Yetix.vue';
+import Yetix from '@/components/yeti/yetix';
 
 defineProps({
   layer: {

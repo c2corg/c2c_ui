@@ -36,7 +36,7 @@
 import { computed, useTemplateRef, watch, type PropType } from 'vue';
 
 import Counter from '@/components/yeti/Counter.vue';
-import Yetix from '@/components/yeti/Yetix.vue';
+import Yetix from '@/components/yeti/yetix';
 
 type Tab = {
   name?: string;

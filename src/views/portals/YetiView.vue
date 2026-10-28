@@ -117,7 +117,7 @@ import SubPanelMethods from '@/components/yeti/SubPanelMethods';
 import Tabs from '@/components/yeti/Tabs';
 import ValidationButton from '@/components/yeti/ValidationButton';
 import YetiMap from '@/components/yeti/YetiMap';
-import Yetix from '@/components/yeti/Yetix';
+import Yetix from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import ol from '@/js/libs/ol';
 import { getPreferences } from '@/js/vue-plugins/local-storage';

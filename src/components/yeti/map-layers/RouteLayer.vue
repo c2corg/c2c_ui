@@ -29,7 +29,7 @@ import { getSortedFeatures } from './route-features';
 import simplify from './simplify';
 import SplitInteraction, { type SplitEvent } from './split-interaction';
 
-import Yetix from '@/components/yeti/Yetix.vue';
+import Yetix from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';

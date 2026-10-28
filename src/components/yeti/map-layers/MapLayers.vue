@@ -11,9 +11,9 @@ import { computed, onBeforeUnmount, onMounted, watch } from 'vue';
 
 import { useLayer } from './layer';
 
-import Yetix from '@/components/yeti/Yetix.vue';
 import BaseLayers from '@/components/yeti/map-layers/BaseLayers.vue';
 import SlopesLayers from '@/components/yeti/map-layers/SlopesLayers.vue';
+import Yetix from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 
 const { map } = useLayer();

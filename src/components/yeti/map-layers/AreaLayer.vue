@@ -13,9 +13,9 @@ import { computed, onBeforeUnmount, onMounted, watch } from 'vue';
 
 import { useLayer } from './layer';
 
-import Yetix from '@/components/yeti/Yetix.vue';
 import BaseLayers from '@/components/yeti/map-layers/BaseLayers.vue';
 import SlopesLayers from '@/components/yeti/map-layers/SlopesLayers.vue';
+import Yetix from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
@@ -49,7 +49,7 @@ function onAreasResult(data: { data: unknown }) {
   const areasFeatures = getFeaturesFromData(data);
 
   // set areas in state
-  Yetix.setAreas(getPropertiesFromFeatures(areasFeatures));
+  Yetix.setAreas(getPropertiesFromFeatures(areasFeatures) as { geometry: Geometry }[]);
 
   // add features
   areasLayer.getSource()!.addFeatures(areasFeatures);

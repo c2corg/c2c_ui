@@ -2,7 +2,7 @@
   <div>
     <p class="title is-size-5" v-translate>YETI Risk</p>
     <ul>
-      <li v-for="(item, i) of yetiLegend.items" :key="i">
+      <li v-for="(item, i) of yetiLegend?.items" :key="i">
         <span class="color" :style="'background:' + item.color" />
         <!-- $gettext('Risky slopes') -->
         <!-- $gettext('Risky slopes, increased risk due to orientation') -->
@@ -13,14 +13,14 @@
       </li>
     </ul>
     <!-- $gettext('From danger 3, consider the slopes which dominate the route') -->
-    <p class="is-size-6 is-italic">{{ $gettext(yetiLegend.comment['en']) }}</p>
+    <p class="is-size-6 is-italic">{{ $gettext(yetiLegend?.comment['en'] ?? '') }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import Yetix from '@/components/yeti/Yetix.vue';
+import Yetix from '@/components/yeti/yetix';
 
 const yetiLegend = computed(() => Yetix.yetiLegend);
 </script>

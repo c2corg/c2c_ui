@@ -22,7 +22,6 @@ import { computed, onBeforeUnmount, onMounted, useTemplateRef } from 'vue';
 
 import { useLayer } from './layer';
 
-import Yetix from '@/components/yeti/Yetix.vue';
 import AvalancheBulletinsLayer from '@/components/yeti/map-layers/AvalancheBulletinsLayer.vue';
 import DataAvalancheLayer from '@/components/yeti/map-layers/DataAvalancheLayer.vue';
 import FfvlLayer from '@/components/yeti/map-layers/FfvlLayer.vue';
@@ -33,7 +32,9 @@ import ProtectedAreasLayer from '@/components/yeti/map-layers/ProtectedAreasLaye
 import RommaLayer from '@/components/yeti/map-layers/RommaLayer.vue';
 import RouteLayer from '@/components/yeti/map-layers/RouteLayer.vue';
 import WinterRouteLayer from '@/components/yeti/map-layers/WinterRouteLayer.vue';
+import Yetix from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
+import type { SelectorLayer } from '@/components/yeti/yetix-types';
 import ol from '@/js/libs/ol';
 
 // a feature under the pointer, or the pixel of a raster layer
@@ -135,7 +136,7 @@ function dealWithEventsOnEachLayer(
   });
 }
 
-function onLayer(layer: unknown, index: number) {
+function onLayer(layer: SelectorLayer, index: number) {
   Yetix.addLayerToOverlaysLayersSelector(layer, index);
 }
 

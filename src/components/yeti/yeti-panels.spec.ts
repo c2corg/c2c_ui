@@ -9,7 +9,7 @@ import LayerButton from './LayerButton.vue';
 import SubPanelMeteo from './SubPanelMeteo.vue';
 import SubPanelMethods from './SubPanelMethods.vue';
 import Tabs from './Tabs.vue';
-import Yetix from './Yetix.vue';
+import Yetix from './yetix';
 import yetixEvents from './yetix-events';
 
 const globalProperties = {
