@@ -3,7 +3,9 @@
 </template>
 
 <script lang="ts">
-// added once, when the ad components are first imported
+// a component without options: its script only adds the ad script, once, when the ad components are first imported
+export default {};
+
 if (!document.getElementById('ad_script')) {
   const s = document.createElement('script');
   s.id = 'ad_script';
