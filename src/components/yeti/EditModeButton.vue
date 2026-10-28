@@ -3,7 +3,7 @@
     class="button edit-mode-button ol-control-edit-mode"
     :class="{ 'is-dark': editMode, 'is-small': isSmall }"
     :title="$gettext('Enable drawing and editing features on map')"
-    :aria-label="iconOnly ? $gettext('Enable drawing and editing features on map') : null"
+    :aria-label="iconOnly ? $gettext('Enable drawing and editing features on map') : undefined"
   >
     <input-checkbox @update:model-value="onEditMode" :model-value="editMode" :disabled="validSimplifyTolerance">
       <span v-if="!iconOnly" v-translate> Edit mode </span>
@@ -12,34 +12,29 @@
   </button>
 </template>
 
-<script>
-import Yetix from '@/components/yeti/Yetix';
+<script setup lang="ts">
+import { computed } from 'vue';
 
-export default {
-  props: {
-    isSmall: {
-      type: Boolean,
-      default: false,
-    },
-    iconOnly: {
-      type: Boolean,
-      default: false,
-    },
+import Yetix from '@/components/yeti/Yetix.vue';
+
+defineProps({
+  isSmall: {
+    type: Boolean,
+    default: false,
   },
-  computed: {
-    editMode() {
-      return Yetix.editMode;
-    },
-    validSimplifyTolerance() {
-      return Yetix.validSimplifyTolerance;
-    },
+  iconOnly: {
+    type: Boolean,
+    default: false,
   },
-  methods: {
-    onEditMode() {
-      Yetix.setEditMode(!this.editMode);
-    },
-  },
-};
+});
+
+const editMode = computed(() => Yetix.editMode);
+
+const validSimplifyTolerance = computed(() => Yetix.validSimplifyTolerance);
+
+function onEditMode() {
+  Yetix.setEditMode(!editMode.value);
+}
 </script>
 
 <style scoped lang="scss">

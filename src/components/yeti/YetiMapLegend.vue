@@ -23,33 +23,18 @@
   </div>
 </template>
 
-<script>
-import Yetix from '@/components/yeti/Yetix';
-import WinterRouteLayerLegend from '@/components/yeti/map-layers/WinterRouteLayerLegend';
-import YetiLayerLegend from '@/components/yeti/map-layers/YetiLayerLegend';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 
-export default {
-  components: {
-    WinterRouteLayerLegend,
-    YetiLayerLegend,
-  },
-  data() {
-    return {
-      showLegend: undefined,
-    };
-  },
-  computed: {
-    yetiLegend() {
-      return Yetix.yetiLegend;
-    },
-    winterRouteLegend() {
-      return Yetix.winterRouteLegend;
-    },
-    atLeastOneLegend() {
-      return this.yetiLegend || this.winterRouteLegend;
-    },
-  },
-};
+import Yetix from '@/components/yeti/Yetix.vue';
+import WinterRouteLayerLegend from '@/components/yeti/map-layers/WinterRouteLayerLegend.vue';
+import YetiLayerLegend from '@/components/yeti/map-layers/YetiLayerLegend.vue';
+
+const showLegend = ref<boolean | undefined>(undefined);
+
+const yetiLegend = computed(() => Yetix.yetiLegend);
+const winterRouteLegend = computed(() => Yetix.winterRouteLegend);
+const atLeastOneLegend = computed(() => yetiLegend.value || winterRouteLegend.value);
 </script>
 
 <style scoped lang="scss">

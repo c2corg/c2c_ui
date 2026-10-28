@@ -19,66 +19,51 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
 import yetixEvents from '@/components/yeti/yetix-events';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 
-export default {
-  components: {
-    SubPanelTitle,
-  },
-  data() {
-    return {
-      loading: false,
-      lat: 0,
-      lon: 0,
-    };
-  },
-  computed: {
-    lang() {
-      let lang = this.$language.current;
-      // available lang in meteoblue
-      if (!['fr', 'it', 'de', 'en', 'es', 'hu'].includes(lang)) {
-        lang = 'en';
-      }
-      return lang;
-    },
-    meteoBlueBaseUrl() {
-      return `https://www.meteoblue.com/${this.lang}/weather`;
-    },
-    meteoBlueWidgetUrl() {
-      let url = this.meteoBlueBaseUrl + '/widget/daily/';
+const { $language } = useGlobalProperties();
 
-      url += this.lat + 'N';
-      url += this.lon + 'E';
+const loading = ref(false);
+const lat = ref(0);
+const lon = ref(0);
 
-      url += `?geoloc=fixed&days=5&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&precipunit=MILLIMETER&coloured=coloured&pictoicon=1&maxtemperature=1&mintemperature=1&windspeed=1&windgust=0&winddirection=1&uv=0&humidity=0&precipitation=1&precipitationprobability=1&spot=0&pressure=0&layout=light`;
+// available lang in meteoblue
+const lang = computed(() => {
+  const current = $language.current;
+  return current && ['fr', 'it', 'de', 'en', 'es', 'hu'].includes(current) ? current : 'en';
+});
+const meteoBlueBaseUrl = computed(() => `https://www.meteoblue.com/${lang.value}/weather`);
+const meteoBlueWidgetUrl = computed(
+  () =>
+    `${meteoBlueBaseUrl.value}/widget/daily/${lat.value}N${lon.value}E` +
+    `?geoloc=fixed&days=5&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&precipunit=MILLIMETER&coloured=coloured&pictoicon=1&maxtemperature=1&mintemperature=1&windspeed=1&windgust=0&winddirection=1&uv=0&humidity=0&precipitation=1&precipitationprobability=1&spot=0&pressure=0&layout=light`
+);
+const meteoBlueUrl = computed(() => `${meteoBlueBaseUrl.value}/week/${lat.value}N${lon.value}E`);
+const hasLonLat = computed(() => lon.value !== 0 && lat.value !== 0);
 
-      return url;
-    },
-    meteoBlueUrl() {
-      let url = this.meteoBlueBaseUrl + '/week/';
+function onLonLat(event: unknown) {
+  const { lon: newLon, lat: newLat } = event as { lon: number; lat: number };
+  loading.value = true;
+  lon.value = newLon;
+  lat.value = newLat;
+  setTimeout(() => {
+    loading.value = false;
+  }, 350);
+}
 
-      url += this.lat + 'N';
-      url += this.lon + 'E';
+onMounted(() => {
+  yetixEvents.on('lon-lat', onLonLat);
+});
 
-      return url;
-    },
-    hasLonLat() {
-      return this.lon !== 0 && this.lat !== 0;
-    },
-  },
-  mounted() {
-    yetixEvents.on('lon-lat', (evt) => {
-      this.loading = true;
-      this.lon = evt.lon;
-      this.lat = evt.lat;
-      setTimeout(() => {
-        this.loading = false;
-      }, 350);
-    });
-  },
-};
+// it listened on after unmount
+onBeforeUnmount(() => {
+  yetixEvents.off('lon-lat', onLonLat);
+});
 </script>
 
 <style scoped lang="scss">

@@ -118,15 +118,12 @@ describe('yeti tabs', () => {
     panel.tabIndex = 0;
     document.body.appendChild(panel);
     const wrapper = mount(Tabs, {
-      props: { tabs: [{ id: 'layers', title: 'Layers' }] },
+      props: { tabs: [{ title: 'Layers', icon: 'layer-group' }] },
       global: { mocks: { $gettext: (s: string) => s }, stubs: { FaIcon: true } },
       attachTo: document.body.appendChild(document.createElement('div')),
     });
 
-    // Tabs reads event.which, read-only in jsdom
-    const keydown = new KeyboardEvent('keydown', { bubbles: true });
-    Object.defineProperty(keydown, 'which', { value: 40 }); // arrow down
-    wrapper.find('[role=tab]').element.dispatchEvent(keydown);
+    wrapper.find('[role=tab]').element.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
     await nextTick();
 
     expect(document.activeElement).toBe(panel);

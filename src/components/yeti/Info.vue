@@ -7,33 +7,27 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    type: {
-      type: String,
-      default: 'info',
-    },
-    inline: {
-      type: Boolean,
-      default: false,
-    },
+<script setup lang="ts">
+import { computed } from 'vue';
+
+const props = defineProps({
+  type: {
+    type: String,
+    default: 'info',
   },
-  data() {
-    return {
-      icons: {
-        info: 'info-circle',
-        warning: 'exclamation-circle',
-        help: 'question-circle',
-      },
-    };
+  inline: {
+    type: Boolean,
+    default: false,
   },
-  computed: {
-    icon() {
-      return this.icons[this.type];
-    },
-  },
+});
+
+const ICONS: Record<string, string> = {
+  info: 'info-circle',
+  warning: 'exclamation-circle',
+  help: 'question-circle',
 };
+
+const icon = computed(() => ICONS[props.type]);
 </script>
 
 <style scoped lang="scss">

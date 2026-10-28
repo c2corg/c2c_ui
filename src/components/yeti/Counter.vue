@@ -4,15 +4,13 @@
   </span>
 </template>
 
-<script>
-export default {
-  props: {
-    isPrimary: {
-      type: Boolean,
-      default: false,
-    },
+<script setup lang="ts">
+defineProps({
+  isPrimary: {
+    type: Boolean,
+    default: false,
   },
-};
+});
 </script>
 
 <style scoped lang="scss">

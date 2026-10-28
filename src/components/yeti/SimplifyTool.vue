@@ -50,67 +50,57 @@
   </dropdown-content>
 </template>
 
-<script>
+<script setup lang="ts">
+import type Feature from 'ol/Feature';
+import type LineString from 'ol/geom/LineString';
+import { computed, onUnmounted, ref, watch } from 'vue';
+
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
 import Info from '@/components/yeti/Info.vue';
-import Yetix from '@/components/yeti/Yetix';
+import Yetix from '@/components/yeti/Yetix.vue';
 import yetixEvents from '@/components/yeti/yetix-events';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 
-export default {
-  components: { DropdownContent, Info },
-  data() {
-    return {
-      tolerances: [0, 25, 50, 100, 200],
-      tolerancesText: [this.$gettext('No'), '25m', '50m', '100m', '200m'],
-      toleranceDistance: 0,
-    };
-  },
-  computed: {
-    features() {
-      return Yetix.features;
-    },
-    featuresLength() {
-      return Yetix.featuresLength;
-    },
-    featuresSimplifiedLength() {
-      return this.features
-        .map((feature) => {
-          return feature.getGeometry().getCoordinates().length;
-        })
-        .reduce((acc, value) => acc + value);
-    },
-    validToleranceDistance() {
-      return this.toleranceDistance !== 0;
-    },
-  },
-  watch: {
-    toleranceDistance() {
-      if (this.validToleranceDistance) {
-        Yetix.setValidSimplifyTolerance(true);
-      } else {
-        Yetix.setValidSimplifyTolerance(false);
-      }
-    },
-  },
-  unmounted() {
-    // set validSimplifyTolerance to false
-    // go back to normal case for simplify tool
-    // and retrieve default value for edit mode
-    Yetix.setValidSimplifyTolerance(false);
-  },
-  methods: {
-    onPreviewSimplify() {
-      yetixEvents.emit('previewSimplify', this.toleranceDistance);
-    },
-    onSimplify() {
-      yetixEvents.emit('simplify');
-      // go back to init
-      this.initialize();
-    },
-    initialize() {
-      this.toleranceDistance = 0;
-      this.onPreviewSimplify();
-    },
-  },
-};
+const { $gettext } = useGlobalProperties();
+
+const tolerances = [0, 25, 50, 100, 200];
+const tolerancesText = [$gettext('No'), '25m', '50m', '100m', '200m'];
+const toleranceDistance = ref(0);
+
+const featuresLength = computed(() => Yetix.featuresLength);
+const featuresSimplifiedLength = computed(() =>
+  (Yetix.features as Feature<LineString>[])
+    .map((feature) => feature.getGeometry()!.getCoordinates().length)
+    .reduce((acc, value) => acc + value)
+);
+const validToleranceDistance = computed(() => toleranceDistance.value !== 0);
+
+watch(toleranceDistance, () => {
+  Yetix.setValidSimplifyTolerance(validToleranceDistance.value);
+});
+
+// set validSimplifyTolerance to false
+// go back to normal case for simplify tool
+// and retrieve default value for edit mode
+onUnmounted(() => {
+  Yetix.setValidSimplifyTolerance(false);
+});
+
+function onPreviewSimplify() {
+  yetixEvents.emit('previewSimplify', toleranceDistance.value);
+}
+
+function initialize() {
+  toleranceDistance.value = 0;
+  onPreviewSimplify();
+}
+
+function onSimplify() {
+  yetixEvents.emit('simplify');
+  // go back to init
+  initialize();
+}
+
+// the course panel resets it when the features are removed
+defineExpose({ initialize });
 </script>
