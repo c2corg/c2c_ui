@@ -60,7 +60,9 @@
         </template>
       </div>
       <div class="ol-control-layer-switcher-close" @click.stop="showLayerSwitcher = !showLayerSwitcher">
-        <fa-icon :title="$gettext('Close')" icon="chevron-left" />
+        <span role="img" :title="$gettext('Close')" :aria-label="$gettext('Close')"
+          ><fa-icon icon="chevron-left"
+        /></span>
       </div>
     </div>
 

@@ -6,7 +6,7 @@
       "extends": ["stylelint-config-recommended-scss"],
       "rules": {
         "no-descending-specificity": null,
-        "scss/at-import-no-partial-leading-underscore": null,
+        "scss/load-no-partial-leading-underscore": null,
         "scss/comment-no-empty": null,
         "scss/operator-no-newline-after": null
       }
@@ -17,7 +17,7 @@
       "rules": {
         "no-descending-specificity": null,
         "declaration-property-value-no-unknown": null,
-        "scss/at-import-no-partial-leading-underscore": null,
+        "scss/load-no-partial-leading-underscore": null,
         "scss/comment-no-empty": null,
         "scss/operator-no-newline-after": null
       }

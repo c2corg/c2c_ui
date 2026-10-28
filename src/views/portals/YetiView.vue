@@ -588,7 +588,7 @@ $yeti-height-ad: calc(100vh - #{$navbarad-height});
   .is-checkradio[type='checkbox'],
   .is-checkradio[type='radio'] {
     display: block;
-    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
   }
   .is-checkradio[type='radio'].is-primary:focus-visible + label::before,
   .is-checkradio[type='checkbox'].is-primary:focus-visible + label::before {
