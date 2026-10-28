@@ -16,7 +16,7 @@
       <div class="data-avalanche-content">
         <p class="is-size-7 px-1 py-1">
           <span>
-            <strong>{{ overlay.title }} ({{ differenceDays(overlay.date) }} <span v-translate>days</span>)</strong>
+            <strong>{{ overlay.title }} ({{ differenceDays(overlay.date!) }} <span v-translate>days</span>)</strong>
           </span>
         </p>
         <p class="is-size-7 is-italic">
@@ -35,133 +35,124 @@
   </icon-layer>
 </template>
 
-<script>
+<script setup lang="ts">
+import type Feature from 'ol/Feature';
+import { computed, ref, watch } from 'vue';
+
 import IconLayer from './IconLayer.vue';
 import { useIconLayer } from './icon-layer';
 
-import Yetix from '@/components/yeti/Yetix';
-import DataAvalancheLayerContent from '@/components/yeti/map-layers/DataAvalancheLayerContent';
-import DataAvalancheLayerContentTitle from '@/components/yeti/map-layers/DataAvalancheLayerContentTitle';
+import Yetix from '@/components/yeti/Yetix.vue';
+import DataAvalancheLayerContent from '@/components/yeti/map-layers/DataAvalancheLayerContent.vue';
+import DataAvalancheLayerContentTitle from '@/components/yeti/map-layers/DataAvalancheLayerContentTitle.vue';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
 
-export default {
-  components: {
-    IconLayer,
-  },
+defineEmits(['layer']);
 
-  emits: ['layer'],
-  setup() {
-    return useIconLayer();
-  },
-  data() {
-    return {
-      name: 'dataAvalanche',
-      color: 'hsl(51, 100%, 45%)',
-      colorWeeks: 'hsl(31, 100%, 45%)',
-      colorSeason: 'hsl(51, 100%, 45%)',
-      colorExpired: 'lightgray',
-      overlay: {
-        title: null,
-        url: null,
-        date: null,
-        localisation: null,
-      },
-      daysValidWeeks: 5,
-      daysValidSeason: 190,
-    };
-  },
-  computed: {
-    layerSelector() {
-      return {
-        title: this.$gettext('Data-Avalanche'),
-        image: 'data-avalanche.png',
-        small: true,
-        contentComponent: DataAvalancheLayerContent,
-        contentTitleComponent: DataAvalancheLayerContentTitle,
-      };
-    },
-    dataAvalancheAll() {
-      return Yetix.dataAvalancheAll;
-    },
-  },
-  watch: {
-    dataAvalancheAll() {
-      this.updateStyle();
-    },
-  },
-  created() {
-    this.createIcon = (color = 'gray') => {
-      let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26">
-        <path d="M10.402 4.742a3 3 0 0 1 5.196 0l7.804 13.516a3 3 0 0 1-2.598 4.5H5.196a3 3 0 0 1-2.598-4.5z" stroke="black" stroke-width="1.25" fill="${color}" />
-        <path d="m11,7.5h4l-1,9l-2,0"/>
-        <circle cx="13" cy="19" r="1.5"></circle>
-        </svg>`;
-      return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-    };
-    this.iconSrc = this.createIcon(this.color);
-    this.iconCardSrc = this.createIcon(this.color);
-  },
-  mounted() {
-    this.features = [];
-  },
-  methods: {
-    setOverlay(feature) {
-      this.overlay.url = feature.get('link');
+const { $dateUtils, $gettext } = useGlobalProperties();
+const { getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoosePointerMove } = useIconLayer();
 
-      let fullTitle = feature.get('title');
-      let [title, text] = fullTitle.split(':').map((part) => part.trim());
-      this.overlay.title = title;
-      this.overlay.localisation = text;
+const name = 'dataAvalanche';
+const color = 'hsl(51, 100%, 45%)';
+const colorWeeks = 'hsl(31, 100%, 45%)';
+const colorSeason = 'hsl(51, 100%, 45%)';
+const colorExpired = 'lightgray';
+const overlay = ref<{ title?: string; url?: string; date?: string; localisation?: string }>({});
+const daysValidWeeks = 5;
+const daysValidSeason = 190;
+let features: Feature[] = [];
 
-      this.overlay.date = feature.get('date');
-    },
-    unsetOverlay() {
-      this.overlay.title = null;
-      this.overlay.url = null;
-      this.overlay.date = null;
-    },
-    dateValid(date, days) {
-      let todayString = this.$dateUtils.toLocalizedString(new Date(), 'YYYY-MM-DD');
-      return (new Date(todayString) - new Date(date)) / 1000 < 60 * 60 * 24 * days;
-    },
-    differenceDays(date) {
-      let todayString = this.$dateUtils.toLocalizedString(new Date(), 'YYYY-MM-DD');
-      return Math.round((new Date(todayString) - new Date(date)) / 1000 / 60 / 60 / 24);
-    },
-    onFeatures(features) {
-      this.features = features;
-      this.updateStyle();
-    },
-    updateStyle() {
-      // set style
-      this.features.forEach((feature) => {
-        let isDateValidWeeks = this.dateValid(feature.get('date'), this.daysValidWeeks);
-        let isDateValidSeason = this.dateValid(feature.get('date'), this.daysValidSeason);
-        let color = isDateValidWeeks ? this.colorWeeks : isDateValidSeason ? this.colorSeason : this.colorExpired;
+const layerSelector = computed(() => {
+  return {
+    title: $gettext('Data-Avalanche'),
+    image: 'data-avalanche.png',
+    small: true,
+    contentComponent: DataAvalancheLayerContent,
+    contentTitleComponent: DataAvalancheLayerContentTitle,
+  };
+});
 
-        let style = new ol.style.Style({
-          image: new ol.style.Icon({
-            src: this.createIcon(color),
-            // based on dataAvalancheAll, size is 0,0, so icons are not visible
-            size: isDateValidSeason || this.dataAvalancheAll ? [26, 26] : [0, 0],
-          }),
-          zIndex: isDateValidSeason ? 1 : 0,
-        });
+const dataAvalancheAll = computed(() => Yetix.dataAvalancheAll as boolean);
 
-        let hoveredStyle = style.clone();
-        hoveredStyle.setZIndex(2);
-        hoveredStyle.getImage().setScale(1.3);
+function setOverlay(feature: Feature) {
+  overlay.value.url = feature.get('link');
 
-        let selectedStyle = style.clone();
+  let fullTitle = feature.get('title');
+  const [title, text] = fullTitle.split(':').map((part: string) => part.trim());
+  overlay.value.title = title;
+  overlay.value.localisation = text;
 
-        feature.setStyle(style);
-        feature.set('normalStyle', style);
-        feature.set('hoveredStyle', hoveredStyle);
-        feature.set('selectedStyle', selectedStyle);
-      });
-    },
-  },
+  overlay.value.date = feature.get('date');
+}
+
+function unsetOverlay() {
+  overlay.value.title = undefined;
+  overlay.value.url = undefined;
+  overlay.value.date = undefined;
+}
+
+function dateValid(date: string, days: number) {
+  const todayString = $dateUtils.toLocalizedString(new Date(), 'YYYY-MM-DD');
+  return (new Date(todayString).getTime() - new Date(date).getTime()) / 1000 < 60 * 60 * 24 * days;
+}
+
+function differenceDays(date: string) {
+  const todayString = $dateUtils.toLocalizedString(new Date(), 'YYYY-MM-DD');
+  return Math.round((new Date(todayString).getTime() - new Date(date).getTime()) / 1000 / 60 / 60 / 24);
+}
+
+function onFeatures(newFeatures: Feature[]) {
+  features = newFeatures;
+  updateStyle();
+}
+
+function updateStyle() {
+  // set style
+  features.forEach((feature) => {
+    let isDateValidWeeks = dateValid(feature.get('date'), daysValidWeeks);
+    let isDateValidSeason = dateValid(feature.get('date'), daysValidSeason);
+    let color = isDateValidWeeks ? colorWeeks : isDateValidSeason ? colorSeason : colorExpired;
+
+    let style = new ol.style.Style({
+      image: new ol.style.Icon({
+        src: createIcon(color),
+        // based on dataAvalancheAll, size is 0,0, so icons are not visible
+        size: isDateValidSeason || dataAvalancheAll.value ? [26, 26] : [0, 0],
+      }),
+      zIndex: isDateValidSeason ? 1 : 0,
+    });
+
+    let hoveredStyle = style.clone();
+    hoveredStyle.setZIndex(2);
+    hoveredStyle.getImage()!.setScale(1.3);
+
+    let selectedStyle = style.clone();
+
+    feature.setStyle(style);
+    feature.set('normalStyle', style);
+    feature.set('hoveredStyle', hoveredStyle);
+    feature.set('selectedStyle', selectedStyle);
+  });
+}
+
+watch(dataAvalancheAll, () => {
+  updateStyle();
+});
+
+// created
+const createIcon = (color = 'gray') => {
+  let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26">
+    <path d="M10.402 4.742a3 3 0 0 1 5.196 0l7.804 13.516a3 3 0 0 1-2.598 4.5H5.196a3 3 0 0 1-2.598-4.5z" stroke="black" stroke-width="1.25" fill="${color}" />
+    <path d="m11,7.5h4l-1,9l-2,0"/>
+    <circle cx="13" cy="19" r="1.5"></circle>
+    </svg>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 };
+const iconSrc = createIcon(color);
+const iconCardSrc = createIcon(color);
+
+defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoosePointerMove });
 </script>
 
 <style scoped lang="scss">

@@ -24,7 +24,7 @@
     <div v-else>
       <p v-translate>Select one or more winter routes on the map</p>
     </div>
-    <toast ref="toast-layer">
+    <toast ref="toastLayer">
       <template #title>
         <span v-translate>Winter routes</span>
       </template>
@@ -36,47 +36,47 @@
   </div>
 </template>
 
-<script>
-import Toast from '@/components/yeti/Toast';
-import Yetix from '@/components/yeti/Yetix';
+<script setup lang="ts">
+import type Feature from 'ol/Feature';
+import { computed, useTemplateRef } from 'vue';
+
+import Toast from '@/components/yeti/Toast.vue';
+import Yetix from '@/components/yeti/Yetix.vue';
 import yetixEvents from '@/components/yeti/yetix-events';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 
-export default {
-  components: {
-    Toast,
-  },
-  computed: {
-    winterRoutes() {
-      return Yetix.winterRoutes.map((winterRoute) => {
-        let start = winterRoute.get('start');
-        let stop = winterRoute.get('stop');
-        let routeTitle = `${this.$gettext('From')} ${start} ${this.$gettext('to')} ${stop}`;
+const { $gettext, $language } = useGlobalProperties();
 
-        // swiss route dont have start/stop, but name (based on lang)
-        if (!start || !stop) {
-          routeTitle = winterRoute.get(`name_${this.$language.current}`) ?? winterRoute.get('name');
-        }
+const toastLayer = useTemplateRef<{ toast(options?: object): void }>('toastLayer');
 
-        winterRoute.set('title', routeTitle);
-        return winterRoute;
-      });
-    },
-  },
-  methods: {
-    addToRoute(winterRoutes) {
-      winterRoutes.forEach((winterRoute) => {
-        yetixEvents.emit('addFeature', winterRoute);
-      });
-      if (winterRoutes.length === 1) {
-        let winterRoute = winterRoutes[0];
-        Yetix.setFeaturesTitle(winterRoute.get('title'));
-      }
-      Yetix.setWinterRoutes([]);
-      Yetix.setActiveTab(2);
-      Yetix.setShowWinterRoute(false);
+const winterRoutes = computed(() => {
+  return (Yetix.winterRoutes as Feature[]).map((winterRoute) => {
+    let start = winterRoute.get('start');
+    let stop = winterRoute.get('stop');
+    let routeTitle = `${$gettext('From')} ${start} ${$gettext('to')} ${stop}`;
 
-      this.$refs['toast-layer'].toast({ duration: 2000 });
-    },
-  },
-};
+    // swiss route dont have start/stop, but name (based on lang)
+    if (!start || !stop) {
+      routeTitle = winterRoute.get(`name_${$language.current}`) ?? winterRoute.get('name');
+    }
+
+    winterRoute.set('title', routeTitle);
+    return winterRoute;
+  });
+});
+
+function addToRoute(winterRoutes: Feature[]) {
+  winterRoutes.forEach((winterRoute) => {
+    yetixEvents.emit('addFeature', winterRoute);
+  });
+  if (winterRoutes.length === 1) {
+    let winterRoute = winterRoutes[0];
+    Yetix.setFeaturesTitle(winterRoute.get('title'));
+  }
+  Yetix.setWinterRoutes([]);
+  Yetix.setActiveTab(2);
+  Yetix.setShowWinterRoute(false);
+
+  toastLayer.value!.toast({ duration: 2000 });
+}
 </script>

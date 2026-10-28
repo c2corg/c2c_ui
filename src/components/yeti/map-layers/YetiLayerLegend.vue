@@ -17,16 +17,12 @@
   </div>
 </template>
 
-<script>
-import Yetix from '@/components/yeti/Yetix';
+<script setup lang="ts">
+import { computed } from 'vue';
 
-export default {
-  computed: {
-    yetiLegend() {
-      return Yetix.yetiLegend;
-    },
-  },
-};
+import Yetix from '@/components/yeti/Yetix.vue';
+
+const yetiLegend = computed(() => Yetix.yetiLegend);
 </script>
 
 <style scoped>

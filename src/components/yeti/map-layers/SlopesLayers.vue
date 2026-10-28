@@ -1,88 +1,74 @@
-<script>
+<script setup lang="ts">
+import type BaseLayer from 'ol/layer/Base';
+import type Layer from 'ol/layer/Layer';
+import type RenderEvent from 'ol/render/Event';
+import { computed, onMounted, watch } from 'vue';
+
 import { dataLayers } from '@/components/map/map-layers';
-import Yetix from '@/components/yeti/Yetix';
+import Yetix from '@/components/yeti/Yetix.vue';
+import type { SelectorLayer } from '@/components/yeti/yetix-types';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 
-// stored under the component name, as before: existing preferences are kept
+// renderless: it only adds OpenLayers layers to the map
+defineOptions({ render: () => null });
+
+// stored under the name the component had, as before: existing preferences are kept
 const preferences = getPreferences('Yeti');
 
-export default {
-  name: 'Yeti',
-  emits: ['layers'],
+const emit = defineEmits(['layers']);
 
-  computed: {
-    slopesLayersSelector() {
-      return Yetix.slopesLayersSelector;
-    },
-  },
-  watch: {
-    slopesLayersSelector: {
-      handler(layers) {
-        layers.map((layer, index) => {
-          let slopeLayer = this.slopesLayers[index];
-          this.setVisible(slopeLayer, layer.checked);
-          this.setLayerOpacity(slopeLayer, layer.opacity);
-          this.setLayerBlendModes(slopeLayer, layer.blendModes);
-        });
-      },
-      deep: true,
-    },
-  },
-  created() {
-    this.slopesLayers = dataLayers();
+const slopesLayersSelector = computed(() => Yetix.slopesLayersSelector as SelectorLayer[]);
 
-    // set our style
-    this.slopesLayers = this.slopesLayers.map((layer) => {
-      return this.setBlendModes(layer);
+// draw the layer multiplied with the layers below
+function compose(evt: RenderEvent, operation: CanvasRenderingContext2D['globalCompositeOperation']) {
+  (evt.context as CanvasRenderingContext2D).globalCompositeOperation = operation;
+}
+
+function setLayerBlendModes(layer: Layer, isBlend: boolean) {
+  layer.on('prerender', (evt) => compose(evt, isBlend ? 'multiply' : 'source-over'));
+  // force re-render
+  layer.setOpacity(layer.getOpacity() + 0.01);
+}
+
+function setBlendModes(layer: Layer) {
+  layer.setOpacity(0.9);
+  layer.on('prerender', (evt) => compose(evt, 'multiply'));
+  layer.on('postrender', (evt) => compose(evt, 'source-over'));
+  return layer;
+}
+
+// set our style
+const slopesLayers: Layer[] = (dataLayers() as Layer[]).map(setBlendModes);
+
+// first, get stored map layer
+const storedLayerNames = preferences.get('yeti-map-layers-slopes', []) as string[];
+
+Yetix.setSlopesLayersSelector(
+  slopesLayers.map((layer) => ({
+    title: layer.get('title'),
+    checked: storedLayerNames.includes(layer.get('title')),
+    opacity: layer.getOpacity(),
+    blendModes: true,
+    image: layer.get('image'),
+    country: layer.get('country'),
+  }))
+);
+
+watch(
+  slopesLayersSelector,
+  (layers) => {
+    layers.forEach((layer, index) => {
+      const slopeLayer = slopesLayers[index];
+      slopeLayer.setVisible(layer.checked);
+      slopeLayer.setOpacity(layer.opacity!);
+      setLayerBlendModes(slopeLayer, layer.blendModes!);
     });
+  },
+  { deep: true }
+);
 
-    // first, get stored map layer
-    let storedLayerNames = preferences.get('yeti-map-layers-slopes', []);
-
-    let slopesLayersSelector = this.slopesLayers.map((layer) => {
-      return {
-        title: layer.get('title'),
-        checked: storedLayerNames.includes(layer.get('title')),
-        opacity: layer.getOpacity(),
-        blendModes: true,
-        image: layer.get('image'),
-        country: layer.get('country'),
-      };
-    });
-
-    Yetix.setSlopesLayersSelector(slopesLayersSelector);
-  },
-  mounted() {
-    // emit new layers
-    this.$emit('layers', this.slopesLayers);
-  },
-  methods: {
-    setVisible(layer, visible) {
-      layer.setVisible(visible);
-    },
-    setLayerOpacity(layer, opacity) {
-      layer.setOpacity(opacity);
-    },
-    setLayerBlendModes(layer, isBlend) {
-      layer.on('prerender', (evt) => {
-        evt.context.globalCompositeOperation = isBlend ? 'multiply' : 'source-over';
-      });
-      // force re-render
-      layer.setOpacity(layer.getOpacity() + 0.01);
-    },
-    setBlendModes(layer) {
-      layer.setOpacity(0.9);
-      layer.on('prerender', (evt) => {
-        evt.context.globalCompositeOperation = 'multiply';
-      });
-      layer.on('postrender', (evt) => {
-        evt.context.globalCompositeOperation = 'source-over';
-      });
-      return layer;
-    },
-  },
-  render() {
-    return null;
-  },
-};
+onMounted(() => {
+  // emit new layers
+  emit('layers', slopesLayers as BaseLayer[]);
+});
 </script>

@@ -6,19 +6,15 @@
   </div>
 </template>
 
-<script>
-import Yetix from '@/components/yeti/Yetix';
+<script setup lang="ts">
+import { computed } from 'vue';
 
-export default {
-  computed: {
-    dataAvalancheAll: {
-      get() {
-        return Yetix.dataAvalancheAll;
-      },
-      set(dataAvalancheAll) {
-        Yetix.setDataAvalancheAll(dataAvalancheAll);
-      },
-    },
+import Yetix from '@/components/yeti/Yetix.vue';
+
+const dataAvalancheAll = computed({
+  get: () => Yetix.dataAvalancheAll as boolean,
+  set(value: boolean) {
+    Yetix.setDataAvalancheAll(value);
   },
-};
+});
 </script>

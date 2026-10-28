@@ -5,26 +5,16 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { useLayer } from './layer';
 
-import Yetix from '@/components/yeti/Yetix';
+import Yetix from '@/components/yeti/Yetix.vue';
 import AreaLayer from '@/components/yeti/map-layers/AreaLayer.vue';
 import YetiLayer from '@/components/yeti/map-layers/YetiLayer.vue';
 
-export default {
-  components: {
-    AreaLayer,
-    YetiLayer,
-  },
-  setup() {
-    return useLayer();
-  },
+const { map } = useLayer();
 
-  methods: {
-    onLayer(layer, index) {
-      Yetix.addLayerToYetiLayersSelector(layer, index);
-    },
-  },
-};
+function onLayer(layer: unknown, index: number) {
+  Yetix.addLayerToYetiLayersSelector(layer, index);
+}
 </script>
