@@ -5,9 +5,7 @@
     "allowJs": true,
     "checkJs": false,
     "paths": {
-      "@/*": ["./src/*"],
-      // swiper 9 has types, but its package exports hide them from the bundler resolution (until #4768)
-      "swiper": ["./node_modules/swiper/swiper.d.ts"]
+      "@/*": ["./src/*"]
     },
     "types": ["vite/client"]
   },

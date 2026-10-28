@@ -29,7 +29,7 @@
       :slides-per-view="1"
       ref="swiper"
       class="image-viewer-swiper"
-      @slidechange="onSlideChange"
+      @swiperslidechange="onSlideChange"
     >
       <swiper-slide class="image-viewer-slide" v-for="image of images" :key="image.document_id">
         <div class="swiper-zoom-container">
@@ -66,7 +66,11 @@
 </template>
 
 <script setup lang="ts">
-import Swiper, { Keyboard, Navigation, Pagination, Virtual, Zoom } from 'swiper';
+import type Swiper from 'swiper';
+import 'swiper/css/pagination';
+import 'swiper/css/zoom';
+import virtualStyles from 'swiper/element/css/virtual?inline';
+import { Keyboard, Navigation, Pagination, Virtual, Zoom } from 'swiper/modules';
 import { nextTick, onBeforeUnmount, ref, useTemplateRef } from 'vue';
 import ZingTouch from 'zingtouch';
 
@@ -74,7 +78,6 @@ import ImageInfo from './ImageInfo.vue';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { getImageUrl } from '@/js/image-urls';
-import throttle from '@/js/throttle';
 import { registerImageViewer, type ViewerImage } from '@/js/vue-plugins/image-viewer';
 
 type SwiperContainer = HTMLElement & { swiper: Swiper; initialize(): void };
@@ -159,12 +162,9 @@ function show(image: ViewerImage) {
     const element = swiper.value!;
     const swiperParams = {
       modules: [Keyboard, Navigation, Pagination, Virtual, Zoom],
-      injectStylesUrls: [
-        '/swiper/navigation-element.min.css',
-        '/swiper/pagination-element.min.css',
-        '/swiper/virtual-element.min.css',
-        '/swiper/zoom-element.min.css',
-      ],
+      // the module styles for the inside of the element (shadow DOM); the navigation buttons, the pagination and the
+      // zoom container are outside it, styled by the swiper/css imports and below
+      injectStyles: [virtualStyles],
       initialSlide,
       // here and not as attributes: Vue 3 sets them as properties of <swiper-container>, as strings ("true"), which
       // Swiper doesn't take as enabled
@@ -183,7 +183,8 @@ function show(image: ViewerImage) {
       },
     };
 
-    element.addEventListener('init', () => {
+    // Swiper Element events are prefixed with "swiper" since Swiper 10 (eventsPrefix)
+    element.addEventListener('swiperinit', () => {
       // close when the user goes back in history
       window.addEventListener('popstate', close);
       // close on mouse wheel
@@ -204,8 +205,9 @@ function show(image: ViewerImage) {
       });
     });
     if ($screen.isMobile) {
-      // no idea why toggleButtons is called twice, so we throttle...
-      element.addEventListener('click', throttle(toggleButtons, 150));
+      // Swiper's click: a tap, not the end of a swipe (Swiper 9 also re-dispatched it as a DOM click, on top of the
+      // native one, hence the throttle there was before)
+      element.addEventListener('swiperclick', toggleButtons);
     }
     Object.assign(element, swiperParams);
     element.initialize();
@@ -231,9 +233,10 @@ function toggleImageInfo(image: ShownImage) {
   infoPanel.value!.toggle(image.document_id);
 }
 
-function onSlideChange() {
+// the Swiper instance from the event: the element doesn't have it yet when the initial slide is set, during init
+function onSlideChange(event: CustomEvent<[Swiper]>) {
   infoPanel.value!.hide();
-  activeDocument.value = images.value[swiper.value!.swiper.activeIndex];
+  activeDocument.value = images.value[event.detail[0].activeIndex];
 }
 
 function toggleFullscreen() {
