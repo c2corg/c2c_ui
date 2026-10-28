@@ -2,24 +2,20 @@
 import { mount } from '@vue/test-utils';
 import { vi } from 'vitest';
 
-import YetiMap from '@/components/yeti/YetiMap.vue';
-
-// YetiMap is read through its options
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Vm = any;
-
 // what YetiMap provides, around a fake OpenLayers map
 export const fakeMap = () => ({ addLayer: vi.fn(), addOverlay: vi.fn(), getView: () => 'view' });
-export const provideFrom = (map: ReturnType<typeof fakeMap>) =>
-  (YetiMap as Vm).provide.call({
+// as YetiMap provides it
+export const provideFrom = (map: ReturnType<typeof fakeMap>) => ({
+  yetiMap: {
     map,
     getExtent: (projection: string) => ['extent', projection],
-    $gettext: (s: string) => s,
-  });
+  },
+});
 
-export const mountInMap = (component: object, { stubs = {} } = {}) => {
+export const mountInMap = (component: object, { stubs = {}, props = {} } = {}) => {
   const map = fakeMap();
   const wrapper = mount(component, {
+    props,
     global: {
       provide: provideFrom(map),
       stubs: { FaIcon: true, ...stubs },
