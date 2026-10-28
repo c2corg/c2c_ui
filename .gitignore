@@ -26,8 +26,6 @@ run-build.bat
 *.env
 .dccache
 
-/public/swiper.css
-
 # e2e (Playwright)
 /dist-e2e/
 /e2e-report/
