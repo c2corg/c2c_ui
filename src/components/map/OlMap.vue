@@ -59,11 +59,15 @@
           </div>
         </template>
       </div>
-      <div class="ol-control-layer-switcher-close" @click.stop="showLayerSwitcher = !showLayerSwitcher">
-        <span role="img" :title="$gettext('Close')" :aria-label="$gettext('Close')"
-          ><fa-icon icon="chevron-left"
-        /></span>
-      </div>
+      <button
+        type="button"
+        class="ol-control-layer-switcher-close"
+        :title="$gettext('Close')"
+        :aria-label="$gettext('Close')"
+        @click.stop="showLayerSwitcher = !showLayerSwitcher"
+      >
+        <fa-icon icon="chevron-left" />
+      </button>
     </div>
 
     <div
@@ -1585,13 +1589,14 @@ $control-margin: 0.5em;
   }
 }
 
-.ol-control-layer-switcher-close {
+// a button: beat the .ol-control button rules of ol.css
+.ol-control button.ol-control-layer-switcher-close {
   background-color: rgb(0, 59, 136, 0.7);
+  color: white;
   width: 20px;
   height: 30px;
-  margin-bottom: 5px;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+  margin: 0 0 5px;
+  border-radius: 0 10px 10px 0;
   cursor: pointer;
   display: flex;
   align-items: center;
