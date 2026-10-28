@@ -43,17 +43,6 @@ const slopesLayers: Layer[] = (dataLayers() as Layer[]).map(setBlendModes);
 // first, get stored map layer
 const storedLayerNames = preferences.get('yeti-map-layers-slopes', []) as string[];
 
-Yetix.setSlopesLayersSelector(
-  slopesLayers.map((layer) => ({
-    title: layer.get('title'),
-    checked: storedLayerNames.includes(layer.get('title')),
-    opacity: layer.getOpacity(),
-    blendModes: true,
-    image: layer.get('image'),
-    country: layer.get('country'),
-  }))
-);
-
 watch(
   slopesLayersSelector,
   (layers) => {
@@ -65,6 +54,18 @@ watch(
     });
   },
   { deep: true }
+);
+
+// after the watcher: it shows the stored layers (as the watcher declared before created() did)
+Yetix.setSlopesLayersSelector(
+  slopesLayers.map((layer) => ({
+    title: layer.get('title'),
+    checked: storedLayerNames.includes(layer.get('title')),
+    opacity: layer.getOpacity(),
+    blendModes: true,
+    image: layer.get('image'),
+    country: layer.get('country'),
+  }))
 );
 
 onMounted(() => {

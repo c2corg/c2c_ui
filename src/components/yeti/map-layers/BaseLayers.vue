@@ -121,8 +121,6 @@ const selector = baseLayers.map((layer) => {
   };
 });
 
-Yetix.setBaseLayersSelector(selector);
-
 watch(
   baseLayersSelector,
   (layers) => {
@@ -130,6 +128,9 @@ watch(
   },
   { deep: true }
 );
+
+// after the watcher: it shows the stored layer (as the watcher declared before created() did)
+Yetix.setBaseLayersSelector(selector);
 
 onMounted(() => {
   // emit new layers
