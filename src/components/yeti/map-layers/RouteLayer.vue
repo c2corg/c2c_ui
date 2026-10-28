@@ -1,119 +1,49 @@
 <template>
-  <div ref="drawInfoOverlay">
+  <div ref="drawInfoElement">
     <p><fa-icon icon="route" transform="shrink-3" /> {{ Number(drawInfo.distance).toLocaleString() }}&nbsp;m</p>
     <p><fa-icon icon="compass" transform="shrink-3" /> {{ drawInfo.bearing }}°</p>
   </div>
 </template>
 
-<script>
-import { useLayer } from './layer';
-import simplify from './simplify';
+<script setup lang="ts">
+import type { Handler } from 'mitt';
+import type Feature from 'ol/Feature';
+import type { Coordinate } from 'ol/coordinate';
+import type Geometry from 'ol/geom/Geometry';
+import type LineString from 'ol/geom/LineString';
+import MultiLineString from 'ol/geom/MultiLineString';
+import type Point from 'ol/geom/Point';
+import type Draw from 'ol/interaction/Draw';
+import type Modify from 'ol/interaction/Modify';
+import type Snap from 'ol/interaction/Snap';
+import type VectorLayer from 'ol/layer/Vector';
+import type VectorSource from 'ol/source/Vector';
+import type { VectorSourceEvent } from 'ol/source/Vector';
+import type CircleStyle from 'ol/style/Circle';
+import { getUid } from 'ol/util';
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import Yetix from '@/components/yeti/Yetix';
+import { useLayer } from './layer';
+import { getSortedFeatures } from './route-features';
+import simplify from './simplify';
+import SplitInteraction, { type SplitEvent } from './split-interaction';
+
+import Yetix from '@/components/yeti/Yetix.vue';
 import yetixEvents from '@/components/yeti/yetix-events';
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import iconSvg from '@/js/icon-svg';
 import ol from '@/js/libs/ol';
 
-class SplitInteraction extends ol.interaction.Pointer {
-  constructor(options) {
-    super({
-      handleDownEvent: (evt) => {
-        if (evt.originalEvent.ctrlKey) {
-          const map = evt.map;
+type Line = Feature<LineString>;
 
-          const feature = map.forEachFeatureAtPixel(
-            evt.pixel,
-            function (feature) {
-              return feature;
-            },
-            {
-              layerFilter: (layer) => {
-                return layer === this.layer_;
-              },
-            }
-          );
-
-          if (feature) {
-            this.feature_ = feature;
-            this.coordinate_ = feature.getGeometry().getClosestPoint(evt.coordinate);
-
-            // the split point is surely not on vertex, so find on which segment it is
-            let coordinates = this.feature_.getGeometry().getCoordinates();
-            let insertIndex = undefined;
-            for (let i = 0; i < coordinates.length - 1; i++) {
-              const [x1, y1] = coordinates[i];
-              const [x2, y2] = coordinates[i + 1];
-              if (this.pointOnSegment(this.coordinate_, [x1, y1], [x2, y2])) {
-                insertIndex = i + 1;
-                break;
-              }
-            }
-
-            // then insert a new point on the segment before split
-            // if insertindex is set (point on line)
-            // and coord is not already a vertex
-            // and coord is not the first point
-            if (
-              insertIndex !== undefined &&
-              coordinates[insertIndex][0] !== this.coordinate_[0] &&
-              coordinates[insertIndex][1] !== this.coordinate_[1] &&
-              coordinates[0][0] !== this.coordinate_[0] &&
-              coordinates[0][1] !== this.coordinate_[1]
-            ) {
-              coordinates.splice(insertIndex, 0, this.coordinate_);
-            }
-
-            // now, split feature and create an array for two splitted feature
-            let sublines = [[], []];
-            let i = 0;
-            let splitDone = false;
-            coordinates.forEach((coord) => {
-              sublines[i].push(coord);
-              // if point is less than one meter away = this is the split point
-              if (
-                !splitDone &&
-                Math.abs(coord[0] - this.coordinate_[0]) < 1 &&
-                Math.abs(coord[1] - this.coordinate_[1]) < 1
-              ) {
-                i = 1;
-                sublines[i].push(coord);
-                splitDone = true;
-              }
-            });
-            this.dispatchEvent({
-              type: 'split',
-              oldFeature: feature,
-              newFeatures: sublines.map((line) => new ol.Feature(new ol.geom.LineString(line))),
-            });
-          }
-
-          return false;
-        }
-      },
-    });
-
-    this.layer_ = options.layer;
-    this.coordinate_ = null;
-    this.feature_ = null;
-  }
-
-  pointOnSegment(p, a, b, tol = 1e-3) {
-    const cross = (p[1] - a[1]) * (b[0] - a[0]) - (p[0] - a[0]) * (b[1] - a[1]);
-    if (Math.abs(cross) > tol) return false;
-    const dot = (p[0] - a[0]) * (b[0] - a[0]) + (p[1] - a[1]) * (b[1] - a[1]);
-    if (dot < 0) return false;
-    const sqLen = (b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2;
-    if (dot > sqLen) return false;
-    return true;
-  }
-}
-
-let angle = 60;
-let pColor = `hsl(${angle}, 100%, 50%)`;
-let pColorLight = `hsl(${angle}, 100%, 90%)`;
-let pColorDark = `hsl(${angle}, 100%, 20%)`;
-let pWidth = 5;
+const angle = 60;
+const pColor = `hsl(${angle}, 100%, 50%)`;
+const pColorLight = `hsl(${angle}, 100%, 90%)`;
+const pColorDark = `hsl(${angle}, 100%, 20%)`;
+const pWidth = 5;
 
 let normalLineStyle = [
   new ol.style.Style({
@@ -144,10 +74,7 @@ let normalWithEditLineStyle = [
       }),
     }),
     geometry(feature) {
-      let coords = feature
-        .getGeometry()
-        .getCoordinates()
-        .map((c) => new ol.geom.Point(c));
+      const coords = (feature.getGeometry() as LineString).getCoordinates().map((c) => new ol.geom.Point(c));
       return new ol.geom.GeometryCollection(coords);
     },
   }),
@@ -234,561 +161,598 @@ let elevationPointStyle = [
   }),
 ];
 
-let drawInfoOverlay = new ol.Overlay({
+const drawInfoOverlay = new ol.Overlay({
   offset: [10, -10],
   positioning: 'bottom-left',
   className: 'draw-info-overlay',
 });
 
-export default {
-  setup() {
-    return useLayer();
-  },
+const route = useRoute();
+const router = useRouter();
+const { $documentUtils, $gettext, $language } = useGlobalProperties();
+const { map, view } = useLayer();
 
-  data() {
-    return {
-      visibleSimplifiedLayer: false,
-      drawInfo: {
-        distance: 0,
-        bearing: 0,
-      },
-    };
-  },
-  computed: {
-    features() {
-      return Yetix.features;
-    },
-    featuresLength() {
-      return Yetix.featuresLength;
-    },
-    mapZoom() {
-      return Yetix.mapZoom;
-    },
-    zoomDelta() {
-      return Yetix.ZOOM_DELTA;
-    },
-    validMinimumMapZoom() {
-      return Yetix.VALID_MINIMUM_MAP_ZOOM;
-    },
-    editMode() {
-      return Yetix.editMode;
-    },
-  },
-  watch: {
-    editMode() {
-      if (!this.editMode) {
-        this.disableInteractions();
-        document.removeEventListener('keydown', this.onKeydown);
-        document.removeEventListener('keyup', this.onKeyup);
-      } else {
-        this.enableInteractions();
-        document.addEventListener('keydown', this.onKeydown);
-        document.addEventListener('keyup', this.onKeyup);
+const visibleSimplifiedLayer = ref(false);
+const drawInfo = ref({
+  distance: 0,
+  bearing: 0,
+});
+let defaultFeaturesTitle: string;
+let drawInteraction: Draw;
+let drawing = false;
+let elevationPoint: Feature<Point>;
+let elevationPointLayer: VectorLayer<VectorSource<Feature<Point>>>;
+let featuresLayer: VectorLayer<VectorSource<Line>>;
+let featuresLayerSource: VectorSource<Line>;
+let loadingExternalFeatures = false;
+let modifyInteraction: Modify;
+let simplifiedLayer: VectorLayer<VectorSource<Line>>;
+let simplifiedSource: VectorSource<Line>;
+let snapInteraction: Snap;
+let splitInteraction: SplitInteraction;
+const drawInfoElement = useTemplateRef<HTMLElement>('drawInfoElement');
+
+const features = computed(() => Yetix.features as Line[]);
+
+const mapZoom = computed(() => Yetix.mapZoom as number);
+
+const zoomDelta = Yetix.ZOOM_DELTA as number;
+
+const validMinimumMapZoom = Yetix.VALID_MINIMUM_MAP_ZOOM as number;
+
+const editMode = computed(() => Yetix.editMode);
+
+function getLayer() {
+  return featuresLayer;
+}
+
+function addInteractions() {
+  let source = featuresLayerSource;
+
+  modifyInteraction = new ol.interaction.Modify({
+    source,
+    style: editStyle,
+  });
+  map.value.addInteraction(modifyInteraction);
+
+  drawInteraction = new ol.interaction.Draw({
+    source,
+    type: 'LineString',
+    style: editStyle,
+    geometryFunction: (drawn, geometry) => {
+      const coords = drawn as Coordinate[];
+      const geom = (geometry as LineString | undefined) ?? new ol.geom.LineString([]);
+
+      if (coords.length <= 1) {
+        drawInfoOverlay.setPosition(undefined);
       }
-      this.updateEditStyle();
-    },
-    mapZoom() {
-      this.updateEditStyle();
-    },
-  },
-  mounted() {
-    // features layer
-    this.featuresLayer = new ol.layer.Vector({
-      name: 'routeLayer',
-      source: new ol.source.Vector(),
-      style: normalLineStyle,
-    });
-    this.featuresLayerSource = this.featuresLayer.getSource();
 
-    this.map.addLayer(this.featuresLayer);
+      // get 2 last points
+      if (coords.length >= 2) {
+        geom.setCoordinates(coords);
 
-    // draw info overlay
-    drawInfoOverlay.setElement(this.$refs.drawInfoOverlay);
-    this.map.addOverlay(drawInfoOverlay);
+        const geomCoords = geom.getCoordinates();
+        let point1 = geomCoords[geomCoords.length - 2];
+        let point2 = geomCoords[geomCoords.length - 1];
+        let distance = ol.sphere.getDistance(ol.proj.toLonLat(point1), ol.proj.toLonLat(point2));
 
-    // simplified layer (preview)
-    this.simplifiedLayer = new ol.layer.Vector({
-      source: new ol.source.Vector(),
-      style: simplifiedLineStyle,
-    });
-    // get source
-    this.simplifiedSource = this.simplifiedLayer.getSource();
-    // add layer, and hide it
-    this.map.addLayer(this.simplifiedLayer);
-    this.simplifiedLayer.setVisible(false);
+        let lon1 = (ol.proj.toLonLat(point1)[0] * Math.PI) / 180;
+        let lon2 = (ol.proj.toLonLat(point2)[0] * Math.PI) / 180;
+        let lat1 = (ol.proj.toLonLat(point1)[1] * Math.PI) / 180;
+        let lat2 = (ol.proj.toLonLat(point2)[1] * Math.PI) / 180;
+        let a = Math.sin(lon2 - lon1) * Math.cos(lat2);
+        let b = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
 
-    // layer for elevation point
-    this.elevationPointLayer = new ol.layer.Vector({
-      source: new ol.source.Vector(),
-      style: elevationPointStyle,
-    });
-    // add layer, and hide it
-    this.map.addLayer(this.elevationPointLayer);
-    this.elevationPointLayer.setVisible(false);
-    // add one feature for point
-    const elevationPointSource = this.elevationPointLayer.getSource();
-    this.elevationPoint = new ol.Feature();
-    elevationPointSource.addFeature(this.elevationPoint);
-    // react to event
-    yetixEvents.on('elevationProfile', this.onElevationProfile);
+        const bearing = ((Math.atan2(a, b) * 180) / Math.PI + 360) % 360;
 
-    // set default featuresTitle
-    this.defaultFeaturesTitle = this.$gettext(Yetix.featuresTitle);
-    Yetix.setFeaturesTitle(this.defaultFeaturesTitle);
-
-    // load camptocamp document
-    let doc = this.$route.params.document_id;
-    let lang = this.$language.current;
-    if (doc) {
-      c2c['route'].getCooked(doc, lang).then(this.addFeaturesFromDocument);
-    }
-
-    // features events (added feature)
-    this.featuresLayerSource.on('addfeature', this.onFeature);
-    this.simplifiedSource.on('addfeature', this.onFeature);
-
-    this.addInteractions();
-
-    yetixEvents.on('addFeature', this.addFeature);
-    yetixEvents.on('removeFeature', this.removeFeature);
-    yetixEvents.on('removeFeatures', this.removeFeatures);
-    yetixEvents.on('gpx', this.addFeaturesFromGpx);
-    yetixEvents.on('previewSimplify', this.previewSimplify);
-    yetixEvents.on('simplify', this.simplify);
-    yetixEvents.on('featureUpdated', this.updateFeaturesFromStore);
-    yetixEvents.on('fit-map-to-features', this.fitMapToFeatures);
-
-    // special event when window loose focus = hanfle ctrl key (when browser shorcuts) for split interaction
-    window.addEventListener('blur', () => this.onKeyup({ key: 'Control', altKey: false }));
-
-    // already features to add?
-    // but not a c2c document
-    if (!doc && this.features.length) {
-      this.featuresLayerSource.addFeatures(this.features);
-    }
-  },
-  methods: {
-    getLayer() {
-      return this.featuresLayer;
-    },
-    addInteractions() {
-      let source = this.featuresLayerSource;
-
-      this.modifyInteraction = new ol.interaction.Modify({
-        source,
-        style: editStyle,
-      });
-      this.map.addInteraction(this.modifyInteraction);
-
-      this.drawInteraction = new ol.interaction.Draw({
-        source,
-        type: 'LineString',
-        style: editStyle,
-        geometryFunction: (coords, geom) => {
-          if (!geom) {
-            geom = new ol.geom.LineString([]);
-          }
-
-          if (coords.length <= 1) {
-            drawInfoOverlay.setPosition(undefined);
-          }
-
-          // get 2 last points
-          if (coords.length >= 2) {
-            geom.setCoordinates(coords);
-
-            let geomCoords = geom.getCoordinates();
-            let point1 = geomCoords[geomCoords.length - 2];
-            let point2 = geomCoords[geomCoords.length - 1];
-            let distance = ol.sphere.getDistance(ol.proj.toLonLat(point1), ol.proj.toLonLat(point2));
-
-            let lon1 = (ol.proj.toLonLat(point1)[0] * Math.PI) / 180;
-            let lon2 = (ol.proj.toLonLat(point2)[0] * Math.PI) / 180;
-            let lat1 = (ol.proj.toLonLat(point1)[1] * Math.PI) / 180;
-            let lat2 = (ol.proj.toLonLat(point2)[1] * Math.PI) / 180;
-            let a = Math.sin(lon2 - lon1) * Math.cos(lat2);
-            let b = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
-
-            let angle = Math.atan2(a, b);
-            let bearing = ((angle * 180) / Math.PI + 360) % 360;
-
-            if (distance > 0) {
-              this.drawInfo.distance = Math.round(distance);
-              this.drawInfo.bearing = Math.round(bearing);
-            } else {
-              this.drawInfo.distance = 0;
-              this.drawInfo.bearing = 0;
-            }
-            drawInfoOverlay.setPosition(geomCoords[geomCoords.length - 1]);
-          }
-
-          return geom;
-        },
-      });
-      this.map.addInteraction(this.drawInteraction);
-
-      this.splitInteraction = new SplitInteraction({
-        layer: this.featuresLayer,
-      });
-      this.map.addInteraction(this.splitInteraction);
-
-      this.snapInteraction = new ol.interaction.Snap({ source });
-      this.map.addInteraction(this.snapInteraction);
-
-      this.drawInteraction.on('drawstart', this.onDrawStart);
-      this.drawInteraction.on('drawend', this.onDrawEnd);
-      this.modifyInteraction.on('modifyend', this.onModifyEnd);
-      this.splitInteraction.on('split', this.onSplit);
-
-      this.disableInteractions();
-    },
-    enableInteractions() {
-      this.drawInteraction.setActive(true);
-      this.modifyInteraction.setActive(true);
-      this.splitInteraction.setActive(true);
-      this.snapInteraction.setActive(true);
-    },
-    disableInteractions() {
-      this.drawInteraction.setActive(false);
-      this.modifyInteraction.setActive(false);
-      this.splitInteraction.setActive(false);
-      this.snapInteraction.setActive(false);
-
-      // hide draw info overlay
-      drawInfoOverlay.setPosition(undefined);
-    },
-    onDrawStart() {
-      this.drawing = true;
-      document.addEventListener('keydown', this.onKeyWhileDrawing);
-      document.addEventListener('keypress', this.onKeyWhileDrawing);
-    },
-    onDrawEnd() {
-      this.drawing = false;
-      document.removeEventListener('keydown', this.onKeyWhileDrawing);
-      document.removeEventListener('keypress', this.onKeyWhileDrawing);
-
-      // hide draw info overlay
-      drawInfoOverlay.setPosition(undefined);
-    },
-    onModifyEnd() {
-      this.updateFeaturesFromStore();
-    },
-    onSplit(evt) {
-      evt.newFeatures.forEach(this.addFeature);
-      this.removeFeature(evt.oldFeature);
-    },
-    onKeyWhileDrawing(event) {
-      event.preventDefault();
-      // backspace key
-      if (event.key === 'Backspace') {
-        this.drawInteraction.removeLastPoint();
-      }
-    },
-    onFeature(event) {
-      // set features styles
-      event.feature.set('highlightedStyle', highlightedLineStyle);
-      // emit new features, only in normal case (edit/drawing)
-      // not in gpx/document case (prevent multiple update for each lines)
-      if (!this.loadingExternalFeatures) {
-        this.updateFeaturesFromStore();
-      }
-    },
-    updateFeaturesFromStore() {
-      // updates features
-      let features = this.visibleSimplifiedLayer ? this.getSimplifiedFeatures() : this.getFeaturesLayerFeatures();
-      Yetix.setFeatures(features);
-      // update length
-      let featuresLength = this.getFeaturesLayerFeatures()
-        .map((feature) => {
-          return feature.getGeometry().getCoordinates().length;
-        })
-        .reduce((acc, value) => acc + value, 0);
-      Yetix.setFeaturesLength(featuresLength);
-
-      if (features.length === 0) {
-        // if user come from a document url, remove url
-        if (this.$route.params.document_id) {
-          this.$router.replace({ path: '/' + this.$route.name });
-        }
-        // set featuresTitle back to default
-        Yetix.setFeaturesTitle(this.defaultFeaturesTitle);
-      }
-    },
-    getFeaturesLayerFeatures() {
-      return this.getSortedFeatures(this.featuresLayerSource.getFeatures());
-    },
-    getSimplifiedFeatures() {
-      return this.getSortedFeatures(this.simplifiedSource.getFeatures());
-    },
-    getSortedFeatures(features) {
-      return features.sort((a, b) => {
-        return Number(a.ol_uid) > Number(b.ol_uid);
-      });
-    },
-    removeFeature(feature) {
-      // remove feature
-      // when only one left, ask for user to confirm
-      let toBeRemoved = !(
-        this.featuresLayerSource.getFeatures().length === 1 && !confirm(this.$gettext('Confirm delete'))
-      );
-      if (toBeRemoved) {
-        if (this.visibleSimplifiedLayer) {
-          this.simplifiedSource.removeFeature(feature);
-          // remove corresponding feature
-          this.getFeaturesLayerFeatures().forEach((f) => {
-            if (feature.get('id') === f.ol_uid) {
-              this.featuresLayerSource.removeFeature(f);
-            }
-          });
+        if (distance > 0) {
+          drawInfo.value.distance = Math.round(distance);
+          drawInfo.value.bearing = Math.round(bearing);
         } else {
-          this.featuresLayerSource.removeFeature(feature);
+          drawInfo.value.distance = 0;
+          drawInfo.value.bearing = 0;
         }
-        this.updateFeaturesFromStore();
+        drawInfoOverlay.setPosition(geomCoords[geomCoords.length - 1]);
       }
-    },
-    removeFeatures() {
-      // clear both layers
-      this.featuresLayerSource.clear();
-      this.simplifiedSource.clear(true);
-      // set default layer to be visible
-      this.hideSimplifiedLayer();
-      // update features
-      this.updateFeaturesFromStore();
-    },
-    addFeaturesFromGpx(gpx) {
-      // return if no gpx
-      if (!gpx) {
-        return;
-      }
-      // first, clear geometry
-      this.featuresLayerSource.clear();
 
-      // before reading gpx, set what we are doing
-      this.loadingExternalFeatures = true;
-
-      let gpxFormat = new ol.format.GPX();
-      let features = gpxFormat.readFeatures(gpx, { featureProjection: 'EPSG:3857' });
-      features.forEach(this.addFeature);
-      // update store
-      Yetix.setFeaturesTitle(this.getFeaturesTitleFromGpx(features));
-
-      // gpx is loaded, go back to normal case
-      this.loadingExternalFeatures = false;
-      // and emit new features
-      this.updateFeaturesFromStore();
-      // fit map to new features
-      this.fitMapToFeatures();
+      return geom;
     },
-    getFeaturesTitleFromGpx(features) {
-      if (features && features.length) {
-        let properties = features[0].getProperties();
-        if (properties.name) {
-          return properties.name;
-        } else {
-          return this.$gettext('GPX file');
+  });
+  map.value.addInteraction(drawInteraction);
+
+  splitInteraction = new SplitInteraction({
+    layer: featuresLayer,
+  });
+  map.value.addInteraction(splitInteraction);
+
+  snapInteraction = new ol.interaction.Snap({ source });
+  map.value.addInteraction(snapInteraction);
+
+  drawInteraction.on('drawstart', onDrawStart);
+  drawInteraction.on('drawend', onDrawEnd);
+  modifyInteraction.on('modifyend', onModifyEnd);
+  splitInteraction.addEventListener('split', (evt) => onSplit(evt as SplitEvent));
+
+  disableInteractions();
+}
+
+function enableInteractions() {
+  drawInteraction.setActive(true);
+  modifyInteraction.setActive(true);
+  splitInteraction.setActive(true);
+  snapInteraction.setActive(true);
+}
+
+function disableInteractions() {
+  drawInteraction.setActive(false);
+  modifyInteraction.setActive(false);
+  splitInteraction.setActive(false);
+  snapInteraction.setActive(false);
+
+  // hide draw info overlay
+  drawInfoOverlay.setPosition(undefined);
+}
+
+function onDrawStart() {
+  drawing = true;
+  document.addEventListener('keydown', onKeyWhileDrawing);
+  document.addEventListener('keypress', onKeyWhileDrawing);
+}
+
+function onDrawEnd() {
+  drawing = false;
+  document.removeEventListener('keydown', onKeyWhileDrawing);
+  document.removeEventListener('keypress', onKeyWhileDrawing);
+
+  // hide draw info overlay
+  drawInfoOverlay.setPosition(undefined);
+}
+
+function onModifyEnd() {
+  updateFeaturesFromStore();
+}
+
+function onSplit(evt: SplitEvent) {
+  evt.newFeatures.forEach(addFeature);
+  removeFeature(evt.oldFeature);
+}
+
+function onKeyWhileDrawing(event: KeyboardEvent) {
+  event.preventDefault();
+  // backspace key
+  if (event.key === 'Backspace') {
+    drawInteraction.removeLastPoint();
+  }
+}
+
+function onFeature(event: VectorSourceEvent<Line>) {
+  // set features styles
+  event.feature!.set('highlightedStyle', highlightedLineStyle);
+  // emit new features, only in normal case (edit/drawing)
+  // not in gpx/document case (prevent multiple update for each lines)
+  if (!loadingExternalFeatures) {
+    updateFeaturesFromStore();
+  }
+}
+
+function updateFeaturesFromStore() {
+  // updates features
+  const currentFeatures = visibleSimplifiedLayer.value ? getSimplifiedFeatures() : getFeaturesLayerFeatures();
+  Yetix.setFeatures(currentFeatures);
+  // update length
+  Yetix.setFeaturesLength(
+    getFeaturesLayerFeatures()
+      .map((feature) => feature.getGeometry()!.getCoordinates().length)
+      .reduce((acc, value) => acc + value, 0)
+  );
+
+  if (currentFeatures.length === 0) {
+    // if user come from a document url, remove url
+    if (route.params.document_id) {
+      router.replace({ path: '/' + String(route.name) });
+    }
+    // set featuresTitle back to default
+    Yetix.setFeaturesTitle(defaultFeaturesTitle);
+  }
+}
+
+function getFeaturesLayerFeatures() {
+  return getSortedFeatures(featuresLayerSource.getFeatures());
+}
+
+function getSimplifiedFeatures() {
+  return getSortedFeatures(simplifiedSource.getFeatures());
+}
+
+function removeFeature(feature: Line) {
+  // remove feature
+  // when only one left, ask for user to confirm
+  let toBeRemoved = !(featuresLayerSource.getFeatures().length === 1 && !confirm($gettext('Confirm delete')));
+  if (toBeRemoved) {
+    if (visibleSimplifiedLayer.value) {
+      simplifiedSource.removeFeature(feature);
+      // remove corresponding feature
+      getFeaturesLayerFeatures().forEach((f) => {
+        if (feature.get('id') === getUid(f)) {
+          featuresLayerSource.removeFeature(f);
         }
-      }
-    },
-    addFeaturesFromDocument(doc) {
-      // before reading document, set what we are doing
-      this.loadingExternalFeatures = true;
-
-      let documentGeometry = doc.data.geometry.geom_detail;
-      if (documentGeometry) {
-        let feature = new ol.format.GeoJSON().readFeature(documentGeometry);
-        this.addFeature(feature);
-        // fit map to new features
-        this.fitMapToFeatures();
-      } else {
-        // fit map to geom
-        this.fitMapToGeom(doc.data.geometry.geom);
-      }
-      // update store
-      Yetix.setFeaturesTitle(this.getFeaturesTitleFromDocument(doc));
-      // document is loaded, go back to normal case
-      this.loadingExternalFeatures = false;
-      // and emit new features
-      this.updateFeaturesFromStore();
-    },
-    addFeature(feature) {
-      // split multilinestrings into linestrings
-      if (feature.getGeometry().getType() === 'MultiLineString') {
-        let lines = feature.getGeometry().getLineStrings();
-        lines.map((line) => new ol.Feature({ geometry: line })).forEach(this.addFeature);
-      } else {
-        let nbPointsOnFeature = feature.getGeometry().getCoordinates().length;
-        if (nbPointsOnFeature >= 2) {
-          this.featuresLayerSource.addFeature(feature);
-        }
-      }
-    },
-    getFeaturesTitleFromDocument(document) {
-      return this.$documentUtils.getDocumentTitle(document.data);
-    },
-    fitMapToFeatures() {
-      let extent = ol.extent.createEmpty();
-
-      ol.extent.extend(extent, this.featuresLayerSource.getExtent());
-
-      this.view.fit(extent, { size: this.map.getSize() });
-    },
-    fitMapToGeom(geom) {
-      let feature = new ol.format.GeoJSON().readFeature(geom);
-      let geometry = feature.getGeometry().getExtent();
-      this.view.fit(geometry, { size: this.map.getSize() });
-      this.view.setZoom(this.validMinimumMapZoom / this.zoomDelta);
-    },
-    hideSimplifiedLayer() {
-      this.featuresLayer.setVisible(true);
-      this.simplifiedLayer.setVisible(false);
-      this.visibleSimplifiedLayer = false;
-    },
-    showSimplifiedLayer() {
-      this.featuresLayer.setVisible(false);
-      this.simplifiedLayer.setVisible(true);
-      this.visibleSimplifiedLayer = true;
-    },
-    previewSimplify(tolerance) {
-      // every preview, clear the layer first
-      this.simplifiedSource.clear(true);
-      // show/hide layers based on tolerance
-      if (tolerance === 0) {
-        this.hideSimplifiedLayer();
-      } else {
-        this.showSimplifiedLayer();
-        // get each features, simplify them, and add to simplified layer
-        let features = this.getFeaturesLayerFeatures();
-        features.forEach((feature) => {
-          let geometry = feature.getGeometry();
-
-          // clone geometry
-          let simplifiedGeometry = geometry.clone();
-          let coordinates = simplifiedGeometry.getCoordinates();
-
-          // if no z, add 0
-          coordinates = coordinates.map((coord) => {
-            if (!coord[2]) {
-              coord[2] = 0;
-            }
-            return coord;
-          });
-
-          // check if tolerance is 0 == no simplification
-          if (tolerance !== 0) {
-            coordinates = simplify(coordinates, tolerance, true);
-            simplifiedGeometry.setCoordinates(coordinates);
-          }
-
-          // create feature (store reference of actual feature thanks to ol_uid)
-          let simplifiedFeature = new ol.Feature({ geometry: simplifiedGeometry, id: feature.ol_uid });
-          this.simplifiedSource.addFeature(simplifiedFeature);
-        });
-      }
-      this.updateFeaturesFromStore();
-    },
-    simplify() {
-      // clear features layer
-      this.featuresLayerSource.clear();
-      // get simplified features
-      let simplifiedFeatures = this.getSimplifiedFeatures();
-      // and move them one by one (to keep order of line chunks) in features layer
-      simplifiedFeatures.forEach((feature) => {
-        this.featuresLayerSource.addFeature(feature);
       });
-      // hide simplified/show features
-      this.hideSimplifiedLayer();
-    },
-    onElevationProfile({ action, coord }) {
-      switch (action) {
-        case 'cursor_move':
-          this.elevationPointLayer.setVisible(true);
-          this.elevationPoint.setGeometry(new ol.geom.Point(coord));
-          break;
-        case 'cursor_end':
-          this.elevationPointLayer.setVisible(false);
-          break;
-      }
-    },
-    updateEditStyle() {
-      this.featuresLayer.setStyle(
-        this.editMode && this.mapZoom >= this.validMinimumMapZoom ? normalWithEditLineStyle : normalLineStyle
-      );
-    },
-    onKeydown(evt) {
-      // not when drawing
-      if (this.drawing) {
-        return false;
-      }
-      // not when both alt+ctrl
-      if (evt.ctrlKey && evt.altKey) {
-        return false;
-      }
-      // which key?
-      let tip = null;
-      let svgSource = null;
-      if (evt.ctrlKey) {
-        tip = this.$gettext('Split line');
-        svgSource = iconSvg({ prefix: 'fas', iconName: 'scissors' });
-      }
-      if (evt.altKey) {
-        tip = this.$gettext('Add or remove point');
-        svgSource = iconSvg({ prefix: 'fas', iconName: 'plus-minus' });
+    } else {
+      featuresLayerSource.removeFeature(feature);
+    }
+    updateFeaturesFromStore();
+  }
+}
+
+function removeFeatures() {
+  // clear both layers
+  featuresLayerSource.clear();
+  simplifiedSource.clear(true);
+  // set default layer to be visible
+  hideSimplifiedLayer();
+  // update features
+  updateFeaturesFromStore();
+}
+
+function addFeaturesFromGpx(gpx: string | null) {
+  // return if no gpx
+  if (!gpx) {
+    return;
+  }
+  // first, clear geometry
+  featuresLayerSource.clear();
+
+  // before reading gpx, set what we are doing
+  loadingExternalFeatures = true;
+
+  const gpxFeatures = new ol.format.GPX().readFeatures(gpx, { featureProjection: 'EPSG:3857' }) as Line[];
+  gpxFeatures.forEach(addFeature);
+  // update store
+  Yetix.setFeaturesTitle(getFeaturesTitleFromGpx(gpxFeatures));
+
+  // gpx is loaded, go back to normal case
+  loadingExternalFeatures = false;
+  // and emit new features
+  updateFeaturesFromStore();
+  // fit map to new features
+  fitMapToFeatures();
+}
+
+function getFeaturesTitleFromGpx(gpxFeatures: Line[]) {
+  if (gpxFeatures && gpxFeatures.length) {
+    const properties = gpxFeatures[0].getProperties();
+    if (properties.name) {
+      return properties.name;
+    } else {
+      return $gettext('GPX file');
+    }
+  }
+}
+
+function addFeaturesFromDocument(doc: { data: { geometry: { geom: string; geom_detail?: string | null } } }) {
+  // before reading document, set what we are doing
+  loadingExternalFeatures = true;
+
+  let documentGeometry = doc.data.geometry.geom_detail;
+  if (documentGeometry) {
+    addFeature(new ol.format.GeoJSON().readFeature(documentGeometry) as Line);
+    // fit map to new features
+    fitMapToFeatures();
+  } else {
+    // fit map to geom
+    fitMapToGeom(doc.data.geometry.geom);
+  }
+  // update store
+  Yetix.setFeaturesTitle(getFeaturesTitleFromDocument(doc));
+  // document is loaded, go back to normal case
+  loadingExternalFeatures = false;
+  // and emit new features
+  updateFeaturesFromStore();
+}
+
+function addFeature(feature: Feature<Geometry>) {
+  const geometry = feature.getGeometry();
+  // split multilinestrings into linestrings
+  if (geometry instanceof MultiLineString) {
+    geometry
+      .getLineStrings()
+      .map((line) => new ol.Feature({ geometry: line }))
+      .forEach(addFeature);
+  } else {
+    const line = feature as Line;
+    const nbPointsOnFeature = line.getGeometry()!.getCoordinates().length;
+    if (nbPointsOnFeature >= 2) {
+      featuresLayerSource.addFeature(line);
+    }
+  }
+}
+
+function getFeaturesTitleFromDocument(document: { data: object }) {
+  return $documentUtils.getDocumentTitle(document.data);
+}
+
+function fitMapToFeatures() {
+  const extent = ol.extent.createEmpty();
+
+  ol.extent.extend(extent, featuresLayerSource.getExtent()!);
+
+  view.value.fit(extent, { size: map.value.getSize() });
+}
+
+function fitMapToGeom(geom: string) {
+  const geometry = (new ol.format.GeoJSON().readFeature(geom) as Feature).getGeometry()!.getExtent();
+  view.value.fit(geometry, { size: map.value.getSize() });
+  view.value.setZoom(validMinimumMapZoom / zoomDelta);
+}
+
+function hideSimplifiedLayer() {
+  featuresLayer.setVisible(true);
+  simplifiedLayer.setVisible(false);
+  visibleSimplifiedLayer.value = false;
+}
+
+function showSimplifiedLayer() {
+  featuresLayer.setVisible(false);
+  simplifiedLayer.setVisible(true);
+  visibleSimplifiedLayer.value = true;
+}
+
+function previewSimplify(tolerance: number) {
+  // every preview, clear the layer first
+  simplifiedSource.clear(true);
+  // show/hide layers based on tolerance
+  if (tolerance === 0) {
+    hideSimplifiedLayer();
+  } else {
+    showSimplifiedLayer();
+    // get each features, simplify them, and add to simplified layer
+    getFeaturesLayerFeatures().forEach((feature) => {
+      // clone geometry
+      const simplifiedGeometry = feature.getGeometry()!.clone();
+      let coordinates = simplifiedGeometry.getCoordinates();
+
+      // if no z, add 0
+      coordinates = coordinates.map((coord) => {
+        if (!coord[2]) {
+          coord[2] = 0;
+        }
+        return coord;
+      });
+
+      // check if tolerance is 0 == no simplification
+      if (tolerance !== 0) {
+        coordinates = simplify(coordinates, tolerance, true);
+        simplifiedGeometry.setCoordinates(coordinates);
       }
 
-      // add new icon in editstyle, only if length is 3
-      if (tip && editStyle.length === 3) {
-        svgSource = svgSource.replace('<svg', '<svg width="10" height="10"');
-        svgSource = svgSource.replace('fill="currentColor"', `fill="white" stroke="${pColorDark}" stroke-width="5"`);
-        editStyle.splice(
-          1,
-          0,
-          new ol.style.Style({
-            image: new ol.style.Icon({
-              src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSource),
-              size: [10, 10],
-            }),
-          })
-        );
-        editStyle[0].getImage().setRadius(10);
-        editStyle[0].setText(
-          new ol.style.Text({
-            text: tip,
-            textAlign: 'left',
-            offsetX: 20,
-            offsetY: 0,
-            padding: [5, 5, 5, 5],
-            fill: new ol.style.Fill({
-              color: 'white',
-            }),
-            backgroundFill: new ol.style.Fill({
-              color: pColorDark,
-            }),
-          })
-        );
-        this.drawInteraction.getOverlay().setStyle(editStyle);
-        this.modifyInteraction.getOverlay().setStyle(editStyle);
-      }
-    },
-    onKeyup(evt) {
-      // remove specific icon
-      // only when alt or ctrl, but not both, and icon is already in editstyle
-      if (((evt.key === 'Alt' && !evt.ctrlKey) || (evt.key === 'Control' && !evt.altKey)) && editStyle.length === 4) {
-        editStyle.splice(1, 1);
-        editStyle[0].getImage().setRadius(6);
-        editStyle[0].setText(
-          new ol.style.Text({
-            text: null,
-          })
-        );
-        this.drawInteraction.getOverlay().setStyle(editStyle);
-        this.modifyInteraction.getOverlay().setStyle(editStyle);
-      }
-    },
-  },
-  render() {
-    return null;
-  },
-};
+      // create feature (store reference of actual feature thanks to ol_uid)
+      const simplifiedFeature = new ol.Feature({ geometry: simplifiedGeometry, id: getUid(feature) });
+      simplifiedSource.addFeature(simplifiedFeature);
+    });
+  }
+  updateFeaturesFromStore();
+}
+
+// applies the simplified preview (named apart from the simplify() of ./simplify)
+function applySimplify() {
+  // clear features layer
+  featuresLayerSource.clear();
+  // get simplified features
+  let simplifiedFeatures = getSimplifiedFeatures();
+  // and move them one by one (to keep order of line chunks) in features layer
+  simplifiedFeatures.forEach((feature) => {
+    featuresLayerSource.addFeature(feature);
+  });
+  // hide simplified/show features
+  hideSimplifiedLayer();
+}
+
+function onElevationProfile(event: unknown) {
+  const { action, coord } = event as { action: string; coord: Coordinate };
+  switch (action) {
+    case 'cursor_move':
+      elevationPointLayer.setVisible(true);
+      elevationPoint.setGeometry(new ol.geom.Point(coord));
+      break;
+    case 'cursor_end':
+      elevationPointLayer.setVisible(false);
+      break;
+  }
+}
+
+function updateEditStyle() {
+  featuresLayer.setStyle(
+    editMode.value && mapZoom.value >= validMinimumMapZoom ? normalWithEditLineStyle : normalLineStyle
+  );
+}
+
+function onKeydown(evt: KeyboardEvent) {
+  // not when drawing
+  if (drawing) {
+    return false;
+  }
+  // not when both alt+ctrl
+  if (evt.ctrlKey && evt.altKey) {
+    return false;
+  }
+  // which key?
+  let tip: string | null = null;
+  let svgSource = '';
+  if (evt.ctrlKey) {
+    tip = $gettext('Split line');
+    svgSource = iconSvg({ prefix: 'fas', iconName: 'scissors' });
+  }
+  if (evt.altKey) {
+    tip = $gettext('Add or remove point');
+    svgSource = iconSvg({ prefix: 'fas', iconName: 'plus-minus' });
+  }
+
+  // add new icon in editstyle, only if length is 3
+  if (tip && editStyle.length === 3) {
+    svgSource = svgSource.replace('<svg', '<svg width="10" height="10"');
+    svgSource = svgSource.replace('fill="currentColor"', `fill="white" stroke="${pColorDark}" stroke-width="5"`);
+    editStyle.splice(
+      1,
+      0,
+      new ol.style.Style({
+        image: new ol.style.Icon({
+          src: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSource),
+          size: [10, 10],
+        }),
+      })
+    );
+    (editStyle[0].getImage() as CircleStyle).setRadius(10);
+    editStyle[0].setText(
+      new ol.style.Text({
+        text: tip,
+        textAlign: 'left',
+        offsetX: 20,
+        offsetY: 0,
+        padding: [5, 5, 5, 5],
+        fill: new ol.style.Fill({
+          color: 'white',
+        }),
+        backgroundFill: new ol.style.Fill({
+          color: pColorDark,
+        }),
+      })
+    );
+    drawInteraction.getOverlay().setStyle(editStyle);
+    modifyInteraction.getOverlay().setStyle(editStyle);
+  }
+}
+
+function onKeyup(evt: Pick<KeyboardEvent, 'key' | 'altKey' | 'ctrlKey'>) {
+  // remove specific icon
+  // only when alt or ctrl, but not both, and icon is already in editstyle
+  if (((evt.key === 'Alt' && !evt.ctrlKey) || (evt.key === 'Control' && !evt.altKey)) && editStyle.length === 4) {
+    editStyle.splice(1, 1);
+    (editStyle[0].getImage() as CircleStyle).setRadius(6);
+    editStyle[0].setText(
+      new ol.style.Text({
+        text: undefined,
+      })
+    );
+    drawInteraction.getOverlay().setStyle(editStyle);
+    modifyInteraction.getOverlay().setStyle(editStyle);
+  }
+}
+
+watch(editMode, () => {
+  if (!editMode.value) {
+    disableInteractions();
+    document.removeEventListener('keydown', onKeydown);
+    document.removeEventListener('keyup', onKeyup);
+  } else {
+    enableInteractions();
+    document.addEventListener('keydown', onKeydown);
+    document.addEventListener('keyup', onKeyup);
+  }
+  updateEditStyle();
+});
+
+watch(mapZoom, () => {
+  updateEditStyle();
+});
+
+const onWindowBlur = () => onKeyup({ key: 'Control', altKey: false, ctrlKey: false });
+
+// what the panels ask the layer, through the yeti event bus
+// typed by each handler: the bus gives the payload as unknown
+const EVENT_HANDLERS: [string, Handler][] = [
+  ['addFeature', addFeature as Handler],
+  ['removeFeature', removeFeature as Handler],
+  ['removeFeatures', removeFeatures as Handler],
+  ['gpx', addFeaturesFromGpx as Handler],
+  ['previewSimplify', previewSimplify as Handler],
+  ['simplify', applySimplify as Handler],
+  ['featureUpdated', updateFeaturesFromStore as Handler],
+  ['fit-map-to-features', fitMapToFeatures as Handler],
+];
+
+onMounted(() => {
+  // features layer
+  featuresLayer = new ol.layer.Vector({
+    source: new ol.source.Vector<Line>(),
+    style: normalLineStyle,
+  });
+  featuresLayer.set('name', 'routeLayer');
+  featuresLayerSource = featuresLayer.getSource()!;
+
+  map.value.addLayer(featuresLayer);
+
+  // draw info overlay
+  drawInfoOverlay.setElement(drawInfoElement.value!);
+  map.value.addOverlay(drawInfoOverlay);
+
+  // simplified layer (preview)
+  simplifiedLayer = new ol.layer.Vector({
+    source: new ol.source.Vector<Line>(),
+    style: simplifiedLineStyle,
+  });
+  // get source
+  simplifiedSource = simplifiedLayer.getSource()!;
+  // add layer, and hide it
+  map.value.addLayer(simplifiedLayer);
+  simplifiedLayer.setVisible(false);
+
+  // layer for elevation point
+  elevationPointLayer = new ol.layer.Vector({
+    source: new ol.source.Vector<Feature<Point>>(),
+    style: elevationPointStyle,
+  });
+  // add layer, and hide it
+  map.value.addLayer(elevationPointLayer);
+  elevationPointLayer.setVisible(false);
+  // add one feature for point
+  const elevationPointSource = elevationPointLayer.getSource()!;
+  elevationPoint = new ol.Feature<Point>();
+  elevationPointSource.addFeature(elevationPoint);
+  // react to event
+  yetixEvents.on('elevationProfile', onElevationProfile);
+
+  // set default featuresTitle
+  defaultFeaturesTitle = $gettext(Yetix.featuresTitle as string);
+  Yetix.setFeaturesTitle(defaultFeaturesTitle);
+
+  // load camptocamp document
+  const doc = route.params.document_id;
+  if (doc) {
+    (c2c.route as DocumentService)
+      .getCooked(Number(doc), $language.current!)
+      .then((response) => addFeaturesFromDocument(response as never));
+  }
+
+  // features events (added feature)
+  featuresLayerSource.on('addfeature', onFeature);
+  simplifiedSource.on('addfeature', onFeature);
+
+  addInteractions();
+
+  EVENT_HANDLERS.forEach(([event, handler]) => yetixEvents.on(event, handler));
+
+  // special event when window loose focus = hanfle ctrl key (when browser shorcuts) for split interaction
+  window.addEventListener('blur', onWindowBlur);
+
+  // already features to add?
+  // but not a c2c document
+  if (!doc && features.value.length) {
+    featuresLayerSource.addFeatures(features.value);
+  }
+});
+
+// they stayed after leaving the page
+onBeforeUnmount(() => {
+  EVENT_HANDLERS.forEach(([event, handler]) => yetixEvents.off(event, handler));
+  yetixEvents.off('elevationProfile', onElevationProfile);
+  window.removeEventListener('blur', onWindowBlur);
+  document.removeEventListener('keydown', onKeydown);
+  document.removeEventListener('keyup', onKeyup);
+  document.removeEventListener('keydown', onKeyWhileDrawing);
+  document.removeEventListener('keypress', onKeyWhileDrawing);
+});
+
+defineExpose({ getLayer });
 </script>
 
 <style>
