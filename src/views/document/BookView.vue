@@ -21,7 +21,7 @@
           <field-view :document="document" :field="fields.url" style="overflow: hidden" />
         </div>
 
-        <map-box v-if="document.associations.waypoints.length" :document="document" />
+        <map-box v-if="document.associations!.waypoints.length" :document="document" />
 
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
@@ -46,20 +46,21 @@
   </div>
 </template>
 
-<script>
-import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import { documentViewComponents, documentViewProps, useDocumentView } from './utils/document-view';
+<script setup lang="ts">
+import DocumentPrintLicense from './utils/DocumentPrintLicense.vue';
+import DocumentViewHeader from './utils/DocumentViewHeader.vue';
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo.vue';
+import CommentsBox from './utils/boxes/CommentsBox.vue';
+import ImagesBox from './utils/boxes/ImagesBox.vue';
+import MapBox from './utils/boxes/MapBox.vue';
+import RoutesBox from './utils/boxes/RoutesBox.vue';
+import ToolBox from './utils/boxes/ToolBox.vue';
+import { documentViewProps, useDocumentView } from './utils/document-view';
+import ActivitiesField from './utils/field-viewers/ActivitiesField.vue';
+import FieldView from './utils/field-viewers/FieldView.vue';
+import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 
-export default {
-  components: {
-    ...documentViewComponents,
-    MaskedDocumentVersionInfo,
-  },
+const props = defineProps(documentViewProps);
 
-  props: documentViewProps,
-
-  setup(props) {
-    return useDocumentView(props);
-  },
-};
+const { promise, documentType, fields, document, version } = useDocumentView(props);
 </script>

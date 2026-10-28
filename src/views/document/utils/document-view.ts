@@ -1,34 +1,10 @@
 // What the document views (RouteView, WaypointView...) share: the document, loaded from the route, or given as a draft
 // (preview of the edition, printing), its view mode, whether the user can edit it, and the <head> tags of its page.
 //
-//   export default {
-//     components: { ...documentViewComponents },
-//     props: documentViewProps,
-//     setup(props) {
-//       return useDocumentView(props);
-//     },
-//   };
+//   const props = defineProps(documentViewProps);
+//   const { document, fields, ... } = useDocumentView(props);
 import { computed, getCurrentInstance, nextTick, ref, watch, type PropType } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-
-import DocumentPrintLicense from './DocumentPrintLicense.vue';
-import DocumentViewHeader from './DocumentViewHeader.vue';
-import FundraiserBanner from './FundraiserBanner.vue';
-import CommentsBox from './boxes/CommentsBox.vue';
-import ImagesBox from './boxes/ImagesBox.vue';
-import IsReachableByPublicTransportsBox from './boxes/IsReachableByPublicTransportsBox.vue';
-import MapBox from './boxes/MapBox.vue';
-import RecentOutingsBox from './boxes/RecentOutingsBox.vue';
-import RoutesBox from './boxes/RoutesBox.vue';
-import ToolBox from './boxes/ToolBox.vue';
-import TransportsBox from './boxes/TransportsBox.vue';
-import ActivitiesField from './field-viewers/ActivitiesField.vue';
-import DoubleNumericField from './field-viewers/DoubleNumericField.vue';
-import EventActivityField from './field-viewers/EventActivityField.vue';
-import FieldView from './field-viewers/FieldView.vue';
-import LabelValue from './field-viewers/LabelValue.vue';
-import MarkdownSection from './field-viewers/MarkdownSection.vue';
-import ProfilesLinks from './field-viewers/ProfilesLinks.vue';
 
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
@@ -41,28 +17,6 @@ import bus from '@/js/event-bus';
 import { getImageUrl, type Image } from '@/js/image-urls';
 import utils from '@/js/utils';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
-
-export const documentViewComponents = {
-  DocumentViewHeader,
-  FundraiserBanner,
-
-  CommentsBox,
-  DocumentPrintLicense,
-  DoubleNumericField,
-  FieldView,
-  LabelValue,
-  ActivitiesField,
-  EventActivityField,
-  IsReachableByPublicTransportsBox,
-  MapBox,
-  MarkdownSection,
-  ProfilesLinks,
-  RecentOutingsBox,
-  ToolBox,
-  RoutesBox,
-  ImagesBox,
-  TransportsBox,
-};
 
 export const documentViewProps = {
   // the document of the edition preview, or of the printing view

@@ -41,7 +41,7 @@
 
       <div class="column is-9">
         <div class="box is-paddingless">
-          <a :href="getOriginalImageUrl(document)">
+          <a :href="getOriginalImageUrl(document as Image)">
             <thumbnail class="main-image" :img="document" size="BI" />
           </a>
         </div>
@@ -63,28 +63,29 @@
   </div>
 </template>
 
-<script>
-import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import { documentViewComponents, documentViewProps, useDocumentView } from './utils/document-view';
+<script setup lang="ts">
+import DocumentPrintLicense from './utils/DocumentPrintLicense.vue';
+import DocumentViewHeader from './utils/DocumentViewHeader.vue';
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo.vue';
+import CommentsBox from './utils/boxes/CommentsBox.vue';
+import ImagesBox from './utils/boxes/ImagesBox.vue';
+import MapBox from './utils/boxes/MapBox.vue';
+import RecentOutingsBox from './utils/boxes/RecentOutingsBox.vue';
+import RoutesBox from './utils/boxes/RoutesBox.vue';
+import ToolBox from './utils/boxes/ToolBox.vue';
+import { documentViewProps, useDocumentView } from './utils/document-view';
+import ActivitiesField from './utils/field-viewers/ActivitiesField.vue';
+import FieldView from './utils/field-viewers/FieldView.vue';
+import LabelValue from './utils/field-viewers/LabelValue.vue';
+import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 
-import { getImageUrl } from '@/js/image-urls';
+import { getImageUrl, type Image } from '@/js/image-urls';
 
-export default {
-  components: {
-    ...documentViewComponents,
-    MaskedDocumentVersionInfo,
-  },
+const props = defineProps(documentViewProps);
 
-  props: documentViewProps,
+const { promise, documentType, fields, document, version, locale } = useDocumentView(props);
 
-  setup(props) {
-    return useDocumentView(props);
-  },
-
-  methods: {
-    getOriginalImageUrl: getImageUrl,
-  },
-};
+const getOriginalImageUrl = getImageUrl;
 </script>
 
 <style scoped lang="scss">

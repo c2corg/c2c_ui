@@ -31,20 +31,15 @@
   </div>
 </template>
 
-<script>
-import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import { documentViewComponents, documentViewProps, useDocumentView } from './utils/document-view';
+<script setup lang="ts">
+import DocumentViewHeader from './utils/DocumentViewHeader.vue';
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo.vue';
+import CommentsBox from './utils/boxes/CommentsBox.vue';
+import { documentViewProps, useDocumentView } from './utils/document-view';
+import FieldView from './utils/field-viewers/FieldView.vue';
+import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 
-export default {
-  components: {
-    ...documentViewComponents,
-    MaskedDocumentVersionInfo,
-  },
+const props = defineProps(documentViewProps);
 
-  props: documentViewProps,
-
-  setup(props) {
-    return useDocumentView(props);
-  },
-};
+const { promise, documentType, fields, document, version } = useDocumentView(props);
 </script>
