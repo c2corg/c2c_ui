@@ -12,15 +12,13 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    documents: {
-      type: Object,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  documents: {
+    type: Object,
+    required: true,
   },
-};
+});
 </script>
 
 <style scoped lang="scss">

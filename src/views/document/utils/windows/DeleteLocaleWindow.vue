@@ -8,39 +8,38 @@
   </modal-confirmation>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, useTemplateRef } from 'vue';
+import { useRouter } from 'vue-router';
+
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import { documentProperty, useDocumentType } from '@/js/properties';
 
-export default {
-  props: {
-    ...documentProperty,
-    localeLang: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  ...documentProperty,
+  localeLang: {
+    type: String,
+    required: true,
   },
+});
 
-  setup(props) {
-    return useDocumentType(props);
-  },
+const router = useRouter();
+const { documentType } = useDocumentType(props);
 
-  data() {
-    return {
-      promise: null,
-    };
-  },
+const promise = ref<ApiData | null>(null);
+const modalWindowRef = useTemplateRef<{ show(): void; hide(): void }>('modalWindow');
 
-  methods: {
-    show() {
-      this.$refs.modalWindow.show();
-    },
+function show() {
+  modalWindowRef.value!.show();
+}
 
-    executeDelete() {
-      this.promise = c2c.moderator.deleteLocale(this.document.document_id, this.localeLang).then(() => {
-        this.$router.push({ name: this.documentType, id: this.document.document_id });
-      });
-    },
-  },
-};
+// shown by ToolBox / DocumentVersionBanner through their template refs
+defineExpose({ show });
+
+function executeDelete() {
+  promise.value = c2c.moderator.deleteLocale(props.document.document_id!, props.localeLang).then(() => {
+    router.push({ name: documentType.value, params: { id: props.document.document_id } });
+  });
+}
 </script>

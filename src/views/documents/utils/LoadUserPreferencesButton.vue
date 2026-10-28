@@ -20,49 +20,46 @@
   </span>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  props: {
-    display: {
-      type: String,
-      default: 'button',
-    },
+defineProps({
+  display: {
+    type: String,
+    default: 'button',
   },
+});
 
-  data() {
-    return {
-      promise: {},
-    };
-  },
+const route = useRoute();
+const router = useRouter();
 
-  computed: {
-    documentType() {
-      return this.$route.name.slice(0, -1);
-    },
-  },
+const promise = ref<ApiData | { loading?: boolean }>({});
 
-  methods: {
-    loadPreferences() {
-      this.promise = c2c.userProfile.preferences.get().then((result) => {
-        const preferences = result.data;
-        const query = Object.assign({}, this.$route.query);
+const documentType = computed(() => String(route.name).slice(0, -1));
 
-        if (['outing', 'route', 'image', 'xreport', 'books', 'articles'].includes(this.documentType)) {
-          const activities = preferences.activities.join(',');
-          query.act = activities === '' ? undefined : activities;
-        }
+function loadPreferences() {
+  promise.value = c2c.userProfile.preferences.get().then((result) => {
+    const preferences = result.data as { activities: string[]; areas: C2cDocument[] };
+    // undefined removes a parameter from the url
+    const query: Record<string, unknown> = Object.assign({}, route.query);
 
-        if (['outing', 'route', 'image', 'xreport', 'waypoint'].includes(this.documentType)) {
-          const areas = preferences.areas.map((area) => area.document_id).join(',');
-          query.a = areas === '' ? undefined : areas;
-          query.bbox = undefined;
-        }
+    if (['outing', 'route', 'image', 'xreport', 'books', 'articles'].includes(documentType.value)) {
+      const activities = preferences.activities.join(',');
+      query.act = activities === '' ? undefined : activities;
+    }
 
-        this.$router.push({ query });
-      });
-    },
-  },
-};
+    if (['outing', 'route', 'image', 'xreport', 'waypoint'].includes(documentType.value)) {
+      const areas = preferences.areas.map((area) => area.document_id).join(',');
+      query.a = areas === '' ? undefined : areas;
+      query.bbox = undefined;
+    }
+
+    router.push({ query: query as typeof route.query });
+  });
+}
 </script>

@@ -13,22 +13,25 @@
   </modal-window>
 </template>
 
-<script>
+<script setup lang="ts">
+import { type PropType, useTemplateRef } from 'vue';
+
 import { documentProperty } from '@/js/properties';
 
-export default {
-  props: {
-    ...documentProperty,
-    missingLangs: {
-      type: Array,
-      required: true,
-    },
+defineProps({
+  ...documentProperty,
+  missingLangs: {
+    type: Array as PropType<string[]>,
+    required: true,
   },
+});
 
-  methods: {
-    show() {
-      this.$refs.modalWindow.show();
-    },
-  },
-};
+const modalWindowRef = useTemplateRef<{ show(): void }>('modalWindow');
+
+function show() {
+  modalWindowRef.value!.show();
+}
+
+// shown by ToolBox through its template ref
+defineExpose({ show });
 </script>

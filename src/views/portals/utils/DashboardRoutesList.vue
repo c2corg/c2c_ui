@@ -19,38 +19,24 @@
   </div>
 </template>
 
-<script>
-import DashboardRouteLink from './DashboardRouteLink';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 
+import DashboardRouteLink from './DashboardRouteLink.vue';
+
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  name: 'DashboardRoutesList',
+const routesPromise = ref<ApiData<{ documents: C2cDocument[] }>>(
+  (c2c.route as DocumentService).getAll({
+    limit: 5,
+    qa: 'draft,great',
+  })
+);
 
-  components: {
-    DashboardRouteLink,
-  },
-
-  data() {
-    return {
-      routesPromise: null,
-    };
-  },
-
-  computed: {
-    routes() {
-      return this.routesPromise?.data;
-    },
-  },
-
-  created(query = {}) {
-    this.routesPromise = c2c.route.getAll({
-      ...query,
-      limit: 5,
-      qa: 'draft,great',
-    });
-  },
-};
+const routes = computed(() => routesPromise.value.data);
 </script>
 
 <style scoped lang="scss">

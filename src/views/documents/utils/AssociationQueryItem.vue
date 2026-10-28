@@ -9,17 +9,14 @@
   />
 </template>
 
-<script>
-export default {
-  props: {
-    documentTypes: {
-      type: Array,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  documentTypes: {
+    type: Array,
+    required: true,
   },
-
-  emits: ['add'],
-};
+});
+defineEmits(['add']);
 </script>
 <style scoped lang="scss">
 .input-document {

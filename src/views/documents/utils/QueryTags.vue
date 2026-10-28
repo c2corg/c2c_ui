@@ -10,17 +10,19 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    documents: {
-      type: Array,
-      required: true,
-    },
-  },
+<script setup lang="ts">
+import type { PropType } from 'vue';
 
-  emits: ['remove'],
-};
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+
+defineProps({
+  documents: {
+    // the documents still loading only have their id
+    type: Array as PropType<(C2cDocument & { loading?: boolean })[]>,
+    required: true,
+  },
+});
+defineEmits(['remove']);
 </script>
 
 <style lang="scss" scoped>

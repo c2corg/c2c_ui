@@ -5,13 +5,11 @@
   </span>
 </template>
 
-<script>
-export default {
-  props: {
-    document: {
-      type: Object,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  document: {
+    type: Object,
+    required: true,
   },
-};
+});
 </script>

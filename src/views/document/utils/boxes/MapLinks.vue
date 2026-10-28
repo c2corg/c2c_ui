@@ -15,10 +15,8 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { documentProperty } from '@/js/properties';
 
-export default {
-  props: { ...documentProperty },
-};
+defineProps({ ...documentProperty });
 </script>

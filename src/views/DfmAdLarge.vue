@@ -2,7 +2,8 @@
   <div id="camptocamp_htad" class="ams-ad is-flex is-justify-content-center is-clipped" />
 </template>
 
-<script>
+<script lang="ts">
+// a component without options: its script only adds the ad script, once, when the ad components are first imported
 export default {};
 
 if (!document.getElementById('ad_script')) {

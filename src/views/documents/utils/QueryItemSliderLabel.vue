@@ -3,7 +3,9 @@
     <div class="columns is-mobile">
       <!--level must be in a single element to remove bottim margin : TODO remove ugly hack -->
       <div class="column query-bound-value-left is-nowrap">
-        <span v-if="field.i18n">{{ $filters.uppercaseFirstLetter($gettext(value[0], field.i18nContext)) }}</span>
+        <span v-if="field.i18n">{{
+          $filters.uppercaseFirstLetter($gettext(String(value[0] ?? ''), field.i18nContext))
+        }}</span>
         <span v-else>{{ value[0] }}</span>
         <span v-if="field.unit">&nbsp;{{ field.unit }}</span>
       </div>
@@ -17,7 +19,9 @@
         {{ $filters.uppercaseFirstLetter($gettext(field.name)) }}
       </div>
       <div class="column query-bound-value-right is-nowrap">
-        <span v-if="field.i18n">{{ $filters.uppercaseFirstLetter($gettext(value[1], field.i18nContext)) }}</span>
+        <span v-if="field.i18n">{{
+          $filters.uppercaseFirstLetter($gettext(String(value[1] ?? ''), field.i18nContext))
+        }}</span>
         <span v-else>{{ value[1] }}</span>
         <span v-if="field.unit">&nbsp;{{ field.unit }}</span>
       </div>
@@ -25,23 +29,23 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import type { PropType } from 'vue';
+
 import { fieldProperty } from '@/js/properties';
 
-export default {
-  props: {
-    ...fieldProperty,
-    value: {
-      type: Array,
-      required: true,
-    },
-    // id of the field name, which names the slider
-    labelId: {
-      type: String,
-      default: undefined,
-    },
+defineProps({
+  ...fieldProperty,
+  value: {
+    type: Array as PropType<(string | number)[]>,
+    required: true,
   },
-};
+  // id of the field name, which names the slider
+  labelId: {
+    type: String,
+    default: undefined,
+  },
+});
 </script>
 
 <style scoped>

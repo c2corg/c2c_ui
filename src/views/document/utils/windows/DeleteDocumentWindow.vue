@@ -8,33 +8,32 @@
   </modal-confirmation>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, useTemplateRef } from 'vue';
+import { useRouter } from 'vue-router';
+
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import { documentProperty, useDocumentType } from '@/js/properties';
 
-export default {
-  props: { ...documentProperty },
+const props = defineProps({ ...documentProperty });
 
-  setup(props) {
-    return useDocumentType(props);
-  },
+const router = useRouter();
+const { documentType } = useDocumentType(props);
 
-  data() {
-    return {
-      promise: null,
-    };
-  },
+const promise = ref<ApiData | null>(null);
+const modalWindowRef = useTemplateRef<{ show(): void; hide(): void }>('modalWindow');
 
-  methods: {
-    show() {
-      this.$refs.modalWindow.show();
-    },
+function show() {
+  modalWindowRef.value!.show();
+}
 
-    executeDelete() {
-      this.promise = c2c.moderator.deleteDocument(this.document.document_id).then(() => {
-        this.$router.push({ name: this.documentType + 's' });
-      });
-    },
-  },
-};
+// shown by ToolBox / DocumentVersionBanner through their template refs
+defineExpose({ show });
+
+function executeDelete() {
+  promise.value = c2c.moderator.deleteDocument(props.document.document_id!).then(() => {
+    router.push({ name: documentType.value + 's' });
+  });
+}
 </script>
