@@ -1,10 +1,10 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import utils from './utils';
 
 describe('stringDivider', () => {
   it.each([undefined, null, ''])('returns %j unchanged', (value) => {
-    expect(utils.stringDivider(value, 5, '\n')).toBe(value);
+    expect(utils.stringDivider(value as string, 5, '\n')).toBe(value);
   });
 
   it('returns strings shorter than or as long as width unchanged', () => {
@@ -95,11 +95,12 @@ describe('decodeHtmlEntities', () => {
   });
 
   it('does not execute scripts or event handlers', () => {
-    window.__decodeHtmlEntitiesPwned = false;
+    const w = window as Window & { __decodeHtmlEntitiesPwned?: boolean };
+    w.__decodeHtmlEntitiesPwned = false;
     utils.decodeHtmlEntities('<img src="x" onerror="window.__decodeHtmlEntitiesPwned = true">');
     utils.decodeHtmlEntities('<script>window.__decodeHtmlEntitiesPwned = true</script>');
-    expect(window.__decodeHtmlEntitiesPwned).toBe(false);
-    delete window.__decodeHtmlEntitiesPwned;
+    expect(w.__decodeHtmlEntitiesPwned).toBe(false);
+    delete w.__decodeHtmlEntitiesPwned;
   });
 });
 
@@ -144,7 +145,7 @@ describe('stripMarkdown', () => {
   });
 
   it('throws on undefined', () => {
-    expect(() => utils.stripMarkdown(undefined)).toThrow(TypeError);
+    expect(() => utils.stripMarkdown(undefined as unknown as string)).toThrow(TypeError);
   });
 
   it('removes list markers and their indentation', () => {
@@ -173,5 +174,42 @@ describe('stripMarkdown', () => {
   it('unwraps several <sup>/<sub> tags on the same line', () => {
     expect(utils.stripMarkdown('1<sup>er</sup> et 2<sup>e</sup>')).toBe('1er et 2e');
     expect(utils.stripMarkdown('1<sup>er</sup> mai, H<sub>2</sub>O')).toBe('1er mai, H2O');
+  });
+});
+
+describe('downloadCsv', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  const csvOf = (objects: Record<string, unknown>[]) => {
+    const download = vi.spyOn(utils, 'download').mockImplementation(() => {});
+    utils.downloadCsv(objects, 'outings.csv', new Map());
+    expect(download).toHaveBeenCalledWith(expect.any(String), 'outings.csv', 'text/csv;charset=utf-8');
+    return download.mock.calls[0][0];
+  };
+
+  it('writes sorted keys as header and one line per object', () => {
+    expect(csvOf([{ title: 'Mont Blanc', elevation: 4808, public: true }])).toBe(
+      'elevation;public;title\n4808;true;"Mont Blanc"'
+    );
+  });
+
+  it('skips excluded keys and writes an empty field for null', () => {
+    expect(csvOf([{ title: 'a', geometry: {}, locales: [] }, { title: null }])).toBe('title\n"a"\n');
+  });
+
+  it('escapes double quotes by doubling them (RFC 4180)', () => {
+    expect(csvOf([{ title: 'Le "Grand" Capucin \\ face E' }])).toBe('title\n"Le ""Grand"" Capucin \\ face E"');
+  });
+
+  it('joins arrays and escapes their double quotes', () => {
+    expect(csvOf([{ activities: ['rock_climbing', 'say "hi"'] }])).toBe('activities\n"rock_climbing,say ""hi"""');
+  });
+
+  it('does nothing without objects', () => {
+    const download = vi.spyOn(utils, 'download').mockImplementation(() => {});
+    utils.downloadCsv(null, 'outings.csv', new Map());
+    expect(download).not.toHaveBeenCalled();
   });
 });
