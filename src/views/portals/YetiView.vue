@@ -323,7 +323,8 @@ export default {
     // remove all previous events (navigating from other c2c pages)
     yetixEvents.all.clear();
 
-    // build tabs: here, after setDefault() resets them, then on each change of localTabs
+    // build tabs: here, after setDefault() resets them (an immediate watcher runs before created()), then on each
+    // change of localTabs
     Yetix.setTabs(this.localTabs);
   },
 
