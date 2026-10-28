@@ -23,12 +23,13 @@
     </div>
     <div class="activity-bottom is-flex is-justify-content-space-between is-size-7 is-italic px-2">
       <div v-if="duration">
-        <fa-icon :icon="['far', 'clock']" :title="$gettext('Duration')"></fa-icon>&hairsp;<span
-          v-html="duration"
-        ></span>
+        <span role="img" :title="$gettext('Duration')" :aria-label="$gettext('Duration')"
+          ><fa-icon :icon="['far', 'clock']" /></span
+        >&hairsp;<span v-html="duration"></span>
       </div>
       <div v-if="length">
-        <fa-icon icon="ruler" :title="$gettext('length')"></fa-icon>&hairsp;<span v-html="length"></span>&nbsp;
+        <span role="img" :title="$gettext('length')" :aria-label="$gettext('length')"><fa-icon icon="ruler" /></span
+        >&hairsp;<span v-html="length"></span>&nbsp;
       </div>
       <div v-if="heightDiffUp"><icon-height-diff-up />&hairsp;<span v-html="heightDiffUp"></span></div>
     </div>

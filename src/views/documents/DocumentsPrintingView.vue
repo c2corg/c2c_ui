@@ -140,6 +140,6 @@ export default {
 
 <style scoped>
 .page-break {
-  page-break-after: always;
+  break-after: page;
 }
 </style>

@@ -6,14 +6,13 @@
 </template>
 
 <script>
-import { icon } from '@fortawesome/fontawesome-svg-core';
-
 import { useLayer } from './layer';
 import simplify from './simplify';
 
 import Yetix from '@/components/yeti/Yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import c2c from '@/js/apis/c2c';
+import iconSvg from '@/js/icon-svg';
 import ol from '@/js/libs/ol';
 
 class SplitInteraction extends ol.interaction.Pointer {
@@ -729,11 +728,11 @@ export default {
       let svgSource = null;
       if (evt.ctrlKey) {
         tip = this.$gettext('Split line');
-        svgSource = icon({ prefix: 'fas', iconName: 'scissors' }).html[0];
+        svgSource = iconSvg({ prefix: 'fas', iconName: 'scissors' });
       }
       if (evt.altKey) {
         tip = this.$gettext('Add or remove point');
-        svgSource = icon({ prefix: 'fas', iconName: 'plus-minus' }).html[0];
+        svgSource = iconSvg({ prefix: 'fas', iconName: 'plus-minus' });
       }
 
       // add new icon in editstyle, only if length is 3
