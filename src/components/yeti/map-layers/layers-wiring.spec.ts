@@ -1,46 +1,21 @@
 import { mount, type VueWrapper } from '@vue/test-utils';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { h, nextTick } from 'vue';
 
 import DataAvalancheLayer from './DataAvalancheLayer.vue';
+import IconLayer from './IconLayer.vue';
 import NivosesLayer from './NivosesLayer.vue';
 import OverlaysLayers from './OverlaysLayers.vue';
 import { useLayer } from './layer';
+import { fakeMap, mountInMap, provideFrom } from './test-utils';
 
 import Tabs from '@/components/yeti/Tabs.vue';
-import YetiMap from '@/components/yeti/YetiMap.vue';
 import ol from '@/js/libs/ol';
 
 // the components are read through their instance, as the layers read each other
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Vm = any;
 const vmOf = (wrapper: VueWrapper): Vm => wrapper.vm;
-
-// what YetiMap provides, around a fake OpenLayers map
-const fakeMap = () => ({ addLayer: vi.fn(), addOverlay: vi.fn(), getView: () => 'view' });
-const provideFrom = (map: ReturnType<typeof fakeMap>) =>
-  (YetiMap as Vm).provide.call({
-    map,
-    getExtent: (projection: string) => ['extent', projection],
-    $gettext: (s: string) => s,
-  });
-
-const mountInMap = (component: object, { stubs = {} } = {}) => {
-  const map = fakeMap();
-  const wrapper = mount(component, {
-    global: {
-      provide: provideFrom(map),
-      stubs: { FaIcon: true, ...stubs },
-      mocks: {
-        $gettext: (s: string) => s,
-        // DataAvalancheLayer dates its avalanches from today
-        $dateUtils: { toLocalizedString: (date: Date) => date.toISOString().slice(0, 10) },
-      },
-      directives: { translate: {} },
-    },
-  });
-  return { wrapper, map };
-};
 
 describe('yeti map layers', () => {
   it('reach the map and its extent from YetiMap, at any depth', () => {
@@ -80,13 +55,14 @@ describe('yeti map layers', () => {
     expect(vmOf(wrapper).overlay).toEqual({ title: 'Beacon', massif: 'Mont-Blanc', url1: 'u1', url2: 'u2' });
 
     vmOf(wrapper).onMapLooseClick();
-    expect(vmOf(wrapper).overlay).toEqual({ title: null, massif: null, url1: null, url2: null });
+    expect(vmOf(wrapper).overlay).toEqual({ title: undefined, massif: undefined, url1: undefined, url2: undefined });
   });
 
   it('uses the icons of the layer built on IconLayer, when it has its own', () => {
     const { wrapper } = mountInMap(DataAvalancheLayer);
 
-    const iconLayer = vmOf(wrapper).$refs.iconLayer;
+    // its <script setup> bindings, through Vue Test Utils (the template ref only gives what it exposes)
+    const iconLayer = vmOf(wrapper.findComponent(IconLayer));
     expect(iconLayer.iconSrc).toBe(vmOf(wrapper).iconSrc);
     expect(iconLayer.iconCardSrc).toBe(vmOf(wrapper).iconCardSrc);
   });

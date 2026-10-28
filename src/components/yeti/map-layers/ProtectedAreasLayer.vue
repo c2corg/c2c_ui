@@ -1,5 +1,5 @@
 <template>
-  <div ref="overlay" class="overlay">
+  <div ref="overlayElement" class="overlay">
     <button class="delete is-small button-close" @click="closeOverlay">x</button>
     <div class="overlay-header pb-3 has-text-centered">
       <p class="title is-5 mb-1" v-translate>Protected areas</p>
@@ -49,274 +49,290 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import axios from 'axios';
+import type MapBrowserEvent from 'ol/MapBrowserEvent';
+import type { Coordinate } from 'ol/coordinate';
+import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue';
 
 import { useLayer } from './layer';
 
 import { protectionAreasLayers } from '@/components/map/map-layers';
-import Yetix from '@/components/yeti/Yetix';
+import Yetix from '@/components/yeti/Yetix.vue';
 import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
 import { sanitizeHtml } from '@/js/sanitize-html';
 import utils from '@/js/utils';
 
-let overlay = new ol.Overlay({
-  positioning: 'top-center',
-  offset: [0, 0],
-  className: 'protectedareas-overlay-container',
-});
+type OverlayData = {
+  coordinate?: Coordinate;
+  title?: string;
+  category?: string;
+  constraint?: string | null;
+  dates?: string | number[];
+  dispositions?: string | null;
+  additionalInfos?: string;
+  contact?: string | null;
+  url?: string;
+};
 
-let overlayPanOptions = {
+const emit = defineEmits(['layer']);
+
+const { map, view } = useLayer();
+const { $gettext, $language } = useGlobalProperties();
+
+const overlayPanOptions = {
   animation: {
     duration: 250,
   },
   margin: 10,
 };
 
-export default {
-  emits: ['layer'],
-  setup() {
-    return useLayer();
-  },
+const overlay = new ol.Overlay({
+  positioning: 'top-center',
+  offset: [0, 0],
+  className: 'protectedareas-overlay-container',
+});
+const overlayElement = useTemplateRef<HTMLElement>('overlayElement');
+const overlayData = ref<OverlayData | null>(null);
 
-  data() {
-    return {
-      overlayData: null,
-    };
-  },
-  computed: {
-    showProtectedAreas() {
-      return Yetix.showProtectedAreas;
-    },
-    layerSelector() {
-      return {
-        title: this.$gettext('Protected Areas'),
-        checked: this.showProtectedAreas,
-        action: this.onShowProtectedAreas,
-        image: 'protected-areas.jpg',
-      };
-    },
-  },
-  watch: {
-    showProtectedAreas() {
-      this.updateVisibility();
-    },
-  },
-  created() {
-    // get swiss protected areas
-    let protectionLayers = protectionAreasLayers();
-    // change default parameters
-    protectionLayers = protectionLayers.map((layer) => {
-      layer.setVisible(true);
-      layer.setOpacity(1);
-      layer.getSource().crossOrigin = 'anonymous';
-      return layer;
-    });
-    // then add biodiv sport data
-    let biodivLayer = new ol.layer.Tile({
-      name: 'biodivLayer',
-      source: new ol.source.TileWMS({
-        url: 'https://api.ensg.eu/geoserver/yeti/wms',
-        params: { LAYERS: 'yeti:biodiv-sports.fr' },
-        attributions: '<a href="https://biodiv-sports.fr" target="_blank">Biodiv\'Sports</a>',
-        crossOrigin: 'anonymous',
-      }),
-    });
-    // create group for layers
-    this.layer = new ol.layer.Group({
-      name: 'protected-areas',
-      layers: [...protectionLayers, biodivLayer],
-      visible: false,
-    });
-  },
-  mounted() {
-    this.map.addLayer(this.layer);
-    this.updateVisibility();
+const showProtectedAreas = computed(() => Yetix.showProtectedAreas as boolean);
 
-    // overlay
-    overlay.setElement(this.$refs.overlay);
-    this.map.addOverlay(overlay);
+function onShowProtectedAreas() {
+  Yetix.setShowProtectedAreas(!showProtectedAreas.value);
+}
 
-    // emit layer data for selector
-    this.$emit('layer', this.layerSelector);
-  },
-  methods: {
-    getLayer() {
-      return this.layer;
-    },
+const layerSelector = computed(() => ({
+  title: $gettext('Protected Areas'),
+  checked: showProtectedAreas.value,
+  action: onShowProtectedAreas,
+  image: 'protected-areas.jpg',
+}));
 
-    onShowProtectedAreas() {
-      Yetix.setShowProtectedAreas(!this.showProtectedAreas);
-    },
-    updateVisibility() {
-      this.layer.setVisible(this.showProtectedAreas);
-      if (this.showProtectedAreas && this.overlayData) {
-        overlay.setPosition(this.overlayData.coordinate);
-      } else {
-        this.closeOverlay();
-      }
-    },
-    onMapClick(evt) {
-      // open overlay first, populate data afterward
-      overlay.setPosition(evt.coordinate);
+// get swiss protected areas, with other default parameters
+const protectionLayers = protectionAreasLayers().map((layer) => {
+  layer.setVisible(true);
+  layer.setOpacity(1);
+  (layer.getSource() as unknown as { crossOrigin: string }).crossOrigin = 'anonymous';
+  return layer;
+});
+// then add biodiv sport data
+const biodivLayer = new ol.layer.Tile({
+  source: new ol.source.TileWMS({
+    url: 'https://api.ensg.eu/geoserver/yeti/wms',
+    params: { LAYERS: 'yeti:biodiv-sports.fr' },
+    attributions: '<a href="https://biodiv-sports.fr" target="_blank">Biodiv\'Sports</a>',
+    crossOrigin: 'anonymous',
+  }),
+});
+biodivLayer.set('name', 'biodivLayer');
+// create group for layers
+const layer = new ol.layer.Group({
+  layers: [...protectionLayers, biodivLayer],
+  visible: false,
+});
+layer.set('name', 'protected-areas');
 
-      this.overlayData = {
-        category: this.$gettext('Data is loading...'),
-      };
+function getLayer() {
+  return layer;
+}
 
-      // data can be from france or swiss,
-      // test both, and pick the one that respond (using Promise.any)
+function closeOverlay() {
+  overlay.setPosition(undefined);
+  overlayData.value = null;
+}
 
-      let swissPromise = new Promise((resolve, reject) => {
-        let extent = this.map.getView().calculateExtent(this.map.getSize() || null);
-        respecterCestProtegerService
-          .identify(evt.coordinate, extent, this.map.getSize()[0], this.map.getSize()[1], this.$language.current)
-          .catch(() => {
-            this.overlayData = {
-              category: this.$gettext('Network error.'),
-            };
-            throw new Error('network error');
-          })
-          .then(({ data }) => {
-            if (data.results && data.results.length) {
-              let result = data.results.find((result) => result.geometry.type === 'MultiPolygon') ?? data.results[0];
+function updateVisibility() {
+  layer.setVisible(showProtectedAreas.value);
+  if (showProtectedAreas.value && overlayData.value) {
+    overlay.setPosition(overlayData.value.coordinate);
+  } else {
+    closeOverlay();
+  }
+}
 
-              let lang = this.$language.current;
-              if (!['fr', 'de', 'it'].includes(lang)) {
-                lang = 'fr';
-              }
+function setOverlayData(
+  coordinate: Coordinate,
+  title: string,
+  category: string,
+  constraint: string | null,
+  dates: string | number[],
+  dispositions: string | null,
+  additionalInfos: string,
+  contact: string | null,
+  url: string
+): OverlayData {
+  return {
+    coordinate,
+    title,
+    category,
+    constraint,
+    dates,
+    dispositions,
+    // additionalInfos and contact are HTML fragments coming from third-party geodata
+    // services (respectercestproteger-service / biodiv-sports): sanitize them before
+    // they get bound with v-html.
+    additionalInfos: sanitizeHtml(additionalInfos),
+    contact: sanitizeHtml(contact),
+    url,
+  };
+}
 
-              let overlayData = this.setOverlayData(
-                evt.coordinate,
-                result.properties.label,
-                result.layerName,
-                utils.decodeHtmlEntities(result.properties[`schutzs_${lang}`] ?? ''),
-                result.properties.schutzzeit,
-                utils.decodeHtmlEntities(result.properties[`best_${lang}`] ?? ''),
-                result.properties.zusatzinformation ?? '',
-                null,
-                result.properties.url_kanton
-              );
-              resolve(overlayData);
-            } else {
-              reject(new Error('no data'));
-            }
-          });
-      });
+function onMapClick(evt: MapBrowserEvent<PointerEvent>) {
+  // open overlay first, populate data afterward
+  overlay.setPosition(evt.coordinate);
 
-      let francePromise = new Promise((resolve, reject) => {
-        let biodivLayer = this.layer.getLayers().getArray()[2];
-        let biodivGetFeatureInfoUrl = biodivLayer
-          .getSource()
-          .getFeatureInfoUrl(evt.coordinate, this.view.getResolution(), 'EPSG:3857', {
-            INFO_FORMAT: 'application/json',
-            QUERY_LAYERS: 'yeti:biodiv-sports.fr',
-            LAYERS: 'yeti:biodiv-sports.fr',
-            FEATURE_COUNT: 5,
-          });
+  overlayData.value = {
+    category: $gettext('Data is loading...'),
+  };
 
-        let lang = this.$language.current;
-        if (!['fr', 'en', 'it'].includes(lang)) {
-          lang = 'en';
+  // data can be from france or swiss,
+  // test both, and pick the one that respond (using Promise.any)
+
+  const swissPromise = new Promise<OverlayData>((resolve, reject) => {
+    const size = map.value.getSize()!;
+    const extent = map.value.getView().calculateExtent(size);
+    respecterCestProtegerService
+      .identify(
+        evt.coordinate as [number, number],
+        extent as [number, number, number, number],
+        size[0],
+        size[1],
+        $language.current!
+      )
+      .catch(() => {
+        overlayData.value = {
+          category: $gettext('Network error.'),
+        };
+        throw new Error('network error');
+      })
+      .then(({ data }) => {
+        if (data.results && data.results.length) {
+          const result =
+            data.results.find((item: { geometry: { type: string } }) => item.geometry.type === 'MultiPolygon') ??
+            data.results[0];
+
+          const current = $language.current;
+          const lang = current && ['fr', 'de', 'it'].includes(current) ? current : 'fr';
+
+          resolve(
+            setOverlayData(
+              evt.coordinate,
+              result.properties.label,
+              result.layerName,
+              utils.decodeHtmlEntities(result.properties[`schutzs_${lang}`] ?? ''),
+              result.properties.schutzzeit,
+              utils.decodeHtmlEntities(result.properties[`best_${lang}`] ?? ''),
+              result.properties.zusatzinformation ?? '',
+              null,
+              result.properties.url_kanton
+            )
+          );
+        } else {
+          reject(new Error('no data'));
         }
-
-        axios
-          .get(biodivGetFeatureInfoUrl)
-          .catch(() => {
-            this.overlayData = {
-              category: this.$gettext('Network error.'),
-            };
-            throw new Error('network error');
-          })
-          .then(({ data }) => {
-            if (data.features?.length) {
-              let features = new ol.format.GeoJSON().readFeatures(data);
-
-              // select last feature
-              let feature = features[features.length - 1];
-
-              let title = JSON.parse(feature.get('name'));
-              title = title[lang] ?? title['fr'];
-
-              let description = JSON.parse(feature.get('description'));
-              description = description[lang] ?? description['fr'];
-
-              let contact = feature.get('contact');
-              contact = contact.replaceAll('<br /><br />', '<br />');
-
-              let period = feature.get('period');
-              try {
-                // convert "(12:1,0,0,1,1,1,1,1,1,0,0,0)" to array
-                period = period
-                  .replaceAll(/[\(\)]/g, '')
-                  .split(':')[1]
-                  .split(',')
-                  .map(Number);
-              } catch {
-                period = '---';
-              }
-
-              let overlayData = this.setOverlayData(
-                evt.coordinate,
-                title,
-                feature.get('species_id') ? this.$gettext('Species zone') : this.$gettext('Regulatory zone'),
-                null,
-                period,
-                '',
-                description,
-                contact,
-                feature.get('info_url')
-              );
-              resolve(overlayData);
-            } else {
-              reject(new Error('no data'));
-            }
-          });
       });
+  });
 
-      // set overlay data with france or swiss
-      Promise.any([francePromise, swissPromise])
-        .then((overlayData) => {
-          this.overlayData = overlayData;
-          this.$nextTick(() => {
-            overlay.panIntoView(overlayPanOptions);
-          });
-        })
-        .catch(() => {
-          this.overlayData = {
-            category: this.$gettext('Error while loading data'),
-          };
-        });
-    },
-    onMapLooseClick() {
-      this.closeOverlay();
-    },
-    setOverlayData(coordinate, title, category, constraint, dates, dispositions, additionalInfos, contact, url) {
-      return {
-        coordinate,
-        title,
-        category,
-        constraint,
-        dates,
-        dispositions,
-        // additionalInfos and contact are HTML fragments coming from third-party geodata
-        // services (respectercestproteger-service / biodiv-sports): sanitize them before
-        // they get bound with v-html.
-        additionalInfos: sanitizeHtml(additionalInfos),
-        contact: sanitizeHtml(contact),
-        url,
+  const francePromise = new Promise<OverlayData>((resolve, reject) => {
+    const biodivGetFeatureInfoUrl = biodivLayer
+      .getSource()!
+      .getFeatureInfoUrl(evt.coordinate, view.value.getResolution()!, 'EPSG:3857', {
+        INFO_FORMAT: 'application/json',
+        QUERY_LAYERS: 'yeti:biodiv-sports.fr',
+        LAYERS: 'yeti:biodiv-sports.fr',
+        FEATURE_COUNT: 5,
+      })!;
+
+    const current = $language.current;
+    const lang = current && ['fr', 'en', 'it'].includes(current) ? current : 'en';
+
+    axios
+      .get(biodivGetFeatureInfoUrl)
+      .catch(() => {
+        overlayData.value = {
+          category: $gettext('Network error.'),
+        };
+        throw new Error('network error');
+      })
+      .then(({ data }) => {
+        if (data.features?.length) {
+          const features = new ol.format.GeoJSON().readFeatures(data);
+
+          // select last feature
+          const feature = features[features.length - 1];
+
+          const titles = JSON.parse(feature.get('name'));
+          const title = titles[lang] ?? titles['fr'];
+
+          const descriptions = JSON.parse(feature.get('description'));
+          const description = descriptions[lang] ?? descriptions['fr'];
+
+          const contact = feature.get('contact').replaceAll('<br /><br />', '<br />');
+
+          let period: string | number[];
+          try {
+            // convert "(12:1,0,0,1,1,1,1,1,1,0,0,0)" to array
+            period = feature.get('period').replaceAll(/[()]/g, '').split(':')[1].split(',').map(Number);
+          } catch {
+            period = '---';
+          }
+
+          resolve(
+            setOverlayData(
+              evt.coordinate,
+              title,
+              feature.get('species_id') ? $gettext('Species zone') : $gettext('Regulatory zone'),
+              null,
+              period,
+              '',
+              description,
+              contact,
+              feature.get('info_url')
+            )
+          );
+        } else {
+          reject(new Error('no data'));
+        }
+      });
+  });
+
+  // set overlay data with france or swiss
+  Promise.any([francePromise, swissPromise])
+    .then((data) => {
+      overlayData.value = data;
+      nextTick(() => {
+        overlay.panIntoView(overlayPanOptions);
+      });
+    })
+    .catch(() => {
+      overlayData.value = {
+        category: $gettext('Error while loading data'),
       };
-    },
-    closeOverlay() {
-      overlay.setPosition(undefined);
-      this.overlayData = null;
-    },
-  },
-  render() {
-    return null;
-  },
-};
+    });
+}
+
+function onMapLooseClick() {
+  closeOverlay();
+}
+
+watch(showProtectedAreas, updateVisibility);
+
+onMounted(() => {
+  map.value.addLayer(layer);
+  updateVisibility();
+
+  // overlay
+  overlay.setElement(overlayElement.value!);
+  map.value.addOverlay(overlay);
+
+  // emit layer data for selector
+  emit('layer', layerSelector.value);
+});
+
+// OverlaysLayers gives the map events to the layers
+defineExpose({ getLayer, onMapClick, onMapLooseClick });
 </script>
 
 <style scoped lang="scss">

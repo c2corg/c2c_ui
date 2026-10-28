@@ -5,13 +5,11 @@
   </span>
 </template>
 
-<script>
-export default {
-  props: {
-    layer: {
-      type: Object,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  layer: {
+    type: Object,
+    required: true,
   },
-};
+});
 </script>

@@ -4,203 +4,209 @@
     <slopes-layers @layers="onSlopesLayers"></slopes-layers>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import type Geometry from 'ol/geom/Geometry';
+import type BaseLayer from 'ol/layer/Base';
+import type Layer from 'ol/layer/Layer';
+import type RenderEvent from 'ol/render/Event';
+import { computed, onBeforeUnmount, onMounted, watch } from 'vue';
+
 import { useLayer } from './layer';
 
-import Yetix from '@/components/yeti/Yetix';
-import BaseLayers from '@/components/yeti/map-layers/BaseLayers';
-import SlopesLayers from '@/components/yeti/map-layers/SlopesLayers';
+import Yetix from '@/components/yeti/Yetix.vue';
+import BaseLayers from '@/components/yeti/map-layers/BaseLayers.vue';
+import SlopesLayers from '@/components/yeti/map-layers/SlopesLayers.vue';
 import yetixEvents from '@/components/yeti/yetix-events';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
 
-export default {
-  components: {
-    BaseLayers,
-    SlopesLayers,
-  },
+const emit = defineEmits(['layer']);
 
-  emits: ['layer'],
-  setup() {
-    return useLayer();
-  },
+const { $gettext } = useGlobalProperties();
+const { map, getExtent, getFeaturesFromData, getPropertiesFromFeatures } = useLayer();
 
-  computed: {
-    mapZoom() {
-      return Yetix.mapZoom;
-    },
-    areas() {
-      return Yetix.areas;
-    },
-    showAreas() {
-      return Yetix.showAreas;
-    },
-    layerSelector() {
-      return {
-        title: this.$gettext('Extent'),
-        checked: this.showAreas,
-        action: this.onShowAreas,
-        disabled: {
-          condition: this.mapZoom > Yetix.BLEND_MODES_MAX_ZOOM,
-          title: this.$gettext('Disabled at this zoom level'),
-          message: this.$gettext('Zoom out and it will be OK'),
-        },
-        image: 'yeti-extent.jpg',
-      };
-    },
-  },
-  watch: {
-    layerSelector: {
-      handler(layer) {
-        this.$emit('layer', layer);
-      },
-      deep: true,
-    },
-    showAreas() {
-      this.updateVisibility();
-    },
-  },
-  created() {
-    // layer for outer stroke of areas
-    this.areasStrokeLayer = new ol.layer.VectorImage({
-      source: new ol.source.Vector(),
-      style: [
-        new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: `rgba(0, 0, 0, 0.2)`,
-            width: 14,
-          }),
-        }),
-        new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: `rgba(0, 0, 0, 0.75)`,
-            width: 1,
-          }),
-        }),
-      ],
-    });
-    // layer for clip
-    // should set className, this forces ol to create another canvas
-    this.areasLayer = new ol.layer.VectorImage({
-      className: Yetix.BLEND_MODES_CLASS_NAME,
-      source: new ol.source.Vector(),
-      style: new ol.style.Style({
-        fill: new ol.style.Fill({
-          color: 'white',
-        }),
-      }),
-    });
-    // group for c2c layers, clipped
-    this.groupLayer = new ol.layer.Group({
-      layers: [],
-    });
+const mapZoom = computed(() => Yetix.mapZoom as number);
 
-    this.baseLayers = [];
-    this.slopesLayers = [];
-  },
-  mounted() {
-    // add layers
-    this.map.addLayer(this.areasStrokeLayer);
-    this.map.addLayer(this.areasLayer);
-    this.map.addLayer(this.groupLayer);
+const areas = computed(() => Yetix.areas as { geometry: Geometry }[]);
 
-    // showAreas checked?
-    this.updateVisibility();
+const showAreas = computed(() => Yetix.showAreas);
 
-    this.$emit('layer', this.layerSelector);
+const layerSelector = computed(() => {
+  return {
+    title: $gettext('Extent'),
+    checked: showAreas.value,
+    action: onShowAreas,
+    disabled: {
+      condition: mapZoom.value > Yetix.BLEND_MODES_MAX_ZOOM,
+      title: $gettext('Disabled at this zoom level'),
+      message: $gettext('Zoom out and it will be OK'),
+    },
+    image: 'yeti-extent.jpg',
+  };
+});
 
-    // only in first mount
-    if (this.areas.length === 0) {
-      // set areas (yeti valid areas)
-      Yetix.fetchAreas().then(this.onAreasResult);
-      // event
-      yetixEvents.on('map-moveend', this.onMapMoveEnd);
+function onAreasResult(data: { data: unknown }) {
+  const areasFeatures = getFeaturesFromData(data);
+
+  // set areas in state
+  Yetix.setAreas(getPropertiesFromFeatures(areasFeatures));
+
+  // add features
+  areasLayer.getSource()!.addFeatures(areasFeatures);
+  areasStrokeLayer.getSource()!.addFeatures(areasFeatures);
+
+  // check is area OK
+  isAreaOK();
+}
+
+function isAreaOK() {
+  let mapExtent = getExtent('EPSG:3857');
+
+  let areaOk = true;
+
+  for (const area of areas.value) {
+    if (area.geometry.intersectsExtent(mapExtent)) {
+      break;
+    } else {
+      areaOk = false;
     }
+  }
+  Yetix.setAreaOk(areaOk);
+}
+
+function onShowAreas() {
+  Yetix.setShowAreas(!showAreas.value);
+}
+
+function updateVisibility() {
+  areasLayer.setVisible(showAreas.value);
+  groupLayer.setVisible(showAreas.value);
+  areasStrokeLayer.setVisible(showAreas.value);
+}
+
+function onMapMoveEnd() {
+  // is area OK ?
+  isAreaOK();
+}
+
+function onBaseLayers(baseLayers: BaseLayer[]) {
+  const layers = baseLayers.map((layer) => {
+    if (layer instanceof ol.layer.Group) {
+      layer
+        .getLayers()
+        .getArray()
+        .forEach((subLayer) => {
+          setPrePostRender(subLayer as Layer);
+        });
+    } else {
+      setPrePostRender(layer as Layer);
+    }
+    return layer;
+  });
+  groupLayer.setLayers(new ol.Collection(layers));
+}
+
+function onSlopesLayers(slopesLayers: BaseLayer[]) {
+  const groupLayers = groupLayer.getLayers();
+  slopesLayers.forEach((layer) => {
+    setClassName(layer as Layer);
+    groupLayers.push(layer);
+  });
+  groupLayer.setLayers(groupLayers);
+}
+
+// a separate canvas for the layer: OpenLayers reads its private className_
+function setClassName(layer: Layer) {
+  (layer as unknown as { className_: string }).className_ = Yetix.BLEND_MODES_CLASS_NAME;
+}
+
+function context(evt: RenderEvent) {
+  return evt.context as CanvasRenderingContext2D;
+}
+
+function setPrePostRender(layer: Layer) {
+  setClassName(layer);
+  layer.on('prerender', (evt) => {
+    // source-atop: means the source (this layer) will only be drawn on actual pixels (area layer)
+    // but only when MAX_ZOOM
+    if (mapZoom.value <= Yetix.BLEND_MODES_MAX_ZOOM) {
+      context(evt).globalCompositeOperation = 'source-atop';
+    }
+  });
+  layer.on('postrender', (evt) => {
+    // source-over: returns to default
+    context(evt).globalCompositeOperation = 'source-over';
+  });
+}
+
+watch(
+  layerSelector,
+  (layer) => {
+    emit('layer', layer);
   },
-  methods: {
-    onAreasResult(data) {
-      let areasFeatures = this.getFeaturesFromData(data);
-      let areas = this.getPropertiesFromFeatures(areasFeatures);
+  { deep: true }
+);
 
-      // set areas in state
-      Yetix.setAreas(areas);
+watch(showAreas, () => {
+  updateVisibility();
+});
 
-      // add features
-      this.areasLayer.getSource().addFeatures(areasFeatures);
-      this.areasStrokeLayer.getSource().addFeatures(areasFeatures);
+// created
+// layer for outer stroke of areas
+const areasStrokeLayer = new ol.layer.VectorImage({
+  source: new ol.source.Vector(),
+  style: [
+    new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: `rgba(0, 0, 0, 0.2)`,
+        width: 14,
+      }),
+    }),
+    new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: `rgba(0, 0, 0, 0.75)`,
+        width: 1,
+      }),
+    }),
+  ],
+});
+// layer for clip
+// should set className, this forces ol to create another canvas
+const areasLayer = new ol.layer.VectorImage({
+  className: Yetix.BLEND_MODES_CLASS_NAME,
+  source: new ol.source.Vector(),
+  style: new ol.style.Style({
+    fill: new ol.style.Fill({
+      color: 'white',
+    }),
+  }),
+});
+// group for c2c layers, clipped
+const groupLayer = new ol.layer.Group({
+  layers: [],
+});
 
-      // check is area OK
-      this.isAreaOK();
-    },
-    isAreaOK() {
-      let mapExtent = this.getExtent('EPSG:3857');
+onMounted(() => {
+  // add layers
+  map.value.addLayer(areasStrokeLayer);
+  map.value.addLayer(areasLayer);
+  map.value.addLayer(groupLayer);
 
-      let areaOk = true;
+  // showAreas checked?
+  updateVisibility();
 
-      for (let area in this.areas) {
-        let polygon = this.areas[area].geometry;
-        if (polygon.intersectsExtent(mapExtent)) {
-          break;
-        } else {
-          areaOk = false;
-        }
-      }
-      Yetix.setAreaOk(areaOk);
-    },
-    onShowAreas() {
-      Yetix.setShowAreas(!this.showAreas);
-    },
-    updateVisibility() {
-      this.areasLayer.setVisible(this.showAreas);
-      this.groupLayer.setVisible(this.showAreas);
-      this.areasStrokeLayer.setVisible(this.showAreas);
-    },
-    onMapMoveEnd() {
-      // is area OK ?
-      this.isAreaOK();
-    },
-    onBaseLayers(baseLayers) {
-      let layers = baseLayers.map((layer) => {
-        if (layer instanceof ol.layer.Group) {
-          layer
-            .getLayers()
-            .getArray()
-            .forEach((subLayer) => {
-              this.setPrePostRender(subLayer);
-            });
-        } else {
-          this.setPrePostRender(layer);
-        }
-        return layer;
-      });
-      this.baseLayers = layers;
+  emit('layer', layerSelector.value);
 
-      this.groupLayer.setLayers(new ol.Collection(layers));
-    },
-    onSlopesLayers(slopesLayers) {
-      let layers = slopesLayers.map((layer) => {
-        layer.className_ = Yetix.BLEND_MODES_CLASS_NAME;
-        return layer;
-      });
-      this.slopesLayers = layers;
+  // only in first mount
+  if (areas.value.length === 0) {
+    // set areas (yeti valid areas)
+    Yetix.fetchAreas().then(onAreasResult);
+  }
+  yetixEvents.on('map-moveend', onMapMoveEnd);
+});
 
-      let groupLayers = this.groupLayer.getLayers();
-      layers.map((layer) => groupLayers.push(layer));
-      this.groupLayer.setLayers(groupLayers);
-    },
-    setPrePostRender(layer) {
-      layer.className_ = Yetix.BLEND_MODES_CLASS_NAME;
-      layer.on('prerender', (evt) => {
-        // source-atop: means the source (this layer) will only be drawn on actual pixels (area layer)
-        // but only when MAX_ZOOM
-        if (this.mapZoom <= Yetix.BLEND_MODES_MAX_ZOOM) {
-          evt.context.globalCompositeOperation = 'source-atop';
-        }
-      });
-      layer.on('postrender', (evt) => {
-        // source-over: returns to default
-        evt.context.globalCompositeOperation = 'source-over';
-      });
-    },
-  },
-};
+// it stayed after leaving the page (and was added on the first visit only)
+onBeforeUnmount(() => {
+  yetixEvents.off('map-moveend', onMapMoveEnd);
+});
 </script>

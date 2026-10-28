@@ -11,21 +11,13 @@
   </div>
 </template>
 
-<script>
-import Yetix from '@/components/yeti/Yetix';
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import Yetix from '@/components/yeti/Yetix.vue';
 import { assetUrl } from '@/js/asset-urls';
 
-export default {
-  computed: {
-    winterRouteLegend() {
-      return Yetix.winterRouteLegend;
-    },
-  },
-
-  methods: {
-    assetUrl,
-  },
-};
+const winterRouteLegend = computed(() => Yetix.winterRouteLegend);
 </script>
 
 <style scoped>

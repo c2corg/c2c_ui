@@ -49,20 +49,17 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    danger: {
-      type: Object,
-      required: true,
-    },
+<script setup lang="ts">
+import { computed } from 'vue';
+
+const props = defineProps({
+  danger: {
+    type: Object,
+    required: true,
   },
-  computed: {
-    locLowIsEast() {
-      return this.danger.locLow === 'E';
-    },
-  },
-};
+});
+
+const locLowIsEast = computed(() => props.danger.locLow === 'E');
 </script>
 
 <style scoped>

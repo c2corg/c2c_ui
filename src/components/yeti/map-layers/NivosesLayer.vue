@@ -33,65 +33,57 @@
   </icon-layer>
 </template>
 
-<script>
+<script setup lang="ts">
+import type Feature from 'ol/Feature';
+import { computed, ref } from 'vue';
+
 import IconLayer from './IconLayer.vue';
 import { useIconLayer } from './icon-layer';
 
-export default {
-  components: {
-    IconLayer,
-  },
+import { useGlobalProperties } from '@/js/composables/global-properties';
 
-  emits: ['layer'],
-  setup() {
-    return useIconLayer();
-  },
-  data() {
-    return {
-      name: 'nivoses',
-      color: 'hsl(328, 95%, 50%)',
-      overlay: {
-        title: null,
-        massif: null,
-        url1: null,
-        url2: null,
-      },
-    };
-  },
-  computed: {
-    layerSelector() {
-      return {
-        title: this.$gettext('Nivose beacons'),
-        image: 'nivose.png',
-        small: true,
-      };
-    },
-  },
-  created() {
-    let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 37" width="50" height="37">
-      <path d="m2 2h34v2h-34z" fill-opacity="0.5" />
-      <path d="m2 14l4-7 3 5 3-3 4 5 7-8 2 4 2-3 3 6 1-2 2 3 2-4 6 3 6-7 1 3v6h-46z" fill="#fe8f00" />
-      <path d="m2 17l4 4 3-3 2 2 3-4 3 4 2-2 6 6-23-0zm37 23l3-3 2 3z" fill="#fe0000" />
-      <path d="m48 23l-1 1-3 2-3-3h-2l-4 3-5-1-4-1-3-1z" fill="#0000fe" />
-      <path d="m2 33l7-1 9 1h6l2-1 3-3 4-1 4 1 5 1 3-2 3 2v5h-46z" fill="#03c776" />
-    </svg>`;
-    this.icon = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-  },
-  methods: {
-    setOverlay(feature) {
-      this.overlay.title = feature.get('name');
-      this.overlay.massif = feature.get('massif');
-      this.overlay.url1 = feature.get('url1');
-      this.overlay.url2 = feature.get('url2');
-    },
-    unsetOverlay() {
-      this.overlay.title = null;
-      this.overlay.massif = null;
-      this.overlay.url1 = null;
-      this.overlay.url2 = null;
-    },
-  },
-};
+defineEmits(['layer']);
+
+const { $gettext } = useGlobalProperties();
+const { getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoosePointerMove } = useIconLayer();
+
+const name = 'nivoses';
+const color = 'hsl(328, 95%, 50%)';
+const overlay = ref<{ title?: string; massif?: string; url1?: string; url2?: string }>({});
+
+const layerSelector = computed(() => {
+  return {
+    title: $gettext('Nivose beacons'),
+    image: 'nivose.png',
+    small: true,
+  };
+});
+
+function setOverlay(feature: Feature) {
+  overlay.value.title = feature.get('name');
+  overlay.value.massif = feature.get('massif');
+  overlay.value.url1 = feature.get('url1');
+  overlay.value.url2 = feature.get('url2');
+}
+
+function unsetOverlay() {
+  overlay.value.title = undefined;
+  overlay.value.massif = undefined;
+  overlay.value.url1 = undefined;
+  overlay.value.url2 = undefined;
+}
+
+// created
+let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 37" width="50" height="37">
+  <path d="m2 2h34v2h-34z" fill-opacity="0.5" />
+  <path d="m2 14l4-7 3 5 3-3 4 5 7-8 2 4 2-3 3 6 1-2 2 3 2-4 6 3 6-7 1 3v6h-46z" fill="#fe8f00" />
+  <path d="m2 17l4 4 3-3 2 2 3-4 3 4 2-2 6 6-23-0zm37 23l3-3 2 3z" fill="#fe0000" />
+  <path d="m48 23l-1 1-3 2-3-3h-2l-4 3-5-1-4-1-3-1z" fill="#0000fe" />
+  <path d="m2 33l7-1 9 1h6l2-1 3-3 4-1 4 1 5 1 3-2 3 2v5h-46z" fill="#03c776" />
+</svg>`;
+const icon = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+
+defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoosePointerMove });
 </script>
 
 <style scoped lang="scss">
