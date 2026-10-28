@@ -50,67 +50,51 @@
   </span>
 </template>
 
-<script>
-export default {
-  props: {
-    documents: {
-      type: Object,
-      default: null,
-    },
-    offset: {
-      type: Number,
-      default: 0,
-    },
-    limit: {
-      type: Number,
-      default: 30,
-    },
+<script setup lang="ts">
+import { computed, ref, useTemplateRef, watch } from 'vue';
+
+const props = defineProps({
+  documents: {
+    type: Object,
+    default: null,
   },
-
-  emits: ['paginate'],
-
-  data() {
-    return {
-      total: this.documents?.total ?? 0,
-    };
+  offset: {
+    type: Number,
+    default: 0,
   },
-
-  computed: {
-    firstDocumentPosition() {
-      return Math.max(this.offset, 0);
-    },
-    lastDocumentPosition() {
-      return Math.min(this.offset + this.limit, this.total);
-    },
+  limit: {
+    type: Number,
+    default: 30,
   },
+});
 
-  watch: {
-    documents: 'saveTotal',
-  },
+const emit = defineEmits(['paginate']);
 
-  methods: {
-    saveTotal() {
-      if (this.documents) {
-        this.total = this.documents.total;
-      }
-    },
+const total = ref<number>(props.documents?.total ?? 0);
+const limitSelector = useTemplateRef<{ isActive: boolean }>('limitSelector');
 
-    pageQuery(off, lim) {
-      // emit to parent that offset and limit have changed
-      this.$emit('paginate', [Math.max(off, 0), lim]);
-    },
+const firstDocumentPosition = computed(() => Math.max(props.offset, 0));
+const lastDocumentPosition = computed(() => Math.min(props.offset + props.limit, total.value));
 
-    hideOnclick() {
-      this.$refs.limitSelector.isActive = false;
-    },
+watch(
+  () => props.documents,
+  () => {
+    if (props.documents) {
+      total.value = props.documents.total;
+    }
+  }
+);
 
-    selectLimit(l) {
-      // emit to parent that offset and limit have changed
-      this.$emit('paginate', [this.offset, l]);
-      this.hideOnclick();
-    },
-  },
-};
+function pageQuery(off: number, lim: number) {
+  // emit to parent that offset and limit have changed
+  emit('paginate', [Math.max(off, 0), lim]);
+}
+
+function selectLimit(l: number) {
+  // emit to parent that offset and limit have changed
+  emit('paginate', [props.offset, l]);
+  limitSelector.value!.isActive = false;
+}
 </script>
 
 <style scoped lang="scss">

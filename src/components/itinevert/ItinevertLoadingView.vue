@@ -20,31 +20,29 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'ItinevertLoadingView',
-  props: {
-    progress: {
-      type: Number,
-      default: 0,
-    },
-    total: {
-      type: Number,
-      default: 0,
-    },
-    isSpinner: {
-      type: Boolean,
-      default: true,
-    },
+<script setup lang="ts">
+import { computed } from 'vue';
+
+const props = defineProps({
+  progress: {
+    type: Number,
+    default: 0,
   },
-  computed: {
-    computedPercent() {
-      const t = Number(this.total) || 0;
-      if (t === 0) return 0;
-      return Math.min(100, Math.round((Number(this.progress) / t) * 100));
-    },
+  total: {
+    type: Number,
+    default: 0,
   },
-};
+  isSpinner: {
+    type: Boolean,
+    default: true,
+  },
+});
+
+const computedPercent = computed(() => {
+  const t = Number(props.total) || 0;
+  if (t === 0) return 0;
+  return Math.min(100, Math.round((Number(props.progress) / t) * 100));
+});
 </script>
 
 <style scoped lang="scss">

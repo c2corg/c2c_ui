@@ -30,73 +30,51 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+
 import { assetUrl } from '@/js/asset-urls';
 import { useUid } from '@/js/uid';
 
-export default {
-  name: 'LayerButton',
-  props: {
-    layer: {
-      type: Object,
-      required: true,
-    },
-    titleContext: {
-      type: String,
-      default: undefined,
-    },
-    selected: {
-      type: Boolean,
-      default: false,
-    },
+const props = defineProps({
+  layer: {
+    type: Object,
+    required: true,
   },
-
-  emits: ['click'],
-
-  setup() {
-    return useUid();
+  titleContext: {
+    type: String,
+    default: undefined,
   },
-
-  data() {
-    return {
-      showSlider: false,
-      opacity: 100,
-    };
+  selected: {
+    type: Boolean,
+    default: false,
   },
+});
 
-  computed: {
-    // the layer title names the opacity slider handle for assistive technologies
-    titleId() {
-      return `layer-button-title-${this.uid}`;
-    },
+defineEmits(['click']);
 
-    country() {
-      return this.layer.country || this.layer.get?.('country');
-    },
-    isConfigurable() {
-      return !!this.layer.get?.('configurable');
-    },
-  },
+const { uid } = useUid();
 
-  watch: {
-    selected() {
-      if (!this.selected) {
-        this.showSlider = false;
-      }
-    },
-    opacity() {
-      this.layer.set?.('opacity', this.opacity / 100);
-    },
-  },
+const showSlider = ref(false);
+const opacity = ref((props.layer.get?.('opacity') ?? 1) * 100);
 
-  mounted() {
-    this.opacity = (this.layer.get?.('opacity') ?? 1) * 100;
-  },
+// the layer title names the opacity slider handle for assistive technologies
+const titleId = computed(() => `layer-button-title-${uid}`);
+const country = computed(() => props.layer.country || props.layer.get?.('country'));
+const isConfigurable = computed(() => !!props.layer.get?.('configurable'));
 
-  methods: {
-    assetUrl,
-  },
-};
+watch(
+  () => props.selected,
+  () => {
+    if (!props.selected) {
+      showSlider.value = false;
+    }
+  }
+);
+
+watch(opacity, () => {
+  props.layer.set?.('opacity', opacity.value / 100);
+});
 </script>
 
 <style scoped lang="scss">

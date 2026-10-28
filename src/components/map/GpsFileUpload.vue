@@ -6,37 +6,37 @@
       @change="uploadGeoFile"
       accept=".gpx,.kml,.fit,.tcx,application/gpx+xml,application/vnd.ant.fit,application/vnd.google-earth.kml+xml,application/vnd.garmin.tcx+xml"
     />
-    <button class="button is-primary is-small" @click="$refs.geoFileInput.click()">
+    <button class="button is-primary is-small" @click="geoFileInput?.click()">
       <slot><span v-translate>Choose file</span></slot>
     </button>
   </div>
 </template>
 
-<script>
-export default {
-  emits: ['click'],
+<script setup lang="ts">
+import { useTemplateRef } from 'vue';
 
-  methods: {
-    uploadGeoFile(event) {
-      const reader = new FileReader();
+const emit = defineEmits(['click']);
 
-      reader.onload = function () {
-        this.$emit('click', reader.result);
-      }.bind(this);
+const geoFileInput = useTemplateRef<HTMLInputElement>('geoFileInput');
 
-      const file = event.target.files[0];
-      if (file.type === 'application/vnd.ant.fit' || file.name.toLowerCase().endsWith('.fit')) {
-        reader.readAsArrayBuffer(file);
-      } else {
-        reader.readAsText(file);
-      }
+function uploadGeoFile(event: Event) {
+  const reader = new FileReader();
 
-      // empty the input, because if user wants to upload same trace
-      // change event is not fired
-      this.$refs.geoFileInput.value = '';
-    },
-  },
-};
+  reader.onload = () => {
+    emit('click', reader.result);
+  };
+
+  const file = (event.target as HTMLInputElement).files![0];
+  if (file.type === 'application/vnd.ant.fit' || file.name.toLowerCase().endsWith('.fit')) {
+    reader.readAsArrayBuffer(file);
+  } else {
+    reader.readAsText(file);
+  }
+
+  // empty the input, because if user wants to upload same trace
+  // change event is not fired
+  geoFileInput.value!.value = '';
+}
 </script>
 
 <style scoped lang="scss">

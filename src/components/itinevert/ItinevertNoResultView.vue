@@ -9,22 +9,20 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'ItinevertNoResultView',
-  props: {
-    error: {
-      type: Object,
-      default: () => ({}),
-    },
+<script setup lang="ts">
+import { useGlobalProperties } from '@/js/composables/global-properties';
+
+defineProps({
+  error: {
+    type: Object,
+    default: () => ({}),
   },
-  data() {
-    return {
-      errorMessages: {
-        date_out_of_bounds: this.$gettext('Public transport schedules are not yet known for this period.'),
-      },
-    };
-  },
+});
+
+const { $gettext } = useGlobalProperties();
+
+const errorMessages: Record<string, string> = {
+  date_out_of_bounds: $gettext('Public transport schedules are not yet known for this period.'),
 };
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <modal-window ref="modalWindow" wide>
+  <modal-window ref="modal" wide>
     <div class="tabs">
       <ul>
         <li :class="{ 'is-active': activeTab === 'tracking-devices' }">
@@ -22,34 +22,30 @@
   </modal-window>
 </template>
 
-<script>
-import GpsFileUpload from '@/components/map/GpsFileUpload';
-import TrackingDeviceActivities from '@/components/tracking/TrackingDeviceActivities';
+<script setup lang="ts">
+import { ref, useTemplateRef } from 'vue';
 
-export default {
-  components: { TrackingDeviceActivities, GpsFileUpload },
+import GpsFileUpload from '@/components/map/GpsFileUpload.vue';
+import TrackingDeviceActivities from '@/components/tracking/TrackingDeviceActivities.vue';
 
-  emits: ['data'],
+const emit = defineEmits(['data']);
 
-  data() {
-    return {
-      activeTab: 'tracking-devices',
-    };
-  },
+const activeTab = ref('tracking-devices');
+const modal = useTemplateRef<{ show(): void; hide(): void }>('modal');
 
-  methods: {
-    show() {
-      this.$refs.modalWindow.show();
-    },
+function show() {
+  modal.value!.show();
+}
 
-    hide() {
-      this.$refs.modalWindow.hide();
-    },
+function hide() {
+  modal.value!.hide();
+}
 
-    setGeometry(geometry) {
-      this.$emit('data', geometry);
-      this.hide();
-    },
-  },
-};
+function setGeometry(geometry: unknown) {
+  emit('data', geometry);
+  hide();
+}
+
+// the map input of the edition forms opens it
+defineExpose({ show });
 </script>
