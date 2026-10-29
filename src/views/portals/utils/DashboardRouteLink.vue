@@ -15,82 +15,80 @@
   </dashboard-link>
 </template>
 
-<script>
-import DashboardLink from './DashboardLink';
+<script setup lang="ts">
+import { computed, type PropType } from 'vue';
 
-export default {
-  components: { DashboardLink },
+import DashboardLink from './DashboardLink.vue';
 
-  props: {
-    route: {
-      type: Object,
-      required: true,
-    },
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+
+const props = defineProps({
+  route: {
+    type: Object as PropType<C2cDocument>,
+    required: true,
   },
+});
 
-  computed: {
-    filteredDocument() {
-      const result = {};
+const filteredDocument = computed(() => {
+  const result: Record<string, unknown> = {};
 
-      if (this.route.activities.includes('skitouring')) {
-        result.ski_rating = this.route.ski_rating;
-        result.height_diff_up = this.route.height_diff_up;
-      }
+  if (props.route.activities.includes('skitouring')) {
+    result.ski_rating = props.route.ski_rating;
+    result.height_diff_up = props.route.height_diff_up;
+  }
 
-      if (this.route.activities.includes('snow_ice_mixed')) {
-        result.height_diff_difficulties = this.route.height_diff_difficulties;
-        result.global_rating = this.route.global_rating;
-      }
+  if (props.route.activities.includes('snow_ice_mixed')) {
+    result.height_diff_difficulties = props.route.height_diff_difficulties;
+    result.global_rating = props.route.global_rating;
+  }
 
-      if (this.route.activities.includes('mountain_climbing')) {
-        result.height_diff_difficulties = this.route.height_diff_difficulties;
-        result.engagement_rating = this.route.engagement_rating;
-      }
+  if (props.route.activities.includes('mountain_climbing')) {
+    result.height_diff_difficulties = props.route.height_diff_difficulties;
+    result.engagement_rating = props.route.engagement_rating;
+  }
 
-      if (this.route.activities.includes('rock_climbing')) {
-        result.height_diff_difficulties = this.route.height_diff_difficulties;
-        result.equipement_rating = this.route.equipement_rating;
-        result.rock_free_rating = this.route.rock_free_rating;
-        result.rock_required_rating = this.route.rock_required_rating;
-      }
+  if (props.route.activities.includes('rock_climbing')) {
+    result.height_diff_difficulties = props.route.height_diff_difficulties;
+    result.equipement_rating = props.route.equipement_rating;
+    result.rock_free_rating = props.route.rock_free_rating;
+    result.rock_required_rating = props.route.rock_required_rating;
+  }
 
-      if (this.route.activities.includes('ice_climbing')) {
-        result.height_diff_difficulties = this.route.height_diff_difficulties;
-        result.ice_rating = this.route.ice_rating;
-      }
+  if (props.route.activities.includes('ice_climbing')) {
+    result.height_diff_difficulties = props.route.height_diff_difficulties;
+    result.ice_rating = props.route.ice_rating;
+  }
 
-      if (this.route.activities.includes('via_ferrata')) {
-        result.via_ferrata_rating = this.route.via_ferrata_rating;
-        result.height_diff_difficulties = this.route.height_diff_difficulties;
-      }
+  if (props.route.activities.includes('via_ferrata')) {
+    result.via_ferrata_rating = props.route.via_ferrata_rating;
+    result.height_diff_difficulties = props.route.height_diff_difficulties;
+  }
 
-      if (this.route.activities.includes('mountain_biking')) {
-        result.mtb_up_rating = this.route.mtb_up_rating;
-        result.mtb_down_rating = this.route.mtb_down_rating;
-      }
+  if (props.route.activities.includes('mountain_biking')) {
+    result.mtb_up_rating = props.route.mtb_up_rating;
+    result.mtb_down_rating = props.route.mtb_down_rating;
+  }
 
-      if (this.route.activities.includes('snowshoeing')) {
-        result.height_diff_up = this.route.height_diff_up;
-        result.height_diff_down = this.route.height_diff_down;
-        result.snowshoe_rating = this.route.snowshoe_rating;
-      }
+  if (props.route.activities.includes('snowshoeing')) {
+    result.height_diff_up = props.route.height_diff_up;
+    result.height_diff_down = props.route.height_diff_down;
+    result.snowshoe_rating = props.route.snowshoe_rating;
+  }
 
-      if (this.route.activities.includes('hiking')) {
-        result.hiking_rating = this.route.hiking_rating;
-        result.height_diff_up = this.route.height_diff_up;
-        result.height_diff_down = this.route.height_diff_down;
-      }
+  if (props.route.activities.includes('hiking')) {
+    result.hiking_rating = props.route.hiking_rating;
+    result.height_diff_up = props.route.height_diff_up;
+    result.height_diff_down = props.route.height_diff_down;
+  }
 
-      if (this.route.activities.includes('slacklining')) {
-        result.slackline_length = this.route.slackline_length;
-        result.slackline_height = this.route.slackline_height;
-        result.height_diff_access = this.route.height_diff_access;
-      }
+  if (props.route.activities.includes('slacklining')) {
+    result.slackline_length = props.route.slackline_length;
+    result.slackline_height = props.route.slackline_height;
+    result.height_diff_access = props.route.height_diff_access;
+  }
 
-      return result;
-    },
-  },
-};
+  return result;
+});
 </script>
 
 <style scoped>

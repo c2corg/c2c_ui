@@ -80,11 +80,7 @@
   </section>
 </template>
 
-<script>
-export default {
-  name: 'HomeBanner',
-};
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .intro-banner {

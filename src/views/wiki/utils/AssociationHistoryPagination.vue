@@ -44,38 +44,33 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    count: {
-      type: Number,
-      required: true,
-    },
-    documentId: {
-      type: Number,
-      default: null,
-    },
-    userId: {
-      type: Number,
-      default: null,
-    },
-    limit: {
-      type: Number,
-      default: null,
-    },
-    offset: {
-      type: Number,
-      default: null,
-    },
-  },
+<script setup lang="ts">
+import { computed } from 'vue';
 
-  computed: {
-    limitAsNumber() {
-      return this.limit ?? 50;
-    },
-    offsetAsNumber() {
-      return this.offset ?? 0;
-    },
+const props = defineProps({
+  count: {
+    type: Number,
+    required: true,
   },
-};
+  documentId: {
+    type: Number,
+    default: null,
+  },
+  userId: {
+    type: Number,
+    default: null,
+  },
+  limit: {
+    type: Number,
+    default: null,
+  },
+  offset: {
+    type: Number,
+    default: null,
+  },
+});
+
+const limitAsNumber = computed(() => props.limit ?? 50);
+
+const offsetAsNumber = computed(() => props.offset ?? 0);
 </script>

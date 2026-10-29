@@ -45,59 +45,50 @@
   </span>
 </template>
 
-<script>
-export default {
-  props: {
-    documents: {
-      type: Object,
-      default: null,
-    },
+<script setup lang="ts">
+import { computed, ref, useTemplateRef, watch, type PropType } from 'vue';
+import { useRoute } from 'vue-router';
+
+import type DropdownButton from '@/components/generics/DropdownButton.vue';
+
+const props = defineProps({
+  // the page of documents, and their total
+  documents: {
+    type: Object as PropType<{ total: number } | null>,
+    default: null,
   },
+});
 
-  data() {
-    return {
-      total: 30,
-    };
-  },
+const route = useRoute();
 
-  computed: {
-    offset() {
-      return parseInt(this.$route.query.offset ?? 0);
-    },
-    queryLimit() {
-      return parseInt(this.$route.query.limit ?? 30);
-    },
-    firstDocumentPosition() {
-      return this.offset + 1;
-    },
-    lastDocumentPosition() {
-      return Math.min(this.offset + this.queryLimit, this.total);
-    },
-  },
+const total = ref(30);
+const limitSelector = useTemplateRef<InstanceType<typeof DropdownButton>>('limitSelector');
 
-  watch: {
-    documents: 'saveTotal',
-  },
+const offset = computed(() => parseInt(String(route.query.offset ?? 0)));
+const queryLimit = computed(() => parseInt(String(route.query.limit ?? 30)));
+const firstDocumentPosition = computed(() => offset.value + 1);
+const lastDocumentPosition = computed(() => Math.min(offset.value + queryLimit.value, total.value));
 
-  methods: {
-    saveTotal() {
-      if (this.documents) {
-        this.total = this.documents.total;
-      }
-    },
+function saveTotal() {
+  if (props.documents) {
+    total.value = props.documents.total;
+  }
+}
 
-    pageQuery(offset, limit) {
-      const query = Object.assign({}, this.$route.query);
-      query.offset = Math.max(offset, 0);
-      query.limit = Math.max(Math.min(limit, 100), 30);
-      return { name: this.$route.name, params: this.$route.params, query };
-    },
+function pageQuery(newOffset: number, limit: number) {
+  const query = {
+    ...route.query,
+    offset: String(Math.max(newOffset, 0)),
+    limit: String(Math.max(Math.min(limit, 100), 30)),
+  };
+  return { name: route.name, params: route.params, query };
+}
 
-    hideOnclick() {
-      this.$refs.limitSelector.isActive = false;
-    },
-  },
-};
+function hideOnclick() {
+  limitSelector.value!.isActive = false;
+}
+
+watch(() => props.documents, saveTotal);
 </script>
 
 <style scoped lang="scss">

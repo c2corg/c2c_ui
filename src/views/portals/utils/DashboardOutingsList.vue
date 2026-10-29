@@ -47,102 +47,95 @@
   </div>
 </template>
 
-<script>
-import DashboardOutingLink from './DashboardOutingLink';
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
 
+import DashboardOutingLink from './DashboardOutingLink.vue';
+
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  name: 'DashboardOutingsList',
+type Query = Record<string, string | undefined>;
 
-  components: {
-    DashboardOutingLink,
+const props = defineProps({
+  isPersonal: {
+    type: Boolean,
+    required: true,
   },
+});
 
-  props: {
-    isPersonal: {
-      type: Boolean,
-      required: true,
-    },
-  },
+const { $user } = useGlobalProperties();
 
-  data() {
-    return {
-      outingsPromise: null,
-    };
-  },
+// the user preferences while they load, then the outings
+const outingsPromise = ref<ApiData | Promise<void> | null>(null);
 
-  computed: {
-    outings() {
-      return this.outingsPromise?.data;
-    },
+const outings = computed(() => (outingsPromise.value as ApiData | null)?.data);
 
-    outingsByDate() {
-      if (!this.outings) {
-        return null;
+const outingsByDate = computed(() => {
+  if (!outings.value) {
+    return null;
+  }
+
+  const result: Record<string, C2cDocument[]> = {};
+
+  for (const outing of outings.value.documents as C2cDocument[]) {
+    if (outing.quality !== 'empty') {
+      result[outing.date_end] = result[outing.date_end] ?? [];
+      result[outing.date_end].push(outing);
+    }
+  }
+
+  return result;
+});
+
+function loadOutings() {
+  if (!props.isPersonal || !$user.isLogged) {
+    loadOutingsWithQuery();
+  } else {
+    outingsPromise.value = getQueryFromUserPreferences('outing').then(loadOutingsWithQuery);
+  }
+}
+
+function loadOutingsWithQuery(query: Query = {}) {
+  outingsPromise.value = (c2c.outing as DocumentService).getAll({
+    ...query,
+    limit: 40,
+    qa: 'draft,great',
+  });
+}
+
+function getQueryFromUserPreferences(documentType: string) {
+  return new Promise<Query>(function (resolve) {
+    c2c.userProfile.preferences.get().then((result) => {
+      const preferences = result.data;
+      const query: Query = {};
+
+      if (['outing', 'route', 'image', 'xreport', 'books', 'articles'].includes(documentType)) {
+        const activities = preferences.activities.join(',');
+        query.act = activities === '' ? undefined : activities;
       }
 
-      const result = {};
-
-      for (const outing of this.outings.documents) {
-        if (outing.quality !== 'empty') {
-          result[outing.date_end] = result[outing.date_end] ?? [];
-          result[outing.date_end].push(outing);
-        }
+      if (['outing', 'route', 'image', 'xreport', 'waypoint'].includes(documentType)) {
+        const areas = preferences.areas.map((area: C2cDocument) => area.document_id).join(',');
+        query.a = areas === '' ? undefined : areas;
+        query.bbox = undefined;
       }
 
-      return result;
-    },
-  },
+      resolve(query);
+    });
+  });
+}
 
-  watch: {
-    isPersonal: 'loadOutings',
-  },
+watch(
+  () => props.isPersonal,
+  () => loadOutings()
+);
 
-  created() {
-    this.loadOutings();
-  },
-
-  methods: {
-    loadOutings() {
-      if (!this.isPersonal || !this.$user.isLogged) {
-        this.loadOutingsWithQuery();
-      } else {
-        this.outingsPromise = this.getQueryFromUserPreferences('outing').then(this.loadOutingsWithQuery);
-      }
-    },
-
-    loadOutingsWithQuery(query = {}) {
-      this.outingsPromise = c2c.outing.getAll({
-        ...query,
-        limit: 40,
-        qa: 'draft,great',
-      });
-    },
-
-    getQueryFromUserPreferences(documentType) {
-      return new Promise(function (resolve) {
-        c2c.userProfile.preferences.get().then((result) => {
-          const preferences = result.data;
-          const query = {};
-
-          if (['outing', 'route', 'image', 'xreport', 'books', 'articles'].includes(documentType)) {
-            const activities = preferences.activities.join(',');
-            query.act = activities === '' ? undefined : activities;
-          }
-
-          if (['outing', 'route', 'image', 'xreport', 'waypoint'].includes(documentType)) {
-            const areas = preferences.areas.map((area) => area.document_id).join(',');
-            query.a = areas === '' ? undefined : areas;
-            query.bbox = undefined;
-          }
-
-          resolve(query);
-        });
-      });
-    },
-  },
-};
+// created
+loadOutings();
 </script>
 
 <style scoped lang="scss">

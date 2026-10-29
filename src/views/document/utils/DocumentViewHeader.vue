@@ -13,11 +13,7 @@
 
           <social-network-sharing v-if="documentType != 'profile' && isNormalView" :document="document" />
 
-          <span
-            :title="$gettext('Add images')"
-            v-if="isEditable && documentType !== 'image'"
-            @click="$refs.imagesUploader.show()"
-          >
+          <span :title="$gettext('Add images')" v-if="isEditable && documentType !== 'image'" @click="uploader?.show()">
             <fa-layers>
               <fa-icon icon="image" />
               <fa-icon icon="circle" :style="{ color: 'white' }" transform="shrink-5 right-5 up-6" />
@@ -47,55 +43,42 @@
         </h1>
       </div>
 
-      <images-uploader ref="imagesUploader" :lang="lang" :parent-document="document" />
+      <images-uploader ref="uploader" :lang="lang" :parent-document="document" />
     </div>
   </div>
 </template>
 
-<script>
-import DocumentVersionBanner from './DocumentVersionBanner';
-import FollowButton from './FollowButton';
-import GotopButton from './GotopButton';
-import SocialNetworkSharing from './SocialNetworkSharing';
-import TagsButton from './TagsButton';
+<script setup lang="ts">
+import { computed, useTemplateRef } from 'vue';
 
-import ImagesUploader from '@/components/images-uploader/ImagesUploader';
+import DocumentVersionBanner from './DocumentVersionBanner.vue';
+import FollowButton from './FollowButton.vue';
+import GotopButton from './GotopButton.vue';
+import SocialNetworkSharing from './SocialNetworkSharing.vue';
+import TagsButton from './TagsButton.vue';
+
+import ImagesUploader from '@/components/images-uploader/ImagesUploader.vue';
 import { useEditable } from '@/js/composables/editable';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { documentProperty, useDocumentType } from '@/js/properties';
 
-export default {
-  components: {
-    ImagesUploader,
-    FollowButton,
-    GotopButton,
-    TagsButton,
-    SocialNetworkSharing,
-    DocumentVersionBanner,
+const props = defineProps({
+  ...documentProperty,
+  version: {
+    type: Object,
+    default: null,
   },
+});
 
-  props: {
-    ...documentProperty,
-    version: {
-      type: Object,
-      default: null,
-    },
-  },
+const { $documentUtils } = useGlobalProperties();
+const { documentType } = useDocumentType(props);
+const { isDraftView, isPrintingView, isNormalView, isEditable } = useEditable(() => props.document);
 
-  setup(props) {
-    // the view mode too: isDraftView, isNormalView...
-    return { ...useEditable(() => props.document), ...useDocumentType(props) };
-  },
+const uploader = useTemplateRef<InstanceType<typeof ImagesUploader>>('uploader');
 
-  computed: {
-    lang() {
-      return this.document.cooked.lang;
-    },
+const lang = computed(() => props.document.cooked.lang);
 
-    title() {
-      return this.$documentUtils.getDocumentTitle(this.document, this.lang);
-    },
-  },
-};
+const title = computed(() => $documentUtils.getDocumentTitle(props.document, lang.value));
 </script>
 
 <style scoped lang="scss">

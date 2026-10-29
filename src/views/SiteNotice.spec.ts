@@ -1,16 +1,14 @@
 import { mount } from '@vue/test-utils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import SiteNotice from './SiteNotice';
+import SiteNotice from './SiteNotice.vue';
 
 import forum from '@/js/apis/forum';
 
 const mountSiteNotice = () =>
   mount(SiteNotice, {
     global: {
-      mocks: {
-        $user: { lang: 'fr' },
-      },
+      config: { globalProperties: { $user: { lang: 'fr' } } as never },
     },
   });
 
@@ -33,7 +31,7 @@ describe('SiteNotice', () => {
   });
 
   it('shows a visible announcement', async () => {
-    forum.axios.get.mockResolvedValue({
+    vi.mocked(forum.axios.get).mockResolvedValue({
       data: {
         tags: ['visible'],
         post_stream: { posts: [{ updated_at: '2026-10-18', cooked: '<p>Header</p><p>Content</p>' }] },
@@ -48,7 +46,7 @@ describe('SiteNotice', () => {
   });
 
   it('shows nothing, and throws nothing, when the forum is unreachable', async () => {
-    forum.axios.get.mockRejectedValue(new Error('Network Error'));
+    vi.mocked(forum.axios.get).mockRejectedValue(new Error('Network Error'));
 
     const wrapper = mountSiteNotice();
     await flush();
@@ -58,7 +56,7 @@ describe('SiteNotice', () => {
   });
 
   it('remembers a closed announcement, under the key existing users have', async () => {
-    forum.axios.get.mockResolvedValue({
+    vi.mocked(forum.axios.get).mockResolvedValue({
       data: {
         tags: ['visible'],
         post_stream: { posts: [{ updated_at: '2026-10-19', cooked: '<p>Closed header</p>' }] },
@@ -70,7 +68,7 @@ describe('SiteNotice', () => {
     await wrapper.find('button.delete').trigger('click');
 
     expect(wrapper.isVisible()).toBe(false);
-    expect(JSON.parse(window.localStorage.getItem('SiteNotice.preferences'))).toMatchObject({
+    expect(JSON.parse(window.localStorage.getItem('SiteNotice.preferences')!)).toMatchObject({
       'readdenPostKey.fr': '2026-10-19',
     });
 

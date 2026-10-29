@@ -1,21 +1,32 @@
-import { mount } from '@vue/test-utils';
-import { describe, expect, it } from 'vitest';
+import { mount, type VueWrapper } from '@vue/test-utils';
+import { describe, expect, it, vi } from 'vitest';
 
-import InputActivity from '@/components/generics/inputs/InputActivity';
-import InputEventActivity from '@/components/generics/inputs/InputEventActivity';
-import InputMultiSelect from '@/components/generics/inputs/InputMultiSelect';
-import EditorButton from '@/components/markdown-editor/EditorButton';
-import PageSelector from '@/views/documents/utils/PageSelector';
+import InputActivity from '@/components/generics/inputs/InputActivity.vue';
+import InputEventActivity from '@/components/generics/inputs/InputEventActivity.vue';
+import InputMultiSelect from '@/components/generics/inputs/InputMultiSelect.vue';
+import EditorButton from '@/components/markdown-editor/EditorButton.vue';
+import PageSelector from '@/views/documents/utils/PageSelector.vue';
 
 // Vue 3 renders attr="false" for an attribute bound to false (Vue 2 removed it), which CSS selectors such as
 // [checked] or Bulma's .button[disabled] then match: the attributes must be absent when false.
 
+// PageSelector reads the page of the current route
+vi.mock('vue-router', async (importOriginal) => ({
+  ...(await importOriginal<object>()),
+  useRoute: () => ({ query: {}, params: {}, name: 'routes' }),
+}));
+
 const global = {
-  mocks: { $gettext: (text) => text, $filters: { uppercaseFirstLetter: (text) => text }, $route: { query: {} } },
+  config: {
+    globalProperties: {
+      $gettext: (text: string) => text,
+      $filters: { uppercaseFirstLetter: (text: string) => text },
+    } as never,
+  },
   stubs: { IconActivity: true, IconEventActivity: true, FaIcon: true, RouterLink: { template: '<a><slot /></a>' } },
 };
 
-const checkedItems = (wrapper, selector) =>
+const checkedItems = (wrapper: VueWrapper, selector: string) =>
   wrapper.findAll(selector).map((item) => item.attributes('checked') !== undefined);
 
 describe('attributes bound to false', () => {
@@ -26,7 +37,7 @@ describe('attributes bound to false', () => {
   });
 
   it('InputEventActivity marks only the chosen activity', () => {
-    const wrapper = mount(InputEventActivity, { props: { modelValue: null }, global });
+    const wrapper = mount(InputEventActivity, { props: { modelValue: undefined }, global });
     expect(checkedItems(wrapper, '.input-item').filter(Boolean)).toHaveLength(0);
   });
 

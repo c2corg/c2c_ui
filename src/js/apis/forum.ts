@@ -19,7 +19,9 @@ type Topic = z.input<typeof topic>;
 
 const latestTopics = z.object({ users: z.array(forumUser), topic_list: z.object({ topics: z.array(topic) }) });
 
-const topicWithPosts = z.object({ post_stream: z.object({ posts: z.array(z.unknown()) }) });
+// the announcements show the last post of their topic, when the topic has the visible tag
+const post = z.object({ cooked: z.string(), updated_at: z.string() });
+const topicWithPosts = topic.pick({ tags: true }).extend({ post_stream: z.object({ posts: z.array(post) }) });
 
 // Discourse does not resolve a topic from its slug alone (/t/annonce-fr.json) anymore: the id is required.
 // /t/id_for/<slug> could give it, but fails when another topic hidden from visitors uses the same slug,

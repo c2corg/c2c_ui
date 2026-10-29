@@ -32,83 +32,69 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+
 import ItinevertBanner from '../../components/itinevert/ItinevertBanner.vue';
 import ItinevertWizard from '../../components/itinevert/ItinevertWizard.vue';
 
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 
 // stored under the component name, as before: existing preferences are kept
 const preferences = getPreferences('ItinevertView');
 
-export default {
-  name: 'ItinevertView',
+const { $user } = useGlobalProperties();
 
-  components: {
-    ItinevertBanner,
-    ItinevertWizard,
-  },
+// the banner is shown to the visitors, hidden to the users
+const visible = ref<boolean>(!$user.isLogged);
+const wizardView = ref('form');
 
-  data() {
-    let state = true;
+const canStartAgain = computed(
+  () => wizardView.value === 'result' || wizardView.value === 'filter' || wizardView.value === 'loading'
+);
 
-    if (this.$user.isLogged) {
-      state = false;
-    }
+function handlePopstate() {
+  // whenever user press back button in itinevert, we go back to form view
+  if (wizardView.value !== 'form') {
+    changeView('form');
+  } else {
+    history.back();
+  }
+}
 
-    return {
-      visible: state,
-      wizardView: 'form',
-    };
-  },
-  computed: {
-    canStartAgain() {
-      return this.wizardView === 'result' || this.wizardView === 'filter' || this.wizardView === 'loading';
-    },
-  },
-  beforeUnmount() {
-    window.removeEventListener('popstate', this.handlePopstate);
-  },
-  mounted() {
-    const stored = preferences.get('itinevert_visible');
-    if (stored !== null) {
-      this.visible = stored;
-    }
-    this.handlePopstate = this.handlePopstate.bind(this);
-    window.addEventListener('popstate', this.handlePopstate);
-  },
-  methods: {
-    handlePopstate(event) {
-      // whenever user press back button in itinevert, we go back to form view
-      if (this.wizardView !== 'form') {
-        this.changeView('form');
-      } else {
-        history.back();
-      }
-    },
-    changeView(view) {
-      // user has clicked on start again, so we are not pushing a new state to history
-      if (view === 'form') {
-        this.wizardView = view;
-      } else if (view === 'filter' || (this.wizardView === 'form' && view === 'result')) {
-        // allow the user to press back button to go back to form view when
-        // he went from form to filter view
-        // he went from form to result view
-        history.pushState(null, 'Itinevert', window.location.href);
-        this.wizardView = view;
-      } else {
-        this.wizardView = view;
-      }
-    },
-    toggleProperty(property) {
-      this.setProperty(property, !this[property]);
-    },
-    setProperty(property, value) {
-      this[property] = value;
-      preferences.set(`itinevert_${property}`, this[property]);
-    },
-  },
-};
+function changeView(view: string) {
+  // user has clicked on start again, so we are not pushing a new state to history
+  if (view === 'form') {
+    wizardView.value = view;
+  } else if (view === 'filter' || (wizardView.value === 'form' && view === 'result')) {
+    // allow the user to press back button to go back to form view when
+    // he went from form to filter view
+    // he went from form to result view
+    history.pushState(null, 'Itinevert', window.location.href);
+    wizardView.value = view;
+  } else {
+    wizardView.value = view;
+  }
+}
+
+// only the banner is toggled
+function toggleProperty(property: 'visible') {
+  visible.value = !visible.value;
+  preferences.set(`itinevert_${property}`, visible.value);
+}
+
+onMounted(() => {
+  const stored = preferences.get('itinevert_visible');
+  if (stored !== null) {
+    visible.value = stored;
+  }
+  window.addEventListener('popstate', handlePopstate);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('popstate', handlePopstate);
+});
 </script>
 
 <style scoped lang="scss">
