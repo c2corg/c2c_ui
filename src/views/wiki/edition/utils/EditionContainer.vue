@@ -6,7 +6,7 @@
         <span v-if="mode === 'edit'">
           <html-header :title="$gettext('Edit a document')" />
           <document-title :document="document" />
-          <span class="is-size-5"> ({{ $language.availableAPI[$route.params.lang] }})</span>
+          <span class="is-size-5"> ({{ $language.availableAPI[$route.params.lang as string] }})</span>
         </span>
         <span v-else>
           <html-header :title="$documentUtils.getCreationTitle(documentType)" />
@@ -15,15 +15,15 @@
             <dropdown-button>
               <template #button>
                 <span class="button">
-                  <span> {{ $language.availableAPI[document.locales[0].lang] }}&nbsp; </span>
+                  <span> {{ $language.availableAPI[document.locales![0].lang] }}&nbsp; </span>
                   <fa-icon icon="angle-down" aria-hidden="true" />
                 </span>
               </template>
               <div
-                v-for="lang of $options.constants.langs"
+                v-for="lang of constants.langs"
                 :key="lang"
                 class="dropdown-item has-hover-background has-cursor-pointer"
-                @click="document.locales[0].lang = lang"
+                @click="document.locales![0].lang = lang"
               >
                 {{ $language.availableAPI[lang] }}
               </div>
@@ -49,7 +49,7 @@
       <div style="clear: both" />
     </div>
 
-    <component :is="documentType + '-view'" v-if="isPreview" :draft="document" />
+    <component :is="documentViews[documentType]" v-if="isPreview" :draft="document" />
 
     <div v-show="!isPreview" class="has-edition-width">
       <hr />
@@ -58,124 +58,124 @@
 
       <save-document-row @save="$emit('save', $event)" @preview="isPreview = true" :is-loading="isLoading" />
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <div v-if="htmlBanners && htmlBanners[documentType]" v-html="htmlBanners[documentType]" class="edition-banner" />
+      <div v-if="banners[documentType]" v-html="banners[documentType]" class="edition-banner" />
     </div>
   </div>
 </template>
 
-<script>
-import SaveDocumentRow from './SaveDocumentRow';
+<script lang="ts">
+const BANNERS_ARTICLE_ID = 1110927;
+
+// the banners of the edition views, per document type, in HTML
+type Banners = { initialized: boolean; [documentType: string]: string | boolean };
+// cache for banners, shared by the edition views (<script setup> runs per instance)
+let htmlBanners: Banners = { initialized: false };
+</script>
+
+<script setup lang="ts">
+import { computed, onMounted, ref, watch, type Component, type PropType } from 'vue';
+import { useRoute } from 'vue-router';
+
+import SaveDocumentRow from './SaveDocumentRow.vue';
 
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
 import { sanitizeRichHtml } from '@/js/sanitize-html';
-import AreaView from '@/views/document/AreaView';
-import ArticleView from '@/views/document/ArticleView';
-import BookView from '@/views/document/BookView';
-import ImageView from '@/views/document/ImageView';
-import MapView from '@/views/document/MapView';
-import OutingView from '@/views/document/OutingView';
-import ProfileView from '@/views/document/ProfileView';
-import RouteView from '@/views/document/RouteView';
-import WaypointView from '@/views/document/WaypointView';
-import XreportView from '@/views/document/XreportView';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+import AreaView from '@/views/document/AreaView.vue';
+import ArticleView from '@/views/document/ArticleView.vue';
+import BookView from '@/views/document/BookView.vue';
+import ImageView from '@/views/document/ImageView.vue';
+import MapView from '@/views/document/MapView.vue';
+import OutingView from '@/views/document/OutingView.vue';
+import ProfileView from '@/views/document/ProfileView.vue';
+import RouteView from '@/views/document/RouteView.vue';
+import WaypointView from '@/views/document/WaypointView.vue';
+import XreportView from '@/views/document/XreportView.vue';
 
-const BANNERS_ARTICLE_ID = 1110927;
-let htmlBanners = { initialized: false }; // cache for banners
-
-export default {
-  components: {
-    AreaView,
-    ArticleView,
-    BookView,
-    ImageView,
-    MapView,
-    OutingView,
-    ProfileView,
-    RouteView,
-    WaypointView,
-    XreportView,
-
-    SaveDocumentRow,
-  },
-
-  props: {
-    document: {
-      type: Object,
-      default: null,
-    },
-    mode: {
-      type: String,
-      required: true,
-    },
-    isLoading: {
-      type: Boolean,
-      required: true,
-    },
-  },
-
-  emits: ['save'],
-
-  data() {
-    return {
-      isPreview: false,
-      htmlBanners,
-    };
-  },
-
-  constants,
-
-  computed: {
-    documentType() {
-      return this.$documentUtils.getDocumentType(this.document.type);
-    },
-  },
-
-  watch: {
-    $route: 'reset',
-  },
-
-  mounted() {
-    if (!htmlBanners.initialized) {
-      c2c.article.getCooked(BANNERS_ARTICLE_ID, this.$language.current).then(this.computeBanners, () => {
-        // banners are optional: the form works without them. Cache is left
-        // uninitialized, so that next edit view tries again.
-      });
-    }
-  },
-
-  methods: {
-    reset() {
-      this.isPreview = false;
-    },
-
-    computeBanners(response) {
-      const cooked = response.data.cooked;
-
-      // cooked.description is HTML converted from a wiki article's user-authored
-      // markdown (banners article): sanitize it before injecting it in the DOM. The
-      // resulting htmlBanners fragments (built from this sanitized DOM's outerHTML
-      // below) stay safe when later bound with v-html.
-      const content = document.createElement('div');
-      content.innerHTML = sanitizeRichHtml(cooked.description);
-
-      let key;
-      htmlBanners = { initialized: true, undefined: '' };
-
-      for (const node of content.children) {
-        const isHeader = node.nodeName.match(/^[hH]3$/);
-
-        if (isHeader) {
-          key = node.id;
-          htmlBanners[key] = '';
-        } else {
-          htmlBanners[key] += node.outerHTML;
-        }
-      }
-      this.htmlBanners = htmlBanners;
-    },
-  },
+// the preview of the document, per document type (the global map-view is the map component)
+const documentViews: Record<string, Component> = {
+  area: AreaView,
+  article: ArticleView,
+  book: BookView,
+  image: ImageView,
+  map: MapView,
+  outing: OutingView,
+  profile: ProfileView,
+  route: RouteView,
+  waypoint: WaypointView,
+  xreport: XreportView,
 };
+
+const props = defineProps({
+  document: {
+    type: Object as PropType<C2cDocument>,
+    default: null,
+  },
+  mode: {
+    type: String,
+    required: true,
+  },
+  isLoading: {
+    type: Boolean,
+    required: true,
+  },
+});
+
+defineEmits(['save']);
+
+const route = useRoute();
+const { $documentUtils, $language } = useGlobalProperties();
+
+const isPreview = ref(false);
+const banners = ref<Banners>(htmlBanners);
+
+const documentType = computed(() => $documentUtils.getDocumentType(props.document.type));
+
+watch(
+  () => route.fullPath,
+  () => {
+    isPreview.value = false;
+  }
+);
+
+function computeBanners(response: { data: object }) {
+  // the document schema has no cooked locale (cook=lang adds it)
+  const cooked = (response.data as { cooked: { description: string } }).cooked;
+
+  // cooked.description is HTML converted from a wiki article's user-authored
+  // markdown (banners article): sanitize it before injecting it in the DOM. The
+  // resulting htmlBanners fragments (built from this sanitized DOM's outerHTML
+  // below) stay safe when later bound with v-html.
+  const content = window.document.createElement('div');
+  content.innerHTML = sanitizeRichHtml(cooked.description);
+
+  let key: string | undefined;
+  htmlBanners = { initialized: true, undefined: '' };
+
+  for (const node of content.children) {
+    const isHeader = node.nodeName.match(/^[hH]3$/);
+
+    if (isHeader) {
+      key = node.id;
+      htmlBanners[key] = '';
+    } else {
+      htmlBanners[String(key)] += node.outerHTML;
+    }
+  }
+  banners.value = htmlBanners;
+}
+
+onMounted(() => {
+  if (!htmlBanners.initialized) {
+    (c2c.article as DocumentService).getCooked(BANNERS_ARTICLE_ID, $language.current!).then(computeBanners, () => {
+      // banners are optional: the form works without them. Cache is left
+      // uninitialized, so that next edit view tries again.
+    });
+  }
+});
 </script>
 
 <style scoped lang="scss">

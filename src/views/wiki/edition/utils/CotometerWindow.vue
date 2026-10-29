@@ -71,170 +71,170 @@
     <template #footer>
       <footer>
         <button class="button is-success" type="button" @click="setResult" :disabled="!rating" v-translate>Ok</button>
-        <button class="button is-default" type="button" @click="$refs.modalWindow.hide()" v-translate>Cancel</button>
+        <button class="button is-default" type="button" @click="modalWindow!.hide()" v-translate>Cancel</button>
       </footer>
     </template>
   </modal-card>
 </template>
 
-<script>
-export default {
-  emits: ['update:modelValue'],
+<script setup lang="ts">
+import { computed, ref, useTemplateRef } from 'vue';
 
-  data() {
-    return {
-      skiability: 0,
-      slope: null,
-      elevation: 50,
-    };
-  },
+const emit = defineEmits(['update:modelValue']);
 
-  computed: {
-    errorSlope() {
-      return Number.isNaN(this.slope) || this.slope < 0 || this.slope > 80.0;
-    },
+const modalWindow = useTemplateRef<{ show(): void; hide(): void }>('modalWindow');
 
-    errorElevation() {
-      return (
-        (Number.isNaN(this.elevation) || this.elevation < 50.0 || this.elevation > 3000.0) && this.elevation !== null
-      );
-    },
+const skiability = ref(0);
+// numbers once typed, '' when cleared
+const slope = ref<number | string | null>(null);
+const elevation = ref<number | string | null>(50);
 
-    rating() {
-      if (this.errorSlope || this.errorElevation) {
-        return null;
-      }
+// as the former arithmetic on them: null and '' count as 0
+const slopeValue = computed(() => Number(slope.value));
+const elevationValue = computed(() => Number(elevation.value));
 
-      let inter = Math.tan((Math.PI * this.slope) / 180) + 0.1 * Math.log(this.elevation);
-      inter += this.skiability * (inter - 1);
+const errorSlope = computed(() => Number.isNaN(slopeValue.value) || slopeValue.value < 0 || slopeValue.value > 80.0);
 
-      const diff = (1 + this.skiability) * this.elevation;
+const errorElevation = computed(
+  () =>
+    (Number.isNaN(elevationValue.value) || elevationValue.value < 50.0 || elevationValue.value > 3000.0) &&
+    elevation.value !== null
+);
 
-      if (this.slope <= 17 && diff < 400) {
-        return '1.1';
-      }
+const rating = computed(() => {
+  if (errorSlope.value || errorElevation.value) {
+    return null;
+  }
 
-      if (this.slope <= 23 && diff < 650) {
-        return '1.2';
-      }
+  let inter = Math.tan((Math.PI * slopeValue.value) / 180) + 0.1 * Math.log(elevationValue.value);
+  inter += skiability.value * (inter - 1);
 
-      if (this.slope < 30 && diff < 800) {
-        return '1.3';
-      }
+  const diff = (1 + skiability.value) * elevationValue.value;
 
-      if ((this.slope < 35 && diff < 800) || (this.slope < 23 && diff > 800)) {
-        return '2.1';
-      }
+  if (slopeValue.value <= 17 && diff < 400) {
+    return '1.1';
+  }
 
-      if (this.slope < 35 && diff <= 950) {
-        return '2.2';
-      }
+  if (slopeValue.value <= 23 && diff < 650) {
+    return '1.2';
+  }
 
-      if (this.slope < 35 && diff > 950) {
-        return '2.3';
-      }
+  if (slopeValue.value < 30 && diff < 800) {
+    return '1.3';
+  }
 
-      if (this.slope >= 35 && this.slope <= 40 && diff < 650) {
-        return '3.1';
-      }
+  if ((slopeValue.value < 35 && diff < 800) || (slopeValue.value < 23 && diff > 800)) {
+    return '2.1';
+  }
 
-      if (this.slope >= 35 && this.slope <= 40 && diff <= 900) {
-        return '3.2';
-      }
+  if (slopeValue.value < 35 && diff <= 950) {
+    return '2.2';
+  }
 
-      if (this.slope >= 35 && this.slope <= 40 && diff > 900) {
-        return '3.3';
-      }
+  if (slopeValue.value < 35 && diff > 950) {
+    return '2.3';
+  }
 
-      if (inter < 0.98) {
-        return '1.1';
-      }
+  if (slopeValue.value >= 35 && slopeValue.value <= 40 && diff < 650) {
+    return '3.1';
+  }
 
-      if (inter >= 0.98 && inter < 1.02) {
-        return '1.2';
-      }
+  if (slopeValue.value >= 35 && slopeValue.value <= 40 && diff <= 900) {
+    return '3.2';
+  }
 
-      if (inter >= 1.03 && inter < 1.09) {
-        return '+1.3';
-      }
+  if (slopeValue.value >= 35 && slopeValue.value <= 40 && diff > 900) {
+    return '3.3';
+  }
 
-      if (inter >= 1.09 && inter < 1.18) {
-        return '+2.1';
-      }
+  if (inter < 0.98) {
+    return '1.1';
+  }
 
-      if (inter >= 1.18 && inter < 1.24) {
-        return '2.2';
-      }
+  if (inter >= 0.98 && inter < 1.02) {
+    return '1.2';
+  }
 
-      if (inter >= 1.24 && inter < 1.3) {
-        return '2.3';
-      }
+  if (inter >= 1.03 && inter < 1.09) {
+    return '+1.3';
+  }
 
-      if (inter >= 1.3 && inter < 1.34) {
-        return '3.1';
-      }
+  if (inter >= 1.09 && inter < 1.18) {
+    return '+2.1';
+  }
 
-      if (inter >= 1.34 && inter < 1.39) {
-        return '3.2';
-      }
+  if (inter >= 1.18 && inter < 1.24) {
+    return '2.2';
+  }
 
-      if (inter >= 1.39 && inter < 1.42) {
-        return '3.3';
-      }
+  if (inter >= 1.24 && inter < 1.3) {
+    return '2.3';
+  }
 
-      if (inter >= 1.42 && inter < 1.46) {
-        return '4.1';
-      }
+  if (inter >= 1.3 && inter < 1.34) {
+    return '3.1';
+  }
 
-      if (inter >= 1.46 && inter < 1.52) {
-        return '4.2';
-      }
+  if (inter >= 1.34 && inter < 1.39) {
+    return '3.2';
+  }
 
-      if (inter >= 1.52 && inter < 1.575) {
-        return '4.3';
-      }
+  if (inter >= 1.39 && inter < 1.42) {
+    return '3.3';
+  }
 
-      if (inter >= 1.575 && inter < 1.67) {
-        return '5.1';
-      }
+  if (inter >= 1.42 && inter < 1.46) {
+    return '4.1';
+  }
 
-      if (inter >= 1.67 && inter < 1.745) {
-        return '5.2';
-      }
+  if (inter >= 1.46 && inter < 1.52) {
+    return '4.2';
+  }
 
-      if (inter >= 1.745 && inter < 1.81) {
-        return '5.3';
-      }
+  if (inter >= 1.52 && inter < 1.575) {
+    return '4.3';
+  }
 
-      if (inter >= 1.81 && inter < 1.95) {
-        return '5.4';
-      }
+  if (inter >= 1.575 && inter < 1.67) {
+    return '5.1';
+  }
 
-      if (inter >= 1.95 && inter < 2.09) {
-        return '5.5';
-      }
+  if (inter >= 1.67 && inter < 1.745) {
+    return '5.2';
+  }
 
-      if (inter >= 2.09 && inter < 2.25) {
-        return '5.6';
-      }
+  if (inter >= 1.745 && inter < 1.81) {
+    return '5.3';
+  }
 
-      if (inter >= 2.25 && inter < 2.4) {
-        return '5.7';
-      }
+  if (inter >= 1.81 && inter < 1.95) {
+    return '5.4';
+  }
 
-      return '5.8';
-    },
-  },
+  if (inter >= 1.95 && inter < 2.09) {
+    return '5.5';
+  }
 
-  methods: {
-    show() {
-      this.$refs.modalWindow.show();
-    },
+  if (inter >= 2.09 && inter < 2.25) {
+    return '5.6';
+  }
 
-    setResult() {
-      this.$emit('update:modelValue', this.rating);
-      this.$refs.modalWindow.hide();
-    },
-  },
-};
+  if (inter >= 2.25 && inter < 2.4) {
+    return '5.7';
+  }
+
+  return '5.8';
+});
+
+function show() {
+  modalWindow.value!.show();
+}
+
+function setResult() {
+  emit('update:modelValue', rating.value);
+  modalWindow.value!.hide();
+}
+
+// the outing edition view opens it through a template ref
+defineExpose({ show });
 </script>

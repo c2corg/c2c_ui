@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest';
 
 import InputDate from './InputDate.vue';
 
+import FormInput from '@/views/wiki/edition/utils/FormInput.vue';
+
 describe('InputDate', () => {
   it('is a native date input showing the value', () => {
     const input = mount(InputDate, { props: { modelValue: '2026-10-01' } }).find('input');
@@ -35,18 +37,25 @@ describe('InputDate', () => {
   });
 });
 
-describe('FormInput date limits', async () => {
-  const { default: FormInput } = await import('@/views/wiki/edition/utils/FormInput.vue');
-  type DateLimit = (this: { min?: string; max?: string; field: { name: string } }) => string | undefined;
-  const { dateMin, dateMax } = (FormInput as unknown as { computed: Record<'dateMin' | 'dateMax', DateLimit> })
-    .computed;
+describe('FormInput date limits', () => {
+  // a date field of the outing form, as far as FormInput reads it
+  const mountDate = (props: { min?: string; max?: string }) =>
+    mount(FormInput, {
+      props: {
+        field: { name: 'date_end', type: 'date', parent: 'document', error: null, isVisibleFor: () => true } as never,
+        document: { type: 'o', locales: [{ lang: 'fr' }], date_end: null },
+        ...props,
+      },
+      // a global component of the app
+      global: { components: { InputDate } },
+    }).findComponent(InputDate);
 
   it('passes the min and max of the outing form as inclusive YYYY-MM-DD limits', () => {
     // OutingEditionView: date_end can't be before date_start, nor after today
-    const field = { name: 'date_end' };
-    expect(dateMin.call({ min: '2026-10-01', field })).toBe('2026-10-01');
-    expect(dateMax.call({ max: '2026-10-19T08:00:00', field })).toBe('2026-10-19');
-    expect(dateMin.call({ field })).toBe(undefined);
-    expect(dateMax.call({ field })).toBe(undefined);
+    expect(mountDate({ min: '2026-10-01', max: '2026-10-19T08:00:00' }).props()).toMatchObject({
+      min: '2026-10-01',
+      max: '2026-10-19',
+    });
+    expect(mountDate({}).props()).toMatchObject({ min: undefined, max: undefined });
   });
 });
