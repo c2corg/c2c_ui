@@ -14,7 +14,7 @@
     <div class="field quality-select-container">
       <input-simple
         v-if="autoComputeQuality && !isCollaborative"
-        :options="$options.quality_types"
+        :options="constants.quality_types"
         i18n
         i18n-context="quality_types"
         :model-value="computedQuality"
@@ -22,7 +22,7 @@
       />
       <input-simple
         v-else
-        :options="$options.quality_types"
+        :options="constants.quality_types"
         i18n
         i18n-context="quality_types"
         required
@@ -32,10 +32,18 @@
   </div>
 </template>
 
-<script>
-import constants from '@/js/constants';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 
-function getQualityFromScore(score) {
+import constants from '@/js/constants';
+import { documentProperty } from '@/js/properties';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+
+type Doc = C2cDocument;
+// the edited locale, with the fields of its document type
+type Locale = Record<string, any>;
+
+function getQualityFromScore(score: number) {
   if (score < 1) {
     return 'empty';
   } else if (score < 2) {
@@ -48,7 +56,7 @@ function getQualityFromScore(score) {
   return 'fine'; // never compute great
 }
 
-function hasActivities(doc, activities) {
+function hasActivities(doc: Doc, activities: string[]) {
   for (const activity of activities) {
     if (doc.activities.includes(activity)) {
       return true;
@@ -57,11 +65,11 @@ function hasActivities(doc, activities) {
   return false;
 }
 
-function hasRouteInfo(doc, locale) {
+function hasRouteInfo(doc: Doc, locale: Locale) {
   return (doc.geometry && doc.geometry.geom_detail) || locale.route_description;
 }
 
-function hasConditionLevel(doc, locale) {
+function hasConditionLevel(doc: Doc, locale: Locale) {
   if (locale.conditions) {
     return true;
   }
@@ -86,7 +94,7 @@ function hasConditionLevel(doc, locale) {
   return false;
 }
 
-function hasSnowInfo(doc) {
+function hasSnowInfo(doc: Doc) {
   return (
     doc.elevation_up_snow ||
     doc.elevation_down_snow ||
@@ -97,13 +105,13 @@ function hasSnowInfo(doc) {
   );
 }
 
-function getImageQuality(doc, locale) {
+function getImageQuality(doc: Doc, locale: Locale) {
   let score = 0;
 
   score += doc.geometry && doc.geometry.geom ? 1 : 0;
   score += doc.activities && doc.activities.length ? 0.5 : 0;
   score += doc.categories && doc.categories.length ? 0.5 : 0;
-  score += doc.associations.waypoints.length || doc.associations.routes.length ? 1 : 0;
+  score += doc.associations!.waypoints.length || doc.associations!.routes.length ? 1 : 0;
 
   score += locale.title ? 1 : 0;
   score += locale.description ? 1 : 0;
@@ -111,13 +119,13 @@ function getImageQuality(doc, locale) {
   return getQualityFromScore(score);
 }
 
-function getArticleQuality(doc, locale) {
+function getArticleQuality(doc: Doc, locale: Locale) {
   const description = locale.description || '';
 
   let score = 0;
 
-  score += doc.associations.waypoints.length ? 1 : 0;
-  score += doc.associations.images.length ? 1 : 0;
+  score += doc.associations!.waypoints.length ? 1 : 0;
+  score += doc.associations!.images.length ? 1 : 0;
   score += locale.summary ? 1 : 0;
   score += description ? 1 : -1;
   score += description.search(/(^|\n)##/g) !== -1 ? 1 : 0; // title
@@ -126,7 +134,7 @@ function getArticleQuality(doc, locale) {
   return getQualityFromScore(score);
 }
 
-function getOutingQuality(doc, locale) {
+function getOutingQuality(doc: Doc, locale: Locale) {
   function getSkiScore() {
     let score = 0;
 
@@ -196,87 +204,61 @@ function getOutingQuality(doc, locale) {
   return getQualityFromScore(score);
 }
 
-export default {
-  props: {
-    document: {
-      type: Object,
-      default: null,
-    },
-  },
+const props = defineProps({ ...documentProperty });
 
-  data() {
-    return {
-      autoComputeQuality: true,
-      computedQuality: 'empty',
-    };
-  },
+const autoComputeQuality = ref(true);
 
-  computed: {
-    editedLocale() {
-      // in edit mode, there is only one locale
-      return this.document ? this.document.locales[0] : null;
-    },
-    isCollaborative() {
-      if (['a', 'b', 'w', 'r', 'm'].includes(this.document.type)) {
-        return true;
-      }
-      if (['u', 'o', 'x'].includes(this.document.type)) {
-        return false;
-      }
-      if (['i'].includes(this.document.type)) {
-        return this.document.image_type === 'collaborative';
-      }
-      if (['c'].includes(this.document.type)) {
-        return this.document.article_type === 'collab';
-      }
+// in edit mode, there is only one locale
+const editedLocale = computed(() => props.document.locales![0]);
 
-      return false;
-    },
-  },
+const isCollaborative = computed(() => {
+  const document = props.document;
 
-  watch: {
-    document: {
-      handler: 'computeQuality',
-      deep: true,
-      immediate: true,
-    },
-  },
+  if (['a', 'b', 'w', 'r', 'm'].includes(document.type!)) {
+    return true;
+  }
+  if (['u', 'o', 'x'].includes(document.type!)) {
+    return false;
+  }
+  if (['i'].includes(document.type!)) {
+    return document.image_type === 'collaborative';
+  }
+  if (['c'].includes(document.type!)) {
+    return document.article_type === 'collab';
+  }
 
-  methods: {
-    computeQuality() {
-      if (!this.document) {
-        return null;
-      }
+  return false;
+});
 
-      if (this.document.type === 'o') {
-        this.computedQuality = getOutingQuality(this.document, this.editedLocale);
-      } else if (this.document.type === 'c') {
-        this.computedQuality = getArticleQuality(this.document, this.editedLocale);
-      } else if (this.document.type === 'i') {
-        this.computedQuality = getImageQuality(this.document, this.editedLocale);
-      } else {
-        this.computedQuality = this.document.quality;
-      }
+const computedQuality = computed(() => {
+  const document = props.document;
 
-      // "great is never proposed by the computation. When current quality is
-      // "great", it's because it has been explicitly set => do not change it
-      if (this.document.quality === 'great') {
-        this.computedQuality = 'great';
-      }
-    },
+  // "great is never proposed by the computation. When current quality is
+  // "great", it's because it has been explicitly set => do not change it
+  if (document.quality === 'great') {
+    return 'great';
+  }
 
-    // will be called by parent component before saving document
-    beforeSave() {
-      if (!this.isCollaborative && this.autoComputeQuality) {
-        this.document.quality = this.computedQuality;
-      }
-    },
-  },
+  if (document.type === 'o') {
+    return getOutingQuality(document, editedLocale.value);
+  } else if (document.type === 'c') {
+    return getArticleQuality(document, editedLocale.value);
+  } else if (document.type === 'i') {
+    return getImageQuality(document, editedLocale.value);
+  }
 
-  quality_types: constants.quality_types,
-};
+  return document.quality as string;
+});
+
+// will be called by parent component before saving document
+function beforeSave() {
+  if (!isCollaborative.value && autoComputeQuality.value) {
+    props.document.quality = computedQuality.value;
+  }
+}
+
+defineExpose({ beforeSave });
 </script>
-
 <style lang="scss" scoped>
 .quality-select-container {
   max-width: 20rem;

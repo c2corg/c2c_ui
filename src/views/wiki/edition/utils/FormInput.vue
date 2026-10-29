@@ -22,7 +22,7 @@
     <select v-model="document.main_waypoint_id">
       <option :value="null" />
       <option
-        v-for="waypoint of document.associations.waypoints"
+        v-for="waypoint of document.associations!.waypoints"
         :key="waypoint.document_id"
         :value="waypoint.document_id"
       >
@@ -71,7 +71,6 @@
   />
 
   <input-simple
-    ref="input"
     v-else-if="simpleInputType"
     v-show="visible"
     :prefix="prefix"
@@ -108,96 +107,80 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import dayjs from 'dayjs';
+import { computed } from 'vue';
 
-import InputConditionsLevels from './InputConditionsLevels';
+import InputConditionsLevels from './InputConditionsLevels.vue';
 
-import { documentProperty, fieldProperty, useDocumentType } from '@/js/properties';
+import { documentProperty, fieldProperty } from '@/js/properties';
 
-export default {
-  components: { InputConditionsLevels },
-
-  props: {
-    ...fieldProperty,
-    ...documentProperty,
-    prefix: {
-      type: String,
-      default: null,
-    },
-    isExpanded: {
-      type: Boolean,
-      default: null,
-    },
-    placeholder: {
-      type: String,
-      default: undefined,
-    },
-    min: {
-      type: String,
-      default: undefined,
-    },
-    max: {
-      type: String,
-      default: undefined,
-    },
-    unit: {
-      type: String,
-      default: undefined,
-    },
-    divisor: {
-      type: Number,
-      default: undefined,
-    },
+const props = defineProps({
+  ...fieldProperty,
+  ...documentProperty,
+  prefix: {
+    type: String,
+    default: null,
   },
-
-  emits: ['click-prefix', 'input'],
-
-  setup(props) {
-    return useDocumentType(props);
+  isExpanded: {
+    type: Boolean,
+    default: null,
   },
-
-  computed: {
-    // earliest and latest selectable dates of a date field, inclusive
-    dateMin() {
-      const min = this.min || this.field.min;
-      return min ? dayjs(min).format('YYYY-MM-DD') : undefined;
-    },
-
-    dateMax() {
-      const max = this.max || this.field.max;
-      return max ? dayjs(max).format('YYYY-MM-DD') : undefined;
-    },
-
-    editedLocale() {
-      // in edit mode, there is only one locale
-      return this.document.locales[0];
-    },
-
-    object() {
-      if (this.field.parent === 'document') {
-        return this.document;
-      }
-
-      if (this.field.parent === 'locales') {
-        return this.editedLocale;
-      }
-
-      if (this.field.parent === 'associations') {
-        return this.document.associations;
-      }
-
-      throw new Error(`Unexpected parent value : ${this.field.parent}`);
-    },
-    visible() {
-      return this.field.isVisibleFor(this.document);
-    },
-    simpleInputType() {
-      return ['text', 'number', 'url', 'tel'].includes(this.field.type);
-    },
-    hasError() {
-      return this.field.error !== null;
-    },
+  placeholder: {
+    type: String,
+    default: undefined,
   },
-};
+  min: {
+    type: String,
+    default: undefined,
+  },
+  max: {
+    type: String,
+    default: undefined,
+  },
+  unit: {
+    type: String,
+    default: undefined,
+  },
+  divisor: {
+    type: Number,
+    default: undefined,
+  },
+});
+
+defineEmits(['click-prefix', 'input']);
+
+// earliest and latest selectable dates of a date field, inclusive
+const dateMin = computed(() => {
+  const min = props.min || props.field.min;
+  return min ? dayjs(min).format('YYYY-MM-DD') : undefined;
+});
+
+const dateMax = computed(() => {
+  const max = props.max || props.field.max;
+  return max ? dayjs(max).format('YYYY-MM-DD') : undefined;
+});
+
+// in edit mode, there is only one locale
+const editedLocale = computed(() => props.document.locales![0]);
+
+const object = computed(() => {
+  if (props.field.parent === 'document') {
+    return props.document;
+  }
+
+  if (props.field.parent === 'locales') {
+    return editedLocale.value;
+  }
+
+  if (props.field.parent === 'associations') {
+    return props.document.associations!;
+  }
+
+  throw new Error(`Unexpected parent value : ${props.field.parent}`);
+});
+
+const visible = computed(() => props.field.isVisibleFor(props.document));
+const simpleInputType = computed(() => ['text', 'number', 'url', 'tel'].includes(props.field.type));
+const hasError = computed(() => props.field.error !== null);
 </script>
