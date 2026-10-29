@@ -49,7 +49,8 @@ export default [
       'prettier/prettier': ['warn', { endOfLine: 'auto' }],
       'no-undef': 'error',
       'no-unused-vars': 'warn',
-      'no-console': 'warn',
+      // console.warn and console.error report the failures to the developers
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
       'vue/no-v-html': 'off',
       'vue/order-in-components': 'warn',
       'vue/require-prop-types': 'warn',
@@ -79,6 +80,16 @@ export default [
     },
   },
 
+  // in components, the core rule reads the parameter names of the function types of <script lang="ts"> as unused variables
+  {
+    files: ['**/*.vue'],
+    plugins: { '@typescript-eslint': tseslint.plugin },
+    rules: {
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'warn',
+    },
+  },
+
   // run by Node (the specs by Vitest)
   {
     files: ['*.mjs', 'src/**/*.spec.{js,ts}'],
@@ -89,6 +100,16 @@ export default [
   {
     files: ['e2e/**/*.mjs'],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
+  },
+
+  // the specs and their helpers declare small stub components inline
+  {
+    files: ['src/**/*.spec.{js,ts}', 'src/views/wiki/edition/edition-test-utils.ts'],
+    rules: {
+      'vue/one-component-per-file': 'off',
+      'vue/require-prop-types': 'off',
+      'vue/order-in-components': 'off',
+    },
   },
 
   {

@@ -42,7 +42,6 @@ class FakeTile extends ol.source.ImageTile {
 const props = defineProps({
   visible: {
     type: Boolean,
-    default: false,
     required: true,
   },
 });

@@ -182,7 +182,6 @@ const featuresTitleInput = useTemplateRef<HTMLElement>('featuresTitleInput');
 const simplifyToolPanel = useTemplateRef<{ initialize(): void }>('simplifyToolPanel');
 const gpxFileInput = useTemplateRef<HTMLInputElement>('gpxFileInput');
 
-const editMode = computed(() => Yetix.editMode);
 const features = computed(() => Yetix.features as Feature<LineString>[]);
 const featuresTitle = computed(() => Yetix.featuresTitle as string);
 const validSimplifyTolerance = computed(() => Yetix.validSimplifyTolerance);
@@ -256,10 +255,6 @@ function downloadCourse() {
   } else if (format.value === 'KML') {
     downloadFeatures(new ol.format.KML(), '.kml', 'application/vnd.google-earth.kml+xml');
   }
-}
-
-function setEditMode() {
-  Yetix.setEditMode(!editMode.value);
 }
 
 function fitMapToFeatures() {

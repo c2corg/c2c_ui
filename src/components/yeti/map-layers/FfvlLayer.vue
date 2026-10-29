@@ -50,7 +50,6 @@ const { getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoosePoint
 
 const name = 'ffvl';
 const color = 'red';
-const colorExpired = 'lightgray';
 const overlay = ref<{ title?: string; url?: string; urlHisto?: string }>({});
 
 const layerSelector = computed(() => {

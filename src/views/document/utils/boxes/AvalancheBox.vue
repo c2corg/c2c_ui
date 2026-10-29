@@ -35,15 +35,12 @@ import { computed, onMounted, ref } from 'vue';
 
 import IconBra from '@/components/generics/icons/IconBra.vue';
 import yetiService from '@/js/apis/yeti-service';
-import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
 import { documentProperty } from '@/js/properties';
 
 const GeoJSON = new ol.format.GeoJSON();
 
 const props = defineProps({ ...documentProperty });
-
-const { $dateUtils } = useGlobalProperties();
 
 // a zone of the avalanche bulletins (BRA), and its bulletin
 type Zone = Feature<Polygon | MultiPolygon, { name: string; country: string }>;
@@ -76,23 +73,6 @@ const showAvalancheInfo = computed(() => {
 
   return props.document.activities?.some((activity: string) => activities.includes(activity));
 });
-
-function orientations(bra: Bra) {
-  // return truthy orientations, in uppercase
-  return Object.keys(bra.orientations)
-    .filter((key) => key !== 'comment')
-    .filter((key) => bra.orientations[key])
-    .map((val) => val.toUpperCase());
-}
-
-function validity(bra: Bra) {
-  return $dateUtils.toLocalizedString(new Date(bra.validUntil), 'DD/MM/YYYY HH:mm');
-}
-
-function expired(bra: Bra) {
-  // return true when validUntil is expired (warn user)
-  return Date.now() - new Date(bra.validUntil).getTime() > 0;
-}
 
 onMounted(() => {
   if (showAvalancheInfo.value) {

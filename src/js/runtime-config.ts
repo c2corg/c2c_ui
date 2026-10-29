@@ -25,7 +25,6 @@ export function applyRuntimeConfig<T extends BuildConfiguration>(config: T, runt
     if (config.urlsConfigurations[runtime.backend]) {
       config.urls = config.urlsConfigurations[runtime.backend];
     } else {
-      // eslint-disable-next-line no-console
       console.warn(`Unknown backend "${runtime.backend}", keeping "${config.urls.name}"`);
     }
   }

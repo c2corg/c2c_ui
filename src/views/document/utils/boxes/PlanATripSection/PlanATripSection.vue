@@ -323,7 +323,7 @@ export default {
     mapDocuments() {
       // This computed property depends on the selectedRouteJourney to ensure
       // route documents update when a journey is selected
-      const selectedRouteJourney = this.currentData.selectedRouteJourney;
+      void this.currentData.selectedRouteJourney;
 
       const baseDocuments = this.document.associations.waypoints ? [this.document.associations.waypoints] : [];
       const accessWaypointDocuments = this.accessWaypoints.map((waypoint) => {
