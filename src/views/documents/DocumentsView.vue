@@ -31,7 +31,7 @@
         <span class="is-pulled-right is-flex header-right" v-if="documentType != 'profile'">
           <load-user-preferences-button class="is-hidden-mobile" />
 
-          <span @click="toogleProperty('listMode')" class="header-item is-size-3 has-cursor-pointer is-hidden-mobile">
+          <span @click="setListMode(!listMode)" class="header-item is-size-3 has-cursor-pointer is-hidden-mobile">
             <fa-icon
               v-show="displayMode !== 'map'"
               icon="th-list"
@@ -48,16 +48,16 @@
           <template v-if="documentAreGeoLocalized">
             <display-mode-switch
               class="header-item is-hidden-mobile"
-              list-mode="listMode"
+              :list-mode="listMode"
               :model-value="displayMode"
-              @update:model-value="setProperty('displayMode', $event)"
+              @update:model-value="setDisplayMode"
             />
 
             <span class="is-size-3 is-hidden-tablet">
               <fa-icon
                 :icon="displayMode === 'map' ? 'th' : 'map-marked-alt'"
                 class="has-text-primary"
-                @click="setProperty('displayMode', displayMode === 'map' ? 'both' : 'map')"
+                @click="setDisplayMode(displayMode === 'map' ? 'both' : 'map')"
               />
             </span>
           </template>
@@ -95,7 +95,7 @@
             }"
             class="column card-container"
             @mouseenter="highlightedDocument = document"
-            @mouseleave="highlightedDocument = null"
+            @mouseleave="highlightedDocument = undefined"
           >
             <document-card :highlighted="highlightedDocument === document" :document="document" />
           </div>
@@ -112,7 +112,7 @@
       </div>
       <div v-if="showMap" class="column map-container">
         <map-view
-          ref="map"
+          ref="olMap"
           :documents="documentsShownOnMap"
           :highlighted-document="highlightedDocument"
           @highlight-document="highlightedDocument = $event"
@@ -125,150 +125,120 @@
   </div>
 </template>
 
-<script>
-import { defineAsyncComponent } from 'vue';
+<script setup lang="ts">
+import { computed, defineAsyncComponent, nextTick, ref, useTemplateRef, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import DisplayModeSwitch from './utils/DisplayModeSwitch';
-import ImageCards from './utils/ImageCards';
-import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton';
-import PageSelector from './utils/PageSelector';
-import QueryItems from './utils/QueryItems';
+import DisplayModeSwitch from './utils/DisplayModeSwitch.vue';
+import ImageCards from './utils/ImageCards.vue';
+import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton.vue';
+import PageSelector from './utils/PageSelector.vue';
+import QueryItems from './utils/QueryItems.vue';
 
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
 import bus from '@/js/event-bus';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 
 // lazy (ag-grid is big): an async component, as Vue 3 no longer takes a plain function returning the import
-const DocumentsTable = defineAsyncComponent(() => import('@/components/datatable/DocumentsTable'));
+const DocumentsTable = defineAsyncComponent(() => import('@/components/datatable/DocumentsTable.vue'));
 
 // stored under the component name, as before: existing preferences are kept
 const preferences = getPreferences('DocumentsView');
 
-export default {
-  name: 'DocumentsView',
+const documentTypes = ['route', 'waypoint', 'outing', 'image', 'book', 'area'];
 
-  components: {
-    QueryItems,
-    PageSelector,
-    DocumentsTable,
-    ImageCards,
-    DisplayModeSwitch,
-    LoadUserPreferencesButton,
-  },
+const route = useRoute();
+const router = useRouter();
+const { $gettext } = useGlobalProperties();
 
-  data() {
-    return {
-      promise: {},
+// the map component: OpenLayers needs an explicit resize when its container changes
+const olMap = useTemplateRef<{ map: { updateSize(): void } }>('olMap');
 
-      displayMode: 'both',
-      listMode: null,
+const promise = ref<ApiData | { data?: undefined }>({});
+const displayMode = ref('both');
+const listMode = ref(false);
+const highlightedDocument = ref<C2cDocument>();
+const filteredWaypoints = ref<C2cDocument[]>([]);
+const queryHasTags = ref(false);
 
-      isMobile: null,
+const showMap = computed(() => ['both', 'map'].includes(displayMode.value));
+const showResults = computed(() => ['result', 'both'].includes(displayMode.value));
+const documents = computed(() => promise.value.data);
+const documentType = computed(() => String(route.name).slice(0, -1));
+const documentAreGeoLocalized = computed(() => constants.objectDefinitions[documentType.value].geoLocalized === true);
 
-      highlightedDocument: null,
+const queryWithoutOffsetAndSort = computed(() => {
+  const result = Object.assign({}, route.query);
+  delete result.offset;
+  delete result.sort;
 
-      filteredWaypoints: [],
+  return result;
+});
 
-      queryHasTags: false,
-    };
-  },
+const documentsShownOnMap = computed(() =>
+  filteredWaypoints.value.concat(documents.value ? documents.value.documents : [])
+);
 
-  computed: {
-    showMap() {
-      return ['both', 'map'].includes(this.displayMode);
-    },
-    showResults() {
-      return ['result', 'both'].includes(this.displayMode);
-    },
-    documents() {
-      return this.promise.data;
-    },
-    documentType() {
-      return this.$route.name.slice(0, -1);
-    },
-    documentTypes() {
-      return ['route', 'waypoint', 'outing', 'image', 'book', 'area'];
-    },
-    documentAreGeoLocalized() {
-      return constants.objectDefinitions[this.documentType].geoLocalized === true;
-    },
-    addQuery() {
-      return {
-        act: this.$route.query.act,
-      };
-    },
-    queryWithoutOffsetAndSort() {
-      const result = Object.assign({}, this.$route.query);
-      delete result.offset;
-      delete result.sort;
+function load() {
+  displayMode.value = preferences.get(
+    documentType.value + '.displayMode',
+    documentAreGeoLocalized.value ? 'both' : 'result'
+  ) as string;
+  listMode.value = preferences.get(documentType.value + '.listMode', false) as boolean;
 
-      return result;
-    },
-    documentsShownOnMap() {
-      return this.filteredWaypoints.concat(this.documents ? this.documents.documents : []);
-    },
-  },
+  if (route.hash) {
+    // keep compatible with v6 AngularJs hacks...
+    router.replace(route.fullPath.replace('#', '?'));
+    // the route watcher will call load
+    return;
+  }
 
-  watch: {
-    $route: {
-      handler: 'load',
-      immediate: true,
-    },
-    displayMode: 'updateMapSize',
-  },
+  promise.value = (c2c as unknown as Record<string, DocumentService>)[documentType.value]
+    .getAll(route.query)
+    .then(() => {
+      // the list has its height: back from a document, the router can restore the scroll position
+      bus.emit('trigger-scroll');
+    });
+}
 
-  methods: {
-    load() {
-      this.displayMode = preferences.get(
-        this.documentType + '.displayMode',
-        this.documentAreGeoLocalized ? 'both' : 'result'
-      );
-      this.listMode = preferences.get(this.documentType + '.listMode', false);
+// the display preferences, per document type
+function setListMode(value: boolean) {
+  listMode.value = value;
+  preferences.set(`${documentType.value}.listMode`, value);
+}
 
-      if (this.$route.hash) {
-        // keep compatible with v6 AngularJs hacks...
-        this.$router.replace(this.$route.fullPath.replace('#', '?'));
-        // $route watcher will call load
-        return;
-      }
+function setDisplayMode(value: string) {
+  displayMode.value = value;
+  preferences.set(`${documentType.value}.displayMode`, value);
+}
 
-      this.promise = c2c[this.documentType].getAll(this.$route.query).then(() => {
-        // the list has its height: back from a document, the router can restore the scroll position
-        bus.emit('trigger-scroll');
-      });
-    },
+function getDocumentTypeTitle(documentType: string) {
+  return $gettext(documentType + 's');
+}
 
-    toogleProperty(property) {
-      this.setProperty(property, !this[property]);
-    },
+// when map container is resized (which happen when displayMode switchs between both and map),
+// openLayer need an explicit resize
+function updateMapSize(newValue: string, oldValue: string) {
+  if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
+    nextTick(() => olMap.value!.map.updateSize());
+  }
+}
 
-    setProperty(property, value) {
-      this[property] = value;
-      preferences.set(`${this.documentType}.${property}`, this[property]);
-    },
+function onQueryDocumentsLoad(documents: C2cDocument[]) {
+  queryHasTags.value = documents.length > 0;
+  filteredWaypoints.value = documents.filter((document) => document.type === 'w');
 
-    getDocumentTypeTitle(documentType) {
-      return this.$gettext(documentType + 's');
-    },
+  // do not display waypoints associated
+  filteredWaypoints.value.forEach((document) => delete document.associations);
+}
 
-    // when map container is resized (which happen when displayMode switchs between both and map),
-    // openLayer need an explicit resize
-    updateMapSize(newValue, oldValue) {
-      if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
-        this.$nextTick(this.$refs.map.map.updateSize.bind(this.$refs.map.map));
-      }
-    },
-
-    onQueryDocumentsLoad(documents) {
-      this.queryHasTags = documents.length > 0;
-      this.filteredWaypoints = documents.filter((document) => document.type === 'w');
-
-      // do not display waypoints associated
-      this.filteredWaypoints.forEach((document) => delete document.associations);
-    },
-  },
-};
+watch(() => route.fullPath, load, { immediate: true });
+watch(displayMode, updateMapSize);
 </script>
 
 <style scoped lang="scss">

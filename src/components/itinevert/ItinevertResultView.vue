@@ -34,7 +34,7 @@
           <template v-if="documentAreGeoLocalized">
             <display-mode-switch
               class="header-item is-hidden-mobile"
-              :list-mode="'listMode'"
+              :list-mode="Boolean(listMode)"
               :model-value="displayMode"
               @update:model-value="setProperty('displayMode', $event)"
             />

@@ -102,7 +102,7 @@
             :key="documentType"
             :document-type="documentType"
             class="dropdown-item is-size-5 is-ellipsed"
-            @click="$refs.addDocumentMenu.isActive = false"
+            @click="addDocumentMenu!.isActive = false"
           >
             <icon-document :document-type="documentType" fixed-width />
             <span>
@@ -128,7 +128,7 @@
                 width="24"
                 height="24"
                 alt="Avatar"
-                :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
+                :src="forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
               />
               <span class="has-text-weight-bold is-hidden-mobile"> &nbsp;{{ $user.name }} </span>
             </span>
@@ -139,7 +139,7 @@
             :key="item.text"
             :to="item.to"
             class="dropdown-item is-size-5"
-            @click="$refs.userMenu.isActive = false"
+            @click="userMenu!.isActive = false"
           >
             <component :is="item.iconComponent || 'fa-icon'" :icon="item.icon" fixed-width />
             <span>
@@ -178,156 +178,136 @@
   </nav>
 </template>
 
-<script>
-import { isNavigationFailure } from 'vue-router';
+<script setup lang="ts">
+import { computed, nextTick, onBeforeUnmount, ref, useTemplateRef } from 'vue';
+import { isNavigationFailure, useRoute, useRouter } from 'vue-router';
 
 import DfmAdLarge from './DfmAdLarge.vue';
 
-import IconHelp from '@/components/generics/icons/IconHelp';
-import IconJoinUs from '@/components/generics/icons/IconJoinUs';
+import IconHelp from '@/components/generics/icons/IconHelp.vue';
+import IconJoinUs from '@/components/generics/icons/IconJoinUs.vue';
 import JoinUsLink from '@/components/generics/links/JoinUsLink.vue';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  components: {
-    DfmAdLarge,
-    IconHelp,
-    IconJoinUs,
-    JoinUsLink,
+defineEmits(['toggle-side-menu']);
+
+const route = useRoute();
+const router = useRouter();
+const { $gettext, $user, $documentUtils } = useGlobalProperties();
+
+const forumUrl = config.urls.forum;
+const siteConfiguration = config;
+
+const searchInputContainer = useTemplateRef<HTMLDivElement>('searchInputContainer');
+const searchInput = useTemplateRef<{ focus(): void }>('searchInput');
+const addDocumentMenu = useTemplateRef<{ isActive: boolean }>('addDocumentMenu');
+const userMenu = useTemplateRef<{ isActive: boolean }>('userMenu');
+
+const hideSearchInput = ref(true); // only on small screen
+
+const userMenuLinks = computed(() => [
+  {
+    to: { name: 'profile', params: { id: $user.id } },
+    text: $gettext('My profile'),
+    icon: 'user',
   },
-  emits: ['toggle-side-menu'],
-
-  data() {
-    return {
-      searchText: '',
-      hideSearchInput: true, // only on small screen,
-    };
+  {
+    to: { name: 'account' },
+    text: $gettext('My account'),
+    icon: 'check-circle',
   },
-
-  computed: {
-    siteConfiguration() {
-      return config;
-    },
-
-    userMenuLinks() {
-      const items = [
-        {
-          to: { name: 'profile', params: { id: this.$user.id } },
-          text: this.$gettext('My profile'),
-          icon: 'user',
-        },
-        {
-          to: { name: 'account' },
-          text: this.$gettext('My account'),
-          icon: 'check-circle',
-        },
-        {
-          to: { name: 'preferences' },
-          text: this.$gettext('My preferences'),
-          icon: 'gears',
-        },
-        {
-          to: { name: 'trackers' },
-          text: this.$gettext('Activity trackers'),
-          icon: 'location-crosshairs',
-        },
-        {
-          to: { name: 'outings', query: { u: this.$user.id } },
-          text: this.$gettext('My outings'),
-          iconComponent: 'icon-outing',
-        },
-        {
-          to: { name: 'outings-stats', query: { u: this.$user.id } },
-          text: this.$gettext('My statistics'),
-          icon: 'chart-bar',
-        },
-        {
-          to: { name: 'whatsnew', query: { u: this.$user.id } },
-          text: this.$gettext('My changes'),
-          icon: 'edit',
-        },
-        {
-          to: { name: 'following' },
-          text: this.$gettext('My followed users'),
-          icon: 'heart',
-        },
-        {
-          to: { name: 'routes', query: { u: this.$user.id } },
-          text: this.$gettext('My bookmarks'),
-          icon: 'star',
-        },
-      ];
-      return items;
-    },
+  {
+    to: { name: 'preferences' },
+    text: $gettext('My preferences'),
+    icon: 'gears',
   },
-
-  forumUrl: config.urls.forum,
-
-  created() {
-    window.addEventListener('click', this.onClick);
+  {
+    to: { name: 'trackers' },
+    text: $gettext('Activity trackers'),
+    icon: 'location-crosshairs',
   },
-
-  beforeUnmount() {
-    window.removeEventListener('click', this.onClick);
+  {
+    to: { name: 'outings', query: { u: $user.id } },
+    text: $gettext('My outings'),
+    iconComponent: 'icon-outing',
   },
-
-  // do need to destroy event listener as Navigation component will always exists
-
-  methods: {
-    go(document) {
-      this.$router.push({
-        name: this.$documentUtils.getDocumentType(document.type),
-        params: { id: document.document_id },
-      });
-    },
-
-    setUrlsConfiguration(name) {
-      config.setUrlsName(name);
-      this.$router.go();
-    },
-
-    onClick(event) {
-      if (!this.$refs.searchInputContainer.contains(event.target)) {
-        this.hideSearchInput = true;
-      }
-    },
-
-    showSearchInput() {
-      this.hideSearchInput = false;
-
-      // after DOM update, input will be visible, and focusable
-      this.$nextTick(() => {
-        this.$refs.searchInput.focus();
-      });
-    },
-
-    signout() {
-      if (!this.$route.meta.requiresAuth) {
-        this.$user.signout();
-        return;
-      }
-
-      // leave the page first: its leave guard (e.g. unsaved edits) may cancel the
-      // navigation, in which case the user stays logged in on the current page
-      this.$router.push({ name: 'home' }).then(
-        () => this.$user.signout(),
-        (error) => {
-          if (!isNavigationFailure(error)) {
-            throw error;
-          }
-        }
-      );
-    },
-
-    homePage() {
-      if (this.$route.path === '/home' || this.$route.path === '/') {
-        return true;
-      } else {
-        return false;
-      }
-    },
+  {
+    to: { name: 'outings-stats', query: { u: $user.id } },
+    text: $gettext('My statistics'),
+    icon: 'chart-bar',
   },
-};
+  {
+    to: { name: 'whatsnew', query: { u: $user.id } },
+    text: $gettext('My changes'),
+    icon: 'edit',
+  },
+  {
+    to: { name: 'following' },
+    text: $gettext('My followed users'),
+    icon: 'heart',
+  },
+  {
+    to: { name: 'routes', query: { u: $user.id } },
+    text: $gettext('My bookmarks'),
+    icon: 'star',
+  },
+]);
+
+function go(document: C2cDocument) {
+  router.push({
+    name: $documentUtils.getDocumentType(document.type),
+    params: { id: document.document_id },
+  });
+}
+
+function setUrlsConfiguration(name: string) {
+  config.setUrlsName(name);
+  // reload the page
+  router.go(0);
+}
+
+function onClick(event: MouseEvent) {
+  if (!searchInputContainer.value!.contains(event.target as Node)) {
+    hideSearchInput.value = true;
+  }
+}
+
+function showSearchInput() {
+  hideSearchInput.value = false;
+
+  // after DOM update, input will be visible, and focusable
+  nextTick(() => {
+    searchInput.value!.focus();
+  });
+}
+
+function signout() {
+  if (!route.meta.requiresAuth) {
+    $user.signout();
+    return;
+  }
+
+  // leave the page first: its leave guard (e.g. unsaved edits) may cancel the
+  // navigation, in which case the user stays logged in on the current page.
+  // vue-router resolves push() with the failure (it rejects only on errors)
+  router.push({ name: 'home' }).then((failure) => {
+    if (!isNavigationFailure(failure)) {
+      $user.signout();
+    }
+  });
+}
+
+function homePage() {
+  return route.path === '/home' || route.path === '/';
+}
+
+window.addEventListener('click', onClick);
+
+onBeforeUnmount(() => {
+  window.removeEventListener('click', onClick);
+});
 </script>
 
 <style scoped lang="scss">

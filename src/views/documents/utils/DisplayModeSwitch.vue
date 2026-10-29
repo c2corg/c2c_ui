@@ -60,8 +60,9 @@ defineProps({
     type: String,
     required: true,
   },
+  // the results are a list (else cards): the icons of the modes follow
   listMode: {
-    type: String,
+    type: Boolean,
     required: true,
   },
 });

@@ -21,7 +21,7 @@
               :version="oldVersion.version.version_id"
               :lang="lang"
             >
-              Revision #{{ oldVersion.document.version }} as of
+              Revision #{{ oldVersion.document!.version }} as of
               {{ $dateUtils.toTechnicalString(oldVersion.version.written_at) }}
             </version-link>
           </div>
@@ -53,7 +53,7 @@
               :version="newVersion.version.version_id"
               :lang="lang"
             >
-              Revision #{{ newVersion.document.version }} as of
+              Revision #{{ newVersion.document!.version }} as of
               {{ $dateUtils.toTechnicalString(newVersion.version.written_at) }}
             </version-link>
           </div>
@@ -174,385 +174,168 @@
   </div>
 </template>
 
-<script>
-import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import { diffMatchPatch } from './utils/diff_match_patch_uncompressed';
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo.vue';
+import { diffBlocks, hasChanged, type Block } from './utils/diff-rows';
 
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useNoRobots } from '@/js/composables/head';
 import constants from '@/js/constants';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-const hasChanged = function (oldVal, newVal) {
-  // does oldVal equals to newVal ?
-  // handle arrays and immutables values
-  // and considerer that null equal to null, and nothing else
+// a version of the document, as the API gives it: none when it is masked
+type Version = {
+  document?: C2cDocument;
+  version: { written_at: string; [property: string]: unknown };
+  previous_version_id?: number | null;
+  next_version_id?: number | null;
+};
 
-  if (Array.isArray(oldVal) || Array.isArray(newVal)) {
-    return JSON.stringify(oldVal) !== JSON.stringify(newVal);
+useNoRobots();
+
+const route = useRoute();
+const { $documentUtils } = useGlobalProperties();
+
+const title = ref<string | null | undefined>(null);
+const oldVersion = ref<Version | null>(null);
+const newVersion = ref<Version | null>(null);
+const diffProperties = ref<Record<string, { old: unknown; new: unknown }>>({});
+const diffLocales = ref<Record<string, Block[]>>({});
+const containsMaskedVersion = ref(true);
+
+const documentId = computed(() => parseInt(String(route.params.id)));
+const documentType = computed(() => String(route.name).replace('-diff', ''));
+const lang = computed(() => String(route.params.lang));
+const geoLocalized = computed(() => constants.objectDefinitions[documentType.value].geoLocalized);
+
+const filenameHasChanged = computed(
+  () => oldVersion.value!.document!.filename !== newVersion.value?.document?.filename
+);
+
+const geometryHasChanged = computed(() => {
+  // areas are flagged as not geolocalized because you cant display
+  // ol map componenent on /areas
+  // but it contains geometry
+  if (!geoLocalized.value && documentType.value !== 'area') {
+    return false;
   }
 
-  if ((oldVal === null && newVal !== null) || (oldVal !== null && newVal === null)) {
+  if (!$documentUtils.hasSameGeolocation(oldVersion.value!.document!, newVersion.value!.document!)) {
+    return true;
+  }
+  const oldGeometry = oldVersion.value?.document?.geometry;
+  const newGeometry = newVersion.value?.document?.geometry;
+
+  if (oldGeometry?.geom_detail !== newGeometry?.geom_detail) {
     return true;
   }
 
-  return oldVal !== newVal;
-};
-
-const computeDiff = function (diff, callback) {
-  // this function transform a diff from diffMatchPatch
-  //
-  // it calls sequentially callback with three argument :
-  //
-  // * old part of diff
-  // * new part of diff
-  // * isIdentical (obvioulsy when old === new)
-  //
-  // if isIdentical is false, there are three use cases :
-  //
-  // * both part are not null : it means that a replacement has been made
-  // * old part is null : it's an addition
-  // * new part is null : it's a deletion
-  //
-  // Note about diff structure : it's an array of (mode, text) where mode can be :
-  //
-  // * -1 : means a deletion
-  // * 0  : means that text has not been modified
-  // * 1  : means an addition
-  //
-  // this structure has a particularity : deletion, if it exists, always precedes addition. So, the logic is :
-  //
-  // * if mode === 0 : callback(text, text, true)
-  // * else if mode === 1 : next mode will be 0, so call callback(null, text, false)
-  // * else if mode === -1 (last possibility) :
-  //   * if next mode is 0, it means that an addition can't be linked to this deletion : callback(text, null, false)
-  //   * else, next diff item can be linked to this deletion : callback(text, nextText, false)
-
-  for (let i = 0; i < diff.length; i++) {
-    if (diff[i][0] === 0) {
-      // no modification, old part and new part are equals
-      callback(diff[i][1], diff[i][1], true);
-    } else if (diff[i][0] === 1) {
-      // an addition, and there is no suppression
-      callback(null, diff[i][1], false);
-    } else if (diff[i][0] === -1) {
-      if (i + 1 < diff.length && diff[i + 1][0] === 1) {
-        // an added part follows this removed part
-        callback(diff[i][1], diff[i + 1][1], false);
-        i += 1;
-      } else {
-        // there is not added part that can be linked to this removed part
-        callback(diff[i][1], null, false);
-      }
-    }
-  }
-};
-
-const Item = function (text, isIdentical) {
-  // an Item is a small amount of text, with a flag that tell if this text has been modified, or not
-  this.text = text;
-  this.isIdentical = isIdentical;
-};
-
-const Row = function (oldPart, newPart, isIdentical) {
-  // a row is a object with old and new part
-  // each part is an array of items
-  // isIdentical is obvious
-  // ellipsed is a UI flag : if true, w'ont be displayed.
-  //   it will be computed by Row.computeEllipsisStates()
-
-  this.oldPart = [];
-  this.newPart = [];
-
-  this.ellipsed = true;
-  this.isIdentical = isIdentical;
-
-  if (isIdentical) {
-    this.oldPart = [new Item(oldPart, true)];
-    this.newPart = this.oldPart; // same object (reduce memory footprint)
-  } else if (oldPart === undefined) {
-    this.newPart.push(new Item(newPart, false));
-  } else if (newPart === undefined) {
-    this.oldPart.push(new Item(oldPart, false));
-  } else {
-    // two different row on the same location, let's compute a precise diff
-    const diff = diffMatchPatch.diff_main(oldPart, newPart);
-    computeDiff(diff, this.addItem.bind(this));
-  }
-};
-
-Object.defineProperty(Row.prototype, 'isFakeOld', {
-  // boolean, true if old part does not exists
-  get() {
-    return this.oldPart.length === 0;
-  },
+  return false;
 });
 
-Object.defineProperty(Row.prototype, 'isFakeNew', {
-  // boolean, true if new part does not exists
-  get() {
-    return this.newPart.length === 0;
-  },
-});
+function getKeys(obj1: object, obj2: object, excludedKeys: string[] = []) {
+  let keys = Object.keys(obj1).concat(Object.keys(obj2));
 
-Row.prototype.addItem = function (oldPart, newPart, isIdentical) {
-  // this function is a callback for computeDiff
-  // oldPart and newPart are a small amount of text
-  if (isIdentical) {
-    const item = new Item(oldPart, true);
-    this.oldPart.push(item);
-    this.newPart.push(item);
+  keys = keys.filter(function (item, pos, self) {
+    return self.indexOf(item) === pos && !excludedKeys.includes(item);
+  });
+
+  keys.sort();
+  return keys;
+}
+
+const prepareText = function (text: string | null | undefined) {
+  text = text ?? ''; // text can be null
+  text = text.replace(/\r\n?/g, '\n');
+  text += text.endsWith('\n') ? '' : '\n';
+
+  return text;
+};
+
+function buildDiff() {
+  diffProperties.value = {};
+  diffLocales.value = {};
+
+  if (!oldVersion.value || !newVersion.value) {
+    return; // Waiting for other version
+  }
+
+  const oldDocument = oldVersion.value.document;
+  const newDocument = newVersion.value.document;
+
+  if (oldDocument && newDocument) {
+    containsMaskedVersion.value = false;
   } else {
-    if (oldPart !== undefined) {
-      this.oldPart.push(new Item(oldPart, false));
-    }
-
-    if (newPart !== undefined) {
-      this.newPart.push(new Item(newPart, false));
-    }
+    return;
   }
-};
 
-const Rows = function () {
-  // simple array of Row() objects, with computation methods
-  this.items = [];
-};
+  const keys = getKeys(oldDocument, newDocument, ['version', 'locales', 'geometry', 'cooked', 'filename']);
 
-Rows.prototype.build = function (oldText, newText) {
-  // compute a line diff
-  const linesData = diffMatchPatch.diff_linesToChars_(oldText, newText);
-  const diff = diffMatchPatch.diff_main(linesData.chars1, linesData.chars2, false);
-  diffMatchPatch.diff_charsToLines_(diff, linesData.lineArray);
-
-  computeDiff(diff, this.add.bind(this));
-};
-
-Rows.prototype.add = function (oldPart, newPart, isIdentical) {
-  // callback for computDiff()
-  // oldPart and newPart are text containing EOLs and finishing with a last EOL
-  // it performs a split on this text, and add equivalent rows
-  // note that if oldPart is different from newPart, and if there is not the same
-  // quantity of EOL, Row object can be initialized with one of oldPart/newPart
-  // argument equals to undefined
-  const rows = this.items;
-
-  if (isIdentical) {
-    const rowTexts = oldPart.split('\n');
-    for (const rowText of rowTexts.slice(0, rowTexts.length - 1)) {
-      rows.push(new Row(rowText, rowText, true));
-    }
-  } else {
-    oldPart = oldPart !== null ? oldPart.split('\n') : [];
-    newPart = newPart !== null ? newPart.split('\n') : [];
-    for (let i = 0; i < Math.max(oldPart.length - 1, newPart.length - 1); i++) {
-      rows.push(new Row(oldPart[i], newPart[i], false));
-    }
-  }
-};
-
-Rows.prototype.computeEllipsisStates = function () {
-  // set Row.ellipsed to false on all rows where Row.isIdentical === false
-  // and also on 2 surrouding rows
-  // the idea is to display context rows on top and bottom of a modified row
-  const rows = this.items;
-  for (let i = 0; i < rows.length; i++) {
-    if (!rows[i].isIdentical) {
-      for (let j = Math.max(0, i - 2); j <= Math.min(rows.length - 1, i + 2); j++) {
-        rows[j].ellipsed = false;
-      }
-    }
-  }
-};
-
-export default {
-  components: {
-    MaskedDocumentVersionInfo,
-  },
-
-  setup() {
-    useNoRobots();
-  },
-
-  data() {
-    return {
-      title: null,
-      oldVersion: null,
-      newVersion: null,
-      diffProperties: {},
-      diffLocales: {},
-      containsMaskedVersion: true,
-    };
-  },
-
-  computed: {
-    documentId() {
-      return parseInt(this.$route.params.id);
-    },
-
-    documentType() {
-      return this.$route.name.replace('-diff', '');
-    },
-
-    lang() {
-      return this.$route.params.lang;
-    },
-
-    geoLocalized() {
-      return constants.objectDefinitions[this.documentType].geoLocalized;
-    },
-
-    filenameHasChanged() {
-      return this.oldVersion.document.filename !== this.newVersion?.document?.filename;
-    },
-
-    geometryHasChanged() {
-      // areas are flagged as not geolocalized because you cant display
-      // ol map componenent on /areas
-      // but it contains geometry
-      if (!this.geoLocalized && this.documentType !== 'area') {
-        return false;
-      }
-
-      if (!this.$documentUtils.hasSameGeolocation(this.oldVersion.document, this.newVersion?.document)) {
-        return true;
-      }
-      const oldGeometry = this.oldVersion?.document?.geometry;
-      const newGeometry = this.newVersion?.document?.geometry;
-
-      if (oldGeometry.geom_detail !== newGeometry.geom_detail) {
-        return true;
-      }
-
-      return false;
-    },
-  },
-
-  watch: {
-    $route: {
-      handler: 'loadVersions',
-      immediate: true,
-    },
-  },
-
-  methods: {
-    loadVersions() {
-      this.loadVersion(this.$route.params.versionFrom, 'oldVersion');
-      this.loadVersion(this.$route.params.versionTo, 'newVersion');
-    },
-
-    getKeys(obj1, obj2, excludedKeys = []) {
-      let keys = Object.keys(obj1).concat(Object.keys(obj2));
-
-      keys = keys.filter(function (item, pos, self) {
-        return self.indexOf(item) === pos && !excludedKeys.includes(item);
-      });
-
-      keys.sort();
-      return keys;
-    },
-
-    buildDiff() {
-      this.diffProperties = {};
-      this.diffLocales = {};
-
-      if (!this.oldVersion || !this.newVersion) {
-        return; // Waiting for other version
-      }
-
-      if (this.oldVersion.document && this.newVersion.document) {
-        this.containsMaskedVersion = false;
-      } else {
-        return;
-      }
-
-      const keys = this.getKeys(this.oldVersion.document, this.newVersion.document, [
-        'version',
-        'locales',
-        'geometry',
-        'cooked',
-        'filename',
-      ]);
-
-      for (const key of keys) {
-        if (hasChanged(this.oldVersion.document[key], this.newVersion.document[key])) {
-          this.diffProperties[key] = {
-            old: this.oldVersion.document[key],
-            new: this.newVersion.document[key],
-          };
-        }
-      }
-
-      const oldLocale = this.$documentUtils.getLocaleStupid(this.oldVersion.document, this.lang);
-      const newLocale = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang);
-      const localeKeys = this.getKeys(oldLocale, newLocale, ['lang', 'version']);
-
-      const prepareText = function (text) {
-        text = text ?? ''; // text can be null
-        text = text.replace(/\r\n?/g, '\n');
-        text += text.endsWith('\n') ? '' : '\n';
-
-        return text;
+  for (const key of keys) {
+    if (hasChanged(oldDocument[key], newDocument[key])) {
+      diffProperties.value[key] = {
+        old: oldDocument[key],
+        new: newDocument[key],
       };
+    }
+  }
 
-      for (const key of localeKeys) {
-        const oldVal = prepareText(oldLocale[key]);
-        const newVal = prepareText(newLocale[key]);
+  const oldLocale = $documentUtils.getLocaleStupid(oldDocument, lang.value)!;
+  const newLocale = $documentUtils.getLocaleStupid(newDocument, lang.value)!;
+  const localeKeys = getKeys(oldLocale, newLocale, ['lang', 'version']);
 
-        if (hasChanged(oldVal, newVal)) {
-          const rows = new Rows();
-          rows.build(oldVal, newVal);
-          rows.computeEllipsisStates();
+  for (const key of localeKeys) {
+    const oldVal = prepareText(oldLocale[key] as string | null | undefined);
+    const newVal = prepareText(newLocale[key] as string | null | undefined);
 
-          const Block = function (ellipsed) {
-            this.rows = [];
-            this.ellipsed = ellipsed;
-          };
+    if (hasChanged(oldVal, newVal)) {
+      diffLocales.value[key] = diffBlocks(oldVal, newVal);
+    }
+  }
+}
 
-          const blocks = [new Block(rows.items[0].ellipsed)];
+function loadVersion(versionId: string | number | null | undefined, resultProperty: 'oldVersion' | 'newVersion') {
+  const result = resultProperty === 'oldVersion' ? oldVersion : newVersion;
+  result.value = null;
 
-          let currentBlock = blocks[0];
+  if (versionId === 'prev' || versionId === 'next') {
+    return;
+  }
 
-          for (const row of rows.items) {
-            if (currentBlock.ellipsed !== row.ellipsed) {
-              currentBlock = new Block(row.ellipsed);
-              blocks.push(currentBlock);
-            }
-            currentBlock.rows.push(row);
-          }
+  (c2c as unknown as Record<string, DocumentService>)[documentType.value]
+    .getVersion(documentId.value, lang.value, versionId as number)
+    .then((response) => {
+      result.value = response.data as unknown as Version;
 
-          this.diffLocales[key] = blocks;
-        }
-      }
-    },
-
-    loadVersion(versionId, resultProperty) {
-      this[resultProperty] = null;
-
-      if (versionId === 'prev' || versionId === 'next') {
-        return;
+      // handle when url version is prev or next
+      // the other version contains the good id
+      if (route.params.versionFrom === 'prev' && resultProperty === 'newVersion') {
+        loadVersion(newVersion.value!.previous_version_id, 'oldVersion');
       }
 
-      c2c[this.documentType].getVersion(this.documentId, this.lang, versionId).then((response) => {
-        this[resultProperty] = response.data;
+      if (route.params.versionTo === 'next' && resultProperty === 'oldVersion') {
+        loadVersion(oldVersion.value!.next_version_id, 'newVersion');
+      }
 
-        // handle when url version is prev or next
-        // the other version contains the good id
-        if (this.$route.params.versionFrom === 'prev' && resultProperty === 'newVersion') {
-          this.loadVersion(this.newVersion.previous_version_id, 'oldVersion');
-        }
+      if (resultProperty === 'newVersion' && newVersion.value!.document) {
+        title.value = $documentUtils.getLocaleStupid(newVersion.value!.document, lang.value)!.title;
+      }
 
-        if (this.$route.params.versionTo === 'next' && resultProperty === 'oldVersion') {
-          this.loadVersion(this.newVersion.next_version_id, 'newVersion');
-        }
+      buildDiff();
+    });
+}
 
-        if (resultProperty === 'newVersion' && this.newVersion.document) {
-          this.title = this.$documentUtils.getLocaleStupid(this.newVersion.document, this.lang).title;
-        }
+function loadVersions() {
+  loadVersion(route.params.versionFrom as string, 'oldVersion');
+  loadVersion(route.params.versionTo as string, 'newVersion');
+}
 
-        this.buildDiff();
-      });
-    },
-  },
-};
+watch(() => route.fullPath, loadVersions, { immediate: true });
 </script>
 
 <style scoped lang="scss">
