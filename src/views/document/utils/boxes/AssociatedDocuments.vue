@@ -22,11 +22,11 @@
     </div>
 
     <!-- books -->
-    <div v-if="associations.books.length != 0" class="associations-list">
+    <div v-if="books.length != 0" class="associations-list">
       <div class="title">
         {{ $filters.uppercaseFirstLetter($gettext('books')) }}
       </div>
-      <div v-for="book of associations.books" :key="book.document_id" class="is-ellipsed">
+      <div v-for="book of books" :key="book.document_id" class="is-ellipsed">
         <document-link :document="book">
           <icon-book fixed-width class="icon-link" />
           <document-title :document="book" />
@@ -36,11 +36,11 @@
     </div>
 
     <!-- articles -->
-    <div v-if="associations.articles.length != 0" class="associations-list">
+    <div v-if="articles.length != 0" class="associations-list">
       <div class="title">
         {{ $filters.uppercaseFirstLetter($gettext('articles')) }}
       </div>
-      <div v-for="article of associations.articles" :key="article.document_id" class="is-ellipsed">
+      <div v-for="article of articles" :key="article.document_id" class="is-ellipsed">
         <document-link :document="article">
           <icon-article fixed-width class="icon-link" />
           <document-title :document="article" />
@@ -116,8 +116,9 @@ function compare(left: C2cDocument, right: C2cDocument) {
   return right.document_id! - left.document_id!;
 }
 
-associations.value.books = (associations.value.books ?? []).sort(compare);
-associations.value.articles = associations.value.articles ?? [];
+// computed: the view keeps this box when it shows another document
+const books = computed(() => [...(associations.value.books ?? [])].sort(compare));
+const articles = computed(() => associations.value.articles ?? []);
 </script>
 
 <style scoped lang="scss">
