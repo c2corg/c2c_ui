@@ -18,9 +18,7 @@
           <activities-field v-if="document.activities && document.activities.length" :document="document" />
 
           <label-value :label="$gettext('forum')">
-            <a :href="$options.forumUrl + '/u/' + document.forum_username + '/activity'">
-              @{{ document.forum_username }}
-            </a>
+            <a :href="forumUrl + '/u/' + document.forum_username + '/activity'"> @{{ document.forum_username }} </a>
           </label-value>
 
           <field-view :document="document" :field="fields.categories" />
@@ -49,30 +47,27 @@
   </div>
 </template>
 
-<script>
-import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import OutingsDownloader from './utils/OutingsDownloader';
-import { documentViewComponents, documentViewProps, useDocumentView } from './utils/document-view';
+<script setup lang="ts">
+import DocumentViewHeader from './utils/DocumentViewHeader.vue';
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo.vue';
+import OutingsDownloader from './utils/OutingsDownloader.vue';
+import ImagesBox from './utils/boxes/ImagesBox.vue';
+import MapBox from './utils/boxes/MapBox.vue';
+import ToolBox from './utils/boxes/ToolBox.vue';
+import { documentViewProps, useDocumentView } from './utils/document-view';
+import ActivitiesField from './utils/field-viewers/ActivitiesField.vue';
+import FieldView from './utils/field-viewers/FieldView.vue';
+import LabelValue from './utils/field-viewers/LabelValue.vue';
+import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 
-import FeedWidget from '@/components/feed-widget/FeedWidget';
+import FeedWidget from '@/components/feed-widget/FeedWidget.vue';
 import config from '@/js/config';
 
-export default {
-  components: {
-    ...documentViewComponents,
-    FeedWidget,
-    OutingsDownloader,
-    MaskedDocumentVersionInfo,
-  },
+const props = defineProps(documentViewProps);
 
-  props: documentViewProps,
+const { promise, documentId, documentType, fields, document, version, locale } = useDocumentView(props);
 
-  setup(props) {
-    return useDocumentView(props);
-  },
-
-  forumUrl: config.urls.forum,
-};
+const forumUrl = config.urls.forum;
 </script>
 
 <style lang="scss" scoped>

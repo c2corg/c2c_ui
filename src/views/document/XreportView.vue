@@ -17,8 +17,8 @@
 
           <field-view :document="document" :field="fields.event_type" />
 
-          <label-value v-if="document.associations.users.length" :label="$gettext('participants')">
-            <profiles-links :profiles="document.associations.users" />
+          <label-value v-if="document.associations!.users.length" :label="$gettext('participants')">
+            <profiles-links :profiles="document.associations!.users" />
           </label-value>
 
           <field-view :document="document" :field="fields.avalanche_level" />
@@ -57,7 +57,7 @@
           <markdown-section :document="document" :field="fields.other_comments" />
           <div style="clear: both" />
 
-          <div v-for="route of document.associations.routes" :key="route.document_id">
+          <div v-for="route of document.associations!.routes" :key="route.document_id">
             <pretty-route-link :route="route" hide-area hide-orientation />
           </div>
         </div>
@@ -73,20 +73,22 @@
   </div>
 </template>
 
-<script>
-import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import { documentViewComponents, documentViewProps, useDocumentView } from './utils/document-view';
+<script setup lang="ts">
+import DocumentPrintLicense from './utils/DocumentPrintLicense.vue';
+import DocumentViewHeader from './utils/DocumentViewHeader.vue';
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo.vue';
+import CommentsBox from './utils/boxes/CommentsBox.vue';
+import ImagesBox from './utils/boxes/ImagesBox.vue';
+import MapBox from './utils/boxes/MapBox.vue';
+import ToolBox from './utils/boxes/ToolBox.vue';
+import { documentViewProps, useDocumentView } from './utils/document-view';
+import EventActivityField from './utils/field-viewers/EventActivityField.vue';
+import FieldView from './utils/field-viewers/FieldView.vue';
+import LabelValue from './utils/field-viewers/LabelValue.vue';
+import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
+import ProfilesLinks from './utils/field-viewers/ProfilesLinks.vue';
 
-export default {
-  components: {
-    ...documentViewComponents,
-    MaskedDocumentVersionInfo,
-  },
+const props = defineProps(documentViewProps);
 
-  props: documentViewProps,
-
-  setup(props) {
-    return useDocumentView(props);
-  },
-};
+const { promise, documentType, fields, document, version } = useDocumentView(props);
 </script>

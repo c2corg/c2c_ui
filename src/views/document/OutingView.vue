@@ -18,7 +18,7 @@
 
       <div class="column is-9 is-12-print">
         <div class="box">
-          <div class="no-print" v-for="route of document.associations.routes" :key="route.document_id">
+          <div class="no-print" v-for="route of document.associations!.routes" :key="route.document_id">
             <pretty-route-link :route="route" hide-area hide-orientation />
           </div>
 
@@ -28,7 +28,7 @@
                 as it refers to profiles document
                 let stay profile coherent and call this component profiles-links
                 and not users-links -->
-            <profiles-links :profiles="document.associations.users" />
+            <profiles-links :profiles="document.associations!.users" />
             <span v-if="document.cooked.participants">, {{ document.cooked.participants }}</span>
           </div>
 
@@ -113,22 +113,24 @@
   </div>
 </template>
 
-<script>
-import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import { documentViewComponents, documentViewProps, useDocumentView } from './utils/document-view';
-import ConditionLevels from './utils/field-viewers/ConditionLevels';
+<script setup lang="ts">
+import DocumentPrintLicense from './utils/DocumentPrintLicense.vue';
+import DocumentViewHeader from './utils/DocumentViewHeader.vue';
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo.vue';
+import CommentsBox from './utils/boxes/CommentsBox.vue';
+import ImagesBox from './utils/boxes/ImagesBox.vue';
+import MapBox from './utils/boxes/MapBox.vue';
+import ToolBox from './utils/boxes/ToolBox.vue';
+import { documentViewProps, useDocumentView } from './utils/document-view';
+import ActivitiesField from './utils/field-viewers/ActivitiesField.vue';
+import ConditionLevels from './utils/field-viewers/ConditionLevels.vue';
+import DoubleNumericField from './utils/field-viewers/DoubleNumericField.vue';
+import FieldView from './utils/field-viewers/FieldView.vue';
+import LabelValue from './utils/field-viewers/LabelValue.vue';
+import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
+import ProfilesLinks from './utils/field-viewers/ProfilesLinks.vue';
 
-export default {
-  components: {
-    ...documentViewComponents,
-    ConditionLevels,
-    MaskedDocumentVersionInfo,
-  },
+const props = defineProps(documentViewProps);
 
-  props: documentViewProps,
-
-  setup(props) {
-    return useDocumentView(props);
-  },
-};
+const { promise, documentType, fields, document, version, locale } = useDocumentView(props);
 </script>

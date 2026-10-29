@@ -42,22 +42,23 @@
   </div>
 </template>
 
-<script>
-import LowDocumentQualityBanner from './utils/LowDocumentQualityBanner';
-import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import { documentViewComponents, documentViewProps, useDocumentView } from './utils/document-view';
+<script setup lang="ts">
+import DocumentPrintLicense from './utils/DocumentPrintLicense.vue';
+import DocumentViewHeader from './utils/DocumentViewHeader.vue';
+import LowDocumentQualityBanner from './utils/LowDocumentQualityBanner.vue';
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo.vue';
+import CommentsBox from './utils/boxes/CommentsBox.vue';
+import ImagesBox from './utils/boxes/ImagesBox.vue';
+import RecentOutingsBox from './utils/boxes/RecentOutingsBox.vue';
+import RoutesBox from './utils/boxes/RoutesBox.vue';
+import ToolBox from './utils/boxes/ToolBox.vue';
+import { documentViewProps, useDocumentView } from './utils/document-view';
+import ActivitiesField from './utils/field-viewers/ActivitiesField.vue';
+import FieldView from './utils/field-viewers/FieldView.vue';
+import LabelValue from './utils/field-viewers/LabelValue.vue';
+import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 
-export default {
-  components: {
-    ...documentViewComponents,
-    LowDocumentQualityBanner,
-    MaskedDocumentVersionInfo,
-  },
+const props = defineProps(documentViewProps);
 
-  props: documentViewProps,
-
-  setup(props) {
-    return useDocumentView(props);
-  },
-};
+const { isDraftView, promise, documentType, fields, document, version, isEditable } = useDocumentView(props);
 </script>
