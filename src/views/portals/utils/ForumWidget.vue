@@ -18,8 +18,10 @@
           rel="noopener"
           :title="topic.last_poster_username"
         >
+          <!-- no avatar when the last poster is missing from the users of the answer -->
           <img
-            :src="getAvatarUrl(topic.last_poster_user!)"
+            v-if="topic.last_poster_user"
+            :src="getAvatarUrl(topic.last_poster_user)"
             :style="'width:' + imgSize + 'px'"
             loading="lazy"
             alt="Avatar"

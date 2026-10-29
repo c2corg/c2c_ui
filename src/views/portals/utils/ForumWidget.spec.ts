@@ -42,4 +42,17 @@ describe('ForumWidget', () => {
     expect(rows[0].attributes('href')).toBe(`${forum.url}/t/topic-1/1/11`);
     expect(rows[0].find('img').attributes('src')).toBe(`${forum.url}/a/alice/20.png`);
   });
+
+  it('lists a topic whose last poster is not among the users of the answer, without avatar', async () => {
+    const answer = structuredClone(latest);
+    answer.topic_list.topics[0].last_poster_username = 'bob';
+    vi.spyOn(forum.axios, 'get').mockResolvedValue({ data: answer });
+    const wrapper = mountWidget();
+    await flushPromises();
+
+    const rows = wrapper.findAll('a.forum-row');
+    expect(rows).toHaveLength(3);
+    expect(rows[0].find('img').exists()).toBe(false);
+    expect(rows[1].find('img').exists()).toBe(true);
+  });
 });

@@ -10,6 +10,7 @@ import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 
 const waypoints = c2c.waypoint as DocumentService;
+const routes = c2c.route as DocumentService;
 
 const mountItems = async (path: string) => {
   const router = createRouter({
@@ -53,6 +54,9 @@ describe('QueryItems', () => {
 
   it('adds and removes association filters in the URL', async () => {
     vi.spyOn(waypoints, 'get').mockImplementation((id) => Promise.resolve({ data: { document_id: id } }) as never);
+    const getRoute = vi
+      .spyOn(routes, 'get')
+      .mockImplementation((id) => Promise.resolve({ data: { document_id: id } }) as never);
     const { wrapper, router } = await mountItems('/outings?w=601');
 
     wrapper.findComponent(AssociationQueryItem).vm.$emit('add', { type: 'w', document_id: 602 });
@@ -62,5 +66,6 @@ describe('QueryItems', () => {
     wrapper.findComponent(AssociationQueryItem).vm.$emit('add', { type: 'r', document_id: 7 });
     await flushPromises();
     expect(router.currentRoute.value.query.r).toBe('7');
+    expect(getRoute).toHaveBeenCalledWith(7);
   });
 });
