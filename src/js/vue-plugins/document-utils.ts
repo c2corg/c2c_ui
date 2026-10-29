@@ -19,7 +19,12 @@ export type C2cDocument = {
   locales?: Locale[];
   associations?: Record<string, C2cDocument[]>;
   // listings give has_geom_detail instead of geom_detail
-  geometry?: { geom?: string | null; geom_detail?: string | null; has_geom_detail?: boolean } | null;
+  geometry?: {
+    geom?: string | null;
+    geom_detail?: string | null;
+    has_geom_detail?: boolean;
+    version?: number;
+  } | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [property: string]: any;
 };

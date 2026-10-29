@@ -1,36 +1,31 @@
 <template>
   <edition-container :mode="mode" :document="document" :is-loading="saving" @save="save">
-    <div class="columns is-multiline">
-      <form-field class="is-12" :document="document" :field="fields.activities" />
-      <form-field class="is-12" :document="document" :field="fields.categories" />
-      <form-field class="is-12" :document="document" :field="fields.summary" />
-      <form-field class="is-12" :document="document" :field="fields.description" />
-    </div>
+    <!-- shown once loaded, as the container is -->
+    <template v-if="document">
+      <div class="columns is-multiline">
+        <form-field class="is-12" :document="document" :field="fields.activities" />
+        <form-field class="is-12" :document="document" :field="fields.categories" />
+        <form-field class="is-12" :document="document" :field="fields.summary" />
+        <form-field class="is-12" :document="document" :field="fields.description" />
+      </div>
 
-    <map-input-row :document="document" ref="map" />
+      <map-input-row :document="document" ref="map" />
 
-    <hr />
+      <hr />
+    </template>
   </edition-container>
 </template>
 
-<script>
-import { documentEditionComponents, useDocumentEdition } from './utils/document-edition';
+<script setup lang="ts">
+import { useTemplateRef } from 'vue';
 
-export default {
-  components: { ...documentEditionComponents },
+import EditionContainer from './utils/EditionContainer.vue';
+import FormField from './utils/FormField.vue';
+import MapInputRow from './utils/MapInputRow.vue';
+import { useDocumentEdition, useFitMapOnFirstGeometry } from './utils/document-edition';
 
-  setup() {
-    return useDocumentEdition();
-  },
+const { fields, saving, mode, document, save } = useDocumentEdition();
 
-  watch: {
-    'document.geometry.geom': function (to, from) {
-      if (from === null && to) {
-        this.$nextTick(() => {
-          this.$refs.map.fitMapToDocuments();
-        });
-      }
-    },
-  },
-};
+const map = useTemplateRef<InstanceType<typeof MapInputRow>>('map');
+useFitMapOnFirstGeometry(document, map);
 </script>

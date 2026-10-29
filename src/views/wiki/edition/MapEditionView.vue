@@ -1,24 +1,23 @@
 <template>
   <edition-container :mode="mode" :document="document" :is-loading="saving" @save="save">
-    <div class="columns is-multiline">
-      <form-field class="is-12" :document="document" :field="fields.title" />
-      <form-field class="is-4" :document="document" :field="fields.editor" />
-      <form-field class="is-4" :document="document" :field="fields.scale" />
-      <form-field class="is-4" :document="document" :field="fields.code" />
-    </div>
+    <!-- shown once loaded, as the container is -->
+    <template v-if="document">
+      <div class="columns is-multiline">
+        <form-field class="is-12" :document="document" :field="fields.title" />
+        <form-field class="is-4" :document="document" :field="fields.editor" />
+        <form-field class="is-4" :document="document" :field="fields.scale" />
+        <form-field class="is-4" :document="document" :field="fields.code" />
+      </div>
 
-    <hr />
+      <hr />
+    </template>
   </edition-container>
 </template>
 
-<script>
-import { documentEditionComponents, useDocumentEdition } from './utils/document-edition';
+<script setup lang="ts">
+import EditionContainer from './utils/EditionContainer.vue';
+import FormField from './utils/FormField.vue';
+import { useDocumentEdition } from './utils/document-edition';
 
-export default {
-  components: { ...documentEditionComponents },
-
-  setup() {
-    return useDocumentEdition();
-  },
-};
+const { mode, fields, saving, document, save } = useDocumentEdition();
 </script>

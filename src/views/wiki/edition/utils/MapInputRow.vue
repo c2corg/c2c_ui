@@ -68,11 +68,11 @@ const props = defineProps({
     default: false,
   },
   documents: {
-    type: Array as PropType<C2cDocument[]>,
+    type: Array as PropType<C2cDocument[] | null>,
     default: null,
   },
   initialExtent: {
-    type: Array as PropType<number[]>,
+    type: Array as PropType<number[] | null>,
     default: null,
   },
 });

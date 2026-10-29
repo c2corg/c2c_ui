@@ -32,12 +32,11 @@ const book = () => ({
 
 const hooks = { afterLoad: vi.fn(), beforeSave: vi.fn(), afterSave: vi.fn() };
 
+// the hooks are given by the view: its instance has none of them (as a <script setup> component in production)
 const View = {
   setup() {
-    return useDocumentEdition();
+    return useDocumentEdition(hooks);
   },
-  // the hooks are methods of the view
-  methods: hooks,
   render: () => null,
 };
 
