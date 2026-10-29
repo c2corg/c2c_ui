@@ -35,7 +35,7 @@
             </ul>
           </div>
           <div class="columns mb-0 is-mobile">
-            <tabs :tabs="tabs" />
+            <tabs :tabs="yetiTabs" />
           </div>
           <div class="box">
             <panel :index="0">
@@ -98,29 +98,35 @@
           </div>
         </div>
 
-        <yeti-map ref="map" />
+        <yeti-map ref="yetiMapView" />
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import axios from 'axios';
+<script setup lang="ts">
+import axios, { type AxiosError, type AxiosResponse } from 'axios';
+import type { Extent } from 'ol/extent';
+import { computed, onMounted, ref, shallowRef, useTemplateRef, watch } from 'vue';
 
-import YetiArticle from '@/components/yeti/Article';
-import Panel from '@/components/yeti/Panel';
-import SubPanelBra from '@/components/yeti/SubPanelBra';
-import SubPanelCourse from '@/components/yeti/SubPanelCourse';
-import SubPanelLayers from '@/components/yeti/SubPanelLayers';
-import SubPanelMeteo from '@/components/yeti/SubPanelMeteo';
-import SubPanelMethods from '@/components/yeti/SubPanelMethods';
-import Tabs from '@/components/yeti/Tabs';
-import ValidationButton from '@/components/yeti/ValidationButton';
-import YetiMap from '@/components/yeti/YetiMap';
+import YetiArticle from '@/components/yeti/Article.vue';
+import Panel from '@/components/yeti/Panel.vue';
+import SubPanelBra from '@/components/yeti/SubPanelBra.vue';
+import SubPanelCourse from '@/components/yeti/SubPanelCourse.vue';
+import SubPanelLayers from '@/components/yeti/SubPanelLayers.vue';
+import SubPanelMeteo from '@/components/yeti/SubPanelMeteo.vue';
+import SubPanelMethods from '@/components/yeti/SubPanelMethods.vue';
+import Tabs from '@/components/yeti/Tabs.vue';
+import ValidationButton from '@/components/yeti/ValidationButton.vue';
+import YetiMap from '@/components/yeti/YetiMap.vue';
 import Yetix from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
+import type { YetiTab } from '@/components/yeti/yetix-types';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
+
+defineOptions({ name: 'Yeti' });
 
 const YETI_URL_BASE =
   'https://api.ensg.eu/yeti-wps?request=Execute&service=WPS&version=1.0.0&identifier=Yeti&datainputs=';
@@ -128,361 +134,309 @@ const YETI_URL_BASE =
 // stored under the component name, as before: existing preferences are kept
 const preferences = getPreferences('Yeti');
 
-export default {
-  name: 'Yeti',
+type FormError = 'area' | 'zoom' | 'bra' | 'altitude' | 'method' | 'method_bra';
 
-  components: {
-    YetiArticle,
-    Panel,
-    SubPanelBra,
-    SubPanelCourse,
-    SubPanelLayers,
-    SubPanelMeteo,
-    SubPanelMethods,
-    Tabs,
-    ValidationButton,
-    YetiMap,
+const { $gettext } = useGlobalProperties();
+
+const yetiMapView = useTemplateRef<InstanceType<typeof YetiMap>>('yetiMapView');
+
+const showDisclaimer = ref(false);
+const checkDisclaimer = ref(false);
+
+const articles = {
+  faq: {
+    id: 1257569,
+    title: 'FAQ',
   },
-
-  data() {
-    return {
-      showDisclaimer: false,
-      checkDisclaimer: false,
-
-      articles: {
-        faq: {
-          id: 1257569,
-          title: 'FAQ',
-        },
-        disclaimer: {
-          id: 1257571,
-          title: this.$gettext('Disclaimer'),
-        },
-      },
-
-      formError: undefined,
-      currentError: undefined,
-
-      promise: null,
-    };
-  },
-
-  computed: {
-    validMinimumMapZoom() {
-      return Yetix.VALID_MINIMUM_MAP_ZOOM;
-    },
-    dangerMaxWhenMrd() {
-      return Yetix.DANGER_MAX_WHEN_MRD;
-    },
-    bra() {
-      return Yetix.bra;
-    },
-    method() {
-      return Yetix.method;
-    },
-    mapZoom() {
-      return Yetix.mapZoom;
-    },
-    areaOk() {
-      return Yetix.areaOk;
-    },
-    hasFeatures() {
-      return Yetix.hasFeatures;
-    },
-    featuresLength() {
-      return Yetix.features.length;
-    },
-    validSimplifyTolerance() {
-      return Yetix.validSimplifyTolerance;
-    },
-    tabs() {
-      return Yetix.tabs;
-    },
-    localTabs() {
-      let tabs = [];
-
-      // layer tab
-      let tabLayer = {
-        id: 'layer',
-        icon: 'layer-group',
-        title: this.$gettext('Layers'),
-      };
-      tabs.push(tabLayer);
-
-      // risk tab
-      let tabRisk = {
-        id: 'risk',
-        name: this.$gettext('Risk'),
-        icon: 'bolt',
-      };
-      tabs.push(tabRisk);
-
-      // route tab
-      let tabRoute = {
-        id: 'route',
-        name: this.$gettext('My outing'),
-        icon: 'route',
-      };
-      if (this.hasFeatures && !this.validSimplifyTolerance) {
-        tabRoute.counter = {
-          text: this.featuresLength,
-          title: this.$gettext('Route on map'),
-        };
-      }
-      if (this.validSimplifyTolerance) {
-        tabRoute.problemIcon = {
-          title: this.$gettext('Not simplified yet'),
-        };
-      }
-      tabs.push(tabRoute);
-
-      // meteo tab
-      let tabMeteo = {
-        id: 'meteo',
-        name: this.$gettext('Meteo'),
-        icon: 'sun',
-      };
-      tabs.push(tabMeteo);
-
-      return tabs;
-    },
-    errors() {
-      return {
-        area: {
-          simple: this.$gettext('Area not covered'),
-          full: this.$gettext(
-            'Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).'
-          ),
-        },
-        method: {
-          simple: this.$gettext('Missing method'),
-          full: this.$gettext('Please select a method before computing.'),
-        },
-        method_bra: {
-          simple: this.$gettext('Conflicting method and danger'),
-          full: this.$gettext(
-            'The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.'
-          ),
-        },
-        bra: {
-          simple: this.$gettext('Missing danger level'),
-          full: this.$gettext('Please set danger level as specified on avalanche bulletin for the specific area.'),
-        },
-        altitude: {
-          simple: this.$gettext('Missing altitude'),
-          full: this.$gettext(
-            'Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.'
-          ),
-        },
-        zoom: {
-          simple: this.$gettext('Area too large'),
-          full: this.$gettext('Current map view is too large. Please zoom to level') + ' ' + this.validMinimumMapZoom,
-        },
-        ok: this.$gettext('Seems fine! :)'),
-        yeti: this.$gettext('Service is inactive right now'),
-        yeti_prefix: 'YETI Service: ',
-        yeti_unauthorized: this.$gettext(
-          'You have to be authorized. Please contact administrators of the service if interested.'
-        ),
-      };
-    },
-    mrdIsNotApplicable() {
-      return this.isBraMax && this.method.type === 'mrd';
-    },
-    isBraMax() {
-      return this.bra.high > this.dangerMaxWhenMrd || this.bra.low > this.dangerMaxWhenMrd;
-    },
-    isValidMapZoom() {
-      return this.mapZoom >= this.validMinimumMapZoom;
-    },
-  },
-
-  watch: {
-    'bra.low': 'check',
-    'bra.altiThreshold': 'check',
-    'bra.isDifferent': 'check',
-    'method.type': 'check',
-    'method.potentialDanger': 'check',
-    mapZoom: 'check',
-    areaOk: 'check',
-    localTabs: {
-      deep: true, // nested
-      handler(tabs) {
-        Yetix.setTabs(tabs);
-      },
-    },
-  },
-
-  created() {
-    // show disclaimer if not already validated
-    if (!preferences.get('yeti-disclaimer')) {
-      this.showDisclaimer = true;
-    }
-    // tmp: set default values for persistent state
-    Yetix.setDefault();
-    // remove all previous events (navigating from other c2c pages)
-    yetixEvents.all.clear();
-
-    // build tabs: here, after setDefault() resets them (an immediate watcher runs before created()), then on each
-    // change of localTabs
-    Yetix.setTabs(this.localTabs);
-  },
-
-  mounted() {
-    this.check();
-  },
-
-  methods: {
-    check() {
-      if (!this.areaOk) {
-        this.formError = 'area';
-      } else if (!this.isValidMapZoom) {
-        this.formError = 'zoom';
-      } else if (!this.bra.high) {
-        this.formError = 'bra';
-      } else if (this.bra.low && this.bra.high !== this.bra.low && !this.bra.altiThreshold) {
-        this.formError = 'altitude';
-      } else if (!this.method.type) {
-        this.formError = 'method';
-      } else if (this.mrdIsNotApplicable) {
-        this.formError = 'method_bra';
-      } else if (this.bra.isDifferent && (!this.bra.low || !this.bra.high)) {
-        this.formError = 'bra';
-      } else {
-        this.formError = null;
-      }
-      // also
-      // verif if bra = 4, method MRD forbidden
-      if (this.mrdIsNotApplicable) {
-        this.method.type = null;
-      }
-
-      // then set errors
-      this.setCurrentError();
-    },
-
-    warnAboutMethodBra(item) {
-      if (item === 'mrd' && this.isBraMax) {
-        window.alert(this.errors.method_bra.full);
-      }
-    },
-
-    setCurrentError() {
-      if (this.formError) {
-        this.currentError = this.errors[this.formError]['simple'];
-        if (this.formError === 'zoom') {
-          this.currentError +=
-            ' (' +
-            this.$gettext('current zoom:') +
-            ' ' +
-            this.mapZoom +
-            ' ' +
-            this.$gettext('on') +
-            ' ' +
-            this.validMinimumMapZoom +
-            ')';
-        }
-      } else {
-        this.currentError = this.errors['ok'];
-      }
-    },
-
-    compute() {
-      if (this.formError) {
-        window.alert(this.errors[this.formError]['full']);
-        return;
-      }
-
-      const extent = this.$refs.map.getExtent('EPSG:3857');
-      const extendedExtent = this.extendExtent(extent);
-
-      const yetiUrl = this.getYetiUrl(extendedExtent);
-
-      // first, set data to null (will remove last one)
-      Yetix.setYetiData(null);
-
-      // fetch img
-      this.promise = axios
-        .get(yetiUrl)
-        .then((result) => this.onYetiResult(result, extendedExtent))
-        .catch(this.onYetiError);
-    },
-
-    extendExtent(extent) {
-      const extendedFactor = Math.min(0.5, (this.mapZoom - this.validMinimumMapZoom) / 6);
-      const extendedValue = Math.max(extent[2] - extent[0], extent[3] - extent[1]) * extendedFactor;
-      return ol.extent.buffer(extent, extendedValue);
-    },
-
-    onYetiResult(result, extendedExtent) {
-      Yetix.setYetiData(result.data);
-      Yetix.setYetiExtent(extendedExtent);
-
-      this.promise = null;
-    },
-
-    onYetiError(err) {
-      this.promise = null;
-
-      let errorText = this.errors['yeti'];
-
-      if (err.response.status === 400) {
-        const xml = new DOMParser().parseFromString(err.response.data, 'text/xml');
-        errorText = [...xml.getElementsByTagName('ExceptionText')].map((_) => _.textContent).join(' ');
-      }
-
-      if (err.response.status === 403) {
-        errorText = this.errors['yeti_unauthorized'];
-      }
-
-      window.alert(this.errors['yeti_prefix'] + errorText);
-    },
-
-    getYetiUrl(extent) {
-      // project extent
-      const bbox = ol.proj.transformExtent(extent, 'EPSG:3857', 'EPSG:4326');
-
-      // set bra.low / altiThreshold
-      const braLow = this.bra.isDifferent ? this.bra.low : this.bra.high;
-      const braAltiThreshold = this.bra.isDifferent ? this.bra.altiThreshold : 0;
-
-      // mre
-      const compass =
-        this.method.type === 'mre' && this.method.orientation.length !== 0
-          ? 'none,' + this.method.orientation.join(',').toLowerCase()
-          : 'none';
-
-      // mrp
-      const potentialDanger = this.method.type === 'mrp' ? this.method.potentialDanger : 0;
-      const wetSnow = this.method.type === 'mrp' ? this.method.wetSnow : false;
-      const groupSize = this.method.type === 'mrp' ? Math.floor(this.method.groupSize) : 0;
-
-      // create url
-      let result = YETI_URL_BASE;
-      result += `methode=${this.method.type};`;
-      result += `bbox=${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]};`;
-      result += `risque_haut=${this.bra.high};`;
-      result += `risque_bas=${braLow};`;
-      result += `seuil_alti=${braAltiThreshold}`;
-
-      // specific parameters based on method
-      if (this.method.type === 'mre') {
-        result += `;rdv=${compass}`;
-      } else if (this.method.type === 'mrp') {
-        result += `;potentiel_danger=${potentialDanger};`;
-        result += `neige_mouillee=${wetSnow};`;
-        result += `taille_groupe=${groupSize}`;
-      }
-
-      return result;
-    },
-
-    onSubmitDisclaimer() {
-      this.showDisclaimer = false;
-      preferences.set('yeti-disclaimer', 'validated');
-    },
+  disclaimer: {
+    id: 1257571,
+    title: $gettext('Disclaimer'),
   },
 };
+
+const formError = ref<FormError | null>();
+const currentError = ref<string>();
+
+const promise = shallowRef<Promise<void>>();
+
+const validMinimumMapZoom = computed(() => Yetix.VALID_MINIMUM_MAP_ZOOM);
+const dangerMaxWhenMrd = computed(() => Yetix.DANGER_MAX_WHEN_MRD);
+const bra = computed(() => Yetix.bra);
+const method = computed(() => Yetix.method);
+const mapZoom = computed(() => Yetix.mapZoom);
+const areaOk = computed(() => Yetix.areaOk);
+const hasFeatures = computed(() => Yetix.hasFeatures);
+const featuresLength = computed(() => Yetix.features.length);
+const validSimplifyTolerance = computed(() => Yetix.validSimplifyTolerance);
+// not named tabs: it would hide the <tabs> component
+const yetiTabs = computed(() => Yetix.tabs);
+const localTabs = computed(() => {
+  const tabs: YetiTab[] = [];
+
+  // layer tab
+  const tabLayer: YetiTab = {
+    id: 'layer',
+    icon: 'layer-group',
+    title: $gettext('Layers'),
+  };
+  tabs.push(tabLayer);
+
+  // risk tab
+  const tabRisk: YetiTab = {
+    id: 'risk',
+    name: $gettext('Risk'),
+    icon: 'bolt',
+  };
+  tabs.push(tabRisk);
+
+  // route tab
+  const tabRoute: YetiTab = {
+    id: 'route',
+    name: $gettext('My outing'),
+    icon: 'route',
+  };
+  if (hasFeatures.value && !validSimplifyTolerance.value) {
+    tabRoute.counter = {
+      text: featuresLength.value,
+      title: $gettext('Route on map'),
+    };
+  }
+  if (validSimplifyTolerance.value) {
+    tabRoute.problemIcon = {
+      title: $gettext('Not simplified yet'),
+    };
+  }
+  tabs.push(tabRoute);
+
+  // meteo tab
+  const tabMeteo: YetiTab = {
+    id: 'meteo',
+    name: $gettext('Meteo'),
+    icon: 'sun',
+  };
+  tabs.push(tabMeteo);
+
+  return tabs;
+});
+const errors = computed(() => ({
+  area: {
+    simple: $gettext('Area not covered'),
+    full: $gettext(
+      'Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).'
+    ),
+  },
+  method: {
+    simple: $gettext('Missing method'),
+    full: $gettext('Please select a method before computing.'),
+  },
+  method_bra: {
+    simple: $gettext('Conflicting method and danger'),
+    full: $gettext('The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.'),
+  },
+  bra: {
+    simple: $gettext('Missing danger level'),
+    full: $gettext('Please set danger level as specified on avalanche bulletin for the specific area.'),
+  },
+  altitude: {
+    simple: $gettext('Missing altitude'),
+    full: $gettext(
+      'Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.'
+    ),
+  },
+  zoom: {
+    simple: $gettext('Area too large'),
+    full: $gettext('Current map view is too large. Please zoom to level') + ' ' + validMinimumMapZoom.value,
+  },
+  ok: $gettext('Seems fine! :)'),
+  yeti: $gettext('Service is inactive right now'),
+  yeti_prefix: 'YETI Service: ',
+  yeti_unauthorized: $gettext('You have to be authorized. Please contact administrators of the service if interested.'),
+}));
+const isBraMax = computed(
+  () => (bra.value.high ?? 0) > dangerMaxWhenMrd.value || (bra.value.low ?? 0) > dangerMaxWhenMrd.value
+);
+const mrdIsNotApplicable = computed(() => isBraMax.value && method.value.type === 'mrd');
+const isValidMapZoom = computed(() => mapZoom.value >= validMinimumMapZoom.value);
+
+watch(
+  [
+    () => bra.value.low,
+    () => bra.value.altiThreshold,
+    () => bra.value.isDifferent,
+    () => method.value.type,
+    () => method.value.potentialDanger,
+    mapZoom,
+    areaOk,
+  ],
+  check
+);
+watch(localTabs, (tabs) => Yetix.setTabs(tabs), { deep: true });
+
+// show disclaimer if not already validated
+if (!preferences.get('yeti-disclaimer')) {
+  showDisclaimer.value = true;
+}
+// tmp: set default values for persistent state
+Yetix.setDefault();
+// remove all previous events (navigating from other c2c pages)
+yetixEvents.all.clear();
+
+// build tabs: here, after setDefault() resets them, then on each change of localTabs
+Yetix.setTabs(localTabs.value);
+
+onMounted(() => {
+  check();
+});
+
+function check() {
+  if (!areaOk.value) {
+    formError.value = 'area';
+  } else if (!isValidMapZoom.value) {
+    formError.value = 'zoom';
+  } else if (!bra.value.high) {
+    formError.value = 'bra';
+  } else if (bra.value.low && bra.value.high !== bra.value.low && !bra.value.altiThreshold) {
+    formError.value = 'altitude';
+  } else if (!method.value.type) {
+    formError.value = 'method';
+  } else if (mrdIsNotApplicable.value) {
+    formError.value = 'method_bra';
+  } else if (bra.value.isDifferent && (!bra.value.low || !bra.value.high)) {
+    formError.value = 'bra';
+  } else {
+    formError.value = null;
+  }
+  // also
+  // verif if bra = 4, method MRD forbidden
+  if (mrdIsNotApplicable.value) {
+    Yetix.setMethod('type', null);
+  }
+
+  // then set errors
+  setCurrentError();
+}
+
+function warnAboutMethodBra(item: string) {
+  if (item === 'mrd' && isBraMax.value) {
+    window.alert(errors.value.method_bra.full);
+  }
+}
+
+function setCurrentError() {
+  if (formError.value) {
+    currentError.value = errors.value[formError.value]['simple'];
+    if (formError.value === 'zoom') {
+      currentError.value +=
+        ' (' +
+        $gettext('current zoom:') +
+        ' ' +
+        mapZoom.value +
+        ' ' +
+        $gettext('on') +
+        ' ' +
+        validMinimumMapZoom.value +
+        ')';
+    }
+  } else {
+    currentError.value = errors.value['ok'];
+  }
+}
+
+function compute() {
+  if (formError.value) {
+    window.alert(errors.value[formError.value]['full']);
+    return;
+  }
+
+  const extent = yetiMapView.value!.getExtent('EPSG:3857');
+  const extendedExtent = extendExtent(extent);
+
+  const yetiUrl = getYetiUrl(extendedExtent);
+
+  // first, set data to null (will remove last one)
+  Yetix.setYetiData(null);
+
+  // fetch img
+  promise.value = axios
+    .get(yetiUrl)
+    .then((result) => onYetiResult(result, extendedExtent))
+    .catch(onYetiError);
+}
+
+function extendExtent(extent: Extent) {
+  const extendedFactor = Math.min(0.5, (mapZoom.value - validMinimumMapZoom.value) / 6);
+  const extendedValue = Math.max(extent[2] - extent[0], extent[3] - extent[1]) * extendedFactor;
+  return ol.extent.buffer(extent, extendedValue);
+}
+
+function onYetiResult(result: AxiosResponse, extendedExtent: Extent) {
+  Yetix.setYetiData(result.data);
+  Yetix.setYetiExtent(extendedExtent);
+
+  promise.value = undefined;
+}
+
+function onYetiError(err: AxiosError<string>) {
+  promise.value = undefined;
+
+  let errorText = errors.value['yeti'];
+
+  // no response on a network error
+  if (err.response?.status === 400) {
+    const xml = new DOMParser().parseFromString(err.response.data, 'text/xml');
+    errorText = [...xml.getElementsByTagName('ExceptionText')].map((_) => _.textContent).join(' ');
+  }
+
+  if (err.response?.status === 403) {
+    errorText = errors.value['yeti_unauthorized'];
+  }
+
+  window.alert(errors.value['yeti_prefix'] + errorText);
+}
+
+function getYetiUrl(extent: Extent) {
+  // project extent
+  const bbox = ol.proj.transformExtent(extent, 'EPSG:3857', 'EPSG:4326');
+
+  // set bra.low / altiThreshold
+  const braLow = bra.value.isDifferent ? bra.value.low : bra.value.high;
+  const braAltiThreshold = bra.value.isDifferent ? bra.value.altiThreshold : 0;
+
+  // mre
+  const compass =
+    method.value.type === 'mre' && method.value.orientation.length !== 0
+      ? 'none,' + method.value.orientation.join(',').toLowerCase()
+      : 'none';
+
+  // mrp
+  const potentialDanger = method.value.type === 'mrp' ? method.value.potentialDanger : 0;
+  const wetSnow = method.value.type === 'mrp' ? method.value.wetSnow : false;
+  const groupSize = method.value.type === 'mrp' ? Math.floor(method.value.groupSize) : 0;
+
+  // create url
+  let result = YETI_URL_BASE;
+  result += `methode=${method.value.type};`;
+  result += `bbox=${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]};`;
+  result += `risque_haut=${bra.value.high};`;
+  result += `risque_bas=${braLow};`;
+  result += `seuil_alti=${braAltiThreshold}`;
+
+  // specific parameters based on method
+  if (method.value.type === 'mre') {
+    result += `;rdv=${compass}`;
+  } else if (method.value.type === 'mrp') {
+    result += `;potentiel_danger=${potentialDanger};`;
+    result += `neige_mouillee=${wetSnow};`;
+    result += `taille_groupe=${groupSize}`;
+  }
+
+  return result;
+}
+
+function onSubmitDisclaimer() {
+  showDisclaimer.value = false;
+  preferences.set('yeti-disclaimer', 'validated');
+}
 </script>
 
 <style scoped lang="scss">
