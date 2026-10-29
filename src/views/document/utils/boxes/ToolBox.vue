@@ -2,11 +2,11 @@
   <div class="box no-print">
     <associated-documents :document="document" />
 
-    <div class="has-text-centered" v-if="isNormalView && available_langs.length">
+    <div class="has-text-centered" v-if="isNormalView && availableLangs.length">
       <span v-translate>View in other lang</span>
       <br />
       <span class="lang-switcher-box-list">
-        <span v-for="l of available_langs" :key="l">
+        <span v-for="l of availableLangs" :key="l">
           <document-link :document="document" :lang="l">
             {{ $gettext(l, 'langs') }}
           </document-link>
@@ -92,7 +92,7 @@
 
     <tool-box-button
       v-if="isEditable && showAssociationEditor"
-      @click="$refs.associationsWindow.show()"
+      @click="associationsModal!.show()"
       icon="link"
       :label="$gettext('Edit associations')"
     />
@@ -107,13 +107,13 @@
 
     <tool-box-button
       v-if="isEditable && hasMissingLangs"
-      @click="$refs.translateWindow.show()"
+      @click="translateModal!.show()"
       icon="globe"
       :label="$gettext('Translate')"
     />
 
     <tool-box-button
-      :href="`mailto:${$options.reportingIssueMail}?subject=${reportingSubject}&body=${reportingBody}`"
+      :href="`mailto:${reportingIssueMail}?subject=${reportingSubject}&body=${reportingBody}`"
       :icon="['fas', 'exclamation-circle']"
       icon-class="has-text-danger"
       :label="$gettext('Report an issue')"
@@ -133,7 +133,7 @@
 
       <tool-box-button
         v-if="documentType !== 'profile'"
-        @click="$refs.MergeDocumentWindow.show()"
+        @click="mergeModal!.show()"
         icon="object-group"
         :label="$gettext('Merge with other document')"
       />
@@ -150,13 +150,13 @@
     <template v-if="isDeletable">
       <tool-box-button
         v-if="document.available_langs.length > 1"
-        @click="$refs.DeleteLocaleWindow.show()"
+        @click="deleteLocaleModal!.show()"
         :icon="['fas', 'trash']"
         :label="$gettext('Delete this locale')"
       />
 
       <tool-box-button
-        @click="$refs.deleteDocumentWindow.show()"
+        @click="deleteDocumentModal!.show()"
         :icon="['fas', 'trash']"
         :label="$gettext('Delete this document')"
       />
@@ -168,29 +168,34 @@
 
     <!-- Modal windows -->
     <div v-if="isEditable">
-      <merge-document-window ref="MergeDocumentWindow" :document="document" />
-      <delete-document-window ref="deleteDocumentWindow" :document="document" />
-      <delete-locale-window ref="DeleteLocaleWindow" :document="document" :locale-lang="document.cooked.lang" />
-      <translate-window ref="translateWindow" :document="document" :missing-langs="missingLangs" />
-      <associations-window ref="associationsWindow" :document="document" />
+      <merge-document-window ref="mergeModal" :document="document" />
+      <delete-document-window ref="deleteDocumentModal" :document="document" />
+      <delete-locale-window ref="deleteLocaleModal" :document="document" :locale-lang="document.cooked.lang" />
+      <translate-window ref="translateModal" :document="document" :missing-langs="missingLangs" />
+      <associations-window ref="associationsModal" :document="document" />
     </div>
   </div>
 </template>
 
-<script>
-import IconQuality from '../../../../components/generics/icons/IconQuality.vue';
-import DeleteDocumentWindow from '../windows/DeleteDocumentWindow';
-import DeleteLocaleWindow from '../windows/DeleteLocaleWindow';
-import MergeDocumentWindow from '../windows/MergeDocumentWindow';
-import TranslateWindow from '../windows/TranslateWindow';
+<script setup lang="ts">
+import type { Point } from 'ol/geom';
+import { computed, ref, useTemplateRef } from 'vue';
+import { useRoute } from 'vue-router';
 
-import AssociatedDocuments from './AssociatedDocuments';
-import LicenseBox from './LicenseBox';
-import ToolBoxButton from './ToolBoxButton';
+import DeleteDocumentWindow from '../windows/DeleteDocumentWindow.vue';
+import DeleteLocaleWindow from '../windows/DeleteLocaleWindow.vue';
+import MergeDocumentWindow from '../windows/MergeDocumentWindow.vue';
+import TranslateWindow from '../windows/TranslateWindow.vue';
 
-import AssociationsWindow from '@/components/association-editor/AssociationsWindow';
+import AssociatedDocuments from './AssociatedDocuments.vue';
+import LicenseBox from './LicenseBox.vue';
+import ToolBoxButton from './ToolBoxButton.vue';
+
+import AssociationsWindow from '@/components/association-editor/AssociationsWindow.vue';
+import IconQuality from '@/components/generics/icons/IconQuality.vue';
 import c2c from '@/js/apis/c2c';
 import { useEditable } from '@/js/composables/editable';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
 import getFundraiser from '@/js/get-fundraiser';
 import ol from '@/js/libs/ol';
@@ -198,209 +203,181 @@ import { documentProperty, useDocumentType } from '@/js/properties';
 
 const GeoJSON = new ol.format.GeoJSON();
 
-export default {
-  components: {
-    ToolBoxButton,
-    LicenseBox,
-    AssociatedDocuments,
-    IconQuality,
-    AssociationsWindow,
-    DeleteLocaleWindow,
-    DeleteDocumentWindow,
-    MergeDocumentWindow,
-    TranslateWindow,
-  },
+const reportingIssueMail = 'topo-fr@camptocamp.org';
 
-  props: { ...documentProperty },
+const props = defineProps({ ...documentProperty });
 
-  setup(props) {
-    // the view mode too: isDraftView, isVersionView...
-    return { ...useEditable(() => props.document), ...useDocumentType(props) };
-  },
+const route = useRoute();
+const { $gettext, $language, $user } = useGlobalProperties();
+// the view mode too: isDraftView, isVersionView...
+const { isNormalView, isEditable, isDeletable } = useEditable(() => props.document);
+const { documentType } = useDocumentType(props);
 
-  data() {
-    return {
-      isAccountBlocked: null,
-    };
-  },
+// the windows, named apart from their tags
+type Modal = { show(): void };
+const mergeModal = useTemplateRef<Modal>('mergeModal');
+const deleteDocumentModal = useTemplateRef<Modal>('deleteDocumentModal');
+const deleteLocaleModal = useTemplateRef<Modal>('deleteLocaleModal');
+const translateModal = useTemplateRef<Modal>('translateModal');
+const associationsModal = useTemplateRef<Modal>('associationsModal');
 
-  reportingIssueMail: 'topo-fr@camptocamp.org',
+const isAccountBlocked = ref<boolean | null>(null);
 
-  computed: {
-    lang() {
-      return this.document.cooked.lang;
-    },
+const lang = computed(() => props.document.cooked.lang);
 
-    reportingSubject() {
-      return this.$gettext('Issue report');
-    },
+const reportingSubject = computed(() => $gettext('Issue report'));
 
-    reportingBody() {
-      return encodeURIComponent(
-        this.$gettext('Describe here your issue') + '\r\n\r\n----\r\n\r\n' + window.location.href
-      );
-    },
+const reportingBody = computed(() =>
+  encodeURIComponent($gettext('Describe here your issue') + '\r\n\r\n----\r\n\r\n' + window.location.href)
+);
 
-    available_langs() {
-      const currentLang = this.$route.params.lang ?? this.document.cooked?.lang;
-      return this.document.available_langs.filter((lang) => currentLang !== lang);
-    },
+const availableLangs = computed(() => {
+  const currentLang = route.params.lang ?? props.document.cooked?.lang;
+  return (props.document.available_langs as string[]).filter((lang) => currentLang !== lang);
+});
 
-    showAssociationEditor() {
-      return this.documentType !== 'area';
-    },
+const showAssociationEditor = computed(() => documentType.value !== 'area');
 
-    missingLangs() {
-      const result = [];
+const missingLangs = computed(() => {
+  const result: string[] = [];
 
-      for (const lang of constants.langs) {
-        if (!this.document.available_langs.includes(lang)) {
-          result.push(lang);
-        }
-      }
-
-      return result;
-    },
-
-    quality() {
-      const fields = constants.objectDefinitions[this.documentType].fields;
-      if (!fields.quality) {
-        return;
-      }
-      return {
-        ...fields.quality,
-        value: this.document[fields.quality.name],
-        i18nName: this.$gettext(fields.quality.name),
-        i18nValue: this.$gettext(this.document[fields.quality.name], fields.quality.i18nContext),
-      };
-    },
-
-    fundraiser() {
-      return getFundraiser(this.document);
-    },
-
-    hasMissingLangs() {
-      return this.missingLangs.length > 0;
-    },
-
-    linkToClosestDocuments() {
-      const result = {
-        name: this.documentType + 's',
-        query: {
-          wtyp: this.documentType === 'waypoint' ? this.document.waypoint_type : undefined,
-        },
-      };
-
-      if (this.document.geometry?.geom) {
-        const point = GeoJSON.readFeatures(this.document.geometry.geom)[0];
-        const extent = ol.extent.buffer(point.getGeometry().getExtent(), 10000);
-
-        result.query.bbox = extent.map(Math.floor).join(',');
-      }
-
-      return result;
-    },
-
-    linkToParaglidingOutings() {
-      return {
-        name: 'outings',
-        query: {
-          act: 'paragliding',
-          w: [
-            ...(this.documentType === 'waypoint' ? [this.document.document_id] : []),
-            ...this.document.associations.waypoints.map((w) => w.document_id),
-            ...this.document.associations.waypoint_children.map((w) => w.document_id),
-          ].join(','),
-        },
-      };
-    },
-
-    shouldAddWheatherLink() {
-      return (this.document.type === 'w' || this.document.type === 'r') && this.document?.geometry?.geom;
-    },
-
-    linkToMeteoBlue() {
-      let lang;
-      switch (this.$language.current) {
-        case 'fr':
-          lang = 'fr/meteo/semaine';
-          break;
-        case 'it':
-          lang = 'it/tempo/settimana';
-          break;
-        case 'de':
-          lang = 'de/wetter/woche';
-          break;
-        case 'es':
-        case 'eu':
-        case 'ca':
-          lang = 'es/tiempo/semana';
-          break;
-        case 'en':
-        default:
-          lang = 'en/weather/week';
-      }
-      const lonLat = ol.proj.toLonLat(
-        GeoJSON.readFeatures(this.document.geometry.geom)[0].getGeometry().getCoordinates()
-      );
-      const coords = ol.coordinate.format(lonLat, '{y}N{x}E', 4);
-      // use waypoint elevation, or elevation of difficuties or max elevation for routes, otherwise nothing
-      const elevation =
-        this.document.elevation ?? this.document.difficulties_height ?? this.document.elevation_max ?? '';
-      return `https://meteoblue.com/${lang}/${coords}${elevation}`;
-    },
-
-    shouldAddDirections() {
-      return (
-        this.document.type === 'w' &&
-        ['access', 'gite', 'camp_site'].includes(this.document.waypoint_type) &&
-        this.document?.geometry?.geom
-      );
-    },
-
-    linkToGoogleMapsDirections() {
-      const lonLat = ol.proj.toLonLat(
-        GeoJSON.readFeatures(this.document.geometry.geom)[0].getGeometry().getCoordinates()
-      );
-      const coords = ol.coordinate.format(lonLat, '{y},{x}', 4);
-      return `https://www.google.com/maps/dir/?api=1&destination=${coords}`;
-    },
-  },
-
-  created() {
-    if (this.$user.isModerator && this.documentType === 'profile') {
-      c2c.moderator.isAccountBlocked(this.document.document_id).then((response) => {
-        this.isAccountBlocked = response.data.blocked;
-      });
+  for (const lang of constants.langs) {
+    if (!props.document.available_langs.includes(lang)) {
+      result.push(lang);
     }
-  },
+  }
 
-  methods: {
-    lockDocumentAction() {
-      if (this.document.protected) {
-        c2c.moderator.unprotectDocument(this.document.document_id).then(() => {
-          this.document.protected = false;
-        });
-      } else {
-        c2c.moderator.protectDocument(this.document.document_id).then(() => {
-          this.document.protected = true;
-        });
-      }
-    },
+  return result;
+});
 
-    lockAccountAction() {
-      if (this.isAccountBlocked) {
-        c2c.moderator.unblockAccount(this.document.document_id).then(() => {
-          this.isAccountBlocked = false;
-        });
-      } else {
-        c2c.moderator.blockAccount(this.document.document_id).then(() => {
-          this.isAccountBlocked = true;
-        });
-      }
-    },
+const quality = computed(() => {
+  const fields = constants.objectDefinitions[documentType.value].fields;
+  if (!fields.quality) {
+    return undefined;
+  }
+  return {
+    ...fields.quality,
+    value: props.document[fields.quality.name],
+    i18nName: $gettext(fields.quality.name),
+    i18nValue: $gettext(props.document[fields.quality.name], fields.quality.i18nContext),
+  };
+});
+
+const fundraiser = computed(() => getFundraiser(props.document as Parameters<typeof getFundraiser>[0]));
+
+const hasMissingLangs = computed(() => missingLangs.value.length > 0);
+
+// the location of the document
+const coordinates = () =>
+  (GeoJSON.readFeatures(props.document.geometry!.geom!)[0].getGeometry() as Point).getCoordinates();
+
+const linkToClosestDocuments = computed(() => {
+  const result = {
+    name: documentType.value + 's',
+    query: {
+      wtyp: documentType.value === 'waypoint' ? props.document.waypoint_type : undefined,
+    } as Record<string, string | undefined>,
+  };
+
+  if (props.document.geometry?.geom) {
+    const point = GeoJSON.readFeatures(props.document.geometry.geom)[0];
+    const extent = ol.extent.buffer(point.getGeometry()!.getExtent(), 10000);
+
+    result.query.bbox = extent.map(Math.floor).join(',');
+  }
+
+  return result;
+});
+
+const linkToParaglidingOutings = computed(() => ({
+  name: 'outings',
+  query: {
+    act: 'paragliding',
+    w: [
+      ...(documentType.value === 'waypoint' ? [props.document.document_id] : []),
+      ...props.document.associations!.waypoints.map((w) => w.document_id),
+      ...props.document.associations!.waypoint_children.map((w) => w.document_id),
+    ].join(','),
   },
-};
+}));
+
+const shouldAddWheatherLink = computed(
+  () => (props.document.type === 'w' || props.document.type === 'r') && props.document?.geometry?.geom
+);
+
+const linkToMeteoBlue = computed(() => {
+  let lang;
+  switch ($language.current) {
+    case 'fr':
+      lang = 'fr/meteo/semaine';
+      break;
+    case 'it':
+      lang = 'it/tempo/settimana';
+      break;
+    case 'de':
+      lang = 'de/wetter/woche';
+      break;
+    case 'es':
+    case 'eu':
+    case 'ca':
+      lang = 'es/tiempo/semana';
+      break;
+    case 'en':
+    default:
+      lang = 'en/weather/week';
+  }
+  const lonLat = ol.proj.toLonLat(coordinates());
+  const coords = ol.coordinate.format(lonLat, '{y}N{x}E', 4);
+  // use waypoint elevation, or elevation of difficuties or max elevation for routes, otherwise nothing
+  const elevation =
+    props.document.elevation ?? props.document.difficulties_height ?? props.document.elevation_max ?? '';
+  return `https://meteoblue.com/${lang}/${coords}${elevation}`;
+});
+
+const shouldAddDirections = computed(
+  () =>
+    props.document.type === 'w' &&
+    ['access', 'gite', 'camp_site'].includes(props.document.waypoint_type) &&
+    props.document?.geometry?.geom
+);
+
+const linkToGoogleMapsDirections = computed(() => {
+  const lonLat = ol.proj.toLonLat(coordinates());
+  const coords = ol.coordinate.format(lonLat, '{y},{x}', 4);
+  return `https://www.google.com/maps/dir/?api=1&destination=${coords}`;
+});
+
+function lockDocumentAction() {
+  const document = props.document;
+  if (document.protected) {
+    c2c.moderator.unprotectDocument(document.document_id!).then(() => {
+      document.protected = false;
+    });
+  } else {
+    c2c.moderator.protectDocument(document.document_id!).then(() => {
+      document.protected = true;
+    });
+  }
+}
+
+function lockAccountAction() {
+  const id = props.document.document_id!;
+  if (isAccountBlocked.value) {
+    c2c.moderator.unblockAccount(id).then(() => {
+      isAccountBlocked.value = false;
+    });
+  } else {
+    c2c.moderator.blockAccount(id).then(() => {
+      isAccountBlocked.value = true;
+    });
+  }
+}
+
+if ($user.isModerator && documentType.value === 'profile') {
+  c2c.moderator.isAccountBlocked(props.document.document_id!).then((response) => {
+    isAccountBlocked.value = response.data.blocked;
+  });
+}
 </script>
 
 <style scoped lang="scss">
