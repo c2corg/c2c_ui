@@ -1,7 +1,8 @@
 import type VectorLayer from 'ol/layer/Vector';
 import { describe, expect, it, vi } from 'vitest';
-import { isProxy, nextTick, reactive } from 'vue';
+import { defineComponent, h, isProxy, nextTick, reactive, ref } from 'vue';
 
+import OlMap from './OlMap.vue';
 import { mountMap } from './test-utils';
 
 import ol from '@/js/libs/ol';
@@ -29,6 +30,40 @@ const GPX = `<?xml version="1.0"?>
 </trkseg></trk></gpx>`;
 
 describe('OlMap', () => {
+  it('takes a full-screen element given before it is mounted', async () => {
+    // as MapBox: the elevation profile of a loaded draft (edition preview) has data once created, before the map is
+    // mounted, and the map then goes full screen with it
+    const errors = vi.spyOn(console, 'error');
+    const ElevationProfile = defineComponent({
+      emits: ['has-data'],
+      created() {
+        this.$emit('has-data');
+      },
+      render: () => h('div', { id: 'fullscreen-map-container' }),
+    });
+    const MapBox = defineComponent({
+      setup() {
+        const hasData = ref(false);
+        return () =>
+          h('div', [
+            h(OlMap, { fullScreenElementId: hasData.value ? 'fullscreen-map-container' : undefined }),
+            h(ElevationProfile, { onHasData: () => (hasData.value = true) }),
+          ]);
+      },
+    });
+
+    // shown later, as the preview is: rendered by the scheduler, where the mounted hooks run last
+    const shown = ref(false);
+    const { wrapper } = await mountMap({}, { setup: () => () => (shown.value ? h(MapBox) : null) });
+    shown.value = true;
+    await nextTick();
+
+    expect(errors).not.toHaveBeenCalled();
+    expect(wrapper.findComponent(OlMap).exists()).toBe(true);
+
+    wrapper.unmount();
+  });
+
   it('does not wrap OpenLayers objects in Vue reactive proxies', async () => {
     // OpenLayers can't render proxied layers: their tiles are disposed and reloaded endlessly
     const { wrapper, vm } = await mountMap();

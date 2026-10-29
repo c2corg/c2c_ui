@@ -1388,6 +1388,11 @@ watch(
 watch(
   () => props.fullScreenElementId,
   (newValue) => {
+    // changed before the map is mounted (the elevation profile of a draft has data once created): onMounted() uses it
+    if (!map) {
+      return;
+    }
+
     // update the fullscreen control (we actually need to remove the old
     // one and attach a new one)
     map.removeControl(fullScreenControl);

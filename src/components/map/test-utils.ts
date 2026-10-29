@@ -2,6 +2,7 @@
 import { mount } from '@vue/test-utils';
 import type OlMapType from 'ol/Map';
 import { vi } from 'vitest';
+import type { Component } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
 
 import OlMap from './OlMap.vue';
@@ -26,13 +27,14 @@ type MapVm = {
   setDocumentGeometryFromGeoFile(file: string): void;
 };
 
-export const mountMap = async (props: Record<string, unknown> = {}) => {
+// the map, or a component rendering it
+export const mountMap = async (props: Record<string, unknown> = {}, component: Component = OlMap) => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [{ path: '/:path*', name: 'waypoint', component: { render: () => null } }],
   });
   await router.push('/');
-  const wrapper = mount(OlMap, {
+  const wrapper = mount(component, {
     props,
     attachTo: document.body,
     global: {
