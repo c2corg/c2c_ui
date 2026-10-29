@@ -98,27 +98,17 @@
   </div>
 </template>
 
-<script>
-import TopoguideViewLink from './TopoguideViewLink';
-import TopoguideViewSmallLink from './TopoguideViewSmallLink';
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import TopoguideViewLink from './TopoguideViewLink.vue';
+import TopoguideViewSmallLink from './TopoguideViewSmallLink.vue';
 
 import constants from '@/js/constants';
 
-export default {
-  components: {
-    TopoguideViewLink,
-    TopoguideViewSmallLink,
-  },
+const activities = computed(() => constants.activities);
 
-  computed: {
-    activities() {
-      return constants.activities;
-    },
-    waypoint_types() {
-      return constants.waypoint_types;
-    },
-  },
-};
+const waypoint_types = computed(() => constants.waypoint_types);
 </script>
 
 <style scoped lang="scss">

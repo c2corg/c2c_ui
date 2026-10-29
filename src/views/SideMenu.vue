@@ -8,7 +8,7 @@
         class="menu-item is-ellipsed"
         :class="{
           'router-link-active': ['topoguide', 'routes', 'waypoints', 'areas', 'route', 'waypoint', 'area'].includes(
-            $route.name
+            String($route.name)
           ),
         }"
       >
@@ -20,7 +20,7 @@
       <span
         class="menu-item is-ellipsed"
         :class="{
-          'router-link-active': ['outings', 'outing'].includes($route.name),
+          'router-link-active': ['outings', 'outing'].includes(String($route.name)),
         }"
       >
         <icon-outing fixed-width />
@@ -37,7 +37,7 @@
       <span
         class="menu-item is-ellipsed"
         :class="{
-          'router-link-active': ['serac', 'xreports', 'xreport'].includes($route.name),
+          'router-link-active': ['serac', 'xreports', 'xreport'].includes(String($route.name)),
         }"
       >
         <icon-xreport fixed-width />
@@ -47,21 +47,24 @@
     <router-link :to="{ name: 'articles' }">
       <span
         class="menu-item is-ellipsed"
-        :class="{ 'router-link-active': ['articles', 'article'].includes($route.name) }"
+        :class="{ 'router-link-active': ['articles', 'article'].includes(String($route.name)) }"
       >
         <icon-article fixed-width />
         <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('articles')) }} </span>
       </span>
     </router-link>
     <router-link :to="{ name: 'yeti' }" v-if="isTall">
-      <span class="menu-item is-ellipsed" :class="{ 'router-link-active': ['yeti'].includes($route.name) }">
+      <span class="menu-item is-ellipsed" :class="{ 'router-link-active': ['yeti'].includes(String($route.name)) }">
         <icon-yeti fixed-width />
         <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('yeti')) }} </span>
       </span>
     </router-link>
     <!-- use of a href instead of router link so that the page is refreshed if you are already on Itinevert -->
     <a :href="$router.resolve({ name: 'itinevert' }).href">
-      <span class="menu-item is-ellipsed" :class="{ 'router-link-active': ['itinevert'].includes($route.name) }">
+      <span
+        class="menu-item is-ellipsed"
+        :class="{ 'router-link-active': ['itinevert'].includes(String($route.name)) }"
+      >
         <icon-itinevert fixed-width />
         <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('Itinevert')) }} </span>
       </span>
@@ -106,49 +109,39 @@
   </aside>
 </template>
 
-<script>
-import IconYeti from '@/components/generics/icons/IconYeti';
+<script setup lang="ts">
+import { onBeforeUnmount, ref } from 'vue';
+
+import IconYeti from '@/components/generics/icons/IconYeti.vue';
 import bus from '@/js/event-bus';
 
-export default {
-  components: { IconYeti },
+const isTall = ref(false);
 
-  data() {
-    return {
-      isTall: false,
-    };
-  },
+function showGdpr() {
+  bus.emit('show-gdpr');
+}
 
-  created() {
-    this.mediaQueryList = window.matchMedia('only screen and (min-height: 715px)');
-    if (this.mediaQueryList.addEventListener) {
-      this.mediaQueryList.addEventListener('change', this.onHeightBreakpointChange);
-    } else {
-      // Safari < 14 support
-      this.mediaQueryList.addListener(this.onHeightBreakpointChange);
-    }
-    this.onHeightBreakpointChange();
-  },
+function onHeightBreakpointChange() {
+  isTall.value = mediaQueryList.matches;
+}
 
-  beforeUnmount() {
-    if (this.mediaQueryList.removeEventListener) {
-      this.mediaQueryList.removeEventListener('change', this.onHeightBreakpointChange);
-    } else {
-      // Safari < 14 support
-      this.mediaQueryList.removeListener(this.onHeightBreakpointChange);
-    }
-  },
+const mediaQueryList = window.matchMedia('only screen and (min-height: 715px)');
+if (mediaQueryList.addEventListener) {
+  mediaQueryList.addEventListener('change', onHeightBreakpointChange);
+} else {
+  // Safari < 14 support
+  mediaQueryList.addListener(onHeightBreakpointChange);
+}
+onHeightBreakpointChange();
 
-  methods: {
-    showGdpr() {
-      bus.emit('show-gdpr');
-    },
-
-    onHeightBreakpointChange() {
-      this.isTall = this.mediaQueryList.matches;
-    },
-  },
-};
+onBeforeUnmount(() => {
+  if (mediaQueryList.removeEventListener) {
+    mediaQueryList.removeEventListener('change', onHeightBreakpointChange);
+  } else {
+    // Safari < 14 support
+    mediaQueryList.removeListener(onHeightBreakpointChange);
+  }
+});
 </script>
 
 <style scoped lang="scss">

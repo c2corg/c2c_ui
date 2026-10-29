@@ -10,43 +10,39 @@
   </dashboard-link>
 </template>
 
-<script>
-import DashboardLink from './DashboardLink';
+<script setup lang="ts">
+import { computed } from 'vue';
 
-export default {
-  components: { DashboardLink },
+import DashboardLink from './DashboardLink.vue';
 
-  props: {
-    outing: {
-      type: Object,
-      required: true,
-    },
+const props = defineProps({
+  outing: {
+    type: Object,
+    required: true,
   },
+});
 
-  computed: {
-    nbIconsClass() {
-      let result = 0;
+const nbIconsClass = computed(() => {
+  let result = 0;
 
-      if (this.outing.img_count > 0) {
-        result = result + 1;
-      }
-      if (this.outing.public_transport) {
-        result = result + 1;
-      }
-      if (this.outing.geometry.has_geom_detail) {
-        result = result + 1;
-      }
-      if (this.outing.quality !== null) {
-        result = result + 1;
-      }
-      if (this.outing.condition_rating !== null) {
-        result = result + 1;
-      }
+  if (props.outing.img_count > 0) {
+    result = result + 1;
+  }
+  if (props.outing.public_transport) {
+    result = result + 1;
+  }
+  if (props.outing.geometry.has_geom_detail) {
+    result = result + 1;
+  }
+  if (props.outing.quality !== null) {
+    result = result + 1;
+  }
+  if (props.outing.condition_rating !== null) {
+    result = result + 1;
+  }
 
-      return 'is-' + result + '-icons';
-    },
-  },
-};
+  return 'is-' + result + '-icons';
+});
 </script>
 
 <style scoped lang="scss">

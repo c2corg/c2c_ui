@@ -26,38 +26,17 @@
   </div>
 </template>
 
-<script>
-import DashboardArticleLink from './DashboardArticleLink';
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import DashboardArticleLink from './DashboardArticleLink.vue';
 
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
 
-export default {
-  name: 'DashboardArticlesList',
+const articlesPromise = (c2c.article as DocumentService).getAll({ limit: 5, qa: 'draft,great' });
 
-  components: {
-    DashboardArticleLink,
-  },
-
-  data() {
-    return {
-      articlesPromise: null,
-    };
-  },
-
-  computed: {
-    articles() {
-      return this.articlesPromise?.data;
-    },
-  },
-
-  created(query = {}) {
-    this.articlesPromise = c2c.article.getAll({
-      ...query,
-      limit: 5,
-      qa: 'draft,great',
-    });
-  },
-};
+const articles = computed(() => articlesPromise.data);
 </script>
 
 <style scoped lang="scss">

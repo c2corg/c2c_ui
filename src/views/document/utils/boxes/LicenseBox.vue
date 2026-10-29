@@ -75,19 +75,15 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { documentProperty } from '@/js/properties';
 
-export default {
-  props: { ...documentProperty },
+const props = defineProps({ ...documentProperty });
 
-  computed: {
-    // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/templates/utils/__init__.py#L47
-    // collaborative means CC-By-Sa
+const { $documentUtils } = useGlobalProperties();
 
-    license() {
-      return this.$documentUtils.getDocumentLicense(this.document);
-    },
-  },
-};
+const license = computed(() => $documentUtils.getDocumentLicense(props.document));
 </script>

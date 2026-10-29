@@ -14,7 +14,7 @@
                 :show-address-propositions="currentData.showAddressPropositions"
                 :default-address="currentData.fromAddress"
                 @update:props="
-                  (address) => {
+                  (address: unknown) => {
                     $emit('update-from-address', address);
                   }
                 "
@@ -72,7 +72,7 @@
                 :show-address-propositions="currentData.showAddressPropositions"
                 :default-address="currentData.fromAddress"
                 @update:props="
-                  (address) => {
+                  (address: unknown) => {
                     $emit('update-from-address', address);
                   }
                 "
@@ -146,7 +146,7 @@
             id="btnToggle"
             name="btnToggle"
             :checked="limitTransfers"
-            @change="$emit('update-limit-transfers', $event.target.checked)"
+            @change="$emit('update-limit-transfers', ($event.target as HTMLInputElement).checked)"
           />
           <span class="slider"></span>
         </label>
@@ -157,9 +157,9 @@
           id="number-dd"
           name="number"
           :value="maxTransfers"
-          @change="$emit('update-max-transfers', Number($event.target.value))"
+          @change="$emit('update-max-transfers', Number(($event.target as HTMLSelectElement).value))"
         >
-          <option value="0" :selected.attr="'selected'">0 (direct)</option>
+          <option value="0" selected>0 (direct)</option>
           <option value="1">1 max</option>
           <option value="2">2 max</option>
           <option value="3">3 max</option>
@@ -180,52 +180,51 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import type { PropType } from 'vue';
+
 import { documentProperty, useDocumentType } from '@/js/properties';
 
-export default {
-  props: {
-    ...documentProperty,
-    activeTab: {
-      type: String,
-      required: true,
-    },
-    currentData: {
-      type: Object,
-      required: true,
-    },
-    accessWaypoints: {
-      type: Array,
-      required: true,
-    },
-    loadingReachable: {
-      type: Boolean,
-      default: false,
-    },
-    limitTransfers: {
-      type: Boolean,
-      default: false,
-    },
-    maxTransfers: {
-      type: Number,
-      default: 0,
-    },
+const props = defineProps({
+  ...documentProperty,
+  activeTab: {
+    type: String,
+    required: true,
   },
-  emits: [
-    'update-from-address',
-    'update-selected-waypoint',
-    'update-selected-date',
-    'update-time-preference',
-    'update-selected-time',
-    'update-limit-transfers',
-    'update-max-transfers',
-    'swap-addresses',
-  ],
+  currentData: {
+    type: Object,
+    required: true,
+  },
+  // the access waypoints of the document, proposed as destination
+  accessWaypoints: {
+    type: Array as PropType<{ id: number; title: string }[]>,
+    required: true,
+  },
+  loadingReachable: {
+    type: Boolean,
+    default: false,
+  },
+  limitTransfers: {
+    type: Boolean,
+    default: false,
+  },
+  maxTransfers: {
+    type: Number,
+    default: 0,
+  },
+});
+defineEmits([
+  'update-from-address',
+  'update-selected-waypoint',
+  'update-selected-date',
+  'update-time-preference',
+  'update-selected-time',
+  'update-limit-transfers',
+  'update-max-transfers',
+  'swap-addresses',
+]);
 
-  setup(props) {
-    return useDocumentType(props);
-  },
-};
+const { documentType } = useDocumentType(props);
 </script>
 
 <style scoped lang="scss">

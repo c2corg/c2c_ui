@@ -1,5 +1,5 @@
 <template>
-  <dropdown-button class="is-right" ref="displayModeSwitch">
+  <dropdown-button class="is-right" ref="dropdown">
     <template #button>
       <span class="button is-small">
         <fa-icon :icon="['fas', 'eye']" class="is-size-4" />
@@ -11,7 +11,7 @@
       class="dropdown-item is-size-6"
       :class="{ 'is-active': modelValue === 'result' }"
       @click="
-        $refs.displayModeSwitch.isActive = false;
+        dropdown!.isActive = false;
         $emit('update:modelValue', 'result');
       "
     >
@@ -24,7 +24,7 @@
       class="dropdown-item is-size-6"
       :class="{ 'is-active': modelValue === 'both' }"
       @click="
-        $refs.displayModeSwitch.isActive = false;
+        dropdown!.isActive = false;
         $emit('update:modelValue', 'both');
       "
     >
@@ -38,7 +38,7 @@
       class="dropdown-item is-size-6"
       :class="{ 'is-active': modelValue === 'map' }"
       @click="
-        $refs.displayModeSwitch.isActive = false;
+        dropdown!.isActive = false;
         $emit('update:modelValue', 'map');
       "
     >
@@ -50,21 +50,24 @@
   </dropdown-button>
 </template>
 
-<script>
-export default {
-  props: {
-    modelValue: {
-      type: String,
-      required: true,
-    },
-    listMode: {
-      type: String,
-      required: true,
-    },
-  },
+<script setup lang="ts">
+import { useTemplateRef } from 'vue';
 
-  emits: ['update:modelValue'],
-};
+import type DropdownButton from '@/components/generics/DropdownButton.vue';
+
+defineProps({
+  modelValue: {
+    type: String,
+    required: true,
+  },
+  listMode: {
+    type: String,
+    required: true,
+  },
+});
+defineEmits(['update:modelValue']);
+
+const dropdown = useTemplateRef<InstanceType<typeof DropdownButton>>('dropdown');
 </script>
 
 <style lang="scss" scoped>

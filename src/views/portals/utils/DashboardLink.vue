@@ -20,30 +20,31 @@
   </document-link>
 </template>
 
-<script>
-export default {
-  props: {
-    document: {
-      type: Object,
-      required: true,
-    },
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+
+const props = defineProps({
+  document: {
+    type: Object,
+    required: true,
   },
+});
 
-  computed: {
-    rangeAreas() {
-      let result = this.document.areas.filter((area) => area.area_type === 'range');
+const rangeAreas = computed(() => {
+  let result = props.document.areas.filter((area: C2cDocument) => area.area_type === 'range');
 
-      result = result.length !== 0 ? result : this.document.areas.filter((area) => area.area_type === 'admin_limits');
-      result = result.length !== 0 ? result : this.document.areas;
+  result =
+    result.length !== 0
+      ? result
+      : props.document.areas.filter((area: C2cDocument) => area.area_type === 'admin_limits');
+  result = result.length !== 0 ? result : props.document.areas;
 
-      return result;
-    },
+  return result;
+});
 
-    isMultiActivities() {
-      return this.document.activities.length > 1 ? true : false;
-    },
-  },
-};
+const isMultiActivities = computed(() => (props.document.activities.length > 1 ? true : false));
 </script>
 
 <style scoped lang="scss">

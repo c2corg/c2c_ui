@@ -52,93 +52,83 @@
   </dropdown-button>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
 import { useUrlFilters } from '@/js/composables/url-filters';
 import constants from '@/js/constants';
 
-export default {
-  setup() {
-    return useUrlFilters();
-  },
+const route = useRoute();
+const router = useRouter();
+const { documentType, fieldIsVisible } = useUrlFilters();
 
-  data() {
-    return {
-      sortField: null,
-      reversed: null,
-      complexSort: false,
-      sortableFields: [],
-    };
-  },
+const sortField = ref<string | null>(null);
+const reversed = ref<boolean | null>(null);
+const complexSort = ref(false);
+const sortableFields = ref<string[]>([]);
 
-  watch: {
-    $route: {
-      handler: 'updateFromRoute',
-      immediate: true,
-    },
-  },
+function setAsComplexSort() {
+  sortField.value = null;
+  reversed.value = null;
+  complexSort.value = true;
+}
 
-  methods: {
-    setAsComplexSort() {
-      this.sortField = null;
-      this.reversed = null;
-      this.complexSort = true;
-    },
+function updateFromRoute() {
+  const fields: string[] = [];
 
-    updateFromRoute() {
-      const sortableFields = [];
+  for (const field of Object.values(constants.objectDefinitions[documentType.value].fields)) {
+    if (field.sortable && fieldIsVisible(field)) {
+      fields.push(field.name);
+    }
+  }
 
-      for (const field of Object.values(constants.objectDefinitions[this.documentType].fields)) {
-        if (field.sortable && this.fieldIsVisible(field)) {
-          sortableFields.push(field.name);
-        }
-      }
+  sortableFields.value = fields;
 
-      this.sortableFields = sortableFields;
+  const sort = route.query.sort ? String(route.query.sort) : '';
 
-      if (!this.$route.query.sort) {
-        this.sortField = null;
-        this.reversed = null;
-        this.complexSort = false;
-        return;
-      }
+  if (!sort) {
+    sortField.value = null;
+    reversed.value = null;
+    complexSort.value = false;
+    return;
+  }
 
-      if (this.$route.query.sort.includes(',')) {
-        this.setAsComplexSort();
-        return;
-      }
+  if (sort.includes(',')) {
+    setAsComplexSort();
+    return;
+  }
 
-      let sortField = this.$route.query.sort;
-      if (sortField.startsWith('-')) {
-        sortField = sortField.substring(1);
-        this.reversed = true;
-      } else {
-        this.reversed = false;
-      }
+  let field = sort;
+  if (field.startsWith('-')) {
+    field = field.substring(1);
+    reversed.value = true;
+  } else {
+    reversed.value = false;
+  }
 
-      if (!this.sortableFields.includes(sortField)) {
-        this.setAsComplexSort();
-        return;
-      }
+  if (!sortableFields.value.includes(field)) {
+    setAsComplexSort();
+    return;
+  }
 
-      this.complexSort = false;
-      this.sortField = sortField;
-    },
+  complexSort.value = false;
+  sortField.value = field;
+}
 
-    toggle(field) {
-      this.setSort(this.sortField === field ? undefined : field);
-    },
+function toggle(field: string) {
+  setSort(sortField.value === field ? undefined : field);
+}
 
-    clear() {
-      this.setSort(undefined);
-    },
+function clear() {
+  setSort(undefined);
+}
 
-    setSort(field) {
-      const query = Object.assign({}, this.$route.query);
-      query.sort = field;
-      this.$router.push({ query });
-    },
-  },
-};
+function setSort(field: string | undefined) {
+  router.push({ query: { ...route.query, sort: field } });
+}
+
+watch(() => route.fullPath, updateFromRoute, { immediate: true });
 </script>
 
 <style lang="scss" scoped>

@@ -22,11 +22,11 @@
     </div>
 
     <!-- books -->
-    <div v-if="associations.books.length != 0" class="associations-list">
+    <div v-if="books.length != 0" class="associations-list">
       <div class="title">
         {{ $filters.uppercaseFirstLetter($gettext('books')) }}
       </div>
-      <div v-for="book of associations.books" :key="book.document_id" class="is-ellipsed">
+      <div v-for="book of books" :key="book.document_id" class="is-ellipsed">
         <document-link :document="book">
           <icon-book fixed-width class="icon-link" />
           <document-title :document="book" />
@@ -36,11 +36,11 @@
     </div>
 
     <!-- articles -->
-    <div v-if="associations.articles.length != 0" class="associations-list">
+    <div v-if="articles.length != 0" class="associations-list">
       <div class="title">
         {{ $filters.uppercaseFirstLetter($gettext('articles')) }}
       </div>
-      <div v-for="article of associations.articles" :key="article.document_id" class="is-ellipsed">
+      <div v-for="article of articles" :key="article.document_id" class="is-ellipsed">
         <document-link :document="article">
           <icon-article fixed-width class="icon-link" />
           <document-title :document="article" />
@@ -82,46 +82,43 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { documentProperty, useDocumentType } from '@/js/properties';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  props: { ...documentProperty },
+const props = defineProps({ ...documentProperty });
 
-  setup(props) {
-    return useDocumentType(props);
-  },
+const { $gettext } = useGlobalProperties();
+const { documentType } = useDocumentType(props);
 
-  computed: {
-    associations() {
-      return this.document.associations ?? {};
-    },
+const associations = computed(() => props.document.associations ?? {});
 
-    waypointsLists() {
-      const result = [];
+const waypointsLists = computed(() => {
+  const result: { title: string; waypoints: C2cDocument[] }[] = [];
 
-      const push = function (title, waypoints) {
-        if (waypoints && waypoints.length !== 0) {
-          result.push({ title, waypoints });
-        }
-      };
-
-      push(this.$gettext('waypoints'), this.associations.waypoints);
-      push(this.$gettext('waypoint_children'), this.associations.waypoint_children);
-
-      return result;
-    },
-  },
-
-  created() {
-    function compare(left, right) {
-      return left.document_id < right.document_id;
+  const push = function (title: string, waypoints?: C2cDocument[]) {
+    if (waypoints && waypoints.length !== 0) {
+      result.push({ title, waypoints });
     }
+  };
 
-    this.associations.books = (this.associations.books ?? []).sort(compare);
-    this.associations.articles = this.associations.articles ?? [];
-  },
-};
+  push($gettext('waypoints'), associations.value.waypoints);
+  push($gettext('waypoint_children'), associations.value.waypoint_children);
+
+  return result;
+});
+
+// the books, the most recent (highest id) first
+function compare(left: C2cDocument, right: C2cDocument) {
+  return right.document_id! - left.document_id!;
+}
+
+// computed: the view keeps this box when it shows another document
+const books = computed(() => [...(associations.value.books ?? [])].sort(compare));
+const articles = computed(() => associations.value.articles ?? []);
 </script>
 
 <style scoped lang="scss">
