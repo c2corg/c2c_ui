@@ -20,7 +20,6 @@ export function checkResponse<S extends z.ZodType>(
     if (strict) {
       throw new Error(message);
     }
-    // eslint-disable-next-line no-console
     console.error(message);
   }
   return data as z.input<S>;

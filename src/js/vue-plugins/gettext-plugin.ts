@@ -230,7 +230,6 @@ export default function install(app: App) {
         case 'zh_CN':
           return 'zh';
         default:
-          // eslint-disable-next-line no-console
           console.error(`Unexpected language: ${lang}`);
           return lang;
       }
@@ -260,7 +259,6 @@ export default function install(app: App) {
         case 'sl':
           return 'sl_SI';
         default:
-          // eslint-disable-next-line no-console
           console.error(`Unexpected language: ${lang}`);
           return lang;
       }
@@ -271,7 +269,6 @@ export default function install(app: App) {
       // marks fragments with, which must stay
       const nodes = [...element.childNodes].filter((node) => node.nodeType !== TEXT_NODE || node.textContent !== '');
       if (nodes.length !== 1 || nodes[0].nodeType !== TEXT_NODE) {
-        // eslint-disable-next-line
         console.error('v-translate must contains only text', element.childNodes);
         return;
       }
