@@ -49,102 +49,75 @@
   </div>
 </template>
 
-<script>
-import PageSelector from './PageSelector';
+<script setup lang="ts">
+import { computed, ref, watch, type PropType } from 'vue';
+
+import PageSelector from './PageSelector.vue';
 
 const PRINT_IMAGES_TIMEOUT = 15000; // ms
 
-export default {
-  components: {
-    PageSelector,
+const props = defineProps({
+  // the page of documents, and their total
+  documents: {
+    type: Object as PropType<{ total: number }>,
+    default: null,
   },
-
-  props: {
-    documents: {
-      type: Object,
-      default: null,
-    },
-    promises: {
-      type: Array,
-      default: null,
-    },
+  // the loading of each document of the page
+  promises: {
+    type: Array as PropType<{ promise: PromiseLike<unknown> }[]>,
+    default: null,
   },
+});
 
-  emits: ['set-image-printing', 'set-page-breaks', 'set-summary-visibility'],
+const emit = defineEmits(['set-image-printing', 'set-page-breaks', 'set-summary-visibility']);
 
-  data() {
-    return {
-      totalResolved: 0,
-      pageBreaks: false,
-      imagePrinting: false,
-      summaryVisibility: true,
-      isPreparingPrint: false,
-    };
-  },
+const totalResolved = ref(0);
+const pageBreaks = ref(false);
+const imagePrinting = ref(false);
+const summaryVisibility = ref(true);
+const isPreparingPrint = ref(false);
 
-  computed: {
-    offset() {
-      return parseInt(this.$route.query.offset ?? 0);
-    },
-    total() {
-      return this.promises.length;
-    },
-    isLoading() {
-      return this.totalResolved < this.total;
-    },
-  },
+const total = computed(() => props.promises.length);
+const isLoading = computed(() => totalResolved.value < total.value);
 
-  watch: {
-    promises: 'trackResolve',
-    pageBreaks: 'setPageBreaks',
-    imagePrinting: 'setImagePrinting',
-    summaryVisibility: 'setSummaryVisibility',
-  },
+// Images embedded in markdown are lazy loaded: the ones that were never scrolled into
+// view would be blank in the printout (some browsers don't load them when printing).
+// Load them first, and wait for them (at most PRINT_IMAGES_TIMEOUT) before printing.
+async function print() {
+  isPreparingPrint.value = true;
 
-  methods: {
-    setPageBreaks() {
-      this.$emit('set-page-breaks', this.pageBreaks);
-    },
-    setImagePrinting() {
-      this.$emit('set-image-printing', this.imagePrinting);
-    },
-    setSummaryVisibility() {
-      this.$emit('set-summary-visibility', this.summaryVisibility);
-    },
-    // Images embedded in markdown are lazy loaded: the ones that were never scrolled into
-    // view would be blank in the printout (some browsers don't load them when printing).
-    // Load them first, and wait for them (at most PRINT_IMAGES_TIMEOUT) before printing.
-    async print() {
-      this.isPreparingPrint = true;
+  const images = [...document.querySelectorAll<HTMLImageElement>('img[c2c\\:role=embedded-image]')].filter(
+    (image) => !image.complete && image.offsetParent !== null
+  );
 
-      const images = [...document.querySelectorAll('img[c2c\\:role=embedded-image]')].filter(
-        (image) => !image.complete && image.offsetParent !== null
-      );
+  const loaded = images.map(
+    (image) =>
+      new Promise((resolve) => {
+        image.addEventListener('load', resolve, { once: true });
+        image.addEventListener('error', resolve, { once: true });
+        image.loading = 'eager';
+      })
+  );
+  const timeout = new Promise((resolve) => setTimeout(resolve, PRINT_IMAGES_TIMEOUT));
+  await Promise.race([Promise.all(loaded), timeout]);
 
-      const loaded = images.map(
-        (image) =>
-          new Promise((resolve) => {
-            image.addEventListener('load', resolve, { once: true });
-            image.addEventListener('error', resolve, { once: true });
-            image.loading = 'eager';
-          })
-      );
-      const timeout = new Promise((resolve) => setTimeout(resolve, PRINT_IMAGES_TIMEOUT));
-      await Promise.race([Promise.all(loaded), timeout]);
+  isPreparingPrint.value = false;
+  window.print();
+}
 
-      this.isPreparingPrint = false;
-      window.print();
-    },
-    trackResolve() {
-      this.totalResolved = 0;
-      this.promises.map((p) => {
-        p.promise.then(() => {
-          this.totalResolved++;
-        });
-      });
-    },
-  },
-};
+function trackResolve() {
+  totalResolved.value = 0;
+  props.promises.forEach((p) => {
+    p.promise.then(() => {
+      totalResolved.value++;
+    });
+  });
+}
+
+watch(() => props.promises, trackResolve);
+watch(pageBreaks, (value) => emit('set-page-breaks', value));
+watch(imagePrinting, (value) => emit('set-image-printing', value));
+watch(summaryVisibility, (value) => emit('set-summary-visibility', value));
 </script>
 
 <style scoped>

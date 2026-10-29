@@ -3,7 +3,7 @@
     <html-header :title="$gettext('Account')" />
 
     <h1 class="title is-1" v-translate>Change account parameters</h1>
-    <base-form ref="form" @submit="save" :promise="promise">
+    <base-form @submit="save" :promise="promise">
       <form-field
         name="username"
         v-model="form.username"
@@ -79,96 +79,85 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { toast } from 'bulma-toast';
+import { reactive, ref, useTemplateRef, watch } from 'vue';
 
-import BaseForm from './utils/BaseForm';
-import FormField from './utils/FormField';
+import BaseForm from './utils/BaseForm.vue';
+import FormField from './utils/FormField.vue';
 import FormSubmitSuccessIndicator from './utils/FormSubmitSuccessIndicator.vue';
-import PasswordRequirements from './utils/PasswordRequirements';
+import PasswordRequirements from './utils/PasswordRequirements.vue';
 
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useNoRobots } from '@/js/composables/head';
 
-export default {
-  components: {
-    BaseForm,
-    FormField,
-    FormSubmitSuccessIndicator,
-    PasswordRequirements,
+useNoRobots();
+
+const { $user, $gettext } = useGlobalProperties();
+
+const form = reactive({
+  // set once logged in
+  username: $user.userName as string,
+  currentpassword: '',
+  newpassword: '',
+  email: '',
+  original_mail: null as string | null,
+  name: $user.name as string,
+  forum_username: $user.forumUsername as string,
+  is_profile_public: null as boolean | null,
+});
+
+const promise = ref<ApiData | { loading?: boolean }>({});
+
+const successIndicator = useTemplateRef<InstanceType<typeof FormSubmitSuccessIndicator>>('successIndicator');
+
+watch(
+  form,
+  () => {
+    successIndicator.value?.clear();
   },
+  { deep: true }
+);
 
-  setup() {
-    useNoRobots();
-  },
+c2c.userProfile.account.get().then((response) => {
+  $user.forumUsername = response.data.forum_username;
 
-  data() {
-    return {
-      form: {
-        username: this.$user.userName,
-        currentpassword: '',
-        newpassword: '',
-        email: '',
-        original_mail: null,
-        name: this.$user.name,
-        forum_username: this.$user.forumUsername,
-        is_profile_public: null,
-      },
+  form.email = response.data.email;
+  form.original_mail = response.data.email;
+  form.is_profile_public = response.data.is_profile_public;
+  form.forum_username = response.data.forum_username;
+});
 
-      promise: {},
-    };
-  },
+function save() {
+  function newOrNull<T>(fieldValue: T, originalValue: T) {
+    return fieldValue === originalValue ? null : fieldValue;
+  }
 
-  watch: {
-    form: {
-      deep: true,
-      handler() {
-        this.$refs.successIndicator.clear();
-      },
-    },
-  },
-
-  created() {
-    c2c.userProfile.account.get().then((response) => {
-      this.$user.forumUsername = response.data.forum_username;
-
-      this.form.email = response.data.email;
-      this.form.original_mail = response.data.email;
-      this.form.is_profile_public = response.data.is_profile_public;
-      this.form.forum_username = response.data.forum_username;
-    });
-  },
-
-  methods: {
-    save() {
-      function newOrNull(fieldValue, originalValue) {
-        return fieldValue === originalValue ? null : fieldValue;
-      }
-
-      this.promise = this.$user.updateAccount(
-        this.form.currentpassword,
-        newOrNull(this.form.name, this.$user.name),
-        newOrNull(this.form.forum_username, this.$user.forumUsername),
-        newOrNull(this.form.email, this.form.original_mail),
-        this.form.is_profile_public,
-        this.form.newpassword ? this.form.newpassword : null
-      );
-      this.promise.then(() => {
-        this.$refs.successIndicator.show();
-        if (this.form.email !== this.form.original_mail) {
-          this.form.original_mail = this.form.email;
-          toast({
-            message: this.$gettext(
-              `A message as been sent to the new address provided. You have to follow the link within to confirm the email address change.`
-            ),
-            type: 'is-warning',
-            position: 'center',
-          });
-        }
+  const request = $user.updateAccount(
+    form.currentpassword,
+    newOrNull(form.name, $user.name),
+    newOrNull(form.forum_username, $user.forumUsername),
+    newOrNull(form.email, form.original_mail),
+    form.is_profile_public,
+    form.newpassword ? form.newpassword : null
+  );
+  promise.value = request;
+  request.then(() => {
+    successIndicator.value!.show();
+    if (form.email !== form.original_mail) {
+      form.original_mail = form.email;
+      toast({
+        message: $gettext(
+          `A message as been sent to the new address provided. You have to follow the link within to confirm the email address change.`
+        ),
+        type: 'is-warning',
+        position: 'center',
       });
-    },
-  },
-};
+    }
+  });
+}
 </script>
 
 <style lang="scss" scoped>

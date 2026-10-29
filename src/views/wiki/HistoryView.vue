@@ -16,8 +16,8 @@
         :document-id="documentId"
         :document-type="documentType"
         :lang="lang"
-        :version-from="versionFrom"
-        :version-to="versionTo"
+        :version-from="versionFrom!"
+        :version-to="versionTo!"
       />
 
       <table class="table is-striped">
@@ -85,87 +85,79 @@
         :document-id="documentId"
         :document-type="documentType"
         :lang="lang"
-        :version-from="versionFrom"
-        :version-to="versionTo"
+        :version-from="versionFrom!"
+        :version-to="versionTo!"
       />
     </div>
   </div>
 </template>
 
-<script>
-import HistoryViewLinks from './utils/HistoryViewLinks';
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
+import HistoryViewLinks from './utils/HistoryViewLinks.vue';
+
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useNoRobots } from '@/js/composables/head';
 
-export default {
-  components: { HistoryViewLinks },
+useNoRobots();
 
-  setup() {
-    useNoRobots();
-  },
+const route = useRoute();
+const { $user } = useGlobalProperties();
 
-  data() {
-    return {
-      // theese three data are computed
-      promise: {},
-      versionFrom: undefined,
-      versionTo: undefined,
-    };
-  },
-
-  computed: {
-    documentId() {
-      return parseInt(this.$route.params.id);
-    },
-    documentType() {
-      return this.$route.name.replace('-history', '');
-    },
-    lang() {
-      return this.$route.params.lang;
-    },
-    latestVersionId() {
-      return this.history.versions[0].version_id;
-    },
-    filteredVersions() {
-      let filteredVersions = [...this.history.versions];
-      if (!this.$user.isModerator) {
-        filteredVersions = filteredVersions.filter((version) => !version.masked);
-      }
-
-      const l = filteredVersions.length;
-      filteredVersions.forEach((version, i) => {
-        if (i < l - 1) {
-          version.previous_version_id = filteredVersions[i + 1].version_id;
-        }
-      });
-
-      return filteredVersions;
-    },
-    history() {
-      return this.promise.data;
-    },
-  },
-
-  watch: {
-    $route: {
-      handler: 'load',
-      immediate: true,
-    },
-  },
-
-  methods: {
-    load() {
-      this.promise = c2c[this.documentType].getHistory(this.documentId, this.lang).then((response) => {
-        const versions = response.data.versions.reverse();
-        response.data.versions = versions;
-
-        this.versionFrom = versions[versions.length > 1 ? 1 : 0].version_id;
-        this.versionTo = versions[0].version_id;
-      });
-    },
-  },
+// a version of the document, as the history lists them
+type Version = {
+  version_id: number;
+  masked?: boolean;
+  previous_version_id?: number;
+  written_at: string;
+  [property: string]: unknown;
 };
+
+// theese three data are computed
+const promise = ref<ApiData | { data?: undefined }>({});
+const versionFrom = ref<number | undefined>(undefined);
+const versionTo = ref<number | undefined>(undefined);
+
+const documentId = computed(() => parseInt(String(route.params.id)));
+const documentType = computed(() => String(route.name).replace('-history', ''));
+const lang = computed(() => String(route.params.lang));
+const history = computed(() => promise.value.data as { title: string; versions: Version[] } | undefined);
+const latestVersionId = computed(() => history.value!.versions[0].version_id);
+
+const filteredVersions = computed(() => {
+  let versions = [...history.value!.versions];
+  if (!$user.isModerator) {
+    versions = versions.filter((version) => !version.masked);
+  }
+
+  const l = versions.length;
+  versions.forEach((version, i) => {
+    if (i < l - 1) {
+      version.previous_version_id = versions[i + 1].version_id;
+    }
+  });
+
+  return versions;
+});
+
+function load() {
+  promise.value = (c2c[documentType.value] as DocumentService)
+    .getHistory(documentId.value, lang.value)
+    .then((response) => {
+      const versions = (response.data.versions as Version[]).reverse();
+      response.data.versions = versions;
+
+      versionFrom.value = versions[versions.length > 1 ? 1 : 0].version_id;
+      versionTo.value = versions[0].version_id;
+    });
+}
+
+watch(() => route.fullPath, load, { immediate: true });
 </script>
 
 <style scoped lang="scss">

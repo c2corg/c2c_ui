@@ -89,12 +89,14 @@ describe('SocialNetworkSharing', () => {
       props: { document: { type: 'r', locales: [{ lang: 'fr', title: 'Face nord' }] } },
       global: {
         stubs: { FaIcon: true },
-        mocks: {
-          $gettext: (s: string) => s,
-          $gdpr: { get: () => null },
-          $documentUtils: {
-            getDocumentTitle: (document: { locales: { title: string }[] }) => document.locales[0].title,
-          },
+        config: {
+          globalProperties: {
+            $gettext: (s: string) => s,
+            $gdpr: { get: () => null },
+            $documentUtils: {
+              getDocumentTitle: (document: { locales: { title: string }[] }) => document.locales[0].title,
+            },
+          } as never,
         },
       },
     });

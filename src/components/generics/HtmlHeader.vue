@@ -1,28 +1,30 @@
-<script>
-function capitalizeFirstLetter(string) {
+<script lang="ts">
+import { defineComponent, watch } from 'vue';
+
+function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export default {
+// no DOM: it only sets document.title (a render function, as a <script setup> component would render a comment)
+export default defineComponent({
   props: {
     title: {
       type: String,
       required: true,
     },
   },
-  watch: {
-    title: {
-      handler() {
-        document.title =
-          this.title !== 'Camptocamp.org' ? capitalizeFirstLetter(this.title) + ' - Camptocamp.org' : 'Camptocamp.org';
-      },
-      immediate: true,
-    },
-  },
 
-  // no DOM: it only sets document.title
-  render() {
-    return null;
+  setup(props) {
+    watch(
+      () => props.title,
+      (title) => {
+        document.title =
+          title !== 'Camptocamp.org' ? capitalizeFirstLetter(title) + ' - Camptocamp.org' : 'Camptocamp.org';
+      },
+      { immediate: true }
+    );
+
+    return () => null;
   },
-};
+});
 </script>

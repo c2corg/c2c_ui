@@ -30,42 +30,40 @@
   </section>
 </template>
 
-<script>
+<script setup lang="ts">
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useNoRobots } from '@/js/composables/head';
 
-const buildDocumentTypeButton = function (documentType, text) {
+useNoRobots();
+
+const { $gettext } = useGlobalProperties();
+
+// the icons are global components (icon-outing...)
+const buildDocumentTypeButton = function (documentType: string, text: string) {
   return {
     to: documentType + 's',
     iconComponent: 'icon-' + documentType,
+    icon: undefined,
     text,
   };
 };
 
-export default {
-  setup() {
-    useNoRobots();
+const buttons = [
+  {
+    to: { name: 'home' },
+    iconComponent: undefined,
+    icon: 'home',
+    text: $gettext('Home'),
   },
-
-  data() {
-    return {
-      buttons: [
-        {
-          to: { name: 'home' },
-          icon: 'home',
-          text: this.$gettext('Home'),
-        },
-        buildDocumentTypeButton('outing', this.$gettext('outings')),
-        buildDocumentTypeButton('waypoint', this.$gettext('waypoints')),
-        buildDocumentTypeButton('route', this.$gettext('routes')),
-        buildDocumentTypeButton('article', this.$gettext('routes')),
-        buildDocumentTypeButton('book', this.$gettext('books')),
-        buildDocumentTypeButton('xreport', this.$gettext('xreports')),
-        buildDocumentTypeButton('image', this.$gettext('images')),
-        buildDocumentTypeButton('area', this.$gettext('areas')),
-      ],
-    };
-  },
-};
+  buildDocumentTypeButton('outing', $gettext('outings')),
+  buildDocumentTypeButton('waypoint', $gettext('waypoints')),
+  buildDocumentTypeButton('route', $gettext('routes')),
+  buildDocumentTypeButton('article', $gettext('articles')),
+  buildDocumentTypeButton('book', $gettext('books')),
+  buildDocumentTypeButton('xreport', $gettext('xreports')),
+  buildDocumentTypeButton('image', $gettext('images')),
+  buildDocumentTypeButton('area', $gettext('areas')),
+];
 </script>
 
 <style scoped lang="scss">

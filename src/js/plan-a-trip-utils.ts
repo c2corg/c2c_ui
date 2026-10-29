@@ -5,7 +5,17 @@ export type Section = {
   duration?: number | null;
   distance?: number;
   path?: { length?: number }[];
-  display_informations?: { commercial_mode?: string; color?: string; equipments?: string[] };
+  display_informations?: {
+    commercial_mode?: string;
+    color?: string;
+    equipments?: string[];
+    code?: string;
+    direction?: string;
+  };
+  departure_date_time?: string;
+  arrival_date_time?: string;
+  from?: { name?: string };
+  to?: { name?: string };
 };
 
 export default {

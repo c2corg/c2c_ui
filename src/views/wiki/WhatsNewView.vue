@@ -65,97 +65,84 @@
   </div>
 </template>
 
-<script>
-import ColoredIconDocument from './utils/ColoredIconDocument';
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
+import ColoredIconDocument from './utils/ColoredIconDocument.vue';
+
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useNoRobots } from '@/js/composables/head';
 import infiniteScroll from '@/js/directives/infinite-scroll';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  components: { ColoredIconDocument },
+const vInfiniteScroll = infiniteScroll;
 
-  directives: { infiniteScroll },
+useNoRobots();
 
-  setup() {
-    useNoRobots();
-  },
+const route = useRoute();
+const router = useRouter();
+const { $documentUtils } = useGlobalProperties();
 
-  data() {
-    return {
-      promise: {},
-      feed: [],
-      endOfFeed: false,
-    };
-  },
+// a change of the feed (version, author, comment...), with the type of its document
+type Change = { document: C2cDocument & { type: string; documentType: string }; [property: string]: any };
 
-  computed: {
-    userId() {
-      return this.$route.query.u ? parseInt(this.$route.query.u) : null;
-    },
-    loading() {
-      return this.promise ? this.promise.loading : false;
-    },
+const promise = ref<ApiData | { loading?: boolean; data?: undefined }>({});
+const feed = ref<Change[]>([]);
+const endOfFeed = ref(false);
 
-    disableInfiniteSCroll() {
-      return this.loading || this.endOfFeed;
-    },
+const userId = computed(() => (route.query.u ? parseInt(String(route.query.u)) : null));
+const loading = computed(() => (promise.value ? Boolean(promise.value.loading) : false));
+const disableInfiniteSCroll = computed(() => loading.value || endOfFeed.value);
 
-    nextQuery() {
-      if (!this.promise.data) {
-        return this.$route.query;
-      }
+const nextQuery = computed(() => {
+  if (!promise.value.data) {
+    return route.query;
+  }
 
-      return Object.assign({}, this.$route.query, { token: this.promise.data.pagination_token });
-    },
-  },
+  return Object.assign({}, route.query, { token: promise.value.data.pagination_token });
+});
 
-  watch: {
-    $route: {
-      handler: 'initialize',
-      immediate: true,
-    },
-  },
+function initialize() {
+  feed.value = [];
+  endOfFeed.value = false;
 
-  methods: {
-    initialize() {
-      this.feed = [];
-      this.endOfFeed = false;
+  if (route.hash) {
+    // keep compatible with v6 AngularJs hacks...
+    router.replace(route.fullPath.replace('#', '?'));
+    // route watcher will call load
+    return;
+  }
 
-      if (this.$route.hash) {
-        // keep compatible with v6 AngularJs hacks...
-        this.$router.replace(this.$route.fullPath.replace('#', '?'));
-        // $route watcher will call load
-        return;
-      }
+  load();
+}
 
-      this.load();
-    },
+function load() {
+  if (promise.value && promise.value.loading) {
+    return;
+  }
 
-    load() {
-      if (this.promise && this.promise.loading) {
-        return;
-      }
+  if (endOfFeed.value) {
+    return;
+  }
 
-      if (this.endOfFeed) {
-        return;
-      }
+  const request = c2c.getRecentChanges(nextQuery.value as Record<string, string>);
+  promise.value = request;
+  request.then(() => onLoad(request));
+}
 
-      this.promise = c2c.getRecentChanges(this.nextQuery).then(this.onLoad);
-    },
+function onLoad(request: ApiData) {
+  for (const change of request.data!.feed as Change[]) {
+    change.document.documentType = $documentUtils.getDocumentType(change.document.type);
+    feed.value.push(change);
+  }
 
-    onLoad() {
-      for (const change of this.promise.data.feed) {
-        change.document.documentType = this.$documentUtils.getDocumentType(change.document.type);
-        this.feed.push(change);
-      }
+  endOfFeed.value = request.data!.feed.length === 0;
+}
 
-      this.endOfFeed = this.promise.data.feed.length === 0;
-
-      this.$nextTick(this.onScroll);
-    },
-  },
-};
+watch(() => route.fullPath, initialize, { immediate: true });
 </script>
 
 <style scoped lang="scss">

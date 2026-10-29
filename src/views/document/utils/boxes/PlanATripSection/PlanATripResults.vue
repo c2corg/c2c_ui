@@ -185,79 +185,92 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import type { PropType } from 'vue';
+
 import { assetUrl } from '@/js/asset-urls';
-import planATripUtils from '@/js/plan-a-trip-utils';
+import planATripUtils, { type Section } from '@/js/plan-a-trip-utils';
 
-export default {
-  components: {},
-  props: {
-    activeTab: {
-      type: String,
-      default: 'outbound',
-    },
-    currentData: {
-      type: Object,
-      default: () => ({
-        fromAddress: '',
-        selectedAddress: null,
-        addressPropositions: [],
-        showAddressPropositions: false,
-        selectedDate: new Date().toISOString().slice(0, 10),
-        selectedTime: new Date().toTimeString().slice(0, 5),
-        timePreference: 'leave-after',
-        fromCoordinates: null,
-        selectedWaypoint: null,
-        journeys: [],
-        selectedJourney: null,
-        noResult: false,
-        selectedRouteJourney: null,
-        showTimeButton: false,
-        isUpdating: false,
-        missingDepartureAddress: false,
-        missingDestinationAddress: false,
-      }),
-    },
-    isUpdating: {
-      type: Boolean,
-      default: false,
-    },
-    noResult: {
-      type: Boolean,
-      default: false,
-    },
-    displayedFromAddress: {
-      type: String,
-      default: '',
-    },
-    displayedToAddress: {
-      type: String,
-      default: '',
-    },
+const {
+  formatTime,
+  formatDuration,
+  formatJourneyDuration,
+  getTransportIcon,
+  getTransportClass,
+  getTransportColorClass,
+  getDistance,
+  calculateSectionDuration,
+} = planATripUtils;
+
+// a journey proposed by Navitia, and the state of the section (PlanATripSection), as it reads them
+type Journey = { sections: Section[]; [property: string]: any };
+type PlanATripData = { journeys: Journey[]; [property: string]: any };
+
+const props = defineProps({
+  activeTab: {
+    type: String,
+    default: 'outbound',
   },
-  emits: ['selectJourney'],
-
-  computed: {},
-  methods: {
-    assetUrl,
-    ...planATripUtils,
-    /** Shows route details */
-    showJourneyDetails(journey) {
-      this.currentData.selectedRouteJourney = journey;
-
-      if (this.currentData.selectedJourney === journey) {
-        this.currentData.selectedJourney = null;
-      } else {
-        this.currentData.selectedJourney = journey;
-      }
-    },
-    /** Selects a route without opening details */
-    selectRouteOnly(journey) {
-      this.currentData.selectedRouteJourney = journey;
-      this.$emit('selectJourney', journey);
-    },
+  currentData: {
+    type: Object as PropType<PlanATripData>,
+    default: () => ({
+      fromAddress: '',
+      selectedAddress: null,
+      addressPropositions: [],
+      showAddressPropositions: false,
+      selectedDate: new Date().toISOString().slice(0, 10),
+      selectedTime: new Date().toTimeString().slice(0, 5),
+      timePreference: 'leave-after',
+      fromCoordinates: null,
+      selectedWaypoint: null,
+      journeys: [],
+      selectedJourney: null,
+      noResult: false,
+      selectedRouteJourney: null,
+      showTimeButton: false,
+      isUpdating: false,
+      missingDepartureAddress: false,
+      missingDestinationAddress: false,
+    }),
   },
-};
+  isUpdating: {
+    type: Boolean,
+    default: false,
+  },
+  noResult: {
+    type: Boolean,
+    default: false,
+  },
+  displayedFromAddress: {
+    type: String,
+    default: '',
+  },
+  displayedToAddress: {
+    type: String,
+    default: '',
+  },
+});
+
+const emit = defineEmits(['selectJourney']);
+
+/** Shows route details */
+function showJourneyDetails(journey: Journey) {
+  // the state of the section, shared with it
+
+  props.currentData.selectedRouteJourney = journey;
+
+  if (props.currentData.selectedJourney === journey) {
+    props.currentData.selectedJourney = null;
+  } else {
+    props.currentData.selectedJourney = journey;
+  }
+}
+
+/** Selects a route without opening details */
+function selectRouteOnly(journey: Journey) {
+  props.currentData.selectedRouteJourney = journey;
+  emit('selectJourney', journey);
+}
 </script>
 <style lang="scss" scoped>
 .itineraries-container {
