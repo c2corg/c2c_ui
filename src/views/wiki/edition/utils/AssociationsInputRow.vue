@@ -8,11 +8,11 @@
         </label>
       </div>
       <div class="column is-narrow">
-        <form-input class="is-expanded" ref="input" :document="document" :field="field" />
+        <form-input class="is-expanded" :document="document" :field="field" />
       </div>
     </div>
     <div class="columns is-multiline">
-      <div v-for="child in document.associations[field.name]" :key="child.document_id" class="column is-4">
+      <div v-for="child in document.associations![field.name]" :key="child.document_id" class="column is-4">
         <document-card
           :document="child"
           :show-delete-button="showDeleteButton(child)"
@@ -24,51 +24,40 @@
   </div>
 </template>
 
-<script>
-import FormInput from './FormInput';
+<script setup lang="ts">
+import { computed, reactive } from 'vue';
+
+import FormInput from './FormInput.vue';
 
 import { useAssociationRights } from '@/js/composables/association-rights';
 import { useFormField } from '@/js/composables/form-registration';
 import { documentProperty, fieldProperty } from '@/js/properties';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  components: {
-    FormInput,
+const props = defineProps({
+  ...fieldProperty,
+  ...documentProperty,
+  label: {
+    type: String,
+    default: null,
   },
 
-  // registered with the FormSection containing it
-  props: {
-    ...fieldProperty,
-    ...documentProperty,
-    label: {
-      type: String,
-      default: null,
-    },
-
-    helper: {
-      type: String,
-      default: undefined, // default must be undefined. null means explicit no helper
-    },
+  helper: {
+    type: String,
+    default: undefined, // default must be undefined. null means explicit no helper
   },
+});
 
-  setup() {
-    useFormField('formSection');
-    return useAssociationRights();
-  },
+const { canRemove } = useAssociationRights();
 
-  computed: {
-    visible() {
-      return this.$refs.input.visible;
-    },
-    hasError() {
-      return this.field.error !== null;
-    },
-  },
+// as its input
+const visible = computed(() => props.field.isVisibleFor(props.document));
+const hasError = computed(() => props.field.error !== null);
 
-  methods: {
-    showDeleteButton(document) {
-      return this.canRemove(this.document, document); // ! FIXME import mixin
-    },
-  },
-};
+// registered with the FormSection containing it
+useFormField('formSection', reactive({ visible, hasError }));
+
+function showDeleteButton(child: C2cDocument) {
+  return canRemove(props.document, child);
+}
 </script>

@@ -22,101 +22,90 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue';
+
 import { useFormContainer } from '@/js/composables/form-registration';
-import { useUid } from '@/js/uid';
+import { nextUid } from '@/js/uid';
 
-export default {
-  // the fields register themselves (FormField, AssociationsInputRow, MapInputRow)
-  props: {
-    title: {
-      type: String,
-      required: true,
-    },
-    subTitle: {
-      type: String,
-      default: undefined,
-    },
-    expandedOnLoad: {
-      type: Boolean,
-      default: false,
-    },
+// the fields register themselves (FormField, AssociationsInputRow, MapInputRow)
+const props = defineProps({
+  title: {
+    type: String,
+    required: true,
   },
-
-  setup() {
-    return { ...useFormContainer('formSection'), ...useUid() };
+  subTitle: {
+    type: String,
+    default: undefined,
   },
-
-  data() {
-    return {
-      expanded_: false,
-      style: null,
-      isMounted: false,
-    };
+  expandedOnLoad: {
+    type: Boolean,
+    default: false,
   },
+});
 
-  computed: {
-    // hidden when none of its fields is visible. Shown until mounted, as the fields register while it renders:
-    // a map inside must not initialize in a hidden (0 size) section
-    visible() {
-      return !this.isMounted || this.formFields.some((field) => field.visible);
-    },
+const { formFields } = useFormContainer('formSection');
+const uid = nextUid();
 
-    hasError() {
-      return this.formFields.some((field) => field.hasError === true);
-    },
-  },
+const content = useTemplateRef<HTMLElement>('content');
 
-  mounted() {
-    this.isMounted = true;
-    this.style = document.createElement('style');
-    this.style.type = 'text/css';
-    document.getElementsByTagName('head')[0].appendChild(this.style);
+const expanded_ = ref(false);
+let style: HTMLStyleElement | null = null;
+const isMounted = ref(false);
 
-    window.addEventListener('keyup', this.onKeyup);
+// hidden when none of its fields is visible. Shown until mounted, as the fields register while it renders:
+// a map inside must not initialize in a hidden (0 size) section
+const visible = computed(() => !isMounted.value || formFields.value.some((field) => field.visible));
 
-    if (this.expandedOnLoad) {
-      this.toggleExpandedState();
+const hasError = computed(() => formFields.value.some((field) => field.hasError === true));
+
+function toggleExpandedState() {
+  const element = content.value!;
+  const className = `section-content-expanded${uid}`;
+
+  if (!expanded_.value) {
+    style!.innerHTML = `.${className} { max-height: ${element.scrollHeight}px!important; }`;
+    element.classList.remove('section-content-hidden');
+    element.classList.add(className);
+    setTimeout(() => {
+      element.classList.remove(className);
+    }, 301);
+  } else {
+    style!.innerHTML = `.${className} { max-height: ${element.clientHeight}px!important; }`;
+    element.classList.add(className);
+    setTimeout(() => {
+      element.classList.add('section-content-hidden');
+      element.classList.remove(className);
+    }, 0);
+  }
+
+  expanded_.value = !expanded_.value;
+}
+
+function onKeyup(event: KeyboardEvent) {
+  if (event.altKey && event.shiftKey) {
+    if ((event.key === 'ArrowUp' && expanded_.value) || (event.key === 'ArrowDown' && !expanded_.value)) {
+      toggleExpandedState();
     }
-  },
+  }
+}
 
-  beforeUnmount() {
-    window.removeEventListener('keyup', this.onKeyup);
-  },
+onMounted(() => {
+  isMounted.value = true;
+  style = document.createElement('style');
+  style.type = 'text/css';
+  document.getElementsByTagName('head')[0].appendChild(style);
 
-  methods: {
-    toggleExpandedState() {
-      const content = this.$refs.content;
-      const className = `section-content-expanded${this.uid}`;
+  window.addEventListener('keyup', onKeyup);
 
-      if (!this.expanded_) {
-        this.style.innerHTML = `.${className} { max-height: ${content.scrollHeight}px!important; }`;
-        content.classList.remove('section-content-hidden');
-        content.classList.add(className);
-        setTimeout(() => {
-          content.classList.remove(className);
-        }, 301);
-      } else {
-        this.style.innerHTML = `.${className} { max-height: ${content.clientHeight}px!important; }`;
-        content.classList.add(className);
-        setTimeout(() => {
-          content.classList.add('section-content-hidden');
-          content.classList.remove(className);
-        }, 0);
-      }
+  if (props.expandedOnLoad) {
+    toggleExpandedState();
+  }
+});
 
-      this.expanded_ = !this.expanded_;
-    },
-
-    onKeyup(event) {
-      if (event.altKey && event.shiftKey) {
-        if ((event.key === 'ArrowUp' && this.expanded_) || (event.key === 'ArrowDown' && !this.expanded_)) {
-          this.toggleExpandedState();
-        }
-      }
-    },
-  },
-};
+onBeforeUnmount(() => {
+  window.removeEventListener('keyup', onKeyup);
+});
 </script>
 
 <style scoped lang="scss">

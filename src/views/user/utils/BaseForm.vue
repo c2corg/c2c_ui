@@ -9,94 +9,81 @@
   </form>
 </template>
 
-<script>
-import { useFormContainer } from '@/js/composables/form-registration';
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
 
-export default {
-  props: {
-    promise: {
-      type: Object,
-      default: null,
-    },
+import { type FormFieldState, useFormContainer } from '@/js/composables/form-registration';
+
+type ApiError = { name?: string; description: string };
+
+const props = defineProps({
+  // the request of the form: its errors are shown on their field, or above the form
+  promise: {
+    type: Object,
+    default: null,
   },
+});
 
-  emits: ['submit'],
-  // the form fields register themselves (user FormField)
+const emit = defineEmits(['submit']);
 
-  setup() {
-    return useFormContainer('baseForm');
-  },
+// the form fields register themselves (user FormField)
+const { formFields } = useFormContainer('baseForm');
 
-  data() {
-    return {
-      serverMetaErrors: [], // errors that can't be linked to an input
-    };
-  },
+const serverMetaErrors = ref<ApiError[]>([]); // errors that can't be linked to an input
 
-  computed: {
-    inputs() {
-      return Object.fromEntries(this.formFields.map((field) => [field.name, field]));
-    },
+const inputs = computed<Record<string, FormFieldState>>(() =>
+  Object.fromEntries(formFields.value.map((field) => [field.name!, field]))
+);
 
-    hasError() {
-      return this.formFields.some((field) => field.hasError);
-    },
-  },
+const hasError = computed(() => formFields.value.some((field) => field.hasError));
 
-  watch: {
-    promise: {
-      handler: 'computeErrors',
-      deep: true,
-    },
-  },
+function cleanErrors() {
+  serverMetaErrors.value = [];
 
-  methods: {
-    cleanErrors() {
-      this.serverMetaErrors = [];
+  for (const input of Object.values(inputs.value)) {
+    input.errorMessage = undefined;
+  }
+}
 
-      for (const input of Object.values(this.inputs)) {
-        input.errorMessage = undefined;
-      }
-    },
+function computeErrors() {
+  cleanErrors();
 
-    computeErrors() {
-      this.cleanErrors();
+  if (!props.promise || !props.promise.error) {
+    return;
+  }
 
-      if (!this.promise || !this.promise.error) {
-        return;
-      }
+  const serverErrors = props.promise.error.response.data;
 
-      const serverErrors = this.promise.error.response.data;
-
-      if (!serverErrors.errors) {
-        // unpexted error structure from API
-        this.serverMetaErrors.push(serverErrors);
+  if (!serverErrors.errors) {
+    // unpexted error structure from API
+    serverMetaErrors.value.push(serverErrors);
+  } else {
+    for (const error of serverErrors.errors as ApiError[]) {
+      const input = error.name ? inputs.value[error.name] : undefined;
+      if (input) {
+        input.errorMessage = error.description;
       } else {
-        for (const error of serverErrors.errors) {
-          if (this.inputs[error.name]) {
-            this.inputs[error.name].errorMessage = error.description;
-          } else {
-            this.serverMetaErrors.push(error);
-          }
-        }
+        serverMetaErrors.value.push(error);
       }
-    },
+    }
+  }
+}
 
-    submit(event) {
-      event.preventDefault();
+watch(() => props.promise, computeErrors, { deep: true });
 
-      if (this.hasError) {
-        return;
-      }
+function submit(event: Event) {
+  event.preventDefault();
 
-      for (const input of Object.values(this.inputs)) {
-        input.errorMessage = null;
-      }
+  if (hasError.value) {
+    return;
+  }
 
-      this.serverMetaErrors = [];
+  for (const input of Object.values(inputs.value)) {
+    input.errorMessage = null;
+  }
 
-      this.$emit('submit');
-    },
-  },
-};
+  serverMetaErrors.value = [];
+
+  emit('submit');
+}
 </script>

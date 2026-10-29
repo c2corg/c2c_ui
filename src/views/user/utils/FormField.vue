@@ -31,7 +31,6 @@
     </label>
     <div class="control has-icons-left has-icons-right">
       <input
-        ref="input"
         :type="unmasked ? 'text' : type"
         :placeholder="placeholder || label"
         :required="required"
@@ -55,96 +54,84 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, reactive, ref, toRef } from 'vue';
+
 import { useFormField } from '@/js/composables/form-registration';
 
-export default {
-  props: {
-    name: {
-      type: String,
-      required: true,
-    },
-    modelValue: {
-      type: [String, Number, Boolean],
-      default: null,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    type: {
-      type: String,
-      required: true,
-      validator: (value) => {
-        return ['text', 'number', 'checkbox', 'radio', 'email', 'password'].includes(value);
-      },
-    },
-    placeholder: {
-      type: String,
-      default: null,
-    },
-    icon: {
-      type: String,
-      required: true,
-    },
-    required: {
-      type: Boolean,
-      default: false,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    autocorrect: {
-      type: String,
-      default: undefined,
-    },
-    autocapitalize: {
-      type: String,
-      default: undefined,
+const props = defineProps({
+  name: {
+    type: String,
+    required: true,
+  },
+  modelValue: {
+    type: [String, Number, Boolean],
+    default: null,
+  },
+  label: {
+    type: String,
+    required: true,
+  },
+  type: {
+    type: String,
+    required: true,
+    validator: (value: string) => {
+      return ['text', 'number', 'checkbox', 'radio', 'email', 'password'].includes(value);
     },
   },
-
-  emits: ['update:modelValue'],
-  // registered with the BaseForm containing it
-
-  setup() {
-    useFormField('baseForm');
+  placeholder: {
+    type: String,
+    default: null,
   },
-
-  data() {
-    return {
-      errorMessage: null,
-      unmasked: false,
-    };
+  icon: {
+    type: String,
+    required: true,
   },
-
-  computed: {
-    value_: {
-      get() {
-        return this.modelValue;
-      },
-      set(value) {
-        this.$emit('update:modelValue', value);
-      },
-    },
-
-    hasError() {
-      if (this.required && !this.modelValue) {
-        return true;
-      }
-
-      return false;
-    },
+  required: {
+    type: Boolean,
+    default: false,
   },
-
-  methods: {
-    focus() {
-      this.$refs.input.focus();
-    },
-    onMaskToggle() {
-      this.unmasked = !this.unmasked;
-    },
+  disabled: {
+    type: Boolean,
+    default: false,
   },
-};
+  autocorrect: {
+    type: String,
+    default: undefined,
+  },
+  autocapitalize: {
+    type: String,
+    default: undefined,
+  },
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+// set by the BaseForm containing it, from the API errors
+const errorMessage = ref<string | null | undefined>(null);
+const unmasked = ref(false);
+
+const value_ = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(value) {
+    emit('update:modelValue', value);
+  },
+});
+
+const hasError = computed(() => {
+  if (props.required && !props.modelValue) {
+    return true;
+  }
+
+  return false;
+});
+
+// registered with the BaseForm containing it
+useFormField('baseForm', reactive({ name: toRef(props, 'name'), hasError, errorMessage }));
+
+function onMaskToggle() {
+  unmasked.value = !unmasked.value;
+}
 </script>

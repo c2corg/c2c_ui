@@ -1,6 +1,6 @@
 import { mount, type VueWrapper } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
-import { h } from 'vue';
+import { h, reactive } from 'vue';
 
 import FormSection from './FormSection.vue';
 
@@ -8,10 +8,10 @@ import { useFormField } from '@/js/composables/form-registration';
 
 // a field as FormField, AssociationsInputRow and MapInputRow are: visible and hasError, registered with the section
 const Field = {
-  setup() {
-    useFormField('formSection');
-  },
   props: { visible: Boolean, hasError: Boolean },
+  setup(props: { visible: boolean; hasError: boolean }) {
+    useFormField('formSection', props);
+  },
   render: () => h('div'),
 };
 
@@ -49,9 +49,8 @@ describe('FormSection', () => {
     let displayedOnMount: boolean | undefined;
     const MapLike = {
       setup() {
-        useFormField('formSection');
+        useFormField('formSection', reactive({ visible: true, hasError: false }));
       },
-      data: () => ({ visible: true, hasError: false }),
       mounted(this: { $el: HTMLElement }) {
         displayedOnMount = (this.$el.closest('.section-item') as HTMLElement).style.display !== 'none';
       },
