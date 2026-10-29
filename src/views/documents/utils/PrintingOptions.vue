@@ -62,9 +62,9 @@ const props = defineProps({
     type: Object as PropType<{ total: number }>,
     default: null,
   },
-  // the loading of each document of the page
+  // the loading of each document of the page (ApiData, whose then() is not the one of a PromiseLike)
   promises: {
-    type: Array as PropType<{ promise: PromiseLike<unknown> }[]>,
+    type: Array as PropType<{ promise: { then(onSuccess: () => void): unknown } }[]>,
     default: null,
   },
 });
