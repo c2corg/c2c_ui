@@ -1,20 +1,25 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
-import FormField from './FormField';
+import FormField from './FormField.vue';
 
 import constants from '@/js/constants';
 import genericComponents from '@/js/vue-plugins/generic-components';
 
 const field = constants.objectDefinitions.outing.fields.ski_rating;
 
-const mountSkiRating = (attrs = {}) =>
+const mountSkiRating = (attrs: Record<string, unknown> = {}) =>
   mount(FormField, {
     props: { document: { activities: ['skitouring'], ski_rating: null }, field },
     attrs,
     global: {
       plugins: [genericComponents], // the inputs, registered globally as in the app
-      mocks: { $gettext: (text) => text, $filters: { uppercaseFirstLetter: (text) => text } },
+      config: {
+        globalProperties: {
+          $gettext: (text: string) => text,
+          $filters: { uppercaseFirstLetter: (text: string) => text },
+        } as never,
+      },
       stubs: { MarkerHelper: true, FaIcon: true },
     },
   });

@@ -1,29 +1,23 @@
 // What the edition views (RouteEditionView, WaypointEditionView...) share: the document to edit, loaded from the route
 // (or built for a new one), its fields and their errors, and its saving.
 //
-//   export default {
-//     components: { ...documentEditionComponents },
-//     setup() {
-//       return useDocumentEdition();
-//     },
-//     methods: {
-//       beforeSave() {...},
-//     },
-//   };
+//   const { document, fields, ... } = useDocumentEdition({ beforeSave });
 //
-// A view may have afterLoad(), beforeSave() and afterSave() methods: they are called when the document is loaded,
+// A view may give afterLoad(), beforeSave() and afterSave() hooks: they are called when the document is loaded,
 // before it's checked and saved, and once its saving has started.
 import { toast } from 'bulma-toast';
-import { computed, getCurrentInstance, onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import {
+  computed,
+  getCurrentInstance,
+  nextTick,
+  onBeforeMount,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+  type Ref,
+} from 'vue';
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router';
-
-import AssociationsInputRow from './AssociationsInputRow.vue';
-import EditionContainer from './EditionContainer.vue';
-import FormField from './FormField.vue';
-import FormInput from './FormInput.vue';
-import FormSection from './FormSection.vue';
-import MapInputRow from './MapInputRow.vue';
-import QualityField from './QualityField.vue';
 
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
@@ -32,17 +26,7 @@ import constants from '@/js/constants';
 import type Field from '@/js/constants/Field';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export const documentEditionComponents = {
-  FormSection,
-  FormField,
-  QualityField,
-  FormInput,
-  MapInputRow,
-  EditionContainer,
-  AssociationsInputRow,
-};
-
-type EditionHooks = {
+export type EditionHooks = {
   afterLoad?: () => void;
   beforeSave?: () => void;
   afterSave?: () => void;
@@ -58,11 +42,8 @@ export function confirmLeave(modified: boolean, gettext: (text: string) => strin
   return !modified || window.confirm(gettext('Do you really want to leave? you have unsaved changes!'));
 }
 
-export function useDocumentEdition() {
-  const instance = getCurrentInstance()!;
-  const globals = instance.appContext.config.globalProperties;
-  // the hooks of the view: its methods, read when they are called
-  const view = () => instance.proxy as unknown as EditionHooks;
+export function useDocumentEdition(hooks: EditionHooks = {}) {
+  const globals = getCurrentInstance()!.appContext.config.globalProperties;
   const route = useRoute();
   const router = useRouter();
 
@@ -78,7 +59,8 @@ export function useDocumentEdition() {
   const documentType = computed(() => String(route.name).replace(/-(edit|add)/, ''));
   const documentId = computed(() => String(route.params.id));
   const lang = computed(() => String(route.params.lang));
-  const document = computed(() => promise.value.data);
+  // null while it loads
+  const document = computed(() => promise.value.data ?? undefined);
   // in edit mode, there is only one locale
   const editedLocale = computed(() => (document.value ? document.value.locales![0] : null));
 
@@ -113,7 +95,7 @@ export function useDocumentEdition() {
             locales.push(globals.$documentUtils.buildLocale(documentType.value, lang.value));
           }
 
-          view().afterLoad?.();
+          hooks.afterLoad?.();
 
           // TODO : implement an algorithm to determine if document has been modified
           modified.value = true;
@@ -132,7 +114,7 @@ export function useDocumentEdition() {
           // TODO : implements a algorithm to determine if document has been modified
           modified.value = true;
           state.data = newDocument;
-          view().afterLoad?.();
+          hooks.afterLoad?.();
         }
       };
 
@@ -266,7 +248,7 @@ export function useDocumentEdition() {
       return;
     }
 
-    view().beforeSave?.(); // allow each view to handle some specific cases
+    hooks.beforeSave?.(); // allow each view to handle some specific cases
 
     const doc = document.value!;
     for (const field of Object.values(fields.value)) {
@@ -297,7 +279,7 @@ export function useDocumentEdition() {
         });
     }
 
-    view().afterSave?.(); // allow each view to handle some specific cases
+    hooks.afterSave?.(); // allow each view to handle some specific cases
 
     request.catch((error) => {
       saving.value = false;
@@ -313,7 +295,7 @@ export function useDocumentEdition() {
     }
   }
 
-  // loaded before the first render, as the $route watcher of the mixin did: the methods of the view are there
+  // loaded before the first render, as the $route watcher of the mixin did
   onBeforeMount(load);
   watch(() => route.fullPath, load);
 
@@ -340,4 +322,27 @@ export function useDocumentEdition() {
     editedLocale,
     save,
   };
+}
+
+/**
+ * Once the document gets its first point (clicked on the map, typed, or given by an association), the map fits it.
+ * geom_detail too for the views editing a track.
+ */
+export function useFitMapOnFirstGeometry(
+  document: Ref<C2cDocument | null | undefined>,
+  map: Ref<{ fitMapToDocuments(): unknown } | null>,
+  { withTrack = false } = {}
+) {
+  const onGeometry = (to: unknown, from: unknown) => {
+    if (from === null && to) {
+      nextTick(() => {
+        map.value!.fitMapToDocuments();
+      });
+    }
+  };
+
+  watch(() => document.value?.geometry?.geom, onGeometry);
+  if (withTrack) {
+    watch(() => document.value?.geometry?.geom_detail, onGeometry);
+  }
 }
