@@ -4,14 +4,20 @@
     <div style="clear:both"/> -->
 </template>
 
-<script>
+<script setup lang="ts">
+import type { IconLookup } from '@fortawesome/fontawesome-svg-core';
+import { onBeforeUnmount, onMounted, useTemplateRef, watch } from 'vue';
+import { useRouter } from 'vue-router';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
 import iconSvg from '@/js/icon-svg';
 import { getEmbeddedImageUrl } from '@/js/image-urls';
 import { sanitizeRichHtml } from '@/js/sanitize-html';
+import type { ViewerImage } from '@/js/vue-plugins/image-viewer';
 
 // copied from vue router : https://github.com/vuejs/vue-router/blob/dev/src/components/link.js
-function guardEvent(e) {
+function guardEvent(e: MouseEvent) {
   // don't redirect with control keys
   if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) return;
   // don't redirect when preventDefault called
@@ -19,9 +25,10 @@ function guardEvent(e) {
   // don't redirect on right click
   if (e.button !== undefined && e.button !== 0) return;
   // don't redirect if `target="_blank"`
-  if (e.currentTarget && e.currentTarget.getAttribute) {
-    const target = e.currentTarget.getAttribute('target');
-    if (/\b_blank\b/i.test(target)) return;
+  const currentTarget = e.currentTarget as Element | null;
+  if (currentTarget && currentTarget.getAttribute) {
+    const target = currentTarget.getAttribute('target');
+    if (/\b_blank\b/i.test(target ?? '')) return;
   }
   // this may be a Weex event which doesn't have this method
   if (e.preventDefault) {
@@ -30,13 +37,13 @@ function guardEvent(e) {
   return true;
 }
 
-const getFontAwesomeSrc = function (prefix, iconeName) {
-  let svgSource = iconSvg({ prefix, iconName: iconeName });
+const getFontAwesomeSrc = function (prefix: string, iconeName: string) {
+  let svgSource = iconSvg({ prefix, iconName: iconeName } as IconLookup);
   svgSource = svgSource.replace('fill="currentColor"', 'fill="#F93"');
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgSource);
 };
 
-const getEmojiSrc = function (emojiSource, svgName) {
+const getEmojiSrc = function (emojiSource: string, svgName: string) {
   if (emojiSource === 'emojione') {
     return `https://cdn.jsdelivr.net/emojione/assets/svg/${svgName}.svg`;
   }
@@ -50,177 +57,179 @@ const getEmojiSrc = function (emojiSource, svgName) {
   }
 };
 
-export default {
-  props: {
-    content: {
-      type: String,
-      required: true,
-    },
+// an image of the content, with the image document it opens in the image viewer
+type EmbeddedImage = HTMLImageElement & { c2cExtrapoledDocument: ViewerImage & { type: string } };
+
+const props = defineProps({
+  content: {
+    type: String,
+    required: true,
   },
+});
 
-  watch: {
-    content: 'compute',
-  },
+const router = useRouter();
+const { $imageViewer, $language } = useGlobalProperties();
 
-  mounted() {
-    this.compute();
-    window.addEventListener('beforeprint', this.loadAllImages);
-  },
+const containerEl = useTemplateRef<HTMLDivElement>('container');
 
-  beforeUnmount() {
-    window.removeEventListener('beforeprint', this.loadAllImages);
-  },
+// lazy images that are not loaded yet would be missing in the printout
+function loadAllImages() {
+  for (const image of containerEl.value!.querySelectorAll<HTMLImageElement>('img[loading=lazy]')) {
+    image.loading = 'eager';
+  }
+}
 
-  methods: {
-    // lazy images that are not loaded yet would be missing in the printout
-    loadAllImages() {
-      for (const image of this.$refs.container.querySelectorAll('img[loading=lazy]')) {
-        image.loading = 'eager';
+function compute() {
+  const container = containerEl.value!;
+
+  const addClasses = function (cssSelector: string, classes: string[]) {
+    const nodes = container.querySelectorAll(cssSelector);
+
+    for (const node of nodes) {
+      node.classList.add(...classes);
+    }
+  };
+
+  // props.content comes from wiki articles converted from user-authored markdown:
+  // sanitize it before injecting it in the DOM to prevent stored XSS.
+  container.innerHTML = sanitizeRichHtml(props.content);
+
+  if (props.content.includes('c2c:role')) {
+    computeFigures(container.querySelectorAll('figure[c2c\\:role=embedded-figure]'));
+    computeImages(container.querySelectorAll<EmbeddedImage>('img[c2c\\:role=embedded-image]'));
+    computeEmojis(container.querySelectorAll<HTMLImageElement>('img[c2c\\:role=emoji]'));
+    computeAnchors(container.querySelectorAll<HTMLAnchorElement>('a[c2c\\:role=internal-link]'));
+    computeVideos(container.querySelectorAll('div[c2c\\:role=video] > iframe'));
+
+    addClasses('div[c2c\\:role=info]', ['notification', 'is-info']);
+    addClasses('div[c2c\\:role=warning]', ['notification', 'is-warning']);
+    addClasses('div[c2c\\:role=danger]', ['notification', 'is-danger']);
+    addClasses('div[c2c\\:role=video]', ['no-print']);
+    addClasses('table[c2c\\:role=ltag]', ['table']);
+  }
+}
+
+function computeVideos(iframes: Iterable<Element>) {
+  for (const iframe of iframes) {
+    iframe.setAttribute('allowfullscreen', 'true');
+    // Restrict what the embedded video player (YouTube/Vimeo/Dailymotion) iframe
+    // can do: allow-scripts and allow-same-origin are required by these players'
+    // own embed code, allow-presentation is required for fullscreen playback.
+    // Notably missing: allow-top-navigation, allow-popups, allow-forms...
+    iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation');
+  }
+}
+
+function computeEmojis(emojis: Iterable<HTMLImageElement>) {
+  for (const emoji of emojis) {
+    const emojiSource = emoji.attributes.getNamedItem('c2c:emoji-db')!.value;
+    const svgName = emoji.attributes.getNamedItem('c2c:svg-name')!.value;
+    emoji.src = getEmojiSrc(emojiSource, svgName)!; // `${svgCdns[emojiSource]}${svgName}.svg`
+  }
+}
+
+function computeFigures(figures: Iterable<Element>) {
+  for (const figure of figures) {
+    const image = figure.children[0];
+    const size = image.attributes.getNamedItem('c2c:size');
+
+    if (size) {
+      figure.setAttribute('c2c:size', size.value);
+    }
+  }
+}
+
+function computeImages(images: Iterable<EmbeddedImage>) {
+  for (const image of images) {
+    const document_id = parseInt(image.attributes.getNamedItem('c2c:document-id')!.value, 10);
+    image.c2cExtrapoledDocument = {
+      document_id,
+      locales: [{ title: '...' }],
+      available_langs: [$language.current!],
+      type: 'i',
+    };
+
+    image.addEventListener('click', () => {
+      $imageViewer.show(image.c2cExtrapoledDocument);
+    });
+
+    const urls = {
+      url: image.getAttribute('c2c:url'),
+      urlProxy: image.getAttribute('c2c:url-proxy')!,
+    };
+    const parent = image.parentNode!;
+    const picture = document.createElement('picture');
+
+    // Until all images are migrated only images uploaded after a given timestamp
+    // or with an id greater than a given one have their webp and avif versions.
+    // Original images (no size) have no modern versions.
+    if (
+      config.urls.modernThumbnailsId &&
+      document_id > config.urls.modernThumbnailsId &&
+      image.getAttribute('c2c:size')
+    ) {
+      const avif = document.createElement('source');
+      avif.setAttribute('type', 'image/avif');
+      avif.setAttribute('srcset', getEmbeddedImageUrl(urls, 'avif'));
+      const webp = document.createElement('source');
+      webp.setAttribute('type', 'image/webp');
+      webp.setAttribute('srcset', getEmbeddedImageUrl(urls, 'webp'));
+      picture.appendChild(avif);
+      picture.appendChild(webp);
+    }
+    picture.appendChild(image);
+    parent.appendChild(picture);
+
+    // Some documents embed hundreds of images (each one being a request to the API
+    // image proxy when the direct media url is not known): only load them when they get
+    // close to the viewport.
+    // loading must be set before src, and the image needs a size while it is loading,
+    // otherwise all the 0x0 images are considered in the viewport and loaded at once.
+    image.classList.add('is-loading');
+    const onLoaded = () => image.classList.remove('is-loading');
+    image.addEventListener('load', onLoaded, { once: true });
+    image.addEventListener('error', onLoaded, { once: true });
+    image.loading = 'lazy';
+    image.decoding = 'async';
+    image.src = getEmbeddedImageUrl(urls);
+
+    $imageViewer.push(image.c2cExtrapoledDocument);
+  }
+}
+
+function computeAnchors(anchors: Iterable<HTMLAnchorElement>) {
+  for (const anchor of anchors) {
+    const attribute = (name: string) => anchor.attributes.getNamedItem(name)?.value;
+
+    const { fullPath, href } = router.resolve({
+      name: attribute('c2c:document-type')!.slice(0, -1),
+      params: {
+        id: parseInt(attribute('c2c:document-id')!, 10),
+        lang: attribute('c2c:lang'),
+        title: attribute('c2c:slug'),
+      },
+      hash: attribute('c2c:anchor') ? '#' + attribute('c2c:anchor') : undefined,
+    });
+
+    anchor.href = href;
+    anchor.addEventListener('click', (e) => {
+      if (guardEvent(e)) {
+        router.push(fullPath);
       }
-    },
+    });
+  }
+}
 
-    compute() {
-      const container = this.$refs.container;
+watch(() => props.content, compute);
 
-      const addClasses = function (cssSelector, classes) {
-        const nodes = container.querySelectorAll(cssSelector);
+onMounted(() => {
+  compute();
+  window.addEventListener('beforeprint', loadAllImages);
+});
 
-        for (const node of nodes) {
-          node.classList.add(...classes);
-        }
-      };
-
-      // this.content comes from wiki articles converted from user-authored markdown:
-      // sanitize it before injecting it in the DOM to prevent stored XSS.
-      container.innerHTML = sanitizeRichHtml(this.content);
-
-      if (this.content.includes('c2c:role')) {
-        this.computeFigures(container.querySelectorAll('figure[c2c\\:role=embedded-figure]'));
-        this.computeImages(container.querySelectorAll('img[c2c\\:role=embedded-image]'));
-        this.computeEmojis(container.querySelectorAll('img[c2c\\:role=emoji]'));
-        this.computeAnchors(container.querySelectorAll('a[c2c\\:role=internal-link]'));
-        this.computeVideos(container.querySelectorAll('div[c2c\\:role=video] > iframe'));
-
-        addClasses('div[c2c\\:role=info]', ['notification', 'is-info']);
-        addClasses('div[c2c\\:role=warning]', ['notification', 'is-warning']);
-        addClasses('div[c2c\\:role=danger]', ['notification', 'is-danger']);
-        addClasses('div[c2c\\:role=video]', ['no-print']);
-        addClasses('table[c2c\\:role=ltag]', ['table']);
-      }
-    },
-
-    computeVideos(iframes) {
-      for (const iframe of iframes) {
-        iframe.setAttribute('allowfullscreen', true);
-        // Restrict what the embedded video player (YouTube/Vimeo/Dailymotion) iframe
-        // can do: allow-scripts and allow-same-origin are required by these players'
-        // own embed code, allow-presentation is required for fullscreen playback.
-        // Notably missing: allow-top-navigation, allow-popups, allow-forms...
-        iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation');
-      }
-    },
-
-    computeEmojis(emojis) {
-      for (const emoji of emojis) {
-        const emojiSource = emoji.attributes['c2c:emoji-db'].value;
-        const svgName = emoji.attributes['c2c:svg-name'].value;
-        emoji.src = getEmojiSrc(emojiSource, svgName); // `${svgCdns[emojiSource]}${svgName}.svg`
-      }
-    },
-
-    computeFigures(figures) {
-      for (const figure of figures) {
-        const image = figure.children[0];
-        const size = image.attributes['c2c:size'];
-
-        if (size) {
-          figure.setAttribute('c2c:size', size.value);
-        }
-      }
-    },
-
-    computeImages(images) {
-      for (const image of images) {
-        const document_id = parseInt(image.attributes['c2c:document-id'].value, 10);
-        image.c2cExtrapoledDocument = {
-          document_id,
-          locales: [{ title: '...' }],
-          available_langs: [this.$language.current],
-          type: 'i',
-        };
-
-        image.addEventListener('click', () => {
-          this.$imageViewer.show(image.c2cExtrapoledDocument);
-        });
-
-        const urls = {
-          url: image.getAttribute('c2c:url'),
-          urlProxy: image.getAttribute('c2c:url-proxy'),
-        };
-        const parent = image.parentNode;
-        const picture = document.createElement('picture');
-
-        // Until all images are migrated only images uploaded after a given timestamp
-        // or with an id greater than a given one have their webp and avif versions.
-        // Original images (no size) have no modern versions.
-        if (
-          config.urls.modernThumbnailsId &&
-          document_id > config.urls.modernThumbnailsId &&
-          image.getAttribute('c2c:size')
-        ) {
-          const avif = document.createElement('source');
-          avif.setAttribute('type', 'image/avif');
-          avif.setAttribute('srcset', getEmbeddedImageUrl(urls, 'avif'));
-          const webp = document.createElement('source');
-          webp.setAttribute('type', 'image/webp');
-          webp.setAttribute('srcset', getEmbeddedImageUrl(urls, 'webp'));
-          picture.appendChild(avif);
-          picture.appendChild(webp);
-        }
-        picture.appendChild(image);
-        parent.appendChild(picture, image);
-
-        // Some documents embed hundreds of images (each one being a request to the API
-        // image proxy when the direct media url is not known): only load them when they get
-        // close to the viewport.
-        // loading must be set before src, and the image needs a size while it is loading,
-        // otherwise all the 0x0 images are considered in the viewport and loaded at once.
-        image.classList.add('is-loading');
-        const onLoaded = () => image.classList.remove('is-loading');
-        image.addEventListener('load', onLoaded, { once: true });
-        image.addEventListener('error', onLoaded, { once: true });
-        image.loading = 'lazy';
-        image.decoding = 'async';
-        image.src = getEmbeddedImageUrl(urls);
-
-        this.$imageViewer.push(image.c2cExtrapoledDocument);
-      }
-    },
-
-    computeAnchors(anchors) {
-      for (const anchor of anchors) {
-        const attributes = anchor.attributes;
-
-        const { fullPath, href } = this.$router.resolve({
-          name: attributes['c2c:document-type'].value.slice(0, -1),
-          params: {
-            id: parseInt(attributes['c2c:document-id'].value, 10),
-            lang: attributes['c2c:lang'] ? attributes['c2c:lang'].value : undefined,
-            title: attributes['c2c:slug'] ? attributes['c2c:slug'].value : undefined,
-          },
-          hash: attributes['c2c:anchor'] ? '#' + attributes['c2c:anchor'].value : undefined,
-        });
-
-        anchor.href = href;
-        anchor.addEventListener('click', (e) => {
-          if (guardEvent(e)) {
-            this.$router.push(fullPath);
-          }
-        });
-      }
-    },
-  },
-};
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeprint', loadAllImages);
+});
 </script>
 
 <style lang="scss">

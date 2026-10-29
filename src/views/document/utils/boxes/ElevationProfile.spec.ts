@@ -1,18 +1,15 @@
 import { mount } from '@vue/test-utils';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { nextTick } from 'vue';
 
-import ElevationProfile from './ElevationProfile.vue';
+import ElevationProfile, {
+  emitCursorEndEvent,
+  emitCursorMoveEvent,
+  emitToggleFullScreenEvent,
+} from './ElevationProfile.vue';
 import MapBox from './MapBox.vue';
 
 import bus from '@/js/event-bus';
-
-// the methods of the elevation profile (Options API) that emit its events
-type ProfileEvents = Record<
-  'emitToggleFullScreenEvent' | 'emitCursorMoveEvent' | 'emitCursorEndEvent',
-  (...args: unknown[]) => void
->;
-const profile = (ElevationProfile as unknown as { methods: ProfileEvents }).methods;
 
 // the elevation profile and the map box only meet through 'elevation_profile' events: check both ends agree
 describe('elevation_profile event', () => {
@@ -40,11 +37,11 @@ describe('elevation_profile event', () => {
     const wrapper = mapBox();
     expect(withProfile(wrapper)).toBe(true);
 
-    profile.emitToggleFullScreenEvent.call({}, true);
+    emitToggleFullScreenEvent(true);
     await nextTick();
     expect(withProfile(wrapper)).toBe(false);
 
-    profile.emitToggleFullScreenEvent.call({}, false);
+    emitToggleFullScreenEvent(false);
     await nextTick();
     expect(withProfile(wrapper)).toBe(true);
   });
@@ -52,8 +49,8 @@ describe('elevation_profile event', () => {
   it('ignores the cursor events', async () => {
     const wrapper = mapBox();
 
-    profile.emitCursorMoveEvent.call({}, [1, 2]);
-    profile.emitCursorEndEvent.call({});
+    emitCursorMoveEvent([1, 2]);
+    emitCursorEndEvent();
     await nextTick();
 
     expect(withProfile(wrapper)).toBe(true);
@@ -64,5 +61,57 @@ describe('elevation_profile event', () => {
     wrapper.unmount();
 
     expect(bus.all.get('elevation_profile') ?? []).toHaveLength(0);
+  });
+});
+
+describe('ElevationProfile', () => {
+  // a track with elevations and times, in EPSG:3857
+  const track = (withElevation = true) =>
+    JSON.stringify({
+      type: 'LineString',
+      coordinates: [
+        [700000, 5700000, withElevation ? 1000 : 0, 1600000000],
+        [700100, 5700100, withElevation ? 1100 : 0, 1600000600],
+        [700200, 5700200, withElevation ? 1250 : 0, 1600001200],
+      ],
+    });
+
+  const mountProfile = (geom_detail: string) =>
+    mount(ElevationProfile, {
+      props: { document: { type: 'o', geometry: { geom_detail } } },
+      attachTo: document.body,
+      global: {
+        directives: { translate: {} },
+        stubs: { FaIcon: true },
+        config: { globalProperties: { $gettext: (text: string) => text } as never },
+      },
+    });
+
+  it('draws the profile of a track with elevations, by distance or time', async () => {
+    // jsdom has no layout
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe() {}
+        unobserve() {}
+      }
+    );
+    const wrapper = mountProfile(track());
+
+    expect(wrapper.emitted('has-data')).toHaveLength(1);
+    // drawn once the d3 modules are loaded
+    await vi.waitFor(() => expect(wrapper.find('.elevation-profile-chart svg path.line').exists()).toBe(true), {
+      timeout: 10000,
+    });
+    expect(wrapper.findAll('input[type=radio]')).toHaveLength(2);
+    wrapper.unmount();
+    vi.unstubAllGlobals();
+  });
+
+  it('shows nothing for a track without elevations', () => {
+    const wrapper = mountProfile(track(false));
+
+    expect(wrapper.emitted('has-data')).toBeUndefined();
+    expect(wrapper.find('.elevation-profile-container').exists()).toBe(false);
   });
 });
