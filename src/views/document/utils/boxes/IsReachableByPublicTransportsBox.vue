@@ -12,108 +12,87 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+
 import transportService from '@/js/apis/transport-service';
 import { documentProperty, useDocumentType } from '@/js/properties';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  props: {
-    ...documentProperty,
-    document: {
-      type: [Object, Array],
-      required: true,
-    },
-  },
+const props = defineProps({ ...documentProperty });
 
-  setup(props) {
-    return useDocumentType(props);
-  },
-  data() {
-    return {
-      showAccessibilityInfo: false,
-    };
-  },
-  computed: {
-    /** Returns only access points */
-    accessWaypoints() {
-      if (this.documentType === 'waypoint' && this.document.waypoint_type === 'access') {
-        // access waypoint
-        return [this.document];
-      } else {
-        // for other types of documents, return the waypoints of type access associated (if any)
-        return this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access') ?? [];
-      }
-    },
-  },
-  watch: {
-    document: {
-      handler() {
-        this.checkAccessibility();
-      },
-      deep: true,
-      immediate: true,
-    },
-  },
-  methods: {
-    /** Returns true if at least one of the waypoints is served */
-    checkAccessibility() {
-      const accessWaypoints = this.accessWaypoints;
+const { documentType } = useDocumentType(props);
 
-      if (accessWaypoints.length === 0) {
-        this.showAccessibilityInfo = false;
-        return;
-      }
+const showAccessibilityInfo = ref(false);
 
-      this.checkWaypointsReachability(accessWaypoints);
-    },
+/** Returns only access points */
+const accessWaypoints = computed<C2cDocument[]>(() => {
+  if (documentType.value === 'waypoint' && props.document.waypoint_type === 'access') {
+    // access waypoint
+    return [props.document];
+  } else {
+    // for other types of documents, return the waypoints of type access associated (if any)
+    return props.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access') ?? [];
+  }
+});
 
-    /** For all waypoints, looks at which ones are served */
-    checkWaypointsReachability(waypoints) {
-      if (!waypoints || waypoints.length === 0) {
-        this.showAccessibilityInfo = false;
-        return;
-      }
+/** Returns true if at least one of the waypoints is served */
+function checkAccessibility() {
+  if (accessWaypoints.value.length === 0) {
+    showAccessibilityInfo.value = false;
+    return;
+  }
 
-      const waypointIds = waypoints.map((wp) => wp.document_id).filter(Boolean);
+  checkWaypointsReachability(accessWaypoints.value);
+}
 
-      if (waypointIds.length === 0) {
-        this.showAccessibilityInfo = false;
-        return;
-      }
+/** For all waypoints, looks at which ones are served */
+function checkWaypointsReachability(waypoints: C2cDocument[]) {
+  if (!waypoints || waypoints.length === 0) {
+    showAccessibilityInfo.value = false;
+    return;
+  }
 
-      this.checkMultipleWaypointsReachability(waypointIds);
-    },
+  const waypointIds = waypoints.map((wp) => wp.document_id).filter((id): id is number => Boolean(id));
 
-    /** Calls the backend service to check if waypoints have associated transports */
-    checkMultipleWaypointsReachability(waypointIds) {
-      const checkNextWaypoint = (index) => {
-        if (index >= waypointIds.length) {
-          this.showAccessibilityInfo = false;
-          return;
+  if (waypointIds.length === 0) {
+    showAccessibilityInfo.value = false;
+    return;
+  }
+
+  checkMultipleWaypointsReachability(waypointIds);
+}
+
+/** Calls the backend service to check if waypoints have associated transports */
+function checkMultipleWaypointsReachability(waypointIds: number[]) {
+  const checkNextWaypoint = (index: number) => {
+    if (index >= waypointIds.length) {
+      showAccessibilityInfo.value = false;
+      return;
+    }
+
+    transportService
+      .isReachable(waypointIds[index])
+      .then((isReachable) => {
+        if (isReachable === true) {
+          showAccessibilityInfo.value = true;
+        } else {
+          checkNextWaypoint(index + 1);
         }
+      })
+      .catch((error) => {
+        console.error(
+          `Erreur lors de la vérification de l'accessibilité pour le waypoint ${waypointIds[index]} :`,
+          error
+        );
+        checkNextWaypoint(index + 1);
+      });
+  };
 
-        transportService
-          .isReachable(waypointIds[index])
-          .then((isReachable) => {
-            if (isReachable === true) {
-              this.showAccessibilityInfo = true;
-            } else {
-              checkNextWaypoint(index + 1);
-            }
-          })
-          .catch((error) => {
-            console.error(
-              `Erreur lors de la vérification de l'accessibilité pour le waypoint ${waypointIds[index]} :`,
-              error
-            );
-            checkNextWaypoint(index + 1);
-          });
-      };
+  checkNextWaypoint(0);
+}
 
-      checkNextWaypoint(0);
-    },
-  },
-};
+watch(() => props.document, checkAccessibility, { deep: true, immediate: true });
 </script>
 
 <style scoped lang="scss">

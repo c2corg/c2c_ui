@@ -72,57 +72,45 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
 import c2c from '@/js/apis/c2c';
 import { useNoRobots } from '@/js/composables/head';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  setup() {
-    useNoRobots();
-  },
+useNoRobots();
 
-  data() {
-    return {
-      promise: null,
-    };
-  },
+// what the user follows in the feed
+type Preferences = { followed_only: boolean; langs: string[]; activities: string[]; areas: C2cDocument[] };
 
-  computed: {
-    preferences() {
-      return this.promise?.data;
-    },
-  },
+const promise = c2c.userProfile.preferences.get();
 
-  created() {
-    this.promise = c2c.userProfile.preferences.get();
-  },
+const preferences = computed(() => promise.data as Preferences | undefined);
 
-  methods: {
-    toggle(item, array) {
-      if (array.indexOf(item) > -1) {
-        array.splice(array.indexOf(item), 1);
-      } else {
-        array.push(item);
-      }
+function toggle(item: string, array: string[]) {
+  if (array.indexOf(item) > -1) {
+    array.splice(array.indexOf(item), 1);
+  } else {
+    array.push(item);
+  }
 
-      this.save();
-    },
+  save();
+}
 
-    addArea(area) {
-      this.preferences.areas.push(area);
-      this.save();
-    },
+function addArea(area: C2cDocument) {
+  preferences.value!.areas.push(area);
+  save();
+}
 
-    removeArea(area) {
-      this.preferences.areas = this.preferences.areas.filter((doc) => doc.document_id !== area.document_id);
-      this.save();
-    },
+function removeArea(area: C2cDocument) {
+  preferences.value!.areas = preferences.value!.areas.filter((doc) => doc.document_id !== area.document_id);
+  save();
+}
 
-    save() {
-      c2c.userProfile.preferences.post(this.preferences);
-    },
-  },
-};
+function save() {
+  c2c.userProfile.preferences.post(preferences.value!);
+}
 </script>
 
 <style scoped>

@@ -45,79 +45,66 @@
   </div>
 </template>
 
-<script>
-import OutingsStatsPart from './OutingsStatsPart';
+<script setup lang="ts">
+import { ref, shallowRef, watch } from 'vue';
+import { useRoute } from 'vue-router';
+
+import OutingsStatsPart from './OutingsStatsPart.vue';
 
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
 import { useNoRobots } from '@/js/composables/head';
 import constants from '@/js/constants';
-import QueryItems from '@/views/documents/utils/QueryItems';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+import QueryItems from '@/views/documents/utils/QueryItems.vue';
 
 const LIST_MAX_LENGTH = 2000;
 
-export default {
-  components: {
-    OutingsStatsPart,
-    QueryItems,
-  },
+useNoRobots();
 
-  setup() {
-    useNoRobots();
-  },
+const route = useRoute();
 
-  data() {
-    return {
-      promise: null,
-      outings: {},
-      loadingPercentage: 0,
-      activeTab: '', // empty string means all
-    };
-  },
+// the download in progress, cancelled by a new search
+const promise = shallowRef<(Promise<void> & { cancel(): void }) | null>(null);
+// the outings, by activity ('' for all of them)
+const outings = ref<Record<string, C2cDocument[]>>({});
+const loadingPercentage = ref(0);
+const activeTab = ref(''); // empty string means all
 
-  watch: {
-    $route: {
-      handler: 'load',
-      immediate: true,
-    },
-  },
+function load() {
+  if (promise.value) {
+    promise.value.cancel();
+  }
+  promise.value = (c2c.outing as DocumentService)
+    .fullDownload(route.query as Record<string, string>, LIST_MAX_LENGTH, progress)
+    .then((found) => compute(found as C2cDocument[])) as Promise<void> & { cancel(): void };
+}
 
-  methods: {
-    load() {
-      if (this.promise) {
-        this.promise.cancel();
-      }
-      this.promise = c2c.outing.fullDownload(this.$route.query, LIST_MAX_LENGTH, this.progress).then(this.compute);
-    },
+function progress(current: number, total: number) {
+  if (!total) {
+    // when there are no outings, we do show "all" of them
+    loadingPercentage.value = 1;
+  } else {
+    loadingPercentage.value = current / Math.min(total, LIST_MAX_LENGTH);
+  }
+}
 
-    progress(current, total) {
-      if (!total) {
-        // when there are no outings, we do show "all" of them
-        this.loadingPercentage = 1;
-      } else {
-        this.loadingPercentage = current / Math.min(total, LIST_MAX_LENGTH);
-      }
-    },
+function compute(found: C2cDocument[]) {
+  promise.value = null;
+  const result: Record<string, C2cDocument[]> = { '': found };
 
-    compute(outings) {
-      this.promise = null;
-      this.outings = { '': outings };
+  for (const activity of constants.activities) {
+    const ofActivity = found.filter((outing) => outing.activities.includes(activity));
 
-      for (let activity of constants.activities) {
-        const result = [];
+    if (ofActivity.length !== 0) {
+      result[activity] = ofActivity;
+    }
+  }
 
-        for (let outing of outings) {
-          if (outing.activities.includes(activity)) {
-            result.push(outing);
-          }
-        }
+  outings.value = result;
+}
 
-        if (result.length !== 0) {
-          this.outings[activity] = result;
-        }
-      }
-    },
-  },
-};
+watch(() => route.fullPath, load, { immediate: true });
 </script>
 
 <style scoped lang="scss">

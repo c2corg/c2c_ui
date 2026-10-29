@@ -12,71 +12,61 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      value: [null, null],
-      usePeriodFilter: false,
-    };
-  },
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-  computed: {
-    currentQueryKey() {
-      return this.usePeriodFilter ? 'period' : 'date';
+const route = useRoute();
+const router = useRouter();
+
+const value = ref<(string | null)[]>([null, null]);
+const usePeriodFilter = ref(false);
+
+const currentQueryKey = computed(() => (usePeriodFilter.value ? 'period' : 'date'));
+
+function updateDateInUrl() {
+  const dates = [value.value[0], value.value[1]].filter(Boolean).join(',');
+
+  if (dates !== route.query[currentQueryKey.value]) {
+    pushQueryObjectToUrl({ [currentQueryKey.value]: dates || undefined });
+  }
+}
+
+function switchFilterInUrl() {
+  const oldQueryKey = usePeriodFilter.value ? 'date' : 'period';
+  const existingQueryString = route.query[oldQueryKey];
+
+  if (!existingQueryString) return;
+
+  pushQueryObjectToUrl({
+    [oldQueryKey]: undefined,
+    [currentQueryKey.value]: String(existingQueryString),
+  });
+}
+
+function pushQueryObjectToUrl(queryObject: Record<string, string | undefined>) {
+  router.push({
+    query: {
+      ...route.query,
+      ...queryObject,
     },
-  },
+  });
+}
 
-  watch: {
-    // deep 1: also when a date of the array changes, as Vue 2 array watchers did
-    value: { handler: 'updateDateInUrl', deep: 1 },
-    usePeriodFilter: 'switchFilterInUrl',
-  },
+// deep 1: also when a date of the array changes, as Vue 2 array watchers did
+watch(value, updateDateInUrl, { deep: 1 });
+watch(usePeriodFilter, switchFilterInUrl);
 
-  created() {
-    const dateQueryString = this.$route.query.date;
-    const periodQueryString = this.$route.query.period;
+// after the watchers, as the created() of the options component was
+const dateQueryString = route.query.date ? String(route.query.date) : '';
+const periodQueryString = route.query.period ? String(route.query.period) : '';
 
-    if (!dateQueryString && !periodQueryString) return;
-
-    if (!periodQueryString) {
-      this.value = dateQueryString.split(',');
-      return;
-    }
-
-    this.value = periodQueryString.split(',');
-    this.usePeriodFilter = true;
-  },
-
-  methods: {
-    updateDateInUrl() {
-      const value = [this.value[0], this.value[1]].filter(Boolean).join(',');
-
-      if (value !== this.$route.query[this.currentQueryKey]) {
-        this.pushQueryObjectToUrl({ [this.currentQueryKey]: value || undefined });
-      }
-    },
-    switchFilterInUrl() {
-      const oldQueryKey = this.usePeriodFilter ? 'date' : 'period';
-      const existingQueryString = this.$route.query[oldQueryKey];
-
-      if (!existingQueryString) return;
-
-      this.pushQueryObjectToUrl({
-        [oldQueryKey]: undefined,
-        [this.currentQueryKey]: existingQueryString,
-      });
-    },
-    pushQueryObjectToUrl(queryObject) {
-      this.$router.push({
-        query: {
-          ...this.$route.query,
-          ...queryObject,
-        },
-      });
-    },
-  },
-};
+if (periodQueryString) {
+  value.value = periodQueryString.split(',');
+  usePeriodFilter.value = true;
+} else if (dateQueryString) {
+  value.value = dateQueryString.split(',');
+}
 </script>
 <style scoped lang="scss">
 .checkbox {

@@ -4,10 +4,10 @@
 
     <association-history-pagination
       :count="results ? results.count : 0"
-      :limit="limit"
-      :offset="offset"
-      :document-id="documentId"
-      :user-id="userId"
+      :limit="limit ?? undefined"
+      :offset="offset ?? undefined"
+      :document-id="documentId ?? undefined"
+      :user-id="userId ?? undefined"
     />
 
     <loading-notification :promise="promise" />
@@ -48,70 +48,50 @@
     </table>
     <association-history-pagination
       :count="results ? results.count : 0"
-      :limit="limit"
-      :offset="offset"
-      :document-id="documentId"
-      :user-id="userId"
+      :limit="limit ?? undefined"
+      :offset="offset ?? undefined"
+      :document-id="documentId ?? undefined"
+      :user-id="userId ?? undefined"
     />
   </div>
 </template>
 
-<script>
-import AssociationHistoryPagination from './utils/AssociationHistoryPagination';
-import ColoredIconDocument from './utils/ColoredIconDocument';
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
+import AssociationHistoryPagination from './utils/AssociationHistoryPagination.vue';
+import ColoredIconDocument from './utils/ColoredIconDocument.vue';
+
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import { useNoRobots } from '@/js/composables/head';
 
-export default {
-  components: { ColoredIconDocument, AssociationHistoryPagination },
+useNoRobots();
 
-  setup() {
-    useNoRobots();
-  },
+const route = useRoute();
 
-  data() {
-    return {
-      promise: {},
-    };
-  },
+const promise = ref<ApiData | { data?: undefined }>({});
 
-  computed: {
-    userId() {
-      return this.$route.query.u ? parseInt(this.$route.query.u) : null;
-    },
-    documentId() {
-      return this.$route.query.d ? parseInt(this.$route.query.d) : null;
-    },
-    offset() {
-      return this.$route.query.offset ? parseInt(this.$route.query.offset) : null;
-    },
-    limit() {
-      return this.$route.query.limit ? parseInt(this.$route.query.limit) : null;
-    },
-    results() {
-      return this.promise.data;
-    },
-  },
+// the filters of the url: u (user), d (document), offset and limit
+const queryNumber = (key: string) => (route.query[key] ? parseInt(String(route.query[key])) : null);
 
-  watch: {
-    $route: {
-      handler: 'load',
-      immediate: true,
-    },
-  },
+const userId = computed(() => queryNumber('u'));
+const documentId = computed(() => queryNumber('d'));
+const offset = computed(() => queryNumber('offset'));
+const limit = computed(() => queryNumber('limit'));
+const results = computed(() => promise.value.data);
 
-  methods: {
-    load() {
-      this.promise = c2c.association.getHistory({
-        documentId: this.documentId,
-        userId: this.userId,
-        limit: this.limit,
-        offset: this.offset,
-      });
-    },
-  },
-};
+function load() {
+  promise.value = c2c.association.getHistory({
+    documentId: documentId.value ?? undefined,
+    userId: userId.value ?? undefined,
+    limit: limit.value ?? undefined,
+    offset: offset.value ?? undefined,
+  });
+}
+
+watch(() => route.fullPath, load, { immediate: true });
 </script>
 
 <style scoped>

@@ -4,7 +4,7 @@
       <query-item-slider-label :field="field" :value="value" :label-id="sliderLabelId" />
       <input-slider
         v-model="valueIndexes"
-        :max="field.values.length - 1"
+        :max="fieldValues().length - 1"
         :format="formatValueIndex"
         :aria-labelledby="sliderLabelId"
         marks
@@ -29,7 +29,7 @@
 
       <multiselect
         v-model="value"
-        :options="field.values"
+        :options="fieldValues()"
         :custom-label="field.i18n ? gettext : undefined"
         :placeholder="$gettext('Select option')"
         :select-label="$gettext('Press enter to select')"
@@ -45,14 +45,7 @@
       <label class="label" v-if="!hideLabel">
         {{ $filters.uppercaseFirstLetter($gettext(field.name)) }}
       </label>
-      <input
-        ref="input"
-        :type="field.type"
-        :value="value"
-        @input="oninput"
-        class="input"
-        :placeholder="$gettext(field.name)"
-      />
+      <input :type="field.type" :value="value" @input="oninput" class="input" :placeholder="$gettext(field.name)" />
     </div>
 
     <div v-else-if="field.queryMode === 'tristate'" class="control">
@@ -94,85 +87,76 @@
   </div>
 </template>
 
-<script>
-import { defineAsyncComponent } from 'vue';
+<script setup lang="ts">
+import { computed, defineAsyncComponent, type Ref } from 'vue';
 
-import DateQueryItem from './DateQueryItem';
-import DatesQueryItem from './DatesQueryItem';
-import QueryItemSliderLabel from './QueryItemSliderLabel';
+import DateQueryItem from './DateQueryItem.vue';
+import DatesQueryItem from './DatesQueryItem.vue';
+import QueryItemSliderLabel from './QueryItemSliderLabel.vue';
 
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useQueryItem } from '@/js/composables/query-item';
 import debounce from '@/js/debounce';
 import { fieldProperty } from '@/js/properties';
-import { useUid } from '@/js/uid';
+import { nextUid } from '@/js/uid';
 
-export default {
-  components: {
-    Multiselect: defineAsyncComponent(() => import('vue-multiselect')),
-    QueryItemSliderLabel,
-    DateQueryItem,
-    DatesQueryItem,
+const Multiselect = defineAsyncComponent(() => import('vue-multiselect'));
+
+const props = defineProps({
+  ...fieldProperty,
+  hideLabel: {
+    type: Boolean,
+    default: false,
   },
+});
 
-  props: {
-    ...fieldProperty,
-    hideLabel: {
-      type: Boolean,
-      default: false,
-    },
+const { $gettext } = useGlobalProperties();
+// the value of the url, as the inputs take it
+const value = useQueryItem(() => props.field).value as Ref<any>;
+const uid = nextUid();
+
+// the field name names the slider handles for assistive technologies
+const sliderLabelId = `query-slider-label-${uid}`;
+
+const fieldValues = () => props.field.values as string[];
+
+// a range of field.values (ratings...): the slider works on their indexes
+const valueIndexes = computed({
+  get() {
+    return (value.value as string[]).map((v) => fieldValues().indexOf(v));
   },
-
-  setup(props) {
-    return { ...useQueryItem(() => props.field), ...useUid() };
+  set(indexes: number[]) {
+    value.value = indexes.map((index) => fieldValues()[index]);
   },
+});
 
-  computed: {
-    // the field name names the slider handles for assistive technologies
-    sliderLabelId() {
-      return `query-slider-label-${this.uid}`;
-    },
+const interval = computed(() => {
+  const scope = props.field.max! - props.field.min!;
 
-    // a range of field.values (ratings...): the slider works on their indexes
-    valueIndexes: {
-      get() {
-        return this.value.map((value) => this.field.values.indexOf(value));
-      },
-      set(indexes) {
-        this.value = indexes.map((index) => this.field.values[index]);
-      },
-    },
+  if (scope < 300) {
+    return 1;
+  } else if (scope < 1000) {
+    return 5;
+  } else if (scope < 3000) {
+    return 10;
+  } else {
+    return 25;
+  }
+});
 
-    interval() {
-      const scope = this.field.max - this.field.min;
+function formatValueIndex(index: number) {
+  const fieldValue = fieldValues()[Math.round(index)];
+  return props.field.i18n ? gettext(fieldValue) : fieldValue;
+}
 
-      if (scope < 300) {
-        return 1;
-      } else if (scope < 1000) {
-        return 5;
-      } else if (scope < 3000) {
-        return 10;
-      } else {
-        return 25;
-      }
-    },
-  },
+function gettext(key: string) {
+  return $gettext(key, props.field.i18nContext);
+}
 
-  methods: {
-    formatValueIndex(index) {
-      const value = this.field.values[Math.round(index)];
-      return this.field.i18n ? this.gettext(value) : value;
-    },
-
-    gettext(key) {
-      return this.$gettext(key, this.field.i18nContext);
-    },
-
-    // for simple input, add a small delay (avoir spamming API, and url history)
-    oninput: debounce(function () {
-      this.value = this.$refs.input.value;
-    }, 300),
-  },
-};
+// for simple input, add a small delay (avoir spamming API, and url history)
+const oninput = debounce((event: Event) => {
+  value.value = (event.target as HTMLInputElement).value;
+}, 300);
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>

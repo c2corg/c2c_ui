@@ -1,4 +1,4 @@
-import { mount, type VueWrapper } from '@vue/test-utils';
+import { flushPromises, mount, type VueWrapper } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 import { h } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
@@ -8,11 +8,7 @@ import InputSlider from './InputSlider.vue';
 import LayerButton from '@/components/map/LayerButton.vue';
 import QueryItem from '@/views/documents/utils/QueryItem.vue';
 
-// a component of the Options API, its computed properties and methods called on a test object
-type OptionsComponent = {
-  computed: Record<string, { get(this: unknown): unknown; set(this: unknown, value: unknown): void }>;
-  methods: Record<string, (this: unknown, ...args: unknown[]) => unknown>;
-};
+const $filters = { uppercaseFirstLetter: (text: string) => text };
 
 const handles = (wrapper: VueWrapper) => wrapper.findAll('[role=slider]');
 
@@ -58,24 +54,44 @@ describe('InputSlider', () => {
 });
 
 describe('QueryItem ratings range', () => {
-  const { valueIndexes } = (QueryItem as unknown as OptionsComponent).computed;
-  const { formatValueIndex } = (QueryItem as unknown as OptionsComponent).methods;
-  const field = { values: ['F', 'F+', 'PD-', 'PD'], i18n: false };
+  // a documents list: QueryItem reads and writes its filter in the URL (useQueryItem)
+  async function mountRange(field: object) {
+    const router = createRouter({
+      history: createMemoryHistory(),
+      routes: [{ path: '/routes', name: 'routes', component: { render: () => h('div') } }],
+    });
+    await router.push('/routes?grat=F%2B,PD');
+    const wrapper = mount(QueryItem, {
+      props: { field: { queryMode: 'valuesRangeSlider', name: 'Global rating', url: 'grat', ...field } as never },
+      global: {
+        plugins: [router],
+        config: { globalProperties: { $gettext: (key: string) => `[${key}]`, $filters } as never },
+        stubs: { InputSlider: true },
+      },
+    });
+    return { wrapper, router, vm: wrapper.vm as unknown as QueryItemVm };
+  }
 
-  it('gives the slider the indexes of the selected values, and the values back', () => {
-    const item: { field: typeof field; value: string[] } = { field, value: ['F+', 'PD'] };
+  // the bindings of its <script setup>, as Vue Test Utils gives them
+  type QueryItemVm = { valueIndexes: number[]; formatValueIndex(index: number): string };
 
-    expect(valueIndexes.get.call(item)).toEqual([1, 3]);
+  const urlToValue = (value: string) => value.split(',');
+  const valueToUrl = (value: string[]) => value.join(',');
+  const field = { values: ['F', 'F+', 'PD-', 'PD'], i18n: false, urlToValue, valueToUrl };
 
-    valueIndexes.set.call(item, [2, 3]);
-    expect(item.value).toEqual(['PD-', 'PD']);
+  it('gives the slider the indexes of the selected values, and the values back', async () => {
+    const { vm, router } = await mountRange(field);
+
+    expect(vm.valueIndexes).toEqual([1, 3]);
+
+    vm.valueIndexes = [2, 3];
+    await flushPromises();
+    expect(router.currentRoute.value.query.grat).toBe('PD-,PD');
   });
 
-  it('shows the value of an index in the tooltips, translated when the field is', () => {
-    expect(formatValueIndex.call({ field }, 2)).toBe('PD-');
-    expect(
-      formatValueIndex.call({ field: { values: ['good'], i18n: true }, gettext: (key: string) => `[${key}]` }, 0)
-    ).toBe('[good]');
+  it('shows the value of an index in the tooltips, translated when the field is', async () => {
+    expect((await mountRange(field)).vm.formatValueIndex(2)).toBe('PD-');
+    expect((await mountRange({ ...field, values: ['good'], i18n: true })).vm.formatValueIndex(0)).toBe('[good]');
   });
 });
 
@@ -102,7 +118,7 @@ describe('slider labels', () => {
     const wrapper = mount(QueryItem, {
       // a field as far as QueryItem reads it
       props: { field: { queryMode, name: 'Global rating', url: 'grat', ...field } as never },
-      global: { plugins: [await listRouter()], mocks, stubs: { InputSlider } },
+      global: { plugins: [await listRouter()], config: { globalProperties: mocks as never }, stubs: { InputSlider } },
       attachTo: document.body,
     });
 
