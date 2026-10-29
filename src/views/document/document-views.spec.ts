@@ -51,6 +51,26 @@ const documentOf = (type: string) => ({
 
 const Empty = { render: () => null };
 
+// the global components of the app (generic-components.ts, font-awesome-config.ts), as empty components: the views
+// may use them without importing them
+const globalComponents = Object.fromEntries(
+  [
+    ...Object.keys(import.meta.glob('@/components/generics/**/*.vue')).map((path) =>
+      path
+        .split('/')
+        .slice(-1)[0]
+        .replace('.vue', '')
+        .replace(/([A-Z])/g, '-$1')
+        .toLowerCase()
+        .substring(1)
+    ),
+    'document-card',
+    'map-view',
+    'fa-icon',
+    'fa-layers',
+  ].map((name) => [name, Empty])
+);
+
 afterEach(() => {
   vi.clearAllMocks();
   document.head.innerHTML = '';
@@ -80,6 +100,7 @@ describe('document views', () => {
     const wrapper = shallowMount(view as Component, {
       global: {
         plugins: [router],
+        components: globalComponents,
         renderStubDefaultSlot: true,
         config: {
           globalProperties: {
@@ -103,7 +124,10 @@ describe('document views', () => {
 
     expect(api.getCooked).toHaveBeenCalledWith(12, 'fr');
     expect(wrapper.html()).not.toBe('');
-    // a binding the template reads, missing from the setup
-    expect(errors.mock.calls.filter(([message]) => String(message).includes('was accessed during render'))).toEqual([]);
+    // a binding the template reads missing from the setup, or a child component not imported
+    const missing = errors.mock.calls.filter(([message]) =>
+      /was accessed during render|Failed to resolve component/.test(String(message))
+    );
+    expect(missing).toEqual([]);
   });
 });
