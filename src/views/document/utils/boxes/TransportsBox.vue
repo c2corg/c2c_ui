@@ -21,7 +21,7 @@
           v-if="showAccessibilityInfo"
           class="button is-primary public-transports-button"
           :class="{ 'is-active': activeSection === 'nearbyStops' }"
-          @click="setActiveSection('nearbyStops')"
+          @click="activeSection = 'nearbyStops'"
         >
           <img class="public-transports-bus default-icon" src="@/assets/img/boxes/bus.svg" alt="transport" />
           <img class="public-transports-bus hover-icon" src="@/assets/img/boxes/public_transport.svg" alt="transport" />
@@ -32,7 +32,7 @@
           v-if="showAccessibilityInfo && isPlanATripSectionDisplayed"
           class="button is-primary public-transports-button"
           :class="{ 'is-active': activeSection === 'planATrip' }"
-          @click="setActiveSection('planATrip')"
+          @click="activeSection = 'planATrip'"
         >
           <img class="public-transports-bus default-icon" src="@/assets/img/boxes/itineraire-2.svg" alt="itinerary" />
           <img class="public-transports-bus hover-icon" src="@/assets/img/boxes/itineraire.svg" alt="itinerary" />
@@ -44,9 +44,9 @@
         v-if="activeSection === 'nearbyStops'"
         :document="document"
         :map-documents="mapDocuments"
-        @highlight-document="handleDocumentHighlight"
+        @highlight-document="$emit('highlight-document', $event)"
         @has-protection-area="$emit('has-protection-area')"
-        @stops-updated="handleStopsUpdated"
+        @stops-updated="stopDocuments = $event"
         @accessibility-info-changed="showAccessibilityInfo = $event"
       />
 
@@ -54,142 +54,95 @@
         v-if="activeSection === 'planATrip'"
         :map-documents="mapDocuments"
         :document="document"
-        @highlight-document="handleDocumentHighlight"
+        @highlight-document="$emit('highlight-document', $event)"
         @has-protection-area="$emit('has-protection-area')"
       />
     </div>
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+
 import NearbyStopsSection from './NearbyStopsSection.vue';
 import PlanATripSection from './PlanATripSection/PlanATripSection.vue';
 
 import { documentProperty, useDocumentType } from '@/js/properties';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  components: {
-    NearbyStopsSection,
-    PlanATripSection,
-  },
-  props: { ...documentProperty },
+const props = defineProps({ ...documentProperty });
 
-  emits: ['has-protection-area', 'highlight-document'],
+defineEmits(['has-protection-area', 'highlight-document']);
 
-  setup(props) {
-    return useDocumentType(props);
-  },
+const { documentType } = useDocumentType(props);
 
-  data() {
-    return {
-      activeSection: 'nearbyStops',
-      accessWaypoint: false,
-      stopDocuments: [],
-      isInFrance: false,
-      showAccessibilityInfo: false,
-      visible: false,
-    };
-  },
-  computed: {
-    /** Copy access points to customize them */
-    accessWaypoints() {
-      let accessWaypoints = [];
-      if (this.documentType === 'waypoint' && this.document.waypoint_type === 'access') {
-        // access waypoint
-        accessWaypoints = [this.document];
-      }
-      // for other types of documents, return the waypoints of type access associated (if any)
-      else {
-        accessWaypoints =
-          this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access') ?? [];
-      }
+// whether the "nearby stop" or "plan a trip" section is active
+const activeSection = ref('nearbyStops');
+const stopDocuments = ref<C2cDocument[]>([]);
+const showAccessibilityInfo = ref(false);
+const visible = ref(false);
 
-      const accessPointsCopy = JSON.parse(JSON.stringify(accessWaypoints));
+/** Copy access points to customize them */
+const accessWaypoints = computed(() => {
+  let accessWaypoints: C2cDocument[] = [];
+  if (documentType.value === 'waypoint' && props.document.waypoint_type === 'access') {
+    // access waypoint
+    accessWaypoints = [props.document];
+  }
+  // for other types of documents, return the waypoints of type access associated (if any)
+  else {
+    accessWaypoints =
+      props.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access') ?? [];
+  }
 
-      accessPointsCopy.forEach((doc) => {
-        if (doc.type === 'w') {
-          doc.type = 'z';
-        }
+  const accessPointsCopy: C2cDocument[] = JSON.parse(JSON.stringify(accessWaypoints));
 
-        if (doc.maps && Array.isArray(doc.maps)) {
-          doc.maps.forEach((map) => {
-            if (map.type === 'w') {
-              map.type = 'z';
-            }
-          });
+  accessPointsCopy.forEach((doc) => {
+    if (doc.type === 'w') {
+      doc.type = 'z';
+    }
+
+    if (doc.maps && Array.isArray(doc.maps)) {
+      doc.maps.forEach((map: C2cDocument) => {
+        if (map.type === 'w') {
+          map.type = 'z';
         }
       });
+    }
+  });
 
-      return accessPointsCopy;
-    },
+  return accessPointsCopy;
+});
 
-    isPlanATripSectionDisplayed() {
-      // plan a trip section is only available for routes and waypoints of type access
-      return (
-        this.documentType === 'route' || (this.documentType === 'waypoint' && this.document.waypoint_type === 'access')
-      );
-    },
+/** Whether there are any waypoints accessible by public transport */
+const accessWaypoint = computed(() => accessWaypoints.value.length > 0);
 
-    /** Adds custom points in document */
-    mapDocuments() {
-      if (!this.accessWaypoints || this.accessWaypoints.length === 0) {
-        return [];
-      }
-      const documents = [...this.accessWaypoints];
+/** Whether the route is in France */
+const isInFrance = computed(() => props.document.areas?.[0]?.document_id === 14274);
 
-      if (this.stopDocuments && this.stopDocuments.length > 0) {
-        documents.push(...this.stopDocuments);
-      }
+const isPlanATripSectionDisplayed = computed(
+  // plan a trip section is only available for routes and waypoints of type access
+  () =>
+    documentType.value === 'route' || (documentType.value === 'waypoint' && props.document.waypoint_type === 'access')
+);
 
-      return documents.filter(Boolean);
-    },
-  },
-  watch: {
-    document: {
-      handler() {
-        this.checkAccessWaypoints();
-        this.checkIfInFrance();
-      },
-      deep: true,
-      immediate: true,
-    },
-    showAccessibilityInfo(newValue) {
-      this.visible = newValue;
-    },
-  },
-  methods: {
-    /** Determines whether the "nearby stop" or "plan a trip" section is active */
-    setActiveSection(section) {
-      this.activeSection = section;
-    },
+/** Adds custom points in document */
+const mapDocuments = computed(() => {
+  if (!accessWaypoints.value || accessWaypoints.value.length === 0) {
+    return [];
+  }
+  const documents = [...accessWaypoints.value];
 
-    /** Checks if there are any waypoints accessible by public transport */
-    checkAccessWaypoints() {
-      const accessWaypoints = this.accessWaypoints;
-      this.accessWaypoint = accessWaypoints.length > 0;
-    },
+  if (stopDocuments.value && stopDocuments.value.length > 0) {
+    documents.push(...stopDocuments.value);
+  }
 
-    /** Emits an event for highlighting points */
-    handleDocumentHighlight(document) {
-      this.$emit('highlight-document', document);
-    },
+  return documents.filter(Boolean);
+});
 
-    /** Updates stops */
-    handleStopsUpdated(stopDocuments) {
-      this.stopDocuments = stopDocuments;
-    },
-
-    /** Check that the route is in France */
-    checkIfInFrance() {
-      try {
-        this.isInFrance =
-          this.document.areas && this.document.areas.length > 0 && this.document.areas[0].document_id === 14274;
-      } catch {
-        this.isInFrance = false;
-      }
-    },
-  },
-};
+watch(showAccessibilityInfo, (value) => {
+  visible.value = value;
+});
 </script>
 
 <style scoped lang="scss">
