@@ -6,7 +6,7 @@
           v-for="(stopGroup, stopName) in groupedStops"
           :key="stopName"
           class="stop-card"
-          :ref="'stopCard_' + stopGroup[0].id"
+          :ref="(card) => setStopCard(stopGroup, card)"
           :class="{ 'selected-stop': isStopGroupSelected(stopGroup) }"
           @mouseover="selectStopGroup(stopGroup)"
           @click="seeLineDetails(stopGroup)"
@@ -77,13 +77,10 @@
 
     <div class="public-transports-map" v-if="showAccessibilityInfo">
       <map-view
-        ref="mapView"
+        ref="olMap"
         :documents="filteredDocuments"
-        :show-protection-areas="['r', 'w'].includes(document.type)"
+        :show-protection-areas="!!document.type && ['r', 'w'].includes(document.type)"
         :biodiv-sports-activities="document.activities"
-        :full-screen-element-id="
-          !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
-        "
         @has-protection-area="$emit('has-protection-area')"
         @stop-clicked="handleStopClicked"
         @highlight-document="handleDocumentHighlight"
@@ -92,337 +89,341 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, nextTick, ref, useTemplateRef, watch, type ComponentPublicInstance, type PropType } from 'vue';
+
+import type OlMap from '@/components/map/OlMap.vue';
 import transportService from '@/js/apis/transport-service';
 import { documentProperty, useDocumentType } from '@/js/properties';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  name: 'NearbyStopsSection',
-  props: {
-    ...documentProperty,
-    document: {
-      type: Object,
-      required: true,
-    },
-    mapDocuments: {
-      type: Array,
-      default: () => [],
-    },
-  },
-  emits: ['accessibility-info-changed', 'has-protection-area', 'highlight-document', 'stops-updated'],
-
-  setup(props) {
-    return useDocumentType(props);
-  },
-
-  data() {
-    return {
-      stops: [],
-      stopDocuments: [],
-      showElevationProfile: false,
-      elevationProfileHasData: false,
-      selectedStop: null,
-      selectedStopGroup: null,
-      expandedLines: {},
-      showAccessibilityInfo: false,
-      missingTransportForWaypoint: false,
-      expandedStopGroups: {},
-    };
-  },
-  computed: {
-    /** Copy access points to customize them */
-    accessWaypoints() {
-      let accessWaypoints = [];
-      if (this.documentType === 'waypoint' && this.document.waypoint_type === 'access') {
-        // access waypoint
-        accessWaypoints = [this.document];
-      }
-      // for other types of documents, return the waypoints of type access associated (if any)
-      else {
-        accessWaypoints =
-          this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access') ?? [];
-      }
-
-      const accessPointsCopy = JSON.parse(JSON.stringify(accessWaypoints));
-
-      accessPointsCopy.forEach((doc) => {
-        if (doc.type === 'w') {
-          doc.type = 'z';
-        }
-
-        if (doc.maps && Array.isArray(doc.maps)) {
-          doc.maps.forEach((map) => {
-            if (map.type === 'w') {
-              map.type = 'z';
-            }
-          });
-        }
-      });
-
-      return accessPointsCopy;
-    },
-
-    /** Each stop can have multiple lines */
-    groupedStops() {
-      return this.stops.reduce((acc, stop) => {
-        if (!acc[stop.stoparea_name]) {
-          acc[stop.stoparea_name] = [];
-        }
-        acc[stop.stoparea_name].push(stop);
-        return acc;
-      }, {});
-    },
-
-    filteredDocuments() {
-      const filteredWaypoints =
-        this.document.associations.waypoints?.filter((waypoint) => waypoint.waypoint_type !== 'access') || [];
-
-      const mainDocument = {
-        ...this.document,
-        associations: {
-          ...this.document.associations,
-          waypoints: filteredWaypoints,
-        },
-      };
-
-      return this.mapDocuments.concat([mainDocument]);
-    },
-  },
-  watch: {
-    document: {
-      handler() {
-        this.processAccessWaypoints();
-      },
-      deep: true,
-      immediate: true,
-    },
-    stops: {
-      handler(newStops) {
-        if (newStops && newStops.length > 0) {
-          this.createStopDocuments();
-          this.$emit('stops-updated', this.stopDocuments);
-        }
-      },
-      deep: true,
-    },
-    showAccessibilityInfo(newVal) {
-      this.$emit('accessibility-info-changed', newVal);
-    },
-  },
-  methods: {
-    /** Fetch access waypoints */
-    processAccessWaypoints() {
-      const accessWaypoints = this.accessWaypoints;
-
-      if (accessWaypoints.length === 0) {
-        this.stops = [];
-        return;
-      }
-
-      this.fetchStopsForDocuments(accessWaypoints);
-    },
-
-    /** Retrieves the stops of each waypoint in the database */
-    fetchStopsForDocuments(documents) {
-      transportService
-        .getStopareasForDocuments(documents)
-        .then((result) => {
-          documents.forEach((doc) => {
-            if (!result.documentResults[doc.document_id]) {
-              doc.public_transportation_rating = 'no service';
-            } else {
-              doc.public_transportation_rating = 'service available';
-            }
-          });
-
-          this.stops = result.stopareas.sort((a, b) => a.distance - b.distance);
-          this.missingTransportForWaypoint = result.missingTransportForWaypoint;
-          this.showAccessibilityInfo = this.stops.length > 0;
-          this.createStopDocuments();
-        })
-        .catch((error) => {
-          console.error('Error retrieving data :', error);
-          this.missingTransportForWaypoint = true;
-
-          documents.forEach((doc) => {
-            doc.public_transportation_rating = 'no service';
-          });
-        });
-    },
-
-    /** Formats the distance to display in km */
-    formattedDistance(distance) {
-      return `${distance.toFixed(3).replace('.', ',')} km`;
-    },
-
-    /** Creates public transport stops near access type waypoints */
-    createStopDocuments() {
-      if (!this.stops || !this.stops.length) return;
-
-      if (this.accessWaypoints.length === 0) return;
-
-      this.stopDocuments = this.stops.reduce(
-        (uniqueStops, stop) => {
-          try {
-            if (!stop.coordinates || !stop.coordinates.x || !stop.coordinates.y) {
-              console.warn(`Stop ${stop.id} does not have valid coordinates:`, stop);
-              return uniqueStops;
-            }
-
-            const coordKey = `${stop.coordinates.x},${stop.coordinates.y}`;
-            if (uniqueStops.coordsMap[coordKey]) {
-              return uniqueStops;
-            }
-
-            const stopDoc = JSON.parse(JSON.stringify(this.accessWaypoints[0]));
-            stopDoc.document_id = stop.id;
-            stopDoc.type = 's';
-            if (stopDoc.locales && stopDoc.locales.length > 0) {
-              stopDoc.locales[0].title = '';
-            }
-            if (stopDoc.geometry) {
-              const geom = {
-                type: 'Point',
-                coordinates: [stop.coordinates.x, stop.coordinates.y],
-              };
-              stopDoc.geometry.geom = JSON.stringify(geom);
-            }
-            stopDoc.isStopPoint = true;
-            stopDoc.stopInfo = {
-              operator: stop.operator,
-              line: stop.line,
-              distance: stop.distance,
-            };
-
-            uniqueStops.coordsMap[coordKey] = true;
-            uniqueStops.docs.push(stopDoc);
-            return uniqueStops;
-          } catch (error) {
-            console.error(`Error creating document for stop ${stop.id}:`, error);
-            return uniqueStops;
-          }
-        },
-        { docs: [], coordsMap: {} }
-      ).docs;
-    },
-
-    /** Updates the map according to the selected stop */
-    selectStopGroup(stopGroup) {
-      this.selectedStopGroup = stopGroup;
-      this.selectedStop = stopGroup[0];
-      this.updateMap();
-    },
-
-    /** Zooms in and highlight a stop on the map */
-    updateMap() {
-      if (this.selectedStop && this.$refs.mapView) {
-        this.$refs.mapView.highlightStop(this.selectedStop.id);
-        this.$refs.mapView.goAndZoomOnStop(this.selectedStop.id);
-      }
-    },
-
-    /** Finds which stop area corresponds to the stop clicked on the map */
-    handleStopClicked(stopId) {
-      this.selectedStop = this.stops.find((stop) => stop.id === stopId);
-      this.selectedStopGroup = Object.values(this.groupedStops).find((group) =>
-        group.some((stop) => stop.id === stopId)
-      );
-    },
-
-    /** Displays a card in green if selected */
-    isStopGroupSelected(stopGroup) {
-      return (
-        this.selectedStopGroup &&
-        stopGroup.some((stop) => this.selectedStopGroup.some((selectedStop) => selectedStop.id === stop.id))
-      );
-    },
-
-    /** Checks if a stoparea is expanded */
-    isStopGroupExpanded(stopGroup) {
-      const groupId = stopGroup[0].id;
-      return this.expandedStopGroups[groupId] === true;
-    },
-
-    /** Shows details of a stoparea */
-    seeLineDetails(stopGroup) {
-      const selection = window.getSelection();
-      if (selection && selection.toString().length > 0) {
-        return;
-      }
-
-      const groupId = stopGroup[0].id;
-      // a new object: adding a key to a reactive object is not reactive in Vue 2
-      this.expandedStopGroups = { ...this.expandedStopGroups, [groupId]: !this.expandedStopGroups[groupId] };
-
-      this.selectedStopGroup = stopGroup;
-      this.selectedStop = stopGroup[0];
-
-      this.$nextTick(() => {
-        const refName = 'stopCard_' + groupId;
-        if (this.$refs[refName] && this.$refs[refName][0]) {
-          this.$refs[refName][0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-      });
-    },
-
-    /** Makes a special display for the highlight (hover) */
-    handleDocumentHighlight(document) {
-      if (document && document.isStopPoint) {
-        const stopId = document.document_id;
-        const stop = this.stops.find((s) => s.id === stopId);
-        if (stop) {
-          this.selectedStopGroup = Object.values(this.groupedStops).find((group) => group.some((s) => s.id === stopId));
-          this.selectedStop = stop;
-
-          if (this.$refs.mapView) {
-            this.$refs.mapView.highlightStop(stopId);
-          }
-
-          this.$nextTick(() => {
-            const refName = 'stopCard_' + stopId;
-            const cardContainer = this.$refs.stopCardContainer;
-
-            if (this.$refs[refName] && this.$refs[refName][0] && cardContainer) {
-              const card = this.$refs[refName][0];
-
-              const containerRect = cardContainer.getBoundingClientRect();
-              const cardRect = card.getBoundingClientRect();
-
-              const isCardAbove = cardRect.top < containerRect.top;
-              const isCardBelow = cardRect.bottom > containerRect.bottom;
-
-              if (isCardAbove || isCardBelow) {
-                let newScrollTop;
-
-                if (isCardAbove) {
-                  newScrollTop = cardContainer.scrollTop + (cardRect.top - containerRect.top) - 10;
-                } else {
-                  newScrollTop = cardContainer.scrollTop + (cardRect.bottom - containerRect.bottom) + 10;
-                }
-
-                cardContainer.scrollTo({
-                  top: newScrollTop,
-                  behavior: 'smooth',
-                });
-              }
-            }
-          });
-        }
-      } else {
-        this.selectedStopGroup = null;
-        this.selectedStop = null;
-
-        if (this.$refs.mapView) {
-          if (!document) {
-            this.$refs.mapView.resetStopStyles();
-          }
-        }
-      }
-
-      this.$emit('highlight-document', document);
-    },
-  },
+type Stop = {
+  id: number;
+  stoparea_name: string;
+  line?: string;
+  operator?: string;
+  distance: number;
+  coordinates?: { x: number; y: number };
 };
+// a document copy, shown on the map
+type MapDocument = C2cDocument & Record<string, any>;
+
+const props = defineProps({
+  ...documentProperty,
+  mapDocuments: {
+    type: Array as PropType<MapDocument[]>,
+    default: () => [],
+  },
+});
+
+const emit = defineEmits(['accessibility-info-changed', 'has-protection-area', 'highlight-document', 'stops-updated']);
+
+const { documentType } = useDocumentType(props);
+
+const olMap = useTemplateRef<InstanceType<typeof OlMap>>('olMap');
+const stopCardContainer = useTemplateRef<HTMLElement>('stopCardContainer');
+// the card of each stop group, by the id of its first stop
+const stopCards: Record<number, Element> = {};
+
+const stops = ref<Stop[]>([]);
+const stopDocuments = ref<MapDocument[]>([]);
+const selectedStop = ref<Stop | null>(null);
+const selectedStopGroup = ref<Stop[] | null>(null);
+const showAccessibilityInfo = ref(false);
+const missingTransportForWaypoint = ref(false);
+const expandedStopGroups = ref<Record<number, boolean>>({});
+
+/** Copy access points to customize them */
+const accessWaypoints = computed<MapDocument[]>(() => {
+  let accessWaypoints: MapDocument[] = [];
+  if (documentType.value === 'waypoint' && props.document.waypoint_type === 'access') {
+    // access waypoint
+    accessWaypoints = [props.document];
+  }
+  // for other types of documents, return the waypoints of type access associated (if any)
+  else {
+    accessWaypoints =
+      props.document?.associations?.waypoints?.filter((doc: MapDocument) => doc && doc.waypoint_type === 'access') ??
+      [];
+  }
+
+  const accessPointsCopy: MapDocument[] = JSON.parse(JSON.stringify(accessWaypoints));
+
+  accessPointsCopy.forEach((doc) => {
+    if (doc.type === 'w') {
+      doc.type = 'z';
+    }
+
+    if (doc.maps && Array.isArray(doc.maps)) {
+      doc.maps.forEach((map: { type?: string }) => {
+        if (map.type === 'w') {
+          map.type = 'z';
+        }
+      });
+    }
+  });
+
+  return accessPointsCopy;
+});
+
+/** Each stop can have multiple lines */
+const groupedStops = computed(() => {
+  return stops.value.reduce(
+    (acc, stop) => {
+      if (!acc[stop.stoparea_name]) {
+        acc[stop.stoparea_name] = [];
+      }
+      acc[stop.stoparea_name].push(stop);
+      return acc;
+    },
+    {} as Record<string, Stop[]>
+  );
+});
+
+const filteredDocuments = computed(() => {
+  const filteredWaypoints =
+    props.document.associations?.waypoints?.filter((waypoint: MapDocument) => waypoint.waypoint_type !== 'access') ||
+    [];
+
+  const mainDocument = {
+    ...props.document,
+    associations: {
+      ...props.document.associations,
+      waypoints: filteredWaypoints,
+    },
+  };
+
+  return props.mapDocuments.concat([mainDocument]);
+});
+
+watch(
+  () => props.document,
+  () => {
+    processAccessWaypoints();
+  },
+  { deep: true, immediate: true }
+);
+watch(
+  stops,
+  (newStops) => {
+    if (newStops && newStops.length > 0) {
+      createStopDocuments();
+      emit('stops-updated', stopDocuments.value);
+    }
+  },
+  { deep: true }
+);
+watch(showAccessibilityInfo, (newVal) => {
+  emit('accessibility-info-changed', newVal);
+});
+
+function setStopCard(stopGroup: Stop[], card: Element | ComponentPublicInstance | null) {
+  if (card) {
+    stopCards[stopGroup[0].id] = card as Element;
+  } else {
+    delete stopCards[stopGroup[0].id];
+  }
+}
+
+/** Fetch access waypoints */
+function processAccessWaypoints() {
+  if (accessWaypoints.value.length === 0) {
+    stops.value = [];
+    return;
+  }
+
+  fetchStopsForDocuments(accessWaypoints.value);
+}
+
+/** Retrieves the stops of each waypoint in the database */
+function fetchStopsForDocuments(documents: MapDocument[]) {
+  transportService
+    .getStopareasForDocuments(documents)
+    .then((result) => {
+      documents.forEach((doc) => {
+        if (!result.documentResults[doc.document_id!]) {
+          doc.public_transportation_rating = 'no service';
+        } else {
+          doc.public_transportation_rating = 'service available';
+        }
+      });
+
+      stops.value = (result.stopareas as unknown as Stop[]).sort((a, b) => a.distance - b.distance);
+      missingTransportForWaypoint.value = result.missingTransportForWaypoint;
+      showAccessibilityInfo.value = stops.value.length > 0;
+      createStopDocuments();
+    })
+    .catch((error) => {
+      console.error('Error retrieving data :', error);
+      missingTransportForWaypoint.value = true;
+
+      documents.forEach((doc) => {
+        doc.public_transportation_rating = 'no service';
+      });
+    });
+}
+
+/** Creates public transport stops near access type waypoints */
+function createStopDocuments() {
+  if (!stops.value || !stops.value.length) return;
+
+  if (accessWaypoints.value.length === 0) return;
+
+  stopDocuments.value = stops.value.reduce(
+    (uniqueStops, stop) => {
+      try {
+        if (!stop.coordinates || !stop.coordinates.x || !stop.coordinates.y) {
+          console.warn(`Stop ${stop.id} does not have valid coordinates:`, stop);
+          return uniqueStops;
+        }
+
+        const coordKey = `${stop.coordinates.x},${stop.coordinates.y}`;
+        if (uniqueStops.coordsMap[coordKey]) {
+          return uniqueStops;
+        }
+
+        const stopDoc: MapDocument = JSON.parse(JSON.stringify(accessWaypoints.value[0]));
+        stopDoc.document_id = stop.id;
+        stopDoc.type = 's';
+        if (stopDoc.locales && stopDoc.locales.length > 0) {
+          stopDoc.locales[0].title = '';
+        }
+        if (stopDoc.geometry) {
+          const geom = {
+            type: 'Point',
+            coordinates: [stop.coordinates.x, stop.coordinates.y],
+          };
+          stopDoc.geometry.geom = JSON.stringify(geom);
+        }
+        stopDoc.isStopPoint = true;
+        stopDoc.stopInfo = {
+          operator: stop.operator,
+          line: stop.line,
+          distance: stop.distance,
+        };
+
+        uniqueStops.coordsMap[coordKey] = true;
+        uniqueStops.docs.push(stopDoc);
+        return uniqueStops;
+      } catch (error) {
+        console.error(`Error creating document for stop ${stop.id}:`, error);
+        return uniqueStops;
+      }
+    },
+    { docs: [] as MapDocument[], coordsMap: {} as Record<string, boolean> }
+  ).docs;
+}
+
+/** Updates the map according to the selected stop */
+function selectStopGroup(stopGroup: Stop[]) {
+  selectedStopGroup.value = stopGroup;
+  selectedStop.value = stopGroup[0];
+  updateMap();
+}
+
+/** Zooms in and highlight a stop on the map */
+function updateMap() {
+  if (selectedStop.value && olMap.value) {
+    olMap.value.highlightStop(selectedStop.value.id);
+    olMap.value.goAndZoomOnStop(selectedStop.value.id);
+  }
+}
+
+/** Finds which stop area corresponds to the stop clicked on the map */
+function handleStopClicked(stopId: number) {
+  selectedStop.value = stops.value.find((stop) => stop.id === stopId) ?? null;
+  selectedStopGroup.value =
+    Object.values(groupedStops.value).find((group) => group.some((stop) => stop.id === stopId)) ?? null;
+}
+
+/** Displays a card in green if selected */
+function isStopGroupSelected(stopGroup: Stop[]) {
+  return (
+    !!selectedStopGroup.value &&
+    stopGroup.some((stop) => selectedStopGroup.value!.some((selectedStop) => selectedStop.id === stop.id))
+  );
+}
+
+/** Checks if a stoparea is expanded */
+function isStopGroupExpanded(stopGroup: Stop[]) {
+  const groupId = stopGroup[0].id;
+  return expandedStopGroups.value[groupId] === true;
+}
+
+/** Shows details of a stoparea */
+function seeLineDetails(stopGroup: Stop[]) {
+  const selection = window.getSelection();
+  if (selection && selection.toString().length > 0) {
+    return;
+  }
+
+  const groupId = stopGroup[0].id;
+  expandedStopGroups.value[groupId] = !expandedStopGroups.value[groupId];
+
+  selectedStopGroup.value = stopGroup;
+  selectedStop.value = stopGroup[0];
+
+  nextTick(() => {
+    stopCards[groupId]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+}
+
+/** Makes a special display for the highlight (hover) */
+function handleDocumentHighlight(document: MapDocument | null) {
+  if (document && document.isStopPoint) {
+    const stopId = document.document_id!;
+    const stop = stops.value.find((s) => s.id === stopId);
+    if (stop) {
+      const stopGroup = Object.values(groupedStops.value).find((group) => group.some((s) => s.id === stopId))!;
+      selectedStopGroup.value = stopGroup;
+      selectedStop.value = stop;
+
+      if (olMap.value) {
+        olMap.value.highlightStop(stopId);
+      }
+
+      nextTick(() => {
+        // cards are found by the first stop of their group, which may not be the stop highlighted
+        const card = stopCards[stopGroup[0].id];
+        const cardContainer = stopCardContainer.value;
+
+        if (card && cardContainer) {
+          const containerRect = cardContainer.getBoundingClientRect();
+          const cardRect = card.getBoundingClientRect();
+
+          const isCardAbove = cardRect.top < containerRect.top;
+          const isCardBelow = cardRect.bottom > containerRect.bottom;
+
+          if (isCardAbove || isCardBelow) {
+            let newScrollTop;
+
+            if (isCardAbove) {
+              newScrollTop = cardContainer.scrollTop + (cardRect.top - containerRect.top) - 10;
+            } else {
+              newScrollTop = cardContainer.scrollTop + (cardRect.bottom - containerRect.bottom) + 10;
+            }
+
+            cardContainer.scrollTo({
+              top: newScrollTop,
+              behavior: 'smooth',
+            });
+          }
+        }
+      });
+    }
+  } else {
+    selectedStopGroup.value = null;
+    selectedStop.value = null;
+
+    if (olMap.value) {
+      if (!document) {
+        olMap.value.resetStopStyles();
+      }
+    }
+  }
+
+  emit('highlight-document', document);
+}
 </script>
 
 <style scoped lang="scss">
