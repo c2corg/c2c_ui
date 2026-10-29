@@ -16,7 +16,7 @@
       >
         <template #button>
           <span class="button is-size-7-mobile" :disabled="category.fields.length === 0 || null">
-            <fa-icon :icon="$options.categoryIcon[category.name]" />
+            <fa-icon :icon="categoryIcon[category.name]" />
             <span class="is-hidden-mobile">
               <!-- $gettext('General') -->
               <!-- $gettext('ratings') -->
@@ -43,7 +43,7 @@
       <dropdown-button key="multi-search" class="query-item-component is-hidden-tablet">
         <template #button>
           <span class="button is-size-7-mobile">
-            <fa-icon :icon="$options.categoryIcon['MultiSearch']" />
+            <fa-icon :icon="categoryIcon['MultiSearch']" />
             <span>&nbsp;</span>
             <fa-icon icon="angle-down" aria-hidden="true" />
           </span>
@@ -89,22 +89,33 @@
   </div>
 </template>
 
-<script>
-import AssociationQueryItem from './AssociationQueryItem';
+<script lang="ts">
+// a document of the association filters, loaded once for all the lists (<script setup> runs per instance)
+type CachedDocument = { document_id: number; type?: string; loading: boolean; [property: string]: unknown };
+const documentsCache: Record<string, CachedDocument> = {};
+</script>
+
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router';
+
+import AssociationQueryItem from './AssociationQueryItem.vue';
 import ExportCsvButton from './ExportCsvButton.vue';
-import LoadUserPreferencesButton from './LoadUserPreferencesButton';
-import PrintButton from './PrintButton';
-import QueryItem from './QueryItem';
-import QuerySortDropdown from './QuerySortDropdown';
-import QueryTags from './QueryTags';
+import LoadUserPreferencesButton from './LoadUserPreferencesButton.vue';
+import PrintButton from './PrintButton.vue';
+import QueryItem from './QueryItem.vue';
+import QuerySortDropdown from './QuerySortDropdown.vue';
+import QueryTags from './QueryTags.vue';
 
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useUrlFilters } from '@/js/composables/url-filters';
 import constants from '@/js/constants';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-const documentsCache = {};
-
-const categorizedFields = {
+// the fields of each document type, per category
+const fieldsByCategory: Record<string, Record<string, string[]>> = {
   area: constants.categorizedFieldsDefault,
   article: constants.categorizedFieldsDefault,
   book: constants.categorizedFieldsDefault,
@@ -117,199 +128,175 @@ const categorizedFields = {
   xreport: constants.categorizedFieldsDefault,
 };
 
-export default {
-  categoryIcon: {
-    General: 'filter',
-    MultiSearch: 'filter',
-    Miscs: 'database',
-    Terrain: ['waypoint', 'summit'],
-    ratings: 'tachometer-alt',
-  },
-
-  components: {
-    AssociationQueryItem,
-    PrintButton,
-    QueryItem,
-    QuerySortDropdown,
-    QueryTags,
-    ExportCsvButton,
-    LoadUserPreferencesButton,
-  },
-
-  props: {
-    listMode: {
-      type: Boolean,
-      default: false,
-    },
-    showPrintButton: {
-      type: Boolean,
-      default: true,
-    },
-  },
-
-  emits: ['documents-load'],
-
-  setup() {
-    return useUrlFilters();
-  },
-
-  data() {
-    return {
-      tags: [],
-    };
-  },
-
-  computed: {
-    associations() {
-      if (this.documentType === 'outing') {
-        return ['area', 'route', 'waypoint', 'profile'];
-      }
-
-      if (this.documentType === 'route') {
-        return ['area', 'waypoint'];
-      }
-
-      if (this.documentType === 'waypoint') {
-        return ['area'];
-      }
-
-      return [];
-    },
-
-    categorizedFields() {
-      const result = [];
-
-      for (const category of Object.keys(categorizedFields[this.documentType])) {
-        const temp = {
-          name: category,
-          activeCount: 0,
-          fields: [],
-        };
-
-        let addCategory = false;
-
-        for (const name of categorizedFields[this.documentType][category]) {
-          const field = this.fields[name];
-          if (field !== undefined && field.url) {
-            addCategory = true;
-
-            if (this.$route.query[field.url] !== undefined) {
-              temp.activeCount += 1;
-            }
-
-            if (this.fieldIsVisible(field)) {
-              temp.fields.push(field);
-            }
-          }
-        }
-
-        if (addCategory) {
-          result.push(temp);
-        }
-      }
-
-      return result;
-    },
-  },
-
-  watch: {
-    $route: {
-      handler: 'load',
-      immediate: true,
-    },
-  },
-
-  methods: {
-    getUrlValue(documentType) {
-      const key = constants.objectDefinitions[documentType].letter;
-
-      return this.$route.query[key];
-    },
-
-    setUrlValue(documentType, value) {
-      const key = constants.objectDefinitions[documentType].letter;
-
-      const query = Object.assign({}, this.$route.query);
-      query[key] = value === '' ? undefined : value;
-
-      if (query[key] !== this.$route.query[key]) {
-        this.$router.push({ query });
-      }
-    },
-
-    getValue(documentType) {
-      const urlValue = this.getUrlValue(documentType);
-
-      return urlValue
-        ? String(urlValue)
-            .split(',')
-            .map((num) => parseInt(num, 10))
-        : [];
-    },
-
-    setValue(documentType, value) {
-      this.setUrlValue(documentType, value.join(','));
-    },
-
-    load() {
-      this.tags = [];
-
-      for (const documentType of this.associations) {
-        for (const documentId of this.getValue(documentType)) {
-          this.tags.push(this.getDocument(documentType, documentId));
-        }
-      }
-
-      this.emitDocumentsLoad();
-    },
-
-    getDocument(documentType, documentId) {
-      const key = `${documentType}#${documentId}`;
-
-      if (documentsCache[key] === undefined) {
-        documentsCache[key] = {
-          document_id: documentId,
-          loading: true,
-        };
-
-        c2c[documentType].get(documentId).then((response) => {
-          documentsCache[key].loading = false;
-          Object.assign(documentsCache[key], response.data);
-          this.emitDocumentsLoad();
-        });
-      }
-
-      return documentsCache[key];
-    },
-
-    addTag(document) {
-      const documentType = this.$documentUtils.getDocumentType(document.type);
-
-      const value = this.getValue(documentType);
-
-      if (value.includes(document.document_id)) {
-        return;
-      }
-
-      value.push(document.document_id);
-
-      this.setValue(documentType, value);
-    },
-
-    removeTag(document) {
-      const documentType = this.$documentUtils.getDocumentType(document.type);
-      const value = this.getValue(documentType);
-      // remove
-      value.splice(value.indexOf(document.document_id), 1);
-
-      this.setValue(documentType, value);
-    },
-
-    emitDocumentsLoad() {
-      this.$emit('documents-load', this.tags);
-    },
-  },
+const categoryIcon: Record<string, string | string[]> = {
+  General: 'filter',
+  MultiSearch: 'filter',
+  Miscs: 'database',
+  Terrain: ['waypoint', 'summit'],
+  ratings: 'tachometer-alt',
 };
+
+defineProps({
+  listMode: {
+    type: Boolean,
+    default: false,
+  },
+  showPrintButton: {
+    type: Boolean,
+    default: true,
+  },
+});
+
+const emit = defineEmits(['documents-load']);
+
+const route = useRoute();
+const router = useRouter();
+const { $documentUtils } = useGlobalProperties();
+const { documentType, fields, fieldIsVisible } = useUrlFilters();
+
+const tags = ref<CachedDocument[]>([]);
+
+const associations = computed(() => {
+  if (documentType.value === 'outing') {
+    return ['area', 'route', 'waypoint', 'profile'];
+  }
+
+  if (documentType.value === 'route') {
+    return ['area', 'waypoint'];
+  }
+
+  if (documentType.value === 'waypoint') {
+    return ['area'];
+  }
+
+  return [];
+});
+
+const categorizedFields = computed(() => {
+  const result = [];
+
+  for (const category of Object.keys(fieldsByCategory[documentType.value])) {
+    const temp = {
+      name: category,
+      activeCount: 0,
+      fields: [] as (typeof fields.value)[string][],
+    };
+
+    let addCategory = false;
+
+    for (const name of fieldsByCategory[documentType.value][category]) {
+      const field = fields.value[name];
+      if (field !== undefined && field.url) {
+        addCategory = true;
+
+        if (route.query[field.url] !== undefined) {
+          temp.activeCount += 1;
+        }
+
+        if (fieldIsVisible(field)) {
+          temp.fields.push(field);
+        }
+      }
+    }
+
+    if (addCategory) {
+      result.push(temp);
+    }
+  }
+
+  return result;
+});
+
+function getUrlValue(documentType: string) {
+  const key = constants.objectDefinitions[documentType].letter;
+
+  return route.query[key];
+}
+
+function setUrlValue(documentType: string, value: string) {
+  const key = constants.objectDefinitions[documentType].letter;
+
+  const query: LocationQueryRaw = Object.assign({}, route.query);
+  query[key] = value === '' ? undefined : value;
+
+  if (query[key] !== route.query[key]) {
+    router.push({ query });
+  }
+}
+
+function getValue(documentType: string) {
+  const urlValue = getUrlValue(documentType);
+
+  return urlValue
+    ? String(urlValue)
+        .split(',')
+        .map((num) => parseInt(num, 10))
+    : [];
+}
+
+function setValue(documentType: string, value: number[]) {
+  setUrlValue(documentType, value.join(','));
+}
+
+function load() {
+  tags.value = [];
+
+  for (const documentType of associations.value) {
+    for (const documentId of getValue(documentType)) {
+      tags.value.push(getDocument(documentType, documentId));
+    }
+  }
+
+  emitDocumentsLoad();
+}
+
+function getDocument(documentType: string, documentId: number) {
+  const key = `${documentType}#${documentId}`;
+
+  if (documentsCache[key] === undefined) {
+    documentsCache[key] = {
+      document_id: documentId,
+      loading: true,
+    };
+
+    (c2c as unknown as Record<string, DocumentService>)[documentType].get(documentId).then((response) => {
+      documentsCache[key].loading = false;
+      Object.assign(documentsCache[key], response.data);
+      emitDocumentsLoad();
+    });
+  }
+
+  return documentsCache[key];
+}
+
+function addTag(document: C2cDocument) {
+  const documentType = $documentUtils.getDocumentType(document.type);
+
+  const value = getValue(documentType);
+
+  if (value.includes(document.document_id!)) {
+    return;
+  }
+
+  value.push(document.document_id!);
+
+  setValue(documentType, value);
+}
+
+function removeTag(document: C2cDocument) {
+  const documentType = $documentUtils.getDocumentType(document.type);
+  const value = getValue(documentType);
+  // remove
+  value.splice(value.indexOf(document.document_id!), 1);
+
+  setValue(documentType, value);
+}
+
+function emitDocumentsLoad() {
+  emit('documents-load', tags.value);
+}
+
+watch(() => route.fullPath, load, { immediate: true });
 </script>
 
 <style scoped lang="scss">

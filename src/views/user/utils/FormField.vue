@@ -37,6 +37,7 @@
         :disabled="disabled"
         :autocorrect="autocorrect"
         :autocapitalize="autocapitalize"
+        ref="input"
         v-model="value_"
         class="input"
         :class="{ 'is-danger': hasError || errorMessage }"
@@ -55,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, toRef } from 'vue';
+import { computed, reactive, ref, toRef, useTemplateRef } from 'vue';
 
 import { useFormField } from '@/js/composables/form-registration';
 
@@ -134,4 +135,13 @@ useFormField('baseForm', reactive({ name: toRef(props, 'name'), hasError, errorM
 function onMaskToggle() {
   unmasked.value = !unmasked.value;
 }
+
+const input = useTemplateRef<HTMLInputElement>('input');
+
+// the login view focuses the main input of each of its forms
+function focus() {
+  input.value!.focus();
+}
+
+defineExpose({ focus });
 </script>

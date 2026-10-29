@@ -77,165 +77,161 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { toast } from 'bulma-toast';
+import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
-import ApplicationCard from '@/components/tracking/ApplicationCard';
-import trackingService from '@/js/apis/tracking-service';
+import ApplicationCard from '@/components/tracking/ApplicationCard.vue';
+import trackingService, { type Activity, type Status, type Vendor } from '@/js/apis/tracking-service';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
 
-export default {
-  components: { ApplicationCard },
-
-  data() {
-    return {
-      trackingService,
-      activitiesLoading: null,
-      activitiesError: false,
-      activities: [],
-      statusError: false,
-      applications: [],
-    };
-  },
-
-  computed: {
-    baseUrl() {
-      return window.location.origin;
-    },
-    filteredApplications() {
-      return this.applications.filter(({ status }) => status !== 'disabled');
-    },
-  },
-
-  mounted() {
-    this.applications = [
-      {
-        // $gettext('strava')
-        name: 'strava',
-        website: 'https://www.strava.com',
-        connect: `${config.urls.stravaConnectAuthUrl}?client_id=${config.urls.stravaClientId}&response_type=code&approval_prompt=force&scope=activity:read,activity:read_all&redirect_uri=${this.baseUrl}/trackers/strava/exchange-token`,
-        status: 'disabled',
-      },
-      {
-        // $gettext('coros')
-        name: 'coros',
-        website: 'https://coros.com/traininghub',
-        connect: `${config.urls.corosConnectAuthUrl}?client_id=${config.urls.corosClientId}&redirect_uri=${this.baseUrl}/trackers/coros/exchange-token&response_type=code`,
-        status: 'disabled',
-      },
-      {
-        // $gettext('decathlon')
-        name: 'decathlon',
-        website: 'https://developers.decathlon.com/products/sports-tracking-data',
-        connect: `${config.urls.decathlonConnectAuthUrl}?client_id=${config.urls.decathlonClientId}&response_type=code&redirect_uri=${this.baseUrl}/trackers/decathlon/exchange-token&state=c2c`,
-        status: 'disabled',
-      },
-      {
-        // $gettext('garmin')
-        name: 'garmin',
-        website: 'https://www.garmin.com/',
-        status: 'disabled',
-      },
-      {
-        // $gettext('polar')
-        name: 'polar',
-        website: 'https://flow.polar.com/',
-        connect: `${config.urls.polarConnectAuthUrl}?response_type=code&client_id=${config.urls.polarClientId}&redirect_uri=${this.baseUrl}/trackers/polar/exchange-token`,
-        status: 'disabled',
-      },
-      {
-        // $gettext('suunto')
-        name: 'suunto',
-        website: 'https://app.suunto.com/',
-        connect: `${config.urls.suuntoConnectAuthUrl}?client_id=${config.urls.suuntoClientId}&response_type=code&redirect_uri=${this.baseUrl}/trackers/suunto/exchange-token&state=c2c`,
-        status: 'disabled',
-      },
-    ];
-    this.load();
-  },
-
-  methods: {
-    load() {
-      this.loadActivities();
-      const error = this.$route.query['error'];
-      if (error) {
-        // $gettext('auth-denied', 'tracking')
-        // $gettext('unsufficient-scopes', 'tracking')
-        // $gettext('setup-failed', 'tracking')
-        // $gettext('unknown', 'tracking')
-        toast({ message: this.$gettext(error, 'tracking'), type: 'is-danger', position: 'center' });
-      }
-    },
-
-    loadActivities() {
-      this.statusError = false;
-      this.activitiesError = false;
-      this.trackingService.getStatus(this.$user.id).then(
-        ({ data }) => {
-          Object.entries(data).map(([app, status]) => {
-            const idx = this.applications.findIndex(({ name }) => name === app);
-            this.applications.splice(idx, 1, { ...this.applications[idx], status });
-          });
-          this.activitiesLoading = true;
-          this.activitiesError = false;
-          this.activities = [];
-          this.trackingService.getActivities(this.$user.id, this.$user.lang).then(
-            ({ data }) => {
-              this.activitiesLoading = false;
-              this.activities = data.slice(0, 5).map((activity) => ({
-                ...activity,
-                ...(activity.duration && { duration: this.$dateUtils.durationToTimeString(activity.duration) }),
-                ...(activity.heightDiffUp && {
-                  heightDiffUp: this.$documentUtils.heightDiffUpWithUnit(activity.heightDiffUp),
-                }),
-                ...(activity.length && { length: this.$documentUtils.lengthWithUnit(activity.length) }),
-              }));
-            },
-            () => {
-              this.activitiesLoading = false;
-              this.activitiesError = true;
-            }
-          );
-        },
-        () => {
-          this.statusError = true;
-        }
-      );
-    },
-
-    configure(vendor) {
-      if (vendor === 'garmin') {
-        this.configureGarmin();
-      } else {
-        window.location.href = this.applications.find(({ name }) => vendor === name).connect;
-      }
-    },
-
-    configureGarmin() {
-      this.trackingService.requestGarminUnauthorizeRequestToken(this.$user.id).then(
-        ({ data }) => {
-          const token = data.token;
-          window.location.href = `https://connect.garmin.com/oauthConfirm?oauth_token=${token}&oauth_callback=${this.baseUrl}/trackers/garmin/exchange-token`;
-        },
-        () => {
-          toast({ message: this.$gettext('setup-failed', 'tracking'), type: 'is-danger', position: 'center' });
-        }
-      );
-    },
-
-    revoke(vendor) {
-      this.trackingService
-        .deauthorize(vendor, this.$user.id)
-        .then(() => {
-          toast({ message: this.$gettext('Subcription revoked'), type: 'is-primary', position: 'top-center' });
-          this.loadActivities(); // async
-        })
-        .catch(() => {
-          toast({ message: this.$gettext('Subcription revokal failed'), type: 'is-danger', position: 'top-center' });
-        });
-    },
-  },
+// an activity tracker, and whether the user configured it
+type Application = { name: Vendor; website: string; connect?: string; status: Status | 'disabled' };
+// an activity as shown: duration, length and height difference formatted
+type ShownActivity = Omit<Activity, 'duration' | 'length' | 'heightDiffUp'> & {
+  duration?: number | string;
+  length?: number | string;
+  heightDiffUp?: number | string;
 };
+
+const route = useRoute();
+const { $gettext, $user, $dateUtils, $documentUtils } = useGlobalProperties();
+
+const baseUrl = window.location.origin;
+
+const activitiesLoading = ref<boolean | null>(null);
+const activitiesError = ref(false);
+const activities = ref<ShownActivity[]>([]);
+const statusError = ref(false);
+const applications = ref<Application[]>([
+  {
+    // $gettext('strava')
+    name: 'strava',
+    website: 'https://www.strava.com',
+    connect: `${config.urls.stravaConnectAuthUrl}?client_id=${config.urls.stravaClientId}&response_type=code&approval_prompt=force&scope=activity:read,activity:read_all&redirect_uri=${baseUrl}/trackers/strava/exchange-token`,
+    status: 'disabled',
+  },
+  {
+    // $gettext('coros')
+    name: 'coros',
+    website: 'https://coros.com/traininghub',
+    connect: `${config.urls.corosConnectAuthUrl}?client_id=${config.urls.corosClientId}&redirect_uri=${baseUrl}/trackers/coros/exchange-token&response_type=code`,
+    status: 'disabled',
+  },
+  {
+    // $gettext('decathlon')
+    name: 'decathlon',
+    website: 'https://developers.decathlon.com/products/sports-tracking-data',
+    connect: `${config.urls.decathlonConnectAuthUrl}?client_id=${config.urls.decathlonClientId}&response_type=code&redirect_uri=${baseUrl}/trackers/decathlon/exchange-token&state=c2c`,
+    status: 'disabled',
+  },
+  {
+    // $gettext('garmin')
+    name: 'garmin',
+    website: 'https://www.garmin.com/',
+    status: 'disabled',
+  },
+  {
+    // $gettext('polar')
+    name: 'polar',
+    website: 'https://flow.polar.com/',
+    connect: `${config.urls.polarConnectAuthUrl}?response_type=code&client_id=${config.urls.polarClientId}&redirect_uri=${baseUrl}/trackers/polar/exchange-token`,
+    status: 'disabled',
+  },
+  {
+    // $gettext('suunto')
+    name: 'suunto',
+    website: 'https://app.suunto.com/',
+    connect: `${config.urls.suuntoConnectAuthUrl}?client_id=${config.urls.suuntoClientId}&response_type=code&redirect_uri=${baseUrl}/trackers/suunto/exchange-token&state=c2c`,
+    status: 'disabled',
+  },
+]);
+
+const filteredApplications = computed(() => applications.value.filter(({ status }) => status !== 'disabled'));
+
+function load() {
+  loadActivities();
+  const error = route.query['error'];
+  if (error) {
+    // $gettext('auth-denied', 'tracking')
+    // $gettext('unsufficient-scopes', 'tracking')
+    // $gettext('setup-failed', 'tracking')
+    // $gettext('unknown', 'tracking')
+    toast({ message: $gettext(String(error), 'tracking'), type: 'is-danger', position: 'center' });
+  }
+}
+
+function loadActivities() {
+  statusError.value = false;
+  activitiesError.value = false;
+  trackingService.getStatus($user.id!).then(
+    ({ data }) => {
+      Object.entries(data).map(([app, status]) => {
+        const idx = applications.value.findIndex(({ name }) => name === app);
+        applications.value.splice(idx, 1, { ...applications.value[idx], status: status! });
+      });
+      activitiesLoading.value = true;
+      activitiesError.value = false;
+      activities.value = [];
+      trackingService.getActivities($user.id!, $user.lang ?? undefined).then(
+        ({ data }) => {
+          activitiesLoading.value = false;
+          activities.value = data.slice(0, 5).map((activity) => ({
+            ...activity,
+            ...(activity.duration && { duration: $dateUtils.durationToTimeString(activity.duration) }),
+            ...(activity.heightDiffUp && {
+              heightDiffUp: $documentUtils.heightDiffUpWithUnit(activity.heightDiffUp),
+            }),
+            ...(activity.length && { length: $documentUtils.lengthWithUnit(activity.length) }),
+          }));
+        },
+        () => {
+          activitiesLoading.value = false;
+          activitiesError.value = true;
+        }
+      );
+    },
+    () => {
+      statusError.value = true;
+    }
+  );
+}
+
+function configure(vendor: Vendor) {
+  if (vendor === 'garmin') {
+    configureGarmin();
+  } else {
+    window.location.href = applications.value.find(({ name }) => vendor === name)!.connect!;
+  }
+}
+
+function configureGarmin() {
+  trackingService.requestGarminUnauthorizeRequestToken($user.id!).then(
+    ({ data }) => {
+      const token = data.token;
+      window.location.href = `https://connect.garmin.com/oauthConfirm?oauth_token=${token}&oauth_callback=${baseUrl}/trackers/garmin/exchange-token`;
+    },
+    () => {
+      toast({ message: $gettext('setup-failed', 'tracking'), type: 'is-danger', position: 'center' });
+    }
+  );
+}
+
+function revoke(vendor: Vendor) {
+  trackingService
+    .deauthorize(vendor, $user.id!)
+    .then(() => {
+      toast({ message: $gettext('Subcription revoked'), type: 'is-primary', position: 'top-center' });
+      loadActivities(); // async
+    })
+    .catch(() => {
+      toast({ message: $gettext('Subcription revokal failed'), type: 'is-danger', position: 'top-center' });
+    });
+}
+
+onMounted(load);
 </script>
 
 <style scoped lang="scss">
