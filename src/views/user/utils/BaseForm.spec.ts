@@ -1,11 +1,14 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
-import BaseForm from './BaseForm';
-import FormField from './FormField';
+import BaseForm from './BaseForm.vue';
+import FormField from './FormField.vue';
+
+// the promise of the form, with the error of the API
+type FormPromise = { error: unknown } | null;
 
 // a login-like form, with the real BaseForm and user FormField
-const mountForm = ({ promise = null } = {}) =>
+const mountForm = ({ promise = null }: { promise?: FormPromise } = {}) =>
   mount(
     {
       template: `<base-form :promise="promise" @submit="submitted++">
@@ -15,11 +18,16 @@ const mountForm = ({ promise = null } = {}) =>
       components: { BaseForm, FormField },
       data: () => ({ promise, username: '', password: '', submitted: 0 }),
     },
-    { global: { stubs: { FaIcon: true }, mocks: { $gettext: (s) => s } } }
+    { global: { stubs: { FaIcon: true }, mocks: { $gettext: (s: string) => s } } }
   );
 
-const errorOf = (wrapper, name) =>
-  wrapper.findAllComponents(FormField).find((field) => field.props('name') === name).vm.errorMessage;
+const errorOf = (wrapper: ReturnType<typeof mountForm>, name: string) =>
+  // FormField keeps its error message in its setup state
+  (
+    wrapper.findAllComponents(FormField).find((field) => field.props('name') === name)!.vm as unknown as {
+      errorMessage: string | null | undefined;
+    }
+  ).errorMessage;
 
 describe('BaseForm', () => {
   it('does not submit while a required field is empty', async () => {
@@ -43,7 +51,7 @@ describe('BaseForm', () => {
   it('shows the API errors on their field, and the others above the form', async () => {
     const wrapper = mountForm({ promise: { error: null } });
 
-    wrapper.vm.promise.error = {
+    (wrapper.vm.promise as NonNullable<FormPromise>).error = {
       response: {
         data: {
           errors: [
@@ -62,7 +70,9 @@ describe('BaseForm', () => {
 
   it('clears the errors on a new submit', async () => {
     const wrapper = mountForm({ promise: { error: null } });
-    wrapper.vm.promise.error = { response: { data: { errors: [{ name: 'username', description: 'Required' }] } } };
+    (wrapper.vm.promise as NonNullable<FormPromise>).error = {
+      response: { data: { errors: [{ name: 'username', description: 'Required' }] } },
+    };
     await wrapper.vm.$nextTick();
     await wrapper.findAll('input')[0].setValue('alice');
     await wrapper.findAll('input')[1].setValue('secret');

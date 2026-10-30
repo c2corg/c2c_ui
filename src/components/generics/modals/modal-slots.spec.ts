@@ -1,12 +1,12 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
-import ModalCard from './ModalCard';
-import ModalWindow from './ModalWindow';
+import ModalCard from './ModalCard.vue';
+import ModalWindow from './ModalWindow.vue';
 
 // The parent templates are compiled like the app's: named slots are passed with <template #name>
 // (Vue 3 condenses whitespace by default)
-const parent = (template) => ({
+const parent = (template: string) => ({
   template,
   components: { ModalCard, ModalWindow },
 });

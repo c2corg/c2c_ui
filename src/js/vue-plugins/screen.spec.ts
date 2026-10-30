@@ -1,21 +1,21 @@
 import { mount } from '@vue/test-utils';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { createApp, h, nextTick } from 'vue';
+import { createApp, defineComponent, h, nextTick } from 'vue';
 
 import screen from './screen';
 
 // a window.matchMedia whose width can change, with the change listeners of the media query lists
-const fakeScreen = (initialWidth) => {
+const fakeScreen = (initialWidth: number) => {
   let width = initialWidth;
-  const lists = [];
-  vi.stubGlobal('matchMedia', (query) => {
-    const maxWidth = Number(query.match(/max-width: (\d+)px/)[1]);
-    const listeners = [];
+  const lists: { fire: () => void }[] = [];
+  vi.stubGlobal('matchMedia', (query: string) => {
+    const maxWidth = Number(query.match(/max-width: (\d+)px/)![1]);
+    const listeners: (() => void)[] = [];
     const list = {
       get matches() {
         return width <= maxWidth;
       },
-      addEventListener: (type, listener) => listeners.push(listener),
+      addEventListener: (type: string, listener: () => void) => listeners.push(listener),
       removeEventListener: vi.fn(),
       fire: () => listeners.forEach((listener) => listener()),
     };
@@ -23,7 +23,7 @@ const fakeScreen = (initialWidth) => {
     return list;
   });
   return {
-    resize(newWidth) {
+    resize(newWidth: number) {
       width = newWidth;
       lists.forEach((list) => list.fire());
     },
@@ -50,18 +50,18 @@ describe('$screen', () => {
     fakeScreen(width);
     const { $screen } = installScreen();
 
-    const flags = ['isMobile', 'isTablet', 'isDesktop', 'isWidescreen', 'isFullHD'];
+    const flags = ['isMobile', 'isTablet', 'isDesktop', 'isWidescreen', 'isFullHD'] as const;
     expect(flags.filter((flag) => $screen[flag])).toEqual([expected]);
   });
 
   it('follows the window size, and updates the components using it', async () => {
     const browser = fakeScreen(1600);
     const wrapper = mount(
-      {
+      defineComponent({
         render() {
           return h('p', this.$screen.isMobile ? 'mobile' : 'large');
         },
-      },
+      }),
       { global: { plugins: [screen] } }
     );
     expect(wrapper.text()).toBe('large');
