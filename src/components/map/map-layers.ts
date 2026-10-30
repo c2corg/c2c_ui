@@ -1,16 +1,22 @@
+import type { Options as WMTSOptions } from 'ol/source/WMTS';
+
 import { swissExtent } from './map-utils';
 
 import config from '@/js/config';
 import ol from '@/js/libs/ol';
 
-function createSwisstopoLayer(title, image, layer, format = 'jpeg', time = 'current', retina = false) {
+function createSwisstopoLayer(
+  title: string,
+  image: string | undefined,
+  layer: string,
+  format = 'jpeg',
+  time = 'current',
+  retina = false
+) {
   const tileSize = retina ? 128 : undefined;
   const tilePixelRatio = retina ? 2 : undefined;
   return new ol.layer.Tile({
-    title,
-    image,
-    country: 'ch',
-    type: 'base',
+    properties: { title, image, country: 'ch', type: 'base' },
     visible: false,
     // no tile requests outside Switzerland, where swisstopo serves blank tiles
     extent: swissExtent,
@@ -26,10 +32,10 @@ function createSwisstopoLayer(title, image, layer, format = 'jpeg', time = 'curr
   });
 }
 
-function createIgnFrSource(title, image, layer, format = 'jpeg') {
-  const resolutions = [];
-  const matrixIds = [];
-  const proj3857 = ol.proj.get('EPSG:3857');
+function createIgnFrSource(title: string, image: string, layer: string, format = 'jpeg') {
+  const resolutions: number[] = [];
+  const matrixIds: string[] = [];
+  const proj3857 = ol.proj.get('EPSG:3857')!;
   const maxResolution = ol.extent.getWidth(proj3857.getExtent()) / 256;
 
   for (let i = 0; i < 18; i++) {
@@ -43,7 +49,7 @@ function createIgnFrSource(title, image, layer, format = 'jpeg') {
     matrixIds,
   });
 
-  let url;
+  let url: string;
   switch (layer) {
     case 'GEOGRAPHICALGRIDSYSTEMS.MAPS':
       url = 'https://data.geopf.fr/private/wmts?apikey=ign_scan_ws';
@@ -64,10 +70,7 @@ function createIgnFrSource(title, image, layer, format = 'jpeg') {
   });
 
   return new ol.layer.Tile({
-    title,
-    image,
-    country: 'fr',
-    type: 'base',
+    properties: { title, image, country: 'fr', type: 'base' },
     visible: false,
     source,
   });
@@ -82,9 +85,9 @@ function createIgnFrSource(title, image, layer, format = 'jpeg') {
  *
  * See http://www.ign.es/web/ign/portal/ide-area-nodo-ide-ign
  */
-function createIgnEsSource(title, image, source) {
+function createIgnEsSource(title: string, image: string, source: string) {
   let url = 'http://www.ign.es/wmts/';
-  let layer;
+  let layer: string;
   switch (source) {
     case 'base':
       url += 'ign-base';
@@ -102,10 +105,10 @@ function createIgnEsSource(title, image, source) {
   }
 
   const levels = 21;
-  const proj3857 = ol.proj.get('EPSG:3857');
+  const proj3857 = ol.proj.get('EPSG:3857')!;
   const maxResolution = ol.extent.getWidth(proj3857.getExtent()) / 256;
-  const resolutions = [];
-  const matrixIds = [];
+  const resolutions: number[] = [];
+  const matrixIds: string[] = [];
   for (let i = 0; i < levels; i++) {
     matrixIds[i] = i.toString();
     resolutions[i] = maxResolution / Math.pow(2, i);
@@ -119,10 +122,7 @@ function createIgnEsSource(title, image, source) {
   });
 
   return new ol.layer.Tile({
-    title,
-    image,
-    country: 'es',
-    type: 'base',
+    properties: { title, image, country: 'es', type: 'base' },
     visible: false,
     source: new ol.source.WMTS({
       url,
@@ -134,15 +134,14 @@ function createIgnEsSource(title, image, source) {
       attributions: [
         'CC BY 4.0 <a href="https://www.scne.es" target="_blank" rel="noreferrer noopener">www.scne.es</a>',
       ],
-    }),
+      // no style: OpenLayers leaves the parameter out of the requests
+    } as WMTSOptions),
   });
 }
 
-function createIcgcSource(title, image, source) {
+function createIcgcSource(title: string, image: string, source: string) {
   return new ol.layer.Tile({
-    title,
-    image,
-    country: 'catalonia',
+    properties: { title, image, country: 'catalonia' },
     visible: false,
     source: new ol.source.TileWMS({
       projection: 'EPSG:3857',
@@ -155,9 +154,9 @@ function createIcgcSource(title, image, source) {
   });
 }
 
-function createBaseMapDotAtSource(title, image, source) {
-  let format;
-  let layer;
+function createBaseMapDotAtSource(title: string, image: string, source: string) {
+  let format: string;
+  let layer: string;
   switch (source) {
     case 'ortho':
       format = 'jpeg';
@@ -171,10 +170,10 @@ function createBaseMapDotAtSource(title, image, source) {
   }
 
   const levels = 20;
-  const proj3857 = ol.proj.get('EPSG:3857');
+  const proj3857 = ol.proj.get('EPSG:3857')!;
   const maxResolution = ol.extent.getWidth(proj3857.getExtent()) / 256;
-  const resolutions = [];
-  const matrixIds = [];
+  const resolutions: number[] = [];
+  const matrixIds: string[] = [];
   for (let i = 0; i < levels; i++) {
     matrixIds[i] = i.toString();
     resolutions[i] = maxResolution / Math.pow(2, i);
@@ -188,13 +187,9 @@ function createBaseMapDotAtSource(title, image, source) {
   });
 
   return new ol.layer.Tile({
-    title,
-    image,
-    country: 'at',
-    type: 'base',
+    properties: { title, image, country: 'at', type: 'base' },
     visible: false,
     source: new ol.source.WMTS({
-      name: 'basemap.at',
       urls: ['', '1', '2', '3', '4'].map(
         (i) =>
           `https://maps${i}.wien.gv.at/basemap/${layer}/normal/google3857/{TileMatrix}/{TileRow}/{TileCol}.${format}`
@@ -203,18 +198,16 @@ function createBaseMapDotAtSource(title, image, source) {
       layer: 'geolandbasemap',
       matrixSet: 'google3857',
       tileGrid,
-      attributions: '© <a href="https://www.basemap.at" target="_blank" rel="norefferer noopener">www.basemap.at</a>',
-    }),
+      attributions: '© <a href="https://www.basemap.at" target="_blank" rel="noreferrer noopener">www.basemap.at</a>',
+      // no style: the URLs have none
+    } as WMTSOptions),
   });
 }
 
 function createOrdnanceSurveySource() {
   // available backgrounds are Outdoor, Light, Road
   return new ol.layer.Tile({
-    title: 'Ordnance Survey (uk)',
-    image: 'uk.jpg',
-    country: 'gb',
-    type: 'base',
+    properties: { title: 'Ordnance Survey (uk)', image: 'uk.jpg', country: 'gb', type: 'base' },
     visible: false,
     source: new ol.source.XYZ({
       attributions: [
@@ -230,8 +223,7 @@ function createOrdnanceSurveySource() {
 export const cartoLayers = function () {
   // $gettext('ESRI', 'Map layer')
   /* const esri = new ol.layer.Tile({
-    title: 'ESRI',
-    type: 'base',
+    properties: { title: 'ESRI', type: 'base' },
     visible: false,
     source: new ol.source.XYZ({
       url:
@@ -249,14 +241,12 @@ export const cartoLayers = function () {
 
   // $gettext('OpenTopoMap', 'Map layer')
   const openTopoMap = new ol.layer.Tile({
-    title: 'OpenTopoMap',
-    image: 'opentopomap.jpg',
-    type: 'base',
+    properties: { title: 'OpenTopoMap', image: 'opentopomap.jpg', type: 'base' },
     visible: true,
     source: new ol.source.XYZ({
       url: 'https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
       attributions:
-        '© <a href="//openstreetmap.org/copyright" target)"_blank" rel="noreferrer noopener">OpenStreetMap</a> | ' +
+        '© <a href="//openstreetmap.org/copyright" target="_blank" rel="noreferrer noopener">OpenStreetMap</a> | ' +
         '© <a href="//opentopomap.org" target="_blank" rel="noreferrer noopener">OpenTopoMap</a>',
       maxZoom: 17,
     }),
@@ -264,9 +254,7 @@ export const cartoLayers = function () {
 
   // $gettext('ESRI World Imagery', 'Map layer')
   const esriImagery = new ol.layer.Tile({
-    title: 'ESRI World Imagery',
-    image: 'esri.jpg',
-    type: 'base',
+    properties: { title: 'ESRI World Imagery', image: 'esri.jpg', type: 'base' },
     visible: false,
     source: new ol.source.XYZ({
       url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',

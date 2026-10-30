@@ -1,49 +1,45 @@
+import type { IconLookup } from '@fortawesome/fontawesome-svg-core';
+import type { Extent } from 'ol/extent';
+import type { Options as StrokeOptions } from 'ol/style/Stroke';
+import type Style from 'ol/style/Style';
+
 import iconSvg from '@/js/icon-svg';
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-const buildTextStyle = function (title, highlight, isPublicTransport) {
+// the drawing properties given by other services: transport lines and stops, start points, areas
+export type FeatureProperties = {
+  color?: string;
+  strokeColor?: string;
+  border_color?: string;
+  border_width?: number;
+  radius?: number;
+  image_url?: string;
+  name?: string;
+  isWalking?: boolean;
+};
+
+const buildTextStyle = function (title: string, highlight: boolean, isPublicTransport: boolean) {
   if (!highlight) {
     return undefined;
   }
-  if (!isPublicTransport) {
-    // on hover in list view
-    const def = {
-      text: utils.stringDivider(title, 30, '\n'),
-      textAlign: 'left',
-      overflow: true,
-      offsetX: 20,
-      font: '12px verdana,sans-serif',
-      stroke: new ol.style.Stroke({
-        color: 'white',
-        width: 3,
-      }),
-      fill: new ol.style.Fill({
-        color: 'black',
-      }),
-      textBaseline: 'middle',
-    };
-
-    return new ol.style.Text(def);
-  } else {
-    const def = {
-      text: utils.stringDivider(title, 30, '\n'),
-      textAlign: 'left',
-      overflow: true,
-      offsetX: 20,
-      font: '17px verdana,sans-serif',
-      stroke: new ol.style.Stroke({
-        color: 'white',
-        width: 3,
-      }),
-      fill: new ol.style.Fill({
-        color: 'black',
-      }),
-      textBaseline: 'middle',
-    };
-
-    return new ol.style.Text(def);
-  }
+  // on hover in list view, larger for public transport
+  return new ol.style.Text({
+    text: utils.stringDivider(title, 30, '\n'),
+    textAlign: 'left',
+    overflow: true,
+    offsetX: 20,
+    font: isPublicTransport ? '17px verdana,sans-serif' : '12px verdana,sans-serif',
+    stroke: new ol.style.Stroke({
+      color: 'white',
+      width: 3,
+    }),
+    fill: new ol.style.Fill({
+      color: 'black',
+    }),
+    textBaseline: 'middle',
+  });
 };
 
 export const buildPolygonStyle = function (opacity = 0.7) {
@@ -58,7 +54,7 @@ export const buildPolygonStyle = function (opacity = 0.7) {
   });
 };
 
-export const buildDiffStyle = function (isOld) {
+export const buildDiffStyle = function (isOld: boolean) {
   return new ol.style.Style({
     stroke: new ol.style.Stroke({
       color: isOld ? 'red' : 'green',
@@ -73,7 +69,7 @@ export const buildDiffStyle = function (isOld) {
   });
 };
 
-const buildPointStyle = function (title, svgSrc, color, highlight) {
+const buildPointStyle = function (title: string, svgSrc: string, color: string, highlight: boolean) {
   const imgSize = highlight ? 30 : 20;
   const circleRadius = highlight ? 20 : 15;
   const zIndexValue = highlight ? 101 : 1;
@@ -95,7 +91,7 @@ const buildPointStyle = function (title, svgSrc, color, highlight) {
   });
 
   let circleFillColor = 'rgba(255, 255, 255, 0.5)';
-  let circleStrokeColor = '#ddd';
+  const circleStrokeColor = '#ddd';
 
   if (svgSrc.includes('bus')) {
     circleFillColor = highlight ? '#4baf50' : '#337ab7';
@@ -113,23 +109,26 @@ const buildPointStyle = function (title, svgSrc, color, highlight) {
   return [circleStyle, iconStyle];
 };
 
+// the custom icons have their own prefixes, unknown to Font Awesome types
+const customIconSvg = (prefix: string, iconName: string) => iconSvg({ prefix, iconName } as IconLookup);
+
 // built on first use: icons are only registered when the font-awesome plugin is installed,
 // which happens after this module is evaluated
-let svgSrcByDocumentTypeCache;
+let svgSrcByDocumentTypeCache: Record<string, string> | undefined;
 const getSvgSrcByDocumentType = function () {
   svgSrcByDocumentTypeCache ??= {
     i: iconSvg({ prefix: 'fas', iconName: 'image' }),
-    o: iconSvg({ prefix: 'document-type', iconName: 'outing' }),
+    o: customIconSvg('document-type', 'outing'),
     r: iconSvg({ prefix: 'fas', iconName: 'route' }),
     u: iconSvg({ prefix: 'fas', iconName: 'user' }),
     x: iconSvg({ prefix: 'fas', iconName: 'flag-checkered' }),
     s: iconSvg({ prefix: 'fas', iconName: 'bus' }),
-    z: iconSvg({ prefix: 'waypoint', iconName: 'access' }),
+    z: customIconSvg('waypoint', 'access'),
   };
   return svgSrcByDocumentTypeCache;
 };
 
-const colorByConditionRating = {
+const colorByConditionRating: Record<string, string> = {
   excellent: '#008000',
   good: '#9ACD32',
   average: '#FFFF00',
@@ -137,13 +136,13 @@ const colorByConditionRating = {
   awful: '#8B0000',
 };
 
-export const getDocumentPointStyle = function (document, title, highlight) {
+export const getDocumentPointStyle = function (document: C2cDocument, title: string, highlight: boolean) {
   const type = document.type;
-  let color = null;
-  let svgSrc = null;
+  let color: string;
+  let svgSrc: string;
 
   if (type === 'start') {
-    const styles = [];
+    const styles: Style[] = [];
 
     styles.push(
       new ol.style.Style({
@@ -210,9 +209,9 @@ export const getDocumentPointStyle = function (document, title, highlight) {
     ) {
       color = '#4baf50';
     }
-    svgSrc = iconSvg({ prefix: 'waypoint', iconName: document.waypoint_type || 'misc' });
+    svgSrc = customIconSvg('waypoint', document.waypoint_type || 'misc');
   } else if (type === 'z') {
-    svgSrc = getSvgSrcByDocumentType()['z'] || iconSvg({ prefix: 'waypoint', iconName: 'access' });
+    svgSrc = getSvgSrcByDocumentType()['z'];
 
     if (document.public_transportation_rating && document.public_transportation_rating !== 'no service') {
       color = '#4baf50';
@@ -226,8 +225,8 @@ export const getDocumentPointStyle = function (document, title, highlight) {
       const image = style.getImage();
 
       if (image instanceof ol.style.Circle) {
-        image.getFill().setColor('rgba(255, 255, 255, 1)');
-        image.getStroke().setColor('#4baf50');
+        image.getFill()!.setColor('rgba(255, 255, 255, 1)');
+        image.getStroke()!.setColor('#4baf50');
         style.setZIndex(highlight ? 101 : 50);
       }
 
@@ -246,7 +245,11 @@ export const getDocumentPointStyle = function (document, title, highlight) {
   return buildPointStyle(title, svgSrc, color, highlight);
 };
 
-export const getDocumentLineStyle = function (title, highlight, properties) {
+export const getDocumentLineStyle = function (
+  title: string,
+  highlight: boolean,
+  properties?: FeatureProperties | null
+): Style | Style[] {
   if (highlight && !properties) {
     return new ol.style.Style({
       stroke: new ol.style.Stroke({
@@ -260,21 +263,18 @@ export const getDocumentLineStyle = function (title, highlight, properties) {
       stroke: new ol.style.Stroke({
         color: 'red',
         width: 5,
-        zIndex: 1,
       }),
-      text: buildTextStyle(properties.name, highlight, true),
+      text: buildTextStyle(properties.name!, highlight, true),
     });
   } else if (properties && properties.color) {
-    const strokeConfigs = [
+    const strokeConfigs: StrokeOptions[] = [
       {
         color: 'white',
         width: 7,
-        zIndex: 0,
       },
       {
         color: `#${properties.color}`,
         width: 5,
-        zIndex: 1,
       },
     ];
     if (properties.isWalking) {
@@ -294,21 +294,23 @@ export const getDocumentLineStyle = function (title, highlight, properties) {
         stroke: new ol.style.Stroke({
           color: 'grey',
           width: 3,
-          zIndex: 0,
         }),
       }),
       new ol.style.Style({
         stroke: new ol.style.Stroke({
           color: 'yellow',
           width: 2,
-          zIndex: 1,
         }),
       }),
     ];
   }
 };
 
-export const getDocumentPolygonStyle = function (title, highlight, properties) {
+export const getDocumentPolygonStyle = function (
+  title: string,
+  highlight: boolean,
+  properties?: FeatureProperties | null
+) {
   // Highlighted polygon (properties provided)
   if (highlight && properties) {
     return new ol.style.Style({
@@ -366,8 +368,8 @@ export const geoJSONFormat = new ol.format.GeoJSON();
 
 // extent of Switzerland in EPSG:3857 projection
 // (based on https://epsg.io/21781, [5.96, 45.82, 10.49, 47.81] in EPSG:4326)
-export const swissExtent = [663464.1651279106, 5751550.865005549, 1167741.4584214399, 6075303.611974082];
+export const swissExtent: Extent = [663464.1651279106, 5751550.865005549, 1167741.4584214399, 6075303.611974082];
 
-export const isFiniteExtent = function (extent) {
+export const isFiniteExtent = function (extent: Extent | null | undefined): extent is Extent {
   return !!extent && extent.filter(isFinite).length === 4;
 };

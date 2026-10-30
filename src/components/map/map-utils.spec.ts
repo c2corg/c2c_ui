@@ -1,3 +1,6 @@
+import type Circle from 'ol/style/Circle';
+import type Icon from 'ol/style/Icon';
+import type Style from 'ol/style/Style';
 import { describe, expect, it, vi } from 'vitest';
 
 describe('map-utils', () => {
@@ -13,12 +16,12 @@ describe('map-utils', () => {
   it('draws document markers with the icons registered by the font-awesome plugin', async () => {
     const { getDocumentPointStyle } = await import('./map-utils');
     const { default: installFontAwesome } = await import('@/js/vue-plugins/font-awesome-config');
-    installFontAwesome({ component: vi.fn() });
+    installFontAwesome({ component: vi.fn() } as never);
 
-    const [circle, icon] = getDocumentPointStyle({ type: 'r', document_id: 1 }, 'title', false);
+    const [circle, icon] = getDocumentPointStyle({ type: 'r', document_id: 1 }, 'title', false) as Style[];
 
-    expect(circle.getImage().getRadius()).toBe(15);
-    expect(decodeURIComponent(icon.getImage().getSrc())).toMatch(
+    expect((circle.getImage() as Circle).getRadius()).toBe(15);
+    expect(decodeURIComponent((icon.getImage() as Icon).getSrc()!)).toMatch(
       /^data:image\/svg\+xml;charset=utf-8,<svg width="20px"/
     );
   }, 180000); // a cold import of all the Font Awesome icons: over a minute under the load of the full suite
