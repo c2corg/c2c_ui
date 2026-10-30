@@ -6,9 +6,9 @@
 // - ads, analytics and the forum are blocked; the forum SSO after a login goes straight back to the UI
 // - the other external requests (map tiles, Yeti layers) go through: blocking them hid the blank maps of #4728
 // - page errors, console errors, Vue warnings, and failed requests to the UI or the API fail the test
-import { test as base, expect } from '@playwright/test';
+import { type Page, test as base, expect } from '@playwright/test';
 
-import { API, readData } from './api.mjs';
+import { API, type E2eData, readData } from './api.ts';
 
 const BLOCKED =
   /^https?:\/\/([^/]*\.)?(googletagmanager|google-analytics|doubleclick|admysports|forum\.camptocamp|forum\.demov6\.camptocamp|api\.camptocamp|api\.demov6\.camptocamp)\./;
@@ -27,8 +27,9 @@ const IGNORED = [
 // documents the UI asks for by id, which only production has: the edit forms' banners (EditionContainer.vue)
 const PRODUCTION_ONLY = /\/articles\/1110927\b/;
 
-export const test = base.extend({
-  // the documents created by global-setup.mjs, and the logged in e2e user
+export const test = base.extend<{ loggedIn: boolean; gdprChosen: boolean }, { data: E2eData }>({
+  // the documents created by global-setup.ts, and the logged in e2e user
+
   data: [async ({}, use) => use(readData()), { scope: 'worker' }],
 
   // a test logged in from the start: the session as the UI stores it after a login (one API login for all)
@@ -37,13 +38,13 @@ export const test = base.extend({
   gdprChosen: [true, { option: true }],
 
   page: async ({ page, baseURL, data, loggedIn, gdprChosen }, use) => {
-    const origin = new URL(baseURL).origin;
+    const origin = new URL(baseURL!).origin;
 
     await page.route(BLOCKED, (route) => route.abort());
     await page.route(/\/session\/sso\?/, (route) =>
       route.fulfill({
         status: 302,
-        headers: { location: new URL(route.request().url()).searchParams.get('return_path') },
+        headers: { location: new URL(route.request().url()).searchParams.get('return_path')! },
       })
     );
     await page.route(`${UI_API}/**`, async (route) => {
@@ -95,7 +96,7 @@ export const test = base.extend({
       { api: UI_API, user: data.user, loggedIn, gdprChosen }
     );
 
-    const problems = [];
+    const problems: string[] = [];
     page.on('pageerror', (error) => {
       if (!IGNORED.some((re) => re.test(error.message))) {
         problems.push(`page error: ${error.message}`);
@@ -108,7 +109,7 @@ export const test = base.extend({
       }
     });
 
-    const isOwn = (url) => url.startsWith(origin) || url.startsWith(UI_API);
+    const isOwn = (url: string) => url.startsWith(origin) || url.startsWith(UI_API);
     page.on('response', (response) => {
       if (isOwn(response.url()) && response.status() >= 400 && !PRODUCTION_ONLY.test(response.url())) {
         problems.push(`${response.status()} ${response.request().method()} ${response.url()}`);
@@ -129,7 +130,7 @@ export const test = base.extend({
 export { expect };
 
 // logs in through the login page, as a user does
-export const logIn = async (page, { username, password }) => {
+export const logIn = async (page: Page, { username, password }: { username: string; password: string }) => {
   await page.getByPlaceholder('Identifiant (ou email)').fill(username);
   await page.getByPlaceholder('Mot de passe', { exact: true }).first().fill(password);
   const [response] = await Promise.all([
@@ -140,7 +141,7 @@ export const logIn = async (page, { username, password }) => {
 };
 
 // expands the collapsed sections of an edit form, as a user does before editing them
-export const expandSections = async (page) => {
+export const expandSections = async (page: Page) => {
   const expand = page.getByRole('button', { name: 'Déplier' });
   while (await expand.count()) {
     await expand.first().click();

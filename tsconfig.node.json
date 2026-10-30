@@ -8,5 +8,5 @@
     "noEmit": true
   },
   // env.d.ts: the build configuration, typed for vite.config.ts as for the app
-  "include": ["*.ts", "tools/**/*.ts", "src/env.d.ts"]
+  "include": ["*.ts", "tools/**/*.ts", "e2e/**/*.ts", "src/env.d.ts"]
 }

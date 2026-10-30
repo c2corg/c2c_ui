@@ -1,8 +1,8 @@
-import { API } from './api.mjs';
-import { expect, test } from './fixtures.mjs';
+import { API } from './api.ts';
+import { expect, test } from './fixtures.ts';
 
 // 3 pages of 30 changes, then an empty one
-const change = (page, i) => ({
+const change = (page: number, i: number) => ({
   written_at: '2026-10-18T19:25:40+00:00',
   lang: 'fr',
   document: { version: 1, document_id: 1000 + page * 100 + i, title: `Doc ${page}-${i}`, type: 'w', quality: 'draft' },
@@ -12,14 +12,14 @@ const change = (page, i) => ({
 });
 
 test('the recent changes load the next page on scroll, until the end of the feed', async ({ page, baseURL }) => {
-  const requested = [];
+  const requested: number[] = [];
   await page.route(`${API}/documents/changes**`, (route) => {
     const token = Number(new URL(route.request().url()).searchParams.get('token') ?? 1);
     requested.push(token);
     const feed = token <= 3 ? Array.from({ length: 30 }, (_, i) => change(token, i)) : [];
     return route.fulfill({
       json: { pagination_token: String(token + 1), feed },
-      headers: { 'access-control-allow-origin': new URL(baseURL).origin },
+      headers: { 'access-control-allow-origin': new URL(baseURL!).origin },
     });
   });
   const changes = page.locator('table tr').filter({ has: page.locator('td') });

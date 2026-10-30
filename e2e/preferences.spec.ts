@@ -1,4 +1,4 @@
-import { expect, test } from './fixtures.mjs';
+import { expect, test } from './fixtures.ts';
 
 // what existing users have in localStorage, under the keys of the former versions
 test.beforeEach(async ({ page }) => {
@@ -19,7 +19,7 @@ test('the stored list mode applies, and a change is saved under the same key', a
   await page.locator('[data-icon="table-list"]').first().click();
 
   await expect(page.getByRole('grid')).toBeHidden();
-  const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('DocumentsView.preferences')));
+  const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('DocumentsView.preferences')!));
   expect(stored).toMatchObject({ 'route.listMode': false });
 });
 

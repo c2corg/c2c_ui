@@ -19,7 +19,7 @@ Not run in CI: run them before merging a change that touches pages, forms, maps 
 
 ```sh
 npm run e2e                              # builds the UI for the local API, serves it on :6553, runs the tests
-npx playwright test e2e/lists.spec.mjs   # one file
+npx playwright test e2e/lists.spec.ts   # one file
 npx playwright show-report e2e-report    # the last report, with traces of the failures
 ```
 
@@ -33,10 +33,10 @@ npx playwright show-report e2e-report    # the last report, with traces of the f
 
 ## What the tests get
 
-- `global-setup.mjs` logs the e2e user in once (the API limits logins to 20 per 15 minutes), puts its language back
+- `global-setup.ts` logs the e2e user in once (the API limits logins to 20 per 15 minutes), puts its language back
   to French, and creates a waypoint, a route and two outings, reused from one run to the next (`e2e/.data.json`,
   not committed)
-- `fixtures.mjs` gives each test a page that uses the local API, never production's or the demo's (blocked), with
+- `fixtures.ts` gives each test a page that uses the local API, never production's or the demo's (blocked), with
   ads, analytics and the forum blocked, and the other external requests (map tiles, Yeti layers) let through
 - page errors, console errors and Vue warnings fail the test
 - `test.use({ loggedIn: true })`: logged in from the start; `test.use({ gdprChosen: false })`: with the GDPR banner
