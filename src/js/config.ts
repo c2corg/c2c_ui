@@ -1,6 +1,6 @@
-// CAMPTOCAMP_CONFIG is a placeholder defined in vite.config.mjs
+// CAMPTOCAMP_CONFIG is a placeholder defined in vite.config.ts
 // Do not modify this file. If you need another build parameter
-// please go to vite.config.mjs in root
+// please go to vite.config.ts in root
 
 import { applyRuntimeConfig } from './runtime-config';
 

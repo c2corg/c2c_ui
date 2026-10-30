@@ -24,7 +24,7 @@ import './assets/sass/main.scss';
 
 reloadOnStaleChunk(router);
 
-// web components (declared as custom elements in vite.config.mjs)
+// web components (declared as custom elements in vite.config.ts)
 registerSwiper();
 
 const app = createApp(App);

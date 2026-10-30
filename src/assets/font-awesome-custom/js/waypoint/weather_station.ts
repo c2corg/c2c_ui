@@ -1,4 +1,4 @@
-// Auto-generated file by generate-icons.js
+// Auto-generated file by generate-icons.ts
 
 import type { IconDefinition, IconName, IconPrefix } from '@fortawesome/fontawesome-svg-core';
 

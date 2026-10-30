@@ -8,7 +8,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default [
-  { ignores: ['node_modules/', 'dist/', 'tools/', 'src/assets/font-awesome-custom/'] },
+  { ignores: ['node_modules/', 'dist/', 'src/assets/font-awesome-custom/'] },
 
   // Vue 3 rules: the deprecated Vue 2 syntax is an error
   ...pluginVue.configs['flat/recommended'],
@@ -28,7 +28,7 @@ export default [
       parserOptions: { parser: { ts: tseslint.parser, js: 'espree' } },
       globals: {
         ...globals.browser,
-        // replaced at build time (vite.config.mjs define)
+        // replaced at build time (vite.config.ts define)
         CAMPTOCAMP_CONFIG: 'readonly',
       },
     },
@@ -92,7 +92,7 @@ export default [
 
   // run by Node (the specs by Vitest)
   {
-    files: ['*.mjs', 'src/**/*.spec.{js,ts}'],
+    files: ['*.ts', 'tools/**/*.ts', 'src/**/*.spec.{js,ts}'],
     languageOptions: { globals: globals.node },
   },
 
@@ -113,7 +113,7 @@ export default [
   },
 
   {
-    files: ['vite.config.mjs', 'vitest.config.mjs', 'eslint.config.mjs', 'src/**/*.spec.{js,ts}'],
+    files: ['*.config.ts', 'src/**/*.spec.{js,ts}'],
     rules: {
       'import-x/no-unresolved': ['error', { ignore: ['^vitest(/|$)', '^@vitejs/plugin-legacy$'] }],
     },

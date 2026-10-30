@@ -1,5 +1,5 @@
 /**
- * Applies the runtime configuration on top of the configuration baked at build time (see vite.config.mjs).
+ * Applies the runtime configuration on top of the configuration baked at build time (see vite.config.ts).
  *
  * The runtime configuration is `window.CAMPTOCAMP_RUNTIME_CONFIG`, defined by `/config.js`. That file is empty in the
  * build output (public/config.js) and rewritten when the Docker container starts, from its C2C_* environment variables

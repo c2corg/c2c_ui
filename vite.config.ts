@@ -3,78 +3,80 @@ import { fileURLToPath, URL } from 'node:url';
 import legacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
 import { visualizer } from 'rollup-plugin-visualizer';
-import { defineConfig } from 'vite';
+import { type Plugin, type Rollup, defineConfig } from 'vite';
 
 /* Please note that all key present in this file are public keys
  * They don't need to be hidden.
  * If you need to use a private key, please do NOT add it here
  */
 
-const config = {
+const urlsConfigurations: Record<string, UrlsConfiguration> = {
+  demo: {
+    name: 'demo',
+    api: 'https://api.demov6.camptocamp.org',
+    media: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
+    imageBackend: 'https://images.demov6.camptocamp.org',
+    tracking: 'https://tracking.demov6.camptocamp.org',
+    miniatures: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-tracking',
+    forum: 'https://forum.demov6.camptocamp.org',
+    recaptchaKey: '6LfWUwoUAAAAAAxud1qqok6wOJJlCUsYXxHizRhc',
+    modernThumbnailsTimestamp: 0,
+    modernThumbnailsId: 0,
+    stravaConnectAuthUrl: 'https://www.strava.com/oauth/authorize',
+    stravaClientId: '99246',
+    decathlonConnectAuthUrl: 'https://api-global.decathlon.net/connect/oauth/authorize',
+    decathlonClientId: 'b708af3b-fd46-41ab-af73-5176a0a56f92',
+    suuntoConnectAuthUrl: 'https://cloudapi-oauth.suunto.com/oauth/authorize',
+    suuntoClientId: '2928e564-85eb-4aef-92fb-2a0259589c9c',
+    polarConnectAuthUrl: 'https://flow.polar.com/oauth2/authorization',
+    polarClientId: '65d10592-5abf-41d6-a5ce-b16a28174849',
+    corosConnectAuthUrl: 'https://opentest.coros.com/oauth2/authorize',
+    corosClientId: 'f263ed9257c74e808befaf548a27852c',
+  },
+  prod: {
+    name: 'prod',
+    api: 'https://api.camptocamp.org',
+    media: 'https://media.camptocamp.org/c2corg-active',
+    imageBackend: 'https://images.camptocamp.org',
+    tracking: 'https://tracking.camptocamp.org',
+    miniatures: 'https://media.camptocamp.org/c2corg-tracking',
+    forum: 'https://forum.camptocamp.org',
+    recaptchaKey: '6Lc9Cw4UAAAAAIKnlar0AOsGX_P5S-bk9u8viuo2',
+    modernThumbnailsTimestamp: 0,
+    modernThumbnailsId: 0,
+    stravaConnectAuthUrl: 'https://www.strava.com/oauth/authorize',
+    stravaClientId: '63968',
+    decathlonConnectAuthUrl: 'https://api-global.decathlon.net/connect/oauth/authorize',
+    decathlonClientId: 'b708af3b-fd46-41ab-af73-5176a0a56f92',
+    suuntoConnectAuthUrl: 'https://cloudapi-oauth.suunto.com/oauth/authorize',
+    suuntoClientId: '2928e564-85eb-4aef-92fb-2a0259589c9c',
+    polarConnectAuthUrl: 'https://flow.polar.com/oauth2/authorization',
+    polarClientId: '5a9f9ddd-fc15-48d2-bc56-86b43d491cc9',
+    corosConnectAuthUrl: 'https://open.coros.com/oauth2/authorize',
+    corosClientId: 'f263ed9257c74e808befaf548a27852c',
+  },
+  localhost: {
+    name: 'localhost',
+    api: 'http://localhost:6543',
+    media: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
+    imageBackend: 'https://images.demov6.camptocamp.org',
+    forum: 'https://forum.demov6.camptocamp.org',
+    modernThumbnailsTimestamp: 0,
+    modernThumbnailsId: 0,
+  },
+};
+
+const config: BuildConfiguration = {
   routerMode: 'history', // for pretty urls
   ordnanceSurveyApiKey: 'eUaDulZ6AqXJo7iyoP2lRsgUjKfZWA71',
   isBackendSelectable: true,
   addthisPublicId: 'ra-58abf6b4f3a680cb',
   // Google Analytics 4 measurement ID (G-...). Universal Analytics (UA-2814179-1) stopped collecting in July 2024
   googleAnalyticsKey: '',
-  urlsConfigurations: {
-    demo: {
-      name: 'demo',
-      api: 'https://api.demov6.camptocamp.org',
-      media: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
-      imageBackend: 'https://images.demov6.camptocamp.org',
-      tracking: 'https://tracking.demov6.camptocamp.org',
-      miniatures: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-tracking',
-      forum: 'https://forum.demov6.camptocamp.org',
-      recaptchaKey: '6LfWUwoUAAAAAAxud1qqok6wOJJlCUsYXxHizRhc',
-      modernThumbnailsTimestamp: 0,
-      modernThumbnailsId: 0,
-      stravaConnectAuthUrl: 'https://www.strava.com/oauth/authorize',
-      stravaClientId: '99246',
-      decathlonConnectAuthUrl: 'https://api-global.decathlon.net/connect/oauth/authorize',
-      decathlonClientId: 'b708af3b-fd46-41ab-af73-5176a0a56f92',
-      suuntoConnectAuthUrl: 'https://cloudapi-oauth.suunto.com/oauth/authorize',
-      suuntoClientId: '2928e564-85eb-4aef-92fb-2a0259589c9c',
-      polarConnectAuthUrl: 'https://flow.polar.com/oauth2/authorization',
-      polarClientId: '65d10592-5abf-41d6-a5ce-b16a28174849',
-      corosConnectAuthUrl: 'https://opentest.coros.com/oauth2/authorize',
-      corosClientId: 'f263ed9257c74e808befaf548a27852c',
-    },
-    prod: {
-      name: 'prod',
-      api: 'https://api.camptocamp.org',
-      media: 'https://media.camptocamp.org/c2corg-active',
-      imageBackend: 'https://images.camptocamp.org',
-      tracking: 'https://tracking.camptocamp.org',
-      miniatures: 'https://media.camptocamp.org/c2corg-tracking',
-      forum: 'https://forum.camptocamp.org',
-      recaptchaKey: '6Lc9Cw4UAAAAAIKnlar0AOsGX_P5S-bk9u8viuo2',
-      modernThumbnailsTimestamp: 0,
-      modernThumbnailsId: 0,
-      stravaConnectAuthUrl: 'https://www.strava.com/oauth/authorize',
-      stravaClientId: '63968',
-      decathlonConnectAuthUrl: 'https://api-global.decathlon.net/connect/oauth/authorize',
-      decathlonClientId: 'b708af3b-fd46-41ab-af73-5176a0a56f92',
-      suuntoConnectAuthUrl: 'https://cloudapi-oauth.suunto.com/oauth/authorize',
-      suuntoClientId: '2928e564-85eb-4aef-92fb-2a0259589c9c',
-      polarConnectAuthUrl: 'https://flow.polar.com/oauth2/authorization',
-      polarClientId: '5a9f9ddd-fc15-48d2-bc56-86b43d491cc9',
-      corosConnectAuthUrl: 'https://open.coros.com/oauth2/authorize',
-      corosClientId: 'f263ed9257c74e808befaf548a27852c',
-    },
-    localhost: {
-      name: 'localhost',
-      api: 'http://localhost:6543',
-      media: 'https://sos-ch-dk-2.exo.io/c2corg-demov6-active',
-      imageBackend: 'https://images.demov6.camptocamp.org',
-      forum: 'https://forum.demov6.camptocamp.org',
-      modernThumbnailsTimestamp: 0,
-      modernThumbnailsId: 0,
-    },
-  },
+  urlsConfigurations,
+  urls: urlsConfigurations.prod, // default: prod
+  publicPath: '/', // set below
 };
-
-config.urls = config.urlsConfigurations.prod; // default: prod
 
 let base = '/';
 
@@ -129,15 +131,16 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
 
 config.publicPath = base;
 
-const isBudgetChecked = (fileName) => !/\.(map|pdf)$/.test(fileName);
+const isBudgetChecked = (fileName: string) => !/\.(map|pdf)$/.test(fileName);
 
-const outputSize = (output) => Buffer.byteLength(output.type === 'chunk' ? output.code : output.source);
+const outputSize = (output: Rollup.OutputChunk | Rollup.OutputAsset) =>
+  Buffer.byteLength(output.type === 'chunk' ? output.code : output.source);
 
 /**
  * Port of webpack performance hints: warns on too big assets, and too big entrypoint (entry chunk + static imports +
  * CSS)
  */
-function performanceBudgets() {
+function performanceBudgets(): Plugin {
   return {
     name: 'c2c-performance-budgets',
     apply: 'build',
@@ -146,8 +149,12 @@ function performanceBudgets() {
   };
 }
 
-function checkBudgets(options, bundle) {
-  const toKiB = (size) => `${(size / 1024).toFixed(0)} KiB`;
+function checkBudgets(
+  this: Rollup.PluginContext,
+  _options: Rollup.NormalizedOutputOptions,
+  bundle: Rollup.OutputBundle
+) {
+  const toKiB = (size: number) => `${(size / 1024).toFixed(0)} KiB`;
 
   const bigAssets = Object.values(bundle).filter(
     (output) => isBudgetChecked(output.fileName) && outputSize(output) > budgets.maxAssetSize
@@ -159,9 +166,9 @@ function checkBudgets(options, bundle) {
     );
   }
 
-  const entry = Object.values(bundle).find((output) => output.type === 'chunk' && output.isEntry);
-  const files = new Set();
-  const visit = (fileName) => {
+  const entry = Object.values(bundle).find((output) => output.type === 'chunk' && output.isEntry)!;
+  const files = new Set<string>();
+  const visit = (fileName: string) => {
     if (files.has(fileName)) {
       return;
     }
@@ -190,11 +197,15 @@ function checkBudgets(options, bundle) {
  * often than the app code, so they stay cached across releases. Dependencies only reached through a dynamic import
  * (ag-grid, d3...) stay in their lazy chunks.
  */
-function vendorChunk() {
-  const staticallyImportedByEntry = new Map();
-  const isStaticallyImportedByEntry = (id, getModuleInfo, visiting = new Set()) => {
+function vendorChunk(): Rollup.GetManualChunk {
+  const staticallyImportedByEntry = new Map<string, boolean>();
+  const isStaticallyImportedByEntry = (
+    id: string,
+    getModuleInfo: Rollup.GetModuleInfo,
+    visiting = new Set<string>()
+  ): boolean => {
     if (staticallyImportedByEntry.has(id)) {
-      return staticallyImportedByEntry.get(id);
+      return staticallyImportedByEntry.get(id)!;
     }
     if (visiting.has(id)) {
       return false; // import cycle, decided by another path
@@ -221,12 +232,12 @@ function vendorChunk() {
 }
 
 /** Injects the backend urls in index.html, which used to be an EJS template */
-function htmlConfig() {
+function htmlConfig(): Plugin {
   return {
     name: 'c2c-html-config',
     transformIndexHtml: {
       order: 'pre',
-      handler: (html) =>
+      handler: (html: string) =>
         html
           .replaceAll('%CAMPTOCAMP_API_URL%', config.urls.api)
           .replaceAll('%CAMPTOCAMP_MEDIA_URL%', config.urls.media),

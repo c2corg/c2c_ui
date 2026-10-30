@@ -1,4 +1,4 @@
-// The build configuration, replaced at build time by the one of vite.config.mjs (define): see src/js/config.ts
+// The build configuration, replaced at build time by the one of vite.config.ts (define): see src/js/config.ts
 
 interface UrlsConfiguration {
   name: string;

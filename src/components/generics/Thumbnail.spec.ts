@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import Thumbnail from './Thumbnail.vue';
 
-// '@/js/config' reads CAMPTOCAMP_CONFIG, a constant injected by Vite (see vite.config.mjs)
+// '@/js/config' reads CAMPTOCAMP_CONFIG, a constant injected by Vite (see vite.config.ts)
 const config = vi.hoisted(() => ({ urls: { media: 'https://media.example.org', modernThumbnailsTimestamp: 0 } }));
 vi.mock('@/js/config', () => ({ default: config }));
 
