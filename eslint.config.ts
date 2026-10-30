@@ -14,7 +14,7 @@ export default [
   ...pluginVue.configs['flat/recommended'],
   importX.errors,
   importX.warnings,
-  // TypeScript: its own parser and recommended rules, for the .ts files only (the JavaScript code is not typed yet)
+  // TypeScript: its own parser and recommended rules, for the .ts files (the components get the parser below)
   ...tseslint.configs.recommended.map((config) => ({ ...config, files: ['**/*.ts'] })),
   eslintPluginPrettier,
   eslintConfigPrettier,
@@ -92,7 +92,7 @@ export default [
 
   // run by Node (the specs by Vitest)
   {
-    files: ['*.ts', 'tools/**/*.ts', 'src/**/*.spec.{js,ts}'],
+    files: ['*.ts', 'tools/**/*.ts', 'src/**/*.spec.ts'],
     languageOptions: { globals: globals.node },
   },
 
@@ -104,7 +104,7 @@ export default [
 
   // the specs and their helpers declare small stub components inline
   {
-    files: ['src/**/*.spec.{js,ts}', 'src/views/wiki/edition/edition-test-utils.ts'],
+    files: ['src/**/*.spec.ts', 'src/views/wiki/edition/edition-test-utils.ts'],
     rules: {
       'vue/one-component-per-file': 'off',
       'vue/require-prop-types': 'off',
@@ -113,7 +113,7 @@ export default [
   },
 
   {
-    files: ['*.config.ts', 'src/**/*.spec.{js,ts}'],
+    files: ['*.config.ts', 'src/**/*.spec.ts'],
     rules: {
       'import-x/no-unresolved': ['error', { ignore: ['^vitest(/|$)', '^@vitejs/plugin-legacy$'] }],
     },

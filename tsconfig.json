@@ -1,9 +1,6 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
-    // the JavaScript modules stay as they are, unchecked, until they are moved to TypeScript
-    "allowJs": true,
-    "checkJs": false,
     "paths": {
       "@/*": ["./src/*"]
     },
