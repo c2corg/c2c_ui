@@ -48,7 +48,7 @@ docker run --rm -p 8081:80 -e LISTEN_FLAGS= -e C2C_API_URL=http://localhost:6543
 
 `npm run serve` reads the same variables for its `localhost` backend (`C2C_API_URL=http://localhost:8080 npm run serve`),
 and lets you switch backend from the navigation bar. How it works: `docker/runtime-config.sh` writes `/config.js` when
-the container starts, `src/js/runtime-config.ts` applies it on top of the build configuration (`vite.config.mjs`).
+the container starts, `src/js/runtime-config.ts` applies it on top of the build configuration (`vite.config.ts`).
 
 ## Previews de PR
 

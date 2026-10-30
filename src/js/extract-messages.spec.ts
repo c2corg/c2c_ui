@@ -1,13 +1,12 @@
 // @vitest-environment node
 import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
-import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import { describe, expect, it, vi } from 'vitest';
 
-// tools/extract-messages.js: the messages of the sources, for the .pot file sent to Transifex
-const extractMessages = createRequire(import.meta.url)('../../tools/extract-messages.js');
+// tools/extract-messages.ts: the messages of the sources, for the .pot file sent to Transifex
+import extractMessages from '../../tools/extract-messages.ts';
 
 describe('extract-messages', () => {
   it('extracts the messages of the JavaScript and TypeScript modules, not of the type declarations', () => {

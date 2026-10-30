@@ -6,7 +6,7 @@ RUN mkdir -p public
 RUN npm install
 COPY . .
 RUN npm run build
-RUN node tools/generate-health.js
+RUN node tools/generate-health.ts
 
 # production stage
 FROM openresty/openresty:1.31.1.1-4-bookworm AS production-stage

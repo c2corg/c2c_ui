@@ -1,0 +1,12 @@
+{
+  // the configurations and tools, run by Node
+  "extends": "@vue/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2024", "DOM"],
+    "types": ["node"],
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  },
+  // env.d.ts: the build configuration, typed for vite.config.ts as for the app
+  "include": ["*.ts", "tools/**/*.ts", "src/env.d.ts"]
+}

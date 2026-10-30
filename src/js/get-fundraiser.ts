@@ -1,5 +1,5 @@
 // Identity marker so fundraiser `message` strings get extracted to the .pot file
-// by tools/extract-messages.js. The actual translation is done at render time via
+// by tools/extract-messages.ts. The actual translation is done at render time via
 // the component's `this.$gettext()`. To add a localized message to an entry, just
 // add a `message: $gettext('Your English message')` field; translations are then
 // managed in Transifex.

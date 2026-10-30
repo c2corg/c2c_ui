@@ -12,7 +12,7 @@ describe('map-utils', () => {
   });
 
   // no resetModules() here: map-utils, imported fresh by the test above, is reused instead of a second cold import
-  // (slow imports: see testTimeout in vitest.config.mjs)
+  // (slow imports: see testTimeout in vitest.config.ts)
   it('draws document markers with the icons registered by the font-awesome plugin', async () => {
     const { getDocumentPointStyle } = await import('./map-utils');
     const { default: installFontAwesome } = await import('@/js/vue-plugins/font-awesome-config');
