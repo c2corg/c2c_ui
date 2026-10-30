@@ -1,6 +1,8 @@
-import { expect, test } from './fixtures.mjs';
+import type { Locator } from '@playwright/test';
 
-const value = (locator) => locator.getAttribute('aria-valuenow').then(Number);
+import { expect, test } from './fixtures.ts';
+
+const value = (locator: Locator) => locator.getAttribute('aria-valuenow').then(Number);
 
 test('the range sliders of the list filters have names, move with the keyboard and update the query', async ({
   page,

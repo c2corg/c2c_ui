@@ -98,7 +98,7 @@ export default [
 
   // Playwright: run by Node, with code run in the page (page.evaluate, addInitScript)
   {
-    files: ['e2e/**/*.mjs'],
+    files: ['e2e/**/*.ts'],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
   },
 

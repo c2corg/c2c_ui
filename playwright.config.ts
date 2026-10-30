@@ -5,8 +5,8 @@ const port = Number(process.env.E2E_PORT ?? 6553);
 
 export default defineConfig({
   testDir: './e2e',
-  testMatch: '*.spec.mjs',
-  globalSetup: './e2e/global-setup.mjs',
+  testMatch: '*.spec.ts',
+  globalSetup: './e2e/global-setup.ts',
   // one test user, whose session and language the tests change
   workers: 1,
   timeout: 60_000,

@@ -1,4 +1,4 @@
-import { expect, test } from './fixtures.mjs';
+import { expect, test } from './fixtures.ts';
 
 test.beforeEach(async ({ page }) => {
   // disclaimer accepted: until then, the Yeti content is hidden

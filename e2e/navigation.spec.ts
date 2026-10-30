@@ -1,4 +1,4 @@
-import { expect, test } from './fixtures.mjs';
+import { expect, test } from './fixtures.ts';
 
 test.use({ loggedIn: true });
 

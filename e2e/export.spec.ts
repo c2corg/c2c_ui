@@ -1,5 +1,5 @@
-import { call } from './api.mjs';
-import { expect, test } from './fixtures.mjs';
+import { call } from './api.ts';
+import { expect, test } from './fixtures.ts';
 
 test('the CSV export of the documents table downloads one file, also after coming back', async ({ page, data }) => {
   await expect
@@ -9,7 +9,7 @@ test('the CSV export of the documents table downloads one file, also after comin
     })
     .toBeGreaterThan(0);
 
-  const downloads = [];
+  const downloads: string[] = [];
   page.on('download', (download) => downloads.push(download.suggestedFilename()));
   const exportButton = page.getByRole('button', { name: 'Exporter en CSV' });
 

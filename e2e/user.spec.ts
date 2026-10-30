@@ -1,7 +1,9 @@
-import { credentials } from './api.mjs';
-import { expect, logIn, test } from './fixtures.mjs';
+import type { Page } from '@playwright/test';
 
-const userMenu = (page) =>
+import { credentials } from './api.ts';
+import { expect, logIn, test } from './fixtures.ts';
+
+const userMenu = (page: Page) =>
   page.locator('.navigation .dropdown-trigger').filter({ has: page.locator('img[alt=Avatar]') });
 
 test('logs in, keeps the session after a reload, and logs out', async ({ page }) => {
@@ -13,7 +15,9 @@ test('logs in, keeps the session after a reload, and logs out', async ({ page })
   await expect(userMenu(page)).toBeVisible();
 
   // the API accepts the stored token: the account page needs it
-  const token = await page.evaluate(() => Object.values(JSON.parse(localStorage.getItem('User.preferences')))[0].token);
+  const token = await page.evaluate(
+    () => Object.values<{ token: string }>(JSON.parse(localStorage.getItem('User.preferences')!))[0].token
+  );
   expect(token).toMatch(/^[\w-]+\.[\w-]+\.[\w-]+$/); // a JWT
   const [account] = await Promise.all([
     page.waitForResponse((response) => response.url().endsWith('/users/account')),

@@ -1,7 +1,7 @@
 """Create the e2e user in a local v6_api database."""
 # Run it in the v6_api environment:
 #   E2E_PASSWORD=... python create-user.py [path/to/development.ini]  (default: ./development.ini)
-# E2E_USERNAME and E2E_PASSWORD are the ones the tests use (e2e/api.mjs)
+# E2E_USERNAME and E2E_PASSWORD are the ones the tests use (e2e/api.ts)
 import datetime
 import os
 import sys

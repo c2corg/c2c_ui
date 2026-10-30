@@ -1,5 +1,5 @@
-import { call } from './api.mjs';
-import { expect, test } from './fixtures.mjs';
+import { call } from './api.ts';
+import { expect, test } from './fixtures.ts';
 
 test.use({ loggedIn: true });
 
@@ -8,11 +8,11 @@ test('an edit form asks before leaving with unsaved changes', async ({ page, dat
   await expect(page.getByRole('button', { name: 'Enregistrer' }).first()).toBeVisible();
   await page.locator('textarea').first().fill('changed');
 
-  const answers = ['dismiss', 'accept'];
-  const asked = [];
+  const answers = ['dismiss', 'accept'] as const;
+  const asked: string[] = [];
   page.on('dialog', (dialog) => {
     asked.push(dialog.message());
-    return dialog[answers.shift()]();
+    return dialog[answers[asked.length - 1]]();
   });
 
   await page.locator('a[href="/"]').first().click();
@@ -34,11 +34,11 @@ test('the outing form limits the dates, and saves them', async ({ page, data }) 
   const today = new Date().toISOString().slice(0, 10);
   await dates.first().click();
   expect(await dates.first().getAttribute('max')).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-  expect((await dates.first().getAttribute('max')) <= today).toBe(true);
+  expect((await dates.first().getAttribute('max'))! <= today).toBe(true);
 
   // another date than the stored one: a save that changes nothing would pass too
   const stored = await dates.first().inputValue();
-  const start = ['2026-01-05', '2026-02-05'].find((date) => date !== stored);
+  const start = ['2026-01-05', '2026-02-05'].find((date) => date !== stored)!;
   const end = start.replace(/05$/, '07');
   await dates.first().fill(start);
   if (!(await dates.nth(1).isVisible())) {

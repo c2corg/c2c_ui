@@ -1,8 +1,9 @@
-import { expect, test } from './fixtures.mjs';
+import type { E2eData } from './api.ts';
+import { expect, test } from './fixtures.ts';
 
 test.use({ loggedIn: true });
 
-const pages = (data) => [`/outings/edit/${data.editedOuting}/fr`, `/routes/edit/${data.route}/fr`, '/yeti'];
+const pages = (data: E2eData) => [`/outings/edit/${data.editedOuting}/fr`, `/routes/edit/${data.route}/fr`, '/yeti'];
 
 test('the form ids are unique, and every label points to one element', async ({ page, data }) => {
   await page.addInitScript(() =>
@@ -14,7 +15,7 @@ test('the form ids are unique, and every label points to one element', async ({ 
 
     const report = await page.evaluate(() => {
       const ids = [...document.querySelectorAll('[id]')].map((element) => element.id);
-      const labels = [...document.querySelectorAll('label[for]')];
+      const labels = [...document.querySelectorAll<HTMLLabelElement>('label[for]')];
       return {
         duplicates: ids.filter((id, i) => ids.indexOf(id) !== i),
         orphanLabels: labels

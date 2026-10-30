@@ -1,6 +1,8 @@
-import { expect, test } from './fixtures.mjs';
+import type { Page } from '@playwright/test';
 
-const switchTo = async (page, label) => {
+import { expect, test } from './fixtures.ts';
+
+const switchTo = async (page: Page, label: string) => {
   await page.locator('.navigation-item .dropdown-trigger button.button').first().click();
   await page.locator('.dropdown.is-active .dropdown-content a', { hasText: label }).first().click();
 };

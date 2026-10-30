@@ -1,9 +1,11 @@
-import { expect, test } from './fixtures.mjs';
+import type { Page } from '@playwright/test';
 
-const canonical = (page) => page.locator('link[rel=canonical]').getAttribute('href');
+import { expect, test } from './fixtures.ts';
+
+const canonical = (page: Page) => page.locator('link[rel=canonical]').getAttribute('href');
 
 test('a waypoint page shows the document and its map, with tiles', async ({ page, data }) => {
-  const tiles = [];
+  const tiles: string[] = [];
   page.on('response', (response) => {
     const url = new URL(response.url());
     if (response.request().resourceType() === 'image' && url.hostname !== 'localhost' && response.ok()) {

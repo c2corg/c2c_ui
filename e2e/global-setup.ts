@@ -2,9 +2,9 @@
 // the documents the tests open exist (created by the e2e user, then reused from one run to the next)
 import { existsSync, writeFileSync } from 'node:fs';
 
-import { API, call, credentials, DATA_FILE, readData } from './api.mjs';
+import { API, call, credentials, DATA_FILE, type E2eData, readData } from './api.ts';
 
-const exists = (type, id) =>
+const exists = (type: string, id: number) =>
   fetch(`${API}/${type}/${id}`)
     .then((response) => response.ok)
     .catch(() => false);
@@ -23,8 +23,8 @@ export default async function globalSetup() {
   const { token } = user;
   await call('/users/update_preferred_language', { token, method: 'POST', body: { lang: 'fr' } });
 
-  const previous = existsSync(DATA_FILE) ? readData() : {};
-  const keep = async (type, id) => (id && (await exists(type, id)) ? id : null);
+  const previous: Partial<E2eData> = existsSync(DATA_FILE) ? readData() : {};
+  const keep = async (type: string, id: number | undefined) => (id && (await exists(type, id)) ? id : null);
 
   const waypoint =
     (await keep('waypoints', previous.waypoint)) ??
@@ -56,7 +56,7 @@ export default async function globalSetup() {
       })
     ).document_id;
 
-  const createOuting = async (title, quality) =>
+  const createOuting = async (title: string, quality: string) =>
     (
       await call('/outings', {
         token,

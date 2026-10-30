@@ -1,4 +1,4 @@
-import { expect, test } from './fixtures.mjs';
+import { expect, test } from './fixtures.ts';
 
 test.use({ gdprChosen: false });
 
@@ -12,7 +12,7 @@ test('the GDPR banner shows on an interaction, and not again once the user chose
 
   await page.getByRole('button', { name: 'Tout refuser' }).click();
   await expect(banner).not.toHaveClass(/active/);
-  const choice = await page.evaluate(() => JSON.parse(localStorage.getItem('Gdpr.preferences')).choice);
+  const choice = await page.evaluate(() => JSON.parse(localStorage.getItem('Gdpr.preferences')!).choice);
   expect(choice).toMatchObject({ statistics: false });
 
   await page.reload();

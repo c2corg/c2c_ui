@@ -1,4 +1,4 @@
-import { expandSections, expect, test } from './fixtures.mjs';
+import { expandSections, expect, test } from './fixtures.ts';
 
 test.use({ loggedIn: true });
 
@@ -10,7 +10,7 @@ test('the markdown editor: toolbar on the selection, and the preview cooked by t
 
   const textarea = page.locator('textarea').first();
   await textarea.fill('Texte saisi E2E markdown');
-  await textarea.evaluate((element) => {
+  await textarea.evaluate((element: HTMLTextAreaElement) => {
     element.focus();
     element.setSelectionRange(element.value.indexOf('E2E'), element.value.indexOf('E2E') + 3);
   });

@@ -1,5 +1,5 @@
-import { call } from './api.mjs';
-import { expect, test } from './fixtures.mjs';
+import { call } from './api.ts';
+import { expect, test } from './fixtures.ts';
 
 test('the routes list shows the same documents as cards and as a table', async ({ page }) => {
   // lists come from the API's search (Elasticsearch), which the v6_api syncer fills
