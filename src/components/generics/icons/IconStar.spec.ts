@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
-import IconStar from './IconStar';
+import IconStar from './IconStar.vue';
 
 // IconStar's template starts with a comment: templates are compiled without comments, as in production, so that its
 // root stays one element, which inherits the attributes of the parent (a comment would make it a fragment)

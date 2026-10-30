@@ -1,9 +1,9 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
-import PrettyRouteLink from './PrettyRouteLink';
+import PrettyRouteLink from './PrettyRouteLink.vue';
 
-import PrettyRoute from '@/components/generics/pretty/PrettyRoute';
+import PrettyRoute from '@/components/generics/pretty/PrettyRoute.vue';
 
 describe('PrettyRouteLink', () => {
   it('passes its display options to the route summary', () => {

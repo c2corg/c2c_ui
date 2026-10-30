@@ -20,7 +20,7 @@ describe('assetUrl', () => {
   it('throws on a missing image, as the webpack require() did', () => {
     // yeti LayerButton relies on it to fall back to no background image
     expect(() => assetUrl('yeti/layers', 'missing.jpg')).toThrow("Cannot find image 'yeti/layers/missing.jpg'");
-    expect(() => assetUrl('yeti/layers', undefined)).toThrow();
+    expect(() => assetUrl('yeti/layers', undefined as unknown as string)).toThrow();
   });
 
   it('throws on an unknown folder', () => {

@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
-import HtmlHeader from './HtmlHeader';
+import HtmlHeader from './HtmlHeader.vue';
 
 describe('HtmlHeader', () => {
   it('sets the page title, and renders nothing', async () => {
