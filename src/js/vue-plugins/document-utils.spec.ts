@@ -10,9 +10,9 @@ const install = ({ userLang = 'fr' } = {}) => {
   app.use(documentUtils);
   const globals = app.config.globalProperties;
   // installed after $documentUtils by main.ts: read when called
-  globals.$gettext = (msgid) => `[${msgid}]`;
-  globals.$language = { current: 'fr' };
-  globals.$user = { lang: userLang };
+  globals.$gettext = (msgid: string) => `[${msgid}]`;
+  globals.$language = { current: 'fr' } as never;
+  globals.$user = { lang: userLang } as never;
   return globals.$documentUtils;
 };
 
@@ -74,24 +74,24 @@ describe('$documentUtils', () => {
     const utils = install();
     const outing = utils.buildDocument('outing', 'fr');
     expect(outing.type).toBe('o');
-    expect(outing.associations.routes).toEqual([]);
+    expect(outing.associations!.routes).toEqual([]);
     expect(outing.geometry).toEqual({ geom: null, geom_detail: null });
 
     utils.addAssociation(outing, route);
     utils.addAssociation(outing, route);
 
-    expect(outing.associations.routes).toEqual([route]);
+    expect(outing.associations!.routes).toEqual([route]);
     expect(outing.global_rating).toBe('AD');
     expect(outing.elevation_max).toBe(4808);
-    expect(outing.geometry.geom).toBe(route.geometry.geom);
-    expect(outing.locales[0].title).toBe('Mont Blanc : Face nord');
+    expect(outing.geometry!.geom).toBe(route.geometry.geom);
+    expect(outing.locales![0].title).toBe('Mont Blanc : Face nord');
 
     utils.removeAssociation(outing, route);
-    expect(outing.associations.routes).toEqual([]);
+    expect(outing.associations!.routes).toEqual([]);
   });
 
   it('sorts areas: range, then administrative limits, then country', () => {
-    const area = (area_type, title) => ({ type: 'a', area_type, locales: [{ lang: 'fr', title }] });
+    const area = (area_type: string, title: string) => ({ type: 'a', area_type, locales: [{ lang: 'fr', title }] });
     const document = {
       areas: [area('country', 'France'), area('range', 'Mont Blanc'), area('admin_limits', 'Haute-Savoie')],
     };
@@ -113,7 +113,7 @@ describe('$documentUtils', () => {
 
   it('compares geolocations', () => {
     const utils = install();
-    const at = (geom) => ({ geometry: { geom } });
+    const at = (geom: string | null) => ({ geometry: { geom } });
     expect(
       utils.hasSameGeolocation(at('{"type":"Point","coordinates":[1,2]}'), at('{"coordinates":[1,2],"type":"Point"}'))
     ).toBe(true);
@@ -124,7 +124,9 @@ describe('$documentUtils', () => {
   });
 
   it('computes the bbox of documents', () => {
-    const at = (x, y) => ({ geometry: { geom: JSON.stringify({ type: 'Point', coordinates: [x, y] }) } });
+    const at = (x: number, y: number) => ({
+      geometry: { geom: JSON.stringify({ type: 'Point', coordinates: [x, y] }) },
+    });
     expect(install().getDocumentsBbox([at(10.4, 20), at(30, 5.6), { geometry: { geom: null } }])).toEqual([
       10, 6, 30, 20,
     ]);

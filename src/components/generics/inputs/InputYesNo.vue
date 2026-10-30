@@ -22,14 +22,17 @@
 </template>
 
 <script setup lang="ts">
+import type { PropType } from 'vue';
+
 import { baseInputProps, useInputValue } from './input-value';
 
 import { useUid } from '@/js/uid';
 
 const props = defineProps({
   ...baseInputProps,
+  // null: unknown
   modelValue: {
-    type: Boolean,
+    type: Boolean as PropType<boolean | null>,
     default: null,
   },
   nullable: {

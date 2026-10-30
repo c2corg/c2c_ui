@@ -5,9 +5,12 @@ import { nextTick } from 'vue';
 import infiniteScroll from './infinite-scroll';
 
 // jsdom has no layout: the list bottom is set by the test, the window is 800px high
-let listBottom;
+let listBottom: number;
 
-const mountList = (options) =>
+// the options of the directive
+type Options = { load: () => void; distance: number; disabled?: boolean };
+
+const mountList = (options: Options) =>
   mount(
     {
       directives: { infiniteScroll },
@@ -22,8 +25,8 @@ describe('v-infinite-scroll', () => {
     vi.useFakeTimers();
     vi.stubGlobal('innerHeight', 800);
     listBottom = 2000;
-    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function () {
-      return { bottom: this.classList.contains('list') ? listBottom : 0 };
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
+      return { bottom: this.classList.contains('list') ? listBottom : 0 } as DOMRect;
     });
   });
 
@@ -72,7 +75,7 @@ describe('v-infinite-scroll', () => {
     window.dispatchEvent(new Event('scroll'));
     expect(load).not.toHaveBeenCalled();
 
-    wrapper.vm.options = { load, distance: 100, disabled: false };
+    (wrapper.vm as unknown as { options: Options }).options = { load, distance: 100, disabled: false };
     await nextTick();
 
     expect(load).toHaveBeenCalledTimes(1);

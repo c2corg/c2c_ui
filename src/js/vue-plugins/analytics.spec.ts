@@ -6,14 +6,16 @@ import analytics, { shouldTrack } from './analytics';
 
 const ID = 'G-TEST123';
 
-const gtagScripts = () => document.head.querySelectorAll('script[src^="https://www.googletagmanager.com/gtag/js"]');
-const calls = () => (window.dataLayer ?? []).map((args) => [...args]);
+const gtagScripts = () =>
+  document.head.querySelectorAll<HTMLScriptElement>('script[src^="https://www.googletagmanager.com/gtag/js"]');
+// gtag.js pushes arguments objects
+const calls = () => (window.dataLayer ?? []).map((args) => [...(args as IArguments)]);
 const pageViews = () =>
   calls()
     .filter(([command, name]) => command === 'event' && name === 'page_view')
-    .map(([, , params]) => params.page_location);
+    .map(([, , params]) => (params as { page_location: string }).page_location);
 
-const install = async ({ id = ID, statistics } = {}) => {
+const install = async ({ id = ID, statistics }: { id?: string | null; statistics?: boolean } = {}) => {
   const app = createApp({});
   // vue-router 4+ records need a component
   const component = { render: () => null };
@@ -25,15 +27,16 @@ const install = async ({ id = ID, statistics } = {}) => {
       { path: '/routes/:id', name: 'route', component },
     ],
   });
-  app.config.globalProperties.$gdpr = { gdprValue: statistics === undefined ? undefined : { statistics } };
-  app.use(analytics, { id, router });
+  app.config.globalProperties.$gdpr = { gdprValue: statistics === undefined ? undefined : { statistics } } as never;
+  // an invalid id on purpose, null included
+  app.use(analytics, { id: id as string, router });
   await router.push('/').catch(() => {});
   return { $ga: app.config.globalProperties.$ga, router };
 };
 
 describe('analytics', () => {
   beforeEach(() => {
-    delete window.dataLayer;
+    delete (window as Partial<Window>).dataLayer;
     delete window[`ga-disable-${ID}`];
     gtagScripts().forEach((script) => script.remove());
     window.history.replaceState(null, '', '/');
@@ -119,8 +122,12 @@ describe('analytics', () => {
   });
 
   it('compares route names and ids', () => {
-    expect(shouldTrack({ name: 'route', params: { id: 12 } }, { name: 'route', params: { id: '12' } })).toBe(false);
-    expect(shouldTrack({ name: 'route', params: { id: 13 } }, { name: 'route', params: { id: 12 } })).toBe(true);
-    expect(shouldTrack({ name: 'routes', params: {} }, { name: 'home', params: {} })).toBe(true);
+    // ids as numbers too: the views push them as such
+    const location = (name: string, id?: number | string) =>
+      ({ name, params: id === undefined ? {} : { id } }) as Parameters<typeof shouldTrack>[0];
+
+    expect(shouldTrack(location('route', 12), location('route', '12'))).toBe(false);
+    expect(shouldTrack(location('route', 13), location('route', 12))).toBe(true);
+    expect(shouldTrack(location('routes'), location('home'))).toBe(true);
   });
 });

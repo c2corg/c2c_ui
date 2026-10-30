@@ -66,7 +66,7 @@ describe('debounce', () => {
   });
 
   it('forwards `this`', () => {
-    const func = vi.fn(function () {
+    const func = vi.fn(function (this: unknown) {
       return this;
     });
     const obj = { method: debounce(func, 10) };

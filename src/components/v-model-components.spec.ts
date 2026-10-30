@@ -1,24 +1,24 @@
-import { mount } from '@vue/test-utils';
+import { type VueWrapper, mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
-import { nextTick } from 'vue';
+import { type Component, type ComponentPublicInstance, nextTick } from 'vue';
 
-import InputRadioButton from '@/components/generics/inputs/InputRadioButton';
-import InputSlider from '@/components/generics/inputs/InputSlider';
-import LayerButton from '@/components/yeti/LayerButton';
-import YetiSlider from '@/components/yeti/Slider';
-import DisplayModeSwitch from '@/views/documents/utils/DisplayModeSwitch';
-import UserFormField from '@/views/user/utils/FormField';
-import InputConditionsLevels from '@/views/wiki/edition/utils/InputConditionsLevels';
+import InputRadioButton from '@/components/generics/inputs/InputRadioButton.vue';
+import InputSlider from '@/components/generics/inputs/InputSlider.vue';
+import LayerButton from '@/components/yeti/LayerButton.vue';
+import YetiSlider from '@/components/yeti/Slider.vue';
+import DisplayModeSwitch from '@/views/documents/utils/DisplayModeSwitch.vue';
+import UserFormField from '@/views/user/utils/FormField.vue';
+import InputConditionsLevels from '@/views/wiki/edition/utils/InputConditionsLevels.vue';
 
 const global = {
-  mocks: { $gettext: (text) => text, $filters: { uppercaseFirstLetter: (text) => text }, $screen: {} },
+  mocks: { $gettext: (text: string) => text, $filters: { uppercaseFirstLetter: (text: string) => text }, $screen: {} },
   stubs: { FaIcon: true, DropdownButton: { template: '<div><slot name="button" /><slot /></div>' } },
   components: { InputSlider },
   directives: { translate: {} },
 };
 
 // the component in a parent, bound with v-model: it shows the parent value, and the parent gets the value chosen in it
-const mountWithVModel = (component, value, attrs = '') =>
+const mountWithVModel = <T>(component: Component, value: T, attrs = '') =>
   mount(
     {
       components: { TheComponent: component },
@@ -26,7 +26,7 @@ const mountWithVModel = (component, value, attrs = '') =>
       data: () => ({ value }),
     },
     { global, attachTo: document.body }
-  );
+  ) as unknown as VueWrapper<ComponentPublicInstance & { value: T }>;
 
 describe('v-model components', () => {
   it('InputRadioButton', async () => {
@@ -35,7 +35,7 @@ describe('v-model components', () => {
       { value: 'b', label: 'B' },
     ];
     const wrapper = mountWithVModel(InputRadioButton, 'a', `:options='${JSON.stringify(options)}'`);
-    const radios = wrapper.findAll('input[type=radio]');
+    const radios = wrapper.findAll<HTMLInputElement>('input[type=radio]');
     expect(radios.map((radio) => radio.element.checked)).toEqual([true, false]);
 
     await radios[1].setValue(true);
@@ -64,7 +64,7 @@ describe('v-model components', () => {
 
   it('Yeti LayerButton, as a checkbox', async () => {
     const wrapper = mountWithVModel(LayerButton, false);
-    const checkbox = wrapper.find('input[type=checkbox]');
+    const checkbox = wrapper.find<HTMLInputElement>('input[type=checkbox]');
 
     await checkbox.setValue(true);
     expect(wrapper.vm.value).toBe(true);
@@ -83,8 +83,8 @@ describe('v-model components', () => {
         data: () => ({ layers, selected: layers[0] }),
       },
       { global, attachTo: document.body }
-    );
-    const radios = wrapper.findAll('input[type=radio]');
+    ) as unknown as VueWrapper<ComponentPublicInstance & { selected: { title: string } }>;
+    const radios = wrapper.findAll<HTMLInputElement>('input[type=radio]');
     expect(radios.map((radio) => radio.element.checked)).toEqual([true, false]);
 
     await radios[1].setValue(true);

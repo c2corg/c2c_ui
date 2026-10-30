@@ -5,7 +5,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 // The Vue 3 rules (eslint-plugin-vue's recommended preset): the Vue 2 syntax, removed in Vue 3, fails the lint
 const eslint = new ESLint({ cwd: process.cwd() });
 
-const lintComponent = async (source) => {
+const lintComponent = async (source: string) => {
   const [result] = await eslint.lintText(source, { filePath: 'src/components/Example.vue' });
   return result.messages;
 };
@@ -42,7 +42,7 @@ export default {
 </script>
 `);
 
-    const rules = (severity) =>
+    const rules = (severity: number) =>
       messages
         .filter((message) => message.severity === severity)
         .map((message) => message.ruleId)
