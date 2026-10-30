@@ -14,7 +14,7 @@ describe('sources', () => {
     const untyped = files
       .filter((file) => file.endsWith('.vue'))
       .filter((file) =>
-        [...readFileSync(`src/${file}`, 'utf8').matchAll(/^<script\b[^>]*>/gm)].some(
+        [...readFileSync(`src/${file}`, 'utf8').matchAll(/^<script\b[^>]*>/gmi)].some(
           ([tag]) => !tag.includes('lang="ts"')
         )
       );
