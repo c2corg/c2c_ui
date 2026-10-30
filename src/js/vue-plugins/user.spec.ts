@@ -43,14 +43,14 @@ const installUser = async () => {
   const app = createApp({});
   const globals = app.config.globalProperties;
   // $language is installed before $user by main.ts
-  globals.$language = { current: 'fr', setCurrent: vi.fn() };
+  globals.$language = { current: 'fr', setCurrent: vi.fn() } as never;
   app.use(user);
 
   const stored = () => JSON.parse(window.localStorage.getItem('User.preferences') ?? '{}')[config.urls.api];
   return { $user: globals.$user, globals, c2c, trackingService, config, h, mount, nextTick, stored };
 };
 
-const storeSession = async (session) => {
+const storeSession = async (session: Record<string, unknown>) => {
   const { default: config } = await import('@/js/config');
   window.localStorage.setItem('User.preferences', JSON.stringify({ [config.urls.api]: session }));
 };
@@ -112,7 +112,7 @@ describe('$user', () => {
 
   it('signs in: stores the session, sets the language and the API token', async () => {
     const { $user, c2c, globals, stored } = await installUser();
-    c2c.userProfile.login.mockResolvedValue(loginResponse);
+    vi.mocked(c2c.userProfile.login).mockResolvedValue(loginResponse as never);
 
     const response = await $user.signIn('alice', 'secret', true);
 
@@ -195,7 +195,7 @@ describe('$user', () => {
 
   it('updates the components showing it', async () => {
     const { $user, c2c, h, mount, nextTick } = await installUser();
-    c2c.userProfile.login.mockResolvedValue(loginResponse);
+    vi.mocked(c2c.userProfile.login).mockResolvedValue(loginResponse as never);
     const wrapper = mount({
       render() {
         return h('p', $user.isLogged ? `hello ${$user.name}` : 'login');

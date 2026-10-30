@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { sanitizeHtml, sanitizeRichHtml } from './sanitize-html';
 
-const parse = (html) => {
+const parse = (html: string) => {
   const template = document.createElement('template');
   template.innerHTML = html;
   return template.content;
@@ -24,8 +24,8 @@ describe.each([
   it('removes inline event handlers', () => {
     const result = sanitize('<img src="a.jpg" onerror="alert(1)"><p onclick="alert(2)">text</p>');
     expect(result).not.toMatch(/onerror|onclick|alert/);
-    expect(parse(result).querySelector('img').getAttribute('src')).toBe('a.jpg');
-    expect(parse(result).querySelector('p').textContent).toBe('text');
+    expect(parse(result).querySelector('img')!.getAttribute('src')).toBe('a.jpg');
+    expect(parse(result).querySelector('p')!.textContent).toBe('text');
   });
 
   it.each([
@@ -35,7 +35,7 @@ describe.each([
     'java\tscript:alert(1)',
     '&#106;avascript:alert(1)',
   ])('removes the %j URL from links', (url) => {
-    const link = parse(sanitize(`<a href="${url}">link</a>`)).querySelector('a');
+    const link = parse(sanitize(`<a href="${url}">link</a>`)).querySelector('a')!;
     expect(link.textContent).toBe('link');
     expect(link.hasAttribute('href')).toBe(false);
   });
@@ -110,7 +110,8 @@ describe('sanitizeRichHtml', () => {
     'https://player.vimeo.com/video/1',
     'https://www.dailymotion.com/embed/video/x1',
   ])('keeps iframes to %s and forces the sandbox attribute', (src) => {
-    const iframe = parse(sanitizeRichHtml(`<iframe src="${src}" frameborder="0" allowfullscreen></iframe>`)).firstChild;
+    const iframe = parse(sanitizeRichHtml(`<iframe src="${src}" frameborder="0" allowfullscreen></iframe>`))
+      .firstChild as HTMLIFrameElement;
     expect(iframe.tagName).toBe('IFRAME');
     expect(iframe.getAttribute('src')).toBe(src);
     expect(iframe.getAttribute('sandbox')).toBe('allow-scripts allow-same-origin allow-presentation');
@@ -121,7 +122,7 @@ describe('sanitizeRichHtml', () => {
   it('overrides a permissive sandbox attribute set in the markup', () => {
     const iframe = parse(
       sanitizeRichHtml('<iframe src="https://www.youtube.com/embed/abc" sandbox="allow-top-navigation allow-popups">')
-    ).firstChild;
+    ).firstChild as HTMLIFrameElement;
     expect(iframe.getAttribute('sandbox')).toBe('allow-scripts allow-same-origin allow-presentation');
   });
 
@@ -129,8 +130,8 @@ describe('sanitizeRichHtml', () => {
     const fragment = parse(
       sanitizeRichHtml('<div c2c:role="video"><iframe src="https://player.vimeo.com/video/1"></iframe></div>')
     );
-    expect(fragment.querySelector('div').getAttribute('c2c:role')).toBe('video');
-    expect(fragment.querySelector('iframe').getAttribute('sandbox')).toBe(
+    expect(fragment.querySelector('div')!.getAttribute('c2c:role')).toBe('video');
+    expect(fragment.querySelector('iframe')!.getAttribute('sandbox')).toBe(
       'allow-scripts allow-same-origin allow-presentation'
     );
   });

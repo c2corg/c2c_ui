@@ -1,9 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { getEmbeddedImageUrl, getImageUrl } from './image-urls';
+import { type ImageSize, getEmbeddedImageUrl, getImageUrl } from './image-urls';
 
 // '@/js/config' reads CAMPTOCAMP_CONFIG, a constant injected by Vite (see vite.config.mjs)
-const config = vi.hoisted(() => ({ urls: {} }));
+const config = vi.hoisted(() => ({
+  urls: {} as { api: string; media: string; modernThumbnailsTimestamp: number; modernThumbnailsId: number },
+}));
 vi.mock('@/js/config', () => ({ default: config }));
 
 const API = 'https://api.example.org';
@@ -21,12 +23,12 @@ describe('getImageUrl', () => {
       expect(getImageUrl(image)).toBe(`${MEDIA}/1588000000_123456.jpg`);
     });
 
-    it.each(['SI', 'MI', 'BI'])('returns the %s thumbnail', (size) => {
+    it.each(['SI', 'MI', 'BI'] as const)('returns the %s thumbnail', (size) => {
       expect(getImageUrl(image, size)).toBe(`${MEDIA}/1588000000_123456${size}.jpg`);
     });
 
     it.each(['XL', 'si', 'small'])('throws on invalid size %j', (size) => {
-      expect(() => getImageUrl(image, size)).toThrow('Invalid size');
+      expect(() => getImageUrl(image, size as ImageSize)).toThrow('Invalid size');
     });
 
     it('returns jpg thumbnails for svg images', () => {
@@ -56,7 +58,7 @@ describe('getImageUrl', () => {
         expect(getImageUrl(image, 'MI', 'webp')).toBeUndefined();
       });
 
-      it.each(['webp', 'avif'])('returns the %s thumbnail from modernThumbnailsTimestamp on', (format) => {
+      it.each(['webp', 'avif'] as const)('returns the %s thumbnail from modernThumbnailsTimestamp on', (format) => {
         config.urls.modernThumbnailsTimestamp = 1588000000;
         expect(getImageUrl(image, 'MI', format)).toBe(`${MEDIA}/1588000000_123456MI.${format}`);
         expect(getImageUrl({ document_id: 1, filename: '1700000000_1.png' }, 'BI', format)).toBe(
@@ -77,7 +79,7 @@ describe('getImageUrl', () => {
       });
 
       it('validates the size before the format', () => {
-        expect(() => getImageUrl(image, 'XL', 'webp')).toThrow('Invalid size');
+        expect(() => getImageUrl(image, 'XL' as ImageSize, 'webp')).toThrow('Invalid size');
       });
     });
   });
@@ -94,7 +96,7 @@ describe('getImageUrl', () => {
     });
 
     it('does not validate the size', () => {
-      expect(getImageUrl(image, 'XL')).toBe(`${API}/images/proxy/42?size=XL`);
+      expect(getImageUrl(image, 'XL' as ImageSize)).toBe(`${API}/images/proxy/42?size=XL`);
     });
 
     it('treats an empty filename as missing', () => {
@@ -132,7 +134,7 @@ describe('getEmbeddedImageUrl', () => {
     expect(getEmbeddedImageUrl({ url, urlProxy })).toBe(url);
   });
 
-  it.each(['avif', 'webp'])('returns the direct media url in %s', (format) => {
+  it.each(['avif', 'webp'] as const)('returns the direct media url in %s', (format) => {
     expect(getEmbeddedImageUrl({ url, urlProxy }, format)).toBe(`${MEDIA}/1526229189_1504164474MI.${format}`);
   });
 

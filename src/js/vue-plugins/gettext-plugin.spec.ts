@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Component } from 'vue';
 
 // fresh modules for each test, as for each page load: the local-storage plugin caches what it read
 const installLanguage = async () => {
@@ -9,15 +10,15 @@ const installLanguage = async () => {
 
   const app = createApp({});
   const globals = app.config.globalProperties;
-  globals.$user = { saveLangPreference: vi.fn() };
+  globals.$user = { saveLangPreference: vi.fn() } as never;
   app.use(gettext);
 
   // components mounted with what the plugin installed in the app
-  const mount = (component) =>
+  const mount = (component: Component) =>
     mountComponent(component, {
       global: {
         mocks: { $language: globals.$language, $gettext: globals.$gettext },
-        directives: { translate: app.directive('translate') },
+        directives: { translate: app.directive('translate')! },
       },
     });
 
