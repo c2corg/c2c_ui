@@ -4,28 +4,24 @@ const parser = require('xml2js');
 
 const HEADER = '// Auto-generated file by generate-icons.js\n\n';
 
-const getJsTemplate = function (prefix, name, width, height, svgPathData) {
+const getTsTemplate = function (prefix, name, width, height, svgPathData) {
   return (
     HEADER +
-    `
+    `import type { IconDefinition, IconName, IconPrefix } from '@fortawesome/fontawesome-svg-core';
+
 export default {
-  prefix: '${prefix}',
-  iconName: '${name}',
+  prefix: '${prefix}' as IconPrefix,
+  iconName: '${name}' as IconName,
   icon: [
     ${width},
     ${height},
     [],
-    "",
-    '${svgPathData}'
-  ]
-}`
+    '',
+    '${svgPathData}',
+  ],
+} satisfies IconDefinition;
+`
   );
-};
-
-const getIndexDotJsFileContent = function (names) {
-  const imports = names.map((name) => `import ${name} from "./${name}"`);
-
-  return HEADER + imports.join('\n') + '\n\nexport {\n    ' + names.join(',\n    ') + '\n}';
 };
 
 const isDirectory = (source) => fs.lstatSync(source).isDirectory();
@@ -35,16 +31,12 @@ function main() {
 
   for (let subDir of fs.readdirSync(root + 'svg')) {
     if (isDirectory(path.join(root + 'svg', subDir))) {
-      const names = [];
-
       if (!fs.existsSync(root + 'js/' + subDir)) {
         fs.mkdirSync(root + 'js/' + subDir);
       }
 
       for (let file of fs.readdirSync(root + 'svg/' + subDir)) {
         if (file.endsWith('.svg')) {
-          names.push(file.replace('.svg', ''));
-
           fs.readFile(root + 'svg/' + subDir + '/' + file, function (err, data) {
             if (err) {
               console.error('Fail: ' + err);
@@ -57,20 +49,17 @@ function main() {
 
               if (result && result.svg && result.svg.path) {
                 fs.writeFileSync(
-                  root + 'js/' + subDir + '/' + name + '.js',
-                  getJsTemplate(subDir, name, result.svg.$.width, result.svg.$.height, result.svg.path[0].$.d)
+                  root + 'js/' + subDir + '/' + name + '.ts',
+                  getTsTemplate(subDir, name, result.svg.$.width, result.svg.$.height, result.svg.path[0].$.d)
                 );
                 console.log('Done', subDir, name);
               } else {
-                fs.writeFileSync(root + 'js/' + subDir + '/' + name + '.js', 'export default {}');
                 console.error('Fail', subDir, name);
               }
             });
           });
         }
       }
-
-      fs.writeFileSync(root + 'js/' + subDir + '/index.js', getIndexDotJsFileContent(names));
     }
   }
 }

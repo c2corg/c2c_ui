@@ -244,7 +244,7 @@ export default function install(app: App) {
     qualityMedium,
     qualityFine,
     qualityGreat,
-  ] as unknown as IconDefinition[];
+  ] satisfies IconDefinition[];
 
   library.add(
     ...customIcons,
