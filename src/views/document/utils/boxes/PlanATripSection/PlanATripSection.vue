@@ -158,9 +158,9 @@
     <!-- the map on which documents are displayed -->
     <div class="plan-trip-map">
       <map-view
-        ref="mapView"
+        ref="olMap"
         :documents="filteredDocuments"
-        :show-protection-areas="['r', 'w'].includes(document.type)"
+        :show-protection-areas="!!document.type && ['r', 'w'].includes(document.type)"
         :biodiv-sports-activities="document.activities"
         :full-screen-element-id="
           !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
@@ -172,906 +172,870 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { transform } from 'ol/proj';
+import { computed, nextTick, onMounted, ref, useTemplateRef, watch, type PropType } from 'vue';
 
 import PlanATripForm from './PlanATripForm.vue';
 import PlanATripResults from './PlanATripResults.vue';
 
 import start from '@/assets/img/boxes/geoloc-2.svg';
-import { default as c2c } from '@/js/apis/c2c';
-import UserProfileService from '@/js/apis/c2c/UserProfileService';
-import NavitiaService from '@/js/apis/navitia-service';
+import type OlMap from '@/components/map/OlMap.vue';
+import NavitiaService, { type DatetimeRepresents, type Journey, type JourneyOptions } from '@/js/apis/navitia-service';
 import transportService from '@/js/apis/transport-service';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
-import planATripUtils from '@/js/plan-a-trip-utils';
+import planATripUtils, { type Section } from '@/js/plan-a-trip-utils';
 import { documentProperty, useDocumentType } from '@/js/properties';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  name: 'PlanATripSection',
-  components: {
-    PlanATripForm,
-    PlanATripResults,
+type Waypoint = { id: number; title: string; coordinates: number[] };
+type Address = { address?: string; geometry?: { coordinates?: number[] } };
+type RouteJourney = Omit<Journey, 'sections'> & {
+  departure_date_time: string;
+  arrival_date_time: string;
+  sections: RouteSection[];
+};
+type RouteSection = Section & { geojson?: { coordinates: number[][] } };
+type TripData = {
+  fromAddress: Address | '';
+  selectedAddress: null;
+  addressPropositions: never[];
+  showAddressPropositions: boolean;
+  selectedDate: string;
+  selectedTime: string;
+  timePreference: string;
+  fromCoordinates: number[] | null | undefined;
+  selectedWaypoint: Waypoint | null;
+  journeys: RouteJourney[];
+  selectedJourney: RouteJourney | null;
+  noResult: boolean;
+  selectedRouteJourney: RouteJourney | null;
+  showTimeButton: boolean;
+  isUpdating: boolean;
+  missingDepartureAddress: boolean;
+  missingDestinationAddress: boolean;
+};
+// a document shown on the map
+type MapDocument = Record<string, any>;
+
+const props = defineProps({
+  ...documentProperty,
+  showElevationProfile: {
+    type: Boolean,
+    default: false,
   },
-  props: {
-    ...documentProperty,
-    showElevationProfile: {
-      type: Boolean,
-      default: false,
+  elevationProfileHasData: {
+    type: Boolean,
+    default: false,
+  },
+  // the route of a document, for its durations
+  document: {
+    type: Object as PropType<C2cDocument & { calculated_duration?: number | null; durations?: string[] | null }>,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['calculate-route', 'has-protection-area']);
+
+const { $gettext, $language } = useGlobalProperties();
+const { documentType } = useDocumentType(props);
+
+const olMap = useTemplateRef<InstanceType<typeof OlMap>>('olMap');
+
+/** The local date, YYYY-MM-DD: toISOString() gives the UTC one, the day before after midnight in Europe */
+function localDate(date: Date) {
+  return [date.getFullYear(), date.getMonth() + 1, date.getDate()]
+    .map((part) => part.toString().padStart(2, '0'))
+    .join('-');
+}
+
+/** A YYYY-MM-DD date some days later (or earlier), on the calendar: a day is not 24 hours when the clocks change */
+function addDays(date: string, days: number) {
+  const day = new Date(`${date}T00:00:00Z`);
+  day.setUTCDate(day.getUTCDate() + days);
+  return day.toISOString().slice(0, 10);
+}
+
+const tripData = (): TripData => ({
+  fromAddress: '',
+  selectedAddress: null,
+  addressPropositions: [],
+  showAddressPropositions: false,
+  selectedDate: localDate(new Date()),
+  selectedTime: new Date().toTimeString().slice(0, 5),
+  timePreference: 'leave-after',
+  fromCoordinates: null,
+  selectedWaypoint: null,
+  journeys: [],
+  selectedJourney: null,
+  noResult: false,
+  selectedRouteJourney: null,
+  showTimeButton: false,
+  isUpdating: false,
+  missingDepartureAddress: false,
+  missingDestinationAddress: false,
+});
+
+const activeTab = ref('outbound');
+
+// Data for the outbound journey
+const outboundData = ref(tripData());
+
+// Data for return journey
+const returnData = ref(tripData());
+
+const displayedFromAddress = ref('');
+const displayedToAddress = ref('');
+const reachableWaypoints = ref<Waypoint[]>([]);
+const loadingReachable = ref(false);
+const limitTransfers = ref(false);
+const maxTransfers = ref(0);
+// undefined for an error without a description: an unknown error
+const queryError = ref<string | null | undefined>(null);
+const errorMessages: Record<string, string> = {
+  // no solution found
+  no_solution: $gettext('It seems your trip can not be completed on the selected date and time'),
+  unknown_object: $gettext(
+    "The start and finish points are too far apart to find a route. Choose a start in a city closer to the route's access point."
+  ),
+  // internal server error
+  unknown_error: $gettext('An unknown error occurred.'),
+  navitia_internal_error: $gettext('Public transport data is currently unavailable.'),
+  auth_error: $gettext('Authentication to public transport data service error.'),
+  invalid_param: $gettext('Invalid parameters were sent to public transport data service.'),
+};
+
+/** Returns the outbound or return data */
+const currentData = computed(() => (activeTab.value === 'outbound' ? outboundData.value : returnData.value));
+
+/** Removes access points natively in routes, to code specific behaviors */
+const filteredDocuments = computed(() => {
+  const filteredWaypoints =
+    props.document.associations?.waypoints?.filter((waypoint: MapDocument) => waypoint.waypoint_type !== 'access') ||
+    [];
+
+  const mainDocument = {
+    ...props.document,
+    associations: {
+      ...props.document.associations,
+      waypoints: filteredWaypoints,
     },
-    elevationProfileHasData: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  emits: ['calculate-route', 'has-protection-area'],
+  };
 
-  setup(props) {
-    return useDocumentType(props);
-  },
+  return mapDocuments.value.concat([mainDocument]);
+});
+const hasReturnTrip = computed(() => documentType.value === 'route');
+/** Determines if a waypoint is accessible by public transport */
+const accessWaypoints = computed(() => (reachableWaypoints.value.length > 0 ? reachableWaypoints.value : []));
 
-  data() {
+const queryErrorMessage = computed(() => {
+  if (currentData.value.noResult) {
+    if (queryError.value !== null) {
+      if (queryError.value && queryError.value in errorMessages) {
+        return errorMessages[queryError.value];
+      } else {
+        return $gettext('An unknown error occured.');
+      }
+    }
+  }
+  return '';
+});
+
+/** Customizes access points: clicking makes a selection instead of redirecting to a page, and the color is green */
+const mapDocuments = computed<MapDocument[]>(() => {
+  // This computed property depends on the selectedRouteJourney to ensure
+  // route documents update when a journey is selected
+  void currentData.value.selectedRouteJourney;
+
+  const baseDocuments = props.document.associations?.waypoints ? [props.document.associations.waypoints] : [];
+  const accessWaypointDocuments = accessWaypoints.value.map((waypoint) => {
     return {
-      activeTab: 'outbound',
-
-      // Data for the outbound journey
-      outboundData: {
-        fromAddress: '',
-        selectedAddress: null,
-        addressPropositions: [],
-        showAddressPropositions: false,
-        selectedDate: new Date().toISOString().slice(0, 10),
-        selectedTime: new Date().toTimeString().slice(0, 5),
-        timePreference: 'leave-after',
-        fromCoordinates: null,
-        selectedWaypoint: null,
-        journeys: [],
-        selectedJourney: null,
-        noResult: false,
-        selectedRouteJourney: null,
-        showTimeButton: false,
-        isUpdating: false,
-        missingDepartureAddress: false,
-        missingDestinationAddress: false,
+      document_id: waypoint.id,
+      type: 'w',
+      waypoint_type: 'access',
+      geometry: {
+        version: 1,
+        geom: JSON.stringify({
+          type: 'Point',
+          coordinates: ol.proj.transform(waypoint.coordinates, 'EPSG:4326', 'EPSG:3857'),
+        }),
       },
-
-      // Data for return journey
-      returnData: {
-        fromAddress: '',
-        selectedAddress: null,
-        addressPropositions: [],
-        showAddressPropositions: false,
-        selectedDate: new Date().toISOString().slice(0, 10),
-        selectedTime: new Date().toTimeString().slice(0, 5),
-        timePreference: 'leave-after',
-        fromCoordinates: null,
-        selectedWaypoint: null,
-        journeys: [],
-        selectedJourney: null,
-        noResult: false,
-        selectedRouteJourney: null,
-        showTimeButton: false,
-        isUpdating: false,
-        missingDepartureAddress: false,
-        missingDestinationAddress: false,
+      properties: {
+        nonInteractive: true,
+        color: 'green',
       },
-
-      userService: new UserProfileService(c2c),
-      displayedFromAddress: '',
-      displayedToAddress: '',
-      showReturnWarning: false,
-      calculatedDuration: this.document.calculated_duration,
-      reachableWaypoints: [],
-      loadingReachable: false,
-      searchTimeout: null,
-      limitTransfers: false,
-      maxTransfers: 0,
-      queryError: null,
-      errorMessages: {
-        // no solution found
-        no_solution: this.$gettext('It seems your trip can not be completed on the selected date and time'),
-        unknown_object: this.$gettext(
-          "The start and finish points are too far apart to find a route. Choose a start in a city closer to the route's access point."
-        ),
-        // internal server error
-        unknown_error: this.$gettext('An unknown error occurred.'),
-        navitia_internal_error: this.$gettext('Public transport data is currently unavailable.'),
-        auth_error: this.$gettext('Authentication to public transport data service error.'),
-        invalid_param: this.$gettext('Invalid parameters were sent to public transport data service.'),
-      },
+      locales: [{ title: waypoint.title, lang: $language.current }],
     };
+  });
+
+  const routeDocuments = prepareRouteDocuments(false);
+
+  return [...baseDocuments, ...accessWaypointDocuments, ...routeDocuments];
+});
+
+const canAccessReturnTab = computed(() => outboundData.value.journeys.length > 0);
+
+const maxNbTransfers = computed(() => (limitTransfers.value ? maxTransfers.value : undefined));
+
+watch(
+  () => currentData.value.selectedRouteJourney,
+  () => {
+    // Trigger recenter when selectedRouteJourney changes
+    recenterMapOnDocuments();
   },
+  { deep: true }
+);
 
-  computed: {
-    /** Removes access points natively in routes, to code specific behaviors */
-    filteredDocuments() {
-      const filteredWaypoints =
-        this.document.associations.waypoints?.filter((waypoint) => waypoint.waypoint_type !== 'access') || [];
+onMounted(() => {
+  // Firefox's date picker calendar has a specific design
+  if (navigator.userAgent.toLowerCase().includes('firefox')) {
+    window.document.documentElement.classList.add('is-firefox');
+  }
+});
 
-      const mainDocument = {
-        ...this.document,
-        associations: {
-          ...this.document.associations,
-          waypoints: filteredWaypoints,
+// Load the waypoints served when mounting the component
+loadReachableWaypoints().then(() => {
+  // If only one waypoint served, select it automatically
+  if (reachableWaypoints.value.length === 1) {
+    currentData.value.selectedWaypoint = reachableWaypoints.value[0];
+  }
+});
+
+function handleUpdateFromAddress(address: Address) {
+  const data = activeTab.value === 'outbound' ? outboundData.value : returnData.value;
+  data.fromAddress = address;
+  data.fromCoordinates = address?.geometry?.coordinates;
+}
+function handleUpdateSelectedWaypoint(waypoint: Waypoint | null) {
+  currentData.value.selectedWaypoint = waypoint;
+}
+function handleUpdateSelectedDate(date: string) {
+  currentData.value.selectedDate = date;
+}
+function handleUpdateTimePreference(preference: string) {
+  currentData.value.timePreference = preference;
+}
+function handleUpdateSelectedTime(time: string) {
+  currentData.value.selectedTime = time;
+}
+function handleUpdateLimitTransfers(limit: boolean) {
+  limitTransfers.value = limit;
+}
+function handleUpdateMaxTransfers(max: number) {
+  maxTransfers.value = max;
+}
+function swapAddresses() {
+  if (activeTab.value === 'outbound') {
+    switchTab('return');
+  } else if (activeTab.value === 'return') {
+    switchTab('outbound');
+  }
+}
+function setSelectedRouteJourney(journey: RouteJourney) {
+  currentData.value.selectedRouteJourney = journey;
+}
+
+/** The options of the Navitia query, without the limit of transfers when there is none */
+function journeyOptions(options: JourneyOptions) {
+  return maxNbTransfers.value === undefined ? options : { ...options, max_nb_transfers: maxNbTransfers.value };
+}
+
+/** Call Navitia and store the results */
+async function calculateRoute() {
+  const data = currentData.value;
+  queryError.value = null;
+  data.missingDepartureAddress = false;
+  data.missingDestinationAddress = false;
+
+  if (
+    (activeTab.value === 'outbound' && !data.fromAddress) ||
+    (activeTab.value === 'return' && !data.selectedWaypoint)
+  ) {
+    data.missingDepartureAddress = true;
+  }
+
+  if (
+    (activeTab.value === 'outbound' && !data.selectedWaypoint) ||
+    (activeTab.value === 'return' && !data.fromAddress)
+  ) {
+    data.missingDestinationAddress = true;
+  }
+
+  if (data.missingDepartureAddress || data.missingDestinationAddress) {
+    return;
+  }
+  let fromCoords, toCoords;
+
+  if (activeTab.value === 'outbound') {
+    // OUTBOUND: From address to waypoint
+    fromCoords = NavitiaService.formatCoordinates(data.fromCoordinates);
+    toCoords = NavitiaService.formatCoordinates(data.selectedWaypoint!.coordinates);
+    displayedFromAddress.value = (data.fromAddress as Address).address!;
+  } else {
+    // RETURN: From waypoint to address
+    fromCoords = NavitiaService.formatCoordinates(data.selectedWaypoint!.coordinates);
+    toCoords = NavitiaService.formatCoordinates(data.fromCoordinates);
+    displayedToAddress.value = (data.fromAddress as Address).address!;
+  }
+
+  data.isUpdating = true;
+
+  // Format datetime for Navitia API minus 15 minutes
+  const originalDateTime = new Date(`${data.selectedDate}T${data.selectedTime}:00`);
+  const adjustedDateTime = new Date(originalDateTime);
+
+  if (originalDateTime.getHours() === 0 && originalDateTime.getMinutes() < 15) {
+    adjustedDateTime.setTime(originalDateTime.getTime());
+  } else {
+    adjustedDateTime.setTime(originalDateTime.getTime() - 15 * 60 * 1000);
+  }
+
+  const year = adjustedDateTime.getFullYear();
+  const month = String(adjustedDateTime.getMonth() + 1).padStart(2, '0');
+  const day = String(adjustedDateTime.getDate()).padStart(2, '0');
+  const hours = String(adjustedDateTime.getHours()).padStart(2, '0');
+  const minutes = String(adjustedDateTime.getMinutes()).padStart(2, '0');
+
+  const dateTimeFormat = `${year}${month}${day}T${hours}${minutes}00`;
+  const dateTimeRepresents: DatetimeRepresents = data.timePreference === 'arrive-before' ? 'arrival' : 'departure';
+
+  try {
+    const response = await NavitiaService.getJourneys(
+      {
+        from: fromCoords,
+        to: toCoords,
+        datetime: dateTimeFormat,
+        datetime_represents: dateTimeRepresents,
+      },
+      journeyOptions({
+        walking_speed: 1.12,
+        max_walking_duration_to_pt: 4464,
+        min_nb_journeys: 3,
+      })
+    );
+
+    const responseData = response.data as { journeys?: RouteJourney[] };
+    data.showTimeButton = true;
+    const selectedDateFormatted = data.selectedDate.replace(/-/g, '');
+
+    if (responseData?.journeys) {
+      const filteredJourneys = responseData.journeys.filter((journey) => {
+        const journeyDate = journey.departure_date_time.split('T')[0];
+        return journeyDate === selectedDateFormatted;
+      });
+
+      if (filteredJourneys.length === 0) {
+        await fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
+        return;
+      }
+
+      data.journeys = responseData.journeys.slice(0, 3);
+      data.noResult = false;
+      data.selectedRouteJourney = data.journeys[0];
+
+      if (activeTab.value === 'outbound') {
+        calculateReturnParameters();
+        await determineReturnWaypoint();
+      }
+
+      // Trigger recenter after journey selection
+      recenterMapOnDocuments();
+    } else {
+      await fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
+    }
+  } catch (error) {
+    queryError.value = (error as NavitiaError)?.response?.data?.errors?.[0]?.description;
+    if (!(queryError.value && queryError.value in errorMessages)) {
+      console.error('Error retrieving routes:', error);
+    }
+    if (queryError.value === 'no_solution' || queryError.value === 'unknown_object') {
+      await fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
+    } else {
+      data.noResult = true;
+      data.journeys = [];
+    }
+  } finally {
+    data.isUpdating = false;
+
+    // Trigger recenter after processing
+    recenterMapOnDocuments();
+  }
+}
+
+type NavitiaError = { response?: { data?: { errors?: { description?: string }[] } } };
+
+async function fetchExtendedTimeframeJourney(
+  fromCoords: string,
+  toCoords: string,
+  dateTimeFormat: string,
+  dateTimeRepresents: DatetimeRepresents
+) {
+  const data = currentData.value;
+  try {
+    const datePart = dateTimeFormat.substring(0, 8);
+    const dateTimeAtStartOfDay = datePart + 'T000100'; // Format: YYYYMMDDT000100
+    const response = await NavitiaService.getJourneys(
+      {
+        from: fromCoords,
+        to: toCoords,
+        datetime: dateTimeAtStartOfDay,
+        datetime_represents: dateTimeRepresents,
+      },
+      journeyOptions({
+        walking_speed: 1.12,
+        max_walking_duration_to_pt: 4464,
+        min_nb_journeys: 3,
+        timeframe_duration: 86400,
+      })
+    );
+
+    const responseData = response.data as { journeys?: RouteJourney[] };
+    const selectedDateFormatted = data.selectedDate.replace(/-/g, '');
+
+    if (responseData?.journeys && responseData.journeys.length > 0) {
+      const filteredJourneys = responseData.journeys.filter((journey) => {
+        const journeyDate = journey.departure_date_time.split('T')[0];
+        return journeyDate === selectedDateFormatted;
+      });
+
+      if (filteredJourneys.length > 0) {
+        const lastDepartureTime = filteredJourneys.reduce((latest, journey) => {
+          const depTime = journey.departure_date_time.substring(9); // HHMMSS
+          return depTime > latest ? depTime : latest;
+        }, '000000');
+
+        const bestLastJourney = filteredJourneys.find(
+          (journey) => journey.departure_date_time.substring(9) === lastDepartureTime
+        )!;
+
+        data.journeys = [bestLastJourney];
+        data.noResult = true;
+        data.selectedRouteJourney = bestLastJourney;
+        if (activeTab.value === 'outbound') {
+          calculateReturnParameters();
+          await determineReturnWaypoint();
+        }
+        data.showTimeButton = true;
+
+        emit('calculate-route', {
+          from: {
+            address: activeTab.value === 'outbound' ? data.fromAddress : data.selectedWaypoint?.title,
+            coordinates: activeTab.value === 'outbound' ? data.fromCoordinates : data.selectedWaypoint?.coordinates,
+          },
+          to: {
+            address: activeTab.value === 'outbound' ? data.selectedWaypoint?.title : data.fromAddress,
+            coordinates: activeTab.value === 'outbound' ? data.selectedWaypoint?.coordinates : data.fromCoordinates,
+          },
+          date: data.selectedDate,
+          time: data.selectedTime,
+          preference: data.timePreference,
+          journeys: data.journeys,
+          isExtendedTimeframe: true,
+        });
+
+        return;
+      }
+    }
+
+    data.noResult = true;
+    data.journeys = [];
+  } catch (error) {
+    queryError.value = (error as NavitiaError)?.response?.data?.errors?.[0]?.description;
+    if (!(queryError.value && queryError.value in errorMessages)) {
+      console.error('Error retrieving extended timeframe routes:', error);
+    }
+    data.noResult = true;
+    data.journeys = [];
+  }
+}
+
+/** Get the selected access waypoint on the map */
+function handleWaypointClicked(document: { document_id: number }) {
+  const waypoint = accessWaypoints.value.find((w) => w.id === document.document_id);
+  if (waypoint) {
+    currentData.value.selectedWaypoint = waypoint;
+  }
+}
+
+/** Displays the routes of different transport on the map */
+function prepareRouteDocuments(scheduleRecenter = true) {
+  const data = currentData.value;
+  if (!data.selectedRouteJourney || !data.journeys || data.journeys.length === 0) return [];
+  const routeDocuments: MapDocument[] = [];
+  const journey = data.selectedRouteJourney;
+
+  journey.sections.forEach((section, index) => {
+    if (section.geojson) {
+      const isWalkingSection =
+        section.type === 'street_network' || section.type === 'transfer' || section.mode === 'walking';
+
+      const routeDocument = {
+        document_id: `route-section-${index}`,
+        type: 'r',
+        geometry: {
+          version: 1,
+          geom: null,
+          geom_detail: JSON.stringify({
+            type: 'LineString',
+            coordinates: section.geojson.coordinates.map((coord) => {
+              const mercatorCoord = ol.proj.transform([coord[0], coord[1]], 'EPSG:4326', 'EPSG:3857');
+              return [...mercatorCoord, 0.0, 0.0];
+            }),
+          }),
+        },
+        properties: {
+          name: section.display_informations?.code,
+          duration: section.duration,
+          color: planATripUtils.getRouteColor(section),
+          isWalking: isWalkingSection,
+          nonInteractive: true,
         },
       };
 
-      return this.mapDocuments.concat([mainDocument]);
-    },
-    hasReturnTrip() {
-      return this.documentType === 'route';
-    },
-    /** Determines if a waypoint is accessible by public transport */
-    accessWaypoints() {
-      return this.reachableWaypoints.length > 0 ? this.reachableWaypoints : [];
-    },
+      routeDocuments.push(routeDocument);
 
-    queryErrorMessage() {
-      if (this.currentData.noResult) {
-        if (this.queryError !== null) {
-          if (this.queryError in this.errorMessages) {
-            return this.errorMessages[this.queryError];
-          } else {
-            return this.$gettext('An unknown error occured.');
-          }
-        }
-      }
-      return '';
-    },
+      if (index === 0) {
+        const startCoord = section.geojson.coordinates[0];
+        const startMercatorCoord = ol.proj.transform([startCoord[0], startCoord[1]], 'EPSG:4326', 'EPSG:3857');
 
-    /** Customizes access points: clicking makes a selection instead of redirecting to a page, and the color is green */
-    mapDocuments() {
-      // This computed property depends on the selectedRouteJourney to ensure
-      // route documents update when a journey is selected
-      void this.currentData.selectedRouteJourney;
-
-      const baseDocuments = this.document.associations.waypoints ? [this.document.associations.waypoints] : [];
-      const accessWaypointDocuments = this.accessWaypoints.map((waypoint) => {
-        return {
-          document_id: waypoint.id,
-          type: 'w',
-          waypoint_type: 'access',
+        const startPointDocument = {
+          document_id: `route-start-origin`,
+          type: 'start',
           geometry: {
             version: 1,
             geom: JSON.stringify({
               type: 'Point',
-              coordinates: ol.proj.transform(waypoint.coordinates, 'EPSG:4326', 'EPSG:3857'),
+              coordinates: [...startMercatorCoord, 0.0, 0.0],
             }),
           },
           properties: {
+            name: 'Départ',
+            color: '#4CAF50',
+            radius: 12,
+            image_url: start,
             nonInteractive: true,
-            color: 'green',
           },
-          locales: [{ title: waypoint.title, lang: this.$language.current }],
         };
-      });
 
-      const routeDocuments = this.prepareRouteDocuments(false);
-
-      return [...baseDocuments, ...accessWaypointDocuments, ...routeDocuments];
-    },
-
-    /** Returns the outbound or return data */
-    currentData() {
-      return this.activeTab === 'outbound' ? this.outboundData : this.returnData;
-    },
-
-    canAccessReturnTab() {
-      return this.outboundData.journeys.length > 0;
-    },
-
-    maxNbTransfers() {
-      return this.limitTransfers ? this.maxTransfers : undefined;
-    },
-  },
-
-  watch: {
-    'currentData.selectedRouteJourney': {
-      handler() {
-        // Trigger recenter when selectedRouteJourney changes
-        this.recenterMapOnDocuments();
-      },
-      deep: true,
-    },
-  },
-
-  async mounted() {
-    // Firefox's date picker calendar has a specific design
-    if (navigator.userAgent.toLowerCase().includes('firefox')) {
-      document.documentElement.classList.add('is-firefox');
-    }
-  },
-
-  async created() {
-    // Load the waypoints served when mounting the component
-    await this.loadReachableWaypoints();
-
-    // If only one waypoint served, select it automatically
-    if (this.reachableWaypoints.length === 1) {
-      this.currentData.selectedWaypoint = this.reachableWaypoints[0];
-    }
-  },
-
-  methods: {
-    // have planATripUtils methods here so they can be used in template
-    ...planATripUtils,
-    handleUpdateFromAddress(address) {
-      if (this.activeTab === 'outbound') {
-        this.outboundData.fromAddress = address;
-        this.outboundData.fromCoordinates = address?.geometry?.coordinates;
-      } else {
-        this.returnData.fromAddress = address;
-        this.returnData.fromCoordinates = address?.geometry?.coordinates;
-      }
-    },
-    handleUpdateSelectedWaypoint(waypoint) {
-      this.currentData.selectedWaypoint = waypoint;
-    },
-    handleUpdateSelectedDate(date) {
-      this.currentData.selectedDate = date;
-    },
-    handleUpdateTimePreference(preference) {
-      this.currentData.timePreference = preference;
-    },
-    handleUpdateSelectedTime(time) {
-      this.currentData.selectedTime = time;
-    },
-    handleUpdateLimitTransfers(limit) {
-      this.limitTransfers = limit;
-    },
-    handleUpdateMaxTransfers(max) {
-      this.maxTransfers = max;
-    },
-    swapAddresses() {
-      if (this.activeTab === 'outbound') {
-        this.switchTab('return');
-      } else if (this.activeTab === 'return') {
-        this.switchTab('outbound');
-      }
-    },
-    setSelectedRouteJourney(journey) {
-      this.currentData.selectedRouteJourney = journey;
-    },
-    /** Call Navitia and store the results */
-    async calculateRoute() {
-      this.queryError = null;
-      this.currentData.missingDepartureAddress = false;
-      this.currentData.missingDestinationAddress = false;
-
-      if (
-        (this.activeTab === 'outbound' && !this.currentData.fromAddress) ||
-        (this.activeTab === 'return' && !this.currentData.selectedWaypoint)
-      ) {
-        this.currentData.missingDepartureAddress = true;
+        routeDocuments.push(startPointDocument);
       }
 
-      if (
-        (this.activeTab === 'outbound' && !this.currentData.selectedWaypoint) ||
-        (this.activeTab === 'return' && !this.currentData.fromAddress)
-      ) {
-        this.currentData.missingDestinationAddress = true;
-      }
+      if (!isWalkingSection) {
+        if (index > 0) {
+          const startCoord = section.geojson.coordinates[0];
+          const startMercatorCoord = ol.proj.transform([startCoord[0], startCoord[1]], 'EPSG:4326', 'EPSG:3857');
 
-      if (this.currentData.missingDepartureAddress || this.currentData.missingDestinationAddress) {
-        return;
-      }
-      let fromCoords, toCoords;
-
-      if (this.activeTab === 'outbound') {
-        // OUTBOUND: From address to waypoint
-        fromCoords = NavitiaService.formatCoordinates(this.currentData.fromCoordinates);
-        toCoords = NavitiaService.formatCoordinates(this.currentData.selectedWaypoint.coordinates);
-        this.displayedFromAddress = this.currentData.fromAddress.address;
-      } else {
-        // RETURN: From waypoint to address
-        fromCoords = NavitiaService.formatCoordinates(this.currentData.selectedWaypoint.coordinates);
-        toCoords = NavitiaService.formatCoordinates(this.currentData.fromCoordinates);
-        this.displayedToAddress = this.currentData.fromAddress.address;
-      }
-
-      this.currentData.isUpdating = true;
-
-      // Format datetime for Navitia API minus 15 minutes
-      const originalDateTime = new Date(`${this.currentData.selectedDate}T${this.currentData.selectedTime}:00`);
-      const adjustedDateTime = new Date(originalDateTime);
-
-      if (originalDateTime.getHours() === 0 && originalDateTime.getMinutes() < 15) {
-        adjustedDateTime.setTime(originalDateTime.getTime());
-      } else {
-        adjustedDateTime.setTime(originalDateTime.getTime() - 15 * 60 * 1000);
-      }
-
-      const year = adjustedDateTime.getFullYear();
-      const month = String(adjustedDateTime.getMonth() + 1).padStart(2, '0');
-      const day = String(adjustedDateTime.getDate()).padStart(2, '0');
-      const hours = String(adjustedDateTime.getHours()).padStart(2, '0');
-      const minutes = String(adjustedDateTime.getMinutes()).padStart(2, '0');
-
-      const dateTimeFormat = `${year}${month}${day}T${hours}${minutes}00`;
-      const dateTimeRepresents = this.currentData.timePreference === 'arrive-before' ? 'arrival' : 'departure';
-
-      try {
-        const response = await NavitiaService.getJourneys(
-          {
-            from: fromCoords,
-            to: toCoords,
-            datetime: dateTimeFormat,
-            datetime_represents: dateTimeRepresents,
-          },
-          {
-            walking_speed: 1.12,
-            max_walking_duration_to_pt: 4464,
-            min_nb_journeys: 3,
-            max_nb_transfers: this.maxNbTransfers,
-          }
-        );
-
-        const data = response.data;
-        this.currentData.showTimeButton = true;
-        const selectedDateFormatted = this.currentData.selectedDate.replace(/-/g, '');
-
-        if (data?.journeys) {
-          const filteredJourneys = data.journeys.filter((journey) => {
-            const journeyDate = journey.departure_date_time.split('T')[0];
-            return journeyDate === selectedDateFormatted;
-          });
-
-          if (filteredJourneys.length === 0) {
-            await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
-            return;
-          }
-
-          this.currentData.journeys = data.journeys.slice(0, 3);
-          this.currentData.noResult = false;
-          this.currentData.selectedRouteJourney = this.currentData.journeys[0];
-
-          if (this.activeTab === 'outbound') {
-            this.calculateReturnParameters();
-            await this.determineReturnWaypoint();
-          }
-
-          // Trigger recenter after journey selection
-          this.recenterMapOnDocuments();
-        } else {
-          await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
-        }
-      } catch (error) {
-        this.queryError = error?.response?.data?.errors?.[0]?.description;
-        if (!(this.queryError in this.errorMessages)) {
-          console.error('Error retrieving routes:', error);
-        }
-        if (this.queryError === 'no_solution' || this.queryError === 'unknown_object') {
-          await this.fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents);
-        } else {
-          this.currentData.noResult = true;
-          this.currentData.journeys = [];
-        }
-      } finally {
-        this.currentData.isUpdating = false;
-
-        // Trigger recenter after processing
-        this.recenterMapOnDocuments();
-      }
-    },
-
-    async fetchExtendedTimeframeJourney(fromCoords, toCoords, dateTimeFormat, dateTimeRepresents) {
-      try {
-        const datePart = dateTimeFormat.substring(0, 8);
-        const dateTimeAtStartOfDay = datePart + 'T000100'; // Format: YYYYMMDDT000100
-        const response = await NavitiaService.getJourneys(
-          {
-            from: fromCoords,
-            to: toCoords,
-            datetime: dateTimeAtStartOfDay,
-            datetime_represents: dateTimeRepresents,
-          },
-          {
-            walking_speed: 1.12,
-            max_walking_duration_to_pt: 4464,
-            min_nb_journeys: 3,
-            max_nb_transfers: this.maxNbTransfers,
-            timeframe_duration: 86400,
-          }
-        );
-
-        const data = response.data;
-        const selectedDateFormatted = this.currentData.selectedDate.replace(/-/g, '');
-
-        if (data?.journeys && data.journeys.length > 0) {
-          const filteredJourneys = data.journeys.filter((journey) => {
-            const journeyDate = journey.departure_date_time.split('T')[0];
-            return journeyDate === selectedDateFormatted;
-          });
-
-          if (filteredJourneys.length > 0) {
-            const lastDepartureTime = filteredJourneys.reduce((latest, journey) => {
-              const depTime = journey.departure_date_time.substring(9); // HHMMSS
-              return depTime > latest ? depTime : latest;
-            }, '000000');
-
-            const bestLastJourney = filteredJourneys.find(
-              (journey) => journey.departure_date_time.substring(9) === lastDepartureTime
-            );
-
-            this.currentData.journeys = [bestLastJourney];
-            this.currentData.noResult = true;
-            this.currentData.selectedRouteJourney = bestLastJourney;
-            if (this.activeTab === 'outbound') {
-              this.calculateReturnParameters();
-              await this.determineReturnWaypoint();
-            }
-            this.currentData.showTimeButton = true;
-
-            this.$emit('calculate-route', {
-              from: {
-                address:
-                  this.activeTab === 'outbound'
-                    ? this.currentData.fromAddress
-                    : this.currentData.selectedWaypoint?.title,
-                coordinates:
-                  this.activeTab === 'outbound'
-                    ? this.currentData.fromCoordinates
-                    : this.currentData.selectedWaypoint?.coordinates,
-              },
-              to: {
-                address:
-                  this.activeTab === 'outbound'
-                    ? this.currentData.selectedWaypoint?.title
-                    : this.currentData.fromAddress,
-                coordinates:
-                  this.activeTab === 'outbound'
-                    ? this.currentData.selectedWaypoint?.coordinates
-                    : this.currentData.fromCoordinates,
-              },
-              date: this.currentData.selectedDate,
-              time: this.currentData.selectedTime,
-              preference: this.currentData.timePreference,
-              journeys: this.currentData.journeys,
-              isExtendedTimeframe: true,
-            });
-
-            return;
-          }
-        }
-
-        this.currentData.noResult = true;
-        this.currentData.journeys = [];
-      } catch (error) {
-        this.queryError = error?.response?.data?.errors?.[0]?.description;
-        if (!(this.queryError in this.errorMessages)) {
-          console.error('Error retrieving extended timeframe routes:', error);
-        }
-        this.currentData.noResult = true;
-        this.currentData.journeys = [];
-      }
-    },
-
-    /** Get the selected access waypoint on the map */
-    handleWaypointClicked(document) {
-      const waypoint = this.accessWaypoints.find((w) => w.id === document.document_id);
-      if (waypoint) {
-        this.currentData.selectedWaypoint = waypoint;
-      }
-    },
-
-    /** Displays the routes of different transport on the map */
-    prepareRouteDocuments(scheduleRecenter = true) {
-      if (
-        !this.currentData.selectedRouteJourney ||
-        !this.currentData.journeys ||
-        this.currentData.journeys.length === 0
-      )
-        return [];
-      const routeDocuments = [];
-      const journey = this.currentData.selectedRouteJourney;
-
-      journey.sections.forEach((section, index) => {
-        if (section.geojson) {
-          const isWalkingSection =
-            section.type === 'street_network' || section.type === 'transfer' || section.mode === 'walking';
-
-          const routeDocument = {
-            document_id: `route-section-${index}`,
-            type: 'r',
+          const startPointDocument = {
+            document_id: `route-start-point-${index}`,
+            type: 'p',
             geometry: {
               version: 1,
-              geom: null,
-              geom_detail: JSON.stringify({
-                type: 'LineString',
-                coordinates: section.geojson.coordinates.map((coord) => {
-                  const mercatorCoord = ol.proj.transform([coord[0], coord[1]], 'EPSG:4326', 'EPSG:3857');
-                  return [...mercatorCoord, 0.0, 0.0];
-                }),
+              geom: JSON.stringify({
+                type: 'Point',
+                coordinates: [...startMercatorCoord, 0.0, 0.0],
               }),
             },
             properties: {
-              name: section.display_informations?.code,
-              duration: section.duration,
-              color: this.getRouteColor(section),
-              isWalking: isWalkingSection,
-              nonInteractive: true,
+              name: `Début section ${index + 1}`,
+              color: '#FFFFFF',
+              border_color: '#000000',
+              radius: 5,
             },
           };
 
-          routeDocuments.push(routeDocument);
-
-          if (index === 0) {
-            const startCoord = section.geojson.coordinates[0];
-            const startMercatorCoord = ol.proj.transform([startCoord[0], startCoord[1]], 'EPSG:4326', 'EPSG:3857');
-
-            const startPointDocument = {
-              document_id: `route-start-origin`,
-              type: 'start',
-              geometry: {
-                version: 1,
-                geom: JSON.stringify({
-                  type: 'Point',
-                  coordinates: [...startMercatorCoord, 0.0, 0.0],
-                }),
-              },
-              properties: {
-                name: 'Départ',
-                color: '#4CAF50',
-                radius: 12,
-                image_url: start,
-                nonInteractive: true,
-              },
-            };
-
-            routeDocuments.push(startPointDocument);
-          }
-
-          if (!isWalkingSection) {
-            if (index > 0) {
-              const startCoord = section.geojson.coordinates[0];
-              const startMercatorCoord = ol.proj.transform([startCoord[0], startCoord[1]], 'EPSG:4326', 'EPSG:3857');
-
-              const startPointDocument = {
-                document_id: `route-start-point-${index}`,
-                type: 'p',
-                geometry: {
-                  version: 1,
-                  geom: JSON.stringify({
-                    type: 'Point',
-                    coordinates: [...startMercatorCoord, 0.0, 0.0],
-                  }),
-                },
-                properties: {
-                  name: `Début section ${index + 1}`,
-                  color: '#FFFFFF',
-                  border_color: '#000000',
-                  radius: 5,
-                },
-              };
-
-              routeDocuments.push(startPointDocument);
-            }
-
-            const endCoord = section.geojson.coordinates[section.geojson.coordinates.length - 1];
-            const endMercatorCoord = ol.proj.transform([endCoord[0], endCoord[1]], 'EPSG:4326', 'EPSG:3857');
-
-            const endPointDocument = {
-              document_id: `route-end-point-${index}`,
-              type: 'p',
-              geometry: {
-                version: 1,
-                geom: JSON.stringify({
-                  type: 'Point',
-                  coordinates: [...endMercatorCoord, 0.0, 0.0],
-                }),
-              },
-              properties: {
-                name: `Fin section ${index + 1}`,
-                color: '#FFFFFF',
-                border_color: '#000000',
-                radius: 5,
-              },
-            };
-
-            routeDocuments.push(endPointDocument);
-          }
+          routeDocuments.push(startPointDocument);
         }
+
+        const endCoord = section.geojson.coordinates[section.geojson.coordinates.length - 1];
+        const endMercatorCoord = ol.proj.transform([endCoord[0], endCoord[1]], 'EPSG:4326', 'EPSG:3857');
+
+        const endPointDocument = {
+          document_id: `route-end-point-${index}`,
+          type: 'p',
+          geometry: {
+            version: 1,
+            geom: JSON.stringify({
+              type: 'Point',
+              coordinates: [...endMercatorCoord, 0.0, 0.0],
+            }),
+          },
+          properties: {
+            name: `Fin section ${index + 1}`,
+            color: '#FFFFFF',
+            border_color: '#000000',
+            radius: 5,
+          },
+        };
+
+        routeDocuments.push(endPointDocument);
+      }
+    }
+  });
+
+  if (scheduleRecenter && olMap.value) {
+    recenterMapOnDocuments();
+  }
+
+  return routeDocuments;
+}
+
+/** Leaves earlier button */
+function departEarlier() {
+  const data = currentData.value;
+  const [hours, minutes] = data.selectedTime.split(':').map(Number);
+  let newHours = hours - 1;
+  let newDate = data.selectedDate;
+
+  if (newHours < 0) {
+    newHours = 23;
+    newDate = addDays(data.selectedDate, -1);
+  }
+
+  data.selectedTime = `${newHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  data.selectedDate = newDate;
+
+  calculateRoute();
+}
+
+/** Leaves later button */
+function departLater() {
+  const data = currentData.value;
+  const [hours, minutes] = data.selectedTime.split(':').map(Number);
+  let newHours = hours + 1;
+  let newDate = data.selectedDate;
+
+  if (newHours > 23) {
+    newHours = 0;
+    newDate = addDays(data.selectedDate, 1);
+  }
+
+  data.selectedTime = `${newHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  data.selectedDate = newDate;
+
+  calculateRoute();
+}
+
+/** Next day button */
+function nextDay() {
+  currentData.value.selectedDate = addDays(currentData.value.selectedDate, 1);
+
+  calculateRoute();
+}
+
+/** Switch between outbound and return tabs */
+function switchTab(tab: string) {
+  if (tab === 'return' && hasReturnTrip.value && !canAccessReturnTab.value) {
+    return;
+  }
+
+  activeTab.value = tab;
+
+  const isReturnTab = tab === 'return';
+  const source = isReturnTab ? outboundData.value : returnData.value;
+  const target = isReturnTab ? returnData.value : outboundData.value;
+
+  if (!hasReturnTrip.value) {
+    // One-way trip: keep both tabs in sync.
+    target.fromAddress = source.fromAddress;
+    target.fromCoordinates = source.fromCoordinates;
+    target.selectedWaypoint = source.selectedWaypoint;
+    return;
+  }
+
+  // Return trip: only initialize the return tab if it hasn't been set yet.
+  if (!target.fromAddress && source.selectedWaypoint) {
+    target.selectedWaypoint = source.selectedWaypoint;
+
+    if (source.fromAddress && source.fromCoordinates) {
+      target.fromAddress = source.fromAddress;
+      target.fromCoordinates = source.fromCoordinates;
+    }
+  }
+}
+
+/** The shortest duration of the route, in days: '10+' gives NaN */
+function shortestDuration() {
+  return props.document.durations?.length ? Math.min(...props.document.durations.map(Number)) : null;
+}
+
+/** Calculation of return fields, according to the available or calculated duration */
+function calculateReturnParameters() {
+  const outbound = outboundData.value;
+  const back = returnData.value;
+  if (!outbound.journeys || outbound.journeys.length === 0) {
+    return;
+  }
+  const outboundJourney = outbound.journeys[0];
+  const arrivalTime = outboundJourney.arrival_date_time;
+
+  // Recovery of the theoretical duration or the duration entered
+  const theoreticalDuration = props.document.calculated_duration; // in days (float)
+  const itineraryDuration = shortestDuration(); // in days (integer)
+
+  // Case 1: Duration <= 1 day with valid theoretical duration
+  if (theoreticalDuration && theoreticalDuration <= 1 && itineraryDuration && itineraryDuration <= 1) {
+    const returnDate = outbound.selectedDate;
+
+    // Calculation of return time (arrival time + theoretical duration)
+    const arrivalHour = parseInt(arrivalTime.substring(9, 11));
+    const arrivalMinute = parseInt(arrivalTime.substring(11, 13));
+
+    const additionalHours = Math.floor(theoreticalDuration * 24);
+    const additionalMinutes = Math.round((theoreticalDuration * 24 - additionalHours) * 60);
+
+    let returnHour = arrivalHour + additionalHours;
+    let returnMinute = arrivalMinute + additionalMinutes;
+
+    // Minutes management > 60
+    if (returnMinute >= 60) {
+      returnHour += Math.floor(returnMinute / 60);
+      returnMinute = returnMinute % 60;
+    }
+
+    // Time management > 24
+    if (returnHour >= 24) {
+      // Case 2: Return impossible on the same day
+      returnHour = 17;
+      returnMinute = 0;
+    }
+
+    back.selectedDate = returnDate;
+    back.selectedTime = `${returnHour.toString().padStart(2, '0')}:${returnMinute.toString().padStart(2, '0')}`;
+  }
+  // Case 3: Duration > 1 day
+  else if (itineraryDuration && itineraryDuration > 1) {
+    back.selectedDate = addDays(outbound.selectedDate, Math.ceil(itineraryDuration));
+    back.selectedTime = '17:00';
+  }
+  // Case 4: Other cases (theoretical duration not available or inconsistent)
+  else {
+    back.selectedDate = outbound.selectedDate;
+    back.selectedTime = '17:00';
+  }
+}
+
+/** Loads waypoints that are accessible by public transport */
+async function loadReachableWaypoints() {
+  loadingReachable.value = true;
+  reachableWaypoints.value = [];
+  let accessPoints: MapDocument[] = [];
+  if (documentType.value === 'waypoint' && props.document.waypoint_type === 'access') {
+    // access waypoint
+    accessPoints = [props.document];
+  } else {
+    // for other types of documents, return the waypoints of type access associated (if any)
+    accessPoints =
+      props.document?.associations?.waypoints?.filter((doc: MapDocument) => doc && doc.waypoint_type === 'access') ??
+      [];
+  }
+  const reachableChecks = [];
+
+  // Check the accessibility of each waypoint
+  for (const waypoint of accessPoints) {
+    reachableChecks.push(
+      transportService
+        .isReachable(waypoint.document_id)
+        .then((isReachable) => ({ waypoint, isReachable }))
+        .catch(() => ({ waypoint, isReachable: false }))
+    );
+  }
+
+  const results = await Promise.all(reachableChecks);
+
+  // Filter served waypoints
+  for (const result of results) {
+    if (result.isReachable) {
+      const locale =
+        result.waypoint.locales.find((l: { lang: string }) => l.lang === $language.current) ||
+        result.waypoint.locales[0];
+      const geom = JSON.parse(result.waypoint.geometry.geom);
+      reachableWaypoints.value.push({
+        id: result.waypoint.document_id,
+        title: locale.title,
+        coordinates: transform(geom.coordinates, 'EPSG:3857', 'EPSG:4326'),
       });
+    }
+  }
 
-      if (scheduleRecenter && this.$refs.mapView) {
-        this.recenterMapOnDocuments();
-      }
+  loadingReachable.value = false;
+}
 
-      return routeDocuments;
-    },
+/** Method to determine the return waypoint automatically */
+async function determineReturnWaypoint() {
+  const outbound = outboundData.value;
+  const back = returnData.value;
+  const reachable = reachableWaypoints.value;
+  if (!outbound.journeys || outbound.journeys.length === 0) {
+    return;
+  }
 
-    /** Retrieves the route position in the list */
-    getTransportSectionIndex(currentSection) {
-      if (!this.currentData.selectedRouteJourney) return 0;
+  // Case 1: No waypoint served
+  if (reachable.length === 0) {
+    back.selectedWaypoint = null;
+    return;
+  }
 
-      let index = 0;
-      for (const section of this.currentData.selectedRouteJourney.sections) {
-        if (section === currentSection) {
-          return index;
-        }
-        if (section.type === 'public_transport') {
-          index++;
-        }
-      }
-      return 0;
-    },
+  // Case 2: Only one waypoint served (loop route)
+  if (reachable.length === 1) {
+    back.selectedWaypoint = reachable[0];
+    return;
+  }
 
-    /** Leaves earlier button */
-    departEarlier() {
-      const [hours, minutes] = this.currentData.selectedTime.split(':').map(Number);
-      let newHours = hours - 1;
-      let newDate = this.currentData.selectedDate;
+  // Case 3: Two waypoints served (crossing)
+  if (reachable.length === 2) {
+    const outboundWaypointId = outbound.selectedWaypoint?.id;
+    const returnWaypoint = reachable.find((w) => w.id !== outboundWaypointId);
 
-      if (newHours < 0) {
-        newHours = 23;
-        const currentDate = new Date(this.currentData.selectedDate);
-        currentDate.setDate(currentDate.getDate() - 1);
-        newDate = currentDate.toISOString().slice(0, 10);
-      }
+    back.selectedWaypoint = returnWaypoint || reachable[1];
+    return;
+  }
 
-      this.currentData.selectedTime = `${newHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-      this.currentData.selectedDate = newDate;
+  // Case 4: More than two waypoints served - let the user choose
+  back.selectedWaypoint = null; // Reset to force manual selection
+}
 
-      this.calculateRoute();
-    },
+/** Displays the duration of the route in days or hours depending on the source */
+function formatDurationForDisplay() {
+  const durations = props.document.durations;
+  const calculatedDuration = props.document.calculated_duration;
+  if (durations?.length === 1 && durations[0] === '10+') {
+    return '10+ ' + $gettext('Day(s)').toLowerCase();
+  }
 
-    /** Leaves later button */
-    departLater() {
-      const [hours, minutes] = this.currentData.selectedTime.split(':').map(Number);
-      let newHours = hours + 1;
-      let newDate = this.currentData.selectedDate;
+  const shouldUseCalculated = durations?.length && shortestDuration() === 1 && calculatedDuration;
 
-      if (newHours > 23) {
-        newHours = 0;
-        const currentDate = new Date(this.currentData.selectedDate);
-        currentDate.setDate(currentDate.getDate() + 1);
-        newDate = currentDate.toISOString().slice(0, 10);
-      }
+  const durationInDays = (shouldUseCalculated ? calculatedDuration : (shortestDuration() ?? calculatedDuration)) ?? 0;
 
-      this.currentData.selectedTime = `${newHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-      this.currentData.selectedDate = newDate;
+  if (durationInDays < 1) {
+    const hours = durationInDays * 24;
+    let hoursInt = Math.floor(hours);
+    let minutes = Math.round((hours - hoursInt) * 60);
 
-      this.calculateRoute();
-    },
+    if (minutes === 60) {
+      hoursInt += 1;
+      minutes = 0;
+    }
 
-    /** Next day button */
-    nextDay() {
-      const currentDate = new Date(this.currentData.selectedDate);
-      currentDate.setDate(currentDate.getDate() + 1);
-      this.currentData.selectedDate = currentDate.toISOString().slice(0, 10);
+    return `${hoursInt}h${minutes.toString().padStart(2, '0')}`;
+  }
 
-      this.calculateRoute();
-    },
+  if (durationInDays === 1) {
+    return `1 ${$gettext('Day(s)').toLowerCase()}`;
+  }
 
-    /** Switch between outbound and return tabs */
-    switchTab(tab) {
-      if (tab === 'return' && this.hasReturnTrip && !this.canAccessReturnTab) {
-        return;
-      }
+  return `${durationInDays} ${$gettext('Day(s)').toLowerCase()}`;
+}
 
-      this.activeTab = tab;
-
-      const isReturnTab = tab === 'return';
-      const source = isReturnTab ? this.outboundData : this.returnData;
-      const target = isReturnTab ? this.returnData : this.outboundData;
-
-      if (!this.hasReturnTrip) {
-        // One-way trip: keep both tabs in sync.
-        target.fromAddress = source.fromAddress;
-        target.fromCoordinates = source.fromCoordinates;
-        target.selectedWaypoint = source.selectedWaypoint;
-        return;
-      }
-
-      // Return trip: only initialize the return tab if it hasn't been set yet.
-      if (!target.fromAddress && source.selectedWaypoint) {
-        target.selectedWaypoint = source.selectedWaypoint;
-
-        if (source.fromAddress && source.fromCoordinates) {
-          target.fromAddress = source.fromAddress;
-          target.fromCoordinates = source.fromCoordinates;
-        }
-      }
-    },
-
-    /** Calculation of return fields, according to the available or calculated duration */
-    calculateReturnParameters() {
-      if (!this.outboundData.journeys || this.outboundData.journeys.length === 0) {
-        return;
-      }
-      const outboundJourney = this.outboundData.journeys[0];
-      const arrivalTime = outboundJourney.arrival_date_time;
-
-      // Recovery of the theoretical duration or the duration entered
-      const theoreticalDuration = this.document.calculated_duration; // in days (float)
-      const itineraryDuration = this.document.durations?.length ? Math.min(...this.document.durations) : null; // in days (integer)
-
-      // Case 1: Duration <= 1 day with valid theoretical duration
-      if (theoreticalDuration && theoreticalDuration <= 1 && itineraryDuration && itineraryDuration <= 1) {
-        const returnDate = this.outboundData.selectedDate;
-
-        // Calculation of return time (arrival time + theoretical duration)
-        const arrivalHour = parseInt(arrivalTime.substring(9, 11));
-        const arrivalMinute = parseInt(arrivalTime.substring(11, 13));
-
-        const additionalHours = Math.floor(theoreticalDuration * 24);
-        const additionalMinutes = Math.round((theoreticalDuration * 24 - additionalHours) * 60);
-
-        let returnHour = arrivalHour + additionalHours;
-        let returnMinute = arrivalMinute + additionalMinutes;
-
-        // Minutes management > 60
-        if (returnMinute >= 60) {
-          returnHour += Math.floor(returnMinute / 60);
-          returnMinute = returnMinute % 60;
-        }
-
-        // Time management > 24
-        if (returnHour >= 24) {
-          // Case 2: Return impossible on the same day
-          returnHour = 17;
-          returnMinute = 0;
-          this.showReturnWarning = true;
-        }
-
-        this.returnData.selectedDate = returnDate;
-        this.returnData.selectedTime = `${returnHour.toString().padStart(2, '0')}:${returnMinute
-          .toString()
-          .padStart(2, '0')}`;
-      }
-      // Case 3: Duration > 1 day
-      else if (itineraryDuration && itineraryDuration > 1) {
-        const outboundDate = new Date(this.outboundData.selectedDate);
-        const daysToAdd = itineraryDuration ? Math.ceil(itineraryDuration) : Math.ceil(theoreticalDuration);
-        outboundDate.setDate(outboundDate.getDate() + daysToAdd);
-
-        this.returnData.selectedDate = outboundDate.toISOString().slice(0, 10);
-        this.returnData.selectedTime = '17:00';
-      }
-      // Case 4: Other cases (theoretical duration not available or inconsistent)
-      else {
-        this.returnData.selectedDate = this.outboundData.selectedDate;
-        this.returnData.selectedTime = '17:00';
-        this.showReturnWarning = true;
-      }
-    },
-
-    /** Loads waypoints that are accessible by public transport */
-    async loadReachableWaypoints() {
-      this.loadingReachable = true;
-      this.reachableWaypoints = [];
-      let accessPoints = [];
-      if (this.documentType === 'waypoint' && this.document.waypoint_type === 'access') {
-        // access waypoint
-        accessPoints = [this.document];
-      } else {
-        // for other types of documents, return the waypoints of type access associated (if any)
-        accessPoints =
-          this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access') ?? [];
-      }
-      const reachableChecks = [];
-
-      // Check the accessibility of each waypoint
-      for (const waypoint of accessPoints) {
-        reachableChecks.push(
-          transportService
-            .isReachable(waypoint.document_id)
-            .then((isReachable) => ({ waypoint, isReachable }))
-            .catch(() => ({ waypoint, isReachable: false }))
-        );
-      }
-
-      const results = await Promise.all(reachableChecks);
-
-      // Filter served waypoints
-      for (const result of results) {
-        if (result.isReachable) {
-          const locale =
-            result.waypoint.locales.find((l) => l.lang === this.$language.current) || result.waypoint.locales[0];
-          const geom = JSON.parse(result.waypoint.geometry.geom);
-          this.reachableWaypoints.push({
-            id: result.waypoint.document_id,
-            title: locale.title,
-            coordinates: transform(geom.coordinates, 'EPSG:3857', 'EPSG:4326'),
-          });
-        }
-      }
-
-      this.loadingReachable = false;
-    },
-
-    /** Method to determine the return waypoint automatically */
-    async determineReturnWaypoint() {
-      if (!this.outboundData.journeys || this.outboundData.journeys.length === 0) {
-        return;
-      }
-
-      // Case 1: No waypoint served
-      if (this.reachableWaypoints.length === 0) {
-        this.returnData.selectedWaypoint = null;
-        return;
-      }
-
-      // Case 2: Only one waypoint served (loop route)
-      if (this.reachableWaypoints.length === 1) {
-        this.returnData.selectedWaypoint = this.reachableWaypoints[0];
-        return;
-      }
-
-      // Case 3: Two waypoints served (crossing)
-      if (this.reachableWaypoints.length === 2) {
-        const outboundWaypointId = this.outboundData.selectedWaypoint?.id;
-        const returnWaypoint = this.reachableWaypoints.find((w) => w.id !== outboundWaypointId);
-
-        this.returnData.selectedWaypoint = returnWaypoint || this.reachableWaypoints[1];
-        return;
-      }
-
-      // Case 4: More than two waypoints served - let the user choose
-      if (this.reachableWaypoints.length > 2) {
-        this.returnData.selectedWaypoint = null; // Reset to force manual selection
-        return;
-      }
-
-      // Case 5: Some waypoints not served - take the outward one if it is served
-      if (this.outboundData.selectedWaypoint) {
-        const isCurrentReachable = this.reachableWaypoints.some((w) => w.id === this.outboundData.selectedWaypoint.id);
-        if (isCurrentReachable) {
-          this.returnData.selectedWaypoint = this.outboundData.selectedWaypoint;
-        } else {
-          this.returnData.selectedWaypoint = null;
-        }
-      }
-    },
-
-    /** Displays the duration of the route in days or hours depending on the source */
-    formatDurationForDisplay() {
-      if (this.document.durations.length === 1 && this.document.durations[0] === '10+') {
-        return '10+ ' + this.$gettext('Day(s)').toLowerCase();
-      }
-
-      const shouldUseCalculated =
-        this.document.durations?.length &&
-        Math.min(...this.document.durations) === 1 &&
-        this.document.calculated_duration;
-
-      const durationInDays = shouldUseCalculated
-        ? this.document.calculated_duration
-        : this.document.durations?.length
-          ? Math.min(...this.document.durations)
-          : this.document.calculated_duration;
-
-      if (durationInDays < 1) {
-        const hours = durationInDays * 24;
-        let hoursInt = Math.floor(hours);
-        let minutes = Math.round((hours - hoursInt) * 60);
-
-        if (minutes === 60) {
-          hoursInt += 1;
-          minutes = 0;
-        }
-
-        return `${hoursInt}h${minutes.toString().padStart(2, '0')}`;
-      }
-
-      if (durationInDays === 1) {
-        return `1 ${this.$gettext('Day(s)').toLowerCase()}`;
-      }
-
-      return `${durationInDays} ${this.$gettext('Day(s)').toLowerCase()}`;
-    },
-
-    /** Helper method to recenter the map on documents if available */
-    recenterMapOnDocuments() {
-      this.$nextTick(() => {
-        // Only recenter if there are documents to recenter on
-        if (this.$refs.mapView && this.currentData.journeys && this.currentData.journeys.length > 0) {
-          this.$refs.mapView.recenterOnDocuments();
-        }
-      });
-    },
-  },
-};
+/** Helper method to recenter the map on documents if available */
+function recenterMapOnDocuments() {
+  nextTick(() => {
+    // Only recenter if there are documents to recenter on
+    if (olMap.value && currentData.value.journeys && currentData.value.journeys.length > 0) {
+      olMap.value.recenterOnDocuments();
+    }
+  });
+}
 </script>
 
 <style scoped lang="scss">
