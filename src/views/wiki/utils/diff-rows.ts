@@ -1,14 +1,8 @@
 // The line by line, then word by word, differences of two texts, as DiffView shows them
-import { diffMatchPatch as library } from './diff_match_patch_uncompressed';
+import { type Diff as DiffPart, diffCharsToLines, diffLinesToChars, diffMain } from 'diff-match-patch-es';
 
-// a diff of diffMatchPatch: (mode, text) pairs, mode being -1 (deletion), 0 (unchanged) or 1 (addition)
-type Diff = [number, string][];
-// the functions used of the library (its JSDoc types are partial)
-const diffMatchPatch = library as unknown as {
-  diff_main(text1: string, text2: string, checklines?: boolean): Diff;
-  diff_linesToChars_(text1: string, text2: string): { chars1: string; chars2: string; lineArray: string[] };
-  diff_charsToLines_(diff: Diff, lineArray: string[]): void;
-};
+// a diff of diff-match-patch: (mode, text) pairs, mode being -1 (deletion), 0 (unchanged) or 1 (addition)
+type Diff = DiffPart[];
 type DiffCallback = (oldPart: string | null, newPart: string | null, isIdentical: boolean) => void;
 
 export const hasChanged = function (oldVal: unknown, newVal: unknown) {
@@ -28,7 +22,7 @@ export const hasChanged = function (oldVal: unknown, newVal: unknown) {
 };
 
 const computeDiff = function (diff: Diff, callback: DiffCallback) {
-  // this function transform a diff from diffMatchPatch
+  // this function transform a diff from diff-match-patch
   //
   // it calls sequentially callback with three argument :
   //
@@ -108,7 +102,7 @@ export class Row {
       this.oldPart.push(new Item(oldPart, false));
     } else {
       // two different row on the same location, let's compute a precise diff
-      const diff = diffMatchPatch.diff_main(oldPart, newPart);
+      const diff = diffMain(oldPart, newPart);
       computeDiff(diff, this.addItem.bind(this));
     }
   }
@@ -148,9 +142,9 @@ export class Rows {
 
   build(oldText: string, newText: string) {
     // compute a line diff
-    const linesData = diffMatchPatch.diff_linesToChars_(oldText, newText);
-    const diff = diffMatchPatch.diff_main(linesData.chars1, linesData.chars2, false);
-    diffMatchPatch.diff_charsToLines_(diff, linesData.lineArray);
+    const linesData = diffLinesToChars(oldText, newText);
+    const diff = diffMain(linesData.chars1, linesData.chars2, undefined, false);
+    diffCharsToLines(diff, linesData.lineArray);
 
     computeDiff(diff, this.add.bind(this));
   }
