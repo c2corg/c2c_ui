@@ -89,7 +89,11 @@ describe('PlanATripSection', () => {
     process.env.TZ = 'Europe/Paris';
   });
   afterAll(() => {
-    process.env.TZ = timezone;
+    if (timezone === undefined) {
+      delete process.env.TZ;
+    } else {
+      process.env.TZ = timezone;
+    }
   });
 
   beforeEach(() => {
@@ -171,6 +175,6 @@ describe('PlanATripSection', () => {
 
     await calculate(wrapper);
 
-    expect(wrapper.find('.navitia-unknown-error-title').text()).toBe('An unknown error occured.');
+    expect(wrapper.find('.navitia-unknown-error-title').text()).toBe('An unknown error occurred.');
   });
 });

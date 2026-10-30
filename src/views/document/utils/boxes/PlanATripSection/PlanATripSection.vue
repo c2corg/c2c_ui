@@ -335,7 +335,7 @@ const queryErrorMessage = computed(() => {
       if (queryError.value && queryError.value in errorMessages) {
         return errorMessages[queryError.value];
       } else {
-        return $gettext('An unknown error occured.');
+        return errorMessages.unknown_error;
       }
     }
   }
