@@ -2,8 +2,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import concurrencyLimit from './concurrency-limit';
 
-const delay = (ms, value) => new Promise((resolve) => setTimeout(() => resolve(value), ms));
-const fail = (ms, error) => new Promise((resolve, reject) => setTimeout(() => reject(error), ms));
+const delay = <T>(ms: number, value?: T) =>
+  new Promise<T | undefined>((resolve) => setTimeout(() => resolve(value), ms));
+const fail = (ms: number, error: Error) => new Promise((resolve, reject) => setTimeout(() => reject(error), ms));
 
 describe('concurrencyLimit', () => {
   beforeEach(() => {
@@ -16,16 +17,22 @@ describe('concurrencyLimit', () => {
 
   // Wraps tasks to record how many run at the same time
   const tracker = () => {
-    const state = { active: 0, maxActive: 0, started: [] };
-    state.wrap = (name, task) => async () => {
-      state.started.push(name);
-      state.active++;
-      state.maxActive = Math.max(state.maxActive, state.active);
-      try {
-        return await task();
-      } finally {
-        state.active--;
-      }
+    const state = {
+      active: 0,
+      maxActive: 0,
+      started: [] as (string | number)[],
+      wrap:
+        <T>(name: string | number, task: () => Promise<T>) =>
+        async () => {
+          state.started.push(name);
+          state.active++;
+          state.maxActive = Math.max(state.maxActive, state.active);
+          try {
+            return await task();
+          } finally {
+            state.active--;
+          }
+        },
     };
     return state;
   };
