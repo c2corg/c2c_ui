@@ -1,50 +1,75 @@
+import type { ScaleBand, ScaleLinear } from 'd3-scale';
+import type { Selection } from 'd3-selection';
+
 import d3 from '@/js/libs/d3';
 
-export class Histogram {
-  constructor(data, htmlElement, getX) {
+// the value of a datum: a number, or for stacked histograms a category, several categories, or values by category
+type YValue = number | string | string[] | Record<string, number> | null | undefined;
+
+interface Bar {
+  x: number;
+  y: number;
+}
+
+interface StackedBar extends Bar {
+  category: string;
+  yDown: number;
+  yUp: number;
+  color: string | null;
+}
+
+export class Histogram<T, V extends Bar = Bar> {
+  protected _data: T[];
+  protected _htmlElement: HTMLElement;
+  protected _getX: (datum: T) => number;
+  protected _xTickLabel: (value: number) => string | number = (value) => value;
+  protected _yTickLabel: (value: number) => string | number = (value) => value;
+  protected _getY: (datum: T) => YValue = () => 1;
+  protected _xUrl: ((value: number) => string) | null = null;
+
+  // set the dimensions and margins of the graph
+  protected _margin = { top: 10, right: 30, bottom: 50, left: 40 };
+  protected _width: number;
+  protected _height: number;
+
+  protected _svg!: Selection<SVGGElement, unknown, null, undefined>;
+  protected _xScale!: ScaleBand<number>;
+  protected _yScale!: ScaleLinear<number, number>;
+
+  protected _values: V[] = []; //computed version of data
+
+  protected _xDomain: number[] | null = null;
+
+  constructor(data: T[], htmlElement: HTMLElement, getX: (datum: T) => number) {
     this._data = data;
     this._htmlElement = htmlElement;
     this._getX = getX;
-    this._xTickLabel = (value) => value;
-    this._yTickLabel = (value) => value;
-    this._getY = () => 1;
-    this._xUrl = null;
 
-    // set the dimensions and margins of the graph
-    this._margin = { top: 10, right: 30, bottom: 50, left: 40 };
     this._width = this._htmlElement.offsetWidth - this._margin.left - this._margin.right;
     this._height = 400 - this._margin.top - this._margin.bottom;
-
-    this._svg = null;
-    this._xScale = null;
-    this._yScale = null;
-
-    this._values = null; //computed version of data
-
-    this._xDomain = null;
   }
 
-  xDomain(domain) {
+  xDomain(domain: number[]) {
     this._xDomain = domain;
     return this;
   }
 
-  y(yGetter) {
+  y(yGetter: (datum: T) => YValue) {
     this._getY = yGetter;
     return this;
   }
 
-  xTickLabel(xTickLabelGetter) {
+  xTickLabel(xTickLabelGetter: (value: number) => string | number) {
     this._xTickLabel = xTickLabelGetter;
     return this;
   }
 
-  xUrl(xUrlGetter) {
+  xUrl(xUrlGetter: ((value: number) => string) | null) {
     this._xUrl = xUrlGetter;
     return this;
   }
 
-  yTickLabel(yTickLabelGetter) {
+  yTickLabel(yTickLabelGetter: (value: number) => string | number) {
     this._yTickLabel = yTickLabelGetter;
     return this;
   }
@@ -53,36 +78,36 @@ export class Histogram {
     d3.then(this._draw.bind(this));
   }
 
-  _computeValues() {
-    let values = {};
+  protected _computeValues() {
+    const values: Record<number, Bar> = {};
 
     for (const d of this._data) {
       const x = this._getX(d);
       const y = this._getY(d);
       if (y !== null && y !== undefined) {
         values[x] = values[x] || { x, y: 0 };
-        values[x].y += y;
+        values[x].y += y as number;
       }
     }
 
-    this._values = Object.values(values);
+    this._values = Object.values(values) as V[];
   }
 
-  _getMaxY() {
-    return d3.max(this._values, (v) => v.y);
+  protected _getMaxY(): number {
+    return d3.max(this._values, (v: V) => v.y);
   }
 
-  _draw() {
+  protected _draw() {
     // clean
     this._htmlElement.innerHTML = '';
 
     this._computeValues();
 
-    const xDomain = this._xDomain
+    const xDomain: number[] = this._xDomain
       ? this._xDomain
       : d3.range(
-          d3.min(this._values, (v) => v.x),
-          d3.max(this._values, (v) => v.x) + 1
+          d3.min(this._values, (v: V) => v.x),
+          d3.max(this._values, (v: V) => v.x) + 1
         );
 
     this._xScale = d3.scaleBand().range([0, this._width]).padding(0.1).domain(xDomain);
@@ -113,7 +138,7 @@ export class Histogram {
     if (this._xUrl) {
       const xUrl = this._xUrl;
 
-      axisBottom.selectAll('text').each(function (d) {
+      axisBottom.selectAll<SVGTextElement, number>('text').each(function (d) {
         const anchor = d3.select(this.parentNode).append('a').attr('xlink:href', xUrl(d));
         anchor.node().appendChild(this);
       });
@@ -134,7 +159,7 @@ export class Histogram {
       .enter()
       .append('rect')
       .attr('class', 'bar')
-      .attr('x', (d) => this._xScale(d.x))
+      .attr('x', (d) => this._xScale(d.x)!)
       .attr('width', this._xScale.bandwidth())
       .attr('y', (d) => this._yScale(d.y))
       .attr('height', (d) => this._height - this._yScale(d.y))
@@ -142,28 +167,25 @@ export class Histogram {
   }
 }
 
-export class StackedHistogram extends Histogram {
-  constructor(data, htmlElement, getX) {
-    super(data, htmlElement, getX);
-    this._getCategoryLabel = (category) => category;
-    this._color = () => '#F93';
-    this._categoryComparator = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
-    this._categories = null;
-    this._categoryUrl = null;
-    this._dataUrl = null;
-  }
+export class StackedHistogram<T> extends Histogram<T, StackedBar> {
+  protected _getCategoryLabel: (category: string) => string = (category) => category;
+  protected _color: (category: string, firstCategory: string, lastCategory: string) => string = () => '#F93';
+  protected _categoryComparator: (a: string, b: string) => number = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+  protected _categories: string[] = [];
+  protected _categoryUrl: ((category: string) => string) | null = null;
+  protected _dataUrl: ((x: number, category: string) => string) | null = null;
 
-  _computeValues() {
-    let values = {};
-    let all_categories = new Set();
-    let xs = new Set();
+  protected _computeValues() {
+    const values: Record<string, StackedBar> = {};
+    const all_categories = new Set<string>();
+    const xs = new Set<number>();
 
     for (const d of this._data) {
       const x = this._getX(d);
       const y = this._getY(d);
 
       if (!!y) {
-        let y_as_object = {};
+        let y_as_object: Record<string, number> = {};
 
         if (typeof y === 'string') {
           // simply use y as a category, and set value to 1
@@ -173,7 +195,7 @@ export class StackedHistogram extends Histogram {
           for (const category of y) {
             y_as_object[category] = 1 / y.length;
           }
-        } else {
+        } else if (typeof y === 'object') {
           y_as_object = y;
         }
 
@@ -197,10 +219,10 @@ export class StackedHistogram extends Histogram {
       lastCategory = this._categories[this._categories.length - 1];
 
     // compute lower and upper bounds of the stack
-    for (let x of xs) {
+    for (const x of xs) {
       let yDown = 0;
 
-      for (let category of this._categories) {
+      for (const category of this._categories) {
         const key = `${x}_${category}`;
 
         if (values[key]) {
@@ -216,42 +238,42 @@ export class StackedHistogram extends Histogram {
     this._values = Object.values(values);
   }
 
-  categoryUrl(_categoryUrlGetter) {
+  categoryUrl(_categoryUrlGetter: ((category: string) => string) | null) {
     this._categoryUrl = _categoryUrlGetter;
     return this;
   }
 
-  categoryLabel(categoryLabelGetter) {
+  categoryLabel(categoryLabelGetter: (category: string) => string) {
     this._getCategoryLabel = categoryLabelGetter;
     return this;
   }
 
-  _getMaxY() {
-    return d3.max(this._values, (v) => v.yUp);
+  protected _getMaxY(): number {
+    return d3.max(this._values, (v: StackedBar) => v.yUp);
   }
 
-  categoryComparator(categoryComparator) {
+  categoryComparator(categoryComparator: (a: string, b: string) => number) {
     this._categoryComparator = categoryComparator;
     return this;
   }
 
-  color(colorGetter) {
+  color(colorGetter: (category: string, firstCategory: string, lastCategory: string) => string) {
     this._color = colorGetter;
     return this;
   }
 
-  dataUrl(dataUrlGetter) {
+  dataUrl(dataUrlGetter: ((x: number, category: string) => string) | null) {
     this._dataUrl = dataUrlGetter;
     return this;
   }
 
   drawLegend() {
     // Add one dot in the legend for each name.
-    var size = 8;
-    const colors = {};
+    const size = 8;
+    const colors: Record<string, string> = {};
     const categories = [...this._categories].reverse();
 
-    for (let category of this._categories) {
+    for (const category of this._categories) {
       colors[category] = this._color(category, this._categories[0], this._categories[this._categories.length - 1]);
     }
 
@@ -280,13 +302,10 @@ export class StackedHistogram extends Histogram {
       .attr('height', size)
       .style('fill', (d) => colors[d]);
 
-    let labels = legend.selectAll('mylabels').data(categories).enter();
+    const labels = legend.selectAll('mylabels').data(categories).enter();
+    const categoryUrl = this._categoryUrl;
 
-    if (this._categoryUrl) {
-      labels = labels.append('a').attr('xlink:href', this._categoryUrl);
-    }
-
-    labels
+    (categoryUrl ? labels.append('a').attr('xlink:href', categoryUrl) : labels)
       .append('text')
       .attr('x', size * 1.2)
       .attr('y', (d, i) => i * (size + 5) + size / 2)
@@ -294,7 +313,7 @@ export class StackedHistogram extends Histogram {
       .attr('text-anchor', 'left')
       .style('alignment-baseline', 'middle');
 
-    const bbox = legend.node().getBBox();
+    const bbox = legend.node()!.getBBox();
     const legendPadding = 3;
 
     legendBox
@@ -305,15 +324,12 @@ export class StackedHistogram extends Histogram {
   }
 
   drawRectangles() {
-    let rectangles = this._svg.selectAll('.bar').data(this._values).enter();
+    const rectangles = this._svg.selectAll('.bar').data(this._values).enter();
+    const dataUrl = this._dataUrl;
 
-    if (this._dataUrl) {
-      rectangles = rectangles.append('a').attr('xlink:href', (value) => this._dataUrl(value.x, value.category));
-    }
-
-    rectangles
+    (dataUrl ? rectangles.append('a').attr('xlink:href', (value) => dataUrl(value.x, value.category)) : rectangles)
       .append('rect')
-      .attr('x', (d) => this._xScale(d.x))
+      .attr('x', (d) => this._xScale(d.x)!)
       .attr('width', this._xScale.bandwidth())
       .attr('y', (d) => this._yScale(d.yUp))
       .attr('height', (d) => this._yScale(d.yDown) - this._yScale(d.yUp))
