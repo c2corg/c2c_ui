@@ -3,7 +3,7 @@ import { join } from 'node:path';
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const sourceFiles = (dir) =>
+const sourceFiles = (dir: string): string[] =>
   readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
     entry.isDirectory()
       ? sourceFiles(join(dir, entry.name))
@@ -13,7 +13,7 @@ const sourceFiles = (dir) =>
   );
 
 // the preferences each component reads and writes, as existing users have them in their browser
-const STORED_UNDER = {
+const STORED_UNDER: Record<string, string> = {
   'src/components/itinevert/ItinevertResultView.vue': 'ItinevertResultView',
   'src/components/yeti/SubPanelLayers.vue': 'Yeti',
   'src/components/yeti/YetiMap.vue': 'Yeti',
@@ -29,9 +29,9 @@ const STORED_UNDER = {
 
 // the name a component's preferences are stored under: its own name with this.$localStorage, the one it passes to
 // getPreferences() otherwise
-const storageName = (source) =>
+const storageName = (source: string) =>
   source.includes('$localStorage')
-    ? source.match(/\n {2}name: '([^']+)'/)[1]
+    ? source.match(/\n {2}name: '([^']+)'/)![1]
     : source.match(/getPreferences\('([^']+)'\)/)?.[1];
 
 describe('local storage', () => {
@@ -49,7 +49,7 @@ describe('local storage', () => {
     expect(preferences.get('isPersonal', false)).toBe(false);
 
     preferences.set('isPersonal', true);
-    expect(JSON.parse(window.localStorage.getItem('HomeView.preferences'))).toEqual({ feed: true, isPersonal: true });
+    expect(JSON.parse(window.localStorage.getItem('HomeView.preferences')!)).toEqual({ feed: true, isPersonal: true });
   });
 
   it('starts empty from what is not a preferences record', async () => {
@@ -63,7 +63,7 @@ describe('local storage', () => {
       expect(getPreferences(name).get('anything', 'default')).toBe('default');
     }
     getPreferences('Yeti').set('yeti-disclaimer', 'validated');
-    expect(JSON.parse(window.localStorage.getItem('Yeti.preferences'))).toEqual({ 'yeti-disclaimer': 'validated' });
+    expect(JSON.parse(window.localStorage.getItem('Yeti.preferences')!)).toEqual({ 'yeti-disclaimer': 'validated' });
   });
 
   it('gives the same preferences to everyone using a name', async () => {
@@ -85,7 +85,7 @@ describe('local storage', () => {
   it('is not reached through this.$localStorage, which gets the wrong this in Vue 3', () => {
     // Vue 3 reads Vue.prototype getters on app.config.globalProperties: `this` is not the component any more
     const uses = sourceFiles('src').filter(
-      (file) => !file.endsWith('local-storage.spec.js') && readFileSync(file, 'utf8').includes('$localStorage')
+      (file) => !file.endsWith('local-storage.spec.ts') && readFileSync(file, 'utf8').includes('$localStorage')
     );
 
     expect(uses).toEqual([]);

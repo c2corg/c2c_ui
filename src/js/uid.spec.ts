@@ -1,18 +1,18 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { mount } from '@vue/test-utils';
+import { type DOMWrapper, type VueWrapper, mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
-import InputCheckbox from '@/components/generics/inputs/InputCheckbox';
-import InputSlider from '@/components/generics/inputs/InputSlider';
-import InputYesNo from '@/components/generics/inputs/InputYesNo';
-import YetiSlider from '@/components/yeti/Slider';
+import InputCheckbox from '@/components/generics/inputs/InputCheckbox.vue';
+import InputSlider from '@/components/generics/inputs/InputSlider.vue';
+import InputYesNo from '@/components/generics/inputs/InputYesNo.vue';
+import YetiSlider from '@/components/yeti/Slider.vue';
 import { nextUid } from '@/js/uid';
 
-const mocks = { $gettext: (key) => key, $filters: { uppercaseFirstLetter: (text) => text } };
+const mocks = { $gettext: (key: string) => key, $filters: { uppercaseFirstLetter: (text: string) => text } };
 
-const sourceFiles = (dir) =>
+const sourceFiles = (dir: string): string[] =>
   readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
     entry.isDirectory()
       ? sourceFiles(join(dir, entry.name))
@@ -22,7 +22,7 @@ const sourceFiles = (dir) =>
   );
 
 // the input a label points to, by its for attribute
-const labelledInput = (wrapper, label) => wrapper.find(`#${label.attributes('for')}`);
+const labelledInput = (wrapper: VueWrapper, label: DOMWrapper<Element>) => wrapper.find(`#${label.attributes('for')}`);
 
 describe('uid', () => {
   it('gives a new id each time', () => {
@@ -62,7 +62,9 @@ describe('uid', () => {
     const labels = wrapper.findAll('label');
     expect(labels).toHaveLength(3);
     // the value each radio sets through v-model (Vue 3 renders no value attribute for null)
-    expect(labels.map((label) => labelledInput(wrapper, label).element._value)).toEqual([true, false, null]);
+    expect(
+      labels.map((label) => (labelledInput(wrapper, label).element as HTMLInputElement & { _value: unknown })._value)
+    ).toEqual([true, false, null]);
   });
 
   it('names the Yeti slider handle after its label', () => {
@@ -74,6 +76,6 @@ describe('uid', () => {
     });
 
     const handle = wrapper.find('[role=slider]');
-    expect(document.getElementById(handle.attributes('aria-labelledby')).textContent.trim()).toBe('Opacity');
+    expect(document.getElementById(handle.attributes('aria-labelledby')!)!.textContent!.trim()).toBe('Opacity');
   });
 });
