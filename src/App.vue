@@ -1,18 +1,19 @@
 <template>
   <div
     id="app"
+    ref="app"
     :class="{
-      'nav-dfm': !homePage() && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
-      'home-topoguide': homePage(),
+      'nav-dfm': !homePage && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
+      'home-topoguide': homePage,
     }"
   >
     <side-menu class="side-menu no-print" :class="{ 'alternative-side-menu': alternativeSideMenu }" />
     <navigation class="navigation no-print" @toggle-side-menu="alternativeSideMenu = !alternativeSideMenu" />
-    <dfm-ad-small v-if="!homePage() && ($screen.isMobile || $screen.isTablet || $screen.isDesktop)" class="ad" />
-    <site-notice ref="siteNotice no-print" class="no-print site-notice" />
-    <image-viewer ref="imageViewer" />
-    <helper-window ref="helper" />
-    <alert-window ref="alertWindow" />
+    <dfm-ad-small v-if="!homePage && ($screen.isMobile || $screen.isTablet || $screen.isDesktop)" class="ad" />
+    <site-notice class="no-print site-notice" />
+    <image-viewer />
+    <helper-window />
+    <alert-window />
     <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu = false" />
 
     <!-- keep router view in last -->
@@ -23,82 +24,63 @@
   </div>
 </template>
 
-<script>
-import AlertWindow from './components/alert-window/AlertWindow';
+<script setup lang="ts">
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { useRoute } from 'vue-router';
+
+import AlertWindow from './components/alert-window/AlertWindow.vue';
 import GdprBanner from './components/gdpr/GdprBanner.vue';
-import HelperWindow from './components/helper/HelperWindow';
-import ImageViewer from './components/image-viewer/ImageViewer';
+import HelperWindow from './components/helper/HelperWindow.vue';
+import ImageViewer from './components/image-viewer/ImageViewer.vue';
 import DfmAdSmall from './views/DfmAdSmall.vue';
-import Navigation from './views/Navigation';
-import SideMenu from './views/SideMenu';
-import SiteNotice from './views/SiteNotice';
+import Navigation from './views/Navigation.vue';
+import SideMenu from './views/SideMenu.vue';
+import SiteNotice from './views/SiteNotice.vue';
 
-export default {
-  name: 'App',
+defineOptions({ name: 'App' });
 
-  components: {
-    DfmAdSmall,
-    SideMenu,
-    Navigation,
-    SiteNotice,
-    HelperWindow,
-    ImageViewer,
-    AlertWindow,
-    GdprBanner,
-  },
+const route = useRoute();
+const app = useTemplateRef<HTMLDivElement>('app');
 
-  data() {
-    return {
-      alternativeSideMenu: false,
-    };
-  },
+const alternativeSideMenu = ref(false);
 
-  watch: {
-    $route: 'hideSideMenuOnMobile',
-  },
+const homePage = computed(() => route.path === '/home' || route.path === '/');
 
-  mounted() {
-    document.getElementById('splashscreen').style.display = 'none';
-    this.updateWidth();
-    window.addEventListener('resize', this.updateWidth);
-  },
+function hideSideMenuOnMobile() {
+  alternativeSideMenu.value = false;
+}
 
-  beforeUnmount() {
-    window.removeEventListener('resize', this.updateWidth);
-  },
+watch(() => route.fullPath, hideSideMenuOnMobile);
 
-  methods: {
-    hideSideMenuOnMobile() {
-      this.alternativeSideMenu = false;
-    },
-    updateWidth() {
-      // allows reactive css when body width changes because map is pinned
-      // (unlike the css @media(max-width) this is replacing)
+function updateWidth() {
+  // allows reactive css when body width changes because map is pinned
+  // (unlike the css @media(max-width) this is replacing)
 
-      const bulmaBreakpoints = {
-        tablet: 769,
-        desktop: 1024,
-        widescreen: 1216,
-        fullhd: 1408,
-      };
-      const width = this.$el.offsetWidth;
-      if (width <= bulmaBreakpoints.tablet) {
-        this.$el.dataset.width = 'mobile';
-      } else if (width <= bulmaBreakpoints.desktop) {
-        this.$el.dataset.width = 'tablet';
-      } else {
-        this.$el.dataset.width = 'desktop';
-      }
-    },
-    homePage() {
-      if (this.$route.path === '/home' || this.$route.path === '/') {
-        return true;
-      } else {
-        return false;
-      }
-    },
-  },
-};
+  const bulmaBreakpoints = {
+    tablet: 769,
+    desktop: 1024,
+    widescreen: 1216,
+    fullhd: 1408,
+  };
+  const width = app.value!.offsetWidth;
+  if (width <= bulmaBreakpoints.tablet) {
+    app.value!.dataset.width = 'mobile';
+  } else if (width <= bulmaBreakpoints.desktop) {
+    app.value!.dataset.width = 'tablet';
+  } else {
+    app.value!.dataset.width = 'desktop';
+  }
+}
+
+onMounted(() => {
+  document.getElementById('splashscreen')!.style.display = 'none';
+  updateWidth();
+  window.addEventListener('resize', updateWidth);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateWidth);
+});
 </script>
 
 <style lang="scss">
