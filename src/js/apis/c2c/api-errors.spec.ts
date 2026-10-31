@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { AxiosError, AxiosHeaders, type AxiosResponse } from 'axios';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { nextTick, reactive } from 'vue';
 
 import { apiErrors, errorStatus } from './api-errors';
@@ -39,6 +39,38 @@ describe('apiErrors', () => {
     const error = failed({ status: 400, data: { status: 'error', errors: [{ message: 'Required' }] } });
 
     expect(() => apiErrors(error)).toThrow('Unexpected response to POST /routes');
+  });
+
+  it('checks every JSON answer: a change of its status fails too', () => {
+    const errors = [{ location: 'body', name: 'title', description: 'Required' }];
+
+    expect(() => apiErrors(failed({ status: 400, data: { status: 'failed', errors } }))).toThrow(
+      'Unexpected response to POST /routes'
+    );
+  });
+
+  describe('in production', () => {
+    beforeEach(() => {
+      vi.stubEnv('DEV', false);
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+    });
+    afterEach(() => {
+      vi.unstubAllEnvs();
+      vi.restoreAllMocks();
+    });
+
+    it('reports an answer of another shape, and keeps its valid errors', () => {
+      const valid = { location: 'body', name: 'title', description: 'Required' };
+      const data = { status: 'error', errors: [null, { description: 'no name' }, valid] };
+
+      expect(apiErrors(failed({ status: 400, data }))).toEqual([valid]);
+      expect(console.error).toHaveBeenCalledWith(expect.stringContaining('Unexpected response to POST /routes'));
+    });
+
+    it('gives the unexpected error when no error is valid', () => {
+      expect(apiErrors(failed({ status: 400, data: { status: 'error', errors: [null] } }))).toEqual([UNEXPECTED]);
+      expect(apiErrors(failed({ status: 400, data: { status: 'failed' } }))).toEqual([UNEXPECTED]);
+    });
   });
 
   it('gives the status of the answer', () => {
