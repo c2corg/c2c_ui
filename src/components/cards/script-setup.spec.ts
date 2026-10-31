@@ -192,21 +192,29 @@ describe('ModalConfirmation', () => {
     const wrapper = mountModal();
 
     await wrapper.setProps({
-      promise: { error: { response: { data: { errors: [{ description: 'Only document less than 24h old' }] } } } },
+      promise: {
+        error: {
+          response: {
+            data: {
+              status: 'error',
+              errors: [{ location: 'body', name: 'document', description: 'Only document less than 24h old' }],
+            },
+          },
+        },
+      },
     });
 
     expect(alert).toHaveBeenCalledWith('Only document less than 24h old');
     alert.mockRestore();
   });
 
-  it('alerts an API error without errors list as it is', async () => {
+  it('alerts an unexpected error for an answer of another server, such as the error page of a proxy', async () => {
     const alert = vi.spyOn(window, 'alert').mockImplementation(() => {});
     const wrapper = mountModal();
 
     await wrapper.setProps({ promise: { error: { response: { data: 'Bad gateway' } } } });
 
-    // not its negation: the user saw "false"
-    expect(alert).toHaveBeenCalledWith('Bad gateway');
+    expect(alert).toHaveBeenCalledWith('An unexpected error occurred, please try again');
     alert.mockRestore();
   });
 });

@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils';
+import { AxiosError } from 'axios';
 import { describe, expect, it } from 'vitest';
 
 import BaseForm from './BaseForm.vue';
@@ -54,9 +55,10 @@ describe('BaseForm', () => {
     (wrapper.vm.promise as NonNullable<FormPromise>).error = {
       response: {
         data: {
+          status: 'error',
           errors: [
-            { name: 'username', description: 'already used username' },
-            { name: 'captcha', description: 'Missing captcha' },
+            { location: 'body', name: 'username', description: 'already used username' },
+            { location: 'body', name: 'captcha', description: 'Missing captcha' },
           ],
         },
       },
@@ -68,10 +70,22 @@ describe('BaseForm', () => {
     expect(wrapper.find('.notification.is-danger').text()).toBe('Missing captcha');
   });
 
+  it('shows an unexpected error above the form when the API did not answer', async () => {
+    const wrapper = mountForm({ promise: { error: null } });
+
+    // a network error: axios gives no response
+    (wrapper.vm.promise as NonNullable<FormPromise>).error = new AxiosError('Network Error', 'ERR_NETWORK');
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find('.notification.is-danger').text()).toBe('An unexpected error occurred, please try again');
+  });
+
   it('clears the errors on a new submit', async () => {
     const wrapper = mountForm({ promise: { error: null } });
     (wrapper.vm.promise as NonNullable<FormPromise>).error = {
-      response: { data: { errors: [{ name: 'username', description: 'Required' }] } },
+      response: {
+        data: { status: 'error', errors: [{ location: 'body', name: 'username', description: 'Required' }] },
+      },
     };
     await wrapper.vm.$nextTick();
     await wrapper.findAll('input')[0].setValue('alice');

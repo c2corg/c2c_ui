@@ -10,6 +10,7 @@ import { useRouter } from 'vue-router';
 
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { apiErrors } from '@/js/apis/c2c/api-errors';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import utils from '@/js/utils';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
@@ -22,7 +23,7 @@ const props = defineProps({
 });
 
 const router = useRouter();
-const { $documentUtils } = useGlobalProperties();
+const { $documentUtils, $gettext } = useGlobalProperties();
 
 const isLoading = ref(false);
 
@@ -46,9 +47,9 @@ function downloadOutings() {
       utils.downloadCsv(outings as C2cDocument[], 'outings.csv', extraKeys);
       isLoading.value = false;
     })
-    .catch((error: { response?: { data?: { errors?: { description: string }[] } } }) => {
+    .catch((error) => {
       isLoading.value = false;
-      window.alert(error.response?.data?.errors?.[0]?.description);
+      window.alert($gettext(apiErrors(error)[0].description, 'API message'));
     });
 }
 </script>

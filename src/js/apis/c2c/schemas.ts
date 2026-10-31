@@ -81,3 +81,19 @@ export const account = z.object({
   forum_username: z.string(),
   is_profile_public: z.boolean(),
 });
+
+// an error answer, of any request: { status: 'error', errors: [{ location, name, description }] } (v6_api web/errors.py)
+export const errorResponse = z.object({
+  status: z.literal('error'),
+  errors: z.array(
+    z.object({
+      // where the error is: body, querystring, url...
+      location: z.string(),
+      // the field in error (locales.0.title, associations.waypoints...), or a short label
+      name: z.string(),
+      description: z.string(),
+    })
+  ),
+});
+
+export type ApiError = z.input<typeof errorResponse>['errors'][number];
