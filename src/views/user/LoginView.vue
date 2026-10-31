@@ -190,6 +190,7 @@ import PasswordRequirements from './utils/PasswordRequirements.vue';
 
 import ReCaptcha from '@/components/recaptcha/ReCaptcha.vue';
 import c2c from '@/js/apis/c2c';
+import { apiErrors, errorStatus } from '@/js/apis/c2c/api-errors';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useNoRobots } from '@/js/composables/head';
 import config from '@/js/config';
@@ -321,14 +322,11 @@ function load() {
   }
 }
 
-// an error of the API, as axios gives it
-type ApiError = { response: { status: number; data: { errors: { description: string }[] } } };
-
-function isTermsError(e: ApiError) {
-  const { status } = e.response;
-  const { errors } = e.response.data;
-  const messageErrors = errors.map((e) => e.description);
-  return status === 403 && messageErrors.includes('Terms of Service need to be accepted');
+function isTermsError(error: unknown) {
+  return (
+    errorStatus(error) === 403 &&
+    apiErrors(error).some(({ description }) => description === 'Terms of Service need to be accepted')
+  );
 }
 
 function signin() {
@@ -342,7 +340,7 @@ function signin() {
     .signIn(username.value, password.value, loginTermsAgreed.value as boolean, sso, sig)
     .then(onSuccessSigin)
     .catch((e) => {
-      loginTermsAgreed.value = isTermsError(e as ApiError) ? false : undefined;
+      loginTermsAgreed.value = isTermsError(e) ? false : undefined;
     });
 }
 

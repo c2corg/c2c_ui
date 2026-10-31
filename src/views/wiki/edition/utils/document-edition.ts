@@ -21,6 +21,8 @@ import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router';
 
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { apiErrors } from '@/js/apis/c2c/api-errors';
+import type { ApiError } from '@/js/apis/c2c/schemas';
 import { useNoRobots } from '@/js/composables/head';
 import constants from '@/js/constants';
 import type Field from '@/js/constants/Field';
@@ -31,8 +33,6 @@ export type EditionHooks = {
   beforeSave?: () => void;
   afterSave?: () => void;
 };
-
-type ApiError = { name: string; description: string };
 
 // the document being loaded: data is null until the document and its associations given in the url are loaded
 type Loading = { data?: C2cDocument | null; loading?: boolean | number };
@@ -196,7 +196,10 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
       // $gettext('Conflict: version of locale \'zh_CN\' has changed')
       // $gettext('Conflict: version of document has changed')
       toast({
-        message: globals.$gettext(`${error.name}: ${error.description}`),
+        // an error without name: the request had no answer of the API
+        message: error.name
+          ? globals.$gettext(`${error.name}: ${error.description}`)
+          : globals.$gettext(error.description, 'API message'),
         type: 'is-danger',
         position: 'center',
       });
@@ -206,7 +209,6 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
   }
 
   function dispatchErrors(errors: ApiError[]) {
-    // TODO : errors === undefined ?
     cleanErrors();
 
     for (const error of errors) {
@@ -283,8 +285,7 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
 
     request.catch((error) => {
       saving.value = false;
-      const data = (error as { response: { data: { errors: ApiError[] } } }).response.data;
-      dispatchErrors(data.errors);
+      dispatchErrors(apiErrors(error));
     });
   }
 

@@ -34,6 +34,7 @@
 <script setup lang="ts">
 import { useTemplateRef, watch } from 'vue';
 
+import { apiErrors } from '@/js/apis/c2c/api-errors';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 
 const props = defineProps({
@@ -65,14 +66,8 @@ function onError() {
     return;
   }
 
-  if (!props.promise.error.response || !props.promise.error.response.data) {
-    window.alert('Unexpected error');
-  } else if (!props.promise.error.response.data.errors) {
-    window.alert(props.promise.error.response.data);
-  } else {
-    // $gettext('Only document less than 24h old can be deleted', 'API message')
-    window.alert($gettext(props.promise.error.response.data.errors[0].description));
-  }
+  // $gettext('Only document less than 24h old can be deleted', 'API message')
+  window.alert($gettext(apiErrors(props.promise.error)[0].description, 'API message'));
 }
 
 watch(() => props.promise?.error, onError);

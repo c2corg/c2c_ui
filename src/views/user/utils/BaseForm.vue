@@ -12,9 +12,9 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 
+import { apiErrors } from '@/js/apis/c2c/api-errors';
+import type { ApiError } from '@/js/apis/c2c/schemas';
 import { type FormFieldState, useFormContainer } from '@/js/composables/form-registration';
-
-type ApiError = { name?: string; description: string };
 
 const props = defineProps({
   // the request of the form: its errors are shown on their field, or above the form
@@ -52,19 +52,12 @@ function computeErrors() {
     return;
   }
 
-  const serverErrors = props.promise.error.response.data;
-
-  if (!serverErrors.errors) {
-    // unpexted error structure from API
-    serverMetaErrors.value.push(serverErrors);
-  } else {
-    for (const error of serverErrors.errors as ApiError[]) {
-      const input = error.name ? inputs.value[error.name] : undefined;
-      if (input) {
-        input.errorMessage = error.description;
-      } else {
-        serverMetaErrors.value.push(error);
-      }
+  for (const error of apiErrors(props.promise.error)) {
+    const input = error.name ? inputs.value[error.name] : undefined;
+    if (input) {
+      input.errorMessage = error.description;
+    } else {
+      serverMetaErrors.value.push(error);
     }
   }
 }

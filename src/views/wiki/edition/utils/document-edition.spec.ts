@@ -160,9 +160,26 @@ describe('useDocumentEdition', () => {
     expect(api.toast).toHaveBeenCalledOnce();
   });
 
+  it('tells about a save the API did not answer', async () => {
+    // a network error: axios gives no response
+    api.save.mockImplementation(() => new ApiData(Promise.reject(new Error('Network Error'))));
+    const { vm } = await mountAt('/books/edit/12/fr');
+
+    vm.save('typo');
+    await flushPromises();
+
+    expect(vm.saving).toBe(false);
+    expect(api.toast).toHaveBeenCalledWith(
+      expect.objectContaining({ message: 'An unexpected error occurred, please try again' })
+    );
+  });
+
   it('shows the errors of the API on their fields', async () => {
     api.save.mockImplementation(() =>
-      failure({ errors: [{ name: 'locales.0.title', description: 'Shorter than minimum length 1' }] })
+      failure({
+        status: 'error',
+        errors: [{ location: 'body', name: 'locales.0.title', description: 'Shorter than minimum length 1' }],
+      })
     );
     const { vm } = await mountAt('/books/edit/12/fr');
 
@@ -170,7 +187,11 @@ describe('useDocumentEdition', () => {
     await flushPromises();
 
     expect(vm.saving).toBe(false);
-    expect(vm.fields.title.error).toEqual({ name: 'locales.0.title', description: 'Shorter than minimum length 1' });
+    expect(vm.fields.title.error).toEqual({
+      location: 'body',
+      name: 'locales.0.title',
+      description: 'Shorter than minimum length 1',
+    });
     expect(api.toast).toHaveBeenCalledOnce();
   });
 });
