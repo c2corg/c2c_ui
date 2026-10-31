@@ -164,7 +164,9 @@ const dateMax = computed(() => {
 // in edit mode, there is only one locale
 const editedLocale = computed(() => props.document.locales![0]);
 
-const object = computed(() => {
+// what the field edits: its value is bound by the field name, whatever the type of the field
+
+const object = computed<Record<string, any>>(() => {
   if (props.field.parent === 'document') {
     return props.document;
   }

@@ -1,4 +1,6 @@
-import { document, documentsPage, fullDocuments } from './schemas';
+import { z } from 'zod';
+
+import { document, documentsPage, fullDocuments, redirection } from './schemas';
 import type { Api, DocumentId, Params } from './types';
 
 export default class DocumentService {
@@ -67,9 +69,9 @@ export default class DocumentService {
     });
   }
 
-  // the full schema of the type (the common fields for a type without one)
+  // the full schema of the type (the common fields for a type without one), or a merged document
   private get documentSchema() {
-    return (fullDocuments[this.documentType] ?? document) as typeof document;
+    return z.union([fullDocuments[this.documentType] ?? document, redirection]) as unknown as typeof document;
   }
 
   get(id: DocumentId, lang?: string) {

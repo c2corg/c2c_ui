@@ -49,6 +49,24 @@ const oneOf = (name: string) => z.enum(attributes[name]);
 
 // a document, as GET /<type>s/:id gives it: its own fields depend on its type, and on its activities or waypoint type
 // (the others are left out); the associations and areas are short documents
+// the associated documents of a full document (v6_api views): lists, and pages for the last outings of a route or a
+// waypoint and the routes of a waypoint
+const associatedDocuments = z.array(document).optional();
+export const associations = z.object({
+  waypoints: associatedDocuments,
+  waypoint_children: associatedDocuments,
+  routes: associatedDocuments,
+  outings: associatedDocuments,
+  images: associatedDocuments,
+  articles: associatedDocuments,
+  books: associatedDocuments,
+  xreports: associatedDocuments,
+  users: associatedDocuments,
+  areas: associatedDocuments,
+  recent_outings: documentsPage.optional(),
+  all_routes: documentsPage.optional(),
+});
+
 // a locale of a document, with the fields of its type
 const fullLocale = <L extends z.ZodRawShape>(localeFields: L) =>
   locale.extend({
@@ -69,7 +87,7 @@ const fullDocument = <T extends z.ZodRawShape, L extends z.ZodRawShape>(fields: 
     locales: z.array(fullLocale(localeFields)),
     // ?cook=<lang>: the locale in that language (or the best one), its markdown as HTML
     cooked: fullLocale(localeFields).optional(),
-    associations: z.record(z.string(), z.union([z.array(document), documentsPage])).optional(),
+    associations: associations.optional(),
     areas: z.array(document).optional(),
     maps: z.array(document).optional(),
     ...fields,
@@ -388,6 +406,9 @@ export type Image = z.input<typeof image>;
 export type TopoMap = z.input<typeof map>;
 export type Profile = z.input<typeof profile>;
 export type Xreport = z.input<typeof xreport>;
+
+// GET /<type>s/:id of a merged document: only the document it was merged into (v6_api views/document.py)
+export const redirection = z.object({ redirects_to: z.number(), available_langs: z.array(z.string()).nullish() });
 
 // the full schema of each document type, by its name in the API urls
 export const fullDocuments: Record<string, z.ZodType> = {

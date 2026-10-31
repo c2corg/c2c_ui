@@ -267,7 +267,7 @@ function save() {
     .then((response) => {
       // add result to parent, it will update page
       // we fake a valid img document with enough info to work
-      props.parentDocument.associations!.images.push(
+      props.parentDocument.associations!.images!.push(
         ...saved.map((img, idx) => ({
           ...img,
           document_id: response.data.images[idx].document_id,

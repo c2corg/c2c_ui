@@ -28,8 +28,8 @@
                 as it refers to profiles document
                 let stay profile coherent and call this component profiles-links
                 and not users-links -->
-            <profiles-links :profiles="document.associations!.users" />
-            <span v-if="document.cooked.participants">, {{ document.cooked.participants }}</span>
+            <profiles-links :profiles="document.associations!.users!" />
+            <span v-if="document.cooked!.participants">, {{ document.cooked!.participants }}</span>
           </div>
 
           <hr />
@@ -93,7 +93,7 @@
           <markdown-section :document="document" :field="fields.weather" />
           <markdown-section :document="document" :field="fields.conditions" />
 
-          <condition-levels :data="locale.conditions_levels" />
+          <condition-levels :data="locale!.conditions_levels ?? undefined" />
 
           <markdown-section :document="document" :field="fields.avalanches" />
           <markdown-section :document="document" :field="fields.timing" />
@@ -130,7 +130,9 @@ import LabelValue from './utils/field-viewers/LabelValue.vue';
 import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 import ProfilesLinks from './utils/field-viewers/ProfilesLinks.vue';
 
+import type { Outing } from '@/js/apis/c2c/schemas';
+
 const props = defineProps(documentViewProps);
 
-const { promise, documentType, fields, document, version, locale } = useDocumentView(props);
+const { promise, documentType, fields, document, version, locale } = useDocumentView<Outing>(props);
 </script>

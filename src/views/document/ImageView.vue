@@ -46,7 +46,7 @@
           </a>
         </div>
 
-        <div v-if="locale.summary || locale.description" class="box">
+        <div v-if="locale!.summary || locale!.description" class="box">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />
           <div style="clear: both" />
@@ -79,11 +79,12 @@ import FieldView from './utils/field-viewers/FieldView.vue';
 import LabelValue from './utils/field-viewers/LabelValue.vue';
 import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 
+import type { Image as ImageDocument } from '@/js/apis/c2c/schemas';
 import { getImageUrl, type Image } from '@/js/image-urls';
 
 const props = defineProps(documentViewProps);
 
-const { promise, documentType, fields, document, version, locale } = useDocumentView(props);
+const { promise, documentType, fields, document, version, locale } = useDocumentView<ImageDocument>(props);
 
 const getOriginalImageUrl = getImageUrl;
 </script>

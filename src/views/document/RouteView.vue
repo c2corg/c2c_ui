@@ -76,8 +76,8 @@
               <field-view :document="document" :field="fields.mtb_length_asphalt" :divisor="1000" unit="km" />
               <field-view :document="document" :field="fields.mtb_length_trail" :divisor="1000" unit="km" />
 
-              <label-value v-if="document.cooked.slope" :label="$gettext('slope')">
-                {{ document.cooked.slope }}
+              <label-value v-if="document.cooked!.slope" :label="$gettext('slope')">
+                {{ document.cooked!.slope }}
               </label-value>
 
               <field-view :document="document" :field="fields.slackline_height" />
@@ -91,7 +91,7 @@
             :document="document"
           />
           <markdown-section :document="document" :field="fields.summary" />
-          <markdown-section v-if="locale.route_history" :document="document" :field="fields.route_history" />
+          <markdown-section v-if="locale!.route_history" :document="document" :field="fields.route_history" />
           <div v-else-if="showMissingHistoryBanner" class="notification is-info no-print missing-history-banner">
             <edit-link :document="document" :lang="lang" v-translate>
               History is missing, please provide it if you have information.
@@ -174,6 +174,7 @@ import LabelValue from './utils/field-viewers/LabelValue.vue';
 import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 import { getGearArticles } from './utils/gear-articles';
 
+import type { Route } from '@/js/apis/c2c/schemas';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 
 const historyWorthActivities = [
@@ -189,7 +190,7 @@ const props = defineProps(documentViewProps);
 
 const { $gettext } = useGlobalProperties();
 const { isPrintingView, promise, documentType, fields, document, version, locale, lang, isEditable } =
-  useDocumentView(props);
+  useDocumentView<Route>(props);
 
 const hasProtectionArea = ref(false);
 

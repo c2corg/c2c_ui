@@ -11,10 +11,13 @@ type Document = {
   protected?: boolean;
   image_type?: string;
   article_type?: string;
-  author?: { user_id: number };
+  author?: { user_id: number } | string | null;
   creator?: { user_id: number } | null;
-  associations?: { users?: { document_id: number }[] };
+  associations?: { users?: { document_id?: number }[] };
 };
+
+// the user who wrote an article or an xreport (the author of a book or an image is a name)
+const authorId = (document: Document) => (typeof document.author === 'object' ? document.author?.user_id : undefined);
 
 type User = { readonly isModerator: boolean; id: number | null };
 
@@ -47,11 +50,11 @@ export function isEditable(document: Document, documentType: string, user: User,
       return true;
     }
 
-    return document.author?.user_id === user.id;
+    return authorId(document) === user.id;
   }
 
   if (documentType === 'xreport') {
-    return document.author?.user_id === user.id || isAssociatedUser(document, user);
+    return authorId(document) === user.id || isAssociatedUser(document, user);
   }
 
   if (documentType === 'outing') {
@@ -93,12 +96,12 @@ export function isDeletable(document: Document, documentType: string, user: User
     }
   } else if (documentType === 'xreport') {
     // xreport : is the current user the author ?
-    if (document.author?.user_id === user.id) {
+    if (authorId(document) === user.id) {
       return true;
     }
   } else if (documentType === 'article') {
     // article : it must be personal
-    if (document.article_type === 'personal' && document.author?.user_id === user.id) {
+    if (document.article_type === 'personal' && authorId(document) === user.id) {
       return true;
     }
   }

@@ -58,7 +58,9 @@ import FieldView from './utils/field-viewers/FieldView.vue';
 import LabelValue from './utils/field-viewers/LabelValue.vue';
 import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 
+import type { Article } from '@/js/apis/c2c/schemas';
+
 const props = defineProps(documentViewProps);
 
-const { isDraftView, promise, documentType, fields, document, version, isEditable } = useDocumentView(props);
+const { isDraftView, promise, documentType, fields, document, version, isEditable } = useDocumentView<Article>(props);
 </script>

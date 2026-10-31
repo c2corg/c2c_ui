@@ -295,8 +295,8 @@ const linkToParaglidingOutings = computed(() => ({
     act: 'paragliding',
     w: [
       ...(documentType.value === 'waypoint' ? [props.document.document_id] : []),
-      ...props.document.associations!.waypoints.map((w) => w.document_id),
-      ...props.document.associations!.waypoint_children.map((w) => w.document_id),
+      ...(props.document.associations!.waypoints ?? []).map((w) => w.document_id),
+      ...(props.document.associations!.waypoint_children ?? []).map((w) => w.document_id),
     ].join(','),
   },
 }));
