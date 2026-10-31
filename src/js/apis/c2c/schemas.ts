@@ -253,8 +253,155 @@ export type Waypoint = z.input<typeof waypoint>;
 export type Route = z.input<typeof route>;
 export type Outing = z.input<typeof outing>;
 
+// a user, as the author of an article or an xreport, or the creator of an image
+const user = z.object({ user_id: z.number(), name: z.string() });
+
+// GET /areas/:id (v6_api models/area.py)
+export const area = fullDocument(
+  {
+    area_type: oneOf('area_types').nullish(),
+  },
+  {}
+);
+
+// GET /articles/:id (v6_api models/article.py)
+export const article = fullDocument(
+  {
+    categories: z.array(oneOf('article_categories')).nullish(),
+    activities: z.array(oneOf('activities')).nullish(),
+    article_type: oneOf('article_types').nullish(),
+    author: user.nullish(),
+  },
+  {}
+);
+
+// GET /books/:id (v6_api models/book.py)
+export const book = fullDocument(
+  {
+    editor: z.string().nullish(),
+    activities: z.array(oneOf('activities')).nullish(),
+    url: z.string().nullish(),
+    isbn: z.string().nullish(),
+    book_types: z.array(oneOf('book_types')).nullish(),
+    nb_pages: z.number().nullish(),
+    publication_date: z.string().nullish(),
+    langs: z.array(z.string()).nullish(),
+    author: z.string().nullish(),
+  },
+  {}
+);
+
+// GET /images/:id (v6_api models/image.py)
+export const image = fullDocument(
+  {
+    activities: z.array(oneOf('activities')).nullish(),
+    categories: z.array(oneOf('image_categories')).nullish(),
+    image_type: oneOf('image_types').nullish(),
+    elevation: z.number().nullish(),
+    height: z.number().nullish(),
+    width: z.number().nullish(),
+    file_size: z.number().nullish(),
+    date_time: z.string().nullish(),
+    camera_name: z.string().nullish(),
+    exposure_time: z.number().nullish(),
+    focal_length: z.number().nullish(),
+    fnumber: z.number().nullish(),
+    iso_speed: z.number().nullish(),
+    filename: z.string(),
+    author: z.string().nullish(),
+    creator: user.nullish(),
+  },
+  {}
+);
+
+// GET /maps/:id (v6_api models/topo_map.py): its editors and scales are not in common.json
+export const map = fullDocument(
+  {
+    editor: z.enum(['IGN', 'Swisstopo', 'Escursionista']).nullish(),
+    scale: z.enum(['25000', '50000', '100000']).nullish(),
+    code: z.string().nullish(),
+  },
+  {}
+);
+
+// GET /profiles/:id (v6_api models/user_profile.py): a private profile, for a visitor, is only its id and name
+export const profile = z.union([
+  fullDocument(
+    {
+      activities: z.array(oneOf('activities')).nullish(),
+      categories: z.array(oneOf('user_categories')).nullish(),
+      name: z.string(),
+      forum_username: z.string().nullish(),
+    },
+    {}
+  ),
+  z.object({ not_authorized: z.literal(true), document_id: z.number(), name: z.string() }),
+]);
+
+// GET /xreports/:id (v6_api models/xreport.py): the personal fields only for its author and the moderators.
+// previous_injuries_3 was taken out of the UI's common.json, the API still has it
+export const xreport = fullDocument(
+  {
+    elevation: z.number().nullish(),
+    date: z.string().nullish(),
+    event_type: oneOf('event_types').nullish(),
+    event_activity: oneOf('event_activities'),
+    nb_participants: z.number().nullish(),
+    nb_impacted: z.number().nullish(),
+    rescue: z.boolean().nullish(),
+    avalanche_level: oneOf('avalanche_levels').nullish(),
+    avalanche_slope: oneOf('avalanche_slopes').nullish(),
+    severity: oneOf('severities').nullish(),
+    author_status: oneOf('author_statuses').nullish(),
+    activity_rate: oneOf('activity_rates').nullish(),
+    age: z.number().nullish(),
+    gender: oneOf('genders').nullish(),
+    previous_injuries: z.enum([...attributes.previous_injuries, 'previous_injuries_3']).nullish(),
+    autonomy: oneOf('autonomies').nullish(),
+    supervision: oneOf('supervision').nullish(),
+    qualification: oneOf('qualification').nullish(),
+    disable_comments: z.boolean().nullish(),
+    anonymous: z.boolean().nullish(),
+    author: user.nullish(),
+  },
+  {
+    place: z.string().nullish(),
+    route_study: z.string().nullish(),
+    conditions: z.string().nullish(),
+    training: z.string().nullish(),
+    motivations: z.string().nullish(),
+    group_management: z.string().nullish(),
+    risk: z.string().nullish(),
+    time_management: z.string().nullish(),
+    safety: z.string().nullish(),
+    reduce_impact: z.string().nullish(),
+    increase_impact: z.string().nullish(),
+    modifications: z.string().nullish(),
+    other_comments: z.string().nullish(),
+  }
+);
+
+export type Area = z.input<typeof area>;
+export type Article = z.input<typeof article>;
+export type Book = z.input<typeof book>;
+export type Image = z.input<typeof image>;
+export type TopoMap = z.input<typeof map>;
+export type Profile = z.input<typeof profile>;
+export type Xreport = z.input<typeof xreport>;
+
 // the full schema of each document type, by its name in the API urls
-export const fullDocuments: Record<string, z.ZodType> = { waypoint, route, outing };
+export const fullDocuments: Record<string, z.ZodType> = {
+  area,
+  article,
+  book,
+  image,
+  map,
+  outing,
+  profile,
+  route,
+  waypoint,
+  xreport,
+};
 
 // GET /search: a page per document type (routes, waypoints...)
 export const searchResults = z.record(z.string(), documentsPage);

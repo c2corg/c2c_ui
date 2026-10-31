@@ -67,7 +67,7 @@ export default class DocumentService {
     });
   }
 
-  // the full schema of the type, when written (waypoint, route, outing), the common fields otherwise
+  // the full schema of the type (the common fields for a type without one)
   private get documentSchema() {
     return (fullDocuments[this.documentType] ?? document) as typeof document;
   }

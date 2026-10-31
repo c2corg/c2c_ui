@@ -64,10 +64,21 @@ describe('EditionContainer', () => {
 
   it('requests banners again on next edit view after a failure, shows them at once, then caches them', async () => {
     get.mockResolvedValue({
-      // as the API answers: the cooked article, with its id (its schema requires it)
+      // as the API answers: the article, with its cooked locale (its schema requires the fields of an article)
       data: {
         document_id: 1110927,
-        cooked: { description: '<h3 id="waypoint">Waypoints</h3><p>Waypoint banner</p>' },
+        version: 1,
+        type: 'c',
+        quality: 'medium',
+        protected: true,
+        article_type: 'collab',
+        locales: [{ lang: 'fr', version: 1, title: 'Bandeaux' }],
+        cooked: {
+          lang: 'fr',
+          version: 1,
+          title: 'Bandeaux',
+          description: '<h3 id="waypoint">Waypoints</h3><p>Waypoint banner</p>',
+        },
       },
     });
 

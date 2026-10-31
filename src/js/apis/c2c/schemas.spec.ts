@@ -55,6 +55,47 @@ describe('the c2c API schemas', () => {
     expect(errorsOf(schemas.waypoint, summit)).toBeUndefined();
   });
 
+  describe('of the other document types', () => {
+    // the fields every full document has
+    const base = (type: string) => ({
+      document_id: 1,
+      version: 1,
+      type,
+      quality: 'medium',
+      protected: false,
+      locales: [{ lang: 'fr', version: 1, title: 'Titre' }],
+    });
+
+    it('accept their answers', () => {
+      expect(errorsOf(schemas.area, { ...base('a'), area_type: 'range' })).toBeUndefined();
+      expect(
+        errorsOf(schemas.article, { ...base('c'), article_type: 'collab', author: { user_id: 2, name: 'A' } })
+      ).toBeUndefined();
+      expect(errorsOf(schemas.book, { ...base('b'), author: 'Gaston Rébuffat', book_types: ['topo'] })).toBeUndefined();
+      expect(
+        errorsOf(schemas.image, { ...base('i'), filename: '1.jpg', creator: { user_id: 2, name: 'A' } })
+      ).toBeUndefined();
+      expect(
+        errorsOf(schemas.map, { ...base('m'), editor: 'Swisstopo', scale: '25000', code: '1344' })
+      ).toBeUndefined();
+      // the profiles have no locale title
+      const locales = [{ lang: 'fr', version: 1, description: null }];
+      expect(errorsOf(schemas.profile, { ...base('u'), locales, name: 'A', forum_username: 'a' })).toBeUndefined();
+      expect(errorsOf(schemas.profile, privateProfile)).toBeUndefined();
+      // a value the API still has, taken out of the UI
+      const xreport = { ...base('x'), event_activity: 'skitouring', previous_injuries: 'previous_injuries_3' };
+      expect(errorsOf(schemas.xreport, xreport)).toBeUndefined();
+    });
+
+    it('reject what the UI could not read', () => {
+      expect(errorsOf(schemas.image, base('i'))).toBeDefined(); // no file
+      expect(errorsOf(schemas.map, { ...base('m'), scale: '1:25000' })).toBeDefined();
+      expect(errorsOf(schemas.article, { ...base('c'), author: 'A' })).toBeDefined();
+      expect(errorsOf(schemas.xreport, base('x'))).toBeDefined(); // no activity
+      expect(errorsOf(schemas.profile, { not_authorized: true, document_id: 1 })).toBeDefined();
+    });
+  });
+
   it('accept the last page of a feed, without its pagination token', () => {
     expect(errorsOf(schemas.feed, { feed: [] })).toBeUndefined();
     expect(errorsOf(schemas.documentChanges, { feed: [] })).toBeUndefined();
