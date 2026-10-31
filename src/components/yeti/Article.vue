@@ -13,6 +13,7 @@ import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
+import type { CookedDocument } from '@/js/vue-plugins/document-utils';
 import MarkdownSection from '@/views/document/utils/field-viewers/MarkdownSection.vue';
 
 const props = defineProps({
@@ -27,7 +28,8 @@ const { $language } = useGlobalProperties();
 const promise = ref<{ data?: unknown } | null>(null);
 
 const title = computed(() => props.article.title);
-const document = computed(() => promise.value?.data ?? null);
+// the article, cooked
+const document = computed(() => (promise.value?.data ?? null) as CookedDocument | null);
 const fields = constants.objectDefinitions.article.fields;
 
 function cookDocument() {

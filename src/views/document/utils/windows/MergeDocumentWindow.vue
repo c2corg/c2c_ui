@@ -44,7 +44,7 @@
         </div>
       </div>
 
-      <div v-for="target of possibleTargets" :key="target.documentId" class="columns is-mobile is-variable is-1">
+      <div v-for="target of possibleTargets" :key="target.document_id" class="columns is-mobile is-variable is-1">
         <div class="column">
           <merge-document-link :document="target" />
         </div>

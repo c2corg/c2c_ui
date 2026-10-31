@@ -97,7 +97,7 @@ const props = defineProps({
     required: true,
   },
   parentDocument: {
-    type: Object as PropType<C2cDocument & { article_type?: string; activities?: string[] }>,
+    type: Object as PropType<C2cDocument & { article_type?: string | null; activities?: string[] | null }>,
     required: true,
   },
 });

@@ -13,9 +13,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { documentProperty } from '@/js/properties';
+import { cookedDocumentProperty } from '@/js/properties';
 
-const props = defineProps({ ...documentProperty });
+const props = defineProps({ ...cookedDocumentProperty });
 
 const lang = computed(() => (props.document ? props.document.cooked.lang : null));
 </script>

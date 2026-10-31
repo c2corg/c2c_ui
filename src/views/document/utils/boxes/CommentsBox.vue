@@ -89,7 +89,7 @@ import c2c from '@/js/apis/c2c';
 import forum from '@/js/apis/forum';
 import { useViewMode } from '@/js/composables/view-mode';
 import config from '@/js/config';
-import { documentProperty } from '@/js/properties';
+import { cookedDocumentProperty } from '@/js/properties';
 import { sanitizeHtml } from '@/js/sanitize-html';
 
 // a post of the topic of the document, as the box reads it
@@ -106,7 +106,7 @@ const computeCooked = function (cooked: string) {
   return sanitizeHtml(cooked);
 };
 
-const props = defineProps({ ...documentProperty });
+const props = defineProps({ ...cookedDocumentProperty });
 
 const { isNormalView } = useViewMode();
 

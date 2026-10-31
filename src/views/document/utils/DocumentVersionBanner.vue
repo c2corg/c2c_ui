@@ -73,10 +73,10 @@ import { computed, useTemplateRef } from 'vue';
 
 import RevertVersionWindow from './windows/RevertVersionWindow.vue';
 
-import { documentProperty, useDocumentType } from '@/js/properties';
+import { cookedDocumentProperty, useDocumentType } from '@/js/properties';
 
 const props = defineProps({
-  ...documentProperty,
+  ...cookedDocumentProperty,
   version: {
     type: Object,
     default: null,

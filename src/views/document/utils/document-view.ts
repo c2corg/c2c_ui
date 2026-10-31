@@ -68,8 +68,9 @@ export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { dr
   /*
    * properties computed when document is loaded
    */
-  // a merged document only gives the one it was merged into
-  const document = computed<(D & { redirects_to?: number }) | undefined>(() => {
+  // its locale is always cooked: the views load it with ?cook=, the versions are cooked, the drafts are cooked here; a
+  // merged document only gives the one it was merged into
+  const document = computed<(D & { cooked: CookedLocale<D>; redirects_to?: number }) | undefined>(() => {
     if (!promise.value?.data) {
       return undefined;
     }
@@ -196,7 +197,7 @@ export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { dr
 
       globals.$imageViewer.clear();
       cooker.cook(draft.locales![0]).then((response) => {
-        draft.cooked = response.data;
+        draft.cooked = response.data as C2cDocument['cooked'];
         promise.value = { data: draft };
       });
     } else {

@@ -89,7 +89,8 @@ const fullDocument = <T extends z.ZodRawShape, L extends z.ZodRawShape>(fields: 
     cooked: fullLocale(localeFields).optional(),
     associations: associations.optional(),
     areas: z.array(document).optional(),
-    maps: z.array(document).optional(),
+    // the maps of the document's area, with their editor and code
+    maps: z.array(document.extend({ editor: z.string().nullish(), code: z.string().nullish() })).optional(),
     ...fields,
   });
 

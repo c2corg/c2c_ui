@@ -9,8 +9,8 @@ import { useViewMode } from '@/js/composables/view-mode';
 type Document = {
   document_id?: number;
   protected?: boolean;
-  image_type?: string;
-  article_type?: string;
+  image_type?: string | null;
+  article_type?: string | null;
   author?: { user_id: number } | string | null;
   creator?: { user_id: number } | null;
   associations?: { users?: { document_id?: number }[] };

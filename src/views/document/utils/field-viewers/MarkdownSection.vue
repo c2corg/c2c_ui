@@ -34,10 +34,10 @@
 import { computed } from 'vue';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
-import { documentProperty, fieldProperty } from '@/js/properties';
+import { cookedDocumentProperty, fieldProperty } from '@/js/properties';
 
 const props = defineProps({
-  ...documentProperty,
+  ...cookedDocumentProperty,
   ...fieldProperty,
   hideTitle: {
     type: Boolean,
@@ -53,7 +53,7 @@ const { $language } = useGlobalProperties();
 
 const lang = computed(() => {
   const current_lang = $language.current;
-  const document_lang = props.document ? props.document.cooked.lang : null;
+  const document_lang = props.document.cooked.lang;
   return document_lang === current_lang ? undefined : $language.getIANALanguageSubtag(document_lang);
 });
 </script>

@@ -56,9 +56,10 @@ export type FieldProperties = {
 // a document, as far as the fields go
 export type FieldDocument = {
   type?: string;
-  activities?: string[];
-  waypoint_type?: string;
-  climbing_outdoor_type?: string;
+  // null when the API has none
+  activities?: string[] | null;
+  waypoint_type?: string | null;
+  climbing_outdoor_type?: string | null;
   associations?: Record<string, unknown>;
   [property: string]: unknown;
 };
@@ -371,7 +372,7 @@ export default class Field {
     return null;
   }
 
-  isVisibleForActivities(activities?: string[]): boolean {
+  isVisibleForActivities(activities?: string[] | null): boolean {
     let result = true;
 
     if (this.activities && activities) {
@@ -381,7 +382,7 @@ export default class Field {
     return result;
   }
 
-  isVisibleForWaypointType(waypointType?: string): boolean {
+  isVisibleForWaypointType(waypointType?: string | null): boolean {
     if (!this.waypoint_types) {
       return true;
     }

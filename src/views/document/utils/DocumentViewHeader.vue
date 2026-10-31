@@ -60,10 +60,10 @@ import TagsButton from './TagsButton.vue';
 import ImagesUploader from '@/components/images-uploader/ImagesUploader.vue';
 import { useEditable } from '@/js/composables/editable';
 import { useGlobalProperties } from '@/js/composables/global-properties';
-import { documentProperty, useDocumentType } from '@/js/properties';
+import { cookedDocumentProperty, useDocumentType } from '@/js/properties';
 
 const props = defineProps({
-  ...documentProperty,
+  ...cookedDocumentProperty,
   version: {
     type: Object,
     default: null,

@@ -9,7 +9,14 @@ import c2c from '@/js/apis/c2c';
 import constants from '@/js/constants';
 
 // a locale of a document: its language, title...
-export type Locale = { lang: string; title?: string | null; title_prefix?: string | null; [property: string]: unknown };
+export type Locale = {
+  lang: string;
+  title?: string | null;
+  title_prefix?: string | null;
+  // the forum topic of its comments
+  topic_id?: number | null;
+  [property: string]: unknown;
+};
 
 // a document of the API, as far as this module goes. Its other properties stay untyped until the API responses are
 // typed (#4747)
@@ -49,6 +56,9 @@ export type C2cDocument = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [property: string]: any;
 };
+
+// a document as a document view shows it: with its locale in the language of the page, as HTML (?cook=<lang>)
+export type CookedDocument = C2cDocument & { cooked: Locale };
 
 export type DocumentUtils = ReturnType<typeof createDocumentUtils>;
 

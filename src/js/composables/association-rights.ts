@@ -5,8 +5,8 @@ type Document = {
   document_id?: number;
   type?: string;
   waypoint_type?: string | null;
-  article_type?: string;
-  author?: { user_id: number };
+  article_type?: string | null;
+  author?: { user_id: number } | string | null;
   associations?: { routes?: unknown[] };
 };
 
@@ -96,7 +96,7 @@ export function canRemove(parent: Document, child: Document, user: User): boolea
   }
 
   if (child.type === 'o') {
-    return child.author?.user_id === user.id;
+    return typeof child.author === 'object' && child.author?.user_id === user.id;
   }
 
   return false;
