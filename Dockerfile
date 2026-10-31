@@ -9,7 +9,7 @@ RUN npm run build
 RUN node tools/generate-health.ts
 
 # production stage
-FROM openresty/openresty:1.31.1.1-4-bookworm AS production-stage
+FROM openresty/openresty:1.31.1.1-5-bookworm AS production-stage
 RUN apt-get update && apt-get install -y gettext-base # required to use envsubst
 COPY --from=build-stage /dist /usr/share/nginx/html
 COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf.template
