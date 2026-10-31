@@ -8,11 +8,11 @@
     ></masked-document-version-info>
     <document-view-header v-if="document" :document="document" :version="version" />
 
-    <div v-if="document && document.not_authorized" v-translate class="notification is-danger">
+    <div v-if="document && 'not_authorized' in document" v-translate class="notification is-danger">
       This profile is only available to authenticated users.
     </div>
 
-    <div v-if="document && !document.not_authorized" class="columns">
+    <div v-if="document && !('not_authorized' in document)" class="columns">
       <div class="column is-3">
         <div class="box">
           <activities-field v-if="document.activities && document.activities.length" :document="document" />
@@ -33,7 +33,7 @@
       </div>
 
       <div class="column is-9">
-        <div class="box" v-if="locale.summary || locale.description">
+        <div class="box" v-if="locale!.summary || locale!.description">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />
           <div style="clear: both" />
@@ -61,11 +61,12 @@ import LabelValue from './utils/field-viewers/LabelValue.vue';
 import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 
 import FeedWidget from '@/components/feed-widget/FeedWidget.vue';
+import type { Profile } from '@/js/apis/c2c/schemas';
 import config from '@/js/config';
 
 const props = defineProps(documentViewProps);
 
-const { promise, documentId, documentType, fields, document, version, locale } = useDocumentView(props);
+const { promise, documentId, documentType, fields, document, version, locale } = useDocumentView<Profile>(props);
 
 const forumUrl = config.urls.forum;
 </script>

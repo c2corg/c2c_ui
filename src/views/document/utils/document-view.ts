@@ -32,7 +32,12 @@ type Loaded = {
   data?: any;
 };
 
-export function useDocumentView(props: { draft: C2cDocument | null }) {
+// the locale of a document type, as ?cook=<lang> gives it
+// (a private profile has none)
+type CookedLocale<D extends C2cDocument> = NonNullable<Extract<D, { cooked?: unknown }>['cooked']>;
+
+// D: the document type of the view (Route, Waypoint...), as its schema gives it (src/js/apis/c2c/schemas.ts)
+export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { draft: C2cDocument | null }) {
   const globals = getCurrentInstance()!.appContext.config.globalProperties;
   const route = useRoute();
   const router = useRouter();
@@ -63,7 +68,8 @@ export function useDocumentView(props: { draft: C2cDocument | null }) {
   /*
    * properties computed when document is loaded
    */
-  const document = computed<C2cDocument | undefined>(() => {
+  // a merged document only gives the one it was merged into
+  const document = computed<(D & { redirects_to?: number }) | undefined>(() => {
     if (!promise.value?.data) {
       return undefined;
     }
@@ -77,9 +83,12 @@ export function useDocumentView(props: { draft: C2cDocument | null }) {
     return promise.value.data.version;
   });
 
-  const locale = computed(() => document.value?.cooked);
+  const locale = computed(() => document.value?.cooked as CookedLocale<D> | undefined);
 
-  const lang = computed<string>(() => document.value?.cooked?.lang ?? globals.$language.current);
+  // (the locale type of D is only known in the views)
+  const lang = computed<string>(
+    () => (locale.value as { lang?: string } | undefined)?.lang ?? globals.$language.current!
+  );
 
   const editable = computed(() =>
     document.value ? isEditable(document.value, documentType.value, globals.$user, isNormalView.value) : false

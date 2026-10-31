@@ -111,7 +111,7 @@ function getImageQuality(doc: Doc, locale: Locale) {
   score += doc.geometry && doc.geometry.geom ? 1 : 0;
   score += doc.activities && doc.activities.length ? 0.5 : 0;
   score += doc.categories && doc.categories.length ? 0.5 : 0;
-  score += doc.associations!.waypoints.length || doc.associations!.routes.length ? 1 : 0;
+  score += doc.associations!.waypoints?.length || doc.associations!.routes?.length ? 1 : 0;
 
   score += locale.title ? 1 : 0;
   score += locale.description ? 1 : 0;
@@ -124,8 +124,8 @@ function getArticleQuality(doc: Doc, locale: Locale) {
 
   let score = 0;
 
-  score += doc.associations!.waypoints.length ? 1 : 0;
-  score += doc.associations!.images.length ? 1 : 0;
+  score += doc.associations!.waypoints?.length ? 1 : 0;
+  score += doc.associations!.images?.length ? 1 : 0;
   score += locale.summary ? 1 : 0;
   score += description ? 1 : -1;
   score += description.search(/(^|\n)##/g) !== -1 ? 1 : 0; // title

@@ -39,7 +39,7 @@
               <field-view
                 :document="document"
                 :field="fields.capacity"
-                :context="capacityContext"
+                :context="capacityContext ?? undefined"
                 v-if="document.capacity"
               />
               <field-view :document="document" :field="fields.capacity_staffed" />
@@ -163,12 +163,13 @@ import DoubleNumericField from './utils/field-viewers/DoubleNumericField.vue';
 import FieldView from './utils/field-viewers/FieldView.vue';
 import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 
+import type { Waypoint } from '@/js/apis/c2c/schemas';
 import { useWaypointLabels } from '@/js/composables/waypoint-labels';
 
 const props = defineProps(documentViewProps);
 
 const { isDraftView, isPrintingView, promise, documentType, fields, document, version, locale } =
-  useDocumentView(props);
+  useDocumentView<Waypoint>(props);
 const { descriptionTitle, accessTitle, accessPeriodTitle } = useWaypointLabels(
   () => document.value as { waypoint_type?: string } | undefined
 );

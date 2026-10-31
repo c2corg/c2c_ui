@@ -12,7 +12,11 @@
       </div>
     </div>
     <div class="columns is-multiline">
-      <div v-for="child in document.associations![field.name]" :key="child.document_id" class="column is-4">
+      <div
+        v-for="child in document.associations![field.name as AssociationList]"
+        :key="child.document_id"
+        class="column is-4"
+      >
         <document-card
           :document="child"
           :show-delete-button="showDeleteButton(child)"
@@ -32,7 +36,7 @@ import FormInput from './FormInput.vue';
 import { useAssociationRights } from '@/js/composables/association-rights';
 import { useFormField } from '@/js/composables/form-registration';
 import { documentProperty, fieldProperty } from '@/js/properties';
-import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+import type { AssociationList, C2cDocument } from '@/js/vue-plugins/document-utils';
 
 const props = defineProps({
   ...fieldProperty,

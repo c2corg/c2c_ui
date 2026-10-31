@@ -17,8 +17,8 @@
 
           <field-view :document="document" :field="fields.event_type" />
 
-          <label-value v-if="document.associations!.users.length" :label="$gettext('participants')">
-            <profiles-links :profiles="document.associations!.users" />
+          <label-value v-if="document.associations!.users!.length" :label="$gettext('participants')">
+            <profiles-links :profiles="document.associations!.users!" />
           </label-value>
 
           <field-view :document="document" :field="fields.avalanche_level" />
@@ -88,7 +88,9 @@ import LabelValue from './utils/field-viewers/LabelValue.vue';
 import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 import ProfilesLinks from './utils/field-viewers/ProfilesLinks.vue';
 
+import type { Xreport } from '@/js/apis/c2c/schemas';
+
 const props = defineProps(documentViewProps);
 
-const { promise, documentType, fields, document, version } = useDocumentView(props);
+const { promise, documentType, fields, document, version } = useDocumentView<Xreport>(props);
 </script>

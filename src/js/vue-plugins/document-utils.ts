@@ -13,11 +13,32 @@ export type Locale = { lang: string; title?: string | null; title_prefix?: strin
 
 // a document of the API, as far as this module goes. Its other properties stay untyped until the API responses are
 // typed (#4747)
+// the associated documents of a document, by kind
+export type Associations = {
+  waypoints?: C2cDocument[];
+  waypoint_children?: C2cDocument[];
+  routes?: C2cDocument[];
+  outings?: C2cDocument[];
+  images?: C2cDocument[];
+  articles?: C2cDocument[];
+  books?: C2cDocument[];
+  xreports?: C2cDocument[];
+  users?: C2cDocument[];
+  areas?: C2cDocument[];
+  // the last outings of a route or a waypoint, the routes of a waypoint: a page of them
+  recent_outings?: { documents: C2cDocument[]; total: number };
+  all_routes?: { documents: C2cDocument[]; total: number };
+};
+
+// the kinds of associations given as a list: those an edition can add to or remove from
+export type AssociationList = Exclude<keyof Associations, 'recent_outings' | 'all_routes'>;
+
 export type C2cDocument = {
   type?: string;
   document_id?: number;
   locales?: Locale[];
-  associations?: Record<string, C2cDocument[]>;
+  // the associated documents (schemas.ts associations): lists, and pages for recent_outings and all_routes
+  associations?: Associations;
   // listings give has_geom_detail instead of geom_detail
   geometry?: {
     geom?: string | null;
@@ -179,9 +200,9 @@ function createDocumentUtils(app: App) {
       );
     },
 
-    getAssociationArrayName(child: C2cDocument): string {
+    getAssociationArrayName(child: C2cDocument): AssociationList {
       const documentType = this.getDocumentType(child.type);
-      return documentType === 'profile' ? 'users' : documentType + 's';
+      return (documentType === 'profile' ? 'users' : documentType + 's') as AssociationList;
     },
 
     isInArray(array: C2cDocument[], document: C2cDocument): boolean {
@@ -189,7 +210,7 @@ function createDocumentUtils(app: App) {
     },
 
     addAssociation(document: C2cDocument, child: C2cDocument) {
-      const array = document.associations![this.getAssociationArrayName(child)];
+      const array = document.associations![this.getAssociationArrayName(child)]!;
 
       if (this.isInArray(array, child)) {
         return;
@@ -201,7 +222,7 @@ function createDocumentUtils(app: App) {
 
     removeAssociation(document: C2cDocument, child: C2cDocument) {
       const arrayName = this.getAssociationArrayName(child);
-      const array = document.associations![arrayName];
+      const array = document.associations![arrayName]!;
 
       document.associations![arrayName] = array.filter((item) => item.document_id !== child.document_id);
     },
