@@ -240,9 +240,10 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
 
   function save(comment: string) {
     if (lang.value === 'eu' && !globals.$user.isModerator) {
+      // one line: the catalog turns a line break into a space, and the message would not match its translations
       toast({
         message: globals.$gettext(
-          "Sorry, euskara lang has been frozen.\nWe're looking for a moderator, if you're interested, please contact board@camptocamp.org"
+          "Sorry, euskara lang has been frozen. We're looking for a moderator, if you're interested, please contact board@camptocamp.org"
         ),
         type: 'is-danger',
         position: 'center',
