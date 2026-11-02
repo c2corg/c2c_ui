@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils';
+import { createPinia } from 'pinia';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createApp, defineComponent, h, nextTick } from 'vue';
 
@@ -32,6 +33,7 @@ const fakeScreen = (initialWidth: number) => {
 
 const installScreen = () => {
   const app = createApp({});
+  app.use(createPinia());
   app.use(screen);
   return app.config.globalProperties;
 };
@@ -62,7 +64,7 @@ describe('$screen', () => {
           return h('p', this.$screen.isMobile ? 'mobile' : 'large');
         },
       }),
-      { global: { plugins: [screen] } }
+      { global: { plugins: [createPinia(), screen] } }
     );
     expect(wrapper.text()).toBe('large');
 
