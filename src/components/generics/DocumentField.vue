@@ -74,7 +74,9 @@ const props = defineProps({
   },
 });
 
-const value = computed(() => props.document[props.field.name]);
+// the value of the field, of any type (string, number, list...)
+
+const value = computed<any>(() => props.document[props.field.name]);
 
 const isArray = computed(() => Array.isArray(value.value));
 

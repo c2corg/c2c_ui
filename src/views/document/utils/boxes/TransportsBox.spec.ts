@@ -9,9 +9,10 @@ import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 const FRANCE = { document_id: 14274 };
 const access = { type: 'w', document_id: 2, waypoint_type: 'access', maps: [{ type: 'w' }] };
 
-const mountBox = (document: C2cDocument) =>
+// the documents of the tests have only the fields the box reads
+const mountBox = (document: object) =>
   shallowMount(TransportsBox, {
-    props: { document },
+    props: { document: document as C2cDocument },
     global: {
       stubs: { FaIcon: true },
       config: {

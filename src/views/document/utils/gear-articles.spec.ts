@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import { getGearArticles } from './gear-articles';
 
-const articles = (route: object) => getGearArticles(route, (text) => text);
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+
+const articles = (route: object) => getGearArticles(route as C2cDocument, (text) => text);
 
 describe('getGearArticles', () => {
   it('gives the articles of the activities and ratings of the route', () => {

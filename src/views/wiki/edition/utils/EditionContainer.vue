@@ -142,7 +142,7 @@ watch(
 );
 
 function computeBanners(response: { data: object }) {
-  // the document schema has no cooked locale (cook=lang adds it)
+  // getCooked is typed with the common fields of the documents, which have no cooked locale (the article schema has)
   const cooked = (response.data as { cooked: { description: string } }).cooked;
 
   // cooked.description is HTML converted from a wiki article's user-authored

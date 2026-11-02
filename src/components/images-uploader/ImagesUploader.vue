@@ -97,7 +97,7 @@ const props = defineProps({
     required: true,
   },
   parentDocument: {
-    type: Object as PropType<C2cDocument & { article_type?: string; activities?: string[] }>,
+    type: Object as PropType<C2cDocument & { article_type?: string | null; activities?: string[] | null }>,
     required: true,
   },
 });
@@ -267,7 +267,7 @@ function save() {
     .then((response) => {
       // add result to parent, it will update page
       // we fake a valid img document with enough info to work
-      props.parentDocument.associations!.images.push(
+      props.parentDocument.associations!.images!.push(
         ...saved.map((img, idx) => ({
           ...img,
           document_id: response.data.images[idx].document_id,

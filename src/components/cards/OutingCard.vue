@@ -10,7 +10,7 @@
 
       <span class="is-nowrap">
         <fa-icon class="card-icon" icon="pen" />
-        <span> {{ $filters.uppercaseFirstLetter(document.author.name) }}</span>
+        <span> {{ $filters.uppercaseFirstLetter((document.author as { name: string }).name) }}</span>
       </span>
     </card-row>
 
@@ -20,7 +20,7 @@
         <document-rating :document="document" />
       </span>
 
-      <card-elevation-item :elevation="document.elevation_max" class="is-ellipsed" />
+      <card-elevation-item :elevation="document.elevation_max ?? undefined" class="is-ellipsed" />
 
       <span v-if="document.height_diff_up" :title="$gettext('height_diff_up')">
         <icon-height-diff-up class="card-icon" />
@@ -30,7 +30,7 @@
     </card-row>
 
     <card-row>
-      <card-activities-item :activities="document.activities" />
+      <card-activities-item :activities="document.activities ?? undefined" />
 
       <span class="card-icon is-nowrap">
         <marker-soft-mobility v-if="document.public_transport" />

@@ -73,7 +73,12 @@
           <form-field class="is-4" :document="document" :field="fields.custodianship" />
           <form-field class="is-4" :document="document" :field="fields.capacity_staffed" />
           <!-- $gettext('capacity', 'bivouac') -->
-          <form-field class="is-4" :document="document" :field="fields.capacity" :context="capacityContext" />
+          <form-field
+            class="is-4"
+            :document="document"
+            :field="fields.capacity"
+            :context="capacityContext ?? undefined"
+          />
           <form-field class="is-4" :document="document" :field="fields.url" />
           <form-field class="is-4" :document="document" :field="fields.phone" />
           <form-field class="is-4" :document="document" :field="fields.phone_custodian" />

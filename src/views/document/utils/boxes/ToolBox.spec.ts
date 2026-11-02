@@ -6,7 +6,7 @@ import { createMemoryHistory, createRouter } from 'vue-router';
 import ToolBox from './ToolBox.vue';
 
 import c2c from '@/js/apis/c2c';
-import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+import type { CookedDocument } from '@/js/vue-plugins/document-utils';
 
 // a window of the tool box, whose show() is recorded under its name
 const shown: string[] = [];
@@ -18,7 +18,7 @@ const modal = (name: string) =>
     },
   });
 
-const route = (): C2cDocument =>
+const route = (): CookedDocument =>
   reactive({
     type: 'r',
     document_id: 12,
@@ -31,7 +31,7 @@ const route = (): C2cDocument =>
     associations: { waypoints: [], waypoint_children: [] },
   });
 
-const mountToolBox = async (document: C2cDocument) => {
+const mountToolBox = async (document: CookedDocument) => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [{ path: '/:pathMatch(.*)*', name: 'route', component: { render: () => h('div') } }],

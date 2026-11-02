@@ -21,7 +21,7 @@
           <field-view :document="document" :field="fields.url" style="overflow: hidden" />
         </div>
 
-        <map-box v-if="document.associations!.waypoints.length" :document="document" />
+        <map-box v-if="document.associations!.waypoints!.length" :document="document" />
 
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
@@ -60,7 +60,9 @@ import ActivitiesField from './utils/field-viewers/ActivitiesField.vue';
 import FieldView from './utils/field-viewers/FieldView.vue';
 import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 
+import type { Book } from '@/js/apis/c2c/schemas';
+
 const props = defineProps(documentViewProps);
 
-const { promise, documentType, fields, document, version } = useDocumentView(props);
+const { promise, documentType, fields, document, version } = useDocumentView<Book>(props);
 </script>

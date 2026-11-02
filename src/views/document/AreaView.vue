@@ -17,7 +17,7 @@
       </div>
 
       <div class="column is-9">
-        <div class="box" v-if="document.cooked.summary || document.cooked.description">
+        <div class="box" v-if="document.cooked!.summary || document.cooked!.description">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" />
           <div style="clear: both" />
@@ -66,7 +66,9 @@ import { documentViewProps, useDocumentView } from './utils/document-view';
 import FieldView from './utils/field-viewers/FieldView.vue';
 import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 
+import type { Area } from '@/js/apis/c2c/schemas';
+
 const props = defineProps(documentViewProps);
 
-const { promise, documentId, documentType, fields, document, version } = useDocumentView(props);
+const { promise, documentId, documentType, fields, document, version } = useDocumentView<Area>(props);
 </script>

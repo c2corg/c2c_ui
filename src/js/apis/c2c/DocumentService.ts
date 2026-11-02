@@ -1,4 +1,6 @@
-import { document, documentsPage } from './schemas';
+import { z } from 'zod';
+
+import { document, documentsPage, fullDocuments, redirection } from './schemas';
 import type { Api, DocumentId, Params } from './types';
 
 export default class DocumentService {
@@ -67,15 +69,23 @@ export default class DocumentService {
     });
   }
 
+  // the full schema of the type (the common fields for a type without one), or a merged document
+  private get documentSchema() {
+    return z.union([fullDocuments[this.documentType] ?? document, redirection]) as unknown as typeof document;
+  }
+
   get(id: DocumentId, lang?: string) {
-    return this.api.getValidated('/' + this.documentType + 's/' + id, document, {
+    return this.api.getValidated('/' + this.documentType + 's/' + id, this.documentSchema, {
       params: { l: this.api.getApiLang(lang) },
     });
   }
 
   getCooked(id: DocumentId, prefered_lang: string) {
     prefered_lang = this.api.getApiLang(prefered_lang);
-    const promise = this.api.getValidated('/' + this.documentType + 's/' + id + `?cook=${prefered_lang}`, document);
+    const promise = this.api.getValidated(
+      '/' + this.documentType + 's/' + id + `?cook=${prefered_lang}`,
+      this.documentSchema
+    );
 
     return promise;
   }

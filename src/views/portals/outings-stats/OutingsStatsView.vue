@@ -94,7 +94,7 @@ function compute(found: C2cDocument[]) {
   const result: Record<string, C2cDocument[]> = { '': found };
 
   for (const activity of constants.activities) {
-    const ofActivity = found.filter((outing) => outing.activities.includes(activity));
+    const ofActivity = found.filter((outing) => outing.activities?.includes(activity));
 
     if (ofActivity.length !== 0) {
       result[activity] = ofActivity;

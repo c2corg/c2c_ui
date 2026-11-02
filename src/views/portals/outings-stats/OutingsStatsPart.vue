@@ -75,11 +75,11 @@ type Outing = C2cDocument;
 const NOT_NULL_VALUES = '__NOT_NULL_VALUES__';
 
 const getOutingYear = function (outing: Outing) {
-  return parseInt(outing.date_start.substring(0, 4), 10);
+  return parseInt(outing.date_start!.substring(0, 4), 10);
 };
 
 const getOutingMonth = function (outing: Outing) {
-  return parseInt(outing.date_start.substring(5, 7), 10) - 1;
+  return parseInt(outing.date_start!.substring(5, 7), 10) - 1;
 };
 
 const getRedToGreenColor = function (value: string, reference: string[], minValue: string, maxValue: string) {
@@ -168,8 +168,8 @@ const activitySplittedValue = function (outing: Outing, value: number | null | u
   const result: Record<string, number> = {};
 
   if (value) {
-    for (const activity of outing.activities) {
-      result[activity] = value / outing.activities.length;
+    for (const activity of outing.activities ?? []) {
+      result[activity] = value / outing.activities!.length;
     }
   }
   return result;

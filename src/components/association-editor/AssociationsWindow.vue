@@ -44,7 +44,7 @@ import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
 import type Field from '@/js/constants/Field';
 import { documentProperty, useDocumentType } from '@/js/properties';
-import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+import type { AssociationList, C2cDocument } from '@/js/vue-plugins/document-utils';
 
 type AssociationItem = {
   arrayName: string;
@@ -72,7 +72,8 @@ function addToData(field: Field) {
   const item: AssociationItem = {
     arrayName: field.name,
     documentType: field.documentType!,
-    current: associations[field.name],
+    // the edited list itself: an edited document has a list for each association field of its type
+    current: associations[field.name as AssociationList]!,
     searchArrayName: field.documentType + 's',
   };
 

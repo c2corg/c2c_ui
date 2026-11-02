@@ -39,7 +39,9 @@ import { documentViewProps, useDocumentView } from './utils/document-view';
 import FieldView from './utils/field-viewers/FieldView.vue';
 import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 
+import type { TopoMap } from '@/js/apis/c2c/schemas';
+
 const props = defineProps(documentViewProps);
 
-const { promise, documentType, fields, document, version } = useDocumentView(props);
+const { promise, documentType, fields, document, version } = useDocumentView<TopoMap>(props);
 </script>

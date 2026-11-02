@@ -3,7 +3,8 @@
     <div v-if="!document.not_authorized">
       <html-header v-if="!isDraftView && !isPrintingView" :title="title" />
 
-      <document-version-banner :version="version" :document="document" />
+      <!-- not a private profile: the document is cooked -->
+      <document-version-banner :version="version" :document="document as CookedDocument" />
 
       <div class="box">
         <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
@@ -43,7 +44,7 @@
         </h1>
       </div>
 
-      <images-uploader ref="uploader" :lang="lang" :parent-document="document" />
+      <images-uploader ref="uploader" :lang="lang!" :parent-document="document" />
     </div>
   </div>
 </template>
@@ -61,8 +62,10 @@ import ImagesUploader from '@/components/images-uploader/ImagesUploader.vue';
 import { useEditable } from '@/js/composables/editable';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { documentProperty, useDocumentType } from '@/js/properties';
+import type { CookedDocument } from '@/js/vue-plugins/document-utils';
 
 const props = defineProps({
+  // a private profile has no cooked locale: the header then shows nothing
   ...documentProperty,
   version: {
     type: Object,
@@ -76,7 +79,7 @@ const { isDraftView, isPrintingView, isNormalView, isEditable } = useEditable(()
 
 const uploader = useTemplateRef<InstanceType<typeof ImagesUploader>>('uploader');
 
-const lang = computed(() => props.document.cooked.lang);
+const lang = computed(() => props.document.cooked?.lang);
 
 const title = computed(() => $documentUtils.getDocumentTitle(props.document, lang.value));
 </script>

@@ -16,7 +16,7 @@
     </card-row>
 
     <card-row>
-      <card-activities-item :activities="document.activities" />
+      <card-activities-item :activities="document.activities ?? undefined" />
       <marker-quality :quality="document.quality" />
     </card-row>
   </card-container>

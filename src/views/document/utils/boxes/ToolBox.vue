@@ -149,7 +149,7 @@
 
     <template v-if="isDeletable">
       <tool-box-button
-        v-if="document.available_langs.length > 1"
+        v-if="(document.available_langs ?? []).length > 1"
         @click="deleteLocaleModal!.show()"
         :icon="['fas', 'trash']"
         :label="$gettext('Delete this locale')"
@@ -199,13 +199,13 @@ import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
 import getFundraiser from '@/js/get-fundraiser';
 import ol from '@/js/libs/ol';
-import { documentProperty, useDocumentType } from '@/js/properties';
+import { cookedDocumentProperty, useDocumentType } from '@/js/properties';
 
 const GeoJSON = new ol.format.GeoJSON();
 
 const reportingIssueMail = 'topo-fr@camptocamp.org';
 
-const props = defineProps({ ...documentProperty });
+const props = defineProps({ ...cookedDocumentProperty });
 
 const route = useRoute();
 const { $gettext, $language, $user } = useGlobalProperties();
@@ -242,7 +242,7 @@ const missingLangs = computed(() => {
   const result: string[] = [];
 
   for (const lang of constants.langs) {
-    if (!props.document.available_langs.includes(lang)) {
+    if (!(props.document.available_langs ?? []).includes(lang)) {
       result.push(lang);
     }
   }
@@ -257,9 +257,9 @@ const quality = computed(() => {
   }
   return {
     ...fields.quality,
-    value: props.document[fields.quality.name],
+    value: props.document.quality!,
     i18nName: $gettext(fields.quality.name),
-    i18nValue: $gettext(props.document[fields.quality.name], fields.quality.i18nContext),
+    i18nValue: $gettext(props.document.quality!, fields.quality.i18nContext),
   };
 });
 
@@ -295,8 +295,8 @@ const linkToParaglidingOutings = computed(() => ({
     act: 'paragliding',
     w: [
       ...(documentType.value === 'waypoint' ? [props.document.document_id] : []),
-      ...props.document.associations!.waypoints.map((w) => w.document_id),
-      ...props.document.associations!.waypoint_children.map((w) => w.document_id),
+      ...(props.document.associations!.waypoints ?? []).map((w) => w.document_id),
+      ...(props.document.associations!.waypoint_children ?? []).map((w) => w.document_id),
     ].join(','),
   },
 }));
@@ -337,7 +337,7 @@ const linkToMeteoBlue = computed(() => {
 const shouldAddDirections = computed(
   () =>
     props.document.type === 'w' &&
-    ['access', 'gite', 'camp_site'].includes(props.document.waypoint_type) &&
+    ['access', 'gite', 'camp_site'].includes(props.document.waypoint_type ?? '') &&
     props.document?.geometry?.geom
 );
 

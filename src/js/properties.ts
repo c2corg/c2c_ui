@@ -7,11 +7,19 @@
 import { computed, getCurrentInstance, type PropType } from 'vue';
 
 import type Field from '@/js/constants/Field';
-import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+import type { C2cDocument, CookedDocument } from '@/js/vue-plugins/document-utils';
 
 export const documentProperty = {
   document: {
     type: Object as PropType<C2cDocument>,
+    required: true as const,
+  },
+};
+
+// a document of a document view, which always has its cooked locale (useDocumentView)
+export const cookedDocumentProperty = {
+  document: {
+    type: Object as PropType<CookedDocument>,
     required: true as const,
   },
 };

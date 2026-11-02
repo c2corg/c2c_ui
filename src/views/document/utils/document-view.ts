@@ -32,7 +32,15 @@ type Loaded = {
   data?: any;
 };
 
-export function useDocumentView(props: { draft: C2cDocument | null }) {
+// the locale of a document type, as ?cook=<lang> gives it
+// (a private profile has none)
+type CookedLocale<D extends C2cDocument> = NonNullable<Extract<D, { cooked?: unknown }>['cooked']>;
+
+// the document of a view: with its cooked locale, except a private profile, which is only its id and name
+type ViewDocument<D extends C2cDocument> = D extends { not_authorized: true } ? D : D & { cooked: CookedLocale<D> };
+
+// D: the document type of the view (Route, Waypoint...), as its schema gives it (src/js/apis/c2c/schemas.ts)
+export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { draft: C2cDocument | null }) {
   const globals = getCurrentInstance()!.appContext.config.globalProperties;
   const route = useRoute();
   const router = useRouter();
@@ -63,7 +71,9 @@ export function useDocumentView(props: { draft: C2cDocument | null }) {
   /*
    * properties computed when document is loaded
    */
-  const document = computed<C2cDocument | undefined>(() => {
+  // its locale is always cooked: the views load it with ?cook=, the versions are cooked, the drafts are cooked here; a
+  // merged document only gives the one it was merged into
+  const document = computed<(ViewDocument<D> & { redirects_to?: number }) | undefined>(() => {
     if (!promise.value?.data) {
       return undefined;
     }
@@ -77,9 +87,12 @@ export function useDocumentView(props: { draft: C2cDocument | null }) {
     return promise.value.data.version;
   });
 
-  const locale = computed(() => document.value?.cooked);
+  const locale = computed(() => document.value?.cooked as CookedLocale<D> | undefined);
 
-  const lang = computed<string>(() => document.value?.cooked?.lang ?? globals.$language.current);
+  // (the locale type of D is only known in the views)
+  const lang = computed<string>(
+    () => (locale.value as { lang?: string } | undefined)?.lang ?? globals.$language.current!
+  );
 
   const editable = computed(() =>
     document.value ? isEditable(document.value, documentType.value, globals.$user, isNormalView.value) : false
@@ -187,7 +200,7 @@ export function useDocumentView(props: { draft: C2cDocument | null }) {
 
       globals.$imageViewer.clear();
       cooker.cook(draft.locales![0]).then((response) => {
-        draft.cooked = response.data;
+        draft.cooked = response.data as C2cDocument['cooked'];
         promise.value = { data: draft };
       });
     } else {
