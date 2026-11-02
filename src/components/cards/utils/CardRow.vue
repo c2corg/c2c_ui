@@ -16,8 +16,8 @@ div {
 }
 
 @media screen and (max-width: $tablet) {
-  span.is-ellipsed,
-  p.is-ellipsed {
+  :slotted(span.is-ellipsed),
+  :slotted(p.is-ellipsed) {
     white-space: normal;
   }
 }

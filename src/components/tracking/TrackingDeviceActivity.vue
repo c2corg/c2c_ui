@@ -114,7 +114,7 @@ a {
   align-items: center;
   pointer-events: none;
 
-  button {
+  :slotted(button) {
     pointer-events: auto;
   }
 }
