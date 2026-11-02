@@ -57,9 +57,11 @@ import { computed, onUnmounted, ref, watch } from 'vue';
 
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
 import Info from '@/components/yeti/Info.vue';
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+
+const Yetix = useYetixStore();
 
 const { $gettext } = useGlobalProperties();
 

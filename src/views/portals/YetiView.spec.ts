@@ -2,13 +2,19 @@ import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import Feature from 'ol/Feature';
 import LineString from 'ol/geom/LineString';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi, beforeEach } from 'vitest';
 import { defineComponent, nextTick } from 'vue';
 
 import YetiView from './YetiView.vue';
 
 import ValidationButton from '@/components/yeti/ValidationButton.vue';
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
+
+// the store of each test, in the Pinia src/test-setup.ts activates
+let Yetix: ReturnType<typeof useYetixStore>;
+beforeEach(() => {
+  Yetix = useYetixStore();
+});
 
 // the map gives the extent sent to YETI
 const YetiMapStub = defineComponent({

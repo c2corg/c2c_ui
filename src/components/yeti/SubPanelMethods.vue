@@ -232,8 +232,10 @@ import { computed, watch } from 'vue';
 
 import Info from '@/components/yeti/Info.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+
+const Yetix = useYetixStore();
 
 const DANGER = {
   min: 1,

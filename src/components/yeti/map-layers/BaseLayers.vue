@@ -5,10 +5,12 @@ import type XYZ from 'ol/source/XYZ';
 import { computed, onMounted, watch } from 'vue';
 
 import { cartoLayers } from '@/components/map/map-layers';
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import type { SelectorLayer } from '@/components/yeti/yetix-types';
 import ol from '@/js/libs/ol';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
+
+const Yetix = useYetixStore();
 
 // renderless: it only adds OpenLayers layers to the map
 defineOptions({ render: () => null });

@@ -13,8 +13,10 @@ import { useLayer } from './layer';
 
 import BaseLayers from '@/components/yeti/map-layers/BaseLayers.vue';
 import SlopesLayers from '@/components/yeti/map-layers/SlopesLayers.vue';
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
+
+const Yetix = useYetixStore();
 
 const { map } = useLayer();
 

@@ -1,6 +1,6 @@
 // the panels of the yeti portal moved to <script setup lang="ts">: what their scripts do
 import { mount } from '@vue/test-utils';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi, beforeEach } from 'vitest';
 import { defineComponent, h, nextTick } from 'vue';
 
 import DropdownContent from './DropdownContent.vue';
@@ -9,8 +9,14 @@ import LayerButton from './LayerButton.vue';
 import SubPanelMeteo from './SubPanelMeteo.vue';
 import SubPanelMethods from './SubPanelMethods.vue';
 import Tabs from './Tabs.vue';
-import Yetix from './yetix';
+import { useYetixStore } from './yetix';
 import yetixEvents from './yetix-events';
+
+// the store of each test, in the Pinia src/test-setup.ts activates
+let Yetix: ReturnType<typeof useYetixStore>;
+beforeEach(() => {
+  Yetix = useYetixStore();
+});
 
 const globalProperties = {
   $gettext: (text: string) => text,

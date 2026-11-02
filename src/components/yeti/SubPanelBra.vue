@@ -121,8 +121,10 @@ import Counter from '@/components/yeti/Counter.vue';
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
 import Info from '@/components/yeti/Info.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import type { BulletinMountain } from '@/components/yeti/yetix-types';
+
+const Yetix = useYetixStore();
 
 const bra = computed(() => Yetix.bra);
 const visibleMountains = computed(() => Yetix.mountains.visible as Record<string, BulletinMountain[]> | null);

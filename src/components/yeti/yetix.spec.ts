@@ -8,7 +8,10 @@ const stored = () => JSON.parse(window.localStorage.getItem('Yeti.preferences') 
 const loadYetix = async () => {
   vi.resetModules();
   const { mount } = await import('@vue/test-utils');
-  const { default: Yetix } = await import('./yetix');
+  const { useYetixStore } = await import('./yetix');
+  const { createPinia, setActivePinia } = await import('pinia');
+  setActivePinia(createPinia());
+  const Yetix = useYetixStore();
   const { default: ol } = await import('@/js/libs/ol');
   const { default: axios } = await import('axios');
   const { h, nextTick } = await import('vue');

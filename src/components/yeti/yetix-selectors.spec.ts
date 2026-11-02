@@ -1,9 +1,15 @@
 import { mount } from '@vue/test-utils';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, beforeEach } from 'vitest';
 import { defineComponent, h, nextTick } from 'vue';
 
-import Yetix from './yetix';
+import { useYetixStore } from './yetix';
 import type { SelectorLayer } from './yetix-types';
+
+// the store of each test, in the Pinia src/test-setup.ts activates
+let Yetix: ReturnType<typeof useYetixStore>;
+beforeEach(() => {
+  Yetix = useYetixStore();
+});
 
 const layer = (title: string) => ({ title }) as SelectorLayer;
 

@@ -127,10 +127,12 @@ import DropdownContent from '@/components/yeti/DropdownContent.vue';
 import LayerButton from '@/components/yeti/LayerButton.vue';
 import Slider from '@/components/yeti/Slider.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import type { SelectorLayer } from '@/components/yeti/yetix-types';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
+
+const Yetix = useYetixStore();
 
 // stored under the name the component had, as before: existing preferences are kept
 const preferences = getPreferences('Yeti');

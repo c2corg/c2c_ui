@@ -11,10 +11,16 @@ import ElevationProfile from '@/components/yeti/ElevationProfile.vue';
 import yetixEvents from '@/components/yeti/yetix-events';
 
 vi.mock('@/components/yeti/yetix', async (importOriginal) => {
-  const { default: Yetix } = await importOriginal<{ default: Record<string, unknown> }>();
-  // no request for the areas
-  Yetix.fetchAreas = () => new Promise(() => {});
-  return { default: Yetix };
+  const original = await importOriginal<typeof import('@/components/yeti/yetix')>();
+  return {
+    ...original,
+    useYetixStore: () => {
+      const Yetix = original.useYetixStore();
+      // no request for the areas
+      Yetix.fetchAreas = () => new Promise(() => {});
+      return Yetix;
+    },
+  };
 });
 
 const handlers = (event: string) => yetixEvents.all.get(event)?.length ?? 0;

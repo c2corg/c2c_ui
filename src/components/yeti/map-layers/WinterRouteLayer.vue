@@ -7,9 +7,11 @@ import { useLayer } from './layer';
 
 import WinterRouteLayerContent from '@/components/yeti/map-layers/WinterRouteLayerContent.vue';
 import WinterRouteLayerContentTitle from '@/components/yeti/map-layers/WinterRouteLayerContentTitle.vue';
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
+
+const Yetix = useYetixStore();
 
 // renderless: it only adds OpenLayers layers to the map
 defineOptions({ render: () => null });

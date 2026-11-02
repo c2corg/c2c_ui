@@ -14,7 +14,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
+
+const Yetix = useYetixStore();
 
 defineProps({
   index: {

@@ -79,11 +79,13 @@ import { useLayer } from './layer';
 
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
 import DangerLevel from '@/components/yeti/map-layers/DangerLevel.vue';
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import type { BulletinMountain } from '@/components/yeti/yetix-types';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
+
+const Yetix = useYetixStore();
 
 // min and max zooms for layers styles
 const MIN_ZOOM = 8;

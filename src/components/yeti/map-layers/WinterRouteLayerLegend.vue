@@ -14,8 +14,10 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import { assetUrl } from '@/js/asset-urls';
+
+const Yetix = useYetixStore();
 
 const winterRouteLegend = computed(() => Yetix.winterRouteLegend);
 </script>

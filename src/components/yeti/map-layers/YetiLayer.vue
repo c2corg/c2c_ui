@@ -6,10 +6,12 @@ import { computed, onMounted, watch } from 'vue';
 
 import { useLayer } from './layer';
 
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import type { SelectorLayer } from '@/components/yeti/yetix-types';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
+
+const Yetix = useYetixStore();
 
 // renderless: it only adds OpenLayers layers to the map
 defineOptions({ render: () => null });

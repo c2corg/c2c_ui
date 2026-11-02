@@ -51,12 +51,14 @@ import YetiLayers from './map-layers/YetiLayers.vue';
 
 import EditModeButton from '@/components/yeti/EditModeButton.vue';
 import YetiMapLegend from '@/components/yeti/YetiMapLegend.vue';
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import photon from '@/js/apis/photon';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
+
+const Yetix = useYetixStore();
 
 // a place found by Photon, to recenter the map on
 type PhotonFeature = { properties: Record<string, string | undefined> };
