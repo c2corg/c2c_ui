@@ -1,12 +1,12 @@
 // The user: their session (token, roles...) and their language, kept in the local storage of the browser
 import { defineStore } from 'pinia';
-import { computed, inject, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import c2c from '@/js/apis/c2c';
 import trackingService from '@/js/apis/tracking-service';
 import config from '@/js/config';
-import { languageKey } from '@/js/vue-plugins/gettext-plugin';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
+import { useLanguageStore } from '@/stores/language';
 
 const STORED_FIELDS = ['userName', 'id', 'lang', 'roles', 'name', 'forumUsername', 'token', 'expire'] as const;
 
@@ -36,9 +36,8 @@ function isExpired(expire: number | null, token: string | null): boolean {
   return false;
 }
 
-// created by the user plugin, in the context of the app: the language is injected
 export const useUserStore = defineStore('user', () => {
-  const language = inject(languageKey)!;
+  const language = useLanguageStore();
 
   // stored under the name of the former User component, so that existing sessions are kept
   const preferences = getPreferences('User');

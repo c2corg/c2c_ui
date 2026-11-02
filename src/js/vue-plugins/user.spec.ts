@@ -41,14 +41,15 @@ const installUser = async () => {
   const { createApp, h, nextTick } = await import('vue');
 
   const { createPinia } = await import('pinia');
-  const { languageKey } = await import('./gettext-plugin');
+  const { useLanguageStore } = await import('@/stores/language');
 
   const app = createApp({});
   const globals = app.config.globalProperties;
-  // $language is installed and provided before $user by main.ts, with Pinia
-  globals.$language = { current: 'fr', setCurrent: vi.fn() } as never;
-  app.provide(languageKey, globals.$language);
   app.use(createPinia());
+  // the language store, as main.ts installs it before $user: French, its change spied on
+  const language = app.runWithContext(() => useLanguageStore());
+  language.setCurrent = vi.fn();
+  globals.$language = language;
   app.use(user);
 
   const stored = () => JSON.parse(window.localStorage.getItem('User.preferences') ?? '{}')[config.urls.api];
