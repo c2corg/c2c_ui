@@ -36,6 +36,9 @@ type Loaded = {
 // (a private profile has none)
 type CookedLocale<D extends C2cDocument> = NonNullable<Extract<D, { cooked?: unknown }>['cooked']>;
 
+// the document of a view: with its cooked locale, except a private profile, which is only its id and name
+type ViewDocument<D extends C2cDocument> = D extends { not_authorized: true } ? D : D & { cooked: CookedLocale<D> };
+
 // D: the document type of the view (Route, Waypoint...), as its schema gives it (src/js/apis/c2c/schemas.ts)
 export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { draft: C2cDocument | null }) {
   const globals = getCurrentInstance()!.appContext.config.globalProperties;
@@ -70,7 +73,7 @@ export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { dr
    */
   // its locale is always cooked: the views load it with ?cook=, the versions are cooked, the drafts are cooked here; a
   // merged document only gives the one it was merged into
-  const document = computed<(D & { cooked: CookedLocale<D>; redirects_to?: number }) | undefined>(() => {
+  const document = computed<(ViewDocument<D> & { redirects_to?: number }) | undefined>(() => {
     if (!promise.value?.data) {
       return undefined;
     }
