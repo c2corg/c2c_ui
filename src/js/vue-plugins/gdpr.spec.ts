@@ -9,8 +9,10 @@ const installGdpr = async () => {
   const { default: gdpr } = await import('./gdpr');
   // and the same Vue copy as the plugin
   const { createApp } = await import('vue');
+  const { createPinia } = await import('pinia');
   const app = createApp({});
   app.config.globalProperties.$ga = { enable: vi.fn(), disable: vi.fn() };
+  app.use(createPinia());
   app.use(gdpr);
   return app.config.globalProperties;
 };
