@@ -24,4 +24,34 @@ describe('extract-messages', () => {
     expect(content).toContain('msgctxt "some context"\nmsgid "from typescript"');
     expect(content).not.toContain('from a declaration');
   });
+
+  it('extracts the messages in double quotes, as Prettier writes those with an apostrophe', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'extract-messages-'));
+    writeFileSync(
+      join(dir, 'module.ts'),
+      `$gettext("The route's access point");\n$gettext("A \\"quoted\\" word", 'some context');`
+    );
+    const pot = join(dir, 'messages.pot');
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+
+    extractMessages(dir, pot);
+
+    const content = readFileSync(pot, 'utf8');
+    expect(content).toContain(`msgid "The route's access point"`);
+    expect(content).toContain('msgctxt "some context"\nmsgid "A &quot;quoted&quot; word"');
+  });
+
+  it('leaves out the messages of the specs, which are test data', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'extract-messages-'));
+    writeFileSync(join(dir, 'module.ts'), "$gettext('from the app');");
+    writeFileSync(join(dir, 'module.spec.ts'), "$gettext('from a spec');");
+    const pot = join(dir, 'messages.pot');
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+
+    extractMessages(dir, pot);
+
+    const content = readFileSync(pot, 'utf8');
+    expect(content).toContain('msgid "from the app"');
+    expect(content).not.toContain('from a spec');
+  });
 });

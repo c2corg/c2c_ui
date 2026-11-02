@@ -35,6 +35,9 @@ const gettext_template1 = /\$gettext\(\s*'((?:[^']|\\')*?)'\s*\)/gm;
 const gettext_template1b = /\$gettext\(\s*`((?:[^`$])*?)`\s*\)/gm;
 const gettext_template2 = /\$gettext\(\s*'((?:[^']|\\')*?)',\s*'([^']*?)'\s*\)/gm;
 const gettext_template2b = /\$gettext\(\s*`((?:[^`$])*?)`,\s*`([^']*?)`\s*\)/gm;
+// double quotes: Prettier keeps them for a message with an apostrophe
+const gettext_template1c = /\$gettext\(\s*"((?:[^"\\]|\\.)*?)"\s*\)/gm;
+const gettext_template2c = /\$gettext\(\s*"((?:[^"\\]|\\.)*?)",\s*'([^']*?)'\s*\)/gm;
 
 /** A "Result" is a .pot item (msgctxt/msgid), with every associated meta-data */
 class Result {
@@ -98,6 +101,8 @@ class Process {
     this.parseScript(file, data, gettext_template1b);
     this.parseScript(file, data, gettext_template2);
     this.parseScript(file, data, gettext_template2b);
+    this.parseScript(file, data, gettext_template1c);
+    this.parseScript(file, data, gettext_template2c);
   }
 
   parseScript(file: string, data: string, regex: RegExp) {
@@ -106,7 +111,7 @@ class Process {
       const msgid = msgData[1];
       const msgctxt = msgData[2];
 
-      this.push(file, null, msgctxt, msgid.replace(/\\'/g, "'"));
+      this.push(file, null, msgctxt, msgid.replace(/\\'/g, "'").replace(/\\"/g, '"'));
     }
   }
 
@@ -163,7 +168,12 @@ class Process {
     } else if (file_or_dir.endsWith('.vue')) {
       const data = readFileSync(file_or_dir, 'utf8');
       this.addVueComponent(file_or_dir, data);
-    } else if ((file_or_dir.endsWith('.js') || file_or_dir.endsWith('.ts')) && !file_or_dir.endsWith('.d.ts')) {
+    } else if (
+      (file_or_dir.endsWith('.js') || file_or_dir.endsWith('.ts')) &&
+      !file_or_dir.endsWith('.d.ts') &&
+      // the specs: their messages are test data
+      !/\.spec\.[jt]s$/.test(file_or_dir)
+    ) {
       const data = readFileSync(file_or_dir, 'utf8');
       this.addScript(file_or_dir, data);
     }
