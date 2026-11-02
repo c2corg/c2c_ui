@@ -70,7 +70,10 @@ jobs:
         if: "contains(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master'"
         uses: docker/build-push-action@v7
         with:
-          push: true
+          # the classic Docker manifest, without attestation: the Docker 1.12 of the production hosts cannot pull an OCI
+          # index ("missing signature key", v7.42.0), as for the v6_api images
+          provenance: false
+          outputs: type=image,push=true,oci-mediatypes=false
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
       - name: Get branch name
