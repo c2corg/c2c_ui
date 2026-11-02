@@ -43,7 +43,7 @@ describe('FormInput date limits', () => {
     mount(FormInput, {
       props: {
         field: { name: 'date_end', type: 'date', parent: 'document', error: null, isVisibleFor: () => true } as never,
-        document: { type: 'o', locales: [{ lang: 'fr' }], date_end: null },
+        document: { type: 'o', locales: [{ lang: 'fr' }], date_end: null } as never,
         ...props,
       },
       // a global component of the app

@@ -145,7 +145,7 @@ function formatExportCell(params: ProcessCellForExportParams) {
 }
 
 function formatOutingDate(document: C2cDocument, field?: string) {
-  return $dateUtils.toLocalizedString(document[field!], 'll');
+  return $dateUtils.toLocalizedString(document[field!] as string, 'll');
 }
 
 function formatAreas(document: C2cDocument) {
@@ -157,11 +157,12 @@ function formatTitle(document: C2cDocument) {
 }
 
 function formatAuthor(document: C2cDocument) {
-  return document.author.name;
+  // the author of an outing
+  return (document.author as { name: string }).name;
 }
 
 function formatActivities(document: C2cDocument) {
-  return document.activities.map((activity: string) => $gettext(activity, 'activities')).join(', ');
+  return (document.activities ?? []).map((activity: string) => $gettext(activity, 'activities')).join(', ');
 }
 
 function formatRating(document: C2cDocument) {
@@ -213,7 +214,7 @@ function formatRating(document: C2cDocument) {
 }
 
 function ratings(document: C2cDocument, ...names: string[]): string[] {
-  return names.map((rating) => document[rating]).filter((rating) => !!rating);
+  return names.map((rating) => document[rating] as string).filter((rating) => !!rating);
 }
 
 function formatGpsTrace(document: C2cDocument) {
@@ -233,7 +234,7 @@ function formatConditions(document: C2cDocument) {
 }
 
 function formatQuality(document: C2cDocument) {
-  return $gettext(document.quality, 'quality_types');
+  return $gettext(document.quality!, 'quality_types');
 }
 
 function computeColumnDefs() {

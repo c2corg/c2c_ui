@@ -147,9 +147,9 @@ export const getDocumentPointStyle = function (document: C2cDocument, title: str
     styles.push(
       new ol.style.Style({
         image: new ol.style.Circle({
-          radius: document.properties.radius || 10,
+          radius: document.properties!.radius || 10,
           fill: new ol.style.Fill({
-            color: document.properties.color || '#4CAF50',
+            color: document.properties!.color || '#4CAF50',
           }),
           stroke: new ol.style.Stroke({
             color: 'white',
@@ -160,11 +160,11 @@ export const getDocumentPointStyle = function (document: C2cDocument, title: str
       })
     );
 
-    if (document.properties.image_url) {
+    if (document.properties!.image_url) {
       styles.push(
         new ol.style.Style({
           image: new ol.style.Icon({
-            src: document.properties.image_url,
+            src: document.properties!.image_url,
             scale: 0.8,
             anchor: [0.5, 0.5],
           }),
@@ -179,13 +179,13 @@ export const getDocumentPointStyle = function (document: C2cDocument, title: str
   if (type === 'p') {
     return new ol.style.Style({
       image: new ol.style.Circle({
-        radius: document.properties.radius || 5,
+        radius: document.properties!.radius || 5,
         fill: new ol.style.Fill({
-          color: document.properties.color || '#ffffff',
+          color: document.properties!.color || '#ffffff',
         }),
         stroke: new ol.style.Stroke({
-          color: document.properties.border_color || '#000000',
-          width: document.properties.border_width || 1,
+          color: document.properties!.border_color || '#000000',
+          width: document.properties!.border_width || 1,
         }),
       }),
       zIndex: highlight ? 101 : 50,
@@ -205,7 +205,7 @@ export const getDocumentPointStyle = function (document: C2cDocument, title: str
       (document.waypoint_type === 'access' &&
         document.public_transportation_rating &&
         document.public_transportation_rating !== 'no service') ||
-      (document.properties && document.properties.color === 'green')
+      (document.properties && document.properties!.color === 'green')
     ) {
       color = '#4baf50';
     }

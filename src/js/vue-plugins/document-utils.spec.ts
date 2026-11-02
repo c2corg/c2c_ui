@@ -96,7 +96,7 @@ describe('$documentUtils', () => {
       areas: [area('country', 'France'), area('range', 'Mont Blanc'), area('admin_limits', 'Haute-Savoie')],
     };
 
-    expect(install().getSortedAreaList(document)).toBe('Mont Blanc - Haute-Savoie - France');
+    expect(install().getSortedAreaList(document as never)).toBe('Mont Blanc - Haute-Savoie - France');
   });
 
   it('localizes outing dates', () => {

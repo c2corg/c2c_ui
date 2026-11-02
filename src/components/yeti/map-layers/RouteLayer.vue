@@ -36,6 +36,7 @@ import type DocumentService from '@/js/apis/c2c/DocumentService';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import iconSvg from '@/js/icon-svg';
 import ol from '@/js/libs/ol';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 type Line = Feature<LineString>;
 
@@ -468,7 +469,7 @@ function addFeature(feature: Feature<Geometry>) {
 }
 
 function getFeaturesTitleFromDocument(document: { data: object }) {
-  return $documentUtils.getDocumentTitle(document.data);
+  return $documentUtils.getDocumentTitle(document.data as C2cDocument);
 }
 
 function fitMapToFeatures() {

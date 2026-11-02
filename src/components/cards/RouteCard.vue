@@ -14,7 +14,7 @@
         <document-rating :document="document" />
       </span>
 
-      <card-elevation-item :elevation="document.elevation_max" class="is-ellipsed" />
+      <card-elevation-item :elevation="document.elevation_max ?? undefined" class="is-ellipsed" />
 
       <span v-if="document.height_diff_up" class="is-ellipsed" :title="$gettext('height_diff_up')">
         <icon-height-diff-up class="card-icon" />
@@ -28,7 +28,7 @@
     </card-row>
 
     <card-row>
-      <card-activities-item :activities="document.activities" />
+      <card-activities-item :activities="document.activities ?? undefined" />
 
       <span class="card-icon">
         <!-- Englobing span is mandatory for tooltip ?? -->

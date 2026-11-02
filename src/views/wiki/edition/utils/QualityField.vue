@@ -58,7 +58,7 @@ function getQualityFromScore(score: number) {
 
 function hasActivities(doc: Doc, activities: string[]) {
   for (const activity of activities) {
-    if (doc.activities.includes(activity)) {
+    if (doc.activities?.includes(activity)) {
       return true;
     }
   }
@@ -148,7 +148,8 @@ function getOutingQuality(doc: Doc, locale: Locale) {
       score += 0.5;
     }
 
-    score += doc.avalanche_signs !== 'no' && locale.avalanches ? 0.5 : 0;
+    // the avalanche signs are a list: ['no'] when none was seen
+    score += doc.avalanche_signs?.some((sign) => sign !== 'no') && locale.avalanches ? 0.5 : 0;
 
     score += locale.description ? 0.5 : 0;
     score += locale.weather ? 0.5 : 0;

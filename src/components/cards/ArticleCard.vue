@@ -11,12 +11,12 @@
     <card-row>
       <span>
         <icon-creative-commons />
-        <span>{{ $gettext(document.article_type, 'article_types') }}</span>
+        <span>{{ $gettext(document.article_type ?? '', 'article_types') }}</span>
       </span>
     </card-row>
 
     <card-row>
-      <card-activities-item :activities="document.activities" />
+      <card-activities-item :activities="document.activities ?? undefined" />
       <marker-quality :quality="document.quality" />
     </card-row>
   </card-container>

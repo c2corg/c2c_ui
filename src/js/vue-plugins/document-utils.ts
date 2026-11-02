@@ -5,7 +5,20 @@
 
 import type { App } from 'vue';
 
+import type { FeatureProperties } from '@/components/map/map-utils';
 import c2c from '@/js/apis/c2c';
+import type {
+  Area,
+  Article,
+  Book,
+  Image,
+  Outing,
+  Profile,
+  Route,
+  TopoMap,
+  Waypoint,
+  Xreport,
+} from '@/js/apis/c2c/schemas';
 import constants from '@/js/constants';
 
 // a locale of a document: its language, title...
@@ -18,8 +31,6 @@ export type Locale = {
   [property: string]: unknown;
 };
 
-// a document of the API, as far as this module goes. Its other properties stay untyped until the API responses are
-// typed (#4747)
 // the associated documents of a document, by kind
 export type Associations = {
   waypoints?: C2cDocument[];
@@ -40,12 +51,19 @@ export type Associations = {
 // the kinds of associations given as a list: those an edition can add to or remove from
 export type AssociationList = Exclude<keyof Associations, 'recent_outings' | 'all_routes'>;
 
+// a document of any type, as the API gives it (src/js/apis/c2c/schemas.ts), or as the UI builds it: the fields of every
+// document type, each optional, with the type they have in the document types that have it. Any other property is
+// unknown: read it through a typed field, or add it here
 export type C2cDocument = {
   type?: string;
   document_id?: number;
   locales?: Locale[];
   // the associated documents (schemas.ts associations): lists, and pages for recent_outings and all_routes
   associations?: Associations;
+  // the documents of the feeds and of the recent changes have a title instead of locales
+  title?: string | null;
+  // the drawing properties of the features of other services (public transports, start points), on the map
+  properties?: FeatureProperties;
   // listings give has_geom_detail instead of geom_detail
   geometry?: {
     geom?: string | null;
@@ -53,8 +71,30 @@ export type C2cDocument = {
     has_geom_detail?: boolean;
     version?: number;
   } | null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [property: string]: any;
+  // ?cook=<lang>: the locale in that language, its markdown as HTML
+  cooked?: Locale;
+  [property: string]: unknown;
+} & AnyOf<
+  | Area
+  | Article
+  | Book
+  | Image
+  | TopoMap
+  | Outing
+  | Exclude<Profile, { not_authorized: true }>
+  | Route
+  | Waypoint
+  | Xreport
+>;
+
+// the fields of the document types, each optional, with the union of their types in the types that have it
+type AllKeys<U> = U extends unknown ? keyof U : never;
+type ValueOf<U, K extends PropertyKey> = U extends unknown ? (K extends keyof U ? U[K] : never) : never;
+type AnyOf<U> = {
+  [K in Exclude<AllKeys<U>, 'type' | 'document_id' | 'locales' | 'associations' | 'geometry' | 'cooked'>]?: ValueOf<
+    U,
+    K
+  >;
 };
 
 // a document as a document view shows it: with its locale in the language of the page, as HTML (?cook=<lang>)
@@ -353,7 +393,7 @@ function createDocumentUtils(app: App) {
         const orderedAreas: Record<string, string[]> = { range: [], admin_limits: [], country: [] };
 
         for (const area of areas) {
-          orderedAreas[area.area_type].push(this.getLocaleSmart(area)?.title as string);
+          orderedAreas[area.area_type!].push(this.getLocaleSmart(area)?.title as string);
         }
 
         if (orderedAreas['range'].length) {

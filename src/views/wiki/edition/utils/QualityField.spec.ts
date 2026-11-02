@@ -52,6 +52,23 @@ describe('QualityField', () => {
     expect(shownQuality(wrapper)).toBe('fine');
   });
 
+  it('counts the avalanche comment of a ski outing only when avalanche signs were seen', () => {
+    const skiOuting = (avalanche_signs: string[]) =>
+      reactive<C2cDocument>({
+        type: 'o',
+        quality: 'draft',
+        activities: ['skitouring'],
+        avalanche_signs,
+        associations: { waypoints: [], routes: [], images: [] },
+        locales: [{ lang: 'fr', description: 'a description', avalanches: 'none seen' }],
+      });
+
+    // description 0.5, avalanches 0.5
+    expect(shownQuality(mountQuality(skiOuting(['danger_sign'])))).toBe('draft');
+    // the avalanche signs are a list: ['no'] when none was seen
+    expect(shownQuality(mountQuality(skiOuting(['no'])))).toBe('empty');
+  });
+
   it('sets the computed quality before saving, unless unlocked', async () => {
     const document = outing({ description: 'a description', conditions: 'dry' });
     const wrapper = mountQuality(document);

@@ -88,7 +88,8 @@ const fullDocument = <T extends z.ZodRawShape, L extends z.ZodRawShape>(fields: 
     // ?cook=<lang>: the locale in that language (or the best one), its markdown as HTML
     cooked: fullLocale(localeFields).optional(),
     associations: associations.optional(),
-    areas: z.array(document).optional(),
+    // the areas of the document, with their type (range, administrative limits, country)
+    areas: z.array(document.extend({ area_type: z.string().nullish() })).optional(),
     // the maps of the document's area, with their editor and code
     maps: z.array(document.extend({ editor: z.string().nullish(), code: z.string().nullish() })).optional(),
     ...fields,

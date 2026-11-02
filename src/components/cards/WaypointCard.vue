@@ -12,7 +12,7 @@
     </card-row>
 
     <card-row>
-      <card-elevation-item :elevation="document.elevation" />
+      <card-elevation-item :elevation="document.elevation ?? undefined" />
 
       <textual-array :array="document.slackline_types" i18n i18n-context="slackline_types" />
 

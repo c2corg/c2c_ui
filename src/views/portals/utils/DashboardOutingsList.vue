@@ -83,8 +83,8 @@ const outingsByDate = computed(() => {
 
   for (const outing of outings.value.documents as C2cDocument[]) {
     if (outing.quality !== 'empty') {
-      result[outing.date_end] = result[outing.date_end] ?? [];
-      result[outing.date_end].push(outing);
+      result[outing.date_end!] = result[outing.date_end!] ?? [];
+      result[outing.date_end!].push(outing);
     }
   }
 

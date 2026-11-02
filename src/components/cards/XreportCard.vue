@@ -7,7 +7,7 @@
     <card-row>
       <card-region-item :document="document" />
 
-      <card-elevation-item :elevation="document.elevation" />
+      <card-elevation-item :elevation="document.elevation ?? undefined" />
     </card-row>
 
     <card-row>
