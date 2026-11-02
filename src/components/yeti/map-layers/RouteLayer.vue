@@ -29,7 +29,7 @@ import { getSortedFeatures } from './route-features';
 import simplify from './simplify';
 import SplitInteraction, { type SplitEvent } from './split-interaction';
 
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
@@ -37,6 +37,8 @@ import { useGlobalProperties } from '@/js/composables/global-properties';
 import iconSvg from '@/js/icon-svg';
 import ol from '@/js/libs/ol';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+
+const Yetix = useYetixStore();
 
 type Line = Feature<LineString>;
 

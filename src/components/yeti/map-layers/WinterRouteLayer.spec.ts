@@ -1,10 +1,16 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, beforeEach } from 'vitest';
 import { nextTick } from 'vue';
 
 import WinterRouteLayer from './WinterRouteLayer.vue';
 import { mountInMap } from './test-utils';
 
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
+
+// the store of each test, in the Pinia src/test-setup.ts activates
+let Yetix: ReturnType<typeof useYetixStore>;
+beforeEach(() => {
+  Yetix = useYetixStore();
+});
 
 type LayerSelector = { id: string; checked: boolean; action(): void };
 

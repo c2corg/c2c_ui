@@ -28,7 +28,9 @@ import { computed, ref } from 'vue';
 
 import WinterRouteLayerLegend from '@/components/yeti/map-layers/WinterRouteLayerLegend.vue';
 import YetiLayerLegend from '@/components/yeti/map-layers/YetiLayerLegend.vue';
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
+
+const Yetix = useYetixStore();
 
 const showLegend = ref<boolean | undefined>(undefined);
 

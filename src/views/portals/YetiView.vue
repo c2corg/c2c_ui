@@ -119,12 +119,14 @@ import SubPanelMethods from '@/components/yeti/SubPanelMethods.vue';
 import Tabs from '@/components/yeti/Tabs.vue';
 import ValidationButton from '@/components/yeti/ValidationButton.vue';
 import YetiMap from '@/components/yeti/YetiMap.vue';
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import type { YetiTab } from '@/components/yeti/yetix-types';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
+
+const Yetix = useYetixStore();
 
 defineOptions({ name: 'Yeti' });
 

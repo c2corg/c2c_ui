@@ -41,9 +41,11 @@ import type Feature from 'ol/Feature';
 import { computed, useTemplateRef } from 'vue';
 
 import Toast from '@/components/yeti/Toast.vue';
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+
+const Yetix = useYetixStore();
 
 const { $gettext, $language } = useGlobalProperties();
 

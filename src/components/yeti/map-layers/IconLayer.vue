@@ -20,9 +20,11 @@ import { computed, onMounted, ref, useTemplateRef, watch } from 'vue';
 
 import { useLayer } from './layer';
 
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import ol from '@/js/libs/ol';
+
+const Yetix = useYetixStore();
 
 const props = defineProps({
   // icons of the layer built on this one, if it has its own

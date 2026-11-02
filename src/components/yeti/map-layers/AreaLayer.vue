@@ -15,10 +15,12 @@ import { useLayer } from './layer';
 
 import BaseLayers from '@/components/yeti/map-layers/BaseLayers.vue';
 import SlopesLayers from '@/components/yeti/map-layers/SlopesLayers.vue';
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
+
+const Yetix = useYetixStore();
 
 const emit = defineEmits(['layer']);
 

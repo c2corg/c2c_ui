@@ -59,12 +59,14 @@ import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch, type 
 import simplify from './map-layers/simplify';
 
 import Info from '@/components/yeti/Info.vue';
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import debounce from '@/js/debounce';
 import d3 from '@/js/libs/d3';
 import ol from '@/js/libs/ol';
+
+const Yetix = useYetixStore();
 
 const MIN_INTERPOLATE_VALUE = 5;
 

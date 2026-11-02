@@ -1,6 +1,6 @@
 /*
  * Yetix
- * State management for Yeti (VueX inspired)
+ * State management for Yeti, as a Pinia store
  *
  * - Read-only state
  * - State mutations can only occur here
@@ -11,7 +11,8 @@ import axios from 'axios';
 import type Feature from 'ol/Feature';
 import type Geometry from 'ol/geom/Geometry';
 import type LineString from 'ol/geom/LineString';
-import { markRaw, reactive } from 'vue';
+import { defineStore } from 'pinia';
+import { computed, markRaw, reactive } from 'vue';
 
 import type { BulletinMountain, SelectorLayer, WinterRouteLegendItem, YetiLegend, YetiTab } from './yetix-types';
 
@@ -129,9 +130,6 @@ const defaultState = () => ({
 
 type State = ReturnType<typeof defaultState>;
 
-/** Read-only reactive state */
-const state = reactive(defaultState()) as State;
-
 // stored under the name of the former Yeti component, so that the saved route and overlays are kept
 const preferences = getPreferences('Yeti');
 
@@ -150,216 +148,120 @@ function setOverlaysToLocalStorage(overlay: Overlays) {
   preferences.set('yeti-map-layers-overlays', { ...overlays, ...overlay });
 }
 
-function fetchApi(url: string) {
-  return axios.get(state.API_URL + url);
-}
-
 /**
- * Exported state
- *
- * Getters expose the read-only state properties. Functions act as mutations (to mutate state) or actions (api calls)
+ * The store: its computed getters expose the read-only state. Functions act as mutations (to mutate state) or actions
+ * (api calls)
  */
-const Yetix = {
+export const useYetixStore = defineStore('yetix', () => {
+  /** Read-only reactive state */
+  const state = reactive(defaultState()) as State;
+
+  function fetchApi(url: string) {
+    return axios.get(state.API_URL + url);
+  }
+
   // getters for the read-only state
-  get BLEND_MODES_CLASS_NAME() {
-    return state.BLEND_MODES_CLASS_NAME;
-  },
-  get BLEND_MODES_MAX_ZOOM() {
-    return state.BLEND_MODES_MAX_ZOOM;
-  },
-  get BLEND_MODES_MIN_ZOOM() {
-    return state.BLEND_MODES_MIN_ZOOM;
-  },
-  get DANGER_MAX_WHEN_MRD() {
-    return state.DANGER_MAX_WHEN_MRD;
-  },
-  get VALID_MINIMUM_MAP_ZOOM() {
-    return state.VALID_MINIMUM_MAP_ZOOM;
-  },
-  get YETI_LAYER_OPACITY() {
-    return state.YETI_LAYER_OPACITY;
-  },
-  get ZOOM_DELTA() {
-    return state.ZOOM_DELTA;
-  },
-  get tabs() {
-    return state.tabs;
-  },
-  get activeTab() {
-    return state.activeTab;
-  },
-  get bra() {
-    return state.bra;
-  },
-  get method() {
-    return state.method;
-  },
-  get baseLayersSelector() {
-    return state.baseLayersSelector;
-  },
-  get slopesLayersSelector() {
-    return state.slopesLayersSelector;
-  },
-  get yetiLayersSelector() {
-    return state.yetiLayersSelector;
-  },
-  get showYeti() {
-    return state.showYeti;
-  },
-  get yetiOk() {
-    return state.yetiOk;
-  },
-  get yetiData() {
-    return state.yetiData;
-  },
-  get yetiExtent() {
-    return state.yetiExtent;
-  },
-  get yetiLegend() {
-    return state.yetiLegend;
-  },
-  get areas() {
-    return state.areas;
-  },
-  get areaOk() {
-    return state.areaOk;
-  },
-  get showAreas() {
-    return state.showAreas;
-  },
-  get features() {
-    return state.features;
-  },
-  get hasFeatures() {
-    return !!state.features.length;
-  },
-  get featuresTitle() {
-    return state.featuresTitle;
-  },
-  get featuresLength() {
-    return state.featuresLength;
-  },
-  get overlaysLayersSelector() {
-    return state.overlaysLayersSelector;
-  },
-  get mountains() {
-    return state.mountains;
-  },
-  get bulletinsLoaded() {
-    return state.bulletinsLoaded;
-  },
-  get showAvalancheBulletins() {
-    return state.showAvalancheBulletins;
-  },
-  get winterRoutes() {
-    return state.winterRoutes;
-  },
-  get hasWinterRoutes() {
-    return !!state.winterRoutes.length;
-  },
-  get showWinterRoute() {
-    return state.showWinterRoute;
-  },
-  get winterRouteLegend() {
-    return state.winterRouteLegend;
-  },
-  get showProtectedAreas() {
-    return state.showProtectedAreas;
-  },
-  get nivoses() {
-    return state.nivoses;
-  },
-  get showNivoses() {
-    return state.showNivoses;
-  },
-  get romma() {
-    return state.romma;
-  },
-  get showRomma() {
-    return state.showRomma;
-  },
-  get flowcapt() {
-    return state.flowcapt;
-  },
-  get showFlowcapt() {
-    return state.showFlowcapt;
-  },
-  get dataAvalanche() {
-    return state.dataAvalanche;
-  },
-  get showDataAvalanche() {
-    return state.showDataAvalanche;
-  },
-  get dataAvalancheAll() {
-    return state.dataAvalancheAll;
-  },
-  get ffvl() {
-    return state.ffvl;
-  },
-  get showFfvl() {
-    return state.showFfvl;
-  },
-  get mapZoom() {
-    return state.mapZoom;
-  },
-  get editMode() {
-    return state.editMode;
-  },
-  get validSimplifyTolerance() {
-    return state.validSimplifyTolerance;
-  },
+  const BLEND_MODES_CLASS_NAME = computed(() => state.BLEND_MODES_CLASS_NAME);
+  const BLEND_MODES_MAX_ZOOM = computed(() => state.BLEND_MODES_MAX_ZOOM);
+  const BLEND_MODES_MIN_ZOOM = computed(() => state.BLEND_MODES_MIN_ZOOM);
+  const DANGER_MAX_WHEN_MRD = computed(() => state.DANGER_MAX_WHEN_MRD);
+  const VALID_MINIMUM_MAP_ZOOM = computed(() => state.VALID_MINIMUM_MAP_ZOOM);
+  const YETI_LAYER_OPACITY = computed(() => state.YETI_LAYER_OPACITY);
+  const ZOOM_DELTA = computed(() => state.ZOOM_DELTA);
+  const tabs = computed(() => state.tabs);
+  const activeTab = computed(() => state.activeTab);
+  const bra = computed(() => state.bra);
+  const method = computed(() => state.method);
+  const baseLayersSelector = computed(() => state.baseLayersSelector);
+  const slopesLayersSelector = computed(() => state.slopesLayersSelector);
+  const yetiLayersSelector = computed(() => state.yetiLayersSelector);
+  const showYeti = computed(() => state.showYeti);
+  const yetiOk = computed(() => state.yetiOk);
+  const yetiData = computed(() => state.yetiData);
+  const yetiExtent = computed(() => state.yetiExtent);
+  const yetiLegend = computed(() => state.yetiLegend);
+  const areas = computed(() => state.areas);
+  const areaOk = computed(() => state.areaOk);
+  const showAreas = computed(() => state.showAreas);
+  const features = computed(() => state.features);
+  const hasFeatures = computed(() => !!state.features.length);
+  const featuresTitle = computed(() => state.featuresTitle);
+  const featuresLength = computed(() => state.featuresLength);
+  const overlaysLayersSelector = computed(() => state.overlaysLayersSelector);
+  const mountains = computed(() => state.mountains);
+  const bulletinsLoaded = computed(() => state.bulletinsLoaded);
+  const showAvalancheBulletins = computed(() => state.showAvalancheBulletins);
+  const winterRoutes = computed(() => state.winterRoutes);
+  const hasWinterRoutes = computed(() => !!state.winterRoutes.length);
+  const showWinterRoute = computed(() => state.showWinterRoute);
+  const winterRouteLegend = computed(() => state.winterRouteLegend);
+  const showProtectedAreas = computed(() => state.showProtectedAreas);
+  const nivoses = computed(() => state.nivoses);
+  const showNivoses = computed(() => state.showNivoses);
+  const romma = computed(() => state.romma);
+  const showRomma = computed(() => state.showRomma);
+  const flowcapt = computed(() => state.flowcapt);
+  const showFlowcapt = computed(() => state.showFlowcapt);
+  const dataAvalanche = computed(() => state.dataAvalanche);
+  const showDataAvalanche = computed(() => state.showDataAvalanche);
+  const dataAvalancheAll = computed(() => state.dataAvalancheAll);
+  const ffvl = computed(() => state.ffvl);
+  const showFfvl = computed(() => state.showFfvl);
+  const mapZoom = computed(() => state.mapZoom);
+  const editMode = computed(() => state.editMode);
+  const validSimplifyTolerance = computed(() => state.validSimplifyTolerance);
 
   // mutations
-  setTabs(tabs: YetiTab[]) {
+  function setTabs(tabs: YetiTab[]) {
     state.tabs = tabs;
-  },
-  setActiveTab(index: number) {
+  }
+  function setActiveTab(index: number) {
     state.activeTab = index;
-  },
+  }
   // the values come from the inputs of the panels
-  setBra(prop: keyof Bra, value: unknown) {
+  function setBra(prop: keyof Bra, value: unknown) {
     (state.bra as Record<string, unknown>)[prop] = value;
-  },
-  setMethod(prop: keyof Method, value: unknown) {
+  }
+  function setMethod(prop: keyof Method, value: unknown) {
     (state.method as Record<string, unknown>)[prop] = value;
-  },
-  setBaseLayersSelector(layers: SelectorLayer[]) {
+  }
+  function setBaseLayersSelector(layers: SelectorLayer[]) {
     state.baseLayersSelector = layers;
-  },
-  setSlopesLayersSelector(layers: SelectorLayer[]) {
+  }
+  function setSlopesLayersSelector(layers: SelectorLayer[]) {
     state.slopesLayersSelector = layers;
-  },
-  addLayerToYetiLayersSelector(layer: SelectorLayer, index: number) {
+  }
+  function addLayerToYetiLayersSelector(layer: SelectorLayer, index: number) {
     addLayerToSelector(state.yetiLayersSelector, layer, index);
-  },
-  setShowYeti(showYeti: boolean) {
+  }
+  function setShowYeti(showYeti: boolean) {
     state.showYeti = showYeti;
-  },
-  setYetiOk(yetiOk: boolean) {
+  }
+  function setYetiOk(yetiOk: boolean) {
     state.yetiOk = yetiOk;
     if (yetiOk) {
-      Yetix.setShowYeti(true);
+      setShowYeti(true);
     }
-  },
-  setYetiData(yetiData: string | null) {
+  }
+  function setYetiData(yetiData: string | null) {
     state.yetiData = yetiData;
-  },
-  setYetiExtent(yetiExtent: number[]) {
+  }
+  function setYetiExtent(yetiExtent: number[]) {
     state.yetiExtent = yetiExtent;
-  },
-  setYetiLegend(yetiLegend: State['yetiLegend']) {
+  }
+  function setYetiLegend(yetiLegend: State['yetiLegend']) {
     state.yetiLegend = yetiLegend;
-  },
-  setAreas(areas: State['areas']) {
+  }
+  function setAreas(areas: State['areas']) {
     state.areas = areas;
-  },
-  setAreaOk(areaOk: boolean) {
+  }
+  function setAreaOk(areaOk: boolean) {
     state.areaOk = areaOk;
-  },
-  setShowAreas(showAreas: boolean) {
+  }
+  function setShowAreas(showAreas: boolean) {
     state.showAreas = showAreas;
-  },
-  setFeatures(features: Feature<LineString>[]) {
+  }
+  function setFeatures(features: Feature<LineString>[]) {
     // OpenLayers features, kept out of reactivity (as the map layers): the array is replaced, never changed in place
     state.features = markRaw(features);
     // store features in localstorage, rounded to 1 meter
@@ -370,90 +272,90 @@ const Yetix = {
         .map((coord) => [Math.round(coord[0]), Math.round(coord[1]), Math.round(coord[2])])
     );
     preferences.set('yeti-map-features', coords);
-  },
-  setFeaturesTitle(featuresTitle: string) {
+  }
+  function setFeaturesTitle(featuresTitle: string) {
     state.featuresTitle = featuresTitle;
     // store features title in localstorage
     preferences.set('yeti-map-features-title', featuresTitle);
-  },
-  setFeaturesLength(featuresLength: number) {
+  }
+  function setFeaturesLength(featuresLength: number) {
     state.featuresLength = featuresLength;
-  },
-  addLayerToOverlaysLayersSelector(layer: SelectorLayer, index: number) {
+  }
+  function addLayerToOverlaysLayersSelector(layer: SelectorLayer, index: number) {
     addLayerToSelector(state.overlaysLayersSelector, layer, index);
-  },
-  setAllMountains(mountains: Record<string, BulletinMountain[]>) {
+  }
+  function setAllMountains(mountains: Record<string, BulletinMountain[]>) {
     state.mountains.all = mountains;
-  },
-  setVisibleMountains(mountains: Record<string, BulletinMountain[]>) {
+  }
+  function setVisibleMountains(mountains: Record<string, BulletinMountain[]>) {
     state.mountains.visible = mountains;
-  },
-  setShowAvalancheBulletins(showAvalancheBulletins: boolean) {
+  }
+  function setShowAvalancheBulletins(showAvalancheBulletins: boolean) {
     state.showAvalancheBulletins = showAvalancheBulletins;
     setOverlaysToLocalStorage({ avalanche: showAvalancheBulletins });
-  },
-  setBulletinsLoaded(bool: boolean) {
+  }
+  function setBulletinsLoaded(bool: boolean) {
     state.bulletinsLoaded = bool;
-  },
-  setWinterRoutes(routes: Feature[]) {
+  }
+  function setWinterRoutes(routes: Feature[]) {
     state.winterRoutes = routes;
-  },
-  setShowWinterRoute(showWinterRoute: boolean) {
+  }
+  function setShowWinterRoute(showWinterRoute: boolean) {
     state.showWinterRoute = showWinterRoute;
     setOverlaysToLocalStorage({ winterRoute: showWinterRoute });
-  },
-  setWinterRouteLegend(winterRouteLegend: WinterRouteLegendItem[] | null) {
+  }
+  function setWinterRouteLegend(winterRouteLegend: WinterRouteLegendItem[] | null) {
     state.winterRouteLegend = winterRouteLegend;
-  },
-  setShowProtectedAreas(showProtectedAreas: boolean) {
+  }
+  function setShowProtectedAreas(showProtectedAreas: boolean) {
     state.showProtectedAreas = showProtectedAreas;
     setOverlaysToLocalStorage({ protectedAreas: showProtectedAreas });
-  },
-  setNivoses(nivoses: FeatureProperties[]) {
+  }
+  function setNivoses(nivoses: FeatureProperties[]) {
     state.nivoses = nivoses;
-  },
-  setShowNivoses(showNivoses: boolean) {
+  }
+  function setShowNivoses(showNivoses: boolean) {
     state.showNivoses = showNivoses;
     setOverlaysToLocalStorage({ nivoses: showNivoses });
-  },
-  setRomma(romma: FeatureProperties[]) {
+  }
+  function setRomma(romma: FeatureProperties[]) {
     state.romma = romma;
-  },
-  setShowRomma(showRomma: boolean) {
+  }
+  function setShowRomma(showRomma: boolean) {
     state.showRomma = showRomma;
     setOverlaysToLocalStorage({ romma: showRomma });
-  },
-  setFlowcapt(flowcapt: FeatureProperties[]) {
+  }
+  function setFlowcapt(flowcapt: FeatureProperties[]) {
     state.flowcapt = flowcapt;
-  },
-  setShowFlowcapt(showFlowcapt: boolean) {
+  }
+  function setShowFlowcapt(showFlowcapt: boolean) {
     state.showFlowcapt = showFlowcapt;
     setOverlaysToLocalStorage({ flowcapt: showFlowcapt });
-  },
-  setDataAvalanche(dataAvalanche: FeatureProperties[]) {
+  }
+  function setDataAvalanche(dataAvalanche: FeatureProperties[]) {
     state.dataAvalanche = dataAvalanche;
-  },
-  setShowDataAvalanche(showDataAvalanche: boolean) {
+  }
+  function setShowDataAvalanche(showDataAvalanche: boolean) {
     state.showDataAvalanche = showDataAvalanche;
     setOverlaysToLocalStorage({ dataAvalanche: showDataAvalanche });
-  },
-  setDataAvalancheAll(dataAvalancheAll: boolean) {
+  }
+  function setDataAvalancheAll(dataAvalancheAll: boolean) {
     state.dataAvalancheAll = dataAvalancheAll;
-  },
-  setFfvl(ffvl: FeatureProperties[]) {
+  }
+  function setFfvl(ffvl: FeatureProperties[]) {
     state.ffvl = ffvl;
-  },
-  setShowFfvl(showFfvl: boolean) {
+  }
+  function setShowFfvl(showFfvl: boolean) {
     state.showFfvl = showFfvl;
     setOverlaysToLocalStorage({ ffvl: showFfvl });
-  },
-  setMapZoom(mapZoom: number) {
+  }
+  function setMapZoom(mapZoom: number) {
     state.mapZoom = mapZoom;
-  },
-  setEditMode(editMode: boolean) {
+  }
+  function setEditMode(editMode: boolean) {
     state.editMode = editMode;
-  },
-  setValidSimplifyTolerance(validSimplifyTolerance: boolean) {
+  }
+  function setValidSimplifyTolerance(validSimplifyTolerance: boolean) {
     state.validSimplifyTolerance = validSimplifyTolerance;
     // when validSimplifyTolerance is OK
     // check state for editMode:
@@ -461,36 +363,36 @@ const Yetix = {
     if (validSimplifyTolerance) {
       if (state.editMode) {
         state.tmpEditMode = true;
-        Yetix.setEditMode(false);
+        setEditMode(false);
       }
     } else if (state.tmpEditMode) {
-      Yetix.setEditMode(true);
+      setEditMode(true);
       state.tmpEditMode = false;
     }
-  },
-  setDefault() {
+  }
+  function setDefault() {
     // revert all state properties to default: a fresh copy, as the arrays are changed in place (it shared the
     // default arrays, and skipped the values null by default)
     Object.assign(state, defaultState());
     // read localstorage and modify
     const mapOverlays = preferences.get('yeti-map-layers-overlays', {
-      avalanche: Yetix.showAvalancheBulletins,
-      winterRoute: Yetix.showWinterRoute,
-      protectedAreas: Yetix.showProtectedAreas,
-      dataAvalanche: Yetix.showDataAvalanche,
-      nivoses: Yetix.showNivoses,
-      romma: Yetix.showRomma,
-      flowcapt: Yetix.showFlowcapt,
-      ffvl: Yetix.showFfvl,
+      avalanche: showAvalancheBulletins.value,
+      winterRoute: showWinterRoute.value,
+      protectedAreas: showProtectedAreas.value,
+      dataAvalanche: showDataAvalanche.value,
+      nivoses: showNivoses.value,
+      romma: showRomma.value,
+      flowcapt: showFlowcapt.value,
+      ffvl: showFfvl.value,
     }) as Overlays;
-    Yetix.setShowAvalancheBulletins(mapOverlays.avalanche!);
-    Yetix.setShowWinterRoute(mapOverlays.winterRoute!);
-    Yetix.setShowProtectedAreas(mapOverlays.protectedAreas!);
-    Yetix.setShowDataAvalanche(mapOverlays.dataAvalanche!);
-    Yetix.setShowNivoses(mapOverlays.nivoses!);
-    Yetix.setShowRomma(mapOverlays.romma!);
-    Yetix.setShowFlowcapt(mapOverlays.flowcapt!);
-    Yetix.setShowFfvl(mapOverlays.ffvl!);
+    setShowAvalancheBulletins(mapOverlays.avalanche!);
+    setShowWinterRoute(mapOverlays.winterRoute!);
+    setShowProtectedAreas(mapOverlays.protectedAreas!);
+    setShowDataAvalanche(mapOverlays.dataAvalanche!);
+    setShowNivoses(mapOverlays.nivoses!);
+    setShowRomma(mapOverlays.romma!);
+    setShowFlowcapt(mapOverlays.flowcapt!);
+    setShowFfvl(mapOverlays.ffvl!);
     // features (routeLayer)
     // first, get saved features
     const savedFeatures = (preferences.get('yeti-map-features', []) as number[][][]).map(
@@ -498,37 +400,37 @@ const Yetix = {
     );
     // if data, set features/featuresTitle
     if (savedFeatures.length) {
-      Yetix.setFeatures(savedFeatures);
-      Yetix.setFeaturesTitle(preferences.get('yeti-map-features-title', state.featuresTitle) as string);
+      setFeatures(savedFeatures);
+      setFeaturesTitle(preferences.get('yeti-map-features-title', state.featuresTitle) as string);
     }
-  },
+  }
 
   // actions
-  fetchAreas() {
+  function fetchAreas() {
     return fetchApi('yeti-extent');
-  },
-  fetchMountains() {
+  }
+  function fetchMountains() {
     return fetchApi('zonesbra');
-  },
-  fetchBulletins() {
+  }
+  function fetchBulletins() {
     return fetchApi('bra');
-  },
-  fetchNivoses() {
+  }
+  function fetchNivoses() {
     return fetchApi('nivoses');
-  },
-  fetchRomma() {
+  }
+  function fetchRomma() {
     return fetchApi('romma');
-  },
-  fetchFlowcapt() {
+  }
+  function fetchFlowcapt() {
     return fetchApi('flowcapt');
-  },
-  fetchDataAvalanche() {
+  }
+  function fetchDataAvalanche() {
     return fetchApi('data-avalanche');
-  },
-  fetchFfvl() {
+  }
+  function fetchFfvl() {
     return fetchApi('ffvl');
-  },
-  fetchWpsAlti(points: number[][], interpolate: number) {
+  }
+  function fetchWpsAlti(points: number[][], interpolate: number) {
     const params = {
       identifier: 'alti',
       operation: 'execute',
@@ -539,7 +441,110 @@ const Yetix = {
       },
     };
     return axios.post(state.API_URL + 'yeti-wps-json', params);
-  },
-};
+  }
 
-export default Yetix;
+  return {
+    BLEND_MODES_CLASS_NAME,
+    BLEND_MODES_MAX_ZOOM,
+    BLEND_MODES_MIN_ZOOM,
+    DANGER_MAX_WHEN_MRD,
+    VALID_MINIMUM_MAP_ZOOM,
+    YETI_LAYER_OPACITY,
+    ZOOM_DELTA,
+    tabs,
+    activeTab,
+    bra,
+    method,
+    baseLayersSelector,
+    slopesLayersSelector,
+    yetiLayersSelector,
+    showYeti,
+    yetiOk,
+    yetiData,
+    yetiExtent,
+    yetiLegend,
+    areas,
+    areaOk,
+    showAreas,
+    features,
+    hasFeatures,
+    featuresTitle,
+    featuresLength,
+    overlaysLayersSelector,
+    mountains,
+    bulletinsLoaded,
+    showAvalancheBulletins,
+    winterRoutes,
+    hasWinterRoutes,
+    showWinterRoute,
+    winterRouteLegend,
+    showProtectedAreas,
+    nivoses,
+    showNivoses,
+    romma,
+    showRomma,
+    flowcapt,
+    showFlowcapt,
+    dataAvalanche,
+    showDataAvalanche,
+    dataAvalancheAll,
+    ffvl,
+    showFfvl,
+    mapZoom,
+    editMode,
+    validSimplifyTolerance,
+    setTabs,
+    setActiveTab,
+    setBra,
+    setMethod,
+    setBaseLayersSelector,
+    setSlopesLayersSelector,
+    addLayerToYetiLayersSelector,
+    setShowYeti,
+    setYetiOk,
+    setYetiData,
+    setYetiExtent,
+    setYetiLegend,
+    setAreas,
+    setAreaOk,
+    setShowAreas,
+    setFeatures,
+    setFeaturesTitle,
+    setFeaturesLength,
+    addLayerToOverlaysLayersSelector,
+    setAllMountains,
+    setVisibleMountains,
+    setShowAvalancheBulletins,
+    setBulletinsLoaded,
+    setWinterRoutes,
+    setShowWinterRoute,
+    setWinterRouteLegend,
+    setShowProtectedAreas,
+    setNivoses,
+    setShowNivoses,
+    setRomma,
+    setShowRomma,
+    setFlowcapt,
+    setShowFlowcapt,
+    setDataAvalanche,
+    setShowDataAvalanche,
+    setDataAvalancheAll,
+    setFfvl,
+    setShowFfvl,
+    setMapZoom,
+    setEditMode,
+    setValidSimplifyTolerance,
+    setDefault,
+    fetchAreas,
+    fetchMountains,
+    fetchBulletins,
+    fetchNivoses,
+    fetchRomma,
+    fetchFlowcapt,
+    fetchDataAvalanche,
+    fetchFfvl,
+    fetchWpsAlti,
+  };
+});
+
+export type Yetix = ReturnType<typeof useYetixStore>;

@@ -8,8 +8,10 @@
 <script setup lang="ts">
 import AreaLayer from '@/components/yeti/map-layers/AreaLayer.vue';
 import YetiLayer from '@/components/yeti/map-layers/YetiLayer.vue';
-import Yetix from '@/components/yeti/yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import type { SelectorLayer } from '@/components/yeti/yetix-types';
+
+const Yetix = useYetixStore();
 
 function onLayer(layer: SelectorLayer, index: number) {
   Yetix.addLayerToYetiLayersSelector(layer, index);
