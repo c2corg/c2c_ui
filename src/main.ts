@@ -1,4 +1,5 @@
 import { type Options as ToastOptions, setDefaults as toastDefaults } from 'bulma-toast';
+import { createPinia } from 'pinia';
 import { register as registerSwiper } from 'swiper/element';
 import { createApp } from 'vue';
 
@@ -29,6 +30,7 @@ registerSwiper();
 
 const app = createApp(App);
 
+app.use(createPinia()); // the stores (src/stores)
 app.use(gdpr);
 app.use(analytics, { id: config.googleAnalyticsKey, router }); // after $gdpr: follows the statistics choice
 app.use(dateUtils); // date functions

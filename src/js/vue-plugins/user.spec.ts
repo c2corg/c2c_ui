@@ -40,14 +40,19 @@ const installUser = async () => {
   const { mount } = await import('@vue/test-utils');
   const { createApp, h, nextTick } = await import('vue');
 
+  const { createPinia } = await import('pinia');
+  const { languageKey } = await import('./gettext-plugin');
+
   const app = createApp({});
   const globals = app.config.globalProperties;
-  // $language is installed before $user by main.ts
+  // $language is installed and provided before $user by main.ts, with Pinia
   globals.$language = { current: 'fr', setCurrent: vi.fn() } as never;
+  app.provide(languageKey, globals.$language);
+  app.use(createPinia());
   app.use(user);
 
   const stored = () => JSON.parse(window.localStorage.getItem('User.preferences') ?? '{}')[config.urls.api];
-  return { $user: globals.$user, globals, c2c, trackingService, config, h, mount, nextTick, stored };
+  return { app, $user: globals.$user, globals, c2c, trackingService, config, h, mount, nextTick, stored };
 };
 
 const storeSession = async (session: Record<string, unknown>) => {
@@ -210,5 +215,16 @@ describe('$user', () => {
     $user.signout();
     await nextTick();
     expect(wrapper.text()).toBe('login');
+  });
+
+  it('is the Pinia store of the user, for the components that use it', async () => {
+    const { app, $user } = await installUser();
+    const { useUserStore } = await import('@/stores/user');
+
+    const store = app.runWithContext(() => useUserStore());
+    $user.name = 'Alice';
+
+    expect(store).toBe($user);
+    expect(store.name).toBe('Alice');
   });
 });
