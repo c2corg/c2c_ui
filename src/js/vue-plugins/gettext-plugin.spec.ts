@@ -8,10 +8,17 @@ const installLanguage = async () => {
   const { mount: mountComponent } = await import('@vue/test-utils');
   const { createApp, h, nextTick } = await import('vue');
 
+  const { createPinia } = await import('pinia');
+  const { useUserStore } = await import('@/stores/user');
+
   const app = createApp({});
   const globals = app.config.globalProperties;
-  globals.$user = { saveLangPreference: vi.fn() } as never;
+  app.use(createPinia());
   app.use(gettext);
+  // the user store, which keeps the language of a logged user: its saving spied on
+  const user = app.runWithContext(() => useUserStore());
+  user.saveLangPreference = vi.fn();
+  globals.$user = user;
 
   // components mounted with what the plugin installed in the app
   const mount = (component: Component) =>
