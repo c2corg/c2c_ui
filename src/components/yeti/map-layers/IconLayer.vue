@@ -259,11 +259,11 @@ defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoo
   padding: 5px;
   vertical-align: 1px;
 }
-.overlay-content a:hover,
-.overlay-content a:focus {
+.overlay-content :slotted(a:hover),
+.overlay-content :slotted(a:focus) {
   text-decoration: underline;
 }
-.overlay-link-icon {
+:slotted(.overlay-link-icon) {
   margin-left: 5px;
 }
 .overlay-icon {
