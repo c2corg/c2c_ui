@@ -88,6 +88,7 @@
     "Associations history": "Historique des associations",
     "At least 10 characters": "Au moins 10 caractères",
     "At least one access point in the route do not have a public transport stop within 5km.": "Au moins un point d'accès du topo ne dispose pas d'arrêt de transport en commun à moins de 5km.",
+    "At least one access point in the waypoint do not have a public transport stop within 5km.": "Au moins un point d'accès du point de passage ne dispose pas d'arrêt de transport en commun à moins de 5km.",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Attribution — Vous devez créditer l'Œuvre, intégrer un lien vers la licence et indiquer si des modifications ont été effectuées à l'Oeuvre. ",
     "Authentication to public transport data service error.": "Erreur d'authentification auprès du service de données de transports publics",
     "Avalanche bulletins": "Bulletins d'avalanche",
@@ -382,6 +383,7 @@
     "If the route does not exists in our base, you can create it.": "Si l'itinéraire n'existe pas, vous pouvez le créer.",
     "If you can't see this email, please check your spam folder.": "Pensez à vérifier dans les spams si vous ne voyez pas ce mail.",
     "If you change your email, a message will be sent to the new address provided. You have to follow the link within to confirm the email address change.": "Si vous changez votre mail, un message sera envoyé à la nouvelle adresse renseignée. Vous devrez cliquer sur le lien qu'il contient pour confirmer le changement d'adresse.",
+    "If you know of a line serving this access point, you can indicate it in this": "Si vous connaissez une ligne desservant cet accès, vous pouvez l'indiquer dans ce ",
     "If you see any improvements or missing lines, you can provide feedback via the links provided in": "Si vous voyez des améliorations ou des lignes manquantes, vous pouvez faire vos retours via les liens indiqués dans",
     "Ignore year": "Ignorer l'année",
     "Image could not be processed": "L'image n'a pas pu être traitée pour le téléversement",
@@ -404,6 +406,7 @@
     "Invalid email address": {
       "API message": "Adresse email invalide"
     },
+    "Invalid parameters were sent to public transport data service.": "Des paramètres invalides ont été envoyés au service de données des transports en commun.",
     "Invalid value": "Valeur invalide",
     "Issue report": "Signalement d'un problème",
     "It seems your trip can not be completed on the selected date and time": "Il semblerait que votre trajet ne puisse être réalisé à la date et aux horaires indiqués",
@@ -613,6 +616,7 @@
     "Protection areas": "Zones de protection",
     "Protection status": "Status de la protection",
     "Provide information and improve its quality, following the contribution rules and respecting copyright.": "Vous êtes invité à compléter les informations et améliorer la qualité du document en suivant les règles de contribution et dans le respect du droit d'auteur.",
+    "Public transport data is currently unavailable.": "Les données de transport en commun sont actuellement indisponibles.",
     "Public transport schedules are not yet known for this period.": "Les horaires de transports en commun ne sont pas encore connus pour cette période.",
     "Put it back": "Remettre",
     "Quote": "Citation",
@@ -767,6 +771,7 @@
     "This tool allows you to search for routes or access points accessible by public transport in mainland France.": "Cet outil vous permet de rechercher soit des itinéraires, soit des points d'accès, accessibles en transports en commun, en France métropolitaine.",
     "This tool estimates the technical difficulty of a ski route (ski rating).": "Cet outil permet d'estimer la difficulté technique d'un itinéraire à ski (cotation ski)",
     "This version has been masked.": "Cette version a été masquée.",
+    "This waypoint is partially accessible by public transport.": "Ce point de passage est partiellement accessible en transport en commun.",
     "Time": "Heure",
     "Title of the book, author, language and date of publication.": "Titre de l'ouvrage, auteur, langue et date.",
     "Title, activity and characteristics of the picture": "Titre, activités et caractéristiques de l\"image",
@@ -784,7 +789,7 @@
     "Translate": "Traduire",
     "Transport & road or PT access": "Accès routier/TC",
     "Tricky sections": "Passages délicats",
-    "Try again later or": "Réessayez plus tard ou",
+    "Try again later or": "Réessayez plus tard ou ",
     "Types and styles": "Types et styles",
     "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "Type d'assurage et de protection, vérifications entre grimpeurs, tests de stabilité du manteau neigeux, test des DVA, etc.",
     "Unable to get your current location.": "Impossible de récupérer votre position.",
@@ -1221,6 +1226,7 @@
     },
     "fnumber": "Ouverture",
     "focal_length": "Focale",
+    "form.": "formulaire.",
     "fr": {
       "langs": "français"
     },
