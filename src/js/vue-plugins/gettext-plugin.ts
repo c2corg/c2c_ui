@@ -1,4 +1,4 @@
-import { type App, reactive, watch } from 'vue';
+import { type App, type InjectionKey, reactive, watch } from 'vue';
 
 import { getPreferences } from './local-storage';
 
@@ -114,6 +114,9 @@ function getMessages(lang: string): TranslationsFile | Promise<TranslationsFile>
 
   throw new Error(`Unsuported language : ${lang}`);
 }
+
+// the language, for the stores (useUserStore), which inject it
+export const languageKey: InjectionKey<Language> = Symbol('language');
 
 export default function install(app: App) {
   // stored under the name of the former Language component, so that the chosen language is kept
@@ -308,5 +311,6 @@ export default function install(app: App) {
   });
 
   app.config.globalProperties.$language = language;
+  app.provide(languageKey, language);
   app.config.globalProperties.$gettext = language.gettext.bind(language);
 }

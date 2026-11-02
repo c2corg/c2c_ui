@@ -12,6 +12,9 @@ export const loginResponse = z.object({
   forum_username: z.string(),
   lang: z.string(),
   roles: z.array(z.string()),
+  // a login for the forum (discourse in the request): where to go back, through the forum SSO
+  redirect: z.string().optional(),
+  redirect_internal: z.string().optional(),
 });
 
 // the data as the API gives it (check-response.ts): the schema's input type
