@@ -57,3 +57,9 @@ $button-padding-horizontal: 0.75em;
 :root {
   --fa-width: auto;
 }
+
+// but a stack of icons (fa-layers) takes its width from the same variable, and its icons are positioned in it, out of
+// the flow: with an auto width, it has none, and the text after it overlaps it. Its width of Font Awesome 6
+:root .fa-layers {
+  width: 1em;
+}
