@@ -17,10 +17,10 @@
 
     <div class="columns is-multiline">
       <div class="column is-12 map-container">
-        <map-view
+        <ol-map
           ref="map"
-          :initial-extent="initialExtent"
-          :documents="documents"
+          :initial-extent="initialExtent ?? undefined"
+          :documents="documents ?? undefined"
           :edited-document="document"
           :geom-detail-editable="geomDetailEditable"
           show-center-on-geolocation
@@ -49,7 +49,9 @@ import { onMounted, reactive, ref, useTemplateRef, watch, type PropType } from '
 
 import GpsFileUpload from '@/components/map/GpsFileUpload.vue';
 import GpsUploadModal from '@/components/map/GpsUploadModal.vue';
-import type OlMap from '@/components/map/OlMap.vue';
+// imported, not the global async map-view: the edition views call the map as soon as they load, and the edition
+// chunk is lazy anyway (#4876)
+import OlMap from '@/components/map/OlMap.vue';
 import trackingService from '@/js/apis/tracking-service';
 import { useFormField } from '@/js/composables/form-registration';
 import { useGlobalProperties } from '@/js/composables/global-properties';

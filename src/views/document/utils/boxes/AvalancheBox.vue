@@ -35,10 +35,7 @@ import { computed, onMounted, ref } from 'vue';
 
 import IconBra from '@/components/generics/icons/IconBra.vue';
 import yetiService from '@/js/apis/yeti-service';
-import ol from '@/js/libs/ol';
 import { documentProperty } from '@/js/properties';
-
-const GeoJSON = new ol.format.GeoJSON();
 
 const props = defineProps({ ...documentProperty });
 
@@ -77,41 +74,48 @@ const showAvalancheInfo = computed(() => {
 onMounted(() => {
   if (showAvalancheInfo.value) {
     const geometry = props.document.geometry!;
-    yetiService.zonesBra().then((response: { data: FeatureCollection<Polygon | MultiPolygon, Zone['properties']> }) => {
-      // use WGS 84 projection for buffering with turf
-      const routeGeometry = (
-        turfBuffer(
-          turfSimplify(
-            GeoJSON.writeGeometryObject(
-              GeoJSON.readGeometry(JSON.parse((geometry.geom_detail ?? geometry.geom)!), {
-                dataProjection: 'EPSG:3857',
-                featureProjection: 'EPSG:4326',
-              })!
-            ) as Geometry,
-            { tolerance: 0.01, highQuality: false }
-          ),
-          geometry.geom_detail ? 1 : 2,
-          {
-            units: 'kilometers',
-          }
-        ) as Feature<Polygon | MultiPolygon>
-      ).geometry;
+    // OpenLayers' GeoJSON format (reprojection) loaded with the zones, not in the startup bundle (#4876)
+    Promise.all([yetiService.zonesBra(), import('ol/format/GeoJSON')]).then(
+      ([response, { default: GeoJSONFormat }]: [
+        { data: FeatureCollection<Polygon | MultiPolygon, Zone['properties']> },
+        typeof import('ol/format/GeoJSON'),
+      ]) => {
+        const GeoJSON = new GeoJSONFormat();
+        // use WGS 84 projection for buffering with turf
+        const routeGeometry = (
+          turfBuffer(
+            turfSimplify(
+              GeoJSON.writeGeometryObject(
+                GeoJSON.readGeometry(JSON.parse((geometry.geom_detail ?? geometry.geom)!), {
+                  dataProjection: 'EPSG:3857',
+                  featureProjection: 'EPSG:4326',
+                })!
+              ) as Geometry,
+              { tolerance: 0.01, highQuality: false }
+            ),
+            geometry.geom_detail ? 1 : 2,
+            {
+              units: 'kilometers',
+            }
+          ) as Feature<Polygon | MultiPolygon>
+        ).geometry;
 
-      const zones = response.data.features.filter((feature) =>
-        turfBooleanIntersects(turfBuffer(feature.geometry, 0.001, { units: 'kilometers' })!.geometry, routeGeometry)
-      );
+        const zones = response.data.features.filter((feature) =>
+          turfBooleanIntersects(turfBuffer(feature.geometry, 0.001, { units: 'kilometers' })!.geometry, routeGeometry)
+        );
 
-      if (zones.length) {
-        const m = new Map(zones.map((zone) => [zone.properties.name + '@' + zone.properties.country, zone]));
-        yetiService.bra().then((response: { data: { zones: Bra[] } }) => {
-          const found = response.data.zones
-            .filter((zone) => m.has(zone.zone + '@' + zone.country))
-            .map((zone) => ({ ...m.get(zone.zone + '@' + zone.country)!.properties, ...zone }));
-          bras.value = found;
-          bulletinsWithInfo.value = found.map((bra) => bra.danger.max).filter(Boolean).length;
-        });
+        if (zones.length) {
+          const m = new Map(zones.map((zone) => [zone.properties.name + '@' + zone.properties.country, zone]));
+          yetiService.bra().then((response: { data: { zones: Bra[] } }) => {
+            const found = response.data.zones
+              .filter((zone) => m.has(zone.zone + '@' + zone.country))
+              .map((zone) => ({ ...m.get(zone.zone + '@' + zone.country)!.properties, ...zone }));
+            bras.value = found;
+            bulletinsWithInfo.value = found.map((bra) => bra.danger.max).filter(Boolean).length;
+          });
+        }
       }
-    });
+    );
   }
 });
 </script>

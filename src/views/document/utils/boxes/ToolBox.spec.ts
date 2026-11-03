@@ -31,7 +31,7 @@ const route = (): CookedDocument =>
     associations: { waypoints: [], waypoint_children: [] },
   });
 
-const mountToolBox = async (document: CookedDocument) => {
+const mountToolBox = async (document: CookedDocument, stubs: Record<string, unknown> = {}) => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [{ path: '/:pathMatch(.*)*', name: 'route', component: { render: () => h('div') } }],
@@ -55,6 +55,7 @@ const mountToolBox = async (document: CookedDocument) => {
         DeleteLocaleWindow: modal('delete locale'),
         TranslateWindow: modal('translate'),
         AssociationsWindow: modal('associations'),
+        ...stubs,
       },
       config: {
         globalProperties: {
@@ -110,5 +111,30 @@ describe('ToolBox', () => {
 
     expect(wrapper.find('.quality').text()).toBe('quality fine');
     expect(wrapper.findAll('.lang-switcher-box-list > span')).toHaveLength(1);
+  });
+
+  // the document's point, in EPSG:3857 as the API gives it; 45.8103,6.5577 in WGS 84
+  const point = (...coordinates: number[]) => ({ geom: JSON.stringify({ type: 'Point', coordinates }) });
+
+  it('links to the directions to an access waypoint, from its coordinates', async () => {
+    const waypoint = reactive({ ...route(), type: 'w', waypoint_type: 'access', geometry: point(730000, 5750000) });
+    const wrapper = await mountToolBox(waypoint as CookedDocument);
+
+    expect(wrapper.find('a[href^="https://www.google.com/maps"]').attributes('href')).toBe(
+      'https://www.google.com/maps/dir/?api=1&destination=45.8103,6.5577'
+    );
+  });
+
+  it('links to the documents within 10 km of the document, whose point may have an elevation', async () => {
+    const document = reactive({ ...route(), geometry: point(730000.6, 5750000.2, 1200) });
+    const wrapper = await mountToolBox(document as CookedDocument, {
+      RouterLink: { props: ['to'], template: '<a class="toolbox-button" :data-to="JSON.stringify(to)"><slot /></a>' },
+    });
+
+    const nearby = wrapper.findAll('a.toolbox-button').find((link) => link.text() === 'See other documents nearby')!;
+    expect(JSON.parse(nearby.attributes('data-to')!)).toEqual({
+      name: 'routes',
+      query: { bbox: '720000,5740000,740000,5760000' },
+    });
   });
 });

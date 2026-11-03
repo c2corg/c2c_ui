@@ -178,7 +178,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Point } from 'ol/geom';
+import { format as formatCoordinate } from 'ol/coordinate';
+import { toLonLat } from 'ol/proj';
 import { computed, ref, useTemplateRef } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -198,10 +199,7 @@ import { useEditable } from '@/js/composables/editable';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
 import getFundraiser from '@/js/get-fundraiser';
-import ol from '@/js/libs/ol';
 import { cookedDocumentProperty, useDocumentType } from '@/js/properties';
-
-const GeoJSON = new ol.format.GeoJSON();
 
 const reportingIssueMail = 'topo-fr@camptocamp.org';
 
@@ -267,9 +265,10 @@ const fundraiser = computed(() => getFundraiser(props.document as Parameters<typ
 
 const hasMissingLangs = computed(() => missingLangs.value.length > 0);
 
-// the location of the document
-const coordinates = () =>
-  (GeoJSON.readFeatures(props.document.geometry!.geom!)[0].getGeometry() as Point).getCoordinates();
+// the location of the document: its geometry is a GeoJSON point (EPSG:3857), read without OpenLayers' GeoJSON format,
+// which would put the OpenLayers geometries in the startup bundle (#4876)
+const pointOf = (geom: string) => (JSON.parse(geom) as { coordinates: number[] }).coordinates.slice(0, 2);
+const coordinates = () => pointOf(props.document.geometry!.geom!);
 
 const linkToClosestDocuments = computed(() => {
   const result = {
@@ -280,8 +279,9 @@ const linkToClosestDocuments = computed(() => {
   };
 
   if (props.document.geometry?.geom) {
-    const point = GeoJSON.readFeatures(props.document.geometry.geom)[0];
-    const extent = ol.extent.buffer(point.getGeometry()!.getExtent(), 10000);
+    // 10 km around the point
+    const [x, y] = pointOf(props.document.geometry.geom);
+    const extent = [x - 10000, y - 10000, x + 10000, y + 10000];
 
     result.query.bbox = extent.map(Math.floor).join(',');
   }
@@ -326,8 +326,8 @@ const linkToMeteoBlue = computed(() => {
     default:
       lang = 'en/weather/week';
   }
-  const lonLat = ol.proj.toLonLat(coordinates());
-  const coords = ol.coordinate.format(lonLat, '{y}N{x}E', 4);
+  const lonLat = toLonLat(coordinates());
+  const coords = formatCoordinate(lonLat, '{y}N{x}E', 4);
   // use waypoint elevation, or elevation of difficuties or max elevation for routes, otherwise nothing
   const elevation =
     props.document.elevation ?? props.document.difficulties_height ?? props.document.elevation_max ?? '';
@@ -342,8 +342,8 @@ const shouldAddDirections = computed(
 );
 
 const linkToGoogleMapsDirections = computed(() => {
-  const lonLat = ol.proj.toLonLat(coordinates());
-  const coords = ol.coordinate.format(lonLat, '{y},{x}', 4);
+  const lonLat = toLonLat(coordinates());
+  const coords = formatCoordinate(lonLat, '{y},{x}', 4);
   return `https://www.google.com/maps/dir/?api=1&destination=${coords}`;
 });
 

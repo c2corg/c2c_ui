@@ -35,9 +35,15 @@ describe('generic-components', () => {
     expect([...registered.keys()].some((name) => name.includes('/') || name.startsWith('inputs'))).toBe(false);
   });
 
-  it('registers the DocumentCard and MapView components', () => {
+  it('registers the DocumentCard component', () => {
     expect(registered.get('DocumentCard')).toBe(DocumentCard);
-    expect(registered.get('MapView')).toBe(OlMap);
+  });
+
+  it('loads the MapView component (OpenLayers) on first use, not at startup', async () => {
+    const mapView = registered.get('MapView') as { __asyncLoader?: () => Promise<Component> };
+    expect(mapView).not.toBe(OlMap);
+    expect(mapView.__asyncLoader).toBeTypeOf('function');
+    expect(await mapView.__asyncLoader!()).toBe(OlMap);
   });
 
   it('registers real components, not module namespaces', () => {

@@ -1,9 +1,8 @@
 // This module will add components available everywhere
 
-import type { App, Component } from 'vue';
+import { type App, type Component, defineAsyncComponent } from 'vue';
 
 import DocumentCard from '@/components/cards/DocumentCard.vue';
-import OlMap from '@/components/map/OlMap.vue';
 
 export default function install(app: App) {
   // add all vue component as globals components, given an import.meta.glob result
@@ -27,5 +26,10 @@ export default function install(app: App) {
 
   // other globals components
   app.component('DocumentCard', DocumentCard);
-  app.component('MapView', OlMap);
+  // OpenLayers is about half of the startup JS: loaded with the first map shown (#4876). Its template ref is null
+  // until then
+  app.component(
+    'MapView',
+    defineAsyncComponent(() => import('@/components/map/OlMap.vue'))
+  );
 }

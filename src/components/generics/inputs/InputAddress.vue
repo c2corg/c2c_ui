@@ -41,12 +41,12 @@
 
 <script setup lang="ts">
 import { toast } from 'bulma-toast';
+import { toLonLat, transform } from 'ol/proj';
 import { onBeforeUnmount, onMounted, reactive, watch } from 'vue';
 
 import { default as c2c } from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
 import { useGlobalProperties } from '@/js/composables/global-properties';
-import ol from '@/js/libs/ol';
 
 type Proposition = {
   type?: string;
@@ -212,7 +212,7 @@ async function loadUserAddressIfLoggedIn() {
     if (geomData.type !== 'Point' || !geomData.coordinates) return;
 
     const [x, y] = geomData.coordinates;
-    const [lon, lat] = ol.proj.transform([x, y], 'EPSG:3857', 'EPSG:4326');
+    const [lon, lat] = transform([x, y], 'EPSG:3857', 'EPSG:4326');
 
     localData.coordinates = [lon, lat];
     await reverseGeocode(lon, lat);
@@ -235,7 +235,7 @@ function searchAddressPropositions() {
   searchTimeout = setTimeout(async () => {
     try {
       const center = props.mapView?.view?.getCenter();
-      const centerWgs84 = center ? (ol.proj.toLonLat(center) as [number, number]) : undefined;
+      const centerWgs84 = center ? (toLonLat(center) as [number, number]) : undefined;
       const response = await photon.getPropositions(localData.address, $language.current!, centerWgs84);
       localData.addressPropositions = response.data.features.slice(0, 6) || [];
       localData.showAddressPropositions = localData.addressPropositions?.length > 0;

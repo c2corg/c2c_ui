@@ -236,7 +236,7 @@ function getDocumentTypeTitle(documentType: string) {
 // openLayer need an explicit resize
 watch(displayMode, (newValue, oldValue) => {
   if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
-    nextTick(() => map.value!.map.updateSize());
+    nextTick(() => map.value?.map.updateSize());
   }
 });
 
