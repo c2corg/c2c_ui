@@ -1,6 +1,5 @@
 import { type Options as ToastOptions, setDefaults as toastDefaults } from 'bulma-toast';
 import { createPinia } from 'pinia';
-import { register as registerSwiper } from 'swiper/element';
 import { createApp } from 'vue';
 
 import App from '@/App.vue';
@@ -24,9 +23,6 @@ import user from '@/js/vue-plugins/user';
 import './assets/sass/main.scss';
 
 reloadOnStaleChunk(router);
-
-// web components (declared as custom elements in vite.config.ts)
-registerSwiper();
 
 const app = createApp(App);
 

@@ -17,6 +17,7 @@
 import { watch, type PropType } from 'vue';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import '@/js/swiper-element';
 
 type GalleryImage = { document_id: number; filename?: string; locales: { title?: string | null }[] };
 

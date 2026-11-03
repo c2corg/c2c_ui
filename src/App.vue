@@ -11,7 +11,7 @@
     <navigation class="navigation no-print" @toggle-side-menu="alternativeSideMenu = !alternativeSideMenu" />
     <dfm-ad-small v-if="!homePage && ($screen.isMobile || $screen.isTablet || $screen.isDesktop)" class="ad" />
     <site-notice class="no-print site-notice" />
-    <image-viewer />
+    <image-viewer v-if="imageViewerRequested" />
     <helper-window />
     <alert-window />
     <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu = false" />
@@ -25,17 +25,21 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 import AlertWindow from './components/alert-window/AlertWindow.vue';
 import GdprBanner from './components/gdpr/GdprBanner.vue';
 import HelperWindow from './components/helper/HelperWindow.vue';
-import ImageViewer from './components/image-viewer/ImageViewer.vue';
 import DfmAdSmall from './views/DfmAdSmall.vue';
 import Navigation from './views/Navigation.vue';
 import SideMenu from './views/SideMenu.vue';
 import SiteNotice from './views/SiteNotice.vue';
+
+import { imageViewerRequested } from '@/js/vue-plugins/image-viewer';
+
+// loaded with the first image shown, with Swiper (#4877)
+const ImageViewer = defineAsyncComponent(() => import('./components/image-viewer/ImageViewer.vue'));
 
 defineOptions({ name: 'App' });
 
