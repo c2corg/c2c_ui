@@ -11,7 +11,7 @@ const exists = (type: string, id: number) =>
 
 export default async function globalSetup() {
   await fetch(`${API}/health`).catch(() => {
-    throw new Error(`No API at ${API}: start v6_api (pserve development.ini), or set E2E_API`);
+    throw new Error(`No API at ${API}: start v6_api (make serve), or set E2E_API`);
   });
 
   const user = await call('/users/login', { method: 'POST', body: credentials }).catch((error) => {

@@ -5,7 +5,7 @@ Not run in CI: run them before merging a change that touches pages, forms, maps 
 
 ## Setup (once)
 
-1. Start v6_api locally, on `http://localhost:6543` (`pserve development.ini`), with Elasticsearch for the lists.
+1. Start v6_api locally, on `http://localhost:6543` (`make serve`), with Elasticsearch for the lists.
 2. Create the e2e user, from the v6_api directory, in its Python environment (the password is the tests' default,
    see `E2E_PASSWORD` below):
 
