@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import type { z } from 'zod';
+import type * as z from 'zod/mini';
 
 import FeedCard from '@/components/cards/FeedCard.vue';
 import c2c from '@/js/apis/c2c';
