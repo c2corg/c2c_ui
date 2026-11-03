@@ -60,7 +60,8 @@ function M.parse_path(path)
   if not plural or not DOCUMENT_TYPES[plural] then
     return nil
   end
-  if rest ~= '' and rest:sub(1, 1) ~= '/' then
+  -- at most a language and a title, and a trailing slash: any other path is the app's not-found page
+  if not (rest:match('^/?$') or rest:match('^/[^/]+/?$') or rest:match('^/[^/]+/[^/]+/?$')) then
     return nil
   end
   local lang = rest:match('^/([^/]+)')

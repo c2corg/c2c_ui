@@ -72,6 +72,10 @@ test('parse_path: document views only', function()
 
   equal(select(3, head.parse_path('/outings/42/')), nil)
   equal(select(3, head.parse_path('/outings/42/xx/title')), nil)
+  equal(head.parse_path('/routes/123/fr/title/'), 'route')
+  -- the router has no route for these: the not-found page
+  equal(head.parse_path('/routes/123/fr/title/extra'), nil)
+  equal(head.parse_path('/routes/123//'), nil)
   equal(head.parse_path('/routes'), nil)
   equal(head.parse_path('/routes/print'), nil)
   equal(head.parse_path('/routes/version/123/fr/4'), nil)
