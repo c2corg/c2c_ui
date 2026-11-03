@@ -33,6 +33,21 @@ describe('Thumbnail', () => {
 
     expect(onClick).toHaveBeenCalledTimes(1);
   });
+
+  it('reserves the size of the thumbnail on the image when asked, from the size of the original', () => {
+    const photo = { ...image, width: 3000, height: 4000 };
+    const reserved = mount(Thumbnail, { props: { img: photo, size: 'BI', reserveSize: true } }).find('img');
+    expect(reserved.attributes()).toMatchObject({ width: '1125', height: '1500' });
+
+    // not asked, or the original's size unknown: nothing, CSS sizes the image
+    expect(
+      mount(Thumbnail, { props: { img: photo, size: 'BI' } })
+        .find('img')
+        .attributes('width')
+    ).toBeUndefined();
+    const unknown = mount(Thumbnail, { props: { img: image, size: 'BI', reserveSize: true } }).find('img');
+    expect(unknown.attributes('width')).toBeUndefined();
+  });
 });
 
 describe('Thumbnail fallback', () => {

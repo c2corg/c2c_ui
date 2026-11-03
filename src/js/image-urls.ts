@@ -5,6 +5,22 @@ export type Image = { document_id: number; filename?: string };
 
 export type ImageSize = 'SI' | 'MI' | 'BI';
 
+// the box each thumbnail fits in, without enlarging the original (v6_images: convert -resize 1500x1500>, 400x400>)
+const THUMBNAIL_BOXES: Partial<Record<ImageSize, number>> = { BI: 1500, MI: 400 };
+
+/** The size of a BI or MI thumbnail, from the size of the original image (image documents), if known */
+export const getThumbnailSize = function (
+  image: { width?: number | null; height?: number | null },
+  size: ImageSize
+): { width: number; height: number } | undefined {
+  const box = THUMBNAIL_BOXES[size];
+  if (!box || !image.width || !image.height) {
+    return undefined;
+  }
+  const scale = Math.min(1, box / Math.max(image.width, image.height));
+  return { width: Math.round(image.width * scale), height: Math.round(image.height * scale) };
+};
+
 export type ImageFormat = 'webp' | 'avif';
 
 const getImageProxyUrl = function (image: Image, size?: ImageSize, format?: ImageFormat): string | undefined {

@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { defineAsyncComponent, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 import AlertWindow from './components/alert-window/AlertWindow.vue';
@@ -36,6 +36,7 @@ import Navigation from './views/Navigation.vue';
 import SideMenu from './views/SideMenu.vue';
 import SiteNotice from './views/SiteNotice.vue';
 
+import { useIsHomePage } from '@/js/composables/home-page';
 import { imageViewerRequested } from '@/js/vue-plugins/image-viewer';
 
 // loaded with the first image shown, with Swiper (#4877)
@@ -48,7 +49,7 @@ const app = useTemplateRef<HTMLDivElement>('app');
 
 const alternativeSideMenu = ref(false);
 
-const homePage = computed(() => route.path === '/home' || route.path === '/');
+const homePage = useIsHomePage();
 
 function hideSideMenuOnMobile() {
   alternativeSideMenu.value = false;

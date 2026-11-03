@@ -2,14 +2,14 @@
   <picture :class="$attrs.class" :style="$attrs.style">
     <source v-if="avif" type="image/avif" :srcset="avif" />
     <source v-if="webp" type="image/webp" :srcset="webp" />
-    <img ref="img" v-bind="imgAttrs" :src="standard" @error.once="onError" />
+    <img ref="img" v-bind="{ ...reservedSize, ...imgAttrs }" :src="standard" @error.once="onError" />
   </picture>
 </template>
 
 <script setup lang="ts">
 import { computed, useAttrs, type PropType } from 'vue';
 
-import { getImageUrl, type Image, type ImageSize } from '@/js/image-urls';
+import { getImageUrl, getThumbnailSize, type Image, type ImageSize } from '@/js/image-urls';
 
 // the classes and style stay on the picture, the other attributes and the listeners go to the image
 defineOptions({ inheritAttrs: false });
@@ -23,6 +23,13 @@ const props = defineProps({
     type: String as PropType<ImageSize>,
     default: null,
   },
+  // the size of the thumbnail on the <img> (width, height), when the image document gives the original's: the page
+  // keeps its space while it loads, instead of shifting (#4883). For an image not sized by CSS: the attributes would
+  // otherwise set its size
+  reserveSize: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const attrs = useAttrs();
@@ -32,6 +39,12 @@ const imgAttrs = computed(() => {
   const { class: className, style, ...imgAttrs } = attrs;
   return imgAttrs;
 });
+
+const reservedSize = computed(() =>
+  props.reserveSize && props.size
+    ? getThumbnailSize(props.img as Parameters<typeof getThumbnailSize>[0], props.size)
+    : undefined
+);
 
 const avif = computed(() => getImageUrl(props.img, props.size, 'avif'));
 const webp = computed(() => getImageUrl(props.img, props.size, 'webp'));
