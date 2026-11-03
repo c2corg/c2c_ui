@@ -290,8 +290,9 @@ export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { dr
         { n: 'description', c: description, id: 'meta-description' },
       ];
     }
-    if (doc.associations?.images?.length) {
-      const image = doc.associations.images[0];
+    // an image shows itself, other documents their first image (same as docker/lua/c2c_head.lua)
+    const image = documentType.value === 'image' ? doc : doc.associations?.images?.[0];
+    if (image) {
       meta = [...meta, { p: 'og:image', c: getImageUrl(image as Image, 'BI'), id: 'meta-og-image' }];
     }
     return meta;
