@@ -17,11 +17,11 @@ COPY ./docker/lua/c2c_head.lua /etc/nginx/lua/
 COPY --chmod=755 ./docker/start.sh ./docker/runtime-config.sh /usr/local/bin/
 
 # Default configuration
-ENV PORT 80
-ENV HEALTH_HTTP_PORT 8080
-ENV SERVER_NAME _
+ENV PORT=80
+ENV HEALTH_HTTP_PORT=8080
+ENV SERVER_NAME=_
 # the production load balancer speaks the PROXY protocol; set LISTEN_FLAGS to an empty value to reach the container
 # directly (development)
-ENV LISTEN_FLAGS proxy_protocol
+ENV LISTEN_FLAGS=proxy_protocol
 
 CMD ["/usr/local/bin/start.sh"]
