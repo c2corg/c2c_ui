@@ -1,6 +1,8 @@
 #!/bin/sh
 # Smoke test of the head tags of the document pages (docker/lua/c2c_head.lua) in the image, against a fake API that
-# serves the cooked route fixture. Needs Docker, python3 and curl; run from the repository root:
+# serves the cooked route fixture, reached through C2C_HEAD_API_URL (the public API URL doesn't exist).
+# Then a container with an invalid C2C_HEAD_API_URL must refuse to start.
+# Needs Docker, python3 and curl; run from the repository root:
 #
 #   docker build -t c2c_ui:test . && docker/test-head.sh c2c_ui:test
 set -eu
@@ -31,7 +33,8 @@ python3 -m http.server "$api_port" --bind 127.0.0.1 --directory "$api_dir" > /de
 api_pid=$!
 
 container=$(docker run -d --network host -e PORT="$ui_port" -e HEALTH_HTTP_PORT=8091 -e LISTEN_FLAGS= \
-  -e C2C_API_URL="http://127.0.0.1:$api_port" -e C2C_MEDIA_URL=https://media.example.org "$image")
+  -e C2C_API_URL=https://api.invalid -e C2C_HEAD_API_URL="http://127.0.0.1:$api_port" \
+  -e C2C_MEDIA_URL=https://media.example.org "$image")
 
 for _ in $(seq 30); do
   curl -sf "http://127.0.0.1:$ui_port/health" > /dev/null && break
@@ -59,5 +62,12 @@ for path in /routes/58/fr /routes /routes/edit/57/fr /; do
   echo "$html" | grep -q 'id="meta-og-title"' && fail "document tags on $path: $html"
   echo "$html" | grep -q '<title>Camptocamp.org</title>' || fail "no index.html on $path: $html"
 done
+
+# a value that would break out of the nginx string
+# (start.sh exits 1; a container that starts anyway is stopped by the timeout, exit 124)
+status=0
+timeout 30 docker run --rm -e LISTEN_FLAGS= -e 'C2C_HEAD_API_URL=http://x"; return 200 "' "$image" > /dev/null 2>&1 ||
+  status=$?
+[ "$status" = 1 ] || fail "invalid C2C_HEAD_API_URL: exit status $status, expected 1"
 
 echo "test-head.sh: ok"

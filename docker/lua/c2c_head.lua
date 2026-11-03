@@ -239,7 +239,8 @@ function M.urls(html)
 end
 
 -- the title and tags of a document, from the cache or the API (subrequest to /_c2c_head_api, see nginx.conf)
-local function head_of(doc_type, id, lang, urls)
+-- (api_url: where to ask the API, which may be an internal address)
+local function head_of(doc_type, id, lang, urls, api_url)
   local cache = ngx.shared.c2c_head
   local key = doc_type .. '/' .. id .. '/' .. lang
   local cached = cache:get(key)
@@ -250,7 +251,7 @@ local function head_of(doc_type, id, lang, urls)
 
   local page_title, tags
   local response = ngx.location.capture('/_c2c_head_api', {
-    ctx = { url = urls.api .. '/' .. doc_type .. 's/' .. id .. '?cook=' .. lang },
+    ctx = { url = api_url .. '/' .. doc_type .. 's/' .. id .. '?cook=' .. lang },
   })
   if response.status == 200 then
     page_title, tags = M.build(cjson.decode(response.body), doc_type, id, lang, urls)
@@ -283,7 +284,10 @@ function M.render(html)
     ngx.header['Vary'] = 'Accept-Language'
   end
 
-  local ok, page_title, tags = pcall(head_of, doc_type, id, lang, urls)
+  -- C2C_HEAD_API_URL (docker/start.sh), else the public API URL of the page
+  local internal_api = ngx.var.c2c_head_api
+  local api_url = internal_api ~= '' and internal_api or urls.api
+  local ok, page_title, tags = pcall(head_of, doc_type, id, lang, urls, api_url)
   if not ok then
     ngx.log(ngx.ERR, 'c2c_head: ', page_title)
     return html
