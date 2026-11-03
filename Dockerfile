@@ -10,9 +10,10 @@ RUN node tools/generate-health.ts
 
 # production stage
 FROM openresty/openresty:1.31.1.1-5-bookworm AS production-stage
-RUN apt-get update && apt-get install -y gettext-base # required to use envsubst
+RUN apt-get update && apt-get install -y gettext-base ca-certificates # envsubst; certificates of the API (docker/lua/c2c_head.lua)
 COPY --from=build-stage /dist /usr/share/nginx/html
 COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf.template
+COPY ./docker/lua/c2c_head.lua /etc/nginx/lua/
 COPY --chmod=755 ./docker/start.sh ./docker/runtime-config.sh /usr/local/bin/
 
 # Default configuration

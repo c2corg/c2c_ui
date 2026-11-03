@@ -9,7 +9,13 @@ import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 const api = vi.hoisted(() => ({ getCooked: vi.fn(), getVersion: vi.fn(), cook: vi.fn() }));
 
-vi.mock('@/js/apis/c2c', () => ({ default: { route: { getCooked: api.getCooked, getVersion: api.getVersion } } }));
+vi.mock('@/js/apis/c2c', () => ({
+  default: {
+    route: { getCooked: api.getCooked, getVersion: api.getVersion },
+    image: { getCooked: api.getCooked, getVersion: api.getVersion },
+  },
+}));
+vi.mock('@/js/config', () => ({ default: { urls: { media: 'https://media.example.org' } } }));
 vi.mock('@/js/cooker', () => ({ default: { cook: api.cook } }));
 
 const response = (data: unknown) => new ApiData(Promise.resolve({ data } as never));
@@ -48,6 +54,7 @@ async function mountAt(path: string, draft: C2cDocument | null = null) {
       { path: '/routes/:id(\\d+)/:lang?/:title?', name: 'route', component: Empty },
       { path: '/routes/version/:id(\\d+)/:lang/:version(\\d+)', name: 'route-version', component: Empty },
       { path: '/routes/edit/:id(\\d+)/:lang', name: 'route-edit', component: Empty },
+      { path: '/images/:id(\\d+)/:lang?/:title?', name: 'image', component: Empty },
     ],
   });
   await router.push(path);
@@ -130,6 +137,24 @@ describe('useDocumentView', () => {
     wrapper.unmount();
 
     expect(head('#canonical')).toBeNull();
+  });
+
+  it('shows the first image of the document in link previews', async () => {
+    api.getCooked.mockImplementation(() =>
+      response({ ...montBlanc(), associations: { images: [{ document_id: 3, filename: '1_2.jpg' }] } })
+    );
+
+    await mountAt('/routes/12/fr');
+
+    expect(head('#meta-og-image')?.getAttribute('content')).toBe('https://media.example.org/1_2BI.jpg');
+  });
+
+  it('shows the image itself in the link previews of an image', async () => {
+    api.getCooked.mockImplementation(() => response({ ...montBlanc(), document_id: 5, filename: '5_6.png' }));
+
+    await mountAt('/images/5/fr');
+
+    expect(head('#meta-og-image')?.getAttribute('content')).toBe('https://media.example.org/5_6BI.png');
   });
 
   it('shows a version, not indexed and not editable, with the links to the next and previous ones', async () => {
