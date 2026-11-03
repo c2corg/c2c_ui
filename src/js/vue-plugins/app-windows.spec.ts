@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { defineComponent, h } from 'vue';
 
 import helperWindow, { registerHelperWindow } from './helper-window';
-import imageViewer, { registerImageViewer } from './image-viewer';
+import imageViewer, { imageViewerRequested, registerImageViewer, type ViewerImage } from './image-viewer';
 
 import SocialNetworkSharing from '@/views/document/utils/SocialNetworkSharing.vue';
 
@@ -23,9 +23,15 @@ describe('$helper and $imageViewer', () => {
     registerImageViewer(viewer);
 
     const wrapper = mount({ render: () => h('div') }, { global: { plugins } });
+    const image = { document_id: 1, locales: [{}] };
+    wrapper.vm.$imageViewer.push(image);
+    wrapper.vm.$imageViewer.show(image);
+    wrapper.vm.$imageViewer.clear();
 
     expect(wrapper.vm.$helper).toBe(helper);
-    expect(wrapper.vm.$imageViewer).toBe(viewer);
+    expect(viewer.push).toHaveBeenCalledWith(image);
+    expect(viewer.show).toHaveBeenCalledWith(image);
+    expect(viewer.clear).toHaveBeenCalledOnce();
   });
 
   it('are registered by the windows themselves while mounted', async () => {
@@ -104,5 +110,59 @@ describe('SocialNetworkSharing', () => {
     await wrapper.find('span[title=Share]').trigger('click');
 
     expect(share).toHaveBeenCalledWith({ title: 'Face nord', url: window.location.href });
+  });
+});
+
+// ImageViewer (and Swiper) is loaded with the first image shown (#4877)
+describe('$imageViewer before ImageViewer is loaded', () => {
+  const image = (document_id: number): ViewerImage => ({ document_id, locales: [{ title: String(document_id) }] });
+  const viewer = () => ({ push: vi.fn(), show: vi.fn(), clear: vi.fn() });
+  const page = () => mount({ render: () => h('div') }, { global: { plugins } }).vm.$imageViewer;
+
+  afterEach(() => {
+    registerImageViewer(null);
+    imageViewerRequested.value = false;
+  });
+
+  it('keeps the images pushed by the page, and asks App.vue for the viewer on the first image shown', () => {
+    const $imageViewer = page();
+    $imageViewer.push(image(1));
+    $imageViewer.push(image(2));
+    expect(imageViewerRequested.value).toBe(false);
+
+    $imageViewer.show(image(2));
+    expect(imageViewerRequested.value).toBe(true);
+
+    // the viewer is loaded: it gets the pushed images, then shows the requested one
+    const loaded = viewer();
+    registerImageViewer(loaded);
+    expect(loaded.push.mock.calls).toEqual([[image(1)], [image(2)]]);
+    expect(loaded.show).toHaveBeenCalledExactlyOnceWith(image(2));
+    expect(loaded.push.mock.invocationCallOrder[1]).toBeLessThan(loaded.show.mock.invocationCallOrder[0]);
+  });
+
+  it('forgets the images of the previous page when the page clears them', () => {
+    const $imageViewer = page();
+    $imageViewer.push(image(1));
+    $imageViewer.clear();
+    $imageViewer.push(image(3));
+    $imageViewer.show(image(3));
+
+    const loaded = viewer();
+    registerImageViewer(loaded);
+    expect(loaded.push.mock.calls).toEqual([[image(3)]]);
+    expect(loaded.clear).not.toHaveBeenCalled();
+  });
+
+  it('gives nothing twice to a viewer registered again', () => {
+    page().push(image(1));
+    const first = viewer();
+    registerImageViewer(first);
+    registerImageViewer(null);
+    const second = viewer();
+    registerImageViewer(second);
+
+    expect(first.push).toHaveBeenCalledOnce();
+    expect(second.push).not.toHaveBeenCalled();
   });
 });

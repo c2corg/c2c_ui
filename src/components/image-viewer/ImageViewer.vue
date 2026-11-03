@@ -76,6 +76,8 @@ import ZingTouch from 'zingtouch';
 
 import ImageInfo from './ImageInfo.vue';
 
+import '@/js/swiper-element';
+
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { getImageUrl } from '@/js/image-urls';
 import { registerImageViewer, type ViewerImage } from '@/js/vue-plugins/image-viewer';
