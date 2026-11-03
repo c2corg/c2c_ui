@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as z from 'zod/mini';
 
 import { document, documentsPage, fullDocuments, redirection } from './schemas';
 import type { Api, DocumentId, Params } from './types';

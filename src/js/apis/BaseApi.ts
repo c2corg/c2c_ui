@@ -1,6 +1,6 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 import { reactive } from 'vue';
-import type { z } from 'zod';
+import type * as z from 'zod/mini';
 
 import { checkResponse } from './check-response';
 import retryOn429 from './retry-on-429';
@@ -86,15 +86,15 @@ export default class BaseApi {
 
   // the same requests, whose response is checked against its schema (check-response.ts), and typed by it: the data
   // is the API's, so it has the schema's input type
-  getValidated<S extends z.ZodType>(url: string, schema: S, params?: AxiosRequestConfig): ApiData<z.input<S>> {
+  getValidated<S extends z.ZodMiniType>(url: string, schema: S, params?: AxiosRequestConfig): ApiData<z.input<S>> {
     return new ApiData(this.validated(this.axios.get(url, params), schema, `GET ${url}`));
   }
 
-  postValidated<S extends z.ZodType>(url: string, schema: S, body?: unknown): ApiData<z.input<S>> {
+  postValidated<S extends z.ZodMiniType>(url: string, schema: S, body?: unknown): ApiData<z.input<S>> {
     return new ApiData(this.validated(this.axios.post(url, body), schema, `POST ${url}`));
   }
 
-  private validated<S extends z.ZodType>(
+  private validated<S extends z.ZodMiniType>(
     request: Promise<AxiosResponse>,
     schema: S,
     description: string

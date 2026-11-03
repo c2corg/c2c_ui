@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as z from 'zod/mini';
 
 /**
  * Checks an API response against its schema, and returns the data as the API gave it: zod's parsed copy would leave out
@@ -8,7 +8,7 @@ import { z } from 'zod';
  * A response that doesn't match is an error in development and in the tests, where it should fail loudly, and only a
  * report in production, where the page goes on with what the API gave.
  */
-export function checkResponse<S extends z.ZodType>(
+export function checkResponse<S extends z.ZodMiniType>(
   schema: S,
   data: unknown,
   request: string,

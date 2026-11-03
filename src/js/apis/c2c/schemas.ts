@@ -1,5 +1,5 @@
 // The responses of the c2c API, as the UI reads them: checked when they arrive (check-response.ts), and typed from here
-import { z } from 'zod';
+import * as z from 'zod/mini';
 
 import common from '@/js/constants/common.json';
 
@@ -15,8 +15,8 @@ export const loginResponse = z.object({
   lang: z.string(),
   roles: z.array(z.string()),
   // a login for the forum (discourse in the request): where to go back, through the forum SSO
-  redirect: z.string().optional(),
-  redirect_internal: z.string().optional(),
+  redirect: z.optional(z.string()),
+  redirect_internal: z.optional(z.string()),
 });
 
 // the data as the API gives it (check-response.ts): the schema's input type
@@ -25,22 +25,22 @@ export type LoginResponse = z.input<typeof loginResponse>;
 // a locale of a document; its other properties depend on the document type
 const locale = z.object({
   lang: z.string(),
-  version: z.number().optional(),
-  title: z.string().nullish(),
-  title_prefix: z.string().nullish(),
+  version: z.optional(z.number()),
+  title: z.nullish(z.string()),
+  title_prefix: z.nullish(z.string()),
 });
 
 // a document, in any answer: only its id is always there (a private profile is { not_authorized, document_id, name })
 export const document = z.object({
   document_id: z.number(),
   // the type letter: r (route), w (waypoint), o (outing)...
-  type: z.string().optional(),
-  version: z.number().optional(),
-  locales: z.array(locale).optional(),
-  available_langs: z.array(z.string()).nullish(),
-  geometry: z.object({ geom: z.string().nullish(), geom_detail: z.string().nullish() }).nullish(),
-  protected: z.boolean().optional(),
-  areas: z.array(z.object({ document_id: z.number() })).optional(),
+  type: z.optional(z.string()),
+  version: z.optional(z.number()),
+  locales: z.optional(z.array(locale)),
+  available_langs: z.nullish(z.array(z.string())),
+  geometry: z.nullish(z.object({ geom: z.nullish(z.string()), geom_detail: z.nullish(z.string()) })),
+  protected: z.optional(z.boolean()),
+  areas: z.optional(z.array(z.object({ document_id: z.number() }))),
 });
 
 // GET /<type>s: a page of documents
@@ -54,7 +54,7 @@ const oneOf = (name: string) => z.enum(attributes[name]);
 // (the others are left out); the associations and areas are short documents
 // the associated documents of a full document (v6_api views): lists, and pages for the last outings of a route or a
 // waypoint and the routes of a waypoint
-const associatedDocuments = z.array(document).optional();
+const associatedDocuments = z.optional(z.array(document));
 export const associations = z.object({
   waypoints: associatedDocuments,
   waypoint_children: associatedDocuments,
@@ -66,35 +66,35 @@ export const associations = z.object({
   xreports: associatedDocuments,
   users: associatedDocuments,
   areas: associatedDocuments,
-  recent_outings: documentsPage.optional(),
-  all_routes: documentsPage.optional(),
+  recent_outings: z.optional(documentsPage),
+  all_routes: z.optional(documentsPage),
 });
 
 // a locale of a document, with the fields of its type
-const fullLocale = <L extends z.ZodRawShape>(localeFields: L) =>
-  locale.extend({
+const fullLocale = <L extends z.core.$ZodShape>(localeFields: L) =>
+  z.extend(locale, {
     version: z.number(),
-    summary: z.string().nullish(),
-    description: z.string().nullish(),
-    topic_id: z.number().nullish(),
+    summary: z.nullish(z.string()),
+    description: z.nullish(z.string()),
+    topic_id: z.nullish(z.number()),
     ...localeFields,
   });
 
-const fullDocument = <T extends z.ZodRawShape, L extends z.ZodRawShape>(fields: T, localeFields: L) =>
-  document.extend({
+const fullDocument = <T extends z.core.$ZodShape, L extends z.core.$ZodShape>(fields: T, localeFields: L) =>
+  z.extend(document, {
     type: z.string(),
     version: z.number(),
     quality: oneOf('quality_types'),
     protected: z.boolean(),
-    available_langs: z.array(z.string()).nullish(),
+    available_langs: z.nullish(z.array(z.string())),
     locales: z.array(fullLocale(localeFields)),
     // ?cook=<lang>: the locale in that language (or the best one), its markdown as HTML
-    cooked: fullLocale(localeFields).optional(),
-    associations: associations.optional(),
+    cooked: z.optional(fullLocale(localeFields)),
+    associations: z.optional(associations),
     // the areas of the document, with their type (range, administrative limits, country)
-    areas: z.array(document.extend({ area_type: z.string().nullish() })).optional(),
+    areas: z.optional(z.array(z.extend(document, { area_type: z.nullish(z.string()) }))),
     // the maps of the document's area, with their editor and code
-    maps: z.array(document.extend({ editor: z.string().nullish(), code: z.string().nullish() })).optional(),
+    maps: z.optional(z.array(z.extend(document, { editor: z.nullish(z.string()), code: z.nullish(z.string()) }))),
     ...fields,
   });
 
@@ -102,119 +102,119 @@ const fullDocument = <T extends z.ZodRawShape, L extends z.ZodRawShape>(fields: 
 export const waypoint = fullDocument(
   {
     waypoint_type: oneOf('waypoint_types'),
-    elevation: z.number().nullish(),
-    elevation_min: z.number().nullish(),
-    prominence: z.number().nullish(),
-    height_max: z.number().nullish(),
-    height_median: z.number().nullish(),
-    height_min: z.number().nullish(),
-    routes_quantity: z.number().nullish(),
-    climbing_outdoor_types: z.array(oneOf('climbing_outdoor_types')).nullish(),
-    climbing_indoor_types: z.array(oneOf('climbing_indoor_types')).nullish(),
-    climbing_rating_max: oneOf('climbing_ratings').nullish(),
-    climbing_rating_min: oneOf('climbing_ratings').nullish(),
-    climbing_rating_median: oneOf('climbing_ratings').nullish(),
-    equipment_ratings: z.array(oneOf('equipment_ratings')).nullish(),
-    climbing_styles: z.array(oneOf('climbing_styles')).nullish(),
-    children_proof: oneOf('children_proof_types').nullish(),
-    rain_proof: oneOf('rain_proof_types').nullish(),
-    orientations: z.array(oneOf('orientation_types')).nullish(),
-    best_periods: z.array(oneOf('months')).nullish(),
-    product_types: z.array(oneOf('product_types')).nullish(),
-    length: z.number().nullish(),
-    slope: z.number().nullish(),
-    ground_types: z.array(oneOf('ground_types')).nullish(),
-    paragliding_rating: oneOf('paragliding_ratings').nullish(),
-    exposition_rating: oneOf('exposition_ratings').nullish(),
-    rock_types: z.array(oneOf('rock_types')).nullish(),
-    weather_station_types: z.array(oneOf('weather_station_types')).nullish(),
-    url: z.string().nullish(),
-    maps_info: z.string().nullish(),
-    phone: z.string().nullish(),
-    public_transportation_types: z.array(oneOf('public_transportation_types')).nullish(),
-    public_transportation_rating: oneOf('public_transportation_ratings').nullish(),
-    snow_clearance_rating: oneOf('snow_clearance_ratings').nullish(),
-    lift_access: z.boolean().nullish(),
-    parking_fee: oneOf('parking_fee_types').nullish(),
-    phone_custodian: z.string().nullish(),
-    custodianship: oneOf('custodianship_types').nullish(),
-    matress_unstaffed: z.boolean().nullish(),
-    blanket_unstaffed: z.boolean().nullish(),
-    gas_unstaffed: z.boolean().nullish(),
-    heating_unstaffed: z.boolean().nullish(),
-    access_time: oneOf('access_times').nullish(),
-    capacity: z.number().nullish(),
-    capacity_staffed: z.number().nullish(),
-    slackline_types: z.array(oneOf('slackline_types')).nullish(),
-    slackline_length_min: z.number().nullish(),
-    slackline_length_max: z.number().nullish(),
+    elevation: z.nullish(z.number()),
+    elevation_min: z.nullish(z.number()),
+    prominence: z.nullish(z.number()),
+    height_max: z.nullish(z.number()),
+    height_median: z.nullish(z.number()),
+    height_min: z.nullish(z.number()),
+    routes_quantity: z.nullish(z.number()),
+    climbing_outdoor_types: z.nullish(z.array(oneOf('climbing_outdoor_types'))),
+    climbing_indoor_types: z.nullish(z.array(oneOf('climbing_indoor_types'))),
+    climbing_rating_max: z.nullish(oneOf('climbing_ratings')),
+    climbing_rating_min: z.nullish(oneOf('climbing_ratings')),
+    climbing_rating_median: z.nullish(oneOf('climbing_ratings')),
+    equipment_ratings: z.nullish(z.array(oneOf('equipment_ratings'))),
+    climbing_styles: z.nullish(z.array(oneOf('climbing_styles'))),
+    children_proof: z.nullish(oneOf('children_proof_types')),
+    rain_proof: z.nullish(oneOf('rain_proof_types')),
+    orientations: z.nullish(z.array(oneOf('orientation_types'))),
+    best_periods: z.nullish(z.array(oneOf('months'))),
+    product_types: z.nullish(z.array(oneOf('product_types'))),
+    length: z.nullish(z.number()),
+    slope: z.nullish(z.number()),
+    ground_types: z.nullish(z.array(oneOf('ground_types'))),
+    paragliding_rating: z.nullish(oneOf('paragliding_ratings')),
+    exposition_rating: z.nullish(oneOf('exposition_ratings')),
+    rock_types: z.nullish(z.array(oneOf('rock_types'))),
+    weather_station_types: z.nullish(z.array(oneOf('weather_station_types'))),
+    url: z.nullish(z.string()),
+    maps_info: z.nullish(z.string()),
+    phone: z.nullish(z.string()),
+    public_transportation_types: z.nullish(z.array(oneOf('public_transportation_types'))),
+    public_transportation_rating: z.nullish(oneOf('public_transportation_ratings')),
+    snow_clearance_rating: z.nullish(oneOf('snow_clearance_ratings')),
+    lift_access: z.nullish(z.boolean()),
+    parking_fee: z.nullish(oneOf('parking_fee_types')),
+    phone_custodian: z.nullish(z.string()),
+    custodianship: z.nullish(oneOf('custodianship_types')),
+    matress_unstaffed: z.nullish(z.boolean()),
+    blanket_unstaffed: z.nullish(z.boolean()),
+    gas_unstaffed: z.nullish(z.boolean()),
+    heating_unstaffed: z.nullish(z.boolean()),
+    access_time: z.nullish(oneOf('access_times')),
+    capacity: z.nullish(z.number()),
+    capacity_staffed: z.nullish(z.number()),
+    slackline_types: z.nullish(z.array(oneOf('slackline_types'))),
+    slackline_length_min: z.nullish(z.number()),
+    slackline_length_max: z.nullish(z.number()),
   },
   {
-    access: z.string().nullish(),
-    access_period: z.string().nullish(),
-    external_resources: z.string().nullish(),
+    access: z.nullish(z.string()),
+    access_period: z.nullish(z.string()),
+    external_resources: z.nullish(z.string()),
   }
 );
 
 // GET /routes/:id (v6_api models/route.py)
 export const route = fullDocument(
   {
-    main_waypoint_id: z.number().nullish(),
+    main_waypoint_id: z.nullish(z.number()),
     activities: z.array(oneOf('activities')),
-    elevation_min: z.number().nullish(),
-    elevation_max: z.number().nullish(),
-    height_diff_up: z.number().nullish(),
-    height_diff_down: z.number().nullish(),
-    route_length: z.number().nullish(),
-    difficulties_height: z.number().nullish(),
-    height_diff_access: z.number().nullish(),
-    height_diff_difficulties: z.number().nullish(),
-    route_types: z.array(oneOf('route_types')).nullish(),
-    orientations: z.array(oneOf('orientation_types')).nullish(),
-    durations: z.array(oneOf('route_duration_types')).nullish(),
-    calculated_duration: z.number().nullish(),
-    glacier_gear: oneOf('glacier_gear_types').nullish(),
-    configuration: z.array(oneOf('route_configuration_types')).nullish(),
-    lift_access: z.boolean().nullish(),
-    ski_rating: oneOf('ski_ratings').nullish(),
-    ski_exposition: oneOf('exposition_ratings').nullish(),
-    labande_ski_rating: oneOf('labande_ski_ratings').nullish(),
-    labande_global_rating: oneOf('global_ratings').nullish(),
-    global_rating: oneOf('global_ratings').nullish(),
-    engagement_rating: oneOf('engagement_ratings').nullish(),
-    risk_rating: oneOf('risk_ratings').nullish(),
-    equipment_rating: oneOf('equipment_ratings').nullish(),
-    ice_rating: oneOf('ice_ratings').nullish(),
-    mixed_rating: oneOf('mixed_ratings').nullish(),
-    exposition_rock_rating: oneOf('exposition_rock_ratings').nullish(),
-    rock_free_rating: oneOf('climbing_ratings').nullish(),
-    rock_required_rating: oneOf('climbing_ratings').nullish(),
-    aid_rating: oneOf('aid_ratings').nullish(),
-    via_ferrata_rating: oneOf('via_ferrata_ratings').nullish(),
-    hiking_rating: oneOf('hiking_ratings').nullish(),
-    hiking_mtb_exposition: oneOf('exposition_ratings').nullish(),
-    snowshoe_rating: oneOf('snowshoe_ratings').nullish(),
-    mtb_up_rating: oneOf('mtb_up_ratings').nullish(),
-    mtb_down_rating: oneOf('mtb_down_ratings').nullish(),
-    mtb_length_asphalt: z.number().nullish(),
-    mtb_length_trail: z.number().nullish(),
-    mtb_height_diff_portages: z.number().nullish(),
-    rock_types: z.array(oneOf('rock_types')).nullish(),
-    climbing_outdoor_type: oneOf('climbing_outdoor_types').nullish(),
-    slackline_type: oneOf('slackline_types').nullish(),
-    slackline_height: z.number().nullish(),
+    elevation_min: z.nullish(z.number()),
+    elevation_max: z.nullish(z.number()),
+    height_diff_up: z.nullish(z.number()),
+    height_diff_down: z.nullish(z.number()),
+    route_length: z.nullish(z.number()),
+    difficulties_height: z.nullish(z.number()),
+    height_diff_access: z.nullish(z.number()),
+    height_diff_difficulties: z.nullish(z.number()),
+    route_types: z.nullish(z.array(oneOf('route_types'))),
+    orientations: z.nullish(z.array(oneOf('orientation_types'))),
+    durations: z.nullish(z.array(oneOf('route_duration_types'))),
+    calculated_duration: z.nullish(z.number()),
+    glacier_gear: z.nullish(oneOf('glacier_gear_types')),
+    configuration: z.nullish(z.array(oneOf('route_configuration_types'))),
+    lift_access: z.nullish(z.boolean()),
+    ski_rating: z.nullish(oneOf('ski_ratings')),
+    ski_exposition: z.nullish(oneOf('exposition_ratings')),
+    labande_ski_rating: z.nullish(oneOf('labande_ski_ratings')),
+    labande_global_rating: z.nullish(oneOf('global_ratings')),
+    global_rating: z.nullish(oneOf('global_ratings')),
+    engagement_rating: z.nullish(oneOf('engagement_ratings')),
+    risk_rating: z.nullish(oneOf('risk_ratings')),
+    equipment_rating: z.nullish(oneOf('equipment_ratings')),
+    ice_rating: z.nullish(oneOf('ice_ratings')),
+    mixed_rating: z.nullish(oneOf('mixed_ratings')),
+    exposition_rock_rating: z.nullish(oneOf('exposition_rock_ratings')),
+    rock_free_rating: z.nullish(oneOf('climbing_ratings')),
+    rock_required_rating: z.nullish(oneOf('climbing_ratings')),
+    aid_rating: z.nullish(oneOf('aid_ratings')),
+    via_ferrata_rating: z.nullish(oneOf('via_ferrata_ratings')),
+    hiking_rating: z.nullish(oneOf('hiking_ratings')),
+    hiking_mtb_exposition: z.nullish(oneOf('exposition_ratings')),
+    snowshoe_rating: z.nullish(oneOf('snowshoe_ratings')),
+    mtb_up_rating: z.nullish(oneOf('mtb_up_ratings')),
+    mtb_down_rating: z.nullish(oneOf('mtb_down_ratings')),
+    mtb_length_asphalt: z.nullish(z.number()),
+    mtb_length_trail: z.nullish(z.number()),
+    mtb_height_diff_portages: z.nullish(z.number()),
+    rock_types: z.nullish(z.array(oneOf('rock_types'))),
+    climbing_outdoor_type: z.nullish(oneOf('climbing_outdoor_types')),
+    slackline_type: z.nullish(oneOf('slackline_types')),
+    slackline_height: z.nullish(z.number()),
     // computed from the access waypoints: unknown service without them
-    public_transportation_rating: z.enum([...attributes.public_transportation_ratings, 'unknown service']).nullish(),
+    public_transportation_rating: z.nullish(z.enum([...attributes.public_transportation_ratings, 'unknown service'])),
   },
   {
-    title_prefix: z.string().nullish(),
-    slope: z.string().nullish(),
-    remarks: z.string().nullish(),
-    gear: z.string().nullish(),
-    external_resources: z.string().nullish(),
-    route_history: z.string().nullish(),
-    slackline_anchor1: z.string().nullish(),
-    slackline_anchor2: z.string().nullish(),
+    title_prefix: z.nullish(z.string()),
+    slope: z.nullish(z.string()),
+    remarks: z.nullish(z.string()),
+    gear: z.nullish(z.string()),
+    external_resources: z.nullish(z.string()),
+    route_history: z.nullish(z.string()),
+    slackline_anchor1: z.nullish(z.string()),
+    slackline_anchor2: z.nullish(z.string()),
   }
 );
 
@@ -224,51 +224,51 @@ export const outing = fullDocument(
     activities: z.array(oneOf('activities')),
     date_start: z.string(),
     date_end: z.string(),
-    frequentation: oneOf('frequentation_types').nullish(),
-    participant_count: z.number().nullish(),
-    elevation_min: z.number().nullish(),
-    elevation_max: z.number().nullish(),
-    elevation_access: z.number().nullish(),
-    elevation_up_snow: z.number().nullish(),
-    elevation_down_snow: z.number().nullish(),
-    height_diff_up: z.number().nullish(),
-    height_diff_down: z.number().nullish(),
-    length_total: z.number().nullish(),
-    partial_trip: z.boolean().nullish(),
-    public_transport: z.boolean().nullish(),
-    access_condition: oneOf('access_conditions').nullish(),
-    lift_status: oneOf('lift_status').nullish(),
-    condition_rating: oneOf('condition_ratings').nullish(),
-    snow_quantity: oneOf('snow_quantity_ratings').nullish(),
-    snow_quality: oneOf('snow_quality_ratings').nullish(),
-    glacier_rating: oneOf('glacier_ratings').nullish(),
-    avalanche_signs: z.array(oneOf('avalanche_signs')).nullish(),
-    hut_status: oneOf('hut_status').nullish(),
-    disable_comments: z.boolean().nullish(),
-    hiking_rating: oneOf('hiking_ratings').nullish(),
-    ski_rating: oneOf('ski_ratings').nullish(),
-    labande_global_rating: oneOf('global_ratings').nullish(),
-    snowshoe_rating: oneOf('snowshoe_ratings').nullish(),
-    global_rating: oneOf('global_ratings').nullish(),
-    height_diff_difficulties: z.number().nullish(),
-    engagement_rating: oneOf('engagement_ratings').nullish(),
-    equipment_rating: oneOf('equipment_ratings').nullish(),
-    rock_free_rating: oneOf('climbing_ratings').nullish(),
-    ice_rating: oneOf('ice_ratings').nullish(),
-    via_ferrata_rating: oneOf('via_ferrata_ratings').nullish(),
-    mtb_up_rating: oneOf('mtb_up_ratings').nullish(),
-    mtb_down_rating: oneOf('mtb_down_ratings').nullish(),
+    frequentation: z.nullish(oneOf('frequentation_types')),
+    participant_count: z.nullish(z.number()),
+    elevation_min: z.nullish(z.number()),
+    elevation_max: z.nullish(z.number()),
+    elevation_access: z.nullish(z.number()),
+    elevation_up_snow: z.nullish(z.number()),
+    elevation_down_snow: z.nullish(z.number()),
+    height_diff_up: z.nullish(z.number()),
+    height_diff_down: z.nullish(z.number()),
+    length_total: z.nullish(z.number()),
+    partial_trip: z.nullish(z.boolean()),
+    public_transport: z.nullish(z.boolean()),
+    access_condition: z.nullish(oneOf('access_conditions')),
+    lift_status: z.nullish(oneOf('lift_status')),
+    condition_rating: z.nullish(oneOf('condition_ratings')),
+    snow_quantity: z.nullish(oneOf('snow_quantity_ratings')),
+    snow_quality: z.nullish(oneOf('snow_quality_ratings')),
+    glacier_rating: z.nullish(oneOf('glacier_ratings')),
+    avalanche_signs: z.nullish(z.array(oneOf('avalanche_signs'))),
+    hut_status: z.nullish(oneOf('hut_status')),
+    disable_comments: z.nullish(z.boolean()),
+    hiking_rating: z.nullish(oneOf('hiking_ratings')),
+    ski_rating: z.nullish(oneOf('ski_ratings')),
+    labande_global_rating: z.nullish(oneOf('global_ratings')),
+    snowshoe_rating: z.nullish(oneOf('snowshoe_ratings')),
+    global_rating: z.nullish(oneOf('global_ratings')),
+    height_diff_difficulties: z.nullish(z.number()),
+    engagement_rating: z.nullish(oneOf('engagement_ratings')),
+    equipment_rating: z.nullish(oneOf('equipment_ratings')),
+    rock_free_rating: z.nullish(oneOf('climbing_ratings')),
+    ice_rating: z.nullish(oneOf('ice_ratings')),
+    via_ferrata_rating: z.nullish(oneOf('via_ferrata_ratings')),
+    mtb_up_rating: z.nullish(oneOf('mtb_up_ratings')),
+    mtb_down_rating: z.nullish(oneOf('mtb_down_ratings')),
   },
   {
-    participants: z.string().nullish(),
-    access_comment: z.string().nullish(),
-    weather: z.string().nullish(),
-    timing: z.string().nullish(),
-    conditions_levels: z.string().nullish(),
-    conditions: z.string().nullish(),
-    avalanches: z.string().nullish(),
-    hut_comment: z.string().nullish(),
-    route_description: z.string().nullish(),
+    participants: z.nullish(z.string()),
+    access_comment: z.nullish(z.string()),
+    weather: z.nullish(z.string()),
+    timing: z.nullish(z.string()),
+    conditions_levels: z.nullish(z.string()),
+    conditions: z.nullish(z.string()),
+    avalanches: z.nullish(z.string()),
+    hut_comment: z.nullish(z.string()),
+    route_description: z.nullish(z.string()),
   }
 );
 
@@ -282,7 +282,7 @@ const user = z.object({ user_id: z.number(), name: z.string() });
 // GET /areas/:id (v6_api models/area.py)
 export const area = fullDocument(
   {
-    area_type: oneOf('area_types').nullish(),
+    area_type: z.nullish(oneOf('area_types')),
   },
   {}
 );
@@ -290,10 +290,10 @@ export const area = fullDocument(
 // GET /articles/:id (v6_api models/article.py)
 export const article = fullDocument(
   {
-    categories: z.array(oneOf('article_categories')).nullish(),
-    activities: z.array(oneOf('activities')).nullish(),
-    article_type: oneOf('article_types').nullish(),
-    author: user.nullish(),
+    categories: z.nullish(z.array(oneOf('article_categories'))),
+    activities: z.nullish(z.array(oneOf('activities'))),
+    article_type: z.nullish(oneOf('article_types')),
+    author: z.nullish(user),
   },
   {}
 );
@@ -301,15 +301,15 @@ export const article = fullDocument(
 // GET /books/:id (v6_api models/book.py)
 export const book = fullDocument(
   {
-    editor: z.string().nullish(),
-    activities: z.array(oneOf('activities')).nullish(),
-    url: z.string().nullish(),
-    isbn: z.string().nullish(),
-    book_types: z.array(oneOf('book_types')).nullish(),
-    nb_pages: z.number().nullish(),
-    publication_date: z.string().nullish(),
-    langs: z.array(z.string()).nullish(),
-    author: z.string().nullish(),
+    editor: z.nullish(z.string()),
+    activities: z.nullish(z.array(oneOf('activities'))),
+    url: z.nullish(z.string()),
+    isbn: z.nullish(z.string()),
+    book_types: z.nullish(z.array(oneOf('book_types'))),
+    nb_pages: z.nullish(z.number()),
+    publication_date: z.nullish(z.string()),
+    langs: z.nullish(z.array(z.string())),
+    author: z.nullish(z.string()),
   },
   {}
 );
@@ -317,22 +317,22 @@ export const book = fullDocument(
 // GET /images/:id (v6_api models/image.py)
 export const image = fullDocument(
   {
-    activities: z.array(oneOf('activities')).nullish(),
-    categories: z.array(oneOf('image_categories')).nullish(),
-    image_type: oneOf('image_types').nullish(),
-    elevation: z.number().nullish(),
-    height: z.number().nullish(),
-    width: z.number().nullish(),
-    file_size: z.number().nullish(),
-    date_time: z.string().nullish(),
-    camera_name: z.string().nullish(),
-    exposure_time: z.number().nullish(),
-    focal_length: z.number().nullish(),
-    fnumber: z.number().nullish(),
-    iso_speed: z.number().nullish(),
+    activities: z.nullish(z.array(oneOf('activities'))),
+    categories: z.nullish(z.array(oneOf('image_categories'))),
+    image_type: z.nullish(oneOf('image_types')),
+    elevation: z.nullish(z.number()),
+    height: z.nullish(z.number()),
+    width: z.nullish(z.number()),
+    file_size: z.nullish(z.number()),
+    date_time: z.nullish(z.string()),
+    camera_name: z.nullish(z.string()),
+    exposure_time: z.nullish(z.number()),
+    focal_length: z.nullish(z.number()),
+    fnumber: z.nullish(z.number()),
+    iso_speed: z.nullish(z.number()),
     filename: z.string(),
-    author: z.string().nullish(),
-    creator: user.nullish(),
+    author: z.nullish(z.string()),
+    creator: z.nullish(user),
   },
   {}
 );
@@ -340,9 +340,9 @@ export const image = fullDocument(
 // GET /maps/:id (v6_api models/topo_map.py): its editors and scales are not in common.json
 export const map = fullDocument(
   {
-    editor: z.enum(['IGN', 'Swisstopo', 'Escursionista']).nullish(),
-    scale: z.enum(['25000', '50000', '100000']).nullish(),
-    code: z.string().nullish(),
+    editor: z.nullish(z.enum(['IGN', 'Swisstopo', 'Escursionista'])),
+    scale: z.nullish(z.enum(['25000', '50000', '100000'])),
+    code: z.nullish(z.string()),
   },
   {}
 );
@@ -351,10 +351,10 @@ export const map = fullDocument(
 export const profile = z.union([
   fullDocument(
     {
-      activities: z.array(oneOf('activities')).nullish(),
-      categories: z.array(oneOf('user_categories')).nullish(),
+      activities: z.nullish(z.array(oneOf('activities'))),
+      categories: z.nullish(z.array(oneOf('user_categories'))),
       name: z.string(),
-      forum_username: z.string().nullish(),
+      forum_username: z.nullish(z.string()),
     },
     {}
   ),
@@ -365,42 +365,42 @@ export const profile = z.union([
 // previous_injuries_3 was taken out of the UI's common.json, the API still has it
 export const xreport = fullDocument(
   {
-    elevation: z.number().nullish(),
-    date: z.string().nullish(),
-    event_type: oneOf('event_types').nullish(),
+    elevation: z.nullish(z.number()),
+    date: z.nullish(z.string()),
+    event_type: z.nullish(oneOf('event_types')),
     event_activity: oneOf('event_activities'),
-    nb_participants: z.number().nullish(),
-    nb_impacted: z.number().nullish(),
-    rescue: z.boolean().nullish(),
-    avalanche_level: oneOf('avalanche_levels').nullish(),
-    avalanche_slope: oneOf('avalanche_slopes').nullish(),
-    severity: oneOf('severities').nullish(),
-    author_status: oneOf('author_statuses').nullish(),
-    activity_rate: oneOf('activity_rates').nullish(),
-    age: z.number().nullish(),
-    gender: oneOf('genders').nullish(),
-    previous_injuries: z.enum([...attributes.previous_injuries, 'previous_injuries_3']).nullish(),
-    autonomy: oneOf('autonomies').nullish(),
-    supervision: oneOf('supervision').nullish(),
-    qualification: oneOf('qualification').nullish(),
-    disable_comments: z.boolean().nullish(),
-    anonymous: z.boolean().nullish(),
-    author: user.nullish(),
+    nb_participants: z.nullish(z.number()),
+    nb_impacted: z.nullish(z.number()),
+    rescue: z.nullish(z.boolean()),
+    avalanche_level: z.nullish(oneOf('avalanche_levels')),
+    avalanche_slope: z.nullish(oneOf('avalanche_slopes')),
+    severity: z.nullish(oneOf('severities')),
+    author_status: z.nullish(oneOf('author_statuses')),
+    activity_rate: z.nullish(oneOf('activity_rates')),
+    age: z.nullish(z.number()),
+    gender: z.nullish(oneOf('genders')),
+    previous_injuries: z.nullish(z.enum([...attributes.previous_injuries, 'previous_injuries_3'])),
+    autonomy: z.nullish(oneOf('autonomies')),
+    supervision: z.nullish(oneOf('supervision')),
+    qualification: z.nullish(oneOf('qualification')),
+    disable_comments: z.nullish(z.boolean()),
+    anonymous: z.nullish(z.boolean()),
+    author: z.nullish(user),
   },
   {
-    place: z.string().nullish(),
-    route_study: z.string().nullish(),
-    conditions: z.string().nullish(),
-    training: z.string().nullish(),
-    motivations: z.string().nullish(),
-    group_management: z.string().nullish(),
-    risk: z.string().nullish(),
-    time_management: z.string().nullish(),
-    safety: z.string().nullish(),
-    reduce_impact: z.string().nullish(),
-    increase_impact: z.string().nullish(),
-    modifications: z.string().nullish(),
-    other_comments: z.string().nullish(),
+    place: z.nullish(z.string()),
+    route_study: z.nullish(z.string()),
+    conditions: z.nullish(z.string()),
+    training: z.nullish(z.string()),
+    motivations: z.nullish(z.string()),
+    group_management: z.nullish(z.string()),
+    risk: z.nullish(z.string()),
+    time_management: z.nullish(z.string()),
+    safety: z.nullish(z.string()),
+    reduce_impact: z.nullish(z.string()),
+    increase_impact: z.nullish(z.string()),
+    modifications: z.nullish(z.string()),
+    other_comments: z.nullish(z.string()),
   }
 );
 
@@ -413,10 +413,10 @@ export type Profile = z.input<typeof profile>;
 export type Xreport = z.input<typeof xreport>;
 
 // GET /<type>s/:id of a merged document: only the document it was merged into (v6_api views/document.py)
-export const redirection = z.object({ redirects_to: z.number(), available_langs: z.array(z.string()).nullish() });
+export const redirection = z.object({ redirects_to: z.number(), available_langs: z.nullish(z.array(z.string())) });
 
 // the full schema of each document type, by its name in the API urls
-export const fullDocuments: Record<string, z.ZodType> = {
+export const fullDocuments: Record<string, z.ZodMiniType> = {
   area,
   article,
   book,
@@ -444,7 +444,7 @@ export const feed = z.object({
       participants: z.array(document),
     })
   ),
-  pagination_token: z.string().optional(),
+  pagination_token: z.optional(z.string()),
 });
 
 // GET /documents/changes: the recent changes; the last page has no pagination token
@@ -454,12 +454,12 @@ export const documentChanges = z.object({
       written_at: z.string(),
       lang: z.string(),
       version_id: z.number(),
-      comment: z.string().nullable(),
-      document: z.object({ document_id: z.number(), type: z.string(), title: z.string().nullish() }),
+      comment: z.nullable(z.string()),
+      document: z.object({ document_id: z.number(), type: z.string(), title: z.nullish(z.string()) }),
       user: z.object({ user_id: z.number(), name: z.string() }),
     })
   ),
-  pagination_token: z.string().optional(),
+  pagination_token: z.optional(z.string()),
 });
 
 // GET /users/account

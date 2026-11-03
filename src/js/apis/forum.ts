@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as z from 'zod/mini';
 
 import BaseApi from '@/js/apis/BaseApi';
 import { checkResponse } from '@/js/apis/check-response';
@@ -11,9 +11,9 @@ type ForumUser = z.input<typeof forumUser>;
 const topic = z.object({
   last_poster_username: z.string(),
   // recent Discourse gives tags as objects ({ id, name, slug }), older ones as plain strings
-  tags: z.array(z.union([z.string(), z.object({ name: z.string() })])).optional(),
+  tags: z.optional(z.array(z.union([z.string(), z.object({ name: z.string() })]))),
   // not from Discourse: linked by getLatest()
-  last_poster_user: forumUser.optional(),
+  last_poster_user: z.optional(forumUser),
 });
 type Topic = z.input<typeof topic>;
 
@@ -21,7 +21,7 @@ const latestTopics = z.object({ users: z.array(forumUser), topic_list: z.object(
 
 // the announcements show the last post of their topic, when the topic has the visible tag
 const post = z.object({ cooked: z.string(), updated_at: z.string() });
-const topicWithPosts = topic.pick({ tags: true }).extend({ post_stream: z.object({ posts: z.array(post) }) });
+const topicWithPosts = z.extend(z.pick(topic, { tags: true }), { post_stream: z.object({ posts: z.array(post) }) });
 
 // Discourse does not resolve a topic from its slug alone (/t/annonce-fr.json) anymore: the id is required.
 // /t/id_for/<slug> could give it, but fails when another topic hidden from visitors uses the same slug,
