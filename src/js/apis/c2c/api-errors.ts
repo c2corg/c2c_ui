@@ -3,6 +3,11 @@ import { type ApiError, apiError, errorResponse } from './schemas';
 
 import { checkResponse } from '@/js/apis/check-response';
 
+// the 403 answers of the API, by the permission the request lacks (shown by the
+// confirmation windows and the edition forms)
+// $gettext('Authentication required', 'API message')
+// $gettext('Moderator role required', 'API message')
+
 // $gettext('An unexpected error occurred, please try again', 'API message')
 const unexpected = (): ApiError => ({
   location: 'body',
