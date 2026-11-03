@@ -602,7 +602,6 @@
     "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Keine Bearbeitungen — Wenn Sie das Material remixen, verändern oder darauf anderweitig direkt aufbauen dürfen Sie die bearbeitete Fassung der Materials nicht verbreiten.",
     "Non sensitive period": "keine Empfindlichkeit",
     "NonCommercial — You may not use the material for commercial purposes.": "Nicht kommerziell — Sie dürfen das Material nicht für kommerzielle Zwecke nutzen.",
-    "Not a known message": "Unbekannte Nachricht",
     "Not simplified yet": "Noch nicht vereinfacht",
     "Note that comments have to be transferred manually in Discourse before merging.": "Beachten Sie, dass Kommentare vor der Vereinigung in Discourse manuell übergeben werden müssen.",
     "Note that the topoguide username will be the one mentioned in the attribution of the content you contributed to.": "Der Topoführername ist der, der in den Zuordnungen der Inhalte, zu denen Sie beitragen, genannt wird.",
@@ -951,7 +950,6 @@
     "You may add associated waypoints, books and articles": "Sie können Wegpunkte, Bücher oder Artikeln verbinden",
     "You may also drag, draw or edit the track on the map.": "Sie können die Strecke auch direkt auf die Karte ziehen, zeichnen oder bearbeiten.",
     "You need to activate your by clicking the link sent to your email address.": "Sie müssen Ihr Konto aktivieren, indem Sie auf den Link klicken, der an Ihre Email-Adresse gesendet wurde.",
-    "Your English message": "Votre message en anglais",
     "Your account is now bound to the new email address you filled in.": "Ihr Konto ist jetzt an die neue E-Mail-Adresse gebunden, die Sie eingegeben haben.",
     "Your account was successfully created": "Ihr Konto wurde erfolgreich erstellt",
     "Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has more restrictions, mainly no accent and no space.": "Ihr Forumsname wird im Forumsbereich der Website verwendet. Er kann jederzeit in den Einstellungen frei geändert werden. Es gibt mehr Einschränkungen bei den Zeichen, hauptsächlich keine Akzente und keine Leerzeichen.",
@@ -1374,10 +1372,6 @@
       "langs": "französisch"
     },
     "frequentation": "Begehungsfrequenz",
-    "from javascript": "aus Javascript",
-    "from typescript": {
-      "some context": "aus Typescript"
-    },
     "garmin": "Garmin Connect™",
     "gas_unstaffed": "Gas (nicht bewartet)",
     "gear": {
