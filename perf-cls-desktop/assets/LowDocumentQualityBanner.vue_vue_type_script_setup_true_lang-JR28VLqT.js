@@ -1,4 +1,0 @@
-import{c as m}from"./index-B2_fOixy.js";import{d as p,r as c,j as f,o,c as e,k as s,b as n,a as v,w as g,l as k}from"./vendor-C7cuu7ky.js";const w={class:"notification is-info no-print"},_=p({__name:"LowDocumentQualityBanner",props:{...m},setup(a){const r=a,l=k(()=>r.document?r.document.cooked.lang:null);return(d,t)=>{const u=c("edit-link"),i=f("translate");return o(),e("div",w,[s((o(),e("span",null,[...t[0]||(t[0]=[n("This document is a draft.",-1)])])),[[i]]),t[3]||(t[3]=n()),v(u,{document:d.document,lang:l.value},{default:g(()=>[s((o(),e("span",null,[...t[1]||(t[1]=[n("Feel free to edit it.",-1)])])),[[i]])]),_:1},8,["document","lang"]),t[4]||(t[4]=n()),s((o(),e("span",null,[...t[2]||(t[2]=[n(`
-      Provide information and improve its quality, following the contribution rules and respecting copyright.
-    `,-1)])])),[[i]])])}}});export{_};
-//# sourceMappingURL=LowDocumentQualityBanner.vue_vue_type_script_setup_true_lang-JR28VLqT.js.map
