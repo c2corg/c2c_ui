@@ -124,5 +124,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/c2corg/c2c_ui.git"
+  },
+  "allowScripts": {
+    "core-js": false,
+    "esbuild": true,
+    "unrs-resolver": true
   }
 }
