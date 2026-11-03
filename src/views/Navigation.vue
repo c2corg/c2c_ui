@@ -188,6 +188,7 @@ import IconHelp from '@/components/generics/icons/IconHelp.vue';
 import IconJoinUs from '@/components/generics/icons/IconJoinUs.vue';
 import JoinUsLink from '@/components/generics/links/JoinUsLink.vue';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { useIsHomePage } from '@/js/composables/home-page';
 import config from '@/js/config';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
@@ -299,8 +300,9 @@ function signout() {
   });
 }
 
+const isHomePage = useIsHomePage();
 function homePage() {
-  return route.path === '/home' || route.path === '/';
+  return isHomePage.value;
 }
 
 window.addEventListener('click', onClick);

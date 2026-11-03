@@ -1,6 +1,10 @@
 <template>
   <swiper-container slides-per-view="auto" space-between="15" class="swiper">
-    <swiper-slide style="height: 200px" v-for="image of images" :key="image.document_id">
+    <swiper-slide
+      v-for="image of images"
+      :key="image.document_id"
+      :style="{ height: SLIDE_HEIGHT + 'px', width: slideWidth(image) }"
+    >
       <thumbnail
         :img="image"
         size="MI"
@@ -19,7 +23,21 @@ import { watch, type PropType } from 'vue';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import '@/js/swiper-element';
 
-type GalleryImage = { document_id: number; filename?: string; locales: { title?: string | null }[] };
+type GalleryImage = {
+  document_id: number;
+  filename?: string;
+  locales: { title?: string | null }[];
+  width?: number | null;
+  height?: number | null;
+};
+
+const SLIDE_HEIGHT = 200;
+
+// the width of an image at the height of the slides, when the API gives its size: the slide keeps it while the image
+// loads, instead of growing from nothing and pushing the next ones (#4883)
+function slideWidth(image: GalleryImage) {
+  return image.width && image.height ? `${Math.round((SLIDE_HEIGHT * image.width) / image.height)}px` : undefined;
+}
 
 const props = defineProps({
   images: {

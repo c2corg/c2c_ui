@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { type ImageSize, getEmbeddedImageUrl, getImageUrl } from './image-urls';
+import { type ImageSize, getEmbeddedImageUrl, getImageUrl, getThumbnailSize } from './image-urls';
 
 // '@/js/config' reads CAMPTOCAMP_CONFIG, a constant injected by Vite (see vite.config.mjs)
 const config = vi.hoisted(() => ({
@@ -171,5 +171,24 @@ describe('getEmbeddedImageUrl', () => {
     expect(getEmbeddedImageUrl({ url: `${MEDIA}/noextension`, urlProxy }, 'avif')).toBe(
       `${API}${urlProxy}&extension=avif`
     );
+  });
+});
+
+// v6_images: BI fits in 1500x1500 and MI in 400x400, never enlarged (checked against 30 production images)
+describe('getThumbnailSize', () => {
+  it('fits the original in the box of the thumbnail', () => {
+    expect(getThumbnailSize({ width: 4000, height: 3000 }, 'BI')).toEqual({ width: 1500, height: 1125 });
+    expect(getThumbnailSize({ width: 909, height: 1611 }, 'BI')).toEqual({ width: 846, height: 1500 });
+    expect(getThumbnailSize({ width: 4000, height: 3000 }, 'MI')).toEqual({ width: 400, height: 300 });
+  });
+
+  it('does not enlarge a smaller original', () => {
+    expect(getThumbnailSize({ width: 800, height: 600 }, 'BI')).toEqual({ width: 800, height: 600 });
+  });
+
+  it('gives nothing without the size of the original, or for SI (cropped)', () => {
+    expect(getThumbnailSize({ width: null, height: 600 }, 'BI')).toBeUndefined();
+    expect(getThumbnailSize({}, 'MI')).toBeUndefined();
+    expect(getThumbnailSize({ width: 800, height: 600 }, 'SI')).toBeUndefined();
   });
 });

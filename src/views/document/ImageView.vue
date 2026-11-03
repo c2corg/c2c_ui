@@ -42,7 +42,7 @@
       <div class="column is-9">
         <div class="box is-paddingless">
           <a :href="getOriginalImageUrl(document as Image)">
-            <thumbnail class="main-image" :img="document" size="BI" />
+            <thumbnail class="main-image" :img="document" size="BI" reserve-size />
           </a>
         </div>
 
