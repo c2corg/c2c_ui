@@ -10,8 +10,9 @@
 
     <meta name="theme-color" content="#F93" />
     <meta name="application-name" content="Camptocamp.org" />
-    <!-- runtime configuration (backend urls), before the app: replaced when the container starts, empty otherwise -->
-    <script src="%BASE_URL%config.js" nonce="__CSP_NONCE__"></script>
+    <!-- runtime configuration (backend urls), before the app: inlined here when the container starts (data-c2c-config,
+      docker/runtime-config.sh), so that the first render doesn't wait for another request; empty otherwise -->
+    <script src="%BASE_URL%config.js" nonce="__CSP_NONCE__" data-c2c-config></script>
     <!-- data-c2c-url: updated when the container starts if the matching C2C_*_URL variable is set (docker/runtime-config.sh) -->
     <link rel="preconnect" href="%CAMPTOCAMP_API_URL%" data-c2c-url="api" />
     <link rel="preconnect" href="%CAMPTOCAMP_MEDIA_URL%" data-c2c-url="media" />

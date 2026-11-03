@@ -1,6 +1,6 @@
 #!/bin/sh
 # Writes the runtime configuration of the app (/config.js) from the C2C_* environment variables, so that one image
-# can serve any backend. Variables that are not set keep the value baked at build time.
+# can serve any backend, and inlines it in index.html (see the end of this script). Variables that are not set keep the value baked at build time.
 #
 #   C2C_BACKEND            name of one of the backends of the build (prod, demo...), as the starting point
 #   C2C_API_URL            https://api.example.org
@@ -78,3 +78,13 @@ update_preconnect() {
 }
 update_preconnect api "${C2C_API_URL:-}"
 update_preconnect media "${C2C_MEDIA_URL:-}"
+
+# The configuration inline in index.html, in place of its <script src="config.js" data-c2c-config> (or of the inline
+# script of a previous start): the first render no longer waits for another request (#4881). The script keeps the
+# CSP nonce placeholder, which openresty fills on each request. The file only holds validated urls and identifiers
+# (no quote, no "<"), which can't close the script.
+inline=$(grep -v '^//' "$out" | tr '\n' ' ' | sed -e 's/ *$//' -e 's/[\\&|]/\\&/g')
+sed -i -E "s|<script[^>]*data-c2c-config[^>]*>.*</script>|<script nonce=\"__CSP_NONCE__\" data-c2c-config>$inline</script>|" \
+  "$html_dir/index.html"
+grep -q '<script nonce="__CSP_NONCE__" data-c2c-config>window.CAMPTOCAMP_RUNTIME_CONFIG' "$html_dir/index.html" ||
+  fail "the runtime configuration could not be inlined in index.html (no <script data-c2c-config>?)"
