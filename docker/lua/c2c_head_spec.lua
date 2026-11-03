@@ -1,6 +1,8 @@
--- Tests of c2c_head.lua, run from the repository root with a LuaJIT that has cjson (the one of the openresty image):
+-- Tests of c2c_head.lua, run from the repository root with a LuaJIT that has cjson, e.g. the one of the image (CI):
 --
 --   luajit docker/lua/c2c_head_spec.lua
+--   docker run --rm -v "$PWD:/src" -w /src -e 'LUA_CPATH=/usr/local/openresty/lualib/?.so;;' c2c_ui:test \
+--     /usr/local/openresty/luajit/bin/luajit docker/lua/c2c_head_spec.lua
 package.path = 'docker/lua/?.lua;' .. package.path
 
 local cjson = require('cjson.safe')

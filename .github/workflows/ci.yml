@@ -57,7 +57,8 @@ jobs:
         # the Lua tests of the head tags of the document pages, and a smoke test of the image serving them
         run: |
           docker build -t c2c_ui:test .
-          docker run --rm -v "$PWD:/src" -w /src c2c_ui:test resty docker/lua/c2c_head_spec.lua
+          docker run --rm -v "$PWD:/src" -w /src -e 'LUA_CPATH=/usr/local/openresty/lualib/?.so;;' c2c_ui:test \
+            /usr/local/openresty/luajit/bin/luajit docker/lua/c2c_head_spec.lua
           docker/test-head.sh c2c_ui:test
       - name: Docker meta
         id: docker_meta
