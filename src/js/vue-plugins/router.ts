@@ -9,35 +9,34 @@ import {
 import config from '@/js/config';
 import constants, { type DocumentDefinition } from '@/js/constants';
 import { once } from '@/js/event-bus';
-import AreaView from '@/views/document/AreaView.vue';
-import ArticleView from '@/views/document/ArticleView.vue';
-import BookView from '@/views/document/BookView.vue';
-import ImageView from '@/views/document/ImageView.vue';
-import MapView from '@/views/document/MapView.vue';
-import OutingView from '@/views/document/OutingView.vue';
-import ProfileView from '@/views/document/ProfileView.vue';
-import RouteView from '@/views/document/RouteView.vue';
-import WaypointView from '@/views/document/WaypointView.vue';
-import XreportView from '@/views/document/XreportView.vue';
-import DocumentsPrintingView from '@/views/documents/DocumentsPrintingView.vue';
-import DocumentsView from '@/views/documents/DocumentsView.vue';
-import HomeView from '@/views/portals/HomeView.vue';
-import ItinevertView from '@/views/portals/ItinevertView.vue';
-import SophiePictureContestView from '@/views/portals/SophiePictureContestView.vue';
-import OutingsStatsView from '@/views/portals/outings-stats/OutingsStatsView.vue';
 import NotFoundView from '@/views/static-views/NotFoundView.vue';
-import SeracView from '@/views/static-views/SeracView.vue';
-import TopoguideView from '@/views/static-views/TopoguideView.vue';
-import AccountView from '@/views/user/AccountView.vue';
-import FollowingView from '@/views/user/FollowingView.vue';
-import LoginView from '@/views/user/LoginView.vue';
-import PreferencesView from '@/views/user/PreferencesView.vue';
-import TrackersExchangeTokenView from '@/views/user/TrackersExchangeTokenView.vue';
-import TrackersView from '@/views/user/TrackersView.vue';
 
-// lazy-load components
-// actually, only diff is quite big, because of diff computation
-// but lets group together this three views.
+// The views are loaded with their first navigation, not in the startup bundle (#4875). NotFoundView stays in it:
+// LoadingNotification, a global component, shows it.
+const AreaView = () => import('@/views/document/AreaView.vue');
+const ArticleView = () => import('@/views/document/ArticleView.vue');
+const BookView = () => import('@/views/document/BookView.vue');
+const ImageView = () => import('@/views/document/ImageView.vue');
+const MapView = () => import('@/views/document/MapView.vue');
+const OutingView = () => import('@/views/document/OutingView.vue');
+const ProfileView = () => import('@/views/document/ProfileView.vue');
+const RouteView = () => import('@/views/document/RouteView.vue');
+const WaypointView = () => import('@/views/document/WaypointView.vue');
+const XreportView = () => import('@/views/document/XreportView.vue');
+const DocumentsPrintingView = () => import('@/views/documents/DocumentsPrintingView.vue');
+const DocumentsView = () => import('@/views/documents/DocumentsView.vue');
+const HomeView = () => import('@/views/portals/HomeView.vue');
+const ItinevertView = () => import('@/views/portals/ItinevertView.vue');
+const SophiePictureContestView = () => import('@/views/portals/SophiePictureContestView.vue');
+const OutingsStatsView = () => import('@/views/portals/outings-stats/OutingsStatsView.vue');
+const SeracView = () => import('@/views/static-views/SeracView.vue');
+const TopoguideView = () => import('@/views/static-views/TopoguideView.vue');
+const AccountView = () => import('@/views/user/AccountView.vue');
+const FollowingView = () => import('@/views/user/FollowingView.vue');
+const LoginView = () => import('@/views/user/LoginView.vue');
+const PreferencesView = () => import('@/views/user/PreferencesView.vue');
+const TrackersExchangeTokenView = () => import('@/views/user/TrackersExchangeTokenView.vue');
+const TrackersView = () => import('@/views/user/TrackersView.vue');
 const AreaEditionView = () => import('@/views/wiki/edition/AreaEditionView.vue');
 const ArticleEditionView = () => import('@/views/wiki/edition/ArticleEditionView.vue');
 const BookEditionView = () => import('@/views/wiki/edition/BookEditionView.vue');
