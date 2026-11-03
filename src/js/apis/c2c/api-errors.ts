@@ -8,6 +8,10 @@ import { checkResponse } from '@/js/apis/check-response';
 // $gettext('Authentication required', 'API message')
 // $gettext('Moderator role required', 'API message')
 
+// the 400 answer of a nonce request (e.g. a password change) for an account whose
+// email is not validated (shown by the login forms)
+// $gettext('Account not validated yet', 'API message')
+
 // $gettext('An unexpected error occurred, please try again', 'API message')
 const unexpected = (): ApiError => ({
   location: 'body',
