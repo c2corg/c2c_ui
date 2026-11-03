@@ -22,7 +22,7 @@ if (config.isBackendSelectable) {
   config.urls = config.urlsConfigurations['demo'];
 }
 
-// Backend urls given when the container starts (window.CAMPTOCAMP_RUNTIME_CONFIG, from /config.js), over the ones of
+// Backend urls given when the container starts (window.CAMPTOCAMP_RUNTIME_CONFIG, from /config.js or inline in index.html), over the ones of
 // the build: the same image can serve any backend
 applyRuntimeConfig(config, window.CAMPTOCAMP_RUNTIME_CONFIG);
 

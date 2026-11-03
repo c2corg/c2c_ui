@@ -50,6 +50,10 @@ echo "$html" | grep -q '<title>E2E sommet : E2E voie - Camptocamp.org</title>' |
 echo "$html" | grep -q '<meta property="og:title" content="E2E sommet : E2E voie" id="meta-og-title" />' ||
   fail "no og:title: $html"
 echo "$html" | grep -q '__CSP_NONCE__' && fail "CSP nonce placeholder left: $html"
+# the runtime configuration inline, with the nonce of the request, instead of a request to /config.js (#4881)
+echo "$html" | grep -Eq '<script nonce="[^"_]+" data-c2c-config>window\.CAMPTOCAMP_RUNTIME_CONFIG = \{.*api: "https://api\.invalid"' ||
+  fail "runtime configuration not inline: $html"
+echo "$html" | grep -q 'src="/config.js"' && fail "index.html still loads /config.js: $html"
 
 # from the cache this time: the fake API is gone
 kill "$api_pid"
