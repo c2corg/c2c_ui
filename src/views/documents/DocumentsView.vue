@@ -225,7 +225,7 @@ function getDocumentTypeTitle(documentType: string) {
 // openLayer need an explicit resize
 function updateMapSize(newValue: string, oldValue: string) {
   if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
-    nextTick(() => olMap.value!.map.updateSize());
+    nextTick(() => olMap.value?.map.updateSize());
   }
 }
 

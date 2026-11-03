@@ -1,10 +1,11 @@
 // This file exposes a simple function that upload a file to c2c image backend
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { containsXY } from 'ol/extent';
+import { get as getProjection, transform } from 'ol/proj';
 
 import Worker from '@/js/Worker';
 import c2c from '@/js/apis/c2c';
-import ol from '@/js/libs/ol';
 
 dayjs.extend(customParseFormat);
 
@@ -22,7 +23,7 @@ type Tags = Record<string, any> | null;
 type ImageDocument = Record<string, unknown>;
 
 // get all world extent. sometimes, geoloc in exif is outside this extent.
-const worldExtent = ol.proj.get('EPSG:4326')!.getExtent();
+const worldExtent = getProjection('EPSG:4326')!.getExtent();
 
 // this worker will handle network upload : only on upload at a time
 const worker = new Worker();
@@ -74,11 +75,11 @@ const parseExifGeometry = (exif: Tags) => {
   const lat = convertDMSToDecimal(latDMS[0], latDMS[1], latDMS[2], exif.GPSInfo?.GPSLatitudeRef);
   const lon = convertDMSToDecimal(lonDMS[0], lonDMS[1], lonDMS[2], exif.GPSInfo?.GPSLongitudeRef);
 
-  if (Number.isNaN(lat) || Number.isNaN(lon) || !ol.extent.containsXY(worldExtent, lon, lat)) {
+  if (Number.isNaN(lat) || Number.isNaN(lon) || !containsXY(worldExtent, lon, lat)) {
     return undefined;
   }
 
-  const location = ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
+  const location = transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
   const geom = { coordinates: location, type: 'Point' };
 
   return { geom: JSON.stringify(geom) };

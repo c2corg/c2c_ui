@@ -66,11 +66,8 @@ import MapLinks from './MapLinks.vue';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import bus from '@/js/event-bus';
-import ol from '@/js/libs/ol';
 import { documentProperty, useDocumentType } from '@/js/properties';
 import utils from '@/js/utils';
-
-const GeoJSON = new ol.format.GeoJSON();
 
 const props = defineProps({ ...documentProperty });
 
@@ -145,15 +142,20 @@ function resizePin() {
   togglePinToSide(false);
 }
 
-function downloadKml() {
-  downloadFeatures(new ol.format.KML(), '.kml', 'application/vnd.google-earth.kml+xml');
+// the OpenLayers formats are only loaded for a download
+async function downloadKml() {
+  const { default: KML } = await import('ol/format/KML');
+  await downloadFeatures(new KML(), '.kml', 'application/vnd.google-earth.kml+xml');
 }
 
-function downloadGpx() {
-  downloadFeatures(new ol.format.GPX(), '.gpx', 'application/gpx+xml');
+async function downloadGpx() {
+  const { default: GPX } = await import('ol/format/GPX');
+  await downloadFeatures(new GPX(), '.gpx', 'application/gpx+xml');
 }
 
-function downloadFeatures(format: FeatureFormat, extension: string, mimetype: string) {
+async function downloadFeatures(format: FeatureFormat, extension: string, mimetype: string) {
+  const { default: GeoJSONFormat } = await import('ol/format/GeoJSON');
+  const GeoJSON = new GeoJSONFormat();
   const geometry = props.document.geometry!;
   let features: Feature[] = [];
   if (geometry.geom_detail) {
