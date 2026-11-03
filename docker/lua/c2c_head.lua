@@ -48,8 +48,9 @@ local SITE_URL = 'https://www.camptocamp.org'
 local LICENSE_PAGE = 'https://www.camptocamp.org/articles/106728'
 local DESCRIPTION_LENGTH = 200
 
--- seconds a built head (or the absence of a document) is kept in the shared dict
-M.CACHE_TTL = 300
+-- seconds a built head (or the absence of a document) is kept in the shared dict: an edit shows in the link previews
+-- within the hour (the app always shows the current tags); every hit saves an API request
+M.CACHE_TTL = 3600
 M.MISS_TTL = 60
 
 --- The document type, id and language of a document view path, nil for any other path
