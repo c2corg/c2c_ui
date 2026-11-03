@@ -1,0 +1,36 @@
+# Huawei search: heavy crawling, little value for our audience (also blocked at HAProxy)
+User-agent: PetalBot
+Disallow: /
+
+# SEO crawlers: heavy on the API, no value for our audience
+User-agent: AhrefsBot
+User-agent: SemrushBot
+User-agent: MJ12bot
+User-agent: DotBot
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: *
+# Pages that only make sense for a logged-in user
+Disallow: /auth
+Disallow: /auth-sso
+Disallow: /account
+Disallow: /following
+Disallow: /preferences
+Disallow: /trackers
+# Editing and history: one URL per version of every document, expensive for the API
+Disallow: /*/add/
+Disallow: /*/edit/
+Disallow: /*/history/
+Disallow: /*/version/
+Disallow: /*/diff/
+Disallow: /*/print
+# Filtered/paginated lists: endless combinations of map area and page
+Disallow: /*bbox=
+Disallow: /*offset=
+# Heavy aggregate page
+Disallow: /outings-stats
+# Honoured by Bing, Yandex and others; ignored by Google
+Crawl-delay: 2
+
+Sitemap: https://api.camptocamp.org/sitemaps.xml
