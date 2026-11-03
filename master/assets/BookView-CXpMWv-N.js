@@ -1,2 +1,0 @@
-import{_ as o}from"./BookView.vue_vue_type_script_setup_true_lang-DovcJaOV.js";import"./DocumentPrintLicense-D3T0LprC.js";import"./index-Bc7GwPCF.js";import"./vendor-DXbOOmw3.js";import"./FieldView.vue_vue_type_script_setup_true_lang-tlRNAadq.js";import"./CommentsBox-kYOF7WpN.js";import"./ToolBox-BGJT-Fwt.js";import"./Gallery-CN7_BGaW.js";import"./MapBox-BvmPBBlI.js";import"./d3-D_aZ4KW8.js";import"./RoutesBox-DYzFEt4x.js";import"./ActivitiesField-CQlYKMTw.js";import"./MarkdownSection-CM1JVxtG.js";export{o as default};
-//# sourceMappingURL=BookView-CXpMWv-N.js.map
