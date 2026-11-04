@@ -85,6 +85,19 @@ describe('Markdown', () => {
     expect(imgs[5].getAttribute('width')).toBe(null);
   });
 
+  it('keeps the placeholder size for invalid sizes, which raw HTML may give', async () => {
+    const image = (width: string, height: string) =>
+      `<figure c2c:role="embedded-figure"><img c2c:role="embedded-image" c2c:document-id="34" c2c:url-proxy="/images/proxy/34" c2c:size="MI" c2c:width="${width}" c2c:height="${height}" /></figure>`;
+    const { wrapper } = await mountMarkdown(
+      [image('Infinity', '300'), image('-4', '3'), image('4.5', '3'), image('x', '3'), image('1', '5000')].join('')
+    );
+
+    for (const img of wrapper.findAll('img')) {
+      expect(img.classes()).toContain('is-loading');
+      expect(img.attributes('width')).toBeUndefined();
+    }
+  });
+
   it('styles the notes, sanitizes the content, and follows its changes', async () => {
     const { wrapper } = await mountMarkdown('<div c2c:role="info">Note</div><script>alert(1)</script>');
 

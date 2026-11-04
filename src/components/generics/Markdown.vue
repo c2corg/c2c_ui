@@ -145,13 +145,17 @@ function computeFigures(figures: Iterable<Element>) {
  */
 function reserveImageSpace(image: HTMLImageElement): boolean {
   const original = { width: Number(image.getAttribute('c2c:width')), height: Number(image.getAttribute('c2c:height')) };
-  if (!original.width || !original.height) {
+  // positive integers only: raw HTML in the text may carry these attributes too, with any value
+  const isSize = (size: { width: number; height: number } | undefined): size is { width: number; height: number } =>
+    !!size && [size.width, size.height].every((value) => Number.isSafeInteger(value) && value > 0);
+  if (!isSize(original)) {
     return false;
   }
   const size = image.getAttribute('c2c:size') as ImageSize | '' | null;
   // SI is cropped to 200x200, no size is the original (v6_images)
   const shown = size === 'SI' ? { width: 200, height: 200 } : size ? getThumbnailSize(original, size) : original;
-  if (!shown) {
+  // a very thin image may round to 0 px
+  if (!isSize(shown)) {
     return false;
   }
   // the bounds of the CSS (max-width: 100%, height: auto) keep the ratio
