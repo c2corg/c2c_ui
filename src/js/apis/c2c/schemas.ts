@@ -483,3 +483,17 @@ export type ApiError = z.input<typeof apiError>;
 
 // an error answer, of any request: { status: 'error', errors: [{ location, name, description }] } (v6_api web/errors.py)
 export const errorResponse = z.object({ status: z.literal('error'), errors: z.array(apiError) });
+
+// an error of a validation answer of FastAPI: { loc: ['body', 'locales', 0, 'title'], msg: 'Field required',
+// type: 'missing' }, with the limits of the check in ctx ({ max_length: 25 })
+export const validationError = z.object({
+  loc: z.array(z.union([z.string(), z.number()])),
+  msg: z.string(),
+  type: z.string(),
+  ctx: z.optional(z.record(z.string(), z.unknown())),
+});
+
+export type ValidationError = z.input<typeof validationError>;
+
+// the 422 answer of invalid parameters or body: { detail: [...] } (FastAPI, see v6_api#2546)
+export const validationErrorResponse = z.object({ detail: z.array(validationError) });
