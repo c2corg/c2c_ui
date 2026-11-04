@@ -1,7 +1,7 @@
 <template>
   <div class="no-print">
     <div class="gdpr-content" :class="{ active: active }">
-      <h4 class="title" v-translate>Control the use of your personal data</h4>
+      <h2 class="title" v-translate>Control the use of your personal data</h2>
       <div class="message">
         <span v-translate class="has-text-justified">
           Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website,
