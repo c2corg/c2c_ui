@@ -51,6 +51,40 @@ describe('Markdown', () => {
     expect(imageViewer.show).toHaveBeenCalledWith(image);
   });
 
+  it('keeps the space of an embedded image while it loads, from the size of its original', async () => {
+    const image = (size: string, width?: number, height?: number) =>
+      `<figure c2c:role="embedded-figure"><img c2c:role="embedded-image" c2c:document-id="34" c2c:url-proxy="/images/proxy/34" c2c:size="${size}"` +
+      (width ? ` c2c:width="${width}" c2c:height="${height}"` : '') +
+      ' /></figure>';
+    const { wrapper } = await mountMarkdown(
+      [
+        image('BI', 4000, 3000),
+        image('MI', 4000, 3000),
+        image('MI', 3000, 4000),
+        image('SI', 4000, 3000),
+        image('', 800, 600),
+        image('MI'),
+      ].join('')
+    );
+    const imgs = wrapper.findAll('img').map((img) => img.element as HTMLImageElement);
+
+    // BI: the thumbnail's size, the CSS keeps the ratio
+    expect([imgs[0].width, imgs[0].height]).toEqual([1500, 1125]);
+    // MI: bounded by min(400px, 25vw) on its longer side
+    expect([imgs[1].width, imgs[1].height]).toEqual([400, 300]);
+    expect(imgs[1].style.width).toBe('min(400px, 400px, 25vw)');
+    expect(imgs[1].style.aspectRatio).toBe('400 / 300');
+    expect(imgs[2].style.height).toBe('min(400px, 400px, 25vw)');
+    expect(imgs[2].style.width).toBe('auto');
+    // SI: cropped square; no size: the original
+    expect([imgs[3].width, imgs[3].height]).toEqual([200, 200]);
+    expect([imgs[4].width, imgs[4].height]).toEqual([800, 600]);
+    expect(imgs.slice(0, 5).every((img) => !img.classList.contains('is-loading'))).toBe(true);
+    // unknown size (an older API): the placeholder size as before
+    expect(imgs[5].classList.contains('is-loading')).toBe(true);
+    expect(imgs[5].getAttribute('width')).toBe(null);
+  });
+
   it('styles the notes, sanitizes the content, and follows its changes', async () => {
     const { wrapper } = await mountMarkdown('<div c2c:role="info">Note</div><script>alert(1)</script>');
 

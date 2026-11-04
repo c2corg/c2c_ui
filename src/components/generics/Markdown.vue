@@ -12,7 +12,7 @@ import { useRouter } from 'vue-router';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
 import iconSvg from '@/js/icon-svg';
-import { getEmbeddedImageUrl } from '@/js/image-urls';
+import { getEmbeddedImageUrl, getThumbnailSize, type ImageSize } from '@/js/image-urls';
 import { sanitizeRichHtml } from '@/js/sanitize-html';
 import type { ViewerImage } from '@/js/vue-plugins/image-viewer';
 
@@ -139,6 +139,40 @@ function computeFigures(figures: Iterable<Element>) {
   }
 }
 
+/**
+ * Gives an embedded image the size it will have, from the size of its original (c2c:width and c2c:height, given by the
+ * API since v6_api #2579): the page keeps its space while it loads, instead of shifting (#4883). False when unknown.
+ */
+function reserveImageSpace(image: HTMLImageElement): boolean {
+  const original = { width: Number(image.getAttribute('c2c:width')), height: Number(image.getAttribute('c2c:height')) };
+  if (!original.width || !original.height) {
+    return false;
+  }
+  const size = image.getAttribute('c2c:size') as ImageSize | '' | null;
+  // SI is cropped to 200x200, no size is the original (v6_images)
+  const shown = size === 'SI' ? { width: 200, height: 200 } : size ? getThumbnailSize(original, size) : original;
+  if (!shown) {
+    return false;
+  }
+  // the bounds of the CSS (max-width: 100%, height: auto) keep the ratio
+  image.width = shown.width;
+  image.height = shown.height;
+  if (size === 'MI') {
+    // a medium image fits in min(400px, 25vw) both ways (styles below): bound its longer side, the other one follows
+    // the ratio (bounding both would squash it)
+    const bound = `min(${Math.max(shown.width, shown.height)}px, 400px, 25vw)`;
+    image.style.aspectRatio = `${shown.width} / ${shown.height}`;
+    if (shown.width >= shown.height) {
+      image.style.width = bound;
+      image.style.height = 'auto';
+    } else {
+      image.style.height = bound;
+      image.style.width = 'auto';
+    }
+  }
+  return true;
+}
+
 function computeImages(images: Iterable<EmbeddedImage>) {
   for (const image of images) {
     const document_id = parseInt(image.attributes.getNamedItem('c2c:document-id')!.value, 10);
@@ -184,8 +218,11 @@ function computeImages(images: Iterable<EmbeddedImage>) {
     // image proxy when the direct media url is not known): only load them when they get
     // close to the viewport.
     // loading must be set before src, and the image needs a size while it is loading,
-    // otherwise all the 0x0 images are considered in the viewport and loaded at once.
-    image.classList.add('is-loading');
+    // otherwise all the 0x0 images are considered in the viewport and loaded at once:
+    // its own, when known, else a placeholder size (is-loading)
+    if (!reserveImageSpace(image)) {
+      image.classList.add('is-loading');
+    }
     const onLoaded = () => image.classList.remove('is-loading');
     image.addEventListener('load', onLoaded, { once: true });
     image.addEventListener('error', onLoaded, { once: true });
