@@ -45,6 +45,8 @@
       <button
         v-if="hasMapLinks"
         class="button is-small"
+        :aria-label="$gettext('maps')"
+        :aria-expanded="mapLinksAreVisible"
         @click="mapLinksAreVisible = !mapLinksAreVisible"
         :class="{ 'is-success': mapLinksAreVisible }"
       >

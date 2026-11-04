@@ -7,7 +7,8 @@
       class="ol-control ol-control-layer-switcher-button"
       :title="$gettext('Layers', 'Map controls')"
     >
-      <button @click.stop="showLayerSwitcher = !showLayerSwitcher">
+      <!-- the title of the control, also the name of its button for screen readers -->
+      <button :aria-label="$gettext('Layers', 'Map controls')" @click.stop="showLayerSwitcher = !showLayerSwitcher">
         <fa-icon icon="layer-group" />
       </button>
     </div>
@@ -18,7 +19,7 @@
       class="ol-control ol-control-pin-to-top"
       :title="$gettext('Pin the map to a side of the screen')"
     >
-      <button @click.stop="$emit('pin-to-top-clicked')">
+      <button :aria-label="$gettext('Pin the map to a side of the screen')" @click.stop="$emit('pin-to-top-clicked')">
         <fa-icon icon="fa-regular fa-window-maximize" />
       </button>
     </div>
@@ -76,7 +77,7 @@
       :title="$gettext('Recenter on your current position')"
       class="ol-control ol-control-center-on-geolocation"
     >
-      <button @click="activateCenterOnGeolocation">
+      <button :aria-label="$gettext('Recenter on your current position')" @click="activateCenterOnGeolocation">
         <fa-icon icon="bullseye" />
       </button>
     </div>

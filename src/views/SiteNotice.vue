@@ -5,7 +5,7 @@
     @click="showContent = !showContent"
   >
     <div class="section is-info">
-      <button class="delete" @click="hide" />
+      <button class="delete" :aria-label="$gettext('Close')" @click="hide" />
       <div ref="header" />
       <div v-show="showContent" ref="content" />
     </div>

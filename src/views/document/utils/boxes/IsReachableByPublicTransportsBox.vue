@@ -2,9 +2,10 @@
   <div v-if="showAccessibilityInfo" class="box accessible-transport-box">
     <a href="#public-transport-scroll">
       <div class="accessible-transport">
-        <img class="public-transports-bus" src="@/assets/img/boxes/public_transport.svg" />
+        <img class="public-transports-bus" src="@/assets/img/boxes/public_transport.svg" alt="" />
         <div class="info-content">
-          <h3>{{ $gettext('Accessible by public transport') }}</h3>
+          <!-- not a heading: the documents' section headings are h2, an h3 here skipped a level -->
+          <p class="info-title">{{ $gettext('Accessible by public transport') }}</p>
           <p class="plan-link">{{ $gettext('Plan my trip →') }}</p>
         </div>
       </div>
@@ -115,7 +116,7 @@ watch(() => props.document, checkAccessibility, { deep: true, immediate: true })
     }
 
     .info-content {
-      h3 {
+      .info-title {
         font-size: 15px;
         color: #333;
         margin: 0 0 0px 0;

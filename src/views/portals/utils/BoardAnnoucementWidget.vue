@@ -1,7 +1,7 @@
 <template>
   <div v-show="hasAnnouncement && !hidden" class="publication has-background-info has-text-white no-print">
     <div class="section is-info">
-      <button class="delete" @click="hide" />
+      <button class="delete" :aria-label="$gettext('Close')" @click="hide" />
       <div ref="content" />
     </div>
   </div>

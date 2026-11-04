@@ -8,7 +8,7 @@ import forum from '@/js/apis/forum';
 const mountSiteNotice = () =>
   mount(SiteNotice, {
     global: {
-      config: { globalProperties: { $user: { lang: 'fr' } } as never },
+      config: { globalProperties: { $user: { lang: 'fr' }, $gettext: (text: string) => text } as never },
     },
   });
 
@@ -43,6 +43,8 @@ describe('SiteNotice', () => {
 
     expect(wrapper.isVisible()).toBe(true);
     expect(wrapper.text()).toContain('Header');
+    // the close button, an icon only, has a name for screen readers
+    expect(wrapper.find('button.delete').attributes('aria-label')).toBe('Close');
   });
 
   it('shows nothing, and throws nothing, when the forum is unreachable', async () => {
