@@ -32,13 +32,18 @@ const unexpected = (): ApiError => ({
 // $gettext('Shorter than minimum length 1', 'API message')
 // $gettext('Shorter than minimum length 3', 'API message')
 // $gettext('Longer than maximum length 25', 'API message')
-const descriptions: Record<string, (ctx: Record<string, unknown>) => string> = {
+const descriptions: Record<string, (ctx: Record<string, unknown>) => string | undefined> = {
   missing: () => 'Required',
-  string_too_short: (ctx) => `Shorter than minimum length ${ctx.min_length}`,
-  too_short: (ctx) => `Shorter than minimum length ${ctx.min_length}`,
-  string_too_long: (ctx) => `Longer than maximum length ${ctx.max_length}`,
-  too_long: (ctx) => `Longer than maximum length ${ctx.max_length}`,
+  string_too_short: (ctx) => withLimit('Shorter than minimum length', ctx.min_length),
+  too_short: (ctx) => withLimit('Shorter than minimum length', ctx.min_length),
+  string_too_long: (ctx) => withLimit('Longer than maximum length', ctx.max_length),
+  too_long: (ctx) => withLimit('Longer than maximum length', ctx.max_length),
 };
+
+// a text with its limit, none without a limit (FastAPI's text is kept)
+function withLimit(text: string, limit: unknown): string | undefined {
+  return typeof limit === 'number' ? `${text} ${limit}` : undefined;
+}
 
 // FastAPI's locations, as the API's own errors name them
 const locations: Record<string, string> = { query: 'querystring' };
@@ -49,7 +54,8 @@ function fromValidationError({ loc, msg, type, ctx }: ValidationError): ApiError
   return {
     location: locations[location] ?? String(location),
     name: path.join('.'),
-    description: descriptions[type]?.(ctx ?? {}) ?? msg,
+    // own types only: not those of Object.prototype (toString...)
+    description: (Object.hasOwn(descriptions, type) ? descriptions[type](ctx ?? {}) : undefined) ?? msg,
   };
 }
 

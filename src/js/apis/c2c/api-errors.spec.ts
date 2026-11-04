@@ -128,6 +128,24 @@ describe('apiErrors', () => {
       expect(apiErrors(invalid(detail))).toEqual([{ location: 'querystring', name: 'limit', description: detail.msg }]);
     });
 
+    it('keeps the text of FastAPI for a length error without its limit, and for a type of Object.prototype', () => {
+      const errors = apiErrors(
+        invalid(
+          { loc: ['body', 'name'], msg: 'String should have at most 25 characters', type: 'string_too_long' },
+          { loc: ['body', 'title'], msg: 'String too short', type: 'string_too_short', ctx: { min_length: 'x' } },
+          { loc: ['body', 'title'], msg: 'Odd', type: '__proto__' },
+          { loc: ['body', 'title'], msg: 'Odder', type: 'toString' }
+        )
+      );
+
+      expect(errors.map(({ description }) => description)).toEqual([
+        'String should have at most 25 characters',
+        'String too short',
+        'Odd',
+        'Odder',
+      ]);
+    });
+
     it('gives an error of the whole body without a name', () => {
       const detail = { loc: ['body'], msg: 'Field required', type: 'missing' };
 
