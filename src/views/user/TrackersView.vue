@@ -80,12 +80,13 @@
 <script setup lang="ts">
 import { toast } from 'bulma-toast';
 import { computed, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import ApplicationCard from '@/components/tracking/ApplicationCard.vue';
 import trackingService, { type Activity, type Status, type Vendor } from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
+import { forgetReturnUrl, oauthStart, rememberReturnUrl, usesRelay } from '@/js/trackers-oauth-relay';
 
 // an activity tracker, and whether the user configured it
 type Application = { name: Vendor; website: string; connect?: string; status: Status | 'disabled' };
@@ -97,9 +98,35 @@ type ShownActivity = Omit<Activity, 'duration' | 'length' | 'heightDiffUp'> & {
 };
 
 const route = useRoute();
+const router = useRouter();
 const { $gettext, $user, $dateUtils, $documentUtils } = useGlobalProperties();
 
 const baseUrl = window.location.origin;
+
+/** Absolute URL of this site's page that receives the answer of a provider. */
+function returnUrlOf(vendor: Vendor) {
+  return new URL(router.resolve({ name: 'trackers-exchange-token', params: { vendor } }).href, window.location.href)
+    .href;
+}
+
+/**
+ * Authorization URL of a provider. The pre-production and the previews are not known by the providers: they go through
+ * the production site (see trackers-oauth-relay.ts).
+ *
+ * @param extraQuery More parameters, starting with &
+ * @param defaultState `state` the provider needs anyway
+ */
+function connectUrl(
+  vendor: Vendor,
+  authUrl: string | undefined,
+  clientId: string | undefined,
+  extraQuery = '',
+  defaultState?: string
+) {
+  const { origin, state } = oauthStart(baseUrl, returnUrlOf(vendor), defaultState);
+  const stateQuery = state === undefined ? '' : `&state=${encodeURIComponent(state)}`;
+  return `${authUrl}?client_id=${clientId}&response_type=code${extraQuery}&redirect_uri=${origin}/trackers/${vendor}/exchange-token${stateQuery}`;
+}
 
 const activitiesLoading = ref<boolean | null>(null);
 const activitiesError = ref(false);
@@ -110,21 +137,26 @@ const applications = ref<Application[]>([
     // $gettext('strava')
     name: 'strava',
     website: 'https://www.strava.com',
-    connect: `${config.urls.stravaConnectAuthUrl}?client_id=${config.urls.stravaClientId}&response_type=code&approval_prompt=force&scope=activity:read,activity:read_all&redirect_uri=${baseUrl}/trackers/strava/exchange-token`,
+    connect: connectUrl(
+      'strava',
+      config.urls.stravaConnectAuthUrl,
+      config.urls.stravaClientId,
+      '&approval_prompt=force&scope=activity:read,activity:read_all'
+    ),
     status: 'disabled',
   },
   {
     // $gettext('coros')
     name: 'coros',
     website: 'https://coros.com/traininghub',
-    connect: `${config.urls.corosConnectAuthUrl}?client_id=${config.urls.corosClientId}&redirect_uri=${baseUrl}/trackers/coros/exchange-token&response_type=code`,
+    connect: connectUrl('coros', config.urls.corosConnectAuthUrl, config.urls.corosClientId),
     status: 'disabled',
   },
   {
     // $gettext('decathlon')
     name: 'decathlon',
     website: 'https://developers.decathlon.com/products/sports-tracking-data',
-    connect: `${config.urls.decathlonConnectAuthUrl}?client_id=${config.urls.decathlonClientId}&response_type=code&redirect_uri=${baseUrl}/trackers/decathlon/exchange-token&state=c2c`,
+    connect: connectUrl('decathlon', config.urls.decathlonConnectAuthUrl, config.urls.decathlonClientId, '', 'c2c'),
     status: 'disabled',
   },
   {
@@ -137,14 +169,14 @@ const applications = ref<Application[]>([
     // $gettext('polar')
     name: 'polar',
     website: 'https://flow.polar.com/',
-    connect: `${config.urls.polarConnectAuthUrl}?response_type=code&client_id=${config.urls.polarClientId}&redirect_uri=${baseUrl}/trackers/polar/exchange-token`,
+    connect: connectUrl('polar', config.urls.polarConnectAuthUrl, config.urls.polarClientId),
     status: 'disabled',
   },
   {
     // $gettext('suunto')
     name: 'suunto',
     website: 'https://app.suunto.com/',
-    connect: `${config.urls.suuntoConnectAuthUrl}?client_id=${config.urls.suuntoClientId}&response_type=code&redirect_uri=${baseUrl}/trackers/suunto/exchange-token&state=c2c`,
+    connect: connectUrl('suunto', config.urls.suuntoConnectAuthUrl, config.urls.suuntoClientId, '', 'c2c'),
     status: 'disabled',
   },
 ]);
@@ -203,6 +235,12 @@ function configure(vendor: Vendor) {
   if (vendor === 'garmin') {
     configureGarmin();
   } else {
+    // remember where to come back to, for the providers that do not return the state (and forget a previous one)
+    if (usesRelay(baseUrl)) {
+      rememberReturnUrl(window.location.hostname, returnUrlOf(vendor));
+    } else {
+      forgetReturnUrl();
+    }
     window.location.href = applications.value.find(({ name }) => vendor === name)!.connect!;
   }
 }

@@ -9,6 +9,7 @@ import {
 import config from '@/js/config';
 import constants, { type DocumentDefinition } from '@/js/constants';
 import { once } from '@/js/event-bus';
+import { forgetReturnUrl, relayTarget } from '@/js/trackers-oauth-relay';
 import NotFoundView from '@/views/static-views/NotFoundView.vue';
 
 // The views are loaded with their first navigation, not in the startup bundle (#4875). NotFoundView stays in it:
@@ -204,6 +205,20 @@ const router = createRouter({
       });
     });
   },
+});
+
+// A provider answered to the production site for a pre-production or a preview: send the browser back there. Before
+// the authentication guard (added later): the visitor is not necessarily logged in on the production site
+router.beforeEach((to) => {
+  if (to.name !== 'trackers-exchange-token') {
+    return;
+  }
+  const target = relayTarget(String(to.params.vendor), to.query, document.cookie, window.location.origin);
+  if (target) {
+    forgetReturnUrl();
+    window.location.replace(target);
+    return false;
+  }
 });
 
 // authentication guard. $user is installed on the app after the router is created: main.ts adds it, before the
