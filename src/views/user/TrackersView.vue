@@ -208,10 +208,10 @@ function configure(vendor: Vendor) {
 }
 
 function configureGarmin() {
-  trackingService.requestGarminUnauthorizeRequestToken($user.id!).then(
+  trackingService.requestGarminAuthorizationUrl($user.id!).then(
     ({ data }) => {
-      const token = data.token;
-      window.location.href = `https://connect.garmin.com/oauthConfirm?oauth_token=${token}&oauth_callback=${baseUrl}/trackers/garmin/exchange-token`;
+      // OAuth 2: the tracking service builds the consent page URL (PKCE challenge, state, redirect URI)
+      window.location.href = data.url;
     },
     () => {
       toast({ message: $gettext('setup-failed', 'tracking'), type: 'is-danger', position: 'center' });
