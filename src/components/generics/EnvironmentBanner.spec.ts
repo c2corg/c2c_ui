@@ -15,11 +15,11 @@ async function mountBanner(label: string) {
 describe('EnvironmentBanner', () => {
   it('names the environment when there is one', async () => {
     const wrapper = await mountBanner('preprod');
-    expect(wrapper.find('.environment-banner').text()).toContain('preprod');
+    expect(wrapper.find('.environment-label').text()).toContain('preprod');
   });
 
   it('renders nothing in production', async () => {
     const wrapper = await mountBanner('');
-    expect(wrapper.find('.environment-banner').exists()).toBe(false);
+    expect(wrapper.find('.environment-label').exists()).toBe(false);
   });
 });
