@@ -7,6 +7,7 @@
       'home-topoguide': homePage,
     }"
   >
+    <environment-banner />
     <side-menu class="side-menu no-print" :class="{ 'alternative-side-menu': alternativeSideMenu }" />
     <navigation class="navigation no-print" @toggle-side-menu="alternativeSideMenu = !alternativeSideMenu" />
     <dfm-ad-small v-if="!homePage && ($screen.isMobile || $screen.isTablet || $screen.isDesktop)" class="ad" />
@@ -30,6 +31,7 @@ import { useRoute } from 'vue-router';
 
 import AlertWindow from './components/alert-window/AlertWindow.vue';
 import GdprBanner from './components/gdpr/GdprBanner.vue';
+import EnvironmentBanner from './components/generics/EnvironmentBanner.vue';
 import HelperWindow from './components/helper/HelperWindow.vue';
 import DfmAdSmall from './views/DfmAdSmall.vue';
 import Navigation from './views/Navigation.vue';

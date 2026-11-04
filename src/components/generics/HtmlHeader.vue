@@ -1,6 +1,8 @@
 <script lang="ts">
 import { defineComponent, watch } from 'vue';
 
+import { environmentLabel } from '@/js/environment-label';
+
 function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -18,8 +20,9 @@ export default defineComponent({
     watch(
       () => props.title,
       (title) => {
-        document.title =
+        const pageTitle =
           title !== 'Camptocamp.org' ? capitalizeFirstLetter(title) + ' - Camptocamp.org' : 'Camptocamp.org';
+        document.title = environmentLabel ? `[${environmentLabel.toUpperCase()}] ${pageTitle}` : pageTitle;
       },
       { immediate: true }
     );

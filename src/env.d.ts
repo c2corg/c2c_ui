@@ -45,6 +45,8 @@ interface RuntimeConfiguration {
   // one of the urlsConfigurations of the build, as the starting point
   backend?: string;
   urls?: Partial<UrlsConfiguration>;
+  // names a non-production environment (e.g. 'preprod'): a banner and a prefix in the tab title tell it
+  environmentLabel?: string;
 }
 
 interface Window {

@@ -1,7 +1,11 @@
 import { mount } from '@vue/test-utils';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import HtmlHeader from './HtmlHeader.vue';
+
+afterEach(() => {
+  vi.doUnmock('@/js/environment-label');
+});
 
 describe('HtmlHeader', () => {
   it('sets the page title, and renders nothing', async () => {
@@ -11,5 +15,13 @@ describe('HtmlHeader', () => {
 
     await wrapper.setProps({ title: 'Camptocamp.org' });
     expect(document.title).toBe('Camptocamp.org');
+  });
+
+  it('prefixes the title with the environment, if any', async () => {
+    vi.resetModules();
+    vi.doMock('@/js/environment-label', () => ({ environmentLabel: 'preprod' }));
+    const { default: PreprodHeader } = await import('./HtmlHeader.vue');
+    mount(PreprodHeader, { props: { title: 'Camptocamp.org' } });
+    expect(document.title).toBe('[PREPROD] Camptocamp.org');
   });
 });
