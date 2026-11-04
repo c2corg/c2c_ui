@@ -71,6 +71,92 @@ describe('apiErrors', () => {
       expect(apiErrors(failed({ status: 400, data: { status: 'error', errors: [null] } }))).toEqual([UNEXPECTED]);
       expect(apiErrors(failed({ status: 400, data: { status: 'failed' } }))).toEqual([UNEXPECTED]);
     });
+
+    it('keeps the valid validation errors of FastAPI, or gives the unexpected error', () => {
+      const valid = { loc: ['body', 'title'], msg: 'Field required', type: 'missing' };
+
+      expect(apiErrors(failed({ status: 422, data: { detail: [null, valid] } }))).toEqual([
+        { location: 'body', name: 'title', description: 'Required' },
+      ]);
+      expect(apiErrors(failed({ status: 422, data: { detail: 'Unprocessable' } }))).toEqual([UNEXPECTED]);
+    });
+  });
+
+  describe('with the validation errors of FastAPI (422)', () => {
+    const invalid = (...detail: unknown[]) => failed({ status: 422, data: { detail } });
+
+    it('gives them as errors of the API: their field as a dotted path, their text as the API gives it', () => {
+      const errors = apiErrors(
+        invalid(
+          { loc: ['body', 'locales', 0, 'title'], msg: 'Field required', type: 'missing' },
+          {
+            loc: ['body', 'name'],
+            msg: 'String should have at most 25 characters',
+            type: 'string_too_long',
+            ctx: { max_length: 25 },
+          },
+          {
+            loc: ['body', 'username'],
+            msg: 'String should have at least 3 characters',
+            type: 'string_too_short',
+            ctx: { min_length: 3 },
+          },
+          {
+            loc: ['body', 'associations', 'routes'],
+            msg: 'List should have at least 1 item',
+            type: 'too_short',
+            ctx: { min_length: 1 },
+          }
+        )
+      );
+
+      expect(errors).toEqual([
+        { location: 'body', name: 'locales.0.title', description: 'Required' },
+        { location: 'body', name: 'name', description: 'Longer than maximum length 25' },
+        { location: 'body', name: 'username', description: 'Shorter than minimum length 3' },
+        { location: 'body', name: 'associations.routes', description: 'Shorter than minimum length 1' },
+      ]);
+    });
+
+    it('keeps the text of FastAPI for the other errors, and names the query string as the API does', () => {
+      const detail = {
+        loc: ['query', 'limit'],
+        msg: 'Input should be a valid integer, unable to parse string as an integer',
+        type: 'int_parsing',
+      };
+
+      expect(apiErrors(invalid(detail))).toEqual([{ location: 'querystring', name: 'limit', description: detail.msg }]);
+    });
+
+    it('keeps the text of FastAPI for a length error without its limit, and for a type of Object.prototype', () => {
+      const errors = apiErrors(
+        invalid(
+          { loc: ['body', 'name'], msg: 'String should have at most 25 characters', type: 'string_too_long' },
+          { loc: ['body', 'title'], msg: 'String too short', type: 'string_too_short', ctx: { min_length: 'x' } },
+          { loc: ['body', 'title'], msg: 'Odd', type: '__proto__' },
+          { loc: ['body', 'title'], msg: 'Odder', type: 'toString' }
+        )
+      );
+
+      expect(errors.map(({ description }) => description)).toEqual([
+        'String should have at most 25 characters',
+        'String too short',
+        'Odd',
+        'Odder',
+      ]);
+    });
+
+    it('gives an error of the whole body without a name', () => {
+      const detail = { loc: ['body'], msg: 'Field required', type: 'missing' };
+
+      expect(apiErrors(invalid(detail))).toEqual([{ location: 'body', name: '', description: 'Required' }]);
+    });
+
+    it('fails loudly on a detail of another shape', () => {
+      expect(() => apiErrors(failed({ status: 422, data: { detail: 'Unprocessable' } }))).toThrow(
+        'Unexpected response to POST /routes'
+      );
+    });
   });
 
   it('gives the status of the answer', () => {
