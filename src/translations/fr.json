@@ -40,6 +40,9 @@
     "Accident database": "Incidents et accidents",
     "Accidents/Incidents database:": "Une base de données incidents/accidents :",
     "Account": "Compte",
+    "Account not validated yet": {
+      "API message": "Compte non encore validé"
+    },
     "Action is disabled. You must confirm simplified geometry first.": "Cette action est désactivée. Vous devez d’abord confirmer la simplification en cours.",
     "Activity feed": "Fil d'activité",
     "Activity trackers": "Traqueurs d'activité",
@@ -90,6 +93,9 @@
     "At least one access point in the route do not have a public transport stop within 5km.": "Au moins un point d'accès du topo ne dispose pas d'arrêt de transport en commun à moins de 5km.",
     "At least one access point in the waypoint do not have a public transport stop within 5km.": "Au moins un point d'accès du point de passage ne dispose pas d'arrêt de transport en commun à moins de 5km.",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Attribution — Vous devez créditer l'Œuvre, intégrer un lien vers la licence et indiquer si des modifications ont été effectuées à l'Oeuvre. ",
+    "Authentication required": {
+      "API message": "Authentification nécessaire"
+    },
     "Authentication to public transport data service error.": "Erreur d'authentification auprès du service de données de transports publics",
     "Avalanche bulletins": "Bulletins d'avalanche",
     "Avalanche risk": "Risque d'avalanche",
@@ -120,6 +126,7 @@
     "Both results and map": "Résultats et carte",
     "Bouldering climbing gear": "Escalade sur bloc",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Décrivez brièvement les blessures éventuelles, et ce que vous feriez aujourd'hui avec du recul. Les commentaires qui n'entrent dans aucun autre champ peuvent être saisis ici.",
+    "Buoux is maintained by local volunteers. Help keep it bolted and open!": "Buoux est maintenu par des bénévoles locaux. Contribuez à le maintenir l'équipement et l'accès !",
     "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "Par défaut, votre pseudonyme dans la partie topoguide sera votre identifiant. Vous pourrez le changer librement par la suite dans les paramètres.",
     "By month": "Par mois",
     "By year": "Par année",
@@ -428,6 +435,7 @@
     "Learn more": "En savoir plus",
     "Leave after": "Partir après",
     "Leave earlier": "Partir plus tôt",
+    "Leave empty to keep your current password.": "Laisser vide pour garder votre mot de passe actuel.",
     "Leave fullscreen": "Quitter le mode plein écran",
     "Leave later": "Partir + tard",
     "Legend": "Légende",
@@ -486,6 +494,9 @@
     },
     "Missing danger level": "Niveau de danger manquant",
     "Missing method": "Méthode manquante",
+    "Moderator role required": {
+      "API message": "Vous devez être un modérateur"
+    },
     "Modified the": {
       "modification date": "Modifié le"
     },
@@ -575,6 +586,9 @@
     "Parameters of the Digital Camera": "Détails sur l'appareil photo numérique",
     "Participants and context": "Participants et contexte",
     "Password": "Mot de passe",
+    "Password must be at least 10 characters long and contain a lowercase letter, an uppercase letter, a digit and a special character": {
+      "API message": "Le mot de passe doit contenir au moins 10 caractères et contenir une minuscule, une majuscule, un nombre et un caractère spécial"
+    },
     "Password too short": {
       "API message": "Le mot de passe est trop court"
     },
@@ -706,6 +720,7 @@
     "Some points are out of extent": "Points hors zone",
     "Some routes feature tricky sections where there is a risk of slipping dangerously (risk of impact or falling from a great height), falling into crevasses, collapsing seracs or drowning after falling through the ice on a mountain lake. To reduce the risk of slipping, it is often advisable to progress on foot, wearing crampons and suitably secured with rope.": "Certains itinéraires présentent des passages délicats exposés à un risque de glissade dangereuse (risque de percussion ou de chute de grande hauteur), de crevasses, de séracs ou de noyade par rupture de la glace sur un lac de montagne. Pour réduire le risque de glissade, il est souvent opportun de progresser à pied, chaussé de crampons avec un encordement adéquat.",
     "Sophie Picture Contest": "Concours Photo Sophie",
+    "Sorry, euskara lang has been frozen. We're looking for a moderator, if you're interested, please contact board@camptocamp.org": "Désolé, le basque a été gelé. Nous sommes à la recherche d'un modérateur. Si vous êtes intéressés, merci de contacter board@camptocamp.org",
     "Sort by": "Trier par",
     "Source:": "Document à fusionner (source) :",
     "Species zone": "Zone espèce",
@@ -744,6 +759,7 @@
     "The results displayed take into account your departure date and time.": "Les résultats proposés tiennent compte de votre jour et heure de départ.",
     "The slope must be between 0 and 80 deg": "La pente doit être comprise entre 0 et 80 deg",
     "The slope must be between 50 and 3000m high": "La hauteur de la pente doit être comprise entre 50 et 3000m",
+    "The start and finish points are too far apart to find a route. Choose a start in a city closer to the route's access point.": "Le départ et l'arrivée sont trop éloignés pour trouver un itinéraire. Choisissez un départ dans une ville plus proche du point d'accès de l'itinéraire.",
     "The “slope traveled frequently” factor is not taken into account by the application, as it is often difficult to ascertain when preparing for an outing.": "Le facteur « pente parcourue fréquemment » n’est pas pris en compte par l’application, car il est souvent difficile de s'en assurer lors de la préparation de course.",
     "There are sensitive areas on this route. Please refer to the map.": "Cet itinéraire traverse ou se situe près de zones sensibles. Merci de consulter la carte pour les localiser : vous pouvez cliquer sur les zones pour des informations détaillées sur les mesures à prendre.",
     "These are positive experiences that reveal usefull risk-management skills.": "Expériences positives qui révèlent des compétences de gestion des risques",
@@ -1683,6 +1699,8 @@
     "reduce_impact": "Éléments ayant atténué les conséquences de l'événement",
     "remarks": "Remarques",
     "required field": "champ obligatoire",
+    "requirement met": "conditions remplies",
+    "requirement not met": "conditions non remplies",
     "rescue": "Intervention des services de secours",
     "resolution": "résolution",
     "restricted_access": "Restrictions d'accès",
