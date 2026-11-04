@@ -28,16 +28,17 @@ Want to easily access to every dev tools on a fancy interface? Have a look on [t
 The backend (API, media, images...) is chosen when the app **starts**, not when it is built, so the same Docker image
 can serve any backend. Variables that are not set keep the production urls.
 
-| Variable                | Meaning                                            |
-| ----------------------- | -------------------------------------------------- |
-| `C2C_BACKEND`           | A backend known to the build (`prod`, `demo`)      |
-| `C2C_API_URL`           | API, e.g. `https://api.example.org`                |
-| `C2C_MEDIA_URL`         | Media (images) storage                             |
-| `C2C_IMAGE_BACKEND_URL` | Image upload backend                               |
-| `C2C_TRACKING_URL`      | Tracking service                                   |
-| `C2C_MINIATURES_URL`    | Tracking miniatures storage                        |
-| `C2C_FORUM_URL`         | Forum                                              |
-| `C2C_RECAPTCHA_KEY`     | Public reCAPTCHA key of the domain serving the app |
+| Variable                | Meaning                                                                                |
+| ----------------------- | -------------------------------------------------------------------------------------- |
+| `C2C_BACKEND`           | A backend known to the build (`prod`, `demo`)                                          |
+| `C2C_API_URL`           | API, e.g. `https://api.example.org`                                                    |
+| `C2C_MEDIA_URL`         | Media (images) storage                                                                 |
+| `C2C_IMAGE_BACKEND_URL` | Image upload backend                                                                   |
+| `C2C_TRACKING_URL`      | Tracking service                                                                       |
+| `C2C_MINIATURES_URL`    | Tracking miniatures storage                                                            |
+| `C2C_FORUM_URL`         | Forum                                                                                  |
+| `C2C_RECAPTCHA_KEY`     | Public reCAPTCHA key of the domain serving the app                                     |
+| `C2C_ENV_LABEL`         | Non-production environment name (`preprod`): shows a banner and prefixes the tab title |
 
 With Docker (`LISTEN_FLAGS=` because, by default, the container expects the PROXY protocol of the production load
 balancer; `PORT` is the port nginx listens on):

@@ -10,6 +10,7 @@
 #   C2C_MINIATURES_URL     https://media.example.org/tracking
 #   C2C_FORUM_URL          https://forum.example.org
 #   C2C_RECAPTCHA_KEY      public reCAPTCHA site key of the domain the app is served from
+#   C2C_ENV_LABEL          preprod: names a non-production environment (banner + tab title); unset in production
 #
 # The file is JavaScript, loaded before the app (index.html): values are checked, and the script stops with an error
 # rather than writing something else than a plain URL / identifier. See src/js/runtime-config.ts for how it is used.
@@ -46,6 +47,11 @@ check_id() {
   if [ -n "${C2C_BACKEND:-}" ]; then
     check_id C2C_BACKEND "$C2C_BACKEND"
     echo "  backend: \"$C2C_BACKEND\","
+  fi
+
+  if [ -n "${C2C_ENV_LABEL:-}" ]; then
+    check_id C2C_ENV_LABEL "$C2C_ENV_LABEL"
+    echo "  environmentLabel: \"$C2C_ENV_LABEL\","
   fi
 
   echo '  urls: {'
