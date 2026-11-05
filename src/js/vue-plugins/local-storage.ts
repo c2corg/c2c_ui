@@ -45,6 +45,8 @@ class LocalStorageItem {
     // deep copy of value
     value = JSON.parse(JSON.stringify(value));
 
+    // what another tab stored since this one read it is kept
+    this.reload();
     this.data_[propertyName] = value;
     this.commit_();
   }
@@ -60,6 +62,7 @@ class LocalStorageItem {
   }
 
   assign(data: Data) {
+    this.reload();
     for (const key of Object.keys(data)) {
       this.data_[key] = data[key];
     }
