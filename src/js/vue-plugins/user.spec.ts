@@ -289,6 +289,17 @@ describe('$user', () => {
       expect(c2c.setAuthorizationToken).toHaveBeenLastCalledWith('other-token');
     });
 
+    it('follows the language of a sign in, without sending it back', async () => {
+      const { $user, c2c, globals, stored } = await installUser();
+
+      await otherTab({ ...session, lang: 'de', token: 'other-token' });
+
+      expect($user.lang).toBe('de');
+      expect(globals.$language.setCurrent).toHaveBeenCalledWith('de');
+      expect(c2c.userProfile.update_preferred_language).not.toHaveBeenCalled();
+      expect(stored().lang).toBe('de');
+    });
+
     it('ignores an expired session', async () => {
       const { $user } = await installUser();
 

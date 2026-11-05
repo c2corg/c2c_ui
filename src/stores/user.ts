@@ -78,6 +78,11 @@ export const useUserStore = defineStore('user', () => {
     userName.value = otherExpired ? null : (other.userName ?? null);
     name.value = otherExpired ? null : (other.name ?? null);
     forumUsername.value = otherExpired ? null : (other.forumUsername ?? null);
+    // the language of a session signed in there, as signIn() applies it: set first, so that no preference is sent
+    if (!otherExpired && other.token && other.lang && other.lang !== lang.value) {
+      lang.value = other.lang;
+      language.setCurrent(other.lang);
+    }
   }
   window.addEventListener('storage', onStorage);
 

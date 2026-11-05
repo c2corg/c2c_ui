@@ -52,6 +52,24 @@ describe('local storage', () => {
     expect(JSON.parse(window.localStorage.getItem('HomeView.preferences')!)).toEqual({ feed: true, isPersonal: true });
   });
 
+  it('keeps what another tab stored when it writes', async () => {
+    const { getPreferences } = await import('./local-storage');
+    const preferences = getPreferences('HomeView');
+    preferences.set('feed', true);
+
+    // another tab stores a value: this tab read the record before
+    window.localStorage.setItem('HomeView.preferences', JSON.stringify({ feed: true, other: 1 }));
+    preferences.set('isPersonal', true);
+    preferences.assign({ map: 'osm' });
+
+    expect(JSON.parse(window.localStorage.getItem('HomeView.preferences')!)).toEqual({
+      feed: true,
+      other: 1,
+      isPersonal: true,
+      map: 'osm',
+    });
+  });
+
   it('starts empty from what is not a preferences record', async () => {
     window.localStorage.setItem('Yeti.preferences', 'null');
     window.localStorage.setItem('HomeView.preferences', '[1, 2]');
