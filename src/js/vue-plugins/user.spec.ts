@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('@/js/apis/c2c', () => ({
   default: {
     setAuthorizationToken: vi.fn(),
+    onSessionRefused: vi.fn(),
     userProfile: {
       login: vi.fn(),
       logout: vi.fn(),
@@ -303,6 +304,44 @@ describe('$user', () => {
       window.dispatchEvent(new StorageEvent('storage', { key: 'other', storageArea: window.localStorage }));
 
       expect($user.isLogged).toBe(true);
+    });
+  });
+
+  describe('when the API refuses the session', () => {
+    const refuse = (c2c: { onSessionRefused: unknown }, reason: string) => {
+      const [callback] = vi.mocked(c2c.onSessionRefused as (cb: (reason: string) => void) => void).mock.lastCall!;
+      callback(reason);
+    };
+
+    it.each(['invalid', 'blocked'])('forgets the session (%s), without a logout', async (reason) => {
+      await storeSession(session);
+      const { $user, c2c, stored } = await installUser();
+
+      refuse(c2c, reason);
+
+      expect($user.isLogged).toBe(false);
+      expect($user.sessionEnded).toBe(reason);
+      expect(c2c.userProfile.logout).not.toHaveBeenCalled();
+      expect(stored()).toMatchObject({ token: null, lang: 'it' });
+    });
+
+    it('ignores it when signed out', async () => {
+      const { $user, c2c } = await installUser();
+
+      refuse(c2c, 'invalid');
+
+      expect($user.sessionEnded).toBe(null);
+    });
+
+    it('forgets the reason at the next sign in', async () => {
+      await storeSession(session);
+      const { $user, c2c } = await installUser();
+      vi.mocked(c2c.userProfile.login).mockResolvedValue(loginResponse as never);
+      refuse(c2c, 'invalid');
+
+      await $user.signIn('alice', 'secret', true);
+
+      expect($user.sessionEnded).toBe(null);
     });
   });
 });

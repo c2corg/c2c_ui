@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
 
 import c2c from '@/js/apis/c2c';
+import type { SessionRefusal } from '@/js/apis/c2c/session-refusal';
 import trackingService from '@/js/apis/tracking-service';
 import config from '@/js/config';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
@@ -53,6 +54,9 @@ export const useUserStore = defineStore('user', () => {
   // token expiration date, in seconds
   const expire = ref(expired ? null : (data.expire ?? null));
 
+  // why the API refused the session, until the next sign in: the navigation tells the user
+  const sessionEnded = ref<SessionRefusal | null>(null);
+
   const isModerator = computed(() => roles.value.includes('moderator'));
   const isLogged = computed(() => Boolean(token.value));
 
@@ -93,6 +97,7 @@ export const useUserStore = defineStore('user', () => {
       name.value = data.name;
       forumUsername.value = data.forum_username;
       expire.value = data.expire;
+      sessionEnded.value = null;
 
       language.setCurrent(lang.value);
       commitToLocalStorage();
@@ -103,7 +108,11 @@ export const useUserStore = defineStore('user', () => {
 
   function signout() {
     c2c.userProfile.logout();
+    forget();
+  }
 
+  // forget the session here, and in the other tabs through the storage
+  function forget() {
     token.value = null;
     roles.value = [];
     id.value = null;
@@ -141,6 +150,15 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  // the API refused the token, or the account is blocked: the session is over, no logout to send
+  c2c.onSessionRefused((reason) => {
+    if (!isLogged.value) {
+      return;
+    }
+    forget();
+    sessionEnded.value = reason;
+  });
+
   watch(
     token,
     (value) => {
@@ -163,6 +181,7 @@ export const useUserStore = defineStore('user', () => {
     expire,
     isModerator,
     isLogged,
+    sessionEnded,
     signIn,
     signout,
     updateAccount,

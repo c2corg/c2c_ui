@@ -8,6 +8,7 @@ import ModeratorService from './ModeratorService';
 import TagsService from './TagsService';
 import UserProfileService from './UserProfileService';
 import { documentChanges, searchResults } from './schemas';
+import { type SessionRefusal, sessionRefusal } from './session-refusal';
 import type { Params } from './types';
 
 import BaseApi from '@/js/apis/BaseApi';
@@ -61,6 +62,17 @@ export class CamptocampApi extends BaseApi {
     } else {
       return lang;
     }
+  }
+
+  // calls back when the API refuses the session of a request: its token is no longer valid, or the account blocked
+  onSessionRefused(callback: (reason: SessionRefusal) => void) {
+    this.axios.interceptors.response.use(undefined, (error: unknown) => {
+      const reason = sessionRefusal(error, this.axios.defaults.headers.common.Authorization);
+      if (reason) {
+        callback(reason);
+      }
+      return Promise.reject(error);
+    });
   }
 
   setAuthorizationToken(token: string | null) {
