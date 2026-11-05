@@ -76,6 +76,9 @@
     "Accident database": "Unfalldatenbank",
     "Accidents/Incidents database:": "Unfälle/Vorfälle Datenbank",
     "Account": "Konto",
+    "Account not validated yet": {
+      "API message": "Konto noch nicht freigeschaltet"
+    },
     "Action": {
       "Sophie picture context": "Aktion"
     },
@@ -709,6 +712,7 @@
     "Refresh": "Aktualisieren",
     "Register": "Anmelden",
     "Regulatory zone": "Regulierte Zone",
+    "Remember me": "Angemeldet bleiben",
     "Remove": "Entfernen",
     "Report an issue": "Problem melden",
     "Report title, activity, linked routes or outings.": "Berichtstitel, Aktivitäten, verbundene Routen oder Tourenberichte.",
@@ -2075,6 +2079,7 @@
       "weather_station_types": "Temperatur"
     },
     "terms of service": "Nutzungsbedingungen",
+    "test environment, on a copy of the production data": "Testumgebung mit einer Kopie der Produktivdaten",
     "text to display": "anzuzeigender Text",
     "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "Vorschau : die Geometrie ist noch nicht vereinfacht. Interaktionen auf der Karte sowie der Export sind deaktiviert.",
     "this message.": "diese Nachricht",
