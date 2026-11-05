@@ -9,6 +9,11 @@ import config from '@/js/config';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 import { useLanguageStore } from '@/stores/language';
 
+// a remembered session is renewed when its token has less than this left (it lasts 14 days)
+const RENEW_BEFORE_SECONDS = 7 * 24 * 3600;
+// one tab renews at a time: the renewal revokes the token the other tabs share
+const RENEW_LOCK = 'c2c-session-renewal';
+
 const STORED_FIELDS = [
   'userName',
   'id',
@@ -81,6 +86,12 @@ export const useUserStore = defineStore('user', () => {
     if (event.storageArea !== window.localStorage || event.key !== preferences.key) {
       return;
     }
+    followStored();
+  }
+  window.addEventListener('storage', onStorage);
+
+  // take the session stored by another tab
+  function followStored() {
     preferences.reload();
     const other = preferences.get<Partial<StoredUser>>(config.urls.api, {});
     const otherExpired = isExpired(other.expire ?? null);
@@ -98,7 +109,52 @@ export const useUserStore = defineStore('user', () => {
       language.setCurrent(other.lang);
     }
   }
-  window.addEventListener('storage', onStorage);
+
+  function needsRenewal() {
+    return (
+      isLogged.value &&
+      remember.value &&
+      expire.value !== null &&
+      expire.value - Date.now() / 1000 < RENEW_BEFORE_SECONDS
+    );
+  }
+
+  // Renew a remembered session whose token expires soon, so that it does not end while it is used. The tabs renew one
+  // at a time (Web Locks): the renewal revokes the former token, so a tab waiting for the lock first takes the session
+  // another tab may have renewed meanwhile.
+  async function renewIfNeeded() {
+    if (!needsRenewal()) {
+      return;
+    }
+    if (navigator.locks) {
+      await navigator.locks.request(RENEW_LOCK, renewOnce);
+    } else {
+      await renewOnce();
+    }
+  }
+
+  async function renewOnce() {
+    const current = token.value;
+    followStored();
+    if (token.value !== current || !needsRenewal()) {
+      return;
+    }
+    try {
+      const { data } = await c2c.userProfile.renew();
+      if (token.value !== current) {
+        // signed out or in meanwhile
+        return;
+      }
+      token.value = data.token;
+      expire.value = data.expire;
+      roles.value = data.roles;
+      name.value = data.name;
+      forumUsername.value = data.forum_username;
+      commitToLocalStorage();
+    } catch {
+      // a refused session is forgotten (onSessionRefused); else the next check tries again
+    }
+  }
 
   function commitToLocalStorage() {
     preferences.set(config.urls.api, Object.fromEntries(STORED_FIELDS.map((field) => [field, stored[field].value])));
@@ -210,6 +266,7 @@ export const useUserStore = defineStore('user', () => {
     isLogged,
     remember,
     sessionEnded,
+    renewIfNeeded,
     signIn,
     signout,
     updateAccount,

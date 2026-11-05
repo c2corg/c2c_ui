@@ -1,3 +1,4 @@
+import { flushPromises } from '@vue/test-utils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/js/apis/c2c', () => ({
@@ -7,6 +8,7 @@ vi.mock('@/js/apis/c2c', () => ({
     userProfile: {
       login: vi.fn(),
       logout: vi.fn(),
+      renew: vi.fn(),
       update_preferred_language: vi.fn(),
       account: { post: vi.fn(() => Promise.resolve()) },
     },
@@ -373,6 +375,114 @@ describe('$user', () => {
       await $user.signIn('alice', 'secret', true);
 
       expect($user.sessionEnded).toBe(null);
+    });
+  });
+
+  describe('renewal', () => {
+    const IN_TEN_DAYS = NOW / 1000 + 10 * 24 * 3600;
+    const IN_14_DAYS = NOW / 1000 + 14 * 24 * 3600;
+    const renewed = { ...loginResponse.data, token: 'renewed-token', expire: IN_14_DAYS, name: 'Alice R.' };
+
+    // the mocked API is the same object for every test: its renewal answers nothing until a test says otherwise
+    beforeEach(async () => {
+      const { default: c2c } = await import('@/js/apis/c2c');
+      vi.mocked(c2c.userProfile.renew).mockReset();
+    });
+
+    const renewWith = async (c2c: { userProfile: { renew: unknown } }) => {
+      vi.mocked(c2c.userProfile.renew as () => unknown).mockResolvedValue({ data: renewed });
+    };
+
+    it('renews a remembered session with less than 7 days left, at load', async () => {
+      const { default: c2cMock } = await import('@/js/apis/c2c');
+      await renewWith(c2cMock);
+      await storeSession(session);
+      const { $user, c2c, stored } = await installUser();
+      await flushPromises();
+
+      expect(c2c.userProfile.renew).toHaveBeenCalledTimes(1);
+      expect($user).toMatchObject({ token: 'renewed-token', expire: IN_14_DAYS, name: 'Alice R.' });
+      expect(stored()).toMatchObject({ token: 'renewed-token', expire: IN_14_DAYS });
+      expect(c2c.setAuthorizationToken).toHaveBeenLastCalledWith('renewed-token');
+    });
+
+    it('does not renew a session with more than 7 days left', async () => {
+      await storeSession({ ...session, expire: IN_TEN_DAYS });
+      const { $user, c2c } = await installUser();
+
+      await $user.renewIfNeeded();
+
+      expect(c2c.userProfile.renew).not.toHaveBeenCalled();
+    });
+
+    it('does not renew a session not remembered', async () => {
+      await storeSession({ ...session, remember: false });
+      const { $user, c2c } = await installUser();
+
+      await $user.renewIfNeeded();
+
+      expect(c2c.userProfile.renew).not.toHaveBeenCalled();
+    });
+
+    it('takes the session another tab renewed meanwhile', async () => {
+      await storeSession({ ...session, expire: IN_TEN_DAYS });
+      const { $user, c2c } = await installUser();
+      // this tab still has the former token, which expires soon; the other tab renewed it (no event received yet)
+      $user.expire = IN_A_DAY;
+      await storeSession({ ...session, token: 'other-tab-token', expire: IN_14_DAYS });
+
+      await $user.renewIfNeeded();
+
+      expect(c2c.userProfile.renew).not.toHaveBeenCalled();
+      expect($user).toMatchObject({ token: 'other-tab-token', expire: IN_14_DAYS });
+    });
+
+    it('renews in one tab at a time', async () => {
+      const request = vi.fn((_: string, callback: () => Promise<void>) => callback());
+      vi.stubGlobal('navigator', { ...navigator, locks: { request } });
+      try {
+        await storeSession(session);
+        const { $user, c2c } = await installUser();
+        // the renewal started at load (its answer mocked as none)
+        await flushPromises();
+        request.mockClear();
+        await renewWith(c2c);
+
+        await $user.renewIfNeeded();
+
+        expect(request).toHaveBeenCalledWith('c2c-session-renewal', expect.any(Function));
+        expect($user.token).toBe('renewed-token');
+      } finally {
+        vi.unstubAllGlobals();
+      }
+    });
+
+    it('keeps the session when the renewal fails', async () => {
+      await storeSession(session);
+      const { $user, c2c } = await installUser();
+      await flushPromises();
+      vi.mocked(c2c.userProfile.renew).mockRejectedValue(new Error('network'));
+
+      await $user.renewIfNeeded();
+
+      expect({ isLogged: $user.isLogged, token: $user.token, sessionEnded: $user.sessionEnded }).toEqual({
+        isLogged: true,
+        token: 'stored-token',
+        sessionEnded: null,
+      });
+    });
+
+    it('checks when the tab is shown again, and every hour', async () => {
+      await storeSession({ ...session, expire: IN_TEN_DAYS });
+      const { $user, c2c } = await installUser();
+      await renewWith(c2c);
+      const check = vi.spyOn($user, 'renewIfNeeded');
+
+      document.dispatchEvent(new Event('visibilitychange'));
+      expect(check).toHaveBeenCalledTimes(1);
+
+      vi.advanceTimersByTime(3600 * 1000);
+      expect(check).toHaveBeenCalledTimes(2);
     });
   });
 });

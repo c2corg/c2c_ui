@@ -128,6 +128,11 @@ export default class UserProfileService {
     return this.api.post('/users/discourse-redirect', { sso, sig });
   }
 
+  // a new token for the session, with its lifetime; the API revokes the token of the request
+  renew() {
+    return this.api.postValidated('/users/renew', loginResponse);
+  }
+
   logout() {
     return this.api.post('/users/logout', { discourse: true });
   }
