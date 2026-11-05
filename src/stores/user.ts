@@ -9,7 +9,17 @@ import config from '@/js/config';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 import { useLanguageStore } from '@/stores/language';
 
-const STORED_FIELDS = ['userName', 'id', 'lang', 'roles', 'name', 'forumUsername', 'token', 'expire'] as const;
+const STORED_FIELDS = [
+  'userName',
+  'id',
+  'lang',
+  'roles',
+  'name',
+  'forumUsername',
+  'token',
+  'expire',
+  'remember',
+] as const;
 
 type StoredUser = {
   userName: string | null;
@@ -20,6 +30,7 @@ type StoredUser = {
   forumUsername: string | null;
   token: string | null;
   expire: number | null;
+  remember: boolean;
 };
 
 // An expired session is forgotten: the API refuses its token (401), so it cannot even be logged out. The API closes the
@@ -53,6 +64,8 @@ export const useUserStore = defineStore('user', () => {
   const token = ref(expired ? null : (data.token ?? null));
   // token expiration date, in seconds
   const expire = ref(expired ? null : (data.expire ?? null));
+  // "remember me" at the sign in: the session is renewed (the sessions stored before it was asked are remembered)
+  const remember = ref(data.remember ?? true);
 
   // why the API refused the session, until the next sign in: the navigation tells the user
   const sessionEnded = ref<SessionRefusal | null>(null);
@@ -60,7 +73,7 @@ export const useUserStore = defineStore('user', () => {
   const isModerator = computed(() => roles.value.includes('moderator'));
   const isLogged = computed(() => Boolean(token.value));
 
-  const stored = { userName, id, lang, roles, name, forumUsername, token, expire };
+  const stored = { userName, id, lang, roles, name, forumUsername, token, expire, remember };
 
   // Another tab signed in or out: follow it, and read the storage again, so that what this tab stores next does not
   // bring back the former session
@@ -78,6 +91,7 @@ export const useUserStore = defineStore('user', () => {
     userName.value = otherExpired ? null : (other.userName ?? null);
     name.value = otherExpired ? null : (other.name ?? null);
     forumUsername.value = otherExpired ? null : (other.forumUsername ?? null);
+    remember.value = other.remember ?? true;
   }
   window.addEventListener('storage', onStorage);
 
@@ -86,8 +100,15 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // ApiData: the request, thenable; its then() returns the request itself, not the callback's promise
-  function signIn(username: string, password: string, acceptTos: boolean, sso?: string, sig?: string) {
-    return c2c.userProfile.login(username, password, acceptTos, sso, sig).then((response) => {
+  function signIn(
+    username: string,
+    password: string,
+    acceptTos: boolean,
+    sso?: string,
+    sig?: string,
+    rememberMe = true
+  ) {
+    return c2c.userProfile.login(username, password, acceptTos, sso, sig, rememberMe).then((response) => {
       const { data } = response;
       lang.value = data.lang;
       token.value = data.token;
@@ -97,6 +118,7 @@ export const useUserStore = defineStore('user', () => {
       name.value = data.name;
       forumUsername.value = data.forum_username;
       expire.value = data.expire;
+      remember.value = rememberMe;
       sessionEnded.value = null;
 
       language.setCurrent(lang.value);
@@ -181,6 +203,7 @@ export const useUserStore = defineStore('user', () => {
     expire,
     isModerator,
     isLogged,
+    remember,
     sessionEnded,
     signIn,
     signout,

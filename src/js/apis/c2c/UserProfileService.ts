@@ -15,6 +15,8 @@ type LoginPayload = {
   username: string;
   password: string;
   accept_tos: boolean;
+  // "remember me": a token of 14 days, renewed by the UI; else of a day
+  remember: boolean;
   discourse?: boolean;
   sso?: string;
   sig?: string;
@@ -96,11 +98,12 @@ export default class UserProfileService {
     };
   }
 
-  login(username: string, password: string, acceptTos: boolean, sso?: string, sig?: string) {
+  login(username: string, password: string, acceptTos: boolean, sso?: string, sig?: string, remember = true) {
     const payload: LoginPayload = {
       username,
       password,
       accept_tos: acceptTos,
+      remember,
     };
 
     // present when the login was reached via a Discourse-initiated SSO

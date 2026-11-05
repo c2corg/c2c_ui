@@ -124,7 +124,7 @@ describe('$user', () => {
     const response = await $user.signIn('alice', 'secret', true);
 
     expect(response).toBe(loginResponse);
-    expect(c2c.userProfile.login).toHaveBeenCalledWith('alice', 'secret', true, undefined, undefined);
+    expect(c2c.userProfile.login).toHaveBeenCalledWith('alice', 'secret', true, undefined, undefined, true);
     expect($user).toMatchObject({ isLogged: true, isModerator: true, id: 42, userName: 'alice', lang: 'de' });
     expect(globals.$language.setCurrent).toHaveBeenCalledWith('de');
     expect(stored()).toEqual({
@@ -136,9 +136,28 @@ describe('$user', () => {
       forumUsername: 'alice_forum',
       token: 'jwt-token',
       expire: IN_A_DAY,
+      remember: true,
     });
     await Promise.resolve();
     expect(c2c.setAuthorizationToken).toHaveBeenLastCalledWith('jwt-token');
+  });
+
+  it('signs in without "remember me"', async () => {
+    const { $user, c2c, stored } = await installUser();
+    vi.mocked(c2c.userProfile.login).mockResolvedValue(loginResponse as never);
+
+    await $user.signIn('alice', 'secret', true, undefined, undefined, false);
+
+    expect(c2c.userProfile.login).toHaveBeenCalledWith('alice', 'secret', true, undefined, undefined, false);
+    expect($user.remember).toBe(false);
+    expect(stored().remember).toBe(false);
+  });
+
+  it('remembers a session stored before "remember me" was asked', async () => {
+    await storeSession(session);
+    const { $user } = await installUser();
+
+    expect($user.remember).toBe(true);
   });
 
   it('signs out: clears the session but keeps the language', async () => {
@@ -159,6 +178,7 @@ describe('$user', () => {
       forumUsername: null,
       token: null,
       expire: null,
+      remember: true,
     });
     await Promise.resolve();
     expect(c2c.setAuthorizationToken).toHaveBeenLastCalledWith(null);
