@@ -26,3 +26,21 @@ export function sessionRefusal(error: unknown, currentAuthorization: unknown): S
   const refused = Array.isArray(errors) && errors.some((e) => e?.description === refusal[0]);
   return refused ? refusal[1] : null;
 }
+
+/**
+ * Whether the API refused a request because its token had been replaced meanwhile: sent with a former token (e.g.
+ * renewed while the request was on its way, which revoked it), while there is a current one. Sent again with the
+ * current token, it passes.
+ */
+export function sentWithFormerToken(error: unknown, currentAuthorization: unknown): boolean {
+  const { response, config } = (error ?? {}) as {
+    response?: { status?: number; data?: unknown };
+    config?: { headers?: Record<string, unknown> };
+  };
+  const sent = config?.headers?.Authorization;
+  if (response?.status !== 401 || !sent || !currentAuthorization || sent === currentAuthorization) {
+    return false;
+  }
+  const { errors } = (response?.data ?? {}) as { errors?: Array<{ description?: unknown }> };
+  return Array.isArray(errors) && errors.some((e) => e?.description === 'Invalid token');
+}

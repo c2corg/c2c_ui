@@ -1,7 +1,7 @@
 import type { AxiosAdapter } from 'axios';
 import { describe, expect, it, vi } from 'vitest';
 
-import { sessionRefusal } from './session-refusal';
+import { sentWithFormerToken, sessionRefusal } from './session-refusal';
 
 import { CamptocampApi } from '@/js/apis/c2c';
 
@@ -58,5 +58,69 @@ describe('onSessionRefused', () => {
 
     await expect(c2c.axios.get('/users/account')).rejects.toBeTruthy();
     expect(callback).not.toHaveBeenCalled();
+  });
+});
+
+describe('sentWithFormerToken', () => {
+  const FORMER = 'JWT token="former"';
+
+  it('reads a request refused with a token replaced meanwhile', () => {
+    expect(sentWithFormerToken(refused(401, 'Invalid token', FORMER), TOKEN)).toBe(true);
+  });
+
+  it.each([
+    ['the current token', refused(401, 'Invalid token', TOKEN), TOKEN],
+    ['no current token (signed out)', refused(401, 'Invalid token', FORMER), undefined],
+    ['a request without a token', refused(401, 'Invalid token', null), TOKEN],
+    ['a blocked account', refused(403, 'account blocked', FORMER), TOKEN],
+    ['another 401', refused(401, 'Unauthorized', FORMER), TOKEN],
+  ])('ignores %s', (_, error, current) => {
+    expect(sentWithFormerToken(error, current)).toBe(false);
+  });
+});
+
+describe('a request sent with a token renewed meanwhile', () => {
+  it('is sent again with the current token', async () => {
+    const c2c = new CamptocampApi();
+    const sent: unknown[] = [];
+    c2c.axios.defaults.adapter = ((config) => {
+      sent.push(config.headers.Authorization);
+      if (config.headers.Authorization === 'JWT token="new"') {
+        return Promise.resolve({ data: { ok: true }, status: 200, statusText: 'OK', headers: {}, config });
+      }
+      // the token is renewed while this request is on its way
+      c2c.setAuthorizationToken('new');
+      return Promise.reject({
+        response: { status: 401, data: { status: 'error', errors: [{ description: 'Invalid token' }] } },
+        config,
+      });
+    }) as AxiosAdapter;
+    c2c.setAuthorizationToken('old');
+    const refusedSession = vi.fn();
+    c2c.onSessionRefused(refusedSession);
+
+    const response = await c2c.axios.get('/users/account');
+
+    expect(response.data).toEqual({ ok: true });
+    expect(sent).toEqual(['JWT token="old"', 'JWT token="new"']);
+    expect(refusedSession).not.toHaveBeenCalled();
+  });
+
+  it('is sent again once only', async () => {
+    const c2c = new CamptocampApi();
+    let calls = 0;
+    c2c.axios.defaults.adapter = ((config) => {
+      calls += 1;
+      // a new token each time: still refused
+      c2c.setAuthorizationToken(`token-${calls}`);
+      return Promise.reject({
+        response: { status: 401, data: { status: 'error', errors: [{ description: 'Invalid token' }] } },
+        config,
+      });
+    }) as AxiosAdapter;
+    c2c.setAuthorizationToken('token-0');
+
+    await expect(c2c.axios.get('/users/account')).rejects.toBeTruthy();
+    expect(calls).toBe(2);
   });
 });
