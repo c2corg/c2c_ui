@@ -1,5 +1,5 @@
 import { flushPromises, mount } from '@vue/test-utils';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { defineComponent, h } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
 
@@ -15,13 +15,14 @@ const FormField = defineComponent({
   },
 });
 const BaseForm = defineComponent({
+  emits: ['submit'],
   setup:
-    (_, { slots }) =>
+    (_, { slots, emit }) =>
     () =>
-      h('form', slots.default?.()),
+      h('form', { onSubmit: () => emit('submit') }, slots.default?.()),
 });
 
-const mountLogin = async (path: string) => {
+const mountLogin = async (path: string, $user: object = { isLogged: false }) => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [
@@ -40,7 +41,7 @@ const mountLogin = async (path: string) => {
       config: {
         globalProperties: {
           $gettext: (text: string) => text,
-          $user: { isLogged: false },
+          $user,
           $language: { current: 'fr' },
         } as never,
       },
@@ -81,5 +82,32 @@ describe('LoginView', () => {
     await router.push('/auth');
     await flushPromises();
     expect(focused).toEqual(['password', 'username']);
+  });
+
+  describe('remember me', () => {
+    // the sign in resolves without a forum redirect: the view then goes home
+    const user = () => ({ isLogged: false, signIn: vi.fn(() => Promise.resolve({ data: {} })) });
+    const checkbox = (wrapper: Awaited<ReturnType<typeof mountLogin>>['wrapper']) =>
+      wrapper.findAll('form')[0].find('input[type="checkbox"]');
+
+    it('is ticked by default, and sent with the sign in', async () => {
+      const $user = user();
+      const { wrapper } = await mountLogin('/auth', $user);
+
+      expect((checkbox(wrapper).element as HTMLInputElement).checked).toBe(true);
+      await wrapper.findAll('form')[0].trigger('submit');
+
+      expect($user.signIn).toHaveBeenCalledWith('', '', undefined, undefined, undefined, true);
+    });
+
+    it('can be unticked', async () => {
+      const $user = user();
+      const { wrapper } = await mountLogin('/auth', $user);
+
+      await checkbox(wrapper).setValue(false);
+      await wrapper.findAll('form')[0].trigger('submit');
+
+      expect($user.signIn).toHaveBeenCalledWith('', '', undefined, undefined, undefined, false);
+    });
   });
 });

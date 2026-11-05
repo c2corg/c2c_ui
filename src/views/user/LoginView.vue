@@ -27,6 +27,15 @@
         icon="key"
       />
 
+      <div class="field">
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" v-model="rememberMe" />
+            <span v-translate>Remember me</span>
+          </label>
+        </div>
+      </div>
+
       <div class="field" v-if="showLoginTerms">
         <div class="control">
           <label class="checkbox">
@@ -237,6 +246,8 @@ const termsAgreed = ref(false);
 // what the forms show of the current request: loading, success, error
 const promise = ref<any>({});
 const loginTermsAgreed = ref<boolean | undefined>(undefined);
+// "remember me": the session lasts and is renewed; unticked, it ends after a day
+const rememberMe = ref(true);
 const termsRoute = { name: 'article', params: { id: 106731 } };
 
 const showLoginTerms = computed(() => loginTermsAgreed.value !== undefined);
@@ -337,7 +348,7 @@ function signin() {
 
   promise.value = $user
     // undefined until the terms are asked: accept_tos is then not sent
-    .signIn(username.value, password.value, loginTermsAgreed.value as boolean, sso, sig)
+    .signIn(username.value, password.value, loginTermsAgreed.value as boolean, sso, sig, rememberMe.value)
     .then(onSuccessSigin)
     .catch((e) => {
       loginTermsAgreed.value = isTermsError(e) ? false : undefined;

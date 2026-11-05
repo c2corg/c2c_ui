@@ -179,7 +179,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, ref, useTemplateRef } from 'vue';
+import { toast } from 'bulma-toast';
+import { computed, nextTick, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue';
 import { isNavigationFailure, useRoute, useRouter } from 'vue-router';
 
 import DfmAdLarge from './DfmAdLarge.vue';
@@ -197,6 +198,24 @@ defineEmits(['toggle-side-menu']);
 const route = useRoute();
 const router = useRouter();
 const { $gettext, $user, $documentUtils } = useGlobalProperties();
+
+// the API refused the session (see the user store): tell the user why they are signed out
+watch(
+  () => $user.sessionEnded,
+  (reason) => {
+    if (!reason) {
+      return;
+    }
+    toast({
+      message:
+        reason === 'blocked'
+          ? $gettext('Your account is blocked: you have been signed out.')
+          : $gettext('Your session has ended: please sign in again.'),
+      type: 'is-warning',
+      position: 'center',
+    });
+  }
+);
 
 const forumUrl = config.urls.forum;
 const siteConfiguration = config;

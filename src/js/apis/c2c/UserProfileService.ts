@@ -15,6 +15,8 @@ type LoginPayload = {
   username: string;
   password: string;
   accept_tos: boolean;
+  // "remember me": a token of 14 days, renewed by the UI; else of a day
+  remember: boolean;
   discourse?: boolean;
   sso?: string;
   sig?: string;
@@ -96,11 +98,12 @@ export default class UserProfileService {
     };
   }
 
-  login(username: string, password: string, acceptTos: boolean, sso?: string, sig?: string) {
+  login(username: string, password: string, acceptTos: boolean, sso?: string, sig?: string, remember = true) {
     const payload: LoginPayload = {
       username,
       password,
       accept_tos: acceptTos,
+      remember,
     };
 
     // present when the login was reached via a Discourse-initiated SSO
@@ -125,19 +128,13 @@ export default class UserProfileService {
     return this.api.post('/users/discourse-redirect', { sso, sig });
   }
 
-  logout() {
-    return this.api.post('/users/logout', { discourse: true });
+  // a new token for the session, with its lifetime; the API revokes the token of the request
+  renew() {
+    return this.api.postValidated('/users/renew', loginResponse);
   }
 
-  expiredTokenLogout(expiredToken: string) {
-    // When the user has expired token, the token is removed from the api,
-    // but we still want to use it in the logout call
-    return this.api.axios.post(
-      '/users/logout',
-      { discourse: true },
-      // a header of this request only: axios merges headers.common into the request headers the same way
-      { headers: { Authorization: 'JWT token="' + expiredToken + '"' } }
-    );
+  logout() {
+    return this.api.post('/users/logout', { discourse: true });
   }
 
   update_preferred_language(lang: string) {

@@ -3,12 +3,28 @@ import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
 
 import c2c from '@/js/apis/c2c';
+import type { SessionRefusal } from '@/js/apis/c2c/session-refusal';
 import trackingService from '@/js/apis/tracking-service';
 import config from '@/js/config';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 import { useLanguageStore } from '@/stores/language';
 
-const STORED_FIELDS = ['userName', 'id', 'lang', 'roles', 'name', 'forumUsername', 'token', 'expire'] as const;
+// a remembered session is renewed when its token has less than this left (it lasts 14 days)
+const RENEW_BEFORE_SECONDS = 7 * 24 * 3600;
+// one tab renews at a time: the renewal revokes the token the other tabs share
+const RENEW_LOCK = 'c2c-session-renewal';
+
+const STORED_FIELDS = [
+  'userName',
+  'id',
+  'lang',
+  'roles',
+  'name',
+  'forumUsername',
+  'token',
+  'expire',
+  'remember',
+] as const;
 
 type StoredUser = {
   userName: string | null;
@@ -19,21 +35,13 @@ type StoredUser = {
   forumUsername: string | null;
   token: string | null;
   expire: number | null;
+  remember: boolean;
 };
 
-function isExpired(expire: number | null, token: string | null): boolean {
-  if (!expire) {
-    return true;
-  }
-
-  const now = Date.now() / 1000; // in seconds
-
-  if (now > expire) {
-    c2c.userProfile.expiredTokenLogout(token ?? '');
-    return true;
-  }
-
-  return false;
+// An expired session is forgotten: the API refuses its token (401), so it cannot even be logged out. The API closes the
+// forum session of the users whose token expired.
+function isExpired(expire: number | null): boolean {
+  return !expire || Date.now() / 1000 > expire;
 }
 
 export const useUserStore = defineStore('user', () => {
@@ -42,7 +50,7 @@ export const useUserStore = defineStore('user', () => {
   // stored under the name of the former User component, so that existing sessions are kept
   const preferences = getPreferences('User');
   const data = preferences.get<Partial<StoredUser>>(config.urls.api, {});
-  const expired = isExpired(data.expire ?? null, data.token ?? null);
+  const expired = isExpired(data.expire ?? null);
 
   // The unique name, used to login
   const userName = ref(expired ? null : (data.userName ?? null));
@@ -61,19 +69,107 @@ export const useUserStore = defineStore('user', () => {
   const token = ref(expired ? null : (data.token ?? null));
   // token expiration date, in seconds
   const expire = ref(expired ? null : (data.expire ?? null));
+  // "remember me" at the sign in: the session is renewed (the sessions stored before it was asked are remembered)
+  const remember = ref(data.remember ?? true);
+
+  // why the API refused the session, until the next sign in: the navigation tells the user
+  const sessionEnded = ref<SessionRefusal | null>(null);
 
   const isModerator = computed(() => roles.value.includes('moderator'));
   const isLogged = computed(() => Boolean(token.value));
 
-  const stored = { userName, id, lang, roles, name, forumUsername, token, expire };
+  const stored = { userName, id, lang, roles, name, forumUsername, token, expire, remember };
+
+  // Another tab signed in or out: follow it, and read the storage again, so that what this tab stores next does not
+  // bring back the former session
+  function onStorage(event: StorageEvent) {
+    if (event.storageArea !== window.localStorage || event.key !== preferences.key) {
+      return;
+    }
+    followStored();
+  }
+  window.addEventListener('storage', onStorage);
+
+  // take the session stored by another tab
+  function followStored() {
+    preferences.reload();
+    const other = preferences.get<Partial<StoredUser>>(config.urls.api, {});
+    const otherExpired = isExpired(other.expire ?? null);
+    token.value = otherExpired ? null : (other.token ?? null);
+    expire.value = otherExpired ? null : (other.expire ?? null);
+    roles.value = otherExpired ? [] : (other.roles ?? []);
+    id.value = otherExpired ? null : (other.id ?? null);
+    userName.value = otherExpired ? null : (other.userName ?? null);
+    name.value = otherExpired ? null : (other.name ?? null);
+    forumUsername.value = otherExpired ? null : (other.forumUsername ?? null);
+    remember.value = other.remember ?? true;
+    // the language of a session signed in there, as signIn() applies it: set first, so that no preference is sent
+    if (!otherExpired && other.token && other.lang && other.lang !== lang.value) {
+      lang.value = other.lang;
+      language.setCurrent(other.lang);
+    }
+  }
+
+  function needsRenewal() {
+    return (
+      isLogged.value &&
+      remember.value &&
+      expire.value !== null &&
+      expire.value - Date.now() / 1000 < RENEW_BEFORE_SECONDS
+    );
+  }
+
+  // Renew a remembered session whose token expires soon, so that it does not end while it is used. The tabs renew one
+  // at a time (Web Locks): the renewal revokes the former token, so a tab waiting for the lock first takes the session
+  // another tab may have renewed meanwhile.
+  async function renewIfNeeded() {
+    if (!needsRenewal()) {
+      return;
+    }
+    if (navigator.locks) {
+      await navigator.locks.request(RENEW_LOCK, renewOnce);
+    } else {
+      await renewOnce();
+    }
+  }
+
+  async function renewOnce() {
+    const current = token.value;
+    followStored();
+    if (token.value !== current || !needsRenewal()) {
+      return;
+    }
+    try {
+      const { data } = await c2c.userProfile.renew();
+      if (token.value !== current) {
+        // signed out or in meanwhile
+        return;
+      }
+      token.value = data.token;
+      expire.value = data.expire;
+      roles.value = data.roles;
+      name.value = data.name;
+      forumUsername.value = data.forum_username;
+      commitToLocalStorage();
+    } catch {
+      // a refused session is forgotten (onSessionRefused); else the next check tries again
+    }
+  }
 
   function commitToLocalStorage() {
     preferences.set(config.urls.api, Object.fromEntries(STORED_FIELDS.map((field) => [field, stored[field].value])));
   }
 
   // ApiData: the request, thenable; its then() returns the request itself, not the callback's promise
-  function signIn(username: string, password: string, acceptTos: boolean, sso?: string, sig?: string) {
-    return c2c.userProfile.login(username, password, acceptTos, sso, sig).then((response) => {
+  function signIn(
+    username: string,
+    password: string,
+    acceptTos: boolean,
+    sso?: string,
+    sig?: string,
+    rememberMe = true
+  ) {
+    return c2c.userProfile.login(username, password, acceptTos, sso, sig, rememberMe).then((response) => {
       const { data } = response;
       lang.value = data.lang;
       token.value = data.token;
@@ -83,6 +179,8 @@ export const useUserStore = defineStore('user', () => {
       name.value = data.name;
       forumUsername.value = data.forum_username;
       expire.value = data.expire;
+      remember.value = rememberMe;
+      sessionEnded.value = null;
 
       language.setCurrent(lang.value);
       commitToLocalStorage();
@@ -93,7 +191,11 @@ export const useUserStore = defineStore('user', () => {
 
   function signout() {
     c2c.userProfile.logout();
+    forget();
+  }
 
+  // forget the session here, and in the other tabs through the storage
+  function forget() {
     token.value = null;
     roles.value = [];
     id.value = null;
@@ -131,6 +233,21 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  // the API refused the token, or the account is blocked: the session is over, no logout to send
+  c2c.onSessionRefused((reason) => {
+    if (!isLogged.value) {
+      return;
+    }
+    // another tab may have renewed the session (which revoked this token) before this tab was told: take its session
+    const refused = token.value;
+    followStored();
+    if (token.value !== refused) {
+      return;
+    }
+    forget();
+    sessionEnded.value = reason;
+  });
+
   watch(
     token,
     (value) => {
@@ -153,6 +270,9 @@ export const useUserStore = defineStore('user', () => {
     expire,
     isModerator,
     isLogged,
+    remember,
+    sessionEnded,
+    renewIfNeeded,
     signIn,
     signout,
     updateAccount,
