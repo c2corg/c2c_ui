@@ -21,19 +21,10 @@ type StoredUser = {
   expire: number | null;
 };
 
-function isExpired(expire: number | null, token: string | null): boolean {
-  if (!expire) {
-    return true;
-  }
-
-  const now = Date.now() / 1000; // in seconds
-
-  if (now > expire) {
-    c2c.userProfile.expiredTokenLogout(token ?? '');
-    return true;
-  }
-
-  return false;
+// An expired session is forgotten: the API refuses its token (401), so it cannot even be logged out. The API closes the
+// forum session of the users whose token expired.
+function isExpired(expire: number | null): boolean {
+  return !expire || Date.now() / 1000 > expire;
 }
 
 export const useUserStore = defineStore('user', () => {
@@ -42,7 +33,7 @@ export const useUserStore = defineStore('user', () => {
   // stored under the name of the former User component, so that existing sessions are kept
   const preferences = getPreferences('User');
   const data = preferences.get<Partial<StoredUser>>(config.urls.api, {});
-  const expired = isExpired(data.expire ?? null, data.token ?? null);
+  const expired = isExpired(data.expire ?? null);
 
   // The unique name, used to login
   const userName = ref(expired ? null : (data.userName ?? null));
@@ -66,6 +57,25 @@ export const useUserStore = defineStore('user', () => {
   const isLogged = computed(() => Boolean(token.value));
 
   const stored = { userName, id, lang, roles, name, forumUsername, token, expire };
+
+  // Another tab signed in or out: follow it, and read the storage again, so that what this tab stores next does not
+  // bring back the former session
+  function onStorage(event: StorageEvent) {
+    if (event.storageArea !== window.localStorage || event.key !== preferences.key) {
+      return;
+    }
+    preferences.reload();
+    const other = preferences.get<Partial<StoredUser>>(config.urls.api, {});
+    const otherExpired = isExpired(other.expire ?? null);
+    token.value = otherExpired ? null : (other.token ?? null);
+    expire.value = otherExpired ? null : (other.expire ?? null);
+    roles.value = otherExpired ? [] : (other.roles ?? []);
+    id.value = otherExpired ? null : (other.id ?? null);
+    userName.value = otherExpired ? null : (other.userName ?? null);
+    name.value = otherExpired ? null : (other.name ?? null);
+    forumUsername.value = otherExpired ? null : (other.forumUsername ?? null);
+  }
+  window.addEventListener('storage', onStorage);
 
   function commitToLocalStorage() {
     preferences.set(config.urls.api, Object.fromEntries(STORED_FIELDS.map((field) => [field, stored[field].value])));

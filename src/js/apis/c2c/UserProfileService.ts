@@ -129,17 +129,6 @@ export default class UserProfileService {
     return this.api.post('/users/logout', { discourse: true });
   }
 
-  expiredTokenLogout(expiredToken: string) {
-    // When the user has expired token, the token is removed from the api,
-    // but we still want to use it in the logout call
-    return this.api.axios.post(
-      '/users/logout',
-      { discourse: true },
-      // a header of this request only: axios merges headers.common into the request headers the same way
-      { headers: { Authorization: 'JWT token="' + expiredToken + '"' } }
-    );
-  }
-
   update_preferred_language(lang: string) {
     return this.api.post('/users/update_preferred_language', { lang });
   }

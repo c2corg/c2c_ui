@@ -11,8 +11,14 @@ class LocalStorageItem {
 
   constructor(key: string) {
     this.key = key;
+    this.data_ = {};
+    this.reload();
+  }
+
+  // read the storage again, e.g. after another tab changed it
+  reload() {
     try {
-      const data = JSON.parse(window.localStorage.getItem(key) ?? '{}');
+      const data = JSON.parse(window.localStorage.getItem(this.key) ?? '{}');
       // anything but an object (e.g. null, stored by another script or a former version) is no preferences record
       this.data_ = data !== null && typeof data === 'object' && !Array.isArray(data) ? data : {};
     } catch {

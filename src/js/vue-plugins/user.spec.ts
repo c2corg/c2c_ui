@@ -6,7 +6,6 @@ vi.mock('@/js/apis/c2c', () => ({
     userProfile: {
       login: vi.fn(),
       logout: vi.fn(),
-      expiredTokenLogout: vi.fn(),
       update_preferred_language: vi.fn(),
       account: { post: vi.fn(() => Promise.resolve()) },
     },
@@ -112,7 +111,8 @@ describe('$user', () => {
     expect($user.isLogged).toBe(false);
     expect($user.id).toBe(null);
     expect($user.lang).toBe('it');
-    expect(c2c.userProfile.expiredTokenLogout).toHaveBeenCalledWith('stored-token');
+    // the API refuses an expired token (401): it cannot be logged out
+    expect(c2c.userProfile.logout).not.toHaveBeenCalled();
     expect(stored()).toMatchObject({ token: null, lang: 'it' });
   });
 
@@ -227,5 +227,82 @@ describe('$user', () => {
 
     expect(store).toBe($user);
     expect(store.name).toBe('Alice');
+  });
+
+  describe('in another tab', () => {
+    // the other tab stores the session, then the browser tells this tab
+    const otherTab = async (other: Record<string, unknown>) => {
+      const { default: config } = await import('@/js/config');
+      const newValue = JSON.stringify({ [config.urls.api]: other });
+      window.localStorage.setItem('User.preferences', newValue);
+      window.dispatchEvent(
+        new StorageEvent('storage', { key: 'User.preferences', newValue, storageArea: window.localStorage })
+      );
+    };
+    const signedOut = {
+      ...session,
+      userName: null,
+      id: null,
+      name: null,
+      forumUsername: null,
+      token: null,
+      expire: null,
+    };
+
+    it('follows a sign out', async () => {
+      await storeSession(session);
+      const { $user, c2c, nextTick } = await installUser();
+
+      await otherTab(signedOut);
+      await nextTick();
+
+      expect($user.isLogged).toBe(false);
+      expect($user.userName).toBe(null);
+      expect(c2c.setAuthorizationToken).toHaveBeenLastCalledWith(null);
+    });
+
+    it('keeps what the other tab stored when it stores the session', async () => {
+      await storeSession(session);
+      const { $user, c2c, config } = await installUser();
+      vi.mocked(c2c.userProfile.login).mockResolvedValue(loginResponse as never);
+
+      // the other tab stored the session of another API too
+      const newValue = JSON.stringify({ [config.urls.api]: signedOut, 'https://other.api': { lang: 'en' } });
+      window.localStorage.setItem('User.preferences', newValue);
+      window.dispatchEvent(
+        new StorageEvent('storage', { key: 'User.preferences', newValue, storageArea: window.localStorage })
+      );
+      await $user.signIn('alice', 'secret', true);
+
+      const all = JSON.parse(window.localStorage.getItem('User.preferences') ?? '{}');
+      expect(all['https://other.api']).toEqual({ lang: 'en' });
+    });
+
+    it('follows a sign in', async () => {
+      const { $user, c2c, nextTick } = await installUser();
+
+      await otherTab({ ...session, token: 'other-token' });
+      await nextTick();
+
+      expect($user).toMatchObject({ isLogged: true, userName: 'alice', id: 42 });
+      expect(c2c.setAuthorizationToken).toHaveBeenLastCalledWith('other-token');
+    });
+
+    it('ignores an expired session', async () => {
+      const { $user } = await installUser();
+
+      await otherTab({ ...session, expire: NOW / 1000 - 60 });
+
+      expect($user.isLogged).toBe(false);
+    });
+
+    it('ignores the other keys', async () => {
+      await storeSession(session);
+      const { $user } = await installUser();
+
+      window.dispatchEvent(new StorageEvent('storage', { key: 'other', storageArea: window.localStorage }));
+
+      expect($user.isLogged).toBe(true);
+    });
   });
 });
