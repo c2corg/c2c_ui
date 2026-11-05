@@ -238,6 +238,12 @@ export const useUserStore = defineStore('user', () => {
     if (!isLogged.value) {
       return;
     }
+    // another tab may have renewed the session (which revoked this token) before this tab was told: take its session
+    const refused = token.value;
+    followStored();
+    if (token.value !== refused) {
+      return;
+    }
     forget();
     sessionEnded.value = reason;
   });

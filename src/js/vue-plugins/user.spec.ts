@@ -358,6 +358,18 @@ describe('$user', () => {
       expect(stored()).toMatchObject({ token: null, lang: 'it' });
     });
 
+    it('takes the session another tab renewed instead (the renewal revoked this token)', async () => {
+      await storeSession(session);
+      const { $user, c2c, stored } = await installUser();
+      // the other tab renewed; this tab was not told yet
+      await storeSession({ ...session, token: 'renewed-elsewhere' });
+
+      refuse(c2c, 'invalid');
+
+      expect($user).toMatchObject({ isLogged: true, token: 'renewed-elsewhere', sessionEnded: null });
+      expect(stored().token).toBe('renewed-elsewhere');
+    });
+
     it('ignores it when signed out', async () => {
       const { $user, c2c } = await installUser();
 
