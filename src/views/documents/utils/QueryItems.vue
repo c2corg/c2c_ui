@@ -69,8 +69,8 @@
       <div class="is-hidden-mobile" style="display: inline">
         <load-user-preferences-button class="is-hidden-tablet query-item-component" />
         <export-csv-button v-if="listMode" class="is-small-mobile query-item-component"></export-csv-button>
-        <print-button v-show="showPrintButton" />
-        <div class="query-items-tags">
+        <print-button v-show="showPrintButton" class="query-item-component" />
+        <div class="query-items-tags is-inline-block">
           <query-tags :documents="tags" @remove="removeTag"></query-tags>
         </div>
       </div>
