@@ -1,4 +1,4 @@
-import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+import type { AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 import AssociationService from './AssociationService';
 import DocumentService from './DocumentService';
@@ -8,7 +8,7 @@ import ModeratorService from './ModeratorService';
 import TagsService from './TagsService';
 import UserProfileService from './UserProfileService';
 import { documentChanges, searchResults } from './schemas';
-import { type SessionRefusal, sessionRefusal } from './session-refusal';
+import { type SessionRefusal, sentWithFormerToken, sessionRefusal } from './session-refusal';
 import type { Params } from './types';
 
 import BaseApi from '@/js/apis/BaseApi';
@@ -38,6 +38,19 @@ export class CamptocampApi extends BaseApi {
     for (const type of constants.documentTypes) {
       this[type] = new DocumentService(this, type);
     }
+
+    // a request refused because its token was replaced meanwhile (renewed while it was on its way) is sent once more,
+    // with the current token. Added first: the other interceptors see the answer of the second request
+    this.axios.interceptors.response.use(undefined, (error: unknown) => {
+      const config = (error as { config?: InternalAxiosRequestConfig & { retriedWithCurrentToken?: boolean } })?.config;
+      const current = this.axios.defaults.headers.common.Authorization;
+      if (config && !config.retriedWithCurrentToken && sentWithFormerToken(error, current)) {
+        config.retriedWithCurrentToken = true;
+        config.headers.Authorization = current as string;
+        return this.axios.request(config);
+      }
+      return Promise.reject(error);
+    });
 
     // TODO
     // once https://github.com/c2corg/v6_api/issues/730 is fixed
