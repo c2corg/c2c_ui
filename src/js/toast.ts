@@ -102,3 +102,13 @@ export function toast(options: ToastOptions): void {
   parent.append(element);
   resume();
 }
+
+// The notices of the pages of the app (saved offline, outing kept on the phone...): at the bottom, near the thumb,
+// longer than the default and with a close button
+export function notify(
+  message: string | Element,
+  type: 'is-info' | 'is-success' | 'is-warning',
+  options: Omit<ToastOptions, 'message' | 'type'> = {}
+): void {
+  toast({ message, type, position: 'bottom-center', duration: 6000, dismissible: true, ...options });
+}

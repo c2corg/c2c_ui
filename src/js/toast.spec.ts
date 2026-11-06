@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { toast } from './toast';
+import { notify, toast } from './toast';
 
 const toasts = () => [...document.querySelectorAll<HTMLElement>('.toast')];
 
@@ -95,6 +95,18 @@ describe('toast', () => {
 
     vi.runAllTimers();
     expect(document.querySelectorAll('.toasts')).toHaveLength(0);
+  });
+
+  it('notifies at the bottom, for 6 seconds, with a close button', () => {
+    notify('Saved offline', 'is-success');
+
+    const [element] = toasts();
+    expect(element.parentElement?.dataset['position']).toBe('bottom-center');
+    expect(element.querySelector('.delete')).not.toBeNull();
+    vi.advanceTimersByTime(5999);
+    expect(toasts()).toHaveLength(1);
+    vi.advanceTimersByTime(1);
+    expect(toasts()).toHaveLength(0);
   });
 
   it('replaces the toasts of its position when single', () => {

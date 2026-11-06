@@ -57,6 +57,7 @@ const YetiView = () => import(`@/views/portals/YetiView.vue`);
 const MeView = () => import('@/views/user/MeView.vue');
 const MoreView = () => import('@/views/MoreView.vue');
 const AppSettingsView = () => import('@/views/user/AppSettingsView.vue');
+const OfflineView = () => import('@/views/user/OfflineView.vue');
 const AppGuideView = () => import('@/views/static-views/AppGuideView.vue');
 
 const routes: RouteRecordRaw[] = [
@@ -84,6 +85,8 @@ const routes: RouteRecordRaw[] = [
   { path: '/me', name: 'me', component: MeView },
   { path: '/more', name: 'more', component: MoreView },
   { path: '/app-settings', name: 'app-settings', component: AppSettingsView },
+  // "My topos": the documents saved on the device (src/stores/offline.ts)
+  { path: '/offline', name: 'offline', component: OfflineView },
   { path: '/app-guide', name: 'app-guide', component: AppGuideView },
 
   // leaves the UI for the forum before any component is needed: vue-router's types want one on every route
