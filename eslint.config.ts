@@ -4,6 +4,7 @@ import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import { createNodeResolver, flatConfigs as importX } from 'eslint-plugin-import-x';
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 import pluginVue from 'eslint-plugin-vue';
+import pluginVueScopedCss from 'eslint-plugin-vue-scoped-css';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -12,6 +13,8 @@ export default [
 
   // Vue 3 rules: the deprecated Vue 2 syntax is an error
   ...pluginVue.configs['flat/recommended'],
+  // <style scoped>: selectors matching nothing in the template, deprecated deep selectors (c2corg/c2c_ui#4918)
+  ...pluginVueScopedCss.configs['flat/recommended'],
   importX.errors,
   importX.warnings,
   // TypeScript: its own parser and recommended rules, for the .ts files (the components get the parser below)
@@ -60,6 +63,11 @@ export default [
       'vue/no-mutating-props': 'off',
       'vue/no-use-v-if-with-v-for': 'error',
       'vue/prop-name-casing': ['error', 'camelCase'],
+      // the global <style> blocks are wanted (Bulma overrides, third-party widgets)
+      'vue-scoped-css/enforce-style-type': 'off',
+      // false positives on the root element of a child component (<fa-icon>'s svg, <router-link>'s a...), which the
+      // scoped styles of the parent also reach, and on classes added at run time: run on demand, `npm run lint:unused-css`
+      'vue-scoped-css/no-unused-selector': 'off',
       eqeqeq: 'warn',
       camelcase: 'off',
       // new in import-x's warnings, not in eslint-plugin-import's: components are imported under other names
