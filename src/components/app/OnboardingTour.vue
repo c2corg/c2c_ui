@@ -114,6 +114,7 @@ const slides = computed<Slide[]>(() => [
       { icon: 'magnifying-glass', text: $gettext('The topoguide at hand: search, map, filters.') },
       { icon: 'clock', text: $gettext('The Recent feed: the latest outings and their photos.') },
       { icon: 'bookmark', text: $gettext('My topos: take a topo offline, with its photos and its map.') },
+      { icon: 'upload', text: $gettext('Your outings written without a network, published when you choose.') },
       { icon: 'circle-info', text: $gettext('Help and settings in the Me tab.') },
       { icon: 'moon', text: $gettext('Dark theme and larger text: Me → App settings.') },
     ],

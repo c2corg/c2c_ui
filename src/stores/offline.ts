@@ -38,7 +38,8 @@ async function loadPagesOf(type: string) {
   const { default: router } = await import('@/js/vue-plugins/router');
   const views = router
     .getRoutes()
-    .filter((route) => route.name === type || route.name === 'offline')
+    // and the outing form: the outing of a topo is written in the mountains
+    .filter((route) => [type, 'offline', 'outing-add'].includes(String(route.name)))
     .map((route) => route.components?.default)
     .filter((view): view is () => Promise<unknown> => typeof view === 'function');
   await Promise.all([import('@/components/map/OlMap.vue'), ...views.map((view) => view())]);

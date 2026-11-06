@@ -20,12 +20,14 @@ vi.mock('@/js/apis/c2c', () => ({ default: { getApiLang: (lang: string) => lang,
 // the code of the pages, loaded for later
 const routeView = vi.hoisted(() => vi.fn(async () => ({})));
 const offlineView = vi.hoisted(() => vi.fn(async () => ({})));
+const outingForm = vi.hoisted(() => vi.fn(async () => ({})));
 vi.mock('@/js/vue-plugins/router', () => ({
   default: {
     getRoutes: () => [
       { name: 'route', components: { default: routeView } },
       { name: 'offline', components: { default: offlineView } },
       { name: 'waypoint', components: { default: vi.fn() } },
+      { name: 'outing-add', components: { default: outingForm } },
     ],
   },
 }));
@@ -58,6 +60,7 @@ describe('offline store', () => {
     expect(offline.isOfflineReady('route', 12)).toBe(true);
     await vi.waitFor(() => expect(routeView).toHaveBeenCalled());
     expect(offlineView).toHaveBeenCalled();
+    expect(outingForm).toHaveBeenCalled();
 
     const [entry] = await listDocuments();
     expect(entry.data.document_id).toBe(12);

@@ -152,7 +152,7 @@ function fitMapToDocuments() {
 }
 
 // the edition views fit the map to the associated documents
-defineExpose({ fitMapToDocuments });
+defineExpose({ fitMapToDocuments, setGeometry });
 </script>
 
 <style scoped>
