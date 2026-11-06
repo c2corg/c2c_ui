@@ -9,7 +9,7 @@ RUN npm run build
 RUN node tools/generate-health.ts
 
 # production stage
-FROM openresty/openresty:1.31.1.1-5-bookworm AS production-stage
+FROM openresty/openresty:1.31.8.1-0-bookworm AS production-stage
 RUN apt-get update && apt-get install -y gettext-base ca-certificates # envsubst; certificates of the API (docker/lua/c2c_head.lua)
 COPY --from=build-stage /dist /usr/share/nginx/html
 COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf.template
