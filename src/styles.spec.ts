@@ -62,11 +62,21 @@ const scssBlocks = vueFiles(src).flatMap((file) =>
 
 // The words of the code that can be class names: templates and scripts of the components, TypeScript and JavaScript
 // modules, translations, index.html. Not the styles, nor the specs.
+const code = (file: string): string => {
+  const content = readFileSync(file, 'utf8');
+  if (!file.endsWith('.vue')) {
+    return content;
+  }
+  // the blocks of the component as @vitejs/plugin-vue sees them, without its <style> blocks
+  const { template, script, scriptSetup } = parse(content, { filename: file }).descriptor;
+  return [template, script, scriptSetup].map((block) => block?.content ?? '').join('\n');
+};
+
 const codeWords = (): Set<string> => {
   const sources = [
     ...files(src, /\.(vue|ts|js|json|html)$/).filter((file) => !/\.spec\.ts$/.test(file)),
     join(root, 'index.html'),
-  ].map((file) => readFileSync(file, 'utf8').replace(/<style[\s\S]*?<\/style>/g, ''));
+  ].map(code);
   return new Set(sources.join('\n').split(/[^\w-]+/));
 };
 
