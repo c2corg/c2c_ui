@@ -16,4 +16,10 @@ h2 {
   background: var(--c2c-grey-lighter);
   text-transform: uppercase;
 }
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark label */
+html[data-theme='dark'] h2 {
+  background: #3a3a3a;
+  color: #f0f0f0;
+}
 </style>

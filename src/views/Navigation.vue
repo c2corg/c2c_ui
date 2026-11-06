@@ -490,6 +490,11 @@ nav {
     margin-right: 0;
   }
 }
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark bar (the yellow one of the test servers stays) */
+html[data-theme='dark'] nav:not(.has-background-warning) {
+  background-color: #1f1f1f;
+}
 </style>
 
 <style>

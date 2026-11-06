@@ -598,4 +598,29 @@ function handleDocumentHighlight(document: MapDocument | null) {
     }
   }
 }
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): dark cards of the stops, their titles light */
+html[data-theme='dark'] .public-transports-section .public-transports-result .stop-card {
+  background: #2a2a2a;
+  border-top-color: rgba(255, 255, 255, 0.15);
+  border-right-color: rgba(255, 255, 255, 0.15);
+  border-bottom-color: rgba(255, 255, 255, 0.15);
+
+  &:hover,
+  &.selected-stop {
+    background-color: #353535;
+
+    .line-details {
+      background-color: #2a2a2a;
+    }
+  }
+
+  .stop-header {
+    color: #f0f0f0;
+  }
+
+  .stop-details .line-details {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+}
 </style>

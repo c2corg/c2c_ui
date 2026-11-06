@@ -1,7 +1,8 @@
 <template>
   <aside>
-    <a :href="'/'" class="menu-brand has-text-centered">
-      <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
+    <!-- the logo inline (LogoCtc): its text turns light in the dark theme -->
+    <a :href="'/'" class="menu-brand has-text-centered" aria-label="Camptocamp.org">
+      <logo-ctc />
     </a>
     <router-link :to="{ name: 'topoguide' }">
       <span
@@ -69,6 +70,13 @@
         <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('Itinevert')) }} </span>
       </span>
     </a>
+    <!-- the pages of the app that its bottom tab bar opens in the phone layout -->
+    <router-link :to="{ name: 'app-settings' }">
+      <span class="menu-item is-ellipsed">
+        <fa-icon icon="palette" fixed-width />
+        <span class="menu-item-text">{{ $gettext('Settings') }}</span>
+      </span>
+    </router-link>
 
     <div class="menu-footer is-size-7">
       <div class="has-text-centered menu-links">
@@ -112,6 +120,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref } from 'vue';
 
+import LogoCtc from '@/components/app/LogoCtc.vue';
 import IconYeti from '@/components/generics/icons/IconYeti.vue';
 import bus from '@/js/event-bus';
 
@@ -155,7 +164,9 @@ aside {
   display: block;
   line-height: 0;
 
-  img {
+  .logo-ctc {
+    display: inline-block;
+    width: auto;
     height: 70px;
     margin: 5px 0;
   }
@@ -221,5 +232,18 @@ aside {
   .menu-socials {
     display: none !important;
   }
+}
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark menu */
+html[data-theme='dark'] aside {
+  background: #1f1f1f;
+}
+
+html[data-theme='dark'] .menu-item {
+  color: #e5e5e5;
+}
+
+html[data-theme='dark'] .menu-item:hover {
+  background: #2a2a2a;
 }
 </style>
