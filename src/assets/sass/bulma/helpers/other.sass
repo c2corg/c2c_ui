@@ -1,15 +1,16 @@
 @use "../utilities/extends"
 @use "../utilities/mixins"
+@use "../utilities/used"
 
-.is-radiusless
++used.rule(".is-radiusless")
   border-radius: 0 !important
 
-.is-shadowless
++used.rule(".is-shadowless")
   box-shadow: none !important
 
-.is-clickable
++used.rule(".is-clickable")
   cursor: pointer !important
   pointer-events: all !important
 
-.is-unselectable
++used.rule(".is-unselectable")
   @extend %unselectable

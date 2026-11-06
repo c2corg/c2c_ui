@@ -2,11 +2,12 @@
 @use "../utilities/mixins"
 @use "../utilities/derived-variables"
 @use "../utilities/initial-variables"
+@use "../utilities/used"
 
 =typography-size($target:'')
   @each $size in derived-variables.$sizes
     $i: list.index(derived-variables.$sizes, $size)
-    .is-size-#{$i}#{if(sass($target == ''): ''; else: '-' + $target)}
+    +used.rule(".is-size-#{$i}#{if(sass($target == ''): ''; else: '-' + $target)}")
       font-size: $size !important
 
 +typography-size()
@@ -32,75 +33,75 @@
 $alignments: ('centered': 'center', 'justified': 'justify', 'left': 'left', 'right': 'right')
 
 @each $alignment, $text-align in $alignments
-  .has-text-#{$alignment}
+  +used.rule(".has-text-#{$alignment}")
     text-align: #{$text-align} !important
 
 @each $alignment, $text-align in $alignments
   +mixins.mobile
-    .has-text-#{$alignment}-mobile
+    +used.rule(".has-text-#{$alignment}-mobile")
       text-align: #{$text-align} !important
   +mixins.tablet
-    .has-text-#{$alignment}-tablet
+    +used.rule(".has-text-#{$alignment}-tablet")
       text-align: #{$text-align} !important
   +mixins.tablet-only
-    .has-text-#{$alignment}-tablet-only
+    +used.rule(".has-text-#{$alignment}-tablet-only")
       text-align: #{$text-align} !important
   +mixins.touch
-    .has-text-#{$alignment}-touch
+    +used.rule(".has-text-#{$alignment}-touch")
       text-align: #{$text-align} !important
   +mixins.desktop
-    .has-text-#{$alignment}-desktop
+    +used.rule(".has-text-#{$alignment}-desktop")
       text-align: #{$text-align} !important
   +mixins.desktop-only
-    .has-text-#{$alignment}-desktop-only
+    +used.rule(".has-text-#{$alignment}-desktop-only")
       text-align: #{$text-align} !important
   +mixins.widescreen
-    .has-text-#{$alignment}-widescreen
+    +used.rule(".has-text-#{$alignment}-widescreen")
       text-align: #{$text-align} !important
   +mixins.widescreen-only
-    .has-text-#{$alignment}-widescreen-only
+    +used.rule(".has-text-#{$alignment}-widescreen-only")
       text-align: #{$text-align} !important
   +mixins.fullhd
-    .has-text-#{$alignment}-fullhd
+    +used.rule(".has-text-#{$alignment}-fullhd")
       text-align: #{$text-align} !important
 
-.is-capitalized
++used.rule(".is-capitalized")
   text-transform: capitalize !important
 
-.is-lowercase
++used.rule(".is-lowercase")
   text-transform: lowercase !important
 
-.is-uppercase
++used.rule(".is-uppercase")
   text-transform: uppercase !important
 
-.is-italic
++used.rule(".is-italic")
   font-style: italic !important
   
-.is-underlined
++used.rule(".is-underlined")
   text-decoration: underline !important
 
-.has-text-weight-light
++used.rule(".has-text-weight-light")
   font-weight: initial-variables.$weight-light !important
-.has-text-weight-normal
++used.rule(".has-text-weight-normal")
   font-weight: initial-variables.$weight-normal !important
-.has-text-weight-medium
++used.rule(".has-text-weight-medium")
   font-weight: initial-variables.$weight-medium !important
-.has-text-weight-semibold
++used.rule(".has-text-weight-semibold")
   font-weight: initial-variables.$weight-semibold !important
-.has-text-weight-bold
++used.rule(".has-text-weight-bold")
   font-weight: initial-variables.$weight-bold !important
 
-.is-family-primary
++used.rule(".is-family-primary")
   font-family: derived-variables.$family-primary !important
 
-.is-family-secondary
++used.rule(".is-family-secondary")
   font-family: derived-variables.$family-secondary !important
 
-.is-family-sans-serif
++used.rule(".is-family-sans-serif")
   font-family: initial-variables.$family-sans-serif !important
 
-.is-family-monospace
++used.rule(".is-family-monospace")
   font-family: initial-variables.$family-monospace !important
 
-.is-family-code
++used.rule(".is-family-code")
   font-family: derived-variables.$family-code !important

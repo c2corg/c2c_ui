@@ -1,10 +1,11 @@
 @use "../utilities/mixins"
+@use "../utilities/used"
 
-.is-clearfix
++used.rule(".is-clearfix")
   +mixins.clearfix
 
-.is-pulled-left
++used.rule(".is-pulled-left")
   float: left !important
 
-.is-pulled-right
++used.rule(".is-pulled-right")
   float: right !important
