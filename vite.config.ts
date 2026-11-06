@@ -82,9 +82,12 @@ const config: BuildConfiguration = {
 
 let base = '/';
 
-// The webpack build shipped untranspiled dependencies (OpenLayers uses ?. and ??), so ES2020 browsers
-// were already the effective minimum: no legacy (non ES module) bundle is needed.
-const modernBrowsers = ['chrome>=80', 'edge>=80', 'firefox>=74', 'safari>=13.1', 'ios>=13.4', 'samsung>=13'];
+// The oldest browsers to keep, for the JS (syntax target and polyfills) and the CSS: .browserslistrc (#4880). All
+// support ES modules: no legacy (non ES module) bundle.
+const browsers = browserslist.loadConfig({ path: '.' }) ?? [];
+if (!browsers.length) {
+  throw new Error('No browser targets: .browserslistrc not found');
+}
 
 // performance budgets, warnings only (as with webpack). Sizes are on minified files, not gzipped ones,
 // hence the x4 (approx. gzip ratio on minified JS)
@@ -274,7 +277,7 @@ export default defineConfig({
     legacy({
       renderLegacyChunks: false,
       modernPolyfills: true,
-      modernTargets: modernBrowsers,
+      modernTargets: browsers,
     }),
     budgets.enabled && performanceBudgets(),
     bundleReport &&
@@ -296,7 +299,7 @@ export default defineConfig({
     // autoprefixer did); build.cssMinify uses it too
     transformer: 'lightningcss',
     lightningcss: {
-      targets: browserslistToTargets(browserslist()),
+      targets: browserslistToTargets(browserslist(browsers)),
     },
     devSourcemap: true,
     preprocessorOptions: {
@@ -320,9 +323,9 @@ export default defineConfig({
   },
 
   build: {
-    // build.target is derived from modernBrowsers by plugin-legacy
+    // build.target is derived from the browsers of .browserslistrc by plugin-legacy (modernTargets)
     sourcemap: true,
-    // with the targets of css.lightningcss (.browserslistrc), not build.target
+    // with the targets of css.lightningcss, not build.target
     cssMinify: 'lightningcss',
     rollupOptions: {
       output: {

@@ -1,6 +1,6 @@
 # Oldest browsers of the visitors to keep (c2corg/c2c_ui#4880, production logs of 2026-11-06):
 # Windows 7 (Firefox 115 ESR, Chrome/Edge 109) and iOS 15 (iPhone 6s/7, updatable to 15.8).
-# Read by Lightning CSS (vite.config.ts): vendor prefixes and syntax lowered for these.
+# Read by vite.config.ts: Lightning CSS (prefixes, CSS syntax lowered), the JS syntax target and the core-js polyfills.
 chrome >= 109
 edge >= 109
 firefox >= 115
