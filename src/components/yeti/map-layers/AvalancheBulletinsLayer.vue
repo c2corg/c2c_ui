@@ -734,8 +734,6 @@ defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoo
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables';
-
 .bulletins-overlay {
   width: 300px;
   max-width: 100%;

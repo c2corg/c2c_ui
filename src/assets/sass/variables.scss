@@ -1,4 +1,8 @@
-//https://bulma.io/documentation/customize/variables/
+// https://bulma.io/documentation/customize/variables/
+//
+// A Sass module without CSS output: vite.config.ts adds `@use '@/assets/sass/variables' as *;` to every component
+// style. It gives the c2c variables and Bulma's initial and derived variables (`$primary`, `$tablet`...), configured
+// here. main.scss passes the other values to the Bulma modules that print CSS.
 
 /**
  * here is custom c2c variables
@@ -20,36 +24,44 @@ $color-link: #337ab7; // We use the same blue as complementary-c2c
 $color-text: #4a4a4a;
 
 /**
- * Bulma variables
+ * Bulma variables (Bulma 0.9.4, in ./bulma)
  */
-$body-size: 14px !default;
-
-// define size to get entire px size.
-// TODO : is ot smarter to directlty set px values ?....
-
-$size-1: 2.1429rem; // 30/14
-$size-2: 1.8571rem; // 26/14
-$size-3: 1.5714rem; // 22/14
-$size-4: 1.2857rem; // 18/14
-$size-5: 1.1429rem; // 16/14
-// $size-6 : 1 rem,    untouched
-$size-7: 0.7857rem; // 12/14
+@forward './bulma/utilities/initial-variables' with (
+  // define size to get entire px size.
+  $size-1: 2.1429rem,
+  // 30/14
+  $size-2: 1.8571rem,
+  // 26/14
+  $size-3: 1.5714rem,
+  // 22/14
+  $size-4: 1.2857rem,
+  // 18/14
+  $size-5: 1.1429rem,
+  // 16/14
+  // $size-6 : 1 rem,    untouched
+  $size-7: 0.7857rem,
+  // 12/14
+  $green: #4baf50
+);
 
 /**
  * customize bulma colors
  */
-$green: #4baf50;
-$primary: $color-complementary-c2c;
+@forward './bulma/utilities/derived-variables' with (
+  $primary: $color-complementary-c2c,
+  $link: $color-link //$info: $cyan
+  //$success: $green
+  //$warning: $yellow
+  //$danger: $red
+  //$dark: $grey-darker
+   //$text: $grey-dark
+);
+
+@use './bulma/utilities/initial-variables' as iv;
+
 $secondary: $color-base-c2c;
-$link: $color-link;
-//$info: $cyan
-//$success: $green
-//$warning: $yellow
-//$danger: $red
-//$dark: $grey-darker
-//$text: $grey-dark
-$pagination-current-background-color: $primary;
-$pagination-current-border-color: $primary;
+
+$body-size: 14px;
 $body-background-color: #fbfaf6; // if you modify this, please also modify it for spashscreen on public/index.html
 
 $input-focus-border-color: $color-base-c2c;
@@ -78,21 +90,17 @@ $sidemenu-width: 200px;
 
 $input-placeholder-color: rgb(160, 160, 160);
 
-@import 'bulma/sass/utilities/initial-variables.sass';
-@import 'bulma/sass/utilities/functions.sass';
-@import 'bulma/sass/utilities/derived-variables.sass';
-
 // icons in input are to light
-$input-icon-color: $grey-light;
+$input-icon-color: iv.$grey-light;
 
 /**
  * bulma card shadow is used to set a border. Remove the border part
  */
-$card-shadow: 0 2px 3px rgba($black, 0.1);
-$card-hover-shadow: 1px 3px 4px rgba($black, 0.1);
+$card-shadow: 0 2px 3px rgba(iv.$black, 0.1);
+$card-hover-shadow: 1px 3px 4px rgba(iv.$black, 0.1);
 
 // and set a variable for card border :
-$card-border: 1px solid rgba($black, 0.15);
+$card-border: 1px solid rgba(iv.$black, 0.15);
 
 /**
  * Another custom C2C var, but that are computed from bulma variables

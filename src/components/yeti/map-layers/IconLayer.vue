@@ -238,8 +238,6 @@ defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoo
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables';
-
 .overlay {
   min-width: 150px;
   max-width: 100%;

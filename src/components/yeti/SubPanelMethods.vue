@@ -305,8 +305,6 @@ watch(
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables';
-
 p:not(:last-child),
 ul:not(:last-child),
 table:not(:last-child) {

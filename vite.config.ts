@@ -294,8 +294,8 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         additionalData: `
-          @import '@/assets/sass/variables.scss';
-          @import '@/assets/sass/mixins.scss';
+          @use '@/assets/sass/variables' as *;
+          @use '@/assets/sass/mixins' as *;
         `,
       },
     },

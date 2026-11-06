@@ -1,6 +1,10 @@
+@use 'sass:meta';
+@use 'sass:string';
+@use './variables' as *;
+
 /* Full links in markdown content, like https://... http://... //... get an external link icon */
 
-$escaped-color-link: '%23#{str-slice(inspect($color-link), 2)}';
+$escaped-color-link: '%23#{string.slice(meta.inspect($color-link), 2)}';
 
 .markdown-content {
   a[href*='//']::after {

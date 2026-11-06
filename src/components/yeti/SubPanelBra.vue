@@ -156,8 +156,6 @@ watch(
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables';
-
 .inputs-bra {
   margin-left: 2rem;
   position: relative;

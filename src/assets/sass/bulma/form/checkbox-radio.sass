@@ -1,0 +1,25 @@
+@use "../utilities/mixins"
+@use "shared"
+
+%checkbox-radio
+  cursor: pointer
+  display: inline-block
+  line-height: 1.25
+  position: relative
+  input
+    cursor: pointer
+  &:hover
+    color: shared.$input-hover-color
+  &[disabled],
+  fieldset[disabled] &,
+  input[disabled]
+    color: shared.$input-disabled-color
+    cursor: not-allowed
+
+.checkbox
+  @extend %checkbox-radio
+
+.radio
+  @extend %checkbox-radio
+  & + .radio
+    +mixins.ltr-property("margin", 0.5em, false)

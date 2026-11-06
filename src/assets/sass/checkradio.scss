@@ -1,0 +1,327 @@
+// Checkboxes and radios `<input class="is-checkradio">` with a styled label.
+//
+// From bulma-checkradio 2.1.3 (https://github.com/Wikiki/bulma-checkradio, MIT License, Copyright (c) 2017 Wikiki),
+// written with `@import`: only the parts the site uses (sizes normal and small, colors primary and info,
+// is-rtl, disabled), followed by the c2c customization.
+//
+// The site loaded the prebuilt CSS of bulma-checkradio, made with Bulma's default variables: its turquoise and its
+// sizes are kept here, not the c2c ones (the c2c customization below overrides the colors of is-primary).
+@use 'sass:math';
+@use './variables' as *;
+
+$checkradio-default-color: hsl(171, 100%, 41%); // Bulma's default $primary (turquoise)
+$checkradio-size-normal: 1rem;
+$checkradio-size-small: 0.75rem;
+
+$checkradio-colors: (
+  'primary': $checkradio-default-color,
+  'info': $info,
+);
+
+$checkbox-radius: $radius;
+$checkbox-border: 0.1rem solid $grey-lighter;
+$checkbox-checked-width: 0.1rem;
+$checkradio-focus: 1px dotted $grey-light;
+$checkradio-top-offset: 0rem;
+
+@mixin checkbox-size($size) {
+  $new-size: $size * 1.5;
+  $height: math.div($new-size, 2.5);
+  $width: math.div($new-size, 4);
+
+  + label {
+    font-size: $size;
+    padding-left: $size * 2;
+
+    &::before {
+      width: $new-size;
+      height: $new-size;
+    }
+
+    &::after {
+      width: $width;
+      height: $height;
+      top: (math.div($new-size, 2) - math.div($height, 2)) * 0.9;
+      left: $height;
+    }
+  }
+
+  &.is-rtl + label {
+    padding-left: 0;
+    padding-right: $size * 2;
+
+    &::after {
+      left: auto;
+      right: $height;
+    }
+  }
+}
+
+@mixin radio-size($size) {
+  $new-size: $size * 1.5;
+
+  + label {
+    font-size: $size;
+    line-height: $new-size;
+    padding-left: $size * 2;
+
+    &::before,
+    &::after {
+      width: $new-size;
+      height: $new-size;
+    }
+  }
+
+  &.is-rtl + label {
+    padding-right: $size * 2;
+  }
+}
+
+.is-checkradio[type='radio'],
+.is-checkradio[type='checkbox'] {
+  outline: 0;
+  user-select: none;
+  display: none;
+  position: absolute;
+  opacity: 0;
+
+  + label {
+    position: relative;
+    display: initial;
+    cursor: pointer;
+    vertical-align: middle;
+    margin: 0.5em;
+    padding: 0.2rem 0.5rem 0.2rem 0;
+    border-radius: $checkbox-radius;
+
+    &:first-of-type {
+      margin-left: 0;
+    }
+
+    &:hover::before {
+      animation-duration: 0.4s;
+      animation-fill-mode: both;
+      animation-name: hover-color;
+    }
+
+    &::before {
+      position: absolute;
+      left: 0;
+      top: $checkradio-top-offset;
+      content: '';
+      border: $checkbox-border;
+    }
+
+    &::after {
+      position: absolute;
+      display: none;
+      content: '';
+      top: $checkradio-top-offset;
+    }
+  }
+
+  &.is-rtl + label {
+    margin-right: 0rem;
+    margin-left: 0.5rem;
+
+    &::before {
+      left: auto;
+      right: 0;
+    }
+  }
+
+  &:focus + label::before {
+    outline: $checkradio-focus;
+  }
+
+  &:hover:not([disabled]) + label::before {
+    border-color: $checkradio-default-color !important;
+  }
+
+  &:checked {
+    + label::before {
+      border: $checkbox-border;
+    }
+
+    &[disabled] {
+      cursor: not-allowed;
+
+      + label {
+        opacity: 0.5;
+      }
+    }
+
+    + label {
+      &::before {
+        animation-name: none;
+      }
+
+      &::after {
+        display: inline-block;
+      }
+    }
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
+
+    + label {
+      opacity: 0.5;
+      cursor: not-allowed;
+
+      &:hover,
+      &::before,
+      &::after {
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.is-checkradio[type='checkbox'] {
+  + label {
+    &::before {
+      border-radius: $checkbox-radius;
+    }
+
+    &::after {
+      box-sizing: border-box;
+      transform: translateY($checkradio-top-offset) rotate(45deg);
+      border-width: $checkbox-checked-width;
+      border-style: solid;
+      border-color: $checkradio-default-color;
+      border-top: 0;
+      border-left: 0;
+    }
+  }
+
+  @include checkbox-size($checkradio-size-normal);
+
+  &.is-small {
+    @include checkbox-size($checkradio-size-small);
+  }
+
+  @each $name, $color in $checkradio-colors {
+    &.is-#{$name} {
+      &:hover:not([disabled]) + label::before {
+        border-color: $color !important;
+      }
+
+      &:checked + label::after {
+        border-color: $color !important;
+      }
+    }
+  }
+}
+
+.is-checkradio[type='radio'] {
+  + label {
+    &::before {
+      border-radius: 50%;
+    }
+
+    &::after {
+      border-radius: 50%;
+      background: $checkradio-default-color;
+      left: 0;
+      transform: scale(0.5);
+    }
+  }
+
+  &.is-rtl + label {
+    padding-left: 0;
+
+    &::after {
+      left: auto;
+      right: 0;
+    }
+  }
+
+  @include radio-size($checkradio-size-normal);
+
+  &.is-small {
+    @include radio-size($checkradio-size-small);
+  }
+
+  @each $name, $color in $checkradio-colors {
+    &.is-#{$name} {
+      &:hover:not([disabled]) + label::before {
+        border-color: $color !important;
+      }
+
+      &:checked + label::after {
+        border-color: $color !important;
+        background-color: $color !important;
+      }
+    }
+  }
+}
+
+// c2c customization
+
+// radio and checkbox must have white background
+.is-checkradio[type='checkbox'] + label::before,
+.is-checkradio[type='radio'] + label::before {
+  background: white;
+}
+
+// checkbox unchecked : 0-sized tick centered
+.is-checkradio[type='checkbox'] + label::after {
+  border-top-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 0;
+  border-left-width: 0;
+  width: 0 !important;
+  height: 0 !important;
+  top: 0.8rem !important;
+  left: 0.8rem !important;
+  transition: 0.1s;
+  display: inline-block;
+}
+
+// checkbox checked : visible tick, with good placement
+.is-checkradio[type='checkbox']:checked + label::after {
+  border-right-width: 3px;
+  border-bottom-width: 3px;
+  width: 0.4rem !important;
+  height: 0.7rem !important;
+  top: 0.35rem !important;
+  left: 0.6rem !important;
+}
+
+// radio unchecked : 0-sized tick centered
+.is-checkradio[type='radio'] + label::after {
+  left: 0.75em !important;
+  top: 0.75em !important;
+  border-radius: 50%;
+  transform: scale(0.5);
+  display: inline-block;
+  width: 0 !important;
+  height: 0 !important;
+  transition: 0.1s;
+}
+
+// radio checked : visible tick, with good placement
+.is-checkradio[type='radio']:checked + label::after {
+  left: 0 !important;
+  top: 0 !important;
+  width: 1.5em !important;
+  height: 1.5em !important;
+}
+
+// use good primary color
+.is-checkradio[type='radio'].is-primary:hover:not([disabled]) + label::before,
+.is-checkradio[type='checkbox'].is-primary:hover:not([disabled]) + label::before {
+  border-color: $primary !important;
+}
+
+.is-checkradio[type='checkbox'].is-primary:checked + label::after,
+.is-checkradio[type='checkbox'].is-primary + label::after {
+  border-color: $primary !important;
+}
+
+.is-checkradio[type='radio'].is-primary:checked + label::after,
+.is-checkradio[type='radio'].is-primary + label::after {
+  border-color: $primary !important;
+  background-color: $primary !important;
+}

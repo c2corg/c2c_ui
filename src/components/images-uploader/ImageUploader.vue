@@ -178,8 +178,6 @@ function applyRotation(angle: number) {
 </script>
 
 <style scoped lang="scss">
-@import 'bulma/sass/utilities/initial-variables.sass';
-
 .img-container {
   width: 100%;
   height: 200px;

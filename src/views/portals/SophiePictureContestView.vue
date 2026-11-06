@@ -651,8 +651,6 @@ function onLoadBatch(batch: Association[], offset: number, load: number) {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables';
-
 .separator {
   background-color: $color-base-c2c-lighter;
 }

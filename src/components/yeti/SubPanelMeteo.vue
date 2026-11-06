@@ -67,8 +67,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables';
-
 .iframe-container {
   background: $light;
 

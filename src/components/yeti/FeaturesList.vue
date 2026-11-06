@@ -47,8 +47,6 @@ function nbPointsOnFeature(feature: Feature<LineString>) {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables';
-
 .featureslist {
   margin: 0 -0.5rem;
 
