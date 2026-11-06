@@ -141,6 +141,36 @@ export const useOfflineStore = defineStore('offline', () => {
     return id;
   }
 
+  // The pack of the day (CDC, lot 1): a route and its waypoints (hut, summit, access...) offline, in a new folder. A
+  // waypoint already saved stays where it is; one that fails does not stop the others. How many waypoints were saved
+  async function saveDayPack(route: { id: number; lang: string; title: string }, folderName: string) {
+    const folderId = await createFolder(folderName, OFFLINE_MODE);
+    await saveDocument({ type: 'route', ...route, folderId, mode: OFFLINE_MODE });
+    const associations = find('route', route.id)?.data?.associations ?? {};
+    const waypoints: { document_id?: number; locales?: { title?: string | null }[] }[] = [
+      ...(associations.waypoints ?? []),
+      ...(associations.waypoint_children ?? []),
+    ];
+    let saved = 0;
+    for (const waypoint of waypoints) {
+      if (!waypoint.document_id || find('waypoint', waypoint.document_id)) {
+        continue;
+      }
+      await saveDocument({
+        type: 'waypoint',
+        id: waypoint.document_id,
+        lang: route.lang,
+        title: waypoint.locales?.[0]?.title ?? '',
+        folderId,
+        mode: OFFLINE_MODE,
+      }).then(
+        () => saved++,
+        () => {}
+      );
+    }
+    return saved;
+  }
+
   return {
     online,
     savedDocs,
@@ -158,6 +188,7 @@ export const useOfflineStore = defineStore('offline', () => {
     removeDocument: (type: string, id: number) => changed(idb.deleteDocument(type, id)),
     moveToFolder: (type: string, id: number, folderId: string | null) => changed(idb.setFolder(type, id, folderId)),
     createFolder,
+    saveDayPack,
     renameFolder: (folder: Folder, name: string) => changed(idb.saveFolder({ ...folder, name })),
     removeFolder: (id: string) => changed(idb.deleteFolder(id)),
     foldersOf: (section: SavedMode) => folders.value.filter((folder) => folder.section === section),

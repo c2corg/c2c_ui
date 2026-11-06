@@ -13,9 +13,17 @@ const getCooked = vi.hoisted(() => async () => ({
     document_id: 12,
     cooked: { lang: 'fr', description: '<img src="https://example.org/broken.png">' },
     geometry: { geom: JSON.stringify({ type: 'Point', coordinates: [764280, 5751080] }) },
+    // its hut and summit, for the pack of the day
+    associations: {
+      waypoints: [{ document_id: 30, locales: [{ title: 'Refuge' }] }],
+      waypoint_children: [{ document_id: 31, locales: [{ title: 'Sommet' }] }],
+    },
   },
 }));
-vi.mock('@/js/apis/c2c', () => ({ default: { getApiLang: (lang: string) => lang, route: { getCooked } } }));
+const getWaypoint = vi.hoisted(() => async (id: number) => ({ data: { document_id: id, cooked: { lang: 'fr' } } }));
+vi.mock('@/js/apis/c2c', () => ({
+  default: { getApiLang: (lang: string) => lang, route: { getCooked }, waypoint: { getCooked: getWaypoint } },
+}));
 
 // the code of the pages, loaded for later
 const routeView = vi.hoisted(() => vi.fn(async () => ({})));
@@ -104,5 +112,19 @@ describe('offline store', () => {
     await offline.purge('online');
     expect(offline.savedDocs).toEqual([]);
     expect(offline.folders).toEqual([]);
+  });
+
+  it('saves the pack of the day: the route and its waypoints offline, in a new folder', async () => {
+    const offline = useOfflineStore();
+    const saved = await offline.saveDayPack({ id: 12, lang: 'fr', title: 'Arête' }, 'Samedi');
+    expect(saved).toBe(2);
+    const [folder] = offline.foldersOf('offline');
+    expect(folder.name).toBe('Samedi');
+    const inPack = offline.savedDocs.filter((entry) => entry.folderId === folder.id);
+    expect(inPack.map((entry) => `${entry.type}/${entry.id}/${entry.mode}`).sort()).toEqual([
+      'route/12/offline',
+      'waypoint/30/offline',
+      'waypoint/31/offline',
+    ]);
   });
 });

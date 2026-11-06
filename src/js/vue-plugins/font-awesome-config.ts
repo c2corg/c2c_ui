@@ -12,6 +12,7 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import {
   faAngleDown,
+  faArrowDown,
   faArrowLeft,
   faArrowRight,
   faArrowUp,
@@ -400,6 +401,7 @@ export default function install(app: App) {
     faSpinner,
     faTriangleExclamation,
     faWifi,
+    faArrowDown,
 
     // regular icons
     faCircleRegular,
