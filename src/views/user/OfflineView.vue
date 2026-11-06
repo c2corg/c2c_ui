@@ -260,6 +260,7 @@
 import { computed, onMounted, ref } from 'vue';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { usePullRefresh } from '@/js/composables/pull-refresh';
 import { toast } from '@/js/toast';
 import {
   freshnessOf,
@@ -281,6 +282,8 @@ const FRESHNESS_CLASSES: Record<string, string> = { stale: 'is-warning', 'very-s
 const { $gettext, $language } = useGlobalProperties();
 const offline = useOfflineStore();
 const queue = useOutingQueueStore();
+// what another tab of the app may have changed meanwhile
+usePullRefresh(() => Promise.all([offline.refresh(), queue.refresh(), updateUsage()]));
 
 // the outing whose route is being linked
 const linking = ref<string | null>(null);

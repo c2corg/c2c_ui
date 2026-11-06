@@ -39,6 +39,22 @@
       </div>
       <p class="note">{{ $gettext('The base size of the whole interface.') }}</p>
 
+      <h2 class="section-label">{{ $gettext('Units') }}</h2>
+      <div class="option-row">
+        <button
+          v-for="option of unitSystems"
+          :key="option.value"
+          type="button"
+          class="option-btn"
+          :class="{ 'is-active': $appSettings.units === option.value }"
+          @click="$appSettings.setUnits(option.value)"
+        >
+          <span>{{ option.sample }}</span>
+          <span>{{ option.label }}</span>
+        </button>
+      </div>
+      <p class="note">{{ $gettext('Elevations and distances of the documents. What you type stays metric.') }}</p>
+
       <!-- the introduction presents the tabs of the bottom bar: only in the phone layout -->
       <template v-if="$appSettings.isMobileShell">
         <h2 class="section-label">{{ $gettext('Discovery') }}</h2>
@@ -57,6 +73,7 @@ import { useRouter } from 'vue-router';
 
 import { replayOnboarding as replay } from '@/components/app/onboarding';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import type { UnitSystem } from '@/js/units';
 import type { TextSize, Theme } from '@/stores/app-settings';
 
 defineOptions({ name: 'AppSettingsView' });
@@ -74,6 +91,11 @@ const textSizes = computed<{ value: TextSize; label: string; demoSize: string }[
   { value: 'small', label: $gettext('Small'), demoSize: '0.85rem' },
   { value: 'normal', label: $gettext('Normal'), demoSize: '1rem' },
   { value: 'large', label: $gettext('Large'), demoSize: '1.2rem' },
+]);
+
+const unitSystems = computed<{ value: UnitSystem; label: string; sample: string }[]>(() => [
+  { value: 'metric', label: $gettext('Metric'), sample: 'm · km' },
+  { value: 'imperial', label: $gettext('Imperial'), sample: 'ft · mi' },
 ]);
 
 // the tour shows over the activity feed: a calmer background than this page

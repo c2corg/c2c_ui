@@ -40,6 +40,7 @@
     <template v-if="appSettings.isMobileShell">
       <bottom-nav />
       <onboarding-tour />
+      <pull-to-refresh />
     </template>
   </div>
 </template>
@@ -52,6 +53,7 @@ import AlertWindow from './components/alert-window/AlertWindow.vue';
 import BottomNav from './components/app/BottomNav.vue';
 import MobileTopBar from './components/app/MobileTopBar.vue';
 import OnboardingTour from './components/app/OnboardingTour.vue';
+import PullToRefresh from './components/app/PullToRefresh.vue';
 import GdprBanner from './components/gdpr/GdprBanner.vue';
 import EnvironmentBanner from './components/generics/EnvironmentBanner.vue';
 import HelperWindow from './components/helper/HelperWindow.vue';
@@ -311,6 +313,9 @@ html[data-text-size='large'] {
 }
 
 html[data-shell='mobile'] {
+  /* pulling the top of the page refreshes what it shows (PullToRefresh.vue), not the whole page as the browser would */
+  overscroll-behavior-y: contain;
+
   .side-menu,
   .navigation,
   .alternative-side-menu-shader {

@@ -41,9 +41,9 @@
     <!-- no line break between prefix, value and unit: the templates keep whitespace, it would render as a space -->
     <span v-else
       ><span v-if="showPrefix">{{ prefix || field.prefix }}</span
-      >{{ divisor ? Math.round(value / divisor) : value }}</span
+      >{{ displayed.value }}</span
     ><template v-if="showUnit"
-      ><template v-if="!field.skipSpaceBeforeUnit">&nbsp;</template>{{ unit || field.unit }}</template
+      ><template v-if="!field.skipSpaceBeforeUnit">&nbsp;</template>{{ displayed.unit }}</template
     ></span
   >
 </template>
@@ -52,6 +52,8 @@
 import { computed } from 'vue';
 
 import { documentProperty, fieldProperty } from '@/js/properties';
+import { displayValueAndUnit } from '@/js/units';
+import { useAppSettingsStore } from '@/stores/app-settings';
 
 const props = defineProps({
   ...documentProperty,
@@ -77,6 +79,13 @@ const props = defineProps({
 // the value of the field, of any type (string, number, list...)
 
 const value = computed<any>(() => props.document[props.field.name]);
+
+// in the units the user chose (meters or feet...)
+// the units of the app settings: the store, which also answers where the global properties are not installed
+const appSettings = useAppSettingsStore();
+const displayed = computed(() =>
+  displayValueAndUnit(value.value, props.unit || props.field.unit || '', props.divisor, appSettings.units)
+);
 
 const isArray = computed(() => Array.isArray(value.value));
 

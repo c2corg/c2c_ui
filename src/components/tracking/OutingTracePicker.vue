@@ -49,11 +49,12 @@ import { onBeforeUnmount, ref } from 'vue';
 import trackingService, { type Activity, type Geometry } from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { toast } from '@/js/toast';
+import { distance, elevation } from '@/js/units';
 
 defineProps<{ pickedId: number | null }>();
 const emit = defineEmits<{ pick: [{ activity: Activity; geometry: Geometry }] }>();
 
-const { $gettext, $user, $language } = useGlobalProperties();
+const { $gettext, $user, $language, $appSettings } = useGlobalProperties();
 
 const SHOWN_ACTIVITIES = 3;
 // new lines push the form under a finger that was aiming at it: no pick that soon after they appear
@@ -121,16 +122,16 @@ async function pick(activity: Activity) {
   }
 }
 
-// ponytail: kilometers and meters; the unit setting of the app comes with lot 4
+// in the units the user chose
 function figuresOf(activity: Activity) {
   const parts = [];
   if (activity.length) {
-    parts.push(
-      `${(activity.length / 1000).toLocaleString($language.current ?? undefined, { maximumFractionDigits: 1 })} km`
-    );
+    const d = distance(activity.length, $appSettings.units);
+    parts.push(`${d.value.toLocaleString($language.current ?? undefined)} ${d.unit}`);
   }
   if (activity.heightDiffUp) {
-    parts.push(`+${Math.round(activity.heightDiffUp)} m`);
+    const e = elevation(activity.heightDiffUp, $appSettings.units);
+    parts.push(`+${e.value} ${e.unit}`);
   }
   return parts.join(' · ');
 }

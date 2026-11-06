@@ -1,8 +1,9 @@
-// Settings of the app on this device (theme, text size), not synchronized with the account, and its layout: written
-// as data-theme, data-text-size and data-shell on <html>, which the styles of App.vue follow
+// Settings of the app on this device (theme, text size, units), not synchronized with the account, and its layout:
+// written as data-theme, data-text-size and data-shell on <html>, which the styles of App.vue follow
 import { defineStore } from 'pinia';
 import { computed, reactive } from 'vue';
 
+import { UNIT_SYSTEMS, type UnitSystem } from '@/js/units';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 
 const THEMES = ['auto', 'light', 'dark'] as const;
@@ -26,6 +27,8 @@ export const useAppSettingsStore = defineStore('app-settings', () => {
   const state = reactive({
     theme: oneOf(THEMES, preferences.get('theme'), 'auto'),
     textSize: oneOf(TEXT_SIZES, preferences.get('textSize'), 'normal'),
+    // what the documents show (src/js/units.ts): read by the views, nothing to write on <html>
+    units: oneOf(UNIT_SYSTEMS, preferences.get('units'), 'metric'),
   });
 
   // what the system and the screen say: the theme follows the system when its setting is 'auto'. Without matchMedia
@@ -70,11 +73,13 @@ export const useAppSettingsStore = defineStore('app-settings', () => {
     // computed, not getters: Pinia copies a getter's value once, which would freeze it
     theme: computed(() => state.theme),
     textSize: computed(() => state.textSize),
+    units: computed(() => state.units),
     effectiveTheme,
     effectiveShellMode,
     isMobileShell: computed(() => effectiveShellMode.value === 'mobile'),
     setTheme: (theme: Theme) => set('theme', oneOf(THEMES, theme, state.theme)),
     setTextSize: (textSize: TextSize) => set('textSize', oneOf(TEXT_SIZES, textSize, state.textSize)),
+    setUnits: (units: UnitSystem) => set('units', oneOf(UNIT_SYSTEMS, units, state.units)),
   };
 });
 

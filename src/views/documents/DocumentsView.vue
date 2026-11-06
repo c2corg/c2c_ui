@@ -62,6 +62,8 @@
             </span>
           </template>
 
+          <near-me-button v-if="documentAreGeoLocalized" class="header-item" />
+
           <!-- "My topos" (src/stores/offline.ts): the page saved at once, and the ones of the page saved offline -->
           <template v-if="SAVABLE_TYPES.includes(documentType)">
             <bulk-offline-button
@@ -149,6 +151,7 @@ import BulkOfflineButton from './utils/BulkOfflineButton.vue';
 import DisplayModeSwitch from './utils/DisplayModeSwitch.vue';
 import ImageCards from './utils/ImageCards.vue';
 import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton.vue';
+import NearMeButton from './utils/NearMeButton.vue';
 import PageSelector from './utils/PageSelector.vue';
 import QueryItems from './utils/QueryItems.vue';
 
@@ -156,6 +159,7 @@ import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { usePullRefresh } from '@/js/composables/pull-refresh';
 import constants from '@/js/constants';
 import bus from '@/js/event-bus';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
@@ -215,6 +219,11 @@ const queryWithoutOffsetAndSort = computed(() => {
 const documentsShownOnMap = computed(() =>
   filteredWaypoints.value.concat(documents.value ? documents.value.documents : [])
 );
+
+usePullRefresh(() => {
+  load();
+  return promise.value;
+});
 
 function load() {
   displayMode.value = preferences.get(

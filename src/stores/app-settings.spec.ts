@@ -86,9 +86,18 @@ describe('app settings', () => {
 
   it('ignores a stored value it does not know', () => {
     fakeMedia({ dark: false, desktop: false });
-    resetStorage({ theme: 'purple', textSize: 'large' });
+    resetStorage({ theme: 'purple', textSize: 'large', units: 'cubits' });
     const settings = useAppSettingsStore();
     expect(settings.theme).toBe('auto');
     expect(settings.textSize).toBe('large');
+    expect(settings.units).toBe('metric');
+  });
+
+  it('remembers the units chosen', () => {
+    fakeMedia({ dark: false, desktop: false });
+    const settings = useAppSettingsStore();
+    settings.setUnits('imperial');
+    expect(settings.units).toBe('imperial');
+    expect(JSON.parse(window.localStorage.getItem('AppSettings.preferences')!).units).toBe('imperial');
   });
 });
