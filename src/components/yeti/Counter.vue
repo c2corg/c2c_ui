@@ -14,8 +14,6 @@ defineProps({
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables';
-
 .yeti-counter {
   display: inline-block;
   min-width: 1em;

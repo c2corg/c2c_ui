@@ -206,7 +206,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-@import 'bulma/sass/utilities/mixins.sass';
+@use '@/assets/sass/bulma/utilities/mixins' as mx;
 
 .map-container {
   margin-top: 1rem;
@@ -230,7 +230,7 @@ onBeforeUnmount(() => {
     right: 0px;
     height: 45vh;
     width: 100%;
-    @include desktop {
+    @include mx.desktop {
       left: $sidemenu-width; /* when sidemenu is shown, as in App.vue */
     }
   }

@@ -566,8 +566,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/sass/variables';
-
 :deep(.elevation-profile-chart) {
   height: 150px; // default height on page
 

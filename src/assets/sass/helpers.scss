@@ -1,4 +1,4 @@
-@import './variables';
+@use './variables' as *;
 
 .has-hover-background:hover {
   background: $hover-background;

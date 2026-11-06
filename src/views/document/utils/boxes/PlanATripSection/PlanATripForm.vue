@@ -524,7 +524,7 @@ const { documentType } = useDocumentType(props);
   color: red;
 }
 .input-address {
-  ::v-deep .from-container {
+  :deep(.from-container) {
     border: none !important;
     box-shadow: none !important;
   }

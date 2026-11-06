@@ -158,8 +158,6 @@ defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoo
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables';
-
 .footer {
   background: $grey-lighter;
   margin: 10px -5px -5px;

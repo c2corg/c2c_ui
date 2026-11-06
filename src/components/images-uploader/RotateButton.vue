@@ -27,8 +27,6 @@ function click() {
 </script>
 
 <style scoped lang="scss">
-@import 'bulma/sass/utilities/initial-variables.sass';
-
 div {
   cursor: pointer;
   color: $primary;

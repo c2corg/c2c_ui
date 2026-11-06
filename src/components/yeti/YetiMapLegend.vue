@@ -40,8 +40,6 @@ const atLeastOneLegend = computed(() => yetiLegend.value || winterRouteLegend.va
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables';
-
 .legend {
   position: absolute;
   z-index: 6;

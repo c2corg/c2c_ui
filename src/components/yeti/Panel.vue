@@ -29,8 +29,6 @@ const activeTab = computed(() => Yetix.activeTab);
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/sass/variables';
-
 .yeti-panel {
   position: relative;
 }
