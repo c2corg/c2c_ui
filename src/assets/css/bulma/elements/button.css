@@ -147,6 +147,12 @@
     font-size: var(--c2c-size-4);
   }
 
+  /* Bulma 0.9.4, for the buttons of the app settings and of the Me page */
+  &.is-fullwidth {
+    display: flex;
+    width: 100%;
+  }
+
   &[disabled],
   fieldset[disabled] & {
     background-color: var(--c2c-white);

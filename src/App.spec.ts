@@ -1,4 +1,5 @@
 import { flushPromises, mount } from '@vue/test-utils';
+import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { h } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
@@ -33,6 +34,9 @@ const mountApp = async (path = '/routes', { width = 1300, screen = 'isWidescreen
         HelperWindow: true,
         AlertWindow: true,
         GdprBanner: true,
+        MobileTopBar: true,
+        BottomNav: true,
+        OnboardingTour: true,
       },
       config: { globalProperties: { $screen: { [screen]: true } } as never },
     },
@@ -93,5 +97,21 @@ describe('App', () => {
     expect((await mountApp('/')).wrapper.classes()).toEqual(['home-topoguide']);
     expect((await mountApp('/routes')).wrapper.classes()).toEqual(['nav-dfm']);
     expect((await mountApp('/routes', { screen: 'isMobile' })).wrapper.classes()).toEqual([]);
+  });
+
+  it('shows the bars of the app under the desktop width, and not from it', async () => {
+    // the layout follows the width (src/stores/app-settings.ts): a screen as wide as a desktop one
+    vi.stubGlobal('matchMedia', (query: string) => ({ matches: query.includes('min-width'), addEventListener() {} }));
+    let { wrapper } = await mountApp();
+    expect(wrapper.findComponent({ name: 'MobileTopBar' }).exists()).toBe(false);
+    expect(wrapper.findComponent({ name: 'BottomNav' }).exists()).toBe(false);
+
+    // a narrower one, with a new store reading it
+    vi.unstubAllGlobals();
+    setActivePinia(createPinia());
+    ({ wrapper } = await mountApp());
+    expect(wrapper.findComponent({ name: 'MobileTopBar' }).exists()).toBe(true);
+    expect(wrapper.findComponent({ name: 'BottomNav' }).exists()).toBe(true);
+    expect(wrapper.findComponent({ name: 'OnboardingTour' }).exists()).toBe(true);
   });
 });

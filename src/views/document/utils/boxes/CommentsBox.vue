@@ -266,4 +266,13 @@ getComments();
   white-space: normal;
   height: auto;
 }
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): the header of each comment */
+html[data-theme='dark'] .discourse-post-header {
+  background: #353535;
+
+  a {
+    color: #6db4ff;
+  }
+}
 </style>

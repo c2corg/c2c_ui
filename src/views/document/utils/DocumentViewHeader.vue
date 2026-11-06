@@ -113,4 +113,9 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
     font-size: 1.5rem !important;
   }
 }
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): the buttons of the header read on a dark box */
+html[data-theme='dark'] .button-bar > a {
+  color: #e5e5e5;
+}
 </style>

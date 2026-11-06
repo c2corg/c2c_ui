@@ -53,6 +53,11 @@ const HistoryView = () => import(`@/views/wiki/HistoryView.vue`);
 const AssociationsHistoryView = () => import(`@/views/wiki/AssociationsHistoryView.vue`);
 const DiffView = () => import(`@/views/wiki/DiffView.vue`);
 const YetiView = () => import(`@/views/portals/YetiView.vue`);
+// the pages of the phone layout (bottom tab bar)
+const MeView = () => import('@/views/user/MeView.vue');
+const MoreView = () => import('@/views/MoreView.vue');
+const AppSettingsView = () => import('@/views/user/AppSettingsView.vue');
+const AppGuideView = () => import('@/views/static-views/AppGuideView.vue');
 
 const routes: RouteRecordRaw[] = [
   { path: '/', name: 'home', component: HomeView },
@@ -76,6 +81,10 @@ const routes: RouteRecordRaw[] = [
   { path: '/yeti/:document_id(\\d+)?/:page?', name: 'yeti', component: YetiView },
   { path: '/outings-stats', name: 'outings-stats', component: OutingsStatsView },
   { path: '/sophie-picture-contest/:year(\\d+)?', name: 'sophie-picture-contest', component: SophiePictureContestView },
+  { path: '/me', name: 'me', component: MeView },
+  { path: '/more', name: 'more', component: MoreView },
+  { path: '/app-settings', name: 'app-settings', component: AppSettingsView },
+  { path: '/app-guide', name: 'app-guide', component: AppGuideView },
 
   // leaves the UI for the forum before any component is needed: vue-router's types want one on every route
   {

@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import { fileURLToPath, URL } from 'node:url';
 
 import legacy from '@vitejs/plugin-legacy';
@@ -6,6 +7,7 @@ import browserslist from 'browserslist';
 import { browserslistToTargets } from 'lightningcss';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { type Plugin, type Rolldown, defineConfig } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 
 /* Please note that all key present in this file are public keys
  * They don't need to be hidden.
@@ -240,6 +242,46 @@ export default defineConfig({
       renderLegacyChunks: false,
       modernPolyfills: true,
       modernTargets: browsers,
+    }),
+    // The app, installable on a phone: web manifest, and the service worker (src/pwa/service-worker.ts) given the list
+    // of the files to keep for starting without a network. Registered by src/pwa/register-service-worker.ts
+    VitePWA({
+      strategies: 'injectManifest',
+      srcDir: 'src/pwa',
+      filename: 'service-worker.ts',
+      injectRegister: false,
+      manifest: {
+        name: 'Camptocamp.org',
+        short_name: 'Camptocamp',
+        description: 'Guide collaboratif des activités de montagne',
+        lang: 'fr',
+        // relative to the manifest: the app is served at the root, or under a path (GitHub Pages previews)
+        start_url: '.',
+        scope: '.',
+        display: 'standalone',
+        background_color: '#fbfaf6',
+        theme_color: '#ff9933',
+        icons: [
+          { src: 'img/icons/android-chrome-192x192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'img/icons/android-chrome-512x512.png', sizes: '512x512', type: 'image/png' },
+        ],
+        shortcuts: [
+          { name: 'Topoguide', url: 'topoguide' },
+          { name: 'Sorties', url: 'outings' },
+        ],
+      },
+      injectManifest: {
+        // Only what index.html loads, the start of the app: the service worker is installed for every visitor, and
+        // the whole build (pages, ten translations, the data table...) would be 10 MB downloaded in the background.
+        // The rest is cached the first time it is used (src/pwa/service-worker.ts)
+        globPatterns: ['assets/*.{js,css}'],
+        manifestTransforms: [
+          async (entries) => {
+            const html = await readFile(fileURLToPath(new URL('./dist/index.html', import.meta.url)), 'utf8');
+            return { manifest: entries.filter((entry) => html.includes(entry.url)), warnings: [] };
+          },
+        ],
+      },
     }),
     budgets.enabled && performanceBudgets(),
     bundleReport &&
