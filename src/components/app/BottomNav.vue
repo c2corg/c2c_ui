@@ -57,6 +57,14 @@ const tabs = computed<Tab[]>(() =>
       match: ['home'],
     },
     {
+      // the documents saved on the device
+      key: 'offline',
+      label: $gettext('My topos'),
+      icon: 'bookmark',
+      to: { name: 'offline' },
+      match: ['offline'],
+    },
+    {
       key: 'me',
       label: $gettext('Me'),
       icon: 'user',
