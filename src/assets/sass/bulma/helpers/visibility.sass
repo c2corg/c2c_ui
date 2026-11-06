@@ -1,42 +1,43 @@
 @use "../utilities/mixins"
+@use "../utilities/used"
 
 $displays: 'block' 'flex' 'inline' 'inline-block' 'inline-flex'
 
 @each $display in $displays
-  .is-#{$display}
+  +used.rule(".is-#{$display}")
     display: #{$display} !important
   +mixins.mobile
-    .is-#{$display}-mobile
+    +used.rule(".is-#{$display}-mobile")
       display: #{$display} !important
   +mixins.tablet
-    .is-#{$display}-tablet
+    +used.rule(".is-#{$display}-tablet")
       display: #{$display} !important
   +mixins.tablet-only
-    .is-#{$display}-tablet-only
+    +used.rule(".is-#{$display}-tablet-only")
       display: #{$display} !important
   +mixins.touch
-    .is-#{$display}-touch
+    +used.rule(".is-#{$display}-touch")
       display: #{$display} !important
   +mixins.desktop
-    .is-#{$display}-desktop
+    +used.rule(".is-#{$display}-desktop")
       display: #{$display} !important
   +mixins.desktop-only
-    .is-#{$display}-desktop-only
+    +used.rule(".is-#{$display}-desktop-only")
       display: #{$display} !important
   +mixins.widescreen
-    .is-#{$display}-widescreen
+    +used.rule(".is-#{$display}-widescreen")
       display: #{$display} !important
   +mixins.widescreen-only
-    .is-#{$display}-widescreen-only
+    +used.rule(".is-#{$display}-widescreen-only")
       display: #{$display} !important
   +mixins.fullhd
-    .is-#{$display}-fullhd
+    +used.rule(".is-#{$display}-fullhd")
       display: #{$display} !important
 
-.is-hidden
++used.rule(".is-hidden")
   display: none !important
 
-.is-sr-only
++used.rule(".is-sr-only")
   border: none !important
   clip: rect(0, 0, 0, 0) !important
   height: 0.01em !important
@@ -47,76 +48,76 @@ $displays: 'block' 'flex' 'inline' 'inline-block' 'inline-flex'
   width: 0.01em !important
 
 +mixins.mobile
-  .is-hidden-mobile
+  +used.rule(".is-hidden-mobile")
     display: none !important
 
 +mixins.tablet
-  .is-hidden-tablet
+  +used.rule(".is-hidden-tablet")
     display: none !important
 
 +mixins.tablet-only
-  .is-hidden-tablet-only
+  +used.rule(".is-hidden-tablet-only")
     display: none !important
 
 +mixins.touch
-  .is-hidden-touch
+  +used.rule(".is-hidden-touch")
     display: none !important
 
 +mixins.desktop
-  .is-hidden-desktop
+  +used.rule(".is-hidden-desktop")
     display: none !important
 
 +mixins.desktop-only
-  .is-hidden-desktop-only
+  +used.rule(".is-hidden-desktop-only")
     display: none !important
 
 +mixins.widescreen
-  .is-hidden-widescreen
+  +used.rule(".is-hidden-widescreen")
     display: none !important
 
 +mixins.widescreen-only
-  .is-hidden-widescreen-only
+  +used.rule(".is-hidden-widescreen-only")
     display: none !important
 
 +mixins.fullhd
-  .is-hidden-fullhd
+  +used.rule(".is-hidden-fullhd")
     display: none !important
 
-.is-invisible
++used.rule(".is-invisible")
   visibility: hidden !important
 
 +mixins.mobile
-  .is-invisible-mobile
+  +used.rule(".is-invisible-mobile")
     visibility: hidden !important
 
 +mixins.tablet
-  .is-invisible-tablet
+  +used.rule(".is-invisible-tablet")
     visibility: hidden !important
 
 +mixins.tablet-only
-  .is-invisible-tablet-only
+  +used.rule(".is-invisible-tablet-only")
     visibility: hidden !important
 
 +mixins.touch
-  .is-invisible-touch
+  +used.rule(".is-invisible-touch")
     visibility: hidden !important
 
 +mixins.desktop
-  .is-invisible-desktop
+  +used.rule(".is-invisible-desktop")
     visibility: hidden !important
 
 +mixins.desktop-only
-  .is-invisible-desktop-only
+  +used.rule(".is-invisible-desktop-only")
     visibility: hidden !important
 
 +mixins.widescreen
-  .is-invisible-widescreen
+  +used.rule(".is-invisible-widescreen")
     visibility: hidden !important
 
 +mixins.widescreen-only
-  .is-invisible-widescreen-only
+  +used.rule(".is-invisible-widescreen-only")
     visibility: hidden !important
 
 +mixins.fullhd
-  .is-invisible-fullhd
+  +used.rule(".is-invisible-fullhd")
     visibility: hidden !important

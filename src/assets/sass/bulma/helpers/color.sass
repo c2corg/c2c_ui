@@ -1,41 +1,42 @@
 @use "sass:list"
 @use "../utilities/derived-variables"
 @use "../utilities/functions"
+@use "../utilities/used"
 
 @each $name, $pair in derived-variables.$colors
   $color: list.nth($pair, 1)
-  .has-text-#{$name}
+  +used.rule(".has-text-#{$name}")
     color: $color !important
-  a.has-text-#{$name}
+  +used.rule("a.has-text-#{$name}")
     &:hover,
     &:focus
       color: functions.bulmaDarken($color, 10%) !important
-  .has-background-#{$name}
+  +used.rule(".has-background-#{$name}")
     background-color: $color !important
   @if list.length($pair) >= 4
     $color-light: list.nth($pair, 3)
     $color-dark: list.nth($pair, 4)
     // Light
-    .has-text-#{$name}-light
+    +used.rule(".has-text-#{$name}-light")
       color: $color-light !important
-    a.has-text-#{$name}-light
+    +used.rule("a.has-text-#{$name}-light")
       &:hover,
       &:focus
         color: functions.bulmaDarken($color-light, 10%) !important
-    .has-background-#{$name}-light
+    +used.rule(".has-background-#{$name}-light")
       background-color: $color-light !important
     // Dark
-    .has-text-#{$name}-dark
+    +used.rule(".has-text-#{$name}-dark")
       color: $color-dark !important
-    a.has-text-#{$name}-dark
+    +used.rule("a.has-text-#{$name}-dark")
       &:hover,
       &:focus
         color: functions.bulmaLighten($color-dark, 10%) !important
-    .has-background-#{$name}-dark
+    +used.rule(".has-background-#{$name}-dark")
       background-color: $color-dark !important
 
 @each $name, $shade in derived-variables.$shades
-  .has-text-#{$name}
+  +used.rule(".has-text-#{$name}")
     color: $shade !important
-  .has-background-#{$name}
+  +used.rule(".has-background-#{$name}")
     background-color: $shade !important
