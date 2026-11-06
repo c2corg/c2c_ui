@@ -27,6 +27,8 @@ import constants from '@/js/constants';
 import type Field from '@/js/constants/Field';
 import { toast } from '@/js/toast';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+import { useOfflineStore } from '@/stores/offline';
+import { useOutingQueueStore } from '@/stores/outing-queue';
 
 export type EditionHooks = {
   afterLoad?: () => void;
@@ -53,6 +55,14 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
   const fields = ref<Record<string, Field>>({});
   const saving = ref(false);
   const modified = ref(false);
+  // an outing waiting on the phone (src/stores/outing-queue.ts), edited again: ?draft=<its id>
+  const draftId = ref<string | null>(null);
+  // who writes, read when the form opens: a session refused while saving signs the user out (user.id null) before the
+  // outing is kept on the phone, which must still be theirs
+  let author: number | null = null;
+  const offline = useOfflineStore();
+  // only when an outing needs it: the other forms never do
+  const queue = () => useOutingQueueStore();
 
   // right part of route name : add or edit
   const mode = computed(() => String(route.name).split('-')[1]);
@@ -83,8 +93,12 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
     if (!globals.$user.isLogged) {
       return;
     }
+    author = globals.$user.id;
 
-    if (mode.value === 'edit') {
+    draftId.value = null;
+    if (documentType.value === 'outing' && route.query.draft) {
+      void loadDraft(String(route.query.draft));
+    } else if (mode.value === 'edit') {
       promise.value = service(documentType.value)
         .get(documentId.value, lang.value)
         .then((response) => {
@@ -118,13 +132,19 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
         }
       };
 
-      // add current user for outings
+      // add current user for outings. Without a network (an outing written in the mountains), the user as known on
+      // the phone: the form must open anyway
       if (documentType.value === 'outing') {
         state.loading += 1;
         service('profile')
           .get(globals.$user.id!)
           .then((response) => {
             globals.$documentUtils.addAssociation(newDocument, response.data);
+            onload();
+          })
+          .catch(() => {
+            const me = { type: 'u', document_id: globals.$user.id!, name: globals.$user.name ?? '' } as C2cDocument;
+            globals.$documentUtils.addAssociation(newDocument, me);
             onload();
           });
       }
@@ -144,6 +164,14 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
               .then((response) => {
                 globals.$documentUtils.addAssociation(newDocument, response.data);
                 onload();
+              })
+              .catch(() => {
+                // without a network, the copy of "My topos" if it was saved offline
+                const saved = offline.find(type, Number(id))?.data;
+                if (saved) {
+                  globals.$documentUtils.addAssociation(newDocument, saved);
+                }
+                onload();
               });
           }
         }
@@ -155,6 +183,31 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
 
       onload();
     }
+  }
+
+  async function loadDraft(id: string) {
+    promise.value = { data: null, loading: 1 };
+    const item = await queue()
+      .get(id)
+      .catch(() => null);
+    if (String(route.query.draft) !== id) {
+      return;
+    }
+    if (!item) {
+      toast({
+        message: globals.$gettext('This outing is no longer waiting: it was published or removed meanwhile.'),
+        type: 'is-warning',
+        position: 'center',
+      });
+      router.replace({ name: 'offline' });
+      return;
+    }
+    draftId.value = id;
+    promise.value = {
+      data: Object.assign(globals.$documentUtils.buildDocument(documentType.value, lang.value), item.payload),
+    };
+    modified.value = true;
+    hooks.afterLoad?.();
   }
 
   // display a popup with info from fields that contains an error
@@ -246,6 +299,67 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
     });
   }
 
+  // the checks of the fields, as before saving: false (and the errors shown) when one fails
+  function isValid() {
+    hooks.beforeSave?.(); // allow each view to handle some specific cases
+
+    const doc = document.value!;
+    for (const field of Object.values(fields.value)) {
+      field.error = field.getError(doc, editedLocale.value!);
+    }
+
+    return !displayErrors(false);
+  }
+
+  // The outing on the phone instead of on Camptocamp (src/stores/outing-queue.ts): published later from My topos.
+  // routeNote: the route could not be found, the user says which one it is
+  // unanswered: sent to the API without an answer, it may be published already (see classifyFailure)
+  async function keepOnPhone(
+    message: string,
+    type: 'is-success' | 'is-warning' = 'is-success',
+    routeNote = '',
+    unanswered = false
+  ) {
+    // a second tap while the first one saves would queue the outing twice
+    if (saving.value) {
+      return;
+    }
+    saving.value = true;
+    try {
+      if (draftId.value) {
+        if (!(await queue().edit(draftId.value, document.value!, unanswered))) {
+          toast({
+            message: globals.$gettext(
+              'This outing is no longer waiting: it was published or removed meanwhile. Your changes are not saved: copy them before leaving the page.'
+            ),
+            type: 'is-danger',
+            position: 'center',
+          });
+          return;
+        }
+      } else {
+        await queue().add(document.value!, routeNote, author ?? globals.$user.id, unanswered);
+      }
+      modified.value = false;
+      toast({ message, type, position: 'center', duration: 6000 });
+      router.push({ name: 'offline' });
+    } catch {
+      toast({
+        message: globals.$gettext('Could not save your outing on the phone. Please try again.'),
+        type: 'is-danger',
+        position: 'center',
+      });
+    } finally {
+      saving.value = false;
+    }
+  }
+
+  function saveWithoutPublishing() {
+    if (isValid()) {
+      void keepOnPhone(globals.$gettext('Outing saved on the phone, not published. Publish it from My topos.'));
+    }
+  }
+
   function save(comment: string) {
     if (lang.value === 'eu' && !globals.$user.isModerator) {
       // one line: the catalog turns a line break into a space, and the message would not match its translations
@@ -259,14 +373,21 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
       return;
     }
 
-    hooks.beforeSave?.(); // allow each view to handle some specific cases
-
-    const doc = document.value!;
-    for (const field of Object.values(fields.value)) {
-      field.error = field.getError(doc, editedLocale.value!);
+    if (!isValid()) {
+      return;
     }
+    const doc = document.value!;
 
-    if (displayErrors(false)) {
+    if (draftId.value) {
+      void keepOnPhone(globals.$gettext('Outing updated on the phone. Publish it from My topos when it is ready.'));
+      return;
+    }
+    // a new outing without a network: on the phone, published later
+    const keepable = mode.value === 'add' && documentType.value === 'outing';
+    if (keepable && !offline.online) {
+      void keepOnPhone(
+        globals.$gettext('Outing saved on the phone. Publish it from My topos once the network is back.')
+      );
       return;
     }
 
@@ -294,6 +415,29 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
 
     request.catch((error) => {
       saving.value = false;
+      // no answer (the network went), or a session that expired meanwhile: kept rather than lost. Without an answer
+      // it may be on the site already: it waits for the user's check, not published again blindly
+      const status = (error as { response?: { status?: number } })?.response?.status;
+      if (keepable && status === 401) {
+        void keepOnPhone(
+          globals.$gettext(
+            'Your session expired: the outing is saved on the phone. Sign in, then publish it from My topos.'
+          ),
+          'is-warning'
+        );
+        return;
+      }
+      if (keepable && status === undefined) {
+        void keepOnPhone(
+          globals.$gettext(
+            'No answer from Camptocamp: the outing may be published already. It is saved on the phone: check on the site, then decide from My topos.'
+          ),
+          'is-warning',
+          '',
+          true
+        );
+        return;
+      }
       dispatchErrors(apiErrors(error));
     });
   }
@@ -331,6 +475,9 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
     document,
     editedLocale,
     save,
+    draftId,
+    keepOnPhone,
+    saveWithoutPublishing,
   };
 }
 

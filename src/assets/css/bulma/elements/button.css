@@ -227,6 +227,12 @@
     margin-bottom: 1rem;
   }
 
+  /* Bulma 0.9.4, for the outings waiting in My topos: small buttons, as .button.is-small */
+  &.are-small .button:not(.is-normal):not(.is-medium):not(.is-large) {
+    border-radius: 2px;
+    font-size: var(--c2c-size-7);
+  }
+
   &.has-addons .button {
     &:not(:first-child) {
       border-bottom-left-radius: 0;

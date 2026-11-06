@@ -70,6 +70,46 @@
         </p>
         <p>{{ $gettext('Folders sort your topos, one trip per folder for example.') }}</p>
 
+        <h2>{{ $gettext('Outings without a network') }}</h2>
+        <ol>
+          <li>{{ $gettext('On a route, tap Add my outing: the form opens even without a network.') }}</li>
+          <li>
+            {{
+              $gettext(
+                'Without a network, Save keeps the outing on the phone. With one, Save without publishing does the same.'
+              )
+            }}
+          </li>
+          <li>
+            {{
+              $gettext(
+                'Route not found? Save without a route, with a note saying which one it is: link it later from My topos.'
+              )
+            }}
+          </li>
+          <li>
+            {{
+              $gettext(
+                'Back with a network, open My topos and tap Publish now: nothing is sent without you. The number on the My topos tab counts the outings waiting.'
+              )
+            }}
+          </li>
+        </ol>
+        <p>
+          {{
+            $gettext(
+              'An outing refused by Camptocamp shows the reason: fix it with Edit, then Try again. If the connection was cut while sending, check on Camptocamp before trying again, so as not to publish it twice.'
+            )
+          }}
+        </p>
+        <p>
+          {{
+            $gettext(
+              'Connected to Strava, Garmin or Suunto? Your last activities show at the top of the form: one tap takes the trace, the date, the distance and the elevation gain.'
+            )
+          }}
+        </p>
+
         <h2>{{ $gettext('Settings') }}</h2>
         <p>
           {{

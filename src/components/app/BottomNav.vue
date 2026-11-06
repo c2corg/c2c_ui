@@ -21,6 +21,7 @@ import { computed } from 'vue';
 import { type RouteLocationRaw, useRoute, useRouter } from 'vue-router';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { useOutingQueueStore } from '@/stores/outing-queue';
 
 defineOptions({ name: 'BottomNav' });
 
@@ -38,6 +39,8 @@ interface Tab {
 const { $gettext } = useGlobalProperties();
 const route = useRoute();
 const router = useRouter();
+
+const queue = useOutingQueueStore();
 
 const tabs = computed<Tab[]>(() =>
   [
@@ -63,6 +66,8 @@ const tabs = computed<Tab[]>(() =>
       icon: 'bookmark',
       to: { name: 'offline' },
       match: ['offline'],
+      badge: queue.pending.length,
+      badgeLabel: $gettext('Outings waiting for you to publish them:') + ' ' + queue.pending.length,
     },
     {
       key: 'me',

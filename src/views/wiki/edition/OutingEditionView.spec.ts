@@ -83,6 +83,28 @@ describe('OutingEditionView', () => {
     expect(edition.document().activities).toEqual(['hiking']);
   });
 
+  it('gives back what a picked activity wrote when a GPS file replaces its trace', async () => {
+    api.suggestRoutes.mockResolvedValue({ data: { documents: [], total: 0 } });
+    const edition = mountEdition(OutingEditionView, 'outing');
+    edition.setDocument(outing(null));
+    const picker = () => edition.wrapper.findComponent({ name: 'OutingTracePicker' });
+    await vi.waitFor(() => expect(picker().exists()).toBe(true));
+    edition.setGeometry.mockImplementation(() => (edition.document().geometry!.geom_detail = TRACK));
+
+    picker().vm.$emit('pick', { activity: { id: 1, date: '2026-10-29T08:00:00Z', heightDiffUp: 900 }, geometry: {} });
+    await vi.waitFor(() => expect(edition.document().date_start).toBe('2026-10-29'));
+    expect(edition.document().height_diff_up).toBe(900);
+
+    // the map row tells of a whole new track before setting it
+    edition.wrapper.findComponent({ name: 'MapInputRow' }).vm.$emit('replace');
+    edition.document().geometry!.geom_detail = TRACK.replace('763000', '764000');
+
+    expect(edition.document().date_start).toBeUndefined();
+    expect(edition.document().height_diff_up).toBeUndefined();
+    // the routes of the last track asked for (once, after a pause): nothing left running for the next test
+    await vi.waitFor(() => expect(api.suggestRoutes).toHaveBeenCalledOnce());
+  });
+
   it('does not draw the proposed routes on the map', async () => {
     api.suggestRoutes.mockResolvedValue({ data: { documents: [route(1)], total: 1 } });
     const edition = mountEdition(OutingEditionView, 'outing');
