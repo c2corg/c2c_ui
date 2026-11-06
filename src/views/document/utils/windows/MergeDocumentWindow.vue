@@ -119,8 +119,6 @@ defineExpose({ show });
 </script>
 
 <style scoped lang="scss">
-.modal-card-body,
-.modal-card,
 .modal {
   overflow: visible !important;
 }

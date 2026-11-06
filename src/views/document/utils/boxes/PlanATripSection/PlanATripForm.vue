@@ -279,51 +279,6 @@ const { documentType } = useDocumentType(props);
         border-right: 1px solid lightgray;
         font-weight: 600;
       }
-      .autocomplete-container {
-        width: 100%;
-        position: relative;
-        .from-address {
-          padding-left: 10px;
-          border: none;
-          outline: none;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          overflow: hidden;
-          width: inherit;
-        }
-        .autocomplete-results {
-          position: absolute;
-          background-color: white;
-          border: 1px solid lightgrey;
-          z-index: 2;
-          margin-top: 5px;
-          ul {
-            li {
-              padding: 6px;
-              border-bottom: 1px solid lightgrey;
-            }
-          }
-        }
-      }
-      .geolocalisation {
-        border-radius: 15px;
-        border: 1px solid lightgray;
-        background-color: white;
-        height: 25px;
-        position: absolute;
-        width: 29px;
-        right: 0;
-        margin-right: 5px;
-        top: 4px;
-        .geolocalisation-img {
-          height: 18px;
-          width: 18px;
-          display: flex;
-        }
-      }
-      .geolocalisation-return {
-        top: 52px;
-      }
     }
     .from-container-return {
       margin-bottom: 0px;
@@ -534,9 +489,5 @@ const { documentType } = useDocumentType(props);
   display: flex;
   flex-direction: column;
   gap: 15px;
-
-  > p {
-    margin-bottom: 10px;
-  }
 }
 </style>

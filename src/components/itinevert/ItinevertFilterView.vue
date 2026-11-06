@@ -249,10 +249,6 @@ function onAnimEnd(e: AnimationEvent) {
     position: relative;
   }
 
-  .searchButton {
-    width: 100%;
-  }
-
   .filter-buttons {
     margin-top: auto;
     margin-bottom: 0.5rem;
@@ -265,10 +261,6 @@ function onAnimEnd(e: AnimationEvent) {
 
   .query-item-component {
     margin-right: 0.25em;
-  }
-
-  .query-items-filters {
-    position: relative; // important, to force drop down on the left
   }
 
   .dropdown {

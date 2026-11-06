@@ -30,10 +30,6 @@ defineProps({
     transition: 0.2s;
     margin-bottom: 5px;
     flex-grow: 1;
-
-    img {
-      height: 200px;
-    }
   }
 }
 </style>

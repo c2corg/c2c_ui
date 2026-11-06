@@ -672,10 +672,6 @@ function onLoadBatch(batch: Association[], offset: number, load: number) {
     padding-right: 5px;
     min-width: 200px;
     text-align: center !important;
-
-    img {
-      height: 200px;
-    }
   }
 }
 </style>

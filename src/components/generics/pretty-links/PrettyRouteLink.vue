@@ -39,10 +39,4 @@ defineProps({
 .pretty-route-link {
   display: block;
 }
-
-@media print {
-  .is-size-4 {
-    font-size: 1rem !important;
-  }
-}
 </style>

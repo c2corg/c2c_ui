@@ -378,11 +378,6 @@ watch(() => route.fullPath, loadVersions, { immediate: true });
     background: #f2f2f2 !important;
     border-left-color: #eee;
   }
-
-  .row-ellipsed {
-    color: red;
-    display: None;
-  }
 }
 
 ins {

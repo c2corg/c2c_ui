@@ -194,7 +194,6 @@ aside {
   bottom: 0;
 
   .menu-socials,
-  .menu-ad,
   .menu-links {
     margin-bottom: 15px !important;
     line-height: 1;

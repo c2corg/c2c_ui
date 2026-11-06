@@ -46,14 +46,6 @@ function onEditMode() {
   .input-checkbox {
     padding: 0;
   }
-  .is-checkradio[type='checkbox'] + label {
-    margin-right: 0;
-    vertical-align: baseline;
-
-    &:before {
-      top: 1px;
-    }
-  }
 }
 </style>
 
