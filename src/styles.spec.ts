@@ -6,6 +6,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { compile, compileString, NodePackageImporter, type FileImporter, type Options } from 'sass';
 import { describe, expect, it } from 'vitest';
+import { parse } from 'vue/compiler-sfc';
 
 import viteConfig from '../vite.config.ts';
 
@@ -50,10 +51,12 @@ const vueFiles = (dir: string): string[] =>
     return entry.name.endsWith('.vue') ? [path] : [];
   });
 
+// the <style> blocks as @vitejs/plugin-vue sees them; the number is the block's position among all the file's styles
 const scssBlocks = vueFiles(src).flatMap((file) =>
-  [...readFileSync(file, 'utf8').matchAll(/<style\b([^>]*)>([\s\S]*?)<\/style>/g)]
-    .filter(([, attributes]) => /\blang="scss"/.test(attributes!) && !/\bsrc=/.test(attributes!))
-    .map(([, , content], index) => ({ file, name: `${relative(src, file)} #${index + 1}`, content: content! }))
+  parse(readFileSync(file, 'utf8'), { filename: file })
+    .descriptor.styles.map((style, index) => ({ style, index }))
+    .filter(({ style }) => style.lang === 'scss' && !style.src)
+    .map(({ style, index }) => ({ file, name: `${relative(src, file)} #${index + 1}`, content: style.content }))
 );
 
 describe('styles', () => {
