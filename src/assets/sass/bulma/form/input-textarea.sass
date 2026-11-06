@@ -3,6 +3,7 @@
 @use "../utilities/functions"
 @use "../utilities/initial-variables"
 @use "shared"
+@use "../utilities/used"
 
 $textarea-padding: controls.$control-padding-horizontal !default
 $textarea-max-height: 40em !default
@@ -20,42 +21,39 @@ $textarea-colors: shared.$form-colors !default
   // Colors
   @each $name, $pair in $textarea-colors
     $color: list.nth($pair, 1)
-    &.is-#{$name}
+    +used.rule("&.is-#{$name}")
       border-color: $color
-      &:focus,
-      &.is-focused,
-      &:active,
-      &.is-active
+      +used.rule("&:focus, &.is-focused, &:active, &.is-active")
         box-shadow: shared.$input-focus-box-shadow-size functions.bulmaRgba($color, 0.25)
   // Sizes
-  &.is-small
+  +used.rule("&.is-small")
     +controls.control-small
-  &.is-medium
+  +used.rule("&.is-medium")
     +controls.control-medium
-  &.is-large
+  +used.rule("&.is-large")
     +controls.control-large
   // Modifiers
-  &.is-fullwidth
+  +used.rule("&.is-fullwidth")
     display: block
     width: 100%
-  &.is-inline
+  +used.rule("&.is-inline")
     display: inline
     width: auto
 
-.input
++used.rule(".input")
   @extend %input-textarea
-  &.is-rounded
+  +used.rule("&.is-rounded")
     border-radius: initial-variables.$radius-rounded
     padding-left: calc(#{controls.$control-padding-horizontal} + 0.375em)
     padding-right: calc(#{controls.$control-padding-horizontal} + 0.375em)
-  &.is-static
+  +used.rule("&.is-static")
     background-color: transparent
     border-color: transparent
     box-shadow: none
     padding-left: 0
     padding-right: 0
 
-.textarea
++used.rule(".textarea")
   @extend %input-textarea
   display: block
   max-width: 100%
@@ -68,5 +66,5 @@ $textarea-colors: shared.$form-colors !default
   &[rows]
     height: initial
   // Modifiers
-  &.has-fixed-size
+  +used.rule("&.has-fixed-size")
     resize: none

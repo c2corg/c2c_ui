@@ -1,4 +1,5 @@
 @use "../utilities/mixins"
+@use "../utilities/used"
 
 $icon-dimensions: 1.5rem !default
 $icon-dimensions-small: 1rem !default
@@ -6,31 +7,31 @@ $icon-dimensions-medium: 2rem !default
 $icon-dimensions-large: 3rem !default
 $icon-text-spacing: 0.25em !default
 
-.icon
++used.rule(".icon")
   align-items: center
   display: inline-flex
   justify-content: center
   height: $icon-dimensions
   width: $icon-dimensions
   // Sizes
-  &.is-small
+  +used.rule("&.is-small")
     height: $icon-dimensions-small
     width: $icon-dimensions-small
-  &.is-medium
+  +used.rule("&.is-medium")
     height: $icon-dimensions-medium
     width: $icon-dimensions-medium
-  &.is-large
+  +used.rule("&.is-large")
     height: $icon-dimensions-large
     width: $icon-dimensions-large
 
-.icon-text
++used.rule(".icon-text")
   align-items: flex-start
   color: inherit
   display: inline-flex
   flex-wrap: wrap
   line-height: $icon-dimensions
   vertical-align: top
-  .icon
+  +used.rule(".icon")
     flex-grow: 0
     flex-shrink: 0
     &:not(:last-child)
@@ -44,5 +45,5 @@ $icon-text-spacing: 0.25em !default
       +mixins.rtl
         margin-right: $icon-text-spacing
 
-div.icon-text
++used.rule("div.icon-text")
   display: flex

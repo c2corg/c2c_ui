@@ -5,6 +5,7 @@
 @use "../utilities/derived-variables"
 @use "../utilities/functions"
 @use "../utilities/initial-variables"
+@use "../utilities/used"
 
 $button-color: derived-variables.$text-strong !default
 $button-background-color: derived-variables.$scheme-main !default
@@ -53,7 +54,7 @@ $button-responsive-sizes: ("mobile": ("small": (derived-variables.$size-small * 
 
 // The button sizes use mixins so they can be used at different breakpoints
 =button-small
-  &:not(.is-rounded)
+  +used.rule("&:not(.is-rounded)")
     border-radius: initial-variables.$radius-small
   font-size: derived-variables.$size-small
 =button-normal
@@ -63,7 +64,7 @@ $button-responsive-sizes: ("mobile": ("small": (derived-variables.$size-small * 
 =button-large
   font-size: derived-variables.$size-large
 
-.button
++used.rule(".button")
   @extend %control
   @extend %unselectable
   background-color: $button-background-color
@@ -82,11 +83,8 @@ $button-responsive-sizes: ("mobile": ("small": (derived-variables.$size-small * 
   white-space: nowrap
   strong
     color: inherit
-  .icon
-    &,
-    &.is-small,
-    &.is-medium,
-    &.is-large
+  +used.rule(".icon")
+    +used.rule("&, &.is-small, &.is-medium, &.is-large")
       height: 1.5em
       width: 1.5em
     &:first-child:not(:last-child)
@@ -99,34 +97,27 @@ $button-responsive-sizes: ("mobile": ("small": (derived-variables.$size-small * 
       margin-left: calc(#{-0.5 * $button-padding-horizontal} - #{$button-border-width})
       margin-right: calc(#{-0.5 * $button-padding-horizontal} - #{$button-border-width})
   // States
-  &:hover,
-  &.is-hovered
+  +used.rule("&:hover, &.is-hovered")
     border-color: $button-hover-border-color
     color: $button-hover-color
-  &:focus,
-  &.is-focused
+  +used.rule("&:focus, &.is-focused")
     border-color: $button-focus-border-color
     color: $button-focus-color
     &:not(:active)
       box-shadow: $button-focus-box-shadow-size $button-focus-box-shadow-color
-  &:active,
-  &.is-active
+  +used.rule("&:active, &.is-active")
     border-color: $button-active-border-color
     color: $button-active-color
   // Colors
-  &.is-text
+  +used.rule("&.is-text")
     background-color: transparent
     border-color: transparent
     color: $button-text-color
     text-decoration: $button-text-decoration
-    &:hover,
-    &.is-hovered,
-    &:focus,
-    &.is-focused
+    +used.rule("&:hover, &.is-hovered, &:focus, &.is-focused")
       background-color: $button-text-hover-background-color
       color: $button-text-hover-color
-    &:active,
-    &.is-active
+    +used.rule("&:active, &.is-active")
       background-color: functions.bulmaDarken($button-text-hover-background-color, 5%)
       color: $button-text-hover-color
     &[disabled],
@@ -134,35 +125,31 @@ $button-responsive-sizes: ("mobile": ("small": (derived-variables.$size-small * 
       background-color: transparent
       border-color: transparent
       box-shadow: none
-  &.is-ghost
+  +used.rule("&.is-ghost")
     background: $button-ghost-background
     border-color: $button-ghost-border-color
     color: $button-ghost-color
     text-decoration: $button-ghost-decoration
-    &:hover,
-    &.is-hovered
+    +used.rule("&:hover, &.is-hovered")
       color: $button-ghost-hover-color
       text-decoration: $button-ghost-hover-decoration
   @each $name, $pair in $button-colors
     $color: list.nth($pair, 1)
     $color-invert: list.nth($pair, 2)
-    &.is-#{$name}
+    +used.rule("&.is-#{$name}")
       background-color: $color
       border-color: transparent
       color: $color-invert
-      &:hover,
-      &.is-hovered
+      +used.rule("&:hover, &.is-hovered")
         background-color: functions.bulmaDarken($color, 2.5%)
         border-color: transparent
         color: $color-invert
-      &:focus,
-      &.is-focused
+      +used.rule("&:focus, &.is-focused")
         border-color: transparent
         color: $color-invert
         &:not(:active)
           box-shadow: $button-focus-box-shadow-size functions.bulmaRgba($color, 0.25)
-      &:active,
-      &.is-active
+      +used.rule("&:active, &.is-active")
         background-color: functions.bulmaDarken($color, 5%)
         border-color: transparent
         color: $color-invert
@@ -171,11 +158,10 @@ $button-responsive-sizes: ("mobile": ("small": (derived-variables.$size-small * 
         background-color: $color
         border-color: $color
         box-shadow: none
-      &.is-inverted
+      +used.rule("&.is-inverted")
         background-color: $color-invert
         color: $color
-        &:hover,
-        &.is-hovered
+        +used.rule("&:hover, &.is-hovered")
           background-color: functions.bulmaDarken($color-invert, 5%)
         &[disabled],
         fieldset[disabled] &
@@ -183,27 +169,21 @@ $button-responsive-sizes: ("mobile": ("small": (derived-variables.$size-small * 
           border-color: transparent
           box-shadow: none
           color: $color
-      &.is-loading
+      +used.rule("&.is-loading")
         &::after
           border-color: transparent transparent $color-invert $color-invert !important
-      &.is-outlined
+      +used.rule("&.is-outlined")
         background-color: transparent
         border-color: $color
         color: $color
-        &:hover,
-        &.is-hovered,
-        &:focus,
-        &.is-focused
+        +used.rule("&:hover, &.is-hovered, &:focus, &.is-focused")
           background-color: $color
           border-color: $color
           color: $color-invert
-        &.is-loading
+        +used.rule("&.is-loading")
           &::after
             border-color: transparent transparent $color $color !important
-          &:hover,
-          &.is-hovered,
-          &:focus,
-          &.is-focused
+          +used.rule("&:hover, &.is-hovered, &:focus, &.is-focused")
             &::after
               border-color: transparent transparent $color-invert $color-invert !important
         &[disabled],
@@ -212,21 +192,15 @@ $button-responsive-sizes: ("mobile": ("small": (derived-variables.$size-small * 
           border-color: $color
           box-shadow: none
           color: $color
-      &.is-inverted.is-outlined
+      +used.rule("&.is-inverted.is-outlined")
         background-color: transparent
         border-color: $color-invert
         color: $color-invert
-        &:hover,
-        &.is-hovered,
-        &:focus,
-        &.is-focused
+        +used.rule("&:hover, &.is-hovered, &:focus, &.is-focused")
           background-color: $color-invert
           color: $color
-        &.is-loading
-          &:hover,
-          &.is-hovered,
-          &:focus,
-          &.is-focused
+        +used.rule("&.is-loading")
+          +used.rule("&:hover, &.is-hovered, &:focus, &.is-focused")
             &::after
               border-color: transparent transparent $color $color !important
         &[disabled],
@@ -239,27 +213,25 @@ $button-responsive-sizes: ("mobile": ("small": (derived-variables.$size-small * 
       @if list.length($pair) >= 4
         $color-light: list.nth($pair, 3)
         $color-dark: list.nth($pair, 4)
-        &.is-light
+        +used.rule("&.is-light")
           background-color: $color-light
           color: $color-dark
-          &:hover,
-          &.is-hovered
+          +used.rule("&:hover, &.is-hovered")
             background-color: functions.bulmaDarken($color-light, 2.5%)
             border-color: transparent
             color: $color-dark
-          &:active,
-          &.is-active
+          +used.rule("&:active, &.is-active")
             background-color: functions.bulmaDarken($color-light, 5%)
             border-color: transparent
             color: $color-dark
   // Sizes
-  &.is-small
+  +used.rule("&.is-small")
     +button-small
-  &.is-normal
+  +used.rule("&.is-normal")
     +button-normal
-  &.is-medium
+  +used.rule("&.is-medium")
     +button-medium
-  &.is-large
+  +used.rule("&.is-large")
     +button-large
   // Modifiers
   &[disabled],
@@ -268,52 +240,52 @@ $button-responsive-sizes: ("mobile": ("small": (derived-variables.$size-small * 
     border-color: $button-disabled-border-color
     box-shadow: $button-disabled-shadow
     opacity: $button-disabled-opacity
-  &.is-fullwidth
+  +used.rule("&.is-fullwidth")
     display: flex
     width: 100%
-  &.is-loading
+  +used.rule("&.is-loading")
     color: transparent !important
     pointer-events: none
     &::after
       @extend %loader
       +mixins.center(1em)
       position: absolute !important
-  &.is-static
+  +used.rule("&.is-static")
     background-color: $button-static-background-color
     border-color: $button-static-border-color
     color: $button-static-color
     box-shadow: none
     pointer-events: none
-  &.is-rounded
+  +used.rule("&.is-rounded")
     border-radius: initial-variables.$radius-rounded
     padding-left: calc(#{$button-padding-horizontal} + 0.25em)
     padding-right: calc(#{$button-padding-horizontal} + 0.25em)
 
-.buttons
++used.rule(".buttons")
   align-items: center
   display: flex
   flex-wrap: wrap
   justify-content: flex-start
-  .button
+  +used.rule(".button")
     margin-bottom: 0.5rem
-    &:not(:last-child):not(.is-fullwidth)
+    +used.rule("&:not(:last-child):not(.is-fullwidth)")
       +mixins.ltr-property("margin", 0.5rem)
   &:last-child
     margin-bottom: -0.5rem
   &:not(:last-child)
     margin-bottom: 1rem
   // Sizes
-  &.are-small
-    .button:not(.is-normal):not(.is-medium):not(.is-large)
+  +used.rule("&.are-small")
+    +used.rule(".button:not(.is-normal):not(.is-medium):not(.is-large)")
       +button-small
-  &.are-medium
-    .button:not(.is-small):not(.is-normal):not(.is-large)
+  +used.rule("&.are-medium")
+    +used.rule(".button:not(.is-small):not(.is-normal):not(.is-large)")
       +button-medium
-  &.are-large
-    .button:not(.is-small):not(.is-normal):not(.is-medium)
+  +used.rule("&.are-large")
+    +used.rule(".button:not(.is-small):not(.is-normal):not(.is-medium)")
       +button-large
-  &.has-addons
-    .button
+  +used.rule("&.has-addons")
+    +used.rule(".button")
       &:not(:first-child)
         border-bottom-left-radius: 0
         border-top-left-radius: 0
@@ -323,30 +295,25 @@ $button-responsive-sizes: ("mobile": ("small": (derived-variables.$size-small * 
         +mixins.ltr-property("margin", -1px)
       &:last-child
         +mixins.ltr-property("margin", 0)
-      &:hover,
-      &.is-hovered
+      +used.rule("&:hover, &.is-hovered")
         z-index: 2
-      &:focus,
-      &.is-focused,
-      &:active,
-      &.is-active,
-      &.is-selected
+      +used.rule("&:focus, &.is-focused, &:active, &.is-active, &.is-selected")
         z-index: 3
         &:hover
           z-index: 4
-      &.is-expanded
+      +used.rule("&.is-expanded")
         flex-grow: 1
         flex-shrink: 1
-  &.is-centered
+  +used.rule("&.is-centered")
     justify-content: center
-    &:not(.has-addons)
-      .button:not(.is-fullwidth)
+    +used.rule("&:not(.has-addons)")
+      +used.rule(".button:not(.is-fullwidth)")
         margin-left: 0.25rem
         margin-right: 0.25rem
-  &.is-right
+  +used.rule("&.is-right")
     justify-content: flex-end
-    &:not(.has-addons)
-      .button:not(.is-fullwidth)
+    +used.rule("&:not(.has-addons)")
+      +used.rule(".button:not(.is-fullwidth)")
         margin-left: 0.25rem
         margin-right: 0.25rem
 
@@ -354,9 +321,8 @@ $button-responsive-sizes: ("mobile": ("small": (derived-variables.$size-small * 
   +mixins.breakpoint($bp-name)
     @each $size, $value in $bp-sizes
       @if $size != "normal"
-        .button.is-responsive.is-#{$size}
+        +used.rule(".button.is-responsive.is-#{$size}")
           font-size: $value
       @else
-        .button.is-responsive,
-        .button.is-responsive.is-normal
+        +used.rule(".button.is-responsive, .button.is-responsive.is-normal")
           font-size: $value

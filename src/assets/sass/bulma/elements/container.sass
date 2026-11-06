@@ -1,15 +1,16 @@
 @use "../utilities/mixins"
 @use "../utilities/initial-variables"
+@use "../utilities/used"
 
 $container-offset: (2 * initial-variables.$gap) !default
 $container-max-width: initial-variables.$fullhd !default
 
-.container
++used.rule(".container")
   flex-grow: 1
   margin: 0 auto
   position: relative
   width: auto
-  &.is-fluid
+  +used.rule("&.is-fluid")
     max-width: none !important
     padding-left: initial-variables.$gap
     padding-right: initial-variables.$gap
@@ -17,14 +18,14 @@ $container-max-width: initial-variables.$fullhd !default
   +mixins.desktop
     max-width: initial-variables.$desktop - $container-offset
   +mixins.until-widescreen
-    &.is-widescreen:not(.is-max-desktop)
+    +used.rule("&.is-widescreen:not(.is-max-desktop)")
       max-width: min(initial-variables.$widescreen, $container-max-width) - $container-offset
   +mixins.until-fullhd
-    &.is-fullhd:not(.is-max-desktop):not(.is-max-widescreen)
+    +used.rule("&.is-fullhd:not(.is-max-desktop):not(.is-max-widescreen)")
       max-width: min(initial-variables.$fullhd, $container-max-width) - $container-offset
   +mixins.widescreen
-    &:not(.is-max-desktop)
+    +used.rule("&:not(.is-max-desktop)")
       max-width: min(initial-variables.$widescreen, $container-max-width) - $container-offset
   +mixins.fullhd
-    &:not(.is-max-desktop):not(.is-max-widescreen)
+    +used.rule("&:not(.is-max-desktop):not(.is-max-widescreen)")
       max-width: min(initial-variables.$fullhd, $container-max-width) - $container-offset

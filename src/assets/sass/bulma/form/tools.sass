@@ -4,6 +4,7 @@
 @use "../utilities/initial-variables"
 @use "../utilities/mixins"
 @use "shared"
+@use "../utilities/used"
 
 $label-color: derived-variables.$text-strong !default
 $label-weight: initial-variables.$weight-bold !default
@@ -12,7 +13,7 @@ $help-size: derived-variables.$size-small !default
 
 $label-colors: shared.$form-colors !default
 
-.label
++used.rule(".label")
   color: $label-color
   display: block
   font-size: derived-variables.$size-normal
@@ -20,43 +21,39 @@ $label-colors: shared.$form-colors !default
   &:not(:last-child)
     margin-bottom: 0.5em
   // Sizes
-  &.is-small
+  +used.rule("&.is-small")
     font-size: derived-variables.$size-small
-  &.is-medium
+  +used.rule("&.is-medium")
     font-size: derived-variables.$size-medium
-  &.is-large
+  +used.rule("&.is-large")
     font-size: derived-variables.$size-large
 
-.help
++used.rule(".help")
   display: block
   font-size: $help-size
   margin-top: 0.25rem
   @each $name, $pair in $label-colors
     $color: list.nth($pair, 1)
-    &.is-#{$name}
+    +used.rule("&.is-#{$name}")
       color: $color
 
 // Containers
 
-.field
++used.rule(".field")
   &:not(:last-child)
     margin-bottom: 0.75rem
   // Modifiers
-  &.has-addons
+  +used.rule("&.has-addons")
     display: flex
     justify-content: flex-start
-    .control
+    +used.rule(".control")
       &:not(:last-child)
         +mixins.ltr-property("margin", -1px)
       &:not(:first-child):not(:last-child)
-        .button,
-        .input,
-        .select select
+        +used.rule(".button, .input, .select select")
           border-radius: 0
       &:first-child:not(:only-child)
-        .button,
-        .input,
-        .select select
+        +used.rule(".button, .input, .select select")
           +mixins.ltr
             border-bottom-right-radius: 0
             border-top-right-radius: 0
@@ -64,58 +61,50 @@ $label-colors: shared.$form-colors !default
             border-bottom-left-radius: 0
             border-top-left-radius: 0
       &:last-child:not(:only-child)
-        .button,
-        .input,
-        .select select
+        +used.rule(".button, .input, .select select")
           +mixins.ltr
             border-bottom-left-radius: 0
             border-top-left-radius: 0
           +mixins.rtl
             border-bottom-right-radius: 0
             border-top-right-radius: 0
-      .button,
-      .input,
-      .select select
+      +used.rule(".button, .input, .select select")
         &:not([disabled])
-          &:hover,
-          &.is-hovered
+          +used.rule("&:hover, &.is-hovered")
             z-index: 2
-          &:focus,
-          &.is-focused,
-          &:active,
-          &.is-active
+          +used.rule("&:focus, &.is-focused, &:active, &.is-active")
             z-index: 3
             &:hover
               z-index: 4
-      &.is-expanded
+      +used.rule("&.is-expanded")
         flex-grow: 1
         flex-shrink: 1
-    &.has-addons-centered
+    +used.rule("&.has-addons-centered")
       justify-content: center
-    &.has-addons-right
+    +used.rule("&.has-addons-right")
       justify-content: flex-end
-    &.has-addons-fullwidth
-      .control
+    +used.rule("&.has-addons-fullwidth")
+      +used.rule(".control")
         flex-grow: 1
         flex-shrink: 0
-  &.is-grouped
+  +used.rule("&.is-grouped")
     display: flex
     justify-content: flex-start
-    & > .control
+    +used.rule("& > .control")
       flex-shrink: 0
       &:not(:last-child)
         margin-bottom: 0
         +mixins.ltr-property("margin", 0.75rem)
-      &.is-expanded
+      +used.rule("&.is-expanded")
         flex-grow: 1
         flex-shrink: 1
-    &.is-grouped-centered
+    +used.rule("&.is-grouped-centered")
       justify-content: center
-    &.is-grouped-right
+    +used.rule("&.is-grouped-right")
       justify-content: flex-end
-    &.is-grouped-multiline
+    +used.rule("&.is-grouped-multiline")
       flex-wrap: wrap
-      & > .control
+      +used.rule("& > .control")
         &:last-child,
         &:not(:last-child)
           margin-bottom: 0.75rem
@@ -123,12 +112,12 @@ $label-colors: shared.$form-colors !default
         margin-bottom: -0.75rem
       &:not(:last-child)
         margin-bottom: 0
-  &.is-horizontal
+  +used.rule("&.is-horizontal")
     +mixins.tablet
       display: flex
 
-.field-label
-  .label
++used.rule(".field-label")
+  +used.rule(".label")
     font-size: inherit
   +mixins.mobile
     margin-bottom: 0.5rem
@@ -138,56 +127,54 @@ $label-colors: shared.$form-colors !default
     flex-shrink: 0
     +mixins.ltr-property("margin", 1.5rem)
     text-align: right
-    &.is-small
+    +used.rule("&.is-small")
       font-size: derived-variables.$size-small
       padding-top: 0.375em
-    &.is-normal
+    +used.rule("&.is-normal")
       padding-top: 0.375em
-    &.is-medium
+    +used.rule("&.is-medium")
       font-size: derived-variables.$size-medium
       padding-top: 0.375em
-    &.is-large
+    +used.rule("&.is-large")
       font-size: derived-variables.$size-large
       padding-top: 0.375em
 
-.field-body
-  .field .field
++used.rule(".field-body")
+  +used.rule(".field .field")
     margin-bottom: 0
   +mixins.tablet
     display: flex
     flex-basis: 0
     flex-grow: 5
     flex-shrink: 1
-    .field
+    +used.rule(".field")
       margin-bottom: 0
-    & > .field
+    +used.rule("& > .field")
       flex-shrink: 1
-      &:not(.is-narrow)
+      +used.rule("&:not(.is-narrow)")
         flex-grow: 1
       &:not(:last-child)
         +mixins.ltr-property("margin", 0.75rem)
 
-.control
++used.rule(".control")
   box-sizing: border-box
   clear: both
   font-size: derived-variables.$size-normal
   position: relative
   text-align: inherit
   // Modifiers
-  &.has-icons-left,
-  &.has-icons-right
-    .input,
-    .select
+  +used.rule("&.has-icons-left, &.has-icons-right")
+    +used.rule(".input, .select")
       &:focus
-        & ~ .icon
+        +used.rule("& ~ .icon")
           color: shared.$input-icon-active-color
-      &.is-small ~ .icon
+      +used.rule("&.is-small ~ .icon")
         font-size: derived-variables.$size-small
-      &.is-medium ~ .icon
+      +used.rule("&.is-medium ~ .icon")
         font-size: derived-variables.$size-medium
-      &.is-large ~ .icon
+      +used.rule("&.is-large ~ .icon")
         font-size: derived-variables.$size-large
-    .icon
+    +used.rule(".icon")
       color: shared.$input-icon-color
       height: shared.$input-height
       pointer-events: none
@@ -195,28 +182,26 @@ $label-colors: shared.$form-colors !default
       top: 0
       width: shared.$input-height
       z-index: 4
-  &.has-icons-left
-    .input,
-    .select select
+  +used.rule("&.has-icons-left")
+    +used.rule(".input, .select select")
       padding-left: shared.$input-height
-    .icon.is-left
+    +used.rule(".icon.is-left")
       left: 0
-  &.has-icons-right
-    .input,
-    .select select
+  +used.rule("&.has-icons-right")
+    +used.rule(".input, .select select")
       padding-right: shared.$input-height
-    .icon.is-right
+    +used.rule(".icon.is-right")
       right: 0
-  &.is-loading
+  +used.rule("&.is-loading")
     &::after
       @extend %loader
       position: absolute !important
       +mixins.ltr-position(0.625em)
       top: 0.625em
       z-index: 4
-    &.is-small:after
+    +used.rule("&.is-small:after")
       font-size: derived-variables.$size-small
-    &.is-medium:after
+    +used.rule("&.is-medium:after")
       font-size: derived-variables.$size-medium
-    &.is-large:after
+    +used.rule("&.is-large:after")
       font-size: derived-variables.$size-large

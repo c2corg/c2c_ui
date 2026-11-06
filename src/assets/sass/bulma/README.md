@@ -27,12 +27,14 @@ And by hand:
   module only extends the selectors of the modules it loads;
 - the modules the site does not load removed (navbar, pagination, hero...).
 
-## Only the variants the site uses
+## Only the classes the site uses
 
-The generated helpers (`helpers/`), columns (`grid/columns.sass`) and image sizes (`elements/image.sass`) write their
-rules through `+used.rule(<selector>)` (`utilities/used.scss`): a rule is kept only when the classes of its selector
-are in the list of `utilities/used.scss`, the variants the site uses (c2corg/c2c_ui#4918). Of the 800 classes these
-modules can write, the site uses 164: the startup CSS goes from 27.6 to 22.7 KB gzipped.
+Every rule with a class, in `components/`, `elements/`, `form/`, `grid/`, `helpers/`, `layout/` and the `control`
+mixin of `utilities/controls.sass`, is written through `+used.rule(<selector>)` (`utilities/used.scss`): a rule is kept
+only when the classes of its selector are in the list of `utilities/used.scss`, the classes the site uses
+(c2corg/c2c_ui#4918). Of the 933 classes these modules can write, the site uses 250: the startup CSS goes from 27.6 to
+18.3 KB gzipped. Unused modifiers (`is-outlined`, `is-inverted`, `are-small`, `is-toggle`...) and colors (`is-black`
+buttons) are gone.
 
-To use another variant (`mt-6`, `is-hidden-desktop`, `is-4-tablet`...), add it to the list; `src/styles.spec.ts` fails
+To use another class (`mt-6`, `is-hidden-desktop`, `is-outlined`...), add it to the list; `src/styles.spec.ts` fails
 when a class used by the code is missing from the list, or a listed class is no longer used.

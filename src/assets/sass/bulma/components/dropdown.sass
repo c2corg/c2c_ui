@@ -1,6 +1,7 @@
 @use "../utilities/mixins"
 @use "../utilities/derived-variables"
 @use "../utilities/initial-variables"
+@use "../utilities/used"
 
 $dropdown-menu-min-width: 12rem !default
 
@@ -21,26 +22,25 @@ $dropdown-item-active-background-color: derived-variables.$link !default
 
 $dropdown-divider-background-color: derived-variables.$border-light !default
 
-.dropdown
++used.rule(".dropdown")
   display: inline-flex
   position: relative
   vertical-align: top
-  &.is-active,
-  &.is-hoverable:hover
-    .dropdown-menu
+  +used.rule("&.is-active, &.is-hoverable:hover")
+    +used.rule(".dropdown-menu")
       display: block
-  &.is-right
-    .dropdown-menu
+  +used.rule("&.is-right")
+    +used.rule(".dropdown-menu")
       left: auto
       right: 0
-  &.is-up
-    .dropdown-menu
+  +used.rule("&.is-up")
+    +used.rule(".dropdown-menu")
       bottom: 100%
       padding-bottom: $dropdown-content-offset
       padding-top: initial
       top: auto
 
-.dropdown-menu
++used.rule(".dropdown-menu")
   display: none
   +mixins.ltr-position(0, false)
   min-width: $dropdown-menu-min-width
@@ -49,14 +49,14 @@ $dropdown-divider-background-color: derived-variables.$border-light !default
   top: 100%
   z-index: $dropdown-content-z
 
-.dropdown-content
++used.rule(".dropdown-content")
   background-color: $dropdown-content-background-color
   border-radius: $dropdown-content-radius
   box-shadow: $dropdown-content-shadow
   padding-bottom: $dropdown-content-padding-bottom
   padding-top: $dropdown-content-padding-top
 
-.dropdown-item
++used.rule(".dropdown-item")
   color: $dropdown-item-color
   display: block
   font-size: 0.875rem
@@ -64,8 +64,7 @@ $dropdown-divider-background-color: derived-variables.$border-light !default
   padding: 0.375rem 1rem
   position: relative
 
-a.dropdown-item,
-button.dropdown-item
++used.rule("a.dropdown-item, button.dropdown-item")
   +mixins.ltr-property("padding", 3rem)
   text-align: inherit
   white-space: nowrap
@@ -73,11 +72,11 @@ button.dropdown-item
   &:hover
     background-color: $dropdown-item-hover-background-color
     color: $dropdown-item-hover-color
-  &.is-active
+  +used.rule("&.is-active")
     background-color: $dropdown-item-active-background-color
     color: $dropdown-item-active-color
 
-.dropdown-divider
++used.rule(".dropdown-divider")
   background-color: $dropdown-divider-background-color
   border: none
   display: block

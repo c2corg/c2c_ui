@@ -4,6 +4,7 @@
 @use "../utilities/mixins"
 @use "../utilities/derived-variables"
 @use "../utilities/initial-variables"
+@use "../utilities/used"
 
 $tag-background-color: derived-variables.$background !default
 $tag-color: derived-variables.$text !default
@@ -12,12 +13,12 @@ $tag-delete-margin: 1px !default
 
 $tag-colors: derived-variables.$colors !default
 
-.tags
++used.rule(".tags")
   align-items: center
   display: flex
   flex-wrap: wrap
   justify-content: flex-start
-  .tag
+  +used.rule(".tag")
     margin-bottom: 0.5rem
     &:not(:last-child)
       +mixins.ltr-property("margin", 0.5rem)
@@ -26,26 +27,26 @@ $tag-colors: derived-variables.$colors !default
   &:not(:last-child)
     margin-bottom: 1rem
   // Sizes
-  &.are-medium
-    .tag:not(.is-normal):not(.is-large)
+  +used.rule("&.are-medium")
+    +used.rule(".tag:not(.is-normal):not(.is-large)")
       font-size: derived-variables.$size-normal
-  &.are-large
-    .tag:not(.is-normal):not(.is-medium)
+  +used.rule("&.are-large")
+    +used.rule(".tag:not(.is-normal):not(.is-medium)")
       font-size: derived-variables.$size-medium
-  &.is-centered
+  +used.rule("&.is-centered")
     justify-content: center
-    .tag
+    +used.rule(".tag")
       margin-right: 0.25rem
       margin-left: 0.25rem
-  &.is-right
+  +used.rule("&.is-right")
     justify-content: flex-end
-    .tag
+    +used.rule(".tag")
       &:not(:first-child)
         margin-left: 0.5rem
       &:not(:last-child)
         margin-right: 0
-  &.has-addons
-    .tag
+  +used.rule("&.has-addons")
+    +used.rule(".tag")
       +mixins.ltr-property("margin", 0)
       &:not(:first-child)
         +mixins.ltr-property("margin", 0, false)
@@ -63,7 +64,7 @@ $tag-colors: derived-variables.$colors !default
           border-top-left-radius: 0
           border-bottom-left-radius: 0
 
-.tag:not(body)
++used.rule(".tag:not(body)")
   align-items: center
   background-color: $tag-background-color
   border-radius: $tag-radius
@@ -76,31 +77,31 @@ $tag-colors: derived-variables.$colors !default
   padding-left: 0.75em
   padding-right: 0.75em
   white-space: nowrap
-  .delete
+  +used.rule(".delete")
     +mixins.ltr-property("margin", 0.25rem, false)
     +mixins.ltr-property("margin", -0.375rem)
   // Colors
   @each $name, $pair in $tag-colors
     $color: list.nth($pair, 1)
     $color-invert: list.nth($pair, 2)
-    &.is-#{$name}
+    +used.rule("&.is-#{$name}")
       background-color: $color
       color: $color-invert
       // If a light and dark colors are provided
       @if list.length($pair) > 3
         $color-light: list.nth($pair, 3)
         $color-dark: list.nth($pair, 4)
-        &.is-light
+        +used.rule("&.is-light")
           background-color: $color-light
           color: $color-dark
   // Sizes
-  &.is-normal
+  +used.rule("&.is-normal")
     font-size: derived-variables.$size-small
-  &.is-medium
+  +used.rule("&.is-medium")
     font-size: derived-variables.$size-normal
-  &.is-large
+  +used.rule("&.is-large")
     font-size: derived-variables.$size-medium
-  .icon
+  +used.rule(".icon")
     &:first-child:not(:last-child)
       +mixins.ltr-property("margin", -0.375em, false)
       +mixins.ltr-property("margin", 0.1875em)
@@ -111,7 +112,7 @@ $tag-colors: derived-variables.$colors !default
       +mixins.ltr-property("margin", -0.375em, false)
       +mixins.ltr-property("margin", -0.375em)
   // Modifiers
-  &.is-delete
+  +used.rule("&.is-delete")
     +mixins.ltr-property("margin", $tag-delete-margin, false)
     padding: 0
     position: relative
@@ -137,9 +138,9 @@ $tag-colors: derived-variables.$colors !default
       background-color: color.adjust($tag-background-color, $lightness: -5%, $space: hsl)
     &:active
       background-color: color.adjust($tag-background-color, $lightness: -10%, $space: hsl)
-  &.is-rounded
+  +used.rule("&.is-rounded")
     border-radius: initial-variables.$radius-rounded
 
-a.tag
++used.rule("a.tag")
   &:hover
     text-decoration: underline

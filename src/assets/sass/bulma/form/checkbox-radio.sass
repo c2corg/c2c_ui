@@ -1,5 +1,6 @@
 @use "../utilities/mixins"
 @use "shared"
+@use "../utilities/used"
 
 %checkbox-radio
   cursor: pointer
@@ -16,10 +17,10 @@
     color: shared.$input-disabled-color
     cursor: not-allowed
 
-.checkbox
++used.rule(".checkbox")
   @extend %checkbox-radio
 
-.radio
++used.rule(".radio")
   @extend %checkbox-radio
-  & + .radio
+  +used.rule("& + .radio")
     +mixins.ltr-property("margin", 0.5em, false)
