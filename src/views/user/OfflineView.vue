@@ -11,6 +11,99 @@
         <span v-if="usage" class="is-size-7 has-text-grey">{{ usage }} {{ $gettext('used on this device') }}</span>
       </header>
 
+      <!-- The outings written on the phone (src/stores/outing-queue.ts). "Waiting for you": nothing is published
+           by itself when the network comes back, the user does it here -->
+      <section v-if="queue.pending.length" class="box pending-outings">
+        <header class="pending-header">
+          <span class="has-text-weight-semibold">
+            <fa-icon icon="upload" />&nbsp;{{ $gettext('Outings waiting for you to publish them:') }}
+            {{ queue.pending.length }}
+          </span>
+          <button
+            v-if="offline.online"
+            type="button"
+            class="button is-small is-primary"
+            :disabled="queue.syncing || !queue.ready.length"
+            @click="queue.publish()"
+          >
+            <fa-icon icon="rotate" :spin="queue.syncing" />&nbsp;{{
+              queue.syncing ? $gettext('Publishing…') : $gettext('Publish now')
+            }}
+          </button>
+          <span v-else class="tag is-warning">{{ $gettext('Offline') }}</span>
+        </header>
+
+        <article v-for="item of queue.pending" :key="item.id" class="pending-outing">
+          <p>
+            <span class="has-text-weight-semibold">{{ item.title }}</span>
+            &nbsp;
+            <span v-if="item.needsRouteAssoc" class="tag is-warning is-light">{{ $gettext('Route to link') }}</span>
+            <span v-else-if="item.conflict" class="tag is-warning is-light">
+              {{ item.freezeReason === 'conflict' ? $gettext('Conflict') : $gettext('To check') }}
+            </span>
+            <span v-else-if="item.attempts" class="tag is-danger is-light">
+              {{ $gettext('Attempts:') }} {{ item.attempts }}
+            </span>
+          </p>
+          <!-- the note written in the mountains, to recognize the outing weeks later -->
+          <p v-if="item.needsRouteAssoc && item.routeNote" class="is-size-7">
+            <em>{{ item.routeNote }}</em>
+          </p>
+          <!-- the API's own words: a refused outing is fixed only if the user sees what was refused -->
+          <p v-if="item.lastError" class="is-size-7 has-text-grey">
+            {{ $gettext('Last error:') }} <code>{{ item.lastError }}</code>
+          </p>
+          <p v-if="item.conflict" class="is-size-7">{{ whyFrozen(item) }}</p>
+
+          <div class="buttons are-small mt-2">
+            <button
+              v-if="item.needsRouteAssoc"
+              type="button"
+              class="button is-primary"
+              @click="linking = linking === item.id ? null : item.id"
+            >
+              <fa-icon icon="link" />&nbsp;{{ $gettext('Link the route') }}
+            </button>
+            <button
+              v-if="item.conflict"
+              type="button"
+              class="button is-primary"
+              :disabled="queue.syncing"
+              @click="retry(item)"
+            >
+              <fa-icon icon="rotate" />&nbsp;{{ $gettext('Try again') }}
+            </button>
+            <router-link
+              class="button"
+              :to="{ name: 'outing-add', params: { lang: $language.current }, query: { draft: item.id } }"
+            >
+              <fa-icon icon="edit" />&nbsp;{{ $gettext('Edit') }}
+            </router-link>
+            <button v-if="item.conflict" type="button" class="button" @click="queue.download(item)">
+              <fa-icon icon="download" />&nbsp;{{ $gettext('Download') }}
+            </button>
+            <button type="button" class="button is-text" @click="giveUp(item)">{{ $gettext('Give up') }}</button>
+          </div>
+
+          <!-- its route: one saved offline, or a search with a network -->
+          <div v-if="linking === item.id" class="route-link-panel">
+            <button
+              v-for="route of offlineRoutes"
+              :key="route.id"
+              type="button"
+              class="button is-small is-fullwidth is-justify-content-flex-start"
+              @click="link(item, route.data)"
+            >
+              <fa-icon icon="bookmark" />&nbsp;{{ route.title }}
+            </button>
+            <input-document v-if="offline.online" document-type="route" @add="link(item, $event)" />
+            <p v-else-if="!offlineRoutes.length" class="is-size-7">
+              {{ $gettext('No route saved offline: link it once the network is back.') }}
+            </p>
+          </div>
+        </article>
+      </section>
+
       <!-- two independent lists: the tab answers the one question that matters, does it open without a network -->
       <div class="tabs is-boxed is-fullwidth">
         <ul>
@@ -177,7 +270,9 @@ import {
   type SavedEntry,
   type SavedMode,
 } from '@/pwa/offline-store';
+import type { PendingOuting } from '@/pwa/outing-queue';
 import { useOfflineStore } from '@/stores/offline';
+import { useOutingQueueStore } from '@/stores/outing-queue';
 
 defineOptions({ name: 'OfflineView' });
 
@@ -185,6 +280,46 @@ const FRESHNESS_CLASSES: Record<string, string> = { stale: 'is-warning', 'very-s
 
 const { $gettext, $language } = useGlobalProperties();
 const offline = useOfflineStore();
+const queue = useOutingQueueStore();
+
+// the outing whose route is being linked
+const linking = ref<string | null>(null);
+const offlineRoutes = computed(() =>
+  offline.savedDocs.filter((entry) => entry.type === 'route' && entry.mode === OFFLINE_MODE && entry.data)
+);
+
+async function link(item: PendingOuting, route: { document_id?: number }) {
+  await queue.attachRoute(item.id, route);
+  linking.value = null;
+  notify($gettext('Route linked: the outing is ready to publish.'), 'is-success');
+}
+
+async function retry(item: PendingOuting) {
+  await queue.retry(item.id);
+  await queue.publish();
+}
+
+async function giveUp(item: PendingOuting) {
+  if (window.confirm($gettext('Give up this outing? It will be lost.'))) {
+    await queue.remove(item.id);
+  }
+}
+
+// why an outing is no longer tried, and what to do. The ambiguous case matters most: it may be on the site already
+function whyFrozen(item: PendingOuting) {
+  if (item.freezeReason === 'conflict') {
+    return $gettext('A linked document changed meanwhile. Check it before publishing again.');
+  }
+  if (item.freezeReason === 'invalid') {
+    return $gettext('Camptocamp refused this outing (reason above). Fix it with Edit, then tap Try again.');
+  }
+  if (item.ambiguous) {
+    return $gettext(
+      'Impossible to know whether this outing was published: the connection was lost at the wrong moment. Check on Camptocamp before trying again, so as not to publish it twice.'
+    );
+  }
+  return $gettext('Several attempts failed. Try again later, or give up the outing.');
+}
 
 // without a network, what opens without one
 const section = ref<SavedMode>(offline.online ? ONLINE_MODE : OFFLINE_MODE);
@@ -295,6 +430,27 @@ async function removeFolder(folder: Folder) {
 </script>
 
 <style scoped>
+.pending-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.pending-outing {
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--c2c-grey-lighter);
+}
+
+.route-link-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
 .offline-header {
   display: flex;
   flex-wrap: wrap;

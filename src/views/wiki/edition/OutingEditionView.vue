@@ -2,6 +2,13 @@
   <edition-container v-if="document" :mode="mode" :document="document" :is-loading="saving" @save="save">
     <!-- shown once loaded, as the container is -->
     <template v-if="document">
+      <div v-if="draftId" class="notification is-info is-light">
+        {{
+          $gettext(
+            'You are editing an outing saved on the phone, not published yet. Save updates it; publish it from My topos.'
+          )
+        }}
+      </div>
       <form-section
         :title="$gettext('general informations')"
         :sub-title="$gettext('Main informations about your outing')"
@@ -30,6 +37,13 @@
           </div>
         </div>
 
+        <!-- the trace of the user's watch, while there is none (or it is the picked one, which another can replace) -->
+        <outing-trace-picker
+          v-if="mode === 'add' && (!document.geometry?.geom_detail || pickedActivityId !== null)"
+          :picked-id="pickedActivityId"
+          @pick="useTrackerActivity"
+        />
+
         <div class="columns is-multiline">
           <form-field class="is-two-fifths" :document="document" :field="fields.activities" />
           <div class="column">
@@ -52,6 +66,20 @@
           </label>
           <div class="control">
             <input class="input" type="text" placeholder="Name" v-model="routeTitle" />
+          </div>
+        </div>
+
+        <!-- the routes of My topos saved offline: at hand without a network, or just after coming down from one -->
+        <div v-if="offlineRoutes.length" class="field">
+          <label class="label"><fa-icon icon="bookmark" />&nbsp;{{ $gettext('My routes saved offline') }}</label>
+          <div v-for="route of offlineRoutes" :key="route.document_id">
+            <input-checkbox
+              :model-value="routeIsAssociated(route.document_id!)"
+              @update:model-value="changeRouteAssociation($event, route)"
+            >
+              <activities :activities="route.activities" class="is-size-4 has-text-secondary" />
+              <document-title :document="route" />
+            </input-checkbox>
           </div>
         </div>
 
@@ -81,6 +109,36 @@
             More routes are available. You can move the map, specify the name or set an activity to filter them out.
           </span>
         </div>
+
+        <!-- No route to link (none offline, or not on Camptocamp yet): a note says which one it is, and the outing waits
+             on the phone until it is linked from My topos -->
+        <template v-if="mode === 'add' && !document.associations?.routes?.length">
+          <p v-if="!showRouteNote" class="help mb-3">
+            <a @click="routeNoteOpened = true">{{ $gettext('Route not found? Save without a route') }}</a>
+          </p>
+          <div v-else class="notification is-warning is-light">
+            <p class="has-text-weight-semibold">
+              {{ offline.online ? $gettext('Route not found') : $gettext('No route available offline') }}
+            </p>
+            <p class="mb-2">
+              {{ $gettext('Note which route this outing is: you will link it later from My topos.') }}
+            </p>
+            <textarea
+              v-model="routeNote"
+              class="textarea"
+              rows="2"
+              :placeholder="$gettext('E.g. South face of the Dent du Requin, normal route')"
+            />
+            <button
+              type="button"
+              class="button is-warning is-fullwidth mt-2"
+              :disabled="saving || !routeNote.trim()"
+              @click="saveWithoutRoute"
+            >
+              {{ $gettext('Save without a route (to complete later)') }}
+            </button>
+          </div>
+        </template>
 
         <div class="columns is-multiline">
           <form-field :document="document" :field="fields.title" />
@@ -230,6 +288,18 @@
               <form-field :document="document" :field="fields.summary"/>
           -->
       <cotometer-window ref="cotometer" v-if="document" v-model="document.ski_rating" />
+
+      <div v-if="mode === 'add' && !draftId" class="keep-on-phone">
+        <button
+          type="button"
+          class="button is-fullwidth"
+          :class="{ 'is-loading': saving }"
+          @click="saveWithoutPublishing"
+        >
+          {{ $gettext('Save without publishing') }}
+        </button>
+        <p class="help">{{ $gettext('The outing stays on the phone: complete and publish it from My topos.') }}</p>
+      </div>
     </template>
   </edition-container>
 </template>
@@ -247,15 +317,25 @@ import MapInputRow from './utils/MapInputRow.vue';
 import QualityField from './utils/QualityField.vue';
 import { useDocumentEdition } from './utils/document-edition';
 
+import OutingTracePicker from '@/components/tracking/OutingTracePicker.vue';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
+import type { Activity, Geometry } from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { toast } from '@/js/toast';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+import { OFFLINE_MODE } from '@/pwa/offline-store';
+import { giveBackTracePick, readTracePick, writeTracePick, type TracePick } from '@/pwa/outing-trace-pick';
+import { useOfflineStore } from '@/stores/offline';
 
-const { $documentUtils, $dateUtils } = useGlobalProperties();
+const { $documentUtils, $dateUtils, $gettext } = useGlobalProperties();
 const pageRoute = useRoute();
 
-const { fields, saving, mode, document, save } = useDocumentEdition({ afterLoad, beforeSave });
+const { fields, saving, mode, document, save, draftId, keepOnPhone, saveWithoutPublishing } = useDocumentEdition({
+  afterLoad,
+  beforeSave,
+});
+const offline = useOfflineStore();
 
 const mapInput = useTemplateRef<InstanceType<typeof MapInputRow>>('mapInput');
 const quality = useTemplateRef<{ beforeSave(): void }>('quality');
@@ -267,6 +347,59 @@ const routeTitle = ref('');
 const bbox = ref<number[] | null>(null);
 const showMoreResultsBanner = ref(false);
 const currentDate = ref(getCurrentDateString());
+
+// the routes saved offline in My topos
+const offlineRoutes = computed(() =>
+  offline.savedDocs
+    .filter((entry) => entry.type === 'route' && entry.mode === OFFLINE_MODE && entry.data)
+    .map((entry) => entry.data as C2cDocument)
+);
+
+// an outing whose route cannot be linked: a note, and it waits on the phone. Offered at once without a network
+const routeNote = ref('');
+const routeNoteOpened = ref(false);
+const showRouteNote = computed(() => !offline.online || routeNoteOpened.value);
+
+function saveWithoutRoute() {
+  const doc = document.value!;
+  if (!doc.activities?.length || !doc.date_start) {
+    toast({
+      message: $gettext('Choose the activity and the date before saving.'),
+      type: 'is-warning',
+      position: 'center',
+    });
+    return;
+  }
+  handleDates();
+  void keepOnPhone(
+    $gettext('Outing saved on the phone. Link its route from My topos to publish it.'),
+    'is-success',
+    routeNote.value
+  );
+}
+
+// the tracker activity whose trace is in the form, as long as it is (src/pwa/outing-trace-pick.ts)
+const trackerPick = ref<(TracePick & { geom?: string | null }) | null>(null);
+const pickedActivityId = computed(() => {
+  const geom = document.value?.geometry?.geom_detail;
+  return geom && trackerPick.value?.geom === geom ? trackerPick.value.id : null;
+});
+
+async function useTrackerActivity({ activity, geometry }: { activity: Activity; geometry: Geometry }) {
+  const doc = document.value!;
+  if (doc.geometry?.geom_detail) {
+    // through null, as clearing it: the previous pick gives back what it wrote
+    doc.geometry.geom = null;
+    doc.geometry.geom_detail = null;
+    await nextTick();
+  }
+  const day = $dateUtils.toLocalizedString(activity.date, 'YYYY-MM-DD');
+  const pick = readTracePick(doc, activity, day, showBothDates.value);
+  mapInput.value!.setGeometry(geometry);
+  showBothDates.value = false;
+  writeTracePick(pick);
+  trackerPick.value = { ...pick, geom: doc.geometry?.geom_detail };
+}
 
 const routes = () => document.value!.associations!.routes!;
 
@@ -425,6 +558,19 @@ watch(
 watch(
   () => document.value?.geometry?.geom_detail,
   (to, from) => {
+    // the picked trace cleared, or replaced (which goes through null): the date and figures it wrote go back, where
+    // not edited since, and the linked routes fill what is empty again
+    const pick = trackerPick.value;
+    if (!to && pick) {
+      const doc = document.value;
+      if (doc === pick.doc) {
+        showBothDates.value = giveBackTracePick(pick, showBothDates.value);
+        for (const route of routes()) {
+          $documentUtils.propagateProperties(doc, route);
+        }
+      }
+      trackerPick.value = null;
+    }
     if (from === null && to) {
       possibleRoutes.value = null;
       nextTick(async () => {
@@ -439,3 +585,9 @@ watch(routeTitle, () => {
   updateRoutes('routeTitle', false);
 });
 </script>
+
+<style scoped>
+.keep-on-phone {
+  margin: 1.5rem 0 0.5rem;
+}
+</style>
