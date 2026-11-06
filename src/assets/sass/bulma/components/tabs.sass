@@ -2,6 +2,7 @@
 @use "../utilities/mixins"
 @use "../utilities/derived-variables"
 @use "../utilities/initial-variables"
+@use "../utilities/used"
 
 $tabs-border-bottom-color: derived-variables.$border !default
 $tabs-border-bottom-style: solid !default
@@ -31,7 +32,7 @@ $tabs-toggle-link-active-background-color: derived-variables.$link !default
 $tabs-toggle-link-active-border-color: derived-variables.$link !default
 $tabs-toggle-link-active-color: derived-variables.$link-invert !default
 
-.tabs
++used.rule(".tabs")
   @extend %block
   +mixins.overflow-touch
   @extend %unselectable
@@ -58,7 +59,7 @@ $tabs-toggle-link-active-color: derived-variables.$link-invert !default
       color: $tabs-link-hover-color
   li
     display: block
-    &.is-active
+    +used.rule("&.is-active")
       a
         border-bottom-color: $tabs-link-active-border-bottom-color
         color: $tabs-link-active-color
@@ -71,30 +72,30 @@ $tabs-toggle-link-active-color: derived-variables.$link-invert !default
     flex-grow: 1
     flex-shrink: 0
     justify-content: flex-start
-    &.is-left
+    +used.rule("&.is-left")
       padding-right: 0.75em
-    &.is-center
+    +used.rule("&.is-center")
       flex: none
       justify-content: center
       padding-left: 0.75em
       padding-right: 0.75em
-    &.is-right
+    +used.rule("&.is-right")
       justify-content: flex-end
       padding-left: 0.75em
-  .icon
+  +used.rule(".icon")
     &:first-child
       +mixins.ltr-property("margin", 0.5em)
     &:last-child
       +mixins.ltr-property("margin", 0.5em, false)
   // Alignment
-  &.is-centered
+  +used.rule("&.is-centered")
     ul
       justify-content: center
-  &.is-right
+  +used.rule("&.is-right")
     ul
       justify-content: flex-end
   // Styles
-  &.is-boxed
+  +used.rule("&.is-boxed")
     a
       border: 1px solid transparent
       +mixins.ltr
@@ -105,16 +106,16 @@ $tabs-toggle-link-active-color: derived-variables.$link-invert !default
         background-color: $tabs-boxed-link-hover-background-color
         border-bottom-color: $tabs-boxed-link-hover-border-bottom-color
     li
-      &.is-active
+      +used.rule("&.is-active")
         a
           background-color: $tabs-boxed-link-active-background-color
           border-color: $tabs-boxed-link-active-border-color
           border-bottom-color: $tabs-boxed-link-active-border-bottom-color !important
-  &.is-fullwidth
+  +used.rule("&.is-fullwidth")
     li
       flex-grow: 1
       flex-shrink: 0
-  &.is-toggle
+  +used.rule("&.is-toggle")
     a
       border-color: $tabs-toggle-link-border-color
       border-style: $tabs-toggle-link-border-style
@@ -142,7 +143,7 @@ $tabs-toggle-link-active-color: derived-variables.$link-invert !default
         +mixins.rtl
           border-top-left-radius: $tabs-toggle-link-radius
           border-bottom-left-radius: $tabs-toggle-link-radius
-      &.is-active
+      +used.rule("&.is-active")
         a
           background-color: $tabs-toggle-link-active-background-color
           border-color: $tabs-toggle-link-active-border-color
@@ -150,7 +151,7 @@ $tabs-toggle-link-active-color: derived-variables.$link-invert !default
           z-index: 1
     ul
       border-bottom: none
-    &.is-toggle-rounded
+    +used.rule("&.is-toggle-rounded")
       li
         &:first-child a
           +mixins.ltr
@@ -171,9 +172,9 @@ $tabs-toggle-link-active-color: derived-variables.$link-invert !default
             border-top-left-radius: initial-variables.$radius-rounded
             padding-left: 1.25em
   // Sizes
-  &.is-small
+  +used.rule("&.is-small")
     font-size: derived-variables.$size-small
-  &.is-medium
+  +used.rule("&.is-medium")
     font-size: derived-variables.$size-medium
-  &.is-large
+  +used.rule("&.is-large")
     font-size: derived-variables.$size-large

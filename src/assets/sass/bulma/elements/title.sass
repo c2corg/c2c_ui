@@ -3,6 +3,7 @@
 @use "../utilities/mixins"
 @use "../utilities/derived-variables"
 @use "../utilities/initial-variables"
+@use "../utilities/used"
 
 $title-color: derived-variables.$text-strong !default
 $title-family: false !default
@@ -23,8 +24,7 @@ $subtitle-strong-color: derived-variables.$text-strong !default
 $subtitle-strong-weight: initial-variables.$weight-semibold !default
 $subtitle-negative-margin: -1.25rem !default
 
-.title,
-.subtitle
++used.rule(".title, .subtitle")
   @extend %block
   word-break: break-word
   em,
@@ -34,10 +34,10 @@ $subtitle-negative-margin: -1.25rem !default
     font-size: $title-sub-size
   sup
     font-size: $title-sup-size
-  .tag
+  +used.rule(".tag")
     vertical-align: middle
 
-.title
++used.rule(".title")
   color: $title-color
   @if $title-family
     font-family: $title-family
@@ -47,15 +47,15 @@ $subtitle-negative-margin: -1.25rem !default
   strong
     color: $title-strong-color
     font-weight: $title-strong-weight
-  &:not(.is-spaced) + .subtitle
+  +used.rule("&:not(.is-spaced) + .subtitle")
     margin-top: $subtitle-negative-margin
   // Sizes
   @each $size in derived-variables.$sizes
     $i: list.index(derived-variables.$sizes, $size)
-    &.is-#{$i}
+    +used.rule("&.is-#{$i}")
       font-size: $size
 
-.subtitle
++used.rule(".subtitle")
   color: $subtitle-color
   @if $subtitle-family
     font-family: $subtitle-family
@@ -65,10 +65,10 @@ $subtitle-negative-margin: -1.25rem !default
   strong
     color: $subtitle-strong-color
     font-weight: $subtitle-strong-weight
-  &:not(.is-spaced) + .title
+  +used.rule("&:not(.is-spaced) + .title")
     margin-top: $subtitle-negative-margin
   // Sizes
   @each $size in derived-variables.$sizes
     $i: list.index(derived-variables.$sizes, $size)
-    &.is-#{$i}
+    +used.rule("&.is-#{$i}")
       font-size: $size

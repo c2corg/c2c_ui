@@ -5,6 +5,7 @@
 @use "../utilities/initial-variables"
 @use "../utilities/mixins"
 @use "shared"
+@use "../utilities/used"
 
 $file-border-color: derived-variables.$border !default
 $file-radius: initial-variables.$radius !default
@@ -21,7 +22,7 @@ $file-name-max-width: 16em !default
 
 $file-colors: shared.$form-colors !default
 
-.file
++used.rule(".file")
   @extend %unselectable
   align-items: stretch
   display: flex
@@ -31,104 +32,101 @@ $file-colors: shared.$form-colors !default
   @each $name, $pair in $file-colors
     $color: list.nth($pair, 1)
     $color-invert: list.nth($pair, 2)
-    &.is-#{$name}
-      .file-cta
+    +used.rule("&.is-#{$name}")
+      +used.rule(".file-cta")
         background-color: $color
         border-color: transparent
         color: $color-invert
-      &:hover,
-      &.is-hovered
-        .file-cta
+      +used.rule("&:hover, &.is-hovered")
+        +used.rule(".file-cta")
           background-color: functions.bulmaDarken($color, 2.5%)
           border-color: transparent
           color: $color-invert
-      &:focus,
-      &.is-focused
-        .file-cta
+      +used.rule("&:focus, &.is-focused")
+        +used.rule(".file-cta")
           border-color: transparent
           box-shadow: 0 0 0.5em functions.bulmaRgba($color, 0.25)
           color: $color-invert
-      &:active,
-      &.is-active
-        .file-cta
+      +used.rule("&:active, &.is-active")
+        +used.rule(".file-cta")
           background-color: functions.bulmaDarken($color, 5%)
           border-color: transparent
           color: $color-invert
   // Sizes
-  &.is-small
+  +used.rule("&.is-small")
     font-size: derived-variables.$size-small
-  &.is-normal
+  +used.rule("&.is-normal")
     font-size: derived-variables.$size-normal
-  &.is-medium
+  +used.rule("&.is-medium")
     font-size: derived-variables.$size-medium
-    .file-icon
-      .fa
+    +used.rule(".file-icon")
+      +used.rule(".fa")
         font-size: 21px
-  &.is-large
+  +used.rule("&.is-large")
     font-size: derived-variables.$size-large
-    .file-icon
-      .fa
+    +used.rule(".file-icon")
+      +used.rule(".fa")
         font-size: 28px
   // Modifiers
-  &.has-name
-    .file-cta
+  +used.rule("&.has-name")
+    +used.rule(".file-cta")
       border-bottom-right-radius: 0
       border-top-right-radius: 0
-    .file-name
+    +used.rule(".file-name")
       border-bottom-left-radius: 0
       border-top-left-radius: 0
-    &.is-empty
-      .file-cta
+    +used.rule("&.is-empty")
+      +used.rule(".file-cta")
         border-radius: $file-radius
-      .file-name
+      +used.rule(".file-name")
         display: none
-  &.is-boxed
-    .file-label
+  +used.rule("&.is-boxed")
+    +used.rule(".file-label")
       flex-direction: column
-    .file-cta
+    +used.rule(".file-cta")
       flex-direction: column
       height: auto
       padding: 1em 3em
-    .file-name
+    +used.rule(".file-name")
       border-width: 0 1px 1px
-    .file-icon
+    +used.rule(".file-icon")
       height: 1.5em
       width: 1.5em
-      .fa
+      +used.rule(".fa")
         font-size: 21px
-    &.is-small
-      .file-icon .fa
+    +used.rule("&.is-small")
+      +used.rule(".file-icon .fa")
         font-size: 14px
-    &.is-medium
-      .file-icon .fa
+    +used.rule("&.is-medium")
+      +used.rule(".file-icon .fa")
         font-size: 28px
-    &.is-large
-      .file-icon .fa
+    +used.rule("&.is-large")
+      +used.rule(".file-icon .fa")
         font-size: 35px
-    &.has-name
-      .file-cta
+    +used.rule("&.has-name")
+      +used.rule(".file-cta")
         border-radius: $file-radius $file-radius 0 0
-      .file-name
+      +used.rule(".file-name")
         border-radius: 0 0 $file-radius $file-radius
         border-width: 0 1px 1px
-  &.is-centered
+  +used.rule("&.is-centered")
     justify-content: center
-  &.is-fullwidth
-    .file-label
+  +used.rule("&.is-fullwidth")
+    +used.rule(".file-label")
       width: 100%
-    .file-name
+    +used.rule(".file-name")
       flex-grow: 1
       max-width: none
-  &.is-right
+  +used.rule("&.is-right")
     justify-content: flex-end
-    .file-cta
+    +used.rule(".file-cta")
       border-radius: 0 $file-radius $file-radius 0
-    .file-name
+    +used.rule(".file-name")
       border-radius: $file-radius 0 0 $file-radius
       border-width: 1px 0 1px 1px
       order: -1
 
-.file-label
++used.rule(".file-label")
   align-items: stretch
   display: flex
   cursor: pointer
@@ -136,19 +134,19 @@ $file-colors: shared.$form-colors !default
   overflow: hidden
   position: relative
   &:hover
-    .file-cta
+    +used.rule(".file-cta")
       background-color: functions.bulmaDarken($file-cta-background-color, 2.5%)
       color: $file-cta-hover-color
-    .file-name
+    +used.rule(".file-name")
       border-color: functions.bulmaDarken($file-name-border-color, 2.5%)
   &:active
-    .file-cta
+    +used.rule(".file-cta")
       background-color: functions.bulmaDarken($file-cta-background-color, 5%)
       color: $file-cta-active-color
-    .file-name
+    +used.rule(".file-name")
       border-color: functions.bulmaDarken($file-name-border-color, 5%)
 
-.file-input
++used.rule(".file-input")
   height: 100%
   left: 0
   opacity: 0
@@ -157,8 +155,7 @@ $file-colors: shared.$form-colors !default
   top: 0
   width: 100%
 
-.file-cta,
-.file-name
++used.rule(".file-cta, .file-name")
   @extend %control
   border-color: $file-border-color
   border-radius: $file-radius
@@ -167,11 +164,11 @@ $file-colors: shared.$form-colors !default
   padding-right: 1em
   white-space: nowrap
 
-.file-cta
++used.rule(".file-cta")
   background-color: $file-cta-background-color
   color: $file-cta-color
 
-.file-name
++used.rule(".file-name")
   border-color: $file-name-border-color
   border-style: $file-name-border-style
   border-width: $file-name-border-width
@@ -181,12 +178,12 @@ $file-colors: shared.$form-colors !default
   text-align: inherit
   text-overflow: ellipsis
 
-.file-icon
++used.rule(".file-icon")
   align-items: center
   display: flex
   height: 1em
   justify-content: center
   +mixins.ltr-property("margin", 0.5em)
   width: 1em
-  .fa
+  +used.rule(".fa")
     font-size: 14px

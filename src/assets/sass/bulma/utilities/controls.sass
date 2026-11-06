@@ -1,5 +1,6 @@
 @use "derived-variables"
 @use "initial-variables"
+@use "used"
 
 $control-radius: initial-variables.$radius !default
 $control-radius-small: initial-variables.$radius-small !default
@@ -31,10 +32,7 @@ $control-padding-horizontal: calc(0.75em - #{$control-border-width}) !default
   position: relative
   vertical-align: top
   // States
-  &:focus,
-  &.is-focused,
-  &:active,
-  &.is-active
+  +used.rule("&:focus, &.is-focused, &:active, &.is-active")
     outline: none
   &[disabled],
   fieldset[disabled] &

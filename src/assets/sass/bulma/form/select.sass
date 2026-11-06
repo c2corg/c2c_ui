@@ -6,23 +6,24 @@
 @use "../utilities/initial-variables"
 @use "../utilities/mixins"
 @use "shared"
+@use "../utilities/used"
 
 $select-colors: shared.$form-colors !default
 
-.select
++used.rule(".select")
   display: inline-block
   max-width: 100%
   position: relative
   vertical-align: top
-  &:not(.is-multiple)
+  +used.rule("&:not(.is-multiple)")
     height: shared.$input-height
-  &:not(.is-multiple):not(.is-loading)
+  +used.rule("&:not(.is-multiple):not(.is-loading)")
     &::after
       @extend %arrow
       border-color: shared.$input-arrow
       +mixins.ltr-position(1.125em)
       z-index: 4
-  &.is-rounded
+  +used.rule("&.is-rounded")
     select
       border-radius: initial-variables.$radius-rounded
       +mixins.ltr-property("padding", 1em, false)
@@ -46,42 +47,38 @@ $select-colors: shared.$form-colors !default
       option
         padding: 0.5em 1em
   // States
-  &:not(.is-multiple):not(.is-loading):hover
+  +used.rule("&:not(.is-multiple):not(.is-loading):hover")
     &::after
       border-color: shared.$input-hover-color
   // Colors
   @each $name, $pair in $select-colors
     $color: list.nth($pair, 1)
-    &.is-#{$name}
+    +used.rule("&.is-#{$name}")
       &:not(:hover)::after
         border-color: $color
       select
         border-color: $color
-        &:hover,
-        &.is-hovered
+        +used.rule("&:hover, &.is-hovered")
           border-color: functions.bulmaDarken($color, 5%)
-        &:focus,
-        &.is-focused,
-        &:active,
-        &.is-active
+        +used.rule("&:focus, &.is-focused, &:active, &.is-active")
           box-shadow: shared.$input-focus-box-shadow-size functions.bulmaRgba($color, 0.25)
   // Sizes
-  &.is-small
+  +used.rule("&.is-small")
     +controls.control-small
-  &.is-medium
+  +used.rule("&.is-medium")
     +controls.control-medium
-  &.is-large
+  +used.rule("&.is-large")
     +controls.control-large
   // Modifiers
-  &.is-disabled
+  +used.rule("&.is-disabled")
     &::after
       border-color: shared.$input-disabled-color !important
       opacity: 0.5
-  &.is-fullwidth
+  +used.rule("&.is-fullwidth")
     width: 100%
     select
       width: 100%
-  &.is-loading
+  +used.rule("&.is-loading")
     &::after
       @extend %loader
       margin-top: 0
@@ -89,9 +86,9 @@ $select-colors: shared.$form-colors !default
       +mixins.ltr-position(0.625em)
       top: 0.625em
       transform: none
-    &.is-small:after
+    +used.rule("&.is-small:after")
       font-size: derived-variables.$size-small
-    &.is-medium:after
+    +used.rule("&.is-medium:after")
       font-size: derived-variables.$size-medium
-    &.is-large:after
+    +used.rule("&.is-large:after")
       font-size: derived-variables.$size-large

@@ -2,6 +2,7 @@
 @use "sass:list"
 @use "../utilities/mixins"
 @use "../utilities/derived-variables"
+@use "../utilities/used"
 
 $table-color: derived-variables.$text-strong !default
 $table-background-color: derived-variables.$scheme-main !default
@@ -31,7 +32,7 @@ $table-striped-row-even-hover-background-color: derived-variables.$scheme-main-t
 
 $table-colors: derived-variables.$colors !default
 
-.table
++used.rule(".table")
   @extend %block
   background-color: $table-background-color
   color: $table-color
@@ -45,28 +46,28 @@ $table-colors: derived-variables.$colors !default
     @each $name, $pair in $table-colors
       $color: list.nth($pair, 1)
       $color-invert: list.nth($pair, 2)
-      &.is-#{$name}
+      +used.rule("&.is-#{$name}")
         background-color: $color
         border-color: $color
         color: $color-invert
     // Modifiers
-    &.is-narrow
+    +used.rule("&.is-narrow")
       white-space: nowrap
       width: 1%
-    &.is-selected
+    +used.rule("&.is-selected")
       background-color: $table-row-active-background-color
       color: $table-row-active-color
       a,
       strong
         color: currentColor
-    &.is-vcentered
+    +used.rule("&.is-vcentered")
       vertical-align: middle
   th
     color: $table-cell-heading-color
     &:not([align])
       text-align: $table-cell-text-align
   tr
-    &.is-selected
+    +used.rule("&.is-selected")
       background-color: $table-row-active-background-color
       color: $table-row-active-color
       a,
@@ -96,7 +97,7 @@ $table-colors: derived-variables.$colors !default
         th
           border-bottom-width: 0
   // Modifiers
-  &.is-bordered
+  +used.rule("&.is-bordered")
     td,
     th
       border-width: 1px
@@ -105,31 +106,31 @@ $table-colors: derived-variables.$colors !default
         td,
         th
           border-bottom-width: 1px
-  &.is-fullwidth
+  +used.rule("&.is-fullwidth")
     width: 100%
-  &.is-hoverable
+  +used.rule("&.is-hoverable")
     tbody
-      tr:not(.is-selected)
+      +used.rule("tr:not(.is-selected)")
         &:hover
           background-color: $table-row-hover-background-color
-    &.is-striped
+    +used.rule("&.is-striped")
       tbody
-        tr:not(.is-selected)
+        +used.rule("tr:not(.is-selected)")
           &:hover
             background-color: $table-row-hover-background-color
             &:nth-child(even)
               background-color: $table-striped-row-even-hover-background-color
-  &.is-narrow
+  +used.rule("&.is-narrow")
     td,
     th
       padding: 0.25em 0.5em
-  &.is-striped
+  +used.rule("&.is-striped")
     tbody
-      tr:not(.is-selected)
+      +used.rule("tr:not(.is-selected)")
         &:nth-child(even)
           background-color: $table-striped-row-even-background-color
 
-.table-container
++used.rule(".table-container")
   @extend %block
   +mixins.overflow-touch
   overflow: auto

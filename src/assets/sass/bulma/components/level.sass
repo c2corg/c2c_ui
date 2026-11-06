@@ -1,10 +1,11 @@
 @use "../utilities/extends"
 @use "../utilities/mixins"
 @use "../utilities/initial-variables"
+@use "../utilities/used"
 
 $level-item-spacing: (initial-variables.$block-spacing * 0.5) !default
 
-.level
++used.rule(".level")
   @extend %block
   align-items: center
   justify-content: space-between
@@ -14,66 +15,63 @@ $level-item-spacing: (initial-variables.$block-spacing * 0.5) !default
     display: inline-block
     vertical-align: top
   // Modifiers
-  &.is-mobile
+  +used.rule("&.is-mobile")
     display: flex
-    .level-left,
-    .level-right
+    +used.rule(".level-left, .level-right")
       display: flex
-    .level-left + .level-right
+    +used.rule(".level-left + .level-right")
       margin-top: 0
-    .level-item
+    +used.rule(".level-item")
       &:not(:last-child)
         margin-bottom: 0
         +mixins.ltr-property("margin", $level-item-spacing)
-      &:not(.is-narrow)
+      +used.rule("&:not(.is-narrow)")
         flex-grow: 1
   // Responsiveness
   +mixins.tablet
     display: flex
-    & > .level-item
-      &:not(.is-narrow)
+    +used.rule("& > .level-item")
+      +used.rule("&:not(.is-narrow)")
         flex-grow: 1
 
-.level-item
++used.rule(".level-item")
   align-items: center
   display: flex
   flex-basis: auto
   flex-grow: 0
   flex-shrink: 0
   justify-content: center
-  .title,
-  .subtitle
+  +used.rule(".title, .subtitle")
     margin-bottom: 0
   // Responsiveness
   +mixins.mobile
     &:not(:last-child)
       margin-bottom: $level-item-spacing
 
-.level-left,
-.level-right
++used.rule(".level-left, .level-right")
   flex-basis: auto
   flex-grow: 0
   flex-shrink: 0
-  .level-item
+  +used.rule(".level-item")
     // Modifiers
-    &.is-flexible
+    +used.rule("&.is-flexible")
       flex-grow: 1
     // Responsiveness
     +mixins.tablet
       &:not(:last-child)
         +mixins.ltr-property("margin", $level-item-spacing)
 
-.level-left
++used.rule(".level-left")
   align-items: center
   justify-content: flex-start
   // Responsiveness
   +mixins.mobile
-    & + .level-right
+    +used.rule("& + .level-right")
       margin-top: 1.5rem
   +mixins.tablet
     display: flex
 
-.level-right
++used.rule(".level-right")
   align-items: center
   justify-content: flex-end
   // Responsiveness

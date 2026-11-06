@@ -1,6 +1,7 @@
 @use "../utilities/mixins"
 @use "../utilities/derived-variables"
 @use "../utilities/initial-variables"
+@use "../utilities/used"
 
 $card-color: derived-variables.$text !default
 $card-background-color: derived-variables.$scheme-main !default
@@ -22,7 +23,7 @@ $card-footer-padding: 0.75rem !default
 
 $card-media-margin: initial-variables.$block-spacing !default
 
-.card
++used.rule(".card")
   background-color: $card-background-color
   border-radius: $card-radius
   box-shadow: $card-shadow
@@ -38,24 +39,24 @@ $card-media-margin: initial-variables.$block-spacing !default
     border-bottom-left-radius: $card-radius
     border-bottom-right-radius: $card-radius
 
-.card-header
++used.rule(".card-header")
   @extend %card-item
   background-color: $card-header-background-color
   align-items: stretch
   box-shadow: $card-header-shadow
   display: flex
 
-.card-header-title
++used.rule(".card-header-title")
   align-items: center
   color: $card-header-color
   display: flex
   flex-grow: 1
   font-weight: $card-header-weight
   padding: $card-header-padding
-  &.is-centered
+  +used.rule("&.is-centered")
     justify-content: center
 
-.card-header-icon
++used.rule(".card-header-icon")
   +mixins.reset
   align-items: center
   cursor: pointer
@@ -63,7 +64,7 @@ $card-media-margin: initial-variables.$block-spacing !default
   justify-content: center
   padding: $card-header-padding
 
-.card-image
++used.rule(".card-image")
   display: block
   position: relative
   &:first-child
@@ -75,19 +76,19 @@ $card-media-margin: initial-variables.$block-spacing !default
       border-bottom-left-radius: $card-radius
       border-bottom-right-radius: $card-radius
 
-.card-content
++used.rule(".card-content")
   @extend %card-item
   background-color: $card-content-background-color
   padding: $card-content-padding
 
-.card-footer
++used.rule(".card-footer")
   @extend %card-item
   background-color: $card-footer-background-color
   border-top: $card-footer-border-top
   align-items: stretch
   display: flex
 
-.card-footer-item
++used.rule(".card-footer-item")
   align-items: center
   display: flex
   flex-basis: 0
@@ -100,6 +101,6 @@ $card-media-margin: initial-variables.$block-spacing !default
 
 // Combinations
 
-.card
-  .media:not(:last-child)
++used.rule(".card")
+  +used.rule(".media:not(:last-child)")
     margin-bottom: $card-media-margin
