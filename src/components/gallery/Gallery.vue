@@ -69,7 +69,7 @@ swiper-slide {
   width: auto;
   cursor: pointer;
 
-  picture::v-deep img {
+  picture :deep(img) {
     height: 200px;
   }
 }

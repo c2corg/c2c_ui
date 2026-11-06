@@ -2,6 +2,8 @@ import { fileURLToPath, URL } from 'node:url';
 
 import legacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
+import browserslist from 'browserslist';
+import { browserslistToTargets } from 'lightningcss';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { type Plugin, type Rollup, defineConfig } from 'vite';
 
@@ -290,6 +292,12 @@ export default defineConfig({
   },
 
   css: {
+    // Lightning CSS instead of PostCSS: vendor prefixes and syntax lowered for the browsers of .browserslistrc (as
+    // autoprefixer did); build.cssMinify uses it too
+    transformer: 'lightningcss',
+    lightningcss: {
+      targets: browserslistToTargets(browserslist()),
+    },
     devSourcemap: true,
     preprocessorOptions: {
       scss: {
@@ -314,6 +322,8 @@ export default defineConfig({
   build: {
     // build.target is derived from modernBrowsers by plugin-legacy
     sourcemap: true,
+    // with the targets of css.lightningcss (.browserslistrc), not build.target
+    cssMinify: 'lightningcss',
     rollupOptions: {
       output: {
         manualChunks: vendorChunk(),
