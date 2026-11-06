@@ -232,4 +232,40 @@ function format(suggestion: unknown) {
 .fade-leave-to {
   opacity: 0;
 }
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark field and list, as the inputs of Bulma */
+html[data-theme='dark'] .autocomplete-wrapper .autocomplete-box {
+  .input-wrapper {
+    .autocomplete-input {
+      color: #e5e5e5;
+      border-color: rgba(255, 255, 255, 0.15);
+      background-color: #1f1f1f;
+    }
+
+    .caret-icon {
+      color: #b5b5b5;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+
+  .autocomplete-dropdown {
+    background: #2a2a2a;
+    border-color: rgba(255, 255, 255, 0.15);
+    scrollbar-color: #6b6b6b #2a2a2a;
+
+    ul li {
+      &:hover {
+        background-color: #353535;
+        color: #fff;
+      }
+
+      &:not(:last-child) {
+        border-bottom-color: rgba(255, 255, 255, 0.08);
+      }
+    }
+  }
+}
 </style>

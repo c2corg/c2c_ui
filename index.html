@@ -10,6 +10,11 @@
 
     <meta name="theme-color" content="#F93" />
     <meta name="application-name" content="Camptocamp.org" />
+    <!-- installed on a phone's home screen (the web manifest is added by vite-plugin-pwa) -->
+    <link rel="apple-touch-icon" href="%BASE_URL%img/icons/apple-touch-icon-180x180.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Camptocamp" />
     <!-- runtime configuration (backend urls), before the app: inlined here when the container starts (data-c2c-config,
       docker/runtime-config.sh), so that the first render doesn't wait for another request; empty otherwise -->
     <script src="%BASE_URL%config.js" nonce="__CSP_NONCE__" data-c2c-config></script>

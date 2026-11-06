@@ -6,6 +6,8 @@
         class="column is-12-mobile"
         :class="feed ? 'is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd' : 'is-7 is-8-fullhd'"
       >
+        <!-- announces the app to the visitors of the website, hidden once installed -->
+        <app-banner />
         <!-- Association and website introduction -->
         <div class="box intro">
           <div class="feed-title has-cursor-pointer">
@@ -96,19 +98,23 @@ import DashboardRoutesList from './utils/DashboardRoutesList.vue';
 import ForumWidget from './utils/ForumWidget.vue';
 import UsefulLinks from './utils/UsefulLinks.vue';
 
+import AppBanner from '@/components/app/AppBanner.vue';
 import FeedWidget from '@/components/feed-widget/FeedWidget.vue';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
+import { useAppSettingsStore } from '@/stores/app-settings';
 
 // stored under the component name, as before: existing preferences are kept
 const preferences = getPreferences('HomeView');
 
 const { $user } = useGlobalProperties();
+const appSettings = useAppSettingsStore();
 
 // the toggles of the page, stored when changed (the banner is shown to the visitors, hidden to the users)
 const toggles = {
   isPersonal: ref<boolean>(preferences.get('isPersonal', false)),
-  feed: ref<boolean>(preferences.get('feed', false)),
+  // in the phone layout of the app, the activity feed: what its Recent tab promises
+  feed: ref<boolean>(preferences.get('feed', appSettings.isMobileShell)),
   visible: ref(!$user.isLogged),
 };
 const { isPersonal, feed, visible } = toggles;
@@ -219,5 +225,10 @@ function setProperty(property: keyof typeof toggles, value: boolean) {
 /* the ad slot stays empty when there is no ad: no gap then */
 .ams-ad:not(:empty) {
   margin-bottom: var(--c2c-size-7);
+}
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark switch */
+html[data-theme='dark'] .toggleContainer {
+  background: #2a2a2a;
 }
 </style>

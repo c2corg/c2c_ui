@@ -94,4 +94,10 @@ onBeforeUnmount(() => {
     border-bottom-right-radius: 4px;
   }
 }
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark window */
+html[data-theme='dark'] .gdpr-content {
+  background-color: #2a2a2a;
+  color: #e5e5e5;
+}
 </style>

@@ -128,12 +128,7 @@
                 class="forum-avatar"
                 :class="{ 'has-notifications': forumLinks.some((link) => link.kind === 'notifications') }"
               >
-                <img
-                  width="24"
-                  height="24"
-                  alt="Avatar"
-                  :src="forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
-                />
+                <img width="24" height="24" alt="Avatar" :src="forum.getUserAvatarUrl($user.forumUsername ?? '', 24)" />
                 <!-- placed like on the forum: messages on the left, other notifications on the right -->
                 <span
                   v-for="link of forumLinks"
@@ -222,6 +217,7 @@ import DfmAdLarge from './DfmAdLarge.vue';
 import IconHelp from '@/components/generics/icons/IconHelp.vue';
 import IconJoinUs from '@/components/generics/icons/IconJoinUs.vue';
 import JoinUsLink from '@/components/generics/links/JoinUsLink.vue';
+import forum from '@/js/apis/forum';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useIsHomePage } from '@/js/composables/home-page';
 import config from '@/js/config';
@@ -630,6 +626,11 @@ nav {
     width: 300px;
     margin-right: 0;
   }
+}
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark bar (the yellow one of the test servers stays) */
+html[data-theme='dark'] nav:not(.has-background-warning) {
+  background-color: #1f1f1f;
 }
 </style>
 

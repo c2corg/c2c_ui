@@ -22,7 +22,7 @@
           class="avatar"
           alt="Avatar"
           @error="useDefaultAvatarIcon = true"
-          :src="forumAvatarUrl + item.user.forum_username + '/36/1_1.png'"
+          :src="forum.getUserAvatarUrl(item.user.forum_username, 36)"
           loading="lazy"
         />
         <fa-icon v-else icon="user" class="is-size-3 has-text-grey" />
@@ -100,8 +100,6 @@ const props = defineProps({
 });
 
 const { $documentUtils, $gettext } = useGlobalProperties();
-
-const forumAvatarUrl = forum.url + '/user_avatar/' + forum.url.replace('https://', '') + '/';
 
 const useDefaultAvatarIcon = ref(false);
 
