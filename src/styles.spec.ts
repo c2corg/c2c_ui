@@ -128,6 +128,18 @@ describe('styles', () => {
     expect(listedClasses().sort()).toEqual(used);
   });
 
+  // a selector is kept when all the classes it requires are listed; those of :not(...) are not required
+  it.each([
+    ['.column:not(.is-narrow-unknown)', '.column:not(.is-narrow-unknown)'],
+    ['.container.is-widescreen:not(.is-max-desktop)', null],
+    ['.column:hover, .column.is-black', '.column:hover'],
+  ])('keeps %s as %s', (selector, kept) => {
+    const { css } = compileString(`@use 'bulma/utilities/used';\na { kept: '#{used.only('${selector}')}'; }`, {
+      url: pathToFileURL(join(sassDir, 'used-only.scss')),
+    });
+    expect(css.match(/kept: "(.*)";/)?.[1]).toBe(kept ?? '');
+  });
+
   it.each(scssBlocks)('compiles the style of $name without a Sass warning', ({ file, content }) => {
     const warnings = compileWarnings((options) =>
       compileString(additionalData + content, { ...options, url: pathToFileURL(file) })

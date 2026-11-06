@@ -45,6 +45,10 @@ $classes: (
   @for $i from 1 through string.length($selector) {
     $char: string.slice($selector, $i, $i);
     @if string.slice($selector, $i, $i + 4) == ':not(' {
+      // the class just before `:not(` is required
+      @if $negated == 0 and $name != null and $name != '' {
+        $result: list.append($result, $name);
+      }
       $negated: $negated + 1;
     } @else if $negated > 0 and $char == ')' {
       $negated: $negated - 1;
