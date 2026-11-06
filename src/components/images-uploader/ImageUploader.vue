@@ -191,16 +191,6 @@ function applyRotation(angle: number) {
   &:hover {
     // background-color: black;
     transition: 0.2s;
-
-    .exif {
-      background-color: rgba(83, 83, 83, 0.58);
-    }
-
-    .remove-image-btn,
-    .exif p {
-      opacity: 1;
-      transition: 0.2s;
-    }
   }
 
   progress {

@@ -120,23 +120,6 @@ onMounted(() => {
 });
 </script>
 <style scoped lang="scss">
-dl,
-dt,
-dd {
-  margin: 0;
-  padding: 0;
-}
-dt,
-dd {
-  display: inline;
-}
-dt {
-  font-weight: bold;
-}
-dt::before {
-  content: '';
-  display: block;
-}
 .icon-bra {
   margin: -35px 0 -25px 0;
 }

@@ -437,11 +437,6 @@ function handleDocumentHighlight(document: MapDocument | null) {
     display: flex;
     flex-direction: column;
     height: 100%;
-    .public-transports-subtitle {
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
 
     .stop-cards {
       height: inherit;

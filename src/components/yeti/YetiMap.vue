@@ -236,33 +236,6 @@ defineExpose({ getExtent });
 @import 'ol/ol.css';
 $control-margin: 0.52em;
 
-.ol-control-layer-switcher {
-  bottom: 3em;
-  left: $control-margin;
-  right: $control-margin;
-  max-width: 400px;
-  text-decoration: none;
-  background-color: white;
-  border: 1px solid lightgray;
-  border-radius: 2px;
-  padding: 0 10px 10px 10px;
-  display: flex;
-
-  & > div {
-    flex: 1;
-
-    header {
-      font-weight: bold;
-      padding-top: 10px;
-    }
-  }
-}
-
-.ol-control-layer-switcher-button {
-  bottom: $control-margin;
-  left: $control-margin;
-}
-
 .ol-control-recenter-on {
   top: $control-margin;
   left: 3em;
@@ -294,13 +267,6 @@ $control-margin: 0.52em;
 .ol-control-center-on-geolocation {
   top: 92px;
   left: $control-margin;
-}
-
-.map-control-listitem {
-  display: flex;
-}
-.map-control-listitem label {
-  padding-left: 0.25rem;
 }
 
 $section-padding: 1.5rem; //TODO find this variable
@@ -343,10 +309,6 @@ $yeti-height: calc(
     top: 3rem;
     left: 3rem;
   }
-}
-
-.icon-notification {
-  color: $primary;
 }
 </style>
 

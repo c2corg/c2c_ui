@@ -1091,21 +1091,12 @@ function recenterMapOnDocuments() {
       display: flex;
       flex-direction: column;
       height: 100%;
-      .plan-trip-title {
-        font-size: 15px;
-        font-weight: bold;
-        margin-bottom: 15px;
-      }
 
       .plan-trip-details {
         display: flex;
         flex-direction: column;
         gap: 15px;
         height: 84%;
-
-        > p {
-          margin-bottom: 10px;
-        }
       }
 
       .plan-trip-search-button {
@@ -1117,10 +1108,6 @@ function recenterMapOnDocuments() {
           font-weight: 600;
           margin-left: 12px;
         }
-      }
-
-      .non-valid-address {
-        color: red;
       }
 
       .calculated-duration {
@@ -1159,44 +1146,6 @@ function recenterMapOnDocuments() {
           padding-right: 16px;
           transition: background-color 0.3s ease;
           position: relative;
-
-          .itinerary-header {
-            border: 1px solid lightgrey;
-            border-left: 4px solid #337ab7;
-            border-radius: 4px;
-            padding: 10px;
-            margin-top: 12px;
-            cursor: pointer;
-            .itinerary-time {
-              display: flex;
-              .journey-duration {
-                margin-left: auto;
-                margin-right: 5px;
-                font-weight: bold;
-              }
-            }
-
-            .journey-steps {
-              display: flex;
-              margin-top: 8px;
-              flex-wrap: wrap;
-
-              .step-wrapper {
-                display: flex;
-                gap: 15px;
-
-                .journey-step {
-                  .transport-icon {
-                    margin-left: 8px;
-                  }
-                }
-              }
-            }
-          }
-          .selected {
-            border-left: 4px solid #4baf50;
-            background-color: #fbfaf6;
-          }
         }
       }
       .navitia-unknown-error {
@@ -1226,18 +1175,6 @@ function recenterMapOnDocuments() {
         background-color: rgba(255, 255, 255, 0.8);
         z-index: 10;
         pointer-events: none;
-      }
-
-      @keyframes fadeFlash {
-        0% {
-          opacity: 0;
-        }
-        50% {
-          opacity: 1;
-        }
-        100% {
-          opacity: 0;
-        }
       }
 
       .time-modification-buttons {
@@ -1292,15 +1229,5 @@ function recenterMapOnDocuments() {
       margin-right: auto;
     }
   }
-  .from-to-container {
-    width: 100% !important;
-  }
-}
-.is-firefox .calendar-icon {
-  display: none !important;
-}
-
-.fullwidth {
-  width: 100% !important;
 }
 </style>

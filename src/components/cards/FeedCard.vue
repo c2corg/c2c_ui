@@ -168,11 +168,6 @@ function max300chars(value: string) {
   text-overflow: ellipsis;
 }
 
-.card-image-content {
-  display: flex;
-  overflow: hidden;
-}
-
 .avatar {
   border-radius: 50%;
   width: 24px;
@@ -181,21 +176,12 @@ function max300chars(value: string) {
   margin-right: 0.5rem;
 }
 
-.card-image-content > div > img {
-  width: 100%;
-  box-sizing: border-box;
-}
-
 .row {
   padding: 0.4rem 0.8rem;
   font-size: 0.9rem;
   min-height: 29px;
   color: $text;
   align-items: center;
-
-  .column {
-    max-height: 58px;
-  }
 }
 
 .is-not-ellipsed {

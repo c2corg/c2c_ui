@@ -454,29 +454,8 @@ $yeti-height-ad: calc(100vh - #{$navbarad-height});
   padding: $section-padding;
 }
 
-.yeti-icon {
-  transform: scale(0.9);
-}
-
 .yeti-title {
   margin-top: calc(0.75rem + 2px);
-}
-
-@media screen and (max-width: $tablet) {
-  .mobile-result-map {
-    margin-top: 0;
-    height: $yeti-height;
-
-    .documents-container {
-      display: None;
-    }
-  }
-
-  .mobile-result-card {
-    .map-container {
-      visibility: hidden; // map does not like to be in a display none...
-    }
-  }
 }
 
 @media screen and (min-width: $tablet) {

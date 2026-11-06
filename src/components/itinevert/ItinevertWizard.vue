@@ -740,13 +740,6 @@ onMounted(() => {
     font-weight: bold;
   }
 
-  .mountainRangeSelector {
-    width: 100%;
-    border: 1px solid lightgray;
-    padding: 5px;
-    border-radius: 4px;
-  }
-
   .maxTripDurationInput {
     width: 50px;
     margin-right: 8px;
@@ -774,9 +767,6 @@ onMounted(() => {
         z-index: 1;
         margin-left: 20px;
         margin-top: -10px;
-      }
-      .input-container-mobile {
-        margin-left: auto;
       }
       .input-container {
         position: relative;
@@ -815,22 +805,6 @@ onMounted(() => {
           outline: none;
           font-size: 15px;
           color: #333;
-
-          &::-webkit-calendar-picker-indicator {
-            cursor: pointer;
-          }
-        }
-
-        .hour-input-mobile {
-          flex: 1;
-          max-width: 90px;
-          margin-left: auto;
-          margin-right: auto;
-          border: none;
-          outline: none;
-          font-size: 15px;
-          color: #333;
-          padding: 4px 6px;
 
           &::-webkit-calendar-picker-indicator {
             cursor: pointer;

@@ -126,10 +126,6 @@ onBeforeUnmount(() => {
     display: none;
   }
 
-  .field {
-    flex-direction: column;
-  }
-
   .title {
     width: 100%;
   }
@@ -137,28 +133,6 @@ onBeforeUnmount(() => {
   .start-again-button {
     font-size: 12px;
     margin-top: 0px;
-  }
-
-  .preference-switch {
-    margin-top: 0.3rem;
-    margin-left: 0.3rem;
-    display: flex;
-  }
-
-  .preference-switch > span {
-    display: flex;
-    flex-direction: row-reverse;
-  }
-
-  .preference-switch > span > * {
-    margin-right: 0.3rem;
-  }
-}
-
-@media screen and (min-width: $tablet) {
-  .field {
-    justify-content: space-between;
-    align-items: baseline;
   }
 }
 
@@ -178,39 +152,6 @@ onBeforeUnmount(() => {
 
 .intro {
   margin-bottom: $size-6;
-}
-
-.switch[type='checkbox']:checked + label::before {
-  background: $color-base-c2c;
-}
-
-.toggleCheckbox {
-  display: none;
-}
-
-.toggleContainer {
-  position: relative;
-  border-radius: 20px;
-  background: white;
-  border: 1px solid $color-base-c2c;
-  padding: 5px 2px;
-  cursor: pointer;
-}
-
-.toggleContainer span {
-  padding: 3px 10px;
-  text-align: center;
-  z-index: 100;
-}
-
-.field {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-
-.ams-ad {
-  margin-bottom: $size-7;
 }
 
 .start-again-button {
