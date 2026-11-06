@@ -12,6 +12,13 @@
           <follow-button v-if="!isPrintingView" :document="document" />
           <tags-button v-if="!isPrintingView" :document="document" />
 
+          <offline-header-button
+            v-if="isNormalView && SAVABLE_TYPES.includes(documentType)"
+            :document-type="documentType"
+            :document-id="document.document_id!"
+            :lang="lang!"
+            :title="title"
+          />
           <social-network-sharing v-if="documentType != 'profile' && isNormalView" :document="document" />
 
           <span :title="$gettext('Add images')" v-if="isEditable && documentType !== 'image'" @click="uploader?.show()">
@@ -55,6 +62,7 @@ import { computed, useTemplateRef } from 'vue';
 import DocumentVersionBanner from './DocumentVersionBanner.vue';
 import FollowButton from './FollowButton.vue';
 import GotopButton from './GotopButton.vue';
+import OfflineHeaderButton from './OfflineHeaderButton.vue';
 import SocialNetworkSharing from './SocialNetworkSharing.vue';
 import TagsButton from './TagsButton.vue';
 
@@ -63,6 +71,7 @@ import { useEditable } from '@/js/composables/editable';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { documentProperty, useDocumentType } from '@/js/properties';
 import type { CookedDocument } from '@/js/vue-plugins/document-utils';
+import { SAVABLE_TYPES } from '@/pwa/offline-store';
 
 const props = defineProps({
   // a private profile has no cooked locale: the header then shows nothing

@@ -71,6 +71,12 @@
       </span>
     </a>
     <!-- the pages of the app that its bottom tab bar opens in the phone layout -->
+    <router-link :to="{ name: 'offline' }">
+      <span class="menu-item is-ellipsed">
+        <fa-icon icon="bookmark" fixed-width />
+        <span class="menu-item-text">{{ $gettext('My topos') }}</span>
+      </span>
+    </router-link>
     <router-link :to="{ name: 'app-settings' }">
       <span class="menu-item is-ellipsed">
         <fa-icon icon="palette" fixed-width />

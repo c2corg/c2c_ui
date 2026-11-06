@@ -22,6 +22,18 @@
 
     <!-- keep router view in last -->
     <div class="page-content is-block-print">
+      <!-- without a network: what still opens -->
+      <div v-if="!offline.online && !offlineBannerClosed" class="offline-banner no-print" role="status">
+        <router-link :to="{ name: 'offline' }">
+          <fa-icon icon="plug" />&nbsp;{{ $gettext('Offline: open My topos') }}
+        </router-link>
+        <button
+          type="button"
+          class="delete is-small"
+          :aria-label="$gettext('Close')"
+          @click="offlineBannerClosed = true"
+        />
+      </div>
       <router-view class="router-view" />
     </div>
     <gdpr-banner></gdpr-banner>
@@ -51,6 +63,7 @@ import SiteNotice from './views/SiteNotice.vue';
 import { useIsHomePage } from '@/js/composables/home-page';
 import { imageViewerRequested } from '@/js/vue-plugins/image-viewer';
 import { useAppSettingsStore } from '@/stores/app-settings';
+import { useOfflineStore } from '@/stores/offline';
 
 // loaded with the first image shown, with Swiper (#4877)
 const ImageViewer = defineAsyncComponent(() => import('./components/image-viewer/ImageViewer.vue'));
@@ -65,6 +78,18 @@ const alternativeSideMenu = ref(false);
 const homePage = useIsHomePage();
 
 const appSettings = useAppSettingsStore();
+
+const offline = useOfflineStore();
+// closed until the network comes back and goes again
+const offlineBannerClosed = ref(false);
+watch(
+  () => offline.online,
+  (online) => {
+    if (online) {
+      offlineBannerClosed.value = false;
+    }
+  }
+);
 
 function hideSideMenuOnMobile() {
   alternativeSideMenu.value = false;
@@ -150,6 +175,20 @@ body,
   width: 100%;
   z-index: 20;
   box-shadow: 0 5px 10px 0px rgba(10, 10, 10, 0.5);
+}
+
+.offline-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--c2c-yellow);
+
+  a {
+    color: var(--c2c-black);
+    font-weight: 600;
+  }
 }
 
 .page-content {

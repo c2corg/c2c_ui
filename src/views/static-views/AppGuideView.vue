@@ -43,10 +43,32 @@
         <ul>
           <li>{{ $gettext('Search: routes, outings, waypoints… with filters, as a list or on a map.') }}</li>
           <li>{{ $gettext('Recent: the latest outings and changes of the community, with their photos.') }}</li>
+          <li>{{ $gettext('My topos: the topos you saved, online or offline.') }}</li>
           <li>{{ $gettext('Me: your account, your outings, the settings of the app and the help.') }}</li>
           <li>{{ $gettext('More: topoguide, articles, SERAC, Yeti, Itinévert, forum.') }}</li>
         </ul>
         <p>{{ $gettext('The + button at the top right adds an outing, a route, a waypoint…') }}</p>
+
+        <h2>{{ $gettext('Topos without a network') }}</h2>
+        <ol>
+          <li>{{ $gettext('On a topo, tap the bookmark at the top: it goes to My topos, Online tab.') }}</li>
+          <li>
+            {{
+              $gettext(
+                'Tap Save offline (in the message that follows, or in My topos): the topo, its photos and the map around it are downloaded. It moves to the Offline tab, a green dot on its bookmark.'
+              )
+            }}
+          </li>
+          <li>{{ $gettext('Without a network, open it from My topos: it opens as with one.') }}</li>
+        </ol>
+        <p>
+          {{
+            $gettext(
+              'The date of the copy shows on each topo: orange after a week, red after a month. Conditions change: download it again before leaving. Incomplete means the network cut the download: download it again.'
+            )
+          }}
+        </p>
+        <p>{{ $gettext('Folders sort your topos, one trip per folder for example.') }}</p>
 
         <h2>{{ $gettext('Settings') }}</h2>
         <p>
