@@ -1,26 +1,28 @@
 <template>
   <div class="content">
     <table>
-      <tr>
-        <th v-translate>Location / elevation / orientation</th>
-        <th v-translate>soft snow</th>
-        <th v-translate>total snow</th>
-        <th v-translate>comment</th>
-        <th />
-      </tr>
-      <tr v-for="(level, i) of levels" :key="i">
-        <td><input type="text" class="input" v-model.lazy="level.level_place" /></td>
-        <td><input type="text" class="input" v-model.lazy="level.level_snow_height_soft" /></td>
-        <td><input type="text" class="input" v-model.lazy="level.level_snow_height_total" /></td>
-        <td><input type="text" class="input" v-model.lazy="level.level_comment" /></td>
-        <td>
-          <delete-button
-            class="is-size-2 delete-button"
-            v-if="i < levels.length - 1 || isLevelFilled(levels[i])"
-            @click="levels.splice(i, 1)"
-          />
-        </td>
-      </tr>
+      <tbody>
+        <tr>
+          <th v-translate>Location / elevation / orientation</th>
+          <th v-translate>soft snow</th>
+          <th v-translate>total snow</th>
+          <th v-translate>comment</th>
+          <th />
+        </tr>
+        <tr v-for="(level, i) of levels" :key="i">
+          <td><input type="text" class="input" v-model.lazy="level.level_place" /></td>
+          <td><input type="text" class="input" v-model.lazy="level.level_snow_height_soft" /></td>
+          <td><input type="text" class="input" v-model.lazy="level.level_snow_height_total" /></td>
+          <td><input type="text" class="input" v-model.lazy="level.level_comment" /></td>
+          <td>
+            <delete-button
+              class="is-size-2 delete-button"
+              v-if="i < levels.length - 1 || isLevelFilled(levels[i])"
+              @click="levels.splice(i, 1)"
+            />
+          </td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </template>

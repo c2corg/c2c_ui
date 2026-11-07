@@ -92,7 +92,7 @@ describe('v-model components', () => {
   });
 
   it('DisplayModeSwitch', async () => {
-    const wrapper = mountWithVModel(DisplayModeSwitch, 'both', 'list-mode="listMode"');
+    const wrapper = mountWithVModel(DisplayModeSwitch, 'both', ':list-mode="false"');
     const items = wrapper.findAll('.dropdown-item');
     expect(items.filter((item) => item.classes('is-active'))).toHaveLength(1);
 
@@ -101,7 +101,7 @@ describe('v-model components', () => {
   });
 
   it('user FormField', async () => {
-    const wrapper = mountWithVModel(UserFormField, 'alice', 'name="username" label="Username" icon="user"');
+    const wrapper = mountWithVModel(UserFormField, 'alice', 'name="username" type="text" label="Username" icon="user"');
     const input = wrapper.find('input');
     expect(input.element.value).toBe('alice');
 

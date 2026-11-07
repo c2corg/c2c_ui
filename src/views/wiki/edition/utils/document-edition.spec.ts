@@ -1,6 +1,7 @@
 import { flushPromises, mount } from '@vue/test-utils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createMemoryHistory, createRouter, type Router } from 'vue-router';
+import { h } from 'vue';
+import { createMemoryHistory, createRouter, type Router, RouterView } from 'vue-router';
 
 import { confirmLeave, useDocumentEdition } from './document-edition';
 
@@ -54,32 +55,36 @@ async function mountAt(path: string, { isLogged = true } = {}) {
     history: createMemoryHistory(),
     routes: [
       { path: '/books/:id(\\d+)/:lang?', name: 'book', component: Empty },
-      { path: '/books/edit/:id(\\d+)/:lang', name: 'book-edit', component: Empty },
-      { path: '/books/add/:lang', name: 'book-add', component: Empty },
+      { path: '/books/edit/:id(\\d+)/:lang', name: 'book-edit', component: View },
+      { path: '/books/add/:lang', name: 'book-add', component: View },
     ],
   });
   await router.push(path);
-  const wrapper = mount(View, {
-    global: {
-      plugins: [router],
-      config: {
-        globalProperties: {
-          $gettext: (text: string) => text,
-          $user: { isLogged, isModerator: false, id: 7 },
-          $documentUtils: {
-            buildDocument: (type: string, lang: string) => ({ type, locales: [{ lang }], associations: {} }),
-            buildLocale: (type: string, lang: string) => ({ lang }),
-            getDocumentType: (letter: string) => ({ w: 'waypoint' })[letter],
-            addAssociation: (doc: C2cDocument, child: C2cDocument) => {
-              doc.associations!.waypoints = [...(doc.associations!.waypoints ?? []), child];
+  // the view as a page, in a <router-view>: its onBeforeRouteLeave() needs the record of its route
+  const wrapper = mount(
+    { render: () => h(RouterView) },
+    {
+      global: {
+        plugins: [router],
+        config: {
+          globalProperties: {
+            $gettext: (text: string) => text,
+            $user: { isLogged, isModerator: false, id: 7 },
+            $documentUtils: {
+              buildDocument: (type: string, lang: string) => ({ type, locales: [{ lang }], associations: {} }),
+              buildLocale: (type: string, lang: string) => ({ lang }),
+              getDocumentType: (letter: string) => ({ w: 'waypoint' })[letter],
+              addAssociation: (doc: C2cDocument, child: C2cDocument) => {
+                doc.associations!.waypoints = [...(doc.associations!.waypoints ?? []), child];
+              },
             },
-          },
-        } as never,
+          } as never,
+        },
       },
-    },
-  });
+    }
+  );
   await flushPromises();
-  return { wrapper, vm: wrapper.vm as unknown as ViewInstance };
+  return { wrapper, vm: wrapper.findComponent(View).vm as unknown as ViewInstance };
 }
 
 beforeEach(() => {

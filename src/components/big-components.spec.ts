@@ -169,7 +169,16 @@ describe('DocumentsTable', () => {
   it('exports the ratings of a route as they are shown', () => {
     const wrapper = mount(DocumentsTable, {
       props: { documentType: 'route', documents: { documents: [] } },
-      global: { config: { globalProperties: globalProperties as never }, stubs: { AgGridVue: true } },
+      global: {
+        plugins: [
+          createRouter({
+            history: createMemoryHistory(),
+            routes: [{ path: '/:p(.*)*', component: { render: () => null } }],
+          }),
+        ],
+        config: { globalProperties: globalProperties as never },
+        stubs: { AgGridVue: true },
+      },
     });
     const { formatRating } = wrapper.vm as unknown as { formatRating(document: object): string };
 
