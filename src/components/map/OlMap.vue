@@ -1534,7 +1534,7 @@ defineExpose({
 }
 </style>
 
-<style lang="scss">
+<style>
 @import 'ol/ol.css';
 
 :root,
@@ -1549,17 +1549,17 @@ defineExpose({
 }
 </style>
 
-<style lang="scss" scoped>
-$control-margin: 0.5em;
+<style scoped>
+/* the controls are 0.5em from the edges of the map */
 
 .ol-control-pin-to-top {
   top: 80px;
-  left: $control-margin;
+  left: 0.5em;
 }
 
 .ol-control-center-on-geolocation {
   top: 120px;
-  left: $control-margin;
+  left: 0.5em;
 }
 
 .ol-control-layer-switcher {
@@ -1594,7 +1594,7 @@ $control-margin: 0.5em;
   }
 }
 
-// a button: beat the .ol-control button rules of ol.css
+/* a button: beat the .ol-control button rules of ol.css */
 .ol-control button.ol-control-layer-switcher-close {
   background-color: rgb(0, 59, 136, 0.7);
   color: white;
@@ -1626,12 +1626,12 @@ $control-margin: 0.5em;
 }
 
 .ol-control-layer-switcher-button {
-  bottom: $control-margin;
-  left: $control-margin;
+  bottom: 0.5em;
+  left: 0.5em;
 }
 
 .ol-control-use-map-as-filter {
-  top: $control-margin;
+  top: 0.5em;
   left: 3em;
   padding: 0 2px;
   background: rgba(255, 255, 255, 0.8);
@@ -1653,7 +1653,7 @@ $control-margin: 0.5em;
 }
 
 .ol-control-recenter-on_on-top {
-  top: $control-margin;
+  top: 0.5em;
 }
 
 .ol-control-recenter-on-propositions {
@@ -1696,7 +1696,7 @@ $control-margin: 0.5em;
 
 .ol-control-edit-map {
   bottom: 35px;
-  right: $control-margin;
+  right: 0.5em;
 
   svg {
     height: 0.7em;
@@ -1730,8 +1730,8 @@ $control-margin: 0.5em;
 }
 </style>
 
-<style lang="scss">
-$control-margin: 0.5em;
+<style>
+/* the controls are 0.5em from the edges of the map */
 
 .ol-attribution ul,
 .ol-scale-line {
@@ -1745,7 +1745,7 @@ $control-margin: 0.5em;
 }
 
 .ol-scale-line {
-  bottom: calc($control-margin + 1px);
+  bottom: calc(0.5em + 1px);
   right: 40px;
   left: initial;
   line-height: 1.3;
@@ -1753,7 +1753,7 @@ $control-margin: 0.5em;
 
 .ol-full-screen {
   right: auto;
-  left: $control-margin;
+  left: 0.5em;
   top: 60px;
 }
 </style>

@@ -98,14 +98,11 @@ function warnIfDisabled() {
 }
 </script>
 
-<style scoped lang="scss">
-$width: calc(70 / 14 * 1rem);
-$height: calc(50 / 14 * 1rem);
-
+<style scoped>
 .layer-image {
   position: relative;
-  width: $width;
-  min-height: $height;
+  width: calc(70 / 14 * 1rem);
+  min-height: calc(50 / 14 * 1rem);
   background: #dbdbdb;
   box-shadow:
     0 0 0 2px white,
@@ -144,7 +141,8 @@ $height: calc(50 / 14 * 1rem);
   .is-checkradio[type='checkbox'] + label::after,
   .is-checkradio[type='radio'] + label::after {
     z-index: 1;
-    left: calc(50% - ($width / 2));
+    /* centered on .layer-image */
+    left: calc(50% - (70 / 14 * 1rem / 2));
   }
   .is-checkradio[type='checkbox'] + label::before,
   .is-checkradio[type='radio'] + label::before {
@@ -153,7 +151,7 @@ $height: calc(50 / 14 * 1rem);
   }
   .is-checkradio[type='checkbox'] + label::after,
   .is-checkradio[type='radio'] + label::after {
-    left: calc(50% - ($width / 2) + 0.5rem) !important;
+    left: calc(50% - (70 / 14 * 1rem / 2) + 0.5rem) !important;
   }
   .is-checkradio:hover:not([disabled]) + label .layer-image {
     box-shadow:

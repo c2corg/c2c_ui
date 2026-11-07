@@ -232,12 +232,14 @@ onMounted(() => {
 defineExpose({ getExtent });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 @import 'ol/ol.css';
-$control-margin: 0.52em;
+@import '@/assets/css/media.css';
+
+/* the controls are 0.52em from the edges of the map */
 
 .ol-control-recenter-on {
-  top: $control-margin;
+  top: 0.52em;
   left: 3em;
   background: var(--c2c-white);
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
@@ -266,17 +268,8 @@ $control-margin: 0.52em;
 
 .ol-control-center-on-geolocation {
   top: 92px;
-  left: $control-margin;
+  left: 0.52em;
 }
-
-$section-padding: 1.5rem; //TODO find this variable
-$box-padding: 1.25rem; //TODO find this variable
-$header-height: 34px;
-$box-margin: 1.5rem; //TODO find this variable
-$yeti-height: calc(
-  100vh - var(--c2c-navbar-height) - #{$section-padding} - 2 * #{$box-padding} - #{$header-height} - #{$box-margin} -
-    #{$box-margin}
-);
 
 .map-container {
   position: relative;
@@ -284,7 +277,9 @@ $yeti-height: calc(
 }
 @media screen and (--c2c-max-tablet) {
   .map-container {
-    height: $yeti-height;
+    /* the window, without the navbar, the section padding (1.5rem), the box padding (2 * 1.25rem), the header
+       (34px) and the box margins (2 * 1.5rem) */
+    height: calc(100vh - var(--c2c-navbar-height) - 1.5rem - 2 * 1.25rem - 34px - 1.5rem - 1.5rem);
     padding-left: 0;
     padding-top: 0;
     padding-bottom: 0;
@@ -300,7 +295,7 @@ $yeti-height: calc(
 }
 
 .ol-control-edit-mode {
-  top: $control-margin;
+  top: 0.52em;
   left: 18.75rem;
 }
 

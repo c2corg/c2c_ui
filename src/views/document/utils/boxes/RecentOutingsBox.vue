@@ -104,7 +104,7 @@ const showAddOutingButton = computed(() => {
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .button {
   vertical-align: bottom;
   margin-left: 1rem;
@@ -115,6 +115,9 @@ const showAddOutingButton = computed(() => {
 }
 
 .badge {
-  @include button-badge-primary;
+  color: var(--c2c-primary);
+  background-color: #fff;
+  border-radius: 1em;
+  padding: 0 0.35em;
 }
 </style>

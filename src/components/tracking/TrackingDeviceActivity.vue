@@ -64,12 +64,10 @@ const heightDiffUp = computed(() => $documentUtils.heightDiffUpWithUnit(props.ac
 const length = computed(() => $documentUtils.lengthWithUnit(props.activity.length));
 </script>
 
-<style lang="scss" scoped>
-$size: 200px;
-
+<style scoped>
 .activity {
-  width: $size;
-  height: $size;
+  width: 200px;
+  height: 200px;
   position: relative;
   background-color: var(--c2c-white-ter);
 
@@ -91,7 +89,7 @@ a {
   position: absolute;
   width: 100%;
   left: 0;
-  background-color: rgba($color: #000, $alpha: 0.55);
+  background-color: rgba(0, 0, 0, 0.55);
   color: white;
 }
 

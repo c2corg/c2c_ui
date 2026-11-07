@@ -93,15 +93,10 @@ function setActiveTabKeyboard(event: KeyboardEvent, index: number) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .yetitabs {
   margin: 0 0 0 -1px !important;
   overflow: visible;
-
-  &-link {
-    font-size: 0.9em;
-    padding: 0.25em 1em;
-  }
 
   li,
   a {
@@ -116,5 +111,10 @@ function setActiveTabKeyboard(event: KeyboardEvent, index: number) {
   li {
     margin-right: 1px;
   }
+}
+
+.yetitabs-link {
+  font-size: 0.9em;
+  padding: 0.25em 1em;
 }
 </style>

@@ -77,22 +77,20 @@ watch(opacity, () => {
 });
 </script>
 
-<style scoped lang="scss">
-$button-width: 78px;
-$button-height: $button-width;
-$button-radius: 5px;
-$button-inner-radius: 2px;
-$button-selected-border: 3px;
-$config-button-width: 17px;
-$config-button-height: $config-button-width;
-
+<style scoped>
 .layer-button {
+  --layer-button-width: 78px;
+  --layer-button-radius: 5px;
+  --layer-button-inner-radius: 2px;
+  --layer-button-selected-border: 3px;
+  --layer-button-config-width: 17px;
+
   position: relative;
-  width: $button-width;
-  height: $button-height;
+  width: var(--layer-button-width);
+  height: var(--layer-button-width);
   margin: 10px;
   cursor: pointer;
-  border-radius: $button-radius;
+  border-radius: var(--layer-button-radius);
   padding: 5px;
   vertical-align: bottom;
 
@@ -105,10 +103,10 @@ $config-button-height: $config-button-width;
   position: absolute;
   top: 0;
   left: 0;
-  width: $button-width;
-  height: $button-width;
-  border-radius: $button-radius;
-  border: $button-selected-border solid #fff;
+  width: var(--layer-button-width);
+  height: var(--layer-button-width);
+  border-radius: var(--layer-button-radius);
+  border: var(--layer-button-selected-border) solid #fff;
   pointer-events: none;
 }
 
@@ -117,28 +115,28 @@ $config-button-height: $config-button-width;
   padding-bottom: 2px;
   bottom: 0;
   left: 0;
-  width: $button-width;
-  border-bottom-left-radius: $button-radius;
-  border-bottom-right-radius: $button-radius;
+  width: var(--layer-button-width);
+  border-bottom-left-radius: var(--layer-button-radius);
+  border-bottom-right-radius: var(--layer-button-radius);
   font-size: 0.8em;
   text-align: center;
-  background-color: rgba($color: #000, $alpha: 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .layer-button-country {
   width: 20px;
   height: 15px;
   background-size: contain;
-  border-radius: $button-inner-radius;
+  border-radius: var(--layer-button-inner-radius);
 }
 
 .layer-button-config {
   position: absolute;
   top: 0;
   right: 0;
-  width: $config-button-width;
-  height: $config-button-height;
-  border-radius: 0 $button-radius 0 $button-inner-radius;
+  width: var(--layer-button-config-width);
+  height: var(--layer-button-config-width);
+  border-radius: 0 var(--layer-button-radius) 0 var(--layer-button-inner-radius);
   background-color: rgb(0, 59, 136, 0.7);
   display: flex;
   align-items: center;
@@ -147,7 +145,7 @@ $config-button-height: $config-button-width;
 }
 
 .layer-button.show-slider .layer-button-config {
-  border-radius: 0 $button-radius 0 0;
+  border-radius: 0 var(--layer-button-radius) 0 0;
 }
 
 .layer-button.selected .layer-button-config {
@@ -159,15 +157,15 @@ $config-button-height: $config-button-width;
   position: absolute;
   background-color: rgb(0, 59, 136, 0.7);
   box-sizing: content-box;
-  border-radius: $button-radius 0 0 0;
+  border-radius: var(--layer-button-radius) 0 0 0;
   top: 0;
   left: 0;
-  width: $button-width - $config-button-width;
-  height: $config-button-height;
+  width: calc(var(--layer-button-width) - var(--layer-button-config-width));
+  height: var(--layer-button-config-width);
 }
 
 .layer-button-slider .input-slider {
-  // the handles stay in the box, as with the former vue-slider-component contained option
+  /* the handles stay in the box, as with the former vue-slider-component contained option */
   --slider-handle-width: 14px;
   --slider-handle-height: 14px;
 
@@ -175,8 +173,8 @@ $config-button-height: $config-button-width;
 }
 
 .layer-button.selected .layer-button-slider {
-  top: $button-selected-border - 1;
-  width: $button-width - $config-button-width - $button-selected-border - 1;
-  padding-left: $button-selected-border - 1;
+  top: calc(var(--layer-button-selected-border) - 1px);
+  width: calc(var(--layer-button-width) - var(--layer-button-config-width) - var(--layer-button-selected-border) - 1px);
+  padding-left: calc(var(--layer-button-selected-border) - 1px);
 }
 </style>

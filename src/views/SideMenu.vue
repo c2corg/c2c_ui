@@ -144,14 +144,9 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped lang="scss">
-$brandLogoHeight: 70px;
-$brandLogoMargin: 5px;
-
-$menuLinkHeightPadding: 6px;
-
+<style scoped>
 aside {
-  // border-right: 1px solid $secondary;
+  /* border-right: 1px solid var(--c2c-secondary); */
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
   background: var(--c2c-white);
 }
@@ -161,14 +156,14 @@ aside {
   line-height: 0;
 
   img {
-    height: $brandLogoHeight;
-    margin: $brandLogoMargin 0;
+    height: 70px;
+    margin: 5px 0;
   }
 }
 
 .menu-item {
   display: block;
-  padding: $menuLinkHeightPadding 10px;
+  padding: 6px 10px;
   border-left: 5px solid var(--c2c-white);
   color: var(--c2c-text);
 }
@@ -207,11 +202,11 @@ aside {
   }
 
   .facebook-icon {
-    color: #6d8bc9; //facebook color
+    color: #6d8bc9; /* facebook color */
   }
 
   .youtube-icon {
-    color: #f00; // youtube color
+    color: #f00; /* youtube color */
   }
 
   .donate-icon {

@@ -264,31 +264,31 @@ function fitMapToFeatures() {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .features-title {
   display: flex;
   line-height: 1.4;
+}
 
-  &-text {
-    min-width: 100px;
-    border: solid 1px transparent;
-    border-radius: 2px;
-    padding: 2px 2em 2px 2px;
-    box-decoration-break: clone;
+.features-title-text {
+  min-width: 100px;
+  border: solid 1px transparent;
+  border-radius: 2px;
+  padding: 2px 2em 2px 2px;
+  box-decoration-break: clone;
 
-    &:hover,
-    &:focus {
-      border-color: #b5b5b5;
-    }
+  &:hover,
+  &:focus {
+    border-color: #b5b5b5;
   }
+}
 
-  &-placeholder {
-    font-style: italic;
-  }
+.features-title-placeholder {
+  font-style: italic;
+}
 
-  &-content {
-    font-weight: bold;
-  }
+.features-title-content {
+  font-weight: bold;
 }
 
 .icon {

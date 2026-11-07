@@ -102,7 +102,7 @@ const routes = computed(() => {
 const totalRoutes = computed(() => associations.value.all_routes?.total || associations.value.routes?.length);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 h3 {
   margin-top: 1.5rem !important;
   margin-bottom: 0.5rem !important;
@@ -118,6 +118,9 @@ h3 {
 }
 
 .badge {
-  @include button-badge-primary;
+  color: var(--c2c-primary);
+  background-color: #fff;
+  border-radius: 1em;
+  padding: 0 0.35em;
 }
 </style>
