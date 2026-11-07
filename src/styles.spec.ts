@@ -172,7 +172,7 @@ describe('styles', () => {
   // a data URL cannot use a custom property
   it('draws the external link icon in the color of the links', () => {
     const css = readFileSync(join(src, 'assets/css/external-links.css'), 'utf8');
-    expect(css).toContain(`fill='${tokens.get('color-link')!.replace('#', '%23')}'`);
+    expect(css).toContain(`fill='${encodeURIComponent(tokens.get('color-link')!)}'`);
   });
 
   it('uses only tokens that exist', () => {
