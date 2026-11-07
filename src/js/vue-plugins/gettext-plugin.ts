@@ -35,5 +35,7 @@ export default function install(app: App) {
   });
 
   app.config.globalProperties.$language = language;
-  app.config.globalProperties.$gettext = language.gettext;
+  // bound to the store: a Pinia action reads this.$id, which on a component (this.$gettext()) is a missing property
+  // Vue warns about in development
+  app.config.globalProperties.$gettext = language.gettext.bind(language);
 }
