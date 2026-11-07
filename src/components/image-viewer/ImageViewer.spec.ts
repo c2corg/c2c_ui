@@ -1,6 +1,6 @@
 import { flushPromises, mount } from '@vue/test-utils';
 import { register } from 'swiper/element';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import ImageViewer from './ImageViewer.vue';
 
@@ -19,9 +19,15 @@ if (!('part' in Element.prototype)) {
 
 register();
 
+// '@/js/config' reads CAMPTOCAMP_CONFIG, a constant injected by Vite (see vite.config.ts)
+const config = vi.hoisted(() => ({
+  urls: { api: 'https://api.example.org', media: 'https://media.example.org', modernThumbnailsTimestamp: 0 },
+}));
+vi.mock('@/js/config', () => ({ default: config }));
+
 const image = (id: number) => ({
   document_id: id,
-  filename: `${id}.jpg`,
+  filename: `1588000000_${id}.jpg`,
   locales: [{ title: `image ${id}` }],
   available_langs: [],
 });
@@ -101,5 +107,18 @@ describe('ImageViewer', () => {
     await flushPromises();
     expect(wrapper.find('.image-viewer').classes()).not.toContain('hide-buttons');
     wrapper.unmount();
+  });
+
+  it('offers the AVIF image of the recent images, and no WebP', async () => {
+    config.urls.modernThumbnailsTimestamp = 1;
+    try {
+      const { wrapper } = await showViewer();
+      const sources = wrapper.findAll('picture source');
+      expect(sources.map((source) => source.attributes('type'))).toEqual(['image/avif', 'image/avif']);
+      expect(sources[0].attributes('srcset')).toBe('https://media.example.org/1588000000_1BI.avif');
+      wrapper.unmount();
+    } finally {
+      config.urls.modernThumbnailsTimestamp = 0;
+    }
   });
 });

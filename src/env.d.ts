@@ -9,7 +9,7 @@ interface UrlsConfiguration {
   tracking?: string;
   miniatures?: string;
   recaptchaKey?: string;
-  // images uploaded after this timestamp, or with a greater id, have webp and avif thumbnails (0: none)
+  // images uploaded after this timestamp, or with a greater id, have AVIF thumbnails (0: none, 1: all)
   modernThumbnailsTimestamp: number;
   modernThumbnailsId: number;
   // OAuth of the activity trackers (tracking service)

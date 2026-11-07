@@ -21,11 +21,12 @@ export const getThumbnailSize = function (
   return { width: Math.round(image.width * scale), height: Math.round(image.height * scale) };
 };
 
-export type ImageFormat = 'webp' | 'avif';
+// AVIF only: the thumbnails have no WebP version (c2corg/c2c_images#1160)
+export type ImageFormat = 'avif';
 
 const getImageProxyUrl = function (image: Image, size?: ImageSize, format?: ImageFormat): string | undefined {
   // Until all images are migrated only images uploaded after a given timestamp
-  // or with an id greater than a given one have their webp and avif versions
+  // or with an id greater than a given one have their AVIF versions
   if (format && (!config.urls.modernThumbnailsId || image.document_id < config.urls.modernThumbnailsId)) {
     return;
   }
@@ -50,7 +51,7 @@ export const getImageUrl = function (image: Image, size?: ImageSize, format?: Im
     backendFilename = image.filename.replace('.', `${size}.`).replace('.svg', '.jpg');
     if (format) {
       // Until all images are migrated only images uploaded after a given timestamp
-      // or with an id greater than a given one have their webp and avif versions
+      // or with an id greater than a given one have their AVIF versions
       const timestamp = Number.parseInt(image.filename.split('_')[0], 10);
       if (
         !config.urls.modernThumbnailsTimestamp ||

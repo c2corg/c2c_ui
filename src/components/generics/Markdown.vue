@@ -199,7 +199,7 @@ function computeImages(images: Iterable<EmbeddedImage>) {
     const picture = document.createElement('picture');
 
     // Until all images are migrated only images uploaded after a given timestamp
-    // or with an id greater than a given one have their webp and avif versions.
+    // or with an id greater than a given one have their AVIF versions (no WebP: c2corg/c2c_images#1160).
     // Original images (no size) have no modern versions.
     if (
       config.urls.modernThumbnailsId &&
@@ -209,11 +209,7 @@ function computeImages(images: Iterable<EmbeddedImage>) {
       const avif = document.createElement('source');
       avif.setAttribute('type', 'image/avif');
       avif.setAttribute('srcset', getEmbeddedImageUrl(urls, 'avif'));
-      const webp = document.createElement('source');
-      webp.setAttribute('type', 'image/webp');
-      webp.setAttribute('srcset', getEmbeddedImageUrl(urls, 'webp'));
       picture.appendChild(avif);
-      picture.appendChild(webp);
     }
     picture.appendChild(image);
     parent.appendChild(picture);

@@ -53,17 +53,17 @@ describe('Thumbnail', () => {
 describe('Thumbnail fallback', () => {
   it('falls back to the basic image when the modern one fails', async () => {
     config.urls.modernThumbnailsTimestamp = 1;
-    // uploaded after modernThumbnailsTimestamp: it has avif and webp versions
+    // uploaded after modernThumbnailsTimestamp: it has an AVIF version, and no WebP one (c2corg/c2c_images#1160)
     const wrapper = mount(Thumbnail, {
       props: { img: { document_id: 2, filename: '1588000000_123456.jpg' }, size: 'MI' },
     });
     const img = wrapper.find('img');
+    const sources = wrapper.findAll('source');
+    expect(sources.map((source) => source.attributes('type'))).toEqual(['image/avif']);
 
     await img.trigger('error');
 
-    const sources = wrapper.findAll('source');
     expect(sources[0].attributes('srcset')).toBe(img.attributes('src'));
-    expect(sources[1].attributes('srcset')).toBe(img.attributes('src'));
     config.urls.modernThumbnailsTimestamp = 0;
   });
 });

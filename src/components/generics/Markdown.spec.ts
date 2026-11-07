@@ -5,6 +5,12 @@ import { createMemoryHistory, createRouter } from 'vue-router';
 
 import Markdown from './Markdown.vue';
 
+// '@/js/config' reads CAMPTOCAMP_CONFIG, a constant injected by Vite (see vite.config.ts)
+const config = vi.hoisted(() => ({
+  urls: { api: 'https://api.example.org', media: 'https://media.example.org', modernThumbnailsId: 0 },
+}));
+vi.mock('@/js/config', () => ({ default: config }));
+
 const mountMarkdown = async (content: string) => {
   const router = createRouter({
     history: createMemoryHistory(),
@@ -49,6 +55,21 @@ describe('Markdown', () => {
     expect(wrapper.find('figure').attributes('c2c:size')).toBe('MI');
     await wrapper.find('figure picture img').trigger('click');
     expect(imageViewer.show).toHaveBeenCalledWith(image);
+  });
+
+  it('offers the AVIF thumbnail of the recent embedded images, and no WebP', async () => {
+    config.urls.modernThumbnailsId = 30;
+    const embed = (id: number): string =>
+      `<figure c2c:role="embedded-figure"><img c2c:role="embedded-image" c2c:document-id="${id}" c2c:url-proxy="/images/proxy/${id}?size=MI" c2c:size="MI" /></figure>`;
+    try {
+      const recent = (await mountMarkdown(embed(34))).wrapper.findAll('figure picture source');
+      expect(recent.map((source) => source.attributes('type'))).toEqual(['image/avif']);
+      expect(recent[0].attributes('srcset')).toBe(`${config.urls.api}/images/proxy/34?size=MI&extension=avif`);
+      // older than modernThumbnailsId: no AVIF yet
+      expect((await mountMarkdown(embed(12))).wrapper.findAll('figure picture source')).toHaveLength(0);
+    } finally {
+      config.urls.modernThumbnailsId = 0;
+    }
   });
 
   it('keeps the space of an embedded image while it loads, from the size of its original', async () => {
