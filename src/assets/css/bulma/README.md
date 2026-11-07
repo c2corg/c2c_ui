@@ -2,7 +2,8 @@
 
 The parts of [Bulma](https://bulma.io) 0.9.4 (MIT License, see `LICENSE`) the site uses, one file per module of
 Bulma's Sass (`elements/button.css` for `sass/elements/button.sass`...), loaded in Bulma's order by `index.css`.
-`shared.css` has the rules several modules share (controls, unselectable, block margins, delete, loader).
+`shared.css` has the rules several modules share (controls, unselectable, block margins, delete, loader),
+`palette.css` the colors of the color classes.
 
 This is our code: the plan (c2corg/c2c_ui#4907) is to make it our own CSS, one module at a time (tokens instead of
 values, nesting, custom properties instead of variants), keeping the class names (`.button`, `.columns`,
@@ -11,8 +12,9 @@ values, nesting, custom properties instead of variants), keeping the class names
 ## Made our own
 
 - `elements/title.css`: nesting, sizes as tokens (`--c2c-size-1`... `--c2c-size-7`).
-- `elements/button.css`: nesting, each color class sets custom properties (`--button-color`...) that one set of
-  rules uses.
+- `palette.css` (ours): the colors of the color classes (`.is-primary`...) as custom properties (`--palette`...).
+- `elements/button.css`, `elements/tag.css`, `elements/notification.css`: nesting, one set of color rules that use
+  the palette.
 
 ## Where it comes from
 

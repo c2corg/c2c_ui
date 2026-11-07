@@ -73,161 +73,61 @@
     }
   }
 
-  /*
-   * The colors: each color class sets the colors of the button, the rules below use them. Of two color classes, the
-   * one set last here wins, as in Bulma (.is-primary.is-danger is red). The colors of hover, active and of the light
-   * variant (.is-light with a color) are those Bulma computed (darker, lighter).
-   */
-  &.is-white {
-    --button-color: var(--c2c-white);
-    --button-invert: hsl(0, 0%, 4%);
-    --button-hover: hsl(0, 0%, 97.5%);
-    --button-active: hsl(0, 0%, 95%);
-    --button-focus-shadow: rgba(255, 255, 255, 0.25);
-  }
-
-  &.is-light {
-    --button-color: var(--c2c-light);
-    --button-invert: rgba(0, 0, 0, 0.7);
-    --button-hover: hsl(0, 0%, 93.5%);
-    --button-active: hsl(0, 0%, 91%);
-    --button-focus-shadow: rgba(96%, 96%, 96%, 0.25);
-  }
-
-  &.is-dark {
-    --button-color: var(--c2c-dark);
-    --button-invert: #fff;
-    --button-hover: hsl(0, 0%, 18.5%);
-    --button-active: hsl(0, 0%, 16%);
-    --button-focus-shadow: rgba(21%, 21%, 21%, 0.25);
-  }
-
-  &.is-primary {
-    --button-color: var(--c2c-primary);
-    --button-invert: #fff;
-    --button-hover: rgb(18.9102564103%, 45.2362996481%, 67.8544494721%);
-    --button-active: rgb(17.8205128205%, 42.6294620412%, 63.9441930618%);
-    --button-focus-shadow: rgba(51, 122, 183, 0.25);
-    --button-light: rgb(93.7435897436%, 96.1709401709%, 98.2564102564%);
-    --button-dark: rgb(19.6153846154%, 46.9230769231%, 70.3846153846%);
-    --button-light-hover: rgb(89.8333333333%, 93.7777777778%, 97.1666666667%);
-    --button-light-active: rgb(85.9230769231%, 91.3846153846%, 96.0769230769%);
-  }
-
-  &.is-link {
-    --button-color: var(--c2c-link);
-    --button-invert: #fff;
-    --button-hover: rgb(18.9102564103%, 45.2362996481%, 67.8544494721%);
-    --button-active: rgb(17.8205128205%, 42.6294620412%, 63.9441930618%);
-    --button-focus-shadow: rgba(51, 122, 183, 0.25);
-    --button-light: rgb(93.7435897436%, 96.1709401709%, 98.2564102564%);
-    --button-dark: rgb(19.6153846154%, 46.9230769231%, 70.3846153846%);
-    --button-light-hover: rgb(89.8333333333%, 93.7777777778%, 97.1666666667%);
-    --button-light-active: rgb(85.9230769231%, 91.3846153846%, 96.0769230769%);
-  }
-
-  &.is-info {
-    --button-color: var(--c2c-info);
-    --button-invert: #fff;
-    --button-hover: hsl(207, 61%, 50.5%);
-    --button-active: hsl(207, 61%, 48%);
-    --button-focus-shadow: rgba(24.33%, 55.867%, 81.67%, 0.25);
-    --button-light: hsl(207, 61%, 96%);
-    --button-dark: hsl(207, 61%, 41%);
-    --button-light-hover: hsl(207, 61%, 93.5%);
-    --button-light-active: hsl(207, 61%, 91%);
-  }
-
-  &.is-success {
-    --button-color: var(--c2c-green);
-    --button-invert: #fff;
-    --button-hover: rgb(27.9117647059%, 65.1274509804%, 29.7725490196%);
-    --button-active: rgb(26.4117647059%, 61.6274509804%, 28.1725490196%);
-    --button-focus-shadow: rgba(75, 175, 80, 0.25);
-    --button-light: rgb(94.4%, 97.6%, 94.56%);
-    --button-dark: rgb(22.2%, 51.8%, 23.68%);
-    --button-light-hover: rgb(90.9%, 96.1%, 91.16%);
-    --button-light-active: rgb(87.4%, 94.6%, 87.76%);
-  }
-
-  &.is-warning {
-    --button-color: var(--c2c-yellow);
-    --button-invert: rgba(0, 0, 0, 0.7);
-    --button-hover: hsl(44, 100%, 74.5%);
-    --button-active: hsl(44, 100%, 72%);
-    --button-focus-shadow: rgba(100%, 87.7333333333%, 54%, 0.25);
-    --button-light: hsl(44, 100%, 96%);
-    --button-dark: hsl(44, 100%, 29%);
-    --button-light-hover: hsl(44, 100%, 93.5%);
-    --button-light-active: hsl(44, 100%, 91%);
-  }
-
-  &.is-danger {
-    --button-color: var(--c2c-danger);
-    --button-invert: #fff;
-    --button-hover: hsl(348, 86%, 58.5%);
-    --button-active: hsl(348, 86%, 56%);
-    --button-focus-shadow: rgba(94.54%, 27.46%, 40.876%, 0.25);
-    --button-light: hsl(348, 86%, 96%);
-    --button-dark: hsl(348, 86%, 43%);
-    --button-light-hover: hsl(348, 86%, 93.5%);
-    --button-light-active: hsl(348, 86%, 91%);
-  }
-
+  /* the colors: see ../palette.css */
   &:is(.is-white, .is-light, .is-dark, .is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger) {
-    background-color: var(--button-color);
+    background-color: var(--palette);
     border-color: transparent;
-    color: var(--button-invert);
+    color: var(--palette-invert);
 
     &:hover {
-      background-color: var(--button-hover);
+      background-color: var(--palette-hover);
       border-color: transparent;
-      color: var(--button-invert);
+      color: var(--palette-invert);
     }
 
     &:focus {
       border-color: transparent;
-      color: var(--button-invert);
+      color: var(--palette-invert);
     }
 
     &:focus:not(:active) {
-      box-shadow: 0 0 0 0.125em var(--button-focus-shadow);
+      box-shadow: 0 0 0 0.125em var(--palette-focus);
     }
 
     &:active,
     &.is-active {
-      background-color: var(--button-active);
+      background-color: var(--palette-active);
       border-color: transparent;
-      color: var(--button-invert);
+      color: var(--palette-invert);
     }
 
     &[disabled],
     fieldset[disabled] & {
-      background-color: var(--button-color);
-      border-color: var(--button-color);
+      background-color: var(--palette);
+      border-color: var(--palette);
       box-shadow: none;
     }
 
     &.is-loading::after {
-      border-color: transparent transparent var(--button-invert) var(--button-invert) !important;
+      border-color: transparent transparent var(--palette-invert) var(--palette-invert) !important;
     }
   }
 
   &:is(.is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger).is-light {
-    background-color: var(--button-light);
-    color: var(--button-dark);
+    background-color: var(--palette-light);
+    color: var(--palette-dark);
 
     &:hover {
-      background-color: var(--button-light-hover);
+      background-color: var(--palette-light-hover);
       border-color: transparent;
-      color: var(--button-dark);
+      color: var(--palette-dark);
     }
 
     &:active,
     &.is-active {
-      background-color: var(--button-light-active);
+      background-color: var(--palette-light-active);
       border-color: transparent;
-      color: var(--button-dark);
+      color: var(--palette-dark);
     }
   }
 
