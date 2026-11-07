@@ -1,6 +1,6 @@
 {
   "name": "c2c_ui",
-  "version": "7.46.0",
+  "version": "7.46.1",
   "private": true,
   "type": "module",
   "description": "https://www.camptocamp.org user interface",
