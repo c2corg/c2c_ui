@@ -100,7 +100,7 @@
     "stylelint": "18.0.0",
     "stylelint-config-recommended": "19.0.0",
     "stylelint-config-recommended-vue": "2.0.0",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "typescript-eslint": "8.72.1",
     "vite": "8.3.6",
     "vitest": "5.1.0",
