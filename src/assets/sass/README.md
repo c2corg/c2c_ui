@@ -5,6 +5,7 @@ CSS global files
   `../css/media.css` give their values to the components, as custom properties and custom media queries
 - `checkradio.scss`, `switch.scss`: checkboxes, radios and switches, from bulma-checkradio and bulma-switch
 
-The `<style>` blocks of the components are plain CSS, built by Lightning CSS: no Sass.
+The other global styles are plain CSS, in `../css` (`src/main.ts` imports them around `main.scss`). The `<style>`
+blocks of the components are plain CSS too, built by Lightning CSS: no Sass.
 
 `src/styles.spec.ts` compiles all of them, and fails on any Sass warning.

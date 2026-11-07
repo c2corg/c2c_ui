@@ -64,7 +64,16 @@ const styleBlocks = (lang: string | undefined) =>
       }))
   );
 const scssBlocks = styleBlocks('scss');
-const cssBlocks = styleBlocks(undefined);
+// the <style> blocks in plain CSS, and the global CSS files
+const cssBlocks = [
+  ...styleBlocks(undefined),
+  ...files(join(src, 'assets/css'), /\.css$/).map((file) => ({
+    file,
+    name: relative(src, file),
+    content: readFileSync(file, 'utf8'),
+    scoped: false,
+  })),
+];
 
 // The words of the code that can be class names: templates and scripts of the components, TypeScript and JavaScript
 // modules, translations, index.html. Not the styles, nor the specs.
@@ -158,6 +167,12 @@ describe('styles', () => {
       )
     );
     expect([...used].filter((name) => !media.includes(`@custom-media ${name} `))).toEqual([]);
+  });
+
+  // a data URL cannot use a custom property
+  it('draws the external link icon in the color of the links', () => {
+    const css = readFileSync(join(src, 'assets/css/external-links.css'), 'utf8');
+    expect(css).toContain(`fill='${tokens.get('color-link')!.replace('#', '%23')}'`);
   });
 
   it('uses only tokens that exist', () => {

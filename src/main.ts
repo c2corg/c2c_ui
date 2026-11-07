@@ -19,9 +19,14 @@ import router, { addAuthenticationGuard } from '@/js/vue-plugins/router';
 import screen from '@/js/vue-plugins/screen';
 import user from '@/js/vue-plugins/user';
 
-// the design tokens (custom properties) the styles use, then the main Sass manifest file
+// the global styles, in this order: the design tokens (custom properties) the styles use, the scrollbars and the
+// external links, Bulma (the main Sass manifest file), the helpers of the site and the width of the icons
 import './assets/css/tokens.css';
+import './assets/css/scrollbar.css';
+import './assets/css/external-links.css';
 import './assets/sass/main.scss';
+import './assets/css/helpers.css';
+import './assets/css/fontawesome.css';
 
 reloadOnStaleChunk(router);
 

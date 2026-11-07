@@ -1,22 +1,23 @@
-@use './variables' as *;
+/* helper classes of the site, after Bulma's */
+@import './media.css';
 
 .has-hover-background:hover {
-  background: $hover-background;
+  background: var(--c2c-hover-background);
 }
 
-// force nowrap
+/* force nowrap */
 .is-nowrap {
   white-space: nowrap;
 }
 
-// Force a inline element to nowrap, and ellipse overflow
+/* Force a inline element to nowrap, and ellipse overflow */
 .is-ellipsed {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-@media screen and (min-width: $tablet) {
+@media screen and (--c2c-min-tablet) {
   .is-ellipsed-tablet {
     overflow: hidden;
     white-space: nowrap;
@@ -29,23 +30,23 @@
 }
 
 .card-icon {
-  color: $text;
+  color: var(--c2c-text);
 }
 
 .has-text-secondary {
-  color: $secondary;
+  color: var(--c2c-secondary);
 }
 
 .has-background-secondary {
-  background-color: $secondary;
+  background-color: var(--c2c-secondary);
 }
 
 .has-text-normal {
-  color: $text;
+  color: var(--c2c-text);
 }
 
 .has-rounded-corner {
-  border-radius: $radius;
+  border-radius: var(--c2c-radius);
 }
 
 .is-disabled {
@@ -96,15 +97,20 @@
     width: 100% !important;
   }
 
-  @media print {
-    .print-no-columns {
-      display: block !important;
+  .print-no-columns {
+    display: block !important;
 
-      @each $size in 1, 2, 3, 4, 5, 6, 7, 9, 10, 11 {
-        .is-#{$size} {
-          width: 100%;
-        }
-      }
+    .is-1,
+    .is-2,
+    .is-3,
+    .is-4,
+    .is-5,
+    .is-6,
+    .is-7,
+    .is-9,
+    .is-10,
+    .is-11 {
+      width: 100%;
     }
   }
 }

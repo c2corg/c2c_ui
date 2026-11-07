@@ -1,8 +1,6 @@
 // Bulma 0.9.4 (./bulma, see its README): its variables configured in variables.scss, then its modules, with the c2c
 // values of their variables. A module is configured where it is first loaded: keep the `with` on the first `@use`.
 @use './variables' as *;
-@use './scrollbar';
-@use './external-links';
 
 // with bulma 0.8.0, buttons are now 2.5em high. Use the following lines to restore previous behaviour.
 $control-border-width: 1px;
@@ -74,17 +72,3 @@ $button-border-width: $control-border-width;
 // checkboxes and radios, and switches: what the site uses of bulma-checkradio and bulma-switch
 @use './checkradio';
 @use './switch';
-//
-@use './helpers' as c2c-helpers;
-
-// Font Awesome 7 gives every icon a fixed width: keep the width of each icon,
-// as in Font Awesome 6, except for icons asking for fixed-width (fa-fw)
-:root {
-  --fa-width: auto;
-}
-
-// but a stack of icons (fa-layers) takes its width from the same variable, and its icons are positioned in it, out of
-// the flow: with an auto width, it has none, and the text after it overlaps it. Its width of Font Awesome 6
-:root .fa-layers {
-  width: 1em;
-}
