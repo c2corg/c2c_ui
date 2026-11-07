@@ -379,7 +379,7 @@ nav {
   }
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .navigation-brand {
     img {
       margin-left: 0px;
@@ -400,7 +400,7 @@ nav {
   }
 }
 
-@media screen and (min-width: $tablet) and (max-width: $desktop) {
+@media screen and (--c2c-min-tablet) and (--c2c-max-desktop) {
   .navigation-brand {
     img {
       margin-left: 5px;
@@ -420,7 +420,7 @@ nav {
   }
 }
 
-@media screen and (min-width: $desktop) and (max-width: $widescreen) {
+@media screen and (--c2c-min-desktop) and (--c2c-max-widescreen) {
   .navigation-brand {
     img {
       margin-left: 20px;
@@ -440,7 +440,7 @@ nav {
   }
 }
 
-@media screen and (min-width: $widescreen) and (max-width: $fullhd) {
+@media screen and (--c2c-min-widescreen) and (--c2c-max-fullhd) {
   .navigation-brand {
     img {
       margin-left: 20px;
@@ -456,7 +456,7 @@ nav {
   }
 }
 
-@media screen and (min-width: $fullhd) {
+@media screen and (--c2c-min-fullhd) {
   .navigation-brand {
     img {
       margin-left: 20px;
@@ -474,7 +474,7 @@ nav {
 
 // search input : increase size to right on hover
 // only on screen wider than desktop
-@media screen and (min-width: $fullhd) {
+@media screen and (--c2c-min-fullhd) {
   .search-input {
     width: 250px;
     margin-right: 50px;
@@ -495,7 +495,7 @@ nav {
   color: var(--c2c-color-text);
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .add-button .dropdown-content {
     position: fixed;
     right: 0;

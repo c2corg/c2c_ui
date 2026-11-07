@@ -82,7 +82,7 @@ const atLeastOneLegend = computed(() => yetiLegend.value || winterRouteLegend.va
   color: var(--c2c-primary);
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .legend {
     top: 0.5rem;
 

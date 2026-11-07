@@ -46,7 +46,7 @@ defineExpose({ isActive });
 </script>
 <style scoped lang="scss">
 .dropdown-menu {
-  @media screen and (max-width: $tablet) {
+  @media screen and (--c2c-max-tablet) {
     max-width: 100%;
   }
 }

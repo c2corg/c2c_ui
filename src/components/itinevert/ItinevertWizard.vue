@@ -847,7 +847,7 @@ onMounted(() => {
   }
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .centered {
     margin-left: auto;
     margin-right: auto;

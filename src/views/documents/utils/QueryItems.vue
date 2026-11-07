@@ -318,11 +318,11 @@ watch(() => route.fullPath, load, { immediate: true });
 }
 
 .sub-query-items {
-  @media screen and (min-width: $tablet) {
+  @media screen and (--c2c-min-tablet) {
     min-width: 300px;
   }
 
-  @media screen and (max-width: $tablet) {
+  @media screen and (--c2c-max-tablet) {
     overflow-y: scroll;
     overflow-x: hidden;
     /*
@@ -340,13 +340,13 @@ watch(() => route.fullPath, load, { immediate: true });
   }
 }
 
-@media screen and (min-width: $tablet) {
+@media screen and (--c2c-min-tablet) {
   .query-item-component {
     margin-right: 0.75em;
   }
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .query-item-component {
     margin-right: 0.25em;
   }

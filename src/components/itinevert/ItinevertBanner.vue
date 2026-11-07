@@ -142,7 +142,7 @@
   }
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .banner-container {
     display: flex;
     flex-direction: column;

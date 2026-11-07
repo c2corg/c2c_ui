@@ -83,7 +83,7 @@ onBeforeUnmount(() => {
   }
 }
 
-@media screen and (min-width: $desktop) {
+@media screen and (--c2c-min-desktop) {
   .gdpr-content {
     width: 50%;
     left: calc(25% - 10px);

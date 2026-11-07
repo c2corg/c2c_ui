@@ -316,7 +316,7 @@ $paginationHeight: 30px;
     width: 100vw;
     height: 100%;
 
-    @media screen and (min-width: $tablet) {
+    @media screen and (--c2c-min-tablet) {
       & .swiper-zoom-container {
         // adjust the initial centering of the img to avoid overlap with 1st line of title
         margin-top: 10px;
@@ -386,7 +386,7 @@ $paginationHeight: 30px;
   }
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .image-viewer-header .image-viewer-title {
     position: fixed;
     // on mobile, title is below to avoid overlap with the toolbox

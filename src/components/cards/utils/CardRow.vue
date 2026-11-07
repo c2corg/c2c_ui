@@ -15,7 +15,7 @@ div {
   display: flex;
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   // .is-nowrap: component roots like card-elevation-item now get the slotted scope too
   :slotted(span.is-ellipsed:not(.is-nowrap)),
   :slotted(p.is-ellipsed) {

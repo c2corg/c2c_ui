@@ -124,7 +124,7 @@ function setProperty(property: keyof typeof toggles, value: boolean) {
 </script>
 
 <style scoped lang="scss">
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .feed-view {
     padding-left: 0;
     padding-right: 0;
@@ -155,7 +155,7 @@ function setProperty(property: keyof typeof toggles, value: boolean) {
   }
 }
 
-@media screen and (min-width: $tablet) {
+@media screen and (--c2c-min-tablet) {
   .feed-view {
     margin-top: var(--c2c-size-3);
   }

@@ -282,7 +282,7 @@ $yeti-height: calc(
   position: relative;
   padding-left: 0;
 }
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .map-container {
     height: $yeti-height;
     padding-left: 0;
@@ -291,7 +291,7 @@ $yeti-height: calc(
   }
 }
 
-@media screen and (min-width: $tablet) {
+@media screen and (--c2c-min-tablet) {
   .yeti-content {
     .map-container {
       min-height: 100%;
@@ -304,7 +304,7 @@ $yeti-height: calc(
   left: 18.75rem;
 }
 
-@media screen and (max-width: $widescreen) {
+@media screen and (--c2c-max-widescreen) {
   .ol-control-edit-mode {
     top: 3rem;
     left: 3rem;

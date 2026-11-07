@@ -56,7 +56,7 @@ const hasData = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   thead {
     display: none;
   }

@@ -406,14 +406,14 @@ div[c2c\:role='video'] {
     width: 400px;
     height: 250px;
     max-width: 100%;
-    @media screen and (min-width: $tablet) {
+    @media screen and (--c2c-min-tablet) {
       width: 420px;
       height: 315px;
     }
   }
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   table[c2c\:role='ltag'] {
     tr {
       display: flex;

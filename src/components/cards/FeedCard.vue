@@ -145,7 +145,7 @@ function max300chars(value: string) {
 </script>
 
 <style scoped lang="scss">
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .feed-card {
     border-left: 0 !important;
     border-right: 0 !important;

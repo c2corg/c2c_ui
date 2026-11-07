@@ -261,11 +261,14 @@ export default defineConfig({
     transformer: 'lightningcss',
     lightningcss: {
       targets: browserslistToTargets(browserslist(browsers)),
+      // the breakpoints of src/assets/css/media.css
+      drafts: { customMedia: true },
     },
     devSourcemap: true,
     preprocessorOptions: {
       scss: {
         additionalData: `
+          @use '@/assets/css/media' as c2c-media;
           @use '@/assets/sass/variables' as *;
           @use '@/assets/sass/mixins' as *;
         `,

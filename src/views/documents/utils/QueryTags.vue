@@ -36,7 +36,7 @@ defineEmits(['remove']);
   margin-bottom: 0.5rem;
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .tag {
     max-width: 100%;
   }
