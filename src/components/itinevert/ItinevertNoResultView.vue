@@ -40,7 +40,7 @@ const errorMessages: Record<string, string> = {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding-top: calc($itinevert-header-height);
+  padding-top: calc(var(--c2c-itinevert-header-height));
 }
 
 .no-result-view-title {

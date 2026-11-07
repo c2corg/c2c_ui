@@ -196,7 +196,7 @@ getComments();
 
 <style lang="scss">
 .discourse-post {
-  border-top: 6px solid $color-base-c2c;
+  border-top: 6px solid var(--c2c-color-base-c2c);
   margin-bottom: 1.5rem;
 }
 

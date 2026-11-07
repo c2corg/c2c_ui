@@ -22,7 +22,7 @@ a {
   padding: 5px;
   background-color: rgba(256, 256, 256, 0.85);
   transition: box-shadow 300ms background-color 300ms;
-  color: $text;
+  color: var(--c2c-text);
 
   // child positions
   display: flex;
@@ -34,6 +34,6 @@ a {
 a:hover {
   box-shadow: 2px 3px 4px 0 rgba(0, 0, 0, 0.14);
   background-color: rgba(256, 256, 256, 0.95);
-  color: $text;
+  color: var(--c2c-text);
 }
 </style>

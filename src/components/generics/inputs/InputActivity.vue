@@ -72,7 +72,7 @@ const activities = computed(() => {
 }
 
 .input-item[checked] {
-  color: $primary;
+  color: var(--c2c-primary);
 }
 
 .with-labels {
@@ -90,7 +90,7 @@ const activities = computed(() => {
 }
 
 .has-error {
-  box-shadow: 0px 0px 8px 0px $danger;
+  box-shadow: 0px 0px 8px 0px var(--c2c-danger);
   // border: 1px solid $danger;
 }
 </style>

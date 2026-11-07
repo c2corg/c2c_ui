@@ -151,7 +151,7 @@ onBeforeUnmount(() => {
 }
 
 .intro {
-  margin-bottom: $size-6;
+  margin-bottom: var(--c2c-size-6);
 }
 
 .start-again-button {

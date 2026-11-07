@@ -140,25 +140,25 @@ loadOutings();
 
 <style scoped lang="scss">
 .outing-date-header {
-  margin-top: $size-6;
-  margin-bottom: $size-7;
-  border-bottom: solid $color-base-c2c 2px;
+  margin-top: var(--c2c-size-6);
+  margin-bottom: var(--c2c-size-7);
+  border-bottom: solid var(--c2c-color-base-c2c) 2px;
 }
 
 h4 > a,
 h6 > a,
 .outing-date-header > a,
 li > a {
-  color: $color-text !important;
+  color: var(--c2c-color-text) !important;
 }
 
 h4 > a:hover,
 h6 > a:hover,
 .outing-date-header > a:hover {
-  color: $color-link !important;
+  color: var(--c2c-color-link) !important;
 }
 
 .dashboard-list > a:nth-child(2n + 1) {
-  background-color: $body-background-color;
+  background-color: var(--c2c-body-background-color);
 }
 </style>

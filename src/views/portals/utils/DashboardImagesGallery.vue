@@ -45,11 +45,11 @@ const images = computed(() => imagesPromise.value.data?.documents as GalleryImag
 
 h4 > a,
 h6 > a {
-  color: $color-text !important;
+  color: var(--c2c-color-text) !important;
 }
 
 h4 > a:hover,
 h6 > a:hover {
-  color: $color-link !important;
+  color: var(--c2c-color-link) !important;
 }
 </style>

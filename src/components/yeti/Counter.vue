@@ -21,8 +21,8 @@ defineProps({
   line-height: 1em;
   margin-left: 0.25rem;
   padding: 0 0.25rem;
-  background: $grey-lighter;
-  color: $grey-darker;
+  background: var(--c2c-grey-lighter);
+  color: var(--c2c-grey-darker);
   border-radius: 1em;
   font-weight: normal;
   text-align: center;
@@ -33,7 +33,7 @@ defineProps({
   }
 
   &.has-background-primary {
-    color: $white;
+    color: var(--c2c-white);
   }
 }
 </style>

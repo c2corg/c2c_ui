@@ -652,10 +652,10 @@ function onLoadBatch(batch: Association[], offset: number, load: number) {
 
 <style scoped lang="scss">
 .separator {
-  background-color: $color-base-c2c-lighter;
+  background-color: var(--c2c-color-base-c2c-lighter);
 }
 .star-icon {
-  color: $yellow;
+  color: var(--c2c-yellow);
 }
 .winner-image {
   height: 250px;

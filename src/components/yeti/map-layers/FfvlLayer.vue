@@ -109,7 +109,7 @@ defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoo
 
 <style scoped lang="scss">
 .footer {
-  background: $grey-lighter;
+  background: var(--c2c-grey-lighter);
   margin: 10px -5px -5px;
 }
 .overlay-icons {
@@ -123,7 +123,7 @@ defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoo
   line-height: 1;
 }
 .overlay-icons img {
-  border: solid 1px rgba($black, 0.5);
+  border: solid 1px rgba(4%, 4%, 4%, 0.5);
 }
 .overlay-icons-imgs {
   position: relative;

@@ -27,6 +27,6 @@ defineProps({
   }
 }
 .dashboard-link:visited {
-  color: $grey-light;
+  color: var(--c2c-grey-light);
 }
 </style>

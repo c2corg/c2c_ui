@@ -59,16 +59,16 @@ defineEmits(['click']);
   cursor: pointer;
 
   span {
-    color: $link;
+    color: var(--c2c-link);
   }
 
   :hover {
-    color: $text;
+    color: var(--c2c-text);
   }
 
   .toolbox-button-icon {
     width: 1rem;
-    color: $text;
+    color: var(--c2c-text);
   }
 }
 </style>

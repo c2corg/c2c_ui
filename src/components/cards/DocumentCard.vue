@@ -65,8 +65,8 @@ const CARDS: Record<string, Component> = {
   position: relative;
 
   .document-card {
-    border-radius: $radius;
-    border-left: 2px solid $color-base-c2c;
+    border-radius: var(--c2c-radius);
+    border-left: 2px solid var(--c2c-color-base-c2c);
   }
 }
 
@@ -79,7 +79,7 @@ const CARDS: Record<string, Component> = {
 
 @media screen and (max-width: $tablet) {
   .document-card-container .document-card {
-    border-left: $card-border;
+    border-left: var(--c2c-card-border);
   }
 
   .delete-button {

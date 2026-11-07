@@ -91,7 +91,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss">
-$body-height: calc(100vh - #{$navbar-height});
+$body-height: calc(100vh - var(--c2c-navbar-height));
 
 html {
   overflow-x: hidden;
@@ -115,7 +115,7 @@ body,
 }
 
 .side-menu {
-  width: $sidemenu-width;
+  width: var(--c2c-sidemenu-width);
   height: 100vh;
   position: fixed;
   top: 0px;
@@ -135,7 +135,7 @@ body,
 
 .site-notice {
   position: absolute;
-  top: $navbar-height;
+  top: var(--c2c-navbar-height);
   width: 100%;
   z-index: 20;
   box-shadow: 0 5px 10px 0px rgba(10, 10, 10, 0.5);
@@ -149,7 +149,7 @@ body,
 
 .home-topoguide {
   .page-content {
-    padding-top: $navbar-height;
+    padding-top: var(--c2c-navbar-height);
   }
 
   .ams-ad {
@@ -159,7 +159,7 @@ body,
 }
 
 .nav-dfm {
-  $body-height-ad: calc(100vh - #{$navbarad-height});
+  $body-height-ad: calc(100vh - var(--c2c-navbarad-height));
 
   html,
   body,
@@ -168,18 +168,18 @@ body,
   }
 
   .site-notice {
-    top: $navbarad-height;
+    top: var(--c2c-navbarad-height);
   }
 
   .page-content {
-    padding-top: $navbarad-height;
+    padding-top: var(--c2c-navbarad-height);
   }
 }
 
 @media screen {
   [data-width='mobile'] {
     .side-menu {
-      left: -$sidemenu-width;
+      left: calc(-1 * var(--c2c-sidemenu-width));
     }
 
     .alternative-side-menu {
@@ -191,7 +191,7 @@ body,
       margin-left: 0;
     }
     .ad {
-      padding-top: $navbar-height;
+      padding-top: var(--c2c-navbar-height);
     }
 
     .section {
@@ -206,7 +206,7 @@ body,
 
   [data-width='tablet'] {
     .side-menu {
-      left: -$sidemenu-width;
+      left: calc(-1 * var(--c2c-sidemenu-width));
     }
 
     .alternative-side-menu {
@@ -219,7 +219,7 @@ body,
     }
 
     .ad {
-      padding-top: $navbar-height;
+      padding-top: var(--c2c-navbar-height);
     }
   }
 
@@ -229,15 +229,15 @@ body,
     }
     .page-content,
     .ad {
-      margin-left: $sidemenu-width;
+      margin-left: var(--c2c-sidemenu-width);
     }
 
     .ad {
-      padding-top: $navbar-height;
+      padding-top: var(--c2c-navbar-height);
     }
 
     .site-notice {
-      padding-left: $sidemenu-width;
+      padding-left: var(--c2c-sidemenu-width);
     }
   }
 }

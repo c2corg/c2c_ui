@@ -576,16 +576,16 @@ onBeforeUnmount(() => {
   .axis path,
   .axis line {
     fill: none;
-    stroke: $grey;
+    stroke: var(--c2c-grey);
     shape-rendering: crispEdges;
   }
 
   .axis .legend {
-    fill: $grey;
+    fill: var(--c2c-grey);
   }
 
   .axis .tick {
-    color: $grey;
+    color: var(--c2c-grey);
   }
 
   .axis.x .tick line {
@@ -609,7 +609,7 @@ onBeforeUnmount(() => {
   .popup {
     font-size: 12px;
     font-weight: bold;
-    fill: $primary;
+    fill: var(--c2c-primary);
   }
 
   .popup text {
@@ -630,7 +630,7 @@ onBeforeUnmount(() => {
   }
 
   .areas-lines {
-    stroke: $grey;
+    stroke: var(--c2c-grey);
     stroke-width: 1px;
     stroke-dasharray: 5;
   }
@@ -660,6 +660,6 @@ onBeforeUnmount(() => {
   padding-left: 2rem;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
-  border-left: solid 1px $primary;
+  border-left: solid 1px var(--c2c-primary);
 }
 </style>

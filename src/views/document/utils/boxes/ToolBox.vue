@@ -385,16 +385,16 @@ if ($user.isModerator && documentType.value === 'profile') {
   cursor: pointer;
 
   span {
-    color: $link;
+    color: var(--c2c-link);
   }
 }
 
 .lock-button-green {
-  color: $green !important;
+  color: var(--c2c-green) !important;
 }
 
 .lock-button-red {
-  color: $red !important;
+  color: var(--c2c-red) !important;
 }
 
 .lang-switcher-box-list span:not(:last-child)::after {

@@ -4,6 +4,6 @@
 
 <style lang="scss" scoped>
 .spinner {
-  color: $color-base-c2c;
+  color: var(--c2c-color-base-c2c);
 }
 </style>

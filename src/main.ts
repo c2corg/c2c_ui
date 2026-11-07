@@ -19,7 +19,8 @@ import router, { addAuthenticationGuard } from '@/js/vue-plugins/router';
 import screen from '@/js/vue-plugins/screen';
 import user from '@/js/vue-plugins/user';
 
-// Import the main Sass manifest file
+// the design tokens (custom properties) the styles use, then the main Sass manifest file
+import './assets/css/tokens.css';
 import './assets/sass/main.scss';
 
 reloadOnStaleChunk(router);

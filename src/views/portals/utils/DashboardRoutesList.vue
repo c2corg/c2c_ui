@@ -42,15 +42,15 @@ const routes = computed(() => routesPromise.value.data);
 <style scoped lang="scss">
 h4 > a,
 h6 > a {
-  color: $color-text !important;
+  color: var(--c2c-color-text) !important;
 }
 
 h4 > a:hover,
 h6 > a:hover {
-  color: $color-link !important;
+  color: var(--c2c-color-link) !important;
 }
 
 .dashboard-list > a:nth-child(2n + 1) {
-  background-color: $body-background-color;
+  background-color: var(--c2c-body-background-color);
 }
 </style>

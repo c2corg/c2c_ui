@@ -250,11 +250,11 @@ $tags-height: 28px;
 $filter-padding-bottom: 0.5rem;
 // prettier-ignore
 $result-height: calc(
-  100vh - #{$navbar-height} - 2 * #{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height}
+  100vh - var(--c2c-navbar-height) - 2 * #{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height}
 );
 // prettier-ignore
 $result-height-with-tags: calc(
-  100vh - #{$navbar-height} - 2 * #{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$tags-height}
+  100vh - var(--c2c-navbar-height) - 2 * #{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$tags-height}
 );
 $cards-gap: 0.25rem;
 
@@ -283,11 +283,11 @@ $cards-gap: 0.25rem;
 
   .search-infos {
     position: fixed;
-    top: $navbar-height;
+    top: var(--c2c-navbar-height);
     left: 0;
     right: 0;
     z-index: 24;
-    background-color: $body-background-color;
+    background-color: var(--c2c-body-background-color);
     padding-top: $mobile-section-padding;
   }
 
@@ -322,7 +322,7 @@ $cards-gap: 0.25rem;
     margin-top: 0;
     .map-container {
       height: calc(
-        100vh - #{$navbar-height} - 3 * #{$mobile-section-padding} - #{$mobile-header-height} -
+        100vh - var(--c2c-navbar-height) - 3 * #{$mobile-section-padding} - #{$mobile-header-height} -
           #{$mobile-filters-height}
       );
     }

@@ -153,7 +153,7 @@ $menuLinkHeightPadding: 6px;
 aside {
   // border-right: 1px solid $secondary;
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
-  background: $white;
+  background: var(--c2c-white);
 }
 
 .menu-brand {
@@ -169,13 +169,13 @@ aside {
 .menu-item {
   display: block;
   padding: $menuLinkHeightPadding 10px;
-  border-left: 5px solid $white;
-  color: $text;
+  border-left: 5px solid var(--c2c-white);
+  color: var(--c2c-text);
 }
 
 .menu-item:hover {
-  background: $light;
-  border-left: 5px solid $color-base-c2c-lighter;
+  background: var(--c2c-light);
+  border-left: 5px solid var(--c2c-color-base-c2c-lighter);
 }
 
 .menu-item-text {
@@ -184,7 +184,7 @@ aside {
 }
 
 .menu-item.router-link-active {
-  border-left: 5px solid $color-base-c2c;
+  border-left: 5px solid var(--c2c-color-base-c2c);
   font-weight: bold;
 }
 

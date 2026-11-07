@@ -102,7 +102,7 @@ defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoo
   line-height: 1;
 }
 .overlay-nivoses-icons img {
-  border: solid 1px rgba($black, 0.5);
+  border: solid 1px rgba(4%, 4%, 4%, 0.5);
 }
 .overlay-nivoses-icons-imgs {
   position: relative;

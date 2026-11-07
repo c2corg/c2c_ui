@@ -159,7 +159,7 @@ defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoo
 
 <style scoped lang="scss">
 .footer {
-  background: $grey-lighter;
+  background: var(--c2c-grey-lighter);
   margin: 10px -5px -5px;
 }
 .data-avalanche-content {

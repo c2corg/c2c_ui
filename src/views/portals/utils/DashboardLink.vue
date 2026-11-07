@@ -73,7 +73,7 @@ const isMultiActivities = computed(() => (props.document.activities.length > 1 ?
 }
 
 .dashboard-link:visited {
-  color: $grey-light;
+  color: var(--c2c-grey-light);
 }
 
 @media screen and (max-width: $tablet) {

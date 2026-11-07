@@ -62,10 +62,10 @@ function focus() {
 .yeti-app {
   /* customization of the slider (@vueform/slider) */
   .input-slider {
-    --slider-connect-bg: #{$primary};
-    --slider-bg: #{$grey-lighter};
-    --slider-handle-shadow: 0 0 0 2px #{$primary};
-    --slider-handle-ring-color: #{$secondary};
+    --slider-connect-bg: var(--c2c-primary);
+    --slider-bg: var(--c2c-grey-lighter);
+    --slider-handle-shadow: 0 0 0 2px var(--c2c-primary);
+    --slider-handle-ring-color: var(--c2c-secondary);
     --slider-handle-ring-width: 4px;
     --slider-handle-width: 14px;
     --slider-handle-height: 14px;

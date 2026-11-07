@@ -108,7 +108,33 @@ const listedClasses = (): string[] => {
   return [...list.matchAll(/'([\w-]+)'/g)].map((m) => m[1]);
 };
 
+// the custom properties of assets/css/tokens.css: name (without --c2c-) and value
+const tokens = new Map(
+  [...readFileSync(join(src, 'assets/css/tokens.css'), 'utf8').matchAll(/--c2c-([\w-]+):\s*([^;]+);/g)].map((m) => [
+    m[1],
+    m[2],
+  ])
+);
+
 describe('styles', () => {
+  // a token has the value of the Sass variable of the same name, which Bulma's Sass still uses
+  it('gives the tokens the values of the Sass variables', () => {
+    expect(tokens.size).toBeGreaterThan(30);
+    const { css } = compileString(
+      `@use 'variables' as *;\na { ${[...tokens.keys()].map((name) => `${name}: $${name};`).join(' ')} }`,
+      { url: pathToFileURL(join(sassDir, 'tokens.scss')) }
+    );
+    const values = new Map([...css.matchAll(/^\s+([\w-]+): (.+);$/gm)].map((m) => [m[1], m[2]]));
+    expect(values).toEqual(tokens);
+  });
+
+  it('uses only tokens that exist', () => {
+    const used = new Set(
+      vueFiles(src).flatMap((file) => [...readFileSync(file, 'utf8').matchAll(/var\(--c2c-([\w-]+)/g)].map((m) => m[1]))
+    );
+    expect([...used].filter((name) => !tokens.has(name))).toEqual([]);
+  });
+
   it('finds the scss blocks of the components', () => {
     expect(scssBlocks.length).toBeGreaterThan(100);
   });
