@@ -20,7 +20,7 @@
 .content h4,
 .content h5,
 .content h6 {
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
   font-weight: 600;
   line-height: 1.125;
 }
@@ -68,7 +68,7 @@
 }
 
 .content blockquote {
-  background-color: hsl(0, 0%, 96%);
+  background-color: var(--c2c-white-ter);
   border-left: 5px solid hsl(0, 0%, 86%);
   padding: 1.25em 1.5em;
 }
@@ -150,7 +150,7 @@
 }
 
 .content table th {
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
 }
 
 .content table th:not([align]) {
@@ -160,13 +160,13 @@
 .content table thead td,
 .content table thead th {
   border-width: 0 0 2px;
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
 }
 
 .content table tfoot td,
 .content table tfoot th {
   border-width: 2px 0 0;
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
 }
 
 .content table tbody tr:last-child td,
@@ -179,7 +179,7 @@
 }
 
 .content.is-small {
-  font-size: 0.7857rem;
+  font-size: var(--c2c-size-7);
 }
 
 .content.is-medium {

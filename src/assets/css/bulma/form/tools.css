@@ -1,9 +1,9 @@
 /* Bulma 0.9.4 (MIT License, see bulma/LICENSE): form/tools */
 
 .label {
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
   display: block;
-  font-size: 1rem;
+  font-size: var(--c2c-size-6);
   font-weight: 700;
 }
 
@@ -12,7 +12,7 @@
 }
 
 .label.is-small {
-  font-size: 0.7857rem;
+  font-size: var(--c2c-size-7);
 }
 
 .label.is-medium {
@@ -25,32 +25,32 @@
 
 .help {
   display: block;
-  font-size: 0.7857rem;
+  font-size: var(--c2c-size-7);
   margin-top: 0.25rem;
 }
 
 .help.is-white {
-  color: hsl(0, 0%, 100%);
+  color: var(--c2c-white);
 }
 
 .help.is-light {
-  color: hsl(0, 0%, 96%);
+  color: var(--c2c-light);
 }
 
 .help.is-dark {
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-dark);
 }
 
 .help.is-primary {
-  color: #337ab7;
+  color: var(--c2c-primary);
 }
 
 .help.is-link {
-  color: #337ab7;
+  color: var(--c2c-link);
 }
 
 .help.is-info {
-  color: hsl(207, 61%, 53%);
+  color: var(--c2c-info);
 }
 
 .help.is-success {
@@ -62,7 +62,7 @@
 }
 
 .help.is-danger {
-  color: hsl(348, 86%, 61%);
+  color: var(--c2c-danger);
 }
 
 .field:not(:last-child) {
@@ -155,7 +155,7 @@
 .control {
   box-sizing: border-box;
   clear: both;
-  font-size: 1rem;
+  font-size: var(--c2c-size-6);
   position: relative;
   text-align: inherit;
 }
@@ -164,14 +164,14 @@
 .control.has-icons-left .select:focus ~ .icon,
 .control.has-icons-right .input:focus ~ .icon,
 .control.has-icons-right .select:focus ~ .icon {
-  color: hsl(0, 0%, 29%);
+  color: var(--c2c-text);
 }
 
 .control.has-icons-left .input.is-small ~ .icon,
 .control.has-icons-left .select.is-small ~ .icon,
 .control.has-icons-right .input.is-small ~ .icon,
 .control.has-icons-right .select.is-small ~ .icon {
-  font-size: 0.7857rem;
+  font-size: var(--c2c-size-7);
 }
 
 .control.has-icons-left .input.is-medium ~ .icon,
@@ -190,7 +190,7 @@
 
 .control.has-icons-left .icon,
 .control.has-icons-right .icon {
-  color: hsl(0, 0%, 71%);
+  color: var(--c2c-grey-light);
   height: 2.25em;
   pointer-events: none;
   position: absolute;
@@ -225,7 +225,7 @@
 }
 
 .control.is-loading.is-small:after {
-  font-size: 0.7857rem;
+  font-size: var(--c2c-size-7);
 }
 
 .control.is-loading.is-medium:after {

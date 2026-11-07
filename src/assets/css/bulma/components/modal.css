@@ -47,7 +47,7 @@
 .modal-card-head,
 .modal-card-foot {
   align-items: center;
-  background-color: hsl(0, 0%, 96%);
+  background-color: var(--c2c-white-ter);
   display: flex;
   flex-shrink: 0;
   justify-content: flex-start;
@@ -62,7 +62,7 @@
 }
 
 .modal-card-title {
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
   flex-grow: 1;
   flex-shrink: 0;
   font-size: 1.2857rem;
@@ -81,7 +81,7 @@
 
 .modal-card-body {
   -webkit-overflow-scrolling: touch;
-  background-color: hsl(0, 0%, 100%);
+  background-color: var(--c2c-white);
   flex-grow: 1;
   flex-shrink: 1;
   overflow: auto;

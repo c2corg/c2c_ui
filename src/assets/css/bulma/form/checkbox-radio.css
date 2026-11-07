@@ -15,7 +15,7 @@
 
 .radio:hover,
 .checkbox:hover {
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
 }
 
 [disabled].radio,
@@ -24,7 +24,7 @@ fieldset[disabled] .radio,
 fieldset[disabled] .checkbox,
 .radio input[disabled],
 .checkbox input[disabled] {
-  color: hsl(0, 0%, 48%);
+  color: var(--c2c-grey);
   cursor: not-allowed;
 }
 

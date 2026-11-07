@@ -3,10 +3,10 @@
 .select select,
 .input,
 .textarea {
-  background-color: hsl(0, 0%, 100%);
-  border-color: hsl(0, 0%, 86%);
-  border-radius: 4px;
-  color: hsl(0, 0%, 21%);
+  background-color: var(--c2c-white);
+  border-color: var(--c2c-grey-lighter);
+  border-radius: var(--c2c-radius);
+  color: var(--c2c-grey-darker);
 }
 
 .select select::-moz-placeholder,
@@ -36,7 +36,7 @@
 .select select:hover,
 .input:hover,
 .textarea:hover {
-  border-color: hsl(0, 0%, 71%);
+  border-color: var(--c2c-grey-light);
 }
 
 .select select:focus,
@@ -48,7 +48,7 @@
 .select select.is-active,
 .is-active.input,
 .is-active.textarea {
-  border-color: #f93;
+  border-color: var(--c2c-color-base-c2c);
   box-shadow: 0 0 0 0 rgba(51, 122, 183, 0.25);
 }
 
@@ -59,10 +59,10 @@ fieldset[disabled] .select select,
 .select fieldset[disabled] select,
 fieldset[disabled] .input,
 fieldset[disabled] .textarea {
-  background-color: hsl(0, 0%, 96%);
-  border-color: hsl(0, 0%, 96%);
+  background-color: var(--c2c-white-ter);
+  border-color: var(--c2c-white-ter);
   box-shadow: none;
-  color: hsl(0, 0%, 48%);
+  color: var(--c2c-grey);
 }
 
 .select select[disabled]::-moz-placeholder,

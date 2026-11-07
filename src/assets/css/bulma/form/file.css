@@ -8,7 +8,7 @@
 }
 
 .file.is-white .file-cta {
-  background-color: hsl(0, 0%, 100%);
+  background-color: var(--c2c-white);
   border-color: transparent;
   color: hsl(0, 0%, 4%);
 }
@@ -33,7 +33,7 @@
 }
 
 .file.is-light .file-cta {
-  background-color: hsl(0, 0%, 96%);
+  background-color: var(--c2c-light);
   border-color: transparent;
   color: rgba(0, 0, 0, 0.7);
 }
@@ -58,7 +58,7 @@
 }
 
 .file.is-dark .file-cta {
-  background-color: hsl(0, 0%, 21%);
+  background-color: var(--c2c-dark);
   border-color: transparent;
   color: #fff;
 }
@@ -83,7 +83,7 @@
 }
 
 .file.is-primary .file-cta {
-  background-color: #337ab7;
+  background-color: var(--c2c-primary);
   border-color: transparent;
   color: #fff;
 }
@@ -108,7 +108,7 @@
 }
 
 .file.is-link .file-cta {
-  background-color: #337ab7;
+  background-color: var(--c2c-link);
   border-color: transparent;
   color: #fff;
 }
@@ -133,7 +133,7 @@
 }
 
 .file.is-info .file-cta {
-  background-color: hsl(207, 61%, 53%);
+  background-color: var(--c2c-info);
   border-color: transparent;
   color: #fff;
 }
@@ -208,7 +208,7 @@
 }
 
 .file.is-danger .file-cta {
-  background-color: hsl(348, 86%, 61%);
+  background-color: var(--c2c-danger);
   border-color: transparent;
   color: #fff;
 }
@@ -233,7 +233,7 @@
 }
 
 .file.is-small {
-  font-size: 0.7857rem;
+  font-size: var(--c2c-size-7);
 }
 
 .file.is-medium {
@@ -306,12 +306,12 @@
 
 .file-label:hover .file-cta {
   background-color: hsl(0, 0%, 93.5%);
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
 }
 
 .file-label:active .file-cta {
   background-color: hsl(0, 0%, 91%);
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
 }
 
 .file-input {
@@ -325,14 +325,14 @@
 }
 
 .file-cta {
-  border-color: hsl(0, 0%, 86%);
-  border-radius: 4px;
+  border-color: var(--c2c-grey-lighter);
+  border-radius: var(--c2c-radius);
   font-size: 1em;
   padding-left: 1em;
   padding-right: 1em;
   white-space: nowrap;
-  background-color: hsl(0, 0%, 96%);
-  color: hsl(0, 0%, 29%);
+  background-color: var(--c2c-white-ter);
+  color: var(--c2c-text);
 }
 
 .file-icon {

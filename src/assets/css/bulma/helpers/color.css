@@ -3,7 +3,7 @@
 /* Bulma Helpers */
 
 .has-text-white {
-  color: hsl(0, 0%, 100%) !important;
+  color: var(--c2c-white) !important;
 }
 
 a.has-text-white:hover,
@@ -12,7 +12,7 @@ a.has-text-white:focus {
 }
 
 .has-text-black {
-  color: hsl(0, 0%, 4%) !important;
+  color: var(--c2c-black) !important;
 }
 
 a.has-text-black:hover,
@@ -21,7 +21,7 @@ a.has-text-black:focus {
 }
 
 .has-text-light {
-  color: hsl(0, 0%, 96%) !important;
+  color: var(--c2c-light) !important;
 }
 
 a.has-text-light:hover,
@@ -30,11 +30,11 @@ a.has-text-light:focus {
 }
 
 .has-background-light {
-  background-color: hsl(0, 0%, 96%) !important;
+  background-color: var(--c2c-light) !important;
 }
 
 .has-text-primary {
-  color: #337ab7 !important;
+  color: var(--c2c-primary) !important;
 }
 
 a.has-text-primary:hover,
@@ -43,11 +43,11 @@ a.has-text-primary:focus {
 }
 
 .has-background-primary {
-  background-color: #337ab7 !important;
+  background-color: var(--c2c-primary) !important;
 }
 
 .has-text-info {
-  color: hsl(207, 61%, 53%) !important;
+  color: var(--c2c-info) !important;
 }
 
 a.has-text-info:hover,
@@ -56,7 +56,7 @@ a.has-text-info:focus {
 }
 
 .has-background-info {
-  background-color: hsl(207, 61%, 53%) !important;
+  background-color: var(--c2c-info) !important;
 }
 
 .has-text-success {
@@ -86,7 +86,7 @@ a.has-text-warning:focus {
 }
 
 .has-text-danger {
-  color: hsl(348, 86%, 61%) !important;
+  color: var(--c2c-danger) !important;
 }
 
 a.has-text-danger:hover,
@@ -95,23 +95,23 @@ a.has-text-danger:focus {
 }
 
 .has-background-danger {
-  background-color: hsl(348, 86%, 61%) !important;
+  background-color: var(--c2c-danger) !important;
 }
 
 .has-text-grey {
-  color: hsl(0, 0%, 48%) !important;
+  color: var(--c2c-grey) !important;
 }
 
 .has-text-grey-light {
-  color: hsl(0, 0%, 71%) !important;
+  color: var(--c2c-grey-light) !important;
 }
 
 .has-text-grey-lighter {
-  color: hsl(0, 0%, 86%) !important;
+  color: var(--c2c-grey-lighter) !important;
 }
 
 .has-background-grey-lighter {
-  background-color: hsl(0, 0%, 86%) !important;
+  background-color: var(--c2c-grey-lighter) !important;
 }
 
 .has-text-white-bis {

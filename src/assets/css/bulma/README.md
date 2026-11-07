@@ -17,6 +17,10 @@ write). The output was split by module with its source map. The CSS of the site 
 
 The history of the Sass is in git: `src/assets/sass/` before c2corg/c2c_ui#4907.
 
+Where the Sass source of a declaration used a variable that is a token (`color: $text`, `$box-color: $text`, the
+colors of the `@each` loops: `.is-primary`...), the CSS uses the token: `var(--c2c-text)`. The other values are those
+Sass computed (`bulmaDarken($primary, 2.5%)`, `rgba($black, 0.1)`...).
+
 ## Only the classes the site uses
 
 `src/styles.spec.ts` fails when a class of the global CSS is not used by the code. To use another class of Bulma

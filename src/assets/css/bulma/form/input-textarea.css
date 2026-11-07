@@ -16,7 +16,7 @@
 
 .is-white.textarea,
 .is-white.input {
-  border-color: hsl(0, 0%, 100%);
+  border-color: var(--c2c-white);
 }
 
 .is-white.textarea:focus,
@@ -30,7 +30,7 @@
 
 .is-light.textarea,
 .is-light.input {
-  border-color: hsl(0, 0%, 96%);
+  border-color: var(--c2c-light);
 }
 
 .is-light.textarea:focus,
@@ -44,7 +44,7 @@
 
 .is-dark.textarea,
 .is-dark.input {
-  border-color: hsl(0, 0%, 21%);
+  border-color: var(--c2c-dark);
 }
 
 .is-dark.textarea:focus,
@@ -58,7 +58,7 @@
 
 .is-primary.textarea,
 .is-primary.input {
-  border-color: #337ab7;
+  border-color: var(--c2c-primary);
 }
 
 .is-primary.textarea:focus,
@@ -72,7 +72,7 @@
 
 .is-link.textarea,
 .is-link.input {
-  border-color: #337ab7;
+  border-color: var(--c2c-link);
 }
 
 .is-link.textarea:focus,
@@ -86,7 +86,7 @@
 
 .is-info.textarea,
 .is-info.input {
-  border-color: hsl(207, 61%, 53%);
+  border-color: var(--c2c-info);
 }
 
 .is-info.textarea:focus,
@@ -128,7 +128,7 @@
 
 .is-danger.textarea,
 .is-danger.input {
-  border-color: hsl(348, 86%, 61%);
+  border-color: var(--c2c-danger);
 }
 
 .is-danger.textarea:focus,
@@ -143,7 +143,7 @@
 .is-small.textarea,
 .is-small.input {
   border-radius: 2px;
-  font-size: 0.7857rem;
+  font-size: var(--c2c-size-7);
 }
 
 .is-medium.textarea,

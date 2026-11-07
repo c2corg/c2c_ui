@@ -1,7 +1,7 @@
 /* Bulma 0.9.4 (MIT License, see bulma/LICENSE): base/generic */
 
 html {
-  background-color: #fbfaf6;
+  background-color: var(--c2c-body-background-color);
   font-size: 14px;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -52,14 +52,14 @@ pre {
 }
 
 body {
-  color: hsl(0, 0%, 29%);
+  color: var(--c2c-text);
   font-size: 1em;
   font-weight: 400;
   line-height: 1.5;
 }
 
 a {
-  color: #337ab7;
+  color: var(--c2c-link);
   cursor: pointer;
   text-decoration: none;
 }
@@ -69,11 +69,11 @@ a strong {
 }
 
 a:hover {
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
 }
 
 code {
-  background-color: hsl(0, 0%, 96%);
+  background-color: var(--c2c-white-ter);
   color: hsl(348, 86%, 46%);
   font-size: 0.875em;
   font-weight: normal;
@@ -81,7 +81,7 @@ code {
 }
 
 hr {
-  background-color: hsl(0, 0%, 96%);
+  background-color: var(--c2c-white-ter);
   border: none;
   display: block;
   height: 2px;
@@ -108,7 +108,7 @@ span {
 }
 
 strong {
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
   font-weight: 700;
 }
 
@@ -118,8 +118,8 @@ fieldset {
 
 pre {
   -webkit-overflow-scrolling: touch;
-  background-color: hsl(0, 0%, 96%);
-  color: hsl(0, 0%, 29%);
+  background-color: var(--c2c-white-ter);
+  color: var(--c2c-text);
   font-size: 0.875em;
   overflow-x: auto;
   padding: 1.25rem 1.5rem;
@@ -145,5 +145,5 @@ table th:not([align]) {
 }
 
 table th {
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
 }

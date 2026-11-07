@@ -29,8 +29,8 @@
 }
 
 .title {
-  color: hsl(0, 0%, 21%);
-  font-size: 1.5714rem;
+  color: var(--c2c-grey-darker);
+  font-size: var(--c2c-size-3);
   font-weight: 600;
   line-height: 1.125;
 }
@@ -73,14 +73,14 @@
 }
 
 .subtitle {
-  color: hsl(0, 0%, 29%);
+  color: var(--c2c-text);
   font-size: 1.1429rem;
   font-weight: 400;
   line-height: 1.25;
 }
 
 .subtitle strong {
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
   font-weight: 600;
 }
 

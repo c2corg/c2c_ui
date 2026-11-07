@@ -1,8 +1,8 @@
 /* Bulma 0.9.4 (MIT License, see bulma/LICENSE): elements/table */
 
 .table {
-  background-color: hsl(0, 0%, 100%);
-  color: hsl(0, 0%, 21%);
+  background-color: var(--c2c-white);
+  color: var(--c2c-grey-darker);
 }
 
 .table td,
@@ -15,43 +15,43 @@
 
 .table td.is-white,
 .table th.is-white {
-  background-color: hsl(0, 0%, 100%);
-  border-color: hsl(0, 0%, 100%);
+  background-color: var(--c2c-white);
+  border-color: var(--c2c-white);
   color: hsl(0, 0%, 4%);
 }
 
 .table td.is-light,
 .table th.is-light {
-  background-color: hsl(0, 0%, 96%);
-  border-color: hsl(0, 0%, 96%);
+  background-color: var(--c2c-light);
+  border-color: var(--c2c-light);
   color: rgba(0, 0, 0, 0.7);
 }
 
 .table td.is-dark,
 .table th.is-dark {
-  background-color: hsl(0, 0%, 21%);
-  border-color: hsl(0, 0%, 21%);
+  background-color: var(--c2c-dark);
+  border-color: var(--c2c-dark);
   color: #fff;
 }
 
 .table td.is-primary,
 .table th.is-primary {
-  background-color: #337ab7;
-  border-color: #337ab7;
+  background-color: var(--c2c-primary);
+  border-color: var(--c2c-primary);
   color: #fff;
 }
 
 .table td.is-link,
 .table th.is-link {
-  background-color: #337ab7;
-  border-color: #337ab7;
+  background-color: var(--c2c-link);
+  border-color: var(--c2c-link);
   color: #fff;
 }
 
 .table td.is-info,
 .table th.is-info {
-  background-color: hsl(207, 61%, 53%);
-  border-color: hsl(207, 61%, 53%);
+  background-color: var(--c2c-info);
+  border-color: var(--c2c-info);
   color: #fff;
 }
 
@@ -71,8 +71,8 @@
 
 .table td.is-danger,
 .table th.is-danger {
-  background-color: hsl(348, 86%, 61%);
-  border-color: hsl(348, 86%, 61%);
+  background-color: var(--c2c-danger);
+  border-color: var(--c2c-danger);
   color: #fff;
 }
 
@@ -88,7 +88,7 @@
 }
 
 .table th {
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
 }
 
 .table th:not([align]) {
@@ -102,7 +102,7 @@
 .table thead td,
 .table thead th {
   border-width: 0 0 2px;
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
 }
 
 .table tfoot {
@@ -112,7 +112,7 @@
 .table tfoot td,
 .table tfoot th {
   border-width: 2px 0 0;
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
 }
 
 .table tbody {
@@ -133,7 +133,7 @@
 }
 
 .table.is-hoverable.is-striped tbody tr:not(.is-selected):hover:nth-child(even) {
-  background-color: hsl(0, 0%, 96%);
+  background-color: var(--c2c-white-ter);
 }
 
 .table.is-narrow td,

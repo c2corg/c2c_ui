@@ -10,7 +10,7 @@
 
 .number {
   align-items: center;
-  background-color: hsl(0, 0%, 96%);
+  background-color: var(--c2c-white-ter);
   border-radius: 9999px;
   display: inline-flex;
   font-size: 1.1429rem;

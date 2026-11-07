@@ -4,7 +4,7 @@
   -webkit-overflow-scrolling: touch;
   align-items: stretch;
   display: flex;
-  font-size: 1rem;
+  font-size: var(--c2c-size-6);
   justify-content: space-between;
   overflow: hidden;
   overflow-x: auto;
@@ -13,10 +13,10 @@
 
 .tabs a {
   align-items: center;
-  border-bottom-color: hsl(0, 0%, 86%);
+  border-bottom-color: var(--c2c-grey-lighter);
   border-bottom-style: solid;
   border-bottom-width: 1px;
-  color: hsl(0, 0%, 29%);
+  color: var(--c2c-text);
   display: flex;
   justify-content: center;
   margin-bottom: -1px;
@@ -25,8 +25,8 @@
 }
 
 .tabs a:hover {
-  border-bottom-color: hsl(0, 0%, 21%);
-  color: hsl(0, 0%, 21%);
+  border-bottom-color: var(--c2c-grey-darker);
+  color: var(--c2c-grey-darker);
 }
 
 .tabs li {
@@ -34,13 +34,13 @@
 }
 
 .tabs li.is-active a {
-  border-bottom-color: #337ab7;
-  color: #337ab7;
+  border-bottom-color: var(--c2c-link);
+  color: var(--c2c-link);
 }
 
 .tabs ul {
   align-items: center;
-  border-bottom-color: hsl(0, 0%, 86%);
+  border-bottom-color: var(--c2c-grey-lighter);
   border-bottom-style: solid;
   border-bottom-width: 1px;
   display: flex;
@@ -80,18 +80,18 @@
 }
 
 .tabs.is-boxed a:hover {
-  background-color: hsl(0, 0%, 96%);
-  border-bottom-color: hsl(0, 0%, 86%);
+  background-color: var(--c2c-white-ter);
+  border-bottom-color: var(--c2c-grey-lighter);
 }
 
 .tabs.is-boxed li.is-active a {
-  background-color: hsl(0, 0%, 100%);
-  border-color: hsl(0, 0%, 86%);
+  background-color: var(--c2c-white);
+  border-color: var(--c2c-grey-lighter);
   border-bottom-color: transparent !important;
 }
 
 .tabs.is-small {
-  font-size: 0.7857rem;
+  font-size: var(--c2c-size-7);
 }
 
 .tabs.is-medium {

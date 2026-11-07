@@ -1,8 +1,8 @@
 /* Bulma 0.9.4 (MIT License, see bulma/LICENSE): elements/notification */
 
 .notification {
-  background-color: hsl(0, 0%, 96%);
-  border-radius: 4px;
+  background-color: var(--c2c-white-ter);
+  border-radius: var(--c2c-radius);
   position: relative;
   padding: 1.25rem 2.5rem 1.25rem 1.5rem;
 }
@@ -18,7 +18,7 @@
 
 .notification code,
 .notification pre {
-  background: hsl(0, 0%, 100%);
+  background: var(--c2c-white);
 }
 
 .notification pre code {
@@ -38,22 +38,22 @@
 }
 
 .notification.is-white {
-  background-color: hsl(0, 0%, 100%);
+  background-color: var(--c2c-white);
   color: hsl(0, 0%, 4%);
 }
 
 .notification.is-light {
-  background-color: hsl(0, 0%, 96%);
+  background-color: var(--c2c-light);
   color: rgba(0, 0, 0, 0.7);
 }
 
 .notification.is-dark {
-  background-color: hsl(0, 0%, 21%);
+  background-color: var(--c2c-dark);
   color: #fff;
 }
 
 .notification.is-primary {
-  background-color: #337ab7;
+  background-color: var(--c2c-primary);
   color: #fff;
 }
 
@@ -63,7 +63,7 @@
 }
 
 .notification.is-link {
-  background-color: #337ab7;
+  background-color: var(--c2c-link);
   color: #fff;
 }
 
@@ -73,7 +73,7 @@
 }
 
 .notification.is-info {
-  background-color: hsl(207, 61%, 53%);
+  background-color: var(--c2c-info);
   color: #fff;
 }
 
@@ -103,7 +103,7 @@
 }
 
 .notification.is-danger {
-  background-color: hsl(348, 86%, 61%);
+  background-color: var(--c2c-danger);
   color: #fff;
 }
 

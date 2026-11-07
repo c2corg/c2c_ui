@@ -12,7 +12,7 @@
 }
 
 .select:not(.is-multiple):not(.is-loading)::after {
-  border-color: #337ab7;
+  border-color: var(--c2c-link);
   right: 1.125em;
   z-index: 4;
 }
@@ -36,7 +36,7 @@
 
 .select select[disabled]:hover,
 fieldset[disabled] .select select:hover {
-  border-color: hsl(0, 0%, 96%);
+  border-color: var(--c2c-white-ter);
 }
 
 .select select:not([multiple]) {
@@ -53,15 +53,15 @@ fieldset[disabled] .select select:hover {
 }
 
 .select:not(.is-multiple):not(.is-loading):hover::after {
-  border-color: hsl(0, 0%, 21%);
+  border-color: var(--c2c-grey-darker);
 }
 
 .select.is-white:not(:hover)::after {
-  border-color: hsl(0, 0%, 100%);
+  border-color: var(--c2c-white);
 }
 
 .select.is-white select {
-  border-color: hsl(0, 0%, 100%);
+  border-color: var(--c2c-white);
 }
 
 .select.is-white select:hover {
@@ -75,11 +75,11 @@ fieldset[disabled] .select select:hover {
 }
 
 .select.is-light:not(:hover)::after {
-  border-color: hsl(0, 0%, 96%);
+  border-color: var(--c2c-light);
 }
 
 .select.is-light select {
-  border-color: hsl(0, 0%, 96%);
+  border-color: var(--c2c-light);
 }
 
 .select.is-light select:hover {
@@ -93,11 +93,11 @@ fieldset[disabled] .select select:hover {
 }
 
 .select.is-dark:not(:hover)::after {
-  border-color: hsl(0, 0%, 21%);
+  border-color: var(--c2c-dark);
 }
 
 .select.is-dark select {
-  border-color: hsl(0, 0%, 21%);
+  border-color: var(--c2c-dark);
 }
 
 .select.is-dark select:hover {
@@ -111,11 +111,11 @@ fieldset[disabled] .select select:hover {
 }
 
 .select.is-primary:not(:hover)::after {
-  border-color: #337ab7;
+  border-color: var(--c2c-primary);
 }
 
 .select.is-primary select {
-  border-color: #337ab7;
+  border-color: var(--c2c-primary);
 }
 
 .select.is-primary select:hover {
@@ -129,11 +129,11 @@ fieldset[disabled] .select select:hover {
 }
 
 .select.is-link:not(:hover)::after {
-  border-color: #337ab7;
+  border-color: var(--c2c-link);
 }
 
 .select.is-link select {
-  border-color: #337ab7;
+  border-color: var(--c2c-link);
 }
 
 .select.is-link select:hover {
@@ -147,11 +147,11 @@ fieldset[disabled] .select select:hover {
 }
 
 .select.is-info:not(:hover)::after {
-  border-color: hsl(207, 61%, 53%);
+  border-color: var(--c2c-info);
 }
 
 .select.is-info select {
-  border-color: hsl(207, 61%, 53%);
+  border-color: var(--c2c-info);
 }
 
 .select.is-info select:hover {
@@ -201,11 +201,11 @@ fieldset[disabled] .select select:hover {
 }
 
 .select.is-danger:not(:hover)::after {
-  border-color: hsl(348, 86%, 61%);
+  border-color: var(--c2c-danger);
 }
 
 .select.is-danger select {
-  border-color: hsl(348, 86%, 61%);
+  border-color: var(--c2c-danger);
 }
 
 .select.is-danger select:hover {
@@ -220,7 +220,7 @@ fieldset[disabled] .select select:hover {
 
 .select.is-small {
   border-radius: 2px;
-  font-size: 0.7857rem;
+  font-size: var(--c2c-size-7);
 }
 
 .select.is-medium {
@@ -232,7 +232,7 @@ fieldset[disabled] .select select:hover {
 }
 
 .select.is-disabled::after {
-  border-color: hsl(0, 0%, 48%) !important;
+  border-color: var(--c2c-grey) !important;
   opacity: 0.5;
 }
 
@@ -245,7 +245,7 @@ fieldset[disabled] .select select:hover {
 }
 
 .select.is-loading.is-small:after {
-  font-size: 0.7857rem;
+  font-size: var(--c2c-size-7);
 }
 
 .select.is-loading.is-medium:after {

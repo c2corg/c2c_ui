@@ -1,12 +1,12 @@
 /* Bulma 0.9.4 (MIT License, see bulma/LICENSE): elements/box */
 
 .box {
-  background-color: hsl(0, 0%, 100%);
+  background-color: var(--c2c-white);
   border-radius: 0;
   box-shadow:
     rgba(10, 10, 10, 0.1) 0 2px 3px 0,
     rgba(10, 10, 10, 0.1) 0 0 0 1px;
-  color: hsl(0, 0%, 29%);
+  color: var(--c2c-text);
   display: block;
   padding: 1.25rem;
 }

@@ -27,8 +27,8 @@
 }
 
 .dropdown-content {
-  background-color: hsl(0, 0%, 100%);
-  border-radius: 4px;
+  background-color: var(--c2c-white);
+  border-radius: var(--c2c-radius);
   box-shadow:
     0 0.5em 1em -0.125em rgba(4%, 4%, 4%, 0.1),
     0 0px 0 1px rgba(4%, 4%, 4%, 0.02);
@@ -37,7 +37,7 @@
 }
 
 .dropdown-item {
-  color: hsl(0, 0%, 29%);
+  color: var(--c2c-text);
   display: block;
   font-size: 0.875rem;
   line-height: 1.5;
@@ -55,18 +55,18 @@ button.dropdown-item {
 
 a.dropdown-item:hover,
 button.dropdown-item:hover {
-  background-color: hsl(0, 0%, 96%);
-  color: hsl(0, 0%, 4%);
+  background-color: var(--c2c-white-ter);
+  color: var(--c2c-black);
 }
 
 a.dropdown-item.is-active,
 button.dropdown-item.is-active {
-  background-color: #337ab7;
+  background-color: var(--c2c-link);
   color: #fff;
 }
 
 .dropdown-divider {
-  background-color: hsl(0, 0%, 93%);
+  background-color: var(--c2c-grey-lightest);
   border: none;
   display: block;
   height: 1px;

@@ -1,10 +1,10 @@
 /* Bulma 0.9.4 (MIT License, see bulma/LICENSE): components/card */
 
 .card {
-  background-color: hsl(0, 0%, 100%);
+  background-color: var(--c2c-white);
   border-radius: 0.25rem;
   box-shadow: 0 2px 3px rgba(4%, 4%, 4%, 0.1);
-  color: hsl(0, 0%, 29%);
+  color: var(--c2c-text);
   max-width: 100%;
   position: relative;
 }
@@ -32,7 +32,7 @@
 
 .card-header-title {
   align-items: center;
-  color: hsl(0, 0%, 21%);
+  color: var(--c2c-grey-darker);
   display: flex;
   flex-grow: 1;
   font-weight: 700;
