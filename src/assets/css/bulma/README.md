@@ -15,6 +15,8 @@ values, nesting, custom properties instead of variants), keeping the class names
 - `palette.css` (ours): the colors of the color classes (`.is-primary`...) as custom properties (`--palette`...).
 - `elements/button.css`, `elements/tag.css`, `elements/notification.css`: nesting, one set of color rules that use
   the palette.
+- `elements/progress.css`, `elements/table.css`, `form/file.css`, `form/input-textarea.css`, `form/select.css`,
+  `form/tools.css`: one set of color rules that use the palette.
 
 ## Where it comes from
 

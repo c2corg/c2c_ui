@@ -7,229 +7,32 @@
   position: relative;
 }
 
-.file.is-white .file-cta {
-  background-color: var(--c2c-white);
-  border-color: transparent;
-  color: hsl(0, 0%, 4%);
-}
+/* the colors: see ../palette.css */
+.file:is(.is-white, .is-light, .is-dark, .is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger) {
+  .file-cta {
+    background-color: var(--palette);
+    border-color: transparent;
+    color: var(--palette-invert);
+  }
 
-.file.is-white:hover .file-cta {
-  background-color: hsl(0, 0%, 97.5%);
-  border-color: transparent;
-  color: hsl(0, 0%, 4%);
-}
+  &:hover .file-cta {
+    background-color: var(--palette-hover);
+    border-color: transparent;
+    color: var(--palette-invert);
+  }
 
-.file.is-white:focus .file-cta {
-  border-color: transparent;
-  box-shadow: 0 0 0.5em rgba(255, 255, 255, 0.25);
-  color: hsl(0, 0%, 4%);
-}
+  &:focus .file-cta {
+    border-color: transparent;
+    box-shadow: 0 0 0.5em var(--palette-focus);
+    color: var(--palette-invert);
+  }
 
-.file.is-white:active .file-cta,
-.file.is-white.is-active .file-cta {
-  background-color: hsl(0, 0%, 95%);
-  border-color: transparent;
-  color: hsl(0, 0%, 4%);
-}
-
-.file.is-light .file-cta {
-  background-color: var(--c2c-light);
-  border-color: transparent;
-  color: rgba(0, 0, 0, 0.7);
-}
-
-.file.is-light:hover .file-cta {
-  background-color: hsl(0, 0%, 93.5%);
-  border-color: transparent;
-  color: rgba(0, 0, 0, 0.7);
-}
-
-.file.is-light:focus .file-cta {
-  border-color: transparent;
-  box-shadow: 0 0 0.5em rgba(96%, 96%, 96%, 0.25);
-  color: rgba(0, 0, 0, 0.7);
-}
-
-.file.is-light:active .file-cta,
-.file.is-light.is-active .file-cta {
-  background-color: hsl(0, 0%, 91%);
-  border-color: transparent;
-  color: rgba(0, 0, 0, 0.7);
-}
-
-.file.is-dark .file-cta {
-  background-color: var(--c2c-dark);
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-dark:hover .file-cta {
-  background-color: hsl(0, 0%, 18.5%);
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-dark:focus .file-cta {
-  border-color: transparent;
-  box-shadow: 0 0 0.5em rgba(21%, 21%, 21%, 0.25);
-  color: #fff;
-}
-
-.file.is-dark:active .file-cta,
-.file.is-dark.is-active .file-cta {
-  background-color: hsl(0, 0%, 16%);
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-primary .file-cta {
-  background-color: var(--c2c-primary);
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-primary:hover .file-cta {
-  background-color: rgb(18.9102564103%, 45.2362996481%, 67.8544494721%);
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-primary:focus .file-cta {
-  border-color: transparent;
-  box-shadow: 0 0 0.5em rgba(51, 122, 183, 0.25);
-  color: #fff;
-}
-
-.file.is-primary:active .file-cta,
-.file.is-primary.is-active .file-cta {
-  background-color: rgb(17.8205128205%, 42.6294620412%, 63.9441930618%);
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-link .file-cta {
-  background-color: var(--c2c-link);
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-link:hover .file-cta {
-  background-color: rgb(18.9102564103%, 45.2362996481%, 67.8544494721%);
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-link:focus .file-cta {
-  border-color: transparent;
-  box-shadow: 0 0 0.5em rgba(51, 122, 183, 0.25);
-  color: #fff;
-}
-
-.file.is-link:active .file-cta,
-.file.is-link.is-active .file-cta {
-  background-color: rgb(17.8205128205%, 42.6294620412%, 63.9441930618%);
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-info .file-cta {
-  background-color: var(--c2c-info);
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-info:hover .file-cta {
-  background-color: hsl(207, 61%, 50.5%);
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-info:focus .file-cta {
-  border-color: transparent;
-  box-shadow: 0 0 0.5em rgba(24.33%, 55.867%, 81.67%, 0.25);
-  color: #fff;
-}
-
-.file.is-info:active .file-cta,
-.file.is-info.is-active .file-cta {
-  background-color: hsl(207, 61%, 48%);
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-success .file-cta {
-  background-color: #4baf50;
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-success:hover .file-cta {
-  background-color: rgb(27.9117647059%, 65.1274509804%, 29.7725490196%);
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-success:focus .file-cta {
-  border-color: transparent;
-  box-shadow: 0 0 0.5em rgba(75, 175, 80, 0.25);
-  color: #fff;
-}
-
-.file.is-success:active .file-cta,
-.file.is-success.is-active .file-cta {
-  background-color: rgb(26.4117647059%, 61.6274509804%, 28.1725490196%);
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-warning .file-cta {
-  background-color: hsl(44, 100%, 77%);
-  border-color: transparent;
-  color: rgba(0, 0, 0, 0.7);
-}
-
-.file.is-warning:hover .file-cta {
-  background-color: hsl(44, 100%, 74.5%);
-  border-color: transparent;
-  color: rgba(0, 0, 0, 0.7);
-}
-
-.file.is-warning:focus .file-cta {
-  border-color: transparent;
-  box-shadow: 0 0 0.5em rgba(100%, 87.7333333333%, 54%, 0.25);
-  color: rgba(0, 0, 0, 0.7);
-}
-
-.file.is-warning:active .file-cta,
-.file.is-warning.is-active .file-cta {
-  background-color: hsl(44, 100%, 72%);
-  border-color: transparent;
-  color: rgba(0, 0, 0, 0.7);
-}
-
-.file.is-danger .file-cta {
-  background-color: var(--c2c-danger);
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-danger:hover .file-cta {
-  background-color: hsl(348, 86%, 58.5%);
-  border-color: transparent;
-  color: #fff;
-}
-
-.file.is-danger:focus .file-cta {
-  border-color: transparent;
-  box-shadow: 0 0 0.5em rgba(94.54%, 27.46%, 40.876%, 0.25);
-  color: #fff;
-}
-
-.file.is-danger:active .file-cta,
-.file.is-danger.is-active .file-cta {
-  background-color: hsl(348, 86%, 56%);
-  border-color: transparent;
-  color: #fff;
+  &:active .file-cta,
+  &.is-active .file-cta {
+    background-color: var(--palette-active);
+    border-color: transparent;
+    color: var(--palette-invert);
+  }
 }
 
 .file.is-small {

@@ -29,40 +29,9 @@
   margin-top: 0.25rem;
 }
 
-.help.is-white {
-  color: var(--c2c-white);
-}
-
-.help.is-light {
-  color: var(--c2c-light);
-}
-
-.help.is-dark {
-  color: var(--c2c-dark);
-}
-
-.help.is-primary {
-  color: var(--c2c-primary);
-}
-
-.help.is-link {
-  color: var(--c2c-link);
-}
-
-.help.is-info {
-  color: var(--c2c-info);
-}
-
-.help.is-success {
-  color: #4baf50;
-}
-
-.help.is-warning {
-  color: hsl(44, 100%, 77%);
-}
-
-.help.is-danger {
-  color: var(--c2c-danger);
+/* the colors: see ../palette.css */
+.help:is(.is-white, .is-light, .is-dark, .is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger) {
+  color: var(--palette);
 }
 
 .field:not(:last-child) {

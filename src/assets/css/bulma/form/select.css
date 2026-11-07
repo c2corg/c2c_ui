@@ -56,166 +56,25 @@ fieldset[disabled] .select select:hover {
   border-color: var(--c2c-grey-darker);
 }
 
-.select.is-white:not(:hover)::after {
-  border-color: var(--c2c-white);
-}
+/* the colors: see ../palette.css */
+.select:is(.is-white, .is-light, .is-dark, .is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger) {
+  &:not(:hover)::after {
+    border-color: var(--palette);
+  }
 
-.select.is-white select {
-  border-color: var(--c2c-white);
-}
+  select {
+    border-color: var(--palette);
 
-.select.is-white select:hover {
-  border-color: hsl(0, 0%, 95%);
-}
+    &:hover {
+      border-color: var(--palette-active);
+    }
 
-.select.is-white select:focus,
-.select.is-white select:active,
-.select.is-white select.is-active {
-  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.25);
-}
-
-.select.is-light:not(:hover)::after {
-  border-color: var(--c2c-light);
-}
-
-.select.is-light select {
-  border-color: var(--c2c-light);
-}
-
-.select.is-light select:hover {
-  border-color: hsl(0, 0%, 91%);
-}
-
-.select.is-light select:focus,
-.select.is-light select:active,
-.select.is-light select.is-active {
-  box-shadow: 0 0 0 0 rgba(96%, 96%, 96%, 0.25);
-}
-
-.select.is-dark:not(:hover)::after {
-  border-color: var(--c2c-dark);
-}
-
-.select.is-dark select {
-  border-color: var(--c2c-dark);
-}
-
-.select.is-dark select:hover {
-  border-color: hsl(0, 0%, 16%);
-}
-
-.select.is-dark select:focus,
-.select.is-dark select:active,
-.select.is-dark select.is-active {
-  box-shadow: 0 0 0 0 rgba(21%, 21%, 21%, 0.25);
-}
-
-.select.is-primary:not(:hover)::after {
-  border-color: var(--c2c-primary);
-}
-
-.select.is-primary select {
-  border-color: var(--c2c-primary);
-}
-
-.select.is-primary select:hover {
-  border-color: rgb(17.8205128205%, 42.6294620412%, 63.9441930618%);
-}
-
-.select.is-primary select:focus,
-.select.is-primary select:active,
-.select.is-primary select.is-active {
-  box-shadow: 0 0 0 0 rgba(51, 122, 183, 0.25);
-}
-
-.select.is-link:not(:hover)::after {
-  border-color: var(--c2c-link);
-}
-
-.select.is-link select {
-  border-color: var(--c2c-link);
-}
-
-.select.is-link select:hover {
-  border-color: rgb(17.8205128205%, 42.6294620412%, 63.9441930618%);
-}
-
-.select.is-link select:focus,
-.select.is-link select:active,
-.select.is-link select.is-active {
-  box-shadow: 0 0 0 0 rgba(51, 122, 183, 0.25);
-}
-
-.select.is-info:not(:hover)::after {
-  border-color: var(--c2c-info);
-}
-
-.select.is-info select {
-  border-color: var(--c2c-info);
-}
-
-.select.is-info select:hover {
-  border-color: hsl(207, 61%, 48%);
-}
-
-.select.is-info select:focus,
-.select.is-info select:active,
-.select.is-info select.is-active {
-  box-shadow: 0 0 0 0 rgba(24.33%, 55.867%, 81.67%, 0.25);
-}
-
-.select.is-success:not(:hover)::after {
-  border-color: #4baf50;
-}
-
-.select.is-success select {
-  border-color: #4baf50;
-}
-
-.select.is-success select:hover {
-  border-color: rgb(26.4117647059%, 61.6274509804%, 28.1725490196%);
-}
-
-.select.is-success select:focus,
-.select.is-success select:active,
-.select.is-success select.is-active {
-  box-shadow: 0 0 0 0 rgba(75, 175, 80, 0.25);
-}
-
-.select.is-warning:not(:hover)::after {
-  border-color: hsl(44, 100%, 77%);
-}
-
-.select.is-warning select {
-  border-color: hsl(44, 100%, 77%);
-}
-
-.select.is-warning select:hover {
-  border-color: hsl(44, 100%, 72%);
-}
-
-.select.is-warning select:focus,
-.select.is-warning select:active,
-.select.is-warning select.is-active {
-  box-shadow: 0 0 0 0 rgba(100%, 87.7333333333%, 54%, 0.25);
-}
-
-.select.is-danger:not(:hover)::after {
-  border-color: var(--c2c-danger);
-}
-
-.select.is-danger select {
-  border-color: var(--c2c-danger);
-}
-
-.select.is-danger select:hover {
-  border-color: hsl(348, 86%, 56%);
-}
-
-.select.is-danger select:focus,
-.select.is-danger select:active,
-.select.is-danger select.is-active {
-  box-shadow: 0 0 0 0 rgba(94.54%, 27.46%, 40.876%, 0.25);
+    &:focus,
+    &:active,
+    &.is-active {
+      box-shadow: 0 0 0 0 var(--palette-focus);
+    }
+  }
 }
 
 .select.is-small {

@@ -7,7 +7,7 @@
  * Of two color classes, the one set last here wins, as in Bulma (.is-primary.is-danger is red, .is-primary.is-light
  * is the light variant of primary). The values that are not tokens are those Bulma computed from the color.
  */
-:is(.button, .notification, .tag) {
+:is(.button, .file, .help, .input, .notification, .progress, .select, .table td, .table th, .tag, .textarea) {
   &.is-white {
     --palette: var(--c2c-white);
     --palette-invert: hsl(0, 0%, 4%);

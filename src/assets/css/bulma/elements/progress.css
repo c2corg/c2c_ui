@@ -29,148 +29,23 @@
   border: none;
 }
 
-.progress.is-white::-webkit-progress-value {
-  background-color: var(--c2c-white);
-}
+/* the colors: see ../palette.css */
+.progress:is(.is-white, .is-light, .is-dark, .is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger) {
+  &::-webkit-progress-value {
+    background-color: var(--palette);
+  }
 
-.progress.is-white::-moz-progress-bar {
-  background-color: var(--c2c-white);
-}
+  &::-moz-progress-bar {
+    background-color: var(--palette);
+  }
 
-.progress.is-white::-ms-fill {
-  background-color: var(--c2c-white);
-}
+  &::-ms-fill {
+    background-color: var(--palette);
+  }
 
-.progress.is-white:indeterminate {
-  background-image: linear-gradient(to right, var(--c2c-white) 30%, var(--c2c-grey-lightest) 30%);
-}
-
-.progress.is-light::-webkit-progress-value {
-  background-color: var(--c2c-light);
-}
-
-.progress.is-light::-moz-progress-bar {
-  background-color: var(--c2c-light);
-}
-
-.progress.is-light::-ms-fill {
-  background-color: var(--c2c-light);
-}
-
-.progress.is-light:indeterminate {
-  background-image: linear-gradient(to right, var(--c2c-light) 30%, var(--c2c-grey-lightest) 30%);
-}
-
-.progress.is-dark::-webkit-progress-value {
-  background-color: var(--c2c-dark);
-}
-
-.progress.is-dark::-moz-progress-bar {
-  background-color: var(--c2c-dark);
-}
-
-.progress.is-dark::-ms-fill {
-  background-color: var(--c2c-dark);
-}
-
-.progress.is-dark:indeterminate {
-  background-image: linear-gradient(to right, var(--c2c-dark) 30%, var(--c2c-grey-lightest) 30%);
-}
-
-.progress.is-primary::-webkit-progress-value {
-  background-color: var(--c2c-primary);
-}
-
-.progress.is-primary::-moz-progress-bar {
-  background-color: var(--c2c-primary);
-}
-
-.progress.is-primary::-ms-fill {
-  background-color: var(--c2c-primary);
-}
-
-.progress.is-primary:indeterminate {
-  background-image: linear-gradient(to right, var(--c2c-primary) 30%, var(--c2c-grey-lightest) 30%);
-}
-
-.progress.is-link::-webkit-progress-value {
-  background-color: var(--c2c-link);
-}
-
-.progress.is-link::-moz-progress-bar {
-  background-color: var(--c2c-link);
-}
-
-.progress.is-link::-ms-fill {
-  background-color: var(--c2c-link);
-}
-
-.progress.is-link:indeterminate {
-  background-image: linear-gradient(to right, var(--c2c-link) 30%, var(--c2c-grey-lightest) 30%);
-}
-
-.progress.is-info::-webkit-progress-value {
-  background-color: var(--c2c-info);
-}
-
-.progress.is-info::-moz-progress-bar {
-  background-color: var(--c2c-info);
-}
-
-.progress.is-info::-ms-fill {
-  background-color: var(--c2c-info);
-}
-
-.progress.is-info:indeterminate {
-  background-image: linear-gradient(to right, var(--c2c-info) 30%, var(--c2c-grey-lightest) 30%);
-}
-
-.progress.is-success::-webkit-progress-value {
-  background-color: #4baf50;
-}
-
-.progress.is-success::-moz-progress-bar {
-  background-color: #4baf50;
-}
-
-.progress.is-success::-ms-fill {
-  background-color: #4baf50;
-}
-
-.progress.is-success:indeterminate {
-  background-image: linear-gradient(to right, #4baf50 30%, var(--c2c-grey-lightest) 30%);
-}
-
-.progress.is-warning::-webkit-progress-value {
-  background-color: hsl(44, 100%, 77%);
-}
-
-.progress.is-warning::-moz-progress-bar {
-  background-color: hsl(44, 100%, 77%);
-}
-
-.progress.is-warning::-ms-fill {
-  background-color: hsl(44, 100%, 77%);
-}
-
-.progress.is-warning:indeterminate {
-  background-image: linear-gradient(to right, hsl(44, 100%, 77%) 30%, var(--c2c-grey-lightest) 30%);
-}
-
-.progress.is-danger::-webkit-progress-value {
-  background-color: var(--c2c-danger);
-}
-
-.progress.is-danger::-moz-progress-bar {
-  background-color: var(--c2c-danger);
-}
-
-.progress.is-danger::-ms-fill {
-  background-color: var(--c2c-danger);
-}
-
-.progress.is-danger:indeterminate {
-  background-image: linear-gradient(to right, var(--c2c-danger) 30%, var(--c2c-grey-lightest) 30%);
+  &:indeterminate {
+    background-image: linear-gradient(to right, var(--palette) 30%, var(--c2c-grey-lightest) 30%);
+  }
 }
 
 .progress:indeterminate {
