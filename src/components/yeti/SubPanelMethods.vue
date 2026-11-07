@@ -314,10 +314,10 @@ table:not(:last-child) {
 .yetiform-danger {
   width: 100%;
   table-layout: fixed;
-  color: $dark;
+  color: var(--c2c-dark);
 
   tr + tr {
-    border-top: 1px solid $grey-lighter;
+    border-top: 1px solid var(--c2c-grey-lighter);
   }
 
   td {
@@ -363,7 +363,7 @@ table:not(:last-child) {
 
     &:hover,
     &:focus {
-      border-color: $grey-lighter;
+      border-color: var(--c2c-grey-lighter);
     }
 
     &.yetitab-label:before {
@@ -379,12 +379,12 @@ table:not(:last-child) {
 
 .yetitab-control--selected {
   .yetitab-label {
-    color: $primary;
-    border-color: $primary;
+    color: var(--c2c-primary);
+    border-color: var(--c2c-primary);
 
     &:hover,
     &:focus {
-      border-color: $primary;
+      border-color: var(--c2c-primary);
     }
   }
 }

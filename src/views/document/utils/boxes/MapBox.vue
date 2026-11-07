@@ -221,7 +221,7 @@ onBeforeUnmount(() => {
 :not(:fullscreen) > .map-container {
   &.pinned {
     position: fixed;
-    top: $navbar-height;
+    top: var(--c2c-navbar-height);
     margin-top: 0; /*avoid space between nav and map, where body text can be seen while scrolling*/
     z-index: 10; /* on top of body but below navbar (z=25) and side-menu (z=30) */
     box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.4); // <o-x> <o-y> <radius>
@@ -231,12 +231,12 @@ onBeforeUnmount(() => {
     height: 45vh;
     width: 100%;
     @include mx.desktop {
-      left: $sidemenu-width; /* when sidemenu is shown, as in App.vue */
+      left: var(--c2c-sidemenu-width); /* when sidemenu is shown, as in App.vue */
     }
   }
   &.pinned-to-right {
     right: 0px;
-    height: calc(100vh - #{$navbar-height});
+    height: calc(100vh - var(--c2c-navbar-height));
     width: 30vw;
   }
 }

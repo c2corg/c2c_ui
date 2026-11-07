@@ -740,8 +740,8 @@ defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoo
   background: #fff;
   border-radius: 4px;
   box-shadow:
-    0 0 3px rgba($black, 0.5),
-    0 3px 8px rgba($black, 0.5);
+    0 0 3px rgba(4%, 4%, 4%, 0.5),
+    0 3px 8px rgba(4%, 4%, 4%, 0.5);
   overflow: hidden;
 
   p,
@@ -750,7 +750,7 @@ defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoo
   }
 }
 .bulletins-header {
-  background: $primary;
+  background: var(--c2c-primary);
   padding-top: 2rem;
 
   .title {
@@ -758,7 +758,7 @@ defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoo
   }
 }
 .bulletins-footer {
-  background: $grey-lighter;
+  background: var(--c2c-grey-lighter);
 }
 .bulletins-overlay-danger-icon {
   position: absolute;

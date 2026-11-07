@@ -1,0 +1,58 @@
+/*
+ * The design tokens of the site, as CSS custom properties (c2corg/c2c_ui#4907): the components use them, not the Sass
+ * variables. Each token has the name and the value of a Sass variable of src/assets/sass/variables.scss (prefixed
+ * with c2c), checked by src/styles.spec.ts as long as Bulma's Sass uses those variables.
+ *
+ * The breakpoints are not here: a custom property cannot be used in a media query.
+ */
+:root {
+  /* the orange and the blue of c2c */
+  --c2c-color-base-c2c: #f93;
+  --c2c-color-base-c2c-lighter: rgb(255, 206, 158);
+  --c2c-secondary: #f93;
+  --c2c-primary: #337ab7;
+  --c2c-primary-light: rgb(93.7435897436%, 96.1709401709%, 98.2564102564%);
+  --c2c-link: #337ab7;
+  --c2c-color-link: #337ab7;
+
+  /* text and backgrounds */
+  --c2c-text: hsl(0, 0%, 29%);
+  --c2c-color-text: #4a4a4a;
+  --c2c-body-background-color: #fbfaf6;
+  --c2c-hover-background: hsl(0, 0%, 95%);
+
+  /* greys */
+  --c2c-white: hsl(0, 0%, 100%);
+  --c2c-white-ter: hsl(0, 0%, 96%);
+  --c2c-light: hsl(0, 0%, 96%);
+  --c2c-grey-lightest: hsl(0, 0%, 93%);
+  --c2c-grey-lighter: hsl(0, 0%, 86%);
+  --c2c-grey-light: hsl(0, 0%, 71%);
+  --c2c-grey: hsl(0, 0%, 48%);
+  --c2c-grey-dark: hsl(0, 0%, 29%);
+  --c2c-grey-darker: hsl(0, 0%, 21%);
+  --c2c-dark: hsl(0, 0%, 21%);
+  --c2c-black: hsl(0, 0%, 4%);
+
+  /* other colors */
+  --c2c-danger: hsl(348, 86%, 61%);
+  --c2c-red: hsl(348, 86%, 61%);
+  --c2c-yellow: hsl(44, 100%, 77%);
+  --c2c-green: #4baf50;
+
+  /* font sizes */
+  --c2c-size-3: 1.5714rem;
+  --c2c-size-6: 1rem;
+  --c2c-size-7: 0.7857rem;
+
+  /* borders and shadows */
+  --c2c-radius: 4px;
+  --c2c-card-border: 1px solid rgba(4%, 4%, 4%, 0.15);
+  --c2c-card-hover-shadow: 1px 3px 4px rgba(4%, 4%, 4%, 0.1);
+
+  /* layout */
+  --c2c-navbar-height: 3.25rem;
+  --c2c-navbarad-height: 90px;
+  --c2c-itinevert-header-height: 4rem;
+  --c2c-sidemenu-width: 200px;
+}

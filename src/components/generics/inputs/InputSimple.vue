@@ -119,6 +119,6 @@ select {
 }
 
 .prefix.is-danger {
-  border-color: $danger;
+  border-color: var(--c2c-danger);
 }
 </style>

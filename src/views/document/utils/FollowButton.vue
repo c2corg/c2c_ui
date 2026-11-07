@@ -51,6 +51,6 @@ if (canFollow.value) {
 
 <style scoped lang="scss">
 .follow-button-yellow {
-  color: $yellow !important;
+  color: var(--c2c-yellow) !important;
 }
 </style>

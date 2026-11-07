@@ -241,18 +241,18 @@ defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoo
 .overlay {
   min-width: 150px;
   max-width: 100%;
-  background: $white;
+  background: var(--c2c-white);
   border-radius: 4px;
   box-shadow:
-    0 0 3px rgba($black, 0.5),
-    0 3px 8px rgba($black, 0.5);
+    0 0 3px rgba(4%, 4%, 4%, 0.5),
+    0 3px 8px rgba(4%, 4%, 4%, 0.5);
   overflow: hidden;
 }
 .overlay-header {
   font-size: 0.9em;
   padding: 5px 0;
   text-align: center;
-  color: $white;
+  color: var(--c2c-white);
 }
 .overlay-content {
   text-align: center;

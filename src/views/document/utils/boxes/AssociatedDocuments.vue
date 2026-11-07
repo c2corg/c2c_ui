@@ -132,7 +132,7 @@ const articles = computed(() => associations.value.articles ?? []);
 
 .icon-link,
 .icon-link:hover {
-  color: $dark;
+  color: var(--c2c-dark);
   margin-right: 3px;
 }
 </style>

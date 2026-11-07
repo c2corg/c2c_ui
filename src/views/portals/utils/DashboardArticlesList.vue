@@ -42,21 +42,21 @@ const articles = computed(() => articlesPromise.data);
 <style scoped lang="scss">
 ul {
   list-style-type: disc !important;
-  padding-left: $size-6;
+  padding-left: var(--c2c-size-6);
 }
 
 h4 > a,
 h6 > a,
 li > a {
-  color: $color-text !important;
+  color: var(--c2c-color-text) !important;
 }
 
 h4 > a:hover,
 h6 > a:hover {
-  color: $color-link !important;
+  color: var(--c2c-color-link) !important;
 }
 
 .dashboard-list > a:nth-child(2n + 1) {
-  background-color: $body-background-color;
+  background-color: var(--c2c-body-background-color);
 }
 </style>

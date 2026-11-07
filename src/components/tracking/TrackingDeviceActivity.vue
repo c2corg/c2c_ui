@@ -71,7 +71,7 @@ $size: 200px;
   width: $size;
   height: $size;
   position: relative;
-  background-color: $white-ter;
+  background-color: var(--c2c-white-ter);
 
   &.hovered > img {
     filter: brightness(80%);

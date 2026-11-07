@@ -10,7 +10,7 @@
 .card-header-title {
   padding: 0.4rem 0.8rem;
   min-width: 0;
-  color: $text;
+  color: var(--c2c-text);
 
   align-items: center;
   justify-content: space-between;

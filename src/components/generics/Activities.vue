@@ -28,7 +28,7 @@ const sortedActivities = computed(() => props.activities.slice(0).sort());
 @media print {
   /* write the activity's title instead of the icon */
   .replace-icon-by-names-on-print {
-    color: $text !important;
+    color: var(--c2c-text) !important;
   }
 
   .replace-icon-by-names-on-print:not(:last-child):after {

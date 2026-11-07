@@ -41,24 +41,24 @@
 <style scoped lang="scss">
 ul {
   list-style-type: disc !important;
-  padding-left: $size-6;
+  padding-left: var(--c2c-size-6);
 }
 
 h4 {
-  padding-bottom: $size-7 !important;
-  margin-bottom: $size-7 !important;
+  padding-bottom: var(--c2c-size-7) !important;
+  margin-bottom: var(--c2c-size-7) !important;
 }
 
 li:hover {
-  background: $hover-background;
+  background: var(--c2c-hover-background);
 }
 
 h4 > a,
 li > a {
-  color: $color-text !important;
+  color: var(--c2c-color-text) !important;
 }
 
 h4 > a:hover {
-  color: $color-link !important;
+  color: var(--c2c-color-link) !important;
 }
 </style>

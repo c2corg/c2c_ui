@@ -129,7 +129,7 @@ const waypoint_types = computed(() => constants.waypoint_types);
 
   h1 {
     font-size: 3rem;
-    color: $light;
+    color: var(--c2c-light);
     margin-bottom: 25px;
   }
 

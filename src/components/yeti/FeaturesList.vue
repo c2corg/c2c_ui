@@ -56,7 +56,7 @@ function nbPointsOnFeature(feature: Feature<LineString>) {
 
     &:hover,
     &:focus {
-      background: $grey-lighter;
+      background: var(--c2c-grey-lighter);
       cursor: default;
     }
   }

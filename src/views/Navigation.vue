@@ -334,16 +334,16 @@ onBeforeUnmount(() => {
 <style scoped lang="scss">
 nav {
   max-width: 100vw;
-  height: $navbar-height;
-  background-color: $white;
-  box-shadow: 0 2px 0 $color-base-c2c;
+  height: var(--c2c-navbar-height);
+  background-color: var(--c2c-white);
+  box-shadow: 0 2px 0 var(--c2c-color-base-c2c);
   display: flex;
 }
 
 .navigation-brand {
   padding: 4px 5px !important;
   img {
-    height: calc(#{$navbar-height} - 8px);
+    height: calc(var(--c2c-navbar-height) - 8px);
   }
 }
 
@@ -360,11 +360,11 @@ nav {
 }
 
 .c2c-color {
-  background-color: $color-base-c2c;
+  background-color: var(--c2c-color-base-c2c);
 }
 
 .with-ad {
-  height: $navbarad-height;
+  height: var(--c2c-navbarad-height);
   margin-left: 200px;
 
   .navigation-end {
@@ -492,7 +492,7 @@ nav {
 
 <style lang="scss">
 .c2c-color > a {
-  color: $color-text;
+  color: var(--c2c-color-text);
 }
 
 @media screen and (max-width: $tablet) {

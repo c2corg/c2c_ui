@@ -39,14 +39,14 @@ const icon = computed(() => ICONS[props.type]);
   padding-right: 0.75rem;
 }
 .is-info {
-  color: $primary;
+  color: var(--c2c-primary);
 }
 .is-warning {
-  color: $red;
+  color: var(--c2c-red);
 }
 .is-help {
-  background: $grey-lightest;
-  color: $grey-dark;
+  background: var(--c2c-grey-lightest);
+  color: var(--c2c-grey-dark);
   border-radius: 4px;
   padding: 0.75rem;
   margin-bottom: 1.5rem !important;

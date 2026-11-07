@@ -160,7 +160,7 @@ function getTopicUrl(topic: Topic) {
 <style scoped lang="scss">
 .forum-row {
   display: flex;
-  color: $text;
+  color: var(--c2c-text);
   padding-bottom: 0.2rem;
 
   img {
@@ -176,7 +176,7 @@ function getTopicUrl(topic: Topic) {
 }
 
 .forum-row:hover {
-  background: $hover-background;
+  background: var(--c2c-hover-background);
 }
 
 .wide {
@@ -198,11 +198,11 @@ function getTopicUrl(topic: Topic) {
 
 h4 > a,
 h6 > a {
-  color: $color-text !important;
+  color: var(--c2c-color-text) !important;
 }
 
 h4 > a:hover,
 h6 > a:hover {
-  color: $color-link !important;
+  color: var(--c2c-color-link) !important;
 }
 </style>

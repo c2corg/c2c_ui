@@ -360,7 +360,7 @@ $paginationHeight: 30px;
     }
 
     .image-viewer-bullet-active {
-      background: $primary;
+      background: var(--c2c-primary);
     }
   }
 
@@ -444,12 +444,12 @@ $swiper-navigation-size: 4rem;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: $white;
+  color: var(--c2c-white);
 
   &.swiper-button-disabled {
     cursor: auto;
     pointer-events: none;
-    color: $grey;
+    color: var(--c2c-grey);
   }
 }
 </style>

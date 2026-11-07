@@ -239,7 +239,7 @@ $control-margin: 0.52em;
 .ol-control-recenter-on {
   top: $control-margin;
   left: 3em;
-  background: $white;
+  background: var(--c2c-white);
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
 
   input {
@@ -274,7 +274,7 @@ $box-padding: 1.25rem; //TODO find this variable
 $header-height: 34px;
 $box-margin: 1.5rem; //TODO find this variable
 $yeti-height: calc(
-  100vh - #{$navbar-height} - #{$section-padding} - 2 * #{$box-padding} - #{$header-height} - #{$box-margin} -
+  100vh - var(--c2c-navbar-height) - #{$section-padding} - 2 * #{$box-padding} - #{$header-height} - #{$box-margin} -
     #{$box-margin}
 );
 
@@ -315,17 +315,17 @@ $yeti-height: calc(
 <style lang="scss">
 .yeti-app {
   .ol-control {
-    background: $white;
+    background: var(--c2c-white);
     padding: 2px;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
   }
   .ol-control button {
-    background: $grey-dark;
-    color: $white;
+    background: var(--c2c-grey-dark);
+    color: var(--c2c-white);
 
     &:hover,
     &:focus {
-      background: $grey;
+      background: var(--c2c-grey);
       outline: none;
     }
   }

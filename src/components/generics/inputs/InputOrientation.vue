@@ -81,17 +81,17 @@ const { value_, toggle } = useArrayInputValue(props, emit);
 }
 
 .input-orientation > g.input-orientation-selected > path {
-  fill: $primary;
+  fill: var(--c2c-primary);
   transition: 0.1s;
 }
 
 .input-orientation.is-black-white > g.input-orientation-selected > path {
-  fill: $black;
+  fill: var(--c2c-black);
   transition: 0.1s;
 }
 
 .input-orientation > g.input-orientation-selected > text {
-  fill: $white;
+  fill: var(--c2c-white);
   transition: 0.1s;
 }
 

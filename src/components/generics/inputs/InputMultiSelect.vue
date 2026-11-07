@@ -40,15 +40,15 @@ const { value_, toggle } = useArrayInputValue(props, emit);
 
 <style scoped lang="scss">
 .has-error {
-  box-shadow: 0px 0px 8px 0px $danger;
+  box-shadow: 0px 0px 8px 0px var(--c2c-danger);
   // border: 1px solid $danger;
 }
 
 .multi-select-item {
   max-width: 100%;
-  border: 1px solid $primary;
-  color: $primary;
-  background-color: $white;
+  border: 1px solid var(--c2c-primary);
+  color: var(--c2c-primary);
+  background-color: var(--c2c-white);
   border-radius: 20px;
   padding: 0.2rem 0.75em;
   margin-bottom: 0.5rem;
@@ -61,7 +61,7 @@ const { value_, toggle } = useArrayInputValue(props, emit);
 }
 
 .multi-select-item:hover {
-  box-shadow: 0 0 3px 0 $primary;
+  box-shadow: 0 0 3px 0 var(--c2c-primary);
 }
 
 .multi-select-item:not(:last-child) {
@@ -70,6 +70,6 @@ const { value_, toggle } = useArrayInputValue(props, emit);
 
 .multi-select-item[checked] {
   color: white;
-  background-color: $primary;
+  background-color: var(--c2c-primary);
 }
 </style>

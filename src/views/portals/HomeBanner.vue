@@ -85,7 +85,7 @@
 <style scoped lang="scss">
 .with-circle {
   list-style: disc !important;
-  margin-left: $size-3;
+  margin-left: var(--c2c-size-3);
 }
 
 .logo-association {

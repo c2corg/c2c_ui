@@ -327,7 +327,7 @@ watch(() => route.fullPath, load, { immediate: true });
     overflow-x: hidden;
     /*
       max-height should be calculated:
-      100vh-($navbar-height)-height(.search-infos)
+      100vh-(var(--c2c-navbar-height))-height(.search-infos)
       but .search-infos height is not fixed
     */
     max-height: 70vh;

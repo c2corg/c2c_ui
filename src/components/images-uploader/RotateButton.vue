@@ -29,11 +29,11 @@ function click() {
 <style scoped lang="scss">
 div {
   cursor: pointer;
-  color: $primary;
+  color: var(--c2c-primary);
 
   &.disabled {
     cursor: not-allowed;
-    color: $primary-light;
+    color: var(--c2c-primary-light);
   }
 }
 </style>

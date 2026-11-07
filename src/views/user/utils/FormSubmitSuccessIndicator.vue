@@ -36,7 +36,7 @@ defineExpose({ show, clear });
 <style lang="scss" scoped>
 .success-indicator {
   font-size: 2em;
-  color: $green;
+  color: var(--c2c-green);
 }
 
 .success-indicator-enter-active,

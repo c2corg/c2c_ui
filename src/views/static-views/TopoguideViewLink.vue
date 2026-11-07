@@ -48,7 +48,7 @@ defineProps({
     text-align: center;
     justify-content: center;
 
-    color: $light;
+    color: var(--c2c-light);
     background-color: rgba(128, 128, 128, 0.4);
 
     transition: 0.2s;

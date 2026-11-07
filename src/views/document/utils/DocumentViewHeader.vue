@@ -90,7 +90,7 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
 }
 
 .button-bar > a {
-  color: $text;
+  color: var(--c2c-text);
 }
 
 .button-bar > span,
@@ -99,7 +99,7 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
   cursor: pointer;
 }
 .button-bar > *:hover {
-  color: $black;
+  color: var(--c2c-black);
 }
 
 .title {

@@ -157,7 +157,7 @@ function setProperty(property: keyof typeof toggles, value: boolean) {
 
 @media screen and (min-width: $tablet) {
   .feed-view {
-    margin-top: $size-3;
+    margin-top: var(--c2c-size-3);
   }
 
   .field {
@@ -175,11 +175,11 @@ function setProperty(property: keyof typeof toggles, value: boolean) {
 }
 
 .intro {
-  margin-bottom: $size-6;
+  margin-bottom: var(--c2c-size-6);
 }
 
 .switch[type='checkbox']:checked + label::before {
-  background: $color-base-c2c;
+  background: var(--c2c-color-base-c2c);
 }
 
 .toggleCheckbox {
@@ -190,7 +190,7 @@ function setProperty(property: keyof typeof toggles, value: boolean) {
   position: relative;
   border-radius: 20px;
   background: white;
-  border: 1px solid $color-base-c2c;
+  border: 1px solid var(--c2c-color-base-c2c);
   padding: 5px 2px;
   cursor: pointer;
 }
@@ -198,7 +198,7 @@ function setProperty(property: keyof typeof toggles, value: boolean) {
 .is-active {
   color: white;
   border-radius: 20px;
-  background: $color-base-c2c;
+  background: var(--c2c-color-base-c2c);
   transition: color 0.3s;
 }
 
@@ -215,6 +215,6 @@ function setProperty(property: keyof typeof toggles, value: boolean) {
 }
 
 .ams-ad {
-  margin-bottom: $size-7;
+  margin-bottom: var(--c2c-size-7);
 }
 </style>

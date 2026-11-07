@@ -26,14 +26,14 @@ defineProps({
 <style scoped lang="scss">
 .card {
   transition: 0.1s;
-  border: $card-border;
+  border: var(--c2c-card-border);
   background: white;
 }
 
 .card:hover,
 .is-highlighted {
   transition: 0.2s;
-  box-shadow: $card-hover-shadow;
-  background: $hover-background;
+  box-shadow: var(--c2c-card-hover-shadow);
+  background: var(--c2c-hover-background);
 }
 </style>

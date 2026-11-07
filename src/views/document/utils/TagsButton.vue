@@ -55,6 +55,6 @@ if (canTag.value) {
 
 <style scoped lang="scss">
 .todo-button.active {
-  color: $yellow !important;
+  color: var(--c2c-yellow) !important;
 }
 </style>

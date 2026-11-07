@@ -73,7 +73,7 @@ loadBoardAnnouncement();
 .publication {
   //display: block;
   position: relative;
-  margin-bottom: $size-7;
+  margin-bottom: var(--c2c-size-7);
 
   a,
   a:hover {
@@ -86,7 +86,7 @@ loadBoardAnnouncement();
 <style scoped lang="scss">
 .delete {
   position: absolute;
-  top: $size-7;
-  right: $size-7;
+  top: var(--c2c-size-7);
+  right: var(--c2c-size-7);
 }
 </style>

@@ -9,7 +9,7 @@ div {
   padding: 0.4rem 0.8rem;
   font-size: 0.9rem;
   min-height: 29px;
-  color: $text;
+  color: var(--c2c-text);
   align-items: center;
   justify-content: space-between;
   display: flex;

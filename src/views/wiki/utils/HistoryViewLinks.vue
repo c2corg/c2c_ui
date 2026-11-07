@@ -49,6 +49,6 @@ defineProps({
 <style scoped lang="scss">
 .links a:after {
   content: '\0000a0\002022\0000a0'; //&nbsp;&bull;&nbsp;
-  color: $text;
+  color: var(--c2c-text);
 }
 </style>

@@ -68,7 +68,7 @@ onBeforeUnmount(() => {
 
 <style scoped lang="scss">
 .iframe-container {
-  background: $light;
+  background: var(--c2c-light);
 
   div {
     transition: opacity 0.35s;

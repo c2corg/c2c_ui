@@ -33,12 +33,12 @@ $cb-skin: skin4;
   $cb-shadow:
     0 2px 3px rgba(10, 10, 10, 0.1),
     0 0 0 1px rgba(10, 10, 10, 0.1);
-  $cb-border-top: 4px solid $primary;
+  $cb-border-top: 4px solid var(--c2c-primary);
   $cb-margin-bottom: 1rem;
 } @else if ($cb-skin == skin3) {
   // primary big border left, no shadow
-  $cb-border-left: 4px solid $primary;
-  $cb-border-top: 1px solid $primary;
+  $cb-border-left: 4px solid var(--c2c-primary);
+  $cb-border-top: 1px solid var(--c2c-primary);
   $cb-margin-bottom: 1rem;
 } @else if ($cb-skin == skin4) {
   // pure :)
@@ -48,7 +48,7 @@ $cb-skin: skin4;
 
 .content-box {
   padding: 1rem;
-  background: $white;
+  background: var(--c2c-white);
   box-shadow: $cb-shadow;
   border-top: $cb-border-top;
   border-left: $cb-border-left;

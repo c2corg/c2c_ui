@@ -446,8 +446,8 @@ $section-padding: 0.75rem; //TODO find this variable
 $box-padding: 1.25rem; //TODO find this variable
 $header-height: 34px;
 $box-margin: 1.5rem; //TODO find this variable
-$yeti-height: calc(100vh - #{$navbar-height});
-$yeti-height-ad: calc(100vh - #{$navbarad-height});
+$yeti-height: calc(100vh - var(--c2c-navbar-height));
+$yeti-height-ad: calc(100vh - var(--c2c-navbarad-height));
 
 .yeti-app {
   position: relative;
@@ -527,7 +527,7 @@ $yeti-height-ad: calc(100vh - #{$navbarad-height});
   }
   .is-checkradio[type='radio'].is-primary:focus-visible + label::before,
   .is-checkradio[type='checkbox'].is-primary:focus-visible + label::before {
-    border-color: $primary;
+    border-color: var(--c2c-primary);
   }
   .is-checkradio[type='radio'].is-primary:focus + label::before,
   .is-checkradio[type='checkbox'].is-primary:focus + label::before {
@@ -538,13 +538,13 @@ $yeti-height-ad: calc(100vh - #{$navbarad-height});
   .select select,
   .input {
     border: none;
-    box-shadow: 0 0 0 1px $grey-lighter;
+    box-shadow: 0 0 0 1px var(--c2c-grey-lighter);
   }
   .select select:hover,
   .select select:focus,
   .input:hover,
   .input:focus {
-    box-shadow: 0 0 0 2px $primary;
+    box-shadow: 0 0 0 2px var(--c2c-primary);
   }
   .is-checkradio[type='checkbox'] + label::after {
     border-right-width: 3px;
@@ -575,15 +575,15 @@ $yeti-height-ad: calc(100vh - #{$navbarad-height});
   }
   .is-checkradio[type='checkbox']:checked + label::before,
   .is-checkradio[type='radio']:checked + label::before {
-    background: $primary;
-    border-color: $primary !important;
+    background: var(--c2c-primary);
+    border-color: var(--c2c-primary) !important;
   }
   .is-checkradio:hover:not([disabled]) + label::before,
   .is-checkradio:focus + label::before {
     border-width: 2px;
   }
   .is-checkradio:focus-visible + label::before {
-    box-shadow: 0 0 0 2px $secondary;
+    box-shadow: 0 0 0 2px var(--c2c-secondary);
   }
 
   .button.is-small {

@@ -69,7 +69,7 @@ const atLeastOneLegend = computed(() => yetiLegend.value || winterRouteLegend.va
   .legend-item + .legend-item {
     margin-top: 2rem;
     padding-top: 1em;
-    border-top: solid 1px $grey-lighter;
+    border-top: solid 1px var(--c2c-grey-lighter);
   }
 }
 
@@ -79,7 +79,7 @@ const atLeastOneLegend = computed(() => yetiLegend.value || winterRouteLegend.va
   right: -10px;
 }
 .icon-notification {
-  color: $primary;
+  color: var(--c2c-primary);
 }
 
 @media screen and (max-width: $tablet) {

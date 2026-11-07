@@ -18,7 +18,7 @@ defineEmits(['click']);
 <style scoped lang="scss">
 div {
   cursor: pointer;
-  color: $red;
+  color: var(--c2c-red);
   transition: 300ms;
 
   svg {
