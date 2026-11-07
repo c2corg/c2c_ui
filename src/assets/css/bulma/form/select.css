@@ -1,0 +1,257 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): form/select */
+
+.select {
+  display: inline-block;
+  max-width: 100%;
+  position: relative;
+  vertical-align: top;
+}
+
+.select:not(.is-multiple) {
+  height: 2.25em;
+}
+
+.select:not(.is-multiple):not(.is-loading)::after {
+  border-color: #337ab7;
+  right: 1.125em;
+  z-index: 4;
+}
+
+.select.is-rounded select {
+  border-radius: 9999px;
+  padding-left: 1em;
+}
+
+.select select {
+  cursor: pointer;
+  display: block;
+  font-size: 1em;
+  max-width: 100%;
+  outline: none;
+}
+
+.select select::-ms-expand {
+  display: none;
+}
+
+.select select[disabled]:hover,
+fieldset[disabled] .select select:hover {
+  border-color: hsl(0, 0%, 96%);
+}
+
+.select select:not([multiple]) {
+  padding-right: 2.5em;
+}
+
+.select select[multiple] {
+  height: auto;
+  padding: 0;
+}
+
+.select select[multiple] option {
+  padding: 0.5em 1em;
+}
+
+.select:not(.is-multiple):not(.is-loading):hover::after {
+  border-color: hsl(0, 0%, 21%);
+}
+
+.select.is-white:not(:hover)::after {
+  border-color: hsl(0, 0%, 100%);
+}
+
+.select.is-white select {
+  border-color: hsl(0, 0%, 100%);
+}
+
+.select.is-white select:hover {
+  border-color: hsl(0, 0%, 95%);
+}
+
+.select.is-white select:focus,
+.select.is-white select:active,
+.select.is-white select.is-active {
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.25);
+}
+
+.select.is-light:not(:hover)::after {
+  border-color: hsl(0, 0%, 96%);
+}
+
+.select.is-light select {
+  border-color: hsl(0, 0%, 96%);
+}
+
+.select.is-light select:hover {
+  border-color: hsl(0, 0%, 91%);
+}
+
+.select.is-light select:focus,
+.select.is-light select:active,
+.select.is-light select.is-active {
+  box-shadow: 0 0 0 0 rgba(96%, 96%, 96%, 0.25);
+}
+
+.select.is-dark:not(:hover)::after {
+  border-color: hsl(0, 0%, 21%);
+}
+
+.select.is-dark select {
+  border-color: hsl(0, 0%, 21%);
+}
+
+.select.is-dark select:hover {
+  border-color: hsl(0, 0%, 16%);
+}
+
+.select.is-dark select:focus,
+.select.is-dark select:active,
+.select.is-dark select.is-active {
+  box-shadow: 0 0 0 0 rgba(21%, 21%, 21%, 0.25);
+}
+
+.select.is-primary:not(:hover)::after {
+  border-color: #337ab7;
+}
+
+.select.is-primary select {
+  border-color: #337ab7;
+}
+
+.select.is-primary select:hover {
+  border-color: rgb(17.8205128205%, 42.6294620412%, 63.9441930618%);
+}
+
+.select.is-primary select:focus,
+.select.is-primary select:active,
+.select.is-primary select.is-active {
+  box-shadow: 0 0 0 0 rgba(51, 122, 183, 0.25);
+}
+
+.select.is-link:not(:hover)::after {
+  border-color: #337ab7;
+}
+
+.select.is-link select {
+  border-color: #337ab7;
+}
+
+.select.is-link select:hover {
+  border-color: rgb(17.8205128205%, 42.6294620412%, 63.9441930618%);
+}
+
+.select.is-link select:focus,
+.select.is-link select:active,
+.select.is-link select.is-active {
+  box-shadow: 0 0 0 0 rgba(51, 122, 183, 0.25);
+}
+
+.select.is-info:not(:hover)::after {
+  border-color: hsl(207, 61%, 53%);
+}
+
+.select.is-info select {
+  border-color: hsl(207, 61%, 53%);
+}
+
+.select.is-info select:hover {
+  border-color: hsl(207, 61%, 48%);
+}
+
+.select.is-info select:focus,
+.select.is-info select:active,
+.select.is-info select.is-active {
+  box-shadow: 0 0 0 0 rgba(24.33%, 55.867%, 81.67%, 0.25);
+}
+
+.select.is-success:not(:hover)::after {
+  border-color: #4baf50;
+}
+
+.select.is-success select {
+  border-color: #4baf50;
+}
+
+.select.is-success select:hover {
+  border-color: rgb(26.4117647059%, 61.6274509804%, 28.1725490196%);
+}
+
+.select.is-success select:focus,
+.select.is-success select:active,
+.select.is-success select.is-active {
+  box-shadow: 0 0 0 0 rgba(75, 175, 80, 0.25);
+}
+
+.select.is-warning:not(:hover)::after {
+  border-color: hsl(44, 100%, 77%);
+}
+
+.select.is-warning select {
+  border-color: hsl(44, 100%, 77%);
+}
+
+.select.is-warning select:hover {
+  border-color: hsl(44, 100%, 72%);
+}
+
+.select.is-warning select:focus,
+.select.is-warning select:active,
+.select.is-warning select.is-active {
+  box-shadow: 0 0 0 0 rgba(100%, 87.7333333333%, 54%, 0.25);
+}
+
+.select.is-danger:not(:hover)::after {
+  border-color: hsl(348, 86%, 61%);
+}
+
+.select.is-danger select {
+  border-color: hsl(348, 86%, 61%);
+}
+
+.select.is-danger select:hover {
+  border-color: hsl(348, 86%, 56%);
+}
+
+.select.is-danger select:focus,
+.select.is-danger select:active,
+.select.is-danger select.is-active {
+  box-shadow: 0 0 0 0 rgba(94.54%, 27.46%, 40.876%, 0.25);
+}
+
+.select.is-small {
+  border-radius: 2px;
+  font-size: 0.7857rem;
+}
+
+.select.is-medium {
+  font-size: 1.1429rem;
+}
+
+.select.is-large {
+  font-size: 1.2857rem;
+}
+
+.select.is-disabled::after {
+  border-color: hsl(0, 0%, 48%) !important;
+  opacity: 0.5;
+}
+
+.select.is-loading::after {
+  margin-top: 0;
+  position: absolute;
+  right: 0.625em;
+  top: 0.625em;
+  transform: none;
+}
+
+.select.is-loading.is-small:after {
+  font-size: 0.7857rem;
+}
+
+.select.is-loading.is-medium:after {
+  font-size: 1.1429rem;
+}
+
+.select.is-loading.is-large:after {
+  font-size: 1.2857rem;
+}

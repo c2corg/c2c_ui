@@ -1,0 +1,113 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): elements/notification */
+
+.notification {
+  background-color: hsl(0, 0%, 96%);
+  border-radius: 4px;
+  position: relative;
+  padding: 1.25rem 2.5rem 1.25rem 1.5rem;
+}
+
+.notification a:not(.button):not(.dropdown-item) {
+  color: currentColor;
+  text-decoration: underline;
+}
+
+.notification strong {
+  color: currentColor;
+}
+
+.notification code,
+.notification pre {
+  background: hsl(0, 0%, 100%);
+}
+
+.notification pre code {
+  background: transparent;
+}
+
+.notification > .delete {
+  right: 0.5rem;
+  position: absolute;
+  top: 0.5rem;
+}
+
+.notification .title,
+.notification .subtitle,
+.notification .content {
+  color: currentColor;
+}
+
+.notification.is-white {
+  background-color: hsl(0, 0%, 100%);
+  color: hsl(0, 0%, 4%);
+}
+
+.notification.is-light {
+  background-color: hsl(0, 0%, 96%);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.notification.is-dark {
+  background-color: hsl(0, 0%, 21%);
+  color: #fff;
+}
+
+.notification.is-primary {
+  background-color: #337ab7;
+  color: #fff;
+}
+
+.notification.is-primary.is-light {
+  background-color: rgb(93.7435897436%, 96.1709401709%, 98.2564102564%);
+  color: rgb(19.6153846154%, 46.9230769231%, 70.3846153846%);
+}
+
+.notification.is-link {
+  background-color: #337ab7;
+  color: #fff;
+}
+
+.notification.is-link.is-light {
+  background-color: rgb(93.7435897436%, 96.1709401709%, 98.2564102564%);
+  color: rgb(19.6153846154%, 46.9230769231%, 70.3846153846%);
+}
+
+.notification.is-info {
+  background-color: hsl(207, 61%, 53%);
+  color: #fff;
+}
+
+.notification.is-info.is-light {
+  background-color: hsl(207, 61%, 96%);
+  color: hsl(207, 61%, 41%);
+}
+
+.notification.is-success {
+  background-color: #4baf50;
+  color: #fff;
+}
+
+.notification.is-success.is-light {
+  background-color: rgb(94.4%, 97.6%, 94.56%);
+  color: rgb(22.2%, 51.8%, 23.68%);
+}
+
+.notification.is-warning {
+  background-color: hsl(44, 100%, 77%);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.notification.is-warning.is-light {
+  background-color: hsl(44, 100%, 96%);
+  color: hsl(44, 100%, 29%);
+}
+
+.notification.is-danger {
+  background-color: hsl(348, 86%, 61%);
+  color: #fff;
+}
+
+.notification.is-danger.is-light {
+  background-color: hsl(348, 86%, 96%);
+  color: hsl(348, 86%, 43%);
+}

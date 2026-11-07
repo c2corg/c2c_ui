@@ -1,0 +1,117 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): elements/title */
+
+.title,
+.subtitle {
+  /* stylelint-disable-next-line declaration-property-value-keyword-no-deprecated -- overflow-wrap: anywhere differs */
+  word-break: break-word;
+}
+
+.title em,
+.title span,
+.subtitle em,
+.subtitle span {
+  font-weight: inherit;
+}
+
+.title sub,
+.subtitle sub {
+  font-size: 0.75em;
+}
+
+.title sup,
+.subtitle sup {
+  font-size: 0.75em;
+}
+
+.title .tag,
+.subtitle .tag {
+  vertical-align: middle;
+}
+
+.title {
+  color: hsl(0, 0%, 21%);
+  font-size: 1.5714rem;
+  font-weight: 600;
+  line-height: 1.125;
+}
+
+.title strong {
+  color: inherit;
+  font-weight: inherit;
+}
+
+.title:not(.is-spaced) + .subtitle {
+  margin-top: -1.25rem;
+}
+
+.title.is-1 {
+  font-size: 2.1429rem;
+}
+
+.title.is-2 {
+  font-size: 1.8571rem;
+}
+
+.title.is-3 {
+  font-size: 1.5714rem;
+}
+
+.title.is-4 {
+  font-size: 1.2857rem;
+}
+
+.title.is-5 {
+  font-size: 1.1429rem;
+}
+
+.title.is-6 {
+  font-size: 1rem;
+}
+
+.title.is-7 {
+  font-size: 0.7857rem;
+}
+
+.subtitle {
+  color: hsl(0, 0%, 29%);
+  font-size: 1.1429rem;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.subtitle strong {
+  color: hsl(0, 0%, 21%);
+  font-weight: 600;
+}
+
+.subtitle:not(.is-spaced) + .title {
+  margin-top: -1.25rem;
+}
+
+.subtitle.is-1 {
+  font-size: 2.1429rem;
+}
+
+.subtitle.is-2 {
+  font-size: 1.8571rem;
+}
+
+.subtitle.is-3 {
+  font-size: 1.5714rem;
+}
+
+.subtitle.is-4 {
+  font-size: 1.2857rem;
+}
+
+.subtitle.is-5 {
+  font-size: 1.1429rem;
+}
+
+.subtitle.is-6 {
+  font-size: 1rem;
+}
+
+.subtitle.is-7 {
+  font-size: 0.7857rem;
+}

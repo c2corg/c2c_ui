@@ -1,0 +1,349 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): form/file */
+
+.file {
+  align-items: stretch;
+  display: flex;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.file.is-white .file-cta {
+  background-color: hsl(0, 0%, 100%);
+  border-color: transparent;
+  color: hsl(0, 0%, 4%);
+}
+
+.file.is-white:hover .file-cta {
+  background-color: hsl(0, 0%, 97.5%);
+  border-color: transparent;
+  color: hsl(0, 0%, 4%);
+}
+
+.file.is-white:focus .file-cta {
+  border-color: transparent;
+  box-shadow: 0 0 0.5em rgba(255, 255, 255, 0.25);
+  color: hsl(0, 0%, 4%);
+}
+
+.file.is-white:active .file-cta,
+.file.is-white.is-active .file-cta {
+  background-color: hsl(0, 0%, 95%);
+  border-color: transparent;
+  color: hsl(0, 0%, 4%);
+}
+
+.file.is-light .file-cta {
+  background-color: hsl(0, 0%, 96%);
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.file.is-light:hover .file-cta {
+  background-color: hsl(0, 0%, 93.5%);
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.file.is-light:focus .file-cta {
+  border-color: transparent;
+  box-shadow: 0 0 0.5em rgba(96%, 96%, 96%, 0.25);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.file.is-light:active .file-cta,
+.file.is-light.is-active .file-cta {
+  background-color: hsl(0, 0%, 91%);
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.file.is-dark .file-cta {
+  background-color: hsl(0, 0%, 21%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-dark:hover .file-cta {
+  background-color: hsl(0, 0%, 18.5%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-dark:focus .file-cta {
+  border-color: transparent;
+  box-shadow: 0 0 0.5em rgba(21%, 21%, 21%, 0.25);
+  color: #fff;
+}
+
+.file.is-dark:active .file-cta,
+.file.is-dark.is-active .file-cta {
+  background-color: hsl(0, 0%, 16%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-primary .file-cta {
+  background-color: #337ab7;
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-primary:hover .file-cta {
+  background-color: rgb(18.9102564103%, 45.2362996481%, 67.8544494721%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-primary:focus .file-cta {
+  border-color: transparent;
+  box-shadow: 0 0 0.5em rgba(51, 122, 183, 0.25);
+  color: #fff;
+}
+
+.file.is-primary:active .file-cta,
+.file.is-primary.is-active .file-cta {
+  background-color: rgb(17.8205128205%, 42.6294620412%, 63.9441930618%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-link .file-cta {
+  background-color: #337ab7;
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-link:hover .file-cta {
+  background-color: rgb(18.9102564103%, 45.2362996481%, 67.8544494721%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-link:focus .file-cta {
+  border-color: transparent;
+  box-shadow: 0 0 0.5em rgba(51, 122, 183, 0.25);
+  color: #fff;
+}
+
+.file.is-link:active .file-cta,
+.file.is-link.is-active .file-cta {
+  background-color: rgb(17.8205128205%, 42.6294620412%, 63.9441930618%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-info .file-cta {
+  background-color: hsl(207, 61%, 53%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-info:hover .file-cta {
+  background-color: hsl(207, 61%, 50.5%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-info:focus .file-cta {
+  border-color: transparent;
+  box-shadow: 0 0 0.5em rgba(24.33%, 55.867%, 81.67%, 0.25);
+  color: #fff;
+}
+
+.file.is-info:active .file-cta,
+.file.is-info.is-active .file-cta {
+  background-color: hsl(207, 61%, 48%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-success .file-cta {
+  background-color: #4baf50;
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-success:hover .file-cta {
+  background-color: rgb(27.9117647059%, 65.1274509804%, 29.7725490196%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-success:focus .file-cta {
+  border-color: transparent;
+  box-shadow: 0 0 0.5em rgba(75, 175, 80, 0.25);
+  color: #fff;
+}
+
+.file.is-success:active .file-cta,
+.file.is-success.is-active .file-cta {
+  background-color: rgb(26.4117647059%, 61.6274509804%, 28.1725490196%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-warning .file-cta {
+  background-color: hsl(44, 100%, 77%);
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.file.is-warning:hover .file-cta {
+  background-color: hsl(44, 100%, 74.5%);
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.file.is-warning:focus .file-cta {
+  border-color: transparent;
+  box-shadow: 0 0 0.5em rgba(100%, 87.7333333333%, 54%, 0.25);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.file.is-warning:active .file-cta,
+.file.is-warning.is-active .file-cta {
+  background-color: hsl(44, 100%, 72%);
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.file.is-danger .file-cta {
+  background-color: hsl(348, 86%, 61%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-danger:hover .file-cta {
+  background-color: hsl(348, 86%, 58.5%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-danger:focus .file-cta {
+  border-color: transparent;
+  box-shadow: 0 0 0.5em rgba(94.54%, 27.46%, 40.876%, 0.25);
+  color: #fff;
+}
+
+.file.is-danger:active .file-cta,
+.file.is-danger.is-active .file-cta {
+  background-color: hsl(348, 86%, 56%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.file.is-small {
+  font-size: 0.7857rem;
+}
+
+.file.is-medium {
+  font-size: 1.1429rem;
+}
+
+.file.is-medium .file-icon .fa {
+  font-size: 21px;
+}
+
+.file.is-large {
+  font-size: 1.2857rem;
+}
+
+.file.is-large .file-icon .fa {
+  font-size: 28px;
+}
+
+.file.is-boxed .file-label {
+  flex-direction: column;
+}
+
+.file.is-boxed .file-cta {
+  flex-direction: column;
+  height: auto;
+  padding: 1em 3em;
+}
+
+.file.is-boxed .file-icon {
+  height: 1.5em;
+  width: 1.5em;
+}
+
+.file.is-boxed .file-icon .fa {
+  font-size: 21px;
+}
+
+.file.is-boxed.is-small .file-icon .fa {
+  font-size: 14px;
+}
+
+.file.is-boxed.is-medium .file-icon .fa {
+  font-size: 28px;
+}
+
+.file.is-boxed.is-large .file-icon .fa {
+  font-size: 35px;
+}
+
+.file.is-centered {
+  justify-content: center;
+}
+
+.file.is-right {
+  justify-content: flex-end;
+}
+
+.file.is-right .file-cta {
+  border-radius: 0 4px 4px 0;
+}
+
+.file-label {
+  align-items: stretch;
+  display: flex;
+  cursor: pointer;
+  justify-content: flex-start;
+  overflow: hidden;
+  position: relative;
+}
+
+.file-label:hover .file-cta {
+  background-color: hsl(0, 0%, 93.5%);
+  color: hsl(0, 0%, 21%);
+}
+
+.file-label:active .file-cta {
+  background-color: hsl(0, 0%, 91%);
+  color: hsl(0, 0%, 21%);
+}
+
+.file-input {
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  outline: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.file-cta {
+  border-color: hsl(0, 0%, 86%);
+  border-radius: 4px;
+  font-size: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
+  white-space: nowrap;
+  background-color: hsl(0, 0%, 96%);
+  color: hsl(0, 0%, 29%);
+}
+
+.file-icon {
+  align-items: center;
+  display: flex;
+  height: 1em;
+  justify-content: center;
+  margin-right: 0.5em;
+  width: 1em;
+}
+
+.file-icon .fa {
+  font-size: 14px;
+}

@@ -273,6 +273,27 @@ onBeforeUnmount(() => {
   width: 100%; /* not 100vw, otherwise the viewer goes under the scrollbar */
   height: 100%;
   background: rgba(0, 0, 0, 0.95);
+
+  .swiper-button-prev,
+  .swiper-button-next,
+  .image-viewer-pagination,
+  .image-viewer-buttons {
+    visibility: visible;
+    opacity: 1;
+    transition:
+      visibility 1s,
+      opacity 1s;
+  }
+
+  &.hide-buttons {
+    .swiper-button-prev,
+    .swiper-button-next,
+    .image-viewer-pagination,
+    .image-viewer-buttons {
+      visibility: hidden;
+      opacity: 0;
+    }
+  }
 }
 
 .image-viewer-header {
@@ -361,29 +382,6 @@ onBeforeUnmount(() => {
 
   .image-viewer-bullet-active {
     background: var(--c2c-primary);
-  }
-}
-
-.image-viewer {
-  .swiper-button-prev,
-  .swiper-button-next,
-  .image-viewer-pagination,
-  .image-viewer-buttons {
-    visibility: visible;
-    opacity: 1;
-    transition:
-      visibility 1s,
-      opacity 1s;
-  }
-
-  &.hide-buttons {
-    .swiper-button-prev,
-    .swiper-button-next,
-    .image-viewer-pagination,
-    .image-viewer-buttons {
-      visibility: hidden;
-      opacity: 0;
-    }
   }
 }
 

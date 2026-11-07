@@ -25,7 +25,7 @@ import user from '@/js/vue-plugins/user';
 import './assets/css/tokens.css';
 import './assets/css/scrollbar.css';
 import './assets/css/external-links.css';
-import './assets/sass/main.scss';
+import './assets/css/bulma/index.css';
 import './assets/css/checkradio.css';
 import './assets/css/switch.css';
 import './assets/css/helpers.css';

@@ -1,0 +1,242 @@
+/*
+ * Bulma 0.9.4 (MIT License, see bulma/LICENSE): the rules several modules share, controls (button, input,
+ * select...), unselectable, block margins, delete, loader
+ */
+
+/**
+ * here is custom c2c variables
+ */
+
+/**
+ * Bulma variables (Bulma 0.9.4, in ./bulma)
+ */
+
+/**
+ * customize bulma colors
+ */
+
+/* box custom */
+
+/*
+ * Here is bulma variables needed for components.
+ * we only includes variables from utilities, and
+ * locally other varaible if needded (like $navbar-height)
+ */
+
+/**
+ * bulma card shadow is used to set a border. Remove the border part
+ */
+
+/**
+ * Another custom C2C var, but that are computed from bulma variables
+ */
+
+/* Bulma Utilities */
+
+.file-cta,
+.select select,
+.input,
+.textarea,
+.button {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  box-shadow: none;
+  display: inline-flex;
+  font-size: 1rem;
+  height: 2.25em;
+  justify-content: flex-start;
+  line-height: 1.5;
+  padding-bottom: calc(0.375em - 1px);
+  padding-left: calc(0.625em - 1px);
+  padding-right: calc(0.625em - 1px);
+  padding-top: calc(0.375em - 1px);
+  position: relative;
+  vertical-align: top;
+}
+
+.file-cta:focus,
+.select select:focus,
+.input:focus,
+.textarea:focus,
+.button:focus,
+.file-cta:active,
+.select select:active,
+.input:active,
+.textarea:active,
+.button:active,
+.is-active.file-cta,
+.select select.is-active,
+.is-active.input,
+.is-active.textarea,
+.is-active.button {
+  outline: none;
+}
+
+[disabled].file-cta,
+.select select[disabled],
+[disabled].input,
+[disabled].textarea,
+[disabled].button,
+fieldset[disabled] .file-cta,
+fieldset[disabled] .select select,
+.select fieldset[disabled] select,
+fieldset[disabled] .input,
+fieldset[disabled] .textarea,
+fieldset[disabled] .button {
+  cursor: not-allowed;
+}
+
+.is-unselectable,
+.tabs,
+.file,
+.button {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.select:not(.is-multiple):not(.is-loading)::after {
+  border: 3px solid transparent;
+  border-radius: 2px;
+  border-right: 0;
+  border-top: 0;
+  content: ' ';
+  display: block;
+  height: 0.625em;
+  margin-top: -0.4375em;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: rotate(-45deg);
+  transform-origin: center;
+  width: 0.625em;
+}
+
+.tabs:not(:last-child),
+.level:not(:last-child),
+.title:not(:last-child),
+.subtitle:not(:last-child),
+.table:not(:last-child),
+.block:not(:last-child),
+.progress:not(:last-child),
+.notification:not(:last-child),
+.content:not(:last-child),
+.box:not(:last-child) {
+  margin-bottom: 1.5rem;
+}
+
+.delete {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-color: rgba(4%, 4%, 4%, 0.2);
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  pointer-events: auto;
+  display: inline-block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  font-size: 0;
+  height: 20px;
+  max-height: 20px;
+  max-width: 20px;
+  min-height: 20px;
+  min-width: 20px;
+  outline: none;
+  position: relative;
+  vertical-align: top;
+  width: 20px;
+}
+
+.delete::before,
+.delete::after {
+  background-color: hsl(0, 0%, 100%);
+  content: '';
+  display: block;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%) rotate(45deg);
+  transform-origin: center center;
+}
+
+.delete::before {
+  height: 2px;
+  width: 50%;
+}
+
+.delete::after {
+  height: 50%;
+  width: 2px;
+}
+
+.delete:hover,
+.delete:focus {
+  background-color: rgba(4%, 4%, 4%, 0.3);
+}
+
+.delete:active {
+  background-color: rgba(4%, 4%, 4%, 0.4);
+}
+
+.is-small.delete {
+  height: 16px;
+  max-height: 16px;
+  max-width: 16px;
+  min-height: 16px;
+  min-width: 16px;
+  width: 16px;
+}
+
+.is-medium.delete {
+  height: 24px;
+  max-height: 24px;
+  max-width: 24px;
+  min-height: 24px;
+  min-width: 24px;
+  width: 24px;
+}
+
+.is-large.delete {
+  height: 32px;
+  max-height: 32px;
+  max-width: 32px;
+  min-height: 32px;
+  min-width: 32px;
+  width: 32px;
+}
+
+.control.is-loading::after,
+.select.is-loading::after,
+.loader,
+.button.is-loading::after {
+  animation: spinAround 500ms infinite linear;
+  border: 2px solid hsl(0, 0%, 86%);
+  border-radius: 9999px;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  content: '';
+  display: block;
+  height: 1em;
+  position: relative;
+  width: 1em;
+}
+
+.modal,
+.modal-background {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}

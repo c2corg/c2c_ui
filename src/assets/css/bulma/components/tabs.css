@@ -1,0 +1,103 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): components/tabs */
+
+.tabs {
+  -webkit-overflow-scrolling: touch;
+  align-items: stretch;
+  display: flex;
+  font-size: 1rem;
+  justify-content: space-between;
+  overflow: hidden;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.tabs a {
+  align-items: center;
+  border-bottom-color: hsl(0, 0%, 86%);
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  color: hsl(0, 0%, 29%);
+  display: flex;
+  justify-content: center;
+  margin-bottom: -1px;
+  padding: 0.5em 1em;
+  vertical-align: top;
+}
+
+.tabs a:hover {
+  border-bottom-color: hsl(0, 0%, 21%);
+  color: hsl(0, 0%, 21%);
+}
+
+.tabs li {
+  display: block;
+}
+
+.tabs li.is-active a {
+  border-bottom-color: #337ab7;
+  color: #337ab7;
+}
+
+.tabs ul {
+  align-items: center;
+  border-bottom-color: hsl(0, 0%, 86%);
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  justify-content: flex-start;
+}
+
+.tabs ul.is-left {
+  padding-right: 0.75em;
+}
+
+.tabs ul.is-right {
+  justify-content: flex-end;
+  padding-left: 0.75em;
+}
+
+.tabs .icon:first-child {
+  margin-right: 0.5em;
+}
+
+.tabs .icon:last-child {
+  margin-left: 0.5em;
+}
+
+.tabs.is-centered ul {
+  justify-content: center;
+}
+
+.tabs.is-right ul {
+  justify-content: flex-end;
+}
+
+.tabs.is-boxed a {
+  border: 1px solid transparent;
+  border-radius: 4px 4px 0 0;
+}
+
+.tabs.is-boxed a:hover {
+  background-color: hsl(0, 0%, 96%);
+  border-bottom-color: hsl(0, 0%, 86%);
+}
+
+.tabs.is-boxed li.is-active a {
+  background-color: hsl(0, 0%, 100%);
+  border-color: hsl(0, 0%, 86%);
+  border-bottom-color: transparent !important;
+}
+
+.tabs.is-small {
+  font-size: 0.7857rem;
+}
+
+.tabs.is-medium {
+  font-size: 1.1429rem;
+}
+
+.tabs.is-large {
+  font-size: 1.2857rem;
+}

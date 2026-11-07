@@ -1,0 +1,219 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): elements/progress */
+
+.progress {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  border-radius: 9999px;
+  display: block;
+  height: 1rem;
+  overflow: hidden;
+  padding: 0;
+  width: 100%;
+}
+
+.progress::-webkit-progress-bar {
+  background-color: hsl(0, 0%, 93%);
+}
+
+.progress::-webkit-progress-value {
+  background-color: hsl(0, 0%, 29%);
+}
+
+.progress::-moz-progress-bar {
+  background-color: hsl(0, 0%, 29%);
+}
+
+.progress::-ms-fill {
+  background-color: hsl(0, 0%, 29%);
+  border: none;
+}
+
+.progress.is-white::-webkit-progress-value {
+  background-color: hsl(0, 0%, 100%);
+}
+
+.progress.is-white::-moz-progress-bar {
+  background-color: hsl(0, 0%, 100%);
+}
+
+.progress.is-white::-ms-fill {
+  background-color: hsl(0, 0%, 100%);
+}
+
+.progress.is-white:indeterminate {
+  background-image: linear-gradient(to right, hsl(0, 0%, 100%) 30%, hsl(0, 0%, 93%) 30%);
+}
+
+.progress.is-light::-webkit-progress-value {
+  background-color: hsl(0, 0%, 96%);
+}
+
+.progress.is-light::-moz-progress-bar {
+  background-color: hsl(0, 0%, 96%);
+}
+
+.progress.is-light::-ms-fill {
+  background-color: hsl(0, 0%, 96%);
+}
+
+.progress.is-light:indeterminate {
+  background-image: linear-gradient(to right, hsl(0, 0%, 96%) 30%, hsl(0, 0%, 93%) 30%);
+}
+
+.progress.is-dark::-webkit-progress-value {
+  background-color: hsl(0, 0%, 21%);
+}
+
+.progress.is-dark::-moz-progress-bar {
+  background-color: hsl(0, 0%, 21%);
+}
+
+.progress.is-dark::-ms-fill {
+  background-color: hsl(0, 0%, 21%);
+}
+
+.progress.is-dark:indeterminate {
+  background-image: linear-gradient(to right, hsl(0, 0%, 21%) 30%, hsl(0, 0%, 93%) 30%);
+}
+
+.progress.is-primary::-webkit-progress-value {
+  background-color: #337ab7;
+}
+
+.progress.is-primary::-moz-progress-bar {
+  background-color: #337ab7;
+}
+
+.progress.is-primary::-ms-fill {
+  background-color: #337ab7;
+}
+
+.progress.is-primary:indeterminate {
+  background-image: linear-gradient(to right, #337ab7 30%, hsl(0, 0%, 93%) 30%);
+}
+
+.progress.is-link::-webkit-progress-value {
+  background-color: #337ab7;
+}
+
+.progress.is-link::-moz-progress-bar {
+  background-color: #337ab7;
+}
+
+.progress.is-link::-ms-fill {
+  background-color: #337ab7;
+}
+
+.progress.is-link:indeterminate {
+  background-image: linear-gradient(to right, #337ab7 30%, hsl(0, 0%, 93%) 30%);
+}
+
+.progress.is-info::-webkit-progress-value {
+  background-color: hsl(207, 61%, 53%);
+}
+
+.progress.is-info::-moz-progress-bar {
+  background-color: hsl(207, 61%, 53%);
+}
+
+.progress.is-info::-ms-fill {
+  background-color: hsl(207, 61%, 53%);
+}
+
+.progress.is-info:indeterminate {
+  background-image: linear-gradient(to right, hsl(207, 61%, 53%) 30%, hsl(0, 0%, 93%) 30%);
+}
+
+.progress.is-success::-webkit-progress-value {
+  background-color: #4baf50;
+}
+
+.progress.is-success::-moz-progress-bar {
+  background-color: #4baf50;
+}
+
+.progress.is-success::-ms-fill {
+  background-color: #4baf50;
+}
+
+.progress.is-success:indeterminate {
+  background-image: linear-gradient(to right, #4baf50 30%, hsl(0, 0%, 93%) 30%);
+}
+
+.progress.is-warning::-webkit-progress-value {
+  background-color: hsl(44, 100%, 77%);
+}
+
+.progress.is-warning::-moz-progress-bar {
+  background-color: hsl(44, 100%, 77%);
+}
+
+.progress.is-warning::-ms-fill {
+  background-color: hsl(44, 100%, 77%);
+}
+
+.progress.is-warning:indeterminate {
+  background-image: linear-gradient(to right, hsl(44, 100%, 77%) 30%, hsl(0, 0%, 93%) 30%);
+}
+
+.progress.is-danger::-webkit-progress-value {
+  background-color: hsl(348, 86%, 61%);
+}
+
+.progress.is-danger::-moz-progress-bar {
+  background-color: hsl(348, 86%, 61%);
+}
+
+.progress.is-danger::-ms-fill {
+  background-color: hsl(348, 86%, 61%);
+}
+
+.progress.is-danger:indeterminate {
+  background-image: linear-gradient(to right, hsl(348, 86%, 61%) 30%, hsl(0, 0%, 93%) 30%);
+}
+
+.progress:indeterminate {
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-name: moveIndeterminate;
+  animation-timing-function: linear;
+  background-color: hsl(0, 0%, 93%);
+  background-image: linear-gradient(to right, hsl(0, 0%, 29%) 30%, hsl(0, 0%, 93%) 30%);
+  background-position: top left;
+  background-repeat: no-repeat;
+  background-size: 150% 150%;
+}
+
+.progress:indeterminate::-webkit-progress-bar {
+  background-color: transparent;
+}
+
+.progress:indeterminate::-moz-progress-bar {
+  background-color: transparent;
+}
+
+.progress:indeterminate::-ms-fill {
+  animation-name: none;
+}
+
+.progress.is-small {
+  height: 0.7857rem;
+}
+
+.progress.is-medium {
+  height: 1.1429rem;
+}
+
+.progress.is-large {
+  height: 1.2857rem;
+}
+
+@keyframes moveIndeterminate {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}

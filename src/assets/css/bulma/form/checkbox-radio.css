@@ -1,0 +1,33 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): form/checkbox-radio */
+
+.radio,
+.checkbox {
+  cursor: pointer;
+  display: inline-block;
+  line-height: 1.25;
+  position: relative;
+}
+
+.radio input,
+.checkbox input {
+  cursor: pointer;
+}
+
+.radio:hover,
+.checkbox:hover {
+  color: hsl(0, 0%, 21%);
+}
+
+[disabled].radio,
+[disabled].checkbox,
+fieldset[disabled] .radio,
+fieldset[disabled] .checkbox,
+.radio input[disabled],
+.checkbox input[disabled] {
+  color: hsl(0, 0%, 48%);
+  cursor: not-allowed;
+}
+
+.radio + .radio {
+  margin-left: 0.5em;
+}
