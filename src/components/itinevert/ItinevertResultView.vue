@@ -68,12 +68,7 @@
       >
         <loading-notification :promise="promise" />
 
-        <image-cards v-if="filteredDocuments && !listMode && documentType === 'image'" :documents="filteredDocuments" />
-
-        <div
-          v-if="filteredDocuments && !listMode && documentType !== 'image'"
-          class="columns is-multiline is-variable is-1 cards-list"
-        >
+        <div v-if="filteredDocuments && !listMode" class="columns is-multiline is-variable is-1 cards-list">
           <div
             v-for="(document, index) in filteredDocuments.documents"
             :key="index"
