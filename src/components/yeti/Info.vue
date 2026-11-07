@@ -30,7 +30,7 @@ const ICONS: Record<string, string> = {
 const icon = computed(() => ICONS[props.type]);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .info-text {
   font-size: 0.85em;
   margin-top: 0.75rem;

@@ -15,7 +15,7 @@ defineProps({
 defineEmits(['click']);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 div {
   cursor: pointer;
   color: var(--c2c-red);

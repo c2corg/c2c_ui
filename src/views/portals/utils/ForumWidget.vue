@@ -157,7 +157,7 @@ function getTopicUrl(topic: Topic) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .forum-row {
   display: flex;
   color: var(--c2c-text);

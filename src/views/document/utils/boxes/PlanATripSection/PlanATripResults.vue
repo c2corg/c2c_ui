@@ -272,7 +272,7 @@ function selectRouteOnly(journey: Journey) {
   emit('selectJourney', journey);
 }
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .itineraries-container {
   max-width: 490px;
   flex: 1;
@@ -317,7 +317,7 @@ function selectRouteOnly(journey: Journey) {
     border-left: 4px solid #4baf50;
     background-color: #fbfaf6;
   }
-  // Bouton "Voir le détail"
+  /* Bouton "Voir le détail" */
   .itinerary-details-button {
     text-align: left;
 
@@ -336,7 +336,7 @@ function selectRouteOnly(journey: Journey) {
     }
   }
 
-  // Détails du trajet
+  /* Détails du trajet */
   .journey-details {
     font-family: Arial, sans-serif;
     max-width: 650px;

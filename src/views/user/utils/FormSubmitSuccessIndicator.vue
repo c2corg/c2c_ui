@@ -33,7 +33,7 @@ function clear() {
 defineExpose({ show, clear });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .success-indicator {
   font-size: 2em;
   color: var(--c2c-green);

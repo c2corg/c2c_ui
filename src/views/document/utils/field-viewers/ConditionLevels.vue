@@ -55,7 +55,9 @@ const hasData = computed(() => {
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+@import '@/assets/css/media.css';
+
 @media screen and (--c2c-max-tablet) {
   thead {
     display: none;
@@ -78,7 +80,7 @@ const hasData = computed(() => {
     border: 0 !important;
   }
 
-  // hide cell with no data
+  /* hide cell with no data */
   td:not([data-title]) {
     display: none;
   }

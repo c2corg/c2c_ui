@@ -13,7 +13,7 @@ defineProps({
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .pretty-book-link {
   display: block;
 }

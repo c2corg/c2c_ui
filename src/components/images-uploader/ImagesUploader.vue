@@ -311,8 +311,8 @@ onBeforeUnmount(() => {
 defineExpose({ show });
 </script>
 
-<style scoped lang="scss">
-// TODO : modal background color with more alpha in Variables
+<style scoped>
+/* TODO : modal background color with more alpha in Variables */
 
 .images-uploader {
   .images-uploader-message {

@@ -13,7 +13,7 @@ defineProps({
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .yeti-counter {
   display: inline-block;
   min-width: 1em;

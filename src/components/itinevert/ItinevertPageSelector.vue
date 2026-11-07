@@ -97,7 +97,7 @@ function selectLimit(l: number) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .pagination-link {
   height: 1.75em;
 }

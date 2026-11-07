@@ -4,7 +4,9 @@
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 div {
   padding: 0.4rem 0.8rem;
   font-size: 0.9rem;
@@ -16,7 +18,7 @@ div {
 }
 
 @media screen and (--c2c-max-tablet) {
-  // .is-nowrap: component roots like card-elevation-item now get the slotted scope too
+  /* .is-nowrap: component roots like card-elevation-item now get the slotted scope too */
   :slotted(span.is-ellipsed:not(.is-nowrap)),
   :slotted(p.is-ellipsed) {
     white-space: normal;

@@ -273,8 +273,10 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style lang="scss">
-// Not scoped syle, because CSS selector are not explicitly present in template
+<style>
+@import '@/assets/css/media.css';
+
+/* Not scoped syle, because CSS selector are not explicitly present in template */
 .markdown-content {
   &:not(:last-child) {
     margin-bottom: 1.5rem;
@@ -321,20 +323,20 @@ figure[c2c\:role='embedded-figure'] {
     cursor: pointer;
   }
 
-  // placeholder size while the lazy image is not loaded
+  /* placeholder size while the lazy image is not loaded */
   img.is-loading {
     min-width: 100px;
     min-height: 100px;
   }
 }
 
-// small image
-// SI is a 200*200 image, no need to specify anything
-// figure[c2c\:size=SI]{
+/* small image */
+/* SI is a 200*200 image, no need to specify anything */
+/* figure[c2c\:size=SI]{ */
 
-// }
+/* } */
 
-// medium image
+/* medium image */
 figure[c2c\:size='MI'] {
   max-width: min(400px, 25vw);
   max-height: min(400px, 25vw);
@@ -345,16 +347,16 @@ figure[c2c\:size='MI'] {
   }
 }
 
-// big image
-// figure[c2c\:size=BI]{
+/* big image */
+/* figure[c2c\:size=BI]{ */
 
-// }
+/* } */
 
-// original size image
-// TODO MARKDOWN PARSER HAS TO EXPOSE THIS EXPLICTLY
-// figure[c2c\:size=OI]{
+/* original size image */
+/* TODO MARKDOWN PARSER HAS TO EXPOSE THIS EXPLICTLY */
+/* figure[c2c\:size=OI]{ */
 
-// }
+/* } */
 
 figure[c2c\:position='right'] {
   float: right;
@@ -381,12 +383,12 @@ figure[c2c\:position='center'] {
 figure[c2c\:position='inline'] {
   margin-right: 0 !important;
   margin-left: 0 !important;
-  // well, no :(
-  // display: inline-block;
+  /* well, no :( */
+  /* display: inline-block; */
 }
 
 table[c2c\:role='ltag'] {
-  width: auto !important; // on prod, bulma CSS is after this CSS ??
+  width: auto !important; /* on prod, bulma CSS is after this CSS ?? */
 
   .pitch {
     font-weight: bold;

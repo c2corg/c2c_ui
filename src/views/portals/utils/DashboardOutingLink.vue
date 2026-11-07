@@ -45,7 +45,9 @@ const nbIconsClass = computed(() => {
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 .is-grid {
   display: grid;
   direction: rtl;
@@ -84,7 +86,7 @@ const nbIconsClass = computed(() => {
 }
 </style>
 
-<style lang="scss">
+<style>
 .outing-icons.is-grid span {
   padding: 0.1rem;
 }

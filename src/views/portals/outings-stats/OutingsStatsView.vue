@@ -107,7 +107,7 @@ function compute(found: C2cDocument[]) {
 watch(() => route.fullPath, load, { immediate: true });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .filter-section {
   padding-bottom: 0.5rem;
   clear: both;

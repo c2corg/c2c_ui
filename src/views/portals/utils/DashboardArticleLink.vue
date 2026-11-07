@@ -18,7 +18,7 @@ defineProps({
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .dashboard-link {
   .dashboard-link-main {
     flex-grow: 1;

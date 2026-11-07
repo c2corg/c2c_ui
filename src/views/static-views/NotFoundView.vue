@@ -66,7 +66,7 @@ const buttons = [
 ];
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .notfound-buttons {
   display: flex;
   flex-flow: wrap row;

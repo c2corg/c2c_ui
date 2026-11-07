@@ -43,7 +43,7 @@ const { value_ } = useInputValue(props, emit);
 const event_activities = computed(() => constants.event_activities);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .input-item {
   font-size: 40px;
   margin: 4px;
@@ -85,6 +85,6 @@ const event_activities = computed(() => constants.event_activities);
 
 .has-error {
   box-shadow: 0px 0px 8px 0px var(--c2c-danger);
-  // border: 1px solid $danger;
+  /* border: 1px solid $danger; */
 }
 </style>

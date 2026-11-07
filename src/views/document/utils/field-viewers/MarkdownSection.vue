@@ -58,7 +58,7 @@ const lang = computed(() => {
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .markdown-section {
   .title {
     font-size: 1.8rem !important;

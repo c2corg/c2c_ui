@@ -87,7 +87,7 @@ function toggle(documentId: number) {
 defineExpose({ show, hide, toggle });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .image-info {
   background: rgba(0, 0, 0, 0.7);
   padding: 1rem;

@@ -62,7 +62,9 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+@import '@/assets/css/media.css';
+
 .gdpr-content {
   z-index: 30;
   position: fixed;

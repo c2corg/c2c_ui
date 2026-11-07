@@ -12,7 +12,7 @@ defineProps({
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .icon-condition-excellent {
   color: green;
 }

@@ -4,9 +4,10 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
+import { bundleAsync } from 'lightningcss';
 import { compile, compileString, NodePackageImporter, type FileImporter, type Options } from 'sass';
 import { describe, expect, it } from 'vitest';
-import { parse } from 'vue/compiler-sfc';
+import { compileStyle, parse } from 'vue/compiler-sfc';
 
 import viteConfig from '../vite.config.ts';
 
@@ -53,12 +54,20 @@ const files = (dir: string, pattern: RegExp): string[] =>
 const vueFiles = (dir: string): string[] => files(dir, /\.vue$/);
 
 // the <style> blocks as @vitejs/plugin-vue sees them; the number is the block's position among all the file's styles
-const scssBlocks = vueFiles(src).flatMap((file) =>
-  parse(readFileSync(file, 'utf8'), { filename: file })
-    .descriptor.styles.map((style, index) => ({ style, index }))
-    .filter(({ style }) => style.lang === 'scss' && !style.src)
-    .map(({ style, index }) => ({ file, name: `${relative(src, file)} #${index + 1}`, content: style.content }))
-);
+const styleBlocks = (lang: string | undefined) =>
+  vueFiles(src).flatMap((file) =>
+    parse(readFileSync(file, 'utf8'), { filename: file })
+      .descriptor.styles.map((style, index) => ({ style, index }))
+      .filter(({ style }) => style.lang === lang && !style.src)
+      .map(({ style, index }) => ({
+        file,
+        name: `${relative(src, file)} #${index + 1}`,
+        content: style.content,
+        scoped: Boolean(style.scoped),
+      }))
+  );
+const scssBlocks = styleBlocks('scss');
+const cssBlocks = styleBlocks(undefined);
 
 // The words of the code that can be class names: templates and scripts of the components, TypeScript and JavaScript
 // modules, translations, index.html. Not the styles, nor the specs.
@@ -161,8 +170,9 @@ describe('styles', () => {
     expect([...used].filter((name) => !tokens.has(name))).toEqual([]);
   });
 
-  it('finds the scss blocks of the components', () => {
-    expect(scssBlocks.length).toBeGreaterThan(100);
+  it('finds the style blocks of the components', () => {
+    expect(scssBlocks.length).toBeGreaterThan(10);
+    expect(cssBlocks.length).toBeGreaterThan(150);
   });
 
   it('compiles main.scss without a Sass warning', () => {
@@ -190,6 +200,25 @@ describe('styles', () => {
       url: pathToFileURL(join(sassDir, 'used-only.scss')),
     });
     expect(css.match(/kept: "(.*)";/)?.[1]).toBe(kept ?? '');
+  });
+
+  // a plain CSS style is valid CSS for Lightning CSS, scoped by Vue then bundled as Vite does with the options of
+  // vite.config.ts (no `//` comment, no Sass), and it imports media.css when it uses a breakpoint
+  it.each(cssBlocks)('compiles the style of $name with Lightning CSS', async ({ file, content: source, scoped }) => {
+    const { code: content, errors } = compileStyle({ source, filename: file, id: 'data-v-spec', scoped });
+    expect(errors).toEqual([]);
+    const { code, warnings } = await bundleAsync({
+      ...viteConfig.css?.lightningcss,
+      filename: file,
+      errorRecovery: false,
+      resolver: {
+        read: (path) => (path === file ? content : readFileSync(path, 'utf8')),
+        resolve: (specifier, from) =>
+          specifier.startsWith('@/') ? join(src, specifier.slice(2)) : join(from, '..', specifier),
+      },
+    });
+    expect(warnings).toEqual([]);
+    expect(code.toString()).not.toMatch(/--c2c-(min|max)-/);
   });
 
   it.each(scssBlocks)('compiles the style of $name without a Sass warning', ({ file, content }) => {

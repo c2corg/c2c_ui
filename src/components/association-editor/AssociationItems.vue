@@ -186,7 +186,7 @@ function onclick(child: Child) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .association-items {
   margin-bottom: 1rem;
 

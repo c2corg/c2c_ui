@@ -28,7 +28,7 @@ defineProps({
 const activeTab = computed(() => Yetix.activeTab);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .yeti-panel {
   position: relative;
 }

@@ -650,7 +650,7 @@ function onLoadBatch(batch: Association[], offset: number, load: number) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .separator {
   background-color: var(--c2c-color-base-c2c-lighter);
 }

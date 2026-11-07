@@ -40,7 +40,7 @@ defineProps({
 defineEmits(['click']);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .info {
   margin-top: 0.25rem;
   margin-right: -0.75rem;

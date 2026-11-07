@@ -14,7 +14,7 @@ defineProps({
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .pretty-outing-link {
   display: block;
 }

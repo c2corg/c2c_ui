@@ -86,7 +86,7 @@ const icon = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoosePointerMove });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .overlay-title em {
   font-size: 0.9em;
   opacity: 0.8;

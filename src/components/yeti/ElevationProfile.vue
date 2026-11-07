@@ -565,9 +565,9 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 :deep(.elevation-profile-chart) {
-  height: 150px; // default height on page
+  height: 150px; /* default height on page */
 
   .axis {
     pointer-events: none;

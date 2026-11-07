@@ -227,7 +227,7 @@ defineEmits([
 const { documentType } = useDocumentType(props);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .plan-trip-from-to {
   display: flex;
   width: 100%;

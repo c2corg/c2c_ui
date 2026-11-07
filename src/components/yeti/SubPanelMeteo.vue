@@ -66,7 +66,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .iframe-container {
   background: var(--c2c-light);
 

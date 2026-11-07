@@ -194,7 +194,7 @@ function getAvatarUrl(user: Post) {
 getComments();
 </script>
 
-<style lang="scss">
+<style>
 .discourse-post {
   border-top: 6px solid var(--c2c-color-base-c2c);
   margin-bottom: 1.5rem;
@@ -261,7 +261,7 @@ getComments();
 }
 </style>
 
-<style lang="scss" scoped>
+<style scoped>
 .button {
   white-space: normal;
   height: auto;

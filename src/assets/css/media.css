@@ -1,8 +1,8 @@
 /*
  * The breakpoints of the site, as custom media queries (c2corg/c2c_ui#4907): `@media screen and (--c2c-max-tablet)`.
- * vite.config.ts imports this file in the style of every component and Lightning CSS replaces the names by their
- * queries (drafts.customMedia), so it writes no CSS. The values are those of Bulma's Sass variables ($tablet...),
- * checked by src/styles.spec.ts.
+ * A plain CSS style that uses them starts with `@import '@/assets/css/media.css';` (vite.config.ts adds this file to
+ * the Sass styles). Lightning CSS replaces the names by their queries (drafts.customMedia), so it writes no CSS. The
+ * values are those of Bulma's Sass variables ($tablet...), checked by src/styles.spec.ts.
  *
  * min- and max- include the breakpoint: at 769px wide, both (--c2c-min-tablet) and (--c2c-max-tablet) match.
  */

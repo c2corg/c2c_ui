@@ -427,7 +427,7 @@ watch(mode, onModeChange);
 onMounted(load);
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .login-view {
   height: 100%;
   align-items: center;

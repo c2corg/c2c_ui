@@ -37,7 +37,7 @@ function switchOpen() {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .dropdown-content {
   border: 1px solid #dbdbdb;
   padding: 0;

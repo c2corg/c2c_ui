@@ -12,7 +12,7 @@ import { documentProperty } from '@/js/properties';
 defineProps({ ...documentProperty });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 @media print {
   .is-size-3 {
     font-size: 1rem !important;

@@ -35,7 +35,7 @@ defineProps({
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .pretty-route-link {
   display: block;
 }

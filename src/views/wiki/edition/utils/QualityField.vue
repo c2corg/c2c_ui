@@ -260,7 +260,7 @@ function beforeSave() {
 
 defineExpose({ beforeSave });
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .quality-select-container {
   max-width: 20rem;
 }

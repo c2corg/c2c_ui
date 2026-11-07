@@ -39,7 +39,7 @@ const routesPromise = ref<ApiData<{ documents: C2cDocument[] }>>(
 const routes = computed(() => routesPromise.value.data);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 h4 > a,
 h6 > a {
   color: var(--c2c-color-text) !important;

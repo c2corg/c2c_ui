@@ -53,7 +53,7 @@ const license = computed(() => {
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .logo {
   height: 70px;
 }

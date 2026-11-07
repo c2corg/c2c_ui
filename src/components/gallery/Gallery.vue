@@ -56,9 +56,9 @@ watch(
 );
 </script>
 
-<style scoped lang="scss">
-// the width of its box, also as a flex item (card rows): its minimum width would otherwise be the width of all the
-// slides, which have the width of their image since the API gives the image sizes, and it would overflow the card
+<style scoped>
+/* the width of its box, also as a flex item (card rows): its minimum width would otherwise be the width of all the */
+/* slides, which have the width of their image since the API gives the image sizes, and it would overflow the card */
 swiper-container {
   width: 100%;
   min-width: 0;

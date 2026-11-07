@@ -337,7 +337,7 @@ onMounted(() => {
 defineExpose({ getLayer, onMapClick, onMapLooseClick });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .overlay {
   width: 400px;
   max-width: 100%;

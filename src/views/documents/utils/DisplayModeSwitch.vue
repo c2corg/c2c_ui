@@ -71,7 +71,7 @@ defineEmits(['update:modelValue']);
 const dropdown = useTemplateRef<InstanceType<typeof DropdownButton>>('dropdown');
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .item-icons {
   display: inline-block;
   width: 2.2rem;

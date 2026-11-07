@@ -1527,8 +1527,8 @@ defineExpose({
 });
 </script>
 
-<style lang="scss">
-// disable mobile CSS for controls.
+<style>
+/* disable mobile CSS for controls. */
 .ol-touch .ol-control button {
   font-size: 1.14em !important;
 }

@@ -21,7 +21,7 @@ import { ref } from 'vue';
 const visible = ref(true);
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .accordion-title {
   position: relative;
 }

@@ -39,7 +39,9 @@ const winterRouteLegend = computed(() => Yetix.winterRouteLegend);
 const atLeastOneLegend = computed(() => yetiLegend.value || winterRouteLegend.value);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 .legend {
   position: absolute;
   z-index: 6;

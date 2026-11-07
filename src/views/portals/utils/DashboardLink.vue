@@ -47,7 +47,9 @@ const rangeAreas = computed(() => {
 const isMultiActivities = computed(() => (props.document.activities.length > 1 ? true : false));
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 .dashboard-link {
   align-items: center;
 
@@ -64,7 +66,7 @@ const isMultiActivities = computed(() => (props.document.activities.length > 1 ?
   }
 
   .document-title:after {
-    content: '\0000a0\002022\0000a0'; //&nbsp;&bull;&nbsp;
+    content: '\0000a0\002022\0000a0'; /* &nbsp;&bull;&nbsp; */
   }
 
   .area-title:not(:last-child):after {

@@ -45,7 +45,7 @@ const computedPercent = computed(() => {
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 /* fills the entire parent container */
 .loading-wrapper {
   align-items: center;

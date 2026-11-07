@@ -160,7 +160,7 @@ function save() {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .account-view {
   form {
     width: 30rem;

@@ -66,7 +66,7 @@ function configure() {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .rounded {
   border-radius: 6px;
 }

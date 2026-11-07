@@ -24,7 +24,7 @@ defineProps({
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .topoguide-link-view {
   width: 150px;
   height: 150px;
@@ -37,12 +37,12 @@ defineProps({
     border-radius: 50%;
     border: 2px solid white;
 
-    // vertical and horizontal center
+    /* vertical and horizontal center */
     position: relative;
     top: 8px;
     left: 8px;
 
-    // child positions
+    /* child positions */
     display: flex;
     flex-direction: column;
     text-align: center;

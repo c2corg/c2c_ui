@@ -121,7 +121,7 @@ const books = computed(() => [...(associations.value.books ?? [])].sort(compare)
 const articles = computed(() => associations.value.articles ?? []);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .title {
   margin-bottom: 0.2rem !important;
 }

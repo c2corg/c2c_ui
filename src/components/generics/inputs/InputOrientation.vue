@@ -70,7 +70,7 @@ const emit = defineEmits(['update:modelValue']);
 const { value_, toggle } = useArrayInputValue(props, emit);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .input-orientation > g > path {
   fill: #ddd;
   transition: 0.1s;

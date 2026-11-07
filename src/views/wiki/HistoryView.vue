@@ -160,7 +160,7 @@ function load() {
 watch(() => route.fullPath, load, { immediate: true });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 tr.masked {
   background: repeating-linear-gradient(
     45deg,

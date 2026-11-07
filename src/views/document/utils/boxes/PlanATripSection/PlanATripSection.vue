@@ -1037,7 +1037,7 @@ function recenterMapOnDocuments() {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .plan-trip-section {
   margin-top: 20px;
   display: flex;

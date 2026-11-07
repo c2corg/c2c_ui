@@ -145,7 +145,7 @@ watch(showAccessibilityInfo, (value) => {
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .public-transports-box {
   position: relative;
 
@@ -199,7 +199,7 @@ watch(showAccessibilityInfo, (value) => {
     }
     .hover-icon {
       position: absolute;
-      left: 12px; // Ajustez selon votre padding
+      left: 12px; /* Ajustez selon votre padding */
       opacity: 0;
     }
 

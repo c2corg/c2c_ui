@@ -312,7 +312,7 @@ $yeti-height: calc(
 }
 </style>
 
-<style lang="scss">
+<style>
 .yeti-app {
   .ol-control {
     background: var(--c2c-white);

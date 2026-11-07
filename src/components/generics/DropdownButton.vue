@@ -44,7 +44,9 @@ onBeforeUnmount(() => {
 // the menus close themselves when one of their items is clicked: $refs.menu.isActive = false
 defineExpose({ isActive });
 </script>
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 .dropdown-menu {
   @media screen and (--c2c-max-tablet) {
     max-width: 100%;

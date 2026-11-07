@@ -16,7 +16,7 @@ defineProps({
 </script>
 
 <!-- not scoped: ag-grid-vue3 mounts the renderer through a wrapper component, which drops its scope id -->
-<style lang="scss">
+<style>
 .cell-activities {
   font-size: 26px;
 }

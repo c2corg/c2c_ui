@@ -6,7 +6,7 @@
   </header>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .card-header-title {
   padding: 0.4rem 0.8rem;
   min-width: 0;

@@ -265,7 +265,7 @@ function handleQuote() {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .markdown-editor {
   border: 1px solid lightgrey;
   box-shadow: none;

@@ -21,10 +21,10 @@ defineProps({
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .cards-container {
   flex-flow: wrap row;
-  //margin:auto;
+  /* margin:auto; */
 
   .card-image {
     transition: 0.2s;

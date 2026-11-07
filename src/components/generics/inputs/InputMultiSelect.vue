@@ -38,10 +38,10 @@ const emit = defineEmits(['update:modelValue']);
 const { value_, toggle } = useArrayInputValue(props, emit);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .has-error {
   box-shadow: 0px 0px 8px 0px var(--c2c-danger);
-  // border: 1px solid $danger;
+  /* border: 1px solid $danger; */
 }
 
 .multi-select-item {

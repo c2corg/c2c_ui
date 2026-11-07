@@ -65,13 +65,13 @@ function hide() {
 loadBoardAnnouncement();
 </script>
 
-<style lang="scss">
+<style>
 .meta {
   display: none;
 }
 
 .publication {
-  //display: block;
+  /* display: block; */
   position: relative;
   margin-bottom: var(--c2c-size-7);
 
@@ -83,7 +83,7 @@ loadBoardAnnouncement();
 }
 </style>
 
-<style scoped lang="scss">
+<style scoped>
 .delete {
   position: absolute;
   top: var(--c2c-size-7);
