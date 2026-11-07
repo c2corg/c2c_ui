@@ -38,30 +38,32 @@
       </info>
 
       <table class="yetiform-danger">
-        <tr>
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level1" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - low</strong></td>
-          <td v-translate>I must not use slopes > 40°</td>
-        </tr>
-        <tr>
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level2" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - moderate</strong></td>
-          <td v-translate>I must not use slopes > 35°</td>
-        </tr>
-        <tr class="multiline">
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level3" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - considerable</strong></td>
-          <td>
-            <span v-translate>I must not use slopes > 30°</span>
-            <br />
-            <small v-translate>including dominant slopes</small>
-          </td>
-        </tr>
-        <tr>
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level4" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - high to very high</strong></td>
-          <td v-translate>I choose to cancel the outing</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level1" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - low</strong></td>
+            <td v-translate>I must not use slopes > 40°</td>
+          </tr>
+          <tr>
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level2" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - moderate</strong></td>
+            <td v-translate>I must not use slopes > 35°</td>
+          </tr>
+          <tr class="multiline">
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level3" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - considerable</strong></td>
+            <td>
+              <span v-translate>I must not use slopes > 30°</span>
+              <br />
+              <small v-translate>including dominant slopes</small>
+            </td>
+          </tr>
+          <tr>
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level4" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - high to very high</strong></td>
+            <td v-translate>I choose to cancel the outing</td>
+          </tr>
+        </tbody>
       </table>
     </div>
 
@@ -95,43 +97,45 @@
       </info>
 
       <table class="yetiform-danger">
-        <tr class="multiline">
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level1" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - low</strong></td>
-          <td>
-            <span v-translate>Stay careful while skiing</span>
-            <br />
-            <small v-translate>risk of a rough fall on hard snow</small>
-          </td>
-        </tr>
-        <tr>
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level2" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - moderate</strong></td>
-          <td v-translate>I must not use slopes > 40°</td>
-        </tr>
-        <tr class="multiline">
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level3" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - considerable</strong></td>
-          <td>
-            <span v-translate>I must not use slopes > 35°</span>
-            <br />
-            <small v-translate>including dominant slopes</small>
-          </td>
-        </tr>
-        <tr class="multiline">
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level4" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - high</strong></td>
-          <td>
-            <span v-translate>I must not use slopes > 30°</span>
-            <br />
-            <small v-translate>including dominant slopes</small>
-          </td>
-        </tr>
-        <tr>
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level4" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - very high</strong></td>
-          <td v-translate>I choose to cancel the outing</td>
-        </tr>
+        <tbody>
+          <tr class="multiline">
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level1" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - low</strong></td>
+            <td>
+              <span v-translate>Stay careful while skiing</span>
+              <br />
+              <small v-translate>risk of a rough fall on hard snow</small>
+            </td>
+          </tr>
+          <tr>
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level2" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - moderate</strong></td>
+            <td v-translate>I must not use slopes > 40°</td>
+          </tr>
+          <tr class="multiline">
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level3" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - considerable</strong></td>
+            <td>
+              <span v-translate>I must not use slopes > 35°</span>
+              <br />
+              <small v-translate>including dominant slopes</small>
+            </td>
+          </tr>
+          <tr class="multiline">
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level4" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - high</strong></td>
+            <td>
+              <span v-translate>I must not use slopes > 30°</span>
+              <br />
+              <small v-translate>including dominant slopes</small>
+            </td>
+          </tr>
+          <tr>
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level4" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - very high</strong></td>
+            <td v-translate>I choose to cancel the outing</td>
+          </tr>
+        </tbody>
       </table>
     </div>
 
