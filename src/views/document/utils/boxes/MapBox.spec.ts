@@ -12,6 +12,12 @@ describe('MapBox', () => {
     const wrapper = mount(MapBox, {
       props: { document: { type: 'r', document_id: 1, areas } },
       global: {
+        plugins: [
+          createRouter({
+            history: createMemoryHistory(),
+            routes: [{ path: '/:p(.*)*', component: { render: () => null } }],
+          }),
+        ],
         stubs: {
           DocumentLink: { props: ['document'], template: '<a>{{ document.name }}</a>' },
           IconArea: true,

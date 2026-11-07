@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { nextTick } from 'vue';
+import { createMemoryHistory, createRouter } from 'vue-router';
 
 import ElevationProfile, {
   emitCursorEndEvent,
@@ -20,6 +21,12 @@ describe('elevation_profile event', () => {
     mount(MapBox, {
       props: { document: { type: 'o', document_id: 1 } },
       global: {
+        plugins: [
+          createRouter({
+            history: createMemoryHistory(),
+            routes: [{ path: '/:p(.*)*', component: { render: () => null } }],
+          }),
+        ],
         stubs: { MapView: true, MapLinks: true, ElevationProfile: true, FaIcon: true },
         config: {
           globalProperties: {

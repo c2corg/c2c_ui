@@ -49,10 +49,12 @@ describe('SiteNotice', () => {
 
   it('shows nothing, and throws nothing, when the forum is unreachable', async () => {
     vi.mocked(forum.axios.get).mockRejectedValue(new Error('Network Error'));
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const wrapper = mountSiteNotice();
     await flush();
 
+    expect(error).toHaveBeenCalledWith('Error retrieving site announcement :', expect.any(Error));
     expect(onUnhandledRejection).not.toHaveBeenCalled();
     expect(wrapper.isVisible()).toBe(false);
   });

@@ -19,7 +19,17 @@ const BaseForm = defineComponent({
   setup:
     (_, { slots, emit }) =>
     () =>
-      h('form', { onSubmit: () => emit('submit') }, slots.default?.()),
+      // without a default action, as the real one: jsdom cannot navigate
+      h(
+        'form',
+        {
+          onSubmit: (event: Event) => {
+            event.preventDefault();
+            emit('submit');
+          },
+        },
+        slots.default?.()
+      ),
 });
 
 const mountLogin = async (path: string, $user: object = { isLogged: false }) => {
@@ -85,8 +95,9 @@ describe('LoginView', () => {
   });
 
   describe('remember me', () => {
-    // the sign in resolves without a forum redirect: the view then goes home
-    const user = () => ({ isLogged: false, signIn: vi.fn(() => Promise.resolve({ data: {} })) });
+    // the sign in stays pending: signed in, the view leaves for the forum session (window.location), which jsdom
+    // cannot do
+    const user = () => ({ isLogged: false, signIn: vi.fn(() => new Promise(() => {})) });
     const checkbox = (wrapper: Awaited<ReturnType<typeof mountLogin>>['wrapper']) =>
       wrapper.findAll('form')[0].find('input[type="checkbox"]');
 
