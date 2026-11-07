@@ -233,7 +233,6 @@ defineExpose({ getExtent });
 </script>
 
 <style scoped>
-@import 'ol/ol.css';
 @import '@/assets/css/media.css';
 
 /* the controls are 0.52em from the edges of the map */
@@ -308,6 +307,9 @@ defineExpose({ getExtent });
 </style>
 
 <style>
+/* not scoped: the map controls are created by OpenLayers, they have no data-v attribute (c2corg/c2c_ui#4955) */
+@import 'ol/ol.css';
+
 .yeti-app {
   .ol-control {
     background: var(--c2c-white);

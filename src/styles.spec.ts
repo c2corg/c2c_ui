@@ -115,6 +115,18 @@ describe('styles', () => {
     expect(cssBlocks.length).toBeGreaterThan(200);
   });
 
+  // a scoped style adds its data-v attribute to the rules it imports: they would not match the elements created by a
+  // library (the controls of ol/ol.css, c2corg/c2c_ui#4955); media.css has no rules, only breakpoints
+  it('imports only media.css in a scoped style', () => {
+    const imports = cssBlocks
+      .filter(({ scoped }) => scoped)
+      .flatMap(({ name, content }) =>
+        [...content.matchAll(/@import\s+(?:url\()?['"]([^'"]+)['"]/g)].map((m) => `${name}: ${m[1]}`)
+      );
+    expect(imports.length).toBeGreaterThan(20);
+    expect(imports.filter((line) => !line.endsWith(': @/assets/css/media.css'))).toEqual([]);
+  });
+
   // the global CSS has only the classes the site uses: Bulma's included, kept from its 0.9.4 Sass with the variants the
   // site used (c2corg/c2c_ui#4918); to use another one (`mt-6`, `is-outlined`...), write its rules
   it('has only classes the code uses in the global CSS', () => {
