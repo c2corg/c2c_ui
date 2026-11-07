@@ -35,7 +35,6 @@
         <div class="swiper-zoom-container">
           <picture>
             <source v-if="image.avifSrc" type="image/avif" :srcset="image.avifSrc" />
-            <source v-if="image.webpSrc" type="image/webp" :srcset="image.webpSrc" />
             <img :src="image.imgSrc" :alt="image.locales[0].title ?? undefined" loading="lazy" />
           </picture>
         </div>
@@ -83,7 +82,7 @@ import { getImageUrl } from '@/js/image-urls';
 import { registerImageViewer, type ViewerImage } from '@/js/vue-plugins/image-viewer';
 
 type SwiperContainer = HTMLElement & { swiper: Swiper; initialize(): void };
-type ShownImage = ViewerImage & { imgSrc?: string; avifSrc?: string; webpSrc?: string };
+type ShownImage = ViewerImage & { imgSrc?: string; avifSrc?: string };
 // Safari
 type WebkitFullscreen = { webkitRequestFullscreen?(): void; webkitExitFullscreen?(): void };
 
@@ -125,7 +124,6 @@ function push(image: ViewerImage) {
       ...image,
       imgSrc: getImageUrl(image, 'BI'),
       avifSrc: getImageUrl(image, 'BI', 'avif'),
-      webpSrc: getImageUrl(image, 'BI', 'webp'),
     });
   }
 }

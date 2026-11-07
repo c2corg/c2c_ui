@@ -1,7 +1,6 @@
 <template>
   <picture :class="$attrs.class" :style="$attrs.style">
     <source v-if="avif" type="image/avif" :srcset="avif" />
-    <source v-if="webp" type="image/webp" :srcset="webp" />
     <img ref="img" v-bind="{ ...reservedSize, ...imgAttrs }" :src="standard" @error.once="onError" />
   </picture>
 </template>
@@ -47,16 +46,16 @@ const reservedSize = computed(() =>
 );
 
 const avif = computed(() => getImageUrl(props.img, props.size, 'avif'));
-const webp = computed(() => getImageUrl(props.img, props.size, 'webp'));
 const standard = computed(() => getImageUrl(props.img, props.size));
 
-// In case the "modern" thumbnail is not available, be sure
+// In case the AVIF thumbnail is not available, be sure
 // to switch to the "basic" version.
 function onError(event: Event) {
   if (avif.value) {
     const img = event.target as HTMLImageElement;
-    const [first, second] = img.parentElement!.children as unknown as HTMLSourceElement[];
-    first.srcset = second.srcset = img.src;
+    for (const source of img.parentElement!.querySelectorAll('source')) {
+      source.srcset = img.src;
+    }
   }
 }
 </script>

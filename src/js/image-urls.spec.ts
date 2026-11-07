@@ -45,20 +45,20 @@ describe('getImageUrl', () => {
 
     it('ignores format without size', () => {
       config.urls.modernThumbnailsTimestamp = 1;
-      expect(getImageUrl(image, undefined, 'webp')).toBe(`${MEDIA}/1588000000_123456.jpg`);
+      expect(getImageUrl(image, undefined, 'avif')).toBe(`${MEDIA}/1588000000_123456.jpg`);
     });
 
     describe('with a modern format', () => {
       it('returns undefined when modern thumbnails are disabled', () => {
-        expect(getImageUrl(image, 'MI', 'webp')).toBeUndefined();
+        expect(getImageUrl(image, 'MI', 'avif')).toBeUndefined();
       });
 
       it('returns undefined for images older than modernThumbnailsTimestamp', () => {
         config.urls.modernThumbnailsTimestamp = 1588000001;
-        expect(getImageUrl(image, 'MI', 'webp')).toBeUndefined();
+        expect(getImageUrl(image, 'MI', 'avif')).toBeUndefined();
       });
 
-      it.each(['webp', 'avif'] as const)('returns the %s thumbnail from modernThumbnailsTimestamp on', (format) => {
+      it.each(['avif'] as const)('returns the %s thumbnail from modernThumbnailsTimestamp on', (format) => {
         config.urls.modernThumbnailsTimestamp = 1588000000;
         expect(getImageUrl(image, 'MI', format)).toBe(`${MEDIA}/1588000000_123456MI.${format}`);
         expect(getImageUrl({ document_id: 1, filename: '1700000000_1.png' }, 'BI', format)).toBe(
@@ -68,18 +68,18 @@ describe('getImageUrl', () => {
 
       it('replaces the jpg extension of svg thumbnails', () => {
         config.urls.modernThumbnailsTimestamp = 1;
-        expect(getImageUrl({ document_id: 1, filename: '1588000000_1.svg' }, 'SI', 'webp')).toBe(
-          `${MEDIA}/1588000000_1SI.webp`
+        expect(getImageUrl({ document_id: 1, filename: '1588000000_1.svg' }, 'SI', 'avif')).toBe(
+          `${MEDIA}/1588000000_1SI.avif`
         );
       });
 
       it('returns undefined when the filename has no numeric timestamp', () => {
         config.urls.modernThumbnailsTimestamp = 1;
-        expect(getImageUrl({ document_id: 1, filename: 'abc.jpg' }, 'SI', 'webp')).toBeUndefined();
+        expect(getImageUrl({ document_id: 1, filename: 'abc.jpg' }, 'SI', 'avif')).toBeUndefined();
       });
 
       it('validates the size before the format', () => {
-        expect(() => getImageUrl(image, 'XL' as ImageSize, 'webp')).toThrow('Invalid size');
+        expect(() => getImageUrl(image, 'XL' as ImageSize, 'avif')).toThrow('Invalid size');
       });
     });
   });
@@ -105,12 +105,12 @@ describe('getImageUrl', () => {
 
     describe('with a modern format', () => {
       it('returns undefined when modern thumbnails are disabled', () => {
-        expect(getImageUrl(image, 'MI', 'webp')).toBeUndefined();
+        expect(getImageUrl(image, 'MI', 'avif')).toBeUndefined();
       });
 
       it('returns undefined for images older than modernThumbnailsId', () => {
         config.urls.modernThumbnailsId = 43;
-        expect(getImageUrl(image, 'MI', 'webp')).toBeUndefined();
+        expect(getImageUrl(image, 'MI', 'avif')).toBeUndefined();
       });
 
       it('returns the proxy url with extension from modernThumbnailsId on', () => {
@@ -120,7 +120,7 @@ describe('getImageUrl', () => {
 
       it('ignores format without size', () => {
         config.urls.modernThumbnailsId = 1;
-        expect(getImageUrl(image, undefined, 'webp')).toBe(`${API}/images/proxy/42`);
+        expect(getImageUrl(image, undefined, 'avif')).toBe(`${API}/images/proxy/42`);
       });
     });
   });
@@ -134,13 +134,13 @@ describe('getEmbeddedImageUrl', () => {
     expect(getEmbeddedImageUrl({ url, urlProxy })).toBe(url);
   });
 
-  it.each(['avif', 'webp'] as const)('returns the direct media url in %s', (format) => {
+  it.each(['avif'] as const)('returns the direct media url in %s', (format) => {
     expect(getEmbeddedImageUrl({ url, urlProxy }, format)).toBe(`${MEDIA}/1526229189_1504164474MI.${format}`);
   });
 
   it('replaces the extension of svg thumbnails', () => {
-    expect(getEmbeddedImageUrl({ url: `${MEDIA}/1588000000_1MI.jpg`, urlProxy }, 'webp')).toBe(
-      `${MEDIA}/1588000000_1MI.webp`
+    expect(getEmbeddedImageUrl({ url: `${MEDIA}/1588000000_1MI.jpg`, urlProxy }, 'avif')).toBe(
+      `${MEDIA}/1588000000_1MI.avif`
     );
   });
 
@@ -158,7 +158,7 @@ describe('getEmbeddedImageUrl', () => {
     'javascript:alert(1)',
   ])('falls back to the proxy for untrusted url %j', (untrusted) => {
     expect(getEmbeddedImageUrl({ url: untrusted, urlProxy })).toBe(`${API}${urlProxy}`);
-    expect(getEmbeddedImageUrl({ url: untrusted, urlProxy }, 'webp')).toBe(`${API}${urlProxy}&extension=webp`);
+    expect(getEmbeddedImageUrl({ url: untrusted, urlProxy }, 'avif')).toBe(`${API}${urlProxy}&extension=avif`);
   });
 
   it('falls back to the proxy when no media url is configured', () => {
