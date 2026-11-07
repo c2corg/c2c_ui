@@ -8,6 +8,10 @@ This is our code: the plan (c2corg/c2c_ui#4907) is to make it our own CSS, one m
 values, nesting, custom properties instead of variants), keeping the class names (`.button`, `.columns`,
 `.is-primary`...).
 
+## Made our own
+
+- `elements/title.css`: nesting, sizes as tokens (`--c2c-size-1`... `--c2c-size-7`).
+
 ## Where it comes from
 
 The CSS is the output of Bulma's Sass as the site compiled it until c2corg/c2c_ui#4907 removed Sass: the modules
