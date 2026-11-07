@@ -2,6 +2,7 @@
  * Bulma 0.9.4: the parts the site uses, in the order of Bulma's modules (see ./README.md)
  */
 @import './shared.css';
+@import './palette.css';
 @import './base/minireset.css';
 @import './base/generic.css';
 @import './base/animations.css';
