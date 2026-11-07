@@ -41,7 +41,11 @@
   --c2c-green: #4baf50;
 
   /* font sizes */
+  --c2c-size-1: 2.1429rem;
+  --c2c-size-2: 1.8571rem;
   --c2c-size-3: 1.5714rem;
+  --c2c-size-4: 1.2857rem;
+  --c2c-size-5: 1.1429rem;
   --c2c-size-6: 1rem;
   --c2c-size-7: 0.7857rem;
 
