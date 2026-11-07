@@ -11,6 +11,8 @@ values, nesting, custom properties instead of variants), keeping the class names
 ## Made our own
 
 - `elements/title.css`: nesting, sizes as tokens (`--c2c-size-1`... `--c2c-size-7`).
+- `elements/button.css`: nesting, each color class sets custom properties (`--button-color`...) that one set of
+  rules uses.
 
 ## Where it comes from
 
