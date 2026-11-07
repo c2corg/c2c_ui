@@ -71,7 +71,7 @@ const { promise, documentId, documentType, fields, document, version, locale } =
 const forumUrl = config.urls.forum;
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .button-outings {
   margin-top: 1rem;
 }

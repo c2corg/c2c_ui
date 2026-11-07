@@ -304,7 +304,9 @@ watch(
 );
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 p:not(:last-child),
 ul:not(:last-child),
 table:not(:last-child) {

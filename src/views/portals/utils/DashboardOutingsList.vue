@@ -138,7 +138,7 @@ watch(
 loadOutings();
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .outing-date-header {
   margin-top: var(--c2c-size-6);
   margin-bottom: var(--c2c-size-7);

@@ -78,8 +78,8 @@ const options = computed(() => {
 });
 </script>
 
-<style lang="scss" scoped>
-// the look of the former vue-slider-component default theme
+<style scoped>
+/* the look of the former vue-slider-component default theme */
 .input-slider {
   --slider-connect-bg: #3498db;
   --slider-tooltip-bg: #3498db;
@@ -88,8 +88,8 @@ const options = computed(() => {
 
   margin: 7px 0;
 
-  // the marks are created by noUiSlider, out of this template: :deep(). The base keeps no stacking context, so that
-  // the marks go above the bar (z-index 0) and below the handles (z-index 1 and more)
+  /* the marks are created by noUiSlider, out of this template: :deep(). The base keeps no stacking context, so that */
+  /* the marks go above the bar (z-index 0) and below the handles (z-index 1 and more) */
   :deep(.slider-base) {
     z-index: auto;
   }

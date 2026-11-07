@@ -144,7 +144,9 @@ function max300chars(value: string) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 @media screen and (--c2c-max-tablet) {
   .feed-card {
     border-left: 0 !important;
@@ -160,7 +162,7 @@ function max300chars(value: string) {
 }
 
 .is-max-3-lines-height {
-  // proprietary stuff, supported on limited browsers
+  /* proprietary stuff, supported on limited browsers */
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;

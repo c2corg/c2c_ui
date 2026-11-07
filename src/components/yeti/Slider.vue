@@ -58,7 +58,7 @@ function focus() {
 }
 </script>
 
-<style lang="scss">
+<style>
 .yeti-app {
   /* customization of the slider (@vueform/slider) */
   .input-slider {

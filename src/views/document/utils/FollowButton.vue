@@ -49,7 +49,7 @@ if (canFollow.value) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .follow-button-yellow {
   color: var(--c2c-yellow) !important;
 }

@@ -72,7 +72,7 @@ function emitSelectedValue() {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .option {
   display: flex;
   flex-direction: column;

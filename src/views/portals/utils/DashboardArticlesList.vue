@@ -39,7 +39,7 @@ const articlesPromise = (c2c.article as DocumentService).getAll({ limit: 5, qa: 
 const articles = computed(() => articlesPromise.data);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 ul {
   list-style-type: disc !important;
   padding-left: var(--c2c-size-6);

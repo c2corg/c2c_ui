@@ -86,7 +86,7 @@ const emit = defineEmits(['update:modelValue', 'click-prefix']);
 const { value_ } = useInputValue(props, emit);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 select,
 input {
   min-width: 15rem;

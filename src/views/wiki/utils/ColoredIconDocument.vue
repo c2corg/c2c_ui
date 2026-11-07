@@ -23,7 +23,7 @@ const colors: Record<string, string> = {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .icon-document-container {
   border-radius: 100%;
 }

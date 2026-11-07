@@ -26,7 +26,7 @@ const errorMessages: Record<string, string> = {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .no-result-found {
   color: red;
   font-size: 12px;

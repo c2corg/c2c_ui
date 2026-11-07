@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 h2 {
   display: inline-block;
   margin-left: -1.25rem;

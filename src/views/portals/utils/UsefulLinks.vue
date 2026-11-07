@@ -38,7 +38,7 @@
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 ul {
   list-style-type: disc !important;
   padding-left: var(--c2c-size-6);

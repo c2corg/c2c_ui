@@ -89,9 +89,9 @@ const { promise, documentType, fields, document, version, locale } = useDocument
 const getOriginalImageUrl = getImageUrl;
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .main-image {
-  // remove the ugly 4px in the bottom
+  /* remove the ugly 4px in the bottom */
   display: block;
 }
 </style>

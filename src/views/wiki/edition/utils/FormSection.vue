@@ -108,7 +108,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .section-item {
   .section-header {
     .title {

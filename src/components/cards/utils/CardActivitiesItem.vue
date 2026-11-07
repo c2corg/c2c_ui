@@ -11,7 +11,7 @@ defineProps({
 });
 </script>
 
-<style lang="scss">
+<style>
 .icon-activities {
   line-height: 1;
 }

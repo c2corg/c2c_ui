@@ -25,7 +25,9 @@ defineProps({
 defineEmits(['remove']);
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+@import '@/assets/css/media.css';
+
 .tags-container {
   margin-right: -0.5rem;
   margin-bottom: -0.5rem;

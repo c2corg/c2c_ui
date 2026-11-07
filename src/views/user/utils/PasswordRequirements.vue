@@ -38,7 +38,7 @@ const rules = computed(() => {
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .password-requirements {
   li {
     transition: color 0.15s;

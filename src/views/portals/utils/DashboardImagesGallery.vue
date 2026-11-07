@@ -38,7 +38,7 @@ const imagesPromise = ref(
 const images = computed(() => imagesPromise.value.data?.documents as GalleryImages | undefined);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .images-container {
   min-height: 200px;
 }

@@ -195,7 +195,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .feed-card {
   margin-bottom: 1.5rem;
 }

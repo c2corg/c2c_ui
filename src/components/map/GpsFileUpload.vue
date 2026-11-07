@@ -39,7 +39,7 @@ function uploadGeoFile(event: Event) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 input {
   opacity: 0; /* invisible but it's there! */
   width: 100%;

@@ -53,7 +53,7 @@ defineProps({
 defineEmits(['click']);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .toolbox-button {
   display: block;
   cursor: pointer;

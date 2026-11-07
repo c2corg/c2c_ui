@@ -69,7 +69,9 @@
   </section>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 .banner-container {
   display: grid;
   grid-template-columns: 1fr 25%;

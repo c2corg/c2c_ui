@@ -145,7 +145,7 @@ function onLoad(request: ApiData) {
 watch(() => route.fullPath, initialize, { immediate: true });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 td {
   white-space: nowrap;
 }

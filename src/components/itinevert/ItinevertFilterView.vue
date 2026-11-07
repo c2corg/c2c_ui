@@ -168,7 +168,9 @@ function onAnimEnd(e: AnimationEvent) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 .above-max-route {
   color: red;
 }
@@ -230,10 +232,10 @@ function onAnimEnd(e: AnimationEvent) {
     overflow: visible;
     max-height: 70vh;
 
-    scrollbar-width: none; // Firefox
+    scrollbar-width: none; /* Firefox */
 
     &::-webkit-scrollbar {
-      display: none; // Chrome, Safari and Opera
+      display: none; /* Chrome, Safari and Opera */
     }
   }
 }
@@ -264,7 +266,7 @@ function onAnimEnd(e: AnimationEvent) {
   }
 
   .dropdown {
-    position: unset; // important, to force drop down on the left
+    position: unset; /* important, to force drop down on the left */
   }
 }
 .filter-button-dropdown {

@@ -118,7 +118,7 @@ function mergeDocuments() {
 defineExpose({ show });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .modal {
   overflow: visible !important;
 }

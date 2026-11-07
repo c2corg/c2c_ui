@@ -272,7 +272,7 @@ function revoke(vendor: Vendor) {
 onMounted(load);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .title.is-2 {
   border-bottom: 1px solid #ddd;
 }

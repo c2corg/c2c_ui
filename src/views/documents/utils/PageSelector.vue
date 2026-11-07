@@ -91,7 +91,7 @@ function hideOnclick() {
 watch(() => props.documents, saveTotal);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .pagination-link {
   height: 1.75em;
 }

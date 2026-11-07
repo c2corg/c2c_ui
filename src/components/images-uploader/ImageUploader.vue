@@ -177,7 +177,7 @@ function applyRotation(angle: number) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .img-container {
   width: 100%;
   height: 200px;
@@ -189,7 +189,7 @@ function applyRotation(angle: number) {
   position: relative;
 
   &:hover {
-    // background-color: black;
+    /* background-color: black; */
     transition: 0.2s;
   }
 

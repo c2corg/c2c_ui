@@ -733,7 +733,7 @@ onBeforeUnmount(() => {
 defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoosePointerMove });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .bulletins-overlay {
   width: 300px;
   max-width: 100%;
@@ -787,7 +787,7 @@ dt {
 }
 </style>
 
-<style lang="scss">
+<style>
 /* Not scoped styles */
 .yeti-app {
   .bulletins-overlay-container {

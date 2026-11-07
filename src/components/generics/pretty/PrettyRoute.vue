@@ -96,7 +96,7 @@ const heightDiffText = computed(() => {
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .icon-activities {
   line-height: 1;
 }

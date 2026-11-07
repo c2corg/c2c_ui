@@ -131,7 +131,7 @@ function setSort(field: string | undefined) {
 watch(() => route.fullPath, updateFromRoute, { immediate: true });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .no-sort-filler {
   width: 20px;
 }

@@ -83,7 +83,7 @@ const minute = computed({
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .date-container {
   padding-right: 0.5rem !important;
 }

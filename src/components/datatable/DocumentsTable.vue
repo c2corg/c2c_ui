@@ -565,7 +565,7 @@ onBeforeUnmount(() => {
 
 <style src="ag-grid-community/styles/ag-grid.css" />
 <style src="ag-grid-community/styles/ag-theme-balham.css" />
-<style lang="scss">
+<style>
 .ag-theme-balham .ag-cell {
   padding-left: 0;
   padding-right: 0;

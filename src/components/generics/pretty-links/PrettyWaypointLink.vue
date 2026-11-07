@@ -13,7 +13,7 @@ defineProps({
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .pretty-waypoint-link {
   display: block;
 }

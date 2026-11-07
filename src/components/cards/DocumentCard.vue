@@ -60,7 +60,9 @@ const CARDS: Record<string, Component> = {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 .document-card-container {
   position: relative;
 

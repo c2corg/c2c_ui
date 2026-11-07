@@ -338,7 +338,7 @@ function loadVersions() {
 watch(() => route.fullPath, loadVersions, { immediate: true });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .locale-diff pre {
   white-space: pre-line;
   line-height: 1.3;

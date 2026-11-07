@@ -696,7 +696,9 @@ onMounted(() => {
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 .centered {
   margin: auto;
   min-height: 80vh;

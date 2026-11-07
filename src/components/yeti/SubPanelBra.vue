@@ -155,7 +155,7 @@ watch(
 );
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .inputs-bra {
   margin-left: 2rem;
   position: relative;

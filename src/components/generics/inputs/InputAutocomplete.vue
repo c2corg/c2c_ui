@@ -118,7 +118,7 @@ function format(suggestion: unknown) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .prevent-zoom-on-ios {
   font-size: 16px;
 }

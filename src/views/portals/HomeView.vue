@@ -123,7 +123,9 @@ function setProperty(property: keyof typeof toggles, value: boolean) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 @media screen and (--c2c-max-tablet) {
   .feed-view {
     padding-left: 0;

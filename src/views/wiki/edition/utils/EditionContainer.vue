@@ -178,7 +178,7 @@ onMounted(() => {
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .preview {
   background: #ffffe0;
 }

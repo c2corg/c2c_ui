@@ -39,7 +39,7 @@ function onEditMode() {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .edit-mode-button {
   padding-left: 0.25em;
   padding-right: 0.25em;
@@ -49,7 +49,7 @@ function onEditMode() {
 }
 </style>
 
-<style lang="scss">
+<style>
 .edit-mode-button {
   .input-checkbox {
     padding: 0;

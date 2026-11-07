@@ -23,7 +23,7 @@ defineProps({
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .card {
   transition: 0.1s;
   border: var(--c2c-card-border);

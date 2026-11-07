@@ -24,7 +24,7 @@ const props = defineProps({
 const sortedActivities = computed(() => props.activities.slice(0).sort());
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 @media print {
   /* write the activity's title instead of the icon */
   .replace-icon-by-names-on-print {

@@ -68,7 +68,7 @@ if (periodQueryString) {
   value.value = dateQueryString.split(',');
 }
 </script>
-<style scoped lang="scss">
+<style scoped>
 .checkbox {
   margin-top: 10px;
 }

@@ -22,7 +22,7 @@ function max50chars(value: string) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .association-image-link-child {
   display: table-cell;
   vertical-align: middle;

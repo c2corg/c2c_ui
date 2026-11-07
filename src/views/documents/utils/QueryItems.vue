@@ -299,7 +299,9 @@ function emitDocumentsLoad() {
 watch(() => route.fullPath, load, { immediate: true });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 .query-items-filters {
   font-size: 0;
 
@@ -332,10 +334,10 @@ watch(() => route.fullPath, load, { immediate: true });
     */
     max-height: 70vh;
 
-    scrollbar-width: none; // Firefox
+    scrollbar-width: none; /* Firefox */
 
     &::-webkit-scrollbar {
-      display: none; // Chrome, Safari and Opera
+      display: none; /* Chrome, Safari and Opera */
     }
   }
 }
@@ -352,11 +354,11 @@ watch(() => route.fullPath, load, { immediate: true });
   }
 
   .query-items-filters {
-    position: relative; // important, to force drop down on the left
+    position: relative; /* important, to force drop down on the left */
   }
 
   .dropdown {
-    position: unset; // important, to force drop down on the left
+    position: unset; /* important, to force drop down on the left */
   }
 }
 </style>

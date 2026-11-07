@@ -84,7 +84,7 @@ const lang = computed(() => props.document.cooked?.lang);
 const title = computed(() => $documentUtils.getDocumentTitle(props.document, lang.value));
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .button-bar {
   font-size: 1.5rem;
 }

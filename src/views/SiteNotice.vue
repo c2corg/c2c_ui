@@ -84,7 +84,7 @@ function hide() {
 loadAnnouncement();
 </script>
 
-<style lang="scss">
+<style>
 .site-notice {
   a,
   a:hover {
@@ -94,7 +94,7 @@ loadAnnouncement();
 }
 </style>
 
-<style scoped lang="scss">
+<style scoped>
 .delete {
   position: absolute;
   top: 0.5rem;

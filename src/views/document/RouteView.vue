@@ -220,7 +220,7 @@ const showMissingHistoryBanner = computed(() => {
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .missing-history-banner {
   overflow: hidden;
 }

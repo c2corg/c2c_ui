@@ -44,7 +44,7 @@ watch(() => $language.current, cookDocument);
 onMounted(cookDocument);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .yeti-article {
   max-width: 1039px;
   margin-top: 1.75em;

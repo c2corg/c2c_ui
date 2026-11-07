@@ -508,7 +508,7 @@ $yeti-height-ad: calc(100vh - var(--c2c-navbarad-height));
 }
 </style>
 
-<style lang="scss">
+<style>
 /* Not scoped styles */
 .yeti-app {
   .input-orientation {

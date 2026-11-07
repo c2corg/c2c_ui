@@ -10,7 +10,7 @@ function onClick() {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .gotop-button {
   cursor: pointer;
 }

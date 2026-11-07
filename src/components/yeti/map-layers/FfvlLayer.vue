@@ -107,7 +107,7 @@ const iconHisto = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgHi
 defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoosePointerMove });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .footer {
   background: var(--c2c-grey-lighter);
   margin: 10px -5px -5px;

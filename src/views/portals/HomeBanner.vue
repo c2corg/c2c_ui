@@ -82,7 +82,7 @@
 
 <script setup lang="ts"></script>
 
-<style scoped lang="scss">
+<style scoped>
 .with-circle {
   list-style: disc !important;
   margin-left: var(--c2c-size-3);

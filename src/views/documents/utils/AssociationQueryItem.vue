@@ -18,7 +18,9 @@ defineProps({
 });
 defineEmits(['add']);
 </script>
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 .input-document {
   @media screen and (--c2c-min-tablet) {
     margin-right: 1rem;

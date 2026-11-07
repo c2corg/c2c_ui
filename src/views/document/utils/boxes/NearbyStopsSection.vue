@@ -426,7 +426,7 @@ function handleDocumentHighlight(document: MapDocument | null) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .public-transports-section {
   margin-top: 20px;
   display: flex;

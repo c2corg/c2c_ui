@@ -331,7 +331,9 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 nav {
   max-width: 100vw;
   height: var(--c2c-navbar-height);
@@ -383,7 +385,7 @@ nav {
   .navigation-brand {
     img {
       margin-left: 0px;
-      // height:31px;
+      /* height:31px; */
     }
   }
 
@@ -472,8 +474,8 @@ nav {
   }
 }
 
-// search input : increase size to right on hover
-// only on screen wider than desktop
+/* search input : increase size to right on hover */
+/* only on screen wider than desktop */
 @media screen and (--c2c-min-fullhd) {
   .search-input {
     width: 250px;
@@ -490,7 +492,9 @@ nav {
 }
 </style>
 
-<style lang="scss">
+<style>
+@import '@/assets/css/media.css';
+
 .c2c-color > a {
   color: var(--c2c-color-text);
 }

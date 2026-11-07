@@ -53,7 +53,7 @@ if (canTag.value) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .todo-button.active {
   color: var(--c2c-yellow) !important;
 }

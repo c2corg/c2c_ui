@@ -15,12 +15,12 @@ import { environmentLabel as label } from '@/js/environment-label';
 defineOptions({ name: 'EnvironmentBanner' });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .environment-banner {
   pointer-events: none;
 }
 
-// thin stripe over the top of the page
+/* thin stripe over the top of the page */
 .environment-stripe {
   position: fixed;
   top: 0;
@@ -31,7 +31,7 @@ defineOptions({ name: 'EnvironmentBanner' });
   background: repeating-linear-gradient(135deg, #ffdd57 0 12px, #363636 12px 24px);
 }
 
-// small label in a corner, away from the navigation
+/* small label in a corner, away from the navigation */
 .environment-label {
   position: fixed;
   bottom: 0.5rem;

@@ -96,7 +96,7 @@ function checkMultipleWaypointsReachability(waypointIds: number[]) {
 watch(() => props.document, checkAccessibility, { deep: true, immediate: true });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .accessible-transport-box {
   border: 3px solid #4baf50;
   border-radius: 2px;

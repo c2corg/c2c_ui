@@ -155,7 +155,7 @@ function fitMapToDocuments() {
 defineExpose({ fitMapToDocuments });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .upload-button {
   position: relative;
 }
