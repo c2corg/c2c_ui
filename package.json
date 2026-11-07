@@ -42,7 +42,7 @@
     "blueimp-load-image": "5.16.0",
     "bulma-toast": "2.4.4",
     "core-js": "3.51.0",
-    "d3": "7.9.0",
+    "d3": "7.9.2",
     "dayjs": "1.11.23",
     "diff-match-patch-es": "2.0.1",
     "dompurify": "^3.4.17",
