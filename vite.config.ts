@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue';
 import browserslist from 'browserslist';
 import { browserslistToTargets } from 'lightningcss';
 import { visualizer } from 'rollup-plugin-visualizer';
-import { type Plugin, type Rollup, defineConfig } from 'vite';
+import { type Plugin, type Rolldown, defineConfig } from 'vite';
 
 /* Please note that all key present in this file are public keys
  * They don't need to be hidden.
@@ -138,7 +138,7 @@ config.publicPath = base;
 
 const isBudgetChecked = (fileName: string) => !/\.(map|pdf)$/.test(fileName);
 
-const outputSize = (output: Rollup.OutputChunk | Rollup.OutputAsset) =>
+const outputSize = (output: Rolldown.OutputChunk | Rolldown.OutputAsset) =>
   Buffer.byteLength(output.type === 'chunk' ? output.code : output.source);
 
 /**
@@ -155,9 +155,9 @@ function performanceBudgets(): Plugin {
 }
 
 function checkBudgets(
-  this: Rollup.PluginContext,
-  _options: Rollup.NormalizedOutputOptions,
-  bundle: Rollup.OutputBundle
+  this: Rolldown.PluginContext,
+  _options: Rolldown.NormalizedOutputOptions,
+  bundle: Rolldown.OutputBundle
 ) {
   const toKiB = (size: number) => `${(size / 1024).toFixed(0)} KiB`;
 
@@ -195,45 +195,6 @@ function checkBudgets(
         `(${toKiB(budgets.maxEntrypointSize)}). This can impact web performance.`
     );
   }
-}
-
-/**
- * Puts dependencies needed at startup in a separate "vendor" chunk, as Vue CLI did with chunk-vendors: they change less
- * often than the app code, so they stay cached across releases. Dependencies only reached through a dynamic import
- * (ag-grid, d3...) stay in their lazy chunks.
- */
-function vendorChunk(): Rollup.GetManualChunk {
-  const staticallyImportedByEntry = new Map<string, boolean>();
-  const isStaticallyImportedByEntry = (
-    id: string,
-    getModuleInfo: Rollup.GetModuleInfo,
-    visiting = new Set<string>()
-  ): boolean => {
-    if (staticallyImportedByEntry.has(id)) {
-      return staticallyImportedByEntry.get(id)!;
-    }
-    if (visiting.has(id)) {
-      return false; // import cycle, decided by another path
-    }
-    visiting.add(id);
-    const info = getModuleInfo(id);
-    const result =
-      !!info &&
-      (info.isEntry ||
-        info.importers.some((importer) => isStaticallyImportedByEntry(importer, getModuleInfo, visiting)));
-    staticallyImportedByEntry.set(id, result);
-    return result;
-  };
-
-  return (id, { getModuleInfo }) => {
-    if (
-      id.includes('node_modules') &&
-      !/\.(css|scss|sass)($|\?)/.test(id) &&
-      isStaticallyImportedByEntry(id, getModuleInfo)
-    ) {
-      return 'vendor';
-    }
-  };
 }
 
 /** Injects the backend urls in index.html, which used to be an EJS template */
@@ -327,9 +288,21 @@ export default defineConfig({
     sourcemap: true,
     // with the targets of css.lightningcss, not build.target
     cssMinify: 'lightningcss',
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        manualChunks: vendorChunk(),
+        codeSplitting: {
+          groups: [
+            {
+              // Dependencies needed at startup in a separate "vendor" chunk, as Vue CLI did with chunk-vendors: they
+              // change less often than the app code, so they stay cached across releases. $initial: only the modules
+              // statically imported by the entry, dependencies only reached through a dynamic import (ag-grid, d3...)
+              // stay in their lazy chunks
+              name: 'vendor',
+              test: (id) => /[\\/]node_modules[\\/]/.test(id) && !/\.(css|scss|sass)($|\?)/.test(id),
+              tags: ['$initial'],
+            },
+          ],
+        },
       },
     },
     // translations, wiki tools... are lazy loaded: never preload them. Vite only preloads the
