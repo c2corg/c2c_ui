@@ -1,0 +1,146 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): elements/table */
+
+.table {
+  background-color: var(--c2c-white);
+  color: var(--c2c-grey-darker);
+}
+
+.table td,
+.table th {
+  border: 1px solid hsl(0, 0%, 86%);
+  border-width: 0 0 1px;
+  padding: 0.5em 0.75em;
+  vertical-align: top;
+}
+
+.table td.is-white,
+.table th.is-white {
+  background-color: var(--c2c-white);
+  border-color: var(--c2c-white);
+  color: hsl(0, 0%, 4%);
+}
+
+.table td.is-light,
+.table th.is-light {
+  background-color: var(--c2c-light);
+  border-color: var(--c2c-light);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.table td.is-dark,
+.table th.is-dark {
+  background-color: var(--c2c-dark);
+  border-color: var(--c2c-dark);
+  color: #fff;
+}
+
+.table td.is-primary,
+.table th.is-primary {
+  background-color: var(--c2c-primary);
+  border-color: var(--c2c-primary);
+  color: #fff;
+}
+
+.table td.is-link,
+.table th.is-link {
+  background-color: var(--c2c-link);
+  border-color: var(--c2c-link);
+  color: #fff;
+}
+
+.table td.is-info,
+.table th.is-info {
+  background-color: var(--c2c-info);
+  border-color: var(--c2c-info);
+  color: #fff;
+}
+
+.table td.is-success,
+.table th.is-success {
+  background-color: #4baf50;
+  border-color: #4baf50;
+  color: #fff;
+}
+
+.table td.is-warning,
+.table th.is-warning {
+  background-color: hsl(44, 100%, 77%);
+  border-color: hsl(44, 100%, 77%);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.table td.is-danger,
+.table th.is-danger {
+  background-color: var(--c2c-danger);
+  border-color: var(--c2c-danger);
+  color: #fff;
+}
+
+.table td.is-narrow,
+.table th.is-narrow {
+  white-space: nowrap;
+  width: 1%;
+}
+
+.table td.is-vcentered,
+.table th.is-vcentered {
+  vertical-align: middle;
+}
+
+.table th {
+  color: var(--c2c-grey-darker);
+}
+
+.table th:not([align]) {
+  text-align: left;
+}
+
+.table thead {
+  background-color: transparent;
+}
+
+.table thead td,
+.table thead th {
+  border-width: 0 0 2px;
+  color: var(--c2c-grey-darker);
+}
+
+.table tfoot {
+  background-color: transparent;
+}
+
+.table tfoot td,
+.table tfoot th {
+  border-width: 2px 0 0;
+  color: var(--c2c-grey-darker);
+}
+
+.table tbody {
+  background-color: transparent;
+}
+
+.table tbody tr:last-child td,
+.table tbody tr:last-child th {
+  border-bottom-width: 0;
+}
+
+.table.is-hoverable tbody tr:not(.is-selected):hover {
+  background-color: hsl(0, 0%, 98%);
+}
+
+.table.is-hoverable.is-striped tbody tr:not(.is-selected):hover {
+  background-color: hsl(0, 0%, 98%);
+}
+
+.table.is-hoverable.is-striped tbody tr:not(.is-selected):hover:nth-child(even) {
+  background-color: var(--c2c-white-ter);
+}
+
+.table.is-narrow td,
+.table.is-narrow th {
+  padding: 0.25em 0.5em;
+}
+
+.table.is-striped tbody tr:not(.is-selected):nth-child(even) {
+  background-color: hsl(0, 0%, 98%);
+}

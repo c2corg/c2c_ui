@@ -1,7 +1,6 @@
 /*
- * The design tokens of the site, as CSS custom properties (c2corg/c2c_ui#4907): the components use them, not the Sass
- * variables. Each token has the name and the value of a Sass variable of src/assets/sass/variables.scss (prefixed
- * with c2c), checked by src/styles.spec.ts as long as Bulma's Sass uses those variables.
+ * The design tokens of the site, as CSS custom properties (c2corg/c2c_ui#4907). They have the names and the values of
+ * the Sass variables of Bulma 0.9.4 and of the site (prefixed with c2c): Bulma's CSS (bulma/) uses them too.
  *
  * The breakpoints are custom media queries, in media.css: a custom property cannot be used in a media query.
  */
@@ -35,6 +34,7 @@
   --c2c-black: hsl(0, 0%, 4%);
 
   /* other colors */
+  --c2c-info: hsl(207, 61%, 53%);
   --c2c-danger: hsl(348, 86%, 61%);
   --c2c-red: hsl(348, 86%, 61%);
   --c2c-yellow: hsl(44, 100%, 77%);

@@ -1,0 +1,652 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): elements/button */
+
+.button {
+  background-color: var(--c2c-white);
+  border-color: var(--c2c-grey-lighter);
+  border-width: 1px;
+  color: var(--c2c-grey-darker);
+  cursor: pointer;
+  justify-content: center;
+  padding-bottom: calc(0.375em - 1px);
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+  padding-top: calc(0.375em - 1px);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.button strong {
+  color: inherit;
+}
+
+.button .icon,
+.button .icon.is-small,
+.button .icon.is-medium,
+.button .icon.is-large {
+  height: 1.5em;
+  width: 1.5em;
+}
+
+.button .icon:first-child:not(:last-child) {
+  margin-left: calc(-0.375em - 1px);
+  margin-right: 0.1875em;
+}
+
+.button .icon:last-child:not(:first-child) {
+  margin-left: 0.1875em;
+  margin-right: calc(-0.375em - 1px);
+}
+
+.button .icon:first-child:last-child {
+  margin-left: calc(-0.375em - 1px);
+  margin-right: calc(-0.375em - 1px);
+}
+
+.button:hover {
+  border-color: var(--c2c-grey-light);
+  color: var(--c2c-grey-darker);
+}
+
+.button:focus {
+  border-color: hsl(229, 53%, 53%);
+  color: var(--c2c-grey-darker);
+}
+
+.button:focus:not(:active) {
+  box-shadow: 0 0 0 0.125em rgba(51, 122, 183, 0.25);
+}
+
+.button:active,
+.button.is-active {
+  border-color: var(--c2c-grey-dark);
+  color: var(--c2c-grey-darker);
+}
+
+.button.is-ghost {
+  background: none;
+  border-color: transparent;
+  color: var(--c2c-link);
+  text-decoration: none;
+}
+
+.button.is-ghost:hover {
+  color: var(--c2c-link);
+  text-decoration: underline;
+}
+
+.button.is-white {
+  background-color: var(--c2c-white);
+  border-color: transparent;
+  color: hsl(0, 0%, 4%);
+}
+
+.button.is-white:hover {
+  background-color: hsl(0, 0%, 97.5%);
+  border-color: transparent;
+  color: hsl(0, 0%, 4%);
+}
+
+.button.is-white:focus {
+  border-color: transparent;
+  color: hsl(0, 0%, 4%);
+}
+
+.button.is-white:focus:not(:active) {
+  box-shadow: 0 0 0 0.125em rgba(255, 255, 255, 0.25);
+}
+
+.button.is-white:active,
+.button.is-white.is-active {
+  background-color: hsl(0, 0%, 95%);
+  border-color: transparent;
+  color: hsl(0, 0%, 4%);
+}
+
+.button.is-white[disabled],
+fieldset[disabled] .button.is-white {
+  background-color: var(--c2c-white);
+  border-color: var(--c2c-white);
+  box-shadow: none;
+}
+
+.button.is-white.is-loading::after {
+  border-color: transparent transparent hsl(0, 0%, 4%) hsl(0, 0%, 4%) !important;
+}
+
+.button.is-light {
+  background-color: var(--c2c-light);
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.button.is-light:hover {
+  background-color: hsl(0, 0%, 93.5%);
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.button.is-light:focus {
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.button.is-light:focus:not(:active) {
+  box-shadow: 0 0 0 0.125em rgba(96%, 96%, 96%, 0.25);
+}
+
+.button.is-light:active,
+.button.is-light.is-active {
+  background-color: hsl(0, 0%, 91%);
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.button.is-light[disabled],
+fieldset[disabled] .button.is-light {
+  background-color: var(--c2c-light);
+  border-color: var(--c2c-light);
+  box-shadow: none;
+}
+
+.button.is-light.is-loading::after {
+  border-color: transparent transparent rgba(0, 0, 0, 0.7) rgba(0, 0, 0, 0.7) !important;
+}
+
+.button.is-dark {
+  background-color: var(--c2c-dark);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-dark:hover {
+  background-color: hsl(0, 0%, 18.5%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-dark:focus {
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-dark:focus:not(:active) {
+  box-shadow: 0 0 0 0.125em rgba(21%, 21%, 21%, 0.25);
+}
+
+.button.is-dark:active,
+.button.is-dark.is-active {
+  background-color: hsl(0, 0%, 16%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-dark[disabled],
+fieldset[disabled] .button.is-dark {
+  background-color: var(--c2c-dark);
+  border-color: var(--c2c-dark);
+  box-shadow: none;
+}
+
+.button.is-dark.is-loading::after {
+  border-color: transparent transparent #fff #fff !important;
+}
+
+.button.is-primary {
+  background-color: var(--c2c-primary);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-primary:hover {
+  background-color: rgb(18.9102564103%, 45.2362996481%, 67.8544494721%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-primary:focus {
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-primary:focus:not(:active) {
+  box-shadow: 0 0 0 0.125em rgba(51, 122, 183, 0.25);
+}
+
+.button.is-primary:active,
+.button.is-primary.is-active {
+  background-color: rgb(17.8205128205%, 42.6294620412%, 63.9441930618%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-primary[disabled],
+fieldset[disabled] .button.is-primary {
+  background-color: var(--c2c-primary);
+  border-color: var(--c2c-primary);
+  box-shadow: none;
+}
+
+.button.is-primary.is-loading::after {
+  border-color: transparent transparent #fff #fff !important;
+}
+
+.button.is-primary.is-light {
+  background-color: rgb(93.7435897436%, 96.1709401709%, 98.2564102564%);
+  color: rgb(19.6153846154%, 46.9230769231%, 70.3846153846%);
+}
+
+.button.is-primary.is-light:hover {
+  background-color: rgb(89.8333333333%, 93.7777777778%, 97.1666666667%);
+  border-color: transparent;
+  color: rgb(19.6153846154%, 46.9230769231%, 70.3846153846%);
+}
+
+.button.is-primary.is-light:active,
+.button.is-primary.is-light.is-active {
+  background-color: rgb(85.9230769231%, 91.3846153846%, 96.0769230769%);
+  border-color: transparent;
+  color: rgb(19.6153846154%, 46.9230769231%, 70.3846153846%);
+}
+
+.button.is-link {
+  background-color: var(--c2c-link);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-link:hover {
+  background-color: rgb(18.9102564103%, 45.2362996481%, 67.8544494721%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-link:focus {
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-link:focus:not(:active) {
+  box-shadow: 0 0 0 0.125em rgba(51, 122, 183, 0.25);
+}
+
+.button.is-link:active,
+.button.is-link.is-active {
+  background-color: rgb(17.8205128205%, 42.6294620412%, 63.9441930618%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-link[disabled],
+fieldset[disabled] .button.is-link {
+  background-color: var(--c2c-link);
+  border-color: var(--c2c-link);
+  box-shadow: none;
+}
+
+.button.is-link.is-loading::after {
+  border-color: transparent transparent #fff #fff !important;
+}
+
+.button.is-link.is-light {
+  background-color: rgb(93.7435897436%, 96.1709401709%, 98.2564102564%);
+  color: rgb(19.6153846154%, 46.9230769231%, 70.3846153846%);
+}
+
+.button.is-link.is-light:hover {
+  background-color: rgb(89.8333333333%, 93.7777777778%, 97.1666666667%);
+  border-color: transparent;
+  color: rgb(19.6153846154%, 46.9230769231%, 70.3846153846%);
+}
+
+.button.is-link.is-light:active,
+.button.is-link.is-light.is-active {
+  background-color: rgb(85.9230769231%, 91.3846153846%, 96.0769230769%);
+  border-color: transparent;
+  color: rgb(19.6153846154%, 46.9230769231%, 70.3846153846%);
+}
+
+.button.is-info {
+  background-color: var(--c2c-info);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-info:hover {
+  background-color: hsl(207, 61%, 50.5%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-info:focus {
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-info:focus:not(:active) {
+  box-shadow: 0 0 0 0.125em rgba(24.33%, 55.867%, 81.67%, 0.25);
+}
+
+.button.is-info:active,
+.button.is-info.is-active {
+  background-color: hsl(207, 61%, 48%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-info[disabled],
+fieldset[disabled] .button.is-info {
+  background-color: var(--c2c-info);
+  border-color: var(--c2c-info);
+  box-shadow: none;
+}
+
+.button.is-info.is-loading::after {
+  border-color: transparent transparent #fff #fff !important;
+}
+
+.button.is-info.is-light {
+  background-color: hsl(207, 61%, 96%);
+  color: hsl(207, 61%, 41%);
+}
+
+.button.is-info.is-light:hover {
+  background-color: hsl(207, 61%, 93.5%);
+  border-color: transparent;
+  color: hsl(207, 61%, 41%);
+}
+
+.button.is-info.is-light:active,
+.button.is-info.is-light.is-active {
+  background-color: hsl(207, 61%, 91%);
+  border-color: transparent;
+  color: hsl(207, 61%, 41%);
+}
+
+.button.is-success {
+  background-color: #4baf50;
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-success:hover {
+  background-color: rgb(27.9117647059%, 65.1274509804%, 29.7725490196%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-success:focus {
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-success:focus:not(:active) {
+  box-shadow: 0 0 0 0.125em rgba(75, 175, 80, 0.25);
+}
+
+.button.is-success:active,
+.button.is-success.is-active {
+  background-color: rgb(26.4117647059%, 61.6274509804%, 28.1725490196%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-success[disabled],
+fieldset[disabled] .button.is-success {
+  background-color: #4baf50;
+  border-color: #4baf50;
+  box-shadow: none;
+}
+
+.button.is-success.is-loading::after {
+  border-color: transparent transparent #fff #fff !important;
+}
+
+.button.is-success.is-light {
+  background-color: rgb(94.4%, 97.6%, 94.56%);
+  color: rgb(22.2%, 51.8%, 23.68%);
+}
+
+.button.is-success.is-light:hover {
+  background-color: rgb(90.9%, 96.1%, 91.16%);
+  border-color: transparent;
+  color: rgb(22.2%, 51.8%, 23.68%);
+}
+
+.button.is-success.is-light:active,
+.button.is-success.is-light.is-active {
+  background-color: rgb(87.4%, 94.6%, 87.76%);
+  border-color: transparent;
+  color: rgb(22.2%, 51.8%, 23.68%);
+}
+
+.button.is-warning {
+  background-color: hsl(44, 100%, 77%);
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.button.is-warning:hover {
+  background-color: hsl(44, 100%, 74.5%);
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.button.is-warning:focus {
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.button.is-warning:focus:not(:active) {
+  box-shadow: 0 0 0 0.125em rgba(100%, 87.7333333333%, 54%, 0.25);
+}
+
+.button.is-warning:active,
+.button.is-warning.is-active {
+  background-color: hsl(44, 100%, 72%);
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.button.is-warning[disabled],
+fieldset[disabled] .button.is-warning {
+  background-color: hsl(44, 100%, 77%);
+  border-color: hsl(44, 100%, 77%);
+  box-shadow: none;
+}
+
+.button.is-warning.is-loading::after {
+  border-color: transparent transparent rgba(0, 0, 0, 0.7) rgba(0, 0, 0, 0.7) !important;
+}
+
+.button.is-warning.is-light {
+  background-color: hsl(44, 100%, 96%);
+  color: hsl(44, 100%, 29%);
+}
+
+.button.is-warning.is-light:hover {
+  background-color: hsl(44, 100%, 93.5%);
+  border-color: transparent;
+  color: hsl(44, 100%, 29%);
+}
+
+.button.is-warning.is-light:active,
+.button.is-warning.is-light.is-active {
+  background-color: hsl(44, 100%, 91%);
+  border-color: transparent;
+  color: hsl(44, 100%, 29%);
+}
+
+.button.is-danger {
+  background-color: var(--c2c-danger);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-danger:hover {
+  background-color: hsl(348, 86%, 58.5%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-danger:focus {
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-danger:focus:not(:active) {
+  box-shadow: 0 0 0 0.125em rgba(94.54%, 27.46%, 40.876%, 0.25);
+}
+
+.button.is-danger:active,
+.button.is-danger.is-active {
+  background-color: hsl(348, 86%, 56%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.button.is-danger[disabled],
+fieldset[disabled] .button.is-danger {
+  background-color: var(--c2c-danger);
+  border-color: var(--c2c-danger);
+  box-shadow: none;
+}
+
+.button.is-danger.is-loading::after {
+  border-color: transparent transparent #fff #fff !important;
+}
+
+.button.is-danger.is-light {
+  background-color: hsl(348, 86%, 96%);
+  color: hsl(348, 86%, 43%);
+}
+
+.button.is-danger.is-light:hover {
+  background-color: hsl(348, 86%, 93.5%);
+  border-color: transparent;
+  color: hsl(348, 86%, 43%);
+}
+
+.button.is-danger.is-light:active,
+.button.is-danger.is-light.is-active {
+  background-color: hsl(348, 86%, 91%);
+  border-color: transparent;
+  color: hsl(348, 86%, 43%);
+}
+
+.button.is-small:not(.is-rounded) {
+  border-radius: 2px;
+}
+
+.button.is-small {
+  font-size: var(--c2c-size-7);
+}
+
+.button.is-medium {
+  font-size: 1.1429rem;
+}
+
+.button.is-large {
+  font-size: 1.2857rem;
+}
+
+.button[disabled],
+fieldset[disabled] .button {
+  background-color: var(--c2c-white);
+  border-color: var(--c2c-grey-lighter);
+  box-shadow: none;
+  opacity: 0.5;
+}
+
+.button.is-loading {
+  color: transparent !important;
+  pointer-events: none;
+}
+
+.button.is-loading::after {
+  left: calc(50% - 1em * 0.5);
+  top: calc(50% - 1em * 0.5);
+  position: absolute !important;
+}
+
+.button.is-rounded {
+  border-radius: 9999px;
+  padding-left: calc(0.75em + 0.25em);
+  padding-right: calc(0.75em + 0.25em);
+}
+
+.buttons {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.buttons .button {
+  margin-bottom: 0.5rem;
+}
+
+.buttons .button:not(:last-child):not(.is-fullwidth) {
+  margin-right: 0.5rem;
+}
+
+.buttons:last-child {
+  margin-bottom: -0.5rem;
+}
+
+.buttons:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.buttons.has-addons .button:not(:first-child) {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.buttons.has-addons .button:not(:last-child) {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  margin-right: -1px;
+}
+
+.buttons.has-addons .button:last-child {
+  margin-right: 0;
+}
+
+.buttons.has-addons .button:hover {
+  z-index: 2;
+}
+
+.buttons.has-addons .button:focus,
+.buttons.has-addons .button:active,
+.buttons.has-addons .button.is-active {
+  z-index: 3;
+}
+
+.buttons.has-addons .button:focus:hover,
+.buttons.has-addons .button:active:hover,
+.buttons.has-addons .button.is-active:hover {
+  z-index: 4;
+}
+
+.buttons.has-addons .button.is-expanded {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.buttons.is-centered {
+  justify-content: center;
+}
+
+.buttons.is-centered:not(.has-addons) .button:not(.is-fullwidth) {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+
+.buttons.is-right {
+  justify-content: flex-end;
+}
+
+.buttons.is-right:not(.has-addons) .button:not(.is-fullwidth) {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}

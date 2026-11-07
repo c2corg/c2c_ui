@@ -1,44 +1,19 @@
 // @vitest-environment node
-// (Dart Sass needs the Uint8Array of Node, not the one of jsdom)
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 
 import { bundleAsync } from 'lightningcss';
-import { compile, compileString, NodePackageImporter, type FileImporter, type Options } from 'sass';
 import { describe, expect, it } from 'vitest';
 import { compileStyle, parse } from 'vue/compiler-sfc';
 
 import viteConfig from '../vite.config.ts';
 
-// The styles compile as the build does (the specs run with `css: false`): main.scss without a Sass warning
-// (deprecations, as Dart Sass 3.0 removes `@import` and the global built-in functions, and @warn alike), and the
-// <style> blocks of the components, in plain CSS, with Vue and Lightning CSS.
+// The styles are plain CSS, and compile as the build does (the specs run with `css: false`): the global CSS files of
+// src/assets/css, Bulma's included, and the <style> blocks of the components, with Vue and Lightning CSS.
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const src = join(root, 'src');
-
-// the `@/` alias of vite.config.ts; Sass resolves the extension and the partials
-const aliasImporter: FileImporter<'sync'> = {
-  findFileUrl: (url) => (url.startsWith('@/') ? new URL(url.slice(2), pathToFileURL(src).href + '/') : null),
-};
-
-const compileWarnings = (run: (options: Options<'sync'>) => unknown): string[] => {
-  const warnings: string[] = [];
-  run({
-    importers: [new NodePackageImporter(root), aliasImporter],
-    loadPaths: [join(root, 'node_modules')],
-    // report every occurrence, not the first five of each kind
-    verbose: true,
-    logger: {
-      warn(message, { span }) {
-        warnings.push(span ? `${message} (${span.url?.pathname}:${span.start.line + 1})` : message);
-      },
-      debug() {},
-    },
-  });
-  return warnings;
-};
 
 const files = (dir: string, pattern: RegExp): string[] =>
   readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -63,17 +38,20 @@ const styleBlocks = (lang: string | undefined) =>
         scoped: Boolean(style.scoped),
       }))
   );
-const scssBlocks = styleBlocks('scss');
+// the global CSS files
+const globalFiles = files(join(src, 'assets/css'), /\.css$/);
 // the <style> blocks in plain CSS, and the global CSS files
 const cssBlocks = [
   ...styleBlocks(undefined),
-  ...files(join(src, 'assets/css'), /\.css$/).map((file) => ({
+  ...globalFiles.map((file) => ({
     file,
     name: relative(src, file),
     content: readFileSync(file, 'utf8'),
     scoped: false,
   })),
 ];
+// all the CSS: global files and blocks of the components
+const allCss = (): string[] => cssBlocks.map(({ content }) => content);
 
 // The words of the code that can be class names: templates and scripts of the components, TypeScript and JavaScript
 // modules, translations, index.html. Not the styles, nor the specs.
@@ -95,33 +73,14 @@ const codeWords = (): Set<string> => {
   return new Set(sources.join('\n').split(/[^\w-]+/));
 };
 
-const sassDir = join(src, 'assets/sass');
-// the classes the guarded generators of Bulma can write (bulma/utilities/used.scss), from the selectors they report
-const generatedClasses = (): Set<string> => {
-  const selectors: string[] = [];
-  compileString(`@use 'bulma/utilities/used' with ($all: true, $report: true);\n@use 'main';`, {
-    url: pathToFileURL(join(sassDir, 'used-report.scss')),
-    logger: {
-      warn() {},
-      debug(message) {
-        if (message.startsWith('used.rule: ')) {
-          selectors.push(message.slice('used.rule: '.length));
-        }
-      },
-    },
-  });
-  // the classes a selector requires: not those of :not(...)
-  const required = (selector: string) => selector.replace(/:not\([^)]*\)/g, '');
-  return new Set(
-    selectors.flatMap((selector) => [...required(selector).matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)].map((m) => m[1]))
-  );
+// the classes a global CSS file requires: in its selectors, not in :not(...)
+const cssClasses = (css: string): string[] => {
+  const selectors = css.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\{[^{}]*\}/g, '{}');
+  return [...selectors.replace(/:not\([^)]*\)/g, '').matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)].map((m) => m[1]);
 };
 
-const listedClasses = (): string[] => {
-  const module = readFileSync(join(sassDir, 'bulma/utilities/used.scss'), 'utf8');
-  const list = module.match(/^\$classes: \(([\s\S]*?)\);/m)?.[1] ?? '';
-  return [...list.matchAll(/'([\w-]+)'/g)].map((m) => m[1]);
-};
+// classes of the global CSS that no source names: set at run time by a library
+const runTimeClasses = ['swiper-wrapper'];
 
 // the custom properties of assets/css/tokens.css: name (without --c2c-) and value
 const tokens = new Map(
@@ -132,86 +91,38 @@ const tokens = new Map(
 );
 
 describe('styles', () => {
-  // a token has the value of the Sass variable of the same name, which Bulma's Sass still uses
-  it('gives the tokens the values of the Sass variables', () => {
-    expect(tokens.size).toBeGreaterThan(30);
-    const { css } = compileString(
-      `@use 'variables' as *;\na { ${[...tokens.keys()].map((name) => `${name}: $${name};`).join(' ')} }`,
-      { url: pathToFileURL(join(sassDir, 'tokens.scss')) }
-    );
-    const values = new Map([...css.matchAll(/^\s+([\w-]+): (.+);$/gm)].map((m) => [m[1], m[2]]));
-    expect(values).toEqual(tokens);
-  });
-
-  // a breakpoint has the value of Bulma's Sass variable: (--c2c-min-tablet) is (min-width: $tablet)
-  it('gives the breakpoints the values of the Sass variables', () => {
-    const queries = [
-      ...readFileSync(join(src, 'assets/css/media.css'), 'utf8').matchAll(/@custom-media --c2c-(\w+)-(\w+) (.+);/g),
-    ];
-    expect(queries.length).toBe(8);
-    const { css } = compileString(
-      `@use 'variables' as *;\na { ${queries.map(([, side, name]) => `${side}-${name}: $${name};`).join(' ')} }`,
-      { url: pathToFileURL(join(sassDir, 'media.scss')) }
-    );
-    for (const [, side, name, query] of queries) {
-      const value = css.match(new RegExp(`${side}-${name}: (.+);`))?.[1];
-      expect(query).toBe(`(${side}-width: ${value})`);
-    }
-  });
-
   it('uses only breakpoints that exist', () => {
     const media = readFileSync(join(src, 'assets/css/media.css'), 'utf8');
-    const used = new Set(
-      vueFiles(src).flatMap((file) =>
-        [...readFileSync(file, 'utf8').matchAll(/(?<!var)\((--c2c-[\w-]+)\)/g)].map((m) => m[1])
-      )
-    );
+    const used = new Set(allCss().flatMap((css) => [...css.matchAll(/(?<!var)\((--c2c-[\w-]+)\)/g)].map((m) => m[1])));
     expect([...used].filter((name) => !media.includes(`@custom-media ${name} `))).toEqual([]);
   });
 
   // a data URL cannot use a custom property
   it('draws the external link icon in the color of the links', () => {
     const css = readFileSync(join(src, 'assets/css/external-links.css'), 'utf8');
-    expect(css).toContain(`fill='${tokens.get('color-link')!.replace('#', '%23')}'`);
+    expect(css).toContain(`fill='${encodeURIComponent(tokens.get('color-link')!)}'`);
   });
 
   it('uses only tokens that exist', () => {
-    const used = new Set(
-      vueFiles(src).flatMap((file) => [...readFileSync(file, 'utf8').matchAll(/var\(--c2c-([\w-]+)/g)].map((m) => m[1]))
-    );
+    expect(tokens.size).toBeGreaterThan(30);
+    const used = new Set(allCss().flatMap((css) => [...css.matchAll(/var\(--c2c-([\w-]+)/g)].map((m) => m[1])));
     expect([...used].filter((name) => !tokens.has(name))).toEqual([]);
   });
 
-  it('writes the styles of the components in plain CSS', () => {
-    expect(scssBlocks.map(({ name }) => name)).toEqual([]);
-    expect(cssBlocks.length).toBeGreaterThan(150);
+  it('has no Sass', () => {
+    expect(files(src, /\.s[ac]ss$/).map((file) => relative(src, file))).toEqual([]);
+    expect(styleBlocks('scss').map(({ name }) => name)).toEqual([]);
+    expect(cssBlocks.length).toBeGreaterThan(200);
   });
 
-  it('compiles main.scss without a Sass warning', () => {
-    const warnings = compileWarnings((options) => compile(join(src, 'assets/sass/main.scss'), options));
-    expect(warnings).toEqual([]);
-  });
-
-  // the CSS has the classes of Bulma the site uses, and only them: a class used by the code and written by the guarded
-  // modules of Bulma must be in the list of bulma/utilities/used.scss, and a listed class must be used
-  it('lists the Bulma classes the code uses', () => {
-    const generated = generatedClasses();
-    expect(generated.size).toBeGreaterThan(900);
+  // the global CSS has only the classes the site uses: Bulma's included, kept from its 0.9.4 Sass with the variants the
+  // site used (c2corg/c2c_ui#4918); to use another one (`mt-6`, `is-outlined`...), write its rules
+  it('has only classes the code uses in the global CSS', () => {
     const words = codeWords();
-    const used = [...generated].filter((name) => words.has(name)).sort();
-    expect(listedClasses().sort()).toEqual(used);
-  });
-
-  // a selector is kept when all the classes it requires are listed; those of :not(...) are not required
-  it.each([
-    ['.column:not(.is-narrow-unknown)', '.column:not(.is-narrow-unknown)'],
-    ['.container.is-widescreen:not(.is-max-desktop)', null],
-    ['.column:hover, .column.is-black', '.column:hover'],
-  ])('keeps %s as %s', (selector, kept) => {
-    const { css } = compileString(`@use 'bulma/utilities/used';\na { kept: '#{used.only('${selector}')}'; }`, {
-      url: pathToFileURL(join(sassDir, 'used-only.scss')),
-    });
-    expect(css.match(/kept: "(.*)";/)?.[1]).toBe(kept ?? '');
+    const unused = new Set(
+      globalFiles.flatMap((file) => cssClasses(readFileSync(file, 'utf8')).filter((name) => !words.has(name)))
+    );
+    expect([...unused].sort()).toEqual(runTimeClasses);
   });
 
   // a plain CSS style is valid CSS for Lightning CSS, scoped by Vue then bundled as Vite does with the options of

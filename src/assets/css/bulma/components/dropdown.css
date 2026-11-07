@@ -1,0 +1,74 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): components/dropdown */
+
+.dropdown {
+  display: inline-flex;
+  position: relative;
+  vertical-align: top;
+}
+
+.dropdown.is-active .dropdown-menu,
+.dropdown.is-hoverable:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown.is-right .dropdown-menu {
+  left: auto;
+  right: 0;
+}
+
+.dropdown-menu {
+  display: none;
+  left: 0;
+  min-width: 12rem;
+  padding-top: 4px;
+  position: absolute;
+  top: 100%;
+  z-index: 20;
+}
+
+.dropdown-content {
+  background-color: var(--c2c-white);
+  border-radius: var(--c2c-radius);
+  box-shadow:
+    0 0.5em 1em -0.125em rgba(4%, 4%, 4%, 0.1),
+    0 0px 0 1px rgba(4%, 4%, 4%, 0.02);
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.dropdown-item {
+  color: var(--c2c-text);
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  padding: 0.375rem 1rem;
+  position: relative;
+}
+
+a.dropdown-item,
+button.dropdown-item {
+  padding-right: 3rem;
+  text-align: inherit;
+  white-space: nowrap;
+  width: 100%;
+}
+
+a.dropdown-item:hover,
+button.dropdown-item:hover {
+  background-color: var(--c2c-white-ter);
+  color: var(--c2c-black);
+}
+
+a.dropdown-item.is-active,
+button.dropdown-item.is-active {
+  background-color: var(--c2c-link);
+  color: #fff;
+}
+
+.dropdown-divider {
+  background-color: var(--c2c-grey-lightest);
+  border: none;
+  display: block;
+  height: 1px;
+  margin: 0.5rem 0;
+}

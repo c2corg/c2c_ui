@@ -1,0 +1,106 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): form/shared */
+
+.select select,
+.input,
+.textarea {
+  background-color: var(--c2c-white);
+  border-color: var(--c2c-grey-lighter);
+  border-radius: var(--c2c-radius);
+  color: var(--c2c-grey-darker);
+}
+
+.select select::-moz-placeholder,
+.input::-moz-placeholder,
+.textarea::-moz-placeholder {
+  color: rgb(160, 160, 160);
+}
+
+.select select::-webkit-input-placeholder,
+.input::-webkit-input-placeholder,
+.textarea::-webkit-input-placeholder {
+  color: rgb(160, 160, 160);
+}
+
+.select select:-moz-placeholder,
+.input:-moz-placeholder,
+.textarea:-moz-placeholder {
+  color: rgb(160, 160, 160);
+}
+
+.select select:-ms-input-placeholder,
+.input:-ms-input-placeholder,
+.textarea:-ms-input-placeholder {
+  color: rgb(160, 160, 160);
+}
+
+.select select:hover,
+.input:hover,
+.textarea:hover {
+  border-color: var(--c2c-grey-light);
+}
+
+.select select:focus,
+.input:focus,
+.textarea:focus,
+.select select:active,
+.input:active,
+.textarea:active,
+.select select.is-active,
+.is-active.input,
+.is-active.textarea {
+  border-color: var(--c2c-color-base-c2c);
+  box-shadow: 0 0 0 0 rgba(51, 122, 183, 0.25);
+}
+
+.select select[disabled],
+[disabled].input,
+[disabled].textarea,
+fieldset[disabled] .select select,
+.select fieldset[disabled] select,
+fieldset[disabled] .input,
+fieldset[disabled] .textarea {
+  background-color: var(--c2c-white-ter);
+  border-color: var(--c2c-white-ter);
+  box-shadow: none;
+  color: var(--c2c-grey);
+}
+
+.select select[disabled]::-moz-placeholder,
+[disabled].input::-moz-placeholder,
+[disabled].textarea::-moz-placeholder,
+fieldset[disabled] .select select::-moz-placeholder,
+.select fieldset[disabled] select::-moz-placeholder,
+fieldset[disabled] .input::-moz-placeholder,
+fieldset[disabled] .textarea::-moz-placeholder {
+  color: rgba(48%, 48%, 48%, 0.3);
+}
+
+.select select[disabled]::-webkit-input-placeholder,
+[disabled].input::-webkit-input-placeholder,
+[disabled].textarea::-webkit-input-placeholder,
+fieldset[disabled] .select select::-webkit-input-placeholder,
+.select fieldset[disabled] select::-webkit-input-placeholder,
+fieldset[disabled] .input::-webkit-input-placeholder,
+fieldset[disabled] .textarea::-webkit-input-placeholder {
+  color: rgba(48%, 48%, 48%, 0.3);
+}
+
+.select select[disabled]:-moz-placeholder,
+[disabled].input:-moz-placeholder,
+[disabled].textarea:-moz-placeholder,
+fieldset[disabled] .select select:-moz-placeholder,
+.select fieldset[disabled] select:-moz-placeholder,
+fieldset[disabled] .input:-moz-placeholder,
+fieldset[disabled] .textarea:-moz-placeholder {
+  color: rgba(48%, 48%, 48%, 0.3);
+}
+
+.select select[disabled]:-ms-input-placeholder,
+[disabled].input:-ms-input-placeholder,
+[disabled].textarea:-ms-input-placeholder,
+fieldset[disabled] .select select:-ms-input-placeholder,
+.select fieldset[disabled] select:-ms-input-placeholder,
+fieldset[disabled] .input:-ms-input-placeholder,
+fieldset[disabled] .textarea:-ms-input-placeholder {
+  color: rgba(48%, 48%, 48%, 0.3);
+}
