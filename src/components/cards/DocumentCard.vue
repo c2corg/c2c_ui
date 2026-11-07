@@ -77,7 +77,7 @@ const CARDS: Record<string, Component> = {
   font-size: 2rem;
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .document-card-container .document-card {
     border-left: var(--c2c-card-border);
   }

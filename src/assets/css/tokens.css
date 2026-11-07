@@ -3,7 +3,7 @@
  * variables. Each token has the name and the value of a Sass variable of src/assets/sass/variables.scss (prefixed
  * with c2c), checked by src/styles.spec.ts as long as Bulma's Sass uses those variables.
  *
- * The breakpoints are not here: a custom property cannot be used in a media query.
+ * The breakpoints are custom media queries, in media.css: a custom property cannot be used in a media query.
  */
 :root {
   /* the orange and the blue of c2c */

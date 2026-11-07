@@ -433,7 +433,7 @@ $cards-gap: 0.25rem;
   clear: both;
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   $mobile-section-padding: 0.5rem;
   $mobile-header-height: 56px;
   $mobile-filters-height: 25px;
@@ -497,7 +497,7 @@ $cards-gap: 0.25rem;
   }
 }
 
-@media screen and (min-width: $tablet) {
+@media screen and (--c2c-min-tablet) {
   .result-section {
     margin-top: 0;
     height: $result-height;

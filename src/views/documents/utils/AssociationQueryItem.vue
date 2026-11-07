@@ -20,7 +20,7 @@ defineEmits(['add']);
 </script>
 <style scoped lang="scss">
 .input-document {
-  @media screen and (min-width: $tablet) {
+  @media screen and (--c2c-min-tablet) {
     margin-right: 1rem;
   }
 }

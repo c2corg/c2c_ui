@@ -76,7 +76,7 @@ const isMultiActivities = computed(() => (props.document.activities.length > 1 ?
   color: var(--c2c-grey-light);
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .is-2-columns {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr);

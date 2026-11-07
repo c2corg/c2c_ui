@@ -71,7 +71,7 @@ const nbIconsClass = computed(() => {
   grid-template-columns: repeat(5, 1fr);
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .is-2-icons,
   .is-3-icons,
   .is-4-icons {

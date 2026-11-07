@@ -390,10 +390,10 @@ table:not(:last-child) {
 }
 
 @media screen and (max-width: 490px),
-  screen and (min-width: $tablet) and (max-width: 970px),
-  screen and (min-width: $desktop) and (max-width: 1180px),
-  screen and (min-width: $widescreen) and (max-width: 1370px),
-  screen and (min-width: $fullhd) and (max-width: 1650px) {
+  screen and (--c2c-min-tablet) and (max-width: 970px),
+  screen and (--c2c-min-desktop) and (max-width: 1180px),
+  screen and (--c2c-min-widescreen) and (max-width: 1370px),
+  screen and (--c2c-min-fullhd) and (max-width: 1650px) {
   .yetitabs {
     flex-wrap: wrap;
   }

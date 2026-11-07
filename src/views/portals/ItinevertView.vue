@@ -98,7 +98,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped lang="scss">
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .feed-title {
     padding-left: 0;
     padding-right: 0;

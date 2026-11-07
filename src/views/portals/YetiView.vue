@@ -458,7 +458,7 @@ $yeti-height-ad: calc(100vh - var(--c2c-navbarad-height));
   margin-top: calc(0.75rem + 2px);
 }
 
-@media screen and (min-width: $tablet) {
+@media screen and (--c2c-min-tablet) {
   .yeti-content {
     height: $yeti-height;
 
@@ -470,7 +470,7 @@ $yeti-height-ad: calc(100vh - var(--c2c-navbarad-height));
   }
 }
 
-@media screen and (min-width: $widescreen) {
+@media screen and (--c2c-min-widescreen) {
   .yeti-content {
     height: $yeti-height-ad;
   }

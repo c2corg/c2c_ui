@@ -128,6 +128,32 @@ describe('styles', () => {
     expect(values).toEqual(tokens);
   });
 
+  // a breakpoint has the value of Bulma's Sass variable: (--c2c-min-tablet) is (min-width: $tablet)
+  it('gives the breakpoints the values of the Sass variables', () => {
+    const queries = [
+      ...readFileSync(join(src, 'assets/css/media.css'), 'utf8').matchAll(/@custom-media --c2c-(\w+)-(\w+) (.+);/g),
+    ];
+    expect(queries.length).toBe(8);
+    const { css } = compileString(
+      `@use 'variables' as *;\na { ${queries.map(([, side, name]) => `${side}-${name}: $${name};`).join(' ')} }`,
+      { url: pathToFileURL(join(sassDir, 'media.scss')) }
+    );
+    for (const [, side, name, query] of queries) {
+      const value = css.match(new RegExp(`${side}-${name}: (.+);`))?.[1];
+      expect(query).toBe(`(${side}-width: ${value})`);
+    }
+  });
+
+  it('uses only breakpoints that exist', () => {
+    const media = readFileSync(join(src, 'assets/css/media.css'), 'utf8');
+    const used = new Set(
+      vueFiles(src).flatMap((file) =>
+        [...readFileSync(file, 'utf8').matchAll(/(?<!var)\((--c2c-[\w-]+)\)/g)].map((m) => m[1])
+      )
+    );
+    expect([...used].filter((name) => !media.includes(`@custom-media ${name} `))).toEqual([]);
+  });
+
   it('uses only tokens that exist', () => {
     const used = new Set(
       vueFiles(src).flatMap((file) => [...readFileSync(file, 'utf8').matchAll(/var\(--c2c-([\w-]+)/g)].map((m) => m[1]))
