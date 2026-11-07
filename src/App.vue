@@ -90,9 +90,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style lang="scss">
-$body-height: calc(100vh - var(--c2c-navbar-height));
-
+<style>
 html {
   overflow-x: hidden;
   overflow-y: scroll;
@@ -103,7 +101,7 @@ html {
 html,
 body,
 #app {
-  min-height: $body-height;
+  min-height: calc(100vh - var(--c2c-navbar-height));
 }
 
 .navigation {
@@ -159,12 +157,10 @@ body,
 }
 
 .nav-dfm {
-  $body-height-ad: calc(100vh - var(--c2c-navbarad-height));
-
   html,
   body,
   #app {
-    min-height: $body-height-ad;
+    min-height: calc(100vh - var(--c2c-navbarad-height));
   }
 
   .site-notice {

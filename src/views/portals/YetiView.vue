@@ -441,17 +441,12 @@ function onSubmitDisclaimer() {
 }
 </script>
 
-<style scoped lang="scss">
-$section-padding: 0.75rem; //TODO find this variable
-$box-padding: 1.25rem; //TODO find this variable
-$header-height: 34px;
-$box-margin: 1.5rem; //TODO find this variable
-$yeti-height: calc(100vh - var(--c2c-navbar-height));
-$yeti-height-ad: calc(100vh - var(--c2c-navbarad-height));
+<style scoped>
+@import '@/assets/css/media.css';
 
 .yeti-app {
   position: relative;
-  padding: $section-padding;
+  padding: 0.75rem;
 }
 
 .yeti-title {
@@ -460,7 +455,7 @@ $yeti-height-ad: calc(100vh - var(--c2c-navbarad-height));
 
 @media screen and (--c2c-min-tablet) {
   .yeti-content {
-    height: $yeti-height;
+    height: calc(100vh - var(--c2c-navbar-height));
 
     .form-container {
       max-width: 450px;
@@ -472,7 +467,7 @@ $yeti-height-ad: calc(100vh - var(--c2c-navbarad-height));
 
 @media screen and (--c2c-min-widescreen) {
   .yeti-content {
-    height: $yeti-height-ad;
+    height: calc(100vh - var(--c2c-navbarad-height));
   }
 }
 

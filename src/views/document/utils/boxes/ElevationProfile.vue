@@ -488,11 +488,9 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style lang="scss" scoped>
-$C2C-orange: red;
-
+<style scoped>
 :deep(.elevation-profile-chart) {
-  height: 300px; // default height on page
+  height: 300px; /* default height on page */
 
   .axis path,
   .axis line {
@@ -507,13 +505,13 @@ $C2C-orange: red;
 
   .line {
     fill: none;
-    stroke: $C2C-orange;
+    stroke: red;
     stroke-width: 3px;
   }
 
   .circle {
     fill: white;
-    stroke: $C2C-orange;
+    stroke: red;
     stroke-width: 2px;
   }
 
@@ -537,8 +535,6 @@ $C2C-orange: red;
 }
 
 :fullscreen .elevation-profile-container {
-  $shadow: 1px -4px 5px rgb(0 0 0 / 20%);
-
   position: absolute;
   bottom: 0;
   height: 30%;
@@ -546,7 +542,7 @@ $C2C-orange: red;
   min-height: 200px;
   width: 100%;
   background-color: white;
-  box-shadow: $shadow;
+  box-shadow: 1px -4px 5px rgb(0 0 0 / 20%);
 
   &.hidden {
     height: 0;
@@ -554,12 +550,11 @@ $C2C-orange: red;
   }
 
   > .elevation-profile-fullscreen-toggle {
-    $height: 23px;
     display: inline-block;
     position: absolute;
     width: 48px;
-    height: $height;
-    top: -$height;
+    height: 23px;
+    top: -23px;
     left: 0;
     right: 0;
     margin: 0 auto;
@@ -569,7 +564,7 @@ $C2C-orange: red;
     border-radius: 8px 8px 0 0;
     border: 0;
     padding: 0;
-    box-shadow: $shadow;
+    box-shadow: 1px -4px 5px rgb(0 0 0 / 20%);
   }
 
   > form {

@@ -46,19 +46,19 @@ function nbPointsOnFeature(feature: Feature<LineString>) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .featureslist {
   margin: 0 -0.5rem;
+}
 
-  &-item {
-    margin: 0.25rem;
-    font-size: 0.7em;
+.featureslist-item {
+  margin: 0.25rem;
+  font-size: 0.7em;
 
-    &:hover,
-    &:focus {
-      background: var(--c2c-grey-lighter);
-      cursor: default;
-    }
+  &:hover,
+  &:focus {
+    background: var(--c2c-grey-lighter);
+    cursor: default;
   }
 }
 </style>

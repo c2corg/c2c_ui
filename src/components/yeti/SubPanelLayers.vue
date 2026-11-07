@@ -193,16 +193,13 @@ watch(slopesLayersSelectorChecked, (layers) => {
 });
 </script>
 
-<style scoped lang="scss">
-$width: calc(70 / 14 * 1rem);
-$height: calc(50 / 14 * 1rem);
-
+<style scoped>
 .layers-group {
   margin-bottom: 2rem;
 }
 .layer-items {
   display: grid;
-  grid-template-columns: repeat(auto-fill, $width);
+  grid-template-columns: repeat(auto-fill, calc(70 / 14 * 1rem));
   grid-template-rows: repeat(auto-fill, 1.429rem);
   justify-content: space-between;
   gap: 1rem;

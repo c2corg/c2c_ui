@@ -261,109 +261,110 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped lang="scss">
-$headerHeight: 3rem;
-$paginationHeight: 30px;
+<style scoped>
+@import '@/assets/css/media.css';
 
+/* the header is 3rem high, the pagination 30px */
 .image-viewer {
   z-index: 1000;
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%; // not 100vw, otherwise the viewer goes under the scrollbar
+  width: 100%; /* not 100vw, otherwise the viewer goes under the scrollbar */
   height: 100%;
   background: rgba(0, 0, 0, 0.95);
+}
 
-  &-header {
-    position: absolute;
-    left: 0;
-    right: 0;
-    z-index: 3;
-    justify-content: space-between;
-    padding: 0.5rem 1rem;
-    margin-bottom: 0 !important;
-    height: $headerHeight;
+.image-viewer-header {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0 !important;
+  height: 3rem;
 
-    .image-viewer-title {
-      margin: auto;
-      // display title on top of the image with some alpha background
-      // in case it overlaps (eg when zooming or on mobile)
-      z-index: 2;
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 10px;
-      padding: 0 10px;
+  .image-viewer-title {
+    margin: auto;
+    /* display title on top of the image with some alpha background in case it overlaps (eg when zooming or on mobile) */
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    padding: 0 10px;
+  }
+
+  .image-viewer-buttons > *:not(:last-child) {
+    margin-right: 0.75rem;
+  }
+
+  .image-viewer-buttons > * {
+    /* keep the buttons visible when they overlap the image */
+    filter: drop-shadow(2px 2px 2px black);
+    svg:hover {
+      color: white;
+    }
+  }
+}
+
+/* the img container */
+.image-viewer-swiper {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 0;
+  width: 100vw;
+  height: 100%;
+
+  @media screen and (--c2c-min-tablet) {
+    & .swiper-zoom-container {
+      /* adjust the initial centering of the img to avoid overlap with 1st line of title */
+      margin-top: 10px;
+    }
+  }
+}
+
+.image-viewer-slide {
+  overflow: hidden;
+
+  img {
+    /* initially avoid overlap with title & scroll, but this is overridden when zooming */
+    max-height: calc(100vh - 3rem - 30px);
+  }
+}
+
+.image-viewer-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+  height: 30px;
+  position: fixed;
+
+  .image-viewer-bullet {
+    display: inline-block;
+    background: white;
+    max-width: 16px;
+    height: 16px;
+    border: 25% solid black;
+
+    &:first-child {
+      border-bottom-left-radius: 50%;
+      border-top-left-radius: 50%;
     }
 
-    .image-viewer-buttons > *:not(:last-child) {
-      margin-right: 0.75rem;
-    }
-
-    .image-viewer-buttons > * {
-      // keep the buttons visible when they overlap the image
-      filter: drop-shadow(2px 2px 2px black);
-      svg:hover {
-        color: white;
-      }
+    &:last-child {
+      border-bottom-right-radius: 50%;
+      border-top-right-radius: 50%;
     }
   }
 
-  // the img container
-  &-swiper {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    z-index: 0;
-    width: 100vw;
-    height: 100%;
-
-    @media screen and (--c2c-min-tablet) {
-      & .swiper-zoom-container {
-        // adjust the initial centering of the img to avoid overlap with 1st line of title
-        margin-top: 10px;
-      }
-    }
+  .image-viewer-bullet-active {
+    background: var(--c2c-primary);
   }
+}
 
-  &-slide {
-    overflow: hidden;
-
-    img {
-      // initially avoid overlap with title & scroll, but this is overridden when zooming
-      max-height: calc(100vh - #{$headerHeight} - #{$paginationHeight});
-    }
-  }
-
-  &-pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    bottom: 0;
-    height: $paginationHeight;
-    position: fixed;
-
-    .image-viewer-bullet {
-      display: inline-block;
-      background: white;
-      max-width: 16px;
-      height: 16px;
-      border: 25% solid black;
-
-      &:first-child {
-        border-bottom-left-radius: 50%;
-        border-top-left-radius: 50%;
-      }
-
-      &:last-child {
-        border-bottom-right-radius: 50%;
-        border-top-right-radius: 50%;
-      }
-    }
-
-    .image-viewer-bullet-active {
-      background: var(--c2c-primary);
-    }
-  }
-
+.image-viewer {
   .swiper-button-prev,
   .swiper-button-next,
   .image-viewer-pagination,
@@ -389,7 +390,7 @@ $paginationHeight: 30px;
 @media screen and (--c2c-max-tablet) {
   .image-viewer-header .image-viewer-title {
     position: fixed;
-    // on mobile, title is below to avoid overlap with the toolbox
+    /* on mobile, title is below to avoid overlap with the toolbox */
     bottom: 0;
     left: 0;
     width: 100%;
@@ -412,8 +413,6 @@ $paginationHeight: 30px;
   right: 0;
 }
 
-$swiper-navigation-size: 4rem;
-
 .swiper-button-prev {
   left: 0;
   right: auto;
@@ -431,14 +430,15 @@ $swiper-navigation-size: 4rem;
   }
 }
 
+/* the navigation buttons are 4rem wide */
 .swiper-button-prev,
 .swiper-button-next {
   position: absolute;
   top: 50%;
-  font-size: $swiper-navigation-size * 0.5;
-  width: $swiper-navigation-size;
-  height: $swiper-navigation-size;
-  margin-top: -$swiper-navigation-size * 0.5;
+  font-size: 2rem;
+  width: 4rem;
+  height: 4rem;
+  margin-top: -2rem;
   z-index: 10;
   display: flex;
   align-items: center;

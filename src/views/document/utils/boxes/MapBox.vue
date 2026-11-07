@@ -205,8 +205,8 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style lang="scss" scoped>
-@use '@/assets/sass/bulma/utilities/mixins' as mx;
+<style scoped>
+@import '@/assets/css/media.css';
 
 .map-container {
   margin-top: 1rem;
@@ -224,13 +224,13 @@ onBeforeUnmount(() => {
     top: var(--c2c-navbar-height);
     margin-top: 0; /*avoid space between nav and map, where body text can be seen while scrolling*/
     z-index: 10; /* on top of body but below navbar (z=25) and side-menu (z=30) */
-    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.4); // <o-x> <o-y> <radius>
+    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.4); /* <o-x> <o-y> <radius> */
   }
   &.pinned-to-top {
     right: 0px;
     height: 45vh;
     width: 100%;
-    @include mx.desktop {
+    @media screen and (--c2c-min-desktop) {
       left: var(--c2c-sidemenu-width); /* when sidemenu is shown, as in App.vue */
     }
   }

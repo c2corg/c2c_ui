@@ -398,25 +398,16 @@ onMounted(() => {
 });
 </script>
 
-<style scoped lang="scss">
-$section-padding: 1.5rem;
-$header-height: 34px;
-$header-padding-bottom: 1.5rem;
-$filter-height: 32px;
-$tags-height: 28px;
-$filter-padding-bottom: 0.5rem;
-// prettier-ignore
-$result-height: calc(
-  100vh - var(--c2c-navbar-height) - 2 * #{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height}
-);
-// prettier-ignore
-$result-height-with-tags: calc(
-  100vh - var(--c2c-navbar-height) - 2 * #{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$tags-height}
-);
-$cards-gap: 0.25rem;
+<style scoped>
+@import '@/assets/css/media.css';
+
+/*
+ * The heights: section padding 1.5rem, header 34px with a bottom padding of 1.5rem, filters 32px with a bottom
+ * padding of 0.5rem, tags 28px. On mobile: section padding 0.5rem, header 56px, filters 25px.
+ */
 
 .header-section {
-  padding-bottom: $header-padding-bottom;
+  padding-bottom: 1.5rem;
 }
 
 .header-right {
@@ -429,15 +420,11 @@ $cards-gap: 0.25rem;
 }
 
 .filter-section {
-  padding-bottom: $filter-padding-bottom;
+  padding-bottom: 0.5rem;
   clear: both;
 }
 
 @media screen and (--c2c-max-tablet) {
-  $mobile-section-padding: 0.5rem;
-  $mobile-header-height: 56px;
-  $mobile-filters-height: 25px;
-
   .search-infos {
     position: fixed;
     top: calc(var(--c2c-navbar-height) + var(--c2c-itinevert-header-height));
@@ -445,7 +432,7 @@ $cards-gap: 0.25rem;
     right: 0;
     z-index: 24;
     background-color: var(--c2c-body-background-color);
-    padding-top: $mobile-section-padding;
+    padding-top: 0.5rem;
   }
 
   .result-section {
@@ -453,7 +440,7 @@ $cards-gap: 0.25rem;
   }
 
   .documents-view {
-    padding-top: $mobile-section-padding;
+    padding-top: 0.5rem;
     padding-left: 0;
     padding-right: 0;
     padding-bottom: 0;
@@ -463,7 +450,7 @@ $cards-gap: 0.25rem;
   .header-section {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-    padding-bottom: $mobile-section-padding;
+    padding-bottom: 0.5rem;
   }
 
   .header-right {
@@ -471,17 +458,14 @@ $cards-gap: 0.25rem;
   }
 
   .map-container {
-    height: $result-height;
+    height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
     padding: 0;
   }
 
   .mobile-mode-map {
     margin-top: 0;
     .map-container {
-      height: calc(
-        100vh - var(--c2c-navbar-height) - 3 * #{$mobile-section-padding} - #{$mobile-header-height} -
-          #{$mobile-filters-height}
-      );
+      height: calc(100vh - var(--c2c-navbar-height) - 3 * 0.5rem - 56px - 25px);
     }
 
     .documents-container {
@@ -492,7 +476,7 @@ $cards-gap: 0.25rem;
   .mobile-mode-result,
   .mobile-mode-both {
     .map-container {
-      visibility: hidden; // map does not like to be in a display none...
+      visibility: hidden; /* map does not like to be in a display none... */
     }
   }
 }
@@ -500,10 +484,10 @@ $cards-gap: 0.25rem;
 @media screen and (--c2c-min-tablet) {
   .result-section {
     margin-top: 0;
-    height: $result-height;
+    height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
 
     &.query-has-tags {
-      height: $result-height-with-tags;
+      height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px - 28px);
     }
 
     .documents-container {

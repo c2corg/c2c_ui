@@ -380,7 +380,7 @@ if ($user.isModerator && documentType.value === 'profile') {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .toolbox-button {
   cursor: pointer;
 
@@ -401,9 +401,21 @@ if ($user.isModerator && documentType.value === 'profile') {
   content: ' \2022 '; /* \2022 is bull */
 }
 
-.quality {
-  span:nth-of-type(1) {
-    @include colon;
+/* a colon after the label, with a non-breaking space before it in French */
+.quality span:nth-of-type(1) {
+  :lang(fr) &::after {
+    content: '\00a0:';
+  }
+  :lang(ca) &::after,
+  :lang(de) &::after,
+  :lang(en) &::after,
+  :lang(es) &::after,
+  :lang(eu) &::after,
+  :lang(hu) &::after,
+  :lang(it) &::after,
+  :lang(sl) &::after,
+  :lang(zh) &::after {
+    content: ':';
   }
 }
 </style>

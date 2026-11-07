@@ -265,15 +265,6 @@ export default defineConfig({
       drafts: { customMedia: true },
     },
     devSourcemap: true,
-    preprocessorOptions: {
-      scss: {
-        additionalData: `
-          @use '@/assets/css/media' as c2c-media;
-          @use '@/assets/sass/variables' as *;
-          @use '@/assets/sass/mixins' as *;
-        `,
-      },
-    },
   },
 
   html: {
