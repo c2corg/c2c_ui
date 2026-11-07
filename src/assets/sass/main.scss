@@ -68,7 +68,3 @@ $button-border-width: $control-border-width;
   $section-padding: $section-padding,
   $section-padding-desktop: $section-padding-desktop
 );
-
-// checkboxes and radios, and switches: what the site uses of bulma-checkradio and bulma-switch
-@use './checkradio';
-@use './switch';

@@ -35,6 +35,7 @@
   --c2c-black: hsl(0, 0%, 4%);
 
   /* other colors */
+  --c2c-info: hsl(207, 61%, 53%);
   --c2c-danger: hsl(348, 86%, 61%);
   --c2c-red: hsl(348, 86%, 61%);
   --c2c-yellow: hsl(44, 100%, 77%);
