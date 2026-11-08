@@ -75,6 +75,10 @@ export function createDensityLayers(type: DensityType) {
     trackStyle: markRaw(
       new ol.style.Style({ stroke: new ol.style.Stroke({ color: DENSITY_OVERLAYS[type].trackColor, width: 2 }) })
     ),
+    // under the pointer
+    trackHighlightedStyle: markRaw(
+      new ol.style.Style({ stroke: new ol.style.Stroke({ color: DENSITY_OVERLAYS[type].trackColor, width: 5 }) })
+    ),
   });
 }
 

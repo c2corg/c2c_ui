@@ -167,6 +167,10 @@
       {{ $gettext('Zoom in to see all tracks') }}
     </div>
 
+    <div v-if="showDensityOverlays" ref="trackTooltip" class="ol-track-tooltip" v-show="trackTooltipTitle">
+      {{ trackTooltipTitle }}
+    </div>
+
     <div v-if="showDensityOverlays" ref="trackPicker" class="ol-track-picker" v-show="trackPickerDocuments.length">
       <ul>
         <li v-for="document of trackPickerDocuments" :key="`${document.type}-${document.document_id}`">
@@ -445,6 +449,8 @@ const densityEnabled = reactive<Record<DensityType, boolean>>({ outing: false, r
 const densityTruncatedByType = reactive<Record<DensityType, boolean>>({ outing: false, route: false });
 // the documents under a click on overlapping tracks, to choose from
 const trackPickerDocuments = ref<C2cDocument[]>([]);
+// the title of the track under the pointer
+const trackTooltipTitle = ref('');
 // on editable mode, there a button reset
 // we must save initial geometry
 const initialGeometry = ref<C2cDocument['geometry']>(null);
@@ -460,6 +466,7 @@ let onElevationProfile: ((event: unknown) => void) | undefined;
 
 // the popup of the tracks under a click
 let trackPickerOverlay: InstanceType<typeof ol.Overlay> | null = null;
+let trackTooltipOverlay: InstanceType<typeof ol.Overlay> | null = null;
 // only the answer to the latest request of an overlay is displayed: moving the map quickly can make them arrive out of
 // order
 const densityRequestIds: Record<DensityType, number> = { outing: 0, route: 0 };
@@ -467,6 +474,7 @@ const densityRequestIds: Record<DensityType, number> = { outing: 0, route: 0 };
 const rootElementEl = useTemplateRef<HTMLElement>('rootElement');
 const densityMessageEl = useTemplateRef<HTMLElement>('densityMessage');
 const trackPickerEl = useTemplateRef<HTMLElement>('trackPicker');
+const trackTooltipEl = useTemplateRef<HTMLElement>('trackTooltip');
 const mapElementEl = useTemplateRef<HTMLElement>('mapElement');
 const layerSwitcherButtonEl = useTemplateRef<HTMLElement>('layerSwitcherButton');
 const togglePinToTopButtonEl = useTemplateRef<HTMLElement>('togglePinToTopButton');
@@ -1076,9 +1084,52 @@ function onPointerMove(event: MapBrowserEvent<PointerEvent>) {
     resultFeature = feature;
     return true;
   });
-  setHighlightedFeature(resultFeature);
-  emit('highlight-document', resultFeature ? (resultFeature as FeatureLike).get('document') : null);
+  // the tracks of the overlays are thin: they are found within a few pixels, and come before the other lines (the
+  // track of an outing lies on the one of its route), but not before the markers
+  const track = resultFeature && isMarker(resultFeature) ? null : overlayTracksAt(event.pixel)[0];
+  const hovered = track ?? resultFeature ?? null;
+  setHighlightedFeature(hovered);
+  emit('highlight-document', hovered ? (hovered as FeatureLike).get('document') : null);
+
+  if (track) {
+    trackTooltipTitle.value = $documentUtils.getDocumentTitle(track.get('document'));
+    trackTooltipOverlay!.setPosition(event.coordinate);
+  } else {
+    hideTrackTooltip();
+  }
 }
+
+function isMarker(feature: FeatureLike) {
+  return (feature as Feature).getGeometry()?.getType() === 'Point';
+}
+
+function hideTrackTooltip() {
+  trackTooltipTitle.value = '';
+  trackTooltipOverlay?.setPosition(undefined);
+}
+
+// the tracks of the overlays under a pixel, except the document the map is about
+function overlayTracksAt(pixel: number[]): Feature[] {
+  if (!showDensityOverlays.value) {
+    return [];
+  }
+
+  const tracksLayers: unknown[] = Object.values(densityLayers).map((layers) => layers.tracks);
+  const tracks: Feature[] = [];
+  map.forEachFeatureAtPixel(pixel, (feature) => void tracks.push(feature as Feature), {
+    layerFilter: (layer) => tracksLayers.includes(layer) && layer.getVisible(),
+    hitTolerance: 6,
+  });
+
+  const displayed = props.documents?.length === 1 ? props.documents[0] : null;
+  return tracks.filter((track) => {
+    const document = track.get('document');
+    return !(displayed && document.type === displayed.type && document.document_id === displayed.document_id);
+  });
+}
+
+// no hover on a touch screen: a tap shows what the track is, before a second tap goes to it
+const noHover = () => window.matchMedia('(hover: none)').matches;
 
 function setHighlightedFeature(feature: FeatureLike | null) {
   if (feature === highlightedFeature.value) {
@@ -1157,7 +1208,12 @@ async function updateDensityOverlay(type: DensityType) {
       source.clear();
       closeTrackPicker();
       for (const document of data.documents) {
-        const feature = addFeature(source, JSON.parse(document.geometry.geom_detail), layers.trackStyle, null);
+        const feature = addFeature(
+          source,
+          JSON.parse(document.geometry.geom_detail),
+          layers.trackStyle,
+          layers.trackHighlightedStyle
+        );
         feature?.set('document', document);
       }
     } else {
@@ -1201,24 +1257,19 @@ function selectTrackPickerDocument(document: C2cDocument) {
 }
 
 function onClick(event: MapBrowserEvent<PointerEvent>) {
-  // several tracks under the click: choose one
-  if (showDensityOverlays.value) {
-    const tracksLayers = Object.values(densityLayers).map((layers) => layers.tracks);
-    const hits: C2cDocument[] = [];
-    map.forEachFeatureAtPixel(event.pixel, (f) => void hits.push(f.get('document')), {
-      layerFilter: (layer) => (tracksLayers as unknown[]).includes(layer) && layer.getVisible(),
-      hitTolerance: 6,
-    });
-
-    if (hits.length > 1) {
-      trackPickerDocuments.value = hits;
-      trackPickerOverlay!.setPosition(event.coordinate);
-      return;
-    }
-    closeTrackPicker();
+  // several tracks under the click, or one on a touch screen: choose one, or see what it is
+  const top = map.forEachFeatureAtPixel(event.pixel, (f) => f);
+  const tracks = top && isMarker(top) ? [] : overlayTracksAt(event.pixel);
+  if (tracks.length > 1 || (tracks.length === 1 && noHover())) {
+    trackPickerDocuments.value = tracks.map((track) => track.get('document'));
+    trackPickerOverlay!.setPosition(event.coordinate);
+    hideTrackTooltip();
+    return;
   }
+  closeTrackPicker();
 
-  const feature = map.forEachFeatureAtPixel(event.pixel, (f) => f);
+  // a track is thin: clicking next to it counts
+  const feature = tracks[0] ?? top;
 
   if (feature) {
     const document = feature.get('document');
@@ -1671,6 +1722,16 @@ onMounted(() => {
     });
     map.addOverlay(trackPickerOverlay);
 
+    // it must not catch the pointer, or hovering the track would hide it
+    trackTooltipOverlay = new ol.Overlay({
+      element: trackTooltipEl.value!,
+      positioning: 'bottom-center',
+      offset: [0, -12],
+      stopEvent: false,
+    });
+    map.addOverlay(trackTooltipOverlay);
+    map.getViewport()?.addEventListener('mouseout', hideTrackTooltip);
+
     map.on('moveend', debounce(updateDensityOverlays, DENSITY_FETCH_DEBOUNCE));
   }
 
@@ -1896,6 +1957,18 @@ defineExpose({
   left: 50%;
   transform: translateX(-50%);
   padding: 4px 10px;
+}
+
+.ol-track-tooltip {
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  padding: 4px 8px;
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
 }
 
 .ol-track-picker {
