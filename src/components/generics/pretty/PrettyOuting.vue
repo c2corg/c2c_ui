@@ -8,7 +8,7 @@
     <span class="has-text-normal">
       <activities :activities="outing.activities" class="is-size-4 has-text-secondary icon-activities" />
       &hairsp;&bull;&hairsp;
-      {{ outing.author.name }}
+      {{ outing.author?.name }}
       &hairsp;&bull;&hairsp;
       <marker-condition :condition="outing.condition_rating" />
       <marker-quality :quality="outing.quality" />
