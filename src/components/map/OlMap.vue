@@ -1964,10 +1964,8 @@ defineExpose({
   border-radius: 4px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
   padding: 4px 8px;
-  max-width: 260px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  width: max-content;
+  max-width: 320px;
   pointer-events: none;
 }
 
@@ -1976,7 +1974,7 @@ defineExpose({
   border-radius: 4px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
   padding: 5px 0;
-  max-width: 260px;
+  max-width: 320px;
 
   ul {
     margin: 0;
@@ -1995,9 +1993,6 @@ defineExpose({
       color: inherit;
       text-decoration: none;
       display: block;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
   }
 }
