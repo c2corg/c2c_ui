@@ -100,6 +100,8 @@
           ref="map"
           :documents="documentsShownOnMap"
           :highlighted-document="highlightedDocument"
+          :tracks-filters="overlayFilters.outing"
+          :routes-filters="overlayFilters.route"
           :open-in-new-tab="true"
           @highlight-document="highlightedDocument = $event"
           show-filter-control
@@ -119,6 +121,7 @@ import DisplayModeSwitch from '../../views/documents/utils/DisplayModeSwitch.vue
 
 import ItinevertPageSelector from './ItinevertPageSelector.vue';
 
+import { searchOverlayFilters } from '@/components/map/density-overlays';
 import itinevertService, { POLYGON_STYLE, type Query } from '@/js/apis/itinevert-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
@@ -164,6 +167,15 @@ const props = defineProps({
 });
 
 const route = useRoute();
+
+// the "Tracks" and "Routes" overlays of the map follow the filters of the results: the activities chosen in the form,
+// unless changed
+const overlayFilters = computed(() =>
+  searchOverlayFilters(props.documentType, {
+    ...(props.baseQuery?.act ? { act: props.baseQuery.act } : {}),
+    ...route.query,
+  })
+);
 const { $gettext } = useGlobalProperties();
 
 const displayMode = ref('both');

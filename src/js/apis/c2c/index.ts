@@ -7,7 +7,7 @@ import ForumService from './ForumService';
 import ModeratorService from './ModeratorService';
 import TagsService from './TagsService';
 import UserProfileService from './UserProfileService';
-import { documentChanges, searchResults } from './schemas';
+import { densityHeatmap, densityTracks, documentChanges, searchResults } from './schemas';
 import { type SessionRefusal, sentWithFormerToken, sessionRefusal } from './session-refusal';
 import type { Params } from './types';
 
@@ -104,6 +104,24 @@ export class CamptocampApi extends BaseApi {
 
   getRecentChanges(params?: Params) {
     return this.getValidated('/documents/changes', documentChanges, { params });
+  }
+
+  /* the map overlays: the density and the tracks of the outings and routes in a box (EPSG:3857) */
+
+  getOutingsHeatmap(params?: Params) {
+    return this.getValidated('/outings/map/heatmap', densityHeatmap, { params });
+  }
+
+  getOutingsTracks(params?: Params) {
+    return this.getValidated('/outings/map/tracks', densityTracks, { params });
+  }
+
+  getRoutesHeatmap(params?: Params) {
+    return this.getValidated('/routes/map/heatmap', densityHeatmap, { params });
+  }
+
+  getRoutesTracks(params?: Params) {
+    return this.getValidated('/routes/map/tracks', densityTracks, { params });
   }
 
   /* image service, I'm lazy. TODO :

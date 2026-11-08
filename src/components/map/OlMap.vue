@@ -59,6 +59,19 @@
             ></layer-button>
           </div>
         </template>
+        <template v-if="showDensityOverlays">
+          <header v-translate>Overlays</header>
+          <!-- $gettext('Tracks') $gettext('Routes') -->
+          <div class="layer-group">
+            <layer-button
+              v-for="type of DENSITY_TYPES"
+              :key="type"
+              @click="toggleDensityOverlay(type)"
+              :selected="densityEnabled[type]"
+              :layer="{ title: DENSITY_OVERLAYS[type].title, color: DENSITY_OVERLAYS[type].trackColor }"
+            ></layer-button>
+          </div>
+        </template>
       </div>
       <button
         type="button"
@@ -145,6 +158,25 @@
       /></a>
     </div>
 
+    <div
+      v-if="showDensityOverlays"
+      ref="densityMessage"
+      v-show="densityTruncated"
+      class="ol-control ol-control-density-message"
+    >
+      {{ $gettext('Zoom in to see all tracks') }}
+    </div>
+
+    <div v-if="showDensityOverlays" ref="trackPicker" class="ol-track-picker" v-show="trackPickerDocuments.length">
+      <ul>
+        <li v-for="document of trackPickerDocuments" :key="`${document.type}-${document.document_id}`">
+          <a href="#" @click.prevent="selectTrackPickerDocument(document)">{{
+            $documentUtils.getDocumentTitle(document)
+          }}</a>
+        </li>
+      </ul>
+    </div>
+
     <biodiv-information v-if="protectionAreasVisible" ref="biodivWindow" :data="biodivData" />
 
     <swiss-protection-area-information
@@ -177,6 +209,7 @@ import {
   type PropType,
   onBeforeUnmount,
   onMounted,
+  reactive,
   ref,
   shallowRef,
   useTemplateRef,
@@ -187,6 +220,16 @@ import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router';
 import BiodivInformation from './BiodivInformation.vue';
 import LayerButton from './LayerButton.vue';
 import SwissProtectionAreaInformation from './SwissProtectionAreaInformation.vue';
+import {
+  DENSITY_FETCH_DEBOUNCE,
+  DENSITY_OVERLAYS,
+  DENSITY_TRACKS_MIN_ZOOM,
+  DENSITY_TYPES,
+  type DensityFilters,
+  type DensityType,
+  createDensityLayers,
+  createHeatmapLayer,
+} from './density-overlays';
 import {
   cartoLayers,
   dataLayers as dataLayersOf,
@@ -210,6 +253,7 @@ import type DocumentService from '@/js/apis/c2c/DocumentService';
 import photon from '@/js/apis/photon';
 import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import debounce from '@/js/debounce';
 import bus from '@/js/event-bus';
 import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
@@ -267,6 +311,18 @@ const props = defineProps({
   showProtectionAreas: {
     type: Boolean,
     default: false,
+  },
+
+  // search filters (the parameters of the documents listing) of the "Tracks" (outings) and "Routes" overlays, which
+  // follow what the map shows. `null` means no filter.
+  tracksFilters: {
+    type: Object as PropType<DensityFilters>,
+    default: null,
+  },
+
+  routesFilters: {
+    type: Object as PropType<DensityFilters>,
+    default: null,
   },
 
   biodivSportsActivities: {
@@ -353,6 +409,13 @@ const dataLayers = markRaw(dataLayers_.map(markRaw));
 const protectionAreasLayer = markRaw(new ol.layer.Vector({ source: new ol.source.Vector() }));
 // protection areas layers
 const protectionAreasLayers = markRaw(protectionAreasLayersOf().map(markRaw));
+// the "Tracks" and "Routes" overlays
+const densityLayers = Object.fromEntries(DENSITY_TYPES.map((type) => [type, createDensityLayers(type)])) as Record<
+  DensityType,
+  ReturnType<typeof createDensityLayers>
+>;
+// the heatmap layers of the overlays, created when first shown (see createHeatmapLayer)
+const heatmapLayers: Partial<Record<DensityType, ReturnType<typeof createHeatmapLayer>>> = {};
 // layer for document icons and paths
 const documentsLayer = markRaw(new ol.layer.Vector({ source: new ol.source.Vector() }));
 // layer edited document
@@ -376,6 +439,12 @@ const biodivData = ref<Record<string, unknown>>({});
 const swissProtectionAreaData = ref<Record<string, unknown>>({ properties: {} });
 const protectionAreasVisible = ref<boolean>(props.showProtectionAreas && !props.editedDocument);
 const hasProtectionAreas = ref<boolean | null>(null);
+// the overlays are off by default: they are an opt-in addition, not a change to the look of the map
+const densityEnabled = reactive<Record<DensityType, boolean>>({ outing: false, route: false });
+// set when the tracks endpoint reports more documents in the box than it is willing to return
+const densityTruncatedByType = reactive<Record<DensityType, boolean>>({ outing: false, route: false });
+// the documents under a click on overlapping tracks, to choose from
+const trackPickerDocuments = ref<C2cDocument[]>([]);
 // on editable mode, there a button reset
 // we must save initial geometry
 const initialGeometry = ref<C2cDocument['geometry']>(null);
@@ -389,7 +458,15 @@ let drawInteraction: InstanceType<typeof ol.interaction.Draw> | null = null;
 let fullScreenControl: InstanceType<typeof ol.control.FullScreen>;
 let onElevationProfile: ((event: unknown) => void) | undefined;
 
+// the popup of the tracks under a click
+let trackPickerOverlay: InstanceType<typeof ol.Overlay> | null = null;
+// only the answer to the latest request of an overlay is displayed: moving the map quickly can make them arrive out of
+// order
+const densityRequestIds: Record<DensityType, number> = { outing: 0, route: 0 };
+
 const rootElementEl = useTemplateRef<HTMLElement>('rootElement');
+const densityMessageEl = useTemplateRef<HTMLElement>('densityMessage');
+const trackPickerEl = useTemplateRef<HTMLElement>('trackPicker');
 const mapElementEl = useTemplateRef<HTMLElement>('mapElement');
 const layerSwitcherButtonEl = useTemplateRef<HTMLElement>('layerSwitcherButton');
 const togglePinToTopButtonEl = useTemplateRef<HTMLElement>('togglePinToTopButton');
@@ -406,6 +483,9 @@ const biodivWindowEl = useTemplateRef<{ show(): void }>('biodivWindow');
 const swissWindowEl = useTemplateRef<{ show(): void }>('swissWindow');
 
 const editable = computed(() => !!props.editedDocument);
+// the overlays are on every map, except when editing a document or comparing two versions of it
+const showDensityOverlays = computed(() => !editable.value && !props.oldDocument && !props.newDocument);
+const densityTruncated = computed(() => Object.values(densityTruncatedByType).some(Boolean));
 
 const urlValue = computed(() => {
   const result = route.query.bbox as string | undefined;
@@ -1021,7 +1101,123 @@ function intersectsWithSwitzerland(extent: Extent) {
   return ol.extent.intersects(extent, swissExtent);
 }
 
+function toggleDensityOverlay(type: DensityType) {
+  densityEnabled[type] = !densityEnabled[type];
+
+  if (densityEnabled[type]) {
+    updateDensityOverlay(type);
+  } else {
+    heatmapLayers[type]?.setVisible(false);
+    densityLayers[type].tracks.setVisible(false);
+    densityTruncatedByType[type] = false;
+    closeTrackPicker();
+  }
+}
+
+// the heatmap layer of an overlay, added to the map under the tracks layer when first needed
+function heatmapLayer(type: DensityType) {
+  let layer = heatmapLayers[type];
+  if (!layer) {
+    layer = heatmapLayers[type] = createHeatmapLayer(type);
+    const layers = map.getLayers();
+    layers.insertAt(layers.getArray().indexOf(densityLayers[type].tracks), layer);
+  }
+  return layer;
+}
+
+function updateDensityOverlays() {
+  DENSITY_TYPES.forEach(updateDensityOverlay);
+}
+
+async function updateDensityOverlay(type: DensityType) {
+  if (!densityEnabled[type]) {
+    return;
+  }
+
+  const layers = densityLayers[type];
+  const overlay = DENSITY_OVERLAYS[type];
+  const zoom = Math.round(view().getZoom()!);
+  const filters = (type === 'outing' ? props.tracksFilters : props.routesFilters) ?? {};
+  const params = { ...filters, bbox: getExtent().join(',') };
+  const requestId = ++densityRequestIds[type];
+  const isCurrent = () => requestId === densityRequestIds[type] && densityEnabled[type];
+
+  try {
+    if (zoom >= DENSITY_TRACKS_MIN_ZOOM) {
+      const { data } = await overlay.getTracks({ ...params, pl: $language.current });
+      if (!isCurrent()) {
+        return;
+      }
+
+      heatmapLayers[type]?.setVisible(false);
+      layers.tracks.setVisible(true);
+      densityTruncatedByType[type] = data.truncated;
+
+      const source = layers.tracks.getSource()!;
+      source.clear();
+      closeTrackPicker();
+      for (const document of data.documents) {
+        const feature = addFeature(source, JSON.parse(document.geometry.geom_detail), layers.trackStyle, null);
+        feature?.set('document', document);
+      }
+    } else {
+      const { data } = await overlay.getHeatmap({ ...params, zoom });
+      if (!isCurrent()) {
+        return;
+      }
+
+      layers.tracks.setVisible(false);
+      const heatmap = heatmapLayer(type);
+      heatmap.setVisible(true);
+      densityTruncatedByType[type] = false;
+      closeTrackPicker();
+
+      const source = heatmap.getSource()!;
+      source.clear();
+
+      const maxCount = Math.max(1, ...data.buckets.map((bucket) => bucket.count));
+      for (const bucket of data.buckets) {
+        const feature = new ol.Feature(new ol.geom.Point([bucket.x, bucket.y]));
+        feature.set('weight', bucket.count / maxCount);
+        source.addFeature(feature);
+      }
+    }
+  } catch {
+    // the overlays are non-critical: on a network or server error, leave the map usable
+  }
+}
+
+function closeTrackPicker() {
+  trackPickerDocuments.value = [];
+  trackPickerOverlay?.setPosition(undefined);
+}
+
+function selectTrackPickerDocument(document: C2cDocument) {
+  closeTrackPicker();
+  router.push({
+    name: $documentUtils.getDocumentType(document.type),
+    params: { id: document.document_id },
+  });
+}
+
 function onClick(event: MapBrowserEvent<PointerEvent>) {
+  // several tracks under the click: choose one
+  if (showDensityOverlays.value) {
+    const tracksLayers = Object.values(densityLayers).map((layers) => layers.tracks);
+    const hits: C2cDocument[] = [];
+    map.forEachFeatureAtPixel(event.pixel, (f) => void hits.push(f.get('document')), {
+      layerFilter: (layer) => (tracksLayers as unknown[]).includes(layer) && layer.getVisible(),
+      hitTolerance: 6,
+    });
+
+    if (hits.length > 1) {
+      trackPickerDocuments.value = hits;
+      trackPickerOverlay!.setPosition(event.coordinate);
+      return;
+    }
+    closeTrackPicker();
+  }
+
   const feature = map.forEachFeatureAtPixel(event.pixel, (f) => f);
 
   if (feature) {
@@ -1349,6 +1545,16 @@ function findStopPoint(stopId: number) {
   return null;
 }
 
+// the filters are compared by content: the parent may give a new (but identical) object each time the route changes
+watch(
+  () => JSON.stringify(props.tracksFilters),
+  () => updateDensityOverlay('outing')
+);
+watch(
+  () => JSON.stringify(props.routesFilters),
+  () => updateDensityOverlay('route')
+);
+
 // deep 1: also when documents are added to or removed from the array, as Vue 2 array watchers did
 watch(
   () => props.documents,
@@ -1427,6 +1633,7 @@ onMounted(() => {
       new ol.control.Control({ element: clearGeometryControlEl.value! }),
       new ol.control.Control({ element: editMapControlEl.value! }),
       new ol.control.Attribution({ tipLabel: $gettext('Attributions', 'Map controls') }),
+      ...(showDensityOverlays.value ? [new ol.control.Control({ element: densityMessageEl.value! })] : []),
     ],
 
     layers: [
@@ -1434,6 +1641,7 @@ onMounted(() => {
       ...dataLayers,
       ...protectionAreasLayers,
       protectionAreasLayer,
+      ...Object.values(densityLayers).map((layers) => layers.tracks),
       imagesLayer, // images icons will be under documents
       documentsLayer,
       waypointsLayer, // keep waypoint above trace and documents
@@ -1454,6 +1662,17 @@ onMounted(() => {
   map.on('moveend', getProtectionAreas);
   map.on('moveend', updateEditMapLink);
   map.on('moveend', emitMoveEvent);
+
+  if (showDensityOverlays.value) {
+    trackPickerOverlay = new ol.Overlay({
+      element: trackPickerEl.value!,
+      positioning: 'bottom-center',
+      offset: [0, -10],
+    });
+    map.addOverlay(trackPickerOverlay);
+
+    map.on('moveend', debounce(updateDensityOverlays, DENSITY_FETCH_DEBOUNCE));
+  }
 
   [...mapLayers, ...dataLayers].forEach((layer) => layer.on('change:visible', () => layersRevision.value++));
 
@@ -1670,6 +1889,44 @@ defineExpose({
 
 .ol-control-recenter-on-propositions_on-top {
   top: 27px;
+}
+
+.ol-control-density-message {
+  top: $control-margin;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 10px;
+}
+
+.ol-track-picker {
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  padding: 5px 0;
+  max-width: 260px;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    padding: 5px 10px;
+
+    &:hover {
+      background: lightgrey;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 }
 
 .ol-control-reset-geometry {

@@ -429,6 +429,24 @@ export const fullDocuments: Record<string, z.ZodMiniType> = {
   xreport,
 };
 
+// GET /outings/map/heatmap, /routes/map/heatmap: the density of the documents, in buckets (EPSG:3857)
+export const densityHeatmap = z.object({
+  buckets: z.array(z.object({ x: z.number(), y: z.number(), count: z.number() })),
+});
+
+// GET /outings/map/tracks, /routes/map/tracks: the tracks (GeoJSON) in a box, none if there are too many of them
+export const densityTracks = z.object({
+  documents: z.array(
+    z.object({
+      document_id: z.number(),
+      type: z.string(),
+      title: z.nullish(z.string()),
+      geometry: z.object({ geom_detail: z.string() }),
+    })
+  ),
+  truncated: z.boolean(),
+});
+
 // GET /search: a page per document type (routes, waypoints...)
 export const searchResults = z.record(z.string(), documentsPage);
 

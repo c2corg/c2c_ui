@@ -115,6 +115,8 @@
           ref="olMap"
           :documents="documentsShownOnMap"
           :highlighted-document="highlightedDocument"
+          :tracks-filters="overlayFilters.outing"
+          :routes-filters="overlayFilters.route"
           @highlight-document="highlightedDocument = $event"
           show-filter-control
           show-center-on-geolocation
@@ -135,6 +137,7 @@ import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton.vue';
 import PageSelector from './utils/PageSelector.vue';
 import QueryItems from './utils/QueryItems.vue';
 
+import { searchOverlayFilters } from '@/components/map/density-overlays';
 import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
@@ -179,6 +182,9 @@ const queryWithoutOffsetAndSort = computed(() => {
 
   return result;
 });
+
+// the "Tracks" and "Routes" overlays of the map follow the search
+const overlayFilters = computed(() => searchOverlayFilters(documentType.value, route.query));
 
 const documentsShownOnMap = computed(() =>
   filteredWaypoints.value.concat(documents.value ? documents.value.documents : [])
