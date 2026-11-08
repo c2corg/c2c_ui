@@ -283,6 +283,7 @@ import {
   createDensityLayers,
   createHeatmapLayer,
   downloadTrackGpx,
+  heatmapWeight,
   sortTracks,
   type DensityTrack,
 } from './density-overlays';
@@ -472,6 +473,8 @@ const densityLayers = Object.fromEntries(DENSITY_TYPES.map((type) => [type, crea
 >;
 // the heatmap layers of the overlays, created when first shown (see createHeatmapLayer)
 const heatmapLayers: Partial<Record<DensityType, ReturnType<typeof createHeatmapLayer>>> = {};
+// the hovered track of an overlay, drawn again over all the other tracks and over the lines of the documents
+const trackHighlightLayer = markRaw(new ol.layer.Vector({ source: new ol.source.Vector() }));
 // layer for document icons and paths
 const documentsLayer = markRaw(new ol.layer.Vector({ source: new ol.source.Vector() }));
 // layer edited document
@@ -1132,10 +1135,14 @@ function getExtent(projection?: string) {
 function onPointerMove(event: MapBrowserEvent<PointerEvent>) {
   let resultFeature: FeatureLike | null = null;
 
-  map.forEachFeatureAtPixel(event.pixel, (feature) => {
-    resultFeature = feature;
-    return true;
-  });
+  map.forEachFeatureAtPixel(
+    event.pixel,
+    (feature) => {
+      resultFeature = feature;
+      return true;
+    },
+    { layerFilter: (layer) => layer !== trackHighlightLayer }
+  );
   // the tracks of the overlays are thin: they are found within a few pixels, and come before the other lines (the
   // track of an outing lies on the one of its route), but not before the markers
   const tracks = resultFeature && isMarker(resultFeature) ? [] : trackEntries(overlayTracksAt(event.pixel));
@@ -1176,7 +1183,7 @@ function hideTrackTooltip() {
 // the tracks under a right click (a long tap on a touch screen): the same panel, with the GPX of each
 function onContextMenu(event: MouseEvent) {
   const pixel = map.getEventPixel(event);
-  const top = map.forEachFeatureAtPixel(pixel, (f) => f);
+  const top = map.forEachFeatureAtPixel(pixel, (f) => f, { layerFilter: (layer) => layer !== trackHighlightLayer });
   const tracks = top && isMarker(top) ? [] : overlayTracksAt(pixel);
   if (tracks.length) {
     event.preventDefault();
@@ -1221,6 +1228,17 @@ function setHighlightedFeature(feature: FeatureLike | null) {
 
   if (feature && feature.get('highlightedStyle')) {
     (feature as Feature).setStyle(feature.get('highlightedStyle'));
+  }
+
+  // a track of an overlay is drawn again on top, thicker: the tracks of the overlays are in two layers, under the
+  // lines of the documents
+  const highlightSource = trackHighlightLayer.getSource()!;
+  highlightSource.clear();
+  const trackStyle = feature?.get('trackHighlightedStyle');
+  if (trackStyle) {
+    const copy = new ol.Feature((feature as Feature).getGeometry());
+    copy.setStyle(trackStyle);
+    highlightSource.addFeature(copy);
   }
 }
 
@@ -1270,49 +1288,51 @@ async function updateDensityOverlay(type: DensityType) {
   const isCurrent = () => requestId === densityRequestIds[type] && densityEnabled[type];
 
   try {
+    let truncated = false;
     if (zoom >= DENSITY_TRACKS_MIN_ZOOM) {
       const { data } = await overlay.getTracks({ ...params, pl: $language.current });
       if (!isCurrent()) {
         return;
       }
 
-      heatmapLayers[type]?.setVisible(false);
-      layers.tracks.setVisible(true);
-      densityTruncatedByType[type] = data.truncated;
+      if (!data.truncated) {
+        heatmapLayers[type]?.setVisible(false);
+        layers.tracks.setVisible(true);
+        densityTruncatedByType[type] = false;
 
-      const source = layers.tracks.getSource()!;
-      source.clear();
-      closeTrackPanel();
-      for (const document of data.documents) {
-        const feature = addFeature(
-          source,
-          JSON.parse(document.geometry.geom_detail),
-          layers.trackStyle,
-          layers.trackHighlightedStyle
-        );
-        feature?.set('document', document);
-      }
-    } else {
-      const { data } = await overlay.getHeatmap({ ...params, zoom });
-      if (!isCurrent()) {
+        const source = layers.tracks.getSource()!;
+        source.clear();
+        closeTrackPanel();
+        for (const document of data.documents) {
+          const feature = addFeature(source, JSON.parse(document.geometry.geom_detail), layers.trackStyle, null);
+          feature?.set('document', document);
+          feature?.set('trackHighlightedStyle', layers.trackHighlightedStyle);
+        }
         return;
       }
+      // too many tracks to draw them: their density, as when zoomed out, and the invitation to zoom in
+      truncated = true;
+    }
 
-      layers.tracks.setVisible(false);
-      const heatmap = heatmapLayer(type);
-      heatmap.setVisible(true);
-      densityTruncatedByType[type] = false;
-      closeTrackPanel();
+    const { data } = await overlay.getHeatmap({ ...params, zoom });
+    if (!isCurrent()) {
+      return;
+    }
 
-      const source = heatmap.getSource()!;
-      source.clear();
+    layers.tracks.setVisible(false);
+    const heatmap = heatmapLayer(type);
+    heatmap.setVisible(true);
+    densityTruncatedByType[type] = truncated;
+    closeTrackPanel();
 
-      const maxCount = Math.max(1, ...data.buckets.map((bucket) => bucket.count));
-      for (const bucket of data.buckets) {
-        const feature = new ol.Feature(new ol.geom.Point([bucket.x, bucket.y]));
-        feature.set('weight', bucket.count / maxCount);
-        source.addFeature(feature);
-      }
+    const source = heatmap.getSource()!;
+    source.clear();
+
+    const maxCount = Math.max(1, ...data.buckets.map((bucket) => bucket.count));
+    for (const bucket of data.buckets) {
+      const feature = new ol.Feature(new ol.geom.Point([bucket.x, bucket.y]));
+      feature.set('weight', heatmapWeight(bucket.count, maxCount));
+      source.addFeature(feature);
     }
   } catch {
     // the overlays are non-critical: on a network or server error, leave the map usable
@@ -1340,7 +1360,9 @@ function closeTrackPanel() {
 
 function onClick(event: MapBrowserEvent<PointerEvent>) {
   // several tracks under the click, or one on a touch screen: choose one, or see what it is
-  const top = map.forEachFeatureAtPixel(event.pixel, (f) => f);
+  const top = map.forEachFeatureAtPixel(event.pixel, (f) => f, {
+    layerFilter: (layer) => layer !== trackHighlightLayer,
+  });
   const tracks = top && isMarker(top) ? [] : overlayTracksAt(event.pixel);
   if (tracks.length > 1 || (tracks.length === 1 && noHover())) {
     openTrackPanel(tracks);
@@ -1775,6 +1797,7 @@ onMounted(() => {
       ...Object.values(densityLayers).map((layers) => layers.tracks),
       imagesLayer, // images icons will be under documents
       documentsLayer,
+      trackHighlightLayer, // over the lines, under the markers
       waypointsLayer, // keep waypoint above trace and documents
       elevationProfileLayer,
       editionLayer,

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { documentOverlayFilters, searchOverlayFilters, sortTracks } from './density-overlays';
+import { documentOverlayFilters, heatmapWeight, searchOverlayFilters, sortTracks } from './density-overlays';
 
 describe('documentOverlayFilters', () => {
   it('shows the outings of a route, and all its routes', () => {
@@ -57,6 +57,42 @@ describe('searchOverlayFilters', () => {
     expect(searchOverlayFilters('route', { act: ['hiking', 'skitouring'] })).toEqual({ outing: null, route: {} });
   });
 
+  it('gives the other overlay the filters that mean the same for both: areas, waypoints, users, ratings', () => {
+    const search = { act: 'skitouring', a: '14384', w: '37268', u: '5', trat: '2.1,3.3', grat: 'AD', q: 'Telliers' };
+
+    expect(searchOverlayFilters('route', search).outing).toEqual({
+      act: 'skitouring',
+      a: '14384',
+      w: '37268',
+      u: '5',
+      trat: '2.1,3.3',
+      grat: 'AD',
+    });
+    expect(searchOverlayFilters('outing', search).route).toEqual({
+      act: 'skitouring',
+      a: '14384',
+      w: '37268',
+      u: '5',
+      trat: '2.1,3.3',
+      grat: 'AD',
+    });
+  });
+
+  it('does not give the other overlay what is about the documents searched: title, dates, quality', () => {
+    expect(
+      searchOverlayFilters('outing', { q: 'Telliers', date: '2024-01-01', qa: 'great', ofreq: 'quiet' }).route
+    ).toBeNull();
+    expect(searchOverlayFilters('route', { q: 'Telliers', qa: 'great', walt: '2000,3000' }).outing).toBeNull();
+  });
+
+  it('shows the routes of the outings searched on given routes', () => {
+    expect(searchOverlayFilters('outing', { r: '4,5', act: 'hiking' })).toEqual({
+      outing: { r: '4,5', act: 'hiking' },
+      route: { act: 'hiking', ids: '4,5' },
+    });
+    expect(searchOverlayFilters('outing', { r: '4' }).route).toEqual({ ids: '4' });
+  });
+
   it('does not filter the overlays of the other document types', () => {
     expect(searchOverlayFilters('waypoint', query)).toEqual({ outing: null, route: null });
   });
@@ -83,10 +119,10 @@ describe('sortTracks', () => {
     expect(sortTracks(tracks).map((track) => track.document_id)).toEqual([5, 3, 1]);
   });
 
-  it('lists the outings before the routes, which are sorted by title', () => {
-    const tracks = [route(10, 'Normale'), outing(1, '2024-02-18'), route(11, 'Arête')];
+  it('lists the routes, by title, before the outings, which are more numerous', () => {
+    const tracks = [route(10, 'Normale'), outing(1, '2024-02-18'), route(11, 'Arête'), outing(2, '2024-12-15')];
 
-    expect(sortTracks(tracks).map((track) => track.document_id)).toEqual([1, 11, 10]);
+    expect(sortTracks(tracks).map((track) => track.document_id)).toEqual([11, 10, 2, 1]);
   });
 
   it('does not change the list it is given', () => {
@@ -94,5 +130,22 @@ describe('sortTracks', () => {
     sortTracks(tracks);
 
     expect(tracks.map((track) => track.document_id)).toEqual([1, 2]);
+  });
+});
+
+describe('heatmapWeight', () => {
+  it('goes from 0 to 1', () => {
+    expect(heatmapWeight(0, 100)).toBe(0);
+    expect(heatmapWeight(100, 100)).toBe(1);
+  });
+
+  it('does not leave the places with few documents in the dark next to the busiest one', () => {
+    // a tenth of the documents of the busiest place: far more than a tenth of its weight
+    expect(heatmapWeight(10, 100)).toBeGreaterThan(0.4);
+    expect(heatmapWeight(2, 100)).toBeGreaterThan(heatmapWeight(1, 100));
+  });
+
+  it('copes with an empty map', () => {
+    expect(heatmapWeight(0, 0)).toBe(0);
   });
 });

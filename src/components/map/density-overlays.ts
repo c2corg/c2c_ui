@@ -24,6 +24,16 @@ export const DENSITY_FETCH_DEBOUNCE = 400;
 
 export const DENSITY_TYPES: DensityType[] = ['outing', 'route'];
 
+// the size of a point of the heatmap and of its blur, in pixels: the cells of the grid of the API are a few pixels
+const HEATMAP_RADIUS = 6;
+const HEATMAP_BLUR = 10;
+
+// The weight of a cell of the heatmap, from 0 to 1. A logarithm: with a linear scale, the busiest place makes the
+// other ones, which have a tenth of its outings, almost disappear.
+export function heatmapWeight(count: number, maxCount: number) {
+  return Math.log1p(count) / Math.log1p(Math.max(maxCount, 1));
+}
+
 // the answers of the endpoints, once the request is done
 export type DensityHeatmap = z.input<typeof densityHeatmap>;
 export type DensityTracks = z.input<typeof densityTracks>;
@@ -68,8 +78,8 @@ export function createHeatmapLayer(type: DensityType) {
   return markRaw(
     new ol.layer.Heatmap({
       source: new ol.source.Vector(),
-      blur: 20,
-      radius: 12,
+      blur: HEATMAP_BLUR,
+      radius: HEATMAP_RADIUS,
       gradient: DENSITY_OVERLAYS[type].heatmapGradient,
       weight: (feature) => feature.get('weight'),
     })
@@ -133,9 +143,32 @@ export function documentOverlayFilters(document: DocumentRef): Record<DensityTyp
 // the parameters of the listing that are not search filters
 const NOT_FILTERS = ['offset', 'limit', 'sort', 'bbox', 'pl'];
 
+// The filters that mean the same for outings and routes: the activities, the areas, the waypoints, the users and the
+// ratings (the ones of an outing are the ones of its route). The others (the title, the dates, the quality...) are
+// those of the documents searched, not of the other ones.
+const SHARED_FILTERS = [
+  'act',
+  'a',
+  'w',
+  'u',
+  'dhei',
+  'erat',
+  'frat',
+  'grat',
+  'hrat',
+  'irat',
+  'krat',
+  'lrat',
+  'mbdr',
+  'mbur',
+  'prat',
+  'trat',
+  'wrat',
+];
+
 // The filters of the overlays on the map of the results of a search of `documentType` documents: they follow the
-// search filters. The activities are the only filter shared by outings and routes, so they are the only one applied
-// to the overlay of the other type.
+// search filters. The overlay of the other type only gets the filters they have in common, and the routes of the
+// outings searched when they are those of given routes.
 export function searchOverlayFilters(
   documentType: string,
   query: Record<string, unknown>
@@ -145,19 +178,28 @@ export function searchOverlayFilters(
       (entry): entry is [string, string] => !NOT_FILTERS.includes(entry[0]) && typeof entry[1] === 'string'
     )
   );
-  const shared = typeof filters.act === 'string' ? { act: filters.act } : null;
+  const shared: Record<string, string> = Object.fromEntries(
+    Object.entries(filters).filter(([name]) => SHARED_FILTERS.includes(name))
+  );
+  const hasShared = Object.keys(shared).length > 0;
 
-  return {
-    outing: documentType === 'outing' ? filters : documentType === 'route' ? shared : null,
-    route: documentType === 'route' ? filters : documentType === 'outing' ? shared : null,
-  };
+  if (documentType === 'outing') {
+    // the outings of given routes: these routes
+    const routes = filters.r ? { ...shared, ids: filters.r } : shared;
+    return { outing: filters, route: hasShared || filters.r ? routes : null };
+  }
+  if (documentType === 'route') {
+    return { outing: hasShared ? shared : null, route: filters };
+  }
+  return { outing: null, route: null };
 }
 
-// The tracks in the order they are listed: the outings first, the most recent ones first, then the routes by title.
+// The tracks in the order they are listed: the routes first, by title (there are fewer of them), then the outings,
+// the most recent ones first.
 export function sortTracks<T extends Pick<DensityTrack, 'type' | 'title' | 'date_end' | 'document_id'>>(
   tracks: T[]
 ): T[] {
-  const rank = (track: T) => (track.type === 'o' ? 0 : 1);
+  const rank = (track: T) => (track.type === 'o' ? 1 : 0);
 
   return [...tracks].sort((a, b) => {
     if (rank(a) !== rank(b)) {
