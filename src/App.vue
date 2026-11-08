@@ -157,6 +157,8 @@ body,
 }
 
 .nav-dfm {
+  --c2c-header-height: var(--c2c-navbarad-height);
+
   html,
   body,
   #app {

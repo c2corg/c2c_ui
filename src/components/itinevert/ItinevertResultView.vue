@@ -465,14 +465,14 @@ onMounted(() => {
   }
 
   .map-container {
-    height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
+    height: calc(100vh - var(--c2c-header-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
     padding: 0;
   }
 
   .mobile-mode-map {
     margin-top: 0;
     .map-container {
-      height: calc(100vh - var(--c2c-navbar-height) - 3 * 0.5rem - 56px - 25px);
+      height: calc(100vh - var(--c2c-header-height) - 3 * 0.5rem - 56px - 25px);
     }
 
     .documents-container {
@@ -491,10 +491,10 @@ onMounted(() => {
 @media screen and (--c2c-min-tablet) {
   .result-section {
     margin-top: 0;
-    height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
+    height: calc(100vh - var(--c2c-header-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
 
     &.query-has-tags {
-      height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px - 28px);
+      height: calc(100vh - var(--c2c-header-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px - 28px);
     }
 
     .documents-container {

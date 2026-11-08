@@ -251,8 +251,8 @@ watch(displayMode, updateMapSize);
 @import '@/assets/css/media.css';
 
 /*
- * The heights: section padding 1.5rem, header 34px with a bottom padding of 1.5rem, filters 32px with a bottom
- * padding of 0.5rem, tags 28px. On mobile: section padding 0.5rem, header 56px, filters 25px.
+ * On mobile the search bars are fixed on top, and the heights are calculated: section padding 0.5rem, header 56px,
+ * filters 25px.
  */
 
 .header-section {
@@ -331,13 +331,19 @@ watch(displayMode, updateMapSize);
 }
 
 @media screen and (--c2c-min-tablet) {
+  /* the page fills the screen under the navigation bar, and the results take what the search bars leave: their
+     height depends on the width (they wrap), so it is not calculated */
+  .documents-view {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    height: calc(100vh - var(--c2c-header-height));
+  }
+
   .result-section {
     margin-top: 0;
-    height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
-
-    &.query-has-tags {
-      height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px - 28px);
-    }
+    flex: 1 1 0;
+    min-height: 0;
 
     .documents-container {
       height: 100%;
