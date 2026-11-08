@@ -7,8 +7,9 @@ import type * as z from 'zod/mini';
 
 import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
-import type { densityHeatmap, densityTracks } from '@/js/apis/c2c/schemas';
+import type { densityHeatmap, densityTrack, densityTracks } from '@/js/apis/c2c/schemas';
 import ol from '@/js/libs/ol';
+import utils from '@/js/utils';
 
 export type DensityType = 'outing' | 'route';
 
@@ -26,6 +27,7 @@ export const DENSITY_TYPES: DensityType[] = ['outing', 'route'];
 // the answers of the endpoints, once the request is done
 export type DensityHeatmap = z.input<typeof densityHeatmap>;
 export type DensityTracks = z.input<typeof densityTracks>;
+export type DensityTrack = z.input<typeof densityTrack>;
 
 export const DENSITY_OVERLAYS: Record<
   DensityType,
@@ -34,21 +36,27 @@ export const DENSITY_OVERLAYS: Record<
     title: string;
     heatmapGradient: string[];
     trackColor: string;
+    // the line around the track, so that it can be seen on any background: whatever the colors one sees
+    casingColor: string;
     getHeatmap: (params: Record<string, unknown>) => ApiData<DensityHeatmap>;
     getTracks: (params: Record<string, unknown>) => ApiData<DensityTracks>;
   }
 > = {
   outing: {
-    title: 'Tracks',
-    heatmapGradient: ['#00f', '#0ff', '#0f0', '#ff0', '#f00'],
-    trackColor: '#e8412c',
+    title: 'Outings',
+    // the orange and the blue of the site: a pair that is told apart by the colorblind (not a red on a green and brown
+    // map), each on a casing of its own, light or dark. The heatmaps go from light to dark.
+    heatmapGradient: ['#fff1d6', '#ffd18a', '#ff9933', '#d9640a', '#8a3a00'],
+    trackColor: '#ff9933',
+    casingColor: '#2b2b2b',
     getHeatmap: (params) => c2c.getOutingsHeatmap(params),
     getTracks: (params) => c2c.getOutingsTracks(params),
   },
   route: {
     title: 'Routes',
-    heatmapGradient: ['#9ecae1', '#4292c6', '#2171b5', '#08519c', '#08306b'],
-    trackColor: '#1f6fd1',
+    heatmapGradient: ['#deebf7', '#9ecae1', '#4292c6', '#2171b5', '#08306b'],
+    trackColor: '#337ab7',
+    casingColor: '#ffffff',
     getHeatmap: (params) => c2c.getRoutesHeatmap(params),
     getTracks: (params) => c2c.getRoutesTracks(params),
   },
@@ -68,17 +76,22 @@ export function createHeatmapLayer(type: DensityType) {
   );
 }
 
+// a track: its color, on a wider line of another color around it
+function trackStyle(type: DensityType, casingWidth: number, width: number) {
+  const { casingColor, trackColor } = DENSITY_OVERLAYS[type];
+  return [
+    new ol.style.Style({ stroke: new ol.style.Stroke({ color: casingColor, width: casingWidth }) }),
+    new ol.style.Style({ stroke: new ol.style.Stroke({ color: trackColor, width }) }),
+  ];
+}
+
 // the layers of an overlay that exist from the start: the individual tracks of the viewport (high zoom)
 export function createDensityLayers(type: DensityType) {
   return markRaw({
     tracks: markRaw(new ol.layer.Vector({ source: new ol.source.Vector(), visible: false })),
-    trackStyle: markRaw(
-      new ol.style.Style({ stroke: new ol.style.Stroke({ color: DENSITY_OVERLAYS[type].trackColor, width: 2 }) })
-    ),
+    trackStyle: markRaw(trackStyle(type, 4.5, 2.5)),
     // under the pointer
-    trackHighlightedStyle: markRaw(
-      new ol.style.Style({ stroke: new ol.style.Stroke({ color: DENSITY_OVERLAYS[type].trackColor, width: 5 }) })
-    ),
+    trackHighlightedStyle: markRaw(trackStyle(type, 8, 4.5)),
   });
 }
 
@@ -138,4 +151,46 @@ export function searchOverlayFilters(
     outing: documentType === 'outing' ? filters : documentType === 'route' ? shared : null,
     route: documentType === 'route' ? filters : documentType === 'outing' ? shared : null,
   };
+}
+
+// The tracks in the order they are listed: the outings first, the most recent ones first, then the routes by title.
+export function sortTracks<T extends Pick<DensityTrack, 'type' | 'title' | 'date_end' | 'document_id'>>(
+  tracks: T[]
+): T[] {
+  const rank = (track: T) => (track.type === 'o' ? 0 : 1);
+
+  return [...tracks].sort((a, b) => {
+    if (rank(a) !== rank(b)) {
+      return rank(a) - rank(b);
+    }
+    if (a.type === 'o') {
+      // ISO dates: the text order is the date one
+      return (b.date_end ?? '').localeCompare(a.date_end ?? '') || b.document_id - a.document_id;
+    }
+    return (a.title ?? '').localeCompare(b.title ?? '') || a.document_id - b.document_id;
+  });
+}
+
+// the track of an outing or a route as a GPX file, as the buttons of the page of the document do
+export async function downloadTrackGpx(track: DensityTrack) {
+  const [{ default: GPX }, { default: GeoJSON }] = await Promise.all([
+    import('ol/format/GPX'),
+    import('ol/format/GeoJSON'),
+  ]);
+
+  const feature = new GeoJSON().readFeatures(track.geometry.geom_detail)[0];
+  if (!feature) {
+    return;
+  }
+
+  const name = track.title ?? '';
+  feature.set('name', name);
+
+  let filename = `${track.document_id}_${name.substring(0, 100)}`;
+  if (track.date_start) {
+    filename += `_${track.date_start}`;
+  }
+
+  const content = new GPX().writeFeatures([feature], { featureProjection: 'EPSG:3857' });
+  utils.download(content, `${filename}.gpx`, 'application/gpx+xml;charset=utf-8');
 }

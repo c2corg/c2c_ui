@@ -252,6 +252,7 @@
     "Distance from the route access point": "Distance avec le point d'arrêt du topo",
     "Document quality": "Qualité du document",
     "Donate": "Faire un don à l'association Camptocamp",
+    "Download the GPX file": "Télécharger le fichier GPX",
     "Download outings": "Télécharger les sorties",
     "Draw": {
       "yeti": "Dessiner"
@@ -580,6 +581,8 @@
     "Outings statistics": "Statistiques des sorties",
     "Outings using sustainable transportation on Camptocamp": "Les sorties en mobilité douce sur Camptocamp",
     "Outings, with the latest conditions in the mountains": "des sorties pour avoir les dernières conditions",
+    "Others here:": "Autres ici :",
+    "Outings": "Sorties",
     "Overlays": "Calques",
     "Page not found": "Page non trouvée",
     "Paragliding outings": "Sorties parapente",
@@ -803,7 +806,7 @@
     "Too many results: please refine your search.": "Trop de résultats : merci de préciser votre recherche. ",
     "Too much points": "Trop de points",
     "Trace": "Trace GPS",
-    "Tracks": "Traces",
+    "Tracks here": "Tracés à cet endroit",
     "Tracking devices": "Dispositifs GPS",
     "Translate": "Traduire",
     "Transport & road or PT access": "Accès routier/TC",
@@ -885,6 +888,7 @@
     "Your password must contain:": "Votre mot de passe doit contenir :",
     "Your search includes too many routes.": "Votre recherche donne trop d'itinéraires.",
     "Zoom in to see all tracks": "Zoomer pour voir toutes les traces",
+    "Right click: download the GPX": "Clic droit : télécharger le GPX",
     "Zoom in": {
       "Map controls": "Zoomer"
     },

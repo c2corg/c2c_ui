@@ -435,17 +435,17 @@ export const densityHeatmap = z.object({
 });
 
 // GET /outings/map/tracks, /routes/map/tracks: the tracks (GeoJSON) in a box, none if there are too many of them
-export const densityTracks = z.object({
-  documents: z.array(
-    z.object({
-      document_id: z.number(),
-      type: z.string(),
-      title: z.nullish(z.string()),
-      geometry: z.object({ geom_detail: z.string() }),
-    })
-  ),
-  truncated: z.boolean(),
+// (with the activities, the dates of an outing and the ratings that are set: the fields of the documents listing)
+export const densityTrack = z.looseObject({
+  document_id: z.number(),
+  type: z.string(),
+  title: z.nullish(z.string()),
+  geometry: z.object({ geom_detail: z.string() }),
+  activities: z.optional(z.array(z.string())),
+  date_start: z.optional(z.string()),
+  date_end: z.optional(z.string()),
 });
+export const densityTracks = z.object({ documents: z.array(densityTrack), truncated: z.boolean() });
 
 // GET /search: a page per document type (routes, waypoints...)
 export const searchResults = z.record(z.string(), documentsPage);

@@ -1,5 +1,5 @@
 <template>
-  <div ref="rootElement" style="width: 100%; height: 100%">
+  <div ref="rootElement" style="position: relative; width: 100%; height: 100%">
     <div ref="mapElement" style="width: 100%; height: 100%" @click="showLayerSwitcher = false" />
 
     <div
@@ -61,7 +61,7 @@
         </template>
         <template v-if="showDensityOverlays">
           <header v-translate>Overlays</header>
-          <!-- $gettext('Tracks') $gettext('Routes') -->
+          <!-- $gettext('Outings') $gettext('Routes') -->
           <div class="layer-group">
             <layer-button
               v-for="type of DENSITY_TYPES"
@@ -167,16 +167,65 @@
       {{ $gettext('Zoom in to see all tracks') }}
     </div>
 
-    <div v-if="showDensityOverlays" ref="trackTooltip" class="ol-track-tooltip" v-show="trackTooltipTitle">
-      {{ trackTooltipTitle }}
+    <div v-if="showDensityOverlays" ref="trackTooltip" class="ol-track-tooltip" v-show="trackTooltip">
+      <template v-if="trackTooltip">
+        <strong>{{ trackTooltip.document.title }}</strong>
+        <span v-if="trackTooltip.document.date_end" class="track-meta">
+          {{ $dateUtils.toLocalizedString(trackTooltip.document.date_end, 'll') }}
+        </span>
+        <document-rating :document="trackTooltip.document" class="track-meta" />
+        <span v-if="trackTooltip.others" class="track-meta"
+          >{{ $gettext('Others here:') }} {{ trackTooltip.others }}</span
+        >
+        <span class="track-hint">{{ $gettext('Right click: download the GPX') }}</span>
+      </template>
     </div>
 
-    <div v-if="showDensityOverlays" ref="trackPicker" class="ol-track-picker" v-show="trackPickerDocuments.length">
+    <!-- the tracks under a click or a tap, in the map: the most recent outings first -->
+    <div
+      v-if="showDensityOverlays"
+      v-show="trackPanelEntries.length"
+      class="ol-track-panel"
+      :class="{ 'is-opening': !trackPanelReady }"
+    >
+      <header>
+        <strong>{{ $gettext('Tracks here') }}</strong>
+        <button type="button" class="delete" :aria-label="$gettext('Close')" @click="closeTrackPanel" />
+      </header>
       <ul>
-        <li v-for="document of trackPickerDocuments" :key="`${document.type}-${document.document_id}`">
-          <a href="#" @click.prevent="selectTrackPickerDocument(document)">{{
-            $documentUtils.getDocumentTitle(document)
-          }}</a>
+        <li
+          v-for="entry of trackPanelEntries"
+          :key="`${entry.document.type}-${entry.document.document_id}`"
+          @mouseenter="setHighlightedFeature(entry.feature)"
+          @mouseleave="setHighlightedFeature(null)"
+        >
+          <span class="track-swatch" :style="trackSwatchStyle(entry.document)" />
+          <div class="track-description">
+            <router-link
+              :to="{
+                name: $documentUtils.getDocumentType(entry.document.type),
+                params: { id: entry.document.document_id },
+              }"
+              :target="openInNewTab ? '_blank' : undefined"
+              @click="closeTrackPanel"
+              >{{ entry.document.title }}</router-link
+            >
+            <div class="track-meta">
+              <span v-if="entry.document.date_end">
+                {{ $dateUtils.toLocalizedString(entry.document.date_end, 'll') }}
+              </span>
+              <document-rating :document="entry.document" />
+              <activities :activities="entry.document.activities" class="is-size-5" />
+            </div>
+          </div>
+          <button
+            type="button"
+            class="button is-small is-primary"
+            :title="$gettext('Download the GPX file')"
+            @click="downloadTrackGpx(entry.document)"
+          >
+            GPX
+          </button>
         </li>
       </ul>
     </div>
@@ -233,6 +282,9 @@ import {
   type DensityType,
   createDensityLayers,
   createHeatmapLayer,
+  downloadTrackGpx,
+  sortTracks,
+  type DensityTrack,
 } from './density-overlays';
 import {
   cartoLayers,
@@ -447,10 +499,12 @@ const hasProtectionAreas = ref<boolean | null>(null);
 const densityEnabled = reactive<Record<DensityType, boolean>>({ outing: false, route: false });
 // set when the tracks endpoint reports more documents in the box than it is willing to return
 const densityTruncatedByType = reactive<Record<DensityType, boolean>>({ outing: false, route: false });
-// the documents under a click on overlapping tracks, to choose from
-const trackPickerDocuments = ref<C2cDocument[]>([]);
-// the title of the track under the pointer
-const trackTooltipTitle = ref('');
+// the tracks under a click or a tap, to choose from, with their line on the map
+const trackPanelEntries = shallowRef<{ document: DensityTrack; feature: Feature }[]>([]);
+// false just after a tap opened the panel: the click that follows it would land on the panel
+const trackPanelReady = ref(true);
+// the track under the pointer, and how many others are there
+const trackTooltip = ref<{ document: DensityTrack; others: number } | null>(null);
 // on editable mode, there a button reset
 // we must save initial geometry
 const initialGeometry = ref<C2cDocument['geometry']>(null);
@@ -465,7 +519,6 @@ let fullScreenControl: InstanceType<typeof ol.control.FullScreen>;
 let onElevationProfile: ((event: unknown) => void) | undefined;
 
 // the popup of the tracks under a click
-let trackPickerOverlay: InstanceType<typeof ol.Overlay> | null = null;
 let trackTooltipOverlay: InstanceType<typeof ol.Overlay> | null = null;
 // only the answer to the latest request of an overlay is displayed: moving the map quickly can make them arrive out of
 // order
@@ -473,7 +526,6 @@ const densityRequestIds: Record<DensityType, number> = { outing: 0, route: 0 };
 
 const rootElementEl = useTemplateRef<HTMLElement>('rootElement');
 const densityMessageEl = useTemplateRef<HTMLElement>('densityMessage');
-const trackPickerEl = useTemplateRef<HTMLElement>('trackPicker');
 const trackTooltipEl = useTemplateRef<HTMLElement>('trackTooltip');
 const mapElementEl = useTemplateRef<HTMLElement>('mapElement');
 const layerSwitcherButtonEl = useTemplateRef<HTMLElement>('layerSwitcherButton');
@@ -1086,17 +1138,30 @@ function onPointerMove(event: MapBrowserEvent<PointerEvent>) {
   });
   // the tracks of the overlays are thin: they are found within a few pixels, and come before the other lines (the
   // track of an outing lies on the one of its route), but not before the markers
-  const track = resultFeature && isMarker(resultFeature) ? null : overlayTracksAt(event.pixel)[0];
-  const hovered = track ?? resultFeature ?? null;
+  const tracks = resultFeature && isMarker(resultFeature) ? [] : trackEntries(overlayTracksAt(event.pixel));
+  const hovered = tracks[0]?.feature ?? resultFeature ?? null;
   setHighlightedFeature(hovered);
   emit('highlight-document', hovered ? (hovered as FeatureLike).get('document') : null);
 
-  if (track) {
-    trackTooltipTitle.value = $documentUtils.getDocumentTitle(track.get('document'));
+  // not over the panel of the tracks, which tells it all
+  if (tracks.length && !trackPanelEntries.value.length) {
+    trackTooltip.value = { document: tracks[0].document, others: tracks.length - 1 };
     trackTooltipOverlay!.setPosition(event.coordinate);
   } else {
     hideTrackTooltip();
   }
+}
+
+// the tracks with their document, the most recent outings first
+function trackEntries(features: Feature[]) {
+  const byDocument = new Map<DensityTrack, Feature>(features.map((feature) => [feature.get('document'), feature]));
+  return sortTracks([...byDocument.keys()]).map((document) => ({ document, feature: byDocument.get(document)! }));
+}
+
+// what a track is on the map, for the list: its color on its casing
+function trackSwatchStyle(document: DensityTrack) {
+  const { trackColor, casingColor } = DENSITY_OVERLAYS[document.type === 'o' ? 'outing' : 'route'];
+  return { background: trackColor, borderColor: casingColor };
 }
 
 function isMarker(feature: FeatureLike) {
@@ -1104,8 +1169,19 @@ function isMarker(feature: FeatureLike) {
 }
 
 function hideTrackTooltip() {
-  trackTooltipTitle.value = '';
+  trackTooltip.value = null;
   trackTooltipOverlay?.setPosition(undefined);
+}
+
+// the tracks under a right click (a long tap on a touch screen): the same panel, with the GPX of each
+function onContextMenu(event: MouseEvent) {
+  const pixel = map.getEventPixel(event);
+  const top = map.forEachFeatureAtPixel(pixel, (f) => f);
+  const tracks = top && isMarker(top) ? [] : overlayTracksAt(pixel);
+  if (tracks.length) {
+    event.preventDefault();
+    openTrackPanel(tracks);
+  }
 }
 
 // the tracks of the overlays under a pixel, except the document the map is about
@@ -1161,7 +1237,7 @@ function toggleDensityOverlay(type: DensityType) {
     heatmapLayers[type]?.setVisible(false);
     densityLayers[type].tracks.setVisible(false);
     densityTruncatedByType[type] = false;
-    closeTrackPicker();
+    closeTrackPanel();
   }
 }
 
@@ -1206,7 +1282,7 @@ async function updateDensityOverlay(type: DensityType) {
 
       const source = layers.tracks.getSource()!;
       source.clear();
-      closeTrackPicker();
+      closeTrackPanel();
       for (const document of data.documents) {
         const feature = addFeature(
           source,
@@ -1226,7 +1302,7 @@ async function updateDensityOverlay(type: DensityType) {
       const heatmap = heatmapLayer(type);
       heatmap.setVisible(true);
       densityTruncatedByType[type] = false;
-      closeTrackPicker();
+      closeTrackPanel();
 
       const source = heatmap.getSource()!;
       source.clear();
@@ -1243,17 +1319,23 @@ async function updateDensityOverlay(type: DensityType) {
   }
 }
 
-function closeTrackPicker() {
-  trackPickerDocuments.value = [];
-  trackPickerOverlay?.setPosition(undefined);
+let trackPanelTimeout: ReturnType<typeof setTimeout> | undefined;
+
+function openTrackPanel(features: Feature[]) {
+  trackPanelEntries.value = trackEntries(features);
+  hideTrackTooltip();
+
+  // a touch screen sends a click after the tap, where the panel now is: it must not open the first track
+  clearTimeout(trackPanelTimeout);
+  trackPanelReady.value = !noHover();
+  if (!trackPanelReady.value) {
+    trackPanelTimeout = setTimeout(() => (trackPanelReady.value = true), 500);
+  }
 }
 
-function selectTrackPickerDocument(document: C2cDocument) {
-  closeTrackPicker();
-  router.push({
-    name: $documentUtils.getDocumentType(document.type),
-    params: { id: document.document_id },
-  });
+function closeTrackPanel() {
+  trackPanelEntries.value = [];
+  setHighlightedFeature(null);
 }
 
 function onClick(event: MapBrowserEvent<PointerEvent>) {
@@ -1261,12 +1343,10 @@ function onClick(event: MapBrowserEvent<PointerEvent>) {
   const top = map.forEachFeatureAtPixel(event.pixel, (f) => f);
   const tracks = top && isMarker(top) ? [] : overlayTracksAt(event.pixel);
   if (tracks.length > 1 || (tracks.length === 1 && noHover())) {
-    trackPickerDocuments.value = tracks.map((track) => track.get('document'));
-    trackPickerOverlay!.setPosition(event.coordinate);
-    hideTrackTooltip();
+    openTrackPanel(tracks);
     return;
   }
-  closeTrackPicker();
+  closeTrackPanel();
 
   // a track is thin: clicking next to it counts
   const feature = tracks[0] ?? top;
@@ -1715,13 +1795,6 @@ onMounted(() => {
   map.on('moveend', emitMoveEvent);
 
   if (showDensityOverlays.value) {
-    trackPickerOverlay = new ol.Overlay({
-      element: trackPickerEl.value!,
-      positioning: 'bottom-center',
-      offset: [0, -10],
-    });
-    map.addOverlay(trackPickerOverlay);
-
     // it must not catch the pointer, or hovering the track would hide it
     trackTooltipOverlay = new ol.Overlay({
       element: trackTooltipEl.value!,
@@ -1731,6 +1804,7 @@ onMounted(() => {
     });
     map.addOverlay(trackTooltipOverlay);
     map.getViewport()?.addEventListener('mouseout', hideTrackTooltip);
+    map.getViewport()?.addEventListener('contextmenu', onContextMenu);
 
     map.on('moveend', debounce(updateDensityOverlays, DENSITY_FETCH_DEBOUNCE));
   }
@@ -1960,6 +2034,8 @@ defineExpose({
 }
 
 .ol-track-tooltip {
+  display: flex;
+  flex-direction: column;
   background: white;
   border-radius: 4px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
@@ -1967,34 +2043,91 @@ defineExpose({
   width: max-content;
   max-width: 320px;
   pointer-events: none;
+
+  .track-meta {
+    color: var(--c2c-grey);
+    font-size: 0.85em;
+  }
+
+  .track-hint {
+    margin-top: 2px;
+    color: var(--c2c-grey);
+    font-size: 0.75em;
+    font-style: italic;
+  }
 }
 
-.ol-track-picker {
+.ol-track-panel {
+  position: absolute;
+  z-index: 2;
+  right: 0.5em;
+  bottom: 0.5em;
+  left: 0.5em;
+  max-width: 380px;
+  margin-left: auto;
+  max-height: 70%;
+  display: flex;
+  flex-direction: column;
   background: white;
   border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-  padding: 5px 0;
-  max-width: 320px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+
+  header {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--c2c-grey-lighter);
+  }
 
   ul {
     margin: 0;
     padding: 0;
+    overflow-y: auto;
     list-style: none;
   }
 
   li {
-    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    padding: 6px 10px;
 
     &:hover {
-      background: lightgrey;
+      background: var(--c2c-hover-background);
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-      display: block;
+    & + li {
+      border-top: 1px solid var(--c2c-grey-lightest);
     }
   }
+
+  .track-swatch {
+    flex: none;
+    width: 1.4em;
+    height: 0.7em;
+    border: 2px solid;
+    border-radius: 4px;
+  }
+
+  .track-description {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .track-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 0.7em;
+    color: var(--c2c-grey);
+    font-size: 0.85em;
+  }
+}
+
+.ol-track-panel.is-opening {
+  pointer-events: none;
 }
 
 .ol-control-reset-geometry {
