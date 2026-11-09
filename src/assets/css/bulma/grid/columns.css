@@ -1,5 +1,7 @@
 /* Bulma 0.9.4 (MIT License, see bulma/LICENSE): grid/columns */
 
+@import '../../media.css';
+
 .column {
   display: block;
   flex-basis: 0;
@@ -97,7 +99,7 @@
   width: 100%;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (--c2c-mobile) {
   .column.is-full-mobile {
     flex: none;
     width: 100%;
@@ -112,7 +114,7 @@
   }
 }
 
-@media screen and (min-width: 769px), print {
+@media screen and (--c2c-min-tablet), print {
   .column.is-narrow {
     flex: none;
     width: unset;
@@ -192,7 +194,7 @@
   }
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (--c2c-min-desktop) {
   .column.is-half-desktop {
     flex: none;
     width: 50%;
@@ -219,7 +221,7 @@
   }
 }
 
-@media screen and (min-width: 1216px) {
+@media screen and (--c2c-min-widescreen) {
   .column.is-half-widescreen {
     flex: none;
     width: 50%;
@@ -254,7 +256,7 @@
   }
 }
 
-@media screen and (min-width: 1408px) {
+@media screen and (--c2c-min-fullhd) {
   .column.is-half-fullhd {
     flex: none;
     width: 50%;
@@ -346,7 +348,7 @@
   }
 }
 
-@media screen and (min-width: 769px), print {
+@media screen and (--c2c-min-tablet), print {
   .columns:not(.is-desktop) {
     display: flex;
   }
@@ -375,25 +377,25 @@
   }
 }
 
-@media screen and (min-width: 769px), print {
+@media screen and (--c2c-min-tablet), print {
   .columns.is-variable.is-2-tablet {
     --columnGap: 0.5rem;
   }
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (--c2c-min-desktop) {
   .columns.is-variable.is-2-desktop {
     --columnGap: 0.5rem;
   }
 }
 
-@media screen and (min-width: 1216px) {
+@media screen and (--c2c-min-widescreen) {
   .columns.is-variable.is-2-widescreen {
     --columnGap: 0.5rem;
   }
 }
 
-@media screen and (min-width: 1408px) {
+@media screen and (--c2c-min-fullhd) {
   .columns.is-variable.is-2-fullhd {
     --columnGap: 0.5rem;
   }
@@ -403,25 +405,25 @@
   --columnGap: 0.75rem;
 }
 
-@media screen and (min-width: 769px), print {
+@media screen and (--c2c-min-tablet), print {
   .columns.is-variable.is-3-tablet {
     --columnGap: 0.75rem;
   }
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (--c2c-min-desktop) {
   .columns.is-variable.is-3-desktop {
     --columnGap: 0.75rem;
   }
 }
 
-@media screen and (min-width: 1216px) {
+@media screen and (--c2c-min-widescreen) {
   .columns.is-variable.is-3-widescreen {
     --columnGap: 0.75rem;
   }
 }
 
-@media screen and (min-width: 1408px) {
+@media screen and (--c2c-min-fullhd) {
   .columns.is-variable.is-3-fullhd {
     --columnGap: 0.75rem;
   }
@@ -431,19 +433,19 @@
   --columnGap: 1rem;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (--c2c-mobile) {
   .columns.is-variable.is-4-mobile {
     --columnGap: 1rem;
   }
 }
 
-@media screen and (min-width: 1216px) {
+@media screen and (--c2c-min-widescreen) {
   .columns.is-variable.is-4-widescreen {
     --columnGap: 1rem;
   }
 }
 
-@media screen and (min-width: 1408px) {
+@media screen and (--c2c-min-fullhd) {
   .columns.is-variable.is-4-fullhd {
     --columnGap: 1rem;
   }
@@ -453,13 +455,13 @@
   --columnGap: 1.25rem;
 }
 
-@media screen and (min-width: 769px), print {
+@media screen and (--c2c-min-tablet), print {
   .columns.is-variable.is-5-tablet {
     --columnGap: 1.25rem;
   }
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (--c2c-min-desktop) {
   .columns.is-variable.is-5-desktop {
     --columnGap: 1.25rem;
   }
@@ -469,7 +471,7 @@
   --columnGap: 1.5rem;
 }
 
-@media screen and (min-width: 1408px) {
+@media screen and (--c2c-min-fullhd) {
   .columns.is-variable.is-6-fullhd {
     --columnGap: 1.5rem;
   }
@@ -479,25 +481,25 @@
   --columnGap: 1.75rem;
 }
 
-@media screen and (min-width: 769px), print {
+@media screen and (--c2c-min-tablet), print {
   .columns.is-variable.is-7-tablet {
     --columnGap: 1.75rem;
   }
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (--c2c-min-desktop) {
   .columns.is-variable.is-7-desktop {
     --columnGap: 1.75rem;
   }
 }
 
-@media screen and (min-width: 1216px) {
+@media screen and (--c2c-min-widescreen) {
   .columns.is-variable.is-7-widescreen {
     --columnGap: 1.75rem;
   }
 }
 
-@media screen and (min-width: 1408px) {
+@media screen and (--c2c-min-fullhd) {
   .columns.is-variable.is-7-fullhd {
     --columnGap: 1.75rem;
   }
@@ -507,13 +509,13 @@
   --columnGap: 2rem;
 }
 
-@media screen and (min-width: 1216px) {
+@media screen and (--c2c-min-widescreen) {
   .columns.is-variable.is-8-widescreen {
     --columnGap: 2rem;
   }
 }
 
-@media screen and (min-width: 1408px) {
+@media screen and (--c2c-min-fullhd) {
   .columns.is-variable.is-8-fullhd {
     --columnGap: 2rem;
   }

@@ -39,7 +39,7 @@
   }
 
   &.is-medium {
-    font-size: 1.1429rem;
+    font-size: var(--c2c-size-5);
 
     .file-icon .fa {
       font-size: 21px;
@@ -47,7 +47,7 @@
   }
 
   &.is-large {
-    font-size: 1.2857rem;
+    font-size: var(--c2c-size-4);
 
     .file-icon .fa {
       font-size: 28px;

@@ -1,5 +1,7 @@
 /* Bulma 0.9.4 (MIT License, see bulma/LICENSE): components/level */
 
+@import '../../media.css';
+
 .level {
   align-items: center;
   justify-content: space-between;
@@ -27,7 +29,7 @@
   }
 }
 
-@media screen and (min-width: 769px), print {
+@media screen and (--c2c-min-tablet), print {
   .level {
     display: flex;
     > .level-item:not(.is-narrow) {
@@ -50,7 +52,7 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (--c2c-mobile) {
   .level-item:not(:last-child) {
     margin-bottom: 0.75rem;
   }

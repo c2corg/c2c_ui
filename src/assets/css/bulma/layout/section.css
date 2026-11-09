@@ -1,10 +1,12 @@
 /* Bulma 0.9.4 (MIT License, see bulma/LICENSE): layout/section */
 
+@import '../../media.css';
+
 .section {
   padding: 1.5rem 1.5rem;
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (--c2c-min-desktop) {
   .section {
     padding: 1.5rem 1.5rem;
     &.is-medium {

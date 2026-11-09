@@ -18,6 +18,7 @@ values, nesting, custom properties instead of variants), keeping the class names
 - `elements/progress.css`, `elements/table.css`, `form/file.css`, `form/input-textarea.css`, `form/select.css`,
   `form/tools.css`: one set of color rules that use the palette.
 - All the modules: nesting, where the rules that follow a rule start with its selector.
+- All the modules: the size tokens (`--c2c-size-5`...) and the breakpoints of `../media.css` (`--c2c-mobile`...).
 
 ## Where it comes from
 

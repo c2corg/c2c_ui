@@ -1,5 +1,7 @@
 /* Bulma 0.9.4 (MIT License, see bulma/LICENSE): components/modal */
 
+@import '../../media.css';
+
 .modal {
   align-items: center;
   display: none;
@@ -27,7 +29,7 @@
   width: 100%;
 }
 
-@media screen and (min-width: 769px) {
+@media screen and (--c2c-min-tablet) {
   .modal-content,
   .modal-card {
     margin: 0 auto;
@@ -65,7 +67,7 @@
   color: var(--c2c-grey-darker);
   flex-grow: 1;
   flex-shrink: 0;
-  font-size: 1.2857rem;
+  font-size: var(--c2c-size-4);
   line-height: 1;
 }
 
