@@ -150,6 +150,10 @@ function onFileChange(event: Event) {
     file,
     undefined as unknown as number,
     (dataUrl) => {
+      // the previews are object URLs of the files: freed when replaced
+      if (newVersionSource.value?.startsWith('blob:')) {
+        URL.revokeObjectURL(newVersionSource.value);
+      }
       newVersionSource.value = dataUrl;
     },
     () => {
