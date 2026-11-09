@@ -125,6 +125,7 @@ import {
   faUserLock,
   faUserPlus,
   faUserShield,
+  faUserSlash,
   faUsers,
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
@@ -367,6 +368,7 @@ export default function install(app: App) {
     faUserPlus,
     faUsers,
     faUserShield,
+    faUserSlash,
     faWrench,
 
     // regular icons

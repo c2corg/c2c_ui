@@ -145,6 +145,13 @@
         :class="{ 'lock-button-red': isAccountBlocked }"
         :label="isAccountBlocked ? $gettext('Unblock account') : $gettext('Block account')"
       />
+
+      <tool-box-button
+        v-if="documentType === 'profile'"
+        @click="removeAccountModal!.show()"
+        icon="user-slash"
+        :label="$gettext('Remove account')"
+      />
     </template>
 
     <template v-if="isDeletable">
@@ -169,6 +176,11 @@
     <!-- Modal windows -->
     <div v-if="isEditable">
       <merge-document-window ref="mergeModal" :document="document" />
+      <remove-account-window
+        v-if="$user.isModerator && documentType === 'profile'"
+        ref="removeAccountModal"
+        :document="document"
+      />
       <delete-document-window ref="deleteDocumentModal" :document="document" />
       <delete-locale-window ref="deleteLocaleModal" :document="document" :locale-lang="document.cooked.lang" />
       <translate-window ref="translateModal" :document="document" :missing-langs="missingLangs" />
@@ -186,6 +198,7 @@ import { useRoute } from 'vue-router';
 import DeleteDocumentWindow from '../windows/DeleteDocumentWindow.vue';
 import DeleteLocaleWindow from '../windows/DeleteLocaleWindow.vue';
 import MergeDocumentWindow from '../windows/MergeDocumentWindow.vue';
+import RemoveAccountWindow from '../windows/RemoveAccountWindow.vue';
 import TranslateWindow from '../windows/TranslateWindow.vue';
 
 import AssociatedDocuments from './AssociatedDocuments.vue';
@@ -216,6 +229,7 @@ type Modal = { show(): void };
 const mergeModal = useTemplateRef<Modal>('mergeModal');
 const deleteDocumentModal = useTemplateRef<Modal>('deleteDocumentModal');
 const deleteLocaleModal = useTemplateRef<Modal>('deleteLocaleModal');
+const removeAccountModal = useTemplateRef<Modal>('removeAccountModal');
 const translateModal = useTemplateRef<Modal>('translateModal');
 const associationsModal = useTemplateRef<Modal>('associationsModal');
 
