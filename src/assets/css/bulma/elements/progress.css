@@ -76,11 +76,11 @@
   }
 
   &.is-medium {
-    height: 1.1429rem;
+    height: var(--c2c-size-5);
   }
 
   &.is-large {
-    height: 1.2857rem;
+    height: var(--c2c-size-4);
   }
 }
 

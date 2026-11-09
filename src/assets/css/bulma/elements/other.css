@@ -13,7 +13,7 @@
   background-color: var(--c2c-white-ter);
   border-radius: 9999px;
   display: inline-flex;
-  font-size: 1.1429rem;
+  font-size: var(--c2c-size-5);
   height: 2em;
   justify-content: center;
   margin-right: 1.5rem;

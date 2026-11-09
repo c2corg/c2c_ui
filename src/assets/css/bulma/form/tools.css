@@ -15,11 +15,11 @@
   }
 
   &.is-medium {
-    font-size: 1.1429rem;
+    font-size: var(--c2c-size-5);
   }
 
   &.is-large {
-    font-size: 1.2857rem;
+    font-size: var(--c2c-size-4);
   }
 }
 
@@ -146,14 +146,14 @@
   &.has-icons-left .select.is-medium ~ .icon,
   &.has-icons-right .input.is-medium ~ .icon,
   &.has-icons-right .select.is-medium ~ .icon {
-    font-size: 1.1429rem;
+    font-size: var(--c2c-size-5);
   }
 
   &.has-icons-left .input.is-large ~ .icon,
   &.has-icons-left .select.is-large ~ .icon,
   &.has-icons-right .input.is-large ~ .icon,
   &.has-icons-right .select.is-large ~ .icon {
-    font-size: 1.2857rem;
+    font-size: var(--c2c-size-4);
   }
 
   &.has-icons-left .icon,
@@ -197,10 +197,10 @@
   }
 
   &.is-loading.is-medium:after {
-    font-size: 1.1429rem;
+    font-size: var(--c2c-size-5);
   }
 
   &.is-loading.is-large:after {
-    font-size: 1.2857rem;
+    font-size: var(--c2c-size-4);
   }
 }

@@ -65,7 +65,7 @@
   color: var(--c2c-grey-darker);
   flex-grow: 1;
   flex-shrink: 0;
-  font-size: 1.2857rem;
+  font-size: var(--c2c-size-4);
   line-height: 1;
 }
 

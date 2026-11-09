@@ -43,12 +43,12 @@
 
 .is-medium.textarea,
 .is-medium.input {
-  font-size: 1.1429rem;
+  font-size: var(--c2c-size-5);
 }
 
 .is-large.textarea,
 .is-large.input {
-  font-size: 1.2857rem;
+  font-size: var(--c2c-size-4);
 }
 
 .is-inline.textarea,

@@ -183,9 +183,9 @@
 }
 
 .content.is-medium {
-  font-size: 1.1429rem;
+  font-size: var(--c2c-size-5);
 }
 
 .content.is-large {
-  font-size: 1.2857rem;
+  font-size: var(--c2c-size-4);
 }
