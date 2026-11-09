@@ -1,0 +1,2 @@
+import{Ma as e,Oa as t,Sa as n,Xa as r}from"./vendor-DlW1qEBl.js";function i(t){let n=r([]);return e(t,{register:e=>n.value.push(e),unregister:e=>{let t=n.value.indexOf(e);t!==-1&&n.value.splice(t,1)}}),{formFields:n}}function a(e,r){let i=n(e,null);i&&(i.register(r),t(()=>i.unregister(r)))}export{a as n,i as t};
+//# sourceMappingURL=form-registration-Wr7dzfvB.js.map
