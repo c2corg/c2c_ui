@@ -5,6 +5,8 @@ Bulma's Sass (`elements/button.css` for `sass/elements/button.sass`...), loaded 
 `shared.css` has the rules several modules share (controls, unselectable, block margins, delete, loader),
 `palette.css` the colors of the color classes.
 
+The style guide of the site's CSS is `../README.md`.
+
 This is our code: the plan (c2corg/c2c_ui#4907) is to make it our own CSS, one module at a time (tokens instead of
 values, nesting, custom properties instead of variants), keeping the class names (`.button`, `.columns`,
 `.is-primary`...).
