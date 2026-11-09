@@ -1,7 +1,7 @@
 <template>
   <swiper-container slides-per-view="auto" space-between="15" class="swiper">
     <swiper-slide
-      v-for="image of images"
+      v-for="(image, index) of images"
       :key="image.document_id"
       :style="{ height: SLIDE_HEIGHT + 'px', width: slideWidth(image) }"
     >
@@ -11,7 +11,8 @@
         :alt="image.locales[0].title"
         :title="image.locales[0].title"
         @click="$imageViewer.show(image)"
-        loading="lazy"
+        :loading="priority && index < EAGER_SLIDES ? 'eager' : 'lazy'"
+        :fetchpriority="priority && index === 0 ? 'high' : undefined"
       />
     </swiper-slide>
   </swiper-container>
@@ -33,6 +34,10 @@ type GalleryImage = {
 
 const SLIDE_HEIGHT = 200;
 
+// with priority, the slides a wide screen shows at once load right away: lazy images wait for the layout, after the
+// scripts, and the first image of a gallery at the top of the page is its largest contentful paint
+const EAGER_SLIDES = 4;
+
 // the width of an image at the height of the slides, when the API gives its size: the slide keeps it while the image
 // loads, instead of growing from nothing and pushing the next ones (#4883)
 function slideWidth(image: GalleryImage) {
@@ -43,6 +48,11 @@ const props = defineProps({
   images: {
     type: Array as PropType<GalleryImage[]>,
     required: true,
+  },
+  // the gallery is at the top of the page (outings): its first images are seen as soon as the page shows
+  priority: {
+    type: Boolean,
+    default: false,
   },
 });
 
