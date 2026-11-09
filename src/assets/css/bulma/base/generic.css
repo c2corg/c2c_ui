@@ -117,7 +117,6 @@ fieldset {
 }
 
 pre {
-  -webkit-overflow-scrolling: touch;
   background-color: var(--c2c-white-ter);
   color: var(--c2c-text);
   font-size: 0.875em;

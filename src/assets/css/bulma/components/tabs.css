@@ -1,7 +1,6 @@
 /* Bulma 0.9.4 (MIT License, see bulma/LICENSE): components/tabs */
 
 .tabs {
-  -webkit-overflow-scrolling: touch;
   align-items: stretch;
   display: flex;
   font-size: var(--c2c-size-6);
