@@ -285,7 +285,7 @@ onBeforeUnmount(() => {
   position: relative;
   border: 1px solid #ccc;
   border-radius: 10px;
-  background-color: #fff;
+  background-color: var(--c2c-white);
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
@@ -319,7 +319,7 @@ onBeforeUnmount(() => {
       top: calc(100% + 5px);
       left: 0;
       right: 0;
-      background-color: #fff;
+      background-color: var(--c2c-white);
       border: 1px solid #ddd;
       border-radius: 10px;
       box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -343,7 +343,7 @@ onBeforeUnmount(() => {
             color 0.2s ease;
 
           &:hover {
-            background-color: #f5f5f5;
+            background-color: var(--c2c-white-ter);
             cursor: pointer;
             color: #000;
           }

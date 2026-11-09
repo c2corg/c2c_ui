@@ -211,7 +211,7 @@ function onAnimEnd(e: AnimationEvent) {
   }
 }
 .dropdown-item {
-  color: #4a4a4a;
+  color: var(--c2c-text);
   display: block;
   font-size: 0.875rem;
   line-height: 1.5;

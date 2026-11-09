@@ -1540,11 +1540,11 @@ defineExpose({
 :root,
 :host {
   --ol-background-color: rgba(0, 60, 136, 0.6);
-  --ol-accent-background-color: #f5f5f5;
+  --ol-accent-background-color: var(--c2c-white-ter);
   --ol-subtle-background-color: rgba(128, 128, 128, 0.25);
   --ol-partial-background-color: rgba(255, 255, 255, 0.75);
-  --ol-foreground-color: #fff;
-  --ol-subtle-foreground-color: #fff;
+  --ol-foreground-color: var(--c2c-white);
+  --ol-subtle-foreground-color: var(--c2c-white);
   --ol-brand-color: #00aaff;
 }
 </style>

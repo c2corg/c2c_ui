@@ -435,13 +435,13 @@ const { documentType } = useDocumentType(props);
     width: 13px;
     left: 2px;
     bottom: 2px;
-    background-color: #fff;
+    background-color: var(--c2c-white);
     transition: 0.4s;
     border-radius: 50%;
   }
 
   input:checked + .slider {
-    background-color: #337ab7;
+    background-color: var(--c2c-primary);
   }
 
   input:checked + .slider:before {
