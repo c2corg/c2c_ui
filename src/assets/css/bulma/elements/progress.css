@@ -1,8 +1,7 @@
 /* Bulma 0.9.4 (MIT License, see bulma/LICENSE): elements/progress */
 
 .progress {
-  -moz-appearance: none;
-  -webkit-appearance: none;
+  appearance: none;
   border: none;
   border-radius: 9999px;
   display: block;
@@ -23,11 +22,6 @@
     background-color: var(--c2c-text);
   }
 
-  &::-ms-fill {
-    background-color: var(--c2c-text);
-    border: none;
-  }
-
   /* the colors: see ../palette.css */
   &:is(.is-white, .is-light, .is-dark, .is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger) {
     &::-webkit-progress-value {
@@ -35,10 +29,6 @@
     }
 
     &::-moz-progress-bar {
-      background-color: var(--palette);
-    }
-
-    &::-ms-fill {
       background-color: var(--palette);
     }
 
@@ -64,10 +54,6 @@
 
     &::-moz-progress-bar {
       background-color: transparent;
-    }
-
-    &::-ms-fill {
-      animation-name: none;
     }
   }
 

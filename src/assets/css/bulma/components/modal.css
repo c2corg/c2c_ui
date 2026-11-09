@@ -43,7 +43,6 @@
   flex-direction: column;
   max-height: calc(100vh - 40px);
   overflow: hidden;
-  -ms-overflow-y: visible;
 }
 
 .modal-card-head,
@@ -82,7 +81,6 @@
 }
 
 .modal-card-body {
-  -webkit-overflow-scrolling: touch;
   background-color: var(--c2c-white);
   flex-grow: 1;
   flex-shrink: 1;

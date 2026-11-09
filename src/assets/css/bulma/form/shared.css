@@ -9,27 +9,9 @@
   color: var(--c2c-grey-darker);
 }
 
-.select select::-moz-placeholder,
-.input::-moz-placeholder,
-.textarea::-moz-placeholder {
-  color: var(--c2c-input-placeholder-color);
-}
-
-.select select::-webkit-input-placeholder,
-.input::-webkit-input-placeholder,
-.textarea::-webkit-input-placeholder {
-  color: var(--c2c-input-placeholder-color);
-}
-
-.select select:-moz-placeholder,
-.input:-moz-placeholder,
-.textarea:-moz-placeholder {
-  color: var(--c2c-input-placeholder-color);
-}
-
-.select select:-ms-input-placeholder,
-.input:-ms-input-placeholder,
-.textarea:-ms-input-placeholder {
+.select select::placeholder,
+.input::placeholder,
+.textarea::placeholder {
   color: var(--c2c-input-placeholder-color);
 }
 
@@ -65,42 +47,12 @@ fieldset[disabled] .textarea {
   color: var(--c2c-grey);
 }
 
-.select select[disabled]::-moz-placeholder,
-[disabled].input::-moz-placeholder,
-[disabled].textarea::-moz-placeholder,
-fieldset[disabled] .select select::-moz-placeholder,
-.select fieldset[disabled] select::-moz-placeholder,
-fieldset[disabled] .input::-moz-placeholder,
-fieldset[disabled] .textarea::-moz-placeholder {
-  color: rgba(48%, 48%, 48%, 0.3);
-}
-
-.select select[disabled]::-webkit-input-placeholder,
-[disabled].input::-webkit-input-placeholder,
-[disabled].textarea::-webkit-input-placeholder,
-fieldset[disabled] .select select::-webkit-input-placeholder,
-.select fieldset[disabled] select::-webkit-input-placeholder,
-fieldset[disabled] .input::-webkit-input-placeholder,
-fieldset[disabled] .textarea::-webkit-input-placeholder {
-  color: rgba(48%, 48%, 48%, 0.3);
-}
-
-.select select[disabled]:-moz-placeholder,
-[disabled].input:-moz-placeholder,
-[disabled].textarea:-moz-placeholder,
-fieldset[disabled] .select select:-moz-placeholder,
-.select fieldset[disabled] select:-moz-placeholder,
-fieldset[disabled] .input:-moz-placeholder,
-fieldset[disabled] .textarea:-moz-placeholder {
-  color: rgba(48%, 48%, 48%, 0.3);
-}
-
-.select select[disabled]:-ms-input-placeholder,
-[disabled].input:-ms-input-placeholder,
-[disabled].textarea:-ms-input-placeholder,
-fieldset[disabled] .select select:-ms-input-placeholder,
-.select fieldset[disabled] select:-ms-input-placeholder,
-fieldset[disabled] .input:-ms-input-placeholder,
-fieldset[disabled] .textarea:-ms-input-placeholder {
+.select select[disabled]::placeholder,
+[disabled].input::placeholder,
+[disabled].textarea::placeholder,
+fieldset[disabled] .select select::placeholder,
+.select fieldset[disabled] select::placeholder,
+fieldset[disabled] .input::placeholder,
+fieldset[disabled] .textarea::placeholder {
   color: rgba(48%, 48%, 48%, 0.3);
 }
