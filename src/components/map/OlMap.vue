@@ -156,7 +156,6 @@
 </template>
 
 <script setup lang="ts">
-import { toast } from 'bulma-toast';
 import type Feature from 'ol/Feature';
 import type { FeatureLike } from 'ol/Feature';
 import type OlMap from 'ol/Map';
@@ -214,6 +213,7 @@ import bus from '@/js/event-bus';
 import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
 import { TCX } from '@/js/tcx/TCX';
+import { toast } from '@/js/toast';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];

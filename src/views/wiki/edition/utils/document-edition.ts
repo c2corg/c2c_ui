@@ -5,7 +5,6 @@
 //
 // A view may give afterLoad(), beforeSave() and afterSave() hooks: they are called when the document is loaded,
 // before it's checked and saved, and once its saving has started.
-import { toast } from 'bulma-toast';
 import {
   computed,
   getCurrentInstance,
@@ -26,6 +25,7 @@ import type { ApiError } from '@/js/apis/c2c/schemas';
 import { useNoRobots } from '@/js/composables/head';
 import constants from '@/js/constants';
 import type Field from '@/js/constants/Field';
+import { toast } from '@/js/toast';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 export type EditionHooks = {
@@ -175,7 +175,15 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
           `${globals.$gettext(field.name)} : ${globals.$gettext((field.error as ApiError).description, i18nContext)}`
       );
 
-      toast({ message: `<ul><li>${messages.join('</li><li>')}</li></ul>`, type: 'is-danger', position: 'center' });
+      const list = window.document.createElement('ul');
+      list.append(
+        ...messages.map((message) => {
+          const item = window.document.createElement('li');
+          item.textContent = message;
+          return item;
+        })
+      );
+      toast({ message: list, type: 'is-danger', position: 'center' });
 
       return true;
     }

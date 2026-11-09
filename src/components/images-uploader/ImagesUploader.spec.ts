@@ -1,5 +1,4 @@
 import { flushPromises, mount } from '@vue/test-utils';
-import { toast } from 'bulma-toast';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { defineComponent, h, nextTick } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
@@ -7,10 +6,11 @@ import { createMemoryHistory, createRouter } from 'vue-router';
 import ImagesUploader from './ImagesUploader.vue';
 
 import c2c from '@/js/apis/c2c';
+import { toast } from '@/js/toast';
 import uploadFile from '@/js/upload-file';
 
 vi.mock('@/js/upload-file', () => ({ default: vi.fn() }));
-vi.mock('bulma-toast', () => ({ toast: vi.fn() }));
+vi.mock('@/js/toast', () => ({ toast: vi.fn() }));
 
 const file = (name: string) => ({ name, lastModified: 1, size: 1000 });
 const upload = vi.mocked(uploadFile);
