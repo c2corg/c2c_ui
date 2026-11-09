@@ -12,25 +12,25 @@
 .select select::-moz-placeholder,
 .input::-moz-placeholder,
 .textarea::-moz-placeholder {
-  color: rgb(160, 160, 160);
+  color: var(--c2c-input-placeholder-color);
 }
 
 .select select::-webkit-input-placeholder,
 .input::-webkit-input-placeholder,
 .textarea::-webkit-input-placeholder {
-  color: rgb(160, 160, 160);
+  color: var(--c2c-input-placeholder-color);
 }
 
 .select select:-moz-placeholder,
 .input:-moz-placeholder,
 .textarea:-moz-placeholder {
-  color: rgb(160, 160, 160);
+  color: var(--c2c-input-placeholder-color);
 }
 
 .select select:-ms-input-placeholder,
 .input:-ms-input-placeholder,
 .textarea:-ms-input-placeholder {
-  color: rgb(160, 160, 160);
+  color: var(--c2c-input-placeholder-color);
 }
 
 .select select:hover,

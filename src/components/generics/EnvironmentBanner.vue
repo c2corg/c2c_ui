@@ -28,7 +28,7 @@ defineOptions({ name: 'EnvironmentBanner' });
   right: 0;
   height: 4px;
   z-index: 35;
-  background: repeating-linear-gradient(135deg, #ffdd57 0 12px, #363636 12px 24px);
+  background: repeating-linear-gradient(135deg, #ffdd57 0 12px, var(--c2c-dark) 12px 24px);
 }
 
 /* small label in a corner, away from the navigation */
@@ -40,7 +40,7 @@ defineOptions({ name: 'EnvironmentBanner' });
   padding: 0.15rem 0.6rem;
   border-radius: 4px;
   background: #ffdd57;
-  color: #363636;
+  color: var(--c2c-grey-darker);
   font-size: 0.75rem;
   opacity: 0.9;
 }

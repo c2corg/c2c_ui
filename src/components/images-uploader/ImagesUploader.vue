@@ -319,8 +319,8 @@ defineExpose({ show });
     position: relative;
     height: 315px;
     text-align: center;
-    border: 5px dashed #ddd;
-    background: #f8f8f8;
+    border: 5px dashed var(--c2c-grey-lighter);
+    background: var(--c2c-white-ter);
     transition: 0.2s;
     padding: 1rem;
 
@@ -336,7 +336,7 @@ defineExpose({ show });
   }
 
   .images-uploader-message:hover {
-    background: #eee;
+    background: var(--c2c-grey-lightest);
     border: 5px dashed #bbb;
   }
 

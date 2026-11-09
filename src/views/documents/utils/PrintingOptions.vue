@@ -127,7 +127,7 @@ watch(summaryVisibility, (value) => emit('set-summary-visibility', value));
 .printing-option-section h2 {
   font-size: 1.8rem;
   margin-bottom: 0.5em;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--c2c-grey-lighter);
 }
 
 .print-button {

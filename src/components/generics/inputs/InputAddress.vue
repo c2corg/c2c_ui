@@ -283,14 +283,14 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   position: relative;
-  border: 1px solid #ccc;
+  border: 1px solid var(--c2c-grey-lighter);
   border-radius: 10px;
-  background-color: #fff;
+  background-color: var(--c2c-white);
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
   &:focus-within {
-    border-color: #666;
+    border-color: var(--c2c-color-base-c2c);
     box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
   }
 
@@ -304,13 +304,13 @@ onBeforeUnmount(() => {
       outline: none;
       background-color: transparent;
       padding: 8px 34px 8px 10px;
-      color: #222;
+      color: var(--c2c-grey-darker);
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
 
       &::placeholder {
-        color: #999;
+        color: var(--c2c-input-placeholder-color);
       }
     }
 
@@ -319,15 +319,15 @@ onBeforeUnmount(() => {
       top: calc(100% + 5px);
       left: 0;
       right: 0;
-      background-color: #fff;
-      border: 1px solid #ddd;
+      background-color: var(--c2c-white);
+      border: 1px solid var(--c2c-grey-lighter);
       border-radius: 10px;
       box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
       z-index: 10;
       max-height: 220px;
       overflow-y: auto;
       scrollbar-width: thin;
-      scrollbar-color: #aaa #f9f9f9;
+      scrollbar-color: var(--c2c-grey-light) var(--c2c-white-ter);
 
       ul {
         list-style: none;
@@ -337,19 +337,19 @@ onBeforeUnmount(() => {
         li {
           padding: 10px 14px;
           font-size: 14px;
-          color: #333;
+          color: var(--c2c-grey-darker);
           transition:
             background 0.2s ease,
             color 0.2s ease;
 
           &:hover {
-            background-color: #f5f5f5;
+            background-color: var(--c2c-white-ter);
             cursor: pointer;
-            color: #000;
+            color: var(--c2c-grey-darker);
           }
 
           &:not(:last-child) {
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--c2c-grey-lightest);
           }
         }
       }
@@ -361,7 +361,7 @@ onBeforeUnmount(() => {
     align-items: center;
     justify-content: center;
     border-radius: 10px;
-    background-color: white;
+    background-color: var(--c2c-white);
     height: 32px;
     width: 32px;
     margin-left: 6px;
@@ -370,7 +370,7 @@ onBeforeUnmount(() => {
     border: 0px;
 
     &:hover {
-      background-color: #efefef;
+      background-color: var(--c2c-grey-lightest);
     }
 
     .geolocalisation-img {

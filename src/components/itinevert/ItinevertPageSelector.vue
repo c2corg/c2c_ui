@@ -107,13 +107,13 @@ function selectLimit(l: number) {
 }
 
 .is-active {
-  background-color: #337ab7 !important;
-  color: #fff !important;
+  background-color: var(--c2c-primary) !important;
+  color: var(--c2c-white) !important;
 }
 
 .dropdown-item:hover {
-  background-color: #f5f5f5;
-  color: #0a0a0a;
+  background-color: var(--c2c-white-ter);
+  color: var(--c2c-black);
 }
 
 @media screen and (max-width: 340px) {

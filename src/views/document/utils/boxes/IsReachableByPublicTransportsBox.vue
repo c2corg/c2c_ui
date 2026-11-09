@@ -98,12 +98,12 @@ watch(() => props.document, checkAccessibility, { deep: true, immediate: true })
 
 <style scoped>
 .accessible-transport-box {
-  border: 3px solid #4baf50;
+  border: 3px solid var(--c2c-green);
   border-radius: 2px;
   .accessible-transport {
     display: flex;
     align-items: center;
-    background-color: #fff;
+    background-color: var(--c2c-white);
     gap: 10px;
 
     .public-transports-bus {
@@ -111,14 +111,14 @@ watch(() => props.document, checkAccessibility, { deep: true, immediate: true })
       height: 40px;
       margin-right: 8px;
       padding: 8px;
-      background-color: #4baf50;
+      background-color: var(--c2c-green);
       border-radius: 4px;
     }
 
     .info-content {
       .info-title {
         font-size: 15px;
-        color: #333;
+        color: var(--c2c-grey-darker);
         margin: 0 0 0px 0;
         font-weight: bold;
       }

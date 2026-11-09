@@ -269,7 +269,7 @@ defineExpose({ focus });
 }
 
 div.dropdown-item-option:hover {
-  background: #eee; /* TODO variables */
+  background: var(--c2c-grey-lightest); /* TODO variables */
 }
 
 .input-container {

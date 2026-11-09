@@ -230,11 +230,11 @@ function applyRotation(angle: number) {
   }
 
   .licence-select {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--c2c-grey-lighter);
     max-width: 100%;
 
     .column:not(:last-child) {
-      border-right: 1px solid #ddd;
+      border-right: 1px solid var(--c2c-grey-lighter);
     }
 
     label {

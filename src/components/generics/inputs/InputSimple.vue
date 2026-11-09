@@ -103,8 +103,8 @@ select {
   .prefix {
     cursor: default;
     background-color: whitesmoke;
-    border-color: #dbdbdb;
-    color: #7a7a7a;
+    border-color: var(--c2c-grey-lighter);
+    color: var(--c2c-grey);
     box-shadow: none;
 
     margin-right: -1px;

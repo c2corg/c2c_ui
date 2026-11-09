@@ -281,7 +281,7 @@ onBeforeUnmount(() => {
   h3 {
     font-size: 1.5rem !important;
     margin-bottom: 0.5em !important;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--c2c-grey-lightest);
   }
   h4 {
     font-size: 1.1rem !important;
@@ -309,9 +309,9 @@ img[c2c\:role='emoji'] {
 
 figure[c2c\:role='embedded-figure'] {
   border-radius: 4px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--c2c-grey-lighter);
   padding: 0.5rem;
-  background: #fafafa;
+  background: var(--c2c-white);
   max-width: 100%;
   display: table;
 

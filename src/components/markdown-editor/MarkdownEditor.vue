@@ -275,7 +275,7 @@ function handleQuote() {
 
   .button-bar {
     padding: 0.5rem;
-    background: #eee;
+    background: var(--c2c-grey-lightest);
     margin-bottom: 0;
     padding-bottom: 0;
     border-bottom: 1px dashed lightgrey;

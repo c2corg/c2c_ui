@@ -274,6 +274,6 @@ onMounted(load);
 
 <style scoped>
 .title.is-2 {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--c2c-grey-lighter);
 }
 </style>
