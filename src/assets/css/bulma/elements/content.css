@@ -28,28 +28,28 @@
 .content h1 {
   font-size: 2em;
   margin-bottom: 0.5em;
-}
 
-.content h1:not(:first-child) {
-  margin-top: 1em;
+  &:not(:first-child) {
+    margin-top: 1em;
+  }
 }
 
 .content h2 {
   font-size: 1.75em;
   margin-bottom: 0.5714em;
-}
 
-.content h2:not(:first-child) {
-  margin-top: 1.1428em;
+  &:not(:first-child) {
+    margin-top: 1.1428em;
+  }
 }
 
 .content h3 {
   font-size: 1.5em;
   margin-bottom: 0.6666em;
-}
 
-.content h3:not(:first-child) {
-  margin-top: 1.3333em;
+  &:not(:first-child) {
+    margin-top: 1.3333em;
+  }
 }
 
 .content h4 {
@@ -77,25 +77,25 @@
   list-style-position: outside;
   margin-left: 2em;
   margin-top: 1em;
-}
 
-.content ol:not([type]) {
-  list-style-type: decimal;
+  &:not([type]) {
+    list-style-type: decimal;
+  }
 }
 
 .content ul {
   list-style: disc outside;
   margin-left: 2em;
   margin-top: 1em;
-}
 
-.content ul ul {
-  list-style-type: circle;
-  margin-top: 0.5em;
-}
+  ul {
+    list-style-type: circle;
+    margin-top: 0.5em;
 
-.content ul ul ul {
-  list-style-type: square;
+    ul {
+      list-style-type: square;
+    }
+  }
 }
 
 .content dd {
@@ -106,22 +106,22 @@
   margin-left: 2em;
   margin-right: 2em;
   text-align: center;
-}
 
-.content figure:not(:first-child) {
-  margin-top: 2em;
-}
+  &:not(:first-child) {
+    margin-top: 2em;
+  }
 
-.content figure:not(:last-child) {
-  margin-bottom: 2em;
-}
+  &:not(:last-child) {
+    margin-bottom: 2em;
+  }
 
-.content figure img {
-  display: inline-block;
-}
+  img {
+    display: inline-block;
+  }
 
-.content figure figcaption {
-  font-style: italic;
+  figcaption {
+    font-style: italic;
+  }
 }
 
 .content pre {
@@ -139,39 +139,39 @@
 
 .content table {
   width: 100%;
-}
 
-.content table td,
-.content table th {
-  border: 1px solid hsl(0, 0%, 86%);
-  border-width: 0 0 1px;
-  padding: 0.5em 0.75em;
-  vertical-align: top;
-}
+  td,
+  th {
+    border: 1px solid hsl(0, 0%, 86%);
+    border-width: 0 0 1px;
+    padding: 0.5em 0.75em;
+    vertical-align: top;
+  }
 
-.content table th {
-  color: var(--c2c-grey-darker);
-}
+  th {
+    color: var(--c2c-grey-darker);
 
-.content table th:not([align]) {
-  text-align: inherit;
-}
+    &:not([align]) {
+      text-align: inherit;
+    }
+  }
 
-.content table thead td,
-.content table thead th {
-  border-width: 0 0 2px;
-  color: var(--c2c-grey-darker);
-}
+  thead td,
+  thead th {
+    border-width: 0 0 2px;
+    color: var(--c2c-grey-darker);
+  }
 
-.content table tfoot td,
-.content table tfoot th {
-  border-width: 2px 0 0;
-  color: var(--c2c-grey-darker);
-}
+  tfoot td,
+  tfoot th {
+    border-width: 2px 0 0;
+    color: var(--c2c-grey-darker);
+  }
 
-.content table tbody tr:last-child td,
-.content table tbody tr:last-child th {
-  border-bottom-width: 0;
+  tbody tr:last-child td,
+  tbody tr:last-child th {
+    border-bottom-width: 0;
+  }
 }
 
 .content .tabs li + li {

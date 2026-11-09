@@ -5,33 +5,33 @@
   max-width: 100%;
   position: relative;
   vertical-align: top;
-}
 
-.select:not(.is-multiple) {
-  height: 2.25em;
-}
+  &:not(.is-multiple) {
+    height: 2.25em;
 
-.select:not(.is-multiple):not(.is-loading)::after {
-  border-color: var(--c2c-link);
-  right: 1.125em;
-  z-index: 4;
-}
+    &:not(.is-loading)::after {
+      border-color: var(--c2c-link);
+      right: 1.125em;
+      z-index: 4;
+    }
+  }
 
-.select.is-rounded select {
-  border-radius: 9999px;
-  padding-left: 1em;
-}
+  &.is-rounded select {
+    border-radius: 9999px;
+    padding-left: 1em;
+  }
 
-.select select {
-  cursor: pointer;
-  display: block;
-  font-size: 1em;
-  max-width: 100%;
-  outline: none;
-}
+  select {
+    cursor: pointer;
+    display: block;
+    font-size: 1em;
+    max-width: 100%;
+    outline: none;
 
-.select select::-ms-expand {
-  display: none;
+    &::-ms-expand {
+      display: none;
+    }
+  }
 }
 
 .select select[disabled]:hover,
@@ -46,10 +46,10 @@ fieldset[disabled] .select select:hover {
 .select select[multiple] {
   height: auto;
   padding: 0;
-}
 
-.select select[multiple] option {
-  padding: 0.5em 1em;
+  option {
+    padding: 0.5em 1em;
+  }
 }
 
 .select:not(.is-multiple):not(.is-loading):hover::after {

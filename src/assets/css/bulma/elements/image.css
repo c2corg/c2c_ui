@@ -3,24 +3,24 @@
 .image {
   display: block;
   position: relative;
-}
 
-.image img {
-  display: block;
-  height: auto;
-  width: 100%;
-}
+  img {
+    display: block;
+    height: auto;
+    width: 100%;
 
-.image img.is-rounded {
-  border-radius: 9999px;
-}
+    &.is-rounded {
+      border-radius: 9999px;
+    }
+  }
 
-.image.is-48x48 {
-  height: 48px;
-  width: 48px;
-}
+  &.is-48x48 {
+    height: 48px;
+    width: 48px;
+  }
 
-.image.is-96x96 {
-  height: 96px;
-  width: 96px;
+  &.is-96x96 {
+    height: 96px;
+    width: 96px;
+  }
 }

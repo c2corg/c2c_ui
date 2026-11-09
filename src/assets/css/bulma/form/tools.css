@@ -5,33 +5,33 @@
   display: block;
   font-size: var(--c2c-size-6);
   font-weight: 700;
-}
 
-.label:not(:last-child) {
-  margin-bottom: 0.5em;
-}
+  &:not(:last-child) {
+    margin-bottom: 0.5em;
+  }
 
-.label.is-small {
-  font-size: var(--c2c-size-7);
-}
+  &.is-small {
+    font-size: var(--c2c-size-7);
+  }
 
-.label.is-medium {
-  font-size: 1.1429rem;
-}
+  &.is-medium {
+    font-size: 1.1429rem;
+  }
 
-.label.is-large {
-  font-size: 1.2857rem;
+  &.is-large {
+    font-size: 1.2857rem;
+  }
 }
 
 .help {
   display: block;
   font-size: var(--c2c-size-7);
   margin-top: 0.25rem;
-}
 
-/* the colors: see ../palette.css */
-.help:is(.is-white, .is-light, .is-dark, .is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger) {
-  color: var(--palette);
+  /* the colors: see ../palette.css */
+  &:is(.is-white, .is-light, .is-dark, .is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger) {
+    color: var(--palette);
+  }
 }
 
 .field:not(:last-child) {
@@ -41,84 +41,84 @@
 .field.has-addons {
   display: flex;
   justify-content: flex-start;
-}
 
-.field.has-addons .control:not(:last-child) {
-  margin-right: -1px;
-}
+  .control:not(:last-child) {
+    margin-right: -1px;
+  }
 
-.field.has-addons .control:not(:first-child):not(:last-child) .button,
-.field.has-addons .control:not(:first-child):not(:last-child) .input,
-.field.has-addons .control:not(:first-child):not(:last-child) .select select {
-  border-radius: 0;
-}
+  .control:not(:first-child):not(:last-child) .button,
+  .control:not(:first-child):not(:last-child) .input,
+  .control:not(:first-child):not(:last-child) .select select {
+    border-radius: 0;
+  }
 
-.field.has-addons .control:first-child:not(:only-child) .button,
-.field.has-addons .control:first-child:not(:only-child) .input,
-.field.has-addons .control:first-child:not(:only-child) .select select {
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-}
+  .control:first-child:not(:only-child) .button,
+  .control:first-child:not(:only-child) .input,
+  .control:first-child:not(:only-child) .select select {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
 
-.field.has-addons .control:last-child:not(:only-child) .button,
-.field.has-addons .control:last-child:not(:only-child) .input,
-.field.has-addons .control:last-child:not(:only-child) .select select {
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0;
-}
+  .control:last-child:not(:only-child) .button,
+  .control:last-child:not(:only-child) .input,
+  .control:last-child:not(:only-child) .select select {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+  }
 
-.field.has-addons .control .button:not([disabled]):hover,
-.field.has-addons .control .input:not([disabled]):hover,
-.field.has-addons .control .select select:not([disabled]):hover {
-  z-index: 2;
-}
+  .control .button:not([disabled]):hover,
+  .control .input:not([disabled]):hover,
+  .control .select select:not([disabled]):hover {
+    z-index: 2;
+  }
 
-.field.has-addons .control .button:not([disabled]):focus,
-.field.has-addons .control .button:not([disabled]):active,
-.field.has-addons .control .button:not([disabled]).is-active,
-.field.has-addons .control .input:not([disabled]):focus,
-.field.has-addons .control .input:not([disabled]):active,
-.field.has-addons .control .input:not([disabled]).is-active,
-.field.has-addons .control .select select:not([disabled]):focus,
-.field.has-addons .control .select select:not([disabled]):active,
-.field.has-addons .control .select select:not([disabled]).is-active {
-  z-index: 3;
-}
+  .control .button:not([disabled]):focus,
+  .control .button:not([disabled]):active,
+  .control .button:not([disabled]).is-active,
+  .control .input:not([disabled]):focus,
+  .control .input:not([disabled]):active,
+  .control .input:not([disabled]).is-active,
+  .control .select select:not([disabled]):focus,
+  .control .select select:not([disabled]):active,
+  .control .select select:not([disabled]).is-active {
+    z-index: 3;
+  }
 
-.field.has-addons .control .button:not([disabled]):focus:hover,
-.field.has-addons .control .button:not([disabled]):active:hover,
-.field.has-addons .control .button:not([disabled]).is-active:hover,
-.field.has-addons .control .input:not([disabled]):focus:hover,
-.field.has-addons .control .input:not([disabled]):active:hover,
-.field.has-addons .control .input:not([disabled]).is-active:hover,
-.field.has-addons .control .select select:not([disabled]):focus:hover,
-.field.has-addons .control .select select:not([disabled]):active:hover,
-.field.has-addons .control .select select:not([disabled]).is-active:hover {
-  z-index: 4;
-}
+  .control .button:not([disabled]):focus:hover,
+  .control .button:not([disabled]):active:hover,
+  .control .button:not([disabled]).is-active:hover,
+  .control .input:not([disabled]):focus:hover,
+  .control .input:not([disabled]):active:hover,
+  .control .input:not([disabled]).is-active:hover,
+  .control .select select:not([disabled]):focus:hover,
+  .control .select select:not([disabled]):active:hover,
+  .control .select select:not([disabled]).is-active:hover {
+    z-index: 4;
+  }
 
-.field.has-addons .control.is-expanded {
-  flex-grow: 1;
-  flex-shrink: 1;
+  .control.is-expanded {
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
 }
 
 .field.is-grouped {
   display: flex;
   justify-content: flex-start;
-}
 
-.field.is-grouped > .control {
-  flex-shrink: 0;
-}
+  > .control {
+    flex-shrink: 0;
 
-.field.is-grouped > .control:not(:last-child) {
-  margin-bottom: 0;
-  margin-right: 0.75rem;
-}
+    &:not(:last-child) {
+      margin-bottom: 0;
+      margin-right: 0.75rem;
+    }
 
-.field.is-grouped > .control.is-expanded {
-  flex-grow: 1;
-  flex-shrink: 1;
+    &.is-expanded {
+      flex-grow: 1;
+      flex-shrink: 1;
+    }
+  }
 }
 
 .control {
@@ -127,80 +127,80 @@
   font-size: var(--c2c-size-6);
   position: relative;
   text-align: inherit;
-}
 
-.control.has-icons-left .input:focus ~ .icon,
-.control.has-icons-left .select:focus ~ .icon,
-.control.has-icons-right .input:focus ~ .icon,
-.control.has-icons-right .select:focus ~ .icon {
-  color: var(--c2c-text);
-}
+  &.has-icons-left .input:focus ~ .icon,
+  &.has-icons-left .select:focus ~ .icon,
+  &.has-icons-right .input:focus ~ .icon,
+  &.has-icons-right .select:focus ~ .icon {
+    color: var(--c2c-text);
+  }
 
-.control.has-icons-left .input.is-small ~ .icon,
-.control.has-icons-left .select.is-small ~ .icon,
-.control.has-icons-right .input.is-small ~ .icon,
-.control.has-icons-right .select.is-small ~ .icon {
-  font-size: var(--c2c-size-7);
-}
+  &.has-icons-left .input.is-small ~ .icon,
+  &.has-icons-left .select.is-small ~ .icon,
+  &.has-icons-right .input.is-small ~ .icon,
+  &.has-icons-right .select.is-small ~ .icon {
+    font-size: var(--c2c-size-7);
+  }
 
-.control.has-icons-left .input.is-medium ~ .icon,
-.control.has-icons-left .select.is-medium ~ .icon,
-.control.has-icons-right .input.is-medium ~ .icon,
-.control.has-icons-right .select.is-medium ~ .icon {
-  font-size: 1.1429rem;
-}
+  &.has-icons-left .input.is-medium ~ .icon,
+  &.has-icons-left .select.is-medium ~ .icon,
+  &.has-icons-right .input.is-medium ~ .icon,
+  &.has-icons-right .select.is-medium ~ .icon {
+    font-size: 1.1429rem;
+  }
 
-.control.has-icons-left .input.is-large ~ .icon,
-.control.has-icons-left .select.is-large ~ .icon,
-.control.has-icons-right .input.is-large ~ .icon,
-.control.has-icons-right .select.is-large ~ .icon {
-  font-size: 1.2857rem;
-}
+  &.has-icons-left .input.is-large ~ .icon,
+  &.has-icons-left .select.is-large ~ .icon,
+  &.has-icons-right .input.is-large ~ .icon,
+  &.has-icons-right .select.is-large ~ .icon {
+    font-size: 1.2857rem;
+  }
 
-.control.has-icons-left .icon,
-.control.has-icons-right .icon {
-  color: var(--c2c-grey-light);
-  height: 2.25em;
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  width: 2.25em;
-  z-index: 4;
-}
+  &.has-icons-left .icon,
+  &.has-icons-right .icon {
+    color: var(--c2c-grey-light);
+    height: 2.25em;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    width: 2.25em;
+    z-index: 4;
+  }
 
-.control.has-icons-left .input,
-.control.has-icons-left .select select {
-  padding-left: 2.25em;
-}
+  &.has-icons-left .input,
+  &.has-icons-left .select select {
+    padding-left: 2.25em;
+  }
 
-.control.has-icons-left .icon.is-left {
-  left: 0;
-}
+  &.has-icons-left .icon.is-left {
+    left: 0;
+  }
 
-.control.has-icons-right .input,
-.control.has-icons-right .select select {
-  padding-right: 2.25em;
-}
+  &.has-icons-right .input,
+  &.has-icons-right .select select {
+    padding-right: 2.25em;
+  }
 
-.control.has-icons-right .icon.is-right {
-  right: 0;
-}
+  &.has-icons-right .icon.is-right {
+    right: 0;
+  }
 
-.control.is-loading::after {
-  position: absolute !important;
-  right: 0.625em;
-  top: 0.625em;
-  z-index: 4;
-}
+  &.is-loading::after {
+    position: absolute !important;
+    right: 0.625em;
+    top: 0.625em;
+    z-index: 4;
+  }
 
-.control.is-loading.is-small:after {
-  font-size: var(--c2c-size-7);
-}
+  &.is-loading.is-small:after {
+    font-size: var(--c2c-size-7);
+  }
 
-.control.is-loading.is-medium:after {
-  font-size: 1.1429rem;
-}
+  &.is-loading.is-medium:after {
+    font-size: 1.1429rem;
+  }
 
-.control.is-loading.is-large:after {
-  font-size: 1.2857rem;
+  &.is-loading.is-large:after {
+    font-size: 1.2857rem;
+  }
 }

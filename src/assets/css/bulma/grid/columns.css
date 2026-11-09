@@ -301,49 +301,49 @@
   margin-left: -0.75rem;
   margin-right: -0.75rem;
   margin-top: -0.75rem;
-}
 
-.columns:last-child {
-  margin-bottom: -0.75rem;
-}
+  &:last-child {
+    margin-bottom: -0.75rem;
+  }
 
-.columns:not(:last-child) {
-  margin-bottom: calc(1.5rem - 0.75rem);
-}
+  &:not(:last-child) {
+    margin-bottom: calc(1.5rem - 0.75rem);
+  }
 
-.columns.is-centered {
-  justify-content: center;
-}
+  &.is-centered {
+    justify-content: center;
+  }
 
-.columns.is-gapless {
-  margin-left: 0;
-  margin-right: 0;
-  margin-top: 0;
-}
+  &.is-gapless {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
 
-.columns.is-gapless > .column {
-  margin: 0;
-  padding: 0 !important;
-}
+    > .column {
+      margin: 0;
+      padding: 0 !important;
+    }
 
-.columns.is-gapless:not(:last-child) {
-  margin-bottom: 1.5rem;
-}
+    &:not(:last-child) {
+      margin-bottom: 1.5rem;
+    }
 
-.columns.is-gapless:last-child {
-  margin-bottom: 0;
-}
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 
-.columns.is-mobile {
-  display: flex;
-}
+  &.is-mobile {
+    display: flex;
+  }
 
-.columns.is-multiline {
-  flex-wrap: wrap;
-}
+  &.is-multiline {
+    flex-wrap: wrap;
+  }
 
-.columns.is-vcentered {
-  align-items: center;
+  &.is-vcentered {
+    align-items: center;
+  }
 }
 
 @media screen and (min-width: 769px), print {
@@ -356,23 +356,23 @@
   --columnGap: 0.75rem;
   margin-left: calc(-1 * var(--columnGap));
   margin-right: calc(-1 * var(--columnGap));
-}
 
-.columns.is-variable > .column {
-  padding-left: var(--columnGap);
-  padding-right: var(--columnGap);
-}
+  > .column {
+    padding-left: var(--columnGap);
+    padding-right: var(--columnGap);
+  }
 
-.columns.is-variable.is-0 {
-  --columnGap: 0rem;
-}
+  &.is-0 {
+    --columnGap: 0rem;
+  }
 
-.columns.is-variable.is-1 {
-  --columnGap: 0.25rem;
-}
+  &.is-1 {
+    --columnGap: 0.25rem;
+  }
 
-.columns.is-variable.is-2 {
-  --columnGap: 0.5rem;
+  &.is-2 {
+    --columnGap: 0.5rem;
+  }
 }
 
 @media screen and (min-width: 769px), print {

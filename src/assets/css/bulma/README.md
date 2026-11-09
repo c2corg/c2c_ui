@@ -17,6 +17,7 @@ values, nesting, custom properties instead of variants), keeping the class names
   the palette.
 - `elements/progress.css`, `elements/table.css`, `form/file.css`, `form/input-textarea.css`, `form/select.css`,
   `form/tools.css`: one set of color rules that use the palette.
+- All the modules: nesting, where the rules that follow a rule start with its selector.
 
 ## Where it comes from
 
