@@ -150,20 +150,20 @@ function format(suggestion: unknown) {
       .autocomplete-input {
         width: 100%;
         padding: 8px 34px 8px 14px;
-        color: #222;
-        border: 1px solid #ccc;
+        color: var(--c2c-grey-darker);
+        border: 1px solid var(--c2c-grey-lighter);
         border-radius: 10px;
         outline: none;
         transition: all 0.2s ease;
         background-color: var(--c2c-white);
 
         &:focus {
-          border-color: #666;
+          border-color: var(--c2c-color-base-c2c);
           box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
         }
 
         &::placeholder {
-          color: #999;
+          color: var(--c2c-input-placeholder-color);
         }
       }
 
@@ -171,13 +171,13 @@ function format(suggestion: unknown) {
         position: absolute;
         right: 10px;
         font-size: 12px;
-        color: #555;
+        color: var(--c2c-grey-dark);
         cursor: pointer;
         user-select: none;
         transition: color 0.2s ease;
 
         &:hover {
-          color: #000;
+          color: var(--c2c-grey-darker);
         }
       }
     }
@@ -195,7 +195,7 @@ function format(suggestion: unknown) {
       max-height: 220px;
       overflow-y: auto;
       scrollbar-width: thin;
-      scrollbar-color: #aaa var(--c2c-white-ter);
+      scrollbar-color: var(--c2c-grey-light) var(--c2c-white-ter);
 
       ul {
         list-style: none;
@@ -212,7 +212,7 @@ function format(suggestion: unknown) {
           &:hover {
             background-color: var(--c2c-white-ter);
             cursor: pointer;
-            color: #000;
+            color: var(--c2c-grey-darker);
           }
 
           &:not(:last-child) {

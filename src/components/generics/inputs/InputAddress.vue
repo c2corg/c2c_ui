@@ -283,14 +283,14 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   position: relative;
-  border: 1px solid #ccc;
+  border: 1px solid var(--c2c-grey-lighter);
   border-radius: 10px;
   background-color: var(--c2c-white);
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
   &:focus-within {
-    border-color: #666;
+    border-color: var(--c2c-color-base-c2c);
     box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
   }
 
@@ -304,13 +304,13 @@ onBeforeUnmount(() => {
       outline: none;
       background-color: transparent;
       padding: 8px 34px 8px 10px;
-      color: #222;
+      color: var(--c2c-grey-darker);
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
 
       &::placeholder {
-        color: #999;
+        color: var(--c2c-input-placeholder-color);
       }
     }
 
@@ -327,7 +327,7 @@ onBeforeUnmount(() => {
       max-height: 220px;
       overflow-y: auto;
       scrollbar-width: thin;
-      scrollbar-color: #aaa var(--c2c-white-ter);
+      scrollbar-color: var(--c2c-grey-light) var(--c2c-white-ter);
 
       ul {
         list-style: none;
@@ -345,7 +345,7 @@ onBeforeUnmount(() => {
           &:hover {
             background-color: var(--c2c-white-ter);
             cursor: pointer;
-            color: #000;
+            color: var(--c2c-grey-darker);
           }
 
           &:not(:last-child) {
@@ -361,7 +361,7 @@ onBeforeUnmount(() => {
     align-items: center;
     justify-content: center;
     border-radius: 10px;
-    background-color: white;
+    background-color: var(--c2c-white);
     height: 32px;
     width: 32px;
     margin-left: 6px;

@@ -19,6 +19,7 @@
   --c2c-color-text: #4a4a4a;
   --c2c-body-background-color: #fbfaf6;
   --c2c-hover-background: hsl(0, 0%, 95%);
+  --c2c-input-placeholder-color: rgb(160, 160, 160);
 
   /* greys */
   --c2c-white: hsl(0, 0%, 100%);
