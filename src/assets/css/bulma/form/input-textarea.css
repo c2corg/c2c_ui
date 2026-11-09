@@ -69,13 +69,13 @@
   min-width: 100%;
   padding: calc(0.625em - 1px);
   resize: vertical;
-}
 
-.textarea:not([rows]) {
-  max-height: 40em;
-  min-height: 8em;
-}
+  &:not([rows]) {
+    max-height: 40em;
+    min-height: 8em;
+  }
 
-.textarea[rows] {
-  height: initial;
+  &[rows] {
+    height: initial;
+  }
 }

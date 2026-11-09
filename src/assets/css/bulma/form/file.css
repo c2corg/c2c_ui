@@ -5,97 +5,97 @@
   display: flex;
   justify-content: flex-start;
   position: relative;
-}
 
-/* the colors: see ../palette.css */
-.file:is(.is-white, .is-light, .is-dark, .is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger) {
-  .file-cta {
-    background-color: var(--palette);
-    border-color: transparent;
-    color: var(--palette-invert);
+  /* the colors: see ../palette.css */
+  &:is(.is-white, .is-light, .is-dark, .is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger) {
+    .file-cta {
+      background-color: var(--palette);
+      border-color: transparent;
+      color: var(--palette-invert);
+    }
+
+    &:hover .file-cta {
+      background-color: var(--palette-hover);
+      border-color: transparent;
+      color: var(--palette-invert);
+    }
+
+    &:focus .file-cta {
+      border-color: transparent;
+      box-shadow: 0 0 0.5em var(--palette-focus);
+      color: var(--palette-invert);
+    }
+
+    &:active .file-cta,
+    &.is-active .file-cta {
+      background-color: var(--palette-active);
+      border-color: transparent;
+      color: var(--palette-invert);
+    }
   }
 
-  &:hover .file-cta {
-    background-color: var(--palette-hover);
-    border-color: transparent;
-    color: var(--palette-invert);
+  &.is-small {
+    font-size: var(--c2c-size-7);
   }
 
-  &:focus .file-cta {
-    border-color: transparent;
-    box-shadow: 0 0 0.5em var(--palette-focus);
-    color: var(--palette-invert);
+  &.is-medium {
+    font-size: 1.1429rem;
+
+    .file-icon .fa {
+      font-size: 21px;
+    }
   }
 
-  &:active .file-cta,
-  &.is-active .file-cta {
-    background-color: var(--palette-active);
-    border-color: transparent;
-    color: var(--palette-invert);
+  &.is-large {
+    font-size: 1.2857rem;
+
+    .file-icon .fa {
+      font-size: 28px;
+    }
   }
-}
 
-.file.is-small {
-  font-size: var(--c2c-size-7);
-}
+  &.is-boxed .file-label {
+    flex-direction: column;
+  }
 
-.file.is-medium {
-  font-size: 1.1429rem;
-}
+  &.is-boxed .file-cta {
+    flex-direction: column;
+    height: auto;
+    padding: 1em 3em;
+  }
 
-.file.is-medium .file-icon .fa {
-  font-size: 21px;
-}
+  &.is-boxed .file-icon {
+    height: 1.5em;
+    width: 1.5em;
 
-.file.is-large {
-  font-size: 1.2857rem;
-}
+    .fa {
+      font-size: 21px;
+    }
+  }
 
-.file.is-large .file-icon .fa {
-  font-size: 28px;
-}
+  &.is-boxed.is-small .file-icon .fa {
+    font-size: 14px;
+  }
 
-.file.is-boxed .file-label {
-  flex-direction: column;
-}
+  &.is-boxed.is-medium .file-icon .fa {
+    font-size: 28px;
+  }
 
-.file.is-boxed .file-cta {
-  flex-direction: column;
-  height: auto;
-  padding: 1em 3em;
-}
+  &.is-boxed.is-large .file-icon .fa {
+    font-size: 35px;
+  }
 
-.file.is-boxed .file-icon {
-  height: 1.5em;
-  width: 1.5em;
-}
+  &.is-centered {
+    justify-content: center;
+  }
 
-.file.is-boxed .file-icon .fa {
-  font-size: 21px;
-}
+  &.is-right {
+    justify-content: flex-end;
 
-.file.is-boxed.is-small .file-icon .fa {
-  font-size: 14px;
-}
-
-.file.is-boxed.is-medium .file-icon .fa {
-  font-size: 28px;
-}
-
-.file.is-boxed.is-large .file-icon .fa {
-  font-size: 35px;
-}
-
-.file.is-centered {
-  justify-content: center;
-}
-
-.file.is-right {
-  justify-content: flex-end;
-}
-
-.file.is-right .file-cta {
-  border-radius: 0 4px 4px 0;
+    .file-cta {
+      border-radius: 0 4px 4px 0;
+    }
+  }
 }
 
 .file-label {
@@ -105,16 +105,16 @@
   justify-content: flex-start;
   overflow: hidden;
   position: relative;
-}
 
-.file-label:hover .file-cta {
-  background-color: hsl(0, 0%, 93.5%);
-  color: var(--c2c-grey-darker);
-}
+  &:hover .file-cta {
+    background-color: hsl(0, 0%, 93.5%);
+    color: var(--c2c-grey-darker);
+  }
 
-.file-label:active .file-cta {
-  background-color: hsl(0, 0%, 91%);
-  color: var(--c2c-grey-darker);
+  &:active .file-cta {
+    background-color: hsl(0, 0%, 91%);
+    color: var(--c2c-grey-darker);
+  }
 }
 
 .file-input {
@@ -145,8 +145,8 @@
   justify-content: center;
   margin-right: 0.5em;
   width: 1em;
-}
 
-.file-icon .fa {
-  font-size: 14px;
+  .fa {
+    font-size: 14px;
+  }
 }

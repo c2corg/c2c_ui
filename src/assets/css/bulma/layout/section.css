@@ -7,11 +7,11 @@
 @media screen and (min-width: 1024px) {
   .section {
     padding: 1.5rem 1.5rem;
-  }
-  .section.is-medium {
-    padding: 9rem 4.5rem;
-  }
-  .section.is-large {
-    padding: 18rem 6rem;
+    &.is-medium {
+      padding: 9rem 4.5rem;
+    }
+    &.is-large {
+      padding: 18rem 6rem;
+    }
   }
 }

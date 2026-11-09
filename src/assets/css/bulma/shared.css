@@ -156,37 +156,37 @@ fieldset[disabled] .button {
   position: relative;
   vertical-align: top;
   width: 20px;
-}
 
-.delete::before,
-.delete::after {
-  background-color: var(--c2c-white);
-  content: '';
-  display: block;
-  left: 50%;
-  position: absolute;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%) rotate(45deg);
-  transform-origin: center center;
-}
+  &::before,
+  &::after {
+    background-color: var(--c2c-white);
+    content: '';
+    display: block;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%) rotate(45deg);
+    transform-origin: center center;
+  }
 
-.delete::before {
-  height: 2px;
-  width: 50%;
-}
+  &::before {
+    height: 2px;
+    width: 50%;
+  }
 
-.delete::after {
-  height: 50%;
-  width: 2px;
-}
+  &::after {
+    height: 50%;
+    width: 2px;
+  }
 
-.delete:hover,
-.delete:focus {
-  background-color: rgba(4%, 4%, 4%, 0.3);
-}
+  &:hover,
+  &:focus {
+    background-color: rgba(4%, 4%, 4%, 0.3);
+  }
 
-.delete:active {
-  background-color: rgba(4%, 4%, 4%, 0.4);
+  &:active {
+    background-color: rgba(4%, 4%, 4%, 0.4);
+  }
 }
 
 .is-small.delete {
