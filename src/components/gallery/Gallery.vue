@@ -11,7 +11,7 @@
         :alt="image.locales[0].title"
         :title="image.locales[0].title"
         @click="$imageViewer.show(image)"
-        :loading="priority && index < EAGER_SLIDES ? 'eager' : 'lazy'"
+        :loading="priority && index < ($screen.isMobile ? 2 : 4) ? 'eager' : 'lazy'"
         :fetchpriority="priority && index === 0 ? 'high' : undefined"
       />
     </swiper-slide>
@@ -34,10 +34,6 @@ type GalleryImage = {
 
 const SLIDE_HEIGHT = 200;
 
-// with priority, the slides a wide screen shows at once load right away: lazy images wait for the layout, after the
-// scripts, and the first image of a gallery at the top of the page is its largest contentful paint
-const EAGER_SLIDES = 4;
-
 // the width of an image at the height of the slides, when the API gives its size: the slide keeps it while the image
 // loads, instead of growing from nothing and pushing the next ones (#4883)
 function slideWidth(image: GalleryImage) {
@@ -49,7 +45,10 @@ const props = defineProps({
     type: Array as PropType<GalleryImage[]>,
     required: true,
   },
-  // the gallery is at the top of the page (outings): its first images are seen as soon as the page shows
+  // the gallery is at the top of the page (outings): its first images are seen as soon as the page shows, and one of
+  // them is its largest contentful paint, while lazy images wait for the layout, after the scripts. The slides the
+  // screen shows at once load right away (2 on a phone, 4 on a wider screen; the widest image, often not the first,
+  // is the largest), the first one with a high priority
   priority: {
     type: Boolean,
     default: false,

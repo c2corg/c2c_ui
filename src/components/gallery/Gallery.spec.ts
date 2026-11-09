@@ -5,12 +5,17 @@ import Gallery from './Gallery.vue';
 
 vi.mock('@/js/swiper-element', () => ({}));
 
-const mountGallery = (images: object[], priority = false) =>
+const mountGallery = (images: object[], priority = false, isMobile = false) =>
   mount(Gallery, {
     props: { images: images as never, priority },
     global: {
       stubs: { Thumbnail: true },
-      config: { globalProperties: { $imageViewer: { push: vi.fn(), show: vi.fn(), clear: vi.fn() } } as never },
+      config: {
+        globalProperties: {
+          $imageViewer: { push: vi.fn(), show: vi.fn(), clear: vi.fn() },
+          $screen: { isMobile },
+        } as never,
+      },
     },
   });
 
@@ -37,7 +42,20 @@ describe('Gallery', () => {
     expect(thumbnails.some((thumbnail) => thumbnail.attributes('fetchpriority'))).toBe(false);
   });
 
-  it('with priority, loads its first 4 images right away, the first one with a high priority', () => {
+  it('with priority, loads its first 2 images right away on a phone', () => {
+    const thumbnails = mountGallery(sixImages, true, true).findAll('thumbnail-stub');
+    expect(thumbnails.map((thumbnail) => thumbnail.attributes('loading'))).toEqual([
+      'eager',
+      'eager',
+      'lazy',
+      'lazy',
+      'lazy',
+      'lazy',
+    ]);
+    expect(thumbnails[0].attributes('fetchpriority')).toBe('high');
+  });
+
+  it('with priority, loads its first 4 images right away on a wider screen, the first one with a high priority', () => {
     const thumbnails = mountGallery(sixImages, true).findAll('thumbnail-stub');
     expect(thumbnails.map((thumbnail) => thumbnail.attributes('loading'))).toEqual([
       'eager',
