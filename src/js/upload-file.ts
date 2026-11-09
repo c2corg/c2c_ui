@@ -9,15 +9,8 @@ import c2c from '@/js/apis/c2c';
 
 dayjs.extend(customParseFormat);
 
-// what this module reads of the image metadata (blueimp-load-image): its types have no getAll()
-type MetadataTags = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getAll(): Record<string, any>;
-  get(tagName: string): unknown;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Tags = Record<string, any> | null;
+// the metadata of the file as exifr gives them: EXIF, GPS and IPTC tags in one object, values as stored
+export type Metadata = Record<string, unknown>;
 
 // the image document being built from the file
 type ImageDocument = Record<string, unknown>;
@@ -28,32 +21,35 @@ const worldExtent = getProjection('EPSG:4326')!.getExtent();
 // this worker will handle network upload : only on upload at a time
 const worker = new Worker();
 
-// https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/utils.js#L273
-const convertDMSToDecimal = (degrees: string, minutes: string, seconds: string, direction?: string) => {
-  let decimal = Number(degrees) + Number(minutes) / 60 + parseFloat(seconds) / 3600;
+// Limits of the stored originals (c2corg/c2c_images#1205). The site shows 1500 px at most (BI thumbnail): a long side
+// of 3072 px allows a 2x thumbnail. Panoramas keep 2048 px on their short side, up to 16 megapixels (Safari limits a
+// canvas to 16.7 megapixels).
+const MAX_LONG_SIDE = 3072;
+const PANORAMA_RATIO = 2;
+const MAX_PANORAMA_SHORT_SIDE = 2048;
+const MAX_PANORAMA_PIXELS = 16_000_000;
+// SSIMULACRA2 over 80 ("high") on photos, and less storage than the 0.92 of the browsers on 2048 px (#1205)
+const JPEG_QUALITY = 0.9;
 
-  // Don't do anything for N or E
-  if (direction === 'S' || direction === 'W') {
-    decimal = decimal * -1;
-  }
+const string = (value: unknown) => (typeof value === 'string' ? value : undefined);
+const number = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : undefined);
 
-  return decimal;
-};
-
-const parseDate = (exif: Tags, iptc: Tags) => {
-  const iptcDate = iptc?.DateCreated;
-  const exifDate = exif?.Exif?.DateTimeOriginal ?? exif?.DateTime;
+const parseDate = (tags: Metadata) => {
+  const iptcDate = string(tags.DateCreated);
+  const exifDate = string(tags.DateTimeOriginal) ?? string(tags.DateTime);
 
   let date = undefined;
 
   if (iptcDate) {
-    if (iptc?.TimeCreated) {
-      date = dayjs(`${iptcDate} ${iptc.TimeCreated}`, 'YYYYMMDD hhmmssZZ');
+    const iptcTime = string(tags.TimeCreated);
+    if (iptcTime) {
+      // with or without its offset
+      date = dayjs(`${iptcDate} ${iptcTime}`, ['YYYYMMDD HHmmssZZ', 'YYYYMMDD HHmmss']);
     } else {
       date = dayjs(iptcDate, 'YYYYMMDD');
     }
   } else if (exifDate) {
-    const offsetTime = exif?.Exif?.OffsetTimeOriginal ?? exif?.Exif?.OffsetTime;
+    const offsetTime = string(tags.OffsetTimeOriginal) ?? string(tags.OffsetTime);
     if (offsetTime) {
       date = dayjs(`${exifDate} ${offsetTime}`, 'YYYY:MM:DD HH:mm:ss Z');
     } else {
@@ -64,18 +60,12 @@ const parseDate = (exif: Tags, iptc: Tags) => {
   return date && date.isValid() ? date.format() : null;
 };
 
-const parseExifGeometry = (exif: Tags) => {
-  if (!exif?.GPSInfo?.GPSLatitude || !exif?.GPSInfo?.GPSLongitude) {
-    return undefined;
-  }
+const parseGeometry = (tags: Metadata) => {
+  // signed decimal degrees, computed by exifr from the GPS tags
+  const lat = number(tags.latitude);
+  const lon = number(tags.longitude);
 
-  const latDMS = exif.GPSInfo.GPSLatitude.split(',');
-  const lonDMS = exif.GPSInfo.GPSLongitude.split(',');
-
-  const lat = convertDMSToDecimal(latDMS[0], latDMS[1], latDMS[2], exif.GPSInfo?.GPSLatitudeRef);
-  const lon = convertDMSToDecimal(lonDMS[0], lonDMS[1], lonDMS[2], exif.GPSInfo?.GPSLongitudeRef);
-
-  if (Number.isNaN(lat) || Number.isNaN(lon) || !containsXY(worldExtent, lon, lat)) {
+  if (lat === undefined || lon === undefined || !containsXY(worldExtent, lon, lat)) {
     return undefined;
   }
 
@@ -85,134 +75,161 @@ const parseExifGeometry = (exif: Tags) => {
   return { geom: JSON.stringify(geom) };
 };
 
-const parseExifElevation = (exif: Tags) => {
-  if (!exif?.GPSInfo?.GPSAltitude) {
-    return undefined;
-  }
-
-  const elevation = parseFloat(exif.GPSInfo.GPSAltitude);
-  return isNaN(elevation) ? undefined : elevation;
-};
-
 const setIfDefined = (document: ImageDocument, name: string, value: unknown) => {
   if (value !== undefined) {
     document[name] = value;
   }
 };
 
-const readFile = async (file: Blob) => {
-  return new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      resolve(reader.result as string);
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-};
-
-const extractDimensions = async (dataUrl: string) => {
-  return new Promise<{ dataUrl: string; width: number; height: number }>((resolve) => {
-    const img = new Image();
-    img.onload = () => resolve({ dataUrl, width: img.width, height: img.height });
-    img.src = dataUrl;
-  });
-};
-
 // exported for the specs
-export const parseMetaData = (document: ImageDocument, metaData: { exif?: unknown; iptc?: unknown }) => {
-  const exifTags = metaData.exif as MetadataTags | undefined;
-  const exif = exifTags?.getAll() ?? null;
-  const iptc = (metaData.iptc as MetadataTags | undefined)?.getAll() ?? null;
-  let orientation = 0;
-
-  setIfDefined(document, 'date_time', parseDate(exif, iptc));
-
-  if (exif) {
-    orientation = exifTags!.get('Orientation') as number;
-
-    setIfDefined(document, 'exposure_time', exif?.Exif?.ExposureTime);
-    setIfDefined(document, 'iso_speed', exif?.Exif?.PhotographicSensitivity);
-    setIfDefined(document, 'focal_length', exif?.Exif?.FocalLengthIn35mmFilm);
-    setIfDefined(document, 'fnumber', exif?.Exif?.FNumber);
-    setIfDefined(document, 'camera_name', exif?.Make && exif?.Model ? exif.Make + ' ' + exif.Model : undefined);
-    setIfDefined(document, 'geometry', parseExifGeometry(exif));
-    setIfDefined(document, 'elevation', parseExifElevation(exif));
+export const parseMetaData = (document: ImageDocument, tags: Metadata | undefined) => {
+  if (!tags) {
+    return;
   }
-  return orientation;
+
+  setIfDefined(document, 'date_time', parseDate(tags));
+  setIfDefined(document, 'exposure_time', number(tags.ExposureTime));
+  setIfDefined(document, 'iso_speed', number(tags.ISO));
+  setIfDefined(document, 'focal_length', number(tags.FocalLengthIn35mmFormat));
+  setIfDefined(document, 'fnumber', number(tags.FNumber));
+  const make = string(tags.Make);
+  const model = string(tags.Model);
+  setIfDefined(document, 'camera_name', make && model ? `${make} ${model}` : undefined);
+  setIfDefined(document, 'geometry', parseGeometry(tags));
+  setIfDefined(document, 'elevation', number(tags.GPSAltitude));
 };
 
+// the metadata of JPEG, HEIC, PNG, TIFF...: none when the file has none or cannot be read
+const readMetadata = async (file: Blob): Promise<Metadata | undefined> => {
+  try {
+    const { default: exifr } = await import('exifr');
+    return (await exifr.parse(file, {
+      tiff: true,
+      exif: true,
+      gps: true,
+      iptc: true,
+      ifd1: false,
+      interop: false,
+      // numbers and strings as stored: dates are read with their offset above
+      translateValues: false,
+      reviveValues: false,
+    })) as Metadata | undefined;
+  } catch {
+    return undefined;
+  }
+};
+
+// The image decoded by the browser, upright (the browsers apply the EXIF orientation since 2020), or none: HEIC in
+// Chrome and Firefox, a broken file... Its src is an object URL of the file, for the preview.
+const decodeImage = (file: Blob) =>
+  new Promise<HTMLImageElement | undefined>((resolve) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      resolve(undefined);
+    };
+    img.src = url;
+  });
+
+// The size to store an image at, or undefined to keep it (exported for the specs)
+export const storedSize = (width: number, height: number) => {
+  const longSide = Math.max(width, height);
+  const shortSide = Math.min(width, height);
+  const scale =
+    longSide / shortSide > PANORAMA_RATIO
+      ? Math.min(MAX_PANORAMA_SHORT_SIDE / shortSide, Math.sqrt(MAX_PANORAMA_PIXELS / (width * height)))
+      : MAX_LONG_SIDE / longSide;
+  // rounded down, to stay under the limits (the epsilon against the errors of floating point)
+  const reduce = (side: number) => Math.floor(side * scale + 1e-6);
+  return scale < 1 ? { width: reduce(width), height: reduce(height) } : undefined;
+};
+
+// draws the image at that size, turned clockwise by angle, and encodes it
+const render = (img: HTMLImageElement, width: number, height: number, angle: number, type: string) => {
+  const turned = angle % 180 !== 0;
+  const canvas = document.createElement('canvas');
+  canvas.width = turned ? height : width;
+  canvas.height = turned ? width : height;
+  const context = canvas.getContext('2d')!;
+  context.translate(canvas.width / 2, canvas.height / 2);
+  context.rotate((angle * Math.PI) / 180);
+  context.drawImage(img, -width / 2, -height / 2, width, height);
+  return new Promise<{ blob: Blob; width: number; height: number }>((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => (blob ? resolve({ blob, width: canvas.width, height: canvas.height }) : reject(new Error('toBlob'))),
+      type,
+      JPEG_QUALITY
+    );
+  });
+};
+
+// Sends the file as it is (with its EXIF and colour profile) unless it is over the limits or turned by the user: then
+// reduced and re-encoded, as JPEG (PNG stays PNG). SVG and GIF (animations) are sent as they are. A file the browser
+// cannot decode (HEIC in Chrome and Firefox) is sent as it is, without preview: the server converts HEIC to JPEG.
 const preProcess = async (
   file: File,
   document: ImageDocument,
-  orientation: number | undefined,
-  onDataUrlReady: (dataUrl: string) => void
+  tags: Metadata | undefined,
+  angle: number,
+  onDataUrlReady: (dataUrl: string | null) => void
 ): Promise<Blob> => {
-  let options: Record<string, unknown> = {};
-  // fix orientation
-  if (orientation) {
-    options = { ...options, orientation };
+  const img = await decodeImage(file);
+
+  if (!img) {
+    onDataUrlReady(null);
+    // the size before the EXIF orientation: turned for orientations 5 to 8
+    const width = number(tags?.ExifImageWidth);
+    const height = number(tags?.ExifImageHeight);
+    const orientation = number(tags?.Orientation) ?? 1;
+    if (width && height) {
+      document.width = orientation >= 5 ? height : width;
+      document.height = orientation >= 5 ? width : height;
+    }
+    return file;
   }
 
-  const result = await readFile(file);
-  // limit file size and dimensions
-  const { dataUrl, width, height } = await extractDimensions(result);
+  const { naturalWidth: width, naturalHeight: height } = img;
+  const kept = file.type === 'image/svg+xml' || file.type === 'image/gif';
+  const size = kept ? undefined : storedSize(width, height);
 
-  // no restriction on SVGs.
-  // images weighting over 2MB are restricted to 2048px height (thus allowing panos).
-  // this is a simple heuristic with flaws, but should match most cases
-  if (file.type !== 'image/svg+xml' && file.size > 2 * 1024 * 1024 && height > 2048) {
-    options = { ...options, maxHeight: 2048 };
-  }
-
-  if (Object.keys(options).length) {
-    options = { ...options, canvas: true };
-    const { default: loadImage } = await import('blueimp-load-image');
-    const { image } = await loadImage(file, options);
-    const canvas = image as HTMLCanvasElement;
-    onDataUrlReady(canvas.toDataURL(file.type)); // send data url to caller
-    // and extract modified image for upload
-    return new Promise((resolve) => {
-      canvas.toBlob((file) => {
-        document.file_size = file!.size;
-        document.width = canvas.width;
-        document.height = canvas.height;
-        resolve(file as Blob);
-      }, file.type);
-    });
-  } else {
-    onDataUrlReady(dataUrl); // send data url to caller
+  if (kept || (!size && !angle)) {
+    onDataUrlReady(img.src);
     document.width = width;
     document.height = height;
-    return Promise.resolve(file);
+    return file;
   }
+
+  const rendered = await render(
+    img,
+    size?.width ?? width,
+    size?.height ?? height,
+    angle,
+    file.type === 'image/png' ? 'image/png' : 'image/jpeg'
+  );
+  URL.revokeObjectURL(img.src);
+  onDataUrlReady(URL.createObjectURL(rendered.blob));
+  document.file_size = rendered.blob.size;
+  document.width = rendered.width;
+  document.height = rendered.height;
+  return rendered.blob;
 };
 
-const orientations = [1, 6, 3, 8];
-
-// angle should be one of 0, 90, 180, 270 (in degrees)
+// angle should be one of 0, 90, 180, 270 (in degrees, clockwise)
 const uploadFile = async (
   file: File,
   angle: number,
-  onDataUrlReady: (dataUrl: string) => void,
+  onDataUrlReady: (dataUrl: string | null) => void,
   onUploadProgress: (event: unknown) => void,
   onSuccess: (document: ImageDocument) => void,
   onFailure: (error?: unknown) => void
 ) => {
   try {
     const document: ImageDocument = {};
-    const { default: loadImage } = await import('blueimp-load-image');
-    // the meta option (metadata only) is missing from the types of blueimp-load-image
-    const metaData = (await loadImage(file, { meta: true } as unknown as Parameters<typeof loadImage>[1])) as {
-      exif?: unknown;
-      iptc?: unknown;
-    };
-    let orientation: number | undefined = await parseMetaData(document, metaData);
-    if (angle) {
-      // if no orientation has been retrieved, consider value 1 (no rotation)
-      orientation = orientations[(orientations.indexOf(orientation || 1) + angle / 90) % 4];
-    }
-    const data = await preProcess(file, document, orientation, onDataUrlReady);
+    const tags = await readMetadata(file);
+    parseMetaData(document, tags);
+    const data = await preProcess(file, document, tags, angle || 0, onDataUrlReady);
     // do the upload
     worker.push(
       c2c.uploadImage.bind(c2c),

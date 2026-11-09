@@ -16,7 +16,7 @@
           :is-saving="image.status === 'SAVING'"
           :is-success="image.status === 'SUCCESS'"
           :is-failed="image.status === 'FAILED'"
-          :can-rotate="Boolean(image.file?.name) && !image.file.name.endsWith('.svg')"
+          :can-rotate="Boolean(image.dataUrl) && !['image/svg+xml', 'image/gif'].includes(image.file.type)"
           @delete-image="onDeleteImage(image)"
           @rotate-image="onRotateImage(image, $event)"
           @retry-upload="startUpload(image)"
@@ -34,7 +34,7 @@
             @dragleave="dragOver = false"
             @drop="dragOver = false"
             multiple
-            accept="image/*"
+            accept="image/*,.heic,.heif"
             class="input-file"
           />
           <!-- this message contains HTML -->

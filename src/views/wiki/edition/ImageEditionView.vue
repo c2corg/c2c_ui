@@ -24,7 +24,13 @@
             <div class="field">
               <div class="file is-centered">
                 <label class="file-label">
-                  <input class="file-input" type="file" name="resume" @change="onFileChange" accept="image/*" />
+                  <input
+                    class="file-input"
+                    type="file"
+                    name="resume"
+                    @change="onFileChange"
+                    accept="image/*,.heic,.heif"
+                  />
                   <span class="file-cta button" :class="{ 'is-loading': uploadingNewFile }">
                     <span class="file-icon">
                       <fa-icon icon="upload" />

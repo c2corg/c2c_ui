@@ -1,6 +1,8 @@
 <template>
   <div class="card">
     <div class="card-image img-container" :style="dataUrl ? 'background-image: url(' + dataUrl + ')' : ''">
+      <!-- a format the browser cannot show (HEIC in Chrome and Firefox): the server converts it -->
+      <fa-icon v-if="!dataUrl && !isInitial" icon="image" size="3x" class="no-preview" />
       <div class="action-buttons">
         <delete-button @click="$emit('delete-image')" :title="$gettext('Delete image')" />
         <rotate-button
@@ -178,6 +180,14 @@ function applyRotation(angle: number) {
 </script>
 
 <style scoped>
+.no-preview {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #9a9a9a;
+}
+
 .img-container {
   width: 100%;
   height: 200px;
