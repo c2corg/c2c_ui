@@ -1,5 +1,7 @@
 /* Bulma 0.9.4 (MIT License, see bulma/LICENSE): helpers/visibility */
 
+@import '../../media.css';
+
 .is-block {
   display: block !important;
 }
@@ -28,19 +30,19 @@
   width: 0.01em !important;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (--c2c-mobile) {
   .is-hidden-mobile {
     display: none !important;
   }
 }
 
-@media screen and (min-width: 769px), print {
+@media screen and (--c2c-min-tablet), print {
   .is-hidden-tablet {
     display: none !important;
   }
 }
 
-@media screen and (max-width: 1023px) {
+@media screen and (--c2c-touch) {
   .is-hidden-touch {
     display: none !important;
   }

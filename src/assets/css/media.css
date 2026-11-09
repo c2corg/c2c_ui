@@ -4,6 +4,7 @@
  * queries (drafts.customMedia), so it writes no CSS. The values are those of Bulma 0.9.4 ($tablet...).
  *
  * min- and max- include the breakpoint: at 769px wide, both (--c2c-min-tablet) and (--c2c-max-tablet) match.
+ * --c2c-mobile and --c2c-touch are those of Bulma: below the tablet and below the desktop breakpoints.
  */
 @custom-media --c2c-min-tablet (min-width: 769px);
 @custom-media --c2c-max-tablet (max-width: 769px);
@@ -13,3 +14,5 @@
 @custom-media --c2c-max-widescreen (max-width: 1216px);
 @custom-media --c2c-min-fullhd (min-width: 1408px);
 @custom-media --c2c-max-fullhd (max-width: 1408px);
+@custom-media --c2c-mobile (max-width: 768px);
+@custom-media --c2c-touch (max-width: 1023px);

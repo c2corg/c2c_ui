@@ -1,5 +1,7 @@
 /* Bulma 0.9.4 (MIT License, see bulma/LICENSE): helpers/typography */
 
+@import '../../media.css';
+
 .is-size-1 {
   font-size: var(--c2c-size-1) !important;
 }
@@ -28,7 +30,7 @@
   font-size: var(--c2c-size-7) !important;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (--c2c-mobile) {
   .is-size-7-mobile {
     font-size: var(--c2c-size-7) !important;
   }
