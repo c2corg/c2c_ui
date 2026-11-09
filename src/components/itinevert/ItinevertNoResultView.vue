@@ -50,7 +50,7 @@ const errorMessages: Record<string, string> = {
 }
 
 .no-result-view-description {
-  color: #7b7b7b;
+  color: var(--c2c-grey);
   font-size: 14px;
 }
 </style>

@@ -188,7 +188,7 @@ function onAnimEnd(e: AnimationEvent) {
   padding: 2rem;
   font-weight: bold;
   border-radius: 10px;
-  background: #ebebeb;
+  background: var(--c2c-grey-lightest);
   border: 1px solid #d1d1d1;
 }
 
@@ -202,7 +202,7 @@ function onAnimEnd(e: AnimationEvent) {
 .filter-header-section {
   padding: 2rem;
   border-radius: 10px;
-  background: #ebebeb;
+  background: var(--c2c-grey-lightest);
   border: 1px solid #d1d1d1;
   font-weight: bold;
   .too-much-route-label {

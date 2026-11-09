@@ -1736,7 +1736,7 @@ defineExpose({
 .ol-attribution ul,
 .ol-scale-line {
   --ol-subtle-foreground-color: #666666;
-  --ol-foreground-color: #333333;
+  --ol-foreground-color: var(--c2c-grey-darker);
 }
 
 .ol-attribution ul {

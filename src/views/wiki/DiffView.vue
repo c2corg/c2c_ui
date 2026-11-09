@@ -347,7 +347,7 @@ watch(() => route.fullPath, loadVersions, { immediate: true });
 .splitted-diff {
   overflow: hidden;
   overflow-x: scroll;
-  background: #eaeaea;
+  background: var(--c2c-grey-lightest);
 
   .block-ellipsed {
     background: white;
@@ -376,7 +376,7 @@ watch(() => route.fullPath, loadVersions, { immediate: true });
 
   .row-fake {
     background: #f2f2f2 !important;
-    border-left-color: #eee;
+    border-left-color: var(--c2c-grey-lightest);
   }
 }
 

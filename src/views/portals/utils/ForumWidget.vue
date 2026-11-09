@@ -182,7 +182,7 @@ function getTopicUrl(topic: Topic) {
 .wide {
   .forum-row {
     padding: 1rem;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--c2c-grey-lightest);
 
     img {
       margin-right: 0.5rem;

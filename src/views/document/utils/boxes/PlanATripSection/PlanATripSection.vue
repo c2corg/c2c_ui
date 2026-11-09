@@ -1067,14 +1067,14 @@ function recenterMapOnDocuments() {
       .tab-button.disabled {
         color: #ccc !important;
         cursor: not-allowed !important;
-        background-color: #f9f9f9 !important;
+        background-color: var(--c2c-white-ter) !important;
       }
 
       .tab-button:disabled {
         pointer-events: none;
       }
       .tab-button:hover {
-        background-color: rgb(232, 232, 232);
+        background-color: var(--c2c-grey-lightest);
         cursor: pointer;
       }
       .tab-button.active:hover {

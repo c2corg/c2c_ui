@@ -189,13 +189,13 @@ function format(suggestion: unknown) {
       right: 0;
       z-index: 5;
       background: var(--c2c-white);
-      border: 1px solid #ddd;
+      border: 1px solid var(--c2c-grey-lighter);
       border-radius: 10px;
       box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
       max-height: 220px;
       overflow-y: auto;
       scrollbar-width: thin;
-      scrollbar-color: #aaa #f9f9f9;
+      scrollbar-color: #aaa var(--c2c-white-ter);
 
       ul {
         list-style: none;
@@ -216,7 +216,7 @@ function format(suggestion: unknown) {
           }
 
           &:not(:last-child) {
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--c2c-grey-lightest);
           }
         }
       }

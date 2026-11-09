@@ -116,7 +116,7 @@ const computedPercent = computed(() => {
 
 /* label below the bar */
 .progress__label {
-  color: #333;
+  color: var(--c2c-grey-darker);
   text-align: center;
   user-select: none;
 }

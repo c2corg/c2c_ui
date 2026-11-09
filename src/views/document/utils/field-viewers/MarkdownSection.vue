@@ -63,7 +63,7 @@ const lang = computed(() => {
   .title {
     font-size: 1.8rem !important;
     margin-bottom: 0.5em !important;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--c2c-grey-lighter);
   }
 
   &:nth-last-child(n + 3) {

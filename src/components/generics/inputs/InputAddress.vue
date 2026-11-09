@@ -320,14 +320,14 @@ onBeforeUnmount(() => {
       left: 0;
       right: 0;
       background-color: var(--c2c-white);
-      border: 1px solid #ddd;
+      border: 1px solid var(--c2c-grey-lighter);
       border-radius: 10px;
       box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
       z-index: 10;
       max-height: 220px;
       overflow-y: auto;
       scrollbar-width: thin;
-      scrollbar-color: #aaa #f9f9f9;
+      scrollbar-color: #aaa var(--c2c-white-ter);
 
       ul {
         list-style: none;
@@ -337,7 +337,7 @@ onBeforeUnmount(() => {
         li {
           padding: 10px 14px;
           font-size: 14px;
-          color: #333;
+          color: var(--c2c-grey-darker);
           transition:
             background 0.2s ease,
             color 0.2s ease;
@@ -349,7 +349,7 @@ onBeforeUnmount(() => {
           }
 
           &:not(:last-child) {
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--c2c-grey-lightest);
           }
         }
       }
@@ -370,7 +370,7 @@ onBeforeUnmount(() => {
     border: 0px;
 
     &:hover {
-      background-color: #efefef;
+      background-color: var(--c2c-grey-lightest);
     }
 
     .geolocalisation-img {

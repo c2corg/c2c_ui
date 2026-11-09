@@ -445,7 +445,7 @@ function selectRouteOnly(journey: Journey) {
 
         .timeline-walking-info {
           font-size: 14px;
-          color: #757575;
+          color: var(--c2c-grey);
           display: flex;
           align-items: center;
           margin-left: -14px;

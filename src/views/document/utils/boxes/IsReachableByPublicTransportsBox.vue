@@ -118,7 +118,7 @@ watch(() => props.document, checkAccessibility, { deep: true, immediate: true })
     .info-content {
       .info-title {
         font-size: 15px;
-        color: #333;
+        color: var(--c2c-grey-darker);
         margin: 0 0 0px 0;
         font-weight: bold;
       }

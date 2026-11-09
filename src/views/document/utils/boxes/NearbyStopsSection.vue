@@ -459,7 +459,7 @@ function handleDocumentHighlight(document: MapDocument | null) {
 
       &:hover {
         border-color: var(--c2c-green);
-        background-color: #fafafa;
+        background-color: var(--c2c-white);
 
         .line-details {
           background-color: white;
