@@ -80,7 +80,6 @@
 </template>
 
 <script setup lang="ts">
-import { toast } from 'bulma-toast';
 import { reactive, ref, useTemplateRef, watch } from 'vue';
 
 import BaseForm from './utils/BaseForm.vue';
@@ -92,6 +91,7 @@ import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useNoRobots } from '@/js/composables/head';
+import { toast } from '@/js/toast';
 
 useNoRobots();
 

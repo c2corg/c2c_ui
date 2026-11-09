@@ -40,13 +40,13 @@
 </template>
 
 <script setup lang="ts">
-import { toast } from 'bulma-toast';
 import { toLonLat, transform } from 'ol/proj';
 import { onBeforeUnmount, onMounted, reactive, watch } from 'vue';
 
 import { default as c2c } from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { toast } from '@/js/toast';
 
 type Proposition = {
   type?: string;

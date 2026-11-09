@@ -27,12 +27,12 @@
 </template>
 
 <script setup lang="ts">
-import { toast } from 'bulma-toast';
 import { onMounted, ref } from 'vue';
 
 import TrackingDeviceActivity from '@/components/tracking/TrackingDeviceActivity.vue';
 import trackingService from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { toast } from '@/js/toast';
 
 const emit = defineEmits(['geojson']);
 

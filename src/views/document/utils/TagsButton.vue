@@ -5,13 +5,13 @@
 </template>
 
 <script setup lang="ts">
-import { toast } from 'bulma-toast';
 import { computed, ref } from 'vue';
 
 import c2c from '@/js/apis/c2c';
 import type { DocumentRef } from '@/js/apis/c2c/types';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { documentProperty } from '@/js/properties';
+import { toast } from '@/js/toast';
 
 const props = defineProps({ ...documentProperty });
 

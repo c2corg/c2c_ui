@@ -179,7 +179,6 @@
 </template>
 
 <script setup lang="ts">
-import { toast } from 'bulma-toast';
 import { computed, nextTick, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue';
 import { isNavigationFailure, useRoute, useRouter } from 'vue-router';
 
@@ -191,6 +190,7 @@ import JoinUsLink from '@/components/generics/links/JoinUsLink.vue';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useIsHomePage } from '@/js/composables/home-page';
 import config from '@/js/config';
+import { toast } from '@/js/toast';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 defineEmits(['toggle-side-menu']);
