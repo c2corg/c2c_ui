@@ -1169,9 +1169,18 @@ function recenterOn(item: PhotonFeature) {
   showRecenterOnPropositions.value = false;
 }
 
-// the page is told about protection areas after the first load that could check them
-let protectionAreasChecked = false;
-let protectionAreasChecking = false;
+// the page is told once about protection areas in the view: by the Swiss check of the first view, or by the first
+// biodiv-sports load that answers (after a failed load, the view of the next one is checked)
+let protectionAreasNotified = false;
+let swissProtectionAreasChecked = false;
+let biodivSportsAreasChecked = false;
+
+function notifyProtectionAreas() {
+  if (!protectionAreasNotified) {
+    protectionAreasNotified = true;
+    emit('has-protection-area');
+  }
+}
 
 // loader of the biodiv-sports areas layer: OpenLayers adds the features
 function loadProtectionAreas(extent: Extent) {
@@ -1193,26 +1202,28 @@ function loadProtectionAreas(extent: Extent) {
       throw error;
     });
 
-  if (!protectionAreasChecked && !protectionAreasChecking) {
-    // check protection areas are contained within map extent
-    protectionAreasChecking = true;
-    const viewExtent = view().calculateExtent(map.getSize());
+  const viewExtent = view().calculateExtent(map.getSize());
 
-    Promise.allSettled([
-      features.then((loaded) => loaded.some((feature) => feature.getGeometry()?.intersectsExtent(viewExtent))),
-      intersectsWithSwitzerland(viewExtent)
-        ? respecterCestProtegerService.hasArea(viewExtent as TupleExtent)
-        : Promise.resolve(false),
-    ]).then(([biodivSports, swiss]) => {
-      protectionAreasChecking = false;
-      if ([biodivSports, swiss].some((result) => result.status === 'fulfilled' && result.value)) {
-        protectionAreasChecked = true;
-        emit('has-protection-area');
-      } else {
-        // a failed biodiv-sports load is checked again by the next one
-        protectionAreasChecked = biodivSports.status === 'fulfilled';
-      }
-    });
+  if (!swissProtectionAreasChecked) {
+    swissProtectionAreasChecked = true;
+    if (intersectsWithSwitzerland(viewExtent)) {
+      respecterCestProtegerService.hasArea(viewExtent as TupleExtent).then(
+        (hasArea) => hasArea && notifyProtectionAreas(),
+        () => {}
+      );
+    }
+  }
+
+  if (!biodivSportsAreasChecked) {
+    features.then(
+      (loaded) => {
+        biodivSportsAreasChecked = true;
+        if (loaded.some((feature) => feature.getGeometry()?.intersectsExtent(viewExtent))) {
+          notifyProtectionAreas();
+        }
+      },
+      () => {}
+    );
   }
 
   return features;

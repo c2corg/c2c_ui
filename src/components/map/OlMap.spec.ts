@@ -6,6 +6,7 @@ import OlMap from './OlMap.vue';
 import { mountMap } from './test-utils';
 
 import biodivSportsService from '@/js/apis/biodivsports-service';
+import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
 import ol from '@/js/libs/ol';
 
 vi.mock('@/js/apis/biodivsports-service', () => ({ default: { fetchData: vi.fn() } }));
@@ -175,7 +176,10 @@ describe('OlMap', () => {
       vm.protectionAreasLayer.getSource()!.loadFeatures(extent, 10, ol.proj.get('EPSG:3857')!);
     const flush = () => new Promise((resolve) => setTimeout(resolve));
 
-    beforeEach(() => fetchData.mockReset());
+    beforeEach(() => {
+      fetchData.mockReset();
+      vi.mocked(respecterCestProtegerService.hasArea).mockReset().mockResolvedValue(false);
+    });
 
     it('are not loaded on maps without them', async () => {
       const { wrapper, vm } = await mountMap();
@@ -241,6 +245,31 @@ describe('OlMap', () => {
       load(vm, viewAround(6.9, 45.9, 500));
       await flush();
 
+      expect(wrapper.emitted('has-protection-area')).toHaveLength(1);
+
+      wrapper.unmount();
+    });
+
+    it('tell the page about one loaded after a failure while the Swiss check is pending, once', async () => {
+      let swissAnswer: (hasArea: boolean) => void = () => {};
+      vi.mocked(respecterCestProtegerService.hasArea).mockReturnValue(
+        new Promise((resolve) => (swissAnswer = resolve)) as never
+      );
+      fetchData
+        .mockRejectedValueOnce(new Error('network'))
+        .mockResolvedValue({ data: { results: [area(1)] } } as never);
+      const { wrapper, vm } = await mountMap({ showProtectionAreas: true });
+      vi.spyOn(vm.map.getView(), 'calculateExtent').mockReturnValue(viewAround(6.8, 45.9, 500));
+
+      load(vm, viewAround(6.8, 45.9, 500));
+      await flush();
+      vm.map.dispatchEvent('moveend');
+      load(vm, viewAround(6.8, 45.9, 500));
+      await flush();
+      expect(wrapper.emitted('has-protection-area')).toHaveLength(1);
+
+      swissAnswer(true);
+      await flush();
       expect(wrapper.emitted('has-protection-area')).toHaveLength(1);
 
       wrapper.unmount();
