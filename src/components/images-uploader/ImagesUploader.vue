@@ -16,7 +16,7 @@
           :is-saving="image.status === 'SAVING'"
           :is-success="image.status === 'SUCCESS'"
           :is-failed="image.status === 'FAILED'"
-          :can-rotate="Boolean(image.dataUrl) && !['image/svg+xml', 'image/gif'].includes(image.file.type)"
+          :can-rotate="Boolean(image.dataUrl) && canRender(image.file)"
           @delete-image="onDeleteImage(image)"
           @rotate-image="onRotateImage(image, $event)"
           @retry-upload="startUpload(image)"
@@ -78,7 +78,7 @@ import ImageUploader from './ImageUploader.vue';
 import c2c from '@/js/apis/c2c';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { toast } from '@/js/toast';
-import uploadFile from '@/js/upload-file';
+import uploadFile, { canRender } from '@/js/upload-file';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 type UploadedImage = {

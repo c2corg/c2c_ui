@@ -203,16 +203,20 @@ describe('upload-file uploadFile', () => {
   });
 
   // uploads a file, and gives what was sent and the document
+  // the server answers the size it stores and, when asked, a preview
+  const PREVIEW = 'data:image/jpeg;base64,/9j/';
   const upload = async (file: File, angle = 0, stored: Record<string, number> = {}) => {
-    const send = vi.spyOn(c2c, 'uploadImage').mockImplementation((data, _progress, onSuccess) => {
-      onSuccess({ data: { filename: '1_2.jpg', ...stored } } as Parameters<typeof onSuccess>[0]);
+    const send = vi.spyOn(c2c, 'uploadImage').mockImplementation((data, _progress, onSuccess, _onFailure, options) => {
+      const preview = options?.preview ? { preview: PREVIEW } : {};
+      onSuccess({ data: { filename: '1_2.jpg', ...stored, ...preview } } as Parameters<typeof onSuccess>[0]);
       return Promise.resolve() as ReturnType<typeof c2c.uploadImage>;
     });
     const dataUrls: (string | null)[] = [];
     const document = await new Promise<Record<string, unknown>>((resolve, reject) =>
       uploadFile(file, angle, (dataUrl) => dataUrls.push(dataUrl), vi.fn(), resolve, reject)
     );
-    return { sent: send.mock.calls[0]![0], document, dataUrls };
+    const [sent, , , , options] = send.mock.calls[0]!;
+    return { sent, options, document, dataUrls };
   };
 
   const file = (name: string, type: string, size?: { width: number; height: number }) => {
@@ -274,7 +278,7 @@ describe('upload-file uploadFile', () => {
     expect(drawn).toBeUndefined();
   });
 
-  it('sends a HEIC the browser cannot decode as it is, without preview, sized from its EXIF', async () => {
+  it('sends a HEIC the browser cannot decode as it is, sized from its EXIF, and shows the preview of the server', async () => {
     ExifReader.load.mockResolvedValue({
       exif: {
         Make: { description: 'samsung' },
@@ -287,12 +291,27 @@ describe('upload-file uploadFile', () => {
     });
     const heic = file('photo.heic', 'image/heic');
 
-    const { sent, document, dataUrls } = await upload(heic);
+    const { sent, options, document, dataUrls } = await upload(heic);
 
     expect(sent).toBe(heic);
-    expect(dataUrls).toEqual([null]);
+    expect(options).toEqual({ preview: true });
+    // no preview until the server answers
+    expect(dataUrls).toEqual([null, PREVIEW]);
     expect(document).toMatchObject({ camera_name: 'samsung SM-G781B', width: 3024, height: 4032 });
     expect(Date.parse(document.date_time as string)).toBe(Date.parse('2022-04-23T08:59:35+02:00'));
+  });
+
+  it.each([
+    ['photo.webp', 'image/webp'],
+    ['photo.avif', 'image/avif'],
+    ['photo.heic', 'image/heic'], // in Safari
+  ])('sends %s the browser decodes as it is, even over the limits: the server converts it', async (name, type) => {
+    const image = file(name, type, { width: 6000, height: 4000 });
+    const { sent, options, dataUrls } = await upload(image);
+    expect(sent).toBe(image);
+    expect(drawn).toBeUndefined();
+    expect(options).toEqual({ preview: false });
+    expect(dataUrls).toEqual(['blob:1']);
   });
 
   it('takes the size of the original as the server stores it', async () => {

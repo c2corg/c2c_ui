@@ -118,7 +118,9 @@ export class CamptocampApi extends BaseApi {
     file: Blob,
     onUploadProgress: AxiosRequestConfig['onUploadProgress'],
     onSuccess: (response: AxiosResponse) => unknown,
-    onFailure: (error: unknown) => unknown
+    onFailure: (error: unknown) => unknown,
+    // a small JPEG of the stored image in the response, for the files the browser cannot show (HEIC, TIFF)
+    { preview = false }: { preview?: boolean } = {}
   ) {
     const formData = new FormData();
 
@@ -134,7 +136,7 @@ export class CamptocampApi extends BaseApi {
     /* can't user post_ helper: it's not the API url */
     /* TODO : move this function in another service... */
     return this.axios
-      .post(config.urls.imageBackend + '/upload', formData, requestConfig)
+      .post(config.urls.imageBackend + '/upload' + (preview ? '?preview=1' : ''), formData, requestConfig)
       .then(onSuccess)
       .catch(onFailure);
   }
