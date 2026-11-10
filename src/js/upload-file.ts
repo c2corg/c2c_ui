@@ -226,14 +226,19 @@ const preProcess = async (
     return file;
   }
 
-  const rendered = await render(
-    img,
-    size?.width ?? width,
-    size?.height ?? height,
-    angle,
-    file.type === 'image/png' ? 'image/png' : 'image/jpeg'
-  );
-  URL.revokeObjectURL(img.src);
+  let rendered;
+  try {
+    rendered = await render(
+      img,
+      size?.width ?? width,
+      size?.height ?? height,
+      angle,
+      file.type === 'image/png' ? 'image/png' : 'image/jpeg'
+    );
+  } finally {
+    // the decoded file is not the preview: freed, also when the rendering fails
+    URL.revokeObjectURL(img.src);
+  }
   onDataUrlReady(URL.createObjectURL(rendered.blob));
   document.file_size = rendered.blob.size;
   document.width = rendered.width;

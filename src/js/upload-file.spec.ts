@@ -301,6 +301,23 @@ describe('upload-file uploadFile', () => {
     expect(document).toMatchObject({ width: 2304, height: 3072, file_size: 1_200_000 });
   });
 
+  it('fails when the rendering fails, freeing the decoded file', async () => {
+    vi.mocked(HTMLCanvasElement.prototype.toBlob).mockImplementation((callback: BlobCallback) => callback(null));
+    const onFailure = vi.fn();
+    const onSuccess = vi.fn();
+    await uploadFile(
+      file('photo.jpg', 'image/jpeg', { width: 4032, height: 3024 }),
+      0,
+      vi.fn(),
+      vi.fn(),
+      onSuccess,
+      onFailure
+    );
+    expect(onFailure).toHaveBeenCalled();
+    expect(onSuccess).not.toHaveBeenCalled();
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:1');
+  });
+
   it('uploads a file whose metadata cannot be read', async () => {
     ExifReader.load.mockRejectedValue(new Error('Invalid image format'));
     const { sent } = await upload(file('photo.jpg', 'image/jpeg', { width: 800, height: 600 }));
