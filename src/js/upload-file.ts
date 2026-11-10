@@ -192,16 +192,23 @@ const render = (img: HTMLImageElement, width: number, height: number, angle: num
   });
 };
 
-// Sends the file as it is (with its EXIF and colour profile) unless it is over the limits or turned by the user: then
-// reduced and re-encoded, as JPEG (PNG stays PNG). SVG and GIF (animations) are sent as they are. A file the browser
-// cannot decode (HEIC in Chrome and Firefox) is sent as it is, without preview: the server converts HEIC to JPEG.
+// The formats the browser reduces and turns: the others are sent as they are, and the server converts them (HEIC, WebP,
+// AVIF, TIFF, GIF), reduces them, and refuses the animated ones. SVG are drawings.
+const RENDERED_TYPES = new Set(['image/jpeg', 'image/png']);
+
+// whether the user can turn the image in the browser (exported for the uploader)
+export const canRender = (file: File) => RENDERED_TYPES.has(file.type);
+
+// Sends the file as it is (with its EXIF and colour profile) unless it is a JPEG or PNG over the limits or turned by the
+// user: then reduced and re-encoded, as JPEG (PNG stays PNG). A file the browser cannot decode (HEIC and TIFF in Chrome
+// and Firefox) is sent as it is, and the server answers a preview of it.
 const preProcess = async (
   file: File,
   document: ImageDocument,
   metadata: Metadata | undefined,
   angle: number,
   onDataUrlReady: (dataUrl: string | null) => void
-): Promise<Blob> => {
+): Promise<{ data: Blob; preview: boolean }> => {
   const img = await decodeImage(file);
 
   if (!img) {
@@ -212,18 +219,17 @@ const preProcess = async (
       document.width = orientation >= 5 ? height : width;
       document.height = orientation >= 5 ? width : height;
     }
-    return file;
+    return { data: file, preview: true };
   }
 
   const { naturalWidth: width, naturalHeight: height } = img;
-  const kept = file.type === 'image/svg+xml' || file.type === 'image/gif';
-  const size = kept ? undefined : storedSize(width, height);
+  const size = canRender(file) ? storedSize(width, height) : undefined;
 
-  if (kept || (!size && !angle)) {
+  if (!canRender(file) || (!size && !angle)) {
     onDataUrlReady(img.src);
     document.width = width;
     document.height = height;
-    return file;
+    return { data: file, preview: false };
   }
 
   let rendered;
@@ -243,7 +249,7 @@ const preProcess = async (
   document.file_size = rendered.blob.size;
   document.width = rendered.width;
   document.height = rendered.height;
-  return rendered.blob;
+  return { data: rendered.blob, preview: false };
 };
 
 // angle should be one of 0, 90, 180, 270 (in degrees, clockwise)
@@ -259,22 +265,27 @@ const uploadFile = async (
     const document: ImageDocument = {};
     const metadata = await readMetadata(file);
     parseMetaData(document, metadata);
-    const data = await preProcess(file, document, metadata, angle || 0, onDataUrlReady);
+    const { data, preview } = await preProcess(file, document, metadata, angle || 0, onDataUrlReady);
     // do the upload
     worker.push(
       c2c.uploadImage.bind(c2c),
       data,
       onUploadProgress,
-      (event: { data: { filename: string; width?: number; height?: number; size?: number } }) => {
+      (event: { data: { filename: string; width?: number; height?: number; size?: number; preview?: string } }) => {
         const { filename, width, height, size } = event.data;
         document.filename = filename;
-        // the original as stored: the server converts HEIC, and reduces the images over the limits (not SVG)
+        // the original as stored: the server converts some formats, and reduces the images over the limits (not SVG)
         setIfDefined(document, 'width', width);
         setIfDefined(document, 'height', height);
         setIfDefined(document, 'file_size', size);
+        // a data URL, from the servers that make it
+        if (preview && event.data.preview?.startsWith('data:image/')) {
+          onDataUrlReady(event.data.preview);
+        }
         onSuccess(document);
       },
-      onFailure
+      onFailure,
+      { preview }
     );
   } catch {
     onFailure();
