@@ -6,12 +6,14 @@
 </template>
 
 <script setup lang="ts">
+import type { PropType } from 'vue';
+
 // imported under another name: the template would resolve <activities> to the prop, and render nothing
 import ActivitiesIcons from '@/components/generics/Activities.vue';
 
 defineProps({
   activities: {
-    type: Array,
+    type: Array as PropType<string[]>,
     default: null,
   },
 });
