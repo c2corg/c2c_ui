@@ -59,7 +59,7 @@
             ></layer-button>
           </div>
         </template>
-        <template v-if="showDensityOverlays">
+        <template v-if="showDensityOverlays && !densityUnavailable">
           <header v-translate>Overlays</header>
           <!-- $gettext('Outings') $gettext('Routes') -->
           <div class="layer-group">
@@ -315,6 +315,7 @@ import bus from '@/js/event-bus';
 import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
 import { TCX } from '@/js/tcx/TCX';
+import { tracksOverlayEnabled } from '@/js/tracks-overlay';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
@@ -502,6 +503,8 @@ const hasProtectionAreas = ref<boolean | null>(null);
 const densityEnabled = reactive<Record<DensityType, boolean>>({ outing: false, route: false });
 // set when the tracks endpoint reports more documents in the box than it is willing to return
 const densityTruncatedByType = reactive<Record<DensityType, boolean>>({ outing: false, route: false });
+// set when the API answers that the overlays are turned off: they are no longer offered
+const densityUnavailable = ref(false);
 // the tracks under a click or a tap, to choose from, with their line on the map
 const trackPanelEntries = shallowRef<{ document: DensityTrack; feature: Feature }[]>([]);
 // false just after a tap opened the panel: the click that follows it would land on the panel
@@ -547,7 +550,9 @@ const swissWindowEl = useTemplateRef<{ show(): void }>('swissWindow');
 
 const editable = computed(() => !!props.editedDocument);
 // the overlays are on every map, except when editing a document or comparing two versions of it
-const showDensityOverlays = computed(() => !editable.value && !props.oldDocument && !props.newDocument);
+const showDensityOverlays = computed(
+  () => tracksOverlayEnabled && !editable.value && !props.oldDocument && !props.newDocument
+);
 const densityTruncated = computed(() => Object.values(densityTruncatedByType).some(Boolean));
 
 const urlValue = computed(() => {
@@ -1334,8 +1339,29 @@ async function updateDensityOverlay(type: DensityType) {
       feature.set('weight', heatmapWeight(bucket.count, maxCount));
       source.addFeature(feature);
     }
-  } catch {
-    // the overlays are non-critical: on a network or server error, leave the map usable
+  } catch (error) {
+    // the API turns the overlays off when they load the servers too much (TRACKS_OVERLAY_ENABLED): so does the map
+    if ((error as { response?: { status?: number } } | null)?.response?.status === 503) {
+      densityUnavailable.value = true;
+      turnOffDensityOverlays();
+    }
+    // any other error: the overlays are non-critical, leave the map usable
+  }
+}
+
+function turnOffDensityOverlays() {
+  const wereOn = DENSITY_TYPES.some((type) => densityEnabled[type]);
+
+  for (const type of DENSITY_TYPES) {
+    densityEnabled[type] = false;
+    heatmapLayers[type]?.setVisible(false);
+    densityLayers[type].tracks.setVisible(false);
+    densityTruncatedByType[type] = false;
+  }
+  closeTrackPanel();
+
+  if (wereOn) {
+    toast({ message: $gettext('The Outings and Routes overlays are temporarily unavailable'), type: 'is-warning' });
   }
 }
 
