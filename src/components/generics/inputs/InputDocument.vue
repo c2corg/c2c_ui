@@ -247,7 +247,8 @@ function onFocus() {
           suggestions.value = documents;
         },
         () => {
-          // a shortcut only: the search works without it
+          // a shortcut only: the search works without it; tried again on the next focus
+          suggestionsRequested = false;
         }
       );
     }

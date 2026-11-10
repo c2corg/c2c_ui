@@ -266,6 +266,21 @@ describe('InputDocument', () => {
       await type(wrapper, 'ann', [annabelle]);
       expect(listed(wrapper)).toEqual(['@annab']);
     });
+
+    it('loads the suggestions again on the next focus after a failure', async () => {
+      vi.useFakeTimers();
+      const loadSuggestions = vi.fn().mockRejectedValueOnce(new Error('offline')).mockResolvedValue([anna]);
+      const { wrapper } = mountUsers({ loadSuggestions });
+      await wrapper.find('input').trigger('focus');
+      await flushPromises();
+
+      document.body.click();
+      await wrapper.find('input').trigger('focus');
+      await flushPromises();
+
+      expect(loadSuggestions).toHaveBeenCalledTimes(2);
+      expect(listed(wrapper)).toEqual(['@anna']);
+    });
   });
 });
 
