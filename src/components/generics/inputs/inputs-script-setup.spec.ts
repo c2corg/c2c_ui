@@ -168,6 +168,120 @@ describe('InputDocument', () => {
     (wrapper.vm as unknown as { focus(): void }).focus();
     expect(document.activeElement).toBe(wrapper.find('input').element);
   });
+
+  describe('suggestions', () => {
+    const anna = { document_id: 11, type: 'u', name: 'Anna Alpine', forum_username: 'anna' };
+    const bruno = { document_id: 12, type: 'u', name: 'Bruno Bloc', forum_username: 'bb' };
+    const chloe = { document_id: 13, type: 'u', name: 'Chloé Roux', forum_username: 'chloe' };
+    const annabelle = { document_id: 14, type: 'u', name: 'Annabelle', forum_username: 'annab' };
+
+    const mountUsers = (props: Record<string, unknown> = {}) => {
+      const loadSuggestions = vi.fn().mockResolvedValue([anna, bruno, chloe]);
+      const wrapper = mount(InputDocument, {
+        props: { documentType: 'profile', multiple: true, modelValue: [], loadSuggestions, ...props },
+        global,
+        attachTo: document.body,
+      });
+      return { wrapper, loadSuggestions };
+    };
+    // the listed users, by forum name
+    const listed = (wrapper: ReturnType<typeof mountUsers>['wrapper']) =>
+      wrapper.findAll('.dropdown-item-option').map((item) => item.find('.is-italic').text());
+    const type = async (wrapper: ReturnType<typeof mountUsers>['wrapper'], text: string, found: object[] = []) => {
+      vi.spyOn(c2c, 'search').mockReturnValue(
+        new ApiData(Promise.resolve({ data: { users: { documents: found } } } as never))
+      );
+      await wrapper.find('input').setValue(text);
+      await vi.advanceTimersByTimeAsync(300);
+      await flushPromises();
+    };
+
+    it('lists the suggestions on focus, loaded once', async () => {
+      vi.useFakeTimers();
+      const { wrapper, loadSuggestions } = mountUsers({ modelValue: [bruno] });
+
+      await wrapper.find('input').trigger('focus');
+      await flushPromises();
+
+      expect(listed(wrapper)).toEqual(['@anna', '@bb', '@chloe']);
+      // the participants already there keep their check mark, as in the search results
+      expect(wrapper.findAll('.dropdown-item-option')[1]!.find('.has-text-success').exists()).toBe(true);
+      expect(wrapper.text()).not.toContain('No result found');
+
+      document.body.click();
+      await nextTick();
+      expect(wrapper.find('.dropdown-menu').exists()).toBe(false);
+
+      await wrapper.find('input').trigger('focus');
+      await flushPromises();
+      expect(listed(wrapper)).toEqual(['@anna', '@bb', '@chloe']);
+      expect(loadSuggestions).toHaveBeenCalledTimes(1);
+    });
+
+    it('filters the suggestions on the name or the forum name, without accents nor case', async () => {
+      vi.useFakeTimers();
+      const { wrapper } = mountUsers();
+      await wrapper.find('input').trigger('focus');
+      await flushPromises();
+
+      await type(wrapper, 'CHLOE');
+      expect(listed(wrapper)).toEqual(['@chloe']);
+
+      await type(wrapper, 'bb');
+      expect(listed(wrapper)).toEqual(['@bb']);
+    });
+
+    it('appends the search results that are not suggestions', async () => {
+      vi.useFakeTimers();
+      const { wrapper } = mountUsers();
+      await wrapper.find('input').trigger('focus');
+      await flushPromises();
+
+      await type(wrapper, 'ann', [annabelle, anna]);
+
+      expect(listed(wrapper)).toEqual(['@anna', '@annab']);
+      // one list, without headers
+      expect(wrapper.find('.has-text-weight-bold').exists()).toBe(false);
+    });
+
+    it('adds a suggestion on click', async () => {
+      vi.useFakeTimers();
+      const { wrapper } = mountUsers();
+      await wrapper.find('input').trigger('focus');
+      await flushPromises();
+
+      await wrapper.findAll('.dropdown-item-option')[2]!.trigger('mousedown');
+
+      expect(wrapper.emitted('update:modelValue')!.at(-1)).toEqual([[chloe]]);
+      expect(wrapper.emitted('add')).toEqual([[chloe]]);
+    });
+
+    it('still searches when the suggestions cannot be loaded', async () => {
+      vi.useFakeTimers();
+      const { wrapper } = mountUsers({ loadSuggestions: vi.fn().mockRejectedValue(new Error('offline')) });
+      await wrapper.find('input').trigger('focus');
+      await flushPromises();
+      expect(wrapper.find('.dropdown-menu').exists()).toBe(false);
+
+      await type(wrapper, 'ann', [annabelle]);
+      expect(listed(wrapper)).toEqual(['@annab']);
+    });
+
+    it('loads the suggestions again on the next focus after a failure', async () => {
+      vi.useFakeTimers();
+      const loadSuggestions = vi.fn().mockRejectedValueOnce(new Error('offline')).mockResolvedValue([anna]);
+      const { wrapper } = mountUsers({ loadSuggestions });
+      await wrapper.find('input').trigger('focus');
+      await flushPromises();
+
+      document.body.click();
+      await wrapper.find('input').trigger('focus');
+      await flushPromises();
+
+      expect(loadSuggestions).toHaveBeenCalledTimes(2);
+      expect(listed(wrapper)).toEqual(['@anna']);
+    });
+  });
 });
 
 describe('InputAddress', () => {

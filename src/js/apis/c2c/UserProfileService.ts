@@ -25,6 +25,7 @@ type LoginPayload = {
 export default class UserProfileService {
   preferences;
   following;
+  partners;
   account;
 
   constructor(private api: Api) {
@@ -53,6 +54,13 @@ export default class UserProfileService {
 
       isFollowing(user_id: DocumentId) {
         return api.get('/users/following-user/' + user_id);
+      },
+    };
+
+    // the users of the recent outings of the user, the latest first
+    this.partners = {
+      get() {
+        return api.get('/users/partners');
       },
     };
 
