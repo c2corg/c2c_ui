@@ -383,4 +383,43 @@ onBeforeUnmount(() => {
 .fullwidth {
   width: 100%;
 }
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark field and list, as the inputs of Bulma */
+html[data-theme='dark'] .from-container {
+  background-color: #1f1f1f;
+  border-color: rgba(255, 255, 255, 0.15);
+
+  .autocomplete-container {
+    .from-address {
+      color: #e5e5e5;
+    }
+
+    .autocomplete-results {
+      background-color: #2a2a2a;
+      border-color: rgba(255, 255, 255, 0.15);
+      scrollbar-color: #6b6b6b #2a2a2a;
+
+      ul li {
+        color: #e5e5e5;
+
+        &:hover {
+          background-color: #353535;
+          color: #fff;
+        }
+
+        &:not(:last-child) {
+          border-bottom-color: rgba(255, 255, 255, 0.08);
+        }
+      }
+    }
+  }
+
+  .geolocalisation {
+    background-color: #1f1f1f;
+
+    &:hover {
+      background-color: #353535;
+    }
+  }
+}
 </style>

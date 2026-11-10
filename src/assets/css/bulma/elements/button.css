@@ -147,6 +147,38 @@
     font-size: var(--c2c-size-4);
   }
 
+  /* Bulma 0.9.4, for the plain buttons of My topos */
+  &.is-text {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--c2c-text);
+    text-decoration: underline;
+
+    &:hover,
+    &:focus {
+      background-color: var(--c2c-white-ter);
+      color: var(--c2c-grey-darker);
+    }
+
+    &:active {
+      background-color: hsl(0, 0%, 91%);
+      color: var(--c2c-grey-darker);
+    }
+
+    &[disabled],
+    fieldset[disabled] & {
+      background-color: transparent;
+      border-color: transparent;
+      box-shadow: none;
+    }
+  }
+
+  /* Bulma 0.9.4, for the buttons of the app settings and of the Me page */
+  &.is-fullwidth {
+    display: flex;
+    width: 100%;
+  }
+
   &[disabled],
   fieldset[disabled] & {
     background-color: var(--c2c-white);
@@ -193,6 +225,12 @@
 
   &:not(:last-child) {
     margin-bottom: 1rem;
+  }
+
+  /* Bulma 0.9.4, for the outings waiting in My topos: small buttons, as .button.is-small */
+  &.are-small .button:not(.is-normal):not(.is-medium):not(.is-large) {
+    border-radius: 2px;
+    font-size: var(--c2c-size-7);
   }
 
   &.has-addons .button {

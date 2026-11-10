@@ -1,6 +1,19 @@
 <template>
   <div ref="root" class="columns" v-infinite-scroll="{ load, disabled: loading, distance: 500 }">
+    <!-- first load: grey cards the shape of a feed card, instead of an empty page for seconds on a slow network -->
+    <p v-if="showSkeleton" class="is-sr-only" role="status">{{ $gettext('Loading...') }}</p>
     <div v-for="(column, i) of columns" :key="i" :class="'column ' + cssColumnsClass">
+      <template v-if="showSkeleton">
+        <div v-for="n in 2" :key="n" class="card feed-card feed-skeleton" aria-hidden="true">
+          <div class="skeleton-row">
+            <span class="skeleton-block skeleton-icon" />
+            <span class="skeleton-block skeleton-title" />
+          </div>
+          <span class="skeleton-block skeleton-image" />
+          <span class="skeleton-block skeleton-line" />
+          <span class="skeleton-block skeleton-line is-short" />
+        </div>
+      </template>
       <feed-card v-for="item of column.items" :key="item.id" :item="item" class="feed-card" />
     </div>
     <!-- <loading-notification :promise="promise" /> -->
@@ -16,6 +29,7 @@ import FeedCard from '@/components/cards/FeedCard.vue';
 import c2c from '@/js/apis/c2c';
 import type { feed } from '@/js/apis/c2c/schemas';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { usePullRefresh } from '@/js/composables/pull-refresh';
 import vInfiniteScroll from '@/js/directives/infinite-scroll';
 
 // the documents of the feed have more than the schema checks: their summary, figures and images
@@ -50,6 +64,7 @@ const cssColumnsClass = ref<string | null>(null);
 const root = useTemplateRef<HTMLElement>('root');
 
 const loading = computed(() => (promise.value ? Boolean(promise.value.loading) : false));
+const showSkeleton = computed(() => loading.value && columns.value.every((column) => !column.items.length));
 
 function estimateSize(item: FeedItem) {
   const headerSize = 47;
@@ -184,6 +199,11 @@ function initialize() {
 }
 
 watch([() => route.fullPath, () => props.type], initialize);
+// the latest items, from the start
+usePullRefresh(() => {
+  initialize();
+  return promise.value;
+});
 
 onMounted(() => {
   window.addEventListener('resize', initializeColumns);
@@ -198,5 +218,72 @@ onBeforeUnmount(() => {
 <style scoped>
 .feed-card {
   margin-bottom: 1.5rem;
+}
+
+.feed-skeleton {
+  padding: 0.4rem 0.8rem 0.8rem;
+}
+
+.skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.4rem 0 0.8rem;
+}
+
+.skeleton-block {
+  display: block;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #ececec 25%, #f6f6f6 37%, #ececec 63%);
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+}
+
+.skeleton-icon {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.skeleton-title {
+  flex: 1;
+  max-width: 70%;
+  height: 1rem;
+}
+
+.skeleton-image {
+  height: 200px;
+  margin-bottom: 0.8rem;
+}
+
+.skeleton-line {
+  height: 0.75rem;
+  margin-bottom: 0.5rem;
+
+  &.is-short {
+    width: 55%;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-block {
+    animation: none;
+  }
+}
+
+/* dark theme of the app */
+:global(html[data-theme='dark']) .skeleton-block {
+  background: #2c2c2c;
 }
 </style>

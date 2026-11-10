@@ -71,4 +71,9 @@ defineEmits(['click']);
     color: var(--c2c-text);
   }
 }
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): the icons of the rows read on a dark box */
+html[data-theme='dark'] .toolbox-button .toolbox-button-icon {
+  color: #e5e5e5;
+}
 </style>

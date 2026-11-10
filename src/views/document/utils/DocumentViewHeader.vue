@@ -12,6 +12,21 @@
           <follow-button v-if="!isPrintingView" :document="document" />
           <tags-button v-if="!isPrintingView" :document="document" />
 
+          <add-link
+            v-if="isNormalView && documentType === 'route'"
+            document-type="outing"
+            :query="{ r: document.document_id }"
+            class="add-my-outing"
+          >
+            <fa-icon icon="plus" />&nbsp;{{ $gettext('Add my outing') }}
+          </add-link>
+          <offline-header-button
+            v-if="isNormalView && SAVABLE_TYPES.includes(documentType)"
+            :document-type="documentType"
+            :document-id="document.document_id!"
+            :lang="lang!"
+            :title="title"
+          />
           <social-network-sharing v-if="documentType != 'profile' && isNormalView" :document="document" />
 
           <span :title="$gettext('Add images')" v-if="isEditable && documentType !== 'image'" @click="uploader?.show()">
@@ -55,6 +70,7 @@ import { computed, useTemplateRef } from 'vue';
 import DocumentVersionBanner from './DocumentVersionBanner.vue';
 import FollowButton from './FollowButton.vue';
 import GotopButton from './GotopButton.vue';
+import OfflineHeaderButton from './OfflineHeaderButton.vue';
 import SocialNetworkSharing from './SocialNetworkSharing.vue';
 import TagsButton from './TagsButton.vue';
 
@@ -63,6 +79,7 @@ import { useEditable } from '@/js/composables/editable';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { documentProperty, useDocumentType } from '@/js/properties';
 import type { CookedDocument } from '@/js/vue-plugins/document-utils';
+import { SAVABLE_TYPES } from '@/pwa/offline-store';
 
 const props = defineProps({
   // a private profile has no cooked locale: the header then shows nothing
@@ -85,12 +102,27 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
 </script>
 
 <style scoped>
+@import '@/assets/css/media.css';
+
 .button-bar {
   font-size: 1.5rem;
 }
 
 .button-bar > a {
   color: var(--c2c-text);
+}
+
+/* the outing of this route, in one tap */
+.button-bar > a.add-my-outing {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: var(--c2c-primary);
+  color: var(--c2c-white);
+  font-size: 0.95rem;
+  font-weight: 600;
+  vertical-align: middle;
 }
 
 .button-bar > span,
@@ -108,9 +140,27 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
   }
 }
 
+/* on a phone the buttons take their own line, above the title: floated beside it, they left a long title a few
+   letters per line ("Aig / uille de la République") */
+@media screen and (--c2c-max-tablet) {
+  .button-bar {
+    float: none !important;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+}
+
 @media print {
   .title {
     font-size: 1.5rem !important;
   }
+}
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): the buttons of the header read on a dark box */
+html[data-theme='dark'] .button-bar > a {
+  color: #e5e5e5;
 }
 </style>

@@ -61,6 +61,24 @@
               />
             </span>
           </template>
+
+          <near-me-button v-if="documentAreGeoLocalized" class="header-item" />
+
+          <!-- "My topos" (src/stores/offline.ts): the page saved at once, and the ones of the page saved offline -->
+          <template v-if="SAVABLE_TYPES.includes(documentType)">
+            <bulk-offline-button
+              class="header-item"
+              :documents="documents?.documents ?? []"
+              :document-type="documentType"
+            />
+            <span
+              class="header-item is-size-3 has-cursor-pointer"
+              :title="$gettext('Only the ones saved offline')"
+              @click="offlineOnly = !offlineOnly"
+            >
+              <fa-icon icon="circle-check" :class="offlineOnly ? 'has-text-primary' : 'has-text-grey-light'" />
+            </span>
+          </template>
         </span>
       </div>
 
@@ -129,9 +147,11 @@
 import { computed, defineAsyncComponent, nextTick, ref, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import BulkOfflineButton from './utils/BulkOfflineButton.vue';
 import DisplayModeSwitch from './utils/DisplayModeSwitch.vue';
 import ImageCards from './utils/ImageCards.vue';
 import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton.vue';
+import NearMeButton from './utils/NearMeButton.vue';
 import PageSelector from './utils/PageSelector.vue';
 import QueryItems from './utils/QueryItems.vue';
 
@@ -139,10 +159,13 @@ import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { usePullRefresh } from '@/js/composables/pull-refresh';
 import constants from '@/js/constants';
 import bus from '@/js/event-bus';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
+import { SAVABLE_TYPES } from '@/pwa/offline-store';
+import { useOfflineStore } from '@/stores/offline';
 
 // lazy (ag-grid is big): an async component, as Vue 3 no longer takes a plain function returning the import
 const DocumentsTable = defineAsyncComponent(() => import('@/components/datatable/DocumentsTable.vue'));
@@ -168,7 +191,20 @@ const queryHasTags = ref(false);
 
 const showMap = computed(() => ['both', 'map'].includes(displayMode.value));
 const showResults = computed(() => ['result', 'both'].includes(displayMode.value));
-const documents = computed(() => promise.value.data);
+const offline = useOfflineStore();
+const offlineOnly = ref(false);
+// the documents of the page, or the ones of them saved offline
+const documents = computed(() => {
+  const data = promise.value.data;
+  return offlineOnly.value && data
+    ? {
+        ...data,
+        documents: data.documents.filter((document: C2cDocument) =>
+          offline.isOfflineReady(documentType.value, document.document_id!)
+        ),
+      }
+    : data;
+});
 const documentType = computed(() => String(route.name).slice(0, -1));
 const documentAreGeoLocalized = computed(() => constants.objectDefinitions[documentType.value].geoLocalized === true);
 
@@ -183,6 +219,11 @@ const queryWithoutOffsetAndSort = computed(() => {
 const documentsShownOnMap = computed(() =>
   filteredWaypoints.value.concat(documents.value ? documents.value.documents : [])
 );
+
+usePullRefresh(() => {
+  load();
+  return promise.value;
+});
 
 function load() {
   displayMode.value = preferences.get(
@@ -356,5 +397,10 @@ watch(displayMode, updateMapSize);
       padding-bottom: 0;
     }
   }
+}
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): the header of the listing on the dark page */
+html[data-theme='dark'] .search-infos {
+  background-color: #1a1a1a;
 }
 </style>

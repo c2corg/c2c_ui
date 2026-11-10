@@ -8,6 +8,11 @@
   flex-wrap: wrap !important;
 }
 
+/* for the routes saved offline in the outing form */
+.is-justify-content-flex-start {
+  justify-content: flex-start !important;
+}
+
 .is-justify-content-flex-end {
   justify-content: flex-end !important;
 }
