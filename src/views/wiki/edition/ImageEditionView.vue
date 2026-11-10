@@ -24,7 +24,13 @@
             <div class="field">
               <div class="file is-centered">
                 <label class="file-label">
-                  <input class="file-input" type="file" name="resume" @change="onFileChange" accept="image/*" />
+                  <input
+                    class="file-input"
+                    type="file"
+                    name="resume"
+                    @change="onFileChange"
+                    accept="image/*,.heic,.heif"
+                  />
                   <span class="file-cta button" :class="{ 'is-loading': uploadingNewFile }">
                     <span class="file-icon">
                       <fa-icon icon="upload" />
@@ -35,6 +41,8 @@
               </div>
             </div>
             <img v-if="newVersionSource" :src="newVersionSource" />
+            <!-- a new version the browser cannot show (HEIC in Chrome and Firefox): not the previous one -->
+            <fa-icon v-else-if="newVersionSelected" icon="image" size="3x" class="has-text-grey-light" />
             <thumbnail v-else :img="document" size="MI" />
           </div>
         </div>
@@ -101,6 +109,7 @@ const { $user } = useGlobalProperties();
 const { fields, saving, mode, document, save } = useDocumentEdition({ beforeSave, afterLoad });
 
 const newVersionSource = ref<string | null>(null);
+const newVersionSelected = ref(false);
 const uploadingNewFile = ref(false);
 
 const map = useTemplateRef<InstanceType<typeof MapInputRow>>('map');
@@ -138,12 +147,17 @@ function onFileChange(event: Event) {
     return;
   }
 
+  newVersionSelected.value = true;
   uploadingNewFile.value = true;
 
   uploadFile(
     file,
     undefined as unknown as number,
     (dataUrl) => {
+      // the previews are object URLs of the files: freed when replaced
+      if (newVersionSource.value?.startsWith('blob:')) {
+        URL.revokeObjectURL(newVersionSource.value);
+      }
       newVersionSource.value = dataUrl;
     },
     () => {

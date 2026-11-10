@@ -16,7 +16,7 @@
           :is-saving="image.status === 'SAVING'"
           :is-success="image.status === 'SUCCESS'"
           :is-failed="image.status === 'FAILED'"
-          :can-rotate="Boolean(image.file?.name) && !image.file.name.endsWith('.svg')"
+          :can-rotate="Boolean(image.dataUrl) && !['image/svg+xml', 'image/gif'].includes(image.file.type)"
           @delete-image="onDeleteImage(image)"
           @rotate-image="onRotateImage(image, $event)"
           @retry-upload="startUpload(image)"
@@ -34,7 +34,7 @@
             @dragleave="dragOver = false"
             @drop="dragOver = false"
             multiple
-            accept="image/*"
+            accept="image/*,.heic,.heif"
             class="input-file"
           />
           <!-- this message contains HTML -->
@@ -145,6 +145,7 @@ function hide() {
 }
 
 function clean() {
+  Object.values(images.value).forEach(revokePreview);
   images.value = {};
   categoriesEdition.value = false;
   promise.value = {};
@@ -157,7 +158,15 @@ function computeReadyForSaving() {
   readyForSaving.value = values.length !== 0 && values.every((image) => image.status === 'SUCCESS');
 }
 
+// the previews are object URLs of the files: freed when replaced or dropped
+function revokePreview(image: UploadedImage) {
+  if (image.dataUrl?.startsWith('blob:')) {
+    URL.revokeObjectURL(image.dataUrl);
+  }
+}
+
 function onDeleteImage(image: UploadedImage) {
+  revokePreview(image);
   if (images.value[image.key]) {
     images.value = Object.fromEntries(Object.entries(images.value).filter(([key]) => key !== image.key));
   }
@@ -222,6 +231,7 @@ function startUpload(image: UploadedImage, angle = 0) {
     image.file,
     angle,
     /*onDataUrlReady =*/ (dataUrl) => {
+      revokePreview(image);
       image.dataUrl = dataUrl;
     },
     (event) => {
