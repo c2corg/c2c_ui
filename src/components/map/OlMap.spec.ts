@@ -1,11 +1,15 @@
 import type VectorLayer from 'ol/layer/Vector';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { defineComponent, h, isProxy, nextTick, reactive, ref } from 'vue';
 
 import OlMap from './OlMap.vue';
 import { mountMap } from './test-utils';
 
+import biodivSportsService from '@/js/apis/biodivsports-service';
 import ol from '@/js/libs/ol';
+
+vi.mock('@/js/apis/biodivsports-service', () => ({ default: { fetchData: vi.fn() } }));
+vi.mock('@/js/apis/respectercestproteger-service', () => ({ default: { hasArea: vi.fn() } }));
 
 // the point markers draw Font Awesome icons, which the specs don't load: plain styles instead
 vi.mock('@/components/map/map-utils', async (importOriginal) => ({
@@ -140,6 +144,97 @@ describe('OlMap', () => {
       vm.onPointerMove(pointerMove());
 
       expect(wrapper.emitted('highlight-document')).toEqual([[document], [null]]);
+
+      wrapper.unmount();
+    });
+  });
+
+  describe('biodiv-sports areas', () => {
+    const fetchData = vi.mocked(biodivSportsService.fetchData);
+    // an area around [6.8, 45.9] (lon, lat)
+    const area = (id: number, lon = 6.8, lat = 45.9) => ({
+      id,
+      name: `area ${id}`,
+      geometry: {
+        type: 'Polygon',
+        coordinates: [
+          [
+            [lon - 0.01, lat - 0.01],
+            [lon + 0.01, lat - 0.01],
+            [lon + 0.01, lat + 0.01],
+            [lon - 0.01, lat - 0.01],
+          ],
+        ],
+      },
+    });
+    const viewAround = (lon: number, lat: number, halfSize: number) => {
+      const [x, y] = ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
+      return [x - halfSize, y - halfSize, x + halfSize, y + halfSize];
+    };
+    const load = (vm: Awaited<ReturnType<typeof mountMap>>['vm'], extent: number[]) =>
+      vm.protectionAreasLayer.getSource()!.loadFeatures(extent, 10, ol.proj.get('EPSG:3857')!);
+    const flush = () => new Promise((resolve) => setTimeout(resolve));
+
+    beforeEach(() => fetchData.mockReset());
+
+    it('are not loaded on maps without them', async () => {
+      const { wrapper, vm } = await mountMap();
+
+      expect(vm.protectionAreasLayer.getVisible()).toBe(false);
+
+      wrapper.unmount();
+    });
+
+    it('are loaded once for the viewed extent and around it', async () => {
+      fetchData.mockResolvedValue({ data: { results: [area(1)] } } as never);
+      const { wrapper, vm } = await mountMap({ showProtectionAreas: true });
+
+      load(vm, viewAround(6.8, 45.9, 5000));
+      await flush();
+      // a small move, then zooming in: already loaded
+      load(vm, viewAround(6.83, 45.9, 5000));
+      load(vm, viewAround(6.8, 45.9, 1000));
+      await flush();
+
+      expect(vm.protectionAreasLayer.getVisible()).toBe(true);
+      expect(fetchData).toHaveBeenCalledTimes(1);
+      expect(vm.protectionAreasLayer.getSource()!.getFeatureById('biodiv_1')).not.toBeNull();
+
+      wrapper.unmount();
+    });
+
+    it('tell the page when one is in the view, not only around it', async () => {
+      const hasArea = async (lon: number) => {
+        fetchData.mockResolvedValue({ data: { results: [area(1, lon)] } } as never);
+        const { wrapper, vm } = await mountMap({ showProtectionAreas: true });
+        // no layout in jsdom: the viewed extent as given (a sized map would render, which jsdom can't)
+        vi.spyOn(vm.map.getView(), 'calculateExtent').mockReturnValue(viewAround(6.8, 45.9, 500));
+
+        load(vm, viewAround(6.8, 45.9, 500));
+        await flush();
+        const emitted = wrapper.emitted('has-protection-area') !== undefined;
+        wrapper.unmount();
+        return emitted;
+      };
+
+      expect(await hasArea(6.8)).toBe(true);
+      // loaded, half a view away
+      expect(await hasArea(6.82)).toBe(false);
+    });
+
+    it('are loaded again after a failure', async () => {
+      fetchData
+        .mockRejectedValueOnce(new Error('network'))
+        .mockResolvedValue({ data: { results: [area(1)] } } as never);
+      const { wrapper, vm } = await mountMap({ showProtectionAreas: true });
+
+      load(vm, viewAround(6.8, 45.9, 5000));
+      await flush();
+      load(vm, viewAround(6.8, 45.9, 5000));
+      await flush();
+
+      expect(fetchData).toHaveBeenCalledTimes(2);
+      expect(vm.protectionAreasLayer.getSource()!.getFeatureById('biodiv_1')).not.toBeNull();
 
       wrapper.unmount();
     });
