@@ -31,26 +31,21 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    version: {
-      type: Object,
-      required: true,
-    },
-    documentType: {
-      type: String,
-      required: true,
-    },
-  },
+<script setup lang="ts">
+import { computed } from 'vue';
 
-  computed: {
-    isFirstVersion() {
-      return !this.version.previous_version_id;
-    },
-    isLastVersion() {
-      return !this.version.next_version_id;
-    },
+const props = defineProps({
+  version: {
+    type: Object,
+    required: true,
   },
-};
+  documentType: {
+    type: String,
+    required: true,
+  },
+});
+
+const isFirstVersion = computed(() => !props.version.previous_version_id);
+
+const isLastVersion = computed(() => !props.version.next_version_id);
 </script>

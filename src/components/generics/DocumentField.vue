@@ -36,71 +36,53 @@
       <span v-else v-translate>no</span>
     </span>
 
-    <span v-else-if="field.i18n">{{ $gettext(value, field.i18nContext) }} </span>
+    <span v-else-if="field.i18n">{{ $gettext(value, field.i18nContext) }}</span>
 
-    <span v-else>
-      <span v-if="showPrefix">{{ prefix || field.prefix }}</span>
-      {{ divisor ? Math.round(value / divisor) : value }}
-    </span>
-
-    <span v-if="showUnit && !field.skipSpaceBeforeUnit">&nbsp;</span>
-    <span v-if="showUnit">{{ unit || field.unit }}</span>
-  </span>
+    <!-- no line break between prefix, value and unit: the templates keep whitespace, it would render as a space -->
+    <span v-else
+      ><span v-if="showPrefix">{{ prefix || field.prefix }}</span
+      >{{ divisor ? Math.round(value / divisor) : value }}</span
+    ><template v-if="showUnit"
+      ><template v-if="!field.skipSpaceBeforeUnit">&nbsp;</template>{{ unit || field.unit }}</template
+    ></span
+  >
 </template>
 
-<script>
-import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import { computed } from 'vue';
 
-export default {
-  mixins: [requireDocumentProperty, requireFieldProperty],
+import { documentProperty, fieldProperty } from '@/js/properties';
 
-  props: {
-    unit: {
-      type: String,
-      default: null,
-    },
-    divisor: {
-      type: Number,
-      default: null,
-    },
-    sortValues: {
-      type: Boolean,
-      default: false,
-    },
-    prefix: {
-      type: String,
-      default: null,
-    },
+const props = defineProps({
+  ...documentProperty,
+  ...fieldProperty,
+  unit: {
+    type: String,
+    default: null,
   },
-
-  computed: {
-    value() {
-      return this.document[this.field.name];
-    },
-
-    isArray() {
-      return Array.isArray(this.value);
-    },
-
-    showUnit() {
-      return (this.unit || this.field.unit) && this.value !== null && this.value !== undefined;
-    },
-
-    showPrefix() {
-      return (this.prefix || this.field.prefix) && this.value !== null && this.value !== undefined;
-    },
-
-    license() {
-      switch (this.value) {
-        case 'personal':
-          return 'by-nc-nd';
-        case 'copyright':
-          return;
-        case 'colaborative':
-        default:
-          return 'by-sa';
-      }
-    },
+  divisor: {
+    type: Number,
+    default: null,
   },
-};
+  sortValues: {
+    type: Boolean,
+    default: false,
+  },
+  prefix: {
+    type: String,
+    default: null,
+  },
+});
+
+// the value of the field, of any type (string, number, list...)
+
+const value = computed<any>(() => props.document[props.field.name]);
+
+const isArray = computed(() => Array.isArray(value.value));
+
+const showUnit = computed(() => (props.unit || props.field.unit) && value.value !== null && value.value !== undefined);
+
+const showPrefix = computed(
+  () => (props.prefix || props.field.prefix) && value.value !== null && value.value !== undefined
+);
 </script>

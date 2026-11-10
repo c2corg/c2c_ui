@@ -1,0 +1,28 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): elements/container */
+
+@import '../../media.css';
+
+.container {
+  flex-grow: 1;
+  margin: 0 auto;
+  position: relative;
+  width: auto;
+}
+
+@media screen and (--c2c-min-desktop) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media screen and (--c2c-min-widescreen) {
+  .container:not(.is-max-desktop) {
+    max-width: 1152px;
+  }
+}
+
+@media screen and (--c2c-min-fullhd) {
+  .container:not(.is-max-desktop):not(.is-max-widescreen) {
+    max-width: 1344px;
+  }
+}

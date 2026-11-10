@@ -13,23 +13,25 @@
   </modal-window>
 </template>
 
-<script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import { type PropType, useTemplateRef } from 'vue';
 
-export default {
-  mixins: [requireDocumentProperty],
+import { documentProperty } from '@/js/properties';
 
-  props: {
-    missingLangs: {
-      type: Array,
-      required: true,
-    },
+defineProps({
+  ...documentProperty,
+  missingLangs: {
+    type: Array as PropType<string[]>,
+    required: true,
   },
+});
 
-  methods: {
-    show() {
-      this.$refs.modalWindow.show();
-    },
-  },
-};
+const modalWindowRef = useTemplateRef<{ show(): void }>('modalWindow');
+
+function show() {
+  modalWindowRef.value!.show();
+}
+
+// shown by ToolBox through its template ref
+defineExpose({ show });
 </script>

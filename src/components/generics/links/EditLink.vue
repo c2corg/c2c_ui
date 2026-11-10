@@ -1,7 +1,7 @@
 <template>
   <router-link
     :to="{ name: documentType + '-edit', params: { id: document.document_id, lang: lang } }"
-    @click.native="$emit('click')"
+    @click="$emit('click')"
     rel="nofollow"
   >
     <slot>
@@ -10,19 +10,17 @@
   </router-link>
 </template>
 
-<script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import { documentProperty, useDocumentType } from '@/js/properties';
 
-export default {
-  mixins: [requireDocumentProperty],
-
-  props: {
-    lang: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  ...documentProperty,
+  lang: {
+    type: String,
+    required: true,
   },
+});
+defineEmits(['click']);
 
-  emits: ['click'],
-};
+const { documentType } = useDocumentType(props);
 </script>

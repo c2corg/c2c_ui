@@ -1,26 +1,22 @@
 <template>
   <div class="control">
-    <markdown-editor v-model="value_" :placeholder="placeholder" />
+    <markdown-editor :model-value="value_ as string" @update:model-value="value_ = $event" :placeholder="placeholder" />
   </div>
 </template>
 
-<script>
-import { baseMixin } from './mixins';
+<script setup lang="ts">
+import { baseInputProps, useInputValue } from './input-value';
 
-import MarkdownEditor from '@/components/markdown-editor/MarkdownEditor';
+import MarkdownEditor from '@/components/markdown-editor/MarkdownEditor.vue';
 
-export default {
-  components: {
-    MarkdownEditor,
+const props = defineProps({
+  ...baseInputProps,
+  modelValue: {
+    type: String,
+    default: null,
   },
+});
+const emit = defineEmits(['update:modelValue']);
 
-  mixins: [baseMixin],
-
-  props: {
-    value: {
-      type: String,
-      default: null,
-    },
-  },
-};
+const { value_ } = useInputValue(props, emit);
 </script>

@@ -27,48 +27,47 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    data: {
-      type: String,
-      default: null,
-    },
+<script setup lang="ts">
+import { computed } from 'vue';
+
+const props = defineProps({
+  data: {
+    type: String,
+    default: null,
   },
+});
 
-  computed: {
-    levels() {
-      return this.data ? JSON.parse(this.data) : null;
-    },
-    hasData() {
-      if (this.levels === null || this.levels.length === 0) {
-        return false;
-      }
+const levels = computed(() => (props.data ? JSON.parse(props.data) : null));
 
-      const firstLevel = this.levels[0]; // goddamn API...
+const hasData = computed(() => {
+  if (levels.value === null || levels.value.length === 0) {
+    return false;
+  }
 
-      return (
-        Boolean(firstLevel.level_place) ||
-        Boolean(firstLevel.level_snow_height_soft) ||
-        Boolean(firstLevel.level_snow_height_total) ||
-        Boolean(firstLevel.level_comment)
-      );
-    },
-  },
-};
+  const firstLevel = levels.value[0]; // goddamn API...
+
+  return (
+    Boolean(firstLevel.level_place) ||
+    Boolean(firstLevel.level_snow_height_soft) ||
+    Boolean(firstLevel.level_snow_height_total) ||
+    Boolean(firstLevel.level_comment)
+  );
+});
 </script>
 
-<style lang="scss" scoped>
-@media screen and (max-width: $tablet) {
+<style scoped>
+@import '@/assets/css/media.css';
+
+@media screen and (--c2c-max-tablet) {
   thead {
     display: none;
   }
 
   tr {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--c2c-grey-lighter);
 
     &:nth-of-type(odd) {
-      background-color: #f9f9f9;
+      background-color: var(--c2c-white-ter);
     }
   }
 
@@ -81,7 +80,7 @@ export default {
     border: 0 !important;
   }
 
-  // hide cell with no data
+  /* hide cell with no data */
   td:not([data-title]) {
     display: none;
   }

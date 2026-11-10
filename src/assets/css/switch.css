@@ -1,0 +1,136 @@
+/*
+ * Switches `<input type="checkbox" class="switch">` with a styled label.
+ *
+ * From bulma-switch 2.0.4 (https://github.com/Wikiki/bulma-switch, MIT License, Copyright (c) 2017 Wikiki): only what
+ * the site uses (sizes normal and small, colors primary and info, is-rounded, is-rtl, disabled).
+ *
+ * The size is --switch-size, on the label (its ::before and ::after inherit it): 1rem, --c2c-size-7 with is-small.
+ * The track (::before) is 1.5 times the size high and twice as wide; the paddle (::after) is 0.25rem inside it.
+ */
+.switch[type='checkbox'] {
+  outline: 0;
+  user-select: none;
+  display: inline-block;
+  position: absolute;
+  opacity: 0;
+
+  + label {
+    --switch-size: 1rem;
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: var(--switch-size);
+    height: 2.25em;
+    line-height: 1.5;
+    padding-left: calc(3 * var(--switch-size) + 0.5rem);
+    padding-top: 0.2rem;
+    cursor: pointer;
+
+    /* the track */
+    &::before {
+      position: absolute;
+      display: block;
+      top: calc(50% - 1.5 * var(--switch-size) * 0.5);
+      left: 0;
+      width: calc(3 * var(--switch-size));
+      height: calc(1.5 * var(--switch-size));
+      border: 0.1rem solid transparent;
+      border-radius: var(--c2c-radius);
+      background: var(--c2c-grey-light);
+      content: '';
+    }
+
+    /* the paddle */
+    &::after {
+      display: block;
+      position: absolute;
+      top: calc(50% - (1.5 * var(--switch-size) - 0.5rem) * 0.5);
+      left: 0.25rem;
+      width: calc(1.5 * var(--switch-size) - 0.5rem);
+      height: calc(1.5 * var(--switch-size) - 0.5rem);
+      transform: translate3d(0, 0, 0);
+      border-radius: var(--c2c-radius);
+      background: var(--c2c-white);
+      transition: all 0.25s ease-out;
+      content: '';
+    }
+  }
+
+  &.is-small + label {
+    --switch-size: var(--c2c-size-7);
+  }
+
+  &:focus + label::before,
+  &:focus + label::after {
+    outline: 1px dotted var(--c2c-grey-light);
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
+
+    + label {
+      opacity: 0.5;
+
+      &::before,
+      &::after {
+        opacity: 0.5;
+      }
+
+      &:hover {
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &.is-rtl + label {
+    padding-left: 0;
+    padding-right: calc(3 * var(--switch-size) + 0.5rem);
+
+    &::before {
+      left: auto;
+      right: 0;
+    }
+
+    /* the paddle, checked: at the right of the track */
+    &::after {
+      left: auto;
+      right: calc(1.5 * var(--switch-size) + 0.125rem);
+    }
+  }
+
+  &:checked {
+    + label::before {
+      background: var(--c2c-primary);
+    }
+
+    /* the paddle: at the right of the track */
+    + label::after {
+      left: calc(1.5 * var(--switch-size) + 0.125rem);
+    }
+
+    &.is-rtl + label::after {
+      left: auto;
+      right: 0.25rem;
+    }
+  }
+
+  &.is-rounded + label {
+    &::before {
+      border-radius: 24px;
+    }
+
+    &::after {
+      border-radius: 50%;
+    }
+  }
+
+  &.is-primary:checked + label::before {
+    background: var(--c2c-primary);
+  }
+
+  &.is-info:checked + label::before {
+    background: var(--c2c-info);
+  }
+}

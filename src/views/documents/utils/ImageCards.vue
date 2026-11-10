@@ -12,30 +12,24 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    documents: {
-      type: Object,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  documents: {
+    type: Object,
+    required: true,
   },
-};
+});
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .cards-container {
   flex-flow: wrap row;
-  //margin:auto;
+  /* margin:auto; */
 
   .card-image {
     transition: 0.2s;
     margin-bottom: 5px;
     flex-grow: 1;
-
-    img {
-      height: 200px;
-    }
   }
 }
 </style>

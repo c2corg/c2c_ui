@@ -23,12 +23,13 @@
     </div>
     <div class="activity-bottom is-flex is-justify-content-space-between is-size-7 is-italic px-2">
       <div v-if="duration">
-        <fa-icon :icon="['far', 'clock']" :title="$gettext('Duration')"></fa-icon>&hairsp;<span
-          v-html="duration"
-        ></span>
+        <span role="img" :title="$gettext('Duration')" :aria-label="$gettext('Duration')"
+          ><fa-icon :icon="['far', 'clock']" /></span
+        >&hairsp;<span v-html="duration"></span>
       </div>
       <div v-if="length">
-        <fa-icon icon="ruler" :title="$gettext('length')"></fa-icon>&hairsp;<span v-html="length"></span>&nbsp;
+        <span role="img" :title="$gettext('length')" :aria-label="$gettext('length')"><fa-icon icon="ruler" /></span
+        >&hairsp;<span v-html="length"></span>&nbsp;
       </div>
       <div v-if="heightDiffUp"><icon-height-diff-up />&hairsp;<span v-html="heightDiffUp"></span></div>
     </div>
@@ -38,56 +39,37 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
 
-export default {
-  name: 'TrackingDeviceActivity',
-
-  props: {
-    activity: {
-      type: Object,
-      required: true,
-    },
+const props = defineProps({
+  activity: {
+    type: Object,
+    required: true,
   },
+});
 
-  data() {
-    return {
-      hover: false,
-    };
-  },
+const { $dateUtils, $documentUtils } = useGlobalProperties();
 
-  computed: {
-    duration() {
-      if (!this.activity.duration) {
-        return undefined;
-      }
-      return this.$dateUtils.durationToTimeString(this.activity.duration);
-    },
+const hover = ref(false);
+const miniaturesBaseUrl = config.urls.miniatures;
 
-    heightDiffUp() {
-      return this.$documentUtils.heightDiffUpWithUnit(this.activity.heightDiffUp);
-    },
-
-    length() {
-      return this.$documentUtils.lengthWithUnit(this.activity.length);
-    },
-
-    miniaturesBaseUrl() {
-      return config.urls.miniatures;
-    },
-  },
-};
+const duration = computed(() =>
+  props.activity.duration ? $dateUtils.durationToTimeString(props.activity.duration) : undefined
+);
+const heightDiffUp = computed(() => $documentUtils.heightDiffUpWithUnit(props.activity.heightDiffUp));
+const length = computed(() => $documentUtils.lengthWithUnit(props.activity.length));
 </script>
 
-<style lang="scss" scoped>
-$size: 200px;
-
+<style scoped>
 .activity {
-  width: $size;
-  height: $size;
+  width: 200px;
+  height: 200px;
   position: relative;
-  background-color: $white-ter;
+  background-color: var(--c2c-white-ter);
 
   &.hovered > img {
     filter: brightness(80%);
@@ -107,7 +89,7 @@ a {
   position: absolute;
   width: 100%;
   left: 0;
-  background-color: rgba($color: #000, $alpha: 0.55);
+  background-color: rgba(0, 0, 0, 0.55);
   color: white;
 }
 
@@ -130,7 +112,7 @@ a {
   align-items: center;
   pointer-events: none;
 
-  button {
+  :slotted(button) {
     pointer-events: auto;
   }
 }

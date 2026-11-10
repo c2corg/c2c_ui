@@ -8,7 +8,7 @@
     ></masked-document-version-info>
     <document-view-header v-if="document" :document="document" :version="version" />
 
-    <images-box v-if="document" :document="document" />
+    <images-box v-if="document" :document="document" priority />
 
     <div v-if="document" class="columns is-multiline is-block-print">
       <div class="column is-3 no-print">
@@ -18,7 +18,7 @@
 
       <div class="column is-9 is-12-print">
         <div class="box">
-          <div class="no-print" v-for="route of document.associations.routes" :key="route.document_id">
+          <div class="no-print" v-for="route of document.associations!.routes" :key="route.document_id">
             <pretty-route-link :route="route" hide-area hide-orientation />
           </div>
 
@@ -28,8 +28,8 @@
                 as it refers to profiles document
                 let stay profile coherent and call this component profiles-links
                 and not users-links -->
-            <profiles-links :profiles="document.associations.users" />
-            <span v-if="document.cooked.participants">, {{ document.cooked.participants }}</span>
+            <profiles-links :profiles="document.associations!.users!" />
+            <span v-if="document.cooked!.participants">, {{ document.cooked!.participants }}</span>
           </div>
 
           <hr />
@@ -93,7 +93,7 @@
           <markdown-section :document="document" :field="fields.weather" />
           <markdown-section :document="document" :field="fields.conditions" />
 
-          <condition-levels :data="locale.conditions_levels" />
+          <condition-levels :data="locale!.conditions_levels ?? undefined" />
 
           <markdown-section :document="document" :field="fields.avalanches" />
           <markdown-section :document="document" :field="fields.timing" />
@@ -113,17 +113,26 @@
   </div>
 </template>
 
-<script>
-import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import documentViewMixin from './utils/document-view-mixin';
-import ConditionLevels from './utils/field-viewers/ConditionLevels';
+<script setup lang="ts">
+import DocumentPrintLicense from './utils/DocumentPrintLicense.vue';
+import DocumentViewHeader from './utils/DocumentViewHeader.vue';
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo.vue';
+import CommentsBox from './utils/boxes/CommentsBox.vue';
+import ImagesBox from './utils/boxes/ImagesBox.vue';
+import MapBox from './utils/boxes/MapBox.vue';
+import ToolBox from './utils/boxes/ToolBox.vue';
+import { documentViewProps, useDocumentView } from './utils/document-view';
+import ActivitiesField from './utils/field-viewers/ActivitiesField.vue';
+import ConditionLevels from './utils/field-viewers/ConditionLevels.vue';
+import DoubleNumericField from './utils/field-viewers/DoubleNumericField.vue';
+import FieldView from './utils/field-viewers/FieldView.vue';
+import LabelValue from './utils/field-viewers/LabelValue.vue';
+import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
+import ProfilesLinks from './utils/field-viewers/ProfilesLinks.vue';
 
-export default {
-  components: {
-    ConditionLevels,
-    MaskedDocumentVersionInfo,
-  },
+import type { Outing } from '@/js/apis/c2c/schemas';
 
-  mixins: [documentViewMixin],
-};
+const props = defineProps(documentViewProps);
+
+const { promise, documentType, fields, document, version, locale } = useDocumentView<Outing>(props);
 </script>

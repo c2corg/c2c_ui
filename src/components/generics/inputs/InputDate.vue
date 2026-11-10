@@ -4,7 +4,7 @@
     type="date"
     class="input input-date"
     :class="{ 'is-danger': hasError }"
-    :value="value"
+    :value="modelValue"
     :min="min"
     :max="max"
     :required="required"
@@ -13,38 +13,35 @@
   />
 </template>
 
-<script>
-import { baseMixin } from './mixins';
+<script setup lang="ts">
+import type { PropType } from 'vue';
 
-export default {
-  mixins: [baseMixin],
+import { baseInputProps } from './input-value';
 
-  props: {
-    // YYYY-MM-DD, as stored by the API
-    value: {
-      type: String,
-      default: null,
-    },
-    // earliest and latest selectable dates (inclusive), YYYY-MM-DD
-    min: {
-      type: String,
-      default: undefined,
-    },
-    max: {
-      type: String,
-      default: undefined,
-    },
+defineProps({
+  ...baseInputProps,
+  // YYYY-MM-DD, as stored by the API
+  modelValue: {
+    type: String as PropType<string | null>,
+    default: null,
   },
-
-  emits: ['input'],
-
-  methods: {
-    onInput(event) {
-      // an empty value is a cleared (or not yet complete) date
-      this.$emit('input', event.target.value || null);
-    },
+  // earliest and latest selectable dates (inclusive), YYYY-MM-DD
+  min: {
+    type: String,
+    default: undefined,
   },
-};
+  max: {
+    type: String,
+    default: undefined,
+  },
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+function onInput(event: Event) {
+  // an empty value is a cleared (or not yet complete) date
+  emit('update:modelValue', (event.target as HTMLInputElement).value || null);
+}
 </script>
 
 <style scoped>

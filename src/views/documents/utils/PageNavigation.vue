@@ -3,23 +3,22 @@
     <component
       :is="previousPageQuery ? 'router-link' : 'span'"
       class="button has-text-normal"
-      :disabled="!previousPageQuery"
+      :disabled="!previousPageQuery || null"
       :aria-disabled="!previousPageQuery ? 'true' : null"
-      :to="previousPageQuery"
+      :to="previousPageQuery ?? undefined"
       :aria-label="$gettext('Previous page')"
     >
       <fa-icon icon="chevron-left" />
     </component>
 
-    <template v-for="(page, index) in pages">
-      <span v-if="page === null" :key="`gap-${index}`" class="page-navigation-gap">&hellip;</span>
+    <template v-for="(page, index) in pages" :key="page ?? `gap-${index}`">
+      <span v-if="page === null" class="page-navigation-gap">&hellip;</span>
       <component
         v-else
-        :key="page"
         :is="page === currentPage ? 'span' : 'router-link'"
         class="button"
         :class="{ 'is-primary': page === currentPage }"
-        :to="pageQuery((page - 1) * queryLimit, queryLimit)"
+        :to="pageAt((page - 1) * queryLimit)"
         :aria-current="page === currentPage ? 'page' : null"
       >
         {{ page }}
@@ -29,9 +28,9 @@
     <component
       :is="nextPageQuery ? 'router-link' : 'span'"
       class="button has-text-normal"
-      :disabled="!nextPageQuery"
+      :disabled="!nextPageQuery || null"
       :aria-disabled="!nextPageQuery ? 'true' : null"
-      :to="nextPageQuery"
+      :to="nextPageQuery ?? undefined"
       :aria-label="$gettext('Next page')"
     >
       <fa-icon icon="chevron-right" />
@@ -39,38 +38,30 @@
   </nav>
 </template>
 
-<script>
-import pageQueryMixin from './page-query-mixin';
+<script setup lang="ts">
+import { computed, type PropType } from 'vue';
+
+import { usePageQuery } from './page-query';
 import { getPages } from './pagination';
 
-export default {
-  mixins: [pageQueryMixin],
-
-  props: {
-    documents: {
-      type: Object,
-      default: null,
-    },
+const props = defineProps({
+  // the page of documents, and their total
+  documents: {
+    type: Object as PropType<{ total: number } | null>,
+    default: null,
   },
+});
 
-  computed: {
-    total() {
-      return this.documents?.total ?? 0;
-    },
-    pageCount() {
-      return Math.ceil(this.total / this.queryLimit);
-    },
-    currentPage() {
-      return this.pageStart / this.queryLimit + 1;
-    },
-    pages() {
-      return getPages(this.currentPage, this.pageCount);
-    },
-  },
-};
+const total = computed(() => props.documents?.total ?? 0);
+
+const { queryLimit, pageStart, previousPageQuery, nextPageQuery, pageAt } = usePageQuery(total);
+
+const pageCount = computed(() => Math.ceil(total.value / queryLimit.value));
+const currentPage = computed(() => pageStart.value / queryLimit.value + 1);
+const pages = computed(() => getPages(currentPage.value, pageCount.value));
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .page-navigation {
   display: flex;
   flex-wrap: wrap;

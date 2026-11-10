@@ -85,6 +85,7 @@
     "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "By default, your username on the topoguide will simply be your username, but you can change it freely in your settings afterwards.",
     "Candidates": "All proposed pictures",
     "Cards mode": "Cards view",
+    "Choice of massif": "Choose mountain range",
     "Conflict: version of document has changed": "Document has been modified in the meantime and a new version is available.",
     "Conflict: version of locale 'ca' has changed": "Document has been modified in the meantime and a new version is available.",
     "Conflict: version of locale 'de' has changed": "Document has been modified in the meantime and a new version is available.",
@@ -121,6 +122,7 @@
     "Easy mountain climbing gear": "Alpine rock climbing from F to AD",
     "Easy snow ice mixed gear": "Alpine snow, ice and mixed climbing from F to PD+",
     "Edit a document": "Edit document",
+    "Enter a massif name": "Enter mountain range name",
     "Everything about ratings : difficulties, exposition...": "Fill in all ratings and grades of the route (difficulties, exposure...)",
     "FF Vol Libre": "FFVL",
     "Fullname": "Topoguide username",
@@ -152,6 +154,7 @@
     "Ice and dry climbing gear": "Ice-climbing and dry-tooling",
     "Information about the terrain, like elevations, lengths...": "Information about the terrain, like height diffs, lengths...",
     "Interpolate value should be a number > 0": "Interpolate value should be a positive number",
+    "Itinevert": "Itinévert",
     "Login": "Sign in",
     "Logout": "Sign out",
     "Longer than maximum length 25": {
@@ -160,6 +163,8 @@
     "Mail has been sent": "An e-mail has been sent",
     "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Main information about the route, such as title, activity, GPS data, and environment.",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Map, guidebook, known route, planning for a plan B, (re)evaluation of a route during a trip?",
+    "Meteo": "Weather forecast ",
+    "Meter(s)": "meters",
     "Miscs": "Miscellaneous",
     "Modified the": {
       "modification date": "Modified on"
@@ -439,6 +444,9 @@
     },
     "goulotte": {
       "route_configuration_types": "gully"
+    },
+    "granit": {
+      "rock_types": "granite"
     },
     "great": {
       "quality_types": "excellent"

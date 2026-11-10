@@ -7,7 +7,7 @@
           role="tab"
           :href="'#panel' + i"
           :id="'tab' + i"
-          ref="tab"
+          ref="tabLinks"
           :aria-selected="activeTab === i"
           :tabindex="activeTab === i ? 0 : -1"
           :title="tab.title"
@@ -32,74 +32,71 @@
   </div>
 </template>
 
-<script>
-import Counter from '@/components/yeti/Counter';
-import Yetix from '@/components/yeti/Yetix';
+<script setup lang="ts">
+import { computed, useTemplateRef, watch, type PropType } from 'vue';
 
-export default {
-  components: {
-    Counter,
+import Counter from '@/components/yeti/Counter.vue';
+import { useYetixStore } from '@/components/yeti/yetix';
+
+const Yetix = useYetixStore();
+
+type Tab = {
+  name?: string;
+  title?: string;
+  icon: string | string[];
+  counter?: { title: string; text: string | number };
+  problemIcon?: { title: string };
+};
+
+const props = defineProps({
+  tabs: {
+    type: Array as PropType<Tab[]>,
+    required: true,
   },
-  props: {
-    tabs: {
-      type: Array,
-      required: true,
-    },
-  },
-  computed: {
-    activeTab() {
-      return Yetix.activeTab;
-    },
-  },
-  watch: {
-    activeTab(index) {
-      // focus active tab
-      this.$refs.tab[index].focus();
-    },
-  },
-  methods: {
-    setActiveTab(index) {
-      Yetix.setActiveTab(index);
-    },
-    setActiveTabKeyboard(event, index) {
-      // Set arrow keys: left/right = switch active tabs / down = focus panel
-      const ARROW_LEFT = 37;
-      const ARROW_RIGHT = 39;
-      const ARROW_DOWN = 40;
-      let dir =
-        event.which === ARROW_LEFT
-          ? index - 1
-          : event.which === ARROW_RIGHT
-          ? index + 1
-          : event.which === ARROW_DOWN
+});
+
+const tabLinks = useTemplateRef<HTMLElement[]>('tabLinks');
+
+const activeTab = computed(() => Yetix.activeTab as number);
+
+// focus active tab
+watch(activeTab, (index) => {
+  tabLinks.value![index].focus();
+});
+
+function setActiveTab(index: number) {
+  Yetix.setActiveTab(index);
+}
+
+// Set arrow keys: left/right = switch active tabs / down = focus panel
+function setActiveTabKeyboard(event: KeyboardEvent, index: number) {
+  const dir =
+    event.key === 'ArrowLeft'
+      ? index - 1
+      : event.key === 'ArrowRight'
+        ? index + 1
+        : event.key === 'ArrowDown'
           ? 'down'
           : null;
 
-      if (dir !== null) {
-        event.preventDefault();
+  if (dir !== null) {
+    event.preventDefault();
 
-        // If the down key is pressed, move focus to the open panel,
-        // otherwise switch to the adjacent tab
-        dir === 'down'
-          ? document.getElementById('panel' + index)?.focus()
-          : this.tabs[dir]
-          ? this.setActiveTab(dir)
-          : void 0;
-      }
-    },
-  },
-};
+    // If the down key is pressed, move focus to the open panel,
+    // otherwise switch to the adjacent tab
+    if (dir === 'down') {
+      document.getElementById('panel' + index)?.focus();
+    } else if (props.tabs[dir]) {
+      setActiveTab(dir);
+    }
+  }
+}
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .yetitabs {
   margin: 0 0 0 -1px !important;
   overflow: visible;
-
-  &-link {
-    font-size: 0.9em;
-    padding: 0.25em 1em;
-  }
 
   li,
   a {
@@ -114,5 +111,10 @@ export default {
   li {
     margin-right: 1px;
   }
+}
+
+.yetitabs-link {
+  font-size: 0.9em;
+  padding: 0.25em 1em;
 }
 </style>

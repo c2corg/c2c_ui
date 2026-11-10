@@ -4,10 +4,8 @@
   </span>
 </template>
 
-<script>
-import { requireDocumentTypeProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import { documentTypeProperty } from '@/js/properties';
 
-export default {
-  mixins: [requireDocumentTypeProperty],
-};
+defineProps({ ...documentTypeProperty });
 </script>

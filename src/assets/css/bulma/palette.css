@@ -1,0 +1,106 @@
+/*
+ * The colors of the color classes (.is-white... .is-danger) of the elements that have them, as custom properties the
+ * modules use: --palette (the color), --palette-invert (the text on it), --palette-hover and --palette-active (the
+ * color, darker), --palette-focus (the color of the focus shadow), and for the light variant (.is-light with a color):
+ * --palette-light (background), --palette-dark (text), --palette-light-hover and --palette-light-active.
+ *
+ * Of two color classes, the one set last here wins, as in Bulma (.is-primary.is-danger is red, .is-primary.is-light
+ * is the light variant of primary). The values that are not tokens are those Bulma computed from the color.
+ */
+:is(.button, .file, .help, .input, .notification, .progress, .select, .table td, .table th, .tag, .textarea) {
+  &.is-white {
+    --palette: var(--c2c-white);
+    --palette-invert: hsl(0, 0%, 4%);
+    --palette-hover: hsl(0, 0%, 97.5%);
+    --palette-active: hsl(0, 0%, 95%);
+    --palette-focus: rgba(255, 255, 255, 0.25);
+  }
+
+  &.is-light {
+    --palette: var(--c2c-light);
+    --palette-invert: rgba(0, 0, 0, 0.7);
+    --palette-hover: hsl(0, 0%, 93.5%);
+    --palette-active: hsl(0, 0%, 91%);
+    --palette-focus: rgba(96%, 96%, 96%, 0.25);
+  }
+
+  &.is-dark {
+    --palette: var(--c2c-dark);
+    --palette-invert: #fff;
+    --palette-hover: hsl(0, 0%, 18.5%);
+    --palette-active: hsl(0, 0%, 16%);
+    --palette-focus: rgba(21%, 21%, 21%, 0.25);
+  }
+
+  &.is-primary {
+    --palette: var(--c2c-primary);
+    --palette-invert: #fff;
+    --palette-hover: rgb(18.9102564103%, 45.2362996481%, 67.8544494721%);
+    --palette-active: rgb(17.8205128205%, 42.6294620412%, 63.9441930618%);
+    --palette-focus: rgba(51, 122, 183, 0.25);
+    --palette-light: var(--c2c-primary-light);
+    --palette-dark: rgb(19.6153846154%, 46.9230769231%, 70.3846153846%);
+    --palette-light-hover: rgb(89.8333333333%, 93.7777777778%, 97.1666666667%);
+    --palette-light-active: rgb(85.9230769231%, 91.3846153846%, 96.0769230769%);
+  }
+
+  &.is-link {
+    --palette: var(--c2c-link);
+    --palette-invert: #fff;
+    --palette-hover: rgb(18.9102564103%, 45.2362996481%, 67.8544494721%);
+    --palette-active: rgb(17.8205128205%, 42.6294620412%, 63.9441930618%);
+    --palette-focus: rgba(51, 122, 183, 0.25);
+    --palette-light: rgb(93.7435897436%, 96.1709401709%, 98.2564102564%);
+    --palette-dark: rgb(19.6153846154%, 46.9230769231%, 70.3846153846%);
+    --palette-light-hover: rgb(89.8333333333%, 93.7777777778%, 97.1666666667%);
+    --palette-light-active: rgb(85.9230769231%, 91.3846153846%, 96.0769230769%);
+  }
+
+  &.is-info {
+    --palette: var(--c2c-info);
+    --palette-invert: #fff;
+    --palette-hover: hsl(207, 61%, 50.5%);
+    --palette-active: hsl(207, 61%, 48%);
+    --palette-focus: rgba(24.33%, 55.867%, 81.67%, 0.25);
+    --palette-light: hsl(207, 61%, 96%);
+    --palette-dark: hsl(207, 61%, 41%);
+    --palette-light-hover: hsl(207, 61%, 93.5%);
+    --palette-light-active: hsl(207, 61%, 91%);
+  }
+
+  &.is-success {
+    --palette: var(--c2c-green);
+    --palette-invert: #fff;
+    --palette-hover: rgb(27.9117647059%, 65.1274509804%, 29.7725490196%);
+    --palette-active: rgb(26.4117647059%, 61.6274509804%, 28.1725490196%);
+    --palette-focus: rgba(75, 175, 80, 0.25);
+    --palette-light: rgb(94.4%, 97.6%, 94.56%);
+    --palette-dark: rgb(22.2%, 51.8%, 23.68%);
+    --palette-light-hover: rgb(90.9%, 96.1%, 91.16%);
+    --palette-light-active: rgb(87.4%, 94.6%, 87.76%);
+  }
+
+  &.is-warning {
+    --palette: var(--c2c-yellow);
+    --palette-invert: rgba(0, 0, 0, 0.7);
+    --palette-hover: hsl(44, 100%, 74.5%);
+    --palette-active: hsl(44, 100%, 72%);
+    --palette-focus: rgba(100%, 87.7333333333%, 54%, 0.25);
+    --palette-light: hsl(44, 100%, 96%);
+    --palette-dark: hsl(44, 100%, 29%);
+    --palette-light-hover: hsl(44, 100%, 93.5%);
+    --palette-light-active: hsl(44, 100%, 91%);
+  }
+
+  &.is-danger {
+    --palette: var(--c2c-danger);
+    --palette-invert: #fff;
+    --palette-hover: hsl(348, 86%, 58.5%);
+    --palette-active: hsl(348, 86%, 56%);
+    --palette-focus: rgba(94.54%, 27.46%, 40.876%, 0.25);
+    --palette-light: hsl(348, 86%, 96%);
+    --palette-dark: hsl(348, 86%, 43%);
+    --palette-light-hover: hsl(348, 86%, 93.5%);
+    --palette-light-active: hsl(348, 86%, 91%);
+  }
+}

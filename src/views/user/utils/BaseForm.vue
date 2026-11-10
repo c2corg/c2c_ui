@@ -9,92 +9,74 @@
   </form>
 </template>
 
-<script>
-import { formContainer } from '@/js/form-registration';
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
 
-export default {
-  // the form fields register themselves (user FormField)
-  mixins: [formContainer('baseForm')],
+import { apiErrors } from '@/js/apis/c2c/api-errors';
+import type { ApiError } from '@/js/apis/c2c/schemas';
+import { type FormFieldState, useFormContainer } from '@/js/composables/form-registration';
 
-  props: {
-    promise: {
-      type: Object,
-      default: null,
-    },
+const props = defineProps({
+  // the request of the form: its errors are shown on their field, or above the form
+  promise: {
+    type: Object,
+    default: null,
   },
+});
 
-  emits: ['submit'],
+const emit = defineEmits(['submit']);
 
-  data() {
-    return {
-      serverMetaErrors: [], // errors that can't be linked to an input
-    };
-  },
+// the form fields register themselves (user FormField)
+const { formFields } = useFormContainer('baseForm');
 
-  computed: {
-    inputs() {
-      return Object.fromEntries(this.formFields.map((field) => [field.name, field]));
-    },
+const serverMetaErrors = ref<ApiError[]>([]); // errors that can't be linked to an input
 
-    hasError() {
-      return this.formFields.some((field) => field.hasError);
-    },
-  },
+const inputs = computed<Record<string, FormFieldState>>(() =>
+  Object.fromEntries(formFields.value.map((field) => [field.name!, field]))
+);
 
-  watch: {
-    promise: {
-      handler: 'computeErrors',
-      deep: true,
-    },
-  },
+const hasError = computed(() => formFields.value.some((field) => field.hasError));
 
-  methods: {
-    cleanErrors() {
-      this.serverMetaErrors = [];
+function cleanErrors() {
+  serverMetaErrors.value = [];
 
-      for (const input of Object.values(this.inputs)) {
-        input.errorMessage = undefined;
-      }
-    },
+  for (const input of Object.values(inputs.value)) {
+    input.errorMessage = undefined;
+  }
+}
 
-    computeErrors() {
-      this.cleanErrors();
+function computeErrors() {
+  cleanErrors();
 
-      if (!this.promise || !this.promise.error) {
-        return;
-      }
+  if (!props.promise || !props.promise.error) {
+    return;
+  }
 
-      const serverErrors = this.promise.error.response.data;
+  for (const error of apiErrors(props.promise.error)) {
+    const input = error.name ? inputs.value[error.name] : undefined;
+    if (input) {
+      input.errorMessage = error.description;
+    } else {
+      serverMetaErrors.value.push(error);
+    }
+  }
+}
 
-      if (!serverErrors.errors) {
-        // unpexted error structure from API
-        this.serverMetaErrors.push(serverErrors);
-      } else {
-        for (const error of serverErrors.errors) {
-          if (this.inputs[error.name]) {
-            this.inputs[error.name].errorMessage = error.description;
-          } else {
-            this.serverMetaErrors.push(error);
-          }
-        }
-      }
-    },
+watch(() => props.promise, computeErrors, { deep: true });
 
-    submit(event) {
-      event.preventDefault();
+function submit(event: Event) {
+  event.preventDefault();
 
-      if (this.hasError) {
-        return;
-      }
+  if (hasError.value) {
+    return;
+  }
 
-      for (const input of Object.values(this.inputs)) {
-        input.errorMessage = null;
-      }
+  for (const input of Object.values(inputs.value)) {
+    input.errorMessage = null;
+  }
 
-      this.serverMetaErrors = [];
+  serverMetaErrors.value = [];
 
-      this.$emit('submit');
-    },
-  },
-};
+  emit('submit');
+}
 </script>

@@ -44,7 +44,7 @@
         </div>
       </div>
 
-      <div v-for="target of possibleTargets" :key="target.documentId" class="columns is-mobile is-variable is-1">
+      <div v-for="target of possibleTargets" :key="target.document_id" class="columns is-mobile is-variable is-1">
         <div class="column">
           <merge-document-link :document="target" />
         </div>
@@ -65,62 +65,60 @@
   </modal-card>
 </template>
 
-<script>
-import MergeDocumentLink from './MergeDocumentLink';
+<script setup lang="ts">
+import { computed, ref, useTemplateRef } from 'vue';
+
+import MergeDocumentLink from './MergeDocumentLink.vue';
 
 import c2c from '@/js/apis/c2c';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { documentProperty, useDocumentType } from '@/js/properties';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  components: { MergeDocumentLink },
+const props = defineProps({ ...documentProperty });
 
-  mixins: [requireDocumentProperty],
+const { $gettext } = useGlobalProperties();
+const { documentType } = useDocumentType(props);
 
-  data() {
-    return {
-      targetDocument: null,
-      options: null,
-    };
-  },
+const targetDocument = ref<C2cDocument | null>(null);
+// the documents found by the search input, by type ("routes"...)
+const options = ref<Record<string, { documents: C2cDocument[] }> | null>(null);
+const modalWindowRef = useTemplateRef<{ show(): void; hide(): void }>('modalWindow');
 
-  computed: {
-    possibleTargets() {
-      if (this.options) {
-        return this.options[this.documentType + 's'].documents;
-      } else {
-        return [];
-      }
-    },
-  },
+const possibleTargets = computed(() => {
+  if (options.value) {
+    return options.value[documentType.value + 's'].documents;
+  } else {
+    return [];
+  }
+});
 
-  methods: {
-    hide() {
-      this.$refs.modalWindow.hide();
-    },
-    show() {
-      this.$refs.modalWindow.show();
-    },
+function hide() {
+  modalWindowRef.value!.hide();
+}
 
-    select(target) {
-      this.targetDocument = target;
-      this.options = null;
-    },
+function show() {
+  modalWindowRef.value!.show();
+}
 
-    mergeDocuments() {
-      if (window.confirm(this.$gettext('Are you sure you want to merge?'))) {
-        c2c.moderator.mergeDocuments(this.document.document_id, this.targetDocument.document_id).then(() => {
-          // TODO feedback
-          this.hide();
-        });
-      }
-    },
-  },
-};
+function select(target: C2cDocument) {
+  targetDocument.value = target;
+  options.value = null;
+}
+
+function mergeDocuments() {
+  if (window.confirm($gettext('Are you sure you want to merge?'))) {
+    c2c.moderator.mergeDocuments(props.document.document_id!, targetDocument.value!.document_id!).then(() => {
+      // TODO feedback
+      hide();
+    });
+  }
+}
+
+defineExpose({ show });
 </script>
 
-<style scoped lang="scss">
-.modal-card-body,
-.modal-card,
+<style scoped>
 .modal {
   overflow: visible !important;
 }

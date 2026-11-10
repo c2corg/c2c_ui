@@ -26,58 +26,37 @@
   </div>
 </template>
 
-<script>
-import DashboardArticleLink from './DashboardArticleLink';
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import DashboardArticleLink from './DashboardArticleLink.vue';
 
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
 
-export default {
-  name: 'DashboardArticlesList',
+const articlesPromise = (c2c.article as DocumentService).getAll({ limit: 5, qa: 'draft,great' });
 
-  components: {
-    DashboardArticleLink,
-  },
-
-  data() {
-    return {
-      articlesPromise: null,
-    };
-  },
-
-  computed: {
-    articles() {
-      return this.articlesPromise?.data;
-    },
-  },
-
-  created(query = {}) {
-    this.articlesPromise = c2c.article.getAll({
-      ...query,
-      limit: 5,
-      qa: 'draft,great',
-    });
-  },
-};
+const articles = computed(() => articlesPromise.data);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 ul {
   list-style-type: disc !important;
-  padding-left: $size-6;
+  padding-left: var(--c2c-size-6);
 }
 
 h4 > a,
 h6 > a,
 li > a {
-  color: $color-text !important;
+  color: var(--c2c-color-text) !important;
 }
 
 h4 > a:hover,
 h6 > a:hover {
-  color: $color-link !important;
+  color: var(--c2c-color-link) !important;
 }
 
 .dashboard-list > a:nth-child(2n + 1) {
-  background-color: $body-background-color;
+  background-color: var(--c2c-body-background-color);
 }
 </style>

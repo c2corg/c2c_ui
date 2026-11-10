@@ -14,10 +14,14 @@
   </card-container>
 </template>
 
-<script>
-import { documentCardMixin } from './utils/mixins';
+<script setup lang="ts">
+import CardContainer from './utils/CardContainer.vue';
+import CardRegionItem from './utils/CardRegionItem.vue';
+import CardRow from './utils/CardRow.vue';
+import CardTitle from './utils/CardTitle.vue';
+import { cardProps } from './utils/card';
 
-export default {
-  mixins: [documentCardMixin],
-};
+import { documentProperty } from '@/js/properties';
+
+defineProps({ ...cardProps, ...documentProperty });
 </script>

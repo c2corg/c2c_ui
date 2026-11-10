@@ -8,11 +8,15 @@
         </label>
       </div>
       <div class="column is-narrow">
-        <form-input class="is-expanded" ref="input" :document="document" :field="field" />
+        <form-input class="is-expanded" :document="document" :field="field" :load-suggestions="loadSuggestions" />
       </div>
     </div>
     <div class="columns is-multiline">
-      <div v-for="child in document.associations[field.name]" :key="child.document_id" class="column is-4">
+      <div
+        v-for="child in document.associations![field.name as AssociationList]"
+        :key="child.document_id"
+        class="column is-4"
+      >
         <document-card
           :document="child"
           :show-delete-button="showDeleteButton(child)"
@@ -24,46 +28,46 @@
   </div>
 </template>
 
-<script>
-import FormInput from './FormInput';
+<script setup lang="ts">
+import { type PropType, computed, reactive } from 'vue';
 
-import associationRights from '@/js/associations-rights-mixin';
-import { formField } from '@/js/form-registration';
-import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
+import FormInput from './FormInput.vue';
 
-export default {
-  components: {
-    FormInput,
+import { useAssociationRights } from '@/js/composables/association-rights';
+import { useFormField } from '@/js/composables/form-registration';
+import { documentProperty, fieldProperty } from '@/js/properties';
+import type { AssociationList, C2cDocument } from '@/js/vue-plugins/document-utils';
+
+const props = defineProps({
+  ...fieldProperty,
+  ...documentProperty,
+  label: {
+    type: String,
+    default: null,
   },
 
-  // registered with the FormSection containing it
-  mixins: [formField('formSection'), requireFieldProperty, requireDocumentProperty, associationRights],
-
-  props: {
-    label: {
-      type: String,
-      default: null,
-    },
-
-    helper: {
-      type: String,
-      default: undefined, // default must be undefined. null means explicit no helper
-    },
+  helper: {
+    type: String,
+    default: undefined, // default must be undefined. null means explicit no helper
   },
 
-  computed: {
-    visible() {
-      return this.$refs.input.visible;
-    },
-    hasError() {
-      return this.field.error !== null;
-    },
+  // the documents the input proposes on focus (see InputDocument)
+  loadSuggestions: {
+    type: Function as PropType<() => Promise<C2cDocument[]>>,
+    default: null,
   },
+});
 
-  methods: {
-    showDeleteButton(document) {
-      return this.canRemove(this.document, document); // ! FIXME import mixin
-    },
-  },
-};
+const { canRemove } = useAssociationRights();
+
+// as its input
+const visible = computed(() => props.field.isVisibleFor(props.document));
+const hasError = computed(() => props.field.error !== null);
+
+// registered with the FormSection containing it
+useFormField('formSection', reactive({ visible, hasError }));
+
+function showDeleteButton(child: C2cDocument) {
+  return canRemove(props.document, child);
+}
 </script>

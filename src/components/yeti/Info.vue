@@ -7,38 +7,30 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    type: {
-      type: String,
-      default: 'info',
-    },
-    inline: {
-      type: Boolean,
-      default: false,
-    },
+<script setup lang="ts">
+import { computed } from 'vue';
+
+const props = defineProps({
+  type: {
+    type: String,
+    default: 'info',
   },
-  data() {
-    return {
-      icons: {
-        info: 'info-circle',
-        warning: 'exclamation-circle',
-        help: 'question-circle',
-      },
-    };
+  inline: {
+    type: Boolean,
+    default: false,
   },
-  computed: {
-    icon() {
-      return this.icons[this.type];
-    },
-  },
+});
+
+const ICONS: Record<string, string> = {
+  info: 'info-circle',
+  warning: 'exclamation-circle',
+  help: 'question-circle',
 };
+
+const icon = computed(() => ICONS[props.type]);
 </script>
 
-<style scoped lang="scss">
-@import '@/assets/sass/variables';
-
+<style scoped>
 .info-text {
   font-size: 0.85em;
   margin-top: 0.75rem;
@@ -47,14 +39,14 @@ export default {
   padding-right: 0.75rem;
 }
 .is-info {
-  color: $primary;
+  color: var(--c2c-primary);
 }
 .is-warning {
-  color: $red;
+  color: var(--c2c-red);
 }
 .is-help {
-  background: $grey-lightest;
-  color: $grey-dark;
+  background: var(--c2c-grey-lightest);
+  color: var(--c2c-grey-dark);
   border-radius: 4px;
   padding: 0.75rem;
   margin-bottom: 1.5rem !important;

@@ -46,7 +46,7 @@
           propose-creation
           show-more-results-link
           clear-input-on-toggle
-          @input="go"
+          @update:model-value="go"
         />
 
         <div class="navigation-item is-hidden-tablet" :class="{ 'is-hidden-mobile': !hideSearchInput }">
@@ -102,7 +102,7 @@
             :key="documentType"
             :document-type="documentType"
             class="dropdown-item is-size-5 is-ellipsed"
-            @click.native="$refs.addDocumentMenu.isActive = false"
+            @click="addDocumentMenu!.isActive = false"
           >
             <icon-document :document-type="documentType" fixed-width />
             <span>
@@ -124,14 +124,49 @@
         <dropdown-button class="is-right" ref="userMenu">
           <template #button>
             <span class="button">
-              <img
-                width="24"
-                height="24"
-                alt="Avatar"
-                :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
-              />
+              <span
+                class="forum-avatar"
+                :class="{ 'has-notifications': forumLinks.some((link) => link.kind === 'notifications') }"
+              >
+                <img
+                  width="24"
+                  height="24"
+                  alt="Avatar"
+                  :src="forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
+                />
+                <!-- placed like on the forum: messages on the left, other notifications on the right -->
+                <span
+                  v-for="link of forumLinks"
+                  :key="link.kind"
+                  class="forum-badge is-on-avatar"
+                  :class="'is-' + link.kind"
+                  aria-hidden="true"
+                >
+                  {{ badgeText(link.count) }}
+                </span>
+              </span>
+              <span v-for="link of forumLinks" :key="link.kind" class="is-sr-only">
+                {{ link.text }}: {{ link.count }}
+              </span>
               <span class="has-text-weight-bold is-hidden-mobile"> &nbsp;{{ $user.name }} </span>
             </span>
+          </template>
+
+          <template v-if="forumLinks.length">
+            <a
+              v-for="link of forumLinks"
+              :key="link.kind"
+              :href="link.href"
+              target="_blank"
+              rel="noopener"
+              class="dropdown-item is-size-5 forum-link"
+              @click="userMenu!.isActive = false"
+            >
+              <fa-icon :icon="link.icon" fixed-width />
+              <span>{{ link.text }}</span>
+              <span class="forum-badge" :class="'is-' + link.kind">{{ link.count }}</span>
+            </a>
+            <hr class="dropdown-divider" />
           </template>
 
           <router-link
@@ -139,7 +174,7 @@
             :key="item.text"
             :to="item.to"
             class="dropdown-item is-size-5"
-            @click.native="$refs.userMenu.isActive = false"
+            @click="userMenu!.isActive = false"
           >
             <component :is="item.iconComponent || 'fa-icon'" :icon="item.icon" fixed-width />
             <span>
@@ -178,171 +213,223 @@
   </nav>
 </template>
 
-<script>
-import { isNavigationFailure } from 'vue-router';
+<script setup lang="ts">
+import { computed, nextTick, onBeforeUnmount, ref, shallowRef, useTemplateRef, watch } from 'vue';
+import { isNavigationFailure, useRoute, useRouter } from 'vue-router';
 
 import DfmAdLarge from './DfmAdLarge.vue';
 
-import IconHelp from '@/components/generics/icons/IconHelp';
-import IconJoinUs from '@/components/generics/icons/IconJoinUs';
+import IconHelp from '@/components/generics/icons/IconHelp.vue';
+import IconJoinUs from '@/components/generics/icons/IconJoinUs.vue';
 import JoinUsLink from '@/components/generics/links/JoinUsLink.vue';
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { useIsHomePage } from '@/js/composables/home-page';
 import config from '@/js/config';
+import { toast } from '@/js/toast';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+import type { useForumNotificationsStore } from '@/stores/forum-notifications';
 
-export default {
-  components: {
-    DfmAdLarge,
-    IconHelp,
-    IconJoinUs,
-    JoinUsLink,
-  },
-  emits: ['toggle-side-menu'],
+defineEmits(['toggle-side-menu']);
 
-  data() {
-    return {
-      searchText: '',
-      hideSearchInput: true, // only on small screen,
-    };
-  },
+const route = useRoute();
+const router = useRouter();
+const { $gettext, $user, $documentUtils } = useGlobalProperties();
 
-  computed: {
-    siteConfiguration() {
-      return config;
-    },
+// the API refused the session (see the user store): tell the user why they are signed out
+watch(
+  () => $user.sessionEnded,
+  (reason) => {
+    if (!reason) {
+      return;
+    }
+    toast({
+      message:
+        reason === 'blocked'
+          ? $gettext('Your account is blocked: you have been signed out.')
+          : $gettext('Your session has ended: please sign in again.'),
+      type: 'is-warning',
+      position: 'center',
+    });
+  }
+);
 
-    userMenuLinks() {
-      const items = [
-        {
-          to: { name: 'profile', params: { id: this.$user.id } },
-          text: this.$gettext('My profile'),
-          icon: 'user',
-        },
-        {
-          to: { name: 'account' },
-          text: this.$gettext('My account'),
-          icon: 'check-circle',
-        },
-        {
-          to: { name: 'preferences' },
-          text: this.$gettext('My preferences'),
-          icon: 'gears',
-        },
-        {
-          to: { name: 'trackers' },
-          text: this.$gettext('Activity trackers'),
-          icon: 'location-crosshairs',
-        },
-        {
-          to: { name: 'outings', query: { u: this.$user.id } },
-          text: this.$gettext('My outings'),
-          iconComponent: 'icon-outing',
-        },
-        {
-          to: { name: 'outings-stats', query: { u: this.$user.id } },
-          text: this.$gettext('My statistics'),
-          icon: 'chart-bar',
-        },
-        {
-          to: { name: 'whatsnew', query: { u: this.$user.id } },
-          text: this.$gettext('My changes'),
-          icon: 'edit',
-        },
-        {
-          to: { name: 'following' },
-          text: this.$gettext('My followed users'),
-          icon: 'heart',
-        },
-        {
-          to: { name: 'routes', query: { u: this.$user.id } },
-          text: this.$gettext('My bookmarks'),
-          icon: 'star',
-        },
-      ];
-      return items;
-    },
-  },
+const forumUrl = config.urls.forum;
 
-  forumUrl: config.urls.forum,
-
-  created() {
-    window.addEventListener('click', this.onClick);
-  },
-
-  beforeDestroy() {
-    window.removeEventListener('click', this.onClick);
-  },
-
-  // do need to destroy event listener as Navigation component will always exists
-
-  methods: {
-    go(document) {
-      this.$router.push({
-        name: this.$documentUtils.getDocumentType(document.type),
-        params: { id: document.document_id },
-      });
-    },
-
-    setUrlsConfiguration(name) {
-      config.setUrlsName(name);
-      this.$router.go();
-    },
-
-    onClick(event) {
-      if (!this.$refs.searchInputContainer.contains(event.target)) {
-        this.hideSearchInput = true;
-      }
-    },
-
-    showSearchInput() {
-      this.hideSearchInput = false;
-
-      // after DOM update, input will be visible, and focusable
-      this.$nextTick(() => {
-        this.$refs.searchInput.focus();
-      });
-    },
-
-    signout() {
-      if (!this.$route.meta.requiresAuth) {
-        this.$user.signout();
+// the unread notifications of the user on the forum, while signed in. Loaded on the first sign in: visitors don't need it
+const forumNotifications = shallowRef<ReturnType<typeof useForumNotificationsStore> | null>(null);
+const followedForumUser = () => ($user.isLogged ? $user.forumUsername : null);
+watch(
+  followedForumUser,
+  async (forumUsername) => {
+    if (!forumUsername) {
+      forumNotifications.value?.stop();
+      return;
+    }
+    if (!forumNotifications.value) {
+      const { useForumNotificationsStore } = await import('@/stores/forum-notifications');
+      forumNotifications.value = useForumNotificationsStore();
+      // signed out or changed while loading: the watcher ran again
+      if (followedForumUser() !== forumUsername) {
         return;
       }
-
-      // leave the page first: its leave guard (e.g. unsaved edits) may cancel the
-      // navigation, in which case the user stays logged in on the current page
-      this.$router.push({ name: 'home' }).then(
-        () => this.$user.signout(),
-        (error) => {
-          if (!isNavigationFailure(error)) {
-            throw error;
-          }
-        }
-      );
-    },
-
-    homePage() {
-      if (this.$route.path === '/home' || this.$route.path === '/') {
-        return true;
-      } else {
-        return false;
-      }
-    },
+    }
+    forumNotifications.value.start(forumUsername);
   },
-};
+  { immediate: true }
+);
+
+// the forum pages listing them, for the counts that are not zero
+const forumLinks = computed(() =>
+  [
+    {
+      kind: 'messages',
+      count: forumNotifications.value?.unreadHighPriority ?? 0,
+      href: `${forumUrl}/u/${$user.forumUsername}/messages`,
+      text: $gettext('Forum messages'),
+      icon: 'envelope',
+    },
+    {
+      kind: 'notifications',
+      count: forumNotifications.value?.unread ?? 0,
+      href: `${forumUrl}/u/${$user.forumUsername}/notifications`,
+      text: $gettext('Forum notifications'),
+      icon: 'bell',
+    },
+  ].filter((link) => link.count > 0)
+);
+
+function badgeText(count: number) {
+  return count > 9 ? '9+' : String(count);
+}
+const siteConfiguration = config;
+
+const searchInputContainer = useTemplateRef<HTMLDivElement>('searchInputContainer');
+const searchInput = useTemplateRef<{ focus(): void }>('searchInput');
+const addDocumentMenu = useTemplateRef<{ isActive: boolean }>('addDocumentMenu');
+const userMenu = useTemplateRef<{ isActive: boolean }>('userMenu');
+
+const hideSearchInput = ref(true); // only on small screen
+
+const userMenuLinks = computed(() => [
+  {
+    to: { name: 'profile', params: { id: $user.id } },
+    text: $gettext('My profile'),
+    icon: 'user',
+  },
+  {
+    to: { name: 'account' },
+    text: $gettext('My account'),
+    icon: 'check-circle',
+  },
+  {
+    to: { name: 'preferences' },
+    text: $gettext('My preferences'),
+    icon: 'gears',
+  },
+  {
+    to: { name: 'trackers' },
+    text: $gettext('Activity trackers'),
+    icon: 'location-crosshairs',
+  },
+  {
+    to: { name: 'outings', query: { u: $user.id } },
+    text: $gettext('My outings'),
+    iconComponent: 'icon-outing',
+  },
+  {
+    to: { name: 'outings-stats', query: { u: $user.id } },
+    text: $gettext('My statistics'),
+    icon: 'chart-bar',
+  },
+  {
+    to: { name: 'whatsnew', query: { u: $user.id } },
+    text: $gettext('My changes'),
+    icon: 'edit',
+  },
+  {
+    to: { name: 'following' },
+    text: $gettext('My followed users'),
+    icon: 'heart',
+  },
+  {
+    to: { name: 'routes', query: { u: $user.id } },
+    text: $gettext('My bookmarks'),
+    icon: 'star',
+  },
+]);
+
+function go(document: C2cDocument) {
+  router.push({
+    name: $documentUtils.getDocumentType(document.type),
+    params: { id: document.document_id },
+  });
+}
+
+function setUrlsConfiguration(name: string) {
+  config.setUrlsName(name);
+  // reload the page
+  router.go(0);
+}
+
+function onClick(event: MouseEvent) {
+  if (!searchInputContainer.value!.contains(event.target as Node)) {
+    hideSearchInput.value = true;
+  }
+}
+
+function showSearchInput() {
+  hideSearchInput.value = false;
+
+  // after DOM update, input will be visible, and focusable
+  nextTick(() => {
+    searchInput.value!.focus();
+  });
+}
+
+function signout() {
+  if (!route.meta.requiresAuth) {
+    $user.signout();
+    return;
+  }
+
+  // leave the page first: its leave guard (e.g. unsaved edits) may cancel the
+  // navigation, in which case the user stays logged in on the current page.
+  // vue-router resolves push() with the failure (it rejects only on errors)
+  router.push({ name: 'home' }).then((failure) => {
+    if (!isNavigationFailure(failure)) {
+      $user.signout();
+    }
+  });
+}
+
+const isHomePage = useIsHomePage();
+function homePage() {
+  return isHomePage.value;
+}
+
+window.addEventListener('click', onClick);
+
+onBeforeUnmount(() => {
+  window.removeEventListener('click', onClick);
+  forumNotifications.value?.stop();
+});
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 nav {
   max-width: 100vw;
-  height: $navbar-height;
-  background-color: $white;
-  box-shadow: 0 2px 0 $color-base-c2c;
+  height: var(--c2c-navbar-height);
+  background-color: var(--c2c-white);
+  box-shadow: 0 2px 0 var(--c2c-color-base-c2c);
   display: flex;
 }
 
 .navigation-brand {
   padding: 4px 5px !important;
   img {
-    height: calc(#{$navbar-height} - 8px);
+    height: calc(var(--c2c-navbar-height) - 8px);
   }
 }
 
@@ -359,11 +446,62 @@ nav {
 }
 
 .c2c-color {
-  background-color: $color-base-c2c;
+  background-color: var(--c2c-color-base-c2c);
+}
+
+/* the forum's badges: its colors (tertiary, success), white text, rounded */
+.forum-avatar {
+  position: relative;
+  display: inline-flex;
+
+  /* room for the right badge before the name */
+  &.has-notifications {
+    margin-right: 9px;
+  }
+}
+
+.forum-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: content-box;
+  min-width: 8px;
+  /* digits sit high in their line box: 2px more above them centers them visually */
+  height: 12px;
+  padding: 2px 3px 0;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  background-color: #337ab7;
+
+  &.is-messages {
+    background-color: #090;
+  }
+
+  /* on the top corners of the avatar, within the button's border: there are only 3px above the avatar */
+  &.is-on-avatar {
+    position: absolute;
+    top: -2px;
+    right: -9px;
+    border: 1px solid var(--c2c-white);
+
+    &.is-messages {
+      right: auto;
+      left: -9px;
+    }
+  }
+}
+
+.forum-link .forum-badge {
+  margin-left: 0.5em;
+  vertical-align: middle;
 }
 
 .with-ad {
-  height: $navbarad-height;
+  height: var(--c2c-navbarad-height);
   margin-left: 200px;
 
   .navigation-end {
@@ -378,11 +516,11 @@ nav {
   }
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .navigation-brand {
     img {
       margin-left: 0px;
-      // height:31px;
+      /* height:31px; */
     }
   }
 
@@ -399,7 +537,7 @@ nav {
   }
 }
 
-@media screen and (min-width: $tablet) and (max-width: $desktop) {
+@media screen and (--c2c-min-tablet) and (--c2c-max-desktop) {
   .navigation-brand {
     img {
       margin-left: 5px;
@@ -419,7 +557,7 @@ nav {
   }
 }
 
-@media screen and (min-width: $desktop) and (max-width: $widescreen) {
+@media screen and (--c2c-min-desktop) and (--c2c-max-widescreen) {
   .navigation-brand {
     img {
       margin-left: 20px;
@@ -439,7 +577,7 @@ nav {
   }
 }
 
-@media screen and (min-width: $widescreen) and (max-width: $fullhd) {
+@media screen and (--c2c-min-widescreen) and (--c2c-max-fullhd) {
   .navigation-brand {
     img {
       margin-left: 20px;
@@ -455,7 +593,7 @@ nav {
   }
 }
 
-@media screen and (min-width: $fullhd) {
+@media screen and (--c2c-min-fullhd) {
   .navigation-brand {
     img {
       margin-left: 20px;
@@ -471,13 +609,15 @@ nav {
   }
 }
 
-// search input : increase size to right on hover
-// only on screen wider than desktop
-@media screen and (min-width: $fullhd) {
+/* search input : increase size to right on hover */
+/* only on screen wider than desktop */
+@media screen and (--c2c-min-fullhd) {
   .search-input {
     width: 250px;
     margin-right: 50px;
-    transition: width 0.5s ease, margin-right 0.5s ease;
+    transition:
+      width 0.5s ease,
+      margin-right 0.5s ease;
   }
 
   .search-input:hover {
@@ -487,12 +627,14 @@ nav {
 }
 </style>
 
-<style lang="scss">
+<style>
+@import '@/assets/css/media.css';
+
 .c2c-color > a {
-  color: $color-text;
+  color: var(--c2c-color-text);
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .add-button .dropdown-content {
     position: fixed;
     right: 0;

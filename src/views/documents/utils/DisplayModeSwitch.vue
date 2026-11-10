@@ -1,5 +1,5 @@
 <template>
-  <dropdown-button class="is-right" ref="displayModeSwitch">
+  <dropdown-button class="is-right" ref="dropdown">
     <template #button>
       <span class="button is-small">
         <fa-icon :icon="['fas', 'eye']" class="is-size-4" />
@@ -9,10 +9,10 @@
     </template>
     <a
       class="dropdown-item is-size-6"
-      :class="{ 'is-active': value === 'result' }"
+      :class="{ 'is-active': modelValue === 'result' }"
       @click="
-        $refs.displayModeSwitch.isActive = false;
-        $emit('input', 'result');
+        dropdown!.isActive = false;
+        $emit('update:modelValue', 'result');
       "
     >
       <span class="has-text-centered item-icons">
@@ -22,10 +22,10 @@
     </a>
     <a
       class="dropdown-item is-size-6"
-      :class="{ 'is-active': value === 'both' }"
+      :class="{ 'is-active': modelValue === 'both' }"
       @click="
-        $refs.displayModeSwitch.isActive = false;
-        $emit('input', 'both');
+        dropdown!.isActive = false;
+        $emit('update:modelValue', 'both');
       "
     >
       <span class="is-nowrap item-icons">
@@ -36,10 +36,10 @@
     </a>
     <a
       class="dropdown-item is-size-6"
-      :class="{ 'is-active': value === 'map' }"
+      :class="{ 'is-active': modelValue === 'map' }"
       @click="
-        $refs.displayModeSwitch.isActive = false;
-        $emit('input', 'map');
+        dropdown!.isActive = false;
+        $emit('update:modelValue', 'map');
       "
     >
       <span class="has-text-centered item-icons">
@@ -50,24 +50,28 @@
   </dropdown-button>
 </template>
 
-<script>
-export default {
-  props: {
-    value: {
-      type: String,
-      required: true,
-    },
-    listMode: {
-      type: String,
-      required: true,
-    },
-  },
+<script setup lang="ts">
+import { useTemplateRef } from 'vue';
 
-  emits: ['input'],
-};
+import type DropdownButton from '@/components/generics/DropdownButton.vue';
+
+defineProps({
+  modelValue: {
+    type: String,
+    required: true,
+  },
+  // the results are a list (else cards): the icons of the modes follow
+  listMode: {
+    type: Boolean,
+    required: true,
+  },
+});
+defineEmits(['update:modelValue']);
+
+const dropdown = useTemplateRef<InstanceType<typeof DropdownButton>>('dropdown');
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .item-icons {
   display: inline-block;
   width: 2.2rem;

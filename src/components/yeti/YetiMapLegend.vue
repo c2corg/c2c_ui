@@ -23,37 +23,24 @@
   </div>
 </template>
 
-<script>
-import Yetix from '@/components/yeti/Yetix';
-import WinterRouteLayerLegend from '@/components/yeti/map-layers/WinterRouteLayerLegend';
-import YetiLayerLegend from '@/components/yeti/map-layers/YetiLayerLegend';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 
-export default {
-  components: {
-    WinterRouteLayerLegend,
-    YetiLayerLegend,
-  },
-  data() {
-    return {
-      showLegend: undefined,
-    };
-  },
-  computed: {
-    yetiLegend() {
-      return Yetix.yetiLegend;
-    },
-    winterRouteLegend() {
-      return Yetix.winterRouteLegend;
-    },
-    atLeastOneLegend() {
-      return this.yetiLegend || this.winterRouteLegend;
-    },
-  },
-};
+import WinterRouteLayerLegend from '@/components/yeti/map-layers/WinterRouteLayerLegend.vue';
+import YetiLayerLegend from '@/components/yeti/map-layers/YetiLayerLegend.vue';
+import { useYetixStore } from '@/components/yeti/yetix';
+
+const Yetix = useYetixStore();
+
+const showLegend = ref<boolean | undefined>(undefined);
+
+const yetiLegend = computed(() => Yetix.yetiLegend);
+const winterRouteLegend = computed(() => Yetix.winterRouteLegend);
+const atLeastOneLegend = computed(() => yetiLegend.value || winterRouteLegend.value);
 </script>
 
-<style scoped lang="scss">
-@import '@/assets/sass/variables';
+<style scoped>
+@import '@/assets/css/media.css';
 
 .legend {
   position: absolute;
@@ -84,7 +71,7 @@ export default {
   .legend-item + .legend-item {
     margin-top: 2rem;
     padding-top: 1em;
-    border-top: solid 1px $grey-lighter;
+    border-top: solid 1px var(--c2c-grey-lighter);
   }
 }
 
@@ -94,10 +81,10 @@ export default {
   right: -10px;
 }
 .icon-notification {
-  color: $primary;
+  color: var(--c2c-primary);
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .legend {
     top: 0.5rem;
 

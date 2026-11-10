@@ -28,94 +28,85 @@
         <slot />
       </div>
     </label>
-    <toast ref="toast-button">
+    <toast ref="disabledToast">
       <template #title>{{ disabled?.title }}</template>
       {{ disabled?.message }}
     </toast>
   </div>
 </template>
 
-<script>
-import Toast from '@/components/yeti/Toast';
+<script setup lang="ts">
+import { computed, useTemplateRef } from 'vue';
+
+import Toast from '@/components/yeti/Toast.vue';
 import { assetUrl } from '@/js/asset-urls';
-import { uidMixin } from '@/js/uid';
+import { useUid } from '@/js/uid';
 
-export default {
-  components: {
-    Toast,
+const props = defineProps({
+  type: {
+    type: String,
+    default: 'checkbox',
   },
-  mixins: [uidMixin],
-  props: {
-    type: {
-      type: String,
-      default: 'checkbox',
-    },
-    name: {
-      type: String,
-      default: null,
-    },
-    value: {
-      type: [Boolean, Object],
-      default: null,
-    },
-    model: {
-      type: Object,
-      default: null,
-    },
-    disabled: {
-      type: Object,
-      default: null,
-    },
-    image: {
-      type: String,
-      default: null,
-    },
-    country: {
-      type: String,
-      default: null,
-    },
+  name: {
+    type: String,
+    default: null,
   },
-  emits: ['change', 'input'],
+  modelValue: {
+    type: [Boolean, Object],
+    default: null,
+  },
+  model: {
+    type: Object,
+    default: null,
+  },
+  disabled: {
+    type: Object,
+    default: null,
+  },
+  image: {
+    type: String,
+    default: null,
+  },
+  country: {
+    type: String,
+    default: null,
+  },
+});
 
-  computed: {
-    _value: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.$emit('input', value);
-      },
-    },
-    backgroundImage() {
-      let img;
-      try {
-        img = assetUrl('yeti/layers', this.image);
-        img = 'url(' + img + ')';
-      } catch (e) {
-        img = 'none';
-      }
-      return img;
-    },
+const emit = defineEmits(['change', 'update:modelValue']);
+
+const { uid } = useUid();
+const disabledToast = useTemplateRef<{ toast(options?: object): void }>('disabledToast');
+
+const _value = computed({
+  get: () => props.modelValue,
+  set(value) {
+    emit('update:modelValue', value);
   },
-  methods: {
-    assetUrl,
-    warnIfDisabled() {
-      this.$refs['toast-button'].toast();
-    },
-  },
-};
+});
+
+const backgroundImage = computed(() => {
+  try {
+    return 'url(' + assetUrl('yeti/layers', props.image) + ')';
+  } catch {
+    return 'none';
+  }
+});
+
+function warnIfDisabled() {
+  disabledToast.value!.toast();
+}
 </script>
 
-<style scoped lang="scss">
-$width: calc(70 / 14 * 1rem);
-$height: calc(50 / 14 * 1rem);
-
+<style scoped>
 .layer-image {
   position: relative;
-  width: $width;
-  min-height: $height;
-  background: #dbdbdb;
-  box-shadow: 0 0 0 2px white, 0 0 0 3px #dbdbdb;
+  width: calc(70 / 14 * 1rem);
+  min-height: calc(50 / 14 * 1rem);
+  background: var(--c2c-grey-lighter);
+  box-shadow:
+    0 0 0 2px white,
+    0 0 0 3px var(--c2c-grey-lighter);
   border-radius: 4px;
   margin-bottom: 0.5rem;
   background-position: center;
@@ -150,7 +141,8 @@ $height: calc(50 / 14 * 1rem);
   .is-checkradio[type='checkbox'] + label::after,
   .is-checkradio[type='radio'] + label::after {
     z-index: 1;
-    left: calc(50% - ($width / 2));
+    /* centered on .layer-image */
+    left: calc(50% - (70 / 14 * 1rem / 2));
   }
   .is-checkradio[type='checkbox'] + label::before,
   .is-checkradio[type='radio'] + label::before {
@@ -159,34 +151,43 @@ $height: calc(50 / 14 * 1rem);
   }
   .is-checkradio[type='checkbox'] + label::after,
   .is-checkradio[type='radio'] + label::after {
-    left: calc(50% - ($width / 2) + 0.5rem) !important;
+    left: calc(50% - (70 / 14 * 1rem / 2) + 0.5rem) !important;
   }
   .is-checkradio:hover:not([disabled]) + label .layer-image {
-    box-shadow: 0 0 0 2px $white, 0 0 0 4px $primary;
+    box-shadow:
+      0 0 0 2px var(--c2c-white),
+      0 0 0 4px var(--c2c-primary);
   }
   .is-checkradio:focus-visible + label .layer-image {
-    box-shadow: 0 0 0 2px $white, 0 0 0 4px $primary;
+    box-shadow:
+      0 0 0 2px var(--c2c-white),
+      0 0 0 4px var(--c2c-primary);
   }
   .is-checkradio:checked:not([disabled]) + label::before {
-    box-shadow: 0 0 0 2px $white;
+    box-shadow: 0 0 0 2px var(--c2c-white);
   }
   .is-checkradio:not(:checked):hover:not([disabled]) + label::before {
     border-width: 1px;
-    border-color: #dbdbdb !important;
+    border-color: var(--c2c-grey-lighter) !important;
     background: white;
     box-shadow: none;
   }
   .is-checkradio:not(:checked):focus-visible + label::before {
     border-width: 1px;
-    border-color: #dbdbdb !important;
+    border-color: var(--c2c-grey-lighter) !important;
     background: white;
     box-shadow: none;
   }
   .is-checkradio:checked:not([disabled]) + label .layer-image {
-    box-shadow: 0 0 0 2px $white, 0 0 0 4px $primary;
+    box-shadow:
+      0 0 0 2px var(--c2c-white),
+      0 0 0 4px var(--c2c-primary);
   }
   .is-checkradio:checked:focus-visible + label .layer-image {
-    box-shadow: 0 0 0 2px $white, 0 0 0 4px $primary, 0 0 0 6px $secondary !important;
+    box-shadow:
+      0 0 0 2px var(--c2c-white),
+      0 0 0 4px var(--c2c-primary),
+      0 0 0 6px var(--c2c-secondary) !important;
   }
 }
 .is-small {

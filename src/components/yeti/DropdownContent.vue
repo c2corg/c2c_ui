@@ -16,47 +16,41 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    inverted: {
-      type: Boolean,
-      default: false,
-    },
-    open: {
-      type: Boolean,
-      default: false,
-    },
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const props = defineProps({
+  inverted: {
+    type: Boolean,
+    default: false,
   },
-  data() {
-    return {
-      localOpen: this.open,
-    };
+  open: {
+    type: Boolean,
+    default: false,
   },
-  methods: {
-    switchOpen() {
-      this.localOpen = !this.localOpen;
-    },
-  },
-};
+});
+
+const localOpen = ref(props.open);
+
+function switchOpen() {
+  localOpen.value = !localOpen.value;
+}
 </script>
 
-<style scoped lang="scss">
-@import '@/assets/sass/variables';
-
+<style scoped>
 .dropdown-content {
-  border: 1px solid #dbdbdb;
+  border: 1px solid var(--c2c-grey-lighter);
   padding: 0;
   box-shadow: none;
 
   &:hover {
-    border-color: #b5b5b5;
+    border-color: var(--c2c-grey-light);
   }
 }
 .dropdown-content-title {
   display: flex;
   align-items: center;
-  color: $grey-darker;
+  color: var(--c2c-grey-darker);
   cursor: pointer;
   padding: 0.25rem 0.75rem;
   border-radius: 4px;
@@ -66,15 +60,15 @@ export default {
   border-radius: 4px 4px 0 0;
 }
 .dropdown-content-title:hover {
-  background: $grey-lightest;
+  background: var(--c2c-grey-lightest);
 }
 .dropdown-content-arrow {
-  color: $primary;
+  color: var(--c2c-primary);
   margin-left: auto;
 }
 
 .dropdown-content-inverted {
-  background: $primary;
+  background: var(--c2c-primary);
   border: 1px solid rgba(0, 0, 0, 0.25);
 
   &:hover {
@@ -82,16 +76,16 @@ export default {
   }
 
   .dropdown-content-title {
-    color: $white;
+    color: var(--c2c-white);
   }
   .dropdown-content-title:hover {
-    background: $primary;
+    background: var(--c2c-primary);
   }
   .dropdown-content-arrow {
-    color: $white;
+    color: var(--c2c-white);
   }
   .dropdown-content-content {
-    color: $white;
+    color: var(--c2c-white);
   }
 }
 </style>

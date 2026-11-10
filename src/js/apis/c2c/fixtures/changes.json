@@ -1,0 +1,21 @@
+{
+  "pagination_token": "79",
+  "feed": [
+    {
+      "written_at": "2026-10-24T14:41:39.629202+00:00",
+      "lang": "fr",
+      "document": { "version": 1, "document_id": 57, "title": "E2E voie", "type": "r", "quality": "draft" },
+      "user": { "user_id": 1, "name": "E2E Tester", "username": "e2etester", "lang": "fr" },
+      "version_id": 80,
+      "comment": "creation"
+    },
+    {
+      "written_at": "2026-10-24T14:41:39.322362+00:00",
+      "lang": "fr",
+      "document": { "version": 1, "document_id": 56, "title": "E2E sommet", "type": "w", "quality": "draft" },
+      "user": { "user_id": 1, "name": "E2E Tester", "username": "e2etester", "lang": "fr" },
+      "version_id": 79,
+      "comment": "creation"
+    }
+  ]
+}

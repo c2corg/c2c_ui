@@ -30,37 +30,40 @@
   </div>
 </template>
 
-<script>
-import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import { computed } from 'vue';
 
-export default {
-  mixins: [requireDocumentProperty, requireFieldProperty],
-  props: {
-    hideTitle: {
-      type: Boolean,
-      default: false,
-    },
-    title: {
-      type: String,
-      default: null,
-    },
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { cookedDocumentProperty, fieldProperty } from '@/js/properties';
+
+const props = defineProps({
+  ...cookedDocumentProperty,
+  ...fieldProperty,
+  hideTitle: {
+    type: Boolean,
+    default: false,
   },
-  computed: {
-    lang() {
-      const current_lang = this.$language.current;
-      const document_lang = this.document ? this.document.cooked.lang : null;
-      return document_lang === current_lang ? undefined : this.$language.getIANALanguageSubtag(document_lang);
-    },
+  title: {
+    type: String,
+    default: null,
   },
-};
+});
+
+const { $language } = useGlobalProperties();
+
+const lang = computed(() => {
+  const current_lang = $language.current;
+  const document_lang = props.document.cooked.lang;
+  return document_lang === current_lang ? undefined : $language.getIANALanguageSubtag(document_lang);
+});
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .markdown-section {
   .title {
     font-size: 1.8rem !important;
     margin-bottom: 0.5em !important;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--c2c-grey-lighter);
   }
 
   &:nth-last-child(n + 3) {

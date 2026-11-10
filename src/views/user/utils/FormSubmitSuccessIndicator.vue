@@ -4,42 +4,39 @@
   </transition>
 </template>
 
-<script>
-let timeout;
+<script setup lang="ts">
+import { ref } from 'vue';
 
-export default {
-  name: 'FormSubmitSuccessIndicator',
-  props: {
-    duration: {
-      type: Number,
-      default: 3000,
-    },
-  },
-  data() {
-    return {
-      isVisible: false,
-    };
-  },
+let timeout: ReturnType<typeof setTimeout> | undefined;
 
-  methods: {
-    show() {
-      this.isVisible = true;
-      clearTimeout(timeout);
-      timeout = setTimeout(() => (this.isVisible = false), this.duration);
-    },
-
-    clear() {
-      this.isVisible = false;
-      clearTimeout(timeout);
-    },
+const props = defineProps({
+  duration: {
+    type: Number,
+    default: 3000,
   },
-};
+});
+
+const isVisible = ref(false);
+
+function show() {
+  isVisible.value = true;
+  clearTimeout(timeout);
+  timeout = setTimeout(() => (isVisible.value = false), props.duration);
+}
+
+function clear() {
+  isVisible.value = false;
+  clearTimeout(timeout);
+}
+
+// called by AccountView through its template ref
+defineExpose({ show, clear });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .success-indicator {
   font-size: 2em;
-  color: $green;
+  color: var(--c2c-green);
 }
 
 .success-indicator-enter-active,
@@ -62,7 +59,7 @@ export default {
   }
 }
 
-.success-indicator-enter,
+.success-indicator-enter-from,
 .success-indicator-leave-to {
   opacity: 0;
 }

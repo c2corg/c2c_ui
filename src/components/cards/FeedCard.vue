@@ -8,7 +8,7 @@
     </card-row>
 
     <card-row v-if="locale?.summary">
-      <p class="is-max-3-lines-height">{{ max300chars($filters.stripMarkdown(locale.summary)) }}</p>
+      <p class="is-max-3-lines-height">{{ max300chars($filters.stripMarkdown(locale.summary as string)) }}</p>
     </card-row>
 
     <card-row v-if="images.length">
@@ -22,7 +22,7 @@
           class="avatar"
           alt="Avatar"
           @error="useDefaultAvatarIcon = true"
-          :src="$options.forumAvatarUrl + item.user.forum_username + '/36/1_1.png'"
+          :src="forumAvatarUrl + item.user.forum_username + '/36/1_1.png'"
           loading="lazy"
         />
         <fa-icon v-else icon="user" class="is-size-3 has-text-grey" />
@@ -77,99 +77,77 @@
   </card-container>
 </template>
 
-<script>
-import { cardMixin } from './utils/mixins';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 
-import Gallery from '@/components/gallery/Gallery';
+import CardActivitiesItem from './utils/CardActivitiesItem.vue';
+import CardContainer from './utils/CardContainer.vue';
+import CardElevationItem from './utils/CardElevationItem.vue';
+import CardRegionItem from './utils/CardRegionItem.vue';
+import CardRow from './utils/CardRow.vue';
+import { cardProps } from './utils/card';
+
+import Gallery from '@/components/gallery/Gallery.vue';
 import forum from '@/js/apis/forum';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 
-export default {
-  components: {
-    Gallery,
+const props = defineProps({
+  ...cardProps,
+  item: {
+    type: Object,
+    required: true,
   },
+});
 
-  mixins: [cardMixin],
+const { $documentUtils, $gettext } = useGlobalProperties();
 
-  props: {
-    item: {
-      type: Object,
-      required: true,
-    },
-  },
+const forumAvatarUrl = forum.url + '/user_avatar/' + forum.url.replace('https://', '') + '/';
 
-  data() {
-    return {
-      actionLine: null,
-      images: [],
-      useDefaultAvatarIcon: false,
-    };
-  },
+const useDefaultAvatarIcon = ref(false);
 
-  computed: {
-    document() {
-      return this.item.document;
-    },
-    documentType() {
-      return this.$documentUtils.getDocumentType(this.document['type']);
-    },
-    locale() {
-      return this.$documentUtils.getLocaleSmart(this.item.document);
-    },
-  },
+const document = computed(() => props.item.document);
+const documentType = computed(() => $documentUtils.getDocumentType(document.value['type']));
+const locale = computed(() => $documentUtils.getLocaleSmart(props.item.document));
+const dates = computed(() => $documentUtils.getOutingDatesLocalized(props.item['document']));
+const images = computed(() => [props.item.image1, props.item.image2, props.item.image3].filter(Boolean));
 
-  forumAvatarUrl: forum.url + '/user_avatar/' + forum.url.replace('https://', '') + '/',
+const actionLine = computed(
+  () =>
+    ({
+      'added_photos article': $gettext('has added images to article'),
+      'added_photos book': $gettext('has added images to book'),
+      'added_photos area': $gettext('has added images to area'),
+      'added_photos outing': $gettext('has added images to outing'),
+      'added_photos route': $gettext('has added images to route'),
+      'added_photos waypoint': $gettext('has added images to waypoint'),
+      'added_photos xreport': $gettext('has added images to xreport'),
+      'created article': $gettext('has created a new article'),
+      'created book': $gettext('has created a new book'),
+      'created image': $gettext('has created a new image'),
+      'created outing': $gettext('has created a new outing'),
+      'created route': $gettext('has created a new route'),
+      'created waypoint': $gettext('has created a new waypoint'),
+      'created xreport': $gettext('has created a new xreport'),
+      'updated area': $gettext('has updated the area'),
+      'updated article': $gettext('has updated the article'),
+      'updated book': $gettext('has updated the book'),
+      'updated image': $gettext('has updated the image'),
+      'updated outing': $gettext('has updated the outing'),
+      'updated route': $gettext('has updated the route'),
+      'updated waypoint': $gettext('has updated the waypoint'),
+      'updated xreport': $gettext('has updated the xreport'),
+    })[[props.item['change_type'], documentType.value].join(' ')]
+);
 
-  created() {
-    this.actionLine = {
-      'added_photos article': this.$gettext('has added images to article'),
-      'added_photos book': this.$gettext('has added images to book'),
-      'added_photos area': this.$gettext('has added images to area'),
-      'added_photos outing': this.$gettext('has added images to outing'),
-      'added_photos route': this.$gettext('has added images to route'),
-      'added_photos waypoint': this.$gettext('has added images to waypoint'),
-      'added_photos xreport': this.$gettext('has added images to xreport'),
-      'created article': this.$gettext('has created a new article'),
-      'created book': this.$gettext('has created a new book'),
-      'created image': this.$gettext('has created a new image'),
-      'created outing': this.$gettext('has created a new outing'),
-      'created route': this.$gettext('has created a new route'),
-      'created waypoint': this.$gettext('has created a new waypoint'),
-      'created xreport': this.$gettext('has created a new xreport'),
-      'updated area': this.$gettext('has updated the area'),
-      'updated article': this.$gettext('has updated the article'),
-      'updated book': this.$gettext('has updated the book'),
-      'updated image': this.$gettext('has updated the image'),
-      'updated outing': this.$gettext('has updated the outing'),
-      'updated route': this.$gettext('has updated the route'),
-      'updated waypoint': this.$gettext('has updated the waypoint'),
-      'updated xreport': this.$gettext('has updated the xreport'),
-    }[[this.item['change_type'], this.documentType].join(' ')];
-
-    this.dates = this.$documentUtils.getOutingDatesLocalized(this.item['document']);
-
-    if (this.item.image1) {
-      this.images.push(this.item.image1);
-    }
-
-    if (this.item.image2) {
-      this.images.push(this.item.image2);
-    }
-
-    if (this.item.image3) {
-      this.images.push(this.item.image3);
-    }
-  },
-
-  methods: {
-    max300chars(value) {
-      return value.length > 300 ? value.substring(0, 300) + '…' : value;
-    },
-  },
-};
+function max300chars(value: string) {
+  return value.length > 300 ? value.substring(0, 300) + '…' : value;
+}
 </script>
 
-<style scoped lang="scss">
-@media screen and (max-width: $tablet) {
+<style scoped>
+@import '@/assets/css/media.css';
+
+@media screen and (--c2c-max-tablet) {
   .feed-card {
     border-left: 0 !important;
     border-right: 0 !important;
@@ -184,17 +162,12 @@ export default {
 }
 
 .is-max-3-lines-height {
-  // proprietary stuff, supported on limited browsers
+  /* proprietary stuff, supported on limited browsers */
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.card-image-content {
-  display: flex;
-  overflow: hidden;
 }
 
 .avatar {
@@ -205,21 +178,12 @@ export default {
   margin-right: 0.5rem;
 }
 
-.card-image-content > div > img {
-  width: 100%;
-  box-sizing: border-box;
-}
-
 .row {
   padding: 0.4rem 0.8rem;
   font-size: 0.9rem;
   min-height: 29px;
-  color: $text;
+  color: var(--c2c-text);
   align-items: center;
-
-  .column {
-    max-height: 58px;
-  }
 }
 
 .is-not-ellipsed {

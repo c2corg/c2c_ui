@@ -1,7 +1,7 @@
 <template>
   <div class="no-print">
     <div class="gdpr-content" :class="{ active: active }">
-      <h4 class="title" v-translate>Control the use of your personal data</h4>
+      <h2 class="title" v-translate>Control the use of your personal data</h2>
       <div class="message">
         <span v-translate class="has-text-justified">
           Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website,
@@ -15,67 +15,56 @@
         <button @click="acceptGdpr(true)" class="button is-primary" v-translate>Allow all</button>
       </div>
     </div>
-    <gdpr-modal ref="GdprModal"></gdpr-modal>
+    <gdpr-modal ref="modal"></gdpr-modal>
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue';
+
 import GdprModal from './GdprModal.vue';
 
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import bus from '@/js/event-bus';
 
-export default {
-  components: { GdprModal },
+const { $gdpr } = useGlobalProperties();
 
-  data() {
-    return {
-      userHasInteracted: false,
-    };
-  },
+const userHasInteracted = ref(false);
+const modal = useTemplateRef<{ show(): void }>('modal');
 
-  computed: {
-    active: function () {
-      return !this.$gdpr.get() && this.userHasInteracted;
-    },
-  },
+const active = computed(() => !$gdpr.get() && userHasInteracted.value);
 
-  beforeMount() {
-    window.addEventListener('scroll', this.firstUserInteraction);
-    window.addEventListener('keydown', this.firstUserInteraction);
-    window.addEventListener('resize', this.firstUserInteraction);
-    window.addEventListener('click', this.firstUserInteraction);
-  },
+function showGdprModal() {
+  modal.value!.show();
+}
 
-  mounted() {
-    bus.on('show-gdpr', this.showGdprModal);
-  },
+function acceptGdpr(accept: boolean) {
+  $gdpr.setAll(accept);
+}
 
-  beforeDestroy() {
-    bus.off('show-gdpr', this.showGdprModal);
-  },
+const INTERACTIONS = ['scroll', 'keydown', 'resize', 'click'];
 
-  methods: {
-    showGdprModal() {
-      this.$refs.GdprModal.show(this.gdprValue);
-    },
+function firstUserInteraction() {
+  INTERACTIONS.forEach((event) => window.removeEventListener(event, firstUserInteraction));
+  userHasInteracted.value = true;
+}
 
-    acceptGdpr(accept) {
-      this.$gdpr.setAll(accept);
-    },
+onBeforeMount(() => {
+  INTERACTIONS.forEach((event) => window.addEventListener(event, firstUserInteraction));
+});
 
-    firstUserInteraction() {
-      window.removeEventListener('scroll', this.firstUserInteraction);
-      window.removeEventListener('keydown', this.firstUserInteraction);
-      window.removeEventListener('resize', this.firstUserInteraction);
-      window.removeEventListener('click', this.firstUserInteraction);
+onMounted(() => {
+  bus.on('show-gdpr', showGdprModal);
+});
 
-      this.userHasInteracted = true;
-    },
-  },
-};
+onBeforeUnmount(() => {
+  bus.off('show-gdpr', showGdprModal);
+});
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+@import '@/assets/css/media.css';
+
 .gdpr-content {
   z-index: 30;
   position: fixed;
@@ -96,7 +85,7 @@ export default {
   }
 }
 
-@media screen and (min-width: $desktop) {
+@media screen and (--c2c-min-desktop) {
   .gdpr-content {
     width: 50%;
     left: calc(25% - 10px);

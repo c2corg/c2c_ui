@@ -33,27 +33,23 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    isLoading: {
-      type: Boolean,
-      required: true,
-    },
-  },
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
-  emits: ['preview', 'save'],
-
-  data() {
-    return {
-      comment: '',
-    };
+defineProps({
+  isLoading: {
+    type: Boolean,
+    required: true,
   },
+});
+defineEmits(['preview', 'save']);
 
-  computed: {
-    mode() {
-      return this.$route.name.split('-')[1]; // right part of route name : add or edit
-    },
-  },
-};
+const route = useRoute();
+
+const comment = ref('');
+
+const mode = computed(() => {
+  return String(route.name).split('-')[1]; // right part of route name : add or edit
+});
 </script>

@@ -2,28 +2,28 @@
   <p class="m-4"><spinner-icon /><span v-translate>Please wait. Requesting authorization...</span></p>
 </template>
 
-<script>
-import trackingService from '@/js/apis/tracking-service';
+<script setup lang="ts">
+import { watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-export default {
-  watch: {
-    $route: {
-      handler: 'exchangeToken',
-      immediate: true,
-    },
-  },
+import trackingService, { type Vendor } from '@/js/apis/tracking-service';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 
-  methods: {
-    exchangeToken() {
-      trackingService.exchangeToken(this.$route.params.vendor, this.$user.id, this.$route.query).then(
-        () => {
-          this.$router.push({ name: 'trackers' });
-        },
-        (error) => {
-          this.$router.push({ name: 'trackers', params: { error: error?.response?.data ?? 'unknown' } });
-        }
-      );
+const route = useRoute();
+const router = useRouter();
+const { $user } = useGlobalProperties();
+
+function exchangeToken() {
+  trackingService.exchangeToken(route.params.vendor as Vendor, $user.id!, route.query).then(
+    () => {
+      router.push({ name: 'trackers' });
     },
-  },
-};
+    (error: { response?: { data?: unknown } }) => {
+      router.push({ name: 'trackers', params: { error: (error?.response?.data as string | undefined) ?? 'unknown' } });
+    }
+  );
+}
+
+// on each route change, as the $route watcher did
+watch(() => route.fullPath, exchangeToken, { immediate: true });
 </script>

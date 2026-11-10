@@ -1,0 +1,63 @@
+{
+  "documents": [
+    {
+      "document_id": 57,
+      "version": 1,
+      "locales": [{ "version": 1, "lang": "fr", "title": "E2E voie", "summary": null, "title_prefix": "E2E sommet" }],
+      "geometry": {
+        "version": 1,
+        "geom": "{\"type\": \"Point\", \"coordinates\": [635956.0, 5723604.0]}",
+        "has_geom_detail": false
+      },
+      "quality": "draft",
+      "activities": ["skitouring"],
+      "elevation_min": null,
+      "elevation_max": null,
+      "height_diff_up": null,
+      "height_diff_down": null,
+      "durations": null,
+      "calculated_duration": null,
+      "height_diff_difficulties": null,
+      "orientations": null,
+      "ski_rating": null,
+      "ski_exposition": null,
+      "labande_ski_rating": null,
+      "labande_global_rating": null,
+      "public_transportation_rating": "unknown service",
+      "available_langs": ["fr"],
+      "areas": [],
+      "protected": false,
+      "type": "r"
+    },
+    {
+      "document_id": 53,
+      "version": 1,
+      "locales": [{ "version": 1, "lang": "fr", "title": "E2E voie", "summary": null, "title_prefix": "E2E sommet" }],
+      "geometry": {
+        "version": 1,
+        "geom": "{\"type\": \"Point\", \"coordinates\": [635956.0, 5723604.0]}",
+        "has_geom_detail": false
+      },
+      "quality": "draft",
+      "activities": ["skitouring"],
+      "elevation_min": null,
+      "elevation_max": null,
+      "height_diff_up": null,
+      "height_diff_down": null,
+      "durations": null,
+      "calculated_duration": null,
+      "height_diff_difficulties": null,
+      "orientations": null,
+      "ski_rating": null,
+      "ski_exposition": null,
+      "labande_ski_rating": null,
+      "labande_global_rating": null,
+      "public_transportation_rating": "unknown service",
+      "available_langs": ["fr"],
+      "areas": [],
+      "protected": false,
+      "type": "r"
+    }
+  ],
+  "total": 6
+}

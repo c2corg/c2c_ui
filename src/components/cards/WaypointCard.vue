@@ -12,7 +12,7 @@
     </card-row>
 
     <card-row>
-      <card-elevation-item :elevation="document.elevation" />
+      <card-elevation-item :elevation="document.elevation ?? undefined" />
 
       <textual-array :array="document.slackline_types" i18n i18n-context="slackline_types" />
 
@@ -21,10 +21,15 @@
   </card-container>
 </template>
 
-<script>
-import { documentCardMixin } from './utils/mixins';
+<script setup lang="ts">
+import CardContainer from './utils/CardContainer.vue';
+import CardElevationItem from './utils/CardElevationItem.vue';
+import CardRegionItem from './utils/CardRegionItem.vue';
+import CardRow from './utils/CardRow.vue';
+import CardTitle from './utils/CardTitle.vue';
+import { cardProps } from './utils/card';
 
-export default {
-  mixins: [documentCardMixin],
-};
+import { documentProperty } from '@/js/properties';
+
+defineProps({ ...cardProps, ...documentProperty });
 </script>

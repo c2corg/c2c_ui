@@ -50,14 +50,14 @@
 
         <h3 v-translate>activities</h3>
         <div class="field is-grouped">
-          <input-activity v-model="preferences.activities" @input="save" />
+          <input-activity v-model="preferences.activities" @update:model-value="save" />
         </div>
 
         <h3>{{ $filters.uppercaseFirstLetter($gettext('areas')) }}</h3>
 
         <div class="columns is-multiline">
           <div class="column is-narrow">
-            <input-document document-type="area" @input="addArea" />
+            <input-document document-type="area" @update:model-value="addArea" />
           </div>
           <div class="column">
             <div class="columns is-multiline">
@@ -72,55 +72,45 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
 import c2c from '@/js/apis/c2c';
-import noRobotsMixin from '@/js/no-robots-mixin';
+import { useNoRobots } from '@/js/composables/head';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  mixins: [noRobotsMixin],
+useNoRobots();
 
-  data() {
-    return {
-      promise: null,
-    };
-  },
+// what the user follows in the feed
+type Preferences = { followed_only: boolean; langs: string[]; activities: string[]; areas: C2cDocument[] };
 
-  computed: {
-    preferences() {
-      return this.promise?.data;
-    },
-  },
+const promise = c2c.userProfile.preferences.get();
 
-  created() {
-    this.promise = c2c.userProfile.preferences.get();
-  },
+const preferences = computed(() => promise.data as Preferences | undefined);
 
-  methods: {
-    toggle(item, array) {
-      if (array.indexOf(item) > -1) {
-        array.splice(array.indexOf(item), 1);
-      } else {
-        array.push(item);
-      }
+function toggle(item: string, array: string[]) {
+  if (array.indexOf(item) > -1) {
+    array.splice(array.indexOf(item), 1);
+  } else {
+    array.push(item);
+  }
 
-      this.save();
-    },
+  save();
+}
 
-    addArea(area) {
-      this.preferences.areas.push(area);
-      this.save();
-    },
+function addArea(area: C2cDocument) {
+  preferences.value!.areas.push(area);
+  save();
+}
 
-    removeArea(area) {
-      this.preferences.areas = this.preferences.areas.filter((doc) => doc.document_id !== area.document_id);
-      this.save();
-    },
+function removeArea(area: C2cDocument) {
+  preferences.value!.areas = preferences.value!.areas.filter((doc) => doc.document_id !== area.document_id);
+  save();
+}
 
-    save() {
-      c2c.userProfile.preferences.post(this.preferences);
-    },
-  },
-};
+function save() {
+  c2c.userProfile.preferences.post(preferences.value!);
+}
 </script>
 
 <style scoped>

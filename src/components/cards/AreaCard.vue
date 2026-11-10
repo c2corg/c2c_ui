@@ -6,16 +6,19 @@
 
     <card-row>
       <span>
-        {{ $filters.uppercaseFirstLetter($gettext(document.area_type, 'area_types')) }}
+        {{ $filters.uppercaseFirstLetter($gettext(document.area_type ?? '', 'area_types')) }}
       </span>
     </card-row>
   </card-container>
 </template>
 
-<script>
-import { documentCardMixin } from './utils/mixins';
+<script setup lang="ts">
+import CardContainer from './utils/CardContainer.vue';
+import CardRow from './utils/CardRow.vue';
+import CardTitle from './utils/CardTitle.vue';
+import { cardProps } from './utils/card';
 
-export default {
-  mixins: [documentCardMixin],
-};
+import { documentProperty } from '@/js/properties';
+
+defineProps({ ...cardProps, ...documentProperty });
 </script>

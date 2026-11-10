@@ -2,17 +2,14 @@
   <component :is="'icon-' + documentType" :fixed-width="fixedWidth" />
 </template>
 
-<script>
-import { requireDocumentTypeProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import { documentTypeProperty } from '@/js/properties';
 
-export default {
-  mixins: [requireDocumentTypeProperty],
-
-  props: {
-    fixedWidth: {
-      type: Boolean,
-      default: false,
-    },
+defineProps({
+  ...documentTypeProperty,
+  fixedWidth: {
+    type: Boolean,
+    default: false,
   },
-};
+});
 </script>

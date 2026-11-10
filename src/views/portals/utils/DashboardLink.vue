@@ -20,33 +20,36 @@
   </document-link>
 </template>
 
-<script>
-export default {
-  props: {
-    document: {
-      type: Object,
-      required: true,
-    },
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+
+const props = defineProps({
+  document: {
+    type: Object,
+    required: true,
   },
+});
 
-  computed: {
-    rangeAreas() {
-      let result = this.document.areas.filter((area) => area.area_type === 'range');
+const rangeAreas = computed(() => {
+  let result = props.document.areas.filter((area: C2cDocument) => area.area_type === 'range');
 
-      result = result.length !== 0 ? result : this.document.areas.filter((area) => area.area_type === 'admin_limits');
-      result = result.length !== 0 ? result : this.document.areas;
+  result =
+    result.length !== 0
+      ? result
+      : props.document.areas.filter((area: C2cDocument) => area.area_type === 'admin_limits');
+  result = result.length !== 0 ? result : props.document.areas;
 
-      return result;
-    },
+  return result;
+});
 
-    isMultiActivities() {
-      return this.document.activities.length > 1 ? true : false;
-    },
-  },
-};
+const isMultiActivities = computed(() => (props.document.activities.length > 1 ? true : false));
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 .dashboard-link {
   align-items: center;
 
@@ -63,7 +66,7 @@ export default {
   }
 
   .document-title:after {
-    content: '\0000a0\002022\0000a0'; //&nbsp;&bull;&nbsp;
+    content: '\0000a0\002022\0000a0'; /* &nbsp;&bull;&nbsp; */
   }
 
   .area-title:not(:last-child):after {
@@ -72,10 +75,10 @@ export default {
 }
 
 .dashboard-link:visited {
-  color: $grey-light;
+  color: var(--c2c-grey-light);
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .is-2-columns {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr);

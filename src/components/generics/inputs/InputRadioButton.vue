@@ -16,68 +16,63 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    options: {
-      type: Array,
-      required: true,
-    },
-    disabledOptions: {
-      type: Array,
-      default: () => [],
-    },
-    defaultValue: {
-      type: String,
-      default: '',
-    },
-    displayVertically: {
-      type: Boolean,
-      default: false,
-    },
-    value: {
-      type: String,
-      default: '',
-    },
-  },
-  emits: ['input'],
+<script setup lang="ts">
+import { computed, onMounted, ref, watch, type PropType } from 'vue';
 
-  data() {
-    return {
-      selected: this.value || this.defaultValue,
-    };
+type Option = { value: string; text: string };
+type DisabledOption = { value: string; reason?: string };
+
+const props = defineProps({
+  options: {
+    type: Array as PropType<Option[]>,
+    required: true,
   },
-  computed: {
-    reasons() {
-      const reasons = {};
-      this.disabledOptions.forEach((option) => {
-        reasons[option.value] = option.reason;
-      });
-      return reasons;
-    },
-    disabledValues() {
-      return new Set(this.disabledOptions.map((option) => option.value));
-    },
+  disabledOptions: {
+    type: Array as PropType<DisabledOption[]>,
+    default: () => [],
   },
-  watch: {
-    value(newValue) {
-      this.selected = newValue;
-    },
+  defaultValue: {
+    type: String,
+    default: '',
   },
-  mounted() {
-    if (this.selected) {
-      this.$emit('input', this.selected);
-    }
+  displayVertically: {
+    type: Boolean,
+    default: false,
   },
-  methods: {
-    emitSelectedValue() {
-      this.$emit('input', this.selected);
-    },
+  modelValue: {
+    type: String,
+    default: '',
   },
-};
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+const selected = ref(props.modelValue || props.defaultValue);
+
+const reasons = computed(() =>
+  Object.fromEntries(props.disabledOptions.map((option) => [option.value, option.reason]))
+);
+const disabledValues = computed(() => new Set(props.disabledOptions.map((option) => option.value)));
+
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    selected.value = newValue;
+  }
+);
+
+onMounted(() => {
+  if (selected.value) {
+    emit('update:modelValue', selected.value);
+  }
+});
+
+function emitSelectedValue() {
+  emit('update:modelValue', selected.value);
+}
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .option {
   display: flex;
   flex-direction: column;

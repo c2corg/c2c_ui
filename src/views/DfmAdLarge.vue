@@ -2,15 +2,14 @@
   <div id="camptocamp_htad" class="ams-ad is-flex is-justify-content-center is-clipped" />
 </template>
 
-<script>
-export default {};
+<script setup lang="ts">
+import { onMounted } from 'vue';
 
-if (!document.getElementById('ad_script')) {
-  const s = document.createElement('script');
-  s.id = 'ad_script';
-  s.src = 'https://static.admysports.com/hb/site/camptocamp/hb_camptocamp.js';
-  document.getElementsByTagName('head')[0].appendChild(s);
-}
+import { loadAdScript } from '@/js/ad-script';
+
+// the ad script displays its slots as soon as it runs, and Google Publisher Tag gives up on a slot whose div is not
+// in the page yet: it is only asked for once this div is mounted (it is then added after the page has loaded)
+onMounted(loadAdScript);
 </script>
 
 <style lang="css" scoped>

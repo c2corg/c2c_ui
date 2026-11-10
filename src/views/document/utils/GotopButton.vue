@@ -4,17 +4,13 @@
   </span>
 </template>
 
-<script>
-export default {
-  methods: {
-    onClick() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    },
-  },
-};
+<script setup lang="ts">
+function onClick() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .gotop-button {
   cursor: pointer;
 }

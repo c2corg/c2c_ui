@@ -5,23 +5,23 @@
   </span>
 </template>
 
-<script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 
-export default {
-  mixins: [requireDocumentProperty],
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { documentProperty } from '@/js/properties';
 
-  props: {
-    uppercaseFirstLetter: {
-      type: Boolean,
-      default: false,
-    },
+const props = defineProps({
+  ...documentProperty,
+  uppercaseFirstLetter: {
+    type: Boolean,
+    default: false,
   },
+});
 
-  computed: {
-    title() {
-      return this.$documentUtils.getDocumentTitle(this.document, this.$route.params.lang);
-    },
-  },
-};
+const { $documentUtils } = useGlobalProperties();
+const route = useRoute();
+
+const title = computed(() => $documentUtils.getDocumentTitle(props.document, route.params.lang as string));
 </script>

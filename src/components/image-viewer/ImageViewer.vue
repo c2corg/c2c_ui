@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" class="image-viewer" :class="{ 'hide-buttons': hideButtons }">
+  <div v-if="visible && activeDocument" ref="root" class="image-viewer" :class="{ 'hide-buttons': hideButtons }">
     <div class="is-flex has-text-grey-lighter image-viewer-header">
       <span class="is-size-4 is-ellipsed-tablet image-viewer-title">
         {{ activeDocument.locales[0].title }}
@@ -11,7 +11,7 @@
 
         <edit-link
           :document="activeDocument"
-          :lang="activeDocument.available_langs[0]"
+          :lang="activeDocument.available_langs?.[0]"
           class="has-text-grey-lighter"
           @click="close()"
         >
@@ -26,19 +26,17 @@
 
     <swiper-container
       init="false"
-      keyboard="true"
-      zoom="true"
       :slides-per-view="1"
       ref="swiper"
       class="image-viewer-swiper"
-      @slidechange="onSlideChange"
+      @swiperslidechange="onSlideChange"
+      @error.capture="onImageError"
     >
       <swiper-slide class="image-viewer-slide" v-for="image of images" :key="image.document_id">
         <div class="swiper-zoom-container">
           <picture>
             <source v-if="image.avifSrc" type="image/avif" :srcset="image.avifSrc" />
-            <source v-if="image.webpSrc" type="image/webp" :srcset="image.webpSrc" />
-            <img :src="image.imgSrc" :alt="image.locales[0].title" loading="lazy" />
+            <img :src="image.imgSrc" :alt="image.locales[0].title ?? undefined" loading="lazy" />
           </picture>
         </div>
       </swiper-slide>
@@ -57,27 +55,39 @@
         :key="image.document_id"
         class="image-viewer-bullet has-cursor-pointer"
         :class="{ 'image-viewer-bullet-active': image === activeDocument }"
-        :title="image.locales[0].title"
+        :title="image.locales[0].title ?? undefined"
         @click="onPaginationClick(index)"
         :style="`width: calc((100vw - 1.5rem) / ${images.length});`"
       />
     </div>
 
-    <image-info ref="imageInfo" class="image-viewer-info" />
+    <image-info ref="infoPanel" class="image-viewer-info" />
   </div>
 </template>
 
-<script>
-import { Keyboard, Navigation, Pagination, Virtual, Zoom } from 'swiper';
+<script setup lang="ts">
+import type Swiper from 'swiper';
+import 'swiper/css/pagination';
+import 'swiper/css/zoom';
+import virtualStyles from 'swiper/element/css/virtual?inline';
+import { Keyboard, Navigation, Pagination, Virtual, Zoom } from 'swiper/modules';
+import { nextTick, onBeforeUnmount, ref, useTemplateRef } from 'vue';
 import ZingTouch from 'zingtouch';
 
-import ImageInfo from './ImageInfo';
+import ImageInfo from './ImageInfo.vue';
 
-import { getImageUrl } from '@/js/image-urls';
-import throttle from '@/js/throttle';
-import { registerImageViewer } from '@/js/vue-plugins/image-viewer';
+import '@/js/swiper-element';
 
-const requestFullscreen = function (wrapper) {
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { fallBackToBasicImage, getImageUrl } from '@/js/image-urls';
+import { registerImageViewer, type ViewerImage } from '@/js/vue-plugins/image-viewer';
+
+type SwiperContainer = HTMLElement & { swiper: Swiper; initialize(): void };
+type ShownImage = ViewerImage & { imgSrc?: string; avifSrc?: string };
+// Safari
+type WebkitFullscreen = { webkitRequestFullscreen?(): void; webkitExitFullscreen?(): void };
+
+const requestFullscreen = function (wrapper: HTMLElement & WebkitFullscreen) {
   if (wrapper.requestFullscreen) {
     wrapper.requestFullscreen();
   } else if (wrapper.webkitRequestFullscreen) {
@@ -87,273 +97,189 @@ const requestFullscreen = function (wrapper) {
 };
 
 const exitFullscreen = function () {
-  if (document.exitFullscreen) {
-    document.exitFullscreen();
-  } else if (document.webkitExitFullscreen) {
+  const doc = document as Document & WebkitFullscreen;
+  if (doc.exitFullscreen) {
+    doc.exitFullscreen();
+  } else if (doc.webkitExitFullscreen) {
     /* Safari */
-    document.webkitExitFullscreen();
+    doc.webkitExitFullscreen();
   }
 };
 
-export default {
-  swiper: null,
-  zt: null,
+const { $screen } = useGlobalProperties();
 
-  components: {
-    ImageInfo,
-  },
+const visible = ref(false);
+const images = ref<ShownImage[]>([]);
+const activeDocument = ref<ShownImage | null>(null);
+const isFullscreen = ref(false);
+const hideButtons = ref(false);
 
-  data() {
-    return {
-      visible: false,
-      images: [],
-      activeDocument: null,
-      isFullscreen: false,
-      hideButtons: false,
+const root = useTemplateRef<HTMLElement>('root');
+const swiper = useTemplateRef<SwiperContainer>('swiper');
+const infoPanel = useTemplateRef<{ hide(): void; toggle(documentId: number): void }>('infoPanel');
+let zt: InstanceType<typeof ZingTouch.Region> | null = null;
+
+function push(image: ViewerImage) {
+  if (images.value.findIndex((item) => item.document_id === image.document_id) === -1) {
+    images.value.push({
+      ...image,
+      imgSrc: getImageUrl(image, 'BI'),
+      avifSrc: getImageUrl(image, 'BI', 'avif'),
+    });
+  }
+}
+
+// the AVIF image may be missing (just uploaded, or never built): the JPG one. Listened to on the swiper (error events
+// don't bubble, hence capture), as the virtual slides are rendered by Swiper from their HTML, without Vue listeners
+function onImageError(event: Event) {
+  if (event.target instanceof HTMLImageElement) {
+    fallBackToBasicImage(event.target);
+  }
+}
+
+function close() {
+  visible.value = false;
+  // clean handlers
+  window.removeEventListener('popstate', close);
+  window.removeEventListener('wheel', close);
+  if (zt) {
+    // the swiper element, still there until the viewer is hidden (was $refs.container, which did not exist)
+    if (swiper.value) {
+      zt.unbind(swiper.value);
+    }
+    zt = null;
+  }
+  hideButtons.value = false;
+}
+
+function toggleButtons() {
+  hideButtons.value = !hideButtons.value;
+}
+
+function show(image: ViewerImage) {
+  let initialSlide = images.value.findIndex((item) => item.document_id === image.document_id);
+
+  if (initialSlide === -1) {
+    initialSlide = images.value.length;
+    push(image);
+  }
+
+  activeDocument.value = images.value[initialSlide];
+  visible.value = true;
+
+  nextTick(() => {
+    const element = swiper.value!;
+    const swiperParams = {
+      modules: [Keyboard, Navigation, Pagination, Virtual, Zoom],
+      // the module styles for the inside of the element (shadow DOM); the navigation buttons, the pagination and the
+      // zoom container are outside it, styled by the swiper/css imports and below
+      injectStyles: [virtualStyles],
+      initialSlide,
+      // here and not as attributes: Vue 3 sets them as properties of <swiper-container>, as strings ("true"), which
+      // Swiper doesn't take as enabled
+      keyboard: true,
+      zoom: true,
+
+      // virtual because it may be too slow if there are too many images, e.g. /articles/1058594/fr/concours-photo-sophie-2018
+      virtual: true,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      pagination: {
+        el: '.image-viewer-pagination',
+        type: 'custom',
+      },
     };
-  },
 
-  created() {
-    // in created(), not mounted(): pages call it while they are created, before the app tree is mounted
-    registerImageViewer(this);
-    // this component is never destroyed, don't need a call to removeListener
-    window.addEventListener('keydown', this.onKeydown);
-  },
-
-  beforeDestroy() {
-    registerImageViewer(null);
-  },
-
-  methods: {
-    push(image) {
-      if (this.images.findIndex((item) => item.document_id === image.document_id) === -1) {
-        this.images.push({
-          ...image,
-          imgSrc: getImageUrl(image, 'BI'),
-          avifSrc: getImageUrl(image, 'BI', 'avif'),
-          webpSrc: getImageUrl(image, 'BI', 'webp'),
-        });
-      }
-    },
-
-    show(image) {
-      let initialSlide = this.images.findIndex((item) => item.document_id === image.document_id);
-
-      if (initialSlide === -1) {
-        initialSlide = this.images.length;
-        this.push(image);
-      }
-
-      this.activeDocument = this.images[initialSlide];
-      this.visible = true;
-
-      this.$nextTick(function () {
-        const swiperParams = {
-          modules: [Keyboard, Navigation, Pagination, Virtual, Zoom],
-          injectStylesUrls: [
-            '/swiper/navigation-element.min.css',
-            '/swiper/pagination-element.min.css',
-            '/swiper/virtual-element.min.css',
-            '/swiper/zoom-element.min.css',
-          ],
-          initialSlide,
-
-          // virtual because it may be too slow if there are too many images, e.g. /articles/1058594/fr/concours-photo-sophie-2018
-          virtual: true,
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+    // Swiper Element events are prefixed with "swiper" since Swiper 10 (eventsPrefix)
+    element.addEventListener('swiperinit', () => {
+      // close when the user goes back in history
+      window.addEventListener('popstate', close);
+      // close on mouse wheel
+      window.addEventListener('wheel', close);
+      // close on vertical swipe
+      zt = new ZingTouch.Region(element);
+      zt.bind(element, 'swipe', (event) => {
+        const {
+          detail: {
+            data: [{ currentDirection }],
           },
-          pagination: {
-            el: '.image-viewer-pagination',
-            type: 'custom',
-          },
-        };
-
-        this.$refs.swiper.addEventListener('init', () => {
-          // close when the user goes back in history
-          window.addEventListener('popstate', this.close);
-          // close on mouse wheel
-          window.addEventListener('wheel', this.close);
-          // close on vertical swipe
-          this.zt = new ZingTouch.Region(this.$refs.swiper);
-          this.zt.bind(this.$refs.swiper, 'swipe', (event) => {
-            const {
-              detail: {
-                data: [{ currentDirection }],
-              },
-            } = event;
-            const isSwipeTop = currentDirection > 60 && currentDirection < 120;
-            const isSwipeBottom = currentDirection > 240 && currentDirection < 300;
-            if (isSwipeTop || isSwipeBottom) {
-              this.close();
-            }
-          });
-        });
-        if (this.$screen.isMobile) {
-          // no idea why toggleButtons is called twice, so we throttle...
-          this.$refs.swiper.addEventListener('click', throttle(this.toggleButtons, 150));
+        } = event;
+        const isSwipeTop = currentDirection > 60 && currentDirection < 120;
+        const isSwipeBottom = currentDirection > 240 && currentDirection < 300;
+        if (isSwipeTop || isSwipeBottom) {
+          close();
         }
-        Object.assign(this.$refs.swiper, swiperParams);
-        this.$refs.swiper.initialize();
       });
-    },
+    });
+    if ($screen.isMobile) {
+      // Swiper's click: a tap, not the end of a swipe (Swiper 9 also re-dispatched it as a DOM click, on top of the
+      // native one, hence the throttle there was before)
+      element.addEventListener('swiperclick', toggleButtons);
+    }
+    Object.assign(element, swiperParams);
+    element.initialize();
+  });
+}
 
-    onPaginationClick(index) {
-      this.$refs.swiper.swiper.slideTo(index, 0, false);
-    },
+function onPaginationClick(index: number) {
+  swiper.value!.swiper.slideTo(index, 0, false);
+}
 
-    clear() {
-      this.images = [];
-      this.close();
-    },
+function clear() {
+  images.value = [];
+  close();
+}
 
-    close() {
-      this.visible = false;
-      // clean handlers
-      window.removeEventListener('popstate', this.close);
-      window.removeEventListener('wheel', this.close);
-      if (this.zt) {
-        this.zt.unbind(this.$refs.container);
-        this.zt = null;
-      }
-      this.hideButtons = false;
-    },
+function onKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape') {
+    close();
+  }
+}
 
-    onKeydown(event) {
-      if (event.key === 'Escape') {
-        this.close();
-      }
-    },
+function toggleImageInfo(image: ShownImage) {
+  infoPanel.value!.toggle(image.document_id);
+}
 
-    toggleButtons() {
-      this.hideButtons = !this.hideButtons;
-    },
+// the Swiper instance from the event: the element doesn't have it yet when the initial slide is set, during init
+function onSlideChange(event: CustomEvent<[Swiper]>) {
+  infoPanel.value!.hide();
+  activeDocument.value = images.value[event.detail[0].activeIndex];
+}
 
-    toggleImageInfo(image) {
-      this.$refs.imageInfo.toggle(image.document_id);
-    },
+function toggleFullscreen() {
+  if (isFullscreen.value) {
+    exitFullscreen();
+  } else {
+    requestFullscreen(root.value!);
+  }
 
-    onSlideChange() {
-      this.$refs.imageInfo.hide();
-      this.activeDocument = this.images[this.$refs.swiper.swiper.activeIndex];
-    },
+  isFullscreen.value = !isFullscreen.value;
+}
 
-    toggleFullscreen() {
-      if (this.isFullscreen) {
-        exitFullscreen();
-      } else {
-        requestFullscreen(this.$el);
-      }
+// in setup, not mounted(): pages call it while they are created, before the app tree is mounted
+registerImageViewer({ push, show, clear });
+// this component is never destroyed, don't need a call to removeListener
+window.addEventListener('keydown', onKeydown);
 
-      this.isFullscreen = !this.isFullscreen;
-    },
-  },
-};
+onBeforeUnmount(() => {
+  registerImageViewer(null);
+});
 </script>
 
-<style scoped lang="scss">
-$headerHeight: 3rem;
-$paginationHeight: 30px;
+<style scoped>
+@import '@/assets/css/media.css';
 
+/* the header is 3rem high, the pagination 30px */
 .image-viewer {
   z-index: 1000;
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%; // not 100vw, otherwise the viewer goes under the scrollbar
+  width: 100%; /* not 100vw, otherwise the viewer goes under the scrollbar */
   height: 100%;
   background: rgba(0, 0, 0, 0.95);
-
-  &-header {
-    position: absolute;
-    left: 0;
-    right: 0;
-    z-index: 3;
-    justify-content: space-between;
-    padding: 0.5rem 1rem;
-    margin-bottom: 0 !important;
-    height: $headerHeight;
-
-    .image-viewer-title {
-      margin: auto;
-      // display title on top of the image with some alpha background
-      // in case it overlaps (eg when zooming or on mobile)
-      z-index: 2;
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 10px;
-      padding: 0 10px;
-    }
-
-    .image-viewer-buttons > *:not(:last-child) {
-      margin-right: 0.75rem;
-    }
-
-    .image-viewer-buttons > * {
-      // keep the buttons visible when they overlap the image
-      filter: drop-shadow(2px 2px 2px black);
-      svg:hover {
-        color: white;
-      }
-    }
-  }
-
-  // the img container
-  &-swiper {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    z-index: 0;
-    width: 100vw;
-    height: 100%;
-
-    @media screen and (min-width: $tablet) {
-      & .swiper-zoom-container {
-        // adjust the initial centering of the img to avoid overlap with 1st line of title
-        margin-top: 10px;
-      }
-    }
-  }
-
-  &-slide {
-    overflow: hidden;
-
-    img {
-      // initially avoid overlap with title & scroll, but this is overridden when zooming
-      max-height: calc(100vh - #{$headerHeight} - #{$paginationHeight});
-    }
-  }
-
-  &-pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    bottom: 0;
-    height: $paginationHeight;
-    position: fixed;
-
-    .image-viewer-bullet {
-      display: inline-block;
-      background: white;
-      max-width: 16px;
-      height: 16px;
-      border: 25% solid black;
-
-      &:first-child {
-        border-bottom-left-radius: 50%;
-        border-top-left-radius: 50%;
-      }
-
-      &:last-child {
-        border-bottom-right-radius: 50%;
-        border-top-right-radius: 50%;
-      }
-    }
-
-    .image-viewer-bullet-active {
-      background: $primary;
-    }
-  }
 
   .swiper-button-prev,
   .swiper-button-next,
@@ -361,7 +287,9 @@ $paginationHeight: 30px;
   .image-viewer-buttons {
     visibility: visible;
     opacity: 1;
-    transition: visibility 1s, opacity 1s;
+    transition:
+      visibility 1s,
+      opacity 1s;
   }
 
   &.hide-buttons {
@@ -375,10 +303,99 @@ $paginationHeight: 30px;
   }
 }
 
-@media screen and (max-width: $tablet) {
+.image-viewer-header {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0 !important;
+  height: 3rem;
+
+  .image-viewer-title {
+    margin: auto;
+    /* display title on top of the image with some alpha background in case it overlaps (eg when zooming or on mobile) */
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    padding: 0 10px;
+  }
+
+  .image-viewer-buttons > *:not(:last-child) {
+    margin-right: 0.75rem;
+  }
+
+  .image-viewer-buttons > * {
+    /* keep the buttons visible when they overlap the image */
+    filter: drop-shadow(2px 2px 2px black);
+    svg:hover {
+      color: white;
+    }
+  }
+}
+
+/* the img container */
+.image-viewer-swiper {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 0;
+  width: 100vw;
+  height: 100%;
+
+  @media screen and (--c2c-min-tablet) {
+    & .swiper-zoom-container {
+      /* adjust the initial centering of the img to avoid overlap with 1st line of title */
+      margin-top: 10px;
+    }
+  }
+}
+
+.image-viewer-slide {
+  overflow: hidden;
+
+  img {
+    /* initially avoid overlap with title & scroll, but this is overridden when zooming */
+    max-height: calc(100vh - 3rem - 30px);
+  }
+}
+
+.image-viewer-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+  height: 30px;
+  position: fixed;
+
+  .image-viewer-bullet {
+    display: inline-block;
+    background: white;
+    max-width: 16px;
+    height: 16px;
+    border: 25% solid black;
+
+    &:first-child {
+      border-bottom-left-radius: 50%;
+      border-top-left-radius: 50%;
+    }
+
+    &:last-child {
+      border-bottom-right-radius: 50%;
+      border-top-right-radius: 50%;
+    }
+  }
+
+  .image-viewer-bullet-active {
+    background: var(--c2c-primary);
+  }
+}
+
+@media screen and (--c2c-max-tablet) {
   .image-viewer-header .image-viewer-title {
     position: fixed;
-    // on mobile, title is below to avoid overlap with the toolbox
+    /* on mobile, title is below to avoid overlap with the toolbox */
     bottom: 0;
     left: 0;
     width: 100%;
@@ -401,8 +418,6 @@ $paginationHeight: 30px;
   right: 0;
 }
 
-$swiper-navigation-size: 4rem;
-
 .swiper-button-prev {
   left: 0;
   right: auto;
@@ -420,25 +435,26 @@ $swiper-navigation-size: 4rem;
   }
 }
 
+/* the navigation buttons are 4rem wide */
 .swiper-button-prev,
 .swiper-button-next {
   position: absolute;
   top: 50%;
-  font-size: $swiper-navigation-size * 0.5;
-  width: $swiper-navigation-size;
-  height: $swiper-navigation-size;
-  margin-top: -$swiper-navigation-size * 0.5;
+  font-size: 2rem;
+  width: 4rem;
+  height: 4rem;
+  margin-top: -2rem;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: $white;
+  color: var(--c2c-white);
 
   &.swiper-button-disabled {
     cursor: auto;
     pointer-events: none;
-    color: $grey;
+    color: var(--c2c-grey);
   }
 }
 </style>

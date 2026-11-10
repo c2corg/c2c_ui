@@ -9,26 +9,24 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'ItinevertNoResultView',
-  props: {
-    error: {
-      type: Object,
-      default: () => ({}),
-    },
+<script setup lang="ts">
+import { useGlobalProperties } from '@/js/composables/global-properties';
+
+defineProps({
+  error: {
+    type: Object,
+    default: () => ({}),
   },
-  data() {
-    return {
-      errorMessages: {
-        date_out_of_bounds: this.$gettext('Public transport schedules are not yet known for this period.'),
-      },
-    };
-  },
+});
+
+const { $gettext } = useGlobalProperties();
+
+const errorMessages: Record<string, string> = {
+  date_out_of_bounds: $gettext('Public transport schedules are not yet known for this period.'),
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .no-result-found {
   color: red;
   font-size: 12px;
@@ -42,7 +40,7 @@ export default {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding-top: calc($itinevert-header-height);
+  padding-top: calc(var(--c2c-itinevert-header-height));
 }
 
 .no-result-view-title {
@@ -52,7 +50,7 @@ export default {
 }
 
 .no-result-view-description {
-  color: #7b7b7b;
+  color: var(--c2c-grey);
   font-size: 14px;
 }
 </style>

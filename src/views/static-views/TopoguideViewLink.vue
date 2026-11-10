@@ -7,26 +7,24 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    to: {
-      type: String,
-      required: true,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    icon: {
-      type: String,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  to: {
+    type: String,
+    required: true,
   },
-};
+  label: {
+    type: String,
+    required: true,
+  },
+  icon: {
+    type: String,
+    required: true,
+  },
+});
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .topoguide-link-view {
   width: 150px;
   height: 150px;
@@ -39,18 +37,18 @@ export default {
     border-radius: 50%;
     border: 2px solid white;
 
-    // vertical and horizontal center
+    /* vertical and horizontal center */
     position: relative;
     top: 8px;
     left: 8px;
 
-    // child positions
+    /* child positions */
     display: flex;
     flex-direction: column;
     text-align: center;
     justify-content: center;
 
-    color: $light;
+    color: var(--c2c-light);
     background-color: rgba(128, 128, 128, 0.4);
 
     transition: 0.2s;

@@ -14,23 +14,22 @@
   </span>
 </template>
 
-<script>
-import { baseMixin } from './mixins';
+<script setup lang="ts">
+import { baseInputProps, useInputValue } from './input-value';
 
-import { uidMixin } from '@/js/uid';
+import { useUid } from '@/js/uid';
 
-export default {
-  mixins: [baseMixin, uidMixin],
-
-  props: {
-    value: {
-      type: Boolean,
-      default: null,
-    },
+const props = defineProps({
+  ...baseInputProps,
+  modelValue: {
+    type: Boolean,
+    default: null,
   },
+});
+const emit = defineEmits(['update:modelValue', 'change']);
 
-  emits: ['change'],
-};
+const { value_ } = useInputValue(props, emit);
+const { uid } = useUid();
 </script>
 
 <style scoped>

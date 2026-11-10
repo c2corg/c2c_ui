@@ -13,18 +13,8 @@
   </span>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      currentYear: this.getCurrentYearString(),
-    };
-  },
+<script setup lang="ts">
+import { useGlobalProperties } from '@/js/composables/global-properties';
 
-  methods: {
-    getCurrentYearString() {
-      return this.$dateUtils.toLocalizedString(new Date(), 'YYYY');
-    },
-  },
-};
+const currentYear = useGlobalProperties().$dateUtils.toLocalizedString(new Date(), 'YYYY');
 </script>

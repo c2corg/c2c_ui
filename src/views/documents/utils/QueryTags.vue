@@ -10,20 +10,24 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    documents: {
-      type: Array,
-      required: true,
-    },
-  },
+<script setup lang="ts">
+import type { PropType } from 'vue';
 
-  emits: ['remove'],
-};
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+
+defineProps({
+  documents: {
+    // the documents still loading only have their id
+    type: Array as PropType<(C2cDocument & { loading?: boolean })[]>,
+    required: true,
+  },
+});
+defineEmits(['remove']);
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+@import '@/assets/css/media.css';
+
 .tags-container {
   margin-right: -0.5rem;
   margin-bottom: -0.5rem;
@@ -34,7 +38,7 @@ export default {
   margin-bottom: 0.5rem;
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .tag {
     max-width: 100%;
   }

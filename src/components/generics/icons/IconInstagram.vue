@@ -14,7 +14,7 @@
   </span>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .instagram-icon * {
   fill: url(#rg);
 }

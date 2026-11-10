@@ -31,12 +31,12 @@
             <span
               v-show="hasFeaturesTitle"
               class="features-title-text features-title-content"
-              ref="featuresTitle"
+              ref="featuresTitleInput"
               tabindex="0"
               contenteditable
               spellcheck="false"
               @blur="onEditFeaturesTitle"
-              @keypress.13.prevent
+              @keypress.enter.prevent
               >{{ featuresTitle }}</span
             >
           </p>
@@ -52,7 +52,7 @@
           <elevation-profile :features="features" />
         </template>
       </dropdown-content>
-      <simplify-tool ref="simplifyTool" />
+      <simplify-tool ref="simplifyToolPanel" />
     </div>
     <div v-else class="columns is-vcentered is-mobile">
       <div class="column">
@@ -151,7 +151,12 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import type Feature from 'ol/Feature';
+import type FeatureFormat from 'ol/format/Feature';
+import type LineString from 'ol/geom/LineString';
+import { computed, nextTick, ref, useTemplateRef } from 'vue';
+
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
 import EditModeButton from '@/components/yeti/EditModeButton.vue';
 import ElevationProfile from '@/components/yeti/ElevationProfile.vue';
@@ -159,151 +164,131 @@ import FeaturesList from '@/components/yeti/FeaturesList.vue';
 import Info from '@/components/yeti/Info.vue';
 import SimplifyTool from '@/components/yeti/SimplifyTool.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import Yetix from '@/components/yeti/Yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
+import type { SelectorLayer } from '@/components/yeti/yetix-types';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 
-export default {
-  components: {
-    DropdownContent,
-    EditModeButton,
-    ElevationProfile,
-    FeaturesList,
-    Info,
-    SimplifyTool,
-    SubPanelTitle,
-  },
-  data() {
-    return {
-      newFeaturesTitle: false,
-      loading: false,
-      formats: ['GPX', 'KML'],
-      format: 'GPX',
-    };
-  },
-  computed: {
-    editMode() {
-      return Yetix.editMode;
-    },
-    features() {
-      return Yetix.features;
-    },
-    featuresTitle() {
-      return Yetix.featuresTitle;
-    },
-    validSimplifyTolerance() {
-      return Yetix.validSimplifyTolerance;
-    },
-    hasFeaturesTitle() {
-      return !(!this.featuresTitle.length && !this.newFeaturesTitle);
-    },
-    winterRouteLayer() {
-      return Yetix.overlaysLayersSelector.filter((layer) => layer.id === 'winter-route')[0];
-    },
-  },
-  methods: {
-    onEditFeaturesTitle(e) {
-      if (!e.target.innerText.length) {
-        this.newFeaturesTitle = false;
-      }
-      Yetix.setFeaturesTitle(e.target.innerText);
-    },
-    onEditNewFeaturesTitle() {
-      this.newFeaturesTitle = true;
-      this.$nextTick(() => {
-        this.$refs.featuresTitle.focus();
-      });
-    },
-    onLoadGpx() {
-      this.$refs.gpxFileInput.click();
-    },
-    onRemoveFeatures() {
-      if (confirm(this.$gettext('Confirm delete'))) {
-        yetixEvents.emit('removeFeatures');
-        // initialize simplify tool (go back to init state)
-        this.$refs.simplifyTool.initialize();
-      }
-    },
-    uploadGpx(event) {
-      this.loading = true;
+const Yetix = useYetixStore();
 
-      const reader = new FileReader();
+const { $dateUtils, $gettext } = useGlobalProperties();
 
-      reader.onload = () => {
-        this.loading = false;
-        yetixEvents.emit('gpx', reader.result);
-      };
+const newFeaturesTitle = ref(false);
+const loading = ref(false);
+const formats = ['GPX', 'KML'];
+const format = ref('GPX');
 
-      reader.readAsText(event.target.files[0]);
+const featuresTitleInput = useTemplateRef<HTMLElement>('featuresTitleInput');
+const simplifyToolPanel = useTemplateRef<{ initialize(): void }>('simplifyToolPanel');
+const gpxFileInput = useTemplateRef<HTMLInputElement>('gpxFileInput');
 
-      // empty the input, because if user wants to upload same trace
-      // change event is not fired
-      // and emit gpx event
-      this.$refs.gpxFileInput.value = '';
-      yetixEvents.emit('gpx', null);
-    },
-    downloadCourse() {
-      if (this.validSimplifyTolerance) {
-        return window.alert(this.$gettext('Action is disabled. You must confirm simplified geometry first.'));
-      }
-      if (this.format === 'GPX') {
-        this.downloadFeatures(new ol.format.GPX(), '.gpx', 'application/gpx+xml');
-      } else if (this.format === 'KML') {
-        this.downloadFeatures(new ol.format.KML(), '.kml', 'application/vnd.google-earth.kml+xml');
-      }
-    },
-    downloadFeatures(olFormat, extension, mimetype) {
-      const features = this.features;
-      features[0].set('name', this.featuresTitle);
+const features = computed(() => Yetix.features as Feature<LineString>[]);
+const featuresTitle = computed(() => Yetix.featuresTitle as string);
+const validSimplifyTolerance = computed(() => Yetix.validSimplifyTolerance);
+const hasFeaturesTitle = computed(() => !(!featuresTitle.value.length && !newFeaturesTitle.value));
+const winterRouteLayer = computed(
+  () => (Yetix.overlaysLayersSelector as SelectorLayer[]).filter((layer) => layer.id === 'winter-route')[0]
+);
 
-      const filename = this.setFilename(extension);
+function onEditFeaturesTitle(e: Event) {
+  const text = (e.target as HTMLElement).innerText;
+  if (!text.length) {
+    newFeaturesTitle.value = false;
+  }
+  Yetix.setFeaturesTitle(text);
+}
 
-      const content = olFormat.writeFeatures(features, {
-        featureProjection: 'EPSG:3857',
-        decimals: 7,
-      });
+function onEditNewFeaturesTitle() {
+  newFeaturesTitle.value = true;
+  nextTick(() => {
+    featuresTitleInput.value!.focus();
+  });
+}
 
-      utils.download(content, filename, mimetype + ';charset=utf-8');
-    },
-    setFilename(ext) {
-      return this.$dateUtils.toLocalizedString(new Date(), 'YYYY-MM-DD_HH-mm-ss') + ext;
-    },
-    setEditMode() {
-      Yetix.setEditMode(!this.editMode);
-    },
-    fitMapToFeatures() {
-      yetixEvents.emit('fit-map-to-features');
-    },
-  },
-};
+function onLoadGpx() {
+  gpxFileInput.value!.click();
+}
+
+function onRemoveFeatures() {
+  if (confirm($gettext('Confirm delete'))) {
+    yetixEvents.emit('removeFeatures');
+    // initialize simplify tool (go back to init state)
+    simplifyToolPanel.value!.initialize();
+  }
+}
+
+function uploadGpx(event: Event) {
+  loading.value = true;
+  const reader = new FileReader();
+  reader.onload = () => {
+    loading.value = false;
+    yetixEvents.emit('gpx', reader.result);
+  };
+  reader.readAsText((event.target as HTMLInputElement).files![0]);
+  // empty the input, because if user wants to upload same trace
+  // change event is not fired
+  // and emit gpx event
+  gpxFileInput.value!.value = '';
+  yetixEvents.emit('gpx', null);
+}
+
+function setFilename(ext: string) {
+  return $dateUtils.toLocalizedString(new Date(), 'YYYY-MM-DD_HH-mm-ss') + ext;
+}
+
+function downloadFeatures(olFormat: FeatureFormat, extension: string, mimetype: string) {
+  features.value[0].set('name', featuresTitle.value);
+  const filename = setFilename(extension);
+  const content = olFormat.writeFeatures(features.value, {
+    featureProjection: 'EPSG:3857',
+    decimals: 7,
+  });
+  utils.download(content, filename, mimetype + ';charset=utf-8');
+}
+
+function downloadCourse() {
+  if (validSimplifyTolerance.value) {
+    return window.alert($gettext('Action is disabled. You must confirm simplified geometry first.'));
+  }
+  if (format.value === 'GPX') {
+    downloadFeatures(new ol.format.GPX(), '.gpx', 'application/gpx+xml');
+  } else if (format.value === 'KML') {
+    downloadFeatures(new ol.format.KML(), '.kml', 'application/vnd.google-earth.kml+xml');
+  }
+}
+
+function fitMapToFeatures() {
+  yetixEvents.emit('fit-map-to-features');
+}
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .features-title {
   display: flex;
   line-height: 1.4;
+}
 
-  &-text {
-    min-width: 100px;
-    border: solid 1px transparent;
-    border-radius: 2px;
-    padding: 2px 2em 2px 2px;
-    box-decoration-break: clone;
+.features-title-text {
+  min-width: 100px;
+  border: solid 1px transparent;
+  border-radius: 2px;
+  padding: 2px 2em 2px 2px;
+  box-decoration-break: clone;
 
-    &:hover,
-    &:focus {
-      border-color: #b5b5b5;
-    }
+  &:hover,
+  &:focus {
+    border-color: var(--c2c-grey-light);
   }
+}
 
-  &-placeholder {
-    font-style: italic;
-  }
+.features-title-placeholder {
+  font-style: italic;
+}
 
-  &-content {
-    font-weight: bold;
-  }
+.features-title-content {
+  font-weight: bold;
 }
 
 .icon {

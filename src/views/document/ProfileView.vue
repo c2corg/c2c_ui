@@ -8,19 +8,17 @@
     ></masked-document-version-info>
     <document-view-header v-if="document" :document="document" :version="version" />
 
-    <div v-if="document && document.not_authorized" v-translate class="notification is-danger">
+    <div v-if="document && 'not_authorized' in document" v-translate class="notification is-danger">
       This profile is only available to authenticated users.
     </div>
 
-    <div v-if="document && !document.not_authorized" class="columns">
+    <div v-if="document && !('not_authorized' in document)" class="columns">
       <div class="column is-3">
         <div class="box">
           <activities-field v-if="document.activities && document.activities.length" :document="document" />
 
           <label-value :label="$gettext('forum')">
-            <a :href="$options.forumUrl + '/u/' + document.forum_username + '/activity'">
-              @{{ document.forum_username }}
-            </a>
+            <a :href="forumUrl + '/u/' + document.forum_username + '/activity'"> @{{ document.forum_username }} </a>
           </label-value>
 
           <field-view :document="document" :field="fields.categories" />
@@ -35,7 +33,7 @@
       </div>
 
       <div class="column is-9">
-        <div class="box" v-if="locale.summary || locale.description">
+        <div class="box" v-if="locale!.summary || locale!.description">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />
           <div style="clear: both" />
@@ -49,28 +47,31 @@
   </div>
 </template>
 
-<script>
-import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import OutingsDownloader from './utils/OutingsDownloader';
-import documentViewMixin from './utils/document-view-mixin';
+<script setup lang="ts">
+import DocumentViewHeader from './utils/DocumentViewHeader.vue';
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo.vue';
+import OutingsDownloader from './utils/OutingsDownloader.vue';
+import ImagesBox from './utils/boxes/ImagesBox.vue';
+import MapBox from './utils/boxes/MapBox.vue';
+import ToolBox from './utils/boxes/ToolBox.vue';
+import { documentViewProps, useDocumentView } from './utils/document-view';
+import ActivitiesField from './utils/field-viewers/ActivitiesField.vue';
+import FieldView from './utils/field-viewers/FieldView.vue';
+import LabelValue from './utils/field-viewers/LabelValue.vue';
+import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 
-import FeedWidget from '@/components/feed-widget/FeedWidget';
+import FeedWidget from '@/components/feed-widget/FeedWidget.vue';
+import type { Profile } from '@/js/apis/c2c/schemas';
 import config from '@/js/config';
 
-export default {
-  components: {
-    FeedWidget,
-    OutingsDownloader,
-    MaskedDocumentVersionInfo,
-  },
+const props = defineProps(documentViewProps);
 
-  mixins: [documentViewMixin],
+const { promise, documentId, documentType, fields, document, version, locale } = useDocumentView<Profile>(props);
 
-  forumUrl: config.urls.forum,
-};
+const forumUrl = config.urls.forum;
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .button-outings {
   margin-top: 1rem;
 }

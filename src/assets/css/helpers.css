@@ -1,0 +1,114 @@
+/* helper classes of the site, after Bulma's */
+@import './media.css';
+
+.has-hover-background:hover {
+  background: var(--c2c-hover-background);
+}
+
+/* force nowrap */
+.is-nowrap {
+  white-space: nowrap;
+}
+
+/* Force a inline element to nowrap, and ellipse overflow */
+.is-ellipsed {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media screen and (--c2c-min-tablet) {
+  .is-ellipsed-tablet {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.has-cursor-pointer {
+  cursor: pointer;
+}
+
+.card-icon {
+  color: var(--c2c-text);
+}
+
+.has-text-secondary {
+  color: var(--c2c-secondary);
+}
+
+.has-background-secondary {
+  background-color: var(--c2c-secondary);
+}
+
+.has-text-normal {
+  color: var(--c2c-text);
+}
+
+.has-rounded-corner {
+  border-radius: var(--c2c-radius);
+}
+
+.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@media not print {
+  .print-only {
+    display: none !important;
+  }
+}
+
+@media print {
+  /* print styles go here */
+
+  /* Printing from Firefox with content display:flex will print only the first page.
+    https://bugzilla.mozilla.org/show_bug.cgi?id=1241323
+    */
+  .is-block-print {
+    display: block !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-image .no-print.image-box {
+    display: block !important;
+  }
+
+  .print-image .no-print.image-box .swiper-wrapper {
+    flex-wrap: wrap !important;
+    justify-content: space-evenly !important;
+  }
+
+  .has-background-white-print {
+    background-color: white !important;
+  }
+
+  .box {
+    padding: 0;
+    box-shadow: none;
+    border-bottom: 1px solid lightGrey;
+  }
+
+  .is-12-print {
+    width: 100% !important;
+  }
+
+  .print-no-columns {
+    display: block !important;
+
+    .is-1,
+    .is-2,
+    .is-3,
+    .is-4,
+    .is-5,
+    .is-6,
+    .is-7,
+    .is-9 {
+      width: 100%;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-  <modal-window ref="modalWindow">
+  <modal-window ref="modal">
     <template #header>
       <div class="has-text-centered">
         <fa-icon icon="user-shield"></fa-icon>
@@ -12,14 +12,7 @@
         <div class="is-flex is-justify-content-space-between is-align-items-baseline">
           <h2 class="is-size-3" v-translate>Necessary cookies</h2>
           <div class="field">
-            <input
-              type="checkbox"
-              id="necessary"
-              name="necessary"
-              class="switch is-rounded"
-              checked="checked"
-              disabled
-            />
+            <input type="checkbox" id="necessary" name="necessary" class="switch is-rounded" checked disabled />
             <label for="necessary"></label>
           </div>
         </div>
@@ -86,31 +79,34 @@
   </modal-window>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      gdpr: {
-        statistics: false,
-        social: false,
-      },
-    };
-  },
+<script setup lang="ts">
+import { ref, useTemplateRef } from 'vue';
 
-  methods: {
-    show() {
-      this.gdpr = JSON.parse(JSON.stringify(this.$gdpr.get())) || { statistics: false, social: false };
-      this.$refs.modalWindow.show();
-    },
+import { useGlobalProperties } from '@/js/composables/global-properties';
 
-    hide() {
-      this.$refs.modalWindow.hide();
-    },
+type GdprChoices = { statistics: boolean; social: boolean; ad?: boolean };
 
-    submit() {
-      this.$gdpr.set(this.gdpr);
-      this.hide();
-    },
-  },
-};
+const { $gdpr } = useGlobalProperties();
+
+const gdpr = ref<GdprChoices>({
+  statistics: false,
+  social: false,
+});
+const modal = useTemplateRef<{ show(): void; hide(): void }>('modal');
+
+function show() {
+  gdpr.value = JSON.parse(JSON.stringify($gdpr.get())) || { statistics: false, social: false };
+  modal.value!.show();
+}
+
+function hide() {
+  modal.value!.hide();
+}
+
+function submit() {
+  $gdpr.set(gdpr.value);
+  hide();
+}
+
+defineExpose({ show, hide });
 </script>

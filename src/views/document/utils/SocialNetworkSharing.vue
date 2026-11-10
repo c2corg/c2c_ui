@@ -18,71 +18,65 @@
   </span>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
+import { documentProperty } from '@/js/properties';
 
 const cdn = '//s7.addthis.com/js/300/addthis_widget.js';
 
-export default {
-  props: {
-    document: {
-      type: Object,
-      required: true,
-    },
-  },
+// the AddThis script, once loaded
+const addthis = () => (window as { addthis?: { button: (selector: string) => void } }).addthis;
 
-  data() {
-    return { addThisVisible: false };
-  },
+const props = defineProps({ ...documentProperty });
 
-  computed: {
-    addThisEnabled: function () {
-      const enabled = this.$gdpr.get()?.social ?? false;
-      enabled ? this.installAddThis() : this.uninstallAddThis();
-      return enabled;
-    },
+const { $gdpr, $documentUtils } = useGlobalProperties();
 
-    supportsWebShare() {
-      return !!navigator.share;
-    },
-  },
+const addThisVisible = ref(false);
 
-  methods: {
-    onAddthisLoad() {
-      this.addThisVisible = true;
-      window.addthis?.button('.social-network-sharing');
-    },
+// with the consent of the user to social networks
+const addThisEnabled = computed(() => $gdpr.get()?.social ?? false);
 
-    installAddThis() {
-      if (document.getElementById('addthis-script') !== null) {
-        this.onAddthisLoad();
-        return;
-      }
+const supportsWebShare = !!navigator.share;
 
-      const el = document.createElement('script');
+function onAddthisLoad() {
+  addThisVisible.value = true;
+  addthis()?.button('.social-network-sharing');
+}
 
-      el.setAttribute('id', 'addthis-script');
-      el.setAttribute('src', `${cdn}#pubid=${config.addthisPublicId}`);
-      el.onload = this.onAddthisLoad;
-      document.body.appendChild(el);
-    },
+function installAddThis() {
+  if (document.getElementById('addthis-script') !== null) {
+    onAddthisLoad();
+    return;
+  }
 
-    uninstallAddThis() {
-      this.addThisVisible = false;
-      const el = document.getElementById('addthis-script');
-      if (el === null) {
-        return;
-      }
-      document.body.removeChild(el);
-      delete window.addthis;
-    },
+  const el = document.createElement('script');
 
-    webShare() {
-      navigator.share({
-        title: this.$documentUtils.getDocumentTitle(this.document),
-        url: window.location.href,
-      });
-    },
-  },
-};
+  el.setAttribute('id', 'addthis-script');
+  el.setAttribute('src', `${cdn}#pubid=${config.addthisPublicId}`);
+  el.onload = onAddthisLoad;
+  document.body.appendChild(el);
+}
+
+function uninstallAddThis() {
+  addThisVisible.value = false;
+  const el = document.getElementById('addthis-script');
+  if (el === null) {
+    return;
+  }
+  document.body.removeChild(el);
+  delete (window as { addthis?: unknown }).addthis;
+}
+
+function webShare() {
+  navigator.share({
+    title: $documentUtils.getDocumentTitle(props.document),
+    url: window.location.href,
+  });
+}
+
+// installed or removed with the consent (was a side effect of the addThisEnabled computed)
+watch(addThisEnabled, (enabled) => (enabled ? installAddThis() : uninstallAddThis()), { immediate: true });
 </script>

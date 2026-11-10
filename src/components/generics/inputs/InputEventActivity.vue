@@ -3,10 +3,10 @@
     <span
       v-for="event_activity of event_activities"
       :key="event_activity"
-      :checked="value_ === event_activity"
+      :checked="value_ === event_activity || null"
       :class="{ 'with-labels': showLabels }"
       class="input-item has-cursor-pointer"
-      :title="showLabels ? null : $gettext(event_activity, 'event_activities')"
+      :title="showLabels ? undefined : $gettext(event_activity, 'event_activities')"
       @click="value_ = event_activity"
     >
       <icon-event-activity :event-activity="event_activity" />
@@ -17,35 +17,33 @@
   </div>
 </template>
 
-<script>
-import { baseMixin } from './mixins';
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import { baseInputProps, useInputValue } from './input-value';
 
 import constants from '@/js/constants';
 
-export default {
-  mixins: [baseMixin],
-
-  props: {
-    value: {
-      type: String,
-      default: null,
-    },
-
-    showLabels: {
-      type: Boolean,
-      default: false,
-    },
+const props = defineProps({
+  ...baseInputProps,
+  modelValue: {
+    type: String,
+    default: null,
   },
 
-  computed: {
-    event_activities() {
-      return constants.event_activities;
-    },
+  showLabels: {
+    type: Boolean,
+    default: false,
   },
-};
+});
+const emit = defineEmits(['update:modelValue']);
+
+const { value_ } = useInputValue(props, emit);
+
+const event_activities = computed(() => constants.event_activities);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .input-item {
   font-size: 40px;
   margin: 4px;
@@ -68,7 +66,7 @@ export default {
 }
 
 .input-item[checked] {
-  color: $primary;
+  color: var(--c2c-primary);
 }
 
 .with-labels {
@@ -86,7 +84,7 @@ export default {
 }
 
 .has-error {
-  box-shadow: 0px 0px 8px 0px $danger;
-  // border: 1px solid $danger;
+  box-shadow: 0px 0px 8px 0px var(--c2c-danger);
+  /* border: 1px solid $danger; */
 }
 </style>

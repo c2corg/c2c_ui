@@ -1,6 +1,10 @@
 <template>
   <div class="login-view is-flex">
     <html-header :title="$gettext('Login')" />
+    <div v-if="mode == 'forum'" class="forum-sso has-text-centered">
+      <span class="button is-white is-large is-loading" aria-hidden="true" />
+      <p v-translate>Loading...</p>
+    </div>
     <base-form v-show="mode == 'signin'" :promise="promise" @submit="signin">
       <form-field
         ref="signinMainInput"
@@ -22,6 +26,15 @@
         :label="$gettext('Password')"
         icon="key"
       />
+
+      <div class="field">
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" v-model="rememberMe" />
+            <span v-translate>Remember me</span>
+          </label>
+        </div>
+      </div>
 
       <div class="field" v-if="showLoginTerms">
         <div class="control">
@@ -96,12 +109,7 @@
       </div>
 
       <div class="field">
-        <re-captcha
-          ref="recaptcha"
-          :sitekey="$options.recaptchaKey"
-          @expired="onCaptchaExpired"
-          @verify="onCaptchaVerify"
-        />
+        <re-captcha ref="recaptcha" :sitekey="recaptchaKey" @expired="onCaptchaExpired" @verify="onCaptchaVerify" />
       </div>
 
       <div class="buttons is-centered">
@@ -118,7 +126,7 @@
       </div>
     </base-form>
 
-    <base-form ref="resetPasswordForm" v-show="mode == 'resetPassword'" :promise="promise" @submit="resetPassword">
+    <base-form v-show="mode == 'resetPassword'" :promise="promise" @submit="resetPassword">
       <template #header>
         <h3 class="title is-3" v-translate>Reset password</h3>
       </template>
@@ -144,12 +152,7 @@
       </div>
     </base-form>
 
-    <base-form
-      ref="changePasswordForm"
-      v-show="mode == 'changePassword'"
-      :promise="promise"
-      @submit="validateNewPassword"
-    >
+    <base-form v-show="mode == 'changePassword'" :promise="promise" @submit="validateNewPassword">
       <template #header>
         <h3 class="title is-3" v-translate>Change password</h3>
       </template>
@@ -185,17 +188,21 @@
   </div>
 </template>
 
-<script>
-import { toast } from 'bulma-toast';
+<script setup lang="ts">
+import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import BaseForm from './utils/BaseForm';
-import FormField from './utils/FormField';
-import PasswordRequirements from './utils/PasswordRequirements';
+import BaseForm from './utils/BaseForm.vue';
+import FormField from './utils/FormField.vue';
+import PasswordRequirements from './utils/PasswordRequirements.vue';
 
-import ReCaptcha from '@/components/recaptcha/ReCaptcha';
+import ReCaptcha from '@/components/recaptcha/ReCaptcha.vue';
 import c2c from '@/js/apis/c2c';
+import { apiErrors, errorStatus } from '@/js/apis/c2c/api-errors';
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { useNoRobots } from '@/js/composables/head';
 import config from '@/js/config';
-import noRobotsMixin from '@/js/no-robots-mixin';
+import { toast } from '@/js/toast';
 
 // possible mode values :
 //
@@ -206,249 +213,221 @@ import noRobotsMixin from '@/js/no-robots-mixin';
 // * changeEmail : if user has asked a new mail, a secret url has been sent
 // * validateAccountCreation : idem, but when account is created
 
-export default {
-  recaptchaKey: config.urls.recaptchaKey,
+const recaptchaKey = config.urls.recaptchaKey!;
 
-  components: {
-    FormField,
-    BaseForm,
-    PasswordRequirements,
-    ReCaptcha,
-  },
+useNoRobots();
 
-  mixins: [noRobotsMixin],
+// here is the trick : all auth action are on the same component.
+// vue won't reload it, even on route modification.
+// watch on the route will perform any action needed by url state.
+// the route entered is kept, to go back to it after login
 
-  // here is the trick : all auth action are on the same component.
-  // vue won't reload it, even on route modification.
-  // watch on $route will perform any action needed by url state.
-  // but this function will be called only once : at the very first load of component
-  // so we'll keep the page to go back
-  // that's all !
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.to = to;
+const route = useRoute();
+const router = useRouter();
+const { $gettext, $language, $user } = useGlobalProperties();
+
+type Focusable = { focus(): void };
+const signinMainInput = useTemplateRef<Focusable>('signinMainInput');
+const signupMainInput = useTemplateRef<Focusable>('signupMainInput');
+const resetPasswordMainInput = useTemplateRef<Focusable>('resetPasswordMainInput');
+const changePasswordMainInput = useTemplateRef<Focusable>('changePasswordMainInput');
+const recaptcha = useTemplateRef<{ reset(): void }>('recaptcha');
+
+const mode = ref('');
+
+const username = ref('');
+const password = ref('');
+const forum_username = ref('');
+const email = ref('');
+const captcha = ref<string | null>(null);
+
+const termsAgreed = ref(false);
+
+// what the forms show of the current request: loading, success, error
+const promise = ref<any>({});
+const loginTermsAgreed = ref<boolean | undefined>(undefined);
+// "remember me": the session lasts and is renewed; unticked, it ends after a day
+const rememberMe = ref(true);
+const termsRoute = { name: 'article', params: { id: 106731 } };
+
+const showLoginTerms = computed(() => loginTermsAgreed.value !== undefined);
+
+// the route entered (vue-router 5 deprecates the next() callback of beforeRouteEnter); a snapshot, as the route
+// would follow the next navigations
+const to = router.currentRoute.value;
+if (route.name === 'auth-sso') {
+  if (route.query.logout !== undefined) {
+    $user.signout();
+  }
+}
+
+function onModeChange() {
+  promise.value = {};
+
+  switch (mode.value) {
+    case 'signin':
+      nextTick(() => signinMainInput.value!.focus());
+      break;
+    case 'changePassword':
+      nextTick(() => changePasswordMainInput.value!.focus());
+      break;
+    case 'resetPassword':
+      nextTick(() => resetPasswordMainInput.value!.focus());
+      break;
+    case 'signup':
+    case 'verifyEmail':
+      nextTick(() => signupMainInput.value!.focus());
+      break;
+  }
+}
+
+function load() {
+  const query = route.query as Record<string, string | undefined>;
+
+  if (route.hash) {
+    // keep compatible with v6 AngularJs hacks...
+    router.replace(route.fullPath.replace('#', '?'));
+  }
+
+  if (query.change_password) {
+    // change password mode
+    // mode when user has forgotten his password.
+    // an url is sent to his mail, with an secret param
+    mode.value = 'changePassword';
+  } else if (query.validate_change_email) {
+    // when user changes his email.
+    // he receives on his new mail a secret url to validate
+    // that  he is the owner
+    mode.value = 'changeEmail';
+    promise.value = c2c.userProfile.validateChangeEmail(query.validate_change_email).then(() => {
+      toast({
+        message: $gettext('Your account is now bound to the new email address you filled in.'),
+        type: 'is-primary',
+        duration: 5000,
+        position: 'center',
+        closeOnClick: true,
+      });
+      router.push({ name: 'home' });
     });
-  },
+  } else if (query.validate_register_email) {
+    // after account creation
+    mode.value = 'validateAccountCreation';
+    promise.value = c2c.userProfile
+      .validateRegisterEmail(query.validate_register_email)
+      .then(() => router.push({ name: 'home' }));
+  } else if (route.name === 'auth-sso' && query.sso && $user.isLogged) {
+    // already logged in (e.g. sent here by onSuccessSigin() below): answer
+    // the forum's SSO handshake without asking for the password again. On
+    // failure the sign in form shows, and signing in answers it instead.
+    mode.value = 'forum';
+    c2c.userProfile
+      .discourseRedirect(query.sso, query.sig!)
+      .then(({ data }) => {
+        window.location.href = data.redirect;
+      })
+      .catch(() => {
+        mode.value = 'signin';
+      });
+  } else {
+    mode.value = 'signin';
+  }
+}
 
-  data() {
-    return {
-      mode: '',
+function isTermsError(error: unknown) {
+  return (
+    errorStatus(error) === 403 &&
+    apiErrors(error).some(({ description }) => description === 'Terms of Service need to be accepted')
+  );
+}
 
-      username: '',
-      password: '',
-      name: '',
-      forum_username: '',
-      email: '',
-      recaptchaAvailable: false,
-      captcha: null,
+function signin() {
+  // sso/sig are only meaningful when we were sent here by Discourse's
+  // own SSO redirect (see the auth-sso route) - forwarded through to
+  // the API, which verifies the signature server-side.
+  const { sso, sig } = (route.name === 'auth-sso' ? route.query : {}) as Record<string, string | undefined>;
 
-      termsAgreed: false,
+  promise.value = $user
+    // undefined until the terms are asked: accept_tos is then not sent
+    .signIn(username.value, password.value, loginTermsAgreed.value as boolean, sso, sig, rememberMe.value)
+    .then(onSuccessSigin)
+    .catch((e) => {
+      loginTermsAgreed.value = isTermsError(e) ? false : undefined;
+    });
+}
 
-      from: null,
-      redirectionStillDone: false,
+function onSuccessSigin(data: { data: { redirect?: string } }) {
+  // present when Discourse itself initiated the SSO handshake (see
+  // signin()) - the user came from there and expects to land back on
+  // it, so this must be a real top-level navigation, not the hidden
+  // iframe trick used below (which wouldn't navigate anywhere, and
+  // could hit third-party cookie restrictions on the Discourse side).
+  mode.value = 'forum';
+  if (data.data.redirect) {
+    window.location.href = data.data.redirect;
+    return;
+  }
 
-      promise: {},
-      loginTermsAgreed: undefined,
-      termsRoute: { name: 'article', params: { id: 106731 } },
-    };
-  },
+  // Open the forum session as well. Discourse binds the SSO nonce to the
+  // browser session that asked for it (discourse_connect_csrf_protection),
+  // so the browser has to start the handshake itself: the forum sends it
+  // to the auth-sso route (see the route entered above), then to its own sso_login, which
+  // sends it back to return_path - provided the forum lists this host in
+  // discourse_connect_allowed_redirect_domains, else it lands on the forum.
+  const target = router.resolve(String(to?.query?.redirect ?? '/')).href;
+  const returnPath = new URL(target, window.location.origin).href;
+  window.location.href = `${config.urls.forum}/session/sso?return_path=${encodeURIComponent(returnPath)}`;
+}
 
-  computed: {
-    showLoginTerms() {
-      return this.loginTermsAgreed !== undefined;
-    },
-  },
+function signup() {
+  promise.value = c2c.userProfile
+    .register({
+      name: username.value,
+      username: username.value,
+      forum_username: forum_username.value,
+      password: password.value,
+      email: email.value,
+      lang: $language.current,
+      captcha: captcha.value,
+    })
+    .then(() => {
+      captcha.value = null;
+      recaptcha.value!.reset();
 
-  watch: {
-    $route: 'load',
-    mode: 'onModeChange',
-  },
+      mode.value = 'verifyEmail';
+    })
+    .catch(() => {
+      captcha.value = null;
+      recaptcha.value!.reset();
+    });
+}
 
-  created() {
-    if (this.$route.name === 'auth-sso') {
-      if (this.$route.query.logout !== undefined) {
-        this.$user.signout();
-      }
-    }
-  },
+function resetPassword() {
+  promise.value = c2c.userProfile
+    .requestPasswordChange(email.value)
+    .then(() => toast({ message: $gettext('Mail has been sent'), type: 'is-danger' }));
+}
 
-  mounted() {
-    this.load();
-  },
+function validateNewPassword() {
+  const nonce = String(route.query.change_password);
 
-  methods: {
-    onModeChange() {
-      this.promise = {};
+  promise.value = c2c.userProfile.validateNewPassword(nonce, password.value).then(() => router.push({ name: 'auth' }));
+}
 
-      switch (this.mode) {
-        case 'signin':
-          this.$nextTick(this.$refs.signinMainInput.focus);
-          break;
-        case 'changePassword':
-          this.$nextTick(this.$refs.changePasswordMainInput.focus);
-          break;
-        case 'resetPassword':
-          this.$nextTick(this.$refs.resetPasswordMainInput.focus);
-          break;
-        case 'signup':
-        case 'verifyEmail':
-          this.$nextTick(this.$refs.signupMainInput.focus);
-          break;
-      }
-    },
+function onCaptchaExpired() {
+  recaptcha.value!.reset();
+}
 
-    load() {
-      if (this.$route.hash) {
-        // keep compatible with v6 AngularJs hacks...
-        this.$router.replace(this.$route.fullPath.replace('#', '?'));
-      }
+function onCaptchaVerify(captchaKey: string) {
+  captcha.value = captchaKey;
+}
 
-      if (this.$route.query.change_password) {
-        // change password mode
-        // mode when user has forgotten his password.
-        // an url is sent to his mail, with an secret param
-        this.mode = 'changePassword';
-      } else if (this.$route.query.validate_change_email) {
-        // when user changes his email.
-        // he receives on his new mail a secret url to validate
-        // that  he is the owner
-        this.mode = 'changeEmail';
-        this.promise = c2c.userProfile.validateChangeEmail(this.$route.query.validate_change_email).then(() => {
-          toast({
-            message: this.$gettext('Your account is now bound to the new email address you filled in.'),
-            type: 'is-primary',
-            duration: 5000,
-            position: 'center',
-            closeOnClick: true,
-          });
-          this.$router.push({ name: 'home' });
-        });
-      } else if (this.$route.query.validate_register_email) {
-        // after account creation
-        this.mode = 'validateAccountCreation';
-        this.promise = c2c.userProfile
-          .validateRegisterEmail(this.$route.query.validate_register_email)
-          .then(() => this.$router.push({ name: 'home' }));
-      } else {
-        this.mode = 'signin';
-      }
-    },
+watch(() => route.fullPath, load);
+watch(mode, onModeChange);
 
-    isTermsError(e) {
-      const { status } = e.response;
-      const { errors } = e.response.data;
-      const messageErrors = errors.map((e) => e.description);
-      return status === 403 && messageErrors.includes('Terms of Service need to be accepted');
-    },
-
-    signin() {
-      // sso/sig are only meaningful when we were sent here by Discourse's
-      // own SSO redirect (see the auth-sso route) - forwarded through to
-      // the API, which verifies the signature server-side.
-      const { sso, sig } = this.$route.name === 'auth-sso' ? this.$route.query : {};
-
-      this.promise = this.$user
-        .signIn(this.username, this.password, this.loginTermsAgreed, sso, sig)
-        .then(this.onSuccessSigin)
-        .catch((e) => {
-          this.loginTermsAgreed = this.isTermsError(e) ? false : undefined;
-        });
-    },
-
-    onSuccessSigin(data) {
-      // present when Discourse itself initiated the SSO handshake (see
-      // signin()) - the user came from there and expects to land back on
-      // it, so this must be a real top-level navigation, not the hidden
-      // iframe trick used below (which wouldn't navigate anywhere, and
-      // could hit third-party cookie restrictions on the Discourse side).
-      if (data.data.redirect) {
-        window.location = data.data.redirect;
-        return;
-      }
-
-      const discourse_url = data.data.redirect_internal;
-
-      if (discourse_url) {
-        // dirty way to SSO...
-        // if somebody wants to implement a better solution, feel free
-        // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/auth/auth.js
-        const iframe = document.createElement('iframe');
-        const sandbox = document.createAttribute('sandbox');
-
-        sandbox.value = 'allow-same-origin';
-        iframe.style.display = 'none';
-        iframe.setAttributeNode(sandbox);
-        iframe.src = discourse_url;
-
-        // 10s to complete discourse authentication
-        window.setTimeout(this.redirect, 10000);
-        iframe.addEventListener('load', this.redirect);
-
-        this.promise.loading = true;
-        document.body.appendChild(iframe);
-      } else {
-        this.redirect();
-      }
-    },
-
-    redirect() {
-      // redirect() may be called twice
-      if (!this.redirectionStillDone) {
-        this.redirectionStillDone = true;
-        this.$router.push(this.to?.query?.redirect ?? '/');
-      }
-    },
-
-    signup() {
-      this.promise = c2c.userProfile
-        .register({
-          name: this.username,
-          username: this.username,
-          forum_username: this.forum_username,
-          password: this.password,
-          email: this.email,
-          lang: this.$language.current,
-          captcha: this.captcha,
-        })
-        .then(() => {
-          this.captcha = null;
-          this.$refs.recaptcha.reset();
-
-          this.mode = 'verifyEmail';
-        })
-        .catch(() => {
-          this.captcha = null;
-          this.$refs.recaptcha.reset();
-        });
-    },
-
-    resetPassword() {
-      this.promise = c2c.userProfile
-        .requestPasswordChange(this.email)
-        .then(() => toast({ message: this.$gettext('Mail has been sent'), type: 'is-danger' }));
-    },
-
-    validateNewPassword() {
-      const password = this.password;
-      const nonce = this.$route.query.change_password;
-
-      this.promise = c2c.userProfile
-        .validateNewPassword(nonce, password)
-        .then(() => this.$router.push({ name: 'auth' }));
-    },
-
-    onCaptchaExpired() {
-      this.$refs.recaptcha.reset();
-    },
-
-    onCaptchaVerify(captchaKey) {
-      this.captcha = captchaKey;
-    },
-  },
-};
+onMounted(load);
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .login-view {
   height: 100%;
   align-items: center;
@@ -459,6 +438,17 @@ export default {
   form {
     width: 100%;
     padding: 1.5rem;
+  }
+}
+
+.forum-sso {
+  width: 100%;
+  padding: 1.5rem;
+
+  .button {
+    border: none;
+    background: transparent;
+    pointer-events: none;
   }
 }
 </style>

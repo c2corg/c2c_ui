@@ -3,64 +3,53 @@
     class="button edit-mode-button ol-control-edit-mode"
     :class="{ 'is-dark': editMode, 'is-small': isSmall }"
     :title="$gettext('Enable drawing and editing features on map')"
-    :aria-label="iconOnly ? $gettext('Enable drawing and editing features on map') : null"
+    :aria-label="iconOnly ? $gettext('Enable drawing and editing features on map') : undefined"
   >
-    <input-checkbox @input="onEditMode" :value="editMode" :disabled="validSimplifyTolerance">
+    <input-checkbox @update:model-value="onEditMode" :model-value="editMode" :disabled="validSimplifyTolerance">
       <span v-if="!iconOnly" v-translate> Edit mode </span>
       <fa-icon icon="pen" class="ml-1" />
     </input-checkbox>
   </button>
 </template>
 
-<script>
-import Yetix from '@/components/yeti/Yetix';
+<script setup lang="ts">
+import { computed } from 'vue';
 
-export default {
-  props: {
-    isSmall: {
-      type: Boolean,
-      default: false,
-    },
-    iconOnly: {
-      type: Boolean,
-      default: false,
-    },
+import { useYetixStore } from '@/components/yeti/yetix';
+
+const Yetix = useYetixStore();
+
+defineProps({
+  isSmall: {
+    type: Boolean,
+    default: false,
   },
-  computed: {
-    editMode() {
-      return Yetix.editMode;
-    },
-    validSimplifyTolerance() {
-      return Yetix.validSimplifyTolerance;
-    },
+  iconOnly: {
+    type: Boolean,
+    default: false,
   },
-  methods: {
-    onEditMode() {
-      Yetix.setEditMode(!this.editMode);
-    },
-  },
-};
+});
+
+const editMode = computed(() => Yetix.editMode);
+
+const validSimplifyTolerance = computed(() => Yetix.validSimplifyTolerance);
+
+function onEditMode() {
+  Yetix.setEditMode(!editMode.value);
+}
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .edit-mode-button {
   padding-left: 0.25em;
   padding-right: 0.25em;
   .input-checkbox {
     padding: 0;
   }
-  .is-checkradio[type='checkbox'] + label {
-    margin-right: 0;
-    vertical-align: baseline;
-
-    &:before {
-      top: 1px;
-    }
-  }
 }
 </style>
 
-<style lang="scss">
+<style>
 .edit-mode-button {
   .input-checkbox {
     padding: 0;

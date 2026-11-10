@@ -75,19 +75,15 @@
   </div>
 </template>
 
-<script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import { computed } from 'vue';
 
-export default {
-  mixins: [requireDocumentProperty],
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { documentProperty } from '@/js/properties';
 
-  computed: {
-    // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/templates/utils/__init__.py#L47
-    // collaborative means CC-By-Sa
+const props = defineProps({ ...documentProperty });
 
-    license() {
-      return this.$documentUtils.getDocumentLicense(this.document);
-    },
-  },
-};
+const { $documentUtils } = useGlobalProperties();
+
+const license = computed(() => $documentUtils.getDocumentLicense(props.document));
 </script>

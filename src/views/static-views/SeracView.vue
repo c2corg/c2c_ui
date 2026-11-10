@@ -92,7 +92,7 @@
             <div class="columns is-multiline is-mobile serac-activities">
               <topoguide-view-small-link
                 class="column topoguide-view-small-link"
-                v-for="eventActivity of $options.event_activities"
+                v-for="eventActivity of eventActivities"
                 :key="eventActivity"
                 :to="{ name: 'xreports', query: { act: eventActivity } }"
               >
@@ -109,27 +109,21 @@
   </div>
 </template>
 
-<script>
-import TopoguideViewSmallLink from './TopoguideViewSmallLink';
+<script setup lang="ts">
+import TopoguideViewSmallLink from './TopoguideViewSmallLink.vue';
 
 import constants from '@/js/constants';
 
-export default {
-  components: {
-    TopoguideViewSmallLink,
-  },
-
-  event_activities: constants.event_activities,
-};
+const eventActivities = constants.event_activities;
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .serac-view {
   background-image: url('@/assets/img/backgrounds/cermygian-crevasse-800w.jpg');
   background-size: cover;
   background-position: center;
   min-height: 100%;
-  // 1224px because after 1024px breakpoint, we have an additional 200px wide menu on the left
+  /* 1224px because after 1024px breakpoint, we have an additional 200px wide menu on the left */
   @media (min-width: 800px) and (max-width: 1224px) {
     background-image: url('@/assets/img/backgrounds/cermygian-crevasse-1024w.jpg');
   }

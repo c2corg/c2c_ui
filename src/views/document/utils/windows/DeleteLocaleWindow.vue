@@ -8,36 +8,38 @@
   </modal-confirmation>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, useTemplateRef } from 'vue';
+import { useRouter } from 'vue-router';
+
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
-export default {
-  mixins: [requireDocumentProperty],
-
-  props: {
-    localeLang: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  ...documentProperty,
+  localeLang: {
+    type: String,
+    required: true,
   },
+});
 
-  data() {
-    return {
-      promise: null,
-    };
-  },
+const router = useRouter();
+const { documentType } = useDocumentType(props);
 
-  methods: {
-    show() {
-      this.$refs.modalWindow.show();
-    },
+const promise = ref<ApiData | null>(null);
+const modalWindowRef = useTemplateRef<{ show(): void; hide(): void }>('modalWindow');
 
-    executeDelete() {
-      this.promise = c2c.moderator.deleteLocale(this.document.document_id, this.localeLang).then(() => {
-        this.$router.push({ name: this.documentType, id: this.document.document_id });
-      });
-    },
-  },
-};
+function show() {
+  modalWindowRef.value!.show();
+}
+
+// shown by ToolBox / DocumentVersionBanner through their template refs
+defineExpose({ show });
+
+function executeDelete() {
+  promise.value = c2c.moderator.deleteLocale(props.document.document_id!, props.localeLang).then(() => {
+    router.push({ name: documentType.value, params: { id: props.document.document_id } });
+  });
+}
 </script>

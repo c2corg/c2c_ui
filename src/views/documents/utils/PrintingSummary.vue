@@ -14,31 +14,30 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    documents: {
-      type: Object,
-      default: null,
-    },
-    promises: {
-      type: Array,
-      default: null,
-    },
-    documentType: {
-      type: String,
-      default: 'route',
-    },
-  },
+<script setup lang="ts">
+import type { PropType } from 'vue';
 
-  emits: ['summary-click'],
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-  methods: {
-    sendSummaryClick(index) {
-      this.$emit('summary-click', index);
-    },
+defineProps({
+  documents: {
+    type: Object as PropType<{ documents: C2cDocument[] } | null>,
+    default: null,
   },
-};
+  promises: {
+    type: Array,
+    default: null,
+  },
+  documentType: {
+    type: String,
+    default: 'route',
+  },
+});
+const emit = defineEmits(['summary-click']);
+
+function sendSummaryClick(index: number) {
+  emit('summary-click', index);
+}
 </script>
 
 <style scoped>

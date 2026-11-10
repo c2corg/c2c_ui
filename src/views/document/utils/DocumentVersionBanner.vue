@@ -59,44 +59,35 @@
       <contributor-link :contributor="version" /> : <em>{{ version.comment }}</em>
     </p>
     <p v-if="$user.isModerator">
-      <button
-        v-if="!isLastVersion"
-        @click="$refs.restoreVersionConfirmationWindow.show()"
-        class="button is-primary"
-        v-translate
-      >
+      <button v-if="!isLastVersion" @click="restoreWindow?.show()" class="button is-primary" v-translate>
         Restore this version
       </button>
     </p>
 
-    <revert-version-window ref="restoreVersionConfirmationWindow" :document="document" :lang="document.cooked.lang" />
+    <revert-version-window ref="restoreWindow" :document="document" :lang="document.cooked.lang" />
   </div>
 </template>
 
-<script>
-import RevertVersionWindow from './windows/RevertVersionWindow';
+<script setup lang="ts">
+import { computed, useTemplateRef } from 'vue';
 
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import RevertVersionWindow from './windows/RevertVersionWindow.vue';
 
-export default {
-  components: { RevertVersionWindow },
+import { cookedDocumentProperty, useDocumentType } from '@/js/properties';
 
-  mixins: [requireDocumentProperty],
-
-  props: {
-    version: {
-      type: Object,
-      default: null,
-    },
+const props = defineProps({
+  ...cookedDocumentProperty,
+  version: {
+    type: Object,
+    default: null,
   },
+});
 
-  computed: {
-    isFirstVersion() {
-      return !this.version.previous_version_id;
-    },
-    isLastVersion() {
-      return !this.version.next_version_id;
-    },
-  },
-};
+const { documentType } = useDocumentType(props);
+
+const restoreWindow = useTemplateRef<InstanceType<typeof RevertVersionWindow>>('restoreWindow');
+
+const isFirstVersion = computed(() => !props.version.previous_version_id);
+
+const isLastVersion = computed(() => !props.version.next_version_id);
 </script>

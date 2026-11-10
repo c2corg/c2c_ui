@@ -38,30 +38,32 @@
       </info>
 
       <table class="yetiform-danger">
-        <tr>
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level1" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - low</strong></td>
-          <td v-translate>I must not use slopes > 40°</td>
-        </tr>
-        <tr>
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level2" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - moderate</strong></td>
-          <td v-translate>I must not use slopes > 35°</td>
-        </tr>
-        <tr class="multiline">
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level3" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - considerable</strong></td>
-          <td>
-            <span v-translate>I must not use slopes > 30°</span>
-            <br />
-            <small v-translate>including dominant slopes</small>
-          </td>
-        </tr>
-        <tr>
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level4" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - high to very high</strong></td>
-          <td v-translate>I choose to cancel the outing</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level1" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - low</strong></td>
+            <td v-translate>I must not use slopes > 40°</td>
+          </tr>
+          <tr>
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level2" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - moderate</strong></td>
+            <td v-translate>I must not use slopes > 35°</td>
+          </tr>
+          <tr class="multiline">
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level3" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - considerable</strong></td>
+            <td>
+              <span v-translate>I must not use slopes > 30°</span>
+              <br />
+              <small v-translate>including dominant slopes</small>
+            </td>
+          </tr>
+          <tr>
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level4" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - high to very high</strong></td>
+            <td v-translate>I choose to cancel the outing</td>
+          </tr>
+        </tbody>
       </table>
     </div>
 
@@ -75,8 +77,8 @@
       </p>
 
       <input-orientation
-        :value="method.orientation"
-        @input="onChange($event, 'orientation')"
+        :model-value="method.orientation"
+        @update:model-value="onChange($event, 'orientation')"
         class="has-text-centered mb-2"
       />
 
@@ -95,43 +97,45 @@
       </info>
 
       <table class="yetiform-danger">
-        <tr class="multiline">
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level1" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - low</strong></td>
-          <td>
-            <span v-translate>Stay careful while skiing</span>
-            <br />
-            <small v-translate>risk of a rough fall on hard snow</small>
-          </td>
-        </tr>
-        <tr>
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level2" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - moderate</strong></td>
-          <td v-translate>I must not use slopes > 40°</td>
-        </tr>
-        <tr class="multiline">
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level3" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - considerable</strong></td>
-          <td>
-            <span v-translate>I must not use slopes > 35°</span>
-            <br />
-            <small v-translate>including dominant slopes</small>
-          </td>
-        </tr>
-        <tr class="multiline">
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level4" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - high</strong></td>
-          <td>
-            <span v-translate>I must not use slopes > 30°</span>
-            <br />
-            <small v-translate>including dominant slopes</small>
-          </td>
-        </tr>
-        <tr>
-          <td><img src="@/assets/img/yeti/levels-danger.svg#level4" loading="lazy" /></td>
-          <td><strong v-translate>Danger rating - very high</strong></td>
-          <td v-translate>I choose to cancel the outing</td>
-        </tr>
+        <tbody>
+          <tr class="multiline">
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level1" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - low</strong></td>
+            <td>
+              <span v-translate>Stay careful while skiing</span>
+              <br />
+              <small v-translate>risk of a rough fall on hard snow</small>
+            </td>
+          </tr>
+          <tr>
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level2" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - moderate</strong></td>
+            <td v-translate>I must not use slopes > 40°</td>
+          </tr>
+          <tr class="multiline">
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level3" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - considerable</strong></td>
+            <td>
+              <span v-translate>I must not use slopes > 35°</span>
+              <br />
+              <small v-translate>including dominant slopes</small>
+            </td>
+          </tr>
+          <tr class="multiline">
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level4" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - high</strong></td>
+            <td>
+              <span v-translate>I must not use slopes > 30°</span>
+              <br />
+              <small v-translate>including dominant slopes</small>
+            </td>
+          </tr>
+          <tr>
+            <td><img src="@/assets/img/yeti/levels-danger.svg#level4" loading="lazy" /></td>
+            <td><strong v-translate>Danger rating - very high</strong></td>
+            <td v-translate>I choose to cancel the outing</td>
+          </tr>
+        </tbody>
       </table>
     </div>
 
@@ -149,8 +153,10 @@
         <li
           v-for="label of potentialDangerLabels"
           :key="label.text"
-          :disabled="!bra.high || label.text < potentialDangerOptions.min || label.text > potentialDangerOptions.max"
-          :selected="method.potentialDanger == label.text"
+          :disabled="
+            !bra.high || label.text < potentialDangerOptions.min || label.text > potentialDangerOptions.max || null
+          "
+          :selected="method.potentialDanger == label.text || null"
           class="potential-danger-label is-size-5"
           @click="onChange(label.text, 'potentialDanger')"
         >
@@ -178,7 +184,7 @@
       </info>
 
       <p>
-        <input-checkbox :value="method.wetSnow" @input="onChange($event, 'wetSnow')">
+        <input-checkbox :model-value="method.wetSnow" @update:model-value="onChange($event, 'wetSnow')">
           <span v-translate>Wet snow: orientation not taken into account</span>
         </input-checkbox>
       </p>
@@ -225,10 +231,15 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, watch } from 'vue';
+
 import Info from '@/components/yeti/Info.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import Yetix from '@/components/yeti/Yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
+import { useGlobalProperties } from '@/js/composables/global-properties';
+
+const Yetix = useYetixStore();
 
 const DANGER = {
   min: 1,
@@ -241,89 +252,64 @@ const DANGER = {
   ],
 };
 
-export default {
-  components: { Info, SubPanelTitle },
-  emits: ['warn-about-method-bra'],
+const emit = defineEmits(['warn-about-method-bra']);
 
-  data() {
-    return {
-      methods: {
-        mrd: ['MRD', this.$gettext('Beginner')],
-        mre: ['MRE', this.$gettext('Elementary')],
-        mrp: ['MRP', this.$gettext('Expert')],
-      },
-      groupSizes: [
-        {
-          value: 1,
-          text: this.$gettext('No reduction factor'),
-        },
-        {
-          value: 2.1,
-          text: this.$gettext('Large group with load shedding distance'),
-        },
-        {
-          value: 2.2,
-          text: this.$gettext('Small group without distance'),
-        },
-        {
-          value: 3,
-          text: this.$gettext('Small group with load shedding distance'),
-        },
-      ],
-    };
-  },
-  computed: {
-    bra() {
-      return Yetix.bra;
-    },
-    method() {
-      return Yetix.method;
-    },
-    potentialDangerLabels() {
-      const result = [];
-      for (let i = DANGER.min; i <= DANGER.max; i++) {
-        const data = { text: i };
-        if (i === 2 || i === 4 || i === 8 || i === 16) {
-          data.val = i;
-        }
-        result.push(data);
-      }
+const { $gettext } = useGlobalProperties();
 
-      return result;
-    },
-    potentialDangerOptions() {
-      if (!this.bra.high) {
-        return { val: undefined, min: 1, max: 16 };
-      }
-
-      return DANGER.bra[this.bra.high - 1];
-    },
-  },
-  watch: {
-    'bra.high': 'onBraChange',
-  },
-  methods: {
-    onChange(event, prop) {
-      let value = null;
-      if (prop === 'orientation' || prop === 'wetSnow' || prop === 'potentialDanger') {
-        value = event;
-      } else {
-        value = event.target.value;
-      }
-      Yetix.setMethod(prop, value);
-    },
-    warnAboutMethodBra(item) {
-      this.$emit('warn-about-method-bra', item);
-    },
-    onBraChange() {
-      this.onChange(this.potentialDangerOptions.val, 'potentialDanger');
-    },
-  },
+const methods: Record<string, [string, string]> = {
+  mrd: ['MRD', $gettext('Beginner')],
+  mre: ['MRE', $gettext('Elementary')],
+  mrp: ['MRP', $gettext('Expert')],
 };
+const groupSizes = [
+  {
+    value: 1,
+    text: $gettext('No reduction factor'),
+  },
+  {
+    value: 2.1,
+    text: $gettext('Large group with load shedding distance'),
+  },
+  {
+    value: 2.2,
+    text: $gettext('Small group without distance'),
+  },
+  {
+    value: 3,
+    text: $gettext('Small group with load shedding distance'),
+  },
+];
+
+const bra = computed(() => Yetix.bra);
+const method = computed(() => Yetix.method);
+const potentialDangerLabels = Array.from({ length: DANGER.max - DANGER.min + 1 }, (_, index) => {
+  const i = DANGER.min + index;
+  return [2, 4, 8, 16].includes(i) ? { text: i, val: i } : { text: i };
+});
+const potentialDangerOptions = computed(() =>
+  bra.value.high ? DANGER.bra[bra.value.high - 1] : { val: undefined, min: 1, max: 16 }
+);
+
+function onChange(event: unknown, prop: Parameters<typeof Yetix.setMethod>[0]) {
+  const value =
+    prop === 'orientation' || prop === 'wetSnow' || prop === 'potentialDanger'
+      ? event
+      : (event as Event & { target: HTMLInputElement }).target.value;
+  Yetix.setMethod(prop, value);
+}
+
+function warnAboutMethodBra(item: unknown) {
+  emit('warn-about-method-bra', item);
+}
+
+watch(
+  () => bra.value.high,
+  () => onChange(potentialDangerOptions.value.val, 'potentialDanger')
+);
 </script>
 
-<style scoped lang="scss">
-@import '@/assets/sass/variables';
+<style scoped>
+@import '@/assets/css/media.css';
 
 p:not(:last-child),
 ul:not(:last-child),
@@ -334,10 +320,10 @@ table:not(:last-child) {
 .yetiform-danger {
   width: 100%;
   table-layout: fixed;
-  color: $dark;
+  color: var(--c2c-dark);
 
   tr + tr {
-    border-top: 1px solid $grey-lighter;
+    border-top: 1px solid var(--c2c-grey-lighter);
   }
 
   td {
@@ -383,7 +369,7 @@ table:not(:last-child) {
 
     &:hover,
     &:focus {
-      border-color: $grey-lighter;
+      border-color: var(--c2c-grey-lighter);
     }
 
     &.yetitab-label:before {
@@ -399,21 +385,21 @@ table:not(:last-child) {
 
 .yetitab-control--selected {
   .yetitab-label {
-    color: $primary;
-    border-color: $primary;
+    color: var(--c2c-primary);
+    border-color: var(--c2c-primary);
 
     &:hover,
     &:focus {
-      border-color: $primary;
+      border-color: var(--c2c-primary);
     }
   }
 }
 
 @media screen and (max-width: 490px),
-  screen and (min-width: $tablet) and (max-width: 970px),
-  screen and (min-width: $desktop) and (max-width: 1180px),
-  screen and (min-width: $widescreen) and (max-width: 1370px),
-  screen and (min-width: $fullhd) and (max-width: 1650px) {
+  screen and (--c2c-min-tablet) and (max-width: 970px),
+  screen and (--c2c-min-desktop) and (max-width: 1180px),
+  screen and (--c2c-min-widescreen) and (max-width: 1370px),
+  screen and (--c2c-min-fullhd) and (max-width: 1650px) {
   .yetitabs {
     flex-wrap: wrap;
   }

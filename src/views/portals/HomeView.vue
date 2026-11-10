@@ -82,67 +82,51 @@
   </div>
 </template>
 
-<script>
-import DfmAdSmall from '../DfmAdSmall';
+<script setup lang="ts">
+import { ref } from 'vue';
 
-import HomeBanner from './HomeBanner';
-import BoardAnnouncementWidget from './utils/BoardAnnoucementWidget';
-import DashboardArticlesList from './utils/DashboardArticlesList';
-import DashboardImagesGallery from './utils/DashboardImagesGallery';
-import DashboardOutingsList from './utils/DashboardOutingsList';
-import DashboardRoutesList from './utils/DashboardRoutesList';
-import ForumWidget from './utils/ForumWidget';
-import UsefulLinks from './utils/UsefulLinks';
+import DfmAdSmall from '../DfmAdSmall.vue';
 
-import FeedWidget from '@/components/feed-widget/FeedWidget';
+import HomeBanner from './HomeBanner.vue';
+import BoardAnnouncementWidget from './utils/BoardAnnoucementWidget.vue';
+import DashboardArticlesList from './utils/DashboardArticlesList.vue';
+import DashboardImagesGallery from './utils/DashboardImagesGallery.vue';
+import DashboardOutingsList from './utils/DashboardOutingsList.vue';
+import DashboardRoutesList from './utils/DashboardRoutesList.vue';
+import ForumWidget from './utils/ForumWidget.vue';
+import UsefulLinks from './utils/UsefulLinks.vue';
+
+import FeedWidget from '@/components/feed-widget/FeedWidget.vue';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 
 // stored under the component name, as before: existing preferences are kept
 const preferences = getPreferences('HomeView');
 
-export default {
-  name: 'HomeView',
+const { $user } = useGlobalProperties();
 
-  components: {
-    DfmAdSmall,
-    HomeBanner,
-    BoardAnnouncementWidget,
-    DashboardArticlesList,
-    DashboardImagesGallery,
-    DashboardOutingsList,
-    DashboardRoutesList,
-    ForumWidget,
-    UsefulLinks,
-    FeedWidget,
-  },
-
-  data() {
-    let state = true;
-
-    if (this.$user.isLogged) {
-      state = false;
-    }
-    return {
-      isPersonal: preferences.get('isPersonal', false),
-      feed: preferences.get('feed', false),
-      visible: state,
-    };
-  },
-
-  methods: {
-    toggleProperty(property) {
-      this.setProperty(property, !this[property]);
-    },
-    setProperty(property, value) {
-      this[property] = value;
-      preferences.set(`${property}`, this[property]);
-    },
-  },
+// the toggles of the page, stored when changed (the banner is shown to the visitors, hidden to the users)
+const toggles = {
+  isPersonal: ref<boolean>(preferences.get('isPersonal', false)),
+  feed: ref<boolean>(preferences.get('feed', false)),
+  visible: ref(!$user.isLogged),
 };
+const { isPersonal, feed, visible } = toggles;
+
+function toggleProperty(property: keyof typeof toggles) {
+  setProperty(property, !toggles[property].value);
+}
+
+function setProperty(property: keyof typeof toggles, value: boolean) {
+  toggles[property].value = value;
+  preferences.set(`${property}`, value);
+}
 </script>
 
-<style scoped lang="scss">
-@media screen and (max-width: $tablet) {
+<style scoped>
+@import '@/assets/css/media.css';
+
+@media screen and (--c2c-max-tablet) {
   .feed-view {
     padding-left: 0;
     padding-right: 0;
@@ -173,9 +157,9 @@ export default {
   }
 }
 
-@media screen and (min-width: $tablet) {
+@media screen and (--c2c-min-tablet) {
   .feed-view {
-    margin-top: $size-3;
+    margin-top: var(--c2c-size-3);
   }
 
   .field {
@@ -193,11 +177,11 @@ export default {
 }
 
 .intro {
-  margin-bottom: $size-6;
+  margin-bottom: var(--c2c-size-6);
 }
 
 .switch[type='checkbox']:checked + label::before {
-  background: $color-base-c2c;
+  background: var(--c2c-color-base-c2c);
 }
 
 .toggleCheckbox {
@@ -208,7 +192,7 @@ export default {
   position: relative;
   border-radius: 20px;
   background: white;
-  border: 1px solid $color-base-c2c;
+  border: 1px solid var(--c2c-color-base-c2c);
   padding: 5px 2px;
   cursor: pointer;
 }
@@ -216,7 +200,7 @@ export default {
 .is-active {
   color: white;
   border-radius: 20px;
-  background: $color-base-c2c;
+  background: var(--c2c-color-base-c2c);
   transition: color 0.3s;
 }
 
@@ -233,6 +217,6 @@ export default {
 }
 
 .ams-ad {
-  margin-bottom: $size-7;
+  margin-bottom: var(--c2c-size-7);
 }
 </style>

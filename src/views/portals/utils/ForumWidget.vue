@@ -18,7 +18,9 @@
           rel="noopener"
           :title="topic.last_poster_username"
         >
+          <!-- no avatar when the last poster is missing from the users of the answer -->
           <img
+            v-if="topic.last_poster_user"
             :src="getAvatarUrl(topic.last_poster_user)"
             :style="'width:' + imgSize + 'px'"
             loading="lazy"
@@ -39,8 +41,20 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
 import forum from '@/js/apis/forum';
+
+// a topic of the latest ones, as the widget reads it
+type Topic = {
+  id: number;
+  slug: string;
+  title: string;
+  highest_post_number: number;
+  last_poster_username: string;
+  last_poster_user?: { username: string; avatar_template: string };
+};
 
 const EXCLUDED_CATEGORIES = [
   // https://forum.camptocamp.org/c/comments
@@ -105,63 +119,48 @@ const EXCLUDED_CATEGORIES = [
   146,
 ];
 
-export default {
-  props: {
-    wide: {
-      type: Boolean,
-      default: false,
-    },
-    messageCount: {
-      type: Number,
-      default: -1,
-    },
+const props = defineProps({
+  wide: {
+    type: Boolean,
+    default: false,
   },
-
-  data() {
-    return {
-      promise: null,
-    };
+  messageCount: {
+    type: Number,
+    default: -1,
   },
+});
 
-  computed: {
-    topics() {
-      if (!this.promise?.data) {
-        return null;
-      }
+const promise = forum.getLatest(EXCLUDED_CATEGORIES);
 
-      let topics = this.promise.data.topic_list.topics;
+const topics = computed(() => {
+  if (!promise.data) {
+    return null;
+  }
 
-      if (this.messageCount >= 0) {
-        topics = topics.slice(0, this.messageCount);
-      }
+  let topics = promise.data.topic_list.topics as Topic[];
 
-      return topics;
-    },
-    imgSize() {
-      return this.wide ? 24 : 20;
-    },
-  },
+  if (props.messageCount >= 0) {
+    topics = topics.slice(0, props.messageCount);
+  }
 
-  created() {
-    this.promise = forum.getLatest(EXCLUDED_CATEGORIES);
-  },
+  return topics;
+});
 
-  methods: {
-    getAvatarUrl(user) {
-      return forum.getAvatarUrl(user, this.imgSize);
-    },
+const imgSize = computed(() => (props.wide ? 24 : 20));
 
-    getTopicUrl(topic) {
-      return `${forum.url}/t/${topic.slug}/${topic.id}/${topic.highest_post_number}`;
-    },
-  },
-};
+function getAvatarUrl(user: { avatar_template: string }) {
+  return forum.getAvatarUrl(user, imgSize.value);
+}
+
+function getTopicUrl(topic: Topic) {
+  return `${forum.url}/t/${topic.slug}/${topic.id}/${topic.highest_post_number}`;
+}
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .forum-row {
   display: flex;
-  color: $text;
+  color: var(--c2c-text);
   padding-bottom: 0.2rem;
 
   img {
@@ -177,13 +176,13 @@ export default {
 }
 
 .forum-row:hover {
-  background: $hover-background;
+  background: var(--c2c-hover-background);
 }
 
 .wide {
   .forum-row {
     padding: 1rem;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--c2c-grey-lightest);
 
     img {
       margin-right: 0.5rem;
@@ -199,11 +198,11 @@ export default {
 
 h4 > a,
 h6 > a {
-  color: $color-text !important;
+  color: var(--c2c-color-text) !important;
 }
 
 h4 > a:hover,
 h6 > a:hover {
-  color: $color-link !important;
+  color: var(--c2c-color-link) !important;
 }
 </style>

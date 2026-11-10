@@ -1,46 +1,84 @@
 <template>
   <swiper-container slides-per-view="auto" space-between="15" class="swiper">
-    <swiper-slide style="height: 200px" v-for="image of images" :key="image.document_id">
+    <swiper-slide
+      v-for="(image, index) of images"
+      :key="image.document_id"
+      :style="{ height: SLIDE_HEIGHT + 'px', width: slideWidth(image) }"
+    >
       <thumbnail
         :img="image"
         size="MI"
         :alt="image.locales[0].title"
         :title="image.locales[0].title"
         @click="$imageViewer.show(image)"
-        loading="lazy"
+        :loading="priority && index < ($screen.isMobile ? 2 : 4) ? 'eager' : 'lazy'"
+        :fetchpriority="priority && index === 0 ? 'high' : undefined"
       />
     </swiper-slide>
   </swiper-container>
 </template>
 
-<script>
-export default {
-  props: {
-    images: {
-      type: Array,
-      required: true,
-    },
-  },
+<script setup lang="ts">
+import { watch, type PropType } from 'vue';
 
-  watch: {
-    images: function () {
-      this.images.forEach(this.$imageViewer.push);
-    },
-  },
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import '@/js/swiper-element';
 
-  created() {
-    this.images.forEach(this.$imageViewer.push);
-  },
+type GalleryImage = {
+  document_id: number;
+  filename?: string;
+  locales: { title?: string | null }[];
+  width?: number | null;
+  height?: number | null;
 };
+
+const SLIDE_HEIGHT = 200;
+
+// the width of an image at the height of the slides, when the API gives its size: the slide keeps it while the image
+// loads, instead of growing from nothing and pushing the next ones (#4883)
+function slideWidth(image: GalleryImage) {
+  return image.width && image.height ? `${Math.round((SLIDE_HEIGHT * image.width) / image.height)}px` : undefined;
+}
+
+const props = defineProps({
+  images: {
+    type: Array as PropType<GalleryImage[]>,
+    required: true,
+  },
+  // the gallery is at the top of the page (outings): its first images are seen as soon as the page shows, and one of
+  // them is its largest contentful paint, while lazy images wait for the layout, after the scripts. The slides the
+  // screen shows at once load right away (2 on a phone, 4 on a wider screen; the widest image, often not the first,
+  // is the largest), the first one with a high priority
+  priority: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const { $imageViewer } = useGlobalProperties();
+
+// deep 1: also when images are added to the array (uploads), as Vue 2 array watchers did
+watch(
+  () => props.images,
+  () => props.images.forEach($imageViewer.push),
+  { deep: 1, immediate: true }
+);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+/* the width of its box, also as a flex item (card rows): its minimum width would otherwise be the width of all the */
+/* slides, which have the width of their image since the API gives the image sizes, and it would overflow the card */
+swiper-container {
+  width: 100%;
+  min-width: 0;
+}
+
 swiper-slide {
   height: 200px;
   width: auto;
   cursor: pointer;
 
-  picture::v-deep img {
+  picture :deep(img) {
     height: 200px;
   }
 }

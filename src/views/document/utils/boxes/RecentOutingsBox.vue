@@ -27,77 +27,84 @@
   </div>
 </template>
 
-<script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
-import viewModeMixin from '@/js/view-mode-mixin';
+<script setup lang="ts">
+import { computed } from 'vue';
 
-export default {
-  mixins: [requireDocumentProperty, viewModeMixin],
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { useViewMode } from '@/js/composables/view-mode';
+import { documentProperty, useDocumentType } from '@/js/properties';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-  props: {
-    hideSeeAllResultsButton: {
-      type: Boolean,
-      default: false,
-    },
-    includeEmptyOutings: {
-      type: Boolean,
-      default: false,
-    },
+const props = defineProps({
+  ...documentProperty,
+  hideSeeAllResultsButton: {
+    type: Boolean,
+    default: false,
   },
-
-  computed: {
-    outings() {
-      let outings = this.document.associations.recent_outings?.documents || this.document.associations.outings;
-
-      if (this.includeEmptyOutings) {
-        return outings;
-      } else {
-        return outings.filter((outing) => outing.quality !== 'empty');
-      }
-    },
-
-    totalOutings() {
-      return this.document.associations.recent_outings?.total || this.outings.length;
-    },
-
-    addOutingQuery() {
-      const query = {};
-
-      if (this.documentType === 'waypoint') {
-        const bbox = this.$documentUtils.getDocumentsBbox(this.document.associations.all_routes.documents);
-        query.initial_bbox = bbox?.join(',');
-      } else if (this.documentType === 'route') {
-        query[this.document.type] = this.document.document_id;
-      }
-
-      return query;
-    },
-
-    allOutingsQuery() {
-      const query = {};
-      query[this.document.type] = this.document.document_id;
-      return query;
-    },
-
-    showAddOutingButton() {
-      // if the document is a route, we can add an outing directly linked to the route
-      if (this.documentType === 'route') {
-        return true;
-      }
-
-      // if the document is a waypoint, and if it has associated route, then the outing form
-      // will propose routes in the extent of the waypoint (see initial_bbox query above)
-      if (this.documentType === 'waypoint' && this.document.associations.all_routes.total !== 0) {
-        return true;
-      }
-
-      return false;
-    },
+  includeEmptyOutings: {
+    type: Boolean,
+    default: false,
   },
-};
+});
+
+const { $documentUtils } = useGlobalProperties();
+const { documentType } = useDocumentType(props);
+const { isDraftView } = useViewMode();
+
+// the outings of a document, and for a waypoint the routes of the area: a page of the documents, and their total
+type Page = { documents: C2cDocument[]; total: number };
+const associations = computed(
+  () => props.document.associations as { outings?: C2cDocument[]; recent_outings?: Page; all_routes?: Page }
+);
+
+const outings = computed(() => {
+  const outings = associations.value.recent_outings?.documents || associations.value.outings || [];
+
+  if (props.includeEmptyOutings) {
+    return outings;
+  } else {
+    return outings.filter((outing) => outing.quality !== 'empty');
+  }
+});
+
+const totalOutings = computed(() => associations.value.recent_outings?.total || outings.value.length);
+
+const addOutingQuery = computed(() => {
+  const query: Record<string, string | number | undefined> = {};
+
+  if (documentType.value === 'waypoint') {
+    const bbox = $documentUtils.getDocumentsBbox(associations.value.all_routes!.documents);
+    query.initial_bbox = bbox?.join(',');
+  } else if (documentType.value === 'route') {
+    query[props.document.type!] = props.document.document_id;
+  }
+
+  return query;
+});
+
+const allOutingsQuery = computed(() => {
+  const query: Record<string, number | undefined> = {};
+  query[props.document.type!] = props.document.document_id;
+  return query;
+});
+
+const showAddOutingButton = computed(() => {
+  // if the document is a route, we can add an outing directly linked to the route
+  if (documentType.value === 'route') {
+    return true;
+  }
+
+  // if the document is a waypoint, and if it has associated route, then the outing form
+  // will propose routes in the extent of the waypoint (see initial_bbox query above)
+  if (documentType.value === 'waypoint' && associations.value.all_routes!.total !== 0) {
+    return true;
+  }
+
+  return false;
+});
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .button {
   vertical-align: bottom;
   margin-left: 1rem;
@@ -108,6 +115,9 @@ export default {
 }
 
 .badge {
-  @include button-badge-primary;
+  color: var(--c2c-primary);
+  background-color: var(--c2c-white);
+  border-radius: 1em;
+  padding: 0 0.35em;
 }
 </style>

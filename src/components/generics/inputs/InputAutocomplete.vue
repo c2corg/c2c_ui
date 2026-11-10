@@ -9,7 +9,7 @@
             class="autocomplete-input"
             :class="[{ 'prevent-zoom-on-ios': isIos }]"
             :value="inputValue"
-            @input="(evt) => searchSuggestions(evt.target.value)"
+            @input="(evt) => searchSuggestions((evt.target as HTMLInputElement).value)"
             @focus="toggleSuggestions"
             @blur="handleBlur"
             :placeholder="placeholder"
@@ -36,98 +36,89 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    fullwidth: { type: Boolean, default: false },
-    placeholder: { type: String, default: '' },
-    defaultValue: { type: Object, default: null },
-    formatSuggestion: { type: Function, default: (s) => s ?? '' },
-    fetchSuggestions: { type: Function, required: true },
-    limit: { type: Number, default: 10 },
-  },
-  emits: ['update:props'],
+<script setup lang="ts">
+import { reactive, ref, watch } from 'vue';
 
-  data() {
-    return {
-      localData: {
-        selectedValue: '',
-        valueSuggestions: [],
-        showSuggestions: false,
-      },
-      inputValue: this.defaultValue ? this.formatSuggestion(this.defaultValue) : '',
-      searchTimeout: null,
-    };
-  },
-  computed: {
-    isIos() {
-      const ua = navigator.userAgent || '';
-      const platform = navigator.platform || '';
-      // Old iPhones/iPads/iPods
-      if (/iPad|iPhone|iPod/i.test(ua) || /iPad|iPhone|iPod/i.test(platform)) return true;
-      // iPadOS 13+ reports MacIntel but has touch points > 1
-      if (platform === 'MacIntel' && navigator.maxTouchPoints > 1) return true;
-      return false;
-    },
-  },
-  watch: {
-    'localData.selectedValue'() {
-      this.$emit('update:props', this.localData.selectedValue);
-    },
-  },
-  methods: {
-    async searchSuggestions(value) {
-      this.inputValue = value;
+const props = defineProps({
+  fullwidth: { type: Boolean, default: false },
+  placeholder: { type: String, default: '' },
+  defaultValue: { type: Object, default: null },
+  formatSuggestion: { type: Function, default: (s: unknown) => s ?? '' },
+  fetchSuggestions: { type: Function, required: true },
+  limit: { type: Number, default: 10 },
+});
 
-      if (this.searchTimeout) clearTimeout(this.searchTimeout);
+const emit = defineEmits(['update:props']);
 
-      if (!value || value.length < 1) {
-        this.localData.valueSuggestions = [];
-        this.localData.showSuggestions = false;
-        this.localData.selectedValue = '';
-        return;
-      }
+const localData = reactive({
+  selectedValue: '' as unknown,
+  valueSuggestions: [] as unknown[],
+  showSuggestions: false,
+});
+const inputValue = ref(props.defaultValue ? props.formatSuggestion(props.defaultValue) : '');
+let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
-      this.searchTimeout = setTimeout(async () => {
-        try {
-          const results = await this.fetchSuggestions(value, this.limit);
+const isIos = (() => {
+  const ua = navigator.userAgent || '';
+  const platform = navigator.platform || '';
+  // Old iPhones/iPads/iPods
+  if (/iPad|iPhone|iPod/i.test(ua) || /iPad|iPhone|iPod/i.test(platform)) return true;
+  // iPadOS 13+ reports MacIntel but has touch points > 1
+  if (platform === 'MacIntel' && navigator.maxTouchPoints > 1) return true;
+  return false;
+})();
 
-          this.localData.valueSuggestions = results;
-          this.localData.showSuggestions = results.length > 0;
-        } catch (e) {
-          console.warn(e);
-        }
-      }, 300);
-    },
+watch(
+  () => localData.selectedValue,
+  () => emit('update:props', localData.selectedValue)
+);
 
-    toggleSuggestions() {
-      if (this.localData.showSuggestions) {
-        this.localData.showSuggestions = false;
-      } else {
-        this.localData.showSuggestions = true;
-      }
-    },
+function searchSuggestions(value: string) {
+  inputValue.value = value;
 
-    selectValue(suggestion) {
-      this.localData.selectedValue = suggestion;
-      this.inputValue = this.formatSuggestion(suggestion);
-      this.localData.showSuggestions = false;
-    },
+  if (searchTimeout) clearTimeout(searchTimeout);
 
-    handleBlur() {
-      setTimeout(() => {
-        this.localData.showSuggestions = false;
-      }, 200);
-    },
+  if (!value || value.length < 1) {
+    localData.valueSuggestions = [];
+    localData.showSuggestions = false;
+    localData.selectedValue = '';
+    return;
+  }
 
-    format(suggestion) {
-      return this.formatSuggestion(suggestion);
-    },
-  },
-};
+  searchTimeout = setTimeout(async () => {
+    try {
+      const results = await props.fetchSuggestions(value, props.limit);
+
+      localData.valueSuggestions = results;
+      localData.showSuggestions = results.length > 0;
+    } catch (e) {
+      console.warn(e);
+    }
+  }, 300);
+}
+
+function toggleSuggestions() {
+  localData.showSuggestions = !localData.showSuggestions;
+}
+
+function selectValue(suggestion: unknown) {
+  localData.selectedValue = suggestion;
+  inputValue.value = props.formatSuggestion(suggestion);
+  localData.showSuggestions = false;
+}
+
+function handleBlur() {
+  setTimeout(() => {
+    localData.showSuggestions = false;
+  }, 200);
+}
+
+function format(suggestion: unknown) {
+  return props.formatSuggestion(suggestion);
+}
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .prevent-zoom-on-ios {
   font-size: 16px;
 }
@@ -159,20 +150,20 @@ export default {
       .autocomplete-input {
         width: 100%;
         padding: 8px 34px 8px 14px;
-        color: #222;
-        border: 1px solid #ccc;
+        color: var(--c2c-grey-darker);
+        border: 1px solid var(--c2c-grey-lighter);
         border-radius: 10px;
         outline: none;
         transition: all 0.2s ease;
-        background-color: #fff;
+        background-color: var(--c2c-white);
 
         &:focus {
-          border-color: #666;
+          border-color: var(--c2c-color-base-c2c);
           box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
         }
 
         &::placeholder {
-          color: #999;
+          color: var(--c2c-input-placeholder-color);
         }
       }
 
@@ -180,13 +171,13 @@ export default {
         position: absolute;
         right: 10px;
         font-size: 12px;
-        color: #555;
+        color: var(--c2c-grey-dark);
         cursor: pointer;
         user-select: none;
         transition: color 0.2s ease;
 
         &:hover {
-          color: #000;
+          color: var(--c2c-grey-darker);
         }
       }
     }
@@ -197,14 +188,14 @@ export default {
       left: 0;
       right: 0;
       z-index: 5;
-      background: #fff;
-      border: 1px solid #ddd;
+      background: var(--c2c-white);
+      border: 1px solid var(--c2c-grey-lighter);
       border-radius: 10px;
       box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
       max-height: 220px;
       overflow-y: auto;
       scrollbar-width: thin;
-      scrollbar-color: #aaa #f9f9f9;
+      scrollbar-color: var(--c2c-grey-light) var(--c2c-white-ter);
 
       ul {
         list-style: none;
@@ -214,16 +205,18 @@ export default {
         li {
           padding: 10px 14px;
           font-size: 14px;
-          transition: background 0.2s ease, color 0.2s ease;
+          transition:
+            background 0.2s ease,
+            color 0.2s ease;
 
           &:hover {
-            background-color: #f5f5f5;
+            background-color: var(--c2c-white-ter);
             cursor: pointer;
-            color: #000;
+            color: var(--c2c-grey-darker);
           }
 
           &:not(:last-child) {
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--c2c-grey-lightest);
           }
         }
       }
@@ -235,7 +228,7 @@ export default {
 .fade-leave-active {
   transition: opacity 0.2s ease;
 }
-.fade-enter,
+.fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }

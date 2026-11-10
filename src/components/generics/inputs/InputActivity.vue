@@ -3,10 +3,10 @@
     <span
       v-for="activity of activities"
       :key="activity"
-      :checked="value_.includes(activity)"
+      :checked="value_.includes(activity) || null"
       :class="{ 'with-labels': showLabels }"
       class="input-item has-cursor-pointer"
-      :title="showLabels ? null : $gettext(activity, 'activities')"
+      :title="showLabels ? undefined : $gettext(activity, 'activities')"
       @click="toggle(activity)"
     >
       <icon-activity :activity="activity" />
@@ -17,38 +17,39 @@
   </div>
 </template>
 
-<script>
-import { arrayMixin, baseMixin } from './mixins';
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import { arrayInputProps, baseInputProps, useArrayInputValue } from './input-value';
 
 import constants from '@/js/constants';
 
-export default {
-  mixins: [baseMixin, arrayMixin],
-
-  props: {
-    showLabels: {
-      type: Boolean,
-      default: false,
-    },
-    documentType: {
-      type: String,
-      default: undefined,
-    },
+const props = defineProps({
+  ...baseInputProps,
+  ...arrayInputProps,
+  showLabels: {
+    type: Boolean,
+    default: false,
   },
-
-  computed: {
-    activities() {
-      if (this.documentType === 'r') {
-        // remove paragliding for routes
-        return constants.activities.filter((act) => act !== 'paragliding');
-      }
-      return constants.activities;
-    },
+  documentType: {
+    type: String,
+    default: undefined,
   },
-};
+});
+const emit = defineEmits(['update:modelValue']);
+
+const { value_, toggle } = useArrayInputValue(props, emit);
+
+const activities = computed(() => {
+  if (props.documentType === 'r') {
+    // remove paragliding for routes
+    return constants.activities.filter((act) => act !== 'paragliding');
+  }
+  return constants.activities;
+});
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .input-item {
   font-size: 40px;
   margin: 4px;
@@ -71,7 +72,7 @@ export default {
 }
 
 .input-item[checked] {
-  color: $primary;
+  color: var(--c2c-primary);
 }
 
 .with-labels {
@@ -89,7 +90,7 @@ export default {
 }
 
 .has-error {
-  box-shadow: 0px 0px 8px 0px $danger;
-  // border: 1px solid $danger;
+  box-shadow: 0px 0px 8px 0px var(--c2c-danger);
+  /* border: 1px solid $danger; */
 }
 </style>

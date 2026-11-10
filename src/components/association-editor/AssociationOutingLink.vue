@@ -5,18 +5,16 @@
   </document-link>
 </template>
 
-<script>
-export default {
-  props: {
-    outing: {
-      type: Object,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  outing: {
+    type: Object,
+    required: true,
   },
-};
+});
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .pretty-outing-link {
   display: block;
 }

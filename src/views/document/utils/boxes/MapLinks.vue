@@ -15,10 +15,8 @@
   </div>
 </template>
 
-<script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import { documentProperty } from '@/js/properties';
 
-export default {
-  mixins: [requireDocumentProperty],
-};
+defineProps({ ...documentProperty });
 </script>

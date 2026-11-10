@@ -64,8 +64,8 @@
 
         <div>
           <input-checkbox
-            @input="onChange($event, 'isDifferent')"
-            :value="bra.isDifferent"
+            @update:model-value="onChange($event, 'isDifferent')"
+            :model-value="bra.isDifferent"
             class="control--bradifferent"
           >
             <span v-translate>Different high/low danger?</span>
@@ -86,7 +86,7 @@
       <template #content>
         <div v-if="showVisibleMountains">
           <div class="mb-2">
-            <input-checkbox @input="onShowAvalancheBulletins" :value="showAvalancheBulletins">
+            <input-checkbox @update:model-value="onShowAvalancheBulletins" :model-value="showAvalancheBulletins">
               <span v-translate>Visible on map</span>
             </input-checkbox>
           </div>
@@ -114,66 +114,48 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, watch } from 'vue';
+
 import Counter from '@/components/yeti/Counter.vue';
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
 import Info from '@/components/yeti/Info.vue';
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import Yetix from '@/components/yeti/Yetix';
+import { useYetixStore } from '@/components/yeti/yetix';
+import type { BulletinMountain } from '@/components/yeti/yetix-types';
 
-export default {
-  components: { Counter, DropdownContent, Info, SubPanelTitle },
-  data() {
-    return {
-      showMountainsList: false,
-    };
-  },
-  computed: {
-    bra() {
-      return Yetix.bra;
-    },
-    visibleMountains() {
-      return Yetix.mountains.visible;
-    },
-    showAvalancheBulletins() {
-      return Yetix.showAvalancheBulletins;
-    },
-    showVisibleMountains() {
-      return this.countVisibleMountains >= 0;
-    },
-    countVisibleMountains() {
-      // if visibleMountains are set
-      if (this.visibleMountains) {
-        return Object.values(this.visibleMountains).reduce((a, b) => a + b.length, 0);
-      }
-      // else, return -1 (because 0 is not an error)
-      return -1;
-    },
-  },
-  watch: {
-    'bra.isDifferent': 'checkBraIsDifferent',
-  },
-  methods: {
-    onChange(event, prop) {
-      const value = prop === 'isDifferent' ? event : event.target.value;
-      Yetix.setBra(prop, value);
-    },
-    checkBraIsDifferent() {
-      if (!this.bra.isDifferent) {
-        Yetix.setBra('low', null);
-        Yetix.setBra('altiThreshold', null);
-      }
-    },
-    onShowAvalancheBulletins(value) {
-      Yetix.setShowAvalancheBulletins(value);
-    },
-  },
-};
+const Yetix = useYetixStore();
+
+const bra = computed(() => Yetix.bra);
+const visibleMountains = computed(() => Yetix.mountains.visible as Record<string, BulletinMountain[]> | null);
+const showAvalancheBulletins = computed(() => Yetix.showAvalancheBulletins);
+// -1 until the visible mountains are set (0 is not an error)
+const countVisibleMountains = computed(() =>
+  visibleMountains.value ? Object.values(visibleMountains.value).reduce((a, b) => a + b.length, 0) : -1
+);
+const showVisibleMountains = computed(() => countVisibleMountains.value >= 0);
+
+function onChange(event: unknown, prop: Parameters<typeof Yetix.setBra>[0]) {
+  const value = prop === 'isDifferent' ? event : (event as Event & { target: HTMLInputElement }).target.value;
+  Yetix.setBra(prop, value);
+}
+
+function onShowAvalancheBulletins(value: boolean) {
+  Yetix.setShowAvalancheBulletins(value);
+}
+
+watch(
+  () => bra.value.isDifferent,
+  () => {
+    if (!bra.value.isDifferent) {
+      Yetix.setBra('low', null);
+      Yetix.setBra('altiThreshold', null);
+    }
+  }
+);
 </script>
 
-<style scoped lang="scss">
-@import '@/assets/sass/variables';
-
+<style scoped>
 .inputs-bra {
   margin-left: 2rem;
   position: relative;

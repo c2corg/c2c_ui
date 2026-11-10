@@ -1,0 +1,185 @@
+import { flushPromises, mount } from '@vue/test-utils';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { defineComponent, h, nextTick } from 'vue';
+import { createMemoryHistory, createRouter } from 'vue-router';
+
+import ImagesUploader from './ImagesUploader.vue';
+
+import c2c from '@/js/apis/c2c';
+import { toast } from '@/js/toast';
+import uploadFile from '@/js/upload-file';
+
+// the real canRender: the rotation follows its format policy
+vi.mock('@/js/upload-file', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/js/upload-file')>()),
+  default: vi.fn(),
+}));
+vi.mock('@/js/toast', () => ({ toast: vi.fn() }));
+
+const file = (name: string, type = 'image/jpeg') => ({ name, type, lastModified: 1, size: 1000 });
+const upload = vi.mocked(uploadFile);
+
+// what the script of the uploader offers to these tests (Vue Test Utils reaches the <script setup> bindings)
+type Uploader = {
+  onFilesChange(event: unknown): void;
+  onDeleteImage(image: unknown): void;
+  save(): void;
+  images: Record<string, unknown>;
+  readyForSaving: boolean;
+};
+
+const router = () => {
+  const result = createRouter({
+    history: createMemoryHistory(),
+    routes: [{ path: '/:path*', component: { render: () => null } }],
+  });
+  result.push('/outings/1');
+  return result;
+};
+
+const mountUploader = async (
+  plugin = router(),
+  parentDocument: InstanceType<typeof ImagesUploader>['$props']['parentDocument'] = {
+    type: 'o',
+    document_id: 1,
+    activities: ['skitouring'],
+  }
+) => {
+  await plugin.isReady();
+  const wrapper = mount(ImagesUploader, {
+    props: { lang: 'fr', parentDocument },
+    global: {
+      stubs: {
+        ModalCard: defineComponent({
+          setup: (_, { expose, slots }) => {
+            expose({ show() {}, hide() {} });
+            return () => h('div', slots.default?.());
+          },
+        }),
+        ImageUploader: defineComponent({
+          props: ['status', 'canRotate'],
+          setup: (props) => () =>
+            h('div', { class: 'image-uploader', 'data-status': props.status, 'data-can-rotate': props.canRotate }),
+        }),
+      },
+      directives: { translate: {} },
+      plugins: [plugin],
+      config: {
+        globalProperties: {
+          $gettext: (value: string) => value,
+          $language: { current: 'fr' },
+          $documentUtils: {
+            buildDocument: () => ({ geometry: {}, associations: {} }),
+            getAssociationArrayName: () => 'outings',
+          },
+        } as never,
+      },
+    },
+  });
+  return { wrapper, uploader: wrapper.vm as unknown as Uploader, router: plugin };
+};
+
+describe('ImagesUploader', () => {
+  beforeEach(() => upload.mockReset());
+
+  it('lists the added files, and starts their upload', async () => {
+    const { wrapper, uploader } = await mountUploader();
+
+    uploader.onFilesChange({ target: { files: [file('a.jpg'), file('b.jpg')], value: 'x' } });
+    await nextTick();
+
+    expect(wrapper.findAll('.image-uploader')).toHaveLength(2);
+    expect(uploadFile).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not add the same file twice', async () => {
+    const { wrapper, uploader } = await mountUploader();
+
+    uploader.onFilesChange({ target: { files: [file('a.jpg')], value: 'x' } });
+    uploader.onFilesChange({ target: { files: [file('a.jpg')], value: 'x' } });
+    await nextTick();
+
+    expect(wrapper.findAll('.image-uploader')).toHaveLength(1);
+  });
+
+  it('shows the upload status of each image', async () => {
+    const { wrapper, uploader } = await mountUploader();
+    uploader.onFilesChange({ target: { files: [file('a.jpg')], value: 'x' } });
+    const [, , , onProgress, onSuccess] = upload.mock.calls[0];
+
+    onProgress({ loaded: 50, total: 100 });
+    await nextTick();
+    expect(wrapper.find('.image-uploader').attributes('data-status')).toBe('SAVING');
+
+    onSuccess({ filename: 'a.jpg' });
+    await nextTick();
+    expect(wrapper.find('.image-uploader').attributes('data-status')).toBe('SUCCESS');
+    expect(uploader.readyForSaving).toBe(true);
+  });
+
+  it.each([
+    ['a.jpg', 'image/jpeg', 'true'],
+    ['a.png', 'image/png', 'true'],
+    ['a.webp', 'image/webp', 'false'],
+    ['a.heic', 'image/heic', 'false'],
+  ])('offers to turn %s only when the browser re-encodes it', async (name, type, canRotate) => {
+    const { wrapper, uploader } = await mountUploader();
+    uploader.onFilesChange({ target: { files: [file(name, type)], value: 'x' } });
+    const [, , onDataUrlReady] = upload.mock.calls[0];
+    await nextTick();
+    expect(wrapper.find('.image-uploader').attributes('data-can-rotate')).toBe('false');
+
+    onDataUrlReady('data:image/jpeg;base64,AAAA');
+    await nextTick();
+    expect(wrapper.find('.image-uploader').attributes('data-can-rotate')).toBe(canRotate);
+  });
+
+  it('removes a deleted image', async () => {
+    const { wrapper, uploader } = await mountUploader();
+    uploader.onFilesChange({ target: { files: [file('a.jpg'), file('b.jpg')], value: 'x' } });
+    await nextTick();
+
+    uploader.onDeleteImage(Object.values(uploader.images)[0]);
+    await nextTick();
+
+    expect(wrapper.findAll('.image-uploader')).toHaveLength(1);
+    expect(Object.keys(uploader.images)).toEqual(['b.jpg#1']);
+  });
+
+  it('adds the saved images to the document, with only their JPG thumbnails offered', async () => {
+    vi.spyOn(c2c, 'createImages').mockResolvedValue({ data: { images: [{ document_id: 123 }] } } as never);
+    const parentDocument = { type: 'o', document_id: 1, activities: ['skitouring'], associations: { images: [] } };
+    const { uploader } = await mountUploader(router(), parentDocument);
+    uploader.onFilesChange({ target: { files: [file('a.jpg')], value: 'x' } });
+    upload.mock.calls[0][4]({ filename: '1588000000_1.jpg' });
+
+    uploader.save();
+    await flushPromises();
+
+    // c2c_images builds the AVIF thumbnails after the upload: they may not exist yet
+    expect(parentDocument.associations.images).toEqual([
+      expect.objectContaining({ document_id: 123, filename: '1588000000_1.jpg', modernThumbnailsPending: true }),
+    ]);
+  });
+
+  it('tells the user when the images could not be saved', async () => {
+    vi.spyOn(c2c, 'createImages').mockRejectedValue(new Error('500'));
+    const { uploader } = await mountUploader();
+
+    uploader.save();
+    await flushPromises();
+
+    expect(toast).toHaveBeenCalledWith(expect.objectContaining({ type: 'is-danger' }));
+  });
+
+  it('forgets the unsaved images when the page changes', async () => {
+    const { wrapper, uploader, router } = await mountUploader();
+    uploader.onFilesChange({ target: { files: [file('a.jpg')], value: 'x' } });
+    await nextTick();
+
+    await router.push('/outings/2');
+    await nextTick();
+
+    expect(wrapper.findAll('.image-uploader')).toHaveLength(0);
+  });
+});

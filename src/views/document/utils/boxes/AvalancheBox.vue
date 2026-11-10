@@ -4,7 +4,7 @@
     <template v-if="bras?.length">
       <template v-if="bulletinsWithInfo">
         <div class="icon-bra is-flex is-justify-content-center">
-          <icon-bra :size="120" :level="Math.max(...bras.map((bra) => bra.danger.max).filter(Boolean))" />
+          <icon-bra :size="120" :level="maxLevel" />
         </div>
         <div class="has-text-centered">
           <span v-for="(bra, index) in bras" :key="bra.id">
@@ -26,122 +26,100 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { booleanIntersects as turfBooleanIntersects } from '@turf/boolean-intersects';
 import { buffer as turfBuffer } from '@turf/buffer';
 import { simplify as turfSimplify } from '@turf/simplify';
+import type { Feature, FeatureCollection, Geometry, MultiPolygon, Polygon } from 'geojson';
+import { computed, onMounted, ref } from 'vue';
 
-import IconBra from '../../../../components/generics/icons/IconBra';
+import IconBra from '@/components/generics/icons/IconBra.vue';
+import yetiService from '@/js/apis/yeti-service';
+import { documentProperty } from '@/js/properties';
 
-import yetiService from '@/js/apis/yeti-service.js';
-import ol from '@/js/libs/ol';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+const props = defineProps({ ...documentProperty });
 
-const GeoJSON = new ol.format.GeoJSON();
+// a zone of the avalanche bulletins (BRA), and its bulletin
+type Zone = Feature<Polygon | MultiPolygon, { name: string; country: string }>;
+type Bra = {
+  id: string;
+  name: string;
+  fullname?: string;
+  country: string;
+  zone: string;
+  urls: { url: string }[];
+  danger: { max: number | null };
+  orientations: Record<string, unknown>;
+  validUntil: string;
+};
 
-export default {
-  components: {
-    IconBra,
-  },
+const bras = ref<Bra[] | null>(null);
+const bulletinsWithInfo = ref(0);
 
-  mixins: [requireDocumentProperty],
+// the highest danger level of the bulletins (shown when one has a level)
+const maxLevel = computed(() => Math.max(...(bras.value ?? []).map((bra) => bra.danger.max ?? 0)));
 
-  data() {
-    return {
-      bras: null,
-      bulletinsWithInfo: 0,
-    };
-  },
+const yetiUrl = computed(() => ({ name: 'yeti', params: { document_id: props.document.document_id } }));
 
-  computed: {
-    yetiUrl() {
-      return { name: 'yeti', params: { document_id: this.document.document_id } };
-    },
+const showAvalancheInfo = computed(() => {
+  if (props.document?.type !== 'r') {
+    return false;
+  }
 
-    showAvalancheInfo() {
-      if (this.document?.type !== 'r') {
-        return false;
-      }
+  const activities = ['skitouring', 'snow_ice_mixed', 'ice_climbing', 'snowshoeing'];
 
-      const activities = ['skitouring', 'snow_ice_mixed', 'ice_climbing', 'snowshoeing'];
+  return props.document.activities?.some((activity: string) => activities.includes(activity));
+});
 
-      return this.document.activities?.some((activity) => activities.includes(activity));
-    },
-  },
-
-  mounted() {
-    if (this.showAvalancheInfo) {
-      yetiService.zonesBra().then((response) => {
+onMounted(() => {
+  if (showAvalancheInfo.value) {
+    const geometry = props.document.geometry!;
+    // OpenLayers' GeoJSON format (reprojection) loaded with the zones, not in the startup bundle (#4876)
+    Promise.all([yetiService.zonesBra(), import('ol/format/GeoJSON')]).then(
+      ([response, { default: GeoJSONFormat }]: [
+        { data: FeatureCollection<Polygon | MultiPolygon, Zone['properties']> },
+        typeof import('ol/format/GeoJSON'),
+      ]) => {
+        const GeoJSON = new GeoJSONFormat();
         // use WGS 84 projection for buffering with turf
-        const routeGeometry = turfBuffer(
-          turfSimplify(
-            GeoJSON.writeGeometryObject(
-              GeoJSON.readGeometry(JSON.parse(this.document.geometry.geom_detail ?? this.document.geometry.geom), {
-                dataProjection: 'EPSG:3857',
-                featureProjection: 'EPSG:4326',
-              })
+        const routeGeometry = (
+          turfBuffer(
+            turfSimplify(
+              GeoJSON.writeGeometryObject(
+                GeoJSON.readGeometry(JSON.parse((geometry.geom_detail ?? geometry.geom)!), {
+                  dataProjection: 'EPSG:3857',
+                  featureProjection: 'EPSG:4326',
+                })!
+              ) as Geometry,
+              { tolerance: 0.01, highQuality: false }
             ),
-            { tolerance: 0.01, highQuality: false }
-          ),
-          this.document.geometry.geom_detail ? 1 : 2,
-          {
-            units: 'kilometers',
-          }
+            geometry.geom_detail ? 1 : 2,
+            {
+              units: 'kilometers',
+            }
+          ) as Feature<Polygon | MultiPolygon>
         ).geometry;
 
         const zones = response.data.features.filter((feature) =>
-          turfBooleanIntersects(turfBuffer(feature.geometry, 0.001, { units: 'kilometers' }).geometry, routeGeometry)
+          turfBooleanIntersects(turfBuffer(feature.geometry, 0.001, { units: 'kilometers' })!.geometry, routeGeometry)
         );
 
         if (zones.length) {
           const m = new Map(zones.map((zone) => [zone.properties.name + '@' + zone.properties.country, zone]));
-          yetiService.bra().then((response) => {
-            this.bras = response.data.zones
+          yetiService.bra().then((response: { data: { zones: Bra[] } }) => {
+            const found = response.data.zones
               .filter((zone) => m.has(zone.zone + '@' + zone.country))
-              .map((zone) => ({ ...m.get(zone.zone + '@' + zone.country).properties, ...zone }));
-            this.bulletinsWithInfo = this.bras.map((bra) => bra.danger.max).filter(Boolean).length;
+              .map((zone) => ({ ...m.get(zone.zone + '@' + zone.country)!.properties, ...zone }));
+            bras.value = found;
+            bulletinsWithInfo.value = found.map((bra) => bra.danger.max).filter(Boolean).length;
           });
         }
-      });
-    }
-  },
-
-  methods: {
-    orientations(bra) {
-      // return truthy orientations, in uppercase
-      return Object.keys(bra.orientations)
-        .filter((key) => key !== 'comment')
-        .filter((key) => bra.orientations[key])
-        .map((val) => val.toUpperCase());
-    },
-    validity(bra) {
-      return this.$dateUtils.toLocalizedString(new Date(bra.validUntil), 'DD/MM/YYYY HH:mm');
-    },
-    expired(bra) {
-      // return true when validUntil is expired (warn user)
-      return new Date() - new Date(bra.validUntil) > 0;
-    },
-  },
-};
+      }
+    );
+  }
+});
 </script>
-<style scoped lang="scss">
-dl,
-dt,
-dd {
-  margin: 0;
-  padding: 0;
-}
-dt,
-dd {
-  display: inline;
-}
-dt {
-  font-weight: bold;
-}
-dt::before {
-  content: '';
-  display: block;
-}
+<style scoped>
 .icon-bra {
   margin: -35px 0 -25px 0;
 }

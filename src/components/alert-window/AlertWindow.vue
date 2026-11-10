@@ -1,5 +1,5 @@
 <template>
-  <modal-window ref="modalWindow" small has-transparent-shader is-danger>
+  <modal-window ref="modal" small has-transparent-shader is-danger>
     <ul>
       <li v-for="(message, i) of messages" :key="i">
         {{ message }}
@@ -8,19 +8,16 @@
   </modal-window>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      messages: null,
-    };
-  },
+<script setup lang="ts">
+import { ref, useTemplateRef } from 'vue';
 
-  methods: {
-    show(messages) {
-      this.messages = messages;
-      this.$refs.modalWindow.show();
-    },
-  },
-};
+const messages = ref<string[] | null>(null);
+const modal = useTemplateRef<{ show(): void }>('modal');
+
+function show(newMessages: string[]) {
+  messages.value = newMessages;
+  modal.value!.show();
+}
+
+defineExpose({ show });
 </script>

@@ -1,0 +1,59 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): components/level */
+
+@import '../../media.css';
+
+.level {
+  align-items: center;
+  justify-content: space-between;
+
+  code {
+    border-radius: var(--c2c-radius);
+  }
+
+  img {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  &.is-mobile {
+    display: flex;
+
+    .level-item:not(:last-child) {
+      margin-bottom: 0;
+      margin-right: 0.75rem;
+    }
+
+    .level-item:not(.is-narrow) {
+      flex-grow: 1;
+    }
+  }
+}
+
+@media screen and (--c2c-min-tablet), print {
+  .level {
+    display: flex;
+    > .level-item:not(.is-narrow) {
+      flex-grow: 1;
+    }
+  }
+}
+
+.level-item {
+  align-items: center;
+  display: flex;
+  flex-basis: auto;
+  flex-grow: 0;
+  flex-shrink: 0;
+  justify-content: center;
+
+  .title,
+  .subtitle {
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (--c2c-mobile) {
+  .level-item:not(:last-child) {
+    margin-bottom: 0.75rem;
+  }
+}

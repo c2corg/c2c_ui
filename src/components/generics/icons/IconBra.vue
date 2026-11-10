@@ -56,28 +56,23 @@
     />
   </svg>
 </template>
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
 // #fff, #cbdb45, #fff100, #f6921e, #ec1c24, #ec1c24
-const dangerFill = ['255, 255, 255', '203, 219, 69', '255, 241, 0', '246, 146, 30', '236, 28, 36', '236, 28, 36'];
+const DANGER_FILLS = ['255, 255, 255', '203, 219, 69', '255, 241, 0', '246, 146, 30', '236, 28, 36', '236, 28, 36'];
 
-export default {
-  props: {
-    size: {
-      type: Number,
-      required: false,
-      default: 80,
-    },
-    level: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
+const props = defineProps({
+  size: {
+    type: Number,
+    required: false,
+    default: 80,
   },
+  level: {
+    type: Number,
+    required: true,
+  },
+});
 
-  computed: {
-    dangerFill() {
-      return `rgb(${dangerFill[this.level]})`;
-    },
-  },
-};
+const dangerFill = computed(() => `rgb(${DANGER_FILLS[props.level]})`);
 </script>

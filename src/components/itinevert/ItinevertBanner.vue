@@ -69,13 +69,9 @@
   </section>
 </template>
 
-<script>
-export default {
-  name: 'ItinevertBanner',
-};
-</script>
+<style scoped>
+@import '@/assets/css/media.css';
 
-<style scoped lang="scss">
 .banner-container {
   display: grid;
   grid-template-columns: 1fr 25%;
@@ -148,7 +144,7 @@ export default {
   }
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .banner-container {
     display: flex;
     flex-direction: column;

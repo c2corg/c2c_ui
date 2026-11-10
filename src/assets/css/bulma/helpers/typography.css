@@ -1,0 +1,73 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): helpers/typography */
+
+@import '../../media.css';
+
+.is-size-1 {
+  font-size: var(--c2c-size-1) !important;
+}
+
+.is-size-2 {
+  font-size: var(--c2c-size-2) !important;
+}
+
+.is-size-3 {
+  font-size: var(--c2c-size-3) !important;
+}
+
+.is-size-4 {
+  font-size: var(--c2c-size-4) !important;
+}
+
+.is-size-5 {
+  font-size: var(--c2c-size-5) !important;
+}
+
+.is-size-6 {
+  font-size: var(--c2c-size-6) !important;
+}
+
+.is-size-7 {
+  font-size: var(--c2c-size-7) !important;
+}
+
+@media screen and (--c2c-mobile) {
+  .is-size-7-mobile {
+    font-size: var(--c2c-size-7) !important;
+  }
+}
+
+.has-text-centered {
+  text-align: center !important;
+}
+
+.has-text-justified {
+  text-align: justify !important;
+}
+
+.has-text-left {
+  text-align: left !important;
+}
+
+.has-text-right {
+  text-align: right !important;
+}
+
+.is-uppercase {
+  text-transform: uppercase !important;
+}
+
+.is-italic {
+  font-style: italic !important;
+}
+
+.has-text-weight-normal {
+  font-weight: 400 !important;
+}
+
+.has-text-weight-semibold {
+  font-weight: 600 !important;
+}
+
+.has-text-weight-bold {
+  font-weight: 700 !important;
+}

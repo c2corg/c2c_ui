@@ -8,29 +8,28 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import getFundraiser from '@/js/get-fundraiser';
 
-export default {
-  props: {
-    document: {
-      type: Object,
-      required: true,
-    },
+const props = defineProps({
+  document: {
+    type: Object,
+    required: true,
   },
+});
 
-  computed: {
-    fundraiser() {
-      return getFundraiser(this.document);
-    },
+const { $gettext } = useGlobalProperties();
 
-    message() {
-      return this.fundraiser?.message
-        ? this.$gettext(this.fundraiser.message)
-        : this.$gettext('This site is maintained by local actors. Support them to help keep it open!');
-    },
-  },
-};
+const fundraiser = computed(() => getFundraiser(props.document));
+
+const message = computed(() => {
+  return fundraiser.value?.message
+    ? $gettext(fundraiser.value.message)
+    : $gettext('This site is maintained by local actors. Support them to help keep it open!');
+});
 </script>
 
 <style scoped>

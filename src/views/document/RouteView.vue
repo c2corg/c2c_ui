@@ -76,8 +76,8 @@
               <field-view :document="document" :field="fields.mtb_length_asphalt" :divisor="1000" unit="km" />
               <field-view :document="document" :field="fields.mtb_length_trail" :divisor="1000" unit="km" />
 
-              <label-value v-if="document.cooked.slope" :label="$gettext('slope')">
-                {{ document.cooked.slope }}
+              <label-value v-if="document.cooked!.slope" :label="$gettext('slope')">
+                {{ document.cooked!.slope }}
               </label-value>
 
               <field-view :document="document" :field="fields.slackline_height" />
@@ -91,7 +91,7 @@
             :document="document"
           />
           <markdown-section :document="document" :field="fields.summary" />
-          <markdown-section v-if="locale.route_history" :document="document" :field="fields.route_history" />
+          <markdown-section v-if="locale!.route_history" :document="document" :field="fields.route_history" />
           <div v-else-if="showMissingHistoryBanner" class="notification is-info no-print missing-history-banner">
             <edit-link :document="document" :lang="lang" v-translate>
               History is missing, please provide it if you have information.
@@ -149,11 +149,33 @@
   </div>
 </template>
 
-<script>
-import LowDocumentQualityBanner from './utils/LowDocumentQualityBanner';
-import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import AvalancheBox from './utils/boxes/AvalancheBox';
-import documentViewMixin from './utils/document-view-mixin';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+
+import DocumentPrintLicense from './utils/DocumentPrintLicense.vue';
+import DocumentViewHeader from './utils/DocumentViewHeader.vue';
+import FundraiserBanner from './utils/FundraiserBanner.vue';
+import LowDocumentQualityBanner from './utils/LowDocumentQualityBanner.vue';
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo.vue';
+import AvalancheBox from './utils/boxes/AvalancheBox.vue';
+import CommentsBox from './utils/boxes/CommentsBox.vue';
+import ImagesBox from './utils/boxes/ImagesBox.vue';
+import IsReachableByPublicTransportsBox from './utils/boxes/IsReachableByPublicTransportsBox.vue';
+import MapBox from './utils/boxes/MapBox.vue';
+import RecentOutingsBox from './utils/boxes/RecentOutingsBox.vue';
+import RoutesBox from './utils/boxes/RoutesBox.vue';
+import ToolBox from './utils/boxes/ToolBox.vue';
+import TransportsBox from './utils/boxes/TransportsBox.vue';
+import { documentViewProps, useDocumentView } from './utils/document-view';
+import ActivitiesField from './utils/field-viewers/ActivitiesField.vue';
+import DoubleNumericField from './utils/field-viewers/DoubleNumericField.vue';
+import FieldView from './utils/field-viewers/FieldView.vue';
+import LabelValue from './utils/field-viewers/LabelValue.vue';
+import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
+import { getGearArticles } from './utils/gear-articles';
+
+import type { Route } from '@/js/apis/c2c/schemas';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 
 const historyWorthActivities = [
   'snow_ice_mixed',
@@ -164,102 +186,41 @@ const historyWorthActivities = [
   'slacklining',
 ];
 
-export default {
-  components: {
-    LowDocumentQualityBanner,
-    MaskedDocumentVersionInfo,
-    AvalancheBox,
-  },
-  mixins: [documentViewMixin],
+const props = defineProps(documentViewProps);
 
-  data() {
-    return {
-      hasProtectionArea: false,
-    };
-  },
+const { $gettext } = useGlobalProperties();
+const { isPrintingView, promise, documentType, fields, document, version, locale, lang, isEditable } =
+  useDocumentView<Route>(props);
 
-  computed: {
-    gearArticles() {
-      const result = {};
-      const doc = this.document;
-      const activities = doc.activities ?? [];
-      const easy_mountain = ['F', 'F+', 'PD-', 'PD', 'PD+', 'AD-', 'AD'];
-      const poor_equiped = ['P2', 'P2+', 'P3', 'P3+', 'P4'];
-      const glacier_activities = ['mountain_climbing', 'skitouring', 'snow_ice_mixed', 'snowshoeing'];
+const hasProtectionArea = ref(false);
 
-      if (activities.includes('snowshoeing') || activities.includes('skitouring')) {
-        result['183333'] = this.$gettext('Skitouring gear');
-      }
+const gearArticles = computed(() => getGearArticles(document.value!, $gettext));
 
-      if (activities.includes('snow_ice_mixed') && ['F', 'F+', 'PD-', 'PD', 'PD+'].includes(doc.global_rating)) {
-        result['185750'] = this.$gettext('Easy snow ice mixed gear');
-      }
+const showMissingHistoryBanner = computed(() => {
+  const doc = document.value!;
 
-      if (activities.includes('mountain_climbing') && easy_mountain.includes(doc.global_rating)) {
-        result['185384'] = this.$gettext('Easy mountain climbing gear');
-      }
+  if (!isEditable.value) {
+    return false;
+  }
 
-      if (activities.includes('rock_climbing')) {
-        if (['bloc', 'psicobloc'].includes(doc.climbing_outdoor_type)) {
-          result['1516488'] = this.$gettext('Bouldering climbing gear');
-        } else if (doc.climbing_outdoor_type === 'single') {
-          result['1307778'] = this.$gettext('Crag climbing gear');
-        } else if (['P1', 'P1+'].includes(doc.equipment_rating)) {
-          result['183332'] = this.$gettext('Bolted rock climbing gear');
-        } else if (
-          !activities.includes('mountain_climbing') &&
-          easy_mountain.includes(doc.global_rating) &&
-          poor_equiped.includes(doc.equipment_rating)
-        ) {
-          result['185384'] = this.$gettext('Easy mountain climbing gear');
-        }
-      }
-
-      if (activities.includes('ice_climbing')) {
-        result['194479'] = this.$gettext('Ice and dry climbing gear');
-      }
-
-      if (activities.includes('hiking')) {
-        result['185207'] = this.$gettext('Hiking gear');
-      }
-
-      // we should use an anchor for glacier gear, but it's not possible
-      if (doc.glacier_gear && doc.glacier_gear !== 'no') {
-        if (activities.filter((act) => glacier_activities.includes(act))) {
-          result['185750'] = this.$gettext('Easy snow ice mixed gear');
-        }
-      }
-
-      return result;
-    },
-
-    showMissingHistoryBanner() {
-      const doc = this.document;
-
-      if (!this.isEditable) {
-        return false;
-      }
-
-      if (this.version || ['empty', 'draft'].includes(doc.quality)) {
-        // hide notice if we are consulting an old version, or if low quality doc banner is already shown
-        return false;
-      }
-      const activities = doc.activities ?? [];
-      for (let act of historyWorthActivities) {
-        if (activities.includes(act)) {
-          return true;
-        }
-      }
-      if (activities.includes('skitouring') && doc.ski_rating?.startsWith('5.')) {
-        return true;
-      }
-      return false;
-    },
-  },
-};
+  if (version.value || ['empty', 'draft'].includes(doc.quality)) {
+    // hide notice if we are consulting an old version, or if low quality doc banner is already shown
+    return false;
+  }
+  const activities = doc.activities ?? [];
+  for (let act of historyWorthActivities) {
+    if (activities.includes(act)) {
+      return true;
+    }
+  }
+  if (activities.includes('skitouring') && doc.ski_rating?.startsWith('5.')) {
+    return true;
+  }
+  return false;
+});
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .missing-history-banner {
   overflow: hidden;
 }

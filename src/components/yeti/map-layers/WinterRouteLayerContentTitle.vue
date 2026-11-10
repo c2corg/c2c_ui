@@ -6,27 +6,22 @@
   </span>
 </template>
 
-<script>
-import Counter from '@/components/yeti/Counter.vue';
-import Yetix from '@/components/yeti/Yetix.vue';
+<script setup lang="ts">
+import { computed } from 'vue';
 
-export default {
-  components: {
-    Counter,
+import Counter from '@/components/yeti/Counter.vue';
+import { useYetixStore } from '@/components/yeti/yetix';
+
+const Yetix = useYetixStore();
+
+defineProps({
+  layer: {
+    type: Object,
+    required: true,
   },
-  props: {
-    layer: {
-      type: Object,
-      required: true,
-    },
-  },
-  computed: {
-    winterRoutes() {
-      return Yetix.winterRoutes;
-    },
-    winterRoutesLength() {
-      return this.winterRoutes.length;
-    },
-  },
-};
+});
+
+const winterRoutes = computed(() => Yetix.winterRoutes);
+
+const winterRoutesLength = computed(() => winterRoutes.value.length);
 </script>

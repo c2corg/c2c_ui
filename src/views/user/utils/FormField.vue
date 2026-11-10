@@ -31,13 +31,13 @@
     </label>
     <div class="control has-icons-left has-icons-right">
       <input
-        ref="input"
         :type="unmasked ? 'text' : type"
         :placeholder="placeholder || label"
         :required="required"
         :disabled="disabled"
         :autocorrect="autocorrect"
         :autocapitalize="autocapitalize"
+        ref="input"
         v-model="value_"
         class="input"
         :class="{ 'is-danger': hasError || errorMessage }"
@@ -55,94 +55,93 @@
   </div>
 </template>
 
-<script>
-import { formField } from '@/js/form-registration';
+<script setup lang="ts">
+import { computed, reactive, ref, toRef, useTemplateRef } from 'vue';
 
-export default {
-  // registered with the BaseForm containing it
-  mixins: [formField('baseForm')],
+import { useFormField } from '@/js/composables/form-registration';
 
-  props: {
-    name: {
-      type: String,
-      required: true,
-    },
-    value: {
-      type: [String, Number, Boolean],
-      default: null,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    type: {
-      type: String,
-      required: true,
-      validator: (value) => {
-        return ['text', 'number', 'checkbox', 'radio', 'email', 'password'].includes(value);
-      },
-    },
-    placeholder: {
-      type: String,
-      default: null,
-    },
-    icon: {
-      type: String,
-      required: true,
-    },
-    required: {
-      type: Boolean,
-      default: false,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    autocorrect: {
-      type: String,
-      default: undefined,
-    },
-    autocapitalize: {
-      type: String,
-      default: undefined,
+const props = defineProps({
+  name: {
+    type: String,
+    required: true,
+  },
+  modelValue: {
+    type: [String, Number, Boolean],
+    default: null,
+  },
+  label: {
+    type: String,
+    required: true,
+  },
+  type: {
+    type: String,
+    required: true,
+    validator: (value: string) => {
+      return ['text', 'number', 'checkbox', 'radio', 'email', 'password'].includes(value);
     },
   },
-
-  emits: ['input'],
-
-  data() {
-    return {
-      errorMessage: null,
-      unmasked: false,
-    };
+  placeholder: {
+    type: String,
+    default: null,
   },
-
-  computed: {
-    value_: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.$emit('input', value);
-      },
-    },
-
-    hasError() {
-      if (this.required && !this.value) {
-        return true;
-      }
-
-      return false;
-    },
+  icon: {
+    type: String,
+    required: true,
   },
-
-  methods: {
-    focus() {
-      this.$refs.input.focus();
-    },
-    onMaskToggle() {
-      this.unmasked = !this.unmasked;
-    },
+  required: {
+    type: Boolean,
+    default: false,
   },
-};
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  autocorrect: {
+    type: String,
+    default: undefined,
+  },
+  autocapitalize: {
+    type: String,
+    default: undefined,
+  },
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+// set by the BaseForm containing it, from the API errors
+const errorMessage = ref<string | null | undefined>(null);
+const unmasked = ref(false);
+
+const value_ = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(value) {
+    emit('update:modelValue', value);
+  },
+});
+
+const hasError = computed(() => {
+  if (props.required && !props.modelValue) {
+    return true;
+  }
+
+  return false;
+});
+
+// registered with the BaseForm containing it
+useFormField('baseForm', reactive({ name: toRef(props, 'name'), hasError, errorMessage }));
+
+function onMaskToggle() {
+  unmasked.value = !unmasked.value;
+}
+
+const input = useTemplateRef<HTMLInputElement>('input');
+
+// the login view focuses the main input of each of its forms
+function focus() {
+  input.value!.focus();
+}
+
+defineExpose({ focus });
 </script>

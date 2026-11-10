@@ -9,7 +9,7 @@
       </div>
 
       <div class="column is-narrow">
-        <input-document document-type="profile" @input="add" />
+        <input-document document-type="profile" @update:model-value="add" />
       </div>
       <div class="column">
         <div v-if="following.data" class="columns is-multiline">
@@ -22,40 +22,31 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
+
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
-import noRobotsMixin from '@/js/no-robots-mixin';
+import { useNoRobots } from '@/js/composables/head';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  mixins: [noRobotsMixin],
+useNoRobots();
 
-  data() {
-    return {
-      following: null,
-      newUser: null,
-    };
-  },
+const following = ref<ApiData<{ following: C2cDocument[] }>>(c2c.userProfile.following.get());
 
-  created() {
-    this.load();
-  },
+function load() {
+  following.value = c2c.userProfile.following.get();
+}
 
-  methods: {
-    load() {
-      this.following = c2c.userProfile.following.get();
-    },
+function add(profile: C2cDocument) {
+  c2c.userProfile.following.add(profile.document_id!).then(() => {
+    load();
+  });
+}
 
-    add(profile) {
-      c2c.userProfile.following.add(profile.document_id).then(() => {
-        this.load();
-      });
-    },
-
-    remove(document) {
-      c2c.userProfile.following.remove(document.document_id).then(() => {
-        this.load();
-      });
-    },
-  },
-};
+function remove(document: C2cDocument) {
+  c2c.userProfile.following.remove(document.document_id!).then(() => {
+    load();
+  });
+}
 </script>

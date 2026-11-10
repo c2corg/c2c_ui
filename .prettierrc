@@ -4,5 +4,6 @@
   "endOfLine": "lf",
   "singleQuote": true,
   "printWidth": 120,
-  "plugins": ["prettier-plugin-jsdoc"]
+  "plugins": ["prettier-plugin-jsdoc"],
+  "trailingComma": "es5"
 }

@@ -18,19 +18,22 @@
   </div>
 </template>
 
-<script>
-import mixins from './mixins';
+<script setup lang="ts">
+import { useModal } from '@/js/composables/modal';
 
-export default {
-  mixins: [mixins],
-
-  props: {
-    wide: {
-      type: Boolean,
-      default: false,
-    },
+defineProps({
+  wide: {
+    type: Boolean,
+    default: false,
   },
-};
+});
+
+const emit = defineEmits<{ show: []; hide: [] }>();
+
+const { visible, show, hide } = useModal(emit);
+
+// the parents show and hide it through a template ref
+defineExpose({ visible, show, hide });
 </script>
 
 <style scoped>

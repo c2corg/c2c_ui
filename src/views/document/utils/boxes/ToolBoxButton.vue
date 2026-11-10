@@ -23,55 +23,52 @@
   </component>
 </template>
 
-<script>
-export default {
-  props: {
-    icon: {
-      type: [String, Array],
-      default: null,
-    },
-    iconClass: {
-      type: String,
-      default: null,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    href: {
-      type: String,
-      default: null,
-    },
-    rel: {
-      type: String,
-      default: null,
-    },
-    to: {
-      type: Object,
-      default: null,
-    },
+<script setup lang="ts">
+defineProps({
+  icon: {
+    type: [String, Array],
+    default: null,
   },
-
-  emits: ['click'],
-};
+  iconClass: {
+    type: String,
+    default: null,
+  },
+  label: {
+    type: String,
+    required: true,
+  },
+  href: {
+    type: String,
+    default: null,
+  },
+  rel: {
+    type: String,
+    default: null,
+  },
+  to: {
+    type: Object,
+    default: null,
+  },
+});
+defineEmits(['click']);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .toolbox-button {
   display: block;
   cursor: pointer;
 
   span {
-    color: $link;
+    color: var(--c2c-link);
   }
 
   :hover {
-    color: $text;
+    color: var(--c2c-text);
   }
 
   .toolbox-button-icon {
     width: 1rem;
-    color: $text;
+    color: var(--c2c-text);
   }
 }
 </style>

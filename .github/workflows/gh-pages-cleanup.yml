@@ -12,8 +12,8 @@ jobs:
     # Previews are never deployed for forks or dependabot (see ci.yml)
     if: "!github.event.pull_request.head.repo.fork && !startsWith(github.head_ref, 'dependabot/')"
     runs-on: ubuntu-latest
-    # Same group as the deploy job in ci.yml, so both never push at once
-    concurrency: github-pages
+    # No concurrency group shared with ci.yml's deploy: GitHub keeps one pending run per group and cancels the older
+    # one, which left previews behind. The push is retried instead (below)
     permissions:
       contents: write
     steps:
@@ -33,6 +33,12 @@ jobs:
           git config --global user.name "GitHub Action"
           git rm -rq -- "$FOLDER"
           git commit -m "Remove $BRANCH branch preview"
-          git push origin gh-pages
+          # another deploy or clean-up may have pushed meanwhile (each in its own folder): rebase on it and retry
+          for attempt in 1 2 3 4 5; do
+            git push origin gh-pages && exit 0
+            sleep $((attempt * 5))
+            git pull --rebase origin gh-pages
+          done
+          exit 1
         env:
           BRANCH: ${{ github.head_ref }}

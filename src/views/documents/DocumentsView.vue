@@ -31,7 +31,7 @@
         <span class="is-pulled-right is-flex header-right" v-if="documentType != 'profile'">
           <load-user-preferences-button class="is-hidden-mobile" />
 
-          <span @click="toogleProperty('listMode')" class="header-item is-size-3 has-cursor-pointer is-hidden-mobile">
+          <span @click="setListMode(!listMode)" class="header-item is-size-3 has-cursor-pointer is-hidden-mobile">
             <fa-icon
               v-show="displayMode !== 'map'"
               icon="th-list"
@@ -48,16 +48,16 @@
           <template v-if="documentAreGeoLocalized">
             <display-mode-switch
               class="header-item is-hidden-mobile"
-              list-mode="listMode"
-              :value="displayMode"
-              @input="setProperty('displayMode', $event)"
+              :list-mode="listMode"
+              :model-value="displayMode"
+              @update:model-value="setDisplayMode"
             />
 
             <span class="is-size-3 is-hidden-tablet">
               <fa-icon
                 :icon="displayMode === 'map' ? 'th' : 'map-marked-alt'"
                 class="has-text-primary"
-                @click="setProperty('displayMode', displayMode === 'map' ? 'both' : 'map')"
+                @click="setDisplayMode(displayMode === 'map' ? 'both' : 'map')"
               />
             </span>
           </template>
@@ -100,7 +100,7 @@
             }"
             class="column card-container"
             @mouseenter="highlightedDocument = document"
-            @mouseleave="highlightedDocument = null"
+            @mouseleave="highlightedDocument = undefined"
           >
             <document-card :highlighted="highlightedDocument === document" :document="document" />
           </div>
@@ -119,7 +119,7 @@
       </div>
       <div v-if="showMap" class="column map-container">
         <map-view
-          ref="map"
+          ref="olMap"
           :documents="documentsShownOnMap"
           :highlighted-document="highlightedDocument"
           @highlight-document="highlightedDocument = $event"
@@ -132,199 +132,159 @@
   </div>
 </template>
 
-<script>
-import DisplayModeSwitch from './utils/DisplayModeSwitch';
-import ImageCards from './utils/ImageCards';
-import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton';
-import PageNavigation from './utils/PageNavigation';
-import PageSelector from './utils/PageSelector';
-import QueryItems from './utils/QueryItems';
-import pageQueryMixin from './utils/page-query-mixin';
+<script setup lang="ts">
+import { computed, defineAsyncComponent, nextTick, ref, useTemplateRef, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
+import DisplayModeSwitch from './utils/DisplayModeSwitch.vue';
+import ImageCards from './utils/ImageCards.vue';
+import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton.vue';
+import PageNavigation from './utils/PageNavigation.vue';
+import PageSelector from './utils/PageSelector.vue';
+import QueryItems from './utils/QueryItems.vue';
+import { normalizedPageQuery } from './utils/page-query';
+
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
 import bus from '@/js/event-bus';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 
-const DocumentsTable = () => import('@/components/datatable/DocumentsTable');
+// lazy (ag-grid is big): an async component, as Vue 3 no longer takes a plain function returning the import
+const DocumentsTable = defineAsyncComponent(() => import('@/components/datatable/DocumentsTable.vue'));
 
 // stored under the component name, as before: existing preferences are kept
 const preferences = getPreferences('DocumentsView');
 
-export default {
-  name: 'DocumentsView',
+const documentTypes = ['route', 'waypoint', 'outing', 'image', 'book', 'area'];
 
-  components: {
-    QueryItems,
-    PageSelector,
-    PageNavigation,
-    DocumentsTable,
-    ImageCards,
-    DisplayModeSwitch,
-    LoadUserPreferencesButton,
-  },
+const route = useRoute();
+const router = useRouter();
+const { $gettext } = useGlobalProperties();
 
-  mixins: [pageQueryMixin],
+// the map component: OpenLayers needs an explicit resize when its container changes
+const olMap = useTemplateRef<{ map: { updateSize(): void } }>('olMap');
+// the list scrolls in its own container on large screens, which the router knows nothing about
+const documentsContainer = useTemplateRef<HTMLElement>('documentsContainer');
 
-  data() {
-    return {
-      promise: {},
+const promise = ref<ApiData | { data?: undefined }>({});
+const displayMode = ref('both');
+const listMode = ref(false);
+const highlightedDocument = ref<C2cDocument>();
+const filteredWaypoints = ref<C2cDocument[]>([]);
+const queryHasTags = ref(false);
 
-      displayMode: 'both',
-      listMode: null,
+const showMap = computed(() => ['both', 'map'].includes(displayMode.value));
+const showResults = computed(() => ['result', 'both'].includes(displayMode.value));
+const documents = computed(() => promise.value.data);
+const documentType = computed(() => String(route.name).slice(0, -1));
+const documentAreGeoLocalized = computed(() => constants.objectDefinitions[documentType.value].geoLocalized === true);
 
-      isMobile: null,
+const queryWithoutOffsetAndSort = computed(() => {
+  const result = Object.assign({}, route.query);
+  delete result.offset;
+  delete result.sort;
 
-      highlightedDocument: null,
+  return result;
+});
 
-      filteredWaypoints: [],
+const documentsShownOnMap = computed(() =>
+  filteredWaypoints.value.concat(documents.value ? documents.value.documents : [])
+);
 
-      queryHasTags: false,
-    };
-  },
+function load() {
+  displayMode.value = preferences.get(
+    documentType.value + '.displayMode',
+    documentAreGeoLocalized.value ? 'both' : 'result'
+  ) as string;
+  listMode.value = preferences.get(documentType.value + '.listMode', false) as boolean;
 
-  computed: {
-    showMap() {
-      return ['both', 'map'].includes(this.displayMode);
-    },
-    showResults() {
-      return ['result', 'both'].includes(this.displayMode);
-    },
-    documents() {
-      return this.promise.data;
-    },
-    documentType() {
-      return this.$route.name.slice(0, -1);
-    },
-    documentTypes() {
-      return ['route', 'waypoint', 'outing', 'image', 'book', 'area'];
-    },
-    documentAreGeoLocalized() {
-      return constants.objectDefinitions[this.documentType].geoLocalized === true;
-    },
-    addQuery() {
-      return {
-        act: this.$route.query.act,
-      };
-    },
-    queryWithoutOffsetAndSort() {
-      const result = Object.assign({}, this.$route.query);
-      delete result.offset;
-      delete result.sort;
+  if (route.hash) {
+    // keep compatible with v6 AngularJs hacks...
+    router.replace(route.fullPath.replace('#', '?'));
+    // the route watcher will call load
+    return;
+  }
 
-      return result;
-    },
-    documentsShownOnMap() {
-      return this.filteredWaypoints.concat(this.documents ? this.documents.documents : []);
-    },
-  },
+  // offset in the middle of a page (old link...): go to the page it belongs to before loading anything
+  const pageQuery = normalizedPageQuery(route, 0);
+  if (pageQuery) {
+    router.replace(pageQuery);
+    // the route watcher will call load
+    return;
+  }
 
-  watch: {
-    $route: {
-      handler: 'load',
-      immediate: true,
-    },
-    displayMode: 'updateMapSize',
-    // scroll as soon as a page is asked for, not once its results are loaded (panning the map changes the route too)
-    '$route.query.offset': 'scrollResultsToTop',
-    '$route.query.limit': 'scrollResultsToTop',
-  },
+  const requested = route.fullPath;
+  promise.value = (c2c as unknown as Record<string, DocumentService>)[documentType.value]
+    .getAll(route.query)
+    .then((response) => {
+      // the list has its height: back from a document, the router can restore the scroll position
+      bus.emit('trigger-scroll');
 
-  methods: {
-    load() {
-      this.displayMode = preferences.get(
-        this.documentType + '.displayMode',
-        this.documentAreGeoLocalized ? 'both' : 'result'
-      );
-      this.listMode = preferences.get(this.documentType + '.listMode', false);
-
-      if (this.$route.hash) {
-        // keep compatible with v6 AngularJs hacks...
-        this.$router.replace(this.$route.fullPath.replace('#', '?'));
-        // $route watcher will call load
-        return;
+      // past the last page, which happens when the map is moved to a sparser area: show the last page instead
+      const lastPageQuery = normalizedPageQuery(route, response.data.total);
+      if (lastPageQuery && route.fullPath === requested) {
+        router.replace(lastPageQuery);
       }
+    });
+}
 
-      // offset in the middle of a page (old link...): go to the page it belongs to before loading anything
-      const pageQuery = this.normalizedPageQuery(0);
-      if (pageQuery) {
-        this.$router.replace(pageQuery);
-        // $route watcher will call load
-        return;
-      }
+// as soon as another page is asked for, not once its results are loaded
+function scrollResultsToTop() {
+  if (documentsContainer.value) {
+    documentsContainer.value.scrollTop = 0;
+  }
+}
 
-      const route = this.$route.fullPath;
-      this.promise = c2c[this.documentType].getAll(this.$route.query).then((response) => {
-        // the list has its height: back from a document, the router can restore the scroll position
-        bus.emit('trigger-scroll');
+// the display preferences, per document type
+function setListMode(value: boolean) {
+  listMode.value = value;
+  preferences.set(`${documentType.value}.listMode`, value);
+}
 
-        // past the last page, which happens when the map is moved to a sparser area: show the last page instead
-        const lastPageQuery = this.normalizedPageQuery(response.data.total);
-        if (lastPageQuery && this.$route.fullPath === route) {
-          this.$router.replace(lastPageQuery);
-        }
-      });
-    },
+function setDisplayMode(value: string) {
+  displayMode.value = value;
+  preferences.set(`${documentType.value}.displayMode`, value);
+}
 
-    // on large screens the list scrolls in its own container, which the router knows nothing about
-    scrollResultsToTop() {
-      const container = this.$refs.documentsContainer;
-      if (container) {
-        container.scrollTop = 0;
-      }
-    },
+function getDocumentTypeTitle(documentType: string) {
+  return $gettext(documentType + 's');
+}
 
-    toogleProperty(property) {
-      this.setProperty(property, !this[property]);
-    },
+// when map container is resized (which happen when displayMode switchs between both and map),
+// openLayer need an explicit resize
+function updateMapSize(newValue: string, oldValue: string) {
+  if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
+    nextTick(() => olMap.value?.map.updateSize());
+  }
+}
 
-    setProperty(property, value) {
-      this[property] = value;
-      preferences.set(`${this.documentType}.${property}`, this[property]);
-    },
+function onQueryDocumentsLoad(documents: C2cDocument[]) {
+  queryHasTags.value = documents.length > 0;
+  filteredWaypoints.value = documents.filter((document) => document.type === 'w');
 
-    getDocumentTypeTitle(documentType) {
-      return this.$gettext(documentType + 's');
-    },
+  // do not display waypoints associated
+  filteredWaypoints.value.forEach((document) => delete document.associations);
+}
 
-    // when map container is resized (which happen when displayMode switchs between both and map),
-    // openLayer need an explicit resize
-    updateMapSize(newValue, oldValue) {
-      if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
-        this.$nextTick(this.$refs.map.map.updateSize.bind(this.$refs.map.map));
-      }
-    },
-
-    onQueryDocumentsLoad(documents) {
-      this.queryHasTags = documents.length > 0;
-      this.filteredWaypoints = documents.filter((document) => document.type === 'w');
-
-      // do not display waypoints associated
-      this.filteredWaypoints.forEach((document) => delete document.associations);
-    },
-  },
-};
+watch(() => route.fullPath, load, { immediate: true });
+watch(displayMode, updateMapSize);
+watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
 </script>
 
-<style scoped lang="scss">
-$section-padding: 1.5rem; //TODO find this variable
-$header-height: 34px;
-$header-padding-bottom: 1.5rem; //TODO find this variable
-$filter-height: 32px;
-$tags-height: 28px;
-$filter-padding-bottom: 0.5rem;
-// prettier-ignore
-$result-height: calc(
-  100vh - #{$navbar-height} - 2 * #{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height}
-);
-// prettier-ignore
-$result-height-with-tags: calc(
-  100vh - #{$navbar-height} - 2 * #{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$tags-height}
-);
-$cards-gap: 0.25rem;
+<style scoped>
+@import '@/assets/css/media.css';
+
+/*
+ * The heights: section padding 1.5rem, header 34px with a bottom padding of 1.5rem, filters 32px with a bottom
+ * padding of 0.5rem, tags 28px. On mobile: section padding 0.5rem, header 56px, filters 25px.
+ */
 
 .header-section {
-  padding-bottom: $header-padding-bottom;
+  padding-bottom: 1.5rem;
 }
 
 .header-right {
@@ -337,31 +297,27 @@ $cards-gap: 0.25rem;
 }
 
 .filter-section {
-  padding-bottom: $filter-padding-bottom;
+  padding-bottom: 0.5rem;
   clear: both;
 }
 
-@media screen and (max-width: $tablet) {
-  $mobile-section-padding: 0.5rem;
-  $mobile-header-height: 56px;
-  $mobile-filters-height: 25px;
-
+@media screen and (--c2c-max-tablet) {
   .search-infos {
     position: fixed;
-    top: $navbar-height;
+    top: var(--c2c-navbar-height);
     left: 0;
     right: 0;
     z-index: 24;
-    background-color: $body-background-color;
-    padding-top: $mobile-section-padding;
+    background-color: var(--c2c-body-background-color);
+    padding-top: 0.5rem;
   }
 
   .result-section {
-    padding-top: calc(2 * #{$mobile-section-padding} + #{$mobile-header-height} + #{$mobile-filters-height});
+    padding-top: calc(2 * 0.5rem + 56px + 25px);
   }
 
   .documents-view {
-    padding-top: $mobile-section-padding;
+    padding-top: 0.5rem;
     padding-left: 0;
     padding-right: 0;
     padding-bottom: 0;
@@ -371,7 +327,7 @@ $cards-gap: 0.25rem;
   .header-section {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-    padding-bottom: $mobile-section-padding;
+    padding-bottom: 0.5rem;
   }
 
   .header-right {
@@ -379,16 +335,14 @@ $cards-gap: 0.25rem;
   }
 
   .map-container {
-    height: $result-height;
+    height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
     padding: 0;
   }
 
   .mobile-mode-map {
     margin-top: 0;
     .map-container {
-      height: calc(
-        100vh - #{$navbar-height} - 3 * #{$mobile-section-padding} - #{$mobile-header-height} - #{$mobile-filters-height}
-      );
+      height: calc(100vh - var(--c2c-navbar-height) - 3 * 0.5rem - 56px - 25px);
     }
 
     .documents-container {
@@ -399,18 +353,18 @@ $cards-gap: 0.25rem;
   .mobile-mode-result,
   .mobile-mode-both {
     .map-container {
-      visibility: hidden; // map does not like to be in a display none...
+      visibility: hidden; /* map does not like to be in a display none... */
     }
   }
 }
 
-@media screen and (min-width: $tablet) {
+@media screen and (--c2c-min-tablet) {
   .result-section {
     margin-top: 0;
-    height: $result-height;
+    height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
 
     &.query-has-tags {
-      height: $result-height-with-tags;
+      height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px - 28px);
     }
 
     .documents-container {
@@ -430,7 +384,7 @@ $cards-gap: 0.25rem;
         flex: 0 0 auto;
       }
 
-      // the table scrolls by itself: it takes the room left by the navigation
+      /* the table scrolls by itself: it takes the room left by the navigation */
       .documents-table {
         flex: 1 1 auto;
         min-height: 0;

@@ -98,38 +98,28 @@
   </div>
 </template>
 
-<script>
-import TopoguideViewLink from './TopoguideViewLink';
-import TopoguideViewSmallLink from './TopoguideViewSmallLink';
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import TopoguideViewLink from './TopoguideViewLink.vue';
+import TopoguideViewSmallLink from './TopoguideViewSmallLink.vue';
 
 import constants from '@/js/constants';
 
-export default {
-  components: {
-    TopoguideViewLink,
-    TopoguideViewSmallLink,
-  },
+const activities = computed(() => constants.activities);
 
-  computed: {
-    activities() {
-      return constants.activities;
-    },
-    waypoint_types() {
-      return constants.waypoint_types;
-    },
-  },
-};
+const waypoint_types = computed(() => constants.waypoint_types);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .topoguide {
   background-image: url('@/assets/img/backgrounds/laurentf-sajama-800w.jpg');
   background-position-x: center;
   background-size: cover;
-  padding-top: 90px; //keep the header on a deep color zone
+  padding-top: 90px; /* keep the header on a deep color zone */
   padding-bottom: 25px;
   justify-content: center;
-  // 1224px because after 1024px breakpoint, we have an additional 200px wide menu on the left
+  /* 1224px because after 1024px breakpoint, we have an additional 200px wide menu on the left */
   @media (min-width: 800px) and (max-width: 1224px) {
     background-image: url('@/assets/img/backgrounds/laurentf-sajama-1024w.jpg');
   }
@@ -139,7 +129,7 @@ export default {
 
   h1 {
     font-size: 3rem;
-    color: $light;
+    color: var(--c2c-light);
     margin-bottom: 25px;
   }
 

@@ -17,58 +17,55 @@
   </div>
 </template>
 
-<script>
-import { uidMixin } from '@/js/uid';
+<script setup lang="ts">
+import { computed, useTemplateRef } from 'vue';
 
-export default {
-  mixins: [uidMixin],
+import { useUid } from '@/js/uid';
 
-  props: {
-    value: {
-      type: Number,
-      default: null,
-    },
-    min: {
-      type: Number,
-      default: null,
-    },
-    max: {
-      type: Number,
-      default: null,
-    },
-    interval: {
-      type: Number,
-      default: null,
-    },
+const props = defineProps({
+  modelValue: {
+    type: Number,
+    default: null,
   },
-  emits: ['change', 'input'],
+  min: {
+    type: Number,
+    default: null,
+  },
+  max: {
+    type: Number,
+    default: null,
+  },
+  interval: {
+    type: Number,
+    default: null,
+  },
+});
 
-  computed: {
-    _value: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.$emit('input', value);
-      },
-    },
+const emit = defineEmits(['change', 'update:modelValue']);
+
+const { uid } = useUid();
+const slider = useTemplateRef<{ $el: HTMLElement }>('slider');
+
+const _value = computed({
+  get: () => props.modelValue,
+  set(value) {
+    emit('update:modelValue', value);
   },
-  methods: {
-    focus() {
-      this.$refs.slider.$el.querySelector('[role=slider]').focus({ focusVisible: true });
-    },
-  },
-};
+});
+
+function focus() {
+  slider.value!.$el.querySelector<HTMLElement>('[role=slider]')!.focus({ focusVisible: true });
+}
 </script>
 
-<style lang="scss">
+<style>
 .yeti-app {
   /* customization of the slider (@vueform/slider) */
   .input-slider {
-    --slider-connect-bg: #{$primary};
-    --slider-bg: #{$grey-lighter};
-    --slider-handle-shadow: 0 0 0 2px #{$primary};
-    --slider-handle-ring-color: #{$secondary};
+    --slider-connect-bg: var(--c2c-primary);
+    --slider-bg: var(--c2c-grey-lighter);
+    --slider-handle-shadow: 0 0 0 2px var(--c2c-primary);
+    --slider-handle-ring-color: var(--c2c-secondary);
     --slider-handle-ring-width: 4px;
     --slider-handle-width: 14px;
     --slider-handle-height: 14px;

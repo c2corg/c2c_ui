@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -10,11 +10,14 @@
 
     <meta name="theme-color" content="#F93" />
     <meta name="application-name" content="Camptocamp.org" />
-    <link rel="preconnect" href="%CAMPTOCAMP_API_URL%" />
-    <link rel="preconnect" href="%CAMPTOCAMP_MEDIA_URL%" />
+    <!-- runtime configuration (backend urls), before the app: inlined here when the container starts (data-c2c-config,
+      docker/runtime-config.sh), so that the first render doesn't wait for another request; empty otherwise -->
+    <script src="%BASE_URL%config.js" nonce="__CSP_NONCE__" data-c2c-config></script>
+    <!-- data-c2c-url: updated when the container starts if the matching C2C_*_URL variable is set (docker/runtime-config.sh) -->
+    <link rel="preconnect" href="%CAMPTOCAMP_API_URL%" data-c2c-url="api" />
+    <link rel="preconnect" href="%CAMPTOCAMP_MEDIA_URL%" data-c2c-url="media" />
     <meta property="fb:pages" content="175865161596" />
     <meta property="og:sitename" content="Camptocamp.org" />
-    <link rel="stylesheet" href="%BASE_URL%swiper.css" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -46,6 +49,6 @@
     </div>
     <!-- Vue 3 mounts App.vue inside this element (Vue 2 replaced it): App.vue keeps the id="app" -->
     <div id="app-mount"></div>
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

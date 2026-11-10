@@ -6,36 +6,34 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    document: {
-      type: Object,
-      default: null,
-    },
-    target: {
-      type: String,
-      default: undefined,
-    },
-    highlighted: {
-      type: Boolean,
-      default: false,
-    },
+<script setup lang="ts">
+defineProps({
+  document: {
+    type: Object,
+    default: null,
   },
-};
+  target: {
+    type: String,
+    default: undefined,
+  },
+  highlighted: {
+    type: Boolean,
+    default: false,
+  },
+});
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .card {
   transition: 0.1s;
-  border: $card-border;
+  border: var(--c2c-card-border);
   background: white;
 }
 
 .card:hover,
 .is-highlighted {
   transition: 0.2s;
-  box-shadow: $card-hover-shadow;
-  background: $hover-background;
+  box-shadow: var(--c2c-card-hover-shadow);
+  background: var(--c2c-hover-background);
 }
 </style>

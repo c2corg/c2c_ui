@@ -4,7 +4,8 @@
       <icon-area />
       <span>&nbsp;</span>
       <span v-for="area of document.areas" :key="area.document_id" class="area-link">
-        <document-link :document="area" />&#0032;
+        <!-- the space as an expression: Vue 3 drops a whitespace-only text at the end of an element, &#0032; included -->
+        <document-link :document="area" />{{ ' ' }}
       </span>
     </div>
 
@@ -22,9 +23,9 @@
         }"
       >
         <map-view
-          ref="mapView"
+          ref="olMap"
           :documents="new Array(document)"
-          :show-protection-areas="['r', 'w'].includes(document.type)"
+          :show-protection-areas="['r', 'w'].includes(document.type!)"
           :biodiv-sports-activities="document.activities"
           :full-screen-element-id="
             !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
@@ -44,6 +45,8 @@
       <button
         v-if="hasMapLinks"
         class="button is-small"
+        :aria-label="$gettext('maps')"
+        :aria-expanded="mapLinksAreVisible"
         @click="mapLinksAreVisible = !mapLinksAreVisible"
         :class="{ 'is-success': mapLinksAreVisible }"
       >
@@ -54,158 +57,156 @@
   </div>
 </template>
 
-<script>
-import ElevationProfile from './ElevationProfile';
-import MapLinks from './MapLinks';
+<script setup lang="ts">
+import type { Feature } from 'ol';
+import type FeatureFormat from 'ol/format/Feature';
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue';
+import { useRoute } from 'vue-router';
 
+import ElevationProfile from './ElevationProfile.vue';
+import MapLinks from './MapLinks.vue';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import bus from '@/js/event-bus';
-import ol from '@/js/libs/ol';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 import utils from '@/js/utils';
 
-const GeoJSON = new ol.format.GeoJSON();
+const props = defineProps({ ...documentProperty });
 
-export default {
-  components: {
-    ElevationProfile,
-    MapLinks,
-  },
+defineEmits(['has-protection-area']);
 
-  mixins: [requireDocumentProperty],
+const route = useRoute();
+const { $documentUtils } = useGlobalProperties();
+const { documentType } = useDocumentType(props);
 
-  emits: ['has-protection-area'],
+// named apart from the map-view tag
+const olMap = useTemplateRef<{ fitMapToDocuments(): void }>('olMap');
 
-  data() {
-    return {
-      mapLinksAreVisible: false,
-      elevationProfileHasData: false,
-      elevationProfileHidden: false,
-      pinnedMode: 0,
-      pinnedSide: '',
-    };
-  },
+const mapLinksAreVisible = ref(false);
+const elevationProfileHasData = ref(false);
+const elevationProfileHidden = ref(false);
+const pinnedMode = ref(0);
+const pinnedSide = ref('');
 
-  computed: {
-    showElevationProfile() {
-      return this.documentType === 'outing';
-    },
+const showElevationProfile = computed(() => documentType.value === 'outing');
 
-    showDownloadTraceButtons() {
-      return this.document.geometry && (this.document.geometry.geom_detail || this.documentType === 'waypoint');
-    },
+const showDownloadTraceButtons = computed(
+  () => props.document.geometry && (props.document.geometry.geom_detail || documentType.value === 'waypoint')
+);
 
-    hasMapLinks() {
-      return (this.document.maps && this.document.maps.length !== 0) || this.document.maps_info;
-    },
-  },
+const hasMapLinks = computed(
+  () => (props.document.maps && props.document.maps.length !== 0) || props.document.maps_info
+);
 
-  mounted() {
-    bus.on('elevation_profile', this.onElevationProfile);
-    window.addEventListener('resize', this.resizePin);
-  },
+function onElevationProfile(event: unknown) {
+  const { action, hide } = event as { action: string; hide: boolean };
+  if (action === 'toggle_fullscreen') {
+    elevationProfileHidden.value = hide;
+  }
+}
 
-  beforeDestroy() {
-    bus.off('elevation_profile', this.onElevationProfile);
-    window.removeEventListener('resize', this.resizePin);
-    if (this.pinnedMode) this.togglePinToSide(true);
-    if (this.pinnedMode) this.togglePinToSide(true);
-  },
+function togglePinToSide(toggle: boolean) {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const breakMobile = 769;
+  // disable eg pin-to-right on mobile
+  const maxMode = width < breakMobile || height < breakMobile ? 2 : 3;
 
-  methods: {
-    onElevationProfile({ action, hide }) {
-      if (action === 'toggle_fullscreen') {
-        this.elevationProfileHidden = hide;
-      }
-    },
+  const toggleAmount = toggle ? 1 : 0;
+  // 0: unpinned / 1: pinned side1 / 2: pinned side2
+  pinnedMode.value = (pinnedMode.value + toggleAmount) % maxMode;
 
-    togglePinToSide(toggle) {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const breakMobile = 769;
-      // disable eg pin-to-right on mobile
-      const maxMode = width < breakMobile || height < breakMobile ? 2 : 3;
+  // side1 is the preferred side for comfort, ie the larger dimension
+  const [side1, side2] = width < height * 1.5 ? ['top', 'right'] : ['right', 'top'];
+  pinnedSide.value = pinnedMode.value === 0 ? '' : pinnedMode.value === 1 ? side1 : side2;
 
-      const toggleAmount = toggle ? 1 : 0;
-      // 0: unpinned / 1: pinned side1 / 2: pinned side2
-      this.pinnedMode = (this.pinnedMode + toggleAmount) % maxMode;
+  // the document prop shadows the global document
+  const body = window.document.body;
+  if (pinnedSide.value === 'right') {
+    body.style.paddingRight = '30%';
+    body.style.paddingTop = '';
+  } else if (pinnedSide.value === 'top') {
+    body.style.paddingRight = '';
+    body.style.paddingTop = '45vh'; // as % is relative to width
+  } else {
+    body.style.paddingRight = '';
+    body.style.paddingTop = '';
+  }
+  setTimeout(() => {
+    // deferred so that map.getSize() gets updated
+    if (olMap.value) {
+      olMap.value.fitMapToDocuments();
+    }
+  });
+}
 
-      // side1 is the preferred side for comfort, ie the larger dimension
-      const [side1, side2] = width < height * 1.5 ? ['top', 'right'] : ['right', 'top'];
-      this.pinnedSide = this.pinnedMode === 0 ? '' : this.pinnedMode === 1 ? side1 : side2;
+function resizePin() {
+  togglePinToSide(false);
+}
 
-      if (this.pinnedSide === 'right') {
-        document.body.style.paddingRight = '30%';
-        document.body.style.paddingTop = null;
-      } else if (this.pinnedSide === 'top') {
-        document.body.style.paddingRight = null;
-        document.body.style.paddingTop = '45vh'; // as % is relative to width
-      } else {
-        document.body.style.paddingRight = null;
-        document.body.style.paddingTop = null;
-      }
-      setTimeout(() => {
-        // deferred so that map.getSize() gets updated
-        if (this.$refs.mapView) {
-          this.$refs.mapView.fitMapToDocuments();
-        }
-      });
-    },
+// the OpenLayers formats are only loaded for a download
+async function downloadKml() {
+  const { default: KML } = await import('ol/format/KML');
+  await downloadFeatures(new KML(), '.kml', 'application/vnd.google-earth.kml+xml');
+}
 
-    resizePin() {
-      this.togglePinToSide(false);
-    },
+async function downloadGpx() {
+  const { default: GPX } = await import('ol/format/GPX');
+  await downloadFeatures(new GPX(), '.gpx', 'application/gpx+xml');
+}
 
-    hasDataChanged(value) {
-      this.elevationProfileHasData = value;
-    },
+async function downloadFeatures(format: FeatureFormat, extension: string, mimetype: string) {
+  const { default: GeoJSONFormat } = await import('ol/format/GeoJSON');
+  const GeoJSON = new GeoJSONFormat();
+  const geometry = props.document.geometry!;
+  let features: Feature[] = [];
+  if (geometry.geom_detail) {
+    features = GeoJSON.readFeatures(geometry.geom_detail);
+  } else if (geometry.geom) {
+    features = GeoJSON.readFeatures(geometry.geom);
+  }
+  if (!features.length) {
+    return;
+  }
 
-    downloadKml() {
-      this.downloadFeatures(new ol.format.KML(), '.kml', 'application/vnd.google-earth.kml+xml');
-    },
+  // Export only the current document geometry, not the associated features
+  const feature = features[0];
+  const name = $documentUtils.getDocumentTitle(props.document, route.params.lang as string);
 
-    downloadGpx() {
-      this.downloadFeatures(new ol.format.GPX(), '.gpx', 'application/gpx+xml');
-    },
+  feature.set('name', name);
 
-    downloadFeatures(format, extension, mimetype) {
-      let features = [];
-      if (this.document.geometry.geom_detail) {
-        features = GeoJSON.readFeatures(this.document.geometry.geom_detail);
-      } else if (this.document.geometry.geom) {
-        features = GeoJSON.readFeatures(this.document.geometry.geom);
-      }
-      if (!features.length) {
-        return;
-      }
+  const filename = getDownloadedFileName(name, extension);
+  const content = format.writeFeatures([feature], {
+    featureProjection: 'EPSG:3857',
+  }) as string;
 
-      // Export only the current document geometry, not the associated features
-      const feature = features[0];
-      const name = this.$documentUtils.getDocumentTitle(this.document, this.$route.params.lang);
+  utils.download(content, filename, mimetype + ';charset=utf-8');
+}
 
-      feature.set('name', name);
+function getDownloadedFileName(name: string, extension: string) {
+  let filename = props.document.document_id + '_' + name.substring(0, 100);
+  if (documentType.value === 'outing') {
+    filename = filename + '_' + props.document.date_start;
+  }
+  // Remove forbidden characters/spaces, and replace them with '_'
+  return filename.replace(/[/\\?%*:|"<>]/g, ' ').replace(/\s+/g, '_') + extension;
+}
 
-      const filename = this.getDownloadedFileName(name, extension);
-      const content = format.writeFeatures([feature], {
-        featureProjection: 'EPSG:3857',
-      });
+onMounted(() => {
+  bus.on('elevation_profile', onElevationProfile);
+  window.addEventListener('resize', resizePin);
+});
 
-      utils.download(content, filename, mimetype + ';charset=utf-8');
-    },
-
-    getDownloadedFileName(name, extension) {
-      let filename = this.document.document_id + '_' + name.substring(0, 100);
-      if (this.documentType === 'outing') {
-        filename = filename + '_' + this.document.date_start;
-      }
-      // Remove forbidden characters/spaces, and replace them with '_'
-      return filename.replace(/[/\\?%*:|"<>]/g, ' ').replace(/\s+/g, '_') + extension;
-    },
-  },
-};
+onBeforeUnmount(() => {
+  bus.off('elevation_profile', onElevationProfile);
+  window.removeEventListener('resize', resizePin);
+  if (pinnedMode.value) togglePinToSide(true);
+  if (pinnedMode.value) togglePinToSide(true);
+});
 </script>
 
-<style lang="scss" scoped>
-@import 'bulma/sass/utilities/mixins.sass';
+<style scoped>
+@import '@/assets/css/media.css';
 
 .map-container {
   margin-top: 1rem;
@@ -220,22 +221,22 @@ export default {
 :not(:fullscreen) > .map-container {
   &.pinned {
     position: fixed;
-    top: $navbar-height;
+    top: var(--c2c-navbar-height);
     margin-top: 0; /*avoid space between nav and map, where body text can be seen while scrolling*/
     z-index: 10; /* on top of body but below navbar (z=25) and side-menu (z=30) */
-    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.4); // <o-x> <o-y> <radius>
+    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.4); /* <o-x> <o-y> <radius> */
   }
   &.pinned-to-top {
     right: 0px;
     height: 45vh;
     width: 100%;
-    @include desktop {
-      left: $sidemenu-width; /* when sidemenu is shown, as in App.vue */
+    @media screen and (--c2c-min-desktop) {
+      left: var(--c2c-sidemenu-width); /* when sidemenu is shown, as in App.vue */
     }
   }
   &.pinned-to-right {
     right: 0px;
-    height: calc(100vh - #{$navbar-height});
+    height: calc(100vh - var(--c2c-navbar-height));
     width: 30vw;
   }
 }

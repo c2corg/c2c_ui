@@ -3,9 +3,9 @@
     <component
       :is="previousPageQuery ? 'router-link' : 'span'"
       class="pagination-link button has-text-normal"
-      :disabled="!previousPageQuery"
+      :disabled="!previousPageQuery || null"
       :aria-disabled="!previousPageQuery ? 'true' : null"
-      :to="previousPageQuery"
+      :to="previousPageQuery ?? undefined"
     >
       <fa-icon icon="chevron-left" />
     </component>
@@ -15,9 +15,9 @@
     <component
       :is="nextPageQuery ? 'router-link' : 'span'"
       class="pagination-link button has-text-normal"
-      :disabled="!nextPageQuery"
+      :disabled="!nextPageQuery || null"
       :aria-disabled="!nextPageQuery ? 'true' : null"
-      :to="nextPageQuery"
+      :to="nextPageQuery ?? undefined"
     >
       <fa-icon icon="chevron-right" />
     </component>
@@ -37,7 +37,7 @@
           class="dropdown-item is-small"
           :class="{ 'is-active': queryLimit === l }"
           :to="limitQuery(l)"
-          @click.native="hideOnclick"
+          @click="hideOnclick"
         >
           <span>{{ l }}</span>
         </component>
@@ -47,53 +47,43 @@
   </span>
 </template>
 
-<script>
-import pageQueryMixin from './page-query-mixin';
+<script setup lang="ts">
+import { computed, ref, useTemplateRef, watch, type PropType } from 'vue';
 
-export default {
-  mixins: [pageQueryMixin],
+import { usePageQuery } from './page-query';
 
-  props: {
-    documents: {
-      type: Object,
-      default: null,
-    },
+import type DropdownButton from '@/components/generics/DropdownButton.vue';
+
+const props = defineProps({
+  // the page of documents, and their total
+  documents: {
+    type: Object as PropType<{ total: number } | null>,
+    default: null,
   },
+});
 
-  data() {
-    return {
-      total: 30,
-    };
-  },
+const total = ref(30);
+const limitSelector = useTemplateRef<InstanceType<typeof DropdownButton>>('limitSelector');
 
-  computed: {
-    firstDocumentPosition() {
-      return this.pageStart + 1;
-    },
-    lastDocumentPosition() {
-      return Math.min(this.pageStart + this.queryLimit, this.total);
-    },
-  },
+const { queryLimit, pageStart, previousPageQuery, nextPageQuery, limitQuery } = usePageQuery(total);
 
-  watch: {
-    documents: 'saveTotal',
-  },
+const firstDocumentPosition = computed(() => pageStart.value + 1);
+const lastDocumentPosition = computed(() => Math.min(pageStart.value + queryLimit.value, total.value));
 
-  methods: {
-    saveTotal() {
-      if (this.documents) {
-        this.total = this.documents.total;
-      }
-    },
+function saveTotal() {
+  if (props.documents) {
+    total.value = props.documents.total;
+  }
+}
 
-    hideOnclick() {
-      this.$refs.limitSelector.isActive = false;
-    },
-  },
-};
+function hideOnclick() {
+  limitSelector.value!.isActive = false;
+}
+
+watch(() => props.documents, saveTotal);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .pagination-link {
   height: 1.75em;
 }

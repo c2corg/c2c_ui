@@ -5,25 +5,20 @@
   </fa-layers>
 </template>
 
-<script>
-export default {
-  props: {
-    visible: {
-      type: Boolean,
-      default: true,
-    },
+<script setup lang="ts">
+defineProps({
+  visible: {
+    type: Boolean,
+    default: true,
   },
-
-  emits: ['click'],
-};
+});
+defineEmits(['click']);
 </script>
 
-<style scoped lang="scss">
-@import 'bulma/sass/utilities/initial-variables.sass';
-
+<style scoped>
 div {
   cursor: pointer;
-  color: $red;
+  color: var(--c2c-red);
   transition: 300ms;
 
   svg {

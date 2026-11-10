@@ -10,7 +10,7 @@
           &nbsp;
           <br class="is-hidden-tablet" />
           <itinevert-page-selector
-            :documents="filteredDocuments"
+            :documents="filteredDocuments ?? undefined"
             :limit="limit"
             :offset="offset"
             @paginate="paginatePostNavitiaDocuments"
@@ -34,9 +34,9 @@
           <template v-if="documentAreGeoLocalized">
             <display-mode-switch
               class="header-item is-hidden-mobile"
-              :list-mode="'listMode'"
-              :value="displayMode"
-              @input="setProperty('displayMode', $event)"
+              :list-mode="Boolean(listMode)"
+              :model-value="displayMode"
+              @update:model-value="setProperty('displayMode', $event)"
             />
 
             <span class="is-size-3 is-hidden-tablet">
@@ -51,7 +51,7 @@
       </div>
       <query-items
         class="filter-section"
-        :list-mode="listMode"
+        :list-mode="Boolean(listMode)"
         :doc-type="documentType"
         :show-print-button="false"
       ></query-items>
@@ -68,12 +68,7 @@
       >
         <loading-notification :promise="promise" />
 
-        <image-cards v-if="filteredDocuments && !listMode && documentType === 'image'" :documents="filteredDocuments" />
-
-        <div
-          v-if="filteredDocuments && !listMode && documentType !== 'image'"
-          class="columns is-multiline is-variable is-1 cards-list"
-        >
+        <div v-if="filteredDocuments && !listMode" class="columns is-multiline is-variable is-1 cards-list">
           <div
             v-for="(document, index) in filteredDocuments.documents"
             :key="index"
@@ -92,9 +87,9 @@
 
         <documents-table
           v-if="listMode"
-          :documents="filteredDocuments ? filteredDocuments : {}"
+          :documents="filteredDocuments ?? ({} as Documents)"
           :document-type="documentType"
-          :highlighted-document="highlightedDocument"
+          :highlighted-document="highlightedDocument ?? undefined"
           :open-in-new-tab="true"
           @highlight-document="highlightedDocument = $event"
           class="documents-table"
@@ -116,322 +111,298 @@
   </div>
 </template>
 
-<script>
-import DisplayModeSwitch from '../../views/documents/utils/DisplayModeSwitch';
+<script setup lang="ts">
+import { computed, defineAsyncComponent, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { useRoute } from 'vue-router';
+
+import DisplayModeSwitch from '../../views/documents/utils/DisplayModeSwitch.vue';
 
 import ItinevertPageSelector from './ItinevertPageSelector.vue';
 
-import itinevertService, { POLYGON_STYLE } from '@/js/apis/itinevert-service';
+import itinevertService, { POLYGON_STYLE, type Query } from '@/js/apis/itinevert-service';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 import QueryItems from '@/views/documents/utils/QueryItems.vue';
 
-const DocumentsTable = () => import('@/components/datatable/DocumentsTable');
+type Documents = { documents: C2cDocument[]; total: number };
+type ResultPromise = { data: unknown; error: unknown; cancel: () => void };
+
+// lazy (ag-grid is big): an async component, as Vue 3 no longer takes a plain function returning the import
+const DocumentsTable = defineAsyncComponent(() => import('@/components/datatable/DocumentsTable.vue'));
 
 // stored under the component name, as before: existing preferences are kept
 const preferences = getPreferences('ItinevertResultView');
 
-export default {
-  name: 'ItinevertResultView',
-
-  components: {
-    QueryItems,
-    ItinevertPageSelector,
-    DocumentsTable,
-    DisplayModeSwitch,
+const props = defineProps({
+  fields: {
+    type: Array,
+    default: () => [],
   },
-
-  props: {
-    fields: {
-      type: Array,
-      default: () => [],
-    },
-    baseQuery: {
-      type: Object,
-      default: null,
-    },
-    documents: {
-      type: Object,
-      default: null,
-    },
-    documentType: {
-      type: String,
-      default: '',
-    },
-    // either the area geometry or the isochrone geometry
-    polygonGeometry: {
-      type: Object,
-      default: null,
-    },
-    isochroneBbox: {
-      type: String,
-      default: '',
-    },
+  baseQuery: {
+    type: Object,
+    default: null,
   },
-
-  data() {
-    return {
-      displayMode: 'both',
-      listMode: null,
-
-      isMobile: null,
-
-      highlightedDocument: null,
-
-      filteredDocuments: null,
-
-      filteredDocumentsBeforePagination: null,
-
-      queryHasTags: false,
-
-      offset: 0,
-
-      limit: 30,
-
-      lastQuery: {},
-
-      promise: {},
-    };
+  documents: {
+    type: Object as () => Documents | null,
+    default: null,
   },
-
-  computed: {
-    showMap() {
-      return ['both', 'map'].includes(this.displayMode);
-    },
-    showResults() {
-      return ['result', 'both'].includes(this.displayMode);
-    },
-    documentAreGeoLocalized() {
-      return constants.objectDefinitions[this.documentType].geoLocalized === true;
-    },
-    documentsShownOnMap() {
-      const mapDocuments = [];
-      if (this.polygonGeometry !== null) {
-        // create an area document based on polygon geometry
-        const areaDocument = {
-          document_id: -1, // synthetic ID to avoid conflicts with real documents
-          type: 'a',
-          geometry: {
-            version: 1,
-            geom: JSON.stringify(this.polygonGeometry),
-            geom_detail: JSON.stringify(this.polygonGeometry),
-          },
-          properties: {
-            ...POLYGON_STYLE,
-            nonInteractive: true,
-          },
-        };
-        mapDocuments.push(areaDocument);
-      }
-      if (this.filteredDocuments) {
-        return this.filteredDocuments?.documents?.concat(mapDocuments);
-      } else {
-        return this.documents?.documents?.concat(mapDocuments);
-      }
-    },
+  documentType: {
+    type: String,
+    default: '',
   },
+  // either the area geometry or the isochrone geometry
+  polygonGeometry: {
+    type: Object,
+    default: null,
+  },
+  isochroneBbox: {
+    type: String,
+    default: '',
+  },
+});
 
-  watch: {
-    displayMode: 'updateMapSize',
-    '$route.query': {
-      async handler(newQuery) {
-        this.filterPostNavitiaDocuments(newQuery);
+const route = useRoute();
+const { $gettext } = useGlobalProperties();
+
+const displayMode = ref('both');
+const listMode = ref<boolean | null>(null);
+const highlightedDocument = ref<C2cDocument | null>(null);
+const filteredDocuments = ref<Documents | null>(null);
+const filteredDocumentsBeforePagination = ref<Documents | null>(null);
+const queryHasTags = ref(false);
+const offset = ref(0);
+const limit = ref(30);
+const promise = ref<ResultPromise | Record<string, never>>({});
+const map = useTemplateRef<{ map: { updateSize(): void } }>('map');
+
+const showMap = computed(() => ['both', 'map'].includes(displayMode.value));
+const showResults = computed(() => ['result', 'both'].includes(displayMode.value));
+const documentAreGeoLocalized = computed(
+  () =>
+    (constants.objectDefinitions as unknown as Record<string, { geoLocalized?: boolean }>)[props.documentType]
+      .geoLocalized === true
+);
+const documentsShownOnMap = computed(() => {
+  const mapDocuments: C2cDocument[] = [];
+  if (props.polygonGeometry !== null) {
+    // create an area document based on polygon geometry
+    const areaDocument = {
+      document_id: -1, // synthetic ID to avoid conflicts with real documents
+      type: 'a',
+      geometry: {
+        version: 1,
+        geom: JSON.stringify(props.polygonGeometry),
+        geom_detail: JSON.stringify(props.polygonGeometry),
       },
-    },
-  },
+      properties: {
+        ...POLYGON_STYLE,
+        nonInteractive: true,
+      },
+    };
+    mapDocuments.push(areaDocument);
+  }
+  if (filteredDocuments.value) {
+    return filteredDocuments.value?.documents?.concat(mapDocuments);
+  } else {
+    return props.documents?.documents?.concat(mapDocuments);
+  }
+});
 
-  mounted() {
-    // init filtered documents
-    if (!this.documents) {
-      this.filteredDocuments = { documents: [], total: 0 };
-      this.filteredDocumentsBeforePagination = { documents: [], total: 0 };
-      this.promise = { data: this.filteredDocuments, error: null, cancel: () => {} };
-      return;
+// the display preferences: list or cards, map or not
+const displayProperties = { listMode, displayMode } as const;
+type DisplayProperty = keyof typeof displayProperties;
+
+function setProperty(property: DisplayProperty, value: unknown) {
+  (displayProperties[property] as { value: unknown }).value = value;
+  preferences.set(`${props.documentType}.${property}`, value);
+}
+
+function toogleProperty(property: DisplayProperty) {
+  setProperty(property, !displayProperties[property].value);
+}
+
+function getDocumentTypeTitle(documentType: string) {
+  return $gettext(documentType + 's');
+}
+
+// when map container is resized (which happen when displayMode switchs between both and map),
+// openLayer need an explicit resize
+watch(displayMode, (newValue, oldValue) => {
+  if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
+    nextTick(() => map.value?.map.updateSize());
+  }
+});
+
+function paginatePostNavitiaDocuments(pagination: [number, number]) {
+  offset.value = pagination[0];
+  limit.value = pagination[1];
+  // whenever a filter is applied, check if offset is < then total
+  if (offset.value > filteredDocuments.value!.total) {
+    offset.value = Math.max(filteredDocuments.value!.total - limit.value, 0);
+  }
+
+  // apply pagination
+  filteredDocuments.value = {
+    documents: filteredDocumentsBeforePagination.value!.documents.slice(offset.value, offset.value + limit.value),
+    total: filteredDocuments.value!.total,
+  };
+}
+
+function filterPostNavitiaDocuments(newQuery: Query) {
+  const paginateDoc = () => {
+    const filtered = filteredDocuments.value!;
+    filtered.total = filtered.documents.length;
+
+    filteredDocumentsBeforePagination.value = filtered;
+
+    // whenever a filter is applied, check if offset is < then total
+    if (offset.value > filtered.total) {
+      offset.value = Math.max(filtered.total - limit.value, 0);
     }
-    this.filteredDocumentsBeforePagination = {
-      documents: this.documents.documents,
-      total: this.documents.total,
+
+    // apply pagination
+    filteredDocuments.value = {
+      documents: filtered.documents.slice(offset.value, offset.value + limit.value),
+      total: filtered.total,
     };
-    this.filteredDocuments = {
-      documents: this.documents.documents.slice(this.offset, this.offset + this.limit),
-      total: this.documents.total,
-    };
-    this.promise = {
-      data: this.filteredDocuments,
-      error: null,
-      cancel: () => {},
-    };
-  },
-  methods: {
-    toogleProperty(property) {
-      this.setProperty(property, !this[property]);
-    },
+  };
 
-    setProperty(property, value) {
-      this[property] = value;
-      preferences.set(`${this.documentType}.${property}`, this[property]);
-    },
+  let query = itinevertService.enhanceQuery(props.baseQuery, newQuery);
+  if (props.isochroneBbox !== '' && !query.bbox) {
+    query.bbox = props.isochroneBbox;
+  }
 
-    getDocumentTypeTitle(documentType) {
-      return this.$gettext(documentType + 's');
-    },
+  let needToQuery = false;
+  // working with routes
+  // the base query has activites choosen during form step
+  // there is no need to query if no extra filters are set
+  // extra filters being other filters (not act), or when you unselect a base activity
+  // if you add more activites than base, we do not query still, since this will never show more documents than all post navitia documents
+  if (props.baseQuery['act']) {
+    if (Object.keys(newQuery).length === 1) {
+      // no activities selected and no extra filters, so we display all documents
+      needToQuery = false;
+    } else if (Object.keys(newQuery).length > 2) {
+      needToQuery = true;
+    } else {
+      const newQueryAct = (newQuery['act'] as string | undefined)?.split(',') ?? [];
+      const baseQueryAct = (props.baseQuery['act'] as string | undefined)?.split(',') ?? [];
 
-    // when map container is resized (which happen when displayMode switchs between both and map),
-    // openLayer need an explicit resize
-    updateMapSize(newValue, oldValue) {
-      if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
-        this.$nextTick(this.$refs.map.map.updateSize.bind(this.$refs.map.map));
-      }
-    },
-    async paginatePostNavitiaDocuments(pagination) {
-      this.offset = pagination[0];
-      this.limit = pagination[1];
-      // whenever a filter is applied, check if offset is < then total
-      if (this.offset > this.filteredDocuments.total) {
-        this.offset = Math.max(this.filteredDocuments.total - this.limit, 0);
-      }
-
-      // apply pagination
-      this.filteredDocuments = {
-        documents: this.filteredDocumentsBeforePagination.documents.slice(this.offset, this.offset + this.limit),
-        total: this.filteredDocuments.total,
-      };
-    },
-    async filterPostNavitiaDocuments(newQuery) {
-      let paginateDoc = () => {
-        this.filteredDocuments.total = this.filteredDocuments.documents.length;
-
-        this.filteredDocumentsBeforePagination = this.filteredDocuments;
-
-        // whenever a filter is applied, check if offset is < then total
-        if (this.offset > this.filteredDocuments.total) {
-          this.offset = Math.max(this.filteredDocuments.total - this.limit, 0);
-        }
-
-        // apply pagination
-        this.filteredDocuments = {
-          documents: this.filteredDocuments.documents.slice(this.offset, this.offset + this.limit),
-          total: this.filteredDocuments.total,
-        };
-      };
-
-      let query = itinevertService.enhanceQuery(this.baseQuery, newQuery);
-      if (this.isochroneBbox !== '' && !query.bbox) {
-        query.bbox = this.isochroneBbox;
-      }
-      this.lastQuery = query;
-
-      let needToQuery = false;
-      // working with routes
-      // the base query has activites choosen during form step
-      // there is no need to query if no extra filters are set
-      // extra filters being other filters (not act), or when you unselect a base activity
-      // if you add more activites than base, we do not query still, since this will never show more documents than all post navitia documents
-      if (this.baseQuery['act']) {
-        if (Object.keys(newQuery).length === 1) {
-          // no activities selected and no extra filters, so we display all documents
-          needToQuery = false;
-        } else if (Object.keys(newQuery).length > 2) {
+      // check if all new activites match base activities
+      for (const activity of baseQueryAct) {
+        if (!newQueryAct.includes(activity)) {
           needToQuery = true;
-        } else {
-          let newQueryAct = newQuery['act']?.split(',') ?? [];
-          let baseQueryAct = this.baseQuery['act']?.split(',') ?? [];
-
-          // check if all new activites match base activities
-          for (let index in baseQueryAct) {
-            if (!newQueryAct.includes(baseQueryAct[index])) {
-              needToQuery = true;
-            }
-          }
         }
-      } else {
-        // working with waypoints
-        // the base query has no filters
-        // there is no need to query if no extra filters are set
-        needToQuery = Object.keys(newQuery).length !== 1; // (1 because documentType)
+      }
+    }
+  } else {
+    // working with waypoints
+    // the base query has no filters
+    // there is no need to query if no extra filters are set
+    needToQuery = Object.keys(newQuery).length !== 1; // (1 because documentType)
+  }
+
+  // if no need to query, we just display base documents
+  if (!needToQuery) {
+    // no filters set → display all documents
+    filteredDocuments.value = {
+      documents: props.documents!.documents,
+      total: props.documents!.total,
+    };
+    paginateDoc();
+    if (promise.value) {
+      promise.value.cancel?.();
+      promise.value.data = filteredDocuments.value;
+    }
+  } else {
+    // Select API function based on document type
+    const functionToFetch =
+      props.documentType === 'route'
+        ? itinevertService.getAllReachableRoutes
+        : itinevertService.getAllReachableWaypoints;
+
+    // get list of previous document IDs
+    const oldIds = props.documents?.documents?.map((doc) => doc.document_id) ?? [];
+
+    // reset filtered list
+    filteredDocuments.value!.documents = [];
+
+    // cancel ongoing promise
+    promise.value?.cancel?.();
+
+    // remove undefined values
+    query = Object.fromEntries(Object.entries(query).filter(([, v]) => v !== undefined));
+
+    // launch new API request
+    const p = functionToFetch.call(itinevertService, query);
+
+    // activate loader
+    const loader: ResultPromise = {
+      data: null,
+      error: null,
+      cancel: p.cancel,
+    };
+    promise.value = loader;
+
+    p.then((data) => {
+      // fill loader data (hides loader)
+      promise.value.data = data;
+
+      // filter only matching old IDs
+      for (const item of data as C2cDocument[]) {
+        if (oldIds.includes(item.document_id)) {
+          filteredDocuments.value!.documents.push(item);
+        }
       }
 
-      // if no need to query, we just display base documents
-      if (!needToQuery) {
-        // no filters set → display all documents
-        this.filteredDocuments = {
-          documents: this.documents.documents,
-          total: this.documents.total,
-        };
-        paginateDoc();
-        if (this.promise) {
-          this.promise.cancel();
-          this.promise.data = this.filteredDocuments;
-        }
-      } else {
-        // Select API function based on document type
-        const functionToFetch =
-          this.documentType === 'route'
-            ? itinevertService.getAllReachableRoutes
-            : itinevertService.getAllReachableWaypoints;
+      paginateDoc();
+    }).catch((err) => {
+      promise.value.error = err;
+    });
+  }
+}
 
-        // get list of previous document IDs
-        const oldIds = this.documents?.documents?.map((doc) => doc.document_id) ?? [];
+watch(
+  () => route.query,
+  (newQuery) => filterPostNavitiaDocuments(newQuery)
+);
 
-        // reset filtered list
-        this.filteredDocuments.documents = [];
-
-        // cancel ongoing promise
-        this.promise?.cancel?.();
-
-        // remove undefined values
-        query = Object.fromEntries(Object.entries(query).filter(([, v]) => v !== undefined));
-
-        // launch new API request
-        const p = functionToFetch.call(itinevertService, query);
-
-        // activate loader
-        this.promise = {
-          data: null,
-          error: null,
-          cancel: p.cancel,
-        };
-
-        p.then((data) => {
-          // fill loader data (hides loader)
-          this.promise.data = data;
-
-          // filter only matching old IDsw
-          for (const item of data) {
-            if (oldIds.includes(item.document_id)) {
-              this.filteredDocuments.documents.push(item);
-            }
-          }
-
-          paginateDoc();
-        }).catch((err) => {
-          this.promise.error = err;
-        });
-      }
-    },
-  },
-};
+onMounted(() => {
+  // init filtered documents
+  if (!props.documents) {
+    filteredDocuments.value = { documents: [], total: 0 };
+    filteredDocumentsBeforePagination.value = { documents: [], total: 0 };
+    promise.value = { data: filteredDocuments.value, error: null, cancel: () => {} };
+    return;
+  }
+  filteredDocumentsBeforePagination.value = {
+    documents: props.documents.documents,
+    total: props.documents.total,
+  };
+  filteredDocuments.value = {
+    documents: props.documents.documents.slice(offset.value, offset.value + limit.value),
+    total: props.documents.total,
+  };
+  promise.value = {
+    data: filteredDocuments.value,
+    error: null,
+    cancel: () => {},
+  };
+});
 </script>
 
-<style scoped lang="scss">
-$section-padding: 1.5rem;
-$header-height: 34px;
-$header-padding-bottom: 1.5rem;
-$filter-height: 32px;
-$tags-height: 28px;
-$filter-padding-bottom: 0.5rem;
-// prettier-ignore
-$result-height: calc(
-  100vh - #{$navbar-height} - 2 * #{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height}
-);
-// prettier-ignore
-$result-height-with-tags: calc(
-  100vh - #{$navbar-height} - 2 * #{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$tags-height}
-);
-$cards-gap: 0.25rem;
+<style scoped>
+@import '@/assets/css/media.css';
+
+/*
+ * The heights: section padding 1.5rem, header 34px with a bottom padding of 1.5rem, filters 32px with a bottom
+ * padding of 0.5rem, tags 28px. On mobile: section padding 0.5rem, header 56px, filters 25px.
+ */
 
 .header-section {
-  padding-bottom: $header-padding-bottom;
+  padding-bottom: 1.5rem;
 }
 
 .header-right {
@@ -444,31 +415,27 @@ $cards-gap: 0.25rem;
 }
 
 .filter-section {
-  padding-bottom: $filter-padding-bottom;
+  padding-bottom: 0.5rem;
   clear: both;
 }
 
-@media screen and (max-width: $tablet) {
-  $mobile-section-padding: 0.5rem;
-  $mobile-header-height: 56px;
-  $mobile-filters-height: 25px;
-
+@media screen and (--c2c-max-tablet) {
   .search-infos {
     position: fixed;
-    top: calc($navbar-height + $itinevert-header-height);
+    top: calc(var(--c2c-navbar-height) + var(--c2c-itinevert-header-height));
     left: 0;
     right: 0;
     z-index: 24;
-    background-color: $body-background-color;
-    padding-top: $mobile-section-padding;
+    background-color: var(--c2c-body-background-color);
+    padding-top: 0.5rem;
   }
 
   .result-section {
-    padding-top: calc($navbar-height + $itinevert-header-height + 3.75rem);
+    padding-top: calc(var(--c2c-navbar-height) + var(--c2c-itinevert-header-height) + 3.75rem);
   }
 
   .documents-view {
-    padding-top: $mobile-section-padding;
+    padding-top: 0.5rem;
     padding-left: 0;
     padding-right: 0;
     padding-bottom: 0;
@@ -478,7 +445,7 @@ $cards-gap: 0.25rem;
   .header-section {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-    padding-bottom: $mobile-section-padding;
+    padding-bottom: 0.5rem;
   }
 
   .header-right {
@@ -486,16 +453,14 @@ $cards-gap: 0.25rem;
   }
 
   .map-container {
-    height: $result-height;
+    height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
     padding: 0;
   }
 
   .mobile-mode-map {
     margin-top: 0;
     .map-container {
-      height: calc(
-        100vh - #{$navbar-height} - 3 * #{$mobile-section-padding} - #{$mobile-header-height} - #{$mobile-filters-height}
-      );
+      height: calc(100vh - var(--c2c-navbar-height) - 3 * 0.5rem - 56px - 25px);
     }
 
     .documents-container {
@@ -506,18 +471,18 @@ $cards-gap: 0.25rem;
   .mobile-mode-result,
   .mobile-mode-both {
     .map-container {
-      visibility: hidden; // map does not like to be in a display none...
+      visibility: hidden; /* map does not like to be in a display none... */
     }
   }
 }
 
-@media screen and (min-width: $tablet) {
+@media screen and (--c2c-min-tablet) {
   .result-section {
     margin-top: 0;
-    height: $result-height;
+    height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
 
     &.query-has-tags {
-      height: $result-height-with-tags;
+      height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px - 28px);
     }
 
     .documents-container {

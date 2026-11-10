@@ -48,30 +48,31 @@
   </div>
 </template>
 
-<script>
-import { arrayMixin, baseMixin } from './mixins';
+<script setup lang="ts">
+import { arrayInputProps, baseInputProps, useArrayInputValue } from './input-value';
 
-export default {
-  mixins: [baseMixin, arrayMixin],
-
-  props: {
-    size: {
-      type: Number,
-      required: false,
-      default: 100,
-    },
-    blackWhite: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
+const props = defineProps({
+  ...baseInputProps,
+  ...arrayInputProps,
+  size: {
+    type: Number,
+    required: false,
+    default: 100,
   },
-};
+  blackWhite: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+});
+const emit = defineEmits(['update:modelValue']);
+
+const { value_, toggle } = useArrayInputValue(props, emit);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .input-orientation > g > path {
-  fill: #ddd;
+  fill: var(--c2c-grey-lighter);
   transition: 0.1s;
 }
 
@@ -80,17 +81,17 @@ export default {
 }
 
 .input-orientation > g.input-orientation-selected > path {
-  fill: $primary;
+  fill: var(--c2c-primary);
   transition: 0.1s;
 }
 
 .input-orientation.is-black-white > g.input-orientation-selected > path {
-  fill: $black;
+  fill: var(--c2c-black);
   transition: 0.1s;
 }
 
 .input-orientation > g.input-orientation-selected > text {
-  fill: $white;
+  fill: var(--c2c-white);
   transition: 0.1s;
 }
 

@@ -1,0 +1,80 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): elements/progress */
+
+.progress {
+  appearance: none;
+  border: none;
+  border-radius: 9999px;
+  display: block;
+  height: var(--c2c-size-6);
+  overflow: hidden;
+  padding: 0;
+  width: 100%;
+
+  &::-webkit-progress-bar {
+    background-color: var(--c2c-grey-lightest);
+  }
+
+  &::-webkit-progress-value {
+    background-color: var(--c2c-text);
+  }
+
+  &::-moz-progress-bar {
+    background-color: var(--c2c-text);
+  }
+
+  /* the colors: see ../palette.css */
+  &:is(.is-white, .is-light, .is-dark, .is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger) {
+    &::-webkit-progress-value {
+      background-color: var(--palette);
+    }
+
+    &::-moz-progress-bar {
+      background-color: var(--palette);
+    }
+
+    &:indeterminate {
+      background-image: linear-gradient(to right, var(--palette) 30%, var(--c2c-grey-lightest) 30%);
+    }
+  }
+
+  &:indeterminate {
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-name: moveIndeterminate;
+    animation-timing-function: linear;
+    background-color: var(--c2c-grey-lightest);
+    background-image: linear-gradient(to right, var(--c2c-text) 30%, var(--c2c-grey-lightest) 30%);
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-size: 150% 150%;
+
+    &::-webkit-progress-bar {
+      background-color: transparent;
+    }
+
+    &::-moz-progress-bar {
+      background-color: transparent;
+    }
+  }
+
+  &.is-small {
+    height: var(--c2c-size-7);
+  }
+
+  &.is-medium {
+    height: var(--c2c-size-5);
+  }
+
+  &.is-large {
+    height: var(--c2c-size-4);
+  }
+}
+
+@keyframes moveIndeterminate {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}

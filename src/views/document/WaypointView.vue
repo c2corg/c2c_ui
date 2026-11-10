@@ -39,7 +39,7 @@
               <field-view
                 :document="document"
                 :field="fields.capacity"
-                :context="capacityContext"
+                :context="capacityContext ?? undefined"
                 v-if="document.capacity"
               />
               <field-view :document="document" :field="fields.capacity_staffed" />
@@ -143,41 +143,58 @@
   </div>
 </template>
 
-<script>
-import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import documentViewMixin from './utils/document-view-mixin';
+<script setup lang="ts">
+import { computed } from 'vue';
 
-import waypointLabels from '@/js/waypoint-labels-mixin';
+import DocumentPrintLicense from './utils/DocumentPrintLicense.vue';
+import DocumentViewHeader from './utils/DocumentViewHeader.vue';
+import FundraiserBanner from './utils/FundraiserBanner.vue';
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo.vue';
+import CommentsBox from './utils/boxes/CommentsBox.vue';
+import ImagesBox from './utils/boxes/ImagesBox.vue';
+import IsReachableByPublicTransportsBox from './utils/boxes/IsReachableByPublicTransportsBox.vue';
+import MapBox from './utils/boxes/MapBox.vue';
+import RecentOutingsBox from './utils/boxes/RecentOutingsBox.vue';
+import RoutesBox from './utils/boxes/RoutesBox.vue';
+import ToolBox from './utils/boxes/ToolBox.vue';
+import TransportsBox from './utils/boxes/TransportsBox.vue';
+import { documentViewProps, useDocumentView } from './utils/document-view';
+import DoubleNumericField from './utils/field-viewers/DoubleNumericField.vue';
+import FieldView from './utils/field-viewers/FieldView.vue';
+import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 
-export default {
-  components: {
-    MaskedDocumentVersionInfo,
-  },
+import type { Waypoint } from '@/js/apis/c2c/schemas';
+import { useWaypointLabels } from '@/js/composables/waypoint-labels';
 
-  mixins: [documentViewMixin, waypointLabels],
+const props = defineProps(documentViewProps);
 
-  computed: {
-    capacityContext() {
-      return this.document.waypoint_type === 'bivouac' ? this.document.waypoint_type : null;
-    },
-    showMainBox() {
-      const { summary, access_period, description, access, external_resources } = this.locale;
-      return summary || access_period || description || access || external_resources;
-    },
-    showTransportBox() {
-      const TRANSPORT_BOX_TYPES = [
-        'access',
-        'hut',
-        'gite',
-        'climbing_outdoor',
-        'climbing_indoor',
-        'paragliding_landing',
-        'shelter',
-        'bivouac',
-        'camp_site',
-      ];
-      return TRANSPORT_BOX_TYPES.includes(this.document.waypoint_type);
-    },
-  },
-};
+const { isDraftView, isPrintingView, promise, documentType, fields, document, version, locale } =
+  useDocumentView<Waypoint>(props);
+const { descriptionTitle, accessTitle, accessPeriodTitle } = useWaypointLabels(
+  () => document.value as { waypoint_type?: string } | undefined
+);
+
+const capacityContext = computed(() =>
+  document.value!.waypoint_type === 'bivouac' ? document.value!.waypoint_type : null
+);
+
+const showMainBox = computed(() => {
+  const { summary, access_period, description, access, external_resources } = locale.value!;
+  return summary || access_period || description || access || external_resources;
+});
+
+const showTransportBox = computed(() => {
+  const TRANSPORT_BOX_TYPES = [
+    'access',
+    'hut',
+    'gite',
+    'climbing_outdoor',
+    'climbing_indoor',
+    'paragliding_landing',
+    'shelter',
+    'bivouac',
+    'camp_site',
+  ];
+  return TRANSPORT_BOX_TYPES.includes(document.value!.waypoint_type as string);
+});
 </script>

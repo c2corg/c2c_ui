@@ -4,18 +4,15 @@
   </label-value>
 </template>
 
-<script>
-import LabelValue from './LabelValue';
+<script setup lang="ts">
+import LabelValue from './LabelValue.vue';
 
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty } from '@/js/properties';
 
-export default {
-  components: { LabelValue },
-  mixins: [requireDocumentProperty],
-};
+defineProps({ ...documentProperty });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 @media print {
   .is-size-3 {
     font-size: 1rem !important;

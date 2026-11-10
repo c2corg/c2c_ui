@@ -1,0 +1,41 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): helpers/flexbox */
+
+.is-flex-direction-column {
+  flex-direction: column !important;
+}
+
+.is-flex-wrap-wrap {
+  flex-wrap: wrap !important;
+}
+
+.is-justify-content-flex-end {
+  justify-content: flex-end !important;
+}
+
+.is-justify-content-center {
+  justify-content: center !important;
+}
+
+.is-justify-content-space-between {
+  justify-content: space-between !important;
+}
+
+.is-justify-content-space-around {
+  justify-content: space-around !important;
+}
+
+.is-justify-content-end {
+  justify-content: end !important;
+}
+
+.is-align-items-center {
+  align-items: center !important;
+}
+
+.is-align-items-baseline {
+  align-items: baseline !important;
+}
+
+.is-flex-grow-1 {
+  flex-grow: 1 !important;
+}
