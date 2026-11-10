@@ -8,7 +8,7 @@
         </label>
       </div>
       <div class="column is-narrow">
-        <form-input class="is-expanded" :document="document" :field="field" />
+        <form-input class="is-expanded" :document="document" :field="field" :load-suggestions="loadSuggestions" />
       </div>
     </div>
     <div class="columns is-multiline">
@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue';
+import { type PropType, computed, reactive } from 'vue';
 
 import FormInput from './FormInput.vue';
 
@@ -49,6 +49,12 @@ const props = defineProps({
   helper: {
     type: String,
     default: undefined, // default must be undefined. null means explicit no helper
+  },
+
+  // the documents the input proposes on focus (see InputDocument)
+  loadSuggestions: {
+    type: Function as PropType<() => Promise<C2cDocument[]>>,
+    default: null,
   },
 });
 

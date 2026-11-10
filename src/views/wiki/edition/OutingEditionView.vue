@@ -139,7 +139,12 @@
         :title="$gettext('Personal informations')"
         :sub-title="$gettext('People who were with you, and your feelings about this outing')"
       >
-        <associations-input-row :label="$gettext('participants')" :document="document" :field="fields.users" />
+        <associations-input-row
+          :label="$gettext('participants')"
+          :document="document"
+          :field="fields.users"
+          :load-suggestions="loadRecentPartners"
+        />
         <div class="columns">
           <form-field :document="document" :field="fields.participant_count" class="is-narrow" />
           <form-field
@@ -279,6 +284,12 @@ const initialExtent = computed(() => {
 
   return null;
 });
+
+// the users of the recent outings of the user, proposed first when adding participants
+async function loadRecentPartners(): Promise<C2cDocument[]> {
+  const response = await c2c.userProfile.partners.get();
+  return response.data.partners;
+}
 
 function afterLoad() {
   showBothDates.value = document.value!.date_start !== document.value!.date_end;
