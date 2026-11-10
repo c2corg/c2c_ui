@@ -86,6 +86,27 @@ describe('$language / $gettext', () => {
     expect(document.documentElement.getAttribute('lang')).toBe('de');
   });
 
+  it('updates the computed values translated before the first language was loaded', async () => {
+    // the navigation's user menu: a computed list of links, rendered with the page before Italian is loaded
+    window.localStorage.setItem('Language.preferences', JSON.stringify({ current: 'it' }));
+    const { $language, h, mount, nextTick, settle } = await installLanguage();
+    const { computed } = await import('vue');
+    const wrapper = mount({
+      setup(_props, { expose }) {
+        expose();
+        const label = computed(() => $language.gettext('Save'));
+        return () => h('p', label.value);
+      },
+    });
+    expect(wrapper.text()).toBe('Save');
+
+    $language.firstLoad();
+    await settle('it');
+    await nextTick();
+
+    expect(wrapper.text()).toBe('Salva');
+  });
+
   it('switches language: loads it, stores it, saves the user preference', async () => {
     const { globals, $language, settle } = await installLanguage();
 
