@@ -26,7 +26,7 @@
           </dropdown-button>
           &nbsp;
           <br class="is-hidden-tablet" />
-          <page-selector :documents="documents" />
+          <page-selector :key="documentType" :documents="documents" />
         </span>
         <span class="is-pulled-right is-flex header-right" v-if="documentType != 'profile'">
           <load-user-preferences-button class="is-hidden-mobile" />
@@ -70,6 +70,7 @@
     <div class="columns result-section" :class="['mobile-mode-' + displayMode, { 'query-has-tags': queryHasTags }]">
       <div
         v-if="showResults"
+        ref="documentsContainer"
         class="column documents-container"
         :class="{
           'is-12': !showMap,
@@ -79,7 +80,11 @@
       >
         <loading-notification :promise="promise" />
 
-        <image-cards v-if="documents && !listMode && documentType === 'image'" :documents="documents" />
+        <image-cards
+          v-if="documents && !listMode && documentType === 'image'"
+          :documents="documents"
+          class="documents-image-cards"
+        />
 
         <div
           v-if="documents && !listMode && documentType !== 'image'"
@@ -109,6 +114,8 @@
           @highlight-document="highlightedDocument = $event"
           class="documents-table"
         />
+
+        <page-navigation v-if="documents" :documents="documents" class="documents-navigation" />
       </div>
       <div v-if="showMap" class="column map-container">
         <map-view
@@ -132,8 +139,10 @@ import { useRoute, useRouter } from 'vue-router';
 import DisplayModeSwitch from './utils/DisplayModeSwitch.vue';
 import ImageCards from './utils/ImageCards.vue';
 import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton.vue';
+import PageNavigation from './utils/PageNavigation.vue';
 import PageSelector from './utils/PageSelector.vue';
 import QueryItems from './utils/QueryItems.vue';
+import { normalizedPageQuery } from './utils/page-query';
 
 import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
@@ -158,6 +167,8 @@ const { $gettext } = useGlobalProperties();
 
 // the map component: OpenLayers needs an explicit resize when its container changes
 const olMap = useTemplateRef<{ map: { updateSize(): void } }>('olMap');
+// the list scrolls in its own container on large screens, which the router knows nothing about
+const documentsContainer = useTemplateRef<HTMLElement>('documentsContainer');
 
 const promise = ref<ApiData | { data?: undefined }>({});
 const displayMode = ref('both');
@@ -198,12 +209,36 @@ function load() {
     return;
   }
 
+  // offset in the middle of a page (old link...): go to the page it belongs to before loading anything
+  const pageQuery = normalizedPageQuery(route, null);
+  if (pageQuery) {
+    router.replace(pageQuery);
+    // the route watcher will call load
+    return;
+  }
+
+  const requested = route.fullPath;
   promise.value = (c2c as unknown as Record<string, DocumentService>)[documentType.value]
     .getAll(route.query)
-    .then(() => {
+    .then((response) => {
+      // past the last page, which happens when the map is moved to a sparser area: show the last page instead
+      const lastPageQuery = normalizedPageQuery(route, response.data.total);
+      if (lastPageQuery && route.fullPath === requested) {
+        router.replace(lastPageQuery);
+        // the route watcher will call load
+        return;
+      }
+
       // the list has its height: back from a document, the router can restore the scroll position
       bus.emit('trigger-scroll');
     });
+}
+
+// as soon as another page is asked for, not once its results are loaded
+function scrollResultsToTop() {
+  if (documentsContainer.value) {
+    documentsContainer.value.scrollTop = 0;
+  }
 }
 
 // the display preferences, per document type
@@ -239,6 +274,7 @@ function onQueryDocumentsLoad(documents: C2cDocument[]) {
 
 watch(() => route.fullPath, load, { immediate: true });
 watch(displayMode, updateMapSize);
+watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
 </script>
 
 <style scoped>
@@ -319,33 +355,73 @@ watch(displayMode, updateMapSize);
   .mobile-mode-result,
   .mobile-mode-both {
     .map-container {
-      visibility: hidden; /* map does not like to be in a display none... */
+      /* map does not like to be in a display none: hidden and without height, so that it leaves no blank page under the list */
+      visibility: hidden;
+      height: 0;
+      overflow: hidden;
     }
   }
 }
 
 @media screen and (--c2c-min-tablet) {
+  /*
+   * The app is as high as the window and the results take what is left under the header and the filters, whatever
+   * their height (the filters can wrap on two lines) and what comes above (the top bar, with or without the ad bar).
+   * The list scrolls in its container, and the pagination stays below it.
+   */
+  :global(#app:has(.documents-view)) {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  :global(#app:has(.documents-view) .page-content) {
+    flex: 1 1 0;
+    min-height: 0;
+  }
+
+  .documents-view {
+    flex: 1 1 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .search-infos {
+    flex: 0 0 auto;
+  }
+
   .result-section {
     margin-top: 0;
-    height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
-
-    &.query-has-tags {
-      height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px - 28px);
-    }
+    margin-bottom: 0;
+    flex: 1 1 0;
+    min-height: 0;
 
     .documents-container {
       height: 100%;
       overflow: auto;
+      display: flex;
+      flex-direction: column;
       padding-top: 0;
       padding-bottom: 0;
 
       .cards-list {
         padding-top: 2px;
-        height: 100%;
       }
 
+      .cards-list,
+      .documents-image-cards {
+        flex: 0 0 auto;
+      }
+
+      /* the table scrolls by itself: it takes the room left by the navigation */
       .documents-table {
-        height: 100%;
+        flex: 1 1 0;
+        min-height: 0;
+      }
+
+      .documents-navigation {
+        flex: 0 0 auto;
       }
     }
 
