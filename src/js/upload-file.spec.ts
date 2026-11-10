@@ -1,29 +1,29 @@
+import type { ExpandedTags } from 'exifreader';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import c2c from '@/js/apis/c2c';
-import uploadFile, { parseMetaData, storedSize } from '@/js/upload-file';
+import uploadFile, { parseMetaData, storedSize, toMetadata } from '@/js/upload-file';
 
-const exifr = vi.hoisted(() => ({ parse: vi.fn() }));
-vi.mock('exifr', () => ({ default: exifr }));
+const ExifReader = vi.hoisted(() => ({ load: vi.fn() }));
+vi.mock('exifreader', () => ({ default: ExifReader }));
 
 describe('upload-file parseMetaData', () => {
   it('reads the date, camera, exposure and position of the metadata', () => {
     const document: Record<string, unknown> = {};
 
-    // as exifr gives them: values as stored, latitude and longitude computed
     parseMetaData(document, {
-      Orientation: 6,
-      Make: 'Canon',
-      Model: 'EOS',
-      DateTimeOriginal: '2026:01:10 08:30:00',
-      OffsetTimeOriginal: '+01:00',
-      ExposureTime: 0.004,
-      FNumber: 8,
-      ISO: 200,
-      FocalLengthIn35mmFormat: 28,
+      orientation: 6,
+      make: 'Canon',
+      model: 'EOS',
+      date: '2026:01:10 08:30:00',
+      offset: '+01:00',
+      exposureTime: 0.004,
+      fnumber: 8,
+      iso: 200,
+      focalLength: 28,
       latitude: 45.175,
       longitude: 5.72,
-      GPSAltitude: 2100.5,
+      altitude: 2100.5,
     });
 
     expect(document).toMatchObject({
@@ -41,36 +41,77 @@ describe('upload-file parseMetaData', () => {
     expect(coordinates[1]).toBeGreaterThan(5_600_000);
   });
 
-  it('prefers the IPTC date, and ignores a position out of the world or a missing one', () => {
+  it('reads an ISO 8601 date, and ignores a position out of the world', () => {
     const document: Record<string, unknown> = {};
-
-    parseMetaData(document, {
-      latitude: 95,
-      longitude: 5,
-      DateCreated: '20260110',
-      DateTimeOriginal: '2025:01:01 00:00:00',
-    });
-
-    expect(document.date_time).toMatch(/^2026-01-10T00:00:00/);
+    parseMetaData(document, { date: '2026-01-10T14:30:00+01:00', latitude: 95, longitude: 5 });
+    expect(Date.parse(document.date_time as string)).toBe(Date.parse('2026-01-10T14:30:00+01:00'));
     expect(document.geometry).toBeUndefined();
   });
 
-  it('reads the IPTC time, with or without its offset', () => {
-    const withOffset: Record<string, unknown> = {};
-    parseMetaData(withOffset, { DateCreated: '20260110', TimeCreated: '143000+0100' });
-    expect(Date.parse(withOffset.date_time as string)).toBe(Date.parse('2026-01-10T14:30:00+01:00'));
-
-    const withoutOffset: Record<string, unknown> = {};
-    parseMetaData(withoutOffset, { DateCreated: '20260110', TimeCreated: '143000' });
-    expect(withoutOffset.date_time).toMatch(/^2026-01-10T14:30:00/);
-  });
-
-  it('ignores a file without metadata, and values of the wrong type', () => {
+  it('ignores a file without metadata, and a date that cannot be read', () => {
     const document: Record<string, unknown> = {};
     parseMetaData(document, undefined);
-    parseMetaData(document, { ExposureTime: 'fast', Make: 'Canon' });
+    parseMetaData(document, { date: 'yesterday', make: 'Canon' });
     // no date: null, as before
     expect(document).toEqual({ date_time: null });
+  });
+});
+
+describe('upload-file toMetadata', () => {
+  // as ExifReader gives them (expanded), from an iPhone 15 Pro HEIC
+  const iphone = {
+    exif: {
+      DateTimeOriginal: { value: ['2023:10:31 11:44:43'], description: '2023:10:31 11:44:43' },
+      OffsetTimeOriginal: { value: ['+01:00'], description: '+01:00' },
+      ExposureTime: { value: [1, 60], description: '1/60' },
+      ISOSpeedRatings: { value: 400, description: '400' },
+      FocalLengthIn35mmFilm: { value: 14, description: '14 mm' },
+      FNumber: { value: [11, 5], description: 'f/2.2' },
+      Make: { value: ['Apple'], description: 'Apple' },
+      Model: { value: ['iPhone 15 Pro'], description: 'iPhone 15 Pro' },
+      Orientation: { value: 6, description: 'right-top' },
+      PixelXDimension: { value: 4032, description: '4032' },
+      PixelYDimension: { value: 3024, description: '3024' },
+    },
+    gps: { Latitude: -52.459605555555555, Longitude: 13.321841666666666, Altitude: 50.15 },
+    file: { 'Image Width': { value: 4032, description: '4032px' } },
+  } as unknown as ExpandedTags;
+
+  it('reads the EXIF and GPS tags', () => {
+    expect(toMetadata(iphone)).toEqual({
+      date: '2023:10:31 11:44:43',
+      offset: '+01:00',
+      exposureTime: 1 / 60,
+      iso: 400,
+      focalLength: 14,
+      fnumber: 2.2,
+      make: 'Apple',
+      model: 'iPhone 15 Pro',
+      latitude: -52.459605555555555,
+      longitude: 13.321841666666666,
+      altitude: 50.15,
+      width: 4032,
+      height: 3024,
+      orientation: 6,
+    });
+  });
+
+  it('prefers the IPTC date, with its time and offset or not', () => {
+    const iptc = (time?: string) =>
+      toMetadata({
+        ...iphone,
+        iptc: {
+          'Date Created': { description: '2026-01-10' },
+          ...(time ? { 'Time Created': { description: time } } : {}),
+        },
+      } as unknown as ExpandedTags);
+    expect(iptc('14:30:00+01:00')).toMatchObject({ date: '2026-01-10T14:30:00+01:00', offset: undefined });
+    expect(iptc()).toMatchObject({ date: '2026-01-10T00:00:00' });
+  });
+
+  it('reads the size of the file without EXIF, and nothing more', () => {
+    const tags = { file: { 'Image Width': { value: 900 }, 'Image Height': { value: 400 } } } as unknown as ExpandedTags;
+    expect(toMetadata(tags)).toMatchObject({ width: 900, height: 400, date: undefined, make: undefined });
   });
 });
 
@@ -106,7 +147,7 @@ describe('upload-file uploadFile', () => {
   beforeEach(() => {
     decodable = new Map();
     drawn = undefined;
-    exifr.parse.mockResolvedValue(undefined);
+    ExifReader.load.mockResolvedValue({});
     objectUrls = 0;
     vi.spyOn(URL, 'createObjectURL').mockImplementation(() => `blob:${++objectUrls}`);
     vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => undefined);
@@ -162,9 +203,9 @@ describe('upload-file uploadFile', () => {
   });
 
   // uploads a file, and gives what was sent and the document
-  const upload = async (file: File, angle = 0) => {
+  const upload = async (file: File, angle = 0, stored: Record<string, number> = {}) => {
     const send = vi.spyOn(c2c, 'uploadImage').mockImplementation((data, _progress, onSuccess) => {
-      onSuccess({ data: { filename: '1_2.jpg' } } as Parameters<typeof onSuccess>[0]);
+      onSuccess({ data: { filename: '1_2.jpg', ...stored } } as Parameters<typeof onSuccess>[0]);
       return Promise.resolve() as ReturnType<typeof c2c.uploadImage>;
     });
     const dataUrls: (string | null)[] = [];
@@ -184,7 +225,9 @@ describe('upload-file uploadFile', () => {
   };
 
   it('sends a photo under the limits as it is, with its metadata', async () => {
-    exifr.parse.mockResolvedValue({ Make: 'Apple', Model: 'iPhone 15 Pro', Orientation: 6 });
+    ExifReader.load.mockResolvedValue({
+      exif: { Make: { description: 'Apple' }, Model: { description: 'iPhone 15 Pro' }, Orientation: { value: 6 } },
+    });
     const photo = file('photo.jpg', 'image/jpeg', { width: 2304, height: 3072 });
 
     const { sent, document, dataUrls } = await upload(photo);
@@ -232,14 +275,15 @@ describe('upload-file uploadFile', () => {
   });
 
   it('sends a HEIC the browser cannot decode as it is, without preview, sized from its EXIF', async () => {
-    exifr.parse.mockResolvedValue({
-      Make: 'samsung',
-      Model: 'SM-G781B',
-      DateTimeOriginal: '2022:04:23 08:59:35',
-      OffsetTimeOriginal: '+02:00',
-      ExifImageWidth: 4032,
-      ExifImageHeight: 3024,
-      Orientation: 6,
+    ExifReader.load.mockResolvedValue({
+      exif: {
+        Make: { description: 'samsung' },
+        Model: { description: 'SM-G781B' },
+        DateTimeOriginal: { description: '2022:04:23 08:59:35' },
+        OffsetTimeOriginal: { description: '+02:00' },
+        Orientation: { value: 6 },
+      },
+      file: { 'Image Width': { value: 4032 }, 'Image Height': { value: 3024 } },
     });
     const heic = file('photo.heic', 'image/heic');
 
@@ -251,8 +295,14 @@ describe('upload-file uploadFile', () => {
     expect(Date.parse(document.date_time as string)).toBe(Date.parse('2022-04-23T08:59:35+02:00'));
   });
 
+  it('takes the size of the original as the server stores it', async () => {
+    const heic = file('photo.heic', 'image/heic');
+    const { document } = await upload(heic, 0, { width: 2304, height: 3072, size: 1_200_000 });
+    expect(document).toMatchObject({ width: 2304, height: 3072, file_size: 1_200_000 });
+  });
+
   it('uploads a file whose metadata cannot be read', async () => {
-    exifr.parse.mockRejectedValue(new Error('Unknown file format'));
+    ExifReader.load.mockRejectedValue(new Error('Invalid image format'));
     const { sent } = await upload(file('photo.jpg', 'image/jpeg', { width: 800, height: 600 }));
     expect(sent).toBeInstanceOf(File);
   });

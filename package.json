@@ -44,7 +44,7 @@
     "dayjs": "1.11.23",
     "diff-match-patch-es": "2.0.1",
     "dompurify": "3.4.17",
-    "exifr": "7.1.3",
+    "exifreader": "4.54.0",
     "file-saver": "2.0.5",
     "mitt": "3.0.1",
     "ol": "10.11.0",

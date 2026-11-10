@@ -1,6 +1,7 @@
 // This file exposes a simple function that upload a file to c2c image backend
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import type { ExpandedTags } from 'exifreader';
 import { containsXY } from 'ol/extent';
 import { get as getProjection, transform } from 'ol/proj';
 
@@ -9,8 +10,26 @@ import c2c from '@/js/apis/c2c';
 
 dayjs.extend(customParseFormat);
 
-// the metadata of the file as exifr gives them: EXIF, GPS and IPTC tags in one object, values as stored
-export type Metadata = Record<string, unknown>;
+// The metadata of the file used for the image document, read by ExifReader from its EXIF, IPTC and GPS tags
+export type Metadata = {
+  // the time of the shot, ISO 8601 or EXIF ('YYYY:MM:DD HH:mm:ss'), with its offset ('+01:00') or not
+  date?: string;
+  offset?: string;
+  exposureTime?: number;
+  iso?: number;
+  focalLength?: number;
+  fnumber?: number;
+  make?: string;
+  model?: string;
+  // signed decimal degrees, meters
+  latitude?: number;
+  longitude?: number;
+  altitude?: number;
+  // as stored, before the orientation
+  width?: number;
+  height?: number;
+  orientation?: number;
+};
 
 // the image document being built from the file
 type ImageDocument = Record<string, unknown>;
@@ -31,40 +50,19 @@ const MAX_PANORAMA_PIXELS = 16_000_000;
 // SSIMULACRA2 over 80 ("high") on photos, and less storage than the 0.92 of the browsers on 2048 px (#1205)
 const JPEG_QUALITY = 0.9;
 
-const string = (value: unknown) => (typeof value === 'string' ? value : undefined);
-const number = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : undefined);
-
-const parseDate = (tags: Metadata) => {
-  const iptcDate = string(tags.DateCreated);
-  const exifDate = string(tags.DateTimeOriginal) ?? string(tags.DateTime);
-
-  let date = undefined;
-
-  if (iptcDate) {
-    const iptcTime = string(tags.TimeCreated);
-    if (iptcTime) {
-      // with or without its offset
-      date = dayjs(`${iptcDate} ${iptcTime}`, ['YYYYMMDD HHmmssZZ', 'YYYYMMDD HHmmss']);
-    } else {
-      date = dayjs(iptcDate, 'YYYYMMDD');
-    }
-  } else if (exifDate) {
-    const offsetTime = string(tags.OffsetTimeOriginal) ?? string(tags.OffsetTime);
-    if (offsetTime) {
-      date = dayjs(`${exifDate} ${offsetTime}`, 'YYYY:MM:DD HH:mm:ss Z');
-    } else {
-      date = dayjs(exifDate, 'YYYY:MM:DD HH:mm:ss');
-    }
+const parseDate = ({ date, offset }: Metadata) => {
+  if (!date) {
+    return null;
   }
-
-  return date && date.isValid() ? date.format() : null;
+  const parsed = date.includes('T')
+    ? dayjs(date) // IPTC, with its offset or not
+    : offset
+      ? dayjs(`${date} ${offset}`, 'YYYY:MM:DD HH:mm:ss Z')
+      : dayjs(date, 'YYYY:MM:DD HH:mm:ss');
+  return parsed.isValid() ? parsed.format() : null;
 };
 
-const parseGeometry = (tags: Metadata) => {
-  // signed decimal degrees, computed by exifr from the GPS tags
-  const lat = number(tags.latitude);
-  const lon = number(tags.longitude);
-
+const parseGeometry = ({ latitude: lat, longitude: lon }: Metadata) => {
   if (lat === undefined || lon === undefined || !containsXY(worldExtent, lon, lat)) {
     return undefined;
   }
@@ -82,38 +80,67 @@ const setIfDefined = (document: ImageDocument, name: string, value: unknown) => 
 };
 
 // exported for the specs
-export const parseMetaData = (document: ImageDocument, tags: Metadata | undefined) => {
-  if (!tags) {
+export const parseMetaData = (document: ImageDocument, metadata: Metadata | undefined) => {
+  if (!metadata) {
     return;
   }
 
-  setIfDefined(document, 'date_time', parseDate(tags));
-  setIfDefined(document, 'exposure_time', number(tags.ExposureTime));
-  setIfDefined(document, 'iso_speed', number(tags.ISO));
-  setIfDefined(document, 'focal_length', number(tags.FocalLengthIn35mmFormat));
-  setIfDefined(document, 'fnumber', number(tags.FNumber));
-  const make = string(tags.Make);
-  const model = string(tags.Model);
+  setIfDefined(document, 'date_time', parseDate(metadata));
+  setIfDefined(document, 'exposure_time', metadata.exposureTime);
+  setIfDefined(document, 'iso_speed', metadata.iso);
+  setIfDefined(document, 'focal_length', metadata.focalLength);
+  setIfDefined(document, 'fnumber', metadata.fnumber);
+  const { make, model } = metadata;
   setIfDefined(document, 'camera_name', make && model ? `${make} ${model}` : undefined);
-  setIfDefined(document, 'geometry', parseGeometry(tags));
-  setIfDefined(document, 'elevation', number(tags.GPSAltitude));
+  setIfDefined(document, 'geometry', parseGeometry(metadata));
+  setIfDefined(document, 'elevation', metadata.altitude);
 };
 
-// the metadata of JPEG, HEIC, PNG, TIFF...: none when the file has none or cannot be read
-const readMetadata = async (file: Blob): Promise<Metadata | undefined> => {
+type Tag = { value?: unknown; description?: string } | undefined;
+
+const text = (tag: Tag) => tag?.description?.trim() || undefined;
+const finite = (value: number) => (Number.isFinite(value) ? value : undefined);
+// a number, or a rational: [numerator, denominator]
+const number = (tag: Tag) => {
+  const value = Array.isArray(tag?.value) && tag.value.length === 1 ? tag.value[0] : tag?.value;
+  if (typeof value === 'number') {
+    return finite(value);
+  }
+  if (Array.isArray(value) && value.length === 2 && value.every((part) => typeof part === 'number')) {
+    return finite(value[0] / value[1]);
+  }
+  return undefined;
+};
+
+// The metadata of the tags of ExifReader (exported for the specs)
+export const toMetadata = (tags: ExpandedTags): Metadata => {
+  const { exif = {}, iptc = {}, gps, file = {} } = tags;
+  const iptcDate = text(iptc['Date Created']);
+  const iptcTime = text(iptc['Time Created']);
+  return {
+    // IPTC first, as edited by the photographers
+    date: iptcDate ? `${iptcDate}T${iptcTime ?? '00:00:00'}` : (text(exif.DateTimeOriginal) ?? text(exif.DateTime)),
+    offset: iptcDate ? undefined : (text(exif.OffsetTimeOriginal) ?? text(exif.OffsetTime)),
+    exposureTime: number(exif.ExposureTime),
+    iso: number(exif.ISOSpeedRatings),
+    focalLength: number(exif.FocalLengthIn35mmFilm),
+    fnumber: number(exif.FNumber),
+    make: text(exif.Make),
+    model: text(exif.Model),
+    latitude: gps?.Latitude,
+    longitude: gps?.Longitude,
+    altitude: gps?.Altitude,
+    width: number(exif.PixelXDimension) ?? number(file['Image Width']),
+    height: number(exif.PixelYDimension) ?? number(file['Image Height']),
+    orientation: number(exif.Orientation),
+  };
+};
+
+// the metadata of JPEG, HEIC, PNG, WebP...: none when the file cannot be read
+const readMetadata = async (file: File): Promise<Metadata | undefined> => {
   try {
-    const { default: exifr } = await import('exifr');
-    return (await exifr.parse(file, {
-      tiff: true,
-      exif: true,
-      gps: true,
-      iptc: true,
-      ifd1: false,
-      interop: false,
-      // numbers and strings as stored: dates are read with their offset above
-      translateValues: false,
-      reviveValues: false,
-    })) as Metadata | undefined;
+    const { default: ExifReader } = await import('exifreader');
+    return toMetadata(await ExifReader.load(file, { expanded: true }));
   } catch {
     return undefined;
   }
@@ -171,7 +198,7 @@ const render = (img: HTMLImageElement, width: number, height: number, angle: num
 const preProcess = async (
   file: File,
   document: ImageDocument,
-  tags: Metadata | undefined,
+  metadata: Metadata | undefined,
   angle: number,
   onDataUrlReady: (dataUrl: string | null) => void
 ): Promise<Blob> => {
@@ -179,10 +206,8 @@ const preProcess = async (
 
   if (!img) {
     onDataUrlReady(null);
-    // the size before the EXIF orientation: turned for orientations 5 to 8
-    const width = number(tags?.ExifImageWidth);
-    const height = number(tags?.ExifImageHeight);
-    const orientation = number(tags?.Orientation) ?? 1;
+    // the size before the EXIF orientation: turned for orientations 5 to 8. The server gives the size it stores.
+    const { width, height, orientation = 1 } = metadata ?? {};
     if (width && height) {
       document.width = orientation >= 5 ? height : width;
       document.height = orientation >= 5 ? width : height;
@@ -227,16 +252,21 @@ const uploadFile = async (
 ) => {
   try {
     const document: ImageDocument = {};
-    const tags = await readMetadata(file);
-    parseMetaData(document, tags);
-    const data = await preProcess(file, document, tags, angle || 0, onDataUrlReady);
+    const metadata = await readMetadata(file);
+    parseMetaData(document, metadata);
+    const data = await preProcess(file, document, metadata, angle || 0, onDataUrlReady);
     // do the upload
     worker.push(
       c2c.uploadImage.bind(c2c),
       data,
       onUploadProgress,
-      (event: { data: { filename: string } }) => {
-        document.filename = event.data.filename;
+      (event: { data: { filename: string; width?: number; height?: number; size?: number } }) => {
+        const { filename, width, height, size } = event.data;
+        document.filename = filename;
+        // the original as stored: the server converts HEIC, and reduces the images over the limits (not SVG)
+        setIfDefined(document, 'width', width);
+        setIfDefined(document, 'height', height);
+        setIfDefined(document, 'file_size', size);
         onSuccess(document);
       },
       onFailure
