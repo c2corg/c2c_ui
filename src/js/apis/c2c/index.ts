@@ -7,7 +7,7 @@ import ForumService from './ForumService';
 import ModeratorService from './ModeratorService';
 import TagsService from './TagsService';
 import UserProfileService from './UserProfileService';
-import { documentChanges, searchResults } from './schemas';
+import { documentChanges, documentsPage, searchResults } from './schemas';
 import { type SessionRefusal, sentWithFormerToken, sessionRefusal } from './session-refusal';
 import type { Params } from './types';
 
@@ -100,6 +100,11 @@ export class CamptocampApi extends BaseApi {
 
   search(params?: Params) {
     return this.getValidated('/search', searchResults, { params });
+  }
+
+  // the routes a GPS track most likely followed, best first; track: an encoded polyline (see encodeTrack)
+  suggestRoutes(track: string, params?: Params) {
+    return this.getValidated('/routes/suggest', documentsPage, { params: { ...params, track } });
   }
 
   getRecentChanges(params?: Params) {
