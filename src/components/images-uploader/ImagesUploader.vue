@@ -282,6 +282,8 @@ function save() {
           ...img,
           document_id: response.data.images[idx].document_id,
           available_langs: [$language.current!],
+          // its AVIF thumbnails may not be built yet: the JPG ones until the page is reloaded
+          modernThumbnailsPending: true,
         }))
       );
       clean();

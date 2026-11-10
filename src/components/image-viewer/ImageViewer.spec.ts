@@ -4,7 +4,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import ImageViewer from './ImageViewer.vue';
 
-import { registerImageViewer, type ImageViewer as ImageViewerApi } from '@/js/vue-plugins/image-viewer';
+import {
+  registerImageViewer,
+  type ImageViewer as ImageViewerApi,
+  type ViewerImage,
+} from '@/js/vue-plugins/image-viewer';
 
 // jsdom has no Element.part (CSS shadow parts), that Swiper 10+ fills in with part.add() when it renders
 if (!('part' in Element.prototype)) {
@@ -41,7 +45,7 @@ type SwiperElement = HTMLElement & {
 };
 
 // shows image 2 after image 1 was pushed, as the pages do through $imageViewer
-async function showViewer({ isMobile = false } = {}) {
+async function showViewer({ isMobile = false, shown = image(2) as ViewerImage } = {}) {
   const wrapper = mount(ImageViewer, {
     attachTo: document.body,
     global: {
@@ -56,7 +60,7 @@ async function showViewer({ isMobile = false } = {}) {
   });
   const viewer = wrapper.vm as unknown as ImageViewerApi;
   viewer.push(image(1));
-  viewer.show(image(2));
+  viewer.show(shown);
   await flushPromises();
   return { wrapper, swiperElement: wrapper.find('swiper-container').element as SwiperElement };
 }
@@ -116,6 +120,35 @@ describe('ImageViewer', () => {
       const sources = wrapper.findAll('picture source');
       expect(sources.map((source) => source.attributes('type'))).toEqual(['image/avif', 'image/avif']);
       expect(sources[0].attributes('srcset')).toBe('https://media.example.org/1588000000_1BI.avif');
+      wrapper.unmount();
+    } finally {
+      config.urls.modernThumbnailsTimestamp = 0;
+    }
+  });
+
+  it('offers only the JPG image of a just uploaded image, whose AVIF one may not be built yet', async () => {
+    config.urls.modernThumbnailsTimestamp = 1;
+    try {
+      const { wrapper } = await showViewer({ shown: { ...image(2), modernThumbnailsPending: true } });
+      const pictures = wrapper.findAll('picture');
+      expect(pictures[0].findAll('source')).toHaveLength(1);
+      expect(pictures[1].findAll('source')).toHaveLength(0);
+      expect(pictures[1].find('img').attributes('src')).toBe('https://media.example.org/1588000000_2BI.jpg');
+      wrapper.unmount();
+    } finally {
+      config.urls.modernThumbnailsTimestamp = 0;
+    }
+  });
+
+  it('shows the JPG image when the AVIF one fails', async () => {
+    config.urls.modernThumbnailsTimestamp = 1;
+    try {
+      const { wrapper } = await showViewer();
+      const picture = wrapper.findAll('picture')[1].element;
+      // as the browser does: on the image, without bubbling
+      picture.querySelector('img')!.dispatchEvent(new Event('error'));
+
+      expect(picture.querySelector('source')!.srcset).toBe('https://media.example.org/1588000000_2BI.jpg');
       wrapper.unmount();
     } finally {
       config.urls.modernThumbnailsTimestamp = 0;

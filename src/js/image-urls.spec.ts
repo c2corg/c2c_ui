@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { type ImageSize, getEmbeddedImageUrl, getImageUrl, getThumbnailSize } from './image-urls';
+import { type ImageSize, fallBackToBasicImage, getEmbeddedImageUrl, getImageUrl, getThumbnailSize } from './image-urls';
 
 // '@/js/config' reads CAMPTOCAMP_CONFIG, a constant injected by Vite (see vite.config.mjs)
 const config = vi.hoisted(() => ({
@@ -78,6 +78,14 @@ describe('getImageUrl', () => {
         expect(getImageUrl({ document_id: 1, filename: 'abc.jpg' }, 'SI', 'avif')).toBeUndefined();
       });
 
+      it('returns undefined for a just uploaded image, whose AVIF thumbnails may not be built yet', () => {
+        config.urls.modernThumbnailsTimestamp = 1;
+        const uploaded = { ...image, modernThumbnailsPending: true };
+        expect(getImageUrl(uploaded, 'BI', 'avif')).toBeUndefined();
+        expect(getImageUrl(uploaded, 'BI')).toBe(`${MEDIA}/1588000000_123456BI.jpg`);
+        expect(getImageUrl(uploaded)).toBe(`${MEDIA}/1588000000_123456.jpg`);
+      });
+
       it('validates the size before the format', () => {
         expect(() => getImageUrl(image, 'XL' as ImageSize, 'avif')).toThrow('Invalid size');
       });
@@ -116,6 +124,13 @@ describe('getImageUrl', () => {
       it('returns the proxy url with extension from modernThumbnailsId on', () => {
         config.urls.modernThumbnailsId = 42;
         expect(getImageUrl(image, 'MI', 'avif')).toBe(`${API}/images/proxy/42?size=MI&extension=avif`);
+      });
+
+      it('returns undefined for a just uploaded image', () => {
+        config.urls.modernThumbnailsId = 1;
+        const uploaded = { ...image, modernThumbnailsPending: true };
+        expect(getImageUrl(uploaded, 'MI', 'avif')).toBeUndefined();
+        expect(getImageUrl(uploaded, 'MI')).toBe(`${API}/images/proxy/42?size=MI`);
       });
 
       it('ignores format without size', () => {
@@ -171,6 +186,36 @@ describe('getEmbeddedImageUrl', () => {
     expect(getEmbeddedImageUrl({ url: `${MEDIA}/noextension`, urlProxy }, 'avif')).toBe(
       `${API}${urlProxy}&extension=avif`
     );
+  });
+});
+
+describe('fallBackToBasicImage', () => {
+  const picture = () => {
+    const element = document.createElement('picture');
+    element.innerHTML = `<source type="image/avif" srcset="${MEDIA}/1MI.avif" /><img src="${MEDIA}/1MI.jpg" />`;
+    return { source: element.querySelector('source')!, img: element.querySelector('img')! };
+  };
+
+  it('shows the basic image instead of the modern one', () => {
+    const { source, img } = picture();
+    expect(fallBackToBasicImage(img)).toBe(true);
+    expect(source.srcset).toBe(`${MEDIA}/1MI.jpg`);
+  });
+
+  it('does nothing when the basic image fails too, so that it is not loaded again endlessly', () => {
+    const { source, img } = picture();
+    fallBackToBasicImage(img);
+    const setAttribute = vi.spyOn(source, 'setAttribute');
+    expect(fallBackToBasicImage(img)).toBe(false);
+    expect(source.srcset).toBe(`${MEDIA}/1MI.jpg`);
+    expect(setAttribute).not.toHaveBeenCalled();
+  });
+
+  it('does nothing for an image outside a picture', () => {
+    const img = document.createElement('img');
+    document.createElement('div').appendChild(img);
+    expect(fallBackToBasicImage(img)).toBe(false);
+    expect(fallBackToBasicImage(document.createElement('img'))).toBe(false);
   });
 });
 
