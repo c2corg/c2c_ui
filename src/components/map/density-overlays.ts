@@ -7,10 +7,8 @@ import type * as z from 'zod/mini';
 
 import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
-import type DocumentService from '@/js/apis/c2c/DocumentService';
 import type { densityHeatmap, densityTrack, densityTracks } from '@/js/apis/c2c/schemas';
 import ol from '@/js/libs/ol';
-import utils from '@/js/utils';
 
 export type DensityType = 'outing' | 'route';
 
@@ -223,31 +221,4 @@ export function sortTracks<T extends Pick<DensityTrack, 'type' | 'title' | 'date
     }
     return (a.title ?? '').localeCompare(b.title ?? '') || a.document_id - b.document_id;
   });
-}
-
-// The track of an outing or a route as a GPX file, as the buttons of the page of the document do. The track of the map
-// is simplified for the screen: the one of the document is asked, as it is in the database (3D, with its times).
-export async function downloadTrackGpx(track: DensityTrack) {
-  const [{ default: GPX }, { default: GeoJSON }, { data: document }] = await Promise.all([
-    import('ol/format/GPX'),
-    import('ol/format/GeoJSON'),
-    (c2c[track.type === 'o' ? 'outing' : 'route'] as DocumentService).get(track.document_id),
-  ]);
-
-  const geometry = document.geometry?.geom_detail;
-  const feature = geometry ? new GeoJSON().readFeatures(geometry)[0] : undefined;
-  if (!feature) {
-    return;
-  }
-
-  const name = track.title ?? '';
-  feature.set('name', name);
-
-  let filename = `${track.document_id}_${name.substring(0, 100)}`;
-  if (track.date_start) {
-    filename += `_${track.date_start}`;
-  }
-
-  const content = new GPX().writeFeatures([feature], { featureProjection: 'EPSG:3857' });
-  utils.download(content, `${filename}.gpx`, 'application/gpx+xml;charset=utf-8');
 }

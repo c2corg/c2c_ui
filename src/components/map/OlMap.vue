@@ -168,7 +168,6 @@
         <span v-if="trackTooltip.others" class="track-meta"
           >{{ $gettext('Others here:') }} {{ trackTooltip.others }}</span
         >
-        <span class="track-hint">{{ $gettext('Right click: download the GPX') }}</span>
       </template>
     </div>
 
@@ -209,14 +208,6 @@
               <activities :activities="entry.document.activities" class="is-size-5" />
             </div>
           </div>
-          <button
-            type="button"
-            class="button is-small is-primary"
-            :title="$gettext('Download the GPX file')"
-            @click="downloadGpx(entry.document)"
-          >
-            GPX
-          </button>
         </li>
       </ul>
     </div>
@@ -272,7 +263,6 @@ import {
   type DensityType,
   createDensityLayers,
   createHeatmapLayer,
-  downloadTrackGpx,
   heatmapWeight,
   sortTracks,
   type DensityTrack,
@@ -1238,17 +1228,6 @@ function hideTrackTooltip() {
   trackTooltipOverlay?.setPosition(undefined);
 }
 
-// the tracks under a right click (a long tap on a touch screen): the same panel, with the GPX of each
-function onContextMenu(event: MouseEvent) {
-  const hits = hitsAt(map.getEventPixel(event), HIT_TOLERANCE);
-  const documentHit = hits.find((hit) => hoverableLayers.has(hit.layer));
-  const tracks = documentHit && isMarker(documentHit.feature) ? [] : tracksIn(hits);
-  if (tracks.length) {
-    event.preventDefault();
-    openTrackPanel(tracks, (event as PointerEvent).pointerType === 'touch');
-  }
-}
-
 function setHighlightedFeature(feature: FeatureLike | null) {
   if (feature === highlightedFeature.value) {
     return;
@@ -1408,14 +1387,6 @@ function turnOffDensityOverlays() {
 }
 
 let trackPanelTimeout: ReturnType<typeof setTimeout> | undefined;
-
-async function downloadGpx(track: DensityTrack) {
-  try {
-    await downloadTrackGpx(track);
-  } catch {
-    toast({ message: $gettext('The GPX file could not be downloaded'), type: 'is-danger' });
-  }
-}
 
 function openTrackPanel(features: Feature[], touch: boolean) {
   trackPanelEntries.value = trackEntries(features);
@@ -1931,7 +1902,6 @@ onMounted(() => {
     });
     map.addOverlay(trackTooltipOverlay);
     map.getViewport()?.addEventListener('mouseout', hideTrackTooltip);
-    map.getViewport()?.addEventListener('contextmenu', onContextMenu);
 
     map.on('moveend', debounce(updateDensityOverlays, DENSITY_FETCH_DEBOUNCE));
   }
@@ -2173,13 +2143,6 @@ defineExpose({
     color: var(--c2c-grey);
     font-size: 0.85em;
   }
-
-  .track-hint {
-    margin-top: 2px;
-    color: var(--c2c-grey);
-    font-size: 0.75em;
-    font-style: italic;
-  }
 }
 
 .ol-track-panel {
@@ -2254,10 +2217,6 @@ defineExpose({
 @media (pointer: coarse) {
   .ol-track-panel li {
     min-height: 44px;
-  }
-
-  .ol-track-panel .button {
-    min-height: 36px;
   }
 }
 
