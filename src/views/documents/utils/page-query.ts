@@ -23,10 +23,10 @@ export function getLimit(route: Route) {
   return Math.min(Math.max(toInt(route.query.limit, LIMIT_MIN), LIMIT_MIN), LIMIT_MAX);
 }
 
-// offset of the page an offset belongs to: on a page boundary, and not past the last page. total is 0 when unknown
-export function pageStartFor(offset: number, limit: number, total: number) {
+// offset of the page an offset belongs to: on a page boundary, and not past the last page. total is null when unknown
+export function pageStartFor(offset: number, limit: number, total: number | null) {
   const start = Math.floor(offset / limit) * limit;
-  return total > 0 && start >= total ? Math.floor((total - 1) / limit) * limit : start;
+  return total !== null && start >= total ? Math.floor(Math.max(total - 1, 0) / limit) * limit : start;
 }
 
 export function pageQuery(route: Route, offset: number, limit: number): RouteLocationRaw {
@@ -39,8 +39,8 @@ export function pageQuery(route: Route, offset: number, limit: number): RouteLoc
 }
 
 // Where to go when the url does not point at a page (offset in the middle of a page, past the last one, unusable
-// limit), null when it does. The total is not known before the results are loaded: pass 0 to only check the alignment.
-export function normalizedPageQuery(route: Route, total: number): RouteLocationRaw | null {
+// limit), null when it does. The total is not known before the results are loaded: pass null to only check the alignment.
+export function normalizedPageQuery(route: Route, total: number | null): RouteLocationRaw | null {
   const limit = getLimit(route);
   const start = pageStartFor(getOffset(route), limit, total);
   const isOffsetOk = String(route.query.offset ?? 0) === String(start);
@@ -49,8 +49,8 @@ export function normalizedPageQuery(route: Route, total: number): RouteLocationR
   return isOffsetOk && isLimitOk ? null : pageQuery(route, start, limit);
 }
 
-// total: the number of documents, 0 until it is known
-export function usePageQuery(total: Ref<number>) {
+// total: the number of documents, null until it is known
+export function usePageQuery(total: Ref<number | null>) {
   const route = useRoute();
 
   const offset = computed(() => getOffset(route));
@@ -62,7 +62,7 @@ export function usePageQuery(total: Ref<number>) {
     pageStart.value > 0 ? pageQuery(route, pageStart.value - queryLimit.value, queryLimit.value) : null
   );
   const nextPageQuery = computed(() =>
-    pageStart.value + queryLimit.value < total.value
+    total.value !== null && pageStart.value + queryLimit.value < total.value
       ? pageQuery(route, pageStart.value + queryLimit.value, queryLimit.value)
       : null
   );

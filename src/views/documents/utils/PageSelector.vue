@@ -9,9 +9,11 @@
     >
       <fa-icon icon="chevron-left" />
     </component>
-    {{ firstDocumentPosition }}-{{ lastDocumentPosition }}
-    <span v-translate translate-context="1-30 of 200 results">of</span>
-    {{ total }}
+    <template v-if="total !== null">
+      {{ firstDocumentPosition }}-{{ lastDocumentPosition }}
+      <span v-translate translate-context="1-30 of 200 results">of</span>
+      {{ total }}
+    </template>
     <component
       :is="nextPageQuery ? 'router-link' : 'span'"
       class="pagination-link button has-text-normal"
@@ -62,13 +64,14 @@ const props = defineProps({
   },
 });
 
-const total = ref(30);
+// unknown until the first results are loaded
+const total = ref<number | null>(null);
 const limitSelector = useTemplateRef<InstanceType<typeof DropdownButton>>('limitSelector');
 
 const { queryLimit, pageStart, previousPageQuery, nextPageQuery, limitQuery } = usePageQuery(total);
 
 const firstDocumentPosition = computed(() => pageStart.value + 1);
-const lastDocumentPosition = computed(() => Math.min(pageStart.value + queryLimit.value, total.value));
+const lastDocumentPosition = computed(() => Math.min(pageStart.value + queryLimit.value, total.value ?? Infinity));
 
 function saveTotal() {
   if (props.documents) {

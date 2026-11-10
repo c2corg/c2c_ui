@@ -20,7 +20,8 @@ describe('page query', () => {
     expect(pageStartFor(45, 30, 100)).toBe(30);
     expect(pageStartFor(240, 30, 45)).toBe(30);
     expect(pageStartFor(240, 30, 60)).toBe(30);
-    expect(pageStartFor(240, 30, 0)).toBe(240);
+    expect(pageStartFor(240, 30, null)).toBe(240);
+    expect(pageStartFor(30, 30, 0)).toBe(0);
   });
 
   it('keeps the other parameters and bounds the limit when building a page url', () => {
@@ -33,16 +34,22 @@ describe('page query', () => {
   });
 
   it('only asks for another url when it does not point at a page', () => {
-    expect(normalizedPageQuery(routeWith({}), 0)).toBeNull();
+    expect(normalizedPageQuery(routeWith({}), null)).toBeNull();
     expect(normalizedPageQuery(routeWith({ offset: '30', limit: '30' }), 100)).toBeNull();
-    expect(normalizedPageQuery(routeWith({ offset: '60' }), 0)).toBeNull();
+    expect(normalizedPageQuery(routeWith({ offset: '60' }), null)).toBeNull();
     // the range is only checked once the total is known
-    expect(normalizedPageQuery(routeWith({ offset: '240' }), 0)).toBeNull();
-    expect(normalizedPageQuery(routeWith({ offset: '45' }), 0)).toMatchObject({ query: { offset: '30', limit: '30' } });
-    expect(normalizedPageQuery(routeWith({ limit: '500' }), 0)).toMatchObject({ query: { offset: '0', limit: '100' } });
+    expect(normalizedPageQuery(routeWith({ offset: '240' }), null)).toBeNull();
+    expect(normalizedPageQuery(routeWith({ offset: '45' }), null)).toMatchObject({
+      query: { offset: '30', limit: '30' },
+    });
+    expect(normalizedPageQuery(routeWith({ limit: '500' }), null)).toMatchObject({
+      query: { offset: '0', limit: '100' },
+    });
     expect(normalizedPageQuery(routeWith({ offset: '240' }), 45)).toMatchObject({
       query: { offset: '30', limit: '30' },
     });
+    // nothing left on the page: back to the first one
+    expect(normalizedPageQuery(routeWith({ offset: '30' }), 0)).toMatchObject({ query: { offset: '0', limit: '30' } });
     expect(normalizedPageQuery(routeWith({ offset: '30', limit: '50' }), 100)).toMatchObject({
       query: { offset: '0', limit: '50' },
     });

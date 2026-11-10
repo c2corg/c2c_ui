@@ -18,7 +18,7 @@
         :is="page === currentPage ? 'span' : 'router-link'"
         class="button"
         :class="{ 'is-primary': page === currentPage }"
-        :to="pageAt((page - 1) * queryLimit)"
+        :to="page === currentPage ? undefined : pageAt((page - 1) * queryLimit)"
         :aria-current="page === currentPage ? 'page' : null"
       >
         {{ page }}
@@ -52,11 +52,11 @@ const props = defineProps({
   },
 });
 
-const total = computed(() => props.documents?.total ?? 0);
+const total = computed(() => props.documents?.total ?? null);
 
 const { queryLimit, pageStart, previousPageQuery, nextPageQuery, pageAt } = usePageQuery(total);
 
-const pageCount = computed(() => Math.ceil(total.value / queryLimit.value));
+const pageCount = computed(() => Math.ceil((total.value ?? 0) / queryLimit.value));
 const currentPage = computed(() => pageStart.value / queryLimit.value + 1);
 const pages = computed(() => getPages(currentPage.value, pageCount.value));
 </script>

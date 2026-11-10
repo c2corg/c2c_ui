@@ -26,7 +26,7 @@
           </dropdown-button>
           &nbsp;
           <br class="is-hidden-tablet" />
-          <page-selector :documents="documents" />
+          <page-selector :key="documentType" :documents="documents" />
         </span>
         <span class="is-pulled-right is-flex header-right" v-if="documentType != 'profile'">
           <load-user-preferences-button class="is-hidden-mobile" />
@@ -210,7 +210,7 @@ function load() {
   }
 
   // offset in the middle of a page (old link...): go to the page it belongs to before loading anything
-  const pageQuery = normalizedPageQuery(route, 0);
+  const pageQuery = normalizedPageQuery(route, null);
   if (pageQuery) {
     router.replace(pageQuery);
     // the route watcher will call load
@@ -221,14 +221,16 @@ function load() {
   promise.value = (c2c as unknown as Record<string, DocumentService>)[documentType.value]
     .getAll(route.query)
     .then((response) => {
-      // the list has its height: back from a document, the router can restore the scroll position
-      bus.emit('trigger-scroll');
-
       // past the last page, which happens when the map is moved to a sparser area: show the last page instead
       const lastPageQuery = normalizedPageQuery(route, response.data.total);
       if (lastPageQuery && route.fullPath === requested) {
         router.replace(lastPageQuery);
+        // the route watcher will call load
+        return;
       }
+
+      // the list has its height: back from a document, the router can restore the scroll position
+      bus.emit('trigger-scroll');
     });
 }
 
@@ -386,7 +388,7 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
 
       /* the table scrolls by itself: it takes the room left by the navigation */
       .documents-table {
-        flex: 1 1 auto;
+        flex: 1 1 0;
         min-height: 0;
       }
 
