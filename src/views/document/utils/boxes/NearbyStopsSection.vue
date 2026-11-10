@@ -458,13 +458,13 @@ function handleDocumentHighlight(document: MapDocument | null) {
       padding: 15px;
       margin-bottom: 10px;
       background: white;
-      border-left: 8px solid #337ab7;
+      border-left: 8px solid var(--c2c-primary);
       cursor: pointer;
       transition: all 0.2s ease;
 
       &:hover {
-        border-color: #4baf50;
-        background-color: #fafafa;
+        border-color: var(--c2c-green);
+        background-color: var(--c2c-white);
 
         .line-details {
           background-color: white;
@@ -478,7 +478,7 @@ function handleDocumentHighlight(document: MapDocument | null) {
 
         .see-more-lines {
           margin-top: 10px;
-          color: #337ab7;
+          color: var(--c2c-primary);
           font-weight: bold;
         }
       }
@@ -502,9 +502,9 @@ function handleDocumentHighlight(document: MapDocument | null) {
       }
 
       &.selected-stop {
-        border: 2px solid #4baf50;
-        border-left: 8px solid #4baf50;
-        background-color: #fbfaf6;
+        border: 2px solid var(--c2c-green);
+        border-left: 8px solid var(--c2c-green);
+        background-color: var(--c2c-body-background-color);
       }
     }
 
@@ -538,7 +538,7 @@ function handleDocumentHighlight(document: MapDocument | null) {
       margin-top: 25px;
       gap: 10px;
       align-items: center;
-      background-color: #3e8ed0;
+      background-color: var(--c2c-info);
       color: white;
       .missing-transports-information-text {
         color: white;

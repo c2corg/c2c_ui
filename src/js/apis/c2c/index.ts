@@ -7,7 +7,7 @@ import ForumService from './ForumService';
 import ModeratorService from './ModeratorService';
 import TagsService from './TagsService';
 import UserProfileService from './UserProfileService';
-import { densityHeatmap, densityTracks, documentChanges, searchResults } from './schemas';
+import { densityHeatmap, densityTracks, documentChanges, documentsPage, searchResults } from './schemas';
 import { type SessionRefusal, sentWithFormerToken, sessionRefusal } from './session-refusal';
 import type { Params } from './types';
 
@@ -102,26 +102,32 @@ export class CamptocampApi extends BaseApi {
     return this.getValidated('/search', searchResults, { params });
   }
 
+  // the routes a GPS track most likely followed, best first; track: an encoded polyline (see encodeTrack)
+  suggestRoutes(track: string, params?: Params) {
+    return this.getValidated('/routes/suggest', documentsPage, { params: { ...params, track } });
+  }
+
   getRecentChanges(params?: Params) {
     return this.getValidated('/documents/changes', documentChanges, { params });
   }
 
-  /* the map overlays: the density and the tracks of the outings and routes in a box (EPSG:3857) */
+  /* the map overlays: the density and the tracks of the outings and routes in a box (EPSG:3857). The request can be
+   * cancelled with `signal` */
 
-  getOutingsHeatmap(params?: Params) {
-    return this.getValidated('/outings/map/heatmap', densityHeatmap, { params });
+  getOutingsHeatmap(params?: Params, signal?: AbortSignal) {
+    return this.getValidated('/outings/map/heatmap', densityHeatmap, { params, signal });
   }
 
-  getOutingsTracks(params?: Params) {
-    return this.getValidated('/outings/map/tracks', densityTracks, { params });
+  getOutingsTracks(params?: Params, signal?: AbortSignal) {
+    return this.getValidated('/outings/map/tracks', densityTracks, { params, signal });
   }
 
-  getRoutesHeatmap(params?: Params) {
-    return this.getValidated('/routes/map/heatmap', densityHeatmap, { params });
+  getRoutesHeatmap(params?: Params, signal?: AbortSignal) {
+    return this.getValidated('/routes/map/heatmap', densityHeatmap, { params, signal });
   }
 
-  getRoutesTracks(params?: Params) {
-    return this.getValidated('/routes/map/tracks', densityTracks, { params });
+  getRoutesTracks(params?: Params, signal?: AbortSignal) {
+    return this.getValidated('/routes/map/tracks', densityTracks, { params, signal });
   }
 
   /* image service, I'm lazy. TODO :
@@ -136,7 +142,9 @@ export class CamptocampApi extends BaseApi {
     file: Blob,
     onUploadProgress: AxiosRequestConfig['onUploadProgress'],
     onSuccess: (response: AxiosResponse) => unknown,
-    onFailure: (error: unknown) => unknown
+    onFailure: (error: unknown) => unknown,
+    // a small JPEG of the stored image in the response, for the files the browser cannot show (HEIC, TIFF)
+    { preview = false }: { preview?: boolean } = {}
   ) {
     const formData = new FormData();
 
@@ -152,7 +160,7 @@ export class CamptocampApi extends BaseApi {
     /* can't user post_ helper: it's not the API url */
     /* TODO : move this function in another service... */
     return this.axios
-      .post(config.urls.imageBackend + '/upload', formData, requestConfig)
+      .post(config.urls.imageBackend + '/upload' + (preview ? '?preview=1' : ''), formData, requestConfig)
       .then(onSuccess)
       .catch(onFailure);
   }

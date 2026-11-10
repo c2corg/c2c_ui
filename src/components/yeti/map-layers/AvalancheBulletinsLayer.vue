@@ -737,7 +737,7 @@ defineExpose({ getLayer, onMapClick, onMapLooseClick, onMapPointerMove, onMapLoo
 .bulletins-overlay {
   width: 300px;
   max-width: 100%;
-  background: #fff;
+  background: var(--c2c-white);
   border-radius: 4px;
   box-shadow:
     0 0 3px rgba(4%, 4%, 4%, 0.5),

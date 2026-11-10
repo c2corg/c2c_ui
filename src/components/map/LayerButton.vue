@@ -109,7 +109,7 @@ watch(opacity, () => {
   width: var(--layer-button-width);
   height: var(--layer-button-width);
   border-radius: var(--layer-button-radius);
-  border: var(--layer-button-selected-border) solid #fff;
+  border: var(--layer-button-selected-border) solid var(--c2c-white);
   pointer-events: none;
 }
 

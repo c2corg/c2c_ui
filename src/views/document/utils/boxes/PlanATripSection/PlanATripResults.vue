@@ -282,7 +282,7 @@ function selectRouteOnly(journey: Journey) {
 
   .itinerary-header {
     border: 1px solid lightgrey;
-    border-left: 4px solid #337ab7;
+    border-left: 4px solid var(--c2c-primary);
     border-radius: 4px;
     padding: 10px;
     margin-top: 12px;
@@ -314,8 +314,8 @@ function selectRouteOnly(journey: Journey) {
     }
   }
   .selected {
-    border-left: 4px solid #4baf50;
-    background-color: #fbfaf6;
+    border-left: 4px solid var(--c2c-green);
+    background-color: var(--c2c-body-background-color);
   }
   /* Bouton "Voir le détail" */
   .itinerary-details-button {
@@ -346,7 +346,7 @@ function selectRouteOnly(journey: Journey) {
     border-bottom-right-radius: 6px;
     border: solid 1px lightgray;
     border-top: none;
-    background-color: #fff;
+    background-color: var(--c2c-white);
 
     .journey-timeline {
       position: relative;
@@ -390,14 +390,14 @@ function selectRouteOnly(journey: Journey) {
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        background-color: #fff;
+        background-color: var(--c2c-white);
         display: flex;
         align-items: center;
         justify-content: center;
         margin: 0 15px 0 -45px;
 
         &.stop {
-          background-color: #fff;
+          background-color: var(--c2c-white);
           width: 15px;
           height: 15px;
           border: 2px solid grey;
@@ -416,7 +416,7 @@ function selectRouteOnly(journey: Journey) {
 
         &.transport {
           border: none;
-          color: #fff;
+          color: var(--c2c-white);
           width: 32px;
           height: 32px;
         }
@@ -445,7 +445,7 @@ function selectRouteOnly(journey: Journey) {
 
         .timeline-walking-info {
           font-size: 14px;
-          color: #757575;
+          color: var(--c2c-grey);
           display: flex;
           align-items: center;
           margin-left: -14px;

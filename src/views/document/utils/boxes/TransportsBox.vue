@@ -214,7 +214,7 @@ watch(showAccessibilityInfo, (value) => {
     }
 
     &.is-active {
-      background-color: #337ab7;
+      background-color: var(--c2c-primary);
       border: none;
       color: white;
     }

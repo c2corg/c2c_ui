@@ -39,12 +39,12 @@ function switchOpen() {
 
 <style scoped>
 .dropdown-content {
-  border: 1px solid #dbdbdb;
+  border: 1px solid var(--c2c-grey-lighter);
   padding: 0;
   box-shadow: none;
 
   &:hover {
-    border-color: #b5b5b5;
+    border-color: var(--c2c-grey-light);
   }
 }
 .dropdown-content-title {

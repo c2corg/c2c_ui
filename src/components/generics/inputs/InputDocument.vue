@@ -1,5 +1,5 @@
 <template>
-  <div ref="root" class="dropdown control" :class="{ 'is-active': promise.data }">
+  <div ref="root" class="dropdown control" :class="{ 'is-active': isOpen }">
     <div class="control has-icons-left input-container">
       <input
         ref="input"
@@ -7,23 +7,23 @@
         :class="{ 'is-danger': hasError, 'is-small': isSmall }"
         type="text"
         :placeholder="placeholder || $gettext('Search ...')"
-        @input="onInput"
-        @focus="onInput"
+        @input="onFocus"
+        @focus="onFocus"
         v-model="searchText"
       />
       <span class="icon is-left">
         <fa-icon icon="search" />
       </span>
     </div>
-    <div class="dropdown-menu" role="menu" v-if="promise.data && showOptions">
+    <div class="dropdown-menu" role="menu" v-if="isOpen && showOptions">
       <div class="dropdown-content">
-        <div v-for="type of documentTypesWithResults" :key="type">
-          <div v-if="documentTypes_.length > 1" class="dropdown-item has-text-weight-bold is-size-5">
+        <div v-for="group of groups" :key="group.key">
+          <div v-if="group.header" class="dropdown-item has-text-weight-bold is-size-5">
             <!-- if several type are requested, add an header -->
-            {{ $filters.uppercaseFirstLetter($gettext(type + 's')) }}
+            {{ $filters.uppercaseFirstLetter($gettext(group.type + 's')) }}
           </div>
           <div
-            v-for="document of promise.data[type + 's']!.documents"
+            v-for="document of group.documents"
             :key="document.document_id"
             @mousedown="toggle(document)"
             class="dropdown-item dropdown-item-option columns is-gapless has-cursor-pointer"
@@ -62,8 +62,8 @@
             </div>
           </div>
           <router-link
-            v-if="showMoreResultsLink"
-            :to="{ name: type + 's', query: { q: searchText } }"
+            v-if="showMoreResultsLink && group.searched"
+            :to="{ name: group.type + 's', query: { q: searchText } }"
             class="dropdown-item is-italic has-text-centered"
             @click="closeDropdown"
             v-translate
@@ -73,7 +73,7 @@
         </div>
 
         <div v-if="proposeCreation">
-          <hr v-if="documentTypesWithResults.length > 0" class="dropdown-divider" />
+          <hr v-if="groups.length > 0" class="dropdown-divider" />
           <div class="dropdown-item has-text-weight-bold is-size-5" v-translate>No match?</div>
           <add-link
             v-for="type of documentTypes_"
@@ -83,16 +83,14 @@
           />
         </div>
 
-        <div v-else-if="documentTypesWithResults.length == 0" class="dropdown-item is-size-6" v-translate>
-          No result found
-        </div>
+        <div v-else-if="groups.length == 0" class="dropdown-item is-size-6" v-translate>No result found</div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, useTemplateRef } from 'vue';
+import { type PropType, computed, onBeforeUnmount, ref, useTemplateRef } from 'vue';
 
 import { arrayInputProps, baseInputProps } from './input-value';
 
@@ -139,6 +137,12 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  // documents proposed as soon as the input has the focus, before the search results (e.g. the recent partners of
+  // the user); loaded on the first focus
+  loadSuggestions: {
+    type: Function as PropType<() => Promise<C2cDocument[]>>,
+    default: null,
+  },
 });
 
 const emit = defineEmits(['add', 'update:modelValue', 'load-options']);
@@ -163,11 +167,60 @@ const documentTypes_ = computed(
   () => (Array.isArray(props.documentType) ? props.documentType : [props.documentType]) as string[]
 );
 
-const documentTypesWithResults = computed(() => {
-  const result = promise.value.data!;
+// the suggestions, null until loaded, and whether they are shown (from the focus until the dropdown is closed)
+const suggestions = ref<C2cDocument[] | null>(null);
+const showSuggestions = ref(false);
+let suggestionsRequested = false;
 
-  return documentTypes_.value.filter((type) => result[type + 's'] && result[type + 's']!.documents.length !== 0);
+// lower case, without accents
+const normalize = (text: string) =>
+  text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+
+// the suggestions matching the typed text, on their name or their forum name
+const shownSuggestions = computed(() => {
+  if (!showSuggestions.value || !suggestions.value) {
+    return [];
+  }
+  const text = normalize(searchText.value.trim());
+  return suggestions.value.filter(
+    (document) =>
+      !text || [document.name, document.forum_username].some((name) => normalize(String(name ?? '')).includes(text))
+  );
 });
+
+type Group = { key: string; type: string; header: boolean; searched: boolean; documents: C2cDocument[] };
+
+// what the dropdown lists: the suggestions first, then the search results not already among them
+const groups = computed<Group[]>(() => {
+  const result: Group[] = [];
+  const header = documentTypes_.value.length > 1;
+  const suggested = new Set(shownSuggestions.value.map((document) => document.document_id));
+
+  if (shownSuggestions.value.length) {
+    result.push({
+      key: 'suggestions',
+      type: documentTypes_.value[0]!,
+      header: false,
+      searched: false,
+      documents: shownSuggestions.value,
+    });
+  }
+
+  const data = promise.value.data;
+  for (const type of data ? documentTypes_.value : []) {
+    const documents = (data![type + 's']?.documents ?? []).filter((document) => !suggested.has(document.document_id));
+    if (documents.length) {
+      result.push({ key: type, type, header, searched: true, documents });
+    }
+  }
+
+  return result;
+});
+
+const isOpen = computed(() => Boolean(promise.value.data) || shownSuggestions.value.length > 0);
 
 const letterTypes = computed(() =>
   documentTypes_.value.map(
@@ -181,6 +234,26 @@ function focus() {
 
 function closeDropdown() {
   promise.value = {};
+  showSuggestions.value = false;
+}
+
+function onFocus() {
+  if (props.loadSuggestions) {
+    showSuggestions.value = true;
+    if (!suggestionsRequested) {
+      suggestionsRequested = true;
+      props.loadSuggestions().then(
+        (documents) => {
+          suggestions.value = documents;
+        },
+        () => {
+          // a shortcut only: the search works without it; tried again on the next focus
+          suggestionsRequested = false;
+        }
+      );
+    }
+  }
+  onInput();
 }
 
 function onWindowClick(event: MouseEvent) {
@@ -269,7 +342,7 @@ defineExpose({ focus });
 }
 
 div.dropdown-item-option:hover {
-  background: #eee; /* TODO variables */
+  background: var(--c2c-grey-lightest); /* TODO variables */
 }
 
 .input-container {

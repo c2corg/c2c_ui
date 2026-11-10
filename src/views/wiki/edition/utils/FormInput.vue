@@ -46,6 +46,7 @@
     multiple
     clear-input-on-toggle
     :has-error="hasError"
+    :load-suggestions="loadSuggestions"
     @add="$documentUtils.propagateProperties(document, $event)"
     v-model="object[field.name]"
   />
@@ -109,11 +110,12 @@
 
 <script setup lang="ts">
 import dayjs from 'dayjs';
-import { computed } from 'vue';
+import { type PropType, computed } from 'vue';
 
 import InputConditionsLevels from './InputConditionsLevels.vue';
 
 import { documentProperty, fieldProperty } from '@/js/properties';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 const props = defineProps({
   ...fieldProperty,
@@ -145,6 +147,11 @@ const props = defineProps({
   divisor: {
     type: Number,
     default: undefined,
+  },
+  // the documents an association input proposes on focus (see InputDocument)
+  loadSuggestions: {
+    type: Function as PropType<() => Promise<C2cDocument[]>>,
+    default: null,
   },
 });
 

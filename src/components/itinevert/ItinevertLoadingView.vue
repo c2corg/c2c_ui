@@ -68,14 +68,14 @@ const computedPercent = computed(() => {
   height: 100px;
   border-radius: 50%;
   border: 6px solid rgba(0, 0, 0, 0.1);
-  border-top-color: #ff9933;
+  border-top-color: var(--c2c-color-base-c2c);
   animation: spin 0.8s linear infinite;
   box-sizing: border-box;
 }
 
 .loading-text {
   margin: 0;
-  color: #4a4a4a;
+  color: var(--c2c-text);
 }
 
 @keyframes spin {
@@ -108,7 +108,7 @@ const computedPercent = computed(() => {
 .progress__bar {
   height: 100%;
   border-radius: 10px;
-  background: linear-gradient(90deg, #ffb366, #ff9933);
+  background: linear-gradient(90deg, #ffb366, var(--c2c-color-base-c2c));
   box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12);
   transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   will-change: width;
@@ -116,7 +116,7 @@ const computedPercent = computed(() => {
 
 /* label below the bar */
 .progress__label {
-  color: #333;
+  color: var(--c2c-grey-darker);
   text-align: center;
   user-select: none;
 }

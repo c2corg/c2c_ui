@@ -119,7 +119,7 @@ h3 {
 
 .badge {
   color: var(--c2c-primary);
-  background-color: #fff;
+  background-color: var(--c2c-white);
   border-radius: 1em;
   padding: 0 0.35em;
 }

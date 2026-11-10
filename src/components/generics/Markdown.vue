@@ -12,7 +12,7 @@ import { useRouter } from 'vue-router';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
 import iconSvg from '@/js/icon-svg';
-import { getEmbeddedImageUrl, getThumbnailSize, type ImageSize } from '@/js/image-urls';
+import { fallBackToBasicImage, getEmbeddedImageUrl, getThumbnailSize, type ImageSize } from '@/js/image-urls';
 import { sanitizeRichHtml } from '@/js/sanitize-html';
 import type { ViewerImage } from '@/js/vue-plugins/image-viewer';
 
@@ -210,6 +210,8 @@ function computeImages(images: Iterable<EmbeddedImage>) {
       avif.setAttribute('type', 'image/avif');
       avif.setAttribute('srcset', getEmbeddedImageUrl(urls, 'avif'));
       picture.appendChild(avif);
+      // the AVIF image may be missing (just uploaded, or never built): the basic one
+      image.addEventListener('error', () => fallBackToBasicImage(image), { once: true });
     }
     picture.appendChild(image);
     parent.appendChild(picture);
@@ -281,7 +283,7 @@ onBeforeUnmount(() => {
   h3 {
     font-size: 1.5rem !important;
     margin-bottom: 0.5em !important;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--c2c-grey-lightest);
   }
   h4 {
     font-size: 1.1rem !important;
@@ -309,9 +311,9 @@ img[c2c\:role='emoji'] {
 
 figure[c2c\:role='embedded-figure'] {
   border-radius: 4px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--c2c-grey-lighter);
   padding: 0.5rem;
-  background: #fafafa;
+  background: var(--c2c-white);
   max-width: 100%;
   display: table;
 

@@ -17,7 +17,7 @@ vi.mock('@/js/apis/c2c', () => ({
     profile: { get: api.profile },
   },
 }));
-vi.mock('bulma-toast', () => ({ toast: api.toast }));
+vi.mock('@/js/toast', () => ({ toast: api.toast }));
 
 const response = (data: unknown) => new ApiData(Promise.resolve({ data } as never));
 const failure = (data: unknown) => new ApiData(Promise.reject({ response: { data } }));
@@ -163,6 +163,9 @@ describe('useDocumentEdition', () => {
     expect(api.save).not.toHaveBeenCalled();
     expect(vm.fields.title.error).not.toBeNull();
     expect(api.toast).toHaveBeenCalledOnce();
+    // the errors as a list of texts: they come from the API
+    const { message } = api.toast.mock.calls[0]![0] as { message: HTMLElement };
+    expect(message.outerHTML).toBe('<ul><li>title : required field</li></ul>');
   });
 
   it('tells about a save the API did not answer', async () => {

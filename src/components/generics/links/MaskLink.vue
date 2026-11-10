@@ -14,11 +14,11 @@
 </template>
 
 <script setup lang="ts">
-import { toast } from 'bulma-toast';
 import { computed } from 'vue';
 
 import c2c from '@/js/apis/c2c';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { toast } from '@/js/toast';
 
 const props = defineProps({
   version: {

@@ -62,14 +62,14 @@ a {
   color: var(--c2c-link);
   cursor: pointer;
   text-decoration: none;
-}
 
-a strong {
-  color: currentColor;
-}
+  strong {
+    color: currentColor;
+  }
 
-a:hover {
-  color: var(--c2c-grey-darker);
+  &:hover {
+    color: var(--c2c-grey-darker);
+  }
 }
 
 code {
@@ -117,7 +117,6 @@ fieldset {
 }
 
 pre {
-  -webkit-overflow-scrolling: touch;
   background-color: var(--c2c-white-ter);
   color: var(--c2c-text);
   font-size: 0.875em;
@@ -125,13 +124,13 @@ pre {
   padding: 1.25rem 1.5rem;
   white-space: pre;
   overflow-wrap: normal;
-}
 
-pre code {
-  background-color: transparent;
-  color: currentColor;
-  font-size: 1em;
-  padding: 0;
+  code {
+    background-color: transparent;
+    color: currentColor;
+    font-size: 1em;
+    padding: 0;
+  }
 }
 
 table td,

@@ -1,7 +1,13 @@
 import config from '@/js/config';
 
 // the image documents of the API, with what the URLs need
-export type Image = { document_id: number; filename?: string };
+export type Image = {
+  document_id: number;
+  filename?: string;
+  // just uploaded: c2c_images builds the AVIF thumbnails after the upload, and publishes them up to 20 s later
+  // (THUMBNAILS_PUBLISH_DELAY), so they may not exist yet. Only the JPG ones are offered.
+  modernThumbnailsPending?: boolean;
+};
 
 export type ImageSize = 'SI' | 'MI' | 'BI';
 
@@ -24,6 +30,28 @@ export const getThumbnailSize = function (
 // AVIF only: the thumbnails have no WebP version (c2corg/c2c_images#1160)
 export type ImageFormat = 'avif';
 
+/**
+ * When the modern (AVIF) thumbnail of a <picture> fails, e.g. not built yet or never built, show its basic one.
+ *
+ * The browser does not fall back to the <img> src itself when a <source> it chose fails: it shows a broken image.
+ * Returns false when there was nothing to change (no modern source, or the basic image failed too).
+ */
+export const fallBackToBasicImage = function (img: HTMLImageElement): boolean {
+  const picture = img.parentElement;
+  if (picture?.tagName !== 'PICTURE') {
+    return false;
+  }
+  let changed = false;
+  for (const source of picture.querySelectorAll('source')) {
+    // never set it again to the same value: the browser would load the image again, and fail again, endlessly
+    if (source.srcset !== img.src) {
+      source.srcset = img.src;
+      changed = true;
+    }
+  }
+  return changed;
+};
+
 const getImageProxyUrl = function (image: Image, size?: ImageSize, format?: ImageFormat): string | undefined {
   // Until all images are migrated only images uploaded after a given timestamp
   // or with an id greater than a given one have their AVIF versions
@@ -37,6 +65,10 @@ const getImageProxyUrl = function (image: Image, size?: ImageSize, format?: Imag
 };
 
 export const getImageUrl = function (image: Image, size?: ImageSize, format?: ImageFormat): string | undefined {
+  if (format && size && image.modernThumbnailsPending) {
+    return;
+  }
+
   if (!image.filename) {
     return getImageProxyUrl(image, size, format);
   }

@@ -7,6 +7,7 @@ import type * as z from 'zod/mini';
 
 import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
 import type { densityHeatmap, densityTrack, densityTracks } from '@/js/apis/c2c/schemas';
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
@@ -48,8 +49,9 @@ export const DENSITY_OVERLAYS: Record<
     trackColor: string;
     // the line around the track, so that it can be seen on any background: whatever the colors one sees
     casingColor: string;
-    getHeatmap: (params: Record<string, unknown>) => ApiData<DensityHeatmap>;
-    getTracks: (params: Record<string, unknown>) => ApiData<DensityTracks>;
+    // `signal` cancels the request
+    getHeatmap: (params: Record<string, unknown>, signal?: AbortSignal) => ApiData<DensityHeatmap>;
+    getTracks: (params: Record<string, unknown>, signal?: AbortSignal) => ApiData<DensityTracks>;
   }
 > = {
   outing: {
@@ -59,16 +61,16 @@ export const DENSITY_OVERLAYS: Record<
     heatmapGradient: ['#fff1d6', '#ffd18a', '#ff9933', '#d9640a', '#8a3a00'],
     trackColor: '#ff9933',
     casingColor: '#2b2b2b',
-    getHeatmap: (params) => c2c.getOutingsHeatmap(params),
-    getTracks: (params) => c2c.getOutingsTracks(params),
+    getHeatmap: (params, signal) => c2c.getOutingsHeatmap(params, signal),
+    getTracks: (params, signal) => c2c.getOutingsTracks(params, signal),
   },
   route: {
     title: 'Routes',
     heatmapGradient: ['#deebf7', '#9ecae1', '#4292c6', '#2171b5', '#08306b'],
     trackColor: '#337ab7',
     casingColor: '#ffffff',
-    getHeatmap: (params) => c2c.getRoutesHeatmap(params),
-    getTracks: (params) => c2c.getRoutesTracks(params),
+    getHeatmap: (params, signal) => c2c.getRoutesHeatmap(params, signal),
+    getTracks: (params, signal) => c2c.getRoutesTracks(params, signal),
   },
 };
 
@@ -113,7 +115,9 @@ type DocumentRef = {
   associations?: { routes?: { document_id?: number }[] };
 };
 
-// The filters of the overlays on the map of a document: only what is linked to it is shown.
+// The filters of the overlays on the map of a document. A route has the outings that are linked to it, an outing the
+// routes that are linked to it, a waypoint or an area what is in it: `null` is no filter, all the documents of the box
+// (the routes around a route, the outings around an outing).
 export function documentOverlayFilters(document: DocumentRef): Record<DensityType, DensityFilters> {
   const id = document.document_id;
   if (id === undefined) {
@@ -213,14 +217,17 @@ export function sortTracks<T extends Pick<DensityTrack, 'type' | 'title' | 'date
   });
 }
 
-// the track of an outing or a route as a GPX file, as the buttons of the page of the document do
+// The track of an outing or a route as a GPX file, as the buttons of the page of the document do. The track of the map
+// is simplified for the screen: the one of the document is asked, as it is in the database (3D, with its times).
 export async function downloadTrackGpx(track: DensityTrack) {
-  const [{ default: GPX }, { default: GeoJSON }] = await Promise.all([
+  const [{ default: GPX }, { default: GeoJSON }, { data: document }] = await Promise.all([
     import('ol/format/GPX'),
     import('ol/format/GeoJSON'),
+    (c2c[track.type === 'o' ? 'outing' : 'route'] as DocumentService).get(track.document_id),
   ]);
 
-  const feature = new GeoJSON().readFeatures(track.geometry.geom_detail)[0];
+  const geometry = document.geometry?.geom_detail;
+  const feature = geometry ? new GeoJSON().readFeatures(geometry)[0] : undefined;
   if (!feature) {
     return;
   }

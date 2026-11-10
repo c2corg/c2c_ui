@@ -6,13 +6,14 @@
 </template>
 
 <script setup lang="ts">
-import { toast as bulmaToast } from 'bulma-toast';
 import { useTemplateRef } from 'vue';
+
+import { type ToastOptions, toast as showToast } from '@/js/toast';
 
 const root = useTemplateRef<HTMLElement>('root');
 
-function toast(options?: object) {
-  bulmaToast({
+function toast(options?: Partial<ToastOptions>) {
+  showToast({
     duration: 3000,
     type: 'is-info',
     pauseOnHover: true,

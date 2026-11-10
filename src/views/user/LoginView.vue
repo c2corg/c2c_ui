@@ -189,7 +189,6 @@
 </template>
 
 <script setup lang="ts">
-import { toast } from 'bulma-toast';
 import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -203,6 +202,7 @@ import { apiErrors, errorStatus } from '@/js/apis/c2c/api-errors';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useNoRobots } from '@/js/composables/head';
 import config from '@/js/config';
+import { toast } from '@/js/toast';
 
 // possible mode values :
 //

@@ -49,7 +49,10 @@ defineExpose({ isActive });
 
 .dropdown-menu {
   @media screen and (--c2c-max-tablet) {
-    max-width: 100%;
+    /* fit the longest item (e.g. "Traqueurs d'activité"), within the viewport:
+       a percentage max-width refers to the trigger button, so min-width won */
+    width: max-content;
+    max-width: calc(100vw - 1rem);
   }
 }
 </style>

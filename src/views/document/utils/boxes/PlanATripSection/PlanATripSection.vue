@@ -1057,7 +1057,7 @@ function recenterMapOnDocuments() {
     .trip-tabs {
       display: flex;
       .tab-button {
-        color: #337ab7;
+        color: var(--c2c-primary);
         padding-left: 60px;
         padding-right: 60px;
         padding-top: 10px;
@@ -1072,23 +1072,23 @@ function recenterMapOnDocuments() {
       .tab-button.disabled {
         color: #ccc !important;
         cursor: not-allowed !important;
-        background-color: #f9f9f9 !important;
+        background-color: var(--c2c-white-ter) !important;
       }
 
       .tab-button:disabled {
         pointer-events: none;
       }
       .tab-button:hover {
-        background-color: rgb(232, 232, 232);
+        background-color: var(--c2c-grey-lightest);
         cursor: pointer;
       }
       .tab-button.active:hover {
-        background-color: #337ab7;
+        background-color: var(--c2c-primary);
         cursor: auto;
       }
       .tab-button.active {
         color: white;
-        background-color: #337ab7;
+        background-color: var(--c2c-primary);
       }
     }
 
@@ -1198,7 +1198,7 @@ function recenterMapOnDocuments() {
           border-radius: 3px;
 
           span {
-            color: #337ab7;
+            color: var(--c2c-primary);
             font-weight: bold;
           }
         }

@@ -103,10 +103,10 @@ function warnIfDisabled() {
   position: relative;
   width: calc(70 / 14 * 1rem);
   min-height: calc(50 / 14 * 1rem);
-  background: #dbdbdb;
+  background: var(--c2c-grey-lighter);
   box-shadow:
     0 0 0 2px white,
-    0 0 0 3px #dbdbdb;
+    0 0 0 3px var(--c2c-grey-lighter);
   border-radius: 4px;
   margin-bottom: 0.5rem;
   background-position: center;
@@ -168,13 +168,13 @@ function warnIfDisabled() {
   }
   .is-checkradio:not(:checked):hover:not([disabled]) + label::before {
     border-width: 1px;
-    border-color: #dbdbdb !important;
+    border-color: var(--c2c-grey-lighter) !important;
     background: white;
     box-shadow: none;
   }
   .is-checkradio:not(:checked):focus-visible + label::before {
     border-width: 1px;
-    border-color: #dbdbdb !important;
+    border-color: var(--c2c-grey-lighter) !important;
     background: white;
     box-shadow: none;
   }

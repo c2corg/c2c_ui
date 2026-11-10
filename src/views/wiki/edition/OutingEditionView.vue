@@ -33,10 +33,10 @@
         <div class="columns is-multiline">
           <form-field class="is-two-fifths" :document="document" :field="fields.activities" />
           <div class="column">
+            <!-- without the possible routes: in an editable map, their markers can be neither hovered nor clicked -->
             <map-input-row
               class="field"
               :document="document"
-              :documents="possibleRoutes"
               geom-detail-editable
               ref="mapInput"
               @move="updateBbox"
@@ -55,7 +55,7 @@
           </div>
         </div>
 
-        <div v-if="possibleRoutes && possibleRoutes.length !== 0" class="field">
+        <div v-if="possibleRoutes.length !== 0" class="field">
           <div v-for="route of possibleRoutes" :key="route.document_id">
             <input-checkbox
               :model-value="routeIsAssociated(route.document_id!)"
@@ -69,6 +69,9 @@
               <fa-icon icon="link" />
             </document-link>
           </div>
+          <button v-if="hiddenRoutes" type="button" class="button is-small mt-2" @click="showMore">
+            {{ $gettext('Show more routes') }} ({{ hiddenRoutes }})
+          </button>
         </div>
 
         <div class="notification is-info" v-else>
@@ -139,7 +142,12 @@
         :title="$gettext('Personal informations')"
         :sub-title="$gettext('People who were with you, and your feelings about this outing')"
       >
-        <associations-input-row :label="$gettext('participants')" :document="document" :field="fields.users" />
+        <associations-input-row
+          :label="$gettext('participants')"
+          :document="document"
+          :field="fields.users"
+          :load-suggestions="proposePartners ? loadRecentPartners : undefined"
+        />
         <div class="columns">
           <form-field :document="document" :field="fields.participant_count" class="is-narrow" />
           <form-field
@@ -246,13 +254,13 @@ import FormSection from './utils/FormSection.vue';
 import MapInputRow from './utils/MapInputRow.vue';
 import QualityField from './utils/QualityField.vue';
 import { useDocumentEdition } from './utils/document-edition';
+import { useRouteProposals } from './utils/route-proposals';
 
 import c2c from '@/js/apis/c2c';
-import type DocumentService from '@/js/apis/c2c/DocumentService';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-const { $documentUtils, $dateUtils } = useGlobalProperties();
+const { $documentUtils, $dateUtils, $user } = useGlobalProperties();
 const pageRoute = useRoute();
 
 const { fields, saving, mode, document, save } = useDocumentEdition({ afterLoad, beforeSave });
@@ -262,13 +270,25 @@ const quality = useTemplateRef<{ beforeSave(): void }>('quality');
 const cotometer = useTemplateRef<{ show(): void }>('cotometer');
 
 const showBothDates = ref(false);
-const possibleRoutes = ref<C2cDocument[] | null>(null);
-const routeTitle = ref('');
-const bbox = ref<number[] | null>(null);
-const showMoreResultsBanner = ref(false);
 const currentDate = ref(getCurrentDateString());
 
 const routes = () => document.value!.associations!.routes!;
+
+// the routes proposed to associate (see route-proposals.ts)
+const {
+  text: routeTitle,
+  bbox,
+  routes: possibleRoutes,
+  hidden: hiddenRoutes,
+  moreResults: showMoreResultsBanner,
+  showMore,
+  moveMap,
+  suggest,
+} = useRouteProposals({
+  associated: () => document.value?.associations?.routes ?? [],
+  activities: () => document.value?.activities ?? [],
+  title: (route) => $documentUtils.getDocumentTitle(route),
+});
 
 const initialExtent = computed(() => {
   if (pageRoute.query.initial_bbox) {
@@ -280,8 +300,19 @@ const initialExtent = computed(() => {
   return null;
 });
 
+// the users of the recent outings of the user, proposed first when adding participants, to a participant of the
+// outing only: a moderator editing the outing of others would get their own partners
+const proposePartners = ref(false);
+
+async function loadRecentPartners(): Promise<C2cDocument[]> {
+  const response = await c2c.userProfile.partners.get();
+  return response.data.partners;
+}
+
 function afterLoad() {
   showBothDates.value = document.value!.date_start !== document.value!.date_end;
+  // on creation, the user is already a participant
+  proposePartners.value = (document.value!.associations?.users ?? []).some((user) => user.document_id === $user.id);
 }
 
 function updateBbox(newBbox: number[]) {
@@ -294,55 +325,13 @@ function updateBbox(newBbox: number[]) {
     return;
   }
 
-  if (newBbox.join(',') !== bbox.value?.join(',')) {
-    bbox.value = newBbox;
-    updateRoutes('bbox', false);
-  }
+  // the first box is where the editor placed the map, not a move of the user
+  moveMap(newBbox, bbox.value !== null);
 }
 
+// placed by the editor: the search follows the new box
 async function fitMapToDocuments() {
-  bbox.value = (await mapInput.value!.fitMapToDocuments()) as number[];
-}
-
-function updateRoutes(reason?: string, fitMap?: boolean) {
-  if (!bbox.value) {
-    return reason;
-  }
-
-  const query: Record<string, string | number> = { limit: 50, bbox: bbox.value.join(',') };
-
-  if (routeTitle.value) {
-    query.q = routeTitle.value;
-  }
-
-  if (document.value!.activities!.length) {
-    query.act = document.value!.activities!.join(',');
-  }
-
-  const promise = (c2c.route as DocumentService).getAll(query);
-
-  promise.then((response) => computePossibleRoutes(response.data.documents, response.data.total, fitMap));
-
-  return promise;
-}
-
-function computePossibleRoutes(found: C2cDocument[], total: number, fitMap?: boolean) {
-  showMoreResultsBanner.value = total !== found.length;
-
-  // always add actual associations to possible routes
-  const routeIds = found.map((r) => r.document_id);
-  const all = [...found, ...routes().filter((r) => !routeIds.includes(r.document_id))];
-
-  // sort by title
-  all.sort((a, b) => $documentUtils.getDocumentTitle(a).localeCompare($documentUtils.getDocumentTitle(b)));
-
-  // assign
-  possibleRoutes.value = all;
-
-  // recenter the map to possible routes
-  if (fitMap) {
-    nextTick(fitMapToDocuments);
-  }
+  moveMap((await mapInput.value!.fitMapToDocuments()) as number[], false);
 }
 
 function changeRouteAssociation(addRoute: boolean, route: C2cDocument) {
@@ -357,13 +346,11 @@ function changeRouteAssociation(addRoute: boolean, route: C2cDocument) {
     routes().push(route);
 
     if (routes().length === 1) {
-      possibleRoutes.value = [];
-
       nextTick(async () => {
         // for first association, force the localization to be the route localization
         $documentUtils.propagateProperties(doc, route);
+        // the search follows the map
         await fitMapToDocuments();
-        updateRoutes('First route', false);
       });
     } else {
       $documentUtils.propagateProperties(doc, route);
@@ -410,32 +397,18 @@ function getCurrentDateString() {
 
 watch(showBothDates, handleDates);
 
-// deep 1: also when an activity is added to the array, as Vue 2 array watchers did
-watch(
-  () => document.value?.activities,
-  (to, from) => {
-    if (!from || !to) {
-      return; // initial load, or the document is null while another one loads
-    }
-    updateRoutes('activities', false);
-  },
-  { deep: 1 }
-);
-
+// the routes the track followed: for the track of the loaded outing, a track added, changed or removed
 watch(
   () => document.value?.geometry?.geom_detail,
   (to, from) => {
+    if (to === from) {
+      return;
+    }
+    suggest(to);
     if (from === null && to) {
-      possibleRoutes.value = null;
-      nextTick(async () => {
-        await fitMapToDocuments();
-        updateRoutes();
-      });
+      // a track added: the map shows it
+      nextTick(fitMapToDocuments);
     }
   }
 );
-
-watch(routeTitle, () => {
-  updateRoutes('routeTitle', false);
-});
 </script>

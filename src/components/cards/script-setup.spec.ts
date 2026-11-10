@@ -7,6 +7,7 @@ import DocumentCard from './DocumentCard.vue';
 import FeedCard from './FeedCard.vue';
 import RouteCard from './RouteCard.vue';
 import WaypointCard from './WaypointCard.vue';
+import CardActivitiesItem from './utils/CardActivitiesItem.vue';
 
 import BestPeriods from '@/components/generics/BestPeriods.vue';
 import DropdownButton from '@/components/generics/DropdownButton.vue';
@@ -86,6 +87,21 @@ describe('FeedCard', () => {
 
   it('shows the forum avatar of the user', () => {
     expect(mountFeedCard({}).find('img.avatar').attributes('src')).toMatch(/\/user_avatar\/.+\/someone\/36\/1_1\.png$/);
+  });
+});
+
+describe('CardActivitiesItem', () => {
+  it('shows an icon per activity', () => {
+    // its prop is named as the global <activities> component, which the template must still reach
+    const wrapper = mount(CardActivitiesItem, {
+      props: { activities: ['skitouring', 'hiking'] },
+      global: {
+        config: { globalProperties },
+        stubs: { IconActivity: { props: ['activity'], template: '<i class="activity">{{ activity }}</i>' } },
+      },
+    });
+
+    expect(wrapper.findAll('.icon-activities .activity').map((icon) => icon.text())).toEqual(['hiking', 'skitouring']);
   });
 });
 

@@ -150,20 +150,20 @@ function format(suggestion: unknown) {
       .autocomplete-input {
         width: 100%;
         padding: 8px 34px 8px 14px;
-        color: #222;
-        border: 1px solid #ccc;
+        color: var(--c2c-grey-darker);
+        border: 1px solid var(--c2c-grey-lighter);
         border-radius: 10px;
         outline: none;
         transition: all 0.2s ease;
-        background-color: #fff;
+        background-color: var(--c2c-white);
 
         &:focus {
-          border-color: #666;
+          border-color: var(--c2c-color-base-c2c);
           box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
         }
 
         &::placeholder {
-          color: #999;
+          color: var(--c2c-input-placeholder-color);
         }
       }
 
@@ -171,13 +171,13 @@ function format(suggestion: unknown) {
         position: absolute;
         right: 10px;
         font-size: 12px;
-        color: #555;
+        color: var(--c2c-grey-dark);
         cursor: pointer;
         user-select: none;
         transition: color 0.2s ease;
 
         &:hover {
-          color: #000;
+          color: var(--c2c-grey-darker);
         }
       }
     }
@@ -188,14 +188,14 @@ function format(suggestion: unknown) {
       left: 0;
       right: 0;
       z-index: 5;
-      background: #fff;
-      border: 1px solid #ddd;
+      background: var(--c2c-white);
+      border: 1px solid var(--c2c-grey-lighter);
       border-radius: 10px;
       box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
       max-height: 220px;
       overflow-y: auto;
       scrollbar-width: thin;
-      scrollbar-color: #aaa #f9f9f9;
+      scrollbar-color: var(--c2c-grey-light) var(--c2c-white-ter);
 
       ul {
         list-style: none;
@@ -210,13 +210,13 @@ function format(suggestion: unknown) {
             color 0.2s ease;
 
           &:hover {
-            background-color: #f5f5f5;
+            background-color: var(--c2c-white-ter);
             cursor: pointer;
-            color: #000;
+            color: var(--c2c-grey-darker);
           }
 
           &:not(:last-child) {
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--c2c-grey-lightest);
           }
         }
       }

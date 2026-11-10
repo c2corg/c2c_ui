@@ -158,15 +158,6 @@
       /></a>
     </div>
 
-    <div
-      v-if="showDensityOverlays"
-      ref="densityMessage"
-      v-show="densityTruncated"
-      class="ol-control ol-control-density-message"
-    >
-      {{ $gettext('Zoom in to see all tracks') }}
-    </div>
-
     <div v-if="showDensityOverlays" ref="trackTooltip" class="ol-track-tooltip" v-show="trackTooltip">
       <template v-if="trackTooltip">
         <strong>{{ trackTooltip.document.title }}</strong>
@@ -222,7 +213,7 @@
             type="button"
             class="button is-small is-primary"
             :title="$gettext('Download the GPX file')"
-            @click="downloadTrackGpx(entry.document)"
+            @click="downloadGpx(entry.document)"
           >
             GPX
           </button>
@@ -241,7 +232,6 @@
 </template>
 
 <script setup lang="ts">
-import { toast } from 'bulma-toast';
 import type Feature from 'ol/Feature';
 import type { FeatureLike } from 'ol/Feature';
 import type OlMap from 'ol/Map';
@@ -315,6 +305,7 @@ import bus from '@/js/event-bus';
 import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
 import { TCX } from '@/js/tcx/TCX';
+import { toast } from '@/js/toast';
 import { tracksOverlayEnabled } from '@/js/tracks-overlay';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
@@ -463,8 +454,22 @@ if (!$user.isLogged) {
 const mapLayers = markRaw(cartoLayers_.map(markRaw));
 // slope layers
 const dataLayers = markRaw(dataLayers_.map(markRaw));
+// extents of the biodiv-sports areas loaded, or being loaded
+const protectionAreasExtents: Extent[] = [];
 // protection areas layer as features
-const protectionAreasLayer = markRaw(new ol.layer.Vector({ source: new ol.source.Vector() }));
+// OpenLayers loads the areas of the viewed extent and half a view around it: small moves and zooming in reuse them
+// (OpenLayers alone would compare the extent around the view, and load again on any move)
+const protectionAreasLayer = markRaw(
+  new ol.layer.Vector({
+    source: new ol.source.Vector({
+      loader: loadProtectionAreas,
+      strategy: (extent) =>
+        protectionAreasExtents.some((loaded) => ol.extent.containsExtent(loaded, extent))
+          ? []
+          : [ol.extent.buffer(extent, ol.extent.getWidth(extent) / 2)],
+    }),
+  })
+);
 // protection areas layers
 const protectionAreasLayers = markRaw(protectionAreasLayersOf().map(markRaw));
 // the "Tracks" and "Routes" overlays
@@ -498,11 +503,8 @@ const showRecenterOnPropositions = ref(false);
 const biodivData = ref<Record<string, unknown>>({});
 const swissProtectionAreaData = ref<Record<string, unknown>>({ properties: {} });
 const protectionAreasVisible = ref<boolean>(props.showProtectionAreas && !props.editedDocument);
-const hasProtectionAreas = ref<boolean | null>(null);
 // the overlays are off by default: they are an opt-in addition, not a change to the look of the map
 const densityEnabled = reactive<Record<DensityType, boolean>>({ outing: false, route: false });
-// set when the tracks endpoint reports more documents in the box than it is willing to return
-const densityTruncatedByType = reactive<Record<DensityType, boolean>>({ outing: false, route: false });
 // set when the API answers that the overlays are turned off: they are no longer offered
 const densityUnavailable = ref(false);
 // the tracks under a click or a tap, to choose from, with their line on the map
@@ -531,7 +533,6 @@ let trackTooltipOverlay: InstanceType<typeof ol.Overlay> | null = null;
 const densityRequestIds: Record<DensityType, number> = { outing: 0, route: 0 };
 
 const rootElementEl = useTemplateRef<HTMLElement>('rootElement');
-const densityMessageEl = useTemplateRef<HTMLElement>('densityMessage');
 const trackTooltipEl = useTemplateRef<HTMLElement>('trackTooltip');
 const mapElementEl = useTemplateRef<HTMLElement>('mapElement');
 const layerSwitcherButtonEl = useTemplateRef<HTMLElement>('layerSwitcherButton');
@@ -553,7 +554,6 @@ const editable = computed(() => !!props.editedDocument);
 const showDensityOverlays = computed(
   () => tracksOverlayEnabled && !editable.value && !props.oldDocument && !props.newDocument
 );
-const densityTruncated = computed(() => Object.values(densityTruncatedByType).some(Boolean));
 
 const urlValue = computed(() => {
   const result = route.query.bbox as string | undefined;
@@ -957,15 +957,10 @@ function addFeature(source: VectorSource, data: object, normalStyle: StyleLike, 
   return feature;
 }
 
-function addBiodivSportsData(response: { data?: { results?: BiodivResult[] } } | undefined) {
-  const results = response?.data?.results;
-  if (!results?.length) {
-    return;
-  }
+function biodivSportsFeatures(response: { data?: { results?: BiodivResult[] } } | undefined) {
+  const features: Feature[] = [];
 
-  const source = protectionAreasLayer.getSource()!;
-
-  for (const result of results) {
+  for (const result of response?.data?.results ?? []) {
     const geometry = geoJSONFormat.readGeometry(result.geometry, {
       dataProjection: 'EPSG:4326',
       featureProjection: 'EPSG:3857',
@@ -989,8 +984,10 @@ function addBiodivSportsData(response: { data?: { results?: BiodivResult[] } } |
     feature.set('normalStyle', buildPolygonStyle());
     feature.setStyle(feature.get('normalStyle'));
 
-    source.addFeature(feature);
+    features.push(feature);
   }
+
+  return features;
 }
 
 function toggleProtectionAreas() {
@@ -1137,23 +1134,33 @@ function getExtent(projection?: string) {
   return extent;
 }
 
-function onPointerMove(event: MapBrowserEvent<PointerEvent>) {
-  let resultFeature: FeatureLike | null = null;
+// the layers whose features are highlighted on hover
+const hoverableLayers = new Set<object>([documentsLayer, waypointsLayer, imagesLayer]);
 
-  map.forEachFeatureAtPixel(
-    event.pixel,
-    (feature) => {
-      resultFeature = feature;
-      return true;
-    },
-    { layerFilter: (layer) => layer !== trackHighlightLayer }
-  );
-  // the tracks of the overlays are thin: they are found within a few pixels, and come before the other lines (the
-  // track of an outing lies on the one of its route), but not before the markers
-  const tracks = resultFeature && isMarker(resultFeature) ? [] : trackEntries(overlayTracksAt(event.pixel));
-  const hovered = tracks[0]?.feature ?? resultFeature ?? null;
-  setHighlightedFeature(hovered);
-  emit('highlight-document', hovered ? (hovered as FeatureLike).get('document') : null);
+function onPointerMove(event: MapBrowserEvent<PointerEvent>) {
+  // no hit detection while panning: it runs on every pointer move
+  if (event.dragging) {
+    return;
+  }
+
+  // no hover on a touch screen: the tooltip would stay under the finger
+  if (isTouch(event)) {
+    hideTrackTooltip();
+    return;
+  }
+
+  const hits = hitsAt(event.pixel, HIT_TOLERANCE, true);
+  // the topmost feature of the documents: the markers come before the tracks
+  const tracksLayers: object[] = Object.values(densityLayers).map((layers) => layers.tracks);
+  const documentHit = hits.find((hit) => !tracksLayers.includes(hit.layer));
+  const tracks = documentHit && isMarker(documentHit.feature) ? [] : trackEntries(tracksIn(hits));
+  const hovered = tracks[0]?.feature ?? documentHit?.feature ?? null;
+
+  // the pages react to each event (the nearby stops reset all their styles): only tell them about changes
+  if (hovered !== highlightedFeature.value) {
+    setHighlightedFeature(hovered);
+    emit('highlight-document', hovered ? hovered.get('document') : null);
+  }
 
   // not over the panel of the tracks, which tells it all
   if (tracks.length && !trackPanelEntries.value.length) {
@@ -1162,6 +1169,52 @@ function onPointerMove(event: MapBrowserEvent<PointerEvent>) {
   } else {
     hideTrackTooltip();
   }
+}
+
+// a pointer that is not a mouse: a finger
+const isTouch = (event: { originalEvent?: Event }) =>
+  (event.originalEvent as PointerEvent | undefined)?.pointerType === 'touch';
+
+// how far from a line or an icon a pointer still hits it, in pixels: the tracks are thin, a finger is not
+const HIT_TOLERANCE = 6;
+const TOUCH_HIT_TOLERANCE = 14;
+
+// What is under a pixel, the topmost first, in one hit detection. To hover: the layers of the documents (markers, lines,
+// images) and the tracks of the overlays. To click: all that is drawn (the protection areas too), but not the heatmaps
+// (no document), nor the copy of the hovered track.
+function hitsAt(pixel: number[], hitTolerance: number, hover = false) {
+  const heatmaps = Object.values(heatmapLayers);
+  const tracksLayers: object[] = Object.values(densityLayers).map((layers) => layers.tracks);
+  const hits: { feature: Feature; layer: object }[] = [];
+  map.forEachFeatureAtPixel(
+    pixel,
+    (feature, layer) => void hits.push({ feature: feature as Feature, layer: layer as object }),
+    {
+      layerFilter: (layer) =>
+        hover
+          ? hoverableLayers.has(layer) || tracksLayers.includes(layer)
+          : layer !== trackHighlightLayer && !heatmaps.includes(layer as never),
+      hitTolerance,
+    }
+  );
+  return hits;
+}
+
+// the tracks of the overlays among the hits, except the document the map is about
+function tracksIn(hits: { feature: Feature; layer: object }[]): Feature[] {
+  if (!showDensityOverlays.value) {
+    return [];
+  }
+
+  const tracksLayers: unknown[] = Object.values(densityLayers).map((layers) => layers.tracks);
+  const displayed = props.documents?.length === 1 ? props.documents[0] : null;
+  return hits
+    .filter((hit) => tracksLayers.includes(hit.layer))
+    .map((hit) => hit.feature)
+    .filter((track) => {
+      const document = track.get('document');
+      return !(displayed && document.type === displayed.type && document.document_id === displayed.document_id);
+    });
 }
 
 // the tracks with their document, the most recent outings first
@@ -1187,37 +1240,14 @@ function hideTrackTooltip() {
 
 // the tracks under a right click (a long tap on a touch screen): the same panel, with the GPX of each
 function onContextMenu(event: MouseEvent) {
-  const pixel = map.getEventPixel(event);
-  const top = map.forEachFeatureAtPixel(pixel, (f) => f, { layerFilter: (layer) => layer !== trackHighlightLayer });
-  const tracks = top && isMarker(top) ? [] : overlayTracksAt(pixel);
+  const hits = hitsAt(map.getEventPixel(event), HIT_TOLERANCE);
+  const documentHit = hits.find((hit) => hoverableLayers.has(hit.layer));
+  const tracks = documentHit && isMarker(documentHit.feature) ? [] : tracksIn(hits);
   if (tracks.length) {
     event.preventDefault();
-    openTrackPanel(tracks);
+    openTrackPanel(tracks, (event as PointerEvent).pointerType === 'touch');
   }
 }
-
-// the tracks of the overlays under a pixel, except the document the map is about
-function overlayTracksAt(pixel: number[]): Feature[] {
-  if (!showDensityOverlays.value) {
-    return [];
-  }
-
-  const tracksLayers: unknown[] = Object.values(densityLayers).map((layers) => layers.tracks);
-  const tracks: Feature[] = [];
-  map.forEachFeatureAtPixel(pixel, (feature) => void tracks.push(feature as Feature), {
-    layerFilter: (layer) => tracksLayers.includes(layer) && layer.getVisible(),
-    hitTolerance: 6,
-  });
-
-  const displayed = props.documents?.length === 1 ? props.documents[0] : null;
-  return tracks.filter((track) => {
-    const document = track.get('document');
-    return !(displayed && document.type === displayed.type && document.document_id === displayed.document_id);
-  });
-}
-
-// no hover on a touch screen: a tap shows what the track is, before a second tap goes to it
-const noHover = () => window.matchMedia('(hover: none)').matches;
 
 function setHighlightedFeature(feature: FeatureLike | null) {
   if (feature === highlightedFeature.value) {
@@ -1257,9 +1287,9 @@ function toggleDensityOverlay(type: DensityType) {
   if (densityEnabled[type]) {
     updateDensityOverlay(type);
   } else {
+    cancelDensityRequest(type);
     heatmapLayers[type]?.setVisible(false);
     densityLayers[type].tracks.setVisible(false);
-    densityTruncatedByType[type] = false;
     closeTrackPanel();
   }
 }
@@ -1279,6 +1309,14 @@ function updateDensityOverlays() {
   DENSITY_TYPES.forEach(updateDensityOverlay);
 }
 
+// the request of each overlay that is running, cancelled when the map moves on
+const densityRequests: Partial<Record<DensityType, AbortController>> = {};
+
+function cancelDensityRequest(type: DensityType) {
+  densityRequests[type]?.abort();
+  delete densityRequests[type];
+}
+
 async function updateDensityOverlay(type: DensityType) {
   if (!densityEnabled[type]) {
     return;
@@ -1292,10 +1330,12 @@ async function updateDensityOverlay(type: DensityType) {
   const requestId = ++densityRequestIds[type];
   const isCurrent = () => requestId === densityRequestIds[type] && densityEnabled[type];
 
+  cancelDensityRequest(type);
+  const { signal } = (densityRequests[type] = new AbortController());
+
   try {
-    let truncated = false;
     if (zoom >= DENSITY_TRACKS_MIN_ZOOM) {
-      const { data } = await overlay.getTracks({ ...params, pl: $language.current });
+      const { data } = await overlay.getTracks({ ...params, pl: $language.current }, signal);
       if (!isCurrent()) {
         return;
       }
@@ -1303,7 +1343,6 @@ async function updateDensityOverlay(type: DensityType) {
       if (!data.truncated) {
         heatmapLayers[type]?.setVisible(false);
         layers.tracks.setVisible(true);
-        densityTruncatedByType[type] = false;
 
         const source = layers.tracks.getSource()!;
         source.clear();
@@ -1315,11 +1354,11 @@ async function updateDensityOverlay(type: DensityType) {
         }
         return;
       }
-      // too many tracks to draw them: their density, as when zoomed out, and the invitation to zoom in
-      truncated = true;
+      // too many tracks to draw them: their density, as when zoomed out
     }
 
-    const { data } = await overlay.getHeatmap({ ...params, zoom });
+    // the size of the cells comes from the box, on the server
+    const { data } = await overlay.getHeatmap(params, signal);
     if (!isCurrent()) {
       return;
     }
@@ -1327,7 +1366,6 @@ async function updateDensityOverlay(type: DensityType) {
     layers.tracks.setVisible(false);
     const heatmap = heatmapLayer(type);
     heatmap.setVisible(true);
-    densityTruncatedByType[type] = truncated;
     closeTrackPanel();
 
     const source = heatmap.getSource()!;
@@ -1340,6 +1378,10 @@ async function updateDensityOverlay(type: DensityType) {
       source.addFeature(feature);
     }
   } catch (error) {
+    // a request replaced by a newer one, or given up: nothing to tell
+    if (signal.aborted) {
+      return;
+    }
     // the API turns the overlays off when they load the servers too much (TRACKS_OVERLAY_ENABLED): so does the map
     if ((error as { response?: { status?: number } } | null)?.response?.status === 503) {
       densityUnavailable.value = true;
@@ -1354,9 +1396,9 @@ function turnOffDensityOverlays() {
 
   for (const type of DENSITY_TYPES) {
     densityEnabled[type] = false;
+    cancelDensityRequest(type);
     heatmapLayers[type]?.setVisible(false);
     densityLayers[type].tracks.setVisible(false);
-    densityTruncatedByType[type] = false;
   }
   closeTrackPanel();
 
@@ -1367,13 +1409,21 @@ function turnOffDensityOverlays() {
 
 let trackPanelTimeout: ReturnType<typeof setTimeout> | undefined;
 
-function openTrackPanel(features: Feature[]) {
+async function downloadGpx(track: DensityTrack) {
+  try {
+    await downloadTrackGpx(track);
+  } catch {
+    toast({ message: $gettext('The GPX file could not be downloaded'), type: 'is-danger' });
+  }
+}
+
+function openTrackPanel(features: Feature[], touch: boolean) {
   trackPanelEntries.value = trackEntries(features);
   hideTrackTooltip();
 
   // a touch screen sends a click after the tap, where the panel now is: it must not open the first track
   clearTimeout(trackPanelTimeout);
-  trackPanelReady.value = !noHover();
+  trackPanelReady.value = !touch;
   if (!trackPanelReady.value) {
     trackPanelTimeout = setTimeout(() => (trackPanelReady.value = true), 500);
   }
@@ -1385,19 +1435,20 @@ function closeTrackPanel() {
 }
 
 function onClick(event: MapBrowserEvent<PointerEvent>) {
-  // several tracks under the click, or one on a touch screen: choose one, or see what it is
-  const top = map.forEachFeatureAtPixel(event.pixel, (f) => f, {
-    layerFilter: (layer) => layer !== trackHighlightLayer,
-  });
-  const tracks = top && isMarker(top) ? [] : overlayTracksAt(event.pixel);
-  if (tracks.length > 1 || (tracks.length === 1 && noHover())) {
-    openTrackPanel(tracks);
+  const touch = isTouch(event);
+  const hits = hitsAt(event.pixel, touch ? TOUCH_HIT_TOLERANCE : HIT_TOLERANCE);
+  const documentHit = hits.find((hit) => hoverableLayers.has(hit.layer));
+  const tracks = documentHit && isMarker(documentHit.feature) ? [] : tracksIn(hits);
+
+  // several tracks under the click, or one under a finger: choose one, or see what it is
+  if (tracks.length > 1 || (tracks.length === 1 && touch)) {
+    openTrackPanel(tracks, touch);
     return;
   }
   closeTrackPanel();
 
   // a track is thin: clicking next to it counts
-  const feature = tracks[0] ?? top;
+  const feature = tracks[0] ?? hits[0]?.feature;
 
   if (feature) {
     const document = feature.get('document');
@@ -1525,40 +1576,64 @@ function recenterOn(item: PhotonFeature) {
   showRecenterOnPropositions.value = false;
 }
 
-function getProtectionAreas() {
-  if (!protectionAreasVisible.value) {
-    return;
-  }
+// the page is told once about protection areas in the view: by the Swiss check of the first view, or by the first
+// biodiv-sports load that answers (after a failed load, the view of the next one is checked)
+let protectionAreasNotified = false;
+let swissProtectionAreasChecked = false;
+let biodivSportsAreasChecked = false;
 
-  const extent = view().calculateExtent(map.getSize());
+function notifyProtectionAreas() {
+  if (!protectionAreasNotified) {
+    protectionAreasNotified = true;
+    emit('has-protection-area');
+  }
+}
+
+// loader of the biodiv-sports areas layer: OpenLayers adds the features
+function loadProtectionAreas(extent: Extent) {
+  const source = protectionAreasLayer.getSource()!;
+  protectionAreasExtents.push(extent);
   // get extent in expected format
   const bsExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857')!, ol.proj.get('EPSG:4326')!);
 
-  if (hasProtectionAreas.value !== null) {
-    // check already made, only update biodivsport areas features
-    biodivSportsService
-      .fetchData(bsExtent as TupleExtent, props.biodivSportsActivities as string[] | undefined, $language.current!)
-      .then((response) => addBiodivSportsData(response as Parameters<typeof addBiodivSportsData>[0]));
-  } else {
-    // first call, check protection areas are contained within map extent and download biodivsports features
-    Promise.allSettled([
-      biodivSportsService
-        .fetchData(bsExtent as TupleExtent, props.biodivSportsActivities as string[] | undefined, $language.current!)
-        .then((response) => {
-          const biodivResponse = response as Parameters<typeof addBiodivSportsData>[0];
-          addBiodivSportsData(biodivResponse);
-          return (biodivResponse?.data?.results?.length ?? 0) > 0;
-        }),
-      intersectsWithSwitzerland(extent)
-        ? respecterCestProtegerService.hasArea(extent as TupleExtent)
-        : Promise.resolve(false),
-    ]).then((hasArea) => {
-      hasProtectionAreas.value = hasArea.some((result) => (result.status === 'fulfilled' ? result.value : false));
-      if (hasProtectionAreas.value) {
-        emit('has-protection-area');
-      }
+  const features = biodivSportsService
+    .fetchData(bsExtent as TupleExtent, props.biodivSportsActivities as string[] | undefined, $language.current!)
+    .then((response) => biodivSportsFeatures(response as Parameters<typeof biodivSportsFeatures>[0]))
+    .catch((error) => {
+      // OpenLayers keeps a failed extent as loaded: load it again on the next move (not right away, OpenLayers
+      // renders again after a failure, which would load it again in a loop)
+      map.once('moveend', () => {
+        source.removeLoadedExtent(extent);
+        protectionAreasExtents.splice(protectionAreasExtents.indexOf(extent), 1);
+      });
+      throw error;
     });
+
+  const viewExtent = view().calculateExtent(map.getSize());
+
+  if (!swissProtectionAreasChecked) {
+    swissProtectionAreasChecked = true;
+    if (intersectsWithSwitzerland(viewExtent)) {
+      respecterCestProtegerService.hasArea(viewExtent as TupleExtent).then(
+        (hasArea) => hasArea && notifyProtectionAreas(),
+        () => {}
+      );
+    }
   }
+
+  if (!biodivSportsAreasChecked) {
+    features.then(
+      (loaded) => {
+        biodivSportsAreasChecked = true;
+        if (loaded.some((feature) => feature.getGeometry()?.intersectsExtent(viewExtent))) {
+          notifyProtectionAreas();
+        }
+      },
+      () => {}
+    );
+  }
+
+  return features;
 }
 
 function clearGeometry() {
@@ -1762,6 +1837,11 @@ watch(filterDocumentsWithMap, () => sendBoundsToUrl());
 watch(
   () => props.highlightedDocument,
   (newValue) => {
+    const current = highlightedFeature.value?.get('document');
+    // compared by type and id: the page gives a reactive proxy
+    if (newValue && current && current.type === newValue.type && current.document_id === newValue.document_id) {
+      return;
+    }
     if (newValue) {
       setHighlightedFeature(documentsLayer.getSource()!.getFeatureById(newValue.document_id));
     } else {
@@ -1812,7 +1892,6 @@ onMounted(() => {
       new ol.control.Control({ element: clearGeometryControlEl.value! }),
       new ol.control.Control({ element: editMapControlEl.value! }),
       new ol.control.Attribution({ tipLabel: $gettext('Attributions', 'Map controls') }),
-      ...(showDensityOverlays.value ? [new ol.control.Control({ element: densityMessageEl.value! })] : []),
     ],
 
     layers: [
@@ -1839,7 +1918,6 @@ onMounted(() => {
   });
 
   map.on('moveend', sendBoundsToUrl);
-  map.on('moveend', getProtectionAreas);
   map.on('moveend', updateEditMapLink);
   map.on('moveend', emitMoveEvent);
 
@@ -1863,6 +1941,8 @@ onMounted(() => {
   if (protectionAreasVisible.value) {
     protectionAreasLayers.forEach((layer) => layer.setVisible(true));
   }
+  // hidden, it loads nothing
+  protectionAreasLayer.setVisible(protectionAreasVisible.value);
 
   geolocation.value = markRaw(
     new ol.Geolocation({
@@ -1896,7 +1976,9 @@ onMounted(() => {
   } else {
     // if map is not editable, feature are clickable
     map.on('pointermove', (event) => onPointerMove(event as MapBrowserEvent<PointerEvent>));
-    map.on('click', (event) => onClick(event as MapBrowserEvent<PointerEvent>));
+    // with a finger, the second tap of a double tap zooms: wait for it (it would open the panel, and close it)
+    map.on('click', (event) => !isTouch(event) && onClick(event as MapBrowserEvent<PointerEvent>));
+    map.on('singleclick', (event) => isTouch(event) && onClick(event as MapBrowserEvent<PointerEvent>));
   }
 
   // listen to elevation profile events to display
@@ -1907,6 +1989,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  DENSITY_TYPES.forEach(cancelDensityRequest);
   // off() without a handler would remove the handlers of every map
   if (onElevationProfile) {
     bus.off('elevation_profile', onElevationProfile);
@@ -1943,11 +2026,11 @@ defineExpose({
 :root,
 :host {
   --ol-background-color: rgba(0, 60, 136, 0.6);
-  --ol-accent-background-color: #f5f5f5;
+  --ol-accent-background-color: var(--c2c-white-ter);
   --ol-subtle-background-color: rgba(128, 128, 128, 0.25);
   --ol-partial-background-color: rgba(255, 255, 255, 0.75);
-  --ol-foreground-color: #fff;
-  --ol-subtle-foreground-color: #fff;
+  --ol-foreground-color: var(--c2c-white);
+  --ol-subtle-foreground-color: var(--c2c-white);
   --ol-brand-color: #00aaff;
 }
 </style>
@@ -2075,13 +2158,6 @@ defineExpose({
   top: 27px;
 }
 
-.ol-control-density-message {
-  top: $control-margin;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 4px 10px;
-}
-
 .ol-track-tooltip {
   display: flex;
   flex-direction: column;
@@ -2175,6 +2251,16 @@ defineExpose({
   }
 }
 
+@media (pointer: coarse) {
+  .ol-track-panel li {
+    min-height: 44px;
+  }
+
+  .ol-track-panel .button {
+    min-height: 36px;
+  }
+}
+
 .ol-track-panel.is-opening {
   pointer-events: none;
 }
@@ -2243,7 +2329,7 @@ defineExpose({
 .ol-attribution ul,
 .ol-scale-line {
   --ol-subtle-foreground-color: #666666;
-  --ol-foreground-color: #333333;
+  --ol-foreground-color: var(--c2c-grey-darker);
 }
 
 .ol-attribution ul {

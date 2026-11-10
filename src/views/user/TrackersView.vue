@@ -78,7 +78,6 @@
 </template>
 
 <script setup lang="ts">
-import { toast } from 'bulma-toast';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -86,6 +85,7 @@ import ApplicationCard from '@/components/tracking/ApplicationCard.vue';
 import trackingService, { type Activity, type Status, type Vendor } from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
+import { toast } from '@/js/toast';
 import { forgetReturnUrl, oauthStart, rememberReturnUrl, usesRelay } from '@/js/trackers-oauth-relay';
 
 // an activity tracker, and whether the user configured it
@@ -274,6 +274,6 @@ onMounted(load);
 
 <style scoped>
 .title.is-2 {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--c2c-grey-lighter);
 }
 </style>

@@ -64,10 +64,10 @@ const hasData = computed(() => {
   }
 
   tr {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--c2c-grey-lighter);
 
     &:nth-of-type(odd) {
-      background-color: #f9f9f9;
+      background-color: var(--c2c-white-ter);
     }
   }
 
