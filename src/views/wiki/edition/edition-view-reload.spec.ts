@@ -107,11 +107,11 @@ describe.each([
       await set(edition, newDocument());
       expect(errors).toEqual([]);
 
-      // the user changes the activities: the possible routes follow
+      // the user changes the activities: the possible routes follow, once the user stops (debounced)
       edition.document().activities = ['skitouring'];
       await settle();
       expect(errors).toEqual([]);
-      expect(api.getAll).toHaveBeenCalledWith(expect.objectContaining({ act: 'skitouring' }));
+      await vi.waitFor(() => expect(api.getAll).toHaveBeenCalledWith(expect.objectContaining({ act: 'skitouring' })));
     });
   }
 });
