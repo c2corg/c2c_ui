@@ -222,6 +222,30 @@ describe('OlMap', () => {
       expect(await hasArea(6.82)).toBe(false);
     });
 
+    it('tell the page about one in the view once loaded after a failure', async () => {
+      fetchData
+        .mockRejectedValueOnce(new Error('network'))
+        .mockResolvedValue({ data: { results: [area(1), area(2, 6.81)] } } as never);
+      const { wrapper, vm } = await mountMap({ showProtectionAreas: true });
+      vi.spyOn(vm.map.getView(), 'calculateExtent').mockReturnValue(viewAround(6.8, 45.9, 500));
+
+      load(vm, viewAround(6.8, 45.9, 500));
+      await flush();
+      expect(wrapper.emitted('has-protection-area')).toBeUndefined();
+
+      vm.map.dispatchEvent('moveend');
+      load(vm, viewAround(6.8, 45.9, 500));
+      await flush();
+      // and only once
+      vm.map.dispatchEvent('moveend');
+      load(vm, viewAround(6.9, 45.9, 500));
+      await flush();
+
+      expect(wrapper.emitted('has-protection-area')).toHaveLength(1);
+
+      wrapper.unmount();
+    });
+
     it('are loaded again after a failure', async () => {
       fetchData
         .mockRejectedValueOnce(new Error('network'))
@@ -230,6 +254,12 @@ describe('OlMap', () => {
 
       load(vm, viewAround(6.8, 45.9, 5000));
       await flush();
+      // OpenLayers renders again after a failure: no new request until the map moves
+      load(vm, viewAround(6.8, 45.9, 5000));
+      await flush();
+      expect(fetchData).toHaveBeenCalledTimes(1);
+
+      vm.map.dispatchEvent('moveend');
       load(vm, viewAround(6.8, 45.9, 5000));
       await flush();
 

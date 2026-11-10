@@ -1169,7 +1169,9 @@ function recenterOn(item: PhotonFeature) {
   showRecenterOnPropositions.value = false;
 }
 
+// the page is told about protection areas after the first load that could check them
 let protectionAreasChecked = false;
+let protectionAreasChecking = false;
 
 // loader of the biodiv-sports areas layer: OpenLayers adds the features
 function loadProtectionAreas(extent: Extent) {
@@ -1182,15 +1184,18 @@ function loadProtectionAreas(extent: Extent) {
     .fetchData(bsExtent as TupleExtent, props.biodivSportsActivities as string[] | undefined, $language.current!)
     .then((response) => biodivSportsFeatures(response as Parameters<typeof biodivSportsFeatures>[0]))
     .catch((error) => {
-      // OpenLayers keeps a failed extent as loaded: load it again on the next move
-      source.removeLoadedExtent(extent);
-      protectionAreasExtents.splice(protectionAreasExtents.indexOf(extent), 1);
+      // OpenLayers keeps a failed extent as loaded: load it again on the next move (not right away, OpenLayers
+      // renders again after a failure, which would load it again in a loop)
+      map.once('moveend', () => {
+        source.removeLoadedExtent(extent);
+        protectionAreasExtents.splice(protectionAreasExtents.indexOf(extent), 1);
+      });
       throw error;
     });
 
-  if (!protectionAreasChecked) {
-    // first load, check protection areas are contained within map extent
-    protectionAreasChecked = true;
+  if (!protectionAreasChecked && !protectionAreasChecking) {
+    // check protection areas are contained within map extent
+    protectionAreasChecking = true;
     const viewExtent = view().calculateExtent(map.getSize());
 
     Promise.allSettled([
@@ -1198,9 +1203,14 @@ function loadProtectionAreas(extent: Extent) {
       intersectsWithSwitzerland(viewExtent)
         ? respecterCestProtegerService.hasArea(viewExtent as TupleExtent)
         : Promise.resolve(false),
-    ]).then((hasArea) => {
-      if (hasArea.some((result) => (result.status === 'fulfilled' ? result.value : false))) {
+    ]).then(([biodivSports, swiss]) => {
+      protectionAreasChecking = false;
+      if ([biodivSports, swiss].some((result) => result.status === 'fulfilled' && result.value)) {
+        protectionAreasChecked = true;
         emit('has-protection-area');
+      } else {
+        // a failed biodiv-sports load is checked again by the next one
+        protectionAreasChecked = biodivSports.status === 'fulfilled';
       }
     });
   }
