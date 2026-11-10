@@ -9,10 +9,14 @@ import c2c from '@/js/apis/c2c';
 import { toast } from '@/js/toast';
 import uploadFile from '@/js/upload-file';
 
-vi.mock('@/js/upload-file', () => ({ default: vi.fn() }));
+// the real canRender: the rotation follows its format policy
+vi.mock('@/js/upload-file', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/js/upload-file')>()),
+  default: vi.fn(),
+}));
 vi.mock('@/js/toast', () => ({ toast: vi.fn() }));
 
-const file = (name: string) => ({ name, lastModified: 1, size: 1000 });
+const file = (name: string, type = 'image/jpeg') => ({ name, type, lastModified: 1, size: 1000 });
 const upload = vi.mocked(uploadFile);
 
 // what the script of the uploader offers to these tests (Vue Test Utils reaches the <script setup> bindings)
@@ -53,8 +57,9 @@ const mountUploader = async (
           },
         }),
         ImageUploader: defineComponent({
-          props: ['status'],
-          setup: (props) => () => h('div', { class: 'image-uploader', 'data-status': props.status }),
+          props: ['status', 'canRotate'],
+          setup: (props) => () =>
+            h('div', { class: 'image-uploader', 'data-status': props.status, 'data-can-rotate': props.canRotate }),
         }),
       },
       directives: { translate: {} },
@@ -110,6 +115,23 @@ describe('ImagesUploader', () => {
     await nextTick();
     expect(wrapper.find('.image-uploader').attributes('data-status')).toBe('SUCCESS');
     expect(uploader.readyForSaving).toBe(true);
+  });
+
+  it.each([
+    ['a.jpg', 'image/jpeg', 'true'],
+    ['a.png', 'image/png', 'true'],
+    ['a.webp', 'image/webp', 'false'],
+    ['a.heic', 'image/heic', 'false'],
+  ])('offers to turn %s only when the browser re-encodes it', async (name, type, canRotate) => {
+    const { wrapper, uploader } = await mountUploader();
+    uploader.onFilesChange({ target: { files: [file(name, type)], value: 'x' } });
+    const [, , onDataUrlReady] = upload.mock.calls[0];
+    await nextTick();
+    expect(wrapper.find('.image-uploader').attributes('data-can-rotate')).toBe('false');
+
+    onDataUrlReady('data:image/jpeg;base64,AAAA');
+    await nextTick();
+    expect(wrapper.find('.image-uploader').attributes('data-can-rotate')).toBe(canRotate);
   });
 
   it('removes a deleted image', async () => {
