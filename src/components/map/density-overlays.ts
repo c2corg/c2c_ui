@@ -137,7 +137,7 @@ export function documentOverlayFilters(document: DocumentRef): Record<DensityTyp
     case 'o': {
       const routes = (document.associations?.routes ?? [])
         .map((route) => route.document_id)
-        .filter((routeId): routeId is number => routeId !== undefined);
+        .filter((routeId): routeId is number => typeof routeId === 'number');
       return {
         // the outings of any of these routes. Without a route there is nothing to compare with: `ids` with an empty
         // list matches nothing (`r` with an empty list would match everything)
