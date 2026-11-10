@@ -256,6 +256,7 @@ import QualityField from './utils/QualityField.vue';
 import { useDocumentEdition } from './utils/document-edition';
 import { useRouteProposals } from './utils/route-proposals';
 
+import c2c from '@/js/apis/c2c';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
