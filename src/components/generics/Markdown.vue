@@ -12,7 +12,7 @@ import { useRouter } from 'vue-router';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
 import iconSvg from '@/js/icon-svg';
-import { getEmbeddedImageUrl, getThumbnailSize, type ImageSize } from '@/js/image-urls';
+import { fallBackToBasicImage, getEmbeddedImageUrl, getThumbnailSize, type ImageSize } from '@/js/image-urls';
 import { sanitizeRichHtml } from '@/js/sanitize-html';
 import type { ViewerImage } from '@/js/vue-plugins/image-viewer';
 
@@ -210,6 +210,8 @@ function computeImages(images: Iterable<EmbeddedImage>) {
       avif.setAttribute('type', 'image/avif');
       avif.setAttribute('srcset', getEmbeddedImageUrl(urls, 'avif'));
       picture.appendChild(avif);
+      // the AVIF image may be missing (just uploaded, or never built): the basic one
+      image.addEventListener('error', () => fallBackToBasicImage(image), { once: true });
     }
     picture.appendChild(image);
     parent.appendChild(picture);

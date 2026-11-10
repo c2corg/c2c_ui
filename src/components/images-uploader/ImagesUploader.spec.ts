@@ -33,10 +33,17 @@ const router = () => {
   return result;
 };
 
-const mountUploader = async (plugin = router()) => {
+const mountUploader = async (
+  plugin = router(),
+  parentDocument: InstanceType<typeof ImagesUploader>['$props']['parentDocument'] = {
+    type: 'o',
+    document_id: 1,
+    activities: ['skitouring'],
+  }
+) => {
   await plugin.isReady();
   const wrapper = mount(ImagesUploader, {
-    props: { lang: 'fr', parentDocument: { type: 'o', document_id: 1, activities: ['skitouring'] } },
+    props: { lang: 'fr', parentDocument },
     global: {
       stubs: {
         ModalCard: defineComponent({
@@ -115,6 +122,22 @@ describe('ImagesUploader', () => {
 
     expect(wrapper.findAll('.image-uploader')).toHaveLength(1);
     expect(Object.keys(uploader.images)).toEqual(['b.jpg#1']);
+  });
+
+  it('adds the saved images to the document, with only their JPG thumbnails offered', async () => {
+    vi.spyOn(c2c, 'createImages').mockResolvedValue({ data: { images: [{ document_id: 123 }] } } as never);
+    const parentDocument = { type: 'o', document_id: 1, activities: ['skitouring'], associations: { images: [] } };
+    const { uploader } = await mountUploader(router(), parentDocument);
+    uploader.onFilesChange({ target: { files: [file('a.jpg')], value: 'x' } });
+    upload.mock.calls[0][4]({ filename: '1588000000_1.jpg' });
+
+    uploader.save();
+    await flushPromises();
+
+    // c2c_images builds the AVIF thumbnails after the upload: they may not exist yet
+    expect(parentDocument.associations.images).toEqual([
+      expect.objectContaining({ document_id: 123, filename: '1588000000_1.jpg', modernThumbnailsPending: true }),
+    ]);
   });
 
   it('tells the user when the images could not be saved', async () => {

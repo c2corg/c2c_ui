@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { computed, useAttrs, type PropType } from 'vue';
 
-import { getImageUrl, getThumbnailSize, type Image, type ImageSize } from '@/js/image-urls';
+import { fallBackToBasicImage, getImageUrl, getThumbnailSize, type Image, type ImageSize } from '@/js/image-urls';
 
 // the classes and style stay on the picture, the other attributes and the listeners go to the image
 defineOptions({ inheritAttrs: false });
@@ -52,10 +52,7 @@ const standard = computed(() => getImageUrl(props.img, props.size));
 // to switch to the "basic" version.
 function onError(event: Event) {
   if (avif.value) {
-    const img = event.target as HTMLImageElement;
-    for (const source of img.parentElement!.querySelectorAll('source')) {
-      source.srcset = img.src;
-    }
+    fallBackToBasicImage(event.target as HTMLImageElement);
   }
 }
 </script>
