@@ -124,14 +124,49 @@
         <dropdown-button class="is-right" ref="userMenu">
           <template #button>
             <span class="button">
-              <img
-                width="24"
-                height="24"
-                alt="Avatar"
-                :src="forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
-              />
+              <span
+                class="forum-avatar"
+                :class="{ 'has-notifications': forumLinks.some((link) => link.kind === 'notifications') }"
+              >
+                <img
+                  width="24"
+                  height="24"
+                  alt="Avatar"
+                  :src="forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
+                />
+                <!-- placed like on the forum: messages on the left, other notifications on the right -->
+                <span
+                  v-for="link of forumLinks"
+                  :key="link.kind"
+                  class="forum-badge is-on-avatar"
+                  :class="'is-' + link.kind"
+                  aria-hidden="true"
+                >
+                  {{ badgeText(link.count) }}
+                </span>
+              </span>
+              <span v-for="link of forumLinks" :key="link.kind" class="is-sr-only">
+                {{ link.text }}: {{ link.count }}
+              </span>
               <span class="has-text-weight-bold is-hidden-mobile"> &nbsp;{{ $user.name }} </span>
             </span>
+          </template>
+
+          <template v-if="forumLinks.length">
+            <a
+              v-for="link of forumLinks"
+              :key="link.kind"
+              :href="link.href"
+              target="_blank"
+              rel="noopener"
+              class="dropdown-item is-size-5 forum-link"
+              @click="userMenu!.isActive = false"
+            >
+              <fa-icon :icon="link.icon" fixed-width />
+              <span>{{ link.text }}</span>
+              <span class="forum-badge" :class="'is-' + link.kind">{{ link.count }}</span>
+            </a>
+            <hr class="dropdown-divider" />
           </template>
 
           <router-link
@@ -179,7 +214,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, ref, shallowRef, useTemplateRef, watch } from 'vue';
 import { isNavigationFailure, useRoute, useRouter } from 'vue-router';
 
 import DfmAdLarge from './DfmAdLarge.vue';
@@ -192,6 +227,7 @@ import { useIsHomePage } from '@/js/composables/home-page';
 import config from '@/js/config';
 import { toast } from '@/js/toast';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+import type { useForumNotificationsStore } from '@/stores/forum-notifications';
 
 defineEmits(['toggle-side-menu']);
 
@@ -218,6 +254,53 @@ watch(
 );
 
 const forumUrl = config.urls.forum;
+
+// the unread notifications of the user on the forum, while signed in. Loaded on the first sign in: visitors don't need it
+const forumNotifications = shallowRef<ReturnType<typeof useForumNotificationsStore> | null>(null);
+const followedForumUser = () => ($user.isLogged ? $user.forumUsername : null);
+watch(
+  followedForumUser,
+  async (forumUsername) => {
+    if (!forumUsername) {
+      forumNotifications.value?.stop();
+      return;
+    }
+    if (!forumNotifications.value) {
+      const { useForumNotificationsStore } = await import('@/stores/forum-notifications');
+      forumNotifications.value = useForumNotificationsStore();
+      // signed out or changed while loading: the watcher ran again
+      if (followedForumUser() !== forumUsername) {
+        return;
+      }
+    }
+    forumNotifications.value.start(forumUsername);
+  },
+  { immediate: true }
+);
+
+// the forum pages listing them, for the counts that are not zero
+const forumLinks = computed(() =>
+  [
+    {
+      kind: 'messages',
+      count: forumNotifications.value?.unreadHighPriority ?? 0,
+      href: `${forumUrl}/u/${$user.forumUsername}/messages`,
+      text: $gettext('Forum messages'),
+      icon: 'envelope',
+    },
+    {
+      kind: 'notifications',
+      count: forumNotifications.value?.unread ?? 0,
+      href: `${forumUrl}/u/${$user.forumUsername}/notifications`,
+      text: $gettext('Forum notifications'),
+      icon: 'bell',
+    },
+  ].filter((link) => link.count > 0)
+);
+
+function badgeText(count: number) {
+  return count > 9 ? '9+' : String(count);
+}
 const siteConfiguration = config;
 
 const searchInputContainer = useTemplateRef<HTMLDivElement>('searchInputContainer');
@@ -328,6 +411,7 @@ window.addEventListener('click', onClick);
 
 onBeforeUnmount(() => {
   window.removeEventListener('click', onClick);
+  forumNotifications.value?.stop();
 });
 </script>
 
@@ -363,6 +447,57 @@ nav {
 
 .c2c-color {
   background-color: var(--c2c-color-base-c2c);
+}
+
+/* the forum's badges: its colors (tertiary, success), white text, rounded */
+.forum-avatar {
+  position: relative;
+  display: inline-flex;
+
+  /* room for the right badge before the name */
+  &.has-notifications {
+    margin-right: 9px;
+  }
+}
+
+.forum-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: content-box;
+  min-width: 8px;
+  /* digits sit high in their line box: 2px more above them centers them visually */
+  height: 12px;
+  padding: 2px 3px 0;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  background-color: #337ab7;
+
+  &.is-messages {
+    background-color: #090;
+  }
+
+  /* on the top corners of the avatar, within the button's border: there are only 3px above the avatar */
+  &.is-on-avatar {
+    position: absolute;
+    top: -2px;
+    right: -9px;
+    border: 1px solid var(--c2c-white);
+
+    &.is-messages {
+      right: auto;
+      left: -9px;
+    }
+  }
+}
+
+.forum-link .forum-badge {
+  margin-left: 0.5em;
+  vertical-align: middle;
 }
 
 .with-ad {
