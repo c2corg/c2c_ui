@@ -44,6 +44,16 @@ describe('documentOverlayFilters', () => {
 describe('searchOverlayFilters', () => {
   const query = { act: 'hiking', date: '2016-01-01', offset: '30', sort: 'id', bbox: '1,2,3,4', pl: 'fr' };
 
+  it('does not filter anything for a search without filters, nor for its pagination or its sort', () => {
+    // the whole listing of outings, or of routes: the overlays only get the box of the map
+    expect(searchOverlayFilters('outing', {})).toEqual({ outing: {}, route: null });
+    expect(searchOverlayFilters('route', {})).toEqual({ outing: null, route: {} });
+    expect(searchOverlayFilters('route', { offset: '30', limit: '30', sort: 'id' })).toEqual({
+      outing: null,
+      route: {},
+    });
+  });
+
   it('applies the search filters to the overlay of the searched type', () => {
     expect(searchOverlayFilters('outing', query)).toEqual({
       outing: { act: 'hiking', date: '2016-01-01' },
