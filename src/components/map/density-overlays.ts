@@ -112,12 +112,15 @@ export type DensityLayers = ReturnType<typeof createDensityLayers>;
 type DocumentRef = {
   type?: string;
   document_id?: number;
+  activities?: string[] | null;
   associations?: { routes?: { document_id?: number }[] };
 };
 
-// The filters of the overlays on the map of a document. A route has the outings that are linked to it, an outing the
-// routes that are linked to it, a waypoint or an area what is in it: `null` is no filter, all the documents of the box
-// (the routes around a route, the outings around an outing).
+// The filters of the overlays on the map of a document:
+// - a route: its outings, and the routes of its activities around it;
+// - an outing: the other outings of its routes (it can have several), and these routes;
+// - a waypoint or an area: what is in it.
+// `null` is no filter: all the documents of the box.
 export function documentOverlayFilters(document: DocumentRef): Record<DensityType, DensityFilters> {
   const id = document.document_id;
   if (id === undefined) {
@@ -126,19 +129,24 @@ export function documentOverlayFilters(document: DocumentRef): Record<DensityTyp
 
   switch (document.type) {
     case 'r':
-      return { outing: { r: id }, route: null };
+      return { outing: { r: id }, route: document.activities?.length ? { act: document.activities.join(',') } : null };
     case 'w':
       return { outing: { w: id }, route: { w: id } };
     case 'a':
       return { outing: { a: id }, route: { a: id } };
     case 'u':
       return { outing: { u: id }, route: null };
-    case 'o':
-      // only the routes of the outing (an empty list matches nothing)
+    case 'o': {
+      const routes = (document.associations?.routes ?? [])
+        .map((route) => route.document_id)
+        .filter((routeId): routeId is number => routeId !== undefined);
       return {
-        outing: null,
-        route: { ids: (document.associations?.routes ?? []).map((route) => route.document_id).join(',') },
+        // the outings of any of these routes. Without a route there is nothing to compare with: `ids` with an empty
+        // list matches nothing (`r` with an empty list would match everything)
+        outing: routes.length ? { r: routes.join(',') } : { ids: '' },
+        route: { ids: routes.join(',') },
       };
+    }
     default:
       return { outing: null, route: null };
   }

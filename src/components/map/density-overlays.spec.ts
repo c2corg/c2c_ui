@@ -3,8 +3,16 @@ import { describe, expect, it } from 'vitest';
 import { documentOverlayFilters, heatmapWeight, searchOverlayFilters, sortTracks } from './density-overlays';
 
 describe('documentOverlayFilters', () => {
-  it('shows the outings of a route, and all its routes', () => {
+  it('shows the outings of a route, and the routes of its activities', () => {
+    expect(documentOverlayFilters({ type: 'r', document_id: 4, activities: ['skitouring', 'snowshoeing'] })).toEqual({
+      outing: { r: 4 },
+      route: { act: 'skitouring,snowshoeing' },
+    });
+  });
+
+  it('shows all the routes around a route without activities', () => {
     expect(documentOverlayFilters({ type: 'r', document_id: 4 })).toEqual({ outing: { r: 4 }, route: null });
+    expect(documentOverlayFilters({ type: 'r', document_id: 4, activities: [] }).route).toBeNull();
   });
 
   it('shows what is linked to a waypoint or an area', () => {
@@ -16,14 +24,15 @@ describe('documentOverlayFilters', () => {
     expect(documentOverlayFilters({ type: 'u', document_id: 7 })).toEqual({ outing: { u: 7 }, route: null });
   });
 
-  it('shows only the routes of an outing', () => {
+  it('shows the routes of an outing, and the outings of any of them', () => {
     const outing = { type: 'o', document_id: 8, associations: { routes: [{ document_id: 1 }, { document_id: 2 }] } };
 
-    expect(documentOverlayFilters(outing)).toEqual({ outing: null, route: { ids: '1,2' } });
+    expect(documentOverlayFilters(outing)).toEqual({ outing: { r: '1,2' }, route: { ids: '1,2' } });
   });
 
-  it('shows no route for an outing without routes', () => {
-    expect(documentOverlayFilters({ type: 'o', document_id: 8 })).toEqual({ outing: null, route: { ids: '' } });
+  it('shows nothing for an outing without routes', () => {
+    // `ids` with an empty list matches nothing, whereas `r` with one would match every outing
+    expect(documentOverlayFilters({ type: 'o', document_id: 8 })).toEqual({ outing: { ids: '' }, route: { ids: '' } });
   });
 
   it('does not filter the other documents', () => {
