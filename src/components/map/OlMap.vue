@@ -349,8 +349,22 @@ if (!$user.isLogged) {
 const mapLayers = markRaw(cartoLayers_.map(markRaw));
 // slope layers
 const dataLayers = markRaw(dataLayers_.map(markRaw));
+// extents of the biodiv-sports areas loaded, or being loaded
+const protectionAreasExtents: Extent[] = [];
 // protection areas layer as features
-const protectionAreasLayer = markRaw(new ol.layer.Vector({ source: new ol.source.Vector() }));
+// OpenLayers loads the areas of the viewed extent and half a view around it: small moves and zooming in reuse them
+// (OpenLayers alone would compare the extent around the view, and load again on any move)
+const protectionAreasLayer = markRaw(
+  new ol.layer.Vector({
+    source: new ol.source.Vector({
+      loader: loadProtectionAreas,
+      strategy: (extent) =>
+        protectionAreasExtents.some((loaded) => ol.extent.containsExtent(loaded, extent))
+          ? []
+          : [ol.extent.buffer(extent, ol.extent.getWidth(extent) / 2)],
+    }),
+  })
+);
 // protection areas layers
 const protectionAreasLayers = markRaw(protectionAreasLayersOf().map(markRaw));
 // layer for document icons and paths
@@ -375,7 +389,6 @@ const showRecenterOnPropositions = ref(false);
 const biodivData = ref<Record<string, unknown>>({});
 const swissProtectionAreaData = ref<Record<string, unknown>>({ properties: {} });
 const protectionAreasVisible = ref<boolean>(props.showProtectionAreas && !props.editedDocument);
-const hasProtectionAreas = ref<boolean | null>(null);
 // on editable mode, there a button reset
 // we must save initial geometry
 const initialGeometry = ref<C2cDocument['geometry']>(null);
@@ -809,15 +822,10 @@ function addFeature(source: VectorSource, data: object, normalStyle: StyleLike, 
   return feature;
 }
 
-function addBiodivSportsData(response: { data?: { results?: BiodivResult[] } } | undefined) {
-  const results = response?.data?.results;
-  if (!results?.length) {
-    return;
-  }
+function biodivSportsFeatures(response: { data?: { results?: BiodivResult[] } } | undefined) {
+  const features: Feature[] = [];
 
-  const source = protectionAreasLayer.getSource()!;
-
-  for (const result of results) {
+  for (const result of response?.data?.results ?? []) {
     const geometry = geoJSONFormat.readGeometry(result.geometry, {
       dataProjection: 'EPSG:4326',
       featureProjection: 'EPSG:3857',
@@ -841,8 +849,10 @@ function addBiodivSportsData(response: { data?: { results?: BiodivResult[] } } |
     feature.set('normalStyle', buildPolygonStyle());
     feature.setStyle(feature.get('normalStyle'));
 
-    source.addFeature(feature);
+    features.push(feature);
   }
+
+  return features;
 }
 
 function toggleProtectionAreas() {
@@ -1159,40 +1169,64 @@ function recenterOn(item: PhotonFeature) {
   showRecenterOnPropositions.value = false;
 }
 
-function getProtectionAreas() {
-  if (!protectionAreasVisible.value) {
-    return;
-  }
+// the page is told once about protection areas in the view: by the Swiss check of the first view, or by the first
+// biodiv-sports load that answers (after a failed load, the view of the next one is checked)
+let protectionAreasNotified = false;
+let swissProtectionAreasChecked = false;
+let biodivSportsAreasChecked = false;
 
-  const extent = view().calculateExtent(map.getSize());
+function notifyProtectionAreas() {
+  if (!protectionAreasNotified) {
+    protectionAreasNotified = true;
+    emit('has-protection-area');
+  }
+}
+
+// loader of the biodiv-sports areas layer: OpenLayers adds the features
+function loadProtectionAreas(extent: Extent) {
+  const source = protectionAreasLayer.getSource()!;
+  protectionAreasExtents.push(extent);
   // get extent in expected format
   const bsExtent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:3857')!, ol.proj.get('EPSG:4326')!);
 
-  if (hasProtectionAreas.value !== null) {
-    // check already made, only update biodivsport areas features
-    biodivSportsService
-      .fetchData(bsExtent as TupleExtent, props.biodivSportsActivities as string[] | undefined, $language.current!)
-      .then((response) => addBiodivSportsData(response as Parameters<typeof addBiodivSportsData>[0]));
-  } else {
-    // first call, check protection areas are contained within map extent and download biodivsports features
-    Promise.allSettled([
-      biodivSportsService
-        .fetchData(bsExtent as TupleExtent, props.biodivSportsActivities as string[] | undefined, $language.current!)
-        .then((response) => {
-          const biodivResponse = response as Parameters<typeof addBiodivSportsData>[0];
-          addBiodivSportsData(biodivResponse);
-          return (biodivResponse?.data?.results?.length ?? 0) > 0;
-        }),
-      intersectsWithSwitzerland(extent)
-        ? respecterCestProtegerService.hasArea(extent as TupleExtent)
-        : Promise.resolve(false),
-    ]).then((hasArea) => {
-      hasProtectionAreas.value = hasArea.some((result) => (result.status === 'fulfilled' ? result.value : false));
-      if (hasProtectionAreas.value) {
-        emit('has-protection-area');
-      }
+  const features = biodivSportsService
+    .fetchData(bsExtent as TupleExtent, props.biodivSportsActivities as string[] | undefined, $language.current!)
+    .then((response) => biodivSportsFeatures(response as Parameters<typeof biodivSportsFeatures>[0]))
+    .catch((error) => {
+      // OpenLayers keeps a failed extent as loaded: load it again on the next move (not right away, OpenLayers
+      // renders again after a failure, which would load it again in a loop)
+      map.once('moveend', () => {
+        source.removeLoadedExtent(extent);
+        protectionAreasExtents.splice(protectionAreasExtents.indexOf(extent), 1);
+      });
+      throw error;
     });
+
+  const viewExtent = view().calculateExtent(map.getSize());
+
+  if (!swissProtectionAreasChecked) {
+    swissProtectionAreasChecked = true;
+    if (intersectsWithSwitzerland(viewExtent)) {
+      respecterCestProtegerService.hasArea(viewExtent as TupleExtent).then(
+        (hasArea) => hasArea && notifyProtectionAreas(),
+        () => {}
+      );
+    }
   }
+
+  if (!biodivSportsAreasChecked) {
+    features.then(
+      (loaded) => {
+        biodivSportsAreasChecked = true;
+        if (loaded.some((feature) => feature.getGeometry()?.intersectsExtent(viewExtent))) {
+          notifyProtectionAreas();
+        }
+      },
+      () => {}
+    );
+  }
+
+  return features;
 }
 
 function clearGeometry() {
@@ -1460,7 +1494,6 @@ onMounted(() => {
   });
 
   map.on('moveend', sendBoundsToUrl);
-  map.on('moveend', getProtectionAreas);
   map.on('moveend', updateEditMapLink);
   map.on('moveend', emitMoveEvent);
 
@@ -1469,6 +1502,8 @@ onMounted(() => {
   if (protectionAreasVisible.value) {
     protectionAreasLayers.forEach((layer) => layer.setVisible(true));
   }
+  // hidden, it loads nothing
+  protectionAreasLayer.setVisible(protectionAreasVisible.value);
 
   geolocation.value = markRaw(
     new ol.Geolocation({

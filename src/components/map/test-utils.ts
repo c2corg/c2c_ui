@@ -28,7 +28,7 @@ type MapVm = {
   documentsLayer: unknown;
   waypointsLayer: unknown;
   imagesLayer: unknown;
-  protectionAreasLayer: unknown;
+  protectionAreasLayer: import('ol/layer/Vector').default<import('ol/source/Vector').default>;
   elevationProfileLayer: unknown;
   setDocumentGeometryFromGeoFile(file: string): void;
 };
