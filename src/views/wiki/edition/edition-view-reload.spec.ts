@@ -113,5 +113,21 @@ describe.each([
       expect(errors).toEqual([]);
       expect(api.getAll).toHaveBeenCalledWith(expect.objectContaining({ act: 'skitouring' }));
     });
+
+    it.each([
+      ['a participant', [{ document_id: 7 }, { document_id: 8 }], true],
+      // e.g. a moderator editing the outing of others: their own partners have nothing to do there
+      ['not a participant', [{ document_id: 8 }], false],
+    ])('proposes the recent partners to %s', async (_, users, proposed) => {
+      const edition = mountEdition(view, documentType, errors);
+      await set(edition, newDocument({ associations: { waypoints: [], routes: [], users } }));
+      edition.hooks().afterLoad!();
+      await settle();
+
+      const participants = edition.wrapper
+        .findAllComponents({ name: 'AssociationsInputRow' })
+        .find((row) => row.props('field').name === 'users')!;
+      expect(Boolean(participants.props('loadSuggestions'))).toBe(proposed);
+    });
   }
 });

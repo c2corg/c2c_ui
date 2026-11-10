@@ -143,7 +143,7 @@
           :label="$gettext('participants')"
           :document="document"
           :field="fields.users"
-          :load-suggestions="loadRecentPartners"
+          :load-suggestions="proposePartners ? loadRecentPartners : undefined"
         />
         <div class="columns">
           <form-field :document="document" :field="fields.participant_count" class="is-narrow" />
@@ -257,7 +257,7 @@ import type DocumentService from '@/js/apis/c2c/DocumentService';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-const { $documentUtils, $dateUtils } = useGlobalProperties();
+const { $documentUtils, $dateUtils, $user } = useGlobalProperties();
 const pageRoute = useRoute();
 
 const { fields, saving, mode, document, save } = useDocumentEdition({ afterLoad, beforeSave });
@@ -285,7 +285,10 @@ const initialExtent = computed(() => {
   return null;
 });
 
-// the users of the recent outings of the user, proposed first when adding participants
+// the users of the recent outings of the user, proposed first when adding participants, to a participant of the
+// outing only: a moderator editing the outing of others would get their own partners
+const proposePartners = ref(false);
+
 async function loadRecentPartners(): Promise<C2cDocument[]> {
   const response = await c2c.userProfile.partners.get();
   return response.data.partners;
@@ -293,6 +296,8 @@ async function loadRecentPartners(): Promise<C2cDocument[]> {
 
 function afterLoad() {
   showBothDates.value = document.value!.date_start !== document.value!.date_end;
+  // on creation, the user is already a participant
+  proposePartners.value = (document.value!.associations?.users ?? []).some((user) => user.document_id === $user.id);
 }
 
 function updateBbox(newBbox: number[]) {
