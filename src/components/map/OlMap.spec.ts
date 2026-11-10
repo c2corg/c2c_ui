@@ -92,6 +92,59 @@ describe('OlMap', () => {
     wrapper.unmount();
   });
 
+  describe('on pointer move', () => {
+    const pointerMove = (dragging = false) => ({ pixel: [10, 10], dragging });
+
+    it('does not look for features while the map is dragged', async () => {
+      const { wrapper, vm } = await mountMap();
+      const forEachFeatureAtPixel = vi.spyOn(vm.map, 'forEachFeatureAtPixel');
+
+      vm.onPointerMove(pointerMove(true));
+
+      expect(forEachFeatureAtPixel).not.toHaveBeenCalled();
+      expect(wrapper.emitted('highlight-document')).toBeUndefined();
+
+      wrapper.unmount();
+    });
+
+    it('only looks for features in the document, waypoint and image layers', async () => {
+      const { wrapper, vm } = await mountMap();
+      const forEachFeatureAtPixel = vi.spyOn(vm.map, 'forEachFeatureAtPixel');
+
+      vm.onPointerMove(pointerMove());
+
+      const layerFilter = forEachFeatureAtPixel.mock.calls[0][2]!.layerFilter!;
+      expect(layerFilter(vm.documentsLayer as never)).toBe(true);
+      expect(layerFilter(vm.waypointsLayer as never)).toBe(true);
+      expect(layerFilter(vm.imagesLayer as never)).toBe(true);
+      expect(layerFilter(vm.protectionAreasLayer as never)).toBe(false);
+      expect(layerFilter(vm.elevationProfileLayer as never)).toBe(false);
+
+      wrapper.unmount();
+    });
+
+    it('tells the page only when the hovered document changes', async () => {
+      // the pages react to each event: the nearby stops reset all their styles when nothing is hovered
+      const { wrapper, vm } = await mountMap();
+      const document = { document_id: 1, type: 'r' };
+      const feature = new ol.Feature({ document });
+      let hovered: InstanceType<typeof ol.Feature> | undefined = feature;
+      vi.spyOn(vm.map, 'forEachFeatureAtPixel').mockImplementation(
+        (_pixel, callback) => hovered && (callback(hovered, null as never, null as never) as never)
+      );
+
+      vm.onPointerMove(pointerMove());
+      vm.onPointerMove(pointerMove());
+      hovered = undefined;
+      vm.onPointerMove(pointerMove());
+      vm.onPointerMove(pointerMove());
+
+      expect(wrapper.emitted('highlight-document')).toEqual([[document], [null]]);
+
+      wrapper.unmount();
+    });
+  });
+
   it('updates the layer switcher selection when a layer is shown or hidden', async () => {
     const { wrapper, vm } = await mountMap();
     const [baseLayers, slopesLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');

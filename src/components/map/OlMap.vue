@@ -989,15 +989,24 @@ function getExtent(projection?: string) {
   return extent;
 }
 
-function onPointerMove(event: MapBrowserEvent<PointerEvent>) {
-  let resultFeature: FeatureLike | null = null;
+// the layers whose features are highlighted on hover
+const hoverableLayers = new Set<object>([documentsLayer, waypointsLayer, imagesLayer]);
 
-  map.forEachFeatureAtPixel(event.pixel, (feature) => {
-    resultFeature = feature;
-    return true;
-  });
-  setHighlightedFeature(resultFeature);
-  emit('highlight-document', resultFeature ? (resultFeature as FeatureLike).get('document') : null);
+function onPointerMove(event: MapBrowserEvent<PointerEvent>) {
+  // no hit detection while panning: it runs on every pointer move
+  if (event.dragging) {
+    return;
+  }
+
+  const feature =
+    map.forEachFeatureAtPixel(event.pixel, (f) => f, { layerFilter: (layer) => hoverableLayers.has(layer) }) ?? null;
+
+  // the pages react to each event (the nearby stops reset all their styles): only tell them about changes
+  if (feature === highlightedFeature.value) {
+    return;
+  }
+  setHighlightedFeature(feature);
+  emit('highlight-document', feature ? feature.get('document') : null);
 }
 
 function setHighlightedFeature(feature: FeatureLike | null) {
