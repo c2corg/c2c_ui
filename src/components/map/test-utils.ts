@@ -24,6 +24,12 @@ type MapVm = {
   highlightedFeature: unknown;
   visibleLayer: { get(key: string): unknown };
   setHighlightedFeature(feature: unknown): void;
+  onPointerMove(event: unknown): void;
+  documentsLayer: unknown;
+  waypointsLayer: unknown;
+  imagesLayer: unknown;
+  protectionAreasLayer: unknown;
+  elevationProfileLayer: unknown;
   setDocumentGeometryFromGeoFile(file: string): void;
 };
 
