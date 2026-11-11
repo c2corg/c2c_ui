@@ -19,6 +19,8 @@ export type Activity = {
   heightDiffUp?: number;
   duration?: number;
   miniature?: string;
+  // the c2c activity matching the vendor's activity type, if any: to prefill the outing
+  c2cActivities?: string[];
 };
 
 export type Geometry = { type: 'LineString'; coordinates: number[][] };
