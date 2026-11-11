@@ -258,6 +258,7 @@ import {
   DENSITY_FETCH_DEBOUNCE,
   DENSITY_OVERLAYS,
   DENSITY_TRACKS_MIN_ZOOM,
+  snapExtent,
   DENSITY_TYPES,
   type DensityFilters,
   type DensityType,
@@ -1290,8 +1291,11 @@ function updateDensityOverlays() {
 
 // the request of each overlay that is running, cancelled when the map moves on
 const densityRequests: Partial<Record<DensityType, AbortController>> = {};
+// what each overlay shows now (its request), to not ask again for the same thing
+const shownDensity: Partial<Record<DensityType, string>> = {};
 
 function cancelDensityRequest(type: DensityType) {
+  delete shownDensity[type];
   densityRequests[type]?.abort();
   delete densityRequests[type];
 }
@@ -1305,7 +1309,13 @@ async function updateDensityOverlay(type: DensityType) {
   const overlay = DENSITY_OVERLAYS[type];
   const zoom = Math.round(view().getZoom()!);
   const filters = (type === 'outing' ? props.tracksFilters : props.routesFilters) ?? {};
-  const params = { ...filters, bbox: getExtent().join(',') };
+  // a box on a grid, so that small moves of the map ask for the same thing: the answer is already there (and the
+  // browser keeps it, the API lets it)
+  const params = { ...filters, bbox: snapExtent(getExtent()).join(',') };
+  const key = JSON.stringify([params, $language.current, zoom >= DENSITY_TRACKS_MIN_ZOOM]);
+  if (key === shownDensity[type]) {
+    return;
+  }
   const requestId = ++densityRequestIds[type];
   const isCurrent = () => requestId === densityRequestIds[type] && densityEnabled[type];
 
@@ -1331,6 +1341,7 @@ async function updateDensityOverlay(type: DensityType) {
           feature?.set('document', document);
           feature?.set('trackHighlightedStyle', layers.trackHighlightedStyle);
         }
+        shownDensity[type] = key;
         return;
       }
       // too many tracks to draw them: their density, as when zoomed out
@@ -1356,6 +1367,7 @@ async function updateDensityOverlay(type: DensityType) {
       feature.set('weight', heatmapWeight(bucket.count, maxCount));
       source.addFeature(feature);
     }
+    shownDensity[type] = key;
   } catch (error) {
     // a request replaced by a newer one, or given up: nothing to tell
     if (signal.aborted) {

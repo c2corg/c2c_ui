@@ -27,6 +27,28 @@ export const DENSITY_TYPES: DensityType[] = ['outing', 'route'];
 const HEATMAP_RADIUS = 6;
 const HEATMAP_BLUR = 10;
 
+/**
+ * The box to ask the API for, from the box of the view: the view, grown to the lines of a grid whose cells are a
+ * quarter to an eighth of its width (a power of two, so the lines are the same for every view of about that size).
+ * Small moves of the map give the same box, so the same request: the one already shown, or the one the browser and the
+ * proxies keep (the API says they can). The box is at most one and a half times as wide as the view.
+ */
+export function snapExtent(extent: number[]): number[] {
+  const [xmin, ymin, xmax, ymax] = extent;
+  const width = xmax - xmin;
+  if (!(width > 0)) {
+    return extent;
+  }
+
+  const step = 2 ** Math.floor(Math.log2(width / 4));
+  return [
+    Math.floor(xmin / step) * step,
+    Math.floor(ymin / step) * step,
+    Math.ceil(xmax / step) * step,
+    Math.ceil(ymax / step) * step,
+  ];
+}
+
 // The weight of a cell of the heatmap, from 0 to 1. A logarithm: with a linear scale, the busiest place makes the
 // other ones, which have a tenth of its outings, almost disappear.
 export function heatmapWeight(count: number, maxCount: number) {

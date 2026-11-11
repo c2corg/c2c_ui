@@ -1,6 +1,47 @@
 import { describe, expect, it } from 'vitest';
 
-import { documentOverlayFilters, heatmapWeight, searchOverlayFilters, sortTracks } from './density-overlays';
+import {
+  documentOverlayFilters,
+  heatmapWeight,
+  searchOverlayFilters,
+  snapExtent,
+  sortTracks,
+} from './density-overlays';
+
+describe('snapExtent', () => {
+  it('contains the view, and is at most one and a half times as wide', () => {
+    for (const view of [
+      [635123, 5723456, 641890, 5728001],
+      [-1234.5, -987.25, 4321.75, 3456.5],
+      [100000, 6000000, 100020, 6000013],
+    ]) {
+      const box = snapExtent(view);
+      expect(box[0]).toBeLessThanOrEqual(view[0]);
+      expect(box[1]).toBeLessThanOrEqual(view[1]);
+      expect(box[2]).toBeGreaterThanOrEqual(view[2]);
+      expect(box[3]).toBeGreaterThanOrEqual(view[3]);
+      expect(box[2] - box[0]).toBeLessThanOrEqual(1.5 * (view[2] - view[0]) + 1e-6);
+    }
+  });
+
+  it('gives the same box for views that are a little apart', () => {
+    const view = [635000, 5723000, 641000, 5727000];
+    const moved = [635010, 5723010, 641010, 5727010];
+
+    expect(snapExtent(moved)).toEqual(snapExtent(view));
+  });
+
+  it('gives another box for a view that moved a lot, or zoomed', () => {
+    const view = [635000, 5723000, 641000, 5727000];
+
+    expect(snapExtent([665000, 5723000, 671000, 5727000])).not.toEqual(snapExtent(view));
+    expect(snapExtent([636000, 5724000, 640000, 5726000])).not.toEqual(snapExtent(view));
+  });
+
+  it('leaves a box with no width as it is', () => {
+    expect(snapExtent([1, 2, 1, 2])).toEqual([1, 2, 1, 2]);
+  });
+});
 
 describe('documentOverlayFilters', () => {
   it('shows the outings of a route, and the routes of its activities', () => {
