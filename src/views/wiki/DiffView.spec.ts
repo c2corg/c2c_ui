@@ -17,6 +17,8 @@ const version = (id: number, description: string, extra = {}) => ({
     document_id: 12,
     type: 'r',
     elevation_max: id * 100,
+    // a new object on each read, as the API computes it
+    license: { id: 'CC-BY-SA-3.0', url: 'https://creativecommons.org/licenses/by-sa/3.0/' },
     geometry: { geom: '{}', geom_detail: null },
     locales: [{ lang: 'fr', title: 'Arête', description }],
   },
@@ -76,6 +78,7 @@ describe('DiffView', () => {
     expect(wrapper.text()).toContain('elevation_max');
     expect(wrapper.findAll('del').map((del) => del.text())).toContain('300');
     expect(wrapper.text()).toContain('two');
+    expect(wrapper.text()).not.toContain('license');
   });
 
   it('finds the version before the new one, and the one after the old one', async () => {
