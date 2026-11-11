@@ -1,0 +1,2 @@
+import{Sa as e,da as t}from"./vendor-W1DtIBzK.js";var n={document:{type:Object,required:!0}},r={document:{type:Object,required:!0}},i={field:{type:Object,required:!0}},a={documentType:{type:String,required:!0,validator:e=>e.length>1}};function o(n){let r=e().appContext.config.globalProperties;return{documentType:t(()=>r.$documentUtils.getDocumentType(n.document.type))}}export{o as a,i,n,a as r,r as t};
+//# sourceMappingURL=properties-DiXhc42H.js.map
