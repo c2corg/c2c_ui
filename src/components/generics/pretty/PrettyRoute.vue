@@ -6,12 +6,13 @@
       :activities="route.activities"
       class="is-size-4 has-text-secondary icon-activities"
     />
-    <span v-if="heightUpText" :title="$gettext('height_diff_up')" class="has-text-normal .is-nowrap">
-      {{ heightUpText }}&#8202;m
-    </span>
-    <span :title="$gettext('height_diff_difficulties')" class="has-text-normal .is-nowrap">
-      {{ heightDiffText }},
-    </span>
+    <!-- the comma follows the last height, with no space before it, and only when there is a height -->
+    <span v-if="heightUpText || heightDiffText" class="has-text-normal is-nowrap"
+      ><span v-if="heightUpText" :title="$gettext('height_diff_up')">{{ heightUpText }}&#8202;m</span
+      >{{ heightUpText && heightDiffText ? ' ' : ''
+      }}<span v-if="heightDiffText" :title="$gettext('height_diff_difficulties')">{{ heightDiffText }}</span
+      >,</span
+    >
     <span
       v-if="route.orientations && route.orientations.length < 3 && !hideOrientation"
       :title="$gettext('orientations')"
