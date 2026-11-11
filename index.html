@@ -76,7 +76,8 @@
           githubPageContent: null,
         },
         created(){
-          axios.get(`https://api.github.com/repos/${REPO_SLUG}/branches`)
+          // the API returns 30 branches by default: ask for the maximum, 100
+          axios.get(`https://api.github.com/repos/${REPO_SLUG}/branches?per_page=100`)
             .then((response) => {
             this.branches = response.data.filter((branch) => branch.name !== 'gh-pages');
             this.branches.map(this.initBranch);
