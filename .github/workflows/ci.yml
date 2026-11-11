@@ -177,6 +177,8 @@ jobs:
             for attempt in 1 2 3 4 5; do
               rm -rf -- "$FOLDER"
               [ "$2" = remove ] || cp -r "$SITE" "$FOLDER"
+              # no Jekyll: it hides the files starting with "_", like Vite's _plugin-vue_export-helper chunk
+              touch .nojekyll
               git add -A .
               # Nothing to commit when the build output is unchanged (e.g. a PR
               # touching only CI config): skip instead of failing the job.
