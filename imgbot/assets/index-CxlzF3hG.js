@@ -1,2 +1,0 @@
-import{u as o,a as e}from"./defaultLocale-D4gfEPxh.js";import{t as v,d as I,f as S,b as l}from"./defaultLocale-D4gfEPxh.js";import"./utcYear-DQJ_ZSCY.js";var r="%Y-%m-%dT%H:%M:%S.%LZ";function s(a){return a.toISOString()}var f=Date.prototype.toISOString?s:o(r);function i(a){var t=new Date(a);return isNaN(t)?null:t}var p=+new Date("2000-01-01T00:00:00.000Z")?i:e(r);export{f as isoFormat,p as isoParse,v as timeFormat,I as timeFormatDefaultLocale,S as timeFormatLocale,l as timeParse,o as utcFormat,e as utcParse};
-//# sourceMappingURL=index-CxlzF3hG.js.map
