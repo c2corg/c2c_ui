@@ -1598,12 +1598,12 @@ defineExpose({
 /* the controls are 0.5em from the edges of the map */
 
 .ol-control-pin-to-top {
-  top: calc(1.5em + 3 * var(--c2c-ol-button-size));
+  top: calc(1.5em + 3 * var(--map-button-size));
   left: 0.5em;
 }
 
 .ol-control-center-on-geolocation {
-  top: calc(2em + 4 * var(--c2c-ol-button-size));
+  top: calc(2em + 4 * var(--map-button-size));
   left: 0.5em;
 }
 
@@ -1740,7 +1740,7 @@ defineExpose({
 }
 
 .ol-control-edit-map {
-  bottom: calc(1em + var(--c2c-ol-button-size));
+  bottom: calc(1em + var(--map-button-size));
   right: 0.5em;
 
   svg {
@@ -1785,11 +1785,11 @@ defineExpose({
  * even when the browser scales the text up (Android font size setting)
  */
 .ol-viewport {
-  --c2c-ol-button-size: calc(1.375em + 2px);
+  --map-button-size: calc(1.375em + 2px);
 }
 
 .ol-viewport.ol-touch {
-  --c2c-ol-button-size: calc(1.14 * 1.375em + 2px);
+  --map-button-size: calc(1.14 * 1.375em + 2px);
 }
 
 .ol-attribution ul,
@@ -1805,7 +1805,7 @@ defineExpose({
 
 .ol-scale-line {
   bottom: calc(0.5em + 1px);
-  right: calc(1em + var(--c2c-ol-button-size));
+  right: calc(1em + var(--map-button-size));
   left: initial;
   line-height: 1.3;
 }
@@ -1813,6 +1813,6 @@ defineExpose({
 .ol-full-screen {
   right: auto;
   left: 0.5em;
-  top: calc(1em + 2 * var(--c2c-ol-button-size));
+  top: calc(1em + 2 * var(--map-button-size));
 }
 </style>
