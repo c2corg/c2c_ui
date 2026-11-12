@@ -14,6 +14,7 @@
         <em v-translate>You may also drag, draw or edit the track on the map.</em>
       </div>
     </div>
+    <tracking-invite v-if="geomDetailEditable && trackingLinked === false" class="mb-3"></tracking-invite>
 
     <div class="columns is-multiline">
       <div class="column is-12 map-container">
@@ -52,6 +53,7 @@ import GpsUploadModal from '@/components/map/GpsUploadModal.vue';
 // imported, not the global async map-view: the edition views call the map as soon as they load, and the edition
 // chunk is lazy anyway (#4876)
 import OlMap from '@/components/map/OlMap.vue';
+import TrackingInvite from '@/components/tracking/TrackingInvite.vue';
 import trackingService from '@/js/apis/tracking-service';
 import { useFormField } from '@/js/composables/form-registration';
 import { useGlobalProperties } from '@/js/composables/global-properties';
@@ -92,6 +94,8 @@ const gpsUploadModal = useTemplateRef<InstanceType<typeof GpsUploadModal>>('gpsU
 const latitude = ref<number | string | null>(null);
 const longitude = ref<number | string | null>(null);
 const hasTrackingActivities = ref(false);
+// no tracking device account linked, not even one whose token was lost: invited to link one
+const trackingLinked = ref<boolean | null>(null);
 
 function openGPSModal() {
   gpsUploadModal.value!.show();
@@ -141,6 +145,7 @@ onMounted(() => {
       if (Object.values(data).includes('configured')) {
         hasTrackingActivities.value = true;
       }
+      trackingLinked.value = Object.values(data).some((status) => status !== 'not-configured');
     },
     (error) => {
       // Falls back to local GPX upload only, but this should not happen silently: a request that
