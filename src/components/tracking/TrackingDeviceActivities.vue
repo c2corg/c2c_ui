@@ -20,7 +20,7 @@
       </p>
     </div>
   </div>
-  <div v-else-if="promise !== null"><span v-translate>Loading...</span></div>
+  <div v-else-if="loading"><span v-translate>Loading...</span></div>
   <div v-else>
     <span v-translate>No activity found</span>
   </div>
@@ -38,14 +38,21 @@ const emit = defineEmits(['geojson']);
 
 const { $gettext, $user } = useGlobalProperties();
 
-const promise = ref<unknown>(null);
+const loading = ref(true);
 const activities = ref<Activity[]>([]);
 const fetching = ref<number | null>(null);
 
 function loadActivities() {
-  promise.value = trackingService.getActivities($user.id!, $user.lang).then((response) => {
-    activities.value = response.data;
-  });
+  trackingService
+    .getActivities($user.id!, $user.lang)
+    .then(
+      (response) => {
+        activities.value = response.data;
+      },
+      () => undefined
+    )
+    // also when they could not be loaded: "No activity found" then, not loading forever
+    .finally(() => (loading.value = false));
 }
 
 function fetch(activity: Activity) {

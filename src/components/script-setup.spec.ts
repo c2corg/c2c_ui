@@ -220,4 +220,20 @@ describe('TrackingDeviceActivities', () => {
 
     expect(wrapper.emitted('geojson')).toEqual([[{ type: 'LineString' }, ['skitouring']]]);
   });
+
+  it('tells the user that there is no activity', async () => {
+    vi.spyOn(trackingService, 'getActivities').mockResolvedValue({ data: [] } as never);
+    const wrapper = mount(TrackingDeviceActivities, { global });
+    await flushPromises();
+
+    expect(wrapper.text()).toBe('No activity found');
+  });
+
+  it('stops loading when the activities cannot be loaded', async () => {
+    vi.spyOn(trackingService, 'getActivities').mockRejectedValue(new Error('down'));
+    const wrapper = mount(TrackingDeviceActivities, { global });
+    await flushPromises();
+
+    expect(wrapper.text()).toBe('No activity found');
+  });
 });
