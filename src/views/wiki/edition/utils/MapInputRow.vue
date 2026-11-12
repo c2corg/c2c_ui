@@ -79,7 +79,7 @@ const props = defineProps({
   },
 });
 
-defineEmits(['move']);
+const emit = defineEmits(['move', 'activities']);
 
 const { $user } = useGlobalProperties();
 
@@ -97,8 +97,12 @@ function openGPSModal() {
   gpsUploadModal.value!.show();
 }
 
-function setGeometry(geometry: unknown) {
+// with the c2c activities of the tracking device activity, if any
+function setGeometry(geometry: unknown, c2cActivities: string[] = []) {
   map.value!.setDocumentGeometryFromGeoFile(geometry as never);
+  if (c2cActivities.length) {
+    emit('activities', c2cActivities);
+  }
 }
 
 function setGeometryPoint() {

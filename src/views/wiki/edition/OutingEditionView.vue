@@ -40,6 +40,7 @@
               geom-detail-editable
               ref="mapInput"
               @move="updateBbox"
+              @activities="prefillActivities"
               :initial-extent="initialExtent"
             />
           </div>
@@ -332,6 +333,14 @@ function updateBbox(newBbox: number[]) {
 // placed by the editor: the search follows the new box
 async function fitMapToDocuments() {
   moveMap((await mapInput.value!.fitMapToDocuments()) as number[], false);
+}
+
+// the activities of the tracking device activity whose track is used, unless already chosen
+function prefillActivities(activities: string[]) {
+  const doc = document.value!;
+  if (!doc.activities?.length) {
+    doc.activities = [...activities] as typeof doc.activities;
+  }
 }
 
 function changeRouteAssociation(addRoute: boolean, route: C2cDocument) {

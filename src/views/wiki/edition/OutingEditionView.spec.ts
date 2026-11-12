@@ -61,6 +61,28 @@ describe('OutingEditionView', () => {
     expect(errors).toEqual([]);
   });
 
+  it('prefills the activities of the tracking device activity whose track is used', async () => {
+    api.suggestRoutes.mockResolvedValue({ data: { documents: [], total: 0 } });
+    const edition = mountEdition(OutingEditionView, 'outing');
+    edition.setDocument(outing(null));
+    await vi.waitFor(() => expect(edition.wrapper.findComponent({ name: 'MapInputRow' }).exists()).toBe(true));
+
+    edition.wrapper.findComponent({ name: 'MapInputRow' }).vm.$emit('activities', ['skitouring']);
+
+    expect(edition.document().activities).toEqual(['skitouring']);
+  });
+
+  it('keeps the activities already chosen', async () => {
+    api.suggestRoutes.mockResolvedValue({ data: { documents: [], total: 0 } });
+    const edition = mountEdition(OutingEditionView, 'outing');
+    edition.setDocument({ ...outing(null), activities: ['hiking'] });
+    await vi.waitFor(() => expect(edition.wrapper.findComponent({ name: 'MapInputRow' }).exists()).toBe(true));
+
+    edition.wrapper.findComponent({ name: 'MapInputRow' }).vm.$emit('activities', ['skitouring']);
+
+    expect(edition.document().activities).toEqual(['hiking']);
+  });
+
   it('does not draw the proposed routes on the map', async () => {
     api.suggestRoutes.mockResolvedValue({ data: { documents: [route(1)], total: 1 } });
     const edition = mountEdition(OutingEditionView, 'outing');
