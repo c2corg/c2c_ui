@@ -1,6 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { type ImageSize, fallBackToBasicImage, getEmbeddedImageUrl, getImageUrl, getThumbnailSize } from './image-urls';
+import {
+  type ImageSize,
+  fallBackToBasicImage,
+  getEmbeddedImageUrl,
+  getImageUrl,
+  getResponsiveSrcset,
+  getThumbnailSize,
+} from './image-urls';
 
 // '@/js/config' reads CAMPTOCAMP_CONFIG, a constant injected by Vite (see vite.config.mjs)
 const config = vi.hoisted(() => ({
@@ -211,6 +218,15 @@ describe('fallBackToBasicImage', () => {
     expect(setAttribute).not.toHaveBeenCalled();
   });
 
+  it('offers the basic thumbnails of a responsive image', () => {
+    const element = document.createElement('picture');
+    element.innerHTML =
+      `<source type="image/avif" srcset="${MEDIA}/1MI.avif 400w, ${MEDIA}/1BI.avif 1500w" />` +
+      `<img src="${MEDIA}/1MI.jpg" srcset="${MEDIA}/1MI.jpg 400w, ${MEDIA}/1BI.jpg 1500w" />`;
+    expect(fallBackToBasicImage(element.querySelector('img')!)).toBe(true);
+    expect(element.querySelector('source')!.srcset).toBe(`${MEDIA}/1MI.jpg 400w, ${MEDIA}/1BI.jpg 1500w`);
+  });
+
   it('does nothing for an image outside a picture', () => {
     const img = document.createElement('img');
     document.createElement('div').appendChild(img);
@@ -235,5 +251,42 @@ describe('getThumbnailSize', () => {
     expect(getThumbnailSize({ width: null, height: 600 }, 'BI')).toBeUndefined();
     expect(getThumbnailSize({}, 'MI')).toBeUndefined();
     expect(getThumbnailSize({ width: 800, height: 600 }, 'SI')).toBeUndefined();
+  });
+});
+
+describe('getResponsiveSrcset', () => {
+  const image = { document_id: 42, filename: '1588000000_123456.jpg', width: 4000, height: 3000 };
+
+  it('offers the thumbnail and BI, with their widths', () => {
+    expect(getResponsiveSrcset(image, 'MI')).toBe(
+      `${MEDIA}/1588000000_123456MI.jpg 400w, ${MEDIA}/1588000000_123456BI.jpg 1500w`
+    );
+    expect(getResponsiveSrcset({ ...image, width: 909, height: 1611 }, 'MI')).toBe(
+      `${MEDIA}/1588000000_123456MI.jpg 226w, ${MEDIA}/1588000000_123456BI.jpg 846w`
+    );
+  });
+
+  it('offers the AVIF thumbnails, when they exist', () => {
+    config.urls.modernThumbnailsTimestamp = 1;
+    expect(getResponsiveSrcset(image, 'MI', 'avif')).toBe(
+      `${MEDIA}/1588000000_123456MI.avif 400w, ${MEDIA}/1588000000_123456BI.avif 1500w`
+    );
+    expect(getResponsiveSrcset({ ...image, modernThumbnailsPending: true }, 'MI', 'avif')).toBeUndefined();
+  });
+
+  it('takes the box width without the size of the original', () => {
+    expect(getResponsiveSrcset({ document_id: 42, filename: '1588000000_123456.jpg' }, 'MI')).toBe(
+      `${MEDIA}/1588000000_123456MI.jpg 400w, ${MEDIA}/1588000000_123456BI.jpg 1500w`
+    );
+  });
+
+  it('offers one candidate per width, for a small original', () => {
+    expect(getResponsiveSrcset({ ...image, width: 300, height: 200 }, 'MI')).toBe(
+      `${MEDIA}/1588000000_123456MI.jpg 300w`
+    );
+  });
+
+  it('gives nothing for SI, whose width is unknown (cropped)', () => {
+    expect(getResponsiveSrcset(image, 'SI')).toBeUndefined();
   });
 });
