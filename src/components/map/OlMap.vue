@@ -781,7 +781,11 @@ function addDocumentFeature(document: C2cDocument | null, source: VectorSource, 
       )!.set('document', document);
     }
   } else {
-    if (document.geometry.geom) {
+    // outside edition and diffs, the point marker of a document with a line adds nothing to the line:
+    // the line alone is shown, and carries the id used to highlight the document from the lists
+    const lineOnly = !!document.geometry.geom_detail && !style && source !== editionLayer.getSource();
+
+    if (document.geometry.geom && !lineOnly) {
       const feature = addFeature(
         source,
         JSON.parse(document.geometry.geom),
@@ -793,12 +797,17 @@ function addDocumentFeature(document: C2cDocument | null, source: VectorSource, 
       feature!.setId(document.document_id);
     }
     if (document.geometry.geom_detail) {
-      addFeature(
+      const feature = addFeature(
         source,
         JSON.parse(document.geometry.geom_detail),
         style ?? getDocumentLineStyle(title, false, document.properties),
         style ? null : getDocumentLineStyle(title, true, document.properties)
-      )!.set('document', document);
+      );
+
+      feature!.set('document', document);
+      if (lineOnly) {
+        feature!.setId(document.document_id);
+      }
     }
   }
 }
