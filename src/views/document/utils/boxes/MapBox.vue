@@ -31,6 +31,7 @@
             !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
           "
           :show-pin-to-top-button="true"
+          :show3d="show3d"
           @has-protection-area="$emit('has-protection-area')"
           @pin-to-top-clicked="togglePinToSide(true)"
         />
@@ -76,6 +77,11 @@ const props = defineProps({ ...documentProperty });
 defineEmits(['has-protection-area']);
 
 const route = useRoute();
+
+// SPIKE: the 3D view for every route (around its waypoints when it has no track) and for the outings with a track
+const show3d = computed(
+  () => props.document.type === 'r' || (props.document.type === 'o' && !!props.document.geometry?.geom_detail)
+);
 const { $documentUtils } = useGlobalProperties();
 const { documentType } = useDocumentType(props);
 
@@ -238,6 +244,16 @@ onBeforeUnmount(() => {
     right: 0px;
     height: calc(100vh - var(--c2c-navbar-height));
     width: 30vw;
+  }
+}
+
+/* on wide screens the navbar is taller, with the ad (.nav-dfm, App.vue): below it, or it hides the top of the map */
+.nav-dfm :not(:fullscreen) > .map-container {
+  &.pinned {
+    top: var(--c2c-navbarad-height);
+  }
+  &.pinned-to-right {
+    height: calc(100vh - var(--c2c-navbarad-height));
   }
 }
 
