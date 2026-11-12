@@ -241,6 +241,16 @@ onBeforeUnmount(() => {
   }
 }
 
+/* on wide screens the navbar is taller, with the ad (.nav-dfm, App.vue): below it, or it hides the top of the map */
+.nav-dfm :not(:fullscreen) > .map-container {
+  &.pinned {
+    top: var(--c2c-navbarad-height);
+  }
+  &.pinned-to-right {
+    height: calc(100vh - var(--c2c-navbarad-height));
+  }
+}
+
 /**
  * Fullscreen mode *with* elevation profile
  * Without the elevation profile it's the map-view
