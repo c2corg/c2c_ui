@@ -251,13 +251,22 @@ export const getDocumentLineStyle = function (
   properties?: FeatureProperties | null
 ): Style | Style[] {
   if (highlight && !properties) {
-    return new ol.style.Style({
-      stroke: new ol.style.Stroke({
-        color: 'red',
-        width: 3,
+    // same slim dark border as the line when not highlighted, so the red line stays readable on any background
+    return [
+      new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: 'grey',
+          width: 4,
+        }),
       }),
-      text: buildTextStyle(title, highlight, false),
-    });
+      new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: 'red',
+          width: 3,
+        }),
+        text: buildTextStyle(title, highlight, false),
+      }),
+    ];
   } else if (highlight && properties && properties.color) {
     return new ol.style.Style({
       stroke: new ol.style.Stroke({
