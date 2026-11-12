@@ -1573,7 +1573,8 @@ defineExpose({
 
 <style>
 /* disable mobile CSS for controls. */
-.ol-touch .ol-control button {
+.ol-touch .ol-control button,
+.ol-touch .ol-control a {
   font-size: 1.14em !important;
 }
 </style>
@@ -1597,12 +1598,12 @@ defineExpose({
 /* the controls are 0.5em from the edges of the map */
 
 .ol-control-pin-to-top {
-  top: 80px;
+  top: calc(1.5em + 3 * var(--c2c-ol-button-size));
   left: 0.5em;
 }
 
 .ol-control-center-on-geolocation {
-  top: 120px;
+  top: calc(2em + 4 * var(--c2c-ol-button-size));
   left: 0.5em;
 }
 
@@ -1739,7 +1740,7 @@ defineExpose({
 }
 
 .ol-control-edit-map {
-  bottom: 35px;
+  bottom: calc(1em + var(--c2c-ol-button-size));
   right: 0.5em;
 
   svg {
@@ -1777,6 +1778,20 @@ defineExpose({
 <style>
 /* the controls are 0.5em from the edges of the map */
 
+/*
+ * outer size of an OpenLayers button: 1.375em plus 1px margin on each side,
+ * buttons are 1.14 times bigger on touch devices (see above),
+ * stacked controls are positioned in em with it so they never overlap,
+ * even when the browser scales the text up (Android font size setting)
+ */
+.ol-viewport {
+  --c2c-ol-button-size: calc(1.375em + 2px);
+}
+
+.ol-viewport.ol-touch {
+  --c2c-ol-button-size: calc(1.14 * 1.375em + 2px);
+}
+
 .ol-attribution ul,
 .ol-scale-line {
   --ol-subtle-foreground-color: #666666;
@@ -1790,7 +1805,7 @@ defineExpose({
 
 .ol-scale-line {
   bottom: calc(0.5em + 1px);
-  right: 40px;
+  right: calc(1em + var(--c2c-ol-button-size));
   left: initial;
   line-height: 1.3;
 }
@@ -1798,6 +1813,6 @@ defineExpose({
 .ol-full-screen {
   right: auto;
   left: 0.5em;
-  top: 60px;
+  top: calc(1em + 2 * var(--c2c-ol-button-size));
 }
 </style>
