@@ -78,10 +78,9 @@ defineEmits(['has-protection-area']);
 
 const route = useRoute();
 
-// the 3D view for every route (around its waypoints when it has no track) and for the outings with a track
-const show3d = computed(
-  () => props.document.type === 'r' || (props.document.type === 'o' && !!props.document.geometry?.geom_detail)
-);
+// the 3D view for routes, outings and waypoints: around their waypoints (an outing: those of its routes) or their point
+// when they have no track
+const show3d = computed(() => ['r', 'o', 'w'].includes(props.document.type!));
 const { $documentUtils } = useGlobalProperties();
 const { documentType } = useDocumentType(props);
 

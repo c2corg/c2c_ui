@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { mountMap } from './test-utils';
 
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
 
 // the 3D view itself needs WebGL: only what the 2D map gives it is checked here
 vi.mock('./Map3dView.vue', () => ({ __esModule: true, default: { render: () => null } }));
@@ -45,7 +46,7 @@ const waypoint = (id: number, type: string, x: number) => ({
 
 describe('the 3D view of an outing', () => {
   it('also shows the waypoints of its routes, read when it opens', async () => {
-    const get = vi.spyOn(c2c.route, 'get').mockReturnValue(
+    const get = vi.spyOn(c2c.route as DocumentService, 'get').mockReturnValue(
       Promise.resolve({
         data: {
           associations: {
@@ -72,7 +73,7 @@ describe('the 3D view of an outing', () => {
   });
 
   it('keeps the view as it is when the route cannot be read', async () => {
-    vi.spyOn(c2c.route, 'get').mockReturnValue(Promise.reject(new Error('offline')) as never);
+    vi.spyOn(c2c.route as DocumentService, 'get').mockReturnValue(Promise.reject(new Error('offline')) as never);
     const { wrapper } = await mountMap({ documents: [outing], show3d: true });
     const vm = wrapper.vm as unknown as { open3d(): void; map3d: { markers: unknown[] } | null };
 
@@ -80,6 +81,25 @@ describe('the 3D view of an outing', () => {
     await flushPromises();
 
     expect(vm.map3d!.markers).toHaveLength(0);
+    wrapper.unmount();
+  });
+});
+
+describe('the 3D view of a waypoint', () => {
+  it('shows the waypoint itself among its child waypoints', async () => {
+    const summit = {
+      ...waypoint(20, 'summit', 700000),
+      associations: { waypoint_children: [waypoint(21, 'hut', 700300)] },
+    };
+    const { wrapper } = await mountMap({ documents: [summit], show3d: true });
+    const vm = wrapper.vm as unknown as { open3d(): void; map3d: { markers: { to: unknown }[] } | null };
+
+    vm.open3d();
+
+    expect(vm.map3d!.markers).toHaveLength(2);
+    // the page's own waypoint is not a link to itself
+    expect(vm.map3d!.markers[0].to).toBeNull();
+    expect(vm.map3d!.markers[1].to).toEqual({ name: 'waypoint', params: { id: 21 } });
     wrapper.unmount();
   });
 });

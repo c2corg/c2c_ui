@@ -542,12 +542,18 @@ function open3d() {
     .getFeatures()
     .filter(isPoint)
     .map((feature) => marker(feature, true));
-  // the point of the document itself only when there is nothing else to show: no track, no waypoint
-  const markers = (
-    lines.length || waypointMarkers.length
-      ? waypointMarkers
-      : documentFeatures.filter(isPoint).map((feature) => marker(feature, false))
-  ).filter((m): m is Marker3d => !!m);
+  // the point of the document itself: a waypoint always (among its child waypoints), another document only when there
+  // is nothing else to show (no track, no waypoint)
+  const documentPoints = documentFeatures.filter(isPoint);
+  const ownPoints = documentPoints.filter(
+    (feature) => (feature.get('document') as C2cDocument | undefined)?.type === 'w'
+  );
+  const markers = [
+    ...documentPoints
+      .filter((feature) => ownPoints.includes(feature) || !(lines.length || waypointMarkers.length))
+      .map((feature) => marker(feature, false)),
+    ...waypointMarkers,
+  ].filter((m): m is Marker3d => !!m);
   const features = lines;
   map3d.value = {
     bounds: extent as [number, number, number, number],
