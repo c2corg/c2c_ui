@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "@babel/core": "8.0.9",
-    "@playwright/test": "1.64.1",
+    "@playwright/test": "1.65.0",
     "@types/d3-array": "3.2.2",
     "@types/d3-axis": "3.0.6",
     "@types/d3-format": "3.0.4",
