@@ -145,13 +145,6 @@
         :class="{ 'lock-button-red': isAccountBlocked }"
         :label="isAccountBlocked ? $gettext('Unblock account') : $gettext('Block account')"
       />
-
-      <tool-box-button
-        v-if="documentType === 'profile'"
-        @click="removeAccountModal!.show()"
-        icon="user-slash"
-        :label="$gettext('Remove account')"
-      />
     </template>
 
     <template v-if="isDeletable">
@@ -169,18 +162,23 @@
       />
     </template>
 
-    <hr v-if="isDeletable || (isEditable && $user.isModerator)" />
+    <!-- the moderators of the forum can ask for the removal of an account too, without being moderators of the topoguide -->
+    <tool-box-button
+      v-if="canRequestRemoval"
+      @click="removeAccountModal!.show()"
+      icon="user-slash"
+      :label="$gettext('Remove account')"
+    />
+
+    <hr v-if="isDeletable || (isEditable && $user.isModerator) || canRequestRemoval" />
 
     <license-box :document="document" />
+
+    <remove-account-window v-if="canRequestRemoval" ref="removeAccountModal" :document="document" />
 
     <!-- Modal windows -->
     <div v-if="isEditable">
       <merge-document-window ref="mergeModal" :document="document" />
-      <remove-account-window
-        v-if="$user.isModerator && documentType === 'profile'"
-        ref="removeAccountModal"
-        :document="document"
-      />
       <delete-document-window ref="deleteDocumentModal" :document="document" />
       <delete-locale-window ref="deleteLocaleModal" :document="document" :locale-lang="document.cooked.lang" />
       <translate-window ref="translateModal" :document="document" :missing-langs="missingLangs" />
@@ -234,6 +232,8 @@ const translateModal = useTemplateRef<Modal>('translateModal');
 const associationsModal = useTemplateRef<Modal>('associationsModal');
 
 const isAccountBlocked = ref<boolean | null>(null);
+
+const canRequestRemoval = computed(() => documentType.value === 'profile' && $user.canManageRemovals);
 
 const lang = computed(() => props.document.cooked.lang);
 

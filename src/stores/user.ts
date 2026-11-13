@@ -78,6 +78,12 @@ export const useUserStore = defineStore('user', () => {
   const isModerator = computed(() => roles.value.includes('moderator'));
   const isLogged = computed(() => Boolean(token.value));
 
+  // Moderator of the forum, as the forum says it of the session of the browser (see the forum notifications). Not
+  // stored: it is only known while this session is, and only drives what is displayed, the API checks the role again.
+  const forumModerator = ref(false);
+  // the moderators of the topoguide and of the forum manage the removals of accounts
+  const canManageRemovals = computed(() => isModerator.value || forumModerator.value);
+
   const stored = { userName, id, lang, roles, name, forumUsername, token, expire, remember };
 
   // Another tab signed in or out: follow it, and read the storage again, so that what this tab stores next does not
@@ -269,6 +275,8 @@ export const useUserStore = defineStore('user', () => {
     token,
     expire,
     isModerator,
+    forumModerator,
+    canManageRemovals,
     isLogged,
     remember,
     sessionEnded,

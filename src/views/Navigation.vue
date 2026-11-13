@@ -318,13 +318,13 @@ const userMenu = useTemplateRef<{ isActive: boolean }>('userMenu');
 
 const hideSearchInput = ref(true); // only on small screen
 
-// the removal requests of the accounts which are not done: moderators of the topoguide are notified of them
+// the removal requests of the accounts which are not done: moderators of the topoguide and of the forum are notified of them
 const openRemovals = ref(0);
 
 watch(
-  () => $user.isModerator,
-  (isModerator) => {
-    if (isModerator) {
+  () => $user.canManageRemovals,
+  (canManageRemovals) => {
+    if (canManageRemovals) {
       c2c.moderator.countAccountRemovals().then((response) => {
         openRemovals.value = response.data.open;
       });
@@ -381,7 +381,7 @@ const userMenuLinks = computed(() => [
     text: $gettext('My bookmarks'),
     icon: 'star',
   },
-  ...($user.isModerator
+  ...($user.canManageRemovals
     ? [
         {
           to: { name: 'account-removals' },
