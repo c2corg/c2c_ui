@@ -332,9 +332,16 @@ async function showFlights(created: MapLibreMap, search: ReturnType<typeof findF
     documents()?.setData(props.documents);
     return;
   }
+  // deck.gl may fail (no WebGL feature it needs, a MapLibre it does not know): the track then stays draped
+  const remove = await addFlightLayers(created, flights).catch(() => null);
+  if (map !== created) return;
+  if (!remove) {
+    documents()?.setData(props.documents);
+    return;
+  }
+  removeFlights = remove;
   documents()?.setData(flights.documents);
   (created.getSource('flight-shadows') as GeoJSONSource).setData(flights.shadows);
-  removeFlights = await addFlightLayers(created, flights);
 }
 
 function addMarkers(created: MapLibreMap) {

@@ -137,9 +137,23 @@ export async function findFlights(documents: FeatureCollection, exaggeration: nu
   return flights;
 }
 
-/** Draws the flights in the air on the map, returns what removes them */
-export async function addFlightLayers(map: MapLibreMap, flights: Flights): Promise<() => void> {
+// deck.gl 9.4 reads map.transform (the camera of mapbox-gl and of MapLibre up to 5), which MapLibre 6 moved to its
+// camera: it is given back from there. False when neither has it (another MapLibre): no flight in the air then.
+export function exposeTransform(map: MapLibreMap): boolean {
+  if ('transform' in map) return true;
+  const camera = (map as unknown as { _camera?: object })._camera;
+  if (!camera || !('transform' in camera)) return false;
+  Object.defineProperty(map, 'transform', {
+    get: () => (camera as { transform: unknown }).transform,
+    configurable: true,
+  });
+  return true;
+}
+
+/** Draws the flights in the air on the map, returns what removes them; null when deck.gl cannot draw on this map */
+export async function addFlightLayers(map: MapLibreMap, flights: Flights): Promise<(() => void) | null> {
   const [{ MapboxOverlay }, { LineLayer, PathLayer }] = await loadFlightLayers();
+  if (!exposeTransform(map)) return null;
   const overlay = new MapboxOverlay({
     interleaved: true,
     layers: [
@@ -164,11 +178,6 @@ export async function addFlightLayers(map: MapLibreMap, flights: Flights): Promi
       }),
     ],
   });
-  // deck.gl 9.4 reads map.transform, which MapLibre 6 moved to its camera
-  const camera = (map as unknown as { _camera?: { transform: unknown } })._camera;
-  if (!('transform' in map) && camera) {
-    Object.defineProperty(map, 'transform', { get: () => camera.transform, configurable: true });
-  }
   map.addControl(overlay);
   return () => map.removeControl(overlay);
 }
