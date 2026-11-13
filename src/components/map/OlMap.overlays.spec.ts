@@ -14,6 +14,14 @@ vi.mock('@/components/map/map-utils', async (importOriginal) => ({
   getDocumentPointStyle: () => [],
 }));
 
+// the heatmap is a WebGL layer, which jsdom cannot create: a plain vector layer stands for it
+vi.mock('@/components/map/density-overlays', async (importOriginal) => {
+  const original = await importOriginal<typeof import('@/components/map/density-overlays')>();
+  const { default: VectorLayer } = await import('ol/layer/Vector');
+  const { default: VectorSource } = await import('ol/source/Vector');
+  return { ...original, createHeatmapLayer: () => new VectorLayer({ source: new VectorSource() }) };
+});
+
 const overlayButtons = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) =>
   wrapper.findAll('.ol-control-layer-switcher .layer-button').filter((button) => /Outings|Routes/.test(button.text()));
 
@@ -95,6 +103,55 @@ describe('the Outings and Routes overlays of OlMap', () => {
     expect(heatmap).toHaveBeenCalledTimes(1);
     expect(heatmap.mock.calls[0][0]).toEqual({ bbox: expect.any(String) });
     expect(wrapper.text()).not.toContain('Zoom in to see all tracks');
+
+    wrapper.unmount();
+  });
+
+  it('list the most recent documents when the density is clicked', async () => {
+    const tracks = vi.spyOn(c2c, 'getOutingsTracks').mockImplementation((params: Record<string, unknown>) => {
+      const documents = params.recent
+        ? [
+            {
+              document_id: 1,
+              type: 'o',
+              title: 'Recent hike',
+              date_end: '2026-11-01',
+              activities: ['hiking'],
+              geometry: {
+                geom_detail: JSON.stringify({
+                  type: 'LineString',
+                  coordinates: [
+                    [0, 0],
+                    [10, 10],
+                  ],
+                }),
+              },
+            },
+          ]
+        : [];
+      return Promise.resolve({ data: { documents, truncated: true } }) as unknown as ReturnType<
+        typeof c2c.getOutingsTracks
+      >;
+    });
+    vi.spyOn(c2c, 'getOutingsHeatmap').mockImplementation(
+      () => Promise.resolve({ data: { buckets: [] } }) as unknown as ReturnType<typeof c2c.getOutingsHeatmap>
+    );
+    const { wrapper, vm } = await mountMap();
+    vm.map.getView().setZoom(15);
+    await overlayButtons(wrapper)[0].trigger('click');
+    await new Promise((resolve) => setTimeout(resolve));
+    tracks.mockClear();
+
+    vm.onClick({ pixel: [10, 10], coordinate: [100, 200], originalEvent: { pointerType: 'mouse' } });
+    await new Promise((resolve) => setTimeout(resolve));
+    await nextTick();
+
+    // a small box around the click, the most recent ones
+    expect(tracks).toHaveBeenCalledTimes(1);
+    expect(tracks.mock.calls[0][0]).toMatchObject({ recent: 30, bbox: expect.stringMatching(/^-?\d+(,-?\d+){3}$/) });
+    expect(wrapper.find('.ol-track-panel').text()).toContain('Recent hike');
+    // more than the list
+    expect(wrapper.find('.ol-track-panel').text()).toContain('Only the most recent ones are listed');
 
     wrapper.unmount();
   });

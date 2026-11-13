@@ -25,6 +25,7 @@ type MapVm = {
   visibleLayer: { get(key: string): unknown };
   setHighlightedFeature(feature: unknown): void;
   onPointerMove(event: unknown): void;
+  onClick(event: unknown): void;
   documentsLayer: unknown;
   waypointsLayer: unknown;
   imagesLayer: unknown;
@@ -37,7 +38,11 @@ type MapVm = {
 export const mountMap = async (props: Record<string, unknown> = {}, component: Component = OlMap) => {
   const router = createRouter({
     history: createMemoryHistory(),
-    routes: [{ path: '/:path*', name: 'waypoint', component: { render: () => null } }],
+    routes: [
+      { path: '/outings/:id', name: 'outing', component: { render: () => null } },
+      { path: '/routes/:id', name: 'route', component: { render: () => null } },
+      { path: '/:path*', name: 'waypoint', component: { render: () => null } },
+    ],
   });
   await router.push('/');
   const wrapper = mount(component, {
@@ -56,7 +61,7 @@ export const mountMap = async (props: Record<string, unknown> = {}, component: C
             getDocumentType: (type: string) =>
               (({ w: 'waypoint', r: 'route', o: 'outing' }) as Record<string, string | undefined>)[type],
           },
-          $dateUtils: {},
+          $dateUtils: { toLocalizedString: (date: string) => date },
         } as never,
       },
       stubs: { FaIcon: true, InputSlider: true, BiodivInformation: true, SwissProtectionAreaInformation: true },
