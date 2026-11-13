@@ -175,6 +175,20 @@
       </div>
     </base-form>
 
+    <div class="invalid-reset-link has-text-centered" v-show="mode == 'invalidResetLink'">
+      <h1 class="is-size-4" v-translate>This password reset link is no longer valid</h1>
+      <p class="my-2" v-translate>
+        It has already been used, has expired, or was replaced by a more recent request: only the link of the last email
+        sent works.
+      </p>
+      <div class="buttons is-centered">
+        <button type="button" class="button is-link" @click="mode = 'resetPassword'" v-translate>
+          Request a new link
+        </button>
+        <button type="button" class="button is-link" @click="mode = 'signin'" v-translate>Login</button>
+      </div>
+    </div>
+
     <base-form v-show="mode == 'changeEmail' || mode == 'validateAccountCreation'" :promise="promise">
       <div v-if="promise.loading" v-translate>Checking...</div>
     </base-form>
@@ -210,6 +224,7 @@ import { toast } from '@/js/toast';
 // * signup : create account
 // * resetPassword : get a mail with an secret URL to reset your password
 // * changePassword : with url from precedent mode, set a new password
+// * invalidResetLink : the url of changePassword is no longer valid (used, expired, or replaced by a newer one)
 // * changeEmail : if user has asked a new mail, a secret url has been sent
 // * validateAccountCreation : idem, but when account is created
 
@@ -410,7 +425,20 @@ function resetPassword() {
 function validateNewPassword() {
   const nonce = String(route.query.change_password);
 
-  promise.value = c2c.userProfile.validateNewPassword(nonce, password.value).then(() => router.push({ name: 'auth' }));
+  promise.value = c2c.userProfile
+    .validateNewPassword(nonce, password.value)
+    .then(() => router.push({ name: 'auth' }))
+    .catch((error) => {
+      // the API knows no valid nonce like this one: used, expired, or replaced by a more recent request (it keeps one
+      // nonce per account). Its 'invalid nonce' would tell the user nothing: explain, and offer a new link instead.
+      // (unless another link was opened meanwhile: the answer is about an older one)
+      if (
+        route.query.change_password === nonce &&
+        apiErrors(error).some(({ description }) => description === 'invalid nonce')
+      ) {
+        mode.value = 'invalidResetLink';
+      }
+    });
 }
 
 function onCaptchaExpired() {
@@ -439,6 +467,11 @@ onMounted(load);
     width: 100%;
     padding: 1.5rem;
   }
+}
+
+.invalid-reset-link {
+  width: 100%;
+  padding: 1.5rem;
 }
 
 .forum-sso {
