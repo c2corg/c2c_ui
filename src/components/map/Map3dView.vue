@@ -119,6 +119,7 @@ import { useRouter } from 'vue-router';
 import LayerButton from './LayerButton.vue';
 import {
   addFlightLayers,
+  type FlightLayers,
   findFlights,
   hasParaglidingTrack,
   loadFlightLayers,
@@ -264,24 +265,37 @@ function onFullscreenChange() {
 // under a flight
 let profileMarker: Marker | null = null;
 
+// the colour of the track; on a flight, the flight layers draw it in the air instead (map-3d-flight-layers.ts)
 function profileMarkerElement(): HTMLElement {
   const element = document.createElement('div');
-  element.style.cssText =
-    'width: 10px; height: 10px; border-radius: 50%; background: yellow; border: 0.5px solid grey; pointer-events: none';
+  element.style.cssText = `width: 10px; height: 10px; border-radius: 50%; background: ${DOCUMENT_COLOR};
+    border: 1px solid grey; pointer-events: none`;
   return element;
 }
 
-function onElevationProfile(event: unknown) {
+// the last cursor event: an older one that waited for the terrain is dropped
+let cursorEvent = 0;
+
+async function onElevationProfile(event: unknown) {
   const { action, coord } = event as { action: string; coord?: number[] };
   if (!map) return;
+  const asked = ++cursorEvent;
   if (action === 'cursor_end') {
+    flightLayers?.cursor(null);
     profileMarker?.remove();
     profileMarker = null;
   } else if (action === 'cursor_move' && coord) {
     // the profile gives EPSG:3857 coordinates
     const lngLat = toLonLat([coord[0], coord[1]]) as [number, number];
-    profileMarker ??= new Marker({ element: profileMarkerElement() });
-    profileMarker.setLngLat(lngLat).addTo(map);
+    const inFlight = flightLayers ? await flightLayers.cursor(lngLat) : false;
+    if (asked !== cursorEvent || !map) return;
+    if (inFlight) {
+      profileMarker?.remove();
+      profileMarker = null;
+    } else {
+      profileMarker ??= new Marker({ element: profileMarkerElement() });
+      profileMarker.setLngLat(lngLat).addTo(map);
+    }
     if (!map.getBounds().contains(lngLat)) map.easeTo({ center: lngLat, duration: 300 });
   }
 }
@@ -314,7 +328,7 @@ const resizeObserver = new ResizeObserver(([entry]) => {
 });
 
 let shownMarkers: Marker[] = [];
-let removeFlights: (() => void) | undefined;
+let flightLayers: FlightLayers | null = null;
 
 // paragliding: the flights in the air, the walk on the ground. The search (terrain tiles) and deck.gl start as soon as
 // the view opens, in parallel with the map; the track is only drawn once split, so that it does not first lie on the
@@ -333,13 +347,13 @@ async function showFlights(created: MapLibreMap, search: ReturnType<typeof findF
     return;
   }
   // deck.gl may fail (no WebGL feature it needs, a MapLibre it does not know): the track then stays draped
-  const remove = await addFlightLayers(created, flights).catch(() => null);
+  const added = await addFlightLayers(created, flights).catch(() => null);
   if (map !== created) return;
-  if (!remove) {
+  if (!added) {
     documents()?.setData(props.documents);
     return;
   }
-  removeFlights = remove;
+  flightLayers = added;
   documents()?.setData(flights.documents);
   (created.getSource('flight-shadows') as GeoJSONSource).setData(flights.shadows);
 }
@@ -485,7 +499,8 @@ onBeforeUnmount(() => {
   document.removeEventListener('fullscreenchange', onFullscreenChange);
   bus.off('elevation_profile', onElevationProfile);
   profileMarker?.remove();
-  removeFlights?.();
+  flightLayers?.remove();
+  flightLayers = null;
   map?.remove();
   map = null;
 });

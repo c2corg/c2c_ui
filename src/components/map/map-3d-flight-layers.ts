@@ -10,6 +10,8 @@ import { type FlightSplit, splitFlights, type TrackPart } from './map-3d-flight'
 import { sampleTerrain } from './map-3d-terrain';
 
 export const FLIGHT_COLOR: [number, number, number] = [214, 39, 40];
+// the point under the profile cursor, on the ground under a flight
+const CURSOR_GROUND_COLOR: [number, number, number] = [70, 70, 70];
 
 type Flights = {
   // the documents with the paragliding tracks reduced to their walk
@@ -20,7 +22,20 @@ type Flights = {
   paths: Position[][];
   // vertical lines from the terrain to the flight, every ~150 m
   drops: [Position, Position][];
+  // the flight vertices in the air, by their place (cursorKey): where the profile cursor is in the air
+  air: Map<string, Position>;
+  exaggeration: number;
 };
+
+/** What the flight layers show and do */
+export type FlightLayers = {
+  remove: () => void;
+  // the profile cursor at [lon, lat]: drawn in the air when it is on a flight (true), else nothing (false)
+  cursor: (lonLat: [number, number] | null) => Promise<boolean>;
+};
+
+// the place of a vertex, to about a metre: the profile and the 3D view read the same track
+const cursorKey = (lon: number, lat: number) => `${lon.toFixed(5)},${lat.toFixed(5)}`;
 
 const isTrack = (feature: Feature) =>
   !!feature.properties?.paragliding &&
@@ -95,6 +110,8 @@ export async function findFlights(documents: FeatureCollection, exaggeration: nu
     shadows: { type: 'FeatureCollection', features: [] },
     paths: [],
     drops: [],
+    air: new Map(),
+    exaggeration,
   };
   for (const feature of documents.features) {
     const split = splits.get(feature);
@@ -113,7 +130,10 @@ export async function findFlights(documents: FeatureCollection, exaggeration: nu
     ];
     for (const [a, b] of split.flights) {
       const path: Position[] = [];
-      for (let i = a; i <= b; i++) path.push(air(i));
+      for (let i = a; i <= b; i++) {
+        path.push(air(i));
+        flights.air.set(cursorKey(split.vertices[i][0], split.vertices[i][1]), air(i));
+      }
       flights.paths.push(path);
     }
     const tops: Position[] = [];
@@ -150,34 +170,78 @@ export function exposeTransform(map: MapLibreMap): boolean {
   return true;
 }
 
-/** Draws the flights in the air on the map, returns what removes them; null when deck.gl cannot draw on this map */
-export async function addFlightLayers(map: MapLibreMap, flights: Flights): Promise<(() => void) | null> {
-  const [{ MapboxOverlay }, { LineLayer, PathLayer }] = await loadFlightLayers();
+/** Draws the flights in the air on the map; null when deck.gl cannot draw on this map */
+export async function addFlightLayers(map: MapLibreMap, flights: Flights): Promise<FlightLayers | null> {
+  const [{ MapboxOverlay }, { LineLayer, PathLayer, ScatterplotLayer }] = await loadFlightLayers();
   if (!exposeTransform(map)) return null;
-  const overlay = new MapboxOverlay({
-    interleaved: true,
-    layers: [
-      new LineLayer<[Position, Position]>({
-        id: 'flight-drops',
-        data: flights.drops,
-        getSourcePosition: (drop) => drop[0] as [number, number, number],
-        getTargetPosition: (drop) => drop[1] as [number, number, number],
-        getColor: [...FLIGHT_COLOR, 120],
-        getWidth: 1,
-      }),
-      new PathLayer<Position[]>({
-        id: 'flight-paths',
-        data: flights.paths,
-        getPath: (path) => path as [number, number, number][],
-        getColor: FLIGHT_COLOR,
-        getWidth: 4,
-        widthUnits: 'pixels',
-        capRounded: true,
-        jointRounded: true,
-        billboard: true,
-      }),
-    ],
-  });
+  const layers = [
+    new LineLayer<[Position, Position]>({
+      id: 'flight-drops',
+      data: flights.drops,
+      getSourcePosition: (drop) => drop[0] as [number, number, number],
+      getTargetPosition: (drop) => drop[1] as [number, number, number],
+      getColor: [...FLIGHT_COLOR, 120],
+      getWidth: 1,
+    }),
+    new PathLayer<Position[]>({
+      id: 'flight-paths',
+      data: flights.paths,
+      getPath: (path) => path as [number, number, number][],
+      getColor: FLIGHT_COLOR,
+      getWidth: 4,
+      widthUnits: 'pixels',
+      capRounded: true,
+      jointRounded: true,
+      billboard: true,
+    }),
+  ];
+  const overlay = new MapboxOverlay({ interleaved: true, layers });
   map.addControl(overlay);
-  return () => map.removeControl(overlay);
+
+  // the last cursor asked: the terrain read of an older one is dropped
+  let request = 0;
+  const cursor = async (lonLat: [number, number] | null) => {
+    const asked = ++request;
+    const top = lonLat && flights.air.get(cursorKey(...lonLat));
+    if (!top) {
+      overlay.setProps({ layers });
+      return false;
+    }
+    const [ground] = await sampleTerrain([[top[0], top[1]]]);
+    if (asked !== request) return true;
+    const bottom: Position = [top[0], top[1], (Number.isFinite(ground) ? ground : 0) * flights.exaggeration];
+    overlay.setProps({
+      layers: [
+        ...layers,
+        new LineLayer<[Position, Position]>({
+          id: 'flight-cursor-drop',
+          data: [[bottom, top]],
+          getSourcePosition: (drop) => drop[0] as [number, number, number],
+          getTargetPosition: (drop) => drop[1] as [number, number, number],
+          getColor: [0, 0, 0, 220],
+          getWidth: 1,
+        }),
+        new ScatterplotLayer<{ position: Position; color: [number, number, number] }>({
+          id: 'flight-cursor',
+          data: [
+            { position: bottom, color: CURSOR_GROUND_COLOR },
+            { position: top, color: FLIGHT_COLOR },
+          ],
+          getPosition: (point) => point.position as [number, number, number],
+          getFillColor: (point) => point.color,
+          getLineColor: [128, 128, 128],
+          radiusUnits: 'pixels',
+          getRadius: 5,
+          stroked: true,
+          lineWidthUnits: 'pixels',
+          getLineWidth: 1,
+          billboard: true,
+          // always drawn: the ground point would sink into the terrain
+          parameters: { depthCompare: 'always' },
+        }),
+      ],
+    });
+    return true;
+  };
+  return { remove: () => map.removeControl(overlay), cursor };
 }
