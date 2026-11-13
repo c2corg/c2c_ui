@@ -122,6 +122,7 @@
   },
   "allowScripts": {
     "core-js": false,
+    "exifreader": false,
     "unrs-resolver": true
   }
 }
