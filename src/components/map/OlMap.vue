@@ -273,8 +273,6 @@ import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router';
 import BiodivInformation from './BiodivInformation.vue';
 import LayerButton from './LayerButton.vue';
 import SwissProtectionAreaInformation from './SwissProtectionAreaInformation.vue';
-import type { Marker3d } from './map-3d-markers';
-import { markUnsupported, supports3d } from './map-3d-support';
 import {
   DENSITY_FETCH_DEBOUNCE,
   DENSITY_OVERLAYS,
@@ -289,6 +287,8 @@ import {
   sortTracks,
   type DensityTrack,
 } from './density-overlays';
+import type { Marker3d } from './map-3d-markers';
+import { markUnsupported, supports3d } from './map-3d-support';
 import {
   cartoLayers,
   dataLayers as dataLayersOf,
