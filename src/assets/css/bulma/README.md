@@ -5,6 +5,8 @@ Bulma's Sass (`elements/button.css` for `sass/elements/button.sass`...), loaded 
 `shared.css` has the rules several modules share (controls, unselectable, block margins, delete, loader),
 `palette.css` the colors of the color classes.
 
+The style guide of the site's CSS is `../README.md`.
+
 This is our code: the plan (c2corg/c2c_ui#4907) is to make it our own CSS, one module at a time (tokens instead of
 values, nesting, custom properties instead of variants), keeping the class names (`.button`, `.columns`,
 `.is-primary`...).
@@ -17,6 +19,8 @@ values, nesting, custom properties instead of variants), keeping the class names
   the palette.
 - `elements/progress.css`, `elements/table.css`, `form/file.css`, `form/input-textarea.css`, `form/select.css`,
   `form/tools.css`: one set of color rules that use the palette.
+- All the modules: nesting, where the rules that follow a rule start with its selector.
+- All the modules: the size tokens (`--c2c-size-5`...) and the breakpoints of `../media.css` (`--c2c-mobile`...).
 
 ## Where it comes from
 

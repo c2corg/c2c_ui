@@ -43,12 +43,12 @@
 
 .is-medium.textarea,
 .is-medium.input {
-  font-size: 1.1429rem;
+  font-size: var(--c2c-size-5);
 }
 
 .is-large.textarea,
 .is-large.input {
-  font-size: 1.2857rem;
+  font-size: var(--c2c-size-4);
 }
 
 .is-inline.textarea,
@@ -69,13 +69,13 @@
   min-width: 100%;
   padding: calc(0.625em - 1px);
   resize: vertical;
-}
 
-.textarea:not([rows]) {
-  max-height: 40em;
-  min-height: 8em;
-}
+  &:not([rows]) {
+    max-height: 40em;
+    min-height: 8em;
+  }
 
-.textarea[rows] {
-  height: initial;
+  &[rows] {
+    height: initial;
+  }
 }

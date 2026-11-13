@@ -274,7 +274,8 @@ function buildDiff() {
     return;
   }
 
-  const keys = getKeys(oldDocument, newDocument, ['version', 'locales', 'geometry', 'cooked', 'filename']);
+  // license is computed by the API on each read, not a property of the version
+  const keys = getKeys(oldDocument, newDocument, ['version', 'locales', 'geometry', 'cooked', 'filename', 'license']);
 
   for (const key of keys) {
     if (hasChanged(oldDocument[key], newDocument[key])) {
@@ -347,7 +348,7 @@ watch(() => route.fullPath, loadVersions, { immediate: true });
 .splitted-diff {
   overflow: hidden;
   overflow-x: scroll;
-  background: #eaeaea;
+  background: var(--c2c-grey-lightest);
 
   .block-ellipsed {
     background: white;
@@ -376,7 +377,7 @@ watch(() => route.fullPath, loadVersions, { immediate: true });
 
   .row-fake {
     background: #f2f2f2 !important;
-    border-left-color: #eee;
+    border-left-color: var(--c2c-grey-lightest);
   }
 }
 

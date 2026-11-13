@@ -1,7 +1,7 @@
 <template>
   <swiper-container slides-per-view="auto" space-between="15" class="swiper">
     <swiper-slide
-      v-for="image of images"
+      v-for="(image, index) of images"
       :key="image.document_id"
       :style="{ height: SLIDE_HEIGHT + 'px', width: slideWidth(image) }"
     >
@@ -11,7 +11,8 @@
         :alt="image.locales[0].title"
         :title="image.locales[0].title"
         @click="$imageViewer.show(image)"
-        loading="lazy"
+        :loading="priority && index < ($screen.isMobile ? 2 : 4) ? 'eager' : 'lazy'"
+        :fetchpriority="priority && index === 0 ? 'high' : undefined"
       />
     </swiper-slide>
   </swiper-container>
@@ -43,6 +44,14 @@ const props = defineProps({
   images: {
     type: Array as PropType<GalleryImage[]>,
     required: true,
+  },
+  // the gallery is at the top of the page (outings): its first images are seen as soon as the page shows, and one of
+  // them is its largest contentful paint, while lazy images wait for the layout, after the scripts. The slides the
+  // screen shows at once load right away (2 on a phone, 4 on a wider screen; the widest image, often not the first,
+  // is the largest), the first one with a high priority
+  priority: {
+    type: Boolean,
+    default: false,
   },
 });
 

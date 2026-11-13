@@ -19,6 +19,7 @@
   --c2c-color-text: #4a4a4a;
   --c2c-body-background-color: #fbfaf6;
   --c2c-hover-background: hsl(0, 0%, 95%);
+  --c2c-input-placeholder-color: rgb(160, 160, 160);
 
   /* greys */
   --c2c-white: hsl(0, 0%, 100%);
@@ -57,6 +58,8 @@
   /* layout */
   --c2c-navbar-height: 3.25rem;
   --c2c-navbarad-height: 90px;
+  /* what the page content starts under: the navigation bar, taller on the wide screens (see .nav-dfm in App.vue) */
+  --c2c-header-height: var(--c2c-navbar-height);
   --c2c-itinevert-header-height: 4rem;
   --c2c-sidemenu-width: 200px;
 }

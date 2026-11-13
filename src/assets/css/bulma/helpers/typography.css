@@ -1,36 +1,38 @@
 /* Bulma 0.9.4 (MIT License, see bulma/LICENSE): helpers/typography */
 
+@import '../../media.css';
+
 .is-size-1 {
-  font-size: 2.1429rem !important;
+  font-size: var(--c2c-size-1) !important;
 }
 
 .is-size-2 {
-  font-size: 1.8571rem !important;
+  font-size: var(--c2c-size-2) !important;
 }
 
 .is-size-3 {
-  font-size: 1.5714rem !important;
+  font-size: var(--c2c-size-3) !important;
 }
 
 .is-size-4 {
-  font-size: 1.2857rem !important;
+  font-size: var(--c2c-size-4) !important;
 }
 
 .is-size-5 {
-  font-size: 1.1429rem !important;
+  font-size: var(--c2c-size-5) !important;
 }
 
 .is-size-6 {
-  font-size: 1rem !important;
+  font-size: var(--c2c-size-6) !important;
 }
 
 .is-size-7 {
-  font-size: 0.7857rem !important;
+  font-size: var(--c2c-size-7) !important;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (--c2c-mobile) {
   .is-size-7-mobile {
-    font-size: 0.7857rem !important;
+    font-size: var(--c2c-size-7) !important;
   }
 }
 

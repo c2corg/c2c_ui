@@ -24,6 +24,12 @@ type MapVm = {
   highlightedFeature: unknown;
   visibleLayer: { get(key: string): unknown };
   setHighlightedFeature(feature: unknown): void;
+  onPointerMove(event: unknown): void;
+  documentsLayer: unknown;
+  waypointsLayer: unknown;
+  imagesLayer: unknown;
+  protectionAreasLayer: import('ol/layer/Vector').default<import('ol/source/Vector').default>;
+  elevationProfileLayer: unknown;
   setDocumentGeometryFromGeoFile(file: string): void;
 };
 
@@ -44,7 +50,12 @@ export const mountMap = async (props: Record<string, unknown> = {}, component: C
           $gettext: (text: string) => text,
           $user: { isLogged: false },
           $language: { current: 'fr' },
-          $documentUtils: { getDocumentTitle: () => '', hasSameGeolocation: () => false },
+          $documentUtils: {
+            getDocumentTitle: () => '',
+            hasSameGeolocation: () => false,
+            getDocumentType: (type: string) =>
+              (({ w: 'waypoint', r: 'route', o: 'outing' }) as Record<string, string | undefined>)[type],
+          },
           $dateUtils: {},
         } as never,
       },

@@ -41,8 +41,9 @@ function hide() {
   modal.value!.hide();
 }
 
-function setGeometry(geometry: unknown) {
-  emit('data', geometry);
+// with the c2c activities of the tracking device activity, if any
+function setGeometry(geometry: unknown, c2cActivities: string[] = []) {
+  emit('data', geometry, c2cActivities);
   hide();
 }
 

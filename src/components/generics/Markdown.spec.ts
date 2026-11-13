@@ -72,6 +72,23 @@ describe('Markdown', () => {
     }
   });
 
+  it('shows the basic thumbnail of an embedded image when its AVIF one fails', async () => {
+    config.urls.modernThumbnailsId = 30;
+    try {
+      const { wrapper } = await mountMarkdown(
+        '<figure c2c:role="embedded-figure"><img c2c:role="embedded-image" c2c:document-id="34" c2c:url-proxy="/images/proxy/34?size=MI" c2c:size="MI" /></figure>'
+      );
+      const img = wrapper.find('figure picture img').element as HTMLImageElement;
+      img.dispatchEvent(new Event('error'));
+
+      expect(wrapper.find('figure picture source').attributes('srcset')).toBe(
+        `${config.urls.api}/images/proxy/34?size=MI`
+      );
+    } finally {
+      config.urls.modernThumbnailsId = 0;
+    }
+  });
+
   it('keeps the space of an embedded image while it loads, from the size of its original', async () => {
     const image = (size: string, width?: number, height?: number) =>
       `<figure c2c:role="embedded-figure"><img c2c:role="embedded-image" c2c:document-id="34" c2c:url-proxy="/images/proxy/34" c2c:size="${size}"` +

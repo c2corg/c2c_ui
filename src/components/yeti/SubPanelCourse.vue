@@ -279,7 +279,7 @@ function fitMapToFeatures() {
 
   &:hover,
   &:focus {
-    border-color: #b5b5b5;
+    border-color: var(--c2c-grey-light);
   }
 }
 

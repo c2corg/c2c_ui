@@ -47,6 +47,8 @@ interface RuntimeConfiguration {
   urls?: Partial<UrlsConfiguration>;
   // names a non-production environment (e.g. 'preprod'): a banner and a prefix in the tab title tell it
   environmentLabel?: string;
+  // false: the Outings and Routes map overlays are not offered (see src/js/tracks-overlay.ts)
+  tracksOverlay?: boolean;
 }
 
 interface Window {

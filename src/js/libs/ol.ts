@@ -3,7 +3,16 @@ import Geolocation from 'ol/Geolocation';
 import { Attribution, Control, FullScreen, ScaleLine, Zoom } from 'ol/control';
 import { format } from 'ol/coordinate';
 import { click, pointerMove } from 'ol/events/condition';
-import { boundingExtent, buffer, containsXY, createEmpty, extend, getWidth, intersects } from 'ol/extent';
+import {
+  boundingExtent,
+  buffer,
+  containsExtent,
+  containsXY,
+  createEmpty,
+  extend,
+  getWidth,
+  intersects,
+} from 'ol/extent';
 import GPX from 'ol/format/GPX';
 import GeoJSON from 'ol/format/GeoJSON';
 import KML from 'ol/format/KML';
@@ -11,6 +20,7 @@ import { LineString, MultiPolygon, Point, Polygon, GeometryCollection } from 'ol
 import { fromExtent } from 'ol/geom/Polygon';
 import { DragAndDrop, Draw, Modify, Pointer, Select, Snap } from 'ol/interaction';
 import GroupLayer from 'ol/layer/Group';
+import HeatmapLayer from 'ol/layer/Heatmap';
 import ImageLayer from 'ol/layer/Image';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
@@ -58,6 +68,7 @@ export default {
     boundingExtent,
     buffer,
     getWidth,
+    containsExtent,
     containsXY,
     createEmpty,
     extend,
@@ -94,6 +105,7 @@ export default {
     Tile: TileLayer,
     Image: ImageLayer,
     Group: GroupLayer,
+    Heatmap: HeatmapLayer,
   },
 
   proj: {

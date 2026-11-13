@@ -72,7 +72,7 @@ const { value_, toggle } = useArrayInputValue(props, emit);
 
 <style scoped>
 .input-orientation > g > path {
-  fill: #ddd;
+  fill: var(--c2c-grey-lighter);
   transition: 0.1s;
 }
 

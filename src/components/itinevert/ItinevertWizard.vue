@@ -761,7 +761,7 @@ onMounted(() => {
       label {
         position: absolute;
         font-size: 12px;
-        color: #333;
+        color: var(--c2c-grey-darker);
         padding-left: 5px;
         padding-right: 5px;
         left: 0px;
@@ -785,7 +785,7 @@ onMounted(() => {
           border: none;
           outline: none;
           font-size: 15px;
-          color: #333;
+          color: var(--c2c-grey-darker);
           background-color: white;
           margin-right: 10px;
 
@@ -806,7 +806,7 @@ onMounted(() => {
           border: none;
           outline: none;
           font-size: 15px;
-          color: #333;
+          color: var(--c2c-grey-darker);
 
           &::-webkit-calendar-picker-indicator {
             cursor: pointer;

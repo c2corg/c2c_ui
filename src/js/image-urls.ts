@@ -1,7 +1,16 @@
 import config from '@/js/config';
 
 // the image documents of the API, with what the URLs need
-export type Image = { document_id: number; filename?: string };
+export type Image = {
+  document_id: number;
+  filename?: string;
+  // just uploaded: c2c_images builds the AVIF thumbnails after the upload, and publishes them up to 20 s later
+  // (THUMBNAILS_PUBLISH_DELAY), so they may not exist yet. Only the JPG ones are offered.
+  modernThumbnailsPending?: boolean;
+  // the size of the original (image documents), for the size of the thumbnails
+  width?: number | null;
+  height?: number | null;
+};
 
 export type ImageSize = 'SI' | 'MI' | 'BI';
 
@@ -21,8 +30,54 @@ export const getThumbnailSize = function (
   return { width: Math.round(image.width * scale), height: Math.round(image.height * scale) };
 };
 
+/**
+ * A srcset offering the thumbnail and the bigger BI one, with their widths: the browser loads BI only where the
+ * thumbnail is shown wider than it is. Without the original's size, the box width stands for it.
+ */
+export const getResponsiveSrcset = function (image: Image, size: ImageSize, format?: ImageFormat): string | undefined {
+  const widths = new Set<number>();
+  const candidates: string[] = [];
+  for (const candidate of [size, 'BI' as const]) {
+    const url = getImageUrl(image, candidate, format);
+    const width = getThumbnailSize(image, candidate)?.width ?? THUMBNAIL_BOXES[candidate];
+    if (!url || !width) {
+      return;
+    }
+    // a small original: its BI thumbnail is no bigger, and two candidates may not share a width
+    if (!widths.has(width)) {
+      widths.add(width);
+      candidates.push(`${url} ${width}w`);
+    }
+  }
+  return candidates.join(', ');
+};
+
 // AVIF only: the thumbnails have no WebP version (c2corg/c2c_images#1160)
 export type ImageFormat = 'avif';
+
+/**
+ * When the modern (AVIF) thumbnail of a <picture> fails, e.g. not built yet or never built, show its basic one.
+ *
+ * The browser does not fall back to the <img> src itself when a <source> it chose fails: it shows a broken image.
+ * Returns false when there was nothing to change (no modern source, or the basic image failed too).
+ */
+export const fallBackToBasicImage = function (img: HTMLImageElement): boolean {
+  const picture = img.parentElement;
+  if (picture?.tagName !== 'PICTURE') {
+    return false;
+  }
+  // a responsive image offers its basic thumbnails in its own srcset
+  const basic = img.getAttribute('srcset') || img.src;
+  let changed = false;
+  for (const source of picture.querySelectorAll('source')) {
+    // never set it again to the same value: the browser would load the image again, and fail again, endlessly
+    if (source.srcset !== basic) {
+      source.srcset = basic;
+      changed = true;
+    }
+  }
+  return changed;
+};
 
 const getImageProxyUrl = function (image: Image, size?: ImageSize, format?: ImageFormat): string | undefined {
   // Until all images are migrated only images uploaded after a given timestamp
@@ -37,6 +92,10 @@ const getImageProxyUrl = function (image: Image, size?: ImageSize, format?: Imag
 };
 
 export const getImageUrl = function (image: Image, size?: ImageSize, format?: ImageFormat): string | undefined {
+  if (format && size && image.modernThumbnailsPending) {
+    return;
+  }
+
   if (!image.filename) {
     return getImageProxyUrl(image, size, format);
   }

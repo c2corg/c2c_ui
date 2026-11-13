@@ -341,7 +341,7 @@ defineExpose({ getLayer, onMapClick, onMapLooseClick });
 .overlay {
   width: 400px;
   max-width: 100%;
-  background: #fff;
+  background: var(--c2c-white);
   border-radius: 4px;
   box-shadow:
     0 0 3px rgba(4%, 4%, 4%, 0.5),
@@ -384,7 +384,7 @@ defineExpose({ getLayer, onMapClick, onMapLooseClick });
   padding: 0 0.2em;
 
   &.nok {
-    background: #ffe08a;
+    background: var(--c2c-yellow);
   }
 }
 </style>

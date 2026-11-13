@@ -256,7 +256,7 @@ const { documentType } = useDocumentType(props);
         }
       }
       .swap-button:hover {
-        background: #eeeeee;
+        background: var(--c2c-grey-lightest);
       }
     }
   }
@@ -325,7 +325,7 @@ const { documentType } = useDocumentType(props);
     label {
       position: absolute;
       font-size: 12px;
-      color: #333;
+      color: var(--c2c-grey-darker);
       padding-left: 5px;
       padding-right: 5px;
       left: 0px;
@@ -350,7 +350,7 @@ const { documentType } = useDocumentType(props);
         border: none;
         outline: none;
         font-size: 15px;
-        color: #333;
+        color: var(--c2c-grey-darker);
         background-color: white;
         margin-right: 10px;
 
@@ -371,7 +371,7 @@ const { documentType } = useDocumentType(props);
         border: none;
         outline: none;
         font-size: 15px;
-        color: #333;
+        color: var(--c2c-grey-darker);
 
         &::-webkit-calendar-picker-indicator {
           cursor: pointer;
@@ -423,7 +423,7 @@ const { documentType } = useDocumentType(props);
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #333;
+    background-color: var(--c2c-grey-darker);
     transition: 0.4s;
     border-radius: 34px;
   }
@@ -435,13 +435,13 @@ const { documentType } = useDocumentType(props);
     width: 13px;
     left: 2px;
     bottom: 2px;
-    background-color: #fff;
+    background-color: var(--c2c-white);
     transition: 0.4s;
     border-radius: 50%;
   }
 
   input:checked + .slider {
-    background-color: #337ab7;
+    background-color: var(--c2c-primary);
   }
 
   input:checked + .slider:before {

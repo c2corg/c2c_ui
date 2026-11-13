@@ -173,7 +173,7 @@ onBeforeUnmount(() => {
   opacity: 0;
   transition: 0.2s;
   background: rgba(0, 0, 0, 0.8);
-  color: #fff;
+  color: var(--c2c-white);
   padding: 5px 10px;
   border-radius: 4px;
   white-space: nowrap;

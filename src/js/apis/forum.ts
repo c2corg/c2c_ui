@@ -39,6 +39,27 @@ const ANNOUNCEMENT_TOPIC_IDS: Record<string, number> = {
 const ANNOUNCEMENT_FALLBACK_LANG = 'en';
 const BOARD_ANNOUNCEMENT_TOPIC_ID = 323845;
 
+// the counts of unread notifications, as Discourse gives them in the current user and on its notification channel
+const notificationCounts = z.object({
+  unread_notifications: z.number(),
+  unread_high_priority_notifications: z.number(),
+});
+export type NotificationCounts = z.input<typeof notificationCounts>;
+
+// the forum user of the browser's forum session
+const currentSession = z.object({
+  current_user: z.extend(notificationCounts, {
+    id: z.number(),
+    username: z.string(),
+    // id of the last message on the user's MessageBus notification channel
+    notification_channel_position: z.nullable(z.number()),
+  }),
+});
+export type CurrentForumUser = z.input<typeof currentSession>['current_user'];
+
+const messageBusMessages = z.array(z.object({ channel: z.string(), message_id: z.number(), data: z.unknown() }));
+export type MessageBusMessage = z.input<typeof messageBusMessages>[number];
+
 class Forum extends BaseApi {
   constructor() {
     super(config.urls.forum);
@@ -89,6 +110,27 @@ class Forum extends BaseApi {
   // Recent Discourse returns tags as objects ({ id, name, slug }), older ones as plain strings
   hasTag(topic: Pick<Topic, 'tags'>, name: string) {
     return (topic.tags || []).some((tag) => (typeof tag === 'string' ? tag : tag.name) === name);
+  }
+
+  // The forum session of the browser, from the forum cookie: rejects with a 404 without one
+  getCurrentUser() {
+    return this.axios
+      .get('/session/current.json', { withCredentials: true })
+      .then(({ data }) => checkResponse(currentSession, data, 'GET /session/current.json').current_user);
+  }
+
+  // One poll of Discourse's MessageBus, with the forum cookie: the messages published on the channels after the given
+  // positions. A long poll waits for one (Discourse answers after 25 s at most), a short one answers at once.
+  // Without the Access-Control-Allow-Credentials header on the forum's answer, the browser rejects it (network error).
+  pollMessageBus(clientId: string, positions: Record<string, number>, long: boolean, signal?: AbortSignal) {
+    const url = `/message-bus/${clientId}/poll` + (long ? '' : '?dlp=t');
+    const body = new URLSearchParams(Object.entries(positions).map(([channel, id]) => [channel, String(id)]));
+    return (
+      this.axios
+        // Dont-Chunk: one answer per message, instead of a stream that axios only reads once it ends
+        .post(url, body, { withCredentials: true, signal, headers: { 'Dont-Chunk': 'true' } })
+        .then(({ data }) => checkResponse(messageBusMessages, data, 'POST /message-bus/poll'))
+    );
   }
 
   // Technically not part of the API, but this helper

@@ -161,6 +161,8 @@
         ref="olMap"
         :documents="filteredDocuments"
         :show-protection-areas="!!document.type && ['r', 'w'].includes(document.type)"
+        :tracks-filters="overlayFilters.outing"
+        :routes-filters="overlayFilters.route"
         :biodiv-sports-activities="document.activities"
         :full-screen-element-id="
           !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
@@ -181,6 +183,7 @@ import PlanATripResults from './PlanATripResults.vue';
 
 import start from '@/assets/img/boxes/geoloc-2.svg';
 import type OlMap from '@/components/map/OlMap.vue';
+import { documentOverlayFilters } from '@/components/map/density-overlays';
 import NavitiaService, { type DatetimeRepresents, type Journey, type JourneyOptions } from '@/js/apis/navitia-service';
 import transportService from '@/js/apis/transport-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
@@ -239,6 +242,8 @@ const emit = defineEmits(['calculate-route', 'has-protection-area']);
 
 const { $gettext, $language } = useGlobalProperties();
 const { documentType } = useDocumentType(props);
+// the "Tracks" and "Routes" overlays of the map show what is linked to the document
+const overlayFilters = computed(() => documentOverlayFilters(props.document));
 
 const olMap = useTemplateRef<InstanceType<typeof OlMap>>('olMap');
 
@@ -1052,7 +1057,7 @@ function recenterMapOnDocuments() {
     .trip-tabs {
       display: flex;
       .tab-button {
-        color: #337ab7;
+        color: var(--c2c-primary);
         padding-left: 60px;
         padding-right: 60px;
         padding-top: 10px;
@@ -1067,23 +1072,23 @@ function recenterMapOnDocuments() {
       .tab-button.disabled {
         color: #ccc !important;
         cursor: not-allowed !important;
-        background-color: #f9f9f9 !important;
+        background-color: var(--c2c-white-ter) !important;
       }
 
       .tab-button:disabled {
         pointer-events: none;
       }
       .tab-button:hover {
-        background-color: rgb(232, 232, 232);
+        background-color: var(--c2c-grey-lightest);
         cursor: pointer;
       }
       .tab-button.active:hover {
-        background-color: #337ab7;
+        background-color: var(--c2c-primary);
         cursor: auto;
       }
       .tab-button.active {
         color: white;
-        background-color: #337ab7;
+        background-color: var(--c2c-primary);
       }
     }
 
@@ -1193,7 +1198,7 @@ function recenterMapOnDocuments() {
           border-radius: 3px;
 
           span {
-            color: #337ab7;
+            color: var(--c2c-primary);
             font-weight: bold;
           }
         }

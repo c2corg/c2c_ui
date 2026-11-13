@@ -2,6 +2,18 @@
 
 [![GitHub license](https://img.shields.io/github/license/c2corg/c2c_ui.svg)](https://github.com/c2corg/c2c_ui/blob/master/LICENSE) ![Continuous integration](https://github.com/c2corg/c2c_ui/workflows/Continuous%20integration/badge.svg?branch=master) ![Github Code scanning](https://github.com/c2corg/c2c_ui/workflows/Github%20Code%20scanning/badge.svg?branch=master) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/659b18a55fcd4f638fa36c4aa2976de8)](https://www.codacy.com/gh/c2corg/c2c_ui/dashboard?utm_source=github.com&utm_medium=referral&utm_content=c2corg/c2c_ui&utm_campaign=Badge_Grade)
 
+## Architecture diagrams
+
+Click a diagram to open its interactive version (zoom, search, details, links to the source code). All the diagrams of camptocamp.org: <https://c2corg.github.io/v6_api/>.
+
+### Frontend (c2c_ui)
+
+[![Frontend (c2c_ui)](docs/architecture/frontend.png)](https://c2corg.github.io/v6_api/architecture/frontend.html)
+
+### Local development
+
+[![Local development](docs/architecture/local-dev.png)](https://c2corg.github.io/v6_api/architecture/local-dev.html)
+
 On any OS, install [git](https://git-scm.com/) and [node.js](https://nodejs.org/en/). Then :
 
 ```bash
@@ -28,17 +40,20 @@ Want to easily access to every dev tools on a fancy interface? Have a look on [t
 The backend (API, media, images...) is chosen when the app **starts**, not when it is built, so the same Docker image
 can serve any backend. Variables that are not set keep the production urls.
 
-| Variable                | Meaning                                                                                |
-| ----------------------- | -------------------------------------------------------------------------------------- |
-| `C2C_BACKEND`           | A backend known to the build (`prod`, `demo`)                                          |
-| `C2C_API_URL`           | API, e.g. `https://api.example.org`                                                    |
-| `C2C_MEDIA_URL`         | Media (images) storage                                                                 |
-| `C2C_IMAGE_BACKEND_URL` | Image upload backend                                                                   |
-| `C2C_TRACKING_URL`      | Tracking service                                                                       |
-| `C2C_MINIATURES_URL`    | Tracking miniatures storage                                                            |
-| `C2C_FORUM_URL`         | Forum                                                                                  |
-| `C2C_RECAPTCHA_KEY`     | Public reCAPTCHA key of the domain serving the app                                     |
-| `C2C_ENV_LABEL`         | Non-production environment name (`preprod`): shows a banner and prefixes the tab title |
+| Variable                 | Meaning                                                                                |
+| ------------------------ | -------------------------------------------------------------------------------------- |
+| `C2C_BACKEND`            | A backend known to the build (`prod`, `demo`)                                          |
+| `C2C_API_URL`            | API, e.g. `https://api.example.org`                                                    |
+| `C2C_MEDIA_URL`          | Media (images) storage                                                                 |
+| `C2C_IMAGE_BACKEND_URL`  | Image upload backend                                                                   |
+| `C2C_TRACKING_URL`       | Tracking service                                                                       |
+| `C2C_MINIATURES_URL`     | Tracking miniatures storage                                                            |
+| `C2C_FORUM_URL`          | Forum                                                                                  |
+| `C2C_RECAPTCHA_KEY`      | Public reCAPTCHA key of the domain serving the app                                     |
+| `C2C_ENV_LABEL`          | Non-production environment name (`preprod`): shows a banner and prefixes the tab title |
+| `TRACKS_OVERLAY_ENABLED` | `false`, `0`, `no` or `off`: the Outings and Routes map overlays are not offered       |
+
+The API reads `TRACKS_OVERLAY_ENABLED` too (it answers 503 when it is off): set it on both to relieve the servers.
 
 With Docker (`LISTEN_FLAGS=` because, by default, the container expects the PROXY protocol of the production load
 balancer; `PORT` is the port nginx listens on):

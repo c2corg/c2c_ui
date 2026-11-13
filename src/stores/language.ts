@@ -98,14 +98,18 @@ function getMessages(lang: string): TranslationsFile | Promise<TranslationsFile>
 export const useLanguageStore = defineStore('language', () => {
   // stored under the name of the former Language component, so that the chosen language is kept
   const preferences = getPreferences('Language');
-  // only the current language is reactive: translations are big, and read through it. A reactive object, not a ref:
-  // firstLoad() sets the same language again once its messages are loaded, which must update the page
-  const state = reactive<{ current: string | null }>({ current: preferences.get<string>('current', 'fr') });
+  // only the current language and the count of loaded translations are reactive: translations are big. A text
+  // translated before the translations of its language were loaded (the stored language, at the first load) is
+  // translated again once they are, as it read the count
+  const state = reactive<{ current: string; loaded: number }>({
+    current: preferences.get<string>('current', 'fr'),
+    loaded: 0,
+  });
 
-  // a Lang; null only while firstLoad() fires the update of the page
+  // a Lang
   const current = computed({
     get: () => state.current,
-    set: (lang: string | null) => {
+    set: (lang: string) => {
       state.current = lang;
     },
   });
@@ -141,9 +145,6 @@ export const useLanguageStore = defineStore('language', () => {
     const lang = current.value as string;
 
     _getMessages(lang).then(() => {
-      // dirty : simulate lang update to fire the update of page on load
-      current.value = null;
-      current.value = lang;
       // set html lang attribute
       document.documentElement.setAttribute('lang', lang);
     });
@@ -179,17 +180,21 @@ export const useLanguageStore = defineStore('language', () => {
       if (messages instanceof Promise) {
         messages.then((file) => {
           translations[lang] = file[lang];
+          state.loaded++;
           resolve(file[lang]);
         });
       } else {
         translations[lang] = messages[lang];
+        state.loaded++;
         resolve(messages[lang]);
       }
     });
   }
 
   function gettext(msgid: string, msgctxt?: string): string {
-    return getTranslation(translations[current.value ?? ''], msgid, msgctxt)
+    // read for the reactivity only: the texts translated before their translations were loaded
+    void state.loaded;
+    return getTranslation(translations[current.value], msgid, msgctxt)
       .replace(/&quot;/g, '"')
       .replace(/&#x5C;/gi, '\\');
   }

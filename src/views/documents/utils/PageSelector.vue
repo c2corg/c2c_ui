@@ -1,21 +1,25 @@
 <template>
   <span class="page-selector ml-1">
     <component
-      :is="firstDocumentPosition > 0 ? 'router-link' : 'span'"
+      :is="previousPageQuery ? 'router-link' : 'span'"
       class="pagination-link button has-text-normal"
-      :disabled="firstDocumentPosition === 1 || null"
-      :to="pageQuery(offset - queryLimit, queryLimit)"
+      :disabled="!previousPageQuery || null"
+      :aria-disabled="!previousPageQuery ? 'true' : null"
+      :to="previousPageQuery ?? undefined"
     >
       <fa-icon icon="chevron-left" />
     </component>
-    {{ firstDocumentPosition }}-{{ lastDocumentPosition }}
-    <span v-translate translate-context="1-30 of 200 results">of</span>
-    {{ total }}
+    <template v-if="total !== null">
+      {{ firstDocumentPosition }}-{{ lastDocumentPosition }}
+      <span v-translate translate-context="1-30 of 200 results">of</span>
+      {{ total }}
+    </template>
     <component
-      :is="lastDocumentPosition < total ? 'router-link' : 'span'"
+      :is="nextPageQuery ? 'router-link' : 'span'"
       class="pagination-link button has-text-normal"
-      :disabled="lastDocumentPosition >= total || null"
-      :to="pageQuery(offset + queryLimit, queryLimit)"
+      :disabled="!nextPageQuery || null"
+      :aria-disabled="!nextPageQuery ? 'true' : null"
+      :to="nextPageQuery ?? undefined"
     >
       <fa-icon icon="chevron-right" />
     </component>
@@ -34,7 +38,7 @@
           :is="'router-link'"
           class="dropdown-item is-small"
           :class="{ 'is-active': queryLimit === l }"
-          :to="pageQuery(offset, l)"
+          :to="limitQuery(l)"
           @click="hideOnclick"
         >
           <span>{{ l }}</span>
@@ -47,7 +51,8 @@
 
 <script setup lang="ts">
 import { computed, ref, useTemplateRef, watch, type PropType } from 'vue';
-import { useRoute } from 'vue-router';
+
+import { usePageQuery } from './page-query';
 
 import type DropdownButton from '@/components/generics/DropdownButton.vue';
 
@@ -59,29 +64,19 @@ const props = defineProps({
   },
 });
 
-const route = useRoute();
-
-const total = ref(30);
+// unknown until the first results are loaded
+const total = ref<number | null>(null);
 const limitSelector = useTemplateRef<InstanceType<typeof DropdownButton>>('limitSelector');
 
-const offset = computed(() => parseInt(String(route.query.offset ?? 0)));
-const queryLimit = computed(() => parseInt(String(route.query.limit ?? 30)));
-const firstDocumentPosition = computed(() => offset.value + 1);
-const lastDocumentPosition = computed(() => Math.min(offset.value + queryLimit.value, total.value));
+const { queryLimit, pageStart, previousPageQuery, nextPageQuery, limitQuery } = usePageQuery(total);
+
+const firstDocumentPosition = computed(() => pageStart.value + 1);
+const lastDocumentPosition = computed(() => Math.min(pageStart.value + queryLimit.value, total.value ?? Infinity));
 
 function saveTotal() {
   if (props.documents) {
     total.value = props.documents.total;
   }
-}
-
-function pageQuery(newOffset: number, limit: number) {
-  const query = {
-    ...route.query,
-    offset: String(Math.max(newOffset, 0)),
-    limit: String(Math.max(Math.min(limit, 100), 30)),
-  };
-  return { name: route.name, params: route.params, query };
 }
 
 function hideOnclick() {

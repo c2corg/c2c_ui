@@ -1,14 +1,28 @@
 <template>
   <picture :class="$attrs.class" :style="$attrs.style">
-    <source v-if="avif" type="image/avif" :srcset="avif" />
-    <img ref="img" v-bind="{ ...reservedSize, ...imgAttrs }" :src="standard" @error.once="onError" />
+    <source v-if="avif" type="image/avif" :srcset="avifSrcset ?? avif" :sizes="sizes" />
+    <img
+      ref="img"
+      v-bind="{ ...reservedSize, ...imgAttrs }"
+      :src="standard"
+      :srcset="standardSrcset"
+      :sizes="sizes"
+      @error.once="onError"
+    />
   </picture>
 </template>
 
 <script setup lang="ts">
 import { computed, useAttrs, type PropType } from 'vue';
 
-import { getImageUrl, getThumbnailSize, type Image, type ImageSize } from '@/js/image-urls';
+import {
+  fallBackToBasicImage,
+  getImageUrl,
+  getResponsiveSrcset,
+  getThumbnailSize,
+  type Image,
+  type ImageSize,
+} from '@/js/image-urls';
 
 // the classes and style stay on the picture, the other attributes and the listeners go to the image
 defineOptions({ inheritAttrs: false });
@@ -29,6 +43,13 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  // the sizes of an image shown at a size CSS decides: it also offers the BI thumbnail, which the browser loads only
+  // where the image is shown wider than the thumbnail. "auto" (lazy images only) lets the browser use the laid out
+  // width; browsers without it use the next value
+  sizes: {
+    type: String,
+    default: null,
+  },
 });
 
 const attrs = useAttrs();
@@ -48,14 +69,18 @@ const reservedSize = computed(() =>
 const avif = computed(() => getImageUrl(props.img, props.size, 'avif'));
 const standard = computed(() => getImageUrl(props.img, props.size));
 
+const avifSrcset = computed(() =>
+  props.sizes && props.size ? getResponsiveSrcset(props.img, props.size, 'avif') : undefined
+);
+const standardSrcset = computed(() =>
+  props.sizes && props.size ? getResponsiveSrcset(props.img, props.size) : undefined
+);
+
 // In case the AVIF thumbnail is not available, be sure
 // to switch to the "basic" version.
 function onError(event: Event) {
   if (avif.value) {
-    const img = event.target as HTMLImageElement;
-    for (const source of img.parentElement!.querySelectorAll('source')) {
-      source.srcset = img.src;
-    }
+    fallBackToBasicImage(event.target as HTMLImageElement);
   }
 }
 </script>

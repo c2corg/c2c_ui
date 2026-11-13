@@ -1,4 +1,3 @@
-import { type Options as ToastOptions, setDefaults as toastDefaults } from 'bulma-toast';
 import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 
@@ -28,6 +27,7 @@ import './assets/css/external-links.css';
 import './assets/css/bulma/index.css';
 import './assets/css/checkradio.css';
 import './assets/css/switch.css';
+import './assets/css/toast.css';
 import './assets/css/helpers.css';
 import './assets/css/fontawesome.css';
 
@@ -55,9 +55,3 @@ app.use(router);
 
 app.config.globalProperties.$language.firstLoad();
 app.mount('#app-mount');
-
-// configure toast defaults (no message: bulma-toast's types require one, defaults have none)
-toastDefaults({
-  duration: 3000,
-  pauseOnHover: true,
-} as ToastOptions);

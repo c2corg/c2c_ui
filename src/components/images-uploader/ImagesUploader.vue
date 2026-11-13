@@ -16,7 +16,7 @@
           :is-saving="image.status === 'SAVING'"
           :is-success="image.status === 'SUCCESS'"
           :is-failed="image.status === 'FAILED'"
-          :can-rotate="Boolean(image.file?.name) && !image.file.name.endsWith('.svg')"
+          :can-rotate="Boolean(image.dataUrl) && canRender(image.file)"
           @delete-image="onDeleteImage(image)"
           @rotate-image="onRotateImage(image, $event)"
           @retry-upload="startUpload(image)"
@@ -34,7 +34,7 @@
             @dragleave="dragOver = false"
             @drop="dragOver = false"
             multiple
-            accept="image/*"
+            accept="image/*,.heic,.heif"
             class="input-file"
           />
           <!-- this message contains HTML -->
@@ -70,7 +70,6 @@
 </template>
 
 <script setup lang="ts">
-import { toast } from 'bulma-toast';
 import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch, type PropType } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -78,7 +77,8 @@ import ImageUploader from './ImageUploader.vue';
 
 import c2c from '@/js/apis/c2c';
 import { useGlobalProperties } from '@/js/composables/global-properties';
-import uploadFile from '@/js/upload-file';
+import { toast } from '@/js/toast';
+import uploadFile, { canRender } from '@/js/upload-file';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 type UploadedImage = {
@@ -145,6 +145,7 @@ function hide() {
 }
 
 function clean() {
+  Object.values(images.value).forEach(revokePreview);
   images.value = {};
   categoriesEdition.value = false;
   promise.value = {};
@@ -157,7 +158,15 @@ function computeReadyForSaving() {
   readyForSaving.value = values.length !== 0 && values.every((image) => image.status === 'SUCCESS');
 }
 
+// the previews are object URLs of the files: freed when replaced or dropped
+function revokePreview(image: UploadedImage) {
+  if (image.dataUrl?.startsWith('blob:')) {
+    URL.revokeObjectURL(image.dataUrl);
+  }
+}
+
 function onDeleteImage(image: UploadedImage) {
+  revokePreview(image);
   if (images.value[image.key]) {
     images.value = Object.fromEntries(Object.entries(images.value).filter(([key]) => key !== image.key));
   }
@@ -222,6 +231,7 @@ function startUpload(image: UploadedImage, angle = 0) {
     image.file,
     angle,
     /*onDataUrlReady =*/ (dataUrl) => {
+      revokePreview(image);
       image.dataUrl = dataUrl;
     },
     (event) => {
@@ -272,6 +282,8 @@ function save() {
           ...img,
           document_id: response.data.images[idx].document_id,
           available_langs: [$language.current!],
+          // its AVIF thumbnails may not be built yet: the JPG ones until the page is reloaded
+          modernThumbnailsPending: true,
         }))
       );
       clean();
@@ -319,8 +331,8 @@ defineExpose({ show });
     position: relative;
     height: 315px;
     text-align: center;
-    border: 5px dashed #ddd;
-    background: #f8f8f8;
+    border: 5px dashed var(--c2c-grey-lighter);
+    background: var(--c2c-white-ter);
     transition: 0.2s;
     padding: 1rem;
 
@@ -336,7 +348,7 @@ defineExpose({ show });
   }
 
   .images-uploader-message:hover {
-    background: #eee;
+    background: var(--c2c-grey-lightest);
     border: 5px dashed #bbb;
   }
 

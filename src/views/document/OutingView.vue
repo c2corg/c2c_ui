@@ -8,7 +8,7 @@
     ></masked-document-version-info>
     <document-view-header v-if="document" :document="document" :version="version" />
 
-    <images-box v-if="document" :document="document" />
+    <images-box v-if="document" :document="document" priority />
 
     <div v-if="document" class="columns is-multiline is-block-print">
       <div class="column is-3 no-print">

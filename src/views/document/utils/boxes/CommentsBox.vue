@@ -225,7 +225,7 @@ getComments();
 
   blockquote {
     background-color: #f0efeb;
-    border-left: 5px solid #e9e9e9;
+    border-left: 5px solid var(--c2c-grey-lightest);
     border-left-color: #d0d0d0;
   }
 
@@ -236,7 +236,7 @@ getComments();
     .title,
     blockquote {
       background-color: #f0efeb;
-      border-left: 5px solid #e9e9e9;
+      border-left: 5px solid var(--c2c-grey-lightest);
       border-left-color: #d0d0d0;
     }
 

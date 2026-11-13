@@ -1,12 +1,20 @@
 import { flushPromises, mount } from '@vue/test-utils';
-import { describe, expect, it, vi } from 'vitest';
-import { h } from 'vue';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { h, reactive } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
 
 import Navigation from './Navigation.vue';
 
+const forumNotifications = reactive({ unread: 0, unreadHighPriority: 0, start: vi.fn(), stop: vi.fn() });
+vi.mock('@/stores/forum-notifications', () => ({ useForumNotificationsStore: () => forumNotifications }));
+
+beforeEach(() => {
+  Object.assign(forumNotifications, { unread: 0, unreadHighPriority: 0 });
+  vi.clearAllMocks();
+});
+
 // an edit page: auth required, its leave guard asks to confirm
-const mountNavigation = async (leave: boolean) => {
+const mountNavigation = async (leave = true) => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [
@@ -79,5 +87,50 @@ describe('Navigation', () => {
 
     expect(router.currentRoute.value.name).toBe('route-edit');
     expect(user.signout).not.toHaveBeenCalled();
+  });
+
+  it('follows the forum notifications of the signed in user', async () => {
+    const { wrapper, user } = await mountNavigation();
+    await flushPromises();
+
+    expect(forumNotifications.start).toHaveBeenCalledWith('alice');
+
+    user.isLogged = false;
+    await wrapper.setProps({});
+    wrapper.unmount();
+    expect(forumNotifications.stop).toHaveBeenCalled();
+  });
+
+  it('shows no forum badge nor link without unread notifications', async () => {
+    const { wrapper } = await mountNavigation();
+
+    expect(wrapper.find('.forum-badge').exists()).toBe(false);
+    expect(wrapper.find('.forum-link').exists()).toBe(false);
+  });
+
+  it('shows the unread forum notifications on the avatar and in the menu', async () => {
+    Object.assign(forumNotifications, { unread: 12, unreadHighPriority: 2 });
+    const { wrapper } = await mountNavigation();
+    await flushPromises();
+
+    expect(wrapper.findAll('.forum-badge.is-on-avatar').map((badge) => [badge.classes(), badge.text()])).toEqual([
+      [expect.arrayContaining(['is-messages']), '2'],
+      [expect.arrayContaining(['is-notifications']), '9+'],
+    ]);
+    expect(
+      wrapper.findAll('a.forum-link').map((link) => [link.attributes('href'), link.attributes('target'), link.text()])
+    ).toEqual([
+      ['https://forum.camptocamp.org/u/alice/messages', '_blank', 'Forum messages 2'],
+      ['https://forum.camptocamp.org/u/alice/notifications', '_blank', 'Forum notifications 12'],
+    ]);
+  });
+
+  it('shows only the forum counts that are not zero', async () => {
+    Object.assign(forumNotifications, { unread: 3, unreadHighPriority: 0 });
+    const { wrapper } = await mountNavigation();
+    await flushPromises();
+
+    expect(wrapper.findAll('.forum-badge.is-on-avatar').map((badge) => badge.text())).toEqual(['3']);
+    expect(wrapper.findAll('a.forum-link').map((link) => link.text())).toEqual(['Forum notifications 3']);
   });
 });

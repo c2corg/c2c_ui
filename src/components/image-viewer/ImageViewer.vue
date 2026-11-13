@@ -30,6 +30,7 @@
       ref="swiper"
       class="image-viewer-swiper"
       @swiperslidechange="onSlideChange"
+      @error.capture="onImageError"
     >
       <swiper-slide class="image-viewer-slide" v-for="image of images" :key="image.document_id">
         <div class="swiper-zoom-container">
@@ -78,7 +79,7 @@ import ImageInfo from './ImageInfo.vue';
 import '@/js/swiper-element';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
-import { getImageUrl } from '@/js/image-urls';
+import { fallBackToBasicImage, getImageUrl } from '@/js/image-urls';
 import { registerImageViewer, type ViewerImage } from '@/js/vue-plugins/image-viewer';
 
 type SwiperContainer = HTMLElement & { swiper: Swiper; initialize(): void };
@@ -125,6 +126,14 @@ function push(image: ViewerImage) {
       imgSrc: getImageUrl(image, 'BI'),
       avifSrc: getImageUrl(image, 'BI', 'avif'),
     });
+  }
+}
+
+// the AVIF image may be missing (just uploaded, or never built): the JPG one. Listened to on the swiper (error events
+// don't bubble, hence capture), as the virtual slides are rendered by Swiper from their HTML, without Vue listeners
+function onImageError(event: Event) {
+  if (event.target instanceof HTMLImageElement) {
+    fallBackToBasicImage(event.target);
   }
 }
 

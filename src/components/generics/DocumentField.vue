@@ -36,16 +36,16 @@
       <span v-else v-translate>no</span>
     </span>
 
-    <span v-else-if="field.i18n">{{ $gettext(value, field.i18nContext) }} </span>
+    <span v-else-if="field.i18n">{{ $gettext(value, field.i18nContext) }}</span>
 
-    <span v-else>
-      <span v-if="showPrefix">{{ prefix || field.prefix }}</span>
-      {{ divisor ? Math.round(value / divisor) : value }}
-    </span>
-
-    <span v-if="showUnit && !field.skipSpaceBeforeUnit">&nbsp;</span>
-    <span v-if="showUnit">{{ unit || field.unit }}</span>
-  </span>
+    <!-- no line break between prefix, value and unit: the templates keep whitespace, it would render as a space -->
+    <span v-else
+      ><span v-if="showPrefix">{{ prefix || field.prefix }}</span
+      >{{ divisor ? Math.round(value / divisor) : value }}</span
+    ><template v-if="showUnit"
+      ><template v-if="!field.skipSpaceBeforeUnit">&nbsp;</template>{{ unit || field.unit }}</template
+    ></span
+  >
 </template>
 
 <script setup lang="ts">
