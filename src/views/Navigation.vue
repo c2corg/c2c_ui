@@ -149,6 +149,12 @@
                 {{ link.text }}: {{ link.count }}
               </span>
               <span class="has-text-weight-bold is-hidden-mobile"> &nbsp;{{ $user.name }} </span>
+              <span
+                v-if="openRemovals > 0"
+                class="removals-badge"
+                :title="$gettext('Account removals in progress')"
+                aria-hidden="true"
+              ></span>
             </span>
           </template>
 
@@ -180,6 +186,7 @@
             <span>
               {{ item.text }}
             </span>
+            <span v-if="item.badge" class="tag is-danger is-rounded">{{ item.badge }}</span>
           </router-link>
 
           <hr class="dropdown-divider" />
@@ -222,6 +229,7 @@ import DfmAdLarge from './DfmAdLarge.vue';
 import IconHelp from '@/components/generics/icons/IconHelp.vue';
 import IconJoinUs from '@/components/generics/icons/IconJoinUs.vue';
 import JoinUsLink from '@/components/generics/links/JoinUsLink.vue';
+import c2c from '@/js/apis/c2c';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useIsHomePage } from '@/js/composables/home-page';
 import config from '@/js/config';
@@ -310,6 +318,23 @@ const userMenu = useTemplateRef<{ isActive: boolean }>('userMenu');
 
 const hideSearchInput = ref(true); // only on small screen
 
+// the removal requests of the accounts which are not done: moderators of the topoguide and of the forum are notified of them
+const openRemovals = ref(0);
+
+watch(
+  () => $user.canManageRemovals,
+  (canManageRemovals) => {
+    if (canManageRemovals) {
+      c2c.moderator.countAccountRemovals().then((response) => {
+        openRemovals.value = response.data.open;
+      });
+    } else {
+      openRemovals.value = 0;
+    }
+  },
+  { immediate: true }
+);
+
 const userMenuLinks = computed(() => [
   {
     to: { name: 'profile', params: { id: $user.id } },
@@ -356,6 +381,16 @@ const userMenuLinks = computed(() => [
     text: $gettext('My bookmarks'),
     icon: 'star',
   },
+  ...($user.canManageRemovals
+    ? [
+        {
+          to: { name: 'account-removals' },
+          text: $gettext('Account removals'),
+          icon: 'user-slash',
+          badge: openRemovals.value || null,
+        },
+      ]
+    : []),
 ]);
 
 function go(document: C2cDocument) {
@@ -417,6 +452,15 @@ onBeforeUnmount(() => {
 
 <style scoped>
 @import '@/assets/css/media.css';
+
+.removals-badge {
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  margin-left: 0.3rem;
+  border-radius: 50%;
+  background-color: hsl(348deg 86% 61%);
+}
 
 nav {
   max-width: 100vw;

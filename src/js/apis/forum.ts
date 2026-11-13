@@ -51,6 +51,9 @@ const currentSession = z.object({
   current_user: z.extend(notificationCounts, {
     id: z.number(),
     username: z.string(),
+    // the staff flags of Discourse: a moderator of the forum is not necessarily one of the topoguide
+    moderator: z.optional(z.boolean()),
+    admin: z.optional(z.boolean()),
     // id of the last message on the user's MessageBus notification channel
     notification_channel_position: z.nullable(z.number()),
   }),

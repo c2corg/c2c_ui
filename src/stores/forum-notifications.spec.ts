@@ -5,13 +5,15 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useForumNotificationsStore } from './forum-notifications';
 
 import forum from '@/js/apis/forum';
+import { useUserStore } from '@/stores/user';
 
 vi.mock('@/js/apis/forum', () => ({ default: { getCurrentUser: vi.fn(), pollMessageBus: vi.fn() } }));
 
 const getCurrentUser = vi.mocked(forum.getCurrentUser);
 const pollMessageBus = vi.mocked(forum.pollMessageBus);
 
-const forumUser = (unread: number, unreadHighPriority: number, username = 'alice_forum') => ({
+const forumUser = (unread: number, unreadHighPriority: number, username = 'alice_forum', staff = {}) => ({
+  ...staff,
   id: 7,
   username,
   unread_notifications: unread,
@@ -89,6 +91,44 @@ describe('forum notifications store', () => {
     await store.start('alice_forum');
 
     expect(store).toMatchObject({ mode: 'off', unread: 0, unreadHighPriority: 0 });
+  });
+
+  describe('moderator of the forum', () => {
+    it.each([
+      ['a moderator', { moderator: true }],
+      ['an admin', { admin: true }],
+    ])('is known from the session of %s', async (_name, staff) => {
+      getCurrentUser.mockResolvedValue(forumUser(0, 0, 'alice_forum', staff));
+      pollMessageBus.mockRejectedValue(corsRejected());
+      const store = useForumNotificationsStore();
+
+      await store.start('alice_forum');
+
+      expect(useUserStore().forumModerator).toBe(true);
+      expect(useUserStore().canManageRemovals).toBe(true);
+
+      store.stop();
+
+      expect(useUserStore().forumModerator).toBe(false);
+    });
+
+    it('is not known for a member', async () => {
+      getCurrentUser.mockResolvedValue(forumUser(0, 0, 'alice_forum', { moderator: false, admin: false }));
+      pollMessageBus.mockRejectedValue(corsRejected());
+
+      await useForumNotificationsStore().start('alice_forum');
+
+      expect(useUserStore().forumModerator).toBe(false);
+      expect(useUserStore().canManageRemovals).toBe(false);
+    });
+
+    it('is not taken from the session of another forum user', async () => {
+      getCurrentUser.mockResolvedValue(forumUser(0, 0, 'bob', { moderator: true }));
+
+      await useForumNotificationsStore().start('alice_forum');
+
+      expect(useUserStore().forumModerator).toBe(false);
+    });
   });
 
   it('polls the session when the forum refuses MessageBus with credentials', async () => {

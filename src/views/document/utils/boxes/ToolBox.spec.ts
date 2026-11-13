@@ -31,10 +31,17 @@ const route = (): CookedDocument =>
     associations: { waypoints: [], waypoint_children: [] },
   });
 
-const mountToolBox = async (document: CookedDocument, stubs: Record<string, unknown> = {}) => {
+const mountToolBox = async (
+  document: CookedDocument,
+  stubs: Record<string, unknown> = {},
+  user: Record<string, unknown> = { isLogged: true, isModerator: true, id: 1 }
+) => {
   const router = createRouter({
     history: createMemoryHistory(),
-    routes: [{ path: '/:pathMatch(.*)*', name: 'route', component: { render: () => h('div') } }],
+    routes: [
+      { path: '/:pathMatch(.*)*', name: 'route', component: { render: () => h('div') } },
+      { path: '/profiles/:id/:lang/history', name: 'profile-history', component: { render: () => h('div') } },
+    ],
   });
   await router.push('/routes/12/fr');
 
@@ -55,15 +62,16 @@ const mountToolBox = async (document: CookedDocument, stubs: Record<string, unkn
         DeleteLocaleWindow: modal('delete locale'),
         TranslateWindow: modal('translate'),
         AssociationsWindow: modal('associations'),
+        RemoveAccountWindow: modal('remove account'),
         ...stubs,
       },
       config: {
         globalProperties: {
           $gettext: (text: string) => text,
           $filters: { uppercaseFirstLetter: (text: string) => text },
-          $documentUtils: { getDocumentType: () => 'route' },
+          $documentUtils: { getDocumentType: (letter: string) => (letter === 'u' ? 'profile' : 'route') },
           $language: { current: 'fr' },
-          $user: { isLogged: true, isModerator: true, id: 1 },
+          $user: user,
         } as never,
       },
     },
@@ -91,6 +99,28 @@ describe('ToolBox', () => {
     await button(wrapper, label).trigger('click');
 
     expect(shown).toEqual([name]);
+  });
+
+  describe('removal of an account', () => {
+    const profile = (): CookedDocument => ({ ...route(), type: 'u', document_id: 12 }) as CookedDocument;
+
+    it.each([
+      ['a moderator of the topoguide', { isLogged: true, isModerator: true, canManageRemovals: true, id: 1 }],
+      ['a moderator of the forum only', { isLogged: true, isModerator: false, canManageRemovals: true, id: 1 }],
+    ])('is offered to %s', async (_name, user) => {
+      const wrapper = await mountToolBox(profile(), {}, user);
+
+      await button(wrapper, 'Remove account').trigger('click');
+
+      expect(shown).toEqual(['remove account']);
+    });
+
+    it('is not offered to the others, nor on other documents', async () => {
+      const member = { isLogged: true, isModerator: false, canManageRemovals: false, id: 1 };
+
+      expect(button(await mountToolBox(profile(), {}, member), 'Remove account')).toBeUndefined();
+      expect(button(await mountToolBox(route()), 'Remove account')).toBeUndefined();
+    });
   });
 
   it('protects the document', async () => {

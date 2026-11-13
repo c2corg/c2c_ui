@@ -33,6 +33,7 @@ const OutingsStatsView = () => import('@/views/portals/outings-stats/OutingsStat
 const SeracView = () => import('@/views/static-views/SeracView.vue');
 const TopoguideView = () => import('@/views/static-views/TopoguideView.vue');
 const AccountView = () => import('@/views/user/AccountView.vue');
+const AccountRemovalsView = () => import('@/views/user/AccountRemovalsView.vue');
 const FollowingView = () => import('@/views/user/FollowingView.vue');
 const LoginView = () => import('@/views/user/LoginView.vue');
 const PreferencesView = () => import('@/views/user/PreferencesView.vue');
@@ -64,6 +65,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/auth', name: 'auth', component: LoginView },
   { path: '/auth-sso', name: 'auth-sso', component: LoginView },
   { path: '/account', name: 'account', component: AccountView, meta: { requiresAuth: true } },
+  { path: '/account-removals', name: 'account-removals', component: AccountRemovalsView, meta: { requiresAuth: true } },
   { path: '/following', name: 'following', component: FollowingView, meta: { requiresAuth: true } },
   { path: '/preferences', name: 'preferences', component: PreferencesView, meta: { requiresAuth: true } },
   { path: '/trackers', name: 'trackers', component: TrackersView, meta: { requiresAuth: true } },

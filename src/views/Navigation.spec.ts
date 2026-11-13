@@ -5,6 +5,8 @@ import { createMemoryHistory, createRouter } from 'vue-router';
 
 import Navigation from './Navigation.vue';
 
+import c2c from '@/js/apis/c2c';
+
 const forumNotifications = reactive({ unread: 0, unreadHighPriority: 0, start: vi.fn(), stop: vi.fn() });
 vi.mock('@/stores/forum-notifications', () => ({ useForumNotificationsStore: () => forumNotifications }));
 
@@ -14,7 +16,7 @@ beforeEach(() => {
 });
 
 // an edit page: auth required, its leave guard asks to confirm
-const mountNavigation = async (leave = true) => {
+const mountNavigation = async (leave = true, roles: Record<string, boolean> = {}) => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [
@@ -30,7 +32,7 @@ const mountNavigation = async (leave = true) => {
   router.beforeEach((to, from) => from.name !== 'route-edit' || leave);
   await router.push('/routes/edit/12');
 
-  const user = { isLogged: true, id: 1, forumUsername: 'alice', signout: vi.fn() };
+  const user = { isLogged: true, id: 1, forumUsername: 'alice', signout: vi.fn(), ...roles };
   const wrapper = mount(Navigation, {
     global: {
       plugins: [router],
@@ -40,7 +42,7 @@ const mountNavigation = async (leave = true) => {
         InputDocument: true,
         DropdownButton: { template: '<div><slot name="button" /><slot /></div>' },
         FaIcon: true,
-        RouterLink: true,
+        RouterLink: { template: '<a><slot /></a>' },
         IconHelp: true,
         IconJoinUs: true,
         JoinUsLink: true,
@@ -123,6 +125,31 @@ describe('Navigation', () => {
       ['https://forum.camptocamp.org/u/alice/messages', '_blank', 'Forum messages 2'],
       ['https://forum.camptocamp.org/u/alice/notifications', '_blank', 'Forum notifications 12'],
     ]);
+  });
+
+  describe('account removals', () => {
+    it.each([
+      ['a moderator of the topoguide', { isModerator: true, canManageRemovals: true }],
+      ['a moderator of the forum only', { isModerator: false, canManageRemovals: true }],
+    ])('are in the menu, with the number of those in progress, for %s', async (_name, roles) => {
+      const count = vi.spyOn(c2c.moderator, 'countAccountRemovals').mockResolvedValue({ data: { open: 2 } } as never);
+      const { wrapper } = await mountNavigation(true, roles);
+      await flushPromises();
+
+      expect(count).toHaveBeenCalled();
+      expect(wrapper.find('.removals-badge').exists()).toBe(true);
+      expect(wrapper.text()).toContain('Account removals');
+    });
+
+    it('are not for the others', async () => {
+      const count = vi.spyOn(c2c.moderator, 'countAccountRemovals');
+      const { wrapper } = await mountNavigation(true, { isModerator: false, canManageRemovals: false });
+      await flushPromises();
+
+      expect(count).not.toHaveBeenCalled();
+      expect(wrapper.find('.removals-badge').exists()).toBe(false);
+      expect(wrapper.text()).not.toContain('Account removals');
+    });
   });
 
   it('shows only the forum counts that are not zero', async () => {

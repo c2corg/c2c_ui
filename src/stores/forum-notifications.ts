@@ -5,6 +5,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 import forum, { type CurrentForumUser, type MessageBusMessage, type NotificationCounts } from '@/js/apis/forum';
+import { useUserStore } from '@/stores/user';
 
 const POLL_INTERVAL = 5 * 60 * 1000;
 // at most one refresh per 30 s when the user comes back to the page
@@ -20,6 +21,7 @@ export const useForumNotificationsStore = defineStore('forum-notifications', () 
   const unread = ref(0);
   const unreadHighPriority = ref(0);
   const mode = ref<ForumNotificationsMode>('off');
+  const userStore = useUserStore();
 
   // one MessageBus client per page load
   const clientId = crypto.randomUUID().replace(/-/g, '');
@@ -40,6 +42,7 @@ export const useForumNotificationsStore = defineStore('forum-notifications', () 
   }
 
   function clear() {
+    userStore.forumModerator = false;
     mode.value = 'off';
     unread.value = 0;
     unreadHighPriority.value = 0;
@@ -66,6 +69,8 @@ export const useForumNotificationsStore = defineStore('forum-notifications', () 
       return false;
     }
     setCounts(user);
+    // the same session tells whether the user is a moderator of the forum (the removal of accounts is theirs too)
+    userStore.forumModerator = Boolean(user.moderator || user.admin);
     channel = `/notification/${user.id}`;
     position = user.notification_channel_position ?? -1;
     return true;
