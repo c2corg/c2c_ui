@@ -75,6 +75,16 @@
             @click="toggleSlope(layer.title)"
           />
         </div>
+        <template v-if="protectionAreas">
+          <header v-translate>Protection areas</header>
+          <div class="layer-group">
+            <layer-button
+              :layer="protectionAreasButton"
+              :selected="showProtectionAreas"
+              @click="showProtectionAreas = !showProtectionAreas"
+            />
+          </div>
+        </template>
         <header v-translate>Terrain</header>
         <div class="layer-group">
           <layer-button
@@ -132,6 +142,7 @@ import {
   registerNoBlankProtocol,
   reliefColors,
   slopeLayers,
+  swissProtectionLayers,
   worldLayer,
 } from './map-3d-layers';
 import { type Marker3d, markerElement } from './map-3d-markers';
@@ -168,6 +179,12 @@ const props = defineProps({
     type: Array as PropType<Marker3d[]>,
     default: () => [],
   },
+  // the protection areas of the 2D map (routes and waypoints): shown or not there, and the biodiv-sports areas it
+  // loaded (EPSG:4326); null where the 2D map has none
+  protectionAreas: {
+    type: Object as PropType<{ visible: boolean; features: FeatureCollection } | null>,
+    default: null,
+  },
   // the element that goes full screen, as for the 2D map: the map and the elevation profile; else the 3D view alone
   fullScreenElementId: {
     type: String as PropType<string | null>,
@@ -196,6 +213,9 @@ const base = ref(
   ).title
 );
 const slopes = ref<string[]>([]);
+// as on the 2D map, where they are on by default for routes and waypoints
+const showProtectionAreas = ref(props.protectionAreas?.visible ?? false);
+const protectionAreasButton = { title: 'Fauna protection areas', image: 'fauna.jpg' };
 const shading = ref(false);
 const showLayerSwitcher = ref(false);
 const isFullscreen = ref(false);
@@ -208,6 +228,7 @@ const attributions = computed(() => {
     ...orthoLayers.filter((layer) => layer.title === base.value),
     ...(base.value === RELIEF ? [] : [worldLayer]),
     ...slopeLayers.filter((layer) => slopes.value.includes(layer.title)),
+    ...(props.protectionAreas && showProtectionAreas.value ? swissProtectionLayers : []),
     terrainSource,
   ];
   return [...new Set(shown.map((layer) => layer.attribution))];
@@ -239,6 +260,10 @@ function showLayers() {
     map.setLayoutProperty(layer.title, 'visibility', visibility(slopes.value.includes(layer.title)));
   }
   map.setLayoutProperty('shading', 'visibility', visibility(shading.value));
+  const protection = visibility(!!props.protectionAreas && showProtectionAreas.value);
+  for (const id of [...swissProtectionLayers.map((layer) => layer.title), 'protection-fill', 'protection-line']) {
+    map.setLayoutProperty(id, 'visibility', protection);
+  }
 }
 
 function toggleSlope(title: string) {
@@ -433,6 +458,11 @@ onMounted(() => {
             data: paragliding ? withoutParaglidingTracks(props.documents) : props.documents,
           },
           'flight-shadows': { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
+          ...Object.fromEntries(swissProtectionLayers.map((layer) => [layer.title, rasterSource(layer)])),
+          protection: {
+            type: 'geojson',
+            data: props.protectionAreas?.features ?? { type: 'FeatureCollection', features: [] },
+          },
         },
         layers: [
           { id: 'background', type: 'background', paint: { 'background-color': '#e6eef5' } },
@@ -453,6 +483,23 @@ onMounted(() => {
             paint: { 'hillshade-exaggeration': 0.5 },
           },
           ...slopeLayers.map((layer) => raster(layer, 0.4)),
+          // the protection areas, in the colours of the 2D map (buildPolygonStyle) but lighter: the terrain shows
+          // through; the outline keeps their limit readable
+          ...swissProtectionLayers.map((layer) => raster(layer, 0.4)),
+          {
+            id: 'protection-fill',
+            type: 'fill',
+            source: 'protection',
+            layout: { visibility: 'none' },
+            paint: { 'fill-color': 'rgb(251, 201, 0)', 'fill-opacity': 0.2 },
+          },
+          {
+            id: 'protection-line',
+            type: 'line',
+            source: 'protection',
+            layout: { visibility: 'none' },
+            paint: { 'line-color': 'rgb(120, 95, 0)', 'line-opacity': 0.6, 'line-width': 1.5 },
+          },
           {
             id: 'documents-line',
             type: 'line',
@@ -499,7 +546,7 @@ onMounted(() => {
   resizeObserver.observe(rootElementEl.value!);
 });
 
-watch([base, slopes, shading], showLayers);
+watch([base, slopes, shading, showProtectionAreas], showLayers);
 watch(
   () => props.documents,
   (data) => (map?.getSource('documents') as GeoJSONSource | undefined)?.setData(data)

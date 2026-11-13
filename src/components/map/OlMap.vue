@@ -24,6 +24,7 @@
       :country="map3d.country"
       :documents="map3d.documents"
       :markers="map3d.markers"
+      :protection-areas="map3d.protectionAreas"
       :full-screen-element-id="fullScreenElementId"
       @close="map3d = null"
       @unavailable="on3dUnavailable"
@@ -432,6 +433,7 @@ const map3d = shallowRef<{
   country: string | undefined;
   documents: FeatureCollection;
   markers: Marker3d[];
+  protectionAreas: { visible: boolean; features: FeatureCollection } | null;
 } | null>(null);
 
 // the OpenLayers map and its controls: created on mount, not state to observe
@@ -568,6 +570,20 @@ function open3d() {
         })),
     },
     markers,
+    // the biodiv-sports areas the 2D map loaded: its view and half a view around, where the 3D view opens
+    protectionAreas:
+      props.showProtectionAreas && !editable.value
+        ? {
+            visible: protectionAreasVisible.value,
+            features: geoJSONFormat.writeFeaturesObject(
+              protectionAreasLayer
+                .getSource()!
+                .getFeatures()
+                .map((feature) => new ol.Feature(feature.getGeometry())),
+              { featureProjection: 'EPSG:3857', dataProjection: 'EPSG:4326' }
+            ) as FeatureCollection,
+          }
+        : null,
   };
 }
 

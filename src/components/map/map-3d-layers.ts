@@ -200,6 +200,28 @@ export const slopeLayers: Layer3d[] = [
   },
 ];
 
+// the protection areas of Switzerland, as on the 2D map (map-layers.ts); the biodiv-sports areas come from the 2D map
+export const swissProtectionLayers: Layer3d[] = [
+  {
+    title: 'Swiss tranquility zones',
+    image: 'fauna.jpg',
+    country: 'ch',
+    tiles: swisstopo('ch.bafu.wrz-wildruhezonen_portal', 'png'),
+    maxzoom: 17,
+    bounds: SWISS_BOUNDS,
+    attribution: '© swisstopo',
+  },
+  {
+    title: 'Swiss fauna protection zones',
+    image: 'fauna.jpg',
+    country: 'ch',
+    tiles: swisstopo('ch.bafu.wrz-jagdbanngebiete_select', 'png'),
+    maxzoom: 17,
+    bounds: SWISS_BOUNDS,
+    attribution: '© swisstopo',
+  },
+];
+
 // the orthophoto of the country of a point, if we have one
 export function orthoLayerAt(lon: number, lat: number): Layer3d | undefined {
   // Switzerland first: its box is inside the French one
