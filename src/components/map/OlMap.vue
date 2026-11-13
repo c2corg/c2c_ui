@@ -199,6 +199,7 @@
         <strong>{{ $gettext('Tracks here') }}</strong>
         <button type="button" class="delete" :aria-label="$gettext('Close')" @click="closeTrackPanel" />
       </header>
+      <p v-if="trackPanelTruncated" class="track-panel-note">{{ $gettext('Only the most recent ones are listed') }}</p>
       <ul>
         <li
           v-for="entry of trackPanelEntries"
@@ -532,6 +533,8 @@ const densityEnabled = reactive<Record<DensityType, boolean>>({ outing: false, r
 const densityUnavailable = ref(false);
 // the tracks under a click or a tap, to choose from, with their line on the map
 const trackPanelEntries = shallowRef<{ document: DensityTrack; feature: Feature }[]>([]);
+// the list is only the most recent ones (a click on a place too busy to draw its tracks)
+const trackPanelTruncated = ref(false);
 // false just after a tap opened the panel: the click that follows it would land on the panel
 const trackPanelReady = ref(true);
 // the track under the pointer, and how many others are there
@@ -1602,6 +1605,7 @@ let trackPanelTimeout: ReturnType<typeof setTimeout> | undefined;
 
 function openTrackPanel(features: Feature[], touch: boolean) {
   trackPanelEntries.value = trackEntries(features);
+  trackPanelTruncated.value = false;
   hideTrackTooltip();
 
   // a touch screen sends a click after the tap, where the panel now is: it must not open the first track
@@ -1613,8 +1617,71 @@ function openTrackPanel(features: Feature[], touch: boolean) {
 }
 
 function closeTrackPanel() {
+  recentRequest?.abort();
   trackPanelEntries.value = [];
+  trackPanelTruncated.value = false;
   setHighlightedFeature(null);
+}
+
+// How far from a click, in pixels, the documents are listed when the overlay is a heatmap, and how many (the most
+// recent ones; the API says when there are more)
+const RECENT_CLICK_RADIUS = 20;
+const RECENT_TOUCH_CLICK_RADIUS = 32;
+const RECENT_COUNT = 30;
+let recentRequest: AbortController | undefined;
+
+// A click on the density of an overlay (too many tracks to draw them): the most recent documents there, in the same
+// panel as the tracks. Returns whether there is a density under the click.
+function listRecentTracks(event: MapBrowserEvent<PointerEvent>, touch: boolean) {
+  const types = DENSITY_TYPES.filter((type) => densityEnabled[type] && heatmapLayers[type]?.getVisible());
+  if (!types.length) {
+    return false;
+  }
+
+  const radius = (touch ? RECENT_TOUCH_CLICK_RADIUS : RECENT_CLICK_RADIUS) * view().getResolution()!;
+  const [x, y] = event.coordinate;
+  const bbox = [x - radius, y - radius, x + radius, y + radius].map(Math.round).join(',');
+
+  recentRequest?.abort();
+  const { signal } = (recentRequest = new AbortController());
+
+  Promise.all(
+    types.map(async (type) => {
+      const filters = (type === 'outing' ? props.tracksFilters : props.routesFilters) ?? {};
+      const { data } = await DENSITY_OVERLAYS[type].getTracks(
+        { ...filters, bbox, pl: $language.current, recent: RECENT_COUNT },
+        signal
+      );
+      const holder = new ol.source.Vector();
+      const features: Feature[] = [];
+      for (const document of data.documents) {
+        const feature = addFeature(
+          holder,
+          JSON.parse(document.geometry.geom_detail),
+          densityLayers[type].trackStyle,
+          null
+        );
+        feature?.set('document', document);
+        feature?.set('trackHighlightedStyle', densityLayers[type].trackHighlightedStyle);
+        if (feature) {
+          features.push(feature);
+        }
+      }
+      return { features, truncated: data.truncated };
+    })
+  )
+    .then((answers) => {
+      const features = answers.flatMap((answer) => answer.features);
+      if (signal.aborted || !features.length) {
+        return;
+      }
+      openTrackPanel(features, touch);
+      trackPanelTruncated.value = answers.some((answer) => answer.truncated);
+    })
+    // the overlays are not critical: the click does nothing
+    .catch(() => undefined);
+
+  return true;
 }
 
 function onClick(event: MapBrowserEvent<PointerEvent>) {
@@ -1680,6 +1747,11 @@ function onClick(event: MapBrowserEvent<PointerEvent>) {
       biodivWindowEl.value!.show();
     }
   } else {
+    // a click on the density of an overlay: the most recent documents there
+    if (showDensityOverlays.value && listRecentTracks(event, touch)) {
+      return;
+    }
+
     // handle clicks on enabled layers
     if (protectionAreasVisible.value) {
       const extent = view().calculateExtent(map.getSize());
@@ -2392,6 +2464,15 @@ defineExpose({
     align-items: center;
     justify-content: space-between;
     padding: 6px 10px;
+    border-bottom: 1px solid var(--c2c-grey-lighter);
+  }
+
+  .track-panel-note {
+    flex: none;
+    margin: 0;
+    padding: 4px 10px;
+    font-size: 0.85em;
+    color: var(--c2c-grey-dark);
     border-bottom: 1px solid var(--c2c-grey-lighter);
   }
 
