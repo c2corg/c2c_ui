@@ -55,6 +55,22 @@ echo "$html" | grep -Eq '<script nonce="[^"_]+" data-c2c-config>window\.CAMPTOCA
   fail "runtime configuration not inline: $html"
 echo "$html" | grep -q 'src="/config.js"' && fail "index.html still loads /config.js: $html"
 
+# the module worker of the 3D view (MapLibre) is served as JavaScript, the other assets keep their types
+content_type() {
+  curl -sf -o /dev/null -w '%{content_type}' "http://127.0.0.1:$ui_port$1" || fail "GET $1 failed"
+}
+for asset in $(docker exec "$container" ls /usr/share/nginx/html/assets); do
+  case "$asset" in
+    *.mjs) expected=text/javascript ;;
+    *.js) expected=application/javascript ;;
+    *.css) expected=text/css ;;
+    *) continue ;;
+  esac
+  type=$(content_type "/assets/$asset")
+  [ "${type%%;*}" = "$expected" ] || fail "/assets/$asset served as $type, not $expected"
+done
+docker exec "$container" ls /usr/share/nginx/html/assets | grep -q '\.mjs$' || fail "no .mjs asset to check"
+
 # from the cache this time: the fake API is gone
 kill "$api_pid"
 api_pid=""
