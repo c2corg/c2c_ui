@@ -31,6 +31,7 @@
             !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
           "
           :show-pin-to-top-button="true"
+          :show3d="show3d"
           @has-protection-area="$emit('has-protection-area')"
           @pin-to-top-clicked="togglePinToSide(true)"
         />
@@ -76,6 +77,11 @@ const props = defineProps({ ...documentProperty });
 defineEmits(['has-protection-area']);
 
 const route = useRoute();
+
+// the 3D view for every route (around its waypoints when it has no track) and for the outings with a track
+const show3d = computed(
+  () => props.document.type === 'r' || (props.document.type === 'o' && !!props.document.geometry?.geom_detail)
+);
 const { $documentUtils } = useGlobalProperties();
 const { documentType } = useDocumentType(props);
 

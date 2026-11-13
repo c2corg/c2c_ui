@@ -1,0 +1,174 @@
+// paragliding tracks in the 3D view. The walk stays draped on the terrain (the documents line layer), the
+// flights are drawn in the air with deck.gl (MapLibre has no 3D line), with thin vertical lines down to the terrain
+// so that the height reads, and their shadow draped on the ground.
+// deck.gl is only downloaded when a paragliding track is shown. All of it starts when the 3D view opens, in
+// parallel with the map: the terrain tiles are read directly, not through the map.
+import type { Feature, FeatureCollection, MultiLineString, Position } from 'geojson';
+import type { Map as MapLibreMap } from 'maplibre-gl';
+
+import { type FlightSplit, splitFlights, type TrackPart } from './map-3d-flight';
+import { sampleTerrain } from './map-3d-terrain';
+
+export const FLIGHT_COLOR: [number, number, number] = [214, 39, 40];
+
+type Flights = {
+  // the documents with the paragliding tracks reduced to their walk
+  documents: FeatureCollection;
+  // the flights, on the ground (their shadow)
+  shadows: FeatureCollection;
+  // the flights in the air, [lon, lat, elevation as drawn]
+  paths: Position[][];
+  // vertical lines from the terrain to the flight, every ~150 m
+  drops: [Position, Position][];
+};
+
+const isTrack = (feature: Feature) =>
+  !!feature.properties?.paragliding &&
+  (feature.geometry.type === 'LineString' || feature.geometry.type === 'MultiLineString');
+
+/** Whether the documents have a paragliding track: then the 3D view looks for its flights */
+export const hasParaglidingTrack = (documents: FeatureCollection): boolean => documents.features.some(isTrack);
+
+/** The documents without their paragliding tracks: what the 3D view shows while it looks for the flights */
+export const withoutParaglidingTracks = (documents: FeatureCollection): FeatureCollection => ({
+  ...documents,
+  features: documents.features.filter((feature) => !isTrack(feature)),
+});
+
+// deck.gl, downloaded once, as soon as a paragliding track is to be shown (in parallel with the terrain reads)
+let deckModules: Promise<[typeof import('@deck.gl/mapbox'), typeof import('@deck.gl/layers')]> | undefined;
+export const loadFlightLayers = () =>
+  (deckModules ??= Promise.all([import('@deck.gl/mapbox'), import('@deck.gl/layers')]));
+
+const partsOf = (feature: Feature): TrackPart[] =>
+  feature.geometry.type === 'LineString'
+    ? [feature.geometry.coordinates]
+    : feature.geometry.type === 'MultiLineString'
+      ? feature.geometry.coordinates
+      : [];
+
+// the lines of the vertices a..b of each run, never across two parts of the track
+function lines(split: FlightSplit, ranges: [number, number][]): Position[][] {
+  const out: Position[][] = [];
+  for (const [a, b] of ranges) {
+    let line: Position[] = [];
+    for (let i = a; i <= b; i++) {
+      if (i > a && split.part[i] !== split.part[i - 1]) {
+        if (line.length > 1) out.push(line);
+        line = [];
+      }
+      line.push(split.vertices[i].slice(0, 2));
+    }
+    if (line.length > 1) out.push(line);
+  }
+  return out;
+}
+
+const groundRanges = (split: FlightSplit): [number, number][] => {
+  const ranges: [number, number][] = [];
+  let start = 0;
+  for (const [a, b] of split.flights) {
+    if (a > start) ranges.push([start, a]);
+    start = b;
+  }
+  if (start < split.vertices.length - 1) ranges.push([start, split.vertices.length - 1]);
+  return ranges;
+};
+
+const multiLine = (coordinates: Position[][]): Feature<MultiLineString> => ({
+  type: 'Feature',
+  properties: {},
+  geometry: { type: 'MultiLineString', coordinates },
+});
+
+/** The flights of the paragliding tracks of the documents, null when there is none */
+export async function findFlights(documents: FeatureCollection, exaggeration: number): Promise<Flights | null> {
+  const tracks = documents.features.filter(isTrack);
+  if (!tracks.length) return null;
+  const splits = new Map<Feature, FlightSplit | null>(
+    await Promise.all(tracks.map(async (track) => [track, await splitFlights(partsOf(track), sampleTerrain)] as const))
+  );
+  if (![...splits.values()].some((split) => split?.flights.length)) return null;
+
+  const flights: Flights = {
+    documents: { type: 'FeatureCollection', features: [] },
+    shadows: { type: 'FeatureCollection', features: [] },
+    paths: [],
+    drops: [],
+  };
+  for (const feature of documents.features) {
+    const split = splits.get(feature);
+    if (!split?.flights.length) {
+      flights.documents.features.push(feature);
+      continue;
+    }
+    flights.documents.features.push(multiLine(lines(split, groundRanges(split))));
+    flights.shadows.features.push(multiLine(lines(split, split.flights)));
+    // in the air: the GPS altitude minus the offset of the track to the terrain, so that the flight leaves and meets
+    // the terrain where it does; exaggerated as the terrain is
+    const air = (i: number): Position => [
+      split.vertices[i][0],
+      split.vertices[i][1],
+      (split.vertices[i][2] - split.offset[i]) * exaggeration,
+    ];
+    for (const [a, b] of split.flights) {
+      const path: Position[] = [];
+      for (let i = a; i <= b; i++) path.push(air(i));
+      flights.paths.push(path);
+    }
+    const tops: Position[] = [];
+    for (const [a, b] of split.flights) {
+      let walked = Infinity;
+      for (let i = a; i < b; i++) {
+        const [lon, lat] = split.vertices[i];
+        const [lon2, lat2] = split.vertices[i + 1];
+        walked += Math.hypot((lon2 - lon) * Math.cos((lat * Math.PI) / 180), lat2 - lat) * 111_195;
+        if (walked >= 150) {
+          tops.push(air(i));
+          walked = 0;
+        }
+      }
+    }
+    const grounds = await sampleTerrain(tops.map(([lon, lat]) => [lon, lat]));
+    tops.forEach((top, k) => {
+      if (Number.isFinite(grounds[k])) flights.drops.push([[top[0], top[1], grounds[k] * exaggeration], top]);
+    });
+  }
+  return flights;
+}
+
+/** Draws the flights in the air on the map, returns what removes them */
+export async function addFlightLayers(map: MapLibreMap, flights: Flights): Promise<() => void> {
+  const [{ MapboxOverlay }, { LineLayer, PathLayer }] = await loadFlightLayers();
+  const overlay = new MapboxOverlay({
+    interleaved: true,
+    layers: [
+      new LineLayer<[Position, Position]>({
+        id: 'flight-drops',
+        data: flights.drops,
+        getSourcePosition: (drop) => drop[0] as [number, number, number],
+        getTargetPosition: (drop) => drop[1] as [number, number, number],
+        getColor: [...FLIGHT_COLOR, 120],
+        getWidth: 1,
+      }),
+      new PathLayer<Position[]>({
+        id: 'flight-paths',
+        data: flights.paths,
+        getPath: (path) => path as [number, number, number][],
+        getColor: FLIGHT_COLOR,
+        getWidth: 4,
+        widthUnits: 'pixels',
+        capRounded: true,
+        jointRounded: true,
+        billboard: true,
+      }),
+    ],
+  });
+  // deck.gl 9.4 reads map.transform, which MapLibre 6 moved to its camera
+  const camera = (map as unknown as { _camera?: { transform: unknown } })._camera;
+  if (!('transform' in map) && camera) {
+    Object.defineProperty(map, 'transform', { get: () => camera.transform, configurable: true });
+  }
+  map.addControl(overlay);
+  return () => map.removeControl(overlay);
+}

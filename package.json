@@ -23,6 +23,9 @@
   },
   "dependencies": {
     "@c2corg/fit-parser-extract-geometry": "1.0.3",
+    "@deck.gl/core": "9.4.1",
+    "@deck.gl/layers": "9.4.1",
+    "@deck.gl/mapbox": "9.4.1",
     "@fortawesome/fontawesome-svg-core": "7.3.1",
     "@fortawesome/free-brands-svg-icons": "7.3.1",
     "@fortawesome/free-regular-svg-icons": "7.3.1",
@@ -46,6 +49,7 @@
     "dompurify": "3.4.17",
     "exifreader": "4.54.0",
     "file-saver": "2.0.5",
+    "maplibre-gl": "6.17.0",
     "mitt": "3.0.1",
     "ol": "10.11.0",
     "pinia": "4.1.0",
