@@ -274,7 +274,8 @@ function buildDiff() {
     return;
   }
 
-  const keys = getKeys(oldDocument, newDocument, ['version', 'locales', 'geometry', 'cooked', 'filename']);
+  // license is computed by the API on each read, not a property of the version
+  const keys = getKeys(oldDocument, newDocument, ['version', 'locales', 'geometry', 'cooked', 'filename', 'license']);
 
   for (const key of keys) {
     if (hasChanged(oldDocument[key], newDocument[key])) {

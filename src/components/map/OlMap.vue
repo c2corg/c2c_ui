@@ -13,6 +13,23 @@
       </button>
     </div>
 
+    <!-- 3D view -->
+    <div v-show="show3d && can3d" ref="map3dButton" class="ol-control ol-control-3d" title="3D">
+      <button aria-label="3D" @click.stop="open3d"><span>3D</span></button>
+    </div>
+
+    <map-3d-view
+      v-if="map3d"
+      :bounds="map3d.bounds"
+      :country="map3d.country"
+      :documents="map3d.documents"
+      :markers="map3d.markers"
+      :protection-areas="map3d.protectionAreas"
+      :full-screen-element-id="fullScreenElementId"
+      @close="map3d = null"
+      @unavailable="on3dUnavailable"
+    />
+
     <div
       v-show="showPinToTopButton && !isFullscreen"
       ref="togglePinToTopButton"
@@ -223,6 +240,7 @@
 </template>
 
 <script setup lang="ts">
+import type { FeatureCollection, Geometry } from 'geojson';
 import type Feature from 'ol/Feature';
 import type { FeatureLike } from 'ol/Feature';
 import type OlMap from 'ol/Map';
@@ -239,6 +257,7 @@ import type Style from 'ol/style/Style';
 import type { StyleLike } from 'ol/style/Style';
 import {
   computed,
+  defineAsyncComponent,
   markRaw,
   type PropType,
   onBeforeUnmount,
@@ -254,6 +273,8 @@ import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router';
 import BiodivInformation from './BiodivInformation.vue';
 import LayerButton from './LayerButton.vue';
 import SwissProtectionAreaInformation from './SwissProtectionAreaInformation.vue';
+import type { Marker3d } from './map-3d-markers';
+import { markUnsupported, supports3d } from './map-3d-support';
 import {
   DENSITY_FETCH_DEBOUNCE,
   DENSITY_OVERLAYS,
@@ -278,6 +299,7 @@ import {
   buildPolygonStyle,
   geoJSONFormat,
   getDocumentLineStyle,
+  getDocumentIcon,
   getDocumentPointStyle,
   getDocumentPolygonStyle,
   getElevationProfileMarkerStyle,
@@ -324,6 +346,10 @@ type PhotonFeature = {
   geometry: { coordinates: number[] };
   properties: Record<string, string | undefined> & { extent?: number[] };
 };
+
+// MapLibre is loaded only when the 3D view opens
+const Map3dView = defineAsyncComponent(() => import('./Map3dView.vue'));
+// a type only: the markers module is loaded with the 3D view
 
 const isNotVirtual = (waypoint: C2cDocument) => waypoint.waypoint_type !== 'virtual';
 
@@ -411,6 +437,12 @@ const props = defineProps({
   },
 
   openInNewTab: {
+    type: Boolean,
+    default: false,
+  },
+
+  // the 3D button
+  show3d: {
     type: Boolean,
     default: false,
   },
@@ -510,6 +542,14 @@ const initialGeometry = ref<C2cDocument['geometry']>(null);
 const highlightedFeature = shallowRef<FeatureLike | null>(null);
 const minZoomLevel = ref(DEFAULT_POINT_ZOOM);
 const editMapLink = ref<string | null>(null);
+// what the 3D view shows, null when closed
+const map3d = shallowRef<{
+  bounds: [number, number, number, number];
+  country: string | undefined;
+  documents: FeatureCollection;
+  markers: Marker3d[];
+  protectionAreas: { visible: boolean; features: FeatureCollection } | null;
+} | null>(null);
 
 // the OpenLayers map and its controls: created on mount, not state to observe
 let map: OlMap;
@@ -537,6 +577,23 @@ const recenterOnPropositionsControlEl = useTemplateRef<HTMLElement>('recenterOnP
 const resetGeometryControlEl = useTemplateRef<HTMLElement>('resetGeometryControl');
 const clearGeometryControlEl = useTemplateRef<HTMLElement>('clearGeometryControl');
 const editMapControlEl = useTemplateRef<HTMLElement>('editMapControl');
+const map3dButtonEl = useTemplateRef<HTMLElement>('map3dButton');
+// the browser can show the 3D view (WebGL 2), checked only where the 3D button may show
+const can3d = ref(false);
+watch(
+  () => props.show3d,
+  (show3d) => {
+    if (show3d) can3d.value = supports3d();
+  },
+  { immediate: true }
+);
+
+// the 3D view failed to start (WebGL refused): back to 2D, without the button
+function on3dUnavailable() {
+  markUnsupported();
+  can3d.value = false;
+  map3d.value = null;
+}
 const biodivWindowEl = useTemplateRef<{ show(): void }>('biodivWindow');
 const swissWindowEl = useTemplateRef<{ show(): void }>('swissWindow');
 
@@ -567,6 +624,140 @@ const visibleLayer = computed({
 });
 
 const osmLayer = computed(() => visibleLayer.value.get('title') === 'OpenTopoMap');
+
+// c2c areas of the countries that have an orthophoto in 3D
+const ORTHO_COUNTRY_AREAS: Record<number, string> = { 14274: 'fr', 14067: 'ch', 14267: 'es' };
+
+function documentsCountry(): string | undefined {
+  for (const document of props.documents ?? []) {
+    for (const area of document.areas ?? []) {
+      if (ORTHO_COUNTRY_AREAS[area.document_id]) return ORTHO_COUNTRY_AREAS[area.document_id];
+    }
+  }
+  return undefined;
+}
+
+// opens the 3D view on the extent, base layer and documents of the 2D map
+function open3d() {
+  const extent = ol.proj.transformExtent(view().calculateExtent(map.getSize()), 'EPSG:3857', 'EPSG:4326');
+  const toLonLat = (feature: Feature) =>
+    ol.proj.toLonLat((feature.getGeometry() as InstanceType<typeof ol.geom.Point>).getCoordinates()) as [
+      number,
+      number,
+    ];
+  const marker = (feature: Feature, interactive: boolean): Marker3d | null => {
+    const document = feature.get('document') as C2cDocument | undefined;
+    const icon = document && getDocumentIcon(document);
+    if (!document || !icon) return null;
+    return {
+      lonLat: toLonLat(feature),
+      title: $documentUtils.getDocumentTitle(document),
+      ...icon,
+      to: interactive
+        ? { name: $documentUtils.getDocumentType(document.type), params: { id: document.document_id } }
+        : null,
+    };
+  };
+  const isPoint = (feature: Feature) => feature.getGeometry()?.getType() === 'Point';
+  const documentFeatures = documentsLayer.getSource()!.getFeatures();
+  const lines = [...documentFeatures, ...editionLayer.getSource()!.getFeatures()].filter(
+    (feature) => feature.getGeometry() && !isPoint(feature)
+  );
+  const waypointMarkers = waypointsLayer
+    .getSource()!
+    .getFeatures()
+    .filter(isPoint)
+    .map((feature) => marker(feature, true));
+  // the point of the document itself: a waypoint always (among its child waypoints), another document only when there
+  // is nothing else to show (no track, no waypoint)
+  const documentPoints = documentFeatures.filter(isPoint);
+  const ownPoints = documentPoints.filter(
+    (feature) => (feature.get('document') as C2cDocument | undefined)?.type === 'w'
+  );
+  const markers = [
+    ...documentPoints
+      .filter((feature) => ownPoints.includes(feature) || !(lines.length || waypointMarkers.length))
+      .map((feature) => marker(feature, false)),
+    ...waypointMarkers,
+  ].filter((m): m is Marker3d => !!m);
+  const features = lines;
+  map3d.value = {
+    bounds: extent as [number, number, number, number],
+    // the country of the 2D base layer, else the one of the documents
+    country: visibleLayer.value.get('country') ?? documentsCountry(),
+    documents: {
+      type: 'FeatureCollection',
+      features: features
+        .filter((feature) => feature.getGeometry())
+        .map((feature) => ({
+          type: 'Feature',
+          // paragliding tracks: their flights are drawn in the air
+          properties: {
+            paragliding: !!(feature.get('document') as C2cDocument | undefined)?.activities?.includes('paragliding'),
+          },
+          geometry: geoJSONFormat.writeGeometryObject(feature.getGeometry()!, {
+            featureProjection: 'EPSG:3857',
+            dataProjection: 'EPSG:4326',
+          }) as Geometry,
+        })),
+    },
+    markers,
+    // the biodiv-sports areas the 2D map loaded: its view and half a view around, where the 3D view opens
+    protectionAreas:
+      props.showProtectionAreas && !editable.value
+        ? {
+            visible: protectionAreasVisible.value,
+            features: geoJSONFormat.writeFeaturesObject(
+              protectionAreasLayer
+                .getSource()!
+                .getFeatures()
+                .map((feature) => new ol.Feature(feature.getGeometry())),
+              { featureProjection: 'EPSG:3857', dataProjection: 'EPSG:4326' }
+            ) as FeatureCollection,
+          }
+        : null,
+  };
+  addRouteWaypoints();
+}
+
+// an outing has no waypoint of its own: the 3D view also shows those of its routes (access, hut, summit), read when
+// it opens (a request per route, 3 routes at most)
+async function addRouteWaypoints() {
+  const opened = map3d.value;
+  const routeIds = [
+    ...new Set(
+      (props.documents ?? [])
+        .filter((document) => document.type === 'o')
+        .flatMap((outing) => outing.associations?.routes?.map((route) => route.document_id) ?? [])
+        .filter((id): id is number => id !== undefined)
+    ),
+  ].slice(0, 3);
+  if (!opened || !routeIds.length) return;
+  const routes = await Promise.all(
+    routeIds.map((id) =>
+      Promise.resolve((c2c.route as DocumentService).get(id, $language.current!)).then(
+        (response) => response.data as C2cDocument,
+        () => null
+      )
+    )
+  );
+  if (map3d.value !== opened) return;
+  const shown = new Set(opened.markers.map((marker) => (marker.to as { params?: { id?: number } } | null)?.params?.id));
+  const markers: Marker3d[] = [];
+  for (const waypoint of routes.flatMap((route) => route?.associations?.waypoints ?? []).filter(isNotVirtual)) {
+    const icon = getDocumentIcon(waypoint);
+    if (!icon || !waypoint.geometry?.geom || shown.has(waypoint.document_id)) continue;
+    shown.add(waypoint.document_id);
+    const point = geoJSONFormat.readGeometry(waypoint.geometry.geom) as InstanceType<typeof ol.geom.Point>;
+    markers.push({
+      lonLat: ol.proj.toLonLat(point.getCoordinates()) as [number, number],
+      title: $documentUtils.getDocumentTitle(waypoint),
+      ...icon,
+      to: { name: 'waypoint', params: { id: waypoint.document_id } },
+    });
+  }
+  if (markers.length) map3d.value = { ...opened, markers: [...opened.markers, ...markers] };
+}
 
 function createFullScreenController(source: HTMLElement | string) {
   const control = new ol.control.FullScreen({
@@ -907,7 +1098,11 @@ function addDocumentFeature(document: C2cDocument | null, source: VectorSource, 
       )!.set('document', document);
     }
   } else {
-    if (document.geometry.geom) {
+    // outside edition and diffs, the point marker of a document with a line adds nothing to the line:
+    // the line alone is shown, and carries the id used to highlight the document from the lists
+    const lineOnly = !!document.geometry.geom_detail && !style && source !== editionLayer.getSource();
+
+    if (document.geometry.geom && !lineOnly) {
       const feature = addFeature(
         source,
         JSON.parse(document.geometry.geom),
@@ -919,12 +1114,17 @@ function addDocumentFeature(document: C2cDocument | null, source: VectorSource, 
       feature!.setId(document.document_id);
     }
     if (document.geometry.geom_detail) {
-      addFeature(
+      const feature = addFeature(
         source,
         JSON.parse(document.geometry.geom_detail),
         style ?? getDocumentLineStyle(title, false, document.properties),
         style ? null : getDocumentLineStyle(title, true, document.properties)
-      )!.set('document', document);
+      );
+
+      feature!.set('document', document);
+      if (lineOnly) {
+        feature!.setId(document.document_id);
+      }
     }
   }
 }
@@ -1874,6 +2074,7 @@ onMounted(() => {
       new ol.control.Control({ element: resetGeometryControlEl.value! }),
       new ol.control.Control({ element: clearGeometryControlEl.value! }),
       new ol.control.Control({ element: editMapControlEl.value! }),
+      new ol.control.Control({ element: map3dButtonEl.value! }),
       new ol.control.Attribution({ tipLabel: $gettext('Attributions', 'Map controls') }),
     ],
 
@@ -1997,7 +2198,8 @@ defineExpose({
 
 <style>
 /* disable mobile CSS for controls. */
-.ol-touch .ol-control button {
+.ol-touch .ol-control button,
+.ol-touch .ol-control a {
   font-size: 1.14em !important;
 }
 </style>
@@ -2021,12 +2223,12 @@ defineExpose({
 /* the controls are 0.5em from the edges of the map */
 
 .ol-control-pin-to-top {
-  top: 80px;
+  top: calc(1.5em + 3 * var(--map-button-size));
   left: 0.5em;
 }
 
 .ol-control-center-on-geolocation {
-  top: 120px;
+  top: calc(2em + 4 * var(--map-button-size));
   left: 0.5em;
 }
 
@@ -2096,6 +2298,18 @@ defineExpose({
 .ol-control-layer-switcher-button {
   bottom: 0.5em;
   left: 0.5em;
+}
+
+/* just above the layer switcher button */
+.ol-control-3d {
+  bottom: calc(1em + var(--map-button-size));
+  left: 0.5em;
+
+  /* a button of the same size as the others, with a smaller text so that two letters fit */
+  span {
+    font-size: 0.7em;
+    font-weight: bold;
+  }
 }
 
 .ol-control-use-map-as-filter {
@@ -2259,7 +2473,7 @@ defineExpose({
 }
 
 .ol-control-edit-map {
-  bottom: 35px;
+  bottom: calc(1em + var(--map-button-size));
   right: 0.5em;
 
   svg {
@@ -2297,6 +2511,20 @@ defineExpose({
 <style>
 /* the controls are 0.5em from the edges of the map */
 
+/*
+ * outer size of an OpenLayers button: 1.375em plus 1px margin on each side,
+ * buttons are 1.14 times bigger on touch devices (see above),
+ * stacked controls are positioned in em with it so they never overlap,
+ * even when the browser scales the text up (Android font size setting)
+ */
+.ol-viewport {
+  --map-button-size: calc(1.375em + 2px);
+}
+
+.ol-viewport.ol-touch {
+  --map-button-size: calc(1.14 * 1.375em + 2px);
+}
+
 .ol-attribution ul,
 .ol-scale-line {
   --ol-subtle-foreground-color: #666666;
@@ -2308,9 +2536,17 @@ defineExpose({
   flex-direction: column;
 }
 
+/* the › of the open attribution in the middle of its button (OpenLayers draws it high) */
+.ol-attribution button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
 .ol-scale-line {
   bottom: calc(0.5em + 1px);
-  right: 40px;
+  right: calc(1em + var(--map-button-size));
   left: initial;
   line-height: 1.3;
 }
@@ -2318,6 +2554,6 @@ defineExpose({
 .ol-full-screen {
   right: auto;
   left: 0.5em;
-  top: 60px;
+  top: calc(1em + 2 * var(--map-button-size));
 }
 </style>

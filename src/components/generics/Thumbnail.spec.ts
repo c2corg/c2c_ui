@@ -48,6 +48,21 @@ describe('Thumbnail', () => {
     const unknown = mount(Thumbnail, { props: { img: image, size: 'BI', reserveSize: true } }).find('img');
     expect(unknown.attributes('width')).toBeUndefined();
   });
+
+  it('offers BI too when given sizes, for an image shown bigger than its thumbnail', () => {
+    const photo = { ...image, width: 4000, height: 3000 };
+    const img = mount(Thumbnail, { props: { img: photo, size: 'MI', sizes: 'auto, 293px' } }).find('img');
+    expect(img.attributes()).toMatchObject({
+      src: 'https://media.example.org/photoMI.jpg',
+      srcset: 'https://media.example.org/photoMI.jpg 400w, https://media.example.org/photoBI.jpg 1500w',
+      sizes: 'auto, 293px',
+    });
+
+    // without sizes: the thumbnail only
+    const plain = mount(Thumbnail, { props: { img: photo, size: 'MI' } }).find('img');
+    expect(plain.attributes('srcset')).toBeUndefined();
+    expect(plain.attributes('sizes')).toBeUndefined();
+  });
 });
 
 describe('Thumbnail fallback', () => {
@@ -64,6 +79,23 @@ describe('Thumbnail fallback', () => {
     await img.trigger('error');
 
     expect(sources[0].attributes('srcset')).toBe(img.attributes('src'));
+    config.urls.modernThumbnailsTimestamp = 0;
+  });
+
+  it('offers the AVIF thumbnail and BI of a responsive image', () => {
+    config.urls.modernThumbnailsTimestamp = 1;
+    const wrapper = mount(Thumbnail, {
+      props: {
+        img: { document_id: 2, filename: '1588000000_123456.jpg', width: 4000, height: 3000 },
+        size: 'MI',
+        sizes: 'auto, 293px',
+      },
+    });
+    expect(wrapper.find('source').attributes()).toMatchObject({
+      srcset:
+        'https://media.example.org/1588000000_123456MI.avif 400w, https://media.example.org/1588000000_123456BI.avif 1500w',
+      sizes: 'auto, 293px',
+    });
     config.urls.modernThumbnailsTimestamp = 0;
   });
 });

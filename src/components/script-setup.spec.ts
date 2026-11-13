@@ -202,6 +202,38 @@ describe('TrackingDeviceActivities', () => {
     await flushPromises();
 
     expect(getActivityGeometry).toHaveBeenCalledWith(42, 7);
-    expect(wrapper.emitted('geojson')).toEqual([[{ type: 'LineString' }]]);
+    expect(wrapper.emitted('geojson')).toEqual([[{ type: 'LineString' }, []]]);
+  });
+
+  it('emits the c2c activities of the chosen one with its track', async () => {
+    vi.spyOn(trackingService, 'getActivities').mockResolvedValue({
+      data: [{ id: 7, c2cActivities: ['skitouring'] }],
+    } as never);
+    vi.spyOn(trackingService, 'getActivityGeometry').mockResolvedValue({ data: { type: 'LineString' } } as never);
+    const wrapper = mount(TrackingDeviceActivities, {
+      global: { ...global, stubs: { ...global.stubs, TrackingDeviceActivity: { template: '<div><slot /></div>' } } },
+    });
+    await flushPromises();
+
+    await wrapper.find('button').trigger('click');
+    await flushPromises();
+
+    expect(wrapper.emitted('geojson')).toEqual([[{ type: 'LineString' }, ['skitouring']]]);
+  });
+
+  it('tells the user that there is no activity', async () => {
+    vi.spyOn(trackingService, 'getActivities').mockResolvedValue({ data: [] } as never);
+    const wrapper = mount(TrackingDeviceActivities, { global });
+    await flushPromises();
+
+    expect(wrapper.text()).toBe('No activity found');
+  });
+
+  it('stops loading when the activities cannot be loaded', async () => {
+    vi.spyOn(trackingService, 'getActivities').mockRejectedValue(new Error('down'));
+    const wrapper = mount(TrackingDeviceActivities, { global });
+    await flushPromises();
+
+    expect(wrapper.text()).toBe('No activity found');
   });
 });

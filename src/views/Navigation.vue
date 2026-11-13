@@ -460,22 +460,28 @@ nav {
   }
 }
 
+/* like Discourse's .badge-notification: one line of text, same padding above and below */
 .forum-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
   box-sizing: content-box;
   min-width: 8px;
-  /* digits sit high in their line box: 2px more above them centers them visually */
-  height: 12px;
-  padding: 2px 3px 0;
+  padding: 2px 3px;
   border-radius: 8px;
   font-size: 10px;
   font-weight: bold;
-  line-height: 1;
+  line-height: 10px;
+  text-align: center;
+  white-space: nowrap;
   font-variant-numeric: tabular-nums;
   color: #fff;
   background-color: #337ab7;
+
+  /* where the digits sit in the line box depends on the font (Segoe UI, San Francisco, Roboto...):
+     trimmed to the digits' height (cap height to baseline), the same padding above and below centers them */
+  @supports (text-box: trim-both cap alphabetic) {
+    padding: 3.5px 3px;
+    text-box: trim-both cap alphabetic;
+  }
 
   &.is-messages {
     background-color: #090;

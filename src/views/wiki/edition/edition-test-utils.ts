@@ -46,6 +46,7 @@ export function mountEdition(view: Component, documentType: string, errors: unkn
 
   const fitMapToDocuments = vi.fn(() => Promise.resolve([600000, 5600000, 800000, 5800000]));
   const MapInputRow = defineComponent({
+    name: 'MapInputRow',
     setup(_, { expose }) {
       expose({ fitMapToDocuments });
       return () => h('div');

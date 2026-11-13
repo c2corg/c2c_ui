@@ -136,6 +136,28 @@ const colorByConditionRating: Record<string, string> = {
   awful: '#8B0000',
 };
 
+/** The icon of a document marker and its colour (condition, public transport), when it has a plain one */
+export const getDocumentIcon = function (document: C2cDocument): { svgSrc: string; color: string } | null {
+  const type = document.type;
+  let color = document.condition_rating ? colorByConditionRating[document.condition_rating] : '#F93';
+
+  if (type === 'i' || type === 'u' || type === 'x' || type === 'o' || type === 'r' || type === 's') {
+    return { svgSrc: getSvgSrcByDocumentType()[type], color };
+  }
+  if (type === 'w') {
+    if (
+      (document.waypoint_type === 'access' &&
+        document.public_transportation_rating &&
+        document.public_transportation_rating !== 'no service') ||
+      (document.properties && document.properties!.color === 'green')
+    ) {
+      color = '#4baf50';
+    }
+    return { svgSrc: customIconSvg('waypoint', document.waypoint_type || 'misc'), color };
+  }
+  return null;
+};
+
 export const getDocumentPointStyle = function (document: C2cDocument, title: string, highlight: boolean) {
   const type = document.type;
   let color: string;
@@ -192,24 +214,9 @@ export const getDocumentPointStyle = function (document: C2cDocument, title: str
     });
   }
 
-  if (!document.condition_rating) {
-    color = '#F93';
-  } else {
-    color = colorByConditionRating[document.condition_rating];
-  }
-
-  if (type === 'i' || type === 'u' || type === 'x' || type === 'o' || type === 'r' || type === 's') {
-    svgSrc = getSvgSrcByDocumentType()[type];
-  } else if (type === 'w') {
-    if (
-      (document.waypoint_type === 'access' &&
-        document.public_transportation_rating &&
-        document.public_transportation_rating !== 'no service') ||
-      (document.properties && document.properties!.color === 'green')
-    ) {
-      color = '#4baf50';
-    }
-    svgSrc = customIconSvg('waypoint', document.waypoint_type || 'misc');
+  const icon = getDocumentIcon(document);
+  if (icon) {
+    ({ svgSrc, color } = icon);
   } else if (type === 'z') {
     svgSrc = getSvgSrcByDocumentType()['z'];
 
@@ -251,13 +258,22 @@ export const getDocumentLineStyle = function (
   properties?: FeatureProperties | null
 ): Style | Style[] {
   if (highlight && !properties) {
-    return new ol.style.Style({
-      stroke: new ol.style.Stroke({
-        color: 'red',
-        width: 3,
+    // same slim dark border as the line when not highlighted, so the red line stays readable on any background
+    return [
+      new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: 'grey',
+          width: 4,
+        }),
       }),
-      text: buildTextStyle(title, highlight, false),
-    });
+      new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: 'red',
+          width: 3,
+        }),
+        text: buildTextStyle(title, highlight, false),
+      }),
+    ];
   } else if (highlight && properties && properties.color) {
     return new ol.style.Style({
       stroke: new ol.style.Stroke({
