@@ -26,6 +26,8 @@
           ref="olMap"
           :documents="new Array(document)"
           :show-protection-areas="['r', 'w'].includes(document.type!)"
+          :tracks-filters="overlayFilters.outing"
+          :routes-filters="overlayFilters.route"
           :biodiv-sports-activities="document.activities"
           :full-screen-element-id="
             !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
@@ -67,6 +69,7 @@ import { useRoute } from 'vue-router';
 import ElevationProfile from './ElevationProfile.vue';
 import MapLinks from './MapLinks.vue';
 
+import { documentOverlayFilters } from '@/components/map/density-overlays';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import bus from '@/js/event-bus';
 import { documentProperty, useDocumentType } from '@/js/properties';
@@ -83,6 +86,8 @@ const route = useRoute();
 const show3d = computed(() => ['r', 'o', 'w'].includes(props.document.type!));
 const { $documentUtils } = useGlobalProperties();
 const { documentType } = useDocumentType(props);
+// the "Tracks" and "Routes" overlays of the map show what is linked to the document
+const overlayFilters = computed(() => documentOverlayFilters(props.document));
 
 // named apart from the map-view tag
 const olMap = useTemplateRef<{ fitMapToDocuments(): void }>('olMap');

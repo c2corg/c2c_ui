@@ -3,9 +3,11 @@
     class="layer-button"
     @click="$emit('click')"
     :class="{ selected, 'show-slider': showSlider }"
-    :style="{
-      'background-image': 'url(' + assetUrl('layers', layer.image || layer.get('image')) + ')',
-    }"
+    :style="
+      image
+        ? { 'background-image': 'url(' + assetUrl('layers', image) + ')' }
+        : { 'background-color': layer.color || '#333' }
+    "
   >
     <span :id="titleId" class="layer-button-title">{{
       $gettext(layer.title || layer.get?.('title'), titleContext)
@@ -60,6 +62,7 @@ const opacity = ref((props.layer.get?.('opacity') ?? 1) * 100);
 
 // the layer title names the opacity slider handle for assistive technologies
 const titleId = computed(() => `layer-button-title-${uid}`);
+const image = computed(() => props.layer.image || props.layer.get?.('image'));
 const country = computed(() => props.layer.country || props.layer.get?.('country'));
 const isConfigurable = computed(() => !!props.layer.get?.('configurable'));
 

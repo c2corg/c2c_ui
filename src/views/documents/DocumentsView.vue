@@ -122,6 +122,8 @@
           ref="olMap"
           :documents="documentsShownOnMap"
           :highlighted-document="highlightedDocument"
+          :tracks-filters="overlayFilters.outing"
+          :routes-filters="overlayFilters.route"
           @highlight-document="highlightedDocument = $event"
           show-filter-control
           show-center-on-geolocation
@@ -144,6 +146,7 @@ import PageSelector from './utils/PageSelector.vue';
 import QueryItems from './utils/QueryItems.vue';
 import { normalizedPageQuery } from './utils/page-query';
 
+import { searchOverlayFilters } from '@/components/map/density-overlays';
 import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
@@ -190,6 +193,9 @@ const queryWithoutOffsetAndSort = computed(() => {
 
   return result;
 });
+
+// the "Tracks" and "Routes" overlays of the map follow the search
+const overlayFilters = computed(() => searchOverlayFilters(documentType.value, route.query));
 
 const documentsShownOnMap = computed(() =>
   filteredWaypoints.value.concat(documents.value ? documents.value.documents : [])
@@ -281,8 +287,8 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
 @import '@/assets/css/media.css';
 
 /*
- * The heights: section padding 1.5rem, header 34px with a bottom padding of 1.5rem, filters 32px with a bottom
- * padding of 0.5rem, tags 28px. On mobile: section padding 0.5rem, header 56px, filters 25px.
+ * On mobile the search bars are fixed on top, and the heights are calculated: section padding 0.5rem, header 56px,
+ * filters 25px.
  */
 
 .header-section {

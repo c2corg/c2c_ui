@@ -80,6 +80,8 @@
         ref="olMap"
         :documents="filteredDocuments"
         :show-protection-areas="!!document.type && ['r', 'w'].includes(document.type)"
+        :tracks-filters="overlayFilters.outing"
+        :routes-filters="overlayFilters.route"
         :biodiv-sports-activities="document.activities"
         @has-protection-area="$emit('has-protection-area')"
         @stop-clicked="handleStopClicked"
@@ -93,6 +95,7 @@
 import { computed, nextTick, ref, useTemplateRef, watch, type ComponentPublicInstance, type PropType } from 'vue';
 
 import type OlMap from '@/components/map/OlMap.vue';
+import { documentOverlayFilters } from '@/components/map/density-overlays';
 import transportService from '@/js/apis/transport-service';
 import { documentProperty, useDocumentType } from '@/js/properties';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
@@ -119,6 +122,8 @@ const props = defineProps({
 const emit = defineEmits(['accessibility-info-changed', 'has-protection-area', 'highlight-document', 'stops-updated']);
 
 const { documentType } = useDocumentType(props);
+// the "Tracks" and "Routes" overlays of the map show what is linked to the document
+const overlayFilters = computed(() => documentOverlayFilters(props.document));
 
 const olMap = useTemplateRef<InstanceType<typeof OlMap>>('olMap');
 const stopCardContainer = useTemplateRef<HTMLElement>('stopCardContainer');

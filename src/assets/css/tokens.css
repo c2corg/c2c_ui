@@ -58,6 +58,8 @@
   /* layout */
   --c2c-navbar-height: 3.25rem;
   --c2c-navbarad-height: 90px;
+  /* what the page content starts under: the navigation bar, taller on the wide screens (see .nav-dfm in App.vue) */
+  --c2c-header-height: var(--c2c-navbar-height);
   --c2c-itinevert-header-height: 4rem;
   --c2c-sidemenu-width: 200px;
 }
