@@ -129,9 +129,9 @@ describe('the Outings and Routes overlays of OlMap', () => {
             },
           ]
         : [];
-      return Promise.resolve({ data: { documents, truncated: true } }) as unknown as ReturnType<
-        typeof c2c.getOutingsTracks
-      >;
+      return Promise.resolve({
+        data: { documents, truncated: true, count: 412, count_capped: false },
+      }) as unknown as ReturnType<typeof c2c.getOutingsTracks>;
     });
     vi.spyOn(c2c, 'getOutingsHeatmap').mockImplementation(
       () => Promise.resolve({ data: { buckets: [] } }) as unknown as ReturnType<typeof c2c.getOutingsHeatmap>
@@ -152,6 +152,55 @@ describe('the Outings and Routes overlays of OlMap', () => {
     expect(wrapper.find('.ol-track-panel').text()).toContain('Recent hike');
     // more than the list
     expect(wrapper.find('.ol-track-panel').text()).toContain('Only the most recent ones are listed');
+    // how many there are
+    expect(wrapper.find('.ol-track-panel').text()).toContain('(412)');
+
+    wrapper.unmount();
+  });
+
+  it('keep the last click: the answer of an older one does not replace it', async () => {
+    const line = JSON.stringify({
+      type: 'LineString',
+      coordinates: [
+        [0, 0],
+        [10, 10],
+      ],
+    });
+    const answer = (title: string) => ({
+      data: { documents: [{ document_id: 1, type: 'o', title, geometry: { geom_detail: line } }], truncated: true },
+    });
+    let releaseOld: (value: unknown) => void = () => undefined;
+    const calls: string[] = [];
+    vi.spyOn(c2c, 'getOutingsTracks').mockImplementation((params: Record<string, unknown>) => {
+      if (!params.recent) {
+        return Promise.resolve({ data: { documents: [], truncated: true } }) as never;
+      }
+      calls.push('lookup');
+      // the first lookup is slow, the second one is fast
+      return (
+        calls.length === 1
+          ? new Promise((resolve) => (releaseOld = () => resolve(answer('Old'))))
+          : Promise.resolve(answer('New'))
+      ) as never;
+    });
+    vi.spyOn(c2c, 'getOutingsHeatmap').mockImplementation(
+      () => Promise.resolve({ data: { buckets: [] } }) as unknown as ReturnType<typeof c2c.getOutingsHeatmap>
+    );
+    const { wrapper, vm } = await mountMap();
+    vm.map.getView().setZoom(15);
+    await overlayButtons(wrapper)[0].trigger('click');
+    await new Promise((resolve) => setTimeout(resolve));
+
+    const click = { pixel: [10, 10], coordinate: [100, 200], originalEvent: { pointerType: 'mouse' } };
+    vm.onClick(click);
+    vm.onClick(click);
+    await new Promise((resolve) => setTimeout(resolve));
+    releaseOld(undefined);
+    await new Promise((resolve) => setTimeout(resolve));
+    await nextTick();
+
+    expect(wrapper.find('.ol-track-panel').text()).toContain('New');
+    expect(wrapper.find('.ol-track-panel').text()).not.toContain('Old');
 
     wrapper.unmount();
   });
