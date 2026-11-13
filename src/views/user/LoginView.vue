@@ -431,7 +431,11 @@ function validateNewPassword() {
     .catch((error) => {
       // the API knows no valid nonce like this one: used, expired, or replaced by a more recent request (it keeps one
       // nonce per account). Its 'invalid nonce' would tell the user nothing: explain, and offer a new link instead.
-      if (apiErrors(error).some(({ description }) => description === 'invalid nonce')) {
+      // (unless another link was opened meanwhile: the answer is about an older one)
+      if (
+        route.query.change_password === nonce &&
+        apiErrors(error).some(({ description }) => description === 'invalid nonce')
+      ) {
         mode.value = 'invalidResetLink';
       }
     });
