@@ -197,6 +197,13 @@ describe('heatmapWeight', () => {
   it('goes from 0 to 1', () => {
     expect(heatmapWeight(0, 100)).toBe(0);
     expect(heatmapWeight(100, 100)).toBe(1);
+    expect(heatmapWeight(1, 1)).toBe(1);
+  });
+
+  it('keeps a place with one outing visible next to a place with tens of thousands', () => {
+    // the weight is the opacity: a few percent would be transparent
+    expect(heatmapWeight(1, 100000)).toBeGreaterThanOrEqual(0.4);
+    expect(heatmapWeight(1, 100000)).toBeLessThan(heatmapWeight(10, 100000));
   });
 
   it('does not leave the places with few documents in the dark next to the busiest one', () => {

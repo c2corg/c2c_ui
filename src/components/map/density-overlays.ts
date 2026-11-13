@@ -24,8 +24,8 @@ export const DENSITY_FETCH_DEBOUNCE = 400;
 export const DENSITY_TYPES: DensityType[] = ['outing', 'route'];
 
 // the size of a point of the heatmap and of its blur, in pixels: the cells of the grid of the API are a few pixels
-const HEATMAP_RADIUS = 6;
-const HEATMAP_BLUR = 10;
+const HEATMAP_RADIUS = 8;
+const HEATMAP_BLUR = 6;
 
 /**
  * The box to ask the API for, from the box of the view: the view, grown to the lines of a grid whose cells are a
@@ -49,10 +49,17 @@ export function snapExtent(extent: number[]): number[] {
   ];
 }
 
-// The weight of a cell of the heatmap, from 0 to 1. A logarithm: with a linear scale, the busiest place makes the
-// other ones, which have a tenth of its outings, almost disappear.
+// The weight of a cell of the heatmap, from 0 to 1. It is also its opacity, so the weight of a place with a single
+// outing must be enough to see it: with a logarithm from 0, the busiest place of a wide view (tens of thousands of
+// outings) leaves all the others at a few percent, transparent. A logarithm, because with a linear scale the other
+// places, which have a tenth of its outings, almost disappear; above a floor, so that none does.
+const HEATMAP_MIN_WEIGHT = 0.4;
+
 export function heatmapWeight(count: number, maxCount: number) {
-  return Math.log1p(count) / Math.log1p(Math.max(maxCount, 1));
+  if (count <= 0) {
+    return 0;
+  }
+  return HEATMAP_MIN_WEIGHT + ((1 - HEATMAP_MIN_WEIGHT) * Math.log1p(count)) / Math.log1p(Math.max(count, maxCount, 1));
 }
 
 // the answers of the endpoints, once the request is done
@@ -78,7 +85,7 @@ export const DENSITY_OVERLAYS: Record<
     title: 'Outings',
     // the orange and the blue of the site: a pair that is told apart by the colorblind (not a red on a green and brown
     // map), each on a casing of its own, light or dark. The heatmaps go from light to dark.
-    heatmapGradient: ['#fff1d6', '#ffd18a', '#ff9933', '#d9640a', '#8a3a00'],
+    heatmapGradient: ['#ffcf8a', '#ffab4d', '#ff8a1f', '#d9540a', '#8a3a00'],
     trackColor: '#ff9933',
     casingColor: '#2b2b2b',
     getHeatmap: (params, signal) => c2c.getOutingsHeatmap(params, signal),
@@ -86,7 +93,7 @@ export const DENSITY_OVERLAYS: Record<
   },
   route: {
     title: 'Routes',
-    heatmapGradient: ['#deebf7', '#9ecae1', '#4292c6', '#2171b5', '#08306b'],
+    heatmapGradient: ['#a9cfe8', '#6baed6', '#3b8bc4', '#1f5fa6', '#08306b'],
     trackColor: '#337ab7',
     casingColor: '#ffffff',
     getHeatmap: (params, signal) => c2c.getRoutesHeatmap(params, signal),
@@ -120,7 +127,7 @@ function trackStyle(type: DensityType, casingWidth: number, width: number) {
 // the layers of an overlay that exist from the start: the individual tracks of the viewport (high zoom)
 export function createDensityLayers(type: DensityType) {
   return markRaw({
-    tracks: markRaw(new ol.layer.Vector({ source: new ol.source.Vector(), visible: false })),
+    tracks: markRaw(new ol.layer.VectorImage({ source: new ol.source.Vector(), visible: false })),
     trackStyle: markRaw(trackStyle(type, 4.5, 2.5)),
     // under the pointer
     trackHighlightedStyle: markRaw(trackStyle(type, 8, 4.5)),
