@@ -39,7 +39,7 @@
     "@turf/simplify": "7.4.0",
     "@vue/devtools-api": "8.2.1",
     "@vueform/slider": "2.1.10",
-    "ag-grid-community": "36.2.0",
+    "ag-grid-community": "36.3.0",
     "ag-grid-vue3": "36.2.0",
     "axios": "1.21.0",
     "core-js": "3.51.0",
