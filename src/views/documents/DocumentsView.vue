@@ -482,9 +482,4 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
     }
   }
 }
-
-/* the dark theme of the app (src/stores/app-settings.ts, App.vue): the header of the listing on the dark page */
-html[data-theme='dark'] .search-infos {
-  background-color: #1a1a1a;
-}
 </style>

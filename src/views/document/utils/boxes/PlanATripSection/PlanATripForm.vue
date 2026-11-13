@@ -494,12 +494,12 @@ const { documentType } = useDocumentType(props);
 /* the dark theme of the app (src/stores/app-settings.ts, App.vue): dark buttons and fields */
 html[data-theme='dark'] .plan-trip-from-to {
   .addresses-container .swap-icon .swap-button {
-    background: #2a2a2a;
-    border-color: rgba(255, 255, 255, 0.15);
+    background: var(--app-dark-surface);
+    border-color: var(--app-dark-border);
   }
 
   .addresses-container .swap-icon .swap-button:hover {
-    background: #353535;
+    background: var(--app-dark-surface-hover);
   }
 
   .from-to-container {
@@ -507,23 +507,23 @@ html[data-theme='dark'] .plan-trip-from-to {
     .from-container-return,
     .to-container,
     .to-container-return {
-      border-color: rgba(255, 255, 255, 0.15);
+      border-color: var(--app-dark-border);
 
       .from-text,
       .to-text {
-        border-right-color: rgba(255, 255, 255, 0.15);
+        border-right-color: var(--app-dark-border);
       }
     }
 
     .to-container,
     .to-container-return {
       .to-address {
-        color: #e5e5e5;
+        color: var(--app-dark-text);
       }
 
       .chose-waypoint {
-        background-color: #1f1f1f;
-        color: #e5e5e5;
+        background-color: var(--app-dark-field);
+        color: var(--app-dark-text);
       }
     }
   }
@@ -531,21 +531,21 @@ html[data-theme='dark'] .plan-trip-from-to {
 
 html[data-theme='dark'] .select-date-container .date-picker-container {
   label {
-    color: #e5e5e5;
-    background-color: #2a2a2a;
+    color: var(--app-dark-text);
+    background-color: var(--app-dark-surface);
   }
 
   .input-container {
-    border-color: rgba(255, 255, 255, 0.15);
+    border-color: var(--app-dark-border);
 
     .date-input,
     .hour-input {
-      color: #e5e5e5;
-      background-color: #1f1f1f;
+      color: var(--app-dark-text);
+      background-color: var(--app-dark-field);
     }
 
     .calendar-icon {
-      color: #b5b5b5;
+      color: var(--c2c-grey-light);
     }
   }
 }

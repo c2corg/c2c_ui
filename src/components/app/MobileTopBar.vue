@@ -236,7 +236,7 @@ watch(picked, (document) => {
   gap: 0.25rem;
   min-height: 52px;
   padding: env(safe-area-inset-top) 0.25rem 0;
-  background: white;
+  background: var(--app-bar);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -249,15 +249,15 @@ watch(picked, (document) => {
   justify-content: center;
   background: transparent;
   border: none;
-  color: #4a4a4a;
+  color: var(--c2c-color-text);
   font-size: 1.1rem;
   cursor: pointer;
   border-radius: 4px;
   text-decoration: none;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.05);
-    color: #4a4a4a;
+    background: var(--app-hover);
+    color: var(--c2c-color-text);
   }
 }
 
@@ -296,7 +296,7 @@ watch(picked, (document) => {
   text-align: center;
   font-size: 1rem;
   font-weight: 600;
-  color: #4a4a4a;
+  color: var(--c2c-color-text);
   margin: 0 0.25rem;
   overflow: hidden;
   white-space: nowrap;
@@ -313,14 +313,14 @@ watch(picked, (document) => {
 /* join us: orange, as the button of the site */
 .join-btn {
   background: var(--c2c-color-base-c2c);
-  color: white;
+  color: var(--c2c-white);
   /* JoinUsLink wraps a classless <a>: the button gives it its color, not Bulma's blue */
   :deep(a) {
     color: inherit;
   }
   &:hover {
     background: #e6791f;
-    color: white;
+    color: var(--c2c-white);
   }
 }
 
@@ -333,7 +333,7 @@ watch(picked, (document) => {
     align-items: center;
     justify-content: center;
     background: #48c774;
-    color: white;
+    color: var(--c2c-white);
     border: none;
     border-radius: 4px;
     font: inherit;
@@ -372,23 +372,6 @@ watch(picked, (document) => {
     width: 100%;
     height: 36px;
     font-size: 16px; /* iOS zooms in on smaller inputs */
-  }
-}
-</style>
-
-<style>
-html[data-theme='dark'] {
-  .mobile-top-bar {
-    background: #232323;
-    border-bottom-color: rgba(255, 255, 255, 0.08);
-  }
-  .mobile-top-bar .top-bar-btn,
-  .mobile-top-bar .top-bar-title {
-    color: #e5e5e5;
-  }
-  .mobile-top-bar .top-bar-btn:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: #fff;
   }
 }
 </style>

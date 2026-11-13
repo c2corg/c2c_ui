@@ -40,11 +40,11 @@ a:hover {
 /* the dark theme of the app (src/stores/app-settings.ts, App.vue): dark tiles */
 html[data-theme='dark'] a {
   background-color: rgba(42, 42, 42, 0.9);
-  color: #e5e5e5;
+  color: var(--app-dark-text);
 
   &:hover {
     background-color: rgba(53, 53, 53, 0.95);
-    color: #fff;
+    color: var(--c2c-white);
   }
 }
 </style>

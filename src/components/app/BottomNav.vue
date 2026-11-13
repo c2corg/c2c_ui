@@ -97,8 +97,8 @@ const isActive = (tab: Tab) => tab.match.includes(String(route.name ?? ''));
   left: 0;
   right: 0;
   z-index: 28;
-  background: white;
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  background: var(--app-bar);
+  border-top: 1px solid var(--app-border);
   /* a 6 px floor where the safe area is 0 (Android), plus the home indicator of iPhones; 66 px in all, as the beta
      testers kept tapping Safari's address bar under a lower bar */
   padding-bottom: calc(6px + env(safe-area-inset-bottom));
@@ -126,7 +126,7 @@ const isActive = (tab: Tab) => tab.match.includes(String(route.name ?? ''));
   align-items: center;
   justify-content: center;
   gap: 3px;
-  color: #9a9a9a;
+  color: var(--app-dark-text-muted);
   text-decoration: none;
   font-size: 0.75rem;
   font-weight: 500;
@@ -134,7 +134,7 @@ const isActive = (tab: Tab) => tab.match.includes(String(route.name ?? ''));
 
   &:hover,
   &:focus {
-    color: #4a4a4a;
+    color: var(--c2c-color-text);
     text-decoration: none;
   }
 
@@ -162,39 +162,16 @@ const isActive = (tab: Tab) => tab.match.includes(String(route.name ?? ''));
   height: 14px;
   padding: 0 3px;
   background: var(--c2c-color-base-c2c);
-  color: white;
+  color: var(--c2c-white);
   font-size: 9px;
   font-weight: 700;
   line-height: 14px;
   border-radius: 7px;
   text-align: center;
-  box-shadow: 0 0 0 2px white;
+  box-shadow: 0 0 0 2px var(--app-bar);
 }
 
 .bottom-nav-label {
   line-height: 1;
-}
-</style>
-
-<style>
-html[data-theme='dark'] {
-  .bottom-nav {
-    background: #232323;
-    border-top-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.4);
-  }
-  .bottom-nav-link {
-    color: #8a8a8a;
-    &:hover,
-    &:focus {
-      color: #ccc;
-    }
-    &.is-active {
-      color: #ff9933;
-    }
-  }
-  .bottom-nav-badge {
-    box-shadow: 0 0 0 2px #232323;
-  }
 }
 </style>

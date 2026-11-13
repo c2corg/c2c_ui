@@ -606,26 +606,26 @@ function handleDocumentHighlight(document: MapDocument | null) {
 
 /* the dark theme of the app (src/stores/app-settings.ts, App.vue): dark cards of the stops, their titles light */
 html[data-theme='dark'] .public-transports-section .public-transports-result .stop-card {
-  background: #2a2a2a;
-  border-top-color: rgba(255, 255, 255, 0.15);
-  border-right-color: rgba(255, 255, 255, 0.15);
-  border-bottom-color: rgba(255, 255, 255, 0.15);
+  background: var(--app-dark-surface);
+  border-top-color: var(--app-dark-border);
+  border-right-color: var(--app-dark-border);
+  border-bottom-color: var(--app-dark-border);
 
   &:hover,
   &.selected-stop {
-    background-color: #353535;
+    background-color: var(--app-dark-surface-hover);
 
     .line-details {
-      background-color: #2a2a2a;
+      background-color: var(--app-dark-surface);
     }
   }
 
   .stop-header {
-    color: #f0f0f0;
+    color: var(--app-dark-text-strong);
   }
 
   .stop-details .line-details {
-    border-color: rgba(255, 255, 255, 0.15);
+    border-color: var(--app-dark-border);
   }
 }
 </style>

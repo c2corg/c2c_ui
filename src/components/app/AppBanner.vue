@@ -80,8 +80,8 @@ onMounted(async () => {
   padding: 1rem 2.5rem 1rem 1rem;
   border-left: 4px solid var(--c2c-color-base-c2c);
   border-radius: 6px;
-  background: #fff5e6;
-  color: #4a4a4a;
+  background: var(--app-accent-background);
+  color: var(--c2c-color-text);
 }
 
 .app-banner-close {
@@ -99,7 +99,7 @@ onMounted(async () => {
   height: 48px;
   border-radius: 50%;
   background: var(--c2c-color-base-c2c);
-  color: white;
+  color: var(--c2c-white);
   font-size: 1.5rem;
 }
 
@@ -135,7 +135,7 @@ onMounted(async () => {
   border: none;
   border-radius: 6px;
   background: var(--c2c-color-base-c2c);
-  color: white;
+  color: var(--c2c-white);
   font-weight: 600;
   cursor: pointer;
 
@@ -154,14 +154,14 @@ onMounted(async () => {
   margin: 0;
   text-align: center;
   font-size: 0.7rem;
-  color: #6b6b6b;
+  color: var(--app-text-muted);
 
   :deep(svg) {
     display: block;
     width: 104px;
     height: 104px;
     padding: 4px;
-    background: white;
+    background: var(--c2c-white);
     border-radius: 4px;
   }
 }
@@ -176,17 +176,8 @@ onMounted(async () => {
 </style>
 
 <style>
-html[data-theme='dark'] .app-banner {
-  background: #3a2f1a;
-  color: #f0f0f0;
-
-  .app-banner-qr {
-    color: #b5b5b5;
-  }
-
-  /* the blue of the links, lighter on the dark banner */
-  .app-banner-link {
-    color: #6db4ff;
-  }
+/* the blue of the links, lighter on the dark banner (its colors come from the tokens, App.vue) */
+html[data-theme='dark'] .app-banner .app-banner-link {
+  color: var(--app-dark-link);
 }
 </style>

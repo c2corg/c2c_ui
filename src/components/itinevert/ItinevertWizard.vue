@@ -878,21 +878,21 @@ onMounted(() => {
 /* the dark theme of the app (src/stores/app-settings.ts, App.vue): dark date and hour fields */
 html[data-theme='dark'] .form-input .select-date-container .date-picker-container {
   label {
-    color: #e5e5e5;
-    background-color: #1a1a1a;
+    color: var(--app-dark-text);
+    background-color: var(--app-dark-background);
   }
 
   .input-container {
-    border-color: rgba(255, 255, 255, 0.15);
+    border-color: var(--app-dark-border);
 
     .date-input,
     .hour-input {
-      color: #e5e5e5;
-      background-color: #1f1f1f;
+      color: var(--app-dark-text);
+      background-color: var(--app-dark-field);
     }
 
     .calendar-icon {
-      color: #b5b5b5;
+      color: var(--c2c-grey-light);
     }
   }
 }

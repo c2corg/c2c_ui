@@ -103,7 +103,7 @@ onBeforeUnmount(() => {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--c2c-white);
+  background: var(--app-surface);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   color: var(--c2c-primary);
   pointer-events: none;
@@ -120,9 +120,5 @@ onBeforeUnmount(() => {
     transform: rotate(180deg);
     transition: transform 0.15s;
   }
-}
-
-:global(html[data-theme='dark']) .pull-to-refresh {
-  background: #2a2a2a;
 }
 </style>

@@ -255,8 +255,8 @@ const sections = computed<Section[]>(() => {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: white;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
   padding: 1rem;
   margin-bottom: 1rem;
 }
@@ -267,7 +267,7 @@ const sections = computed<Section[]>(() => {
   height: 56px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--c2c-color-base-c2c), #b26f1e);
-  color: white;
+  color: var(--c2c-white);
   font-size: 1.4rem;
   font-weight: 700;
   display: inline-flex;
@@ -298,7 +298,7 @@ const sections = computed<Section[]>(() => {
 .me-display-name {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #4a4a4a;
+  color: var(--c2c-color-text);
   margin: 0;
   line-height: 1.2;
   white-space: nowrap;
@@ -308,7 +308,7 @@ const sections = computed<Section[]>(() => {
 
 .me-username {
   font-size: 0.85rem;
-  color: #6b6b6b;
+  color: var(--app-text-muted);
   margin: 0.1rem 0 0.4rem;
   white-space: nowrap;
   overflow: hidden;
@@ -331,7 +331,7 @@ const sections = computed<Section[]>(() => {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #6b6b6b;
+  color: var(--app-text-muted);
   margin: 1.25rem 0 0.4rem;
 }
 
@@ -348,9 +348,9 @@ const sections = computed<Section[]>(() => {
   align-items: center;
   gap: 0.75rem;
   padding: 0.6rem 0.75rem;
-  background: white;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  color: #4a4a4a;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  color: var(--c2c-color-text);
   text-decoration: none;
   transition: box-shadow 0.15s;
 
@@ -358,7 +358,7 @@ const sections = computed<Section[]>(() => {
   &:focus {
     text-decoration: none;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    color: #4a4a4a;
+    color: var(--c2c-color-text);
   }
 }
 
@@ -369,7 +369,7 @@ const sections = computed<Section[]>(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #fff5e6;
+  background: var(--app-accent-background);
   color: var(--c2c-color-base-c2c);
   border-radius: 4px;
 }
@@ -388,7 +388,7 @@ const sections = computed<Section[]>(() => {
 
 .action-desc {
   font-size: 0.7rem;
-  color: #6b6b6b;
+  color: var(--app-text-muted);
 }
 
 .action-chevron {
@@ -406,41 +406,10 @@ const sections = computed<Section[]>(() => {
   border-top: 1px solid rgba(0, 0, 0, 0.08);
   text-align: center;
   font-size: 0.75rem;
-  color: #6b6b6b;
+  color: var(--app-text-muted);
 
   a {
     padding: 0 0.25rem;
-  }
-}
-</style>
-
-<style>
-html[data-theme='dark'] {
-  .me-view .me-header,
-  .me-view .action-link {
-    background: #2a2a2a;
-    border-color: rgba(255, 255, 255, 0.1);
-    color: #e5e5e5;
-  }
-  .me-view .me-display-name {
-    color: #f5f5f5;
-  }
-  .me-view .me-username,
-  .me-view .action-desc,
-  .me-view .section-label,
-  .me-view .footer-links {
-    color: #9a9a9a;
-  }
-  .me-view .action-icon {
-    background: #3a2f1a;
-  }
-  .me-view .footer-links {
-    border-top-color: rgba(255, 255, 255, 0.1);
-  }
-  .me-view .action-link:hover,
-  .me-view .action-link:focus {
-    color: #f5f5f5;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   }
 }
 </style>

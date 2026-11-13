@@ -237,33 +237,33 @@ function format(suggestion: unknown) {
 html[data-theme='dark'] .autocomplete-wrapper .autocomplete-box {
   .input-wrapper {
     .autocomplete-input {
-      color: #e5e5e5;
-      border-color: rgba(255, 255, 255, 0.15);
-      background-color: #1f1f1f;
+      color: var(--app-dark-text);
+      border-color: var(--app-dark-border);
+      background-color: var(--app-dark-field);
     }
 
     .caret-icon {
-      color: #b5b5b5;
+      color: var(--c2c-grey-light);
 
       &:hover {
-        color: #fff;
+        color: var(--c2c-white);
       }
     }
   }
 
   .autocomplete-dropdown {
-    background: #2a2a2a;
-    border-color: rgba(255, 255, 255, 0.15);
-    scrollbar-color: #6b6b6b #2a2a2a;
+    background: var(--app-dark-surface);
+    border-color: var(--app-dark-border);
+    scrollbar-color: var(--app-text-muted) var(--app-dark-surface);
 
     ul li {
       &:hover {
-        background-color: #353535;
-        color: #fff;
+        background-color: var(--app-dark-surface-hover);
+        color: var(--c2c-white);
       }
 
       &:not(:last-child) {
-        border-bottom-color: rgba(255, 255, 255, 0.08);
+        border-bottom-color: var(--app-dark-border-light);
       }
     }
   }

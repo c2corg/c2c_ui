@@ -304,6 +304,29 @@ body,
   --app-top-bar-height: calc(52px + env(safe-area-inset-top));
   /* 66 px: a lower bar kept the beta testers tapping Safari's address bar instead of the tabs */
   --app-bottom-bar-height: calc(66px + env(safe-area-inset-bottom));
+
+  /* the colors of the app the design tokens (tokens.css) have no token for, prefixed --app- to stay out of their list:
+     the roles of the components of the app (a surface, the bars, a border...), which the dark theme redefines below,
+     and the shades of the dark theme */
+  --app-surface: var(--c2c-white);
+  --app-bar: var(--c2c-white);
+  --app-border: rgba(0, 0, 0, 0.12);
+  --app-hover: rgba(0, 0, 0, 0.05);
+  --app-text-muted: #6b6b6b;
+  --app-accent-background: #fff5e6;
+  --app-dark-background: #1a1a1a;
+  --app-dark-field: #1f1f1f;
+  --app-dark-surface-sunken: #232323;
+  --app-dark-surface: #2a2a2a;
+  --app-dark-surface-hover: #353535;
+  --app-dark-surface-raised: #3a3a3a;
+  --app-dark-text: #e5e5e5;
+  --app-dark-text-strong: #f0f0f0;
+  --app-dark-text-muted: #9a9a9a;
+  --app-dark-border: rgba(255, 255, 255, 0.15);
+  --app-dark-border-light: rgba(255, 255, 255, 0.08);
+  --app-dark-accent-background: #3a2f1a;
+  --app-dark-link: #6db4ff;
 }
 
 /* the text size of the app settings, in both layouts: Bulma's base is 14px */
@@ -358,29 +381,65 @@ html[data-shell='mobile'] {
    website turn dark, the orange and blue accents stay. The components of the app have their own dark rules.
    html[data-theme='dark'] out-specifies the scoped rules (.class[data-v-xxx]) of the components */
 html[data-theme='dark'] {
+  /* The dark theme redefines the design tokens (tokens.css, c2corg/c2c_ui#4907): what uses them turns dark by itself,
+     Bulma's CSS and the components alike. --c2c-white stays white: it is the background of the surfaces (cards, boxes,
+     inputs...) but also the text on the colored ones (buttons of the maps, Yeti, Itinévert...), which must stay white.
+     The white surfaces get their dark background below. */
+  --c2c-body-background-color: var(--app-dark-background);
+  --c2c-text: var(--app-dark-text);
+  --c2c-color-text: var(--app-dark-text);
+  --c2c-grey-darker: var(--app-dark-text-strong);
+  --c2c-grey-dark: #c5c5c5;
+  --c2c-white-ter: var(--app-dark-surface-hover);
+  --c2c-grey-lightest: var(--app-dark-border-light);
+  --c2c-grey-lighter: var(--app-dark-border);
+  --c2c-hover-background: var(--app-dark-surface-hover);
+  --c2c-input-placeholder-color: #7a7a7a;
+  --c2c-primary-light: #1e3a5f;
+  --c2c-card-border: 1px solid var(--app-dark-border-light);
+  /* and the roles of the components of the app */
+  --app-surface: var(--app-dark-surface);
+  --app-bar: var(--app-dark-surface-sunken);
+  --app-border: rgba(255, 255, 255, 0.12);
+  --app-hover: rgba(255, 255, 255, 0.06);
+  --app-text-muted: var(--app-dark-text-muted);
+  --app-accent-background: var(--app-dark-accent-background);
+
+  /* the orange buttons of the site (c2c-color, "Join" in the navigation): their text stays dark, as on the light theme */
+  .button.c2c-color,
+  .button.c2c-color a {
+    color: hsl(0, 0%, 21%);
+  }
+
+  /* the attribution and the scale line sit on the map, which stays light: their text stays dark */
+  .ol-attribution ul,
+  .ol-scale-line {
+    --ol-foreground-color: hsl(0, 0%, 21%);
+  }
+
   /* index.html colors the body inline, for the first paint before the styles */
   body {
-    background-color: #1a1a1a !important;
+    background-color: var(--app-dark-background) !important;
   }
   body,
   .page-content {
-    background: #1a1a1a;
-    color: #f0f0f0;
+    background: var(--app-dark-background);
+    color: var(--app-dark-text-strong);
   }
 
   /* cards: the rows of the cards hardcode Bulma's $text color, which disappears on a dark card */
   .card {
-    background: #2a2a2a;
-    color: #f0f0f0;
-    border-color: rgba(255, 255, 255, 0.08);
+    background: var(--app-dark-surface);
+    color: var(--app-dark-text-strong);
+    border-color: var(--app-dark-border-light);
   }
   /* the pressed state of a card is near white on the website */
   .card:hover,
   .card:focus,
   .card:active,
   .card.is-highlighted {
-    background: #353535;
-    color: #f5f5f5;
+    background: var(--app-dark-surface-hover);
+    color: var(--app-dark-text-strong);
   }
   .card div,
   .card p,
@@ -389,7 +448,7 @@ html[data-theme='dark'] {
     a:not(.button):not(.tag):not(.has-text-primary):not(.has-text-info):not(.has-text-link):not(.has-text-success):not(
       .has-text-warning
     ):not(.has-text-danger) {
-    color: #f0f0f0;
+    color: var(--app-dark-text-strong);
   }
   .card .has-text-grey,
   .card .has-text-grey-light,
@@ -402,15 +461,15 @@ html[data-theme='dark'] {
     background: transparent;
   }
   .card-footer {
-    border-top-color: rgba(255, 255, 255, 0.08);
+    border-top-color: var(--app-dark-border-light);
   }
   .card-footer-item {
-    border-right-color: rgba(255, 255, 255, 0.08);
+    border-right-color: var(--app-dark-border-light);
   }
 
   .box {
-    background: #2a2a2a;
-    color: #e5e5e5;
+    background: var(--app-dark-surface);
+    color: var(--app-dark-text);
     box-shadow:
       0 1px 2px rgba(0, 0, 0, 0.4),
       0 0 0 1px rgba(255, 255, 255, 0.06);
@@ -421,7 +480,7 @@ html[data-theme='dark'] {
   .has-text-grey-dark,
   .has-text-dark,
   .has-text-black {
-    color: #f0f0f0 !important;
+    color: var(--app-dark-text-strong) !important;
   }
   .has-text-grey {
     color: #c5c5c5 !important;
@@ -431,22 +490,19 @@ html[data-theme='dark'] {
   }
   .has-text-info,
   .has-text-link {
-    color: #6db4ff;
+    color: var(--app-dark-link);
   }
   .has-background-light,
   .has-background-white {
-    background-color: #2a2a2a !important;
+    background-color: var(--app-dark-surface) !important;
   }
 
+  /* the plain and light tags: --c2c-light, their light palette, is not a token the dark theme changes */
   .tag:not(.is-primary):not(.is-info):not(.is-success):not(.is-warning):not(.is-danger) {
-    background: #3a3a3a;
-    color: #e5e5e5;
+    background: var(--app-dark-surface-raised);
+    color: var(--app-dark-text);
   }
 
-  .notification {
-    background: #2f2f2f;
-    color: #e5e5e5;
-  }
   .notification.is-info {
     background: #1e3a5f;
     color: #d8e6f5;
@@ -460,22 +516,13 @@ html[data-theme='dark'] {
     color: #f5d6d6;
   }
 
-  .title {
-    color: #f5f5f5;
-  }
   .subtitle {
-    color: #b5b5b5;
+    color: var(--c2c-grey-light);
   }
 
-  /* Bulma's bold text and table headings ($text-strong), and the helpers of the site set to $text: the color of the
-     text around them, light */
-  strong,
-  .content table th {
-    color: inherit;
-  }
   .has-text-normal,
   .card-icon {
-    color: #e5e5e5;
+    color: var(--app-dark-text);
   }
 
   /* the boxes of the home page (DashboardXxx, ForumWidget, UsefulLinks) force $color-text on their links, and stripe
@@ -486,7 +533,7 @@ html[data-theme='dark'] {
     li > a,
     .outing-date-header > a,
     .forum-row {
-      color: #e5e5e5 !important;
+      color: var(--app-dark-text) !important;
     }
     .dashboard-list > a:nth-child(2n + 1) {
       background: #303030;
@@ -495,13 +542,10 @@ html[data-theme='dark'] {
 
   /* the tabs of My topos, and the light tags of Bulma */
   .tabs.is-boxed li.is-active a {
-    background-color: #2a2a2a;
-    border-color: rgba(255, 255, 255, 0.15);
+    background-color: var(--app-dark-surface);
+    border-color: var(--app-dark-border);
     border-bottom-color: transparent;
-    color: #f5f5f5;
-  }
-  .tabs.is-boxed a:hover {
-    background-color: #2a2a2a;
+    color: var(--app-dark-text-strong);
   }
   .tag.is-success.is-light {
     background-color: #1f3d26;
@@ -513,48 +557,40 @@ html[data-theme='dark'] {
     background-color: #303030;
   }
   .table a:not(.button):not(.tag) {
-    color: #6db4ff;
+    color: var(--app-dark-link);
   }
   .control.has-icons-left,
   .control.has-icons-right {
     .input:focus ~ .icon,
     .select:focus ~ .icon {
-      color: #e5e5e5;
+      color: var(--app-dark-text);
     }
   }
 
   .input,
   .textarea,
   .select select {
-    background: #1f1f1f;
-    color: #e5e5e5;
-    border-color: rgba(255, 255, 255, 0.15);
-    &::placeholder {
-      color: #6b6b6b;
-    }
+    background: var(--app-dark-field);
     &:focus {
       border-color: var(--c2c-color-base-c2c);
       box-shadow: 0 0 0 0.125em rgba(255, 153, 51, 0.25);
     }
   }
-  .label {
-    color: #e5e5e5;
-  }
   .help {
-    color: #9a9a9a;
+    color: var(--app-dark-text-muted);
   }
 
   /* only the plain buttons need a dark surface: the colored ones stand out on any background */
   .button:not(.is-primary):not(.is-info):not(.is-success):not(.is-warning):not(.is-danger):not(.is-link):not(
       .c2c-color
     ) {
-    background: #2a2a2a;
-    color: #e5e5e5;
-    border-color: rgba(255, 255, 255, 0.15);
+    background: var(--app-dark-surface);
+    color: var(--app-dark-text);
+    border-color: var(--app-dark-border);
     &:hover,
     &:focus {
-      background: #353535;
-      color: #fff;
+      background: var(--app-dark-surface-hover);
+      color: var(--c2c-white);
       border-color: rgba(255, 255, 255, 0.25);
     }
   }
@@ -567,40 +603,34 @@ html[data-theme='dark'] {
   }
 
   .dropdown-content {
-    background: #2a2a2a;
+    background: var(--app-dark-surface);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   }
   .dropdown-item {
-    color: #e5e5e5;
+    color: var(--app-dark-text);
     &:hover,
     &.is-active {
-      background: #3a3a3a;
-      color: #fff;
+      background: var(--app-dark-surface-raised);
+      color: var(--c2c-white);
     }
-  }
-  .dropdown-divider {
-    background-color: rgba(255, 255, 255, 0.08);
   }
 
   .modal-card-head,
   .modal-card-foot {
-    background: #232323;
-    border-color: rgba(255, 255, 255, 0.08);
+    background: var(--app-dark-surface-sunken);
+    border-color: var(--app-dark-border-light);
   }
   .modal-card-body {
-    background: #2a2a2a;
-    color: #e5e5e5;
-  }
-  .modal-card-title {
-    color: #f5f5f5;
+    background: var(--app-dark-surface);
+    color: var(--app-dark-text);
   }
   .modal-background {
     background-color: rgba(0, 0, 0, 0.7);
   }
 
   .tabs a {
-    color: #b5b5b5;
-    border-bottom-color: rgba(255, 255, 255, 0.15);
+    color: var(--c2c-grey-light);
+    border-bottom-color: var(--app-dark-border);
   }
   .tabs li.is-active a {
     color: var(--c2c-color-base-c2c);
@@ -610,12 +640,12 @@ html[data-theme='dark'] {
   table,
   .table {
     background: transparent;
-    color: #e5e5e5;
+    color: var(--app-dark-text);
   }
   .table th {
-    background: #232323;
-    color: #f5f5f5;
-    border-color: rgba(255, 255, 255, 0.08);
+    background: var(--app-dark-surface-sunken);
+    color: var(--app-dark-text-strong);
+    border-color: var(--app-dark-border-light);
   }
   .table td {
     border-color: rgba(255, 255, 255, 0.06);
@@ -623,36 +653,32 @@ html[data-theme='dark'] {
 
   /* the list view of the documents (ag-grid), whose stylesheet has a fixed light palette */
   .ag-theme-balham {
-    --ag-background-color: #2a2a2a;
-    --ag-header-background-color: #232323;
-    --ag-odd-row-background-color: #2a2a2a;
-    --ag-foreground-color: #e5e5e5;
-    --ag-header-foreground-color: #f5f5f5;
-    --ag-border-color: rgba(255, 255, 255, 0.08);
+    --ag-background-color: var(--app-dark-surface);
+    --ag-header-background-color: var(--app-dark-surface-sunken);
+    --ag-odd-row-background-color: var(--app-dark-surface);
+    --ag-foreground-color: var(--app-dark-text);
+    --ag-header-foreground-color: var(--app-dark-text-strong);
+    --ag-border-color: var(--app-dark-border-light);
     --ag-row-hover-color: rgba(255, 255, 255, 0.05);
-    --ag-secondary-foreground-color: #b5b5b5;
-  }
-
-  hr {
-    background-color: rgba(255, 255, 255, 0.08);
+    --ag-secondary-foreground-color: var(--c2c-grey-light);
   }
 
   /* the text of the documents, and its embedded figures (#fafafa blocks on the website) */
   .markdown-content {
-    color: #e5e5e5;
+    color: var(--app-dark-text);
     code,
     pre {
-      background: #1a1a1a;
+      background: var(--app-dark-background);
     }
     code {
       color: #ffd17a;
     }
     blockquote {
       border-left-color: rgba(255, 255, 255, 0.2);
-      color: #b5b5b5;
+      color: var(--c2c-grey-light);
     }
     figure[c2c\:role='embedded-figure'] {
-      background: #2a2a2a;
+      background: var(--app-dark-surface);
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
     figure,
@@ -664,15 +690,7 @@ html[data-theme='dark'] {
   .content p,
   .content li,
   .content blockquote {
-    color: #e5e5e5;
-  }
-  .content h1,
-  .content h2,
-  .content h3,
-  .content h4,
-  .content h5,
-  .content h6 {
-    color: #f5f5f5;
+    color: var(--app-dark-text);
   }
 }
 

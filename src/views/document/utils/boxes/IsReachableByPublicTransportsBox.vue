@@ -140,10 +140,6 @@ watch(() => props.document, checkAccessibility, { deep: true, immediate: true })
 
 /* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark box, its title light */
 html[data-theme='dark'] .accessible-transport-box .accessible-transport {
-  background-color: #2a2a2a;
-
-  .info-content .info-title {
-    color: #f0f0f0;
-  }
+  background-color: var(--app-dark-surface);
 }
 </style>

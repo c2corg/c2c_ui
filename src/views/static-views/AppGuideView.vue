@@ -159,16 +159,10 @@ defineOptions({ name: 'AppGuideView' });
   padding: 0.8rem 1rem;
   border-left: 4px solid var(--c2c-color-base-c2c);
   border-radius: 6px;
-  background: #fff5e6;
+  background: var(--app-accent-background);
 
   p {
     margin-bottom: 0.4rem;
   }
-}
-</style>
-
-<style>
-html[data-theme='dark'] .app-guide-here {
-  background: #3a2f1a;
 }
 </style>

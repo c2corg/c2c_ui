@@ -139,6 +139,6 @@ const articles = computed(() => associations.value.articles ?? []);
 /* the dark theme of the app (src/stores/app-settings.ts, App.vue): the icons of the linked documents read on a dark box */
 html[data-theme='dark'] .icon-link,
 html[data-theme='dark'] .icon-link:hover {
-  color: #e5e5e5;
+  color: var(--app-dark-text);
 }
 </style>

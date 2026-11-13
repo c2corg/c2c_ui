@@ -194,7 +194,7 @@ const current = computed(() => slides.value[shownStep.value]);
   position: relative;
   width: 100%;
   max-width: 380px;
-  background: white;
+  background: var(--app-surface);
   border-radius: 12px;
   padding: 1.5rem 1.25rem 1.25rem;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
@@ -223,13 +223,13 @@ const current = computed(() => slides.value[shownStep.value]);
   align-items: center;
   justify-content: center;
   font-size: 1rem;
-  color: #6b6b6b;
+  color: var(--app-text-muted);
   cursor: pointer;
   border-radius: 50%;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.05);
-    color: #4a4a4a;
+    background: var(--app-hover);
+    color: var(--c2c-color-text);
   }
 }
 
@@ -249,7 +249,7 @@ const current = computed(() => slides.value[shownStep.value]);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #fff5e6;
+  background: var(--app-accent-background);
   color: var(--c2c-color-base-c2c);
   font-size: 1.8rem;
   border-radius: 50%;
@@ -258,13 +258,13 @@ const current = computed(() => slides.value[shownStep.value]);
 .onboarding-title {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #4a4a4a;
+  color: var(--c2c-color-text);
   margin: 0;
 }
 
 .onboarding-text {
   font-size: 0.9rem;
-  color: #6b6b6b;
+  color: var(--app-text-muted);
   line-height: 1.4;
   margin: 0;
 }
@@ -280,7 +280,7 @@ const current = computed(() => slides.value[shownStep.value]);
   list-style: none;
   text-align: left;
   font-size: 0.88rem;
-  color: #4a4a4a;
+  color: var(--c2c-color-text);
 
   li {
     display: flex;
@@ -343,7 +343,7 @@ const current = computed(() => slides.value[shownStep.value]);
 
 .onboarding-btn-primary {
   background: var(--c2c-color-base-c2c);
-  color: white;
+  color: var(--c2c-white);
 
   &:hover {
     background: #e6791f;
@@ -352,46 +352,11 @@ const current = computed(() => slides.value[shownStep.value]);
 
 .onboarding-btn-secondary {
   background: transparent;
-  color: #4a4a4a;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  color: var(--c2c-color-text);
+  border: 1px solid var(--app-border);
 
   &:hover {
-    background: rgba(0, 0, 0, 0.04);
-  }
-}
-</style>
-
-<style>
-html[data-theme='dark'] {
-  .onboarding-card {
-    background: #2a2a2a;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
-  }
-  .onboarding-title {
-    color: #f5f5f5;
-  }
-  .onboarding-text {
-    color: #b5b5b5;
-  }
-  .onboarding-list {
-    color: #e5e5e5;
-  }
-  .onboarding-skip {
-    color: #b5b5b5;
-    &:hover {
-      background: rgba(255, 255, 255, 0.08);
-      color: #fff;
-    }
-  }
-  .onboarding-icon {
-    background: #3a2f1a;
-  }
-  .onboarding-btn-secondary {
-    color: #e5e5e5;
-    border-color: rgba(255, 255, 255, 0.15);
-    &:hover {
-      background: rgba(255, 255, 255, 0.06);
-    }
+    background: var(--app-hover);
   }
 }
 </style>

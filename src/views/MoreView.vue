@@ -94,7 +94,7 @@ const tiles = computed<Tile[]>(() => [
 
 .subtitle {
   margin-bottom: 1rem;
-  color: #6b6b6b;
+  color: var(--app-text-muted);
 }
 
 .tile-grid {
@@ -111,9 +111,9 @@ const tiles = computed<Tile[]>(() => [
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: white;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  color: #4a4a4a;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  color: var(--c2c-color-text);
   text-decoration: none;
   transition: box-shadow 0.15s;
 
@@ -121,7 +121,7 @@ const tiles = computed<Tile[]>(() => [
   &:focus {
     text-decoration: none;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    color: #4a4a4a;
+    color: var(--c2c-color-text);
     outline: none;
   }
 }
@@ -133,7 +133,7 @@ const tiles = computed<Tile[]>(() => [
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #fff5e6;
+  background: var(--app-accent-background);
   border-radius: 4px;
 }
 
@@ -151,33 +151,11 @@ const tiles = computed<Tile[]>(() => [
 
 .tile-desc {
   font-size: 0.75rem;
-  color: #6b6b6b;
+  color: var(--app-text-muted);
 }
 
 .tile-chevron {
   color: #9ca3af;
   flex: 0 0 auto;
-}
-</style>
-
-<style>
-html[data-theme='dark'] {
-  .more-view .tile-link {
-    background: #2a2a2a;
-    border-color: rgba(255, 255, 255, 0.1);
-    color: #e5e5e5;
-    &:hover,
-    &:focus {
-      color: #f5f5f5;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-    }
-  }
-  .more-view .tile-icon {
-    background: #3a2f1a;
-  }
-  .more-view .subtitle,
-  .more-view .tile-desc {
-    color: #9a9a9a;
-  }
 }
 </style>

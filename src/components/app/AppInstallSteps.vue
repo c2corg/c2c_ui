@@ -97,7 +97,7 @@ const platform = devicePlatform();
   border: none;
   border-radius: 6px;
   background: var(--c2c-color-base-c2c);
-  color: white;
+  color: var(--c2c-white);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;

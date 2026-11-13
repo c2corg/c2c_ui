@@ -373,39 +373,39 @@ onBeforeUnmount(() => {
 
 /* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark field and list, as the inputs of Bulma */
 html[data-theme='dark'] .from-container {
-  background-color: #1f1f1f;
-  border-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--app-dark-field);
+  border-color: var(--app-dark-border);
 
   .autocomplete-container {
     .from-address {
-      color: #e5e5e5;
+      color: var(--app-dark-text);
     }
 
     .autocomplete-results {
-      background-color: #2a2a2a;
-      border-color: rgba(255, 255, 255, 0.15);
-      scrollbar-color: #6b6b6b #2a2a2a;
+      background-color: var(--app-dark-surface);
+      border-color: var(--app-dark-border);
+      scrollbar-color: var(--app-text-muted) var(--app-dark-surface);
 
       ul li {
-        color: #e5e5e5;
+        color: var(--app-dark-text);
 
         &:hover {
-          background-color: #353535;
-          color: #fff;
+          background-color: var(--app-dark-surface-hover);
+          color: var(--c2c-white);
         }
 
         &:not(:last-child) {
-          border-bottom-color: rgba(255, 255, 255, 0.08);
+          border-bottom-color: var(--app-dark-border-light);
         }
       }
     }
   }
 
   .geolocalisation {
-    background-color: #1f1f1f;
+    background-color: var(--app-dark-field);
 
     &:hover {
-      background-color: #353535;
+      background-color: var(--app-dark-surface-hover);
     }
   }
 }

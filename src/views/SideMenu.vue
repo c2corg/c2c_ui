@@ -242,14 +242,15 @@ aside {
 
 /* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark menu */
 html[data-theme='dark'] aside {
-  background: #1f1f1f;
+  background: var(--app-dark-field);
 }
 
+/* the white left border of the items, the color of the dark menu (their text follows the tokens, App.vue) */
 html[data-theme='dark'] .menu-item {
-  color: #e5e5e5;
+  border-left-color: var(--app-dark-field);
 }
 
 html[data-theme='dark'] .menu-item:hover {
-  background: #2a2a2a;
+  background: var(--app-dark-surface);
 }
 </style>

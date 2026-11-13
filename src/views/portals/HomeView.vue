@@ -229,6 +229,6 @@ function setProperty(property: keyof typeof toggles, value: boolean) {
 
 /* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark switch */
 html[data-theme='dark'] .toggleContainer {
-  background: #2a2a2a;
+  background: var(--app-dark-surface);
 }
 </style>

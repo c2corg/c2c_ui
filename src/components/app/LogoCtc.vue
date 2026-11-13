@@ -34,7 +34,7 @@ defineOptions({ name: 'LogoCtc' });
   transition: fill 0.15s;
 }
 .logo-mountain {
-  fill: #ff9933;
+  fill: var(--c2c-color-base-c2c);
 }
 </style>
 
@@ -44,6 +44,6 @@ defineOptions({ name: 'LogoCtc' });
    so they read on the dark top bar. The orange mountain glyph keeps its
    brand color in both themes. */
 html[data-theme='dark'] .logo-ctc .logo-text {
-  fill: #f5f5f5;
+  fill: var(--app-dark-text-strong);
 }
 </style>
