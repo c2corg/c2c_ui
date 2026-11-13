@@ -14,7 +14,6 @@ Click a diagram to open its interactive version (zoom, search, details, links to
 
 [![Local development](docs/architecture/local-dev.png)](https://c2corg.github.io/v6_api/architecture/local-dev.html)
 
-
 On any OS, install [git](https://git-scm.com/) and [node.js](https://nodejs.org/en/). Then :
 
 ```bash
