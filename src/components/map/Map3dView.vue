@@ -547,6 +547,11 @@ onMounted(() => {
 });
 
 watch([base, slopes, shading, showProtectionAreas], showLayers);
+// waypoints added after the view opened (those of an outing's routes)
+watch(
+  () => props.markers,
+  () => map && addMarkers(map)
+);
 watch(
   () => props.documents,
   (data) => (map?.getSource('documents') as GeoJSONSource | undefined)?.setData(data)

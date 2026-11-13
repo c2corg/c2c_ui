@@ -585,6 +585,46 @@ function open3d() {
           }
         : null,
   };
+  addRouteWaypoints();
+}
+
+// an outing has no waypoint of its own: the 3D view also shows those of its routes (access, hut, summit), read when
+// it opens (a request per route, 3 routes at most)
+async function addRouteWaypoints() {
+  const opened = map3d.value;
+  const routeIds = [
+    ...new Set(
+      (props.documents ?? [])
+        .filter((document) => document.type === 'o')
+        .flatMap((outing) => outing.associations?.routes?.map((route) => route.document_id) ?? [])
+        .filter((id): id is number => id !== undefined)
+    ),
+  ].slice(0, 3);
+  if (!opened || !routeIds.length) return;
+  const routes = await Promise.all(
+    routeIds.map((id) =>
+      Promise.resolve((c2c.route as DocumentService).get(id, $language.current!)).then(
+        (response) => response.data as C2cDocument,
+        () => null
+      )
+    )
+  );
+  if (map3d.value !== opened) return;
+  const shown = new Set(opened.markers.map((marker) => (marker.to as { params?: { id?: number } } | null)?.params?.id));
+  const markers: Marker3d[] = [];
+  for (const waypoint of routes.flatMap((route) => route?.associations?.waypoints ?? []).filter(isNotVirtual)) {
+    const icon = getDocumentIcon(waypoint);
+    if (!icon || !waypoint.geometry?.geom || shown.has(waypoint.document_id)) continue;
+    shown.add(waypoint.document_id);
+    const point = geoJSONFormat.readGeometry(waypoint.geometry.geom) as InstanceType<typeof ol.geom.Point>;
+    markers.push({
+      lonLat: ol.proj.toLonLat(point.getCoordinates()) as [number, number],
+      title: $documentUtils.getDocumentTitle(waypoint),
+      ...icon,
+      to: { name: 'waypoint', params: { id: waypoint.document_id } },
+    });
+  }
+  if (markers.length) map3d.value = { ...opened, markers: [...opened.markers, ...markers] };
 }
 
 function createFullScreenController(source: HTMLElement | string) {
