@@ -26,11 +26,14 @@
           ref="olMap"
           :documents="new Array(document)"
           :show-protection-areas="['r', 'w'].includes(document.type!)"
+          :tracks-filters="overlayFilters.outing"
+          :routes-filters="overlayFilters.route"
           :biodiv-sports-activities="document.activities"
           :full-screen-element-id="
             !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
           "
           :show-pin-to-top-button="true"
+          :show3d="show3d"
           @has-protection-area="$emit('has-protection-area')"
           @pin-to-top-clicked="togglePinToSide(true)"
         />
@@ -66,6 +69,7 @@ import { useRoute } from 'vue-router';
 import ElevationProfile from './ElevationProfile.vue';
 import MapLinks from './MapLinks.vue';
 
+import { documentOverlayFilters } from '@/components/map/density-overlays';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import bus from '@/js/event-bus';
 import { documentProperty, useDocumentType } from '@/js/properties';
@@ -76,8 +80,14 @@ const props = defineProps({ ...documentProperty });
 defineEmits(['has-protection-area']);
 
 const route = useRoute();
+
+// the 3D view for routes, outings and waypoints: around their waypoints (an outing: those of its routes) or their point
+// when they have no track
+const show3d = computed(() => ['r', 'o', 'w'].includes(props.document.type!));
 const { $documentUtils } = useGlobalProperties();
 const { documentType } = useDocumentType(props);
+// the "Tracks" and "Routes" overlays of the map show what is linked to the document
+const overlayFilters = computed(() => documentOverlayFilters(props.document));
 
 // named apart from the map-view tag
 const olMap = useTemplateRef<{ fitMapToDocuments(): void }>('olMap');

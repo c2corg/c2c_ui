@@ -1,5 +1,5 @@
 <template>
-  <div ref="rootElement" style="width: 100%; height: 100%">
+  <div ref="rootElement" style="position: relative; width: 100%; height: 100%">
     <div ref="mapElement" style="width: 100%; height: 100%" @click="showLayerSwitcher = false" />
 
     <div
@@ -12,6 +12,23 @@
         <fa-icon icon="layer-group" />
       </button>
     </div>
+
+    <!-- 3D view -->
+    <div v-show="show3d && can3d" ref="map3dButton" class="ol-control ol-control-3d" title="3D">
+      <button aria-label="3D" @click.stop="open3d"><span>3D</span></button>
+    </div>
+
+    <map-3d-view
+      v-if="map3d"
+      :bounds="map3d.bounds"
+      :country="map3d.country"
+      :documents="map3d.documents"
+      :markers="map3d.markers"
+      :protection-areas="map3d.protectionAreas"
+      :full-screen-element-id="fullScreenElementId"
+      @close="map3d = null"
+      @unavailable="on3dUnavailable"
+    />
 
     <div
       v-show="showPinToTopButton && !isFullscreen"
@@ -56,6 +73,19 @@
               @click="toggleProtectionAreas"
               :selected="protectionAreasVisible"
               :layer="protectionAreasLayerButton"
+            ></layer-button>
+          </div>
+        </template>
+        <template v-if="showDensityOverlays && !densityUnavailable">
+          <header v-translate>Overlays</header>
+          <!-- $gettext('Outings') $gettext('Routes') -->
+          <div class="layer-group">
+            <layer-button
+              v-for="type of DENSITY_TYPES"
+              :key="type"
+              @click="toggleDensityOverlay(type)"
+              :selected="densityEnabled[type]"
+              :layer="{ title: DENSITY_OVERLAYS[type].title, color: DENSITY_OVERLAYS[type].trackColor }"
             ></layer-button>
           </div>
         </template>
@@ -145,6 +175,60 @@
       /></a>
     </div>
 
+    <div v-if="showDensityOverlays" ref="trackTooltip" class="ol-track-tooltip" v-show="trackTooltip">
+      <template v-if="trackTooltip">
+        <strong>{{ trackTooltip.document.title }}</strong>
+        <span v-if="trackTooltip.document.date_end" class="track-meta">
+          {{ $dateUtils.toLocalizedString(trackTooltip.document.date_end, 'll') }}
+        </span>
+        <document-rating :document="trackTooltip.document" class="track-meta" />
+        <span v-if="trackTooltip.others" class="track-meta"
+          >{{ $gettext('Others here:') }} {{ trackTooltip.others }}</span
+        >
+      </template>
+    </div>
+
+    <!-- the tracks under a click or a tap, in the map: the most recent outings first -->
+    <div
+      v-if="showDensityOverlays"
+      v-show="trackPanelEntries.length"
+      class="ol-track-panel"
+      :class="{ 'is-opening': !trackPanelReady }"
+    >
+      <header>
+        <strong>{{ $gettext('Tracks here') }}</strong>
+        <button type="button" class="delete" :aria-label="$gettext('Close')" @click="closeTrackPanel" />
+      </header>
+      <ul>
+        <li
+          v-for="entry of trackPanelEntries"
+          :key="`${entry.document.type}-${entry.document.document_id}`"
+          @mouseenter="setHighlightedFeature(entry.feature)"
+          @mouseleave="setHighlightedFeature(null)"
+        >
+          <span class="track-swatch" :style="trackSwatchStyle(entry.document)" />
+          <div class="track-description">
+            <router-link
+              :to="{
+                name: $documentUtils.getDocumentType(entry.document.type),
+                params: { id: entry.document.document_id },
+              }"
+              :target="openInNewTab ? '_blank' : undefined"
+              @click="closeTrackPanel"
+              >{{ entry.document.title }}</router-link
+            >
+            <div class="track-meta">
+              <span v-if="entry.document.date_end">
+                {{ $dateUtils.toLocalizedString(entry.document.date_end, 'll') }}
+              </span>
+              <document-rating :document="entry.document" />
+              <activities :activities="entry.document.activities" class="is-size-5" />
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
     <biodiv-information v-if="protectionAreasVisible" ref="biodivWindow" :data="biodivData" />
 
     <swiss-protection-area-information
@@ -156,6 +240,7 @@
 </template>
 
 <script setup lang="ts">
+import type { FeatureCollection, Geometry } from 'geojson';
 import type Feature from 'ol/Feature';
 import type { FeatureLike } from 'ol/Feature';
 import type OlMap from 'ol/Map';
@@ -172,10 +257,12 @@ import type Style from 'ol/style/Style';
 import type { StyleLike } from 'ol/style/Style';
 import {
   computed,
+  defineAsyncComponent,
   markRaw,
   type PropType,
   onBeforeUnmount,
   onMounted,
+  reactive,
   ref,
   shallowRef,
   useTemplateRef,
@@ -187,6 +274,22 @@ import BiodivInformation from './BiodivInformation.vue';
 import LayerButton from './LayerButton.vue';
 import SwissProtectionAreaInformation from './SwissProtectionAreaInformation.vue';
 import {
+  DENSITY_FETCH_DEBOUNCE,
+  DENSITY_OVERLAYS,
+  DENSITY_TRACKS_MIN_ZOOM,
+  snapExtent,
+  DENSITY_TYPES,
+  type DensityFilters,
+  type DensityType,
+  createDensityLayers,
+  createHeatmapLayer,
+  heatmapWeight,
+  sortTracks,
+  type DensityTrack,
+} from './density-overlays';
+import type { Marker3d } from './map-3d-markers';
+import { markUnsupported, supports3d } from './map-3d-support';
+import {
   cartoLayers,
   dataLayers as dataLayersOf,
   protectionAreasLayers as protectionAreasLayersOf,
@@ -196,6 +299,7 @@ import {
   buildPolygonStyle,
   geoJSONFormat,
   getDocumentLineStyle,
+  getDocumentIcon,
   getDocumentPointStyle,
   getDocumentPolygonStyle,
   getElevationProfileMarkerStyle,
@@ -209,11 +313,13 @@ import type DocumentService from '@/js/apis/c2c/DocumentService';
 import photon from '@/js/apis/photon';
 import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import debounce from '@/js/debounce';
 import bus from '@/js/event-bus';
 import { FIT } from '@/js/fit/FIT';
 import ol from '@/js/libs/ol';
 import { TCX } from '@/js/tcx/TCX';
 import { toast } from '@/js/toast';
+import { tracksOverlayEnabled } from '@/js/tracks-overlay';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
@@ -241,6 +347,10 @@ type PhotonFeature = {
   properties: Record<string, string | undefined> & { extent?: number[] };
 };
 
+// MapLibre is loaded only when the 3D view opens
+const Map3dView = defineAsyncComponent(() => import('./Map3dView.vue'));
+// a type only: the markers module is loaded with the 3D view
+
 const isNotVirtual = (waypoint: C2cDocument) => waypoint.waypoint_type !== 'virtual';
 
 const props = defineProps({
@@ -267,6 +377,18 @@ const props = defineProps({
   showProtectionAreas: {
     type: Boolean,
     default: false,
+  },
+
+  // search filters (the parameters of the documents listing) of the "Tracks" (outings) and "Routes" overlays, which
+  // follow what the map shows. `null` means no filter.
+  tracksFilters: {
+    type: Object as PropType<DensityFilters>,
+    default: null,
+  },
+
+  routesFilters: {
+    type: Object as PropType<DensityFilters>,
+    default: null,
   },
 
   biodivSportsActivities: {
@@ -315,6 +437,12 @@ const props = defineProps({
   },
 
   openInNewTab: {
+    type: Boolean,
+    default: false,
+  },
+
+  // the 3D button
+  show3d: {
     type: Boolean,
     default: false,
   },
@@ -367,6 +495,15 @@ const protectionAreasLayer = markRaw(
 );
 // protection areas layers
 const protectionAreasLayers = markRaw(protectionAreasLayersOf().map(markRaw));
+// the "Tracks" and "Routes" overlays
+const densityLayers = Object.fromEntries(DENSITY_TYPES.map((type) => [type, createDensityLayers(type)])) as Record<
+  DensityType,
+  ReturnType<typeof createDensityLayers>
+>;
+// the heatmap layers of the overlays, created when first shown (see createHeatmapLayer)
+const heatmapLayers: Partial<Record<DensityType, ReturnType<typeof createHeatmapLayer>>> = {};
+// the hovered track of an overlay, drawn again over all the other tracks and over the lines of the documents
+const trackHighlightLayer = markRaw(new ol.layer.Vector({ source: new ol.source.Vector() }));
 // layer for document icons and paths
 const documentsLayer = markRaw(new ol.layer.Vector({ source: new ol.source.Vector() }));
 // layer edited document
@@ -389,12 +526,30 @@ const showRecenterOnPropositions = ref(false);
 const biodivData = ref<Record<string, unknown>>({});
 const swissProtectionAreaData = ref<Record<string, unknown>>({ properties: {} });
 const protectionAreasVisible = ref<boolean>(props.showProtectionAreas && !props.editedDocument);
+// the overlays are off by default: they are an opt-in addition, not a change to the look of the map
+const densityEnabled = reactive<Record<DensityType, boolean>>({ outing: false, route: false });
+// set when the API answers that the overlays are turned off: they are no longer offered
+const densityUnavailable = ref(false);
+// the tracks under a click or a tap, to choose from, with their line on the map
+const trackPanelEntries = shallowRef<{ document: DensityTrack; feature: Feature }[]>([]);
+// false just after a tap opened the panel: the click that follows it would land on the panel
+const trackPanelReady = ref(true);
+// the track under the pointer, and how many others are there
+const trackTooltip = ref<{ document: DensityTrack; others: number } | null>(null);
 // on editable mode, there a button reset
 // we must save initial geometry
 const initialGeometry = ref<C2cDocument['geometry']>(null);
 const highlightedFeature = shallowRef<FeatureLike | null>(null);
 const minZoomLevel = ref(DEFAULT_POINT_ZOOM);
 const editMapLink = ref<string | null>(null);
+// what the 3D view shows, null when closed
+const map3d = shallowRef<{
+  bounds: [number, number, number, number];
+  country: string | undefined;
+  documents: FeatureCollection;
+  markers: Marker3d[];
+  protectionAreas: { visible: boolean; features: FeatureCollection } | null;
+} | null>(null);
 
 // the OpenLayers map and its controls: created on mount, not state to observe
 let map: OlMap;
@@ -402,7 +557,14 @@ let drawInteraction: InstanceType<typeof ol.interaction.Draw> | null = null;
 let fullScreenControl: InstanceType<typeof ol.control.FullScreen>;
 let onElevationProfile: ((event: unknown) => void) | undefined;
 
+// the popup of the tracks under a click
+let trackTooltipOverlay: InstanceType<typeof ol.Overlay> | null = null;
+// only the answer to the latest request of an overlay is displayed: moving the map quickly can make them arrive out of
+// order
+const densityRequestIds: Record<DensityType, number> = { outing: 0, route: 0 };
+
 const rootElementEl = useTemplateRef<HTMLElement>('rootElement');
+const trackTooltipEl = useTemplateRef<HTMLElement>('trackTooltip');
 const mapElementEl = useTemplateRef<HTMLElement>('mapElement');
 const layerSwitcherButtonEl = useTemplateRef<HTMLElement>('layerSwitcherButton');
 const togglePinToTopButtonEl = useTemplateRef<HTMLElement>('togglePinToTopButton');
@@ -415,10 +577,31 @@ const recenterOnPropositionsControlEl = useTemplateRef<HTMLElement>('recenterOnP
 const resetGeometryControlEl = useTemplateRef<HTMLElement>('resetGeometryControl');
 const clearGeometryControlEl = useTemplateRef<HTMLElement>('clearGeometryControl');
 const editMapControlEl = useTemplateRef<HTMLElement>('editMapControl');
+const map3dButtonEl = useTemplateRef<HTMLElement>('map3dButton');
+// the browser can show the 3D view (WebGL 2), checked only where the 3D button may show
+const can3d = ref(false);
+watch(
+  () => props.show3d,
+  (show3d) => {
+    if (show3d) can3d.value = supports3d();
+  },
+  { immediate: true }
+);
+
+// the 3D view failed to start (WebGL refused): back to 2D, without the button
+function on3dUnavailable() {
+  markUnsupported();
+  can3d.value = false;
+  map3d.value = null;
+}
 const biodivWindowEl = useTemplateRef<{ show(): void }>('biodivWindow');
 const swissWindowEl = useTemplateRef<{ show(): void }>('swissWindow');
 
 const editable = computed(() => !!props.editedDocument);
+// the overlays are on every map, except when editing a document or comparing two versions of it
+const showDensityOverlays = computed(
+  () => tracksOverlayEnabled && !editable.value && !props.oldDocument && !props.newDocument
+);
 
 const urlValue = computed(() => {
   const result = route.query.bbox as string | undefined;
@@ -441,6 +624,140 @@ const visibleLayer = computed({
 });
 
 const osmLayer = computed(() => visibleLayer.value.get('title') === 'OpenTopoMap');
+
+// c2c areas of the countries that have an orthophoto in 3D
+const ORTHO_COUNTRY_AREAS: Record<number, string> = { 14274: 'fr', 14067: 'ch', 14267: 'es' };
+
+function documentsCountry(): string | undefined {
+  for (const document of props.documents ?? []) {
+    for (const area of document.areas ?? []) {
+      if (ORTHO_COUNTRY_AREAS[area.document_id]) return ORTHO_COUNTRY_AREAS[area.document_id];
+    }
+  }
+  return undefined;
+}
+
+// opens the 3D view on the extent, base layer and documents of the 2D map
+function open3d() {
+  const extent = ol.proj.transformExtent(view().calculateExtent(map.getSize()), 'EPSG:3857', 'EPSG:4326');
+  const toLonLat = (feature: Feature) =>
+    ol.proj.toLonLat((feature.getGeometry() as InstanceType<typeof ol.geom.Point>).getCoordinates()) as [
+      number,
+      number,
+    ];
+  const marker = (feature: Feature, interactive: boolean): Marker3d | null => {
+    const document = feature.get('document') as C2cDocument | undefined;
+    const icon = document && getDocumentIcon(document);
+    if (!document || !icon) return null;
+    return {
+      lonLat: toLonLat(feature),
+      title: $documentUtils.getDocumentTitle(document),
+      ...icon,
+      to: interactive
+        ? { name: $documentUtils.getDocumentType(document.type), params: { id: document.document_id } }
+        : null,
+    };
+  };
+  const isPoint = (feature: Feature) => feature.getGeometry()?.getType() === 'Point';
+  const documentFeatures = documentsLayer.getSource()!.getFeatures();
+  const lines = [...documentFeatures, ...editionLayer.getSource()!.getFeatures()].filter(
+    (feature) => feature.getGeometry() && !isPoint(feature)
+  );
+  const waypointMarkers = waypointsLayer
+    .getSource()!
+    .getFeatures()
+    .filter(isPoint)
+    .map((feature) => marker(feature, true));
+  // the point of the document itself: a waypoint always (among its child waypoints), another document only when there
+  // is nothing else to show (no track, no waypoint)
+  const documentPoints = documentFeatures.filter(isPoint);
+  const ownPoints = documentPoints.filter(
+    (feature) => (feature.get('document') as C2cDocument | undefined)?.type === 'w'
+  );
+  const markers = [
+    ...documentPoints
+      .filter((feature) => ownPoints.includes(feature) || !(lines.length || waypointMarkers.length))
+      .map((feature) => marker(feature, false)),
+    ...waypointMarkers,
+  ].filter((m): m is Marker3d => !!m);
+  const features = lines;
+  map3d.value = {
+    bounds: extent as [number, number, number, number],
+    // the country of the 2D base layer, else the one of the documents
+    country: visibleLayer.value.get('country') ?? documentsCountry(),
+    documents: {
+      type: 'FeatureCollection',
+      features: features
+        .filter((feature) => feature.getGeometry())
+        .map((feature) => ({
+          type: 'Feature',
+          // paragliding tracks: their flights are drawn in the air
+          properties: {
+            paragliding: !!(feature.get('document') as C2cDocument | undefined)?.activities?.includes('paragliding'),
+          },
+          geometry: geoJSONFormat.writeGeometryObject(feature.getGeometry()!, {
+            featureProjection: 'EPSG:3857',
+            dataProjection: 'EPSG:4326',
+          }) as Geometry,
+        })),
+    },
+    markers,
+    // the biodiv-sports areas the 2D map loaded: its view and half a view around, where the 3D view opens
+    protectionAreas:
+      props.showProtectionAreas && !editable.value
+        ? {
+            visible: protectionAreasVisible.value,
+            features: geoJSONFormat.writeFeaturesObject(
+              protectionAreasLayer
+                .getSource()!
+                .getFeatures()
+                .map((feature) => new ol.Feature(feature.getGeometry())),
+              { featureProjection: 'EPSG:3857', dataProjection: 'EPSG:4326' }
+            ) as FeatureCollection,
+          }
+        : null,
+  };
+  addRouteWaypoints();
+}
+
+// an outing has no waypoint of its own: the 3D view also shows those of its routes (access, hut, summit), read when
+// it opens (a request per route, 3 routes at most)
+async function addRouteWaypoints() {
+  const opened = map3d.value;
+  const routeIds = [
+    ...new Set(
+      (props.documents ?? [])
+        .filter((document) => document.type === 'o')
+        .flatMap((outing) => outing.associations?.routes?.map((route) => route.document_id) ?? [])
+        .filter((id): id is number => id !== undefined)
+    ),
+  ].slice(0, 3);
+  if (!opened || !routeIds.length) return;
+  const routes = await Promise.all(
+    routeIds.map((id) =>
+      Promise.resolve((c2c.route as DocumentService).get(id, $language.current!)).then(
+        (response) => response.data as C2cDocument,
+        () => null
+      )
+    )
+  );
+  if (map3d.value !== opened) return;
+  const shown = new Set(opened.markers.map((marker) => (marker.to as { params?: { id?: number } } | null)?.params?.id));
+  const markers: Marker3d[] = [];
+  for (const waypoint of routes.flatMap((route) => route?.associations?.waypoints ?? []).filter(isNotVirtual)) {
+    const icon = getDocumentIcon(waypoint);
+    if (!icon || !waypoint.geometry?.geom || shown.has(waypoint.document_id)) continue;
+    shown.add(waypoint.document_id);
+    const point = geoJSONFormat.readGeometry(waypoint.geometry.geom) as InstanceType<typeof ol.geom.Point>;
+    markers.push({
+      lonLat: ol.proj.toLonLat(point.getCoordinates()) as [number, number],
+      title: $documentUtils.getDocumentTitle(waypoint),
+      ...icon,
+      to: { name: 'waypoint', params: { id: waypoint.document_id } },
+    });
+  }
+  if (markers.length) map3d.value = { ...opened, markers: [...opened.markers, ...markers] };
+}
 
 function createFullScreenController(source: HTMLElement | string) {
   const control = new ol.control.FullScreen({
@@ -781,7 +1098,11 @@ function addDocumentFeature(document: C2cDocument | null, source: VectorSource, 
       )!.set('document', document);
     }
   } else {
-    if (document.geometry.geom) {
+    // outside edition and diffs, the point marker of a document with a line adds nothing to the line:
+    // the line alone is shown, and carries the id used to highlight the document from the lists
+    const lineOnly = !!document.geometry.geom_detail && !style && source !== editionLayer.getSource();
+
+    if (document.geometry.geom && !lineOnly) {
       const feature = addFeature(
         source,
         JSON.parse(document.geometry.geom),
@@ -793,12 +1114,17 @@ function addDocumentFeature(document: C2cDocument | null, source: VectorSource, 
       feature!.setId(document.document_id);
     }
     if (document.geometry.geom_detail) {
-      addFeature(
+      const feature = addFeature(
         source,
         JSON.parse(document.geometry.geom_detail),
         style ?? getDocumentLineStyle(title, false, document.properties),
         style ? null : getDocumentLineStyle(title, true, document.properties)
-      )!.set('document', document);
+      );
+
+      feature!.set('document', document);
+      if (lineOnly) {
+        feature!.setId(document.document_id);
+      }
     }
   }
 }
@@ -1008,15 +1334,99 @@ function onPointerMove(event: MapBrowserEvent<PointerEvent>) {
     return;
   }
 
-  const feature =
-    map.forEachFeatureAtPixel(event.pixel, (f) => f, { layerFilter: (layer) => hoverableLayers.has(layer) }) ?? null;
-
-  // the pages react to each event (the nearby stops reset all their styles): only tell them about changes
-  if (feature === highlightedFeature.value) {
+  // no hover on a touch screen: the tooltip would stay under the finger
+  if (isTouch(event)) {
+    hideTrackTooltip();
     return;
   }
-  setHighlightedFeature(feature);
-  emit('highlight-document', feature ? feature.get('document') : null);
+
+  const hits = hitsAt(event.pixel, HIT_TOLERANCE, true);
+  // the topmost feature of the documents: the markers come before the tracks
+  const tracksLayers: object[] = Object.values(densityLayers).map((layers) => layers.tracks);
+  const documentHit = hits.find((hit) => !tracksLayers.includes(hit.layer));
+  const tracks = documentHit && isMarker(documentHit.feature) ? [] : trackEntries(tracksIn(hits));
+  const hovered = tracks[0]?.feature ?? documentHit?.feature ?? null;
+
+  // the pages react to each event (the nearby stops reset all their styles): only tell them about changes
+  if (hovered !== highlightedFeature.value) {
+    setHighlightedFeature(hovered);
+    emit('highlight-document', hovered ? hovered.get('document') : null);
+  }
+
+  // not over the panel of the tracks, which tells it all
+  if (tracks.length && !trackPanelEntries.value.length) {
+    trackTooltip.value = { document: tracks[0].document, others: tracks.length - 1 };
+    trackTooltipOverlay!.setPosition(event.coordinate);
+  } else {
+    hideTrackTooltip();
+  }
+}
+
+// a pointer that is not a mouse: a finger
+const isTouch = (event: { originalEvent?: Event }) =>
+  (event.originalEvent as PointerEvent | undefined)?.pointerType === 'touch';
+
+// how far from a line or an icon a pointer still hits it, in pixels: the tracks are thin, a finger is not
+const HIT_TOLERANCE = 6;
+const TOUCH_HIT_TOLERANCE = 14;
+
+// What is under a pixel, the topmost first, in one hit detection. To hover: the layers of the documents (markers, lines,
+// images) and the tracks of the overlays. To click: all that is drawn (the protection areas too), but not the heatmaps
+// (no document), nor the copy of the hovered track.
+function hitsAt(pixel: number[], hitTolerance: number, hover = false) {
+  const heatmaps = Object.values(heatmapLayers);
+  const tracksLayers: object[] = Object.values(densityLayers).map((layers) => layers.tracks);
+  const hits: { feature: Feature; layer: object }[] = [];
+  map.forEachFeatureAtPixel(
+    pixel,
+    (feature, layer) => void hits.push({ feature: feature as Feature, layer: layer as object }),
+    {
+      layerFilter: (layer) =>
+        hover
+          ? hoverableLayers.has(layer) || tracksLayers.includes(layer)
+          : layer !== trackHighlightLayer && !heatmaps.includes(layer as never),
+      hitTolerance,
+    }
+  );
+  return hits;
+}
+
+// the tracks of the overlays among the hits, except the document the map is about
+function tracksIn(hits: { feature: Feature; layer: object }[]): Feature[] {
+  if (!showDensityOverlays.value) {
+    return [];
+  }
+
+  const tracksLayers: unknown[] = Object.values(densityLayers).map((layers) => layers.tracks);
+  const displayed = props.documents?.length === 1 ? props.documents[0] : null;
+  return hits
+    .filter((hit) => tracksLayers.includes(hit.layer))
+    .map((hit) => hit.feature)
+    .filter((track) => {
+      const document = track.get('document');
+      return !(displayed && document.type === displayed.type && document.document_id === displayed.document_id);
+    });
+}
+
+// the tracks with their document, the most recent outings first
+function trackEntries(features: Feature[]) {
+  const byDocument = new Map<DensityTrack, Feature>(features.map((feature) => [feature.get('document'), feature]));
+  return sortTracks([...byDocument.keys()]).map((document) => ({ document, feature: byDocument.get(document)! }));
+}
+
+// what a track is on the map, for the list: its color on its casing
+function trackSwatchStyle(document: DensityTrack) {
+  const { trackColor, casingColor } = DENSITY_OVERLAYS[document.type === 'o' ? 'outing' : 'route'];
+  return { background: trackColor, borderColor: casingColor };
+}
+
+function isMarker(feature: FeatureLike) {
+  return (feature as Feature).getGeometry()?.getType() === 'Point';
+}
+
+function hideTrackTooltip() {
+  trackTooltip.value = null;
+  trackTooltipOverlay?.setPosition(undefined);
 }
 
 function setHighlightedFeature(feature: FeatureLike | null) {
@@ -1034,14 +1444,194 @@ function setHighlightedFeature(feature: FeatureLike | null) {
   if (feature && feature.get('highlightedStyle')) {
     (feature as Feature).setStyle(feature.get('highlightedStyle'));
   }
+
+  // a track of an overlay is drawn again on top, thicker: the tracks of the overlays are in two layers, under the
+  // lines of the documents
+  const highlightSource = trackHighlightLayer.getSource()!;
+  highlightSource.clear();
+  const trackStyle = feature?.get('trackHighlightedStyle');
+  if (trackStyle) {
+    const copy = new ol.Feature((feature as Feature).getGeometry());
+    copy.setStyle(trackStyle);
+    highlightSource.addFeature(copy);
+  }
 }
 
 function intersectsWithSwitzerland(extent: Extent) {
   return ol.extent.intersects(extent, swissExtent);
 }
 
+function toggleDensityOverlay(type: DensityType) {
+  densityEnabled[type] = !densityEnabled[type];
+
+  if (densityEnabled[type]) {
+    updateDensityOverlay(type);
+  } else {
+    cancelDensityRequest(type);
+    heatmapLayers[type]?.setVisible(false);
+    densityLayers[type].tracks.setVisible(false);
+    closeTrackPanel();
+  }
+}
+
+// the heatmap layer of an overlay, added to the map under the tracks layer when first needed
+function heatmapLayer(type: DensityType) {
+  let layer = heatmapLayers[type];
+  if (!layer) {
+    layer = heatmapLayers[type] = createHeatmapLayer(type);
+    const layers = map.getLayers();
+    layers.insertAt(layers.getArray().indexOf(densityLayers[type].tracks), layer);
+  }
+  return layer;
+}
+
+function updateDensityOverlays() {
+  DENSITY_TYPES.forEach(updateDensityOverlay);
+}
+
+// the request of each overlay that is running, cancelled when the map moves on
+const densityRequests: Partial<Record<DensityType, AbortController>> = {};
+// what each overlay shows now (its request), to not ask again for the same thing
+const shownDensity: Partial<Record<DensityType, string>> = {};
+
+function cancelDensityRequest(type: DensityType) {
+  delete shownDensity[type];
+  densityRequests[type]?.abort();
+  delete densityRequests[type];
+}
+
+async function updateDensityOverlay(type: DensityType) {
+  if (!densityEnabled[type]) {
+    return;
+  }
+
+  const layers = densityLayers[type];
+  const overlay = DENSITY_OVERLAYS[type];
+  const zoom = Math.round(view().getZoom()!);
+  const filters = (type === 'outing' ? props.tracksFilters : props.routesFilters) ?? {};
+  // a box on a grid, so that small moves of the map ask for the same thing: the answer is already there (and the
+  // browser keeps it, the API lets it)
+  const params = { ...filters, bbox: snapExtent(getExtent()).join(',') };
+  const key = JSON.stringify([params, $language.current, zoom >= DENSITY_TRACKS_MIN_ZOOM]);
+  if (key === shownDensity[type]) {
+    return;
+  }
+  const requestId = ++densityRequestIds[type];
+  const isCurrent = () => requestId === densityRequestIds[type] && densityEnabled[type];
+
+  cancelDensityRequest(type);
+  const { signal } = (densityRequests[type] = new AbortController());
+
+  try {
+    if (zoom >= DENSITY_TRACKS_MIN_ZOOM) {
+      const { data } = await overlay.getTracks({ ...params, pl: $language.current }, signal);
+      if (!isCurrent()) {
+        return;
+      }
+
+      if (!data.truncated) {
+        heatmapLayers[type]?.setVisible(false);
+        layers.tracks.setVisible(true);
+
+        const source = layers.tracks.getSource()!;
+        source.clear();
+        closeTrackPanel();
+        for (const document of data.documents) {
+          const feature = addFeature(source, JSON.parse(document.geometry.geom_detail), layers.trackStyle, null);
+          feature?.set('document', document);
+          feature?.set('trackHighlightedStyle', layers.trackHighlightedStyle);
+        }
+        shownDensity[type] = key;
+        return;
+      }
+      // too many tracks to draw them: their density, as when zoomed out
+    }
+
+    // the size of the cells comes from the box, on the server
+    const { data } = await overlay.getHeatmap(params, signal);
+    if (!isCurrent()) {
+      return;
+    }
+
+    layers.tracks.setVisible(false);
+    const heatmap = heatmapLayer(type);
+    heatmap.setVisible(true);
+    closeTrackPanel();
+
+    const source = heatmap.getSource()!;
+    source.clear();
+
+    const maxCount = Math.max(1, ...data.buckets.map((bucket) => bucket.count));
+    for (const bucket of data.buckets) {
+      const feature = new ol.Feature(new ol.geom.Point([bucket.x, bucket.y]));
+      feature.set('weight', heatmapWeight(bucket.count, maxCount));
+      source.addFeature(feature);
+    }
+    shownDensity[type] = key;
+  } catch (error) {
+    // a request replaced by a newer one, or given up: nothing to tell
+    if (signal.aborted) {
+      return;
+    }
+    // the API turns the overlays off when they load the servers too much (TRACKS_OVERLAY_ENABLED): so does the map
+    if ((error as { response?: { status?: number } } | null)?.response?.status === 503) {
+      densityUnavailable.value = true;
+      turnOffDensityOverlays();
+    }
+    // any other error: the overlays are non-critical, leave the map usable
+  }
+}
+
+function turnOffDensityOverlays() {
+  const wereOn = DENSITY_TYPES.some((type) => densityEnabled[type]);
+
+  for (const type of DENSITY_TYPES) {
+    densityEnabled[type] = false;
+    cancelDensityRequest(type);
+    heatmapLayers[type]?.setVisible(false);
+    densityLayers[type].tracks.setVisible(false);
+  }
+  closeTrackPanel();
+
+  if (wereOn) {
+    toast({ message: $gettext('The Outings and Routes overlays are temporarily unavailable'), type: 'is-warning' });
+  }
+}
+
+let trackPanelTimeout: ReturnType<typeof setTimeout> | undefined;
+
+function openTrackPanel(features: Feature[], touch: boolean) {
+  trackPanelEntries.value = trackEntries(features);
+  hideTrackTooltip();
+
+  // a touch screen sends a click after the tap, where the panel now is: it must not open the first track
+  clearTimeout(trackPanelTimeout);
+  trackPanelReady.value = !touch;
+  if (!trackPanelReady.value) {
+    trackPanelTimeout = setTimeout(() => (trackPanelReady.value = true), 500);
+  }
+}
+
+function closeTrackPanel() {
+  trackPanelEntries.value = [];
+  setHighlightedFeature(null);
+}
+
 function onClick(event: MapBrowserEvent<PointerEvent>) {
-  const feature = map.forEachFeatureAtPixel(event.pixel, (f) => f);
+  const touch = isTouch(event);
+  const hits = hitsAt(event.pixel, touch ? TOUCH_HIT_TOLERANCE : HIT_TOLERANCE);
+  const documentHit = hits.find((hit) => hoverableLayers.has(hit.layer));
+  const tracks = documentHit && isMarker(documentHit.feature) ? [] : tracksIn(hits);
+
+  // several tracks under the click, or one under a finger: choose one, or see what it is
+  if (tracks.length > 1 || (tracks.length === 1 && touch)) {
+    openTrackPanel(tracks, touch);
+    return;
+  }
+  closeTrackPanel();
+
+  // a track is thin: clicking next to it counts
+  const feature = tracks[0] ?? hits[0]?.feature;
 
   if (feature) {
     const document = feature.get('document');
@@ -1392,6 +1982,16 @@ function findStopPoint(stopId: number) {
   return null;
 }
 
+// the filters are compared by content: the parent may give a new (but identical) object each time the route changes
+watch(
+  () => JSON.stringify(props.tracksFilters),
+  () => updateDensityOverlay('outing')
+);
+watch(
+  () => JSON.stringify(props.routesFilters),
+  () => updateDensityOverlay('route')
+);
+
 // deep 1: also when documents are added to or removed from the array, as Vue 2 array watchers did
 watch(
   () => props.documents,
@@ -1420,6 +2020,11 @@ watch(filterDocumentsWithMap, () => sendBoundsToUrl());
 watch(
   () => props.highlightedDocument,
   (newValue) => {
+    const current = highlightedFeature.value?.get('document');
+    // compared by type and id: the page gives a reactive proxy
+    if (newValue && current && current.type === newValue.type && current.document_id === newValue.document_id) {
+      return;
+    }
     if (newValue) {
       setHighlightedFeature(documentsLayer.getSource()!.getFeatureById(newValue.document_id));
     } else {
@@ -1469,6 +2074,7 @@ onMounted(() => {
       new ol.control.Control({ element: resetGeometryControlEl.value! }),
       new ol.control.Control({ element: clearGeometryControlEl.value! }),
       new ol.control.Control({ element: editMapControlEl.value! }),
+      new ol.control.Control({ element: map3dButtonEl.value! }),
       new ol.control.Attribution({ tipLabel: $gettext('Attributions', 'Map controls') }),
     ],
 
@@ -1477,8 +2083,10 @@ onMounted(() => {
       ...dataLayers,
       ...protectionAreasLayers,
       protectionAreasLayer,
+      ...Object.values(densityLayers).map((layers) => layers.tracks),
       imagesLayer, // images icons will be under documents
       documentsLayer,
+      trackHighlightLayer, // over the lines, under the markers
       waypointsLayer, // keep waypoint above trace and documents
       elevationProfileLayer,
       editionLayer,
@@ -1496,6 +2104,20 @@ onMounted(() => {
   map.on('moveend', sendBoundsToUrl);
   map.on('moveend', updateEditMapLink);
   map.on('moveend', emitMoveEvent);
+
+  if (showDensityOverlays.value) {
+    // it must not catch the pointer, or hovering the track would hide it
+    trackTooltipOverlay = new ol.Overlay({
+      element: trackTooltipEl.value!,
+      positioning: 'bottom-center',
+      offset: [0, -12],
+      stopEvent: false,
+    });
+    map.addOverlay(trackTooltipOverlay);
+    map.getViewport()?.addEventListener('mouseout', hideTrackTooltip);
+
+    map.on('moveend', debounce(updateDensityOverlays, DENSITY_FETCH_DEBOUNCE));
+  }
 
   [...mapLayers, ...dataLayers].forEach((layer) => layer.on('change:visible', () => layersRevision.value++));
 
@@ -1537,7 +2159,9 @@ onMounted(() => {
   } else {
     // if map is not editable, feature are clickable
     map.on('pointermove', (event) => onPointerMove(event as MapBrowserEvent<PointerEvent>));
-    map.on('click', (event) => onClick(event as MapBrowserEvent<PointerEvent>));
+    // with a finger, the second tap of a double tap zooms: wait for it (it would open the panel, and close it)
+    map.on('click', (event) => !isTouch(event) && onClick(event as MapBrowserEvent<PointerEvent>));
+    map.on('singleclick', (event) => isTouch(event) && onClick(event as MapBrowserEvent<PointerEvent>));
   }
 
   // listen to elevation profile events to display
@@ -1548,6 +2172,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  DENSITY_TYPES.forEach(cancelDensityRequest);
   // off() without a handler would remove the handlers of every map
   if (onElevationProfile) {
     bus.off('elevation_profile', onElevationProfile);
@@ -1675,6 +2300,18 @@ defineExpose({
   left: 0.5em;
 }
 
+/* just above the layer switcher button */
+.ol-control-3d {
+  bottom: calc(1em + var(--map-button-size));
+  left: 0.5em;
+
+  /* a button of the same size as the others, with a smaller text so that two letters fit */
+  span {
+    font-size: 0.7em;
+    font-weight: bold;
+  }
+}
+
 .ol-control-use-map-as-filter {
   top: 0.5em;
   left: 3em;
@@ -1715,6 +2352,102 @@ defineExpose({
 
 .ol-control-recenter-on-propositions_on-top {
   top: 27px;
+}
+
+.ol-track-tooltip {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  padding: 4px 8px;
+  width: max-content;
+  max-width: 320px;
+  pointer-events: none;
+
+  .track-meta {
+    color: var(--c2c-grey);
+    font-size: 0.85em;
+  }
+}
+
+.ol-track-panel {
+  position: absolute;
+  z-index: 2;
+  right: 0.5em;
+  bottom: 0.5em;
+  left: 0.5em;
+  max-width: 380px;
+  margin-left: auto;
+  max-height: 70%;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+
+  header {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--c2c-grey-lighter);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    list-style: none;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    padding: 6px 10px;
+
+    &:hover {
+      background: var(--c2c-hover-background);
+    }
+
+    & + li {
+      border-top: 1px solid var(--c2c-grey-lightest);
+    }
+  }
+
+  .track-swatch {
+    flex: none;
+    width: 1.4em;
+    height: 0.7em;
+    border: 2px solid;
+    border-radius: 4px;
+  }
+
+  .track-description {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .track-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 0.7em;
+    color: var(--c2c-grey);
+    font-size: 0.85em;
+  }
+}
+
+@media (pointer: coarse) {
+  .ol-track-panel li {
+    min-height: 44px;
+  }
+}
+
+.ol-track-panel.is-opening {
+  pointer-events: none;
 }
 
 .ol-control-reset-geometry {
@@ -1801,6 +2534,14 @@ defineExpose({
 .ol-attribution ul {
   display: flex;
   flex-direction: column;
+}
+
+/* the › of the open attribution in the middle of its button (OpenLayers draws it high) */
+.ol-attribution button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 .ol-scale-line {

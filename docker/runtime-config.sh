@@ -11,6 +11,8 @@
 #   C2C_FORUM_URL          https://forum.example.org
 #   C2C_RECAPTCHA_KEY      public reCAPTCHA site key of the domain the app is served from
 #   C2C_ENV_LABEL          preprod: names a non-production environment (banner + tab title); unset in production
+#   TRACKS_OVERLAY_ENABLED false, 0, no or off (any case): the Outings and Routes map overlays are not offered. The same
+#                          variable turns them off on the API (503): set it on both when they load the servers too much
 #
 # The file is JavaScript, loaded before the app (index.html): values are checked, and the script stops with an error
 # rather than writing something else than a plain URL / identifier. See src/js/runtime-config.ts for how it is used.
@@ -52,6 +54,14 @@ check_id() {
   if [ -n "${C2C_ENV_LABEL:-}" ]; then
     check_id C2C_ENV_LABEL "$C2C_ENV_LABEL"
     echo "  environmentLabel: \"$C2C_ENV_LABEL\","
+  fi
+
+  if [ -n "${TRACKS_OVERLAY_ENABLED:-}" ]; then
+    # the same values as the API (c2corg_api/views/document_map.py): anything else leaves the overlays on
+    flag=$(printf '%s' "$TRACKS_OVERLAY_ENABLED" | tr '[:upper:]' '[:lower:]' | tr -d ' ')
+    case "$flag" in
+      false | 0 | no | off) echo '  tracksOverlay: false,' ;;
+    esac
   fi
 
   echo '  urls: {'

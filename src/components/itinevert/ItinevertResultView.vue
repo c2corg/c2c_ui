@@ -100,6 +100,8 @@
           ref="map"
           :documents="documentsShownOnMap"
           :highlighted-document="highlightedDocument"
+          :tracks-filters="overlayFilters.outing"
+          :routes-filters="overlayFilters.route"
           :open-in-new-tab="true"
           @highlight-document="highlightedDocument = $event"
           show-filter-control
@@ -119,6 +121,7 @@ import DisplayModeSwitch from '../../views/documents/utils/DisplayModeSwitch.vue
 
 import ItinevertPageSelector from './ItinevertPageSelector.vue';
 
+import { searchOverlayFilters } from '@/components/map/density-overlays';
 import itinevertService, { POLYGON_STYLE, type Query } from '@/js/apis/itinevert-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
@@ -164,6 +167,15 @@ const props = defineProps({
 });
 
 const route = useRoute();
+
+// the "Tracks" and "Routes" overlays of the map follow the filters of the results: the activities chosen in the form,
+// unless changed
+const overlayFilters = computed(() =>
+  searchOverlayFilters(props.documentType, {
+    ...(props.baseQuery?.act ? { act: props.baseQuery.act } : {}),
+    ...route.query,
+  })
+);
 const { $gettext } = useGlobalProperties();
 
 const displayMode = ref('both');
@@ -453,14 +465,14 @@ onMounted(() => {
   }
 
   .map-container {
-    height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
+    height: calc(100vh - var(--c2c-header-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
     padding: 0;
   }
 
   .mobile-mode-map {
     margin-top: 0;
     .map-container {
-      height: calc(100vh - var(--c2c-navbar-height) - 3 * 0.5rem - 56px - 25px);
+      height: calc(100vh - var(--c2c-header-height) - 3 * 0.5rem - 56px - 25px);
     }
 
     .documents-container {
@@ -479,10 +491,10 @@ onMounted(() => {
 @media screen and (--c2c-min-tablet) {
   .result-section {
     margin-top: 0;
-    height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
+    height: calc(100vh - var(--c2c-header-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
 
     &.query-has-tags {
-      height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px - 28px);
+      height: calc(100vh - var(--c2c-header-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px - 28px);
     }
 
     .documents-container {
