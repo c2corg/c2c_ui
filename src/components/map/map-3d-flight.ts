@@ -54,9 +54,13 @@ const P = {
 const EARTH = 6371008.8;
 const toRad = Math.PI / 180;
 
+// the longitude difference the short way, also across the 180° meridian
+const lonDelta = (from: number, to: number) => ((((to - from) % 360) + 540) % 360) - 180;
+const wrapLon = (lon: number) => ((((lon + 180) % 360) + 360) % 360) - 180;
+
 function groundDistance(a: number[], b: number[]): number {
   const lat = ((a[1] + b[1]) / 2) * toRad;
-  const dx = (b[0] - a[0]) * toRad * Math.cos(lat);
+  const dx = lonDelta(a[0], b[0]) * toRad * Math.cos(lat);
   const dy = (b[1] - a[1]) * toRad;
   return Math.hypot(dx, dy) * EARTH;
 }
@@ -176,7 +180,7 @@ export function prepareTrack(parts: TrackPart[]): Track {
     const span = dist[i + 1] - dist[i];
     const f = span > 0 ? (d - dist[i]) / span : 0;
     densePoints.push([
-      vertices[i][0] + f * (vertices[i + 1][0] - vertices[i][0]),
+      wrapLon(vertices[i][0] + f * lonDelta(vertices[i][0], vertices[i + 1][0])),
       vertices[i][1] + f * (vertices[i + 1][1] - vertices[i][1]),
     ]);
   }
@@ -295,7 +299,8 @@ function classify(f: Features): boolean[] {
   });
   const edges = new Array<boolean>(n - 1).fill(false);
   for (const [a, b] of runs(cand)) {
-    const range = (values: ArrayLike<number>) => Array.from(values).slice(a, b + 1);
+    // the values of the run's edges a..b only: copying whole tracks per run would be quadratic
+    const range = (values: ArrayLike<number>) => Array.from({ length: b - a + 1 }, (_, k) => values[a + k]);
     if (chord.slice(a, b + 1).some(Boolean)) {
       edges.fill(true, a, b + 1);
       continue;
@@ -363,7 +368,9 @@ function localOffset(z: number[], ground: Float64Array, f: Features, edges: bool
     for (let c0 = a; c0 < b; c0 += 60) {
       const c1 = Math.min(b, c0 + 60);
       if (c1 - c0 < 5) continue;
-      const values = raw.slice(c0, c1 + 1);
+      // where the terrain has no tile, no sample: such vertices tell nothing about the offset
+      const values = raw.slice(c0, c1 + 1).filter(Number.isFinite);
+      if (values.length < 5) continue;
       // not glued to the ground: maybe a low flight taken for a walk
       if (std(values) > 25) continue;
       xs.push((c0 + c1) / 2);

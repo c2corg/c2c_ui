@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import tracks from './fixtures/paragliding-tracks.json';
-import { prepareTrack, splitFlightsWithGround, type TrackPart } from './map-3d-flight';
+import { prepareTrack, splitFlights, splitFlightsWithGround, type TrackPart } from './map-3d-flight';
 
 type Fixture = {
   parts: TrackPart[];
@@ -58,5 +58,35 @@ describe('splitFlightsWithGround', () => {
       false
     );
     expect(flights.length).toBe(fixture.flightsNoTime.length);
+  });
+});
+
+describe('splitFlights', () => {
+  it('keeps finite altitudes where the terrain has no tile on a ground part', async () => {
+    const fixture = fixtures['1955604'];
+    const ground = Float64Array.from(fixture.ground);
+    // the start of the walk without terrain: a whole chunk of ground vertices without sample
+    ground.fill(NaN, 0, 70);
+    const dense = groundDense(fixture);
+    const split = await splitFlights(fixture.parts, (points) =>
+      Promise.resolve(points.length === ground.length ? ground : dense)
+    );
+    expect(split!.flights.length).toBeGreaterThan(0);
+    expect(split!.offset.every(Number.isFinite)).toBe(true);
+  });
+});
+
+describe('prepareTrack', () => {
+  it('takes the short way across the 180° meridian', () => {
+    const track = prepareTrack([
+      [
+        [179.9999, 0, 0, 0],
+        [-179.9999, 0, 0, 0],
+      ],
+    ]);
+    // about 22 m, not around the world
+    expect(track.dist[1]).toBeLessThan(30);
+    expect(track.densePoints.length).toBeLessThan(3);
+    for (const [lon] of track.densePoints) expect(Math.abs(lon)).toBeLessThanOrEqual(180);
   });
 });

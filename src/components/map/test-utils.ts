@@ -53,7 +53,8 @@ export const mountMap = async (props: Record<string, unknown> = {}, component: C
           $documentUtils: {
             getDocumentTitle: () => '',
             hasSameGeolocation: () => false,
-            getDocumentType: (type: string) => ({ w: 'waypoint', r: 'route', o: 'outing' })[type],
+            getDocumentType: (type: string) =>
+              (({ w: 'waypoint', r: 'route', o: 'outing' }) as Record<string, string | undefined>)[type],
           },
           $dateUtils: {},
         } as never,

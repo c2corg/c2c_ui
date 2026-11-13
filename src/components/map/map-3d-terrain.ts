@@ -70,7 +70,9 @@ export async function sampleTerrain(points: [number, number][], zoom = 12): Prom
   points.forEach(([lon, lat], i) => {
     const [wx, wy] = world(lon, lat);
     const key = `${Math.floor(wx * 2 ** zoom)}/${Math.floor(wy * 2 ** zoom)}`;
-    byTile.set(key, [...(byTile.get(key) ?? []), i]);
+    const indices = byTile.get(key);
+    if (indices) indices.push(i);
+    else byTile.set(key, [i]);
   });
   await Promise.all(
     [...byTile].map(async ([key, indices]) => {
