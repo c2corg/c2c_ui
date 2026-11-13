@@ -103,7 +103,7 @@ let bundleReport = false;
 
 if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   // add an url conf for local API developers: the API runs on localhost:6543 unless told otherwise, with the same
-  // variables as the Docker container (see docker/runtime-config.sh), e.g. C2C_API_URL=http://localhost:8080 npm run serve
+  // variables as the Docker container (see docker/runtime-config.sh), e.g. C2C_API_URL=http://localhost:6544 npm run serve (8080 is this dev server)
   config.urlsConfigurations.localhost = {
     name: 'localhost',
     api: process.env.C2C_API_URL ?? 'http://localhost:6543',

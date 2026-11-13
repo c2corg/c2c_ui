@@ -2,19 +2,24 @@
 
 [![GitHub license](https://img.shields.io/github/license/c2corg/c2c_ui.svg)](https://github.com/c2corg/c2c_ui/blob/master/LICENSE) ![Continuous integration](https://github.com/c2corg/c2c_ui/workflows/Continuous%20integration/badge.svg?branch=master) ![Github Code scanning](https://github.com/c2corg/c2c_ui/workflows/Github%20Code%20scanning/badge.svg?branch=master) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/659b18a55fcd4f638fa36c4aa2976de8)](https://www.codacy.com/gh/c2corg/c2c_ui/dashboard?utm_source=github.com&utm_medium=referral&utm_content=c2corg/c2c_ui&utm_campaign=Badge_Grade)
 
-## Architecture diagrams
+## Architecture
 
-Click a diagram to open its interactive version (zoom, search, details, links to the source code). All the diagrams of camptocamp.org: <https://c2corg.github.io/v6_api/>.
+This is the Vue3-based responsive web frontend of camptocamp.
 
-### Frontend (c2c_ui)
+*(Click for the interactive version)*
+
+#### Frontend (c2c_ui)
 
 [![Frontend (c2c_ui)](docs/architecture/frontend.png)](https://c2corg.github.io/v6_api/architecture/frontend.html)
 
-### Local development
+#### Local development
 
 [![Local development](docs/architecture/local-dev.png)](https://c2corg.github.io/v6_api/architecture/local-dev.html)
 
-On any OS, install [git](https://git-scm.com/) and [node.js](https://nodejs.org/en/). Then :
+## Setup
+
+On any OS, install [git](https://git-scm.com/) and [node.js](https://nodejs.org/en/) (the current LTS, as in CI; some
+development dependencies need at least 22.22.2 or 24.15, e.g. `nvm install --lts`). Then :
 
 ```bash
 # Download camptocamp.org source code :
@@ -33,7 +38,12 @@ npm run serve
 
 :heart: [http://localhost:8080](http://localhost:8080) :heart:
 
-Want to easily access to every dev tools on a fancy interface? Have a look on [the doc](https://github.com/c2corg/c2c_ui/wiki/development-environment)! :sunglasses:
+⚠️ The dev server starts on the **production** backend. To use a local API ([v6_api](https://github.com/c2corg/v6_api),
+on `http://localhost:6543`, whose dev configuration allows this origin), choose `localhost` in the backend selector of
+the navigation bar: the choice is kept in the browser (local storage).
+
+Other tasks: `npm run lint`, `npm test` (unit tests), `npm run e2e` (Playwright), `npm run type-check`,
+`npm run build`. See also [the wiki](https://github.com/c2corg/c2c_ui/wiki/Development-environment).
 
 ## Backend urls
 
@@ -62,8 +72,8 @@ balancer; `PORT` is the port nginx listens on):
 docker run --rm -p 8081:80 -e LISTEN_FLAGS= -e C2C_API_URL=http://localhost:6543 c2corg/c2c_ui
 ```
 
-`npm run serve` reads the same variables for its `localhost` backend (`C2C_API_URL=http://localhost:8080 npm run serve`),
-and lets you switch backend from the navigation bar. How it works: `docker/runtime-config.sh` writes `/config.js` when
+`npm run serve` reads the same `C2C_*_URL` variables for its `localhost` backend only (e.g. an API on another port: `C2C_API_URL=http://localhost:6544 npm run serve`; `C2C_BACKEND` is ignored there),
+which you pick in the backend selector of the navigation bar. How it works: `docker/runtime-config.sh` writes `/config.js` when
 the container starts, `src/js/runtime-config.ts` applies it on top of the build configuration (`vite.config.ts`).
 
 ## Previews de PR
