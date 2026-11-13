@@ -175,7 +175,7 @@ const props = defineProps({
   },
 });
 
-defineEmits(['close']);
+const emit = defineEmits(['close', 'unavailable']);
 
 const router = useRouter();
 
@@ -413,66 +413,78 @@ onMounted(() => {
     paint: { 'raster-opacity': opacity },
   });
 
-  const created = new MapLibreMap({
-    container: mapElementEl.value!,
-    style: {
-      version: 8,
-      sources: {
-        terrain: terrainSource,
-        // a second source for the relief and the shading: sharing the terrain one makes MapLibre warn and render
-        // them at a lower zoom
-        relief: terrainSource,
-        world: rasterSource(worldLayer),
-        ...Object.fromEntries([...orthoLayers, ...slopeLayers].map((layer) => [layer.title, rasterSource(layer)])),
-        documents: { type: 'geojson', data: paragliding ? withoutParaglidingTracks(props.documents) : props.documents },
-        'flight-shadows': { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
+  let created: MapLibreMap;
+  try {
+    created = new MapLibreMap({
+      container: mapElementEl.value!,
+      // at most 2 device pixels per CSS pixel: the 3x screens of phones would ask 2.25 times the tiles and fill rate
+      pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+      style: {
+        version: 8,
+        sources: {
+          terrain: terrainSource,
+          // a second source for the relief and the shading: sharing the terrain one makes MapLibre warn and render
+          // them at a lower zoom
+          relief: terrainSource,
+          world: rasterSource(worldLayer),
+          ...Object.fromEntries([...orthoLayers, ...slopeLayers].map((layer) => [layer.title, rasterSource(layer)])),
+          documents: {
+            type: 'geojson',
+            data: paragliding ? withoutParaglidingTracks(props.documents) : props.documents,
+          },
+          'flight-shadows': { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
+        },
+        layers: [
+          { id: 'background', type: 'background', paint: { 'background-color': '#e6eef5' } },
+          { ...raster(worldLayer), id: 'world', source: 'world' },
+          {
+            id: 'relief',
+            type: 'color-relief',
+            source: 'relief',
+            layout: { visibility: 'none' },
+            paint: { 'color-relief-color': ['interpolate', ['linear'], ['elevation'], ...reliefColors] },
+          },
+          ...orthoLayers.map((layer) => raster(layer)),
+          {
+            id: 'shading',
+            type: 'hillshade',
+            source: 'relief',
+            layout: { visibility: 'none' },
+            paint: { 'hillshade-exaggeration': 0.5 },
+          },
+          ...slopeLayers.map((layer) => raster(layer, 0.4)),
+          {
+            id: 'documents-line',
+            type: 'line',
+            source: 'documents',
+            filter: ['in', ['geometry-type'], ['literal', ['LineString', 'MultiLineString']]],
+            layout: { 'line-join': 'round', 'line-cap': 'round' },
+            paint: { 'line-color': DOCUMENT_COLOR, 'line-width': 4 },
+          },
+          // the shadow of the flights drawn in the air (paragliding)
+          {
+            id: 'flight-shadows',
+            type: 'line',
+            source: 'flight-shadows',
+            layout: { 'line-join': 'round', 'line-cap': 'round' },
+            paint: { 'line-color': '#222', 'line-opacity': 0.6, 'line-width': 2.5, 'line-dasharray': [2, 2] },
+          },
+        ],
+        terrain: { source: 'terrain', exaggeration: EXAGGERATION },
+        sky: { 'sky-color': '#9cc9f0', 'horizon-color': '#e6eef5', 'horizon-fog-blend': 0.6 },
       },
-      layers: [
-        { id: 'background', type: 'background', paint: { 'background-color': '#e6eef5' } },
-        { ...raster(worldLayer), id: 'world', source: 'world' },
-        {
-          id: 'relief',
-          type: 'color-relief',
-          source: 'relief',
-          layout: { visibility: 'none' },
-          paint: { 'color-relief-color': ['interpolate', ['linear'], ['elevation'], ...reliefColors] },
-        },
-        ...orthoLayers.map((layer) => raster(layer)),
-        {
-          id: 'shading',
-          type: 'hillshade',
-          source: 'relief',
-          layout: { visibility: 'none' },
-          paint: { 'hillshade-exaggeration': 0.5 },
-        },
-        ...slopeLayers.map((layer) => raster(layer, 0.4)),
-        {
-          id: 'documents-line',
-          type: 'line',
-          source: 'documents',
-          filter: ['in', ['geometry-type'], ['literal', ['LineString', 'MultiLineString']]],
-          layout: { 'line-join': 'round', 'line-cap': 'round' },
-          paint: { 'line-color': DOCUMENT_COLOR, 'line-width': 4 },
-        },
-        // the shadow of the flights drawn in the air (paragliding)
-        {
-          id: 'flight-shadows',
-          type: 'line',
-          source: 'flight-shadows',
-          layout: { 'line-join': 'round', 'line-cap': 'round' },
-          paint: { 'line-color': '#222', 'line-opacity': 0.6, 'line-width': 2.5, 'line-dasharray': [2, 2] },
-        },
-      ],
-      terrain: { source: 'terrain', exaggeration: EXAGGERATION },
-      sky: { 'sky-color': '#9cc9f0', 'horizon-color': '#e6eef5', 'horizon-fog-blend': 0.6 },
-    },
-    bounds: startBounds,
-    // fitBounds ignores the terrain: closer, the camera can end up inside a mountain
-    fitBoundsOptions: FIT_OPTIONS,
-    pitch: 60,
-    maxPitch: 85,
-    attributionControl: false,
-  });
+      bounds: startBounds,
+      // fitBounds ignores the terrain: closer, the camera can end up inside a mountain
+      fitBoundsOptions: FIT_OPTIONS,
+      pitch: 60,
+      maxPitch: 85,
+      attributionControl: false,
+    });
+  } catch {
+    // no WebGL 2 after all (refused by the browser or the device): OlMap goes back to 2D, without the 3D button
+    emit('unavailable');
+    return;
+  }
   map = created;
 
   created.addControl(new ScaleControl(), 'bottom-right');

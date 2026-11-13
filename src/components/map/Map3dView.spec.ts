@@ -7,12 +7,16 @@ import { mountMap } from './test-utils';
 import bus from '@/js/event-bus';
 
 // MapLibre needs WebGL, which jsdom has not: a map that records what the view asks
-const { markers } = vi.hoisted(() => ({
+const { markers, webgl } = vi.hoisted(() => ({
   markers: [] as { lngLat?: [number, number]; added: boolean; removed: boolean }[],
+  webgl: { works: true },
 }));
 
 vi.mock('maplibre-gl', () => {
   class Map {
+    constructor() {
+      if (!webgl.works) throw new Error('Failed to initialize WebGL');
+    }
     on() {}
     once() {}
     addControl() {}
@@ -61,6 +65,14 @@ const props = {
 describe('Map3dView', () => {
   beforeEach(() => {
     markers.length = 0;
+    webgl.works = true;
+  });
+
+  it('asks to go back to 2D when WebGL fails', async () => {
+    webgl.works = false;
+    const { wrapper } = await mountMap(props, Map3dView);
+    expect(wrapper.emitted('unavailable')).toHaveLength(1);
+    wrapper.unmount();
   });
 
   afterEach(() => {

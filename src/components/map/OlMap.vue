@@ -14,7 +14,7 @@
     </div>
 
     <!-- 3D view -->
-    <div v-show="show3d" ref="map3dButton" class="ol-control ol-control-3d" title="3D">
+    <div v-show="show3d && can3d" ref="map3dButton" class="ol-control ol-control-3d" title="3D">
       <button aria-label="3D" @click.stop="open3d"><span>3D</span></button>
     </div>
 
@@ -26,6 +26,7 @@
       :markers="map3d.markers"
       :full-screen-element-id="fullScreenElementId"
       @close="map3d = null"
+      @unavailable="on3dUnavailable"
     />
 
     <div
@@ -204,6 +205,7 @@ import BiodivInformation from './BiodivInformation.vue';
 import LayerButton from './LayerButton.vue';
 import SwissProtectionAreaInformation from './SwissProtectionAreaInformation.vue';
 import type { Marker3d } from './map-3d-markers';
+import { markUnsupported, supports3d } from './map-3d-support';
 import {
   cartoLayers,
   dataLayers as dataLayersOf,
@@ -452,6 +454,22 @@ const resetGeometryControlEl = useTemplateRef<HTMLElement>('resetGeometryControl
 const clearGeometryControlEl = useTemplateRef<HTMLElement>('clearGeometryControl');
 const editMapControlEl = useTemplateRef<HTMLElement>('editMapControl');
 const map3dButtonEl = useTemplateRef<HTMLElement>('map3dButton');
+// the browser can show the 3D view (WebGL 2), checked only where the 3D button may show
+const can3d = ref(false);
+watch(
+  () => props.show3d,
+  (show3d) => {
+    if (show3d) can3d.value = supports3d();
+  },
+  { immediate: true }
+);
+
+// the 3D view failed to start (WebGL refused): back to 2D, without the button
+function on3dUnavailable() {
+  markUnsupported();
+  can3d.value = false;
+  map3d.value = null;
+}
 const biodivWindowEl = useTemplateRef<{ show(): void }>('biodivWindow');
 const swissWindowEl = useTemplateRef<{ show(): void }>('swissWindow');
 
