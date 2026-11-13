@@ -6,7 +6,7 @@
 
 This is the Vue3-based responsive web frontend of camptocamp.
 
-*(Click for the interactive version)*
+_(Click for the interactive version)_
 
 #### Frontend (c2c_ui)
 
