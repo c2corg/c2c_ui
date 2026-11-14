@@ -114,7 +114,7 @@
     "Describe road access": "Describe road access and facilities (accommodation, restaurant, etc.)",
     "Describe the conditions you encountered during your outing": "Describe the conditions encountered during your outing",
     "Describe the route following the structure below": "Describe the route following the structure below:\n## Approach # duration in h\nApproach description\n\n## Ascent # duration in h\nL# | rating | length | description (use # button above)\n\n## Descent # duration in h\nDescent description",
-    "Detailed figures, like ratings, height differences, frequentation...": "Detailed fiures (ratings, height differences, attendance...)",
+    "Detailed figures, like ratings, height differences, frequentation...": "Detailed figures (ratings, height differences, attendance...)",
     "Donate": "Donate to Camptocamp association",
     "ESRI World Imagery": {
       "Map layer": "ESRI Sat"
@@ -373,8 +373,8 @@
     },
     "decathlon": "Decathlon",
     "describe conditions": "Describe ground conditions, equipment and rock quality.\nIf you meet defective equipment, contact local actors like mountain guides or tourism office.",
-    "describe route_conditions": "Describe route conditions",
-    "describe timing": "Describe timing",
+    "describe route_conditions": "Briefly describe the route you followed in the following cases: a route different from the one in the guidebook, a guidebook with alternative routes, a loop route, a series of routes, or a point reached during a partial hike.\nWARNING: Do not upload photos copied from a guidebook or a book. Moderators will delete them immediately, as this is illegal and violates the licenses used by the site.",
+    "describe timing": "Departure time / timetable",
     "describe weather": "Describe weather",
     "description": "Description",
     "difficult": {

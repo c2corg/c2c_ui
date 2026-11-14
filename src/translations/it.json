@@ -1029,8 +1029,8 @@
     "descent": {
       "image_categories": "discesa"
     },
-    "describe conditions": "Condizioni del terreno, chiodatura, qualità della roccia... (nell'avvicinamento, nella via, ... )",
-    "describe route_conditions": "Descrivi brevemente l'itinerario che hai seguito solo nei casi seguenti : varianti, concatenamento di più itinerari, percorso parziale dell'itinerario...",
+    "describe conditions": "Condizioni del terreno, attrezzatura e qualità della roccia riscontrate (avvicinamento, via e nelle vicinanze).\nSe riscontrate attrezzature difettose, informate gli operatori locali (attrezzatori, ufficio delle guide, ufficio turistico...) ",
+    "describe route_conditions": "Descrivi brevemente l'itinerario che hai seguito solo nei casi seguenti : varianti, concatenamento di più itinerari, percorso parziale dell'itinerario...\nATTENZIONE: non caricate foto copiate da una guida o da un libro. I moderatori le elimineranno immediatamente, poiché si tratta di una pratica illegale che non rispetta le licenze utilizzate dal sito.",
     "describe timing": "Ora di partenza / orari:",
     "describe weather": "Condizioni meteorologiche incontrate durante la gita: copertura nuvolosa, precipitazioni, vento, temperatura...",
     "description": "Descrizione",

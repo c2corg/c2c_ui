@@ -320,7 +320,7 @@
       "image_categories": "jeitsiera"
     },
     "describe conditions": "Aurkitutako kondizioak, ekipamendua eta harkaitzaren kalitatea (gerturatzean, ibilbidean eta inguruan)",
-    "describe route_conditions": "Laburtu ezazu jarraitutako ibilbidea hurrengo kasuetako batekin bat egiten badu: topo gidan deskribatutakoren desberdina bada, topo-gidak saihesbideak proposatzen baditu, ibilbide zirkularrak, jarraian eginiko ibilbideak edo ibilbidea ez bada amaitu.",
+    "describe route_conditions": "Laburtu ezazu jarraitutako ibilbidea hurrengo kasuetako batekin bat egiten badu: topo gidan deskribatutakoren desberdina bada, topo-gidak saihesbideak proposatzen baditu, ibilbide zirkularrak, jarraian eginiko ibilbideak edo ibilbidea ez bada amaitu.\nOHARRA: ez igo gida-liburu batetik edo beste liburu batetik kopiaturiko argazkiak. Moderatzaileek berehala ezabatuko dituzte, ilegalak direlako eta gunearen erabilitako lizentziak urratzen dituztelako.",
     "describe timing": "Irteera ordua / iraupena",
     "describe weather": "Irteeran aurkitutako eguraldiaren egoera: lainoak, euria, haizea, tenperatura.",
     "description": "Deskribapena",

@@ -1271,9 +1271,9 @@
       "image_categories": "Abstieg"
     },
     "describe conditions": "Grundverhältnisse, Ausrüstung und Gesteinsqualität beschreiben.\nFals Sie eine defekte Ausrüstung begegnen, wenden Sie sich an lokalen Bergführern oder Touristeninformation.",
-    "describe route_conditions": "Route beschreiben",
+    "describe route_conditions": "Beschreiben Sie kurz  in den folgenden Fällen die Route, die Sie genommen haben: Route, die von der im Kletterführer angegebenen abweicht, Kletterführer mit Varianten, Rundroute, Routenkombination, Punkt, der bei einer Teilstrecke erreicht wurde.\nACHTUNG: Laden Sie keine Fotos hoch, die aus einem Wanderführer oder einem Buch kopiert wurden. Die Moderatoren löschen diese sofort, da dies illegal ist und gegen die von der Website verwendeten Lizenzen verstößt.",
     "describe timing": "Zeiten (Abmarsch, Gesamtdauer, usw.)",
-    "describe weather": "Wetter beschreiben",
+    "describe weather": "Wetterbedingungen während der Tour: Bewölkung, Niederschlag, Wind, Temperatur",
     "description": "Beschreibung",
     "detail": {
       "image_categories": "Detail"
@@ -2086,7 +2086,7 @@
     "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "Vorschau : die Geometrie ist noch nicht vereinfacht. Interaktionen auf der Karte sowie der Export sind deaktiviert.",
     "this message.": "diese Nachricht",
     "time_management": "Zeitmanagement",
-    "timing": "Timing",
+    "timing": "Zeitpunkt",
     "title": "Titel",
     "to": {
       "$$noContext": "zu",
