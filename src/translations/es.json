@@ -435,6 +435,7 @@
     "Results only": "Solo resultados",
     "Retry": "Inténtalo de nuevo",
     "Route": "Vía",
+    "Routes": "Itinerarios",
     "Save": "Guardar",
     "Search ...": "Buscar ...",
     "See more results": "Ver más resultado",
@@ -787,10 +788,10 @@
     "descent": {
       "image_categories": "descenso"
     },
-    "describe conditions": "Describir condiciones",
-    "describe route_conditions": "Brevemente describa el itinerario que siguió en los siguientes casos: ruta diferente de la del topo, topo con variantes, encadenamiento de rutas, itinerario en cierre, punto alcanzado durante un recorrido parcial.",
+    "describe conditions": "Condiciones del terreno, equipamiento y calidad de la roca encontradas (acceso, vía y alrededores).\nSi detectas algún elemento de equipamiento defectuoso, informa a los responsables locales (encargados del equipamiento, oficina de guías, oficina de turismo, etc.). ",
+    "describe route_conditions": "Brevemente describa el itinerario que siguió en los siguientes casos: ruta diferente de la del topo, topo con variantes, encadenamiento de rutas, itinerario en cierre, punto alcanzado durante un recorrido parcial.\nATENCIÓN: no subas fotos copiadas de una guía o de un libro. Los moderadores las eliminarán inmediatamente, ya que se trata de una práctica ilegal y no respeta las licencias utilizadas por la web.",
     "describe timing": "Hora de salida / horario",
-    "describe weather": "Describir el tiempo",
+    "describe weather": "Condiciones meteorológicas durante la salida: nubosidad, precipitaciones, viento, temperatura",
     "description": "Descripción",
     "detail": {
       "image_categories": "detalle"
