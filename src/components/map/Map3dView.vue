@@ -430,12 +430,12 @@ onMounted(() => {
   const search = paragliding ? findFlights(props.documents, EXAGGERATION) : null;
   if (paragliding) loadFlightLayers().catch(() => undefined);
 
-  const raster = (layer: Layer3d, opacity = 1) => ({
+  const raster = (layer: Layer3d, opacity = 1, blend: 'normal' | 'multiply' = 'normal') => ({
     id: layer.title,
     type: 'raster' as const,
     source: layer.title,
     layout: { visibility: 'none' as const },
-    paint: { 'raster-opacity': opacity },
+    paint: { 'raster-opacity': opacity, 'raster-layer-blend': blend },
   });
 
   let created: MapLibreMap;
@@ -482,16 +482,19 @@ onMounted(() => {
             layout: { visibility: 'none' },
             paint: { 'hillshade-exaggeration': 0.5 },
           },
-          ...slopeLayers.map((layer) => raster(layer, 0.4)),
-          // the protection areas, in the colours of the 2D map (buildPolygonStyle) but lighter: the terrain shows
-          // through; the outline keeps their limit readable
-          ...swissProtectionLayers.map((layer) => raster(layer, 0.4)),
+          // the slopes stay normal on the orthophotos, multiplied they darken the shaded faces too much; multiply is
+          // for the slopes on a topographic map (as in Yeti)
+          ...slopeLayers.map((layer) => raster(layer, 0.4, 'normal')),
+          // the protection areas, in the colours of the 2D map (buildPolygonStyle), multiplied onto the ground: it keeps
+          // its texture under their colours (a plain opacity washes both out); not quite opaque, so that the shaded
+          // faces of the orthophotos do not go black. The outline keeps their limit readable
+          ...swissProtectionLayers.map((layer) => raster(layer, 0.7, 'multiply')),
           {
             id: 'protection-fill',
             type: 'fill',
             source: 'protection',
             layout: { visibility: 'none' },
-            paint: { 'fill-color': 'rgb(251, 201, 0)', 'fill-opacity': 0.2 },
+            paint: { 'fill-color': 'rgb(251, 201, 0)', 'fill-opacity': 0.4, 'fill-layer-blend': 'multiply' },
           },
           {
             id: 'protection-line',

@@ -7,15 +7,17 @@ import { mountMap } from './test-utils';
 import bus from '@/js/event-bus';
 
 // MapLibre needs WebGL, which jsdom has not: a map that records what the view asks
-const { markers, webgl } = vi.hoisted(() => ({
+const { markers, webgl, styles } = vi.hoisted(() => ({
   markers: [] as { lngLat?: [number, number]; added: boolean; removed: boolean }[],
   webgl: { works: true },
+  styles: [] as { layers: { id: string; paint?: Record<string, unknown> }[] }[],
 }));
 
 vi.mock('maplibre-gl', () => {
   class Map {
-    constructor() {
+    constructor({ style }: { style: (typeof styles)[number] }) {
       if (!webgl.works) throw new Error('Failed to initialize WebGL');
+      styles.push(style);
     }
     on() {}
     once() {}
@@ -65,6 +67,7 @@ const props = {
 describe('Map3dView', () => {
   beforeEach(() => {
     markers.length = 0;
+    styles.length = 0;
     webgl.works = true;
   });
 
@@ -101,6 +104,21 @@ describe('Map3dView', () => {
 
     expect(root.requestFullscreen).toHaveBeenCalled();
     wrapper.unmount();
+  });
+
+  it('multiplies the protection areas onto the ground, not the slopes nor the track', async () => {
+    const { wrapper } = await mountMap(props, Map3dView);
+    wrapper.unmount();
+    const paint = (id: string) => styles[0].layers.find((layer) => layer.id === id)!.paint!;
+
+    for (const id of ['Swiss tranquility zones', 'Swiss fauna protection zones']) {
+      expect(paint(id)['raster-layer-blend']).toBe('multiply');
+    }
+    for (const id of ['IGN Slopes', 'SwissTopo Slopes']) {
+      expect(paint(id)).toEqual({ 'raster-opacity': 0.4, 'raster-layer-blend': 'normal' });
+    }
+    expect(paint('protection-fill')['fill-layer-blend']).toBe('multiply');
+    expect(paint('documents-line')['line-layer-blend']).toBeUndefined();
   });
 
   it('shows the point under the cursor of the elevation profile', async () => {

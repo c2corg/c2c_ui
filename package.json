@@ -49,7 +49,7 @@
     "dompurify": "3.4.17",
     "exifreader": "4.54.0",
     "file-saver": "2.0.5",
-    "maplibre-gl": "6.17.0",
+    "maplibre-gl": "6.18.0",
     "mitt": "3.0.1",
     "ol": "10.11.0",
     "pinia": "4.1.0",
