@@ -553,6 +553,9 @@
     "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Pas de modifications — Dans le cas où vous effectuez un remix, que vous transformez, ou créez à partir du matériel composant l'Oeuvre originale, vous n'êtes pas autorisé à distribuer ou mettre à disposition l'Oeuvre modifiée. ",
     "Non sensitive period": "Pas de sensibilité",
     "NonCommercial — You may not use the material for commercial purposes.": "Pas d’Utilisation Commerciale — Vous n'êtes pas autorisé à faire un usage commercial de cette Oeuvre, tout ou partie du matériel la composant. ",
+    "North up": {
+      "Map controls": "Nord en haut"
+    },
     "Not simplified yet": "Non encore simplifié",
     "Note that comments have to be transferred manually in Discourse before merging.": "Les commentaires doivent être transférés manuellement dans Discourse avant de fusionner les documents.",
     "Note that the topoguide username will be the one mentioned in the attribution of the content you contributed to.": "Le pseudo topoguide sera celui mentionné dans les attributions des contenus auxquels vous contribuez.",
@@ -703,6 +706,9 @@
     "Set a maximum time to reach the access point (from the selected departure time)": "Définir une durée maximum pour atteindre le point d’accès (à compter de l’heure de départ sélectionnée)",
     "Settings": "Paramètres",
     "Several days?": "Plusieurs jours ?",
+    "Shading": {
+      "Map layer": "Ombres"
+    },
     "Share": "Partager",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Partage dans les Mêmes Conditions — Dans le cas où vous effectuez un remix, que vous transformez, ou créez à partir du matériel composant l'Oeuvre originale, vous devez diffuser l'Oeuvre modifiée dans les même conditions, c'est à dire avec la même licence avec laquelle l'Oeuvre originale a été diffusée. ",
     "Shorter than minimum length 1": {
