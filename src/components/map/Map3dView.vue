@@ -112,14 +112,7 @@
 // a 3D view of the 2D map (same place and documents), on MapLibre and our terrain tiles (map-3d-terrain.ts).
 // MapLibre is only downloaded when this component is first shown: OlMap imports it asynchronously on the 3D click.
 import type { FeatureCollection } from 'geojson';
-import {
-  type GeoJSONSource,
-  Map as MapLibreMap,
-  Marker,
-  type RasterSourceSpecification,
-  ScaleControl,
-  setWorkerUrl,
-} from 'maplibre-gl';
+import { type GeoJSONSource, Map as MapLibreMap, Marker, ScaleControl, setWorkerUrl } from 'maplibre-gl';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { toLonLat } from 'ol/proj';
@@ -135,18 +128,10 @@ import {
   loadFlightLayers,
   withoutParaglidingTracks,
 } from './map-3d-flight-layers';
-import {
-  type Layer3d,
-  orthoLayerAt,
-  orthoLayers,
-  registerNoBlankProtocol,
-  reliefColors,
-  slopeLayers,
-  swissProtectionLayers,
-  worldLayer,
-} from './map-3d-layers';
+import { orthoLayerAt, registerNoBlankProtocol, reliefColors } from './map-3d-layers';
 import { type Marker3d, markerElement } from './map-3d-markers';
 import { terrainSource } from './map-3d-terrain';
+import { type MapLayer, orthoLayers, rasterSource, slopeLayers, swissProtectionLayers, worldLayer } from './map-layers';
 
 import bus from '@/js/event-bus';
 
@@ -238,15 +223,6 @@ const attributions = computed(() => {
 
 // not reactive: Vue proxies break WebGL map objects
 let map: MapLibreMap | null = null;
-
-const rasterSource = (layer: Layer3d): RasterSourceSpecification => ({
-  type: 'raster',
-  tiles: layer.tiles,
-  tileSize: 256,
-  maxzoom: layer.maxzoom,
-  bounds: layer.bounds,
-  attribution: layer.attribution,
-});
 
 const visibility = (visible: boolean) => (visible ? 'visible' : 'none');
 
@@ -432,7 +408,7 @@ onMounted(() => {
   const search = paragliding ? findFlights(props.documents, EXAGGERATION) : null;
   if (paragliding) loadFlightLayers().catch(() => undefined);
 
-  const raster = (layer: Layer3d, opacity = 1, blend: 'normal' | 'multiply' = 'normal') => ({
+  const raster = (layer: MapLayer, opacity = 1, blend: 'normal' | 'multiply' = 'normal') => ({
     id: layer.title,
     type: 'raster' as const,
     source: layer.title,
