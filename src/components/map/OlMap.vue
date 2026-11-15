@@ -290,11 +290,12 @@ import {
 } from './density-overlays';
 import type { Marker3d } from './map-3d-markers';
 import { markUnsupported, supports3d } from './map-3d-support';
+import { swissExtent } from './map-layers';
 import {
   cartoLayers,
   dataLayers as dataLayersOf,
   protectionAreasLayers as protectionAreasLayersOf,
-} from './map-layers';
+} from './map-layers-ol';
 import {
   buildDiffStyle,
   buildPolygonStyle,
@@ -305,7 +306,6 @@ import {
   getDocumentPolygonStyle,
   getElevationProfileMarkerStyle,
   isFiniteExtent,
-  swissExtent,
 } from './map-utils';
 
 import biodivSportsService from '@/js/apis/biodivsports-service';

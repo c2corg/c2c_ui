@@ -4,7 +4,7 @@ import type TileLayer from 'ol/layer/Tile';
 import type XYZ from 'ol/source/XYZ';
 import { computed, onMounted, watch } from 'vue';
 
-import { cartoLayers } from '@/components/map/map-layers';
+import { cartoLayers } from '@/components/map/map-layers-ol';
 import { useYetixStore } from '@/components/yeti/yetix';
 import type { SelectorLayer } from '@/components/yeti/yetix-types';
 import ol from '@/js/libs/ol';

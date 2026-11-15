@@ -57,7 +57,7 @@ import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue';
 
 import { useLayer } from './layer';
 
-import { protectionAreasLayers } from '@/components/map/map-layers';
+import { protectionAreasLayers } from '@/components/map/map-layers-ol';
 import { useYetixStore } from '@/components/yeti/yetix';
 import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';

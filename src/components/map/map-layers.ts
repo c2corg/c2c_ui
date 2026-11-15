@@ -1,358 +1,275 @@
-import type { Options as WMTSOptions } from 'ol/source/WMTS';
-
-import { swissExtent } from './map-utils';
+// The layers of the maps, as data: the 2D and 3D views and the Yeti portal build their layers from these entries
+// (map-layers-ol.ts for OpenLayers, rasterSource() for MapLibre). Web Mercator tiles only, given by URL templates:
+// {z}/{x}/{y} for XYZ and WMTS, {bbox-epsg-3857} for WMS.
+import type { RasterSourceSpecification } from 'maplibre-gl';
 
 import config from '@/js/config';
-import ol from '@/js/libs/ol';
+import { extentFromLonLat } from '@/js/geo/projection';
 
-function createSwisstopoLayer(
-  title: string,
-  image: string | undefined,
-  layer: string,
-  format = 'jpeg',
-  time = 'current',
-  retina = false
-) {
-  const tileSize = retina ? 128 : undefined;
-  const tilePixelRatio = retina ? 2 : undefined;
-  return new ol.layer.Tile({
-    properties: { title, image, country: 'ch', type: 'base' },
-    visible: false,
-    // no tile requests outside Switzerland, where swisstopo serves blank tiles
-    extent: swissExtent,
-    source: new ol.source.XYZ({
-      attributions: ['© <a target="_blank" rel="noreferrer noopener" href="//www.swisstopo.admin.ch">Swisstopo</a>'],
-      urls: ['10', '11', '12', '13', '14'].map((i) => {
-        return `https://wmts${i}.geo.admin.ch/1.0.0/${layer}/default/${time}/3857/{z}/{x}/{y}.${format}`;
-      }),
-      maxZoom: 17,
-      tileSize: tileSize,
-      tilePixelRatio: tilePixelRatio,
-    }),
-  });
-}
-
-function createIgnFrSource(title: string, image: string, layer: string, format = 'jpeg') {
-  const resolutions: number[] = [];
-  const matrixIds: string[] = [];
-  const proj3857 = ol.proj.get('EPSG:3857')!;
-  const maxResolution = ol.extent.getWidth(proj3857.getExtent()) / 256;
-
-  for (let i = 0; i < 18; i++) {
-    matrixIds[i] = i.toString();
-    resolutions[i] = maxResolution / Math.pow(2, i);
-  }
-
-  const tileGrid = new ol.tilegrid.WMTS({
-    origin: [-20037508, 20037508],
-    resolutions,
-    matrixIds,
-  });
-
-  let url: string;
-  switch (layer) {
-    case 'GEOGRAPHICALGRIDSYSTEMS.MAPS':
-      url = 'https://data.geopf.fr/private/wmts?apikey=ign_scan_ws';
-      break;
-    default:
-      url = 'https://data.geopf.fr/wmts';
-  }
-
-  const source = new ol.source.WMTS({
-    url,
-    layer,
-    matrixSet: 'PM',
-    format: `image/${format}`,
-    projection: 'EPSG:3857',
-    tileGrid,
-    style: 'normal',
-    attributions: ['© <a href="//www.geoportail.fr/" target="_blank" rel="noreferrer noopener">Geoportail</a>'],
-  });
-
-  return new ol.layer.Tile({
-    properties: { title, image, country: 'fr', type: 'base' },
-    visible: false,
-    source,
-  });
-}
-
-/*
- * Creates map layer for IGN spain.
- * Available maps useful for c2c are:
- * - raster
- * - base
- * - ortho
- *
- * See http://www.ign.es/web/ign/portal/ide-area-nodo-ide-ign
- */
-function createIgnEsSource(title: string, image: string, source: string) {
-  let url = 'http://www.ign.es/wmts/';
-  let layer: string;
-  switch (source) {
-    case 'base':
-      url += 'ign-base';
-      layer = 'IGNBaseTodo';
-      break;
-    case 'ortho':
-      url += 'pnoa-ma';
-      layer = 'OI.OrthoimageCoverage';
-      break;
-    case 'raster':
-    default:
-      url += 'mapa-raster';
-      layer = 'MTN';
-      break;
-  }
-
-  const levels = 21;
-  const proj3857 = ol.proj.get('EPSG:3857')!;
-  const maxResolution = ol.extent.getWidth(proj3857.getExtent()) / 256;
-  const resolutions: number[] = [];
-  const matrixIds: string[] = [];
-  for (let i = 0; i < levels; i++) {
-    matrixIds[i] = i.toString();
-    resolutions[i] = maxResolution / Math.pow(2, i);
-  }
-
-  const tileGrid = new ol.tilegrid.WMTS({
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34],
-    origin: [-20037508.34, 20037508.34],
-    resolutions,
-    matrixIds,
-  });
-
-  return new ol.layer.Tile({
-    properties: { title, image, country: 'es', type: 'base' },
-    visible: false,
-    source: new ol.source.WMTS({
-      url,
-      layer,
-      matrixSet: 'EPSG:3857',
-      format: 'image/jpeg',
-      projection: 'EPSG:3857',
-      tileGrid,
-      attributions: [
-        'CC BY 4.0 <a href="https://www.scne.es" target="_blank" rel="noreferrer noopener">www.scne.es</a>',
-      ],
-      // no style: OpenLayers leaves the parameter out of the requests
-    } as WMTSOptions),
-  });
-}
-
-function createIcgcSource(title: string, image: string, source: string) {
-  return new ol.layer.Tile({
-    properties: { title, image, country: 'catalonia' },
-    visible: false,
-    source: new ol.source.TileWMS({
-      projection: 'EPSG:3857',
-      url: 'https://geoserveis.icgc.cat/icc_mapesmultibase/utm/wms/service?',
-      params: {
-        LAYERS: source,
-      },
-      attributions: ['CC BY 4.0 <a href="http://www.icgc.cat" target="_blank" rel="noreferrer noopener">ICGC</a>'],
-    }),
-  });
-}
-
-function createBaseMapDotAtSource(title: string, image: string, source: string) {
-  let format: string;
-  let layer: string;
-  switch (source) {
-    case 'ortho':
-      format = 'jpeg';
-      layer = 'bmaporthofoto30cm';
-      break;
-    case 'raster':
-    default:
-      format = 'png';
-      layer = 'bmapgrau';
-      break;
-  }
-
-  const levels = 20;
-  const proj3857 = ol.proj.get('EPSG:3857')!;
-  const maxResolution = ol.extent.getWidth(proj3857.getExtent()) / 256;
-  const resolutions: number[] = [];
-  const matrixIds: string[] = [];
-  for (let i = 0; i < levels; i++) {
-    matrixIds[i] = i.toString();
-    resolutions[i] = maxResolution / Math.pow(2, i);
-  }
-
-  const tileGrid = new ol.tilegrid.WMTS({
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34],
-    origin: [-20037508.34, 20037508.34],
-    resolutions,
-    matrixIds,
-  });
-
-  return new ol.layer.Tile({
-    properties: { title, image, country: 'at', type: 'base' },
-    visible: false,
-    source: new ol.source.WMTS({
-      urls: ['', '1', '2', '3', '4'].map(
-        (i) =>
-          `https://maps${i}.wien.gv.at/basemap/${layer}/normal/google3857/{TileMatrix}/{TileRow}/{TileCol}.${format}`
-      ),
-      requestEncoding: 'REST',
-      layer: 'geolandbasemap',
-      matrixSet: 'google3857',
-      tileGrid,
-      attributions: '© <a href="https://www.basemap.at" target="_blank" rel="noreferrer noopener">www.basemap.at</a>',
-      // no style: the URLs have none
-    } as WMTSOptions),
-  });
-}
-
-function createOrdnanceSurveySource() {
-  // available backgrounds are Outdoor, Light, Road
-  return new ol.layer.Tile({
-    properties: { title: 'Ordnance Survey (uk)', image: 'uk.jpg', country: 'gb', type: 'base' },
-    visible: false,
-    source: new ol.source.XYZ({
-      attributions: [
-        '© <a target="_blank" rel="noreferrer noopener" href="//www.ordnancesurvey.co.uk/">Ordnance Survey</a>',
-      ],
-      url: 'https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=' + config.ordnanceSurveyApiKey,
-      minZoom: 7,
-      maxZoom: 16,
-    }),
-  });
-}
-
-export const cartoLayers = function () {
-  // $gettext('ESRI', 'Map layer')
-  /* const esri = new ol.layer.Tile({
-    properties: { title: 'ESRI', type: 'base' },
-    visible: false,
-    source: new ol.source.XYZ({
-      url:
-        'https://server.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/' +
-        'WMTS?layer=World_Topo_Map&style=default&tilematrixset=GoogleMapsCompatible&' +
-        'Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fjpeg&' +
-        'TileMatrix={z}&TileCol={x}&TileRow={y}',
-      attributions: [
-        '<a href="https://www.arcgis.com/home/item.html?id=30e5fe3149c34df1ba922e6f5bbf808f"' +
-          ' target="_blank" rel="noreferrer noopener">Esri</a>'
-      ],
-      maxZoom: 19
-    })
-  }); */
-
-  // $gettext('OpenTopoMap', 'Map layer')
-  const openTopoMap = new ol.layer.Tile({
-    properties: { title: 'OpenTopoMap', image: 'opentopomap.jpg', type: 'base' },
-    visible: true,
-    source: new ol.source.XYZ({
-      url: 'https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
-      attributions:
-        '© <a href="//openstreetmap.org/copyright" target="_blank" rel="noreferrer noopener">OpenStreetMap</a> | ' +
-        '© <a href="//opentopomap.org" target="_blank" rel="noreferrer noopener">OpenTopoMap</a>',
-      maxZoom: 17,
-    }),
-  });
-
-  // $gettext('ESRI World Imagery', 'Map layer')
-  const esriImagery = new ol.layer.Tile({
-    properties: { title: 'ESRI World Imagery', image: 'esri.jpg', type: 'base' },
-    visible: false,
-    source: new ol.source.XYZ({
-      url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      attributions: [
-        '<a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9"' +
-          ' target="_blank" rel="noreferrer noopener">Esri</a>',
-      ],
-      maxZoom: 19,
-    }),
-  });
-
-  // $gettext('IGN maps', 'Map layer')
-  const ignFrMaps = createIgnFrSource('IGN maps', 'ign.jpg', 'GEOGRAPHICALGRIDSYSTEMS.MAPS');
-  // $gettext('IGN ortho', 'Map layer')
-  const ignFrOrtho = createIgnFrSource('IGN ortho', 'ignortho.jpg', 'ORTHOIMAGERY.ORTHOPHOTOS');
-  // $gettext('SwissTopo', 'Map layer')
-  const swissTopo = createSwisstopoLayer(
-    'SwissTopo',
-    'swisstopo.jpg',
-    'ch.swisstopo.pixelkarte-farbe',
-    'jpeg',
-    'current',
-    true
-  );
-  // $gettext('SwissTopo ortho', 'Map layer')
-  const swissTopoOrtho = createSwisstopoLayer(
-    'SwissTopo ortho',
-    'swisstopoortho.jpg',
-    'ch.swisstopo.swissimage',
-    'jpeg',
-    'current'
-  );
-  // $gettext('IGN raster (es)', 'Map layer')
-  const ignEsMaps = createIgnEsSource('IGN raster (es)', 'ignes.jpg', 'raster');
-  // $gettext('IGN ortho (es)', 'Map layer')
-  const ignEsOrtho = createIgnEsSource('IGN ortho (es)', 'ignesortho.jpg', 'ortho');
-  // $gettext('ICGC raster (ca)', 'Map layer')
-  const icgcMaps = createIcgcSource('ICGC raster (ca)', 'icgc.jpg', 'topo');
-  // $gettext('ICGC ortho (ca)', 'Map layer')
-  const icgcOrtho = createIcgcSource('ICGC ortho (ca)', 'icgcortho.jpg', 'orto');
-  // $gettext('Basemap (at)', 'Map layer')
-  const basemap = createBaseMapDotAtSource('Basemap (at)', 'at.jpg', 'raster');
-  // $gettext('Basemap ortho (at)', 'Map layer')
-  const basemapOrtho = createBaseMapDotAtSource('Basemap ortho (at)', 'atortho.jpg', 'ortho');
-  // $gettext('Ordnance Survey (uk)', 'Map layer')
-  const ordnanceSurvey = createOrdnanceSurveySource();
-  return [
-    openTopoMap,
-    /* esri, */
-    esriImagery,
-    ignFrMaps,
-    ignFrOrtho,
-    swissTopo,
-    swissTopoOrtho,
-    ignEsMaps,
-    ignEsOrtho,
-    icgcMaps,
-    icgcOrtho,
-    basemap,
-    basemapOrtho,
-    ordnanceSurvey,
-  ];
+export type MapLayer = {
+  // translated (Map layer context), also the image of the layer button, in src/assets/img/layers
+  title: string;
+  image?: string;
+  // the flag shown on the button
+  country?: string;
+  tiles: string[];
+  // 128: tiles of the next zoom shown at half their size, for a sharper text (swisstopo maps)
+  tileSize?: 128 | 256;
+  minzoom?: number;
+  maxzoom: number;
+  // [west, south, east, north]: no tile request outside
+  bounds?: [number, number, number, number];
+  attribution: string;
+  opacity?: number;
+  // allowed in the 3D view by the licence and service terms of the layer (assessment of 2026-11-10)
+  in3d?: boolean;
 };
 
-export const dataLayers = function () {
-  // $gettext('IGN Slopes', 'Map slopes layer')
-  const ignSlopes = createIgnFrSource('IGN Slopes', 'ignslopes.jpg', 'GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png');
-  ignSlopes.setOpacity(0.4);
-  ignSlopes.set('configurable', true);
-  // $gettext('SwissTopo Slopes', 'Map slopes layer')
-  const swissSlopes = createSwisstopoLayer(
-    'SwissTopo Slopes',
-    'swisstoposlopes.jpg',
-    'ch.swisstopo.hangneigung-ueber_30',
-    'png',
-    'current'
-  );
-  swissSlopes.setOpacity(0.4);
-  swissSlopes.set('configurable', true);
+// the IGN France orthophotos are read through this protocol, which drops their white outside France (map-3d-layers.ts)
+export const NO_BLANK = 'c2c-noblank';
 
-  return [ignSlopes, swissSlopes];
+export const SWISS_BOUNDS: [number, number, number, number] = [5.96, 45.82, 10.49, 47.81];
+// in EPSG:3857
+export const swissExtent = extentFromLonLat(SWISS_BOUNDS);
+
+const link = (href: string, text: string) => `<a href="${href}" target="_blank" rel="noreferrer noopener">${text}</a>`;
+
+const ignFr = (layer: string, format = 'jpeg') =>
+  (layer === 'GEOGRAPHICALGRIDSYSTEMS.MAPS'
+    ? 'https://data.geopf.fr/private/wmts?apikey=ign_scan_ws&'
+    : 'https://data.geopf.fr/wmts?') +
+  `SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=${layer}&STYLE=normal&TILEMATRIXSET=PM` +
+  `&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/${format}`;
+const IGN_FR = `© ${link('//www.geoportail.fr/', 'Geoportail')}`;
+
+const swisstopo = (layer: string, format = 'jpeg') =>
+  ['10', '11', '12', '13', '14'].map(
+    (i) => `https://wmts${i}.geo.admin.ch/1.0.0/${layer}/default/current/3857/{z}/{x}/{y}.${format}`
+  );
+const SWISSTOPO = `© ${link('//www.swisstopo.admin.ch', 'Swisstopo')}`;
+
+const ignEs = (path: string, layer: string) =>
+  `https://www.ign.es/wmts/${path}?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=${layer}&STYLE=default` +
+  '&TILEMATRIXSET=EPSG:3857&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/jpeg';
+const IGN_ES = `CC BY 4.0 ${link('https://www.scne.es', 'www.scne.es')}`;
+
+const icgc = (layer: string) =>
+  'https://geoserveis.icgc.cat/icc_mapesmultibase/utm/wms/service?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap' +
+  `&FORMAT=image/png&TRANSPARENT=true&LAYERS=${layer}&STYLES=&CRS=EPSG:3857&WIDTH=256&HEIGHT=256&BBOX={bbox-epsg-3857}`;
+const ICGC = `CC BY 4.0 ${link('http://www.icgc.cat', 'ICGC')}`;
+
+const basemapAt = (layer: string, format: string) =>
+  ['', '1', '2', '3', '4'].map(
+    (i) => `https://maps${i}.wien.gv.at/basemap/${layer}/normal/google3857/{z}/{y}/{x}.${format}`
+  );
+const BASEMAP_AT = `© ${link('https://www.basemap.at', 'www.basemap.at')}`;
+
+// the base layers of the 2D map, one of them shown: OpenTopoMap first, the default
+export const baseLayers: MapLayer[] = [
+  {
+    // $gettext('OpenTopoMap', 'Map layer')
+    title: 'OpenTopoMap',
+    image: 'opentopomap.jpg',
+    tiles: ['a', 'b', 'c'].map((s) => `https://${s}.tile.opentopomap.org/{z}/{x}/{y}.png`),
+    maxzoom: 17,
+    attribution:
+      `© ${link('//openstreetmap.org/copyright', 'OpenStreetMap')} | ` +
+      `© ${link('//opentopomap.org', 'OpenTopoMap')}`,
+  },
+  {
+    // $gettext('ESRI World Imagery', 'Map layer')
+    title: 'ESRI World Imagery',
+    image: 'esri.jpg',
+    tiles: ['https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+    maxzoom: 19,
+    attribution: link('https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9', 'Esri'),
+  },
+  {
+    // $gettext('IGN maps', 'Map layer')
+    title: 'IGN maps',
+    image: 'ign.jpg',
+    country: 'fr',
+    tiles: [ignFr('GEOGRAPHICALGRIDSYSTEMS.MAPS')],
+    maxzoom: 17,
+    attribution: IGN_FR,
+  },
+  {
+    // $gettext('IGN ortho', 'Map layer')
+    title: 'IGN ortho',
+    image: 'ignortho.jpg',
+    country: 'fr',
+    tiles: [ignFr('ORTHOIMAGERY.ORTHOPHOTOS').replace('https://', `${NO_BLANK}://`)],
+    maxzoom: 19,
+    attribution: IGN_FR,
+    in3d: true,
+  },
+  {
+    // $gettext('SwissTopo', 'Map layer')
+    title: 'SwissTopo',
+    image: 'swisstopo.jpg',
+    country: 'ch',
+    tiles: swisstopo('ch.swisstopo.pixelkarte-farbe'),
+    tileSize: 128,
+    maxzoom: 17,
+    bounds: SWISS_BOUNDS,
+    attribution: SWISSTOPO,
+  },
+  {
+    // $gettext('SwissTopo ortho', 'Map layer')
+    title: 'SwissTopo ortho',
+    image: 'swisstopoortho.jpg',
+    country: 'ch',
+    tiles: swisstopo('ch.swisstopo.swissimage'),
+    maxzoom: 19,
+    bounds: SWISS_BOUNDS,
+    attribution: SWISSTOPO,
+    in3d: true,
+  },
+  {
+    // $gettext('IGN raster (es)', 'Map layer')
+    title: 'IGN raster (es)',
+    image: 'ignes.jpg',
+    country: 'es',
+    tiles: [ignEs('mapa-raster', 'MTN')],
+    maxzoom: 20,
+    attribution: IGN_ES,
+  },
+  {
+    // $gettext('IGN ortho (es)', 'Map layer')
+    title: 'IGN ortho (es)',
+    image: 'ignesortho.jpg',
+    country: 'es',
+    tiles: [ignEs('pnoa-ma', 'OI.OrthoimageCoverage')],
+    maxzoom: 20,
+    attribution: IGN_ES,
+    in3d: true,
+  },
+  {
+    // $gettext('ICGC raster (ca)', 'Map layer')
+    title: 'ICGC raster (ca)',
+    image: 'icgc.jpg',
+    country: 'catalonia',
+    tiles: [icgc('topo')],
+    maxzoom: 20,
+    attribution: ICGC,
+  },
+  {
+    // $gettext('ICGC ortho (ca)', 'Map layer')
+    title: 'ICGC ortho (ca)',
+    image: 'icgcortho.jpg',
+    country: 'catalonia',
+    tiles: [icgc('orto')],
+    maxzoom: 20,
+    attribution: ICGC,
+  },
+  {
+    // $gettext('Basemap (at)', 'Map layer')
+    title: 'Basemap (at)',
+    image: 'at.jpg',
+    country: 'at',
+    tiles: basemapAt('bmapgrau', 'png'),
+    maxzoom: 19,
+    attribution: BASEMAP_AT,
+  },
+  {
+    // $gettext('Basemap ortho (at)', 'Map layer')
+    title: 'Basemap ortho (at)',
+    image: 'atortho.jpg',
+    country: 'at',
+    tiles: basemapAt('bmaporthofoto30cm', 'jpeg'),
+    maxzoom: 19,
+    attribution: BASEMAP_AT,
+  },
+  {
+    // $gettext('Ordnance Survey (uk)', 'Map layer')
+    title: 'Ordnance Survey (uk)',
+    image: 'uk.jpg',
+    country: 'gb',
+    // available backgrounds are Outdoor, Light, Road
+    tiles: ['https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=' + config.ordnanceSurveyApiKey],
+    minzoom: 7,
+    maxzoom: 16,
+    attribution: `© ${link('//www.ordnancesurvey.co.uk/', 'Ordnance Survey')}`,
+  },
+];
+
+// the base layers of the 3D view: the orthophotos, over the world one
+export const orthoLayers = baseLayers.filter((layer) => layer.in3d);
+
+// covers the whole world in 3D, also under the national orthophotos, past their borders
+export const worldLayer: MapLayer = {
+  // $gettext('Sentinel-2', 'Map layer')
+  title: 'Sentinel-2',
+  image: 's2cloudless.jpg',
+  // 2016 mosaic: CC BY 4.0 (the later years are non commercial)
+  tiles: ['https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/g/{z}/{y}/{x}.jpg'],
+  maxzoom: 14,
+  attribution:
+    `${link('https://s2maps.eu', 'Sentinel-2 cloudless 2016 by EOX')}` +
+    ' (Contains modified Copernicus Sentinel data 2016)',
+  in3d: true,
 };
 
-export const protectionAreasLayers = function () {
-  const swissTranquilityZones = createSwisstopoLayer(
-    'Swiss tranquility zones',
-    undefined,
-    'ch.bafu.wrz-wildruhezonen_portal',
-    'png'
-  );
-  swissTranquilityZones.setOpacity(0.7);
-  const swissFaunaProtectionZones = createSwisstopoLayer(
-    'Swiss fauna protection zones',
-    undefined,
-    'ch.bafu.wrz-jagdbanngebiete_select',
-    'png'
-  );
-  swissFaunaProtectionZones.setOpacity(0.7);
+export const slopeLayers: MapLayer[] = [
+  {
+    // $gettext('IGN Slopes', 'Map slopes layer')
+    title: 'IGN Slopes',
+    image: 'ignslopes.jpg',
+    country: 'fr',
+    tiles: [ignFr('GEOGRAPHICALGRIDSYSTEMS.SLOPES.MOUNTAIN', 'png')],
+    maxzoom: 17,
+    attribution: IGN_FR,
+    opacity: 0.4,
+    in3d: true,
+  },
+  {
+    // $gettext('SwissTopo Slopes', 'Map slopes layer')
+    title: 'SwissTopo Slopes',
+    image: 'swisstoposlopes.jpg',
+    country: 'ch',
+    tiles: swisstopo('ch.swisstopo.hangneigung-ueber_30', 'png'),
+    maxzoom: 17,
+    bounds: SWISS_BOUNDS,
+    attribution: SWISSTOPO,
+    opacity: 0.4,
+    in3d: true,
+  },
+];
 
-  return [swissTranquilityZones, swissFaunaProtectionZones];
-};
+// the protection areas of Switzerland; the biodiv-sports ones are features loaded by the map
+export const swissProtectionLayers: MapLayer[] = [
+  {
+    title: 'Swiss tranquility zones',
+    image: 'fauna.jpg',
+    country: 'ch',
+    tiles: swisstopo('ch.bafu.wrz-wildruhezonen_portal', 'png'),
+    maxzoom: 17,
+    bounds: SWISS_BOUNDS,
+    attribution: SWISSTOPO,
+    opacity: 0.7,
+    in3d: true,
+  },
+  {
+    title: 'Swiss fauna protection zones',
+    image: 'fauna.jpg',
+    country: 'ch',
+    tiles: swisstopo('ch.bafu.wrz-jagdbanngebiete_select', 'png'),
+    maxzoom: 17,
+    bounds: SWISS_BOUNDS,
+    attribution: SWISSTOPO,
+    opacity: 0.7,
+    in3d: true,
+  },
+];
+
+/** The MapLibre source of a layer */
+export const rasterSource = ({ tiles, tileSize, minzoom, maxzoom, bounds, attribution }: MapLayer) =>
+  ({
+    type: 'raster',
+    tiles,
+    tileSize: tileSize ?? 256,
+    maxzoom,
+    attribution,
+    ...(minzoom === undefined ? {} : { minzoom }),
+    ...(bounds ? { bounds } : {}),
+  }) as RasterSourceSpecification;
