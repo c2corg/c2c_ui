@@ -6,14 +6,14 @@
 // track, the search alone gives the routes, as before.
 //
 // Every request waits for the user to stop typing or moving the map, and only the answer to the last one is used.
-import Polyline from 'ol/format/Polyline';
-import { LineString } from 'ol/geom';
-import { toLonLat } from 'ol/proj';
 import { computed, ref, watch } from 'vue';
 
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import debounce from '@/js/debounce';
+import { encodePolyline } from '@/js/geo/polyline';
+import { toLonLat } from '@/js/geo/projection';
+import { simplify } from '@/js/geo/simplify';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 // the wait before a request, in ms
@@ -29,8 +29,6 @@ const SEARCH_LIMIT = 50;
 // the URL must stay under the limits of the servers (~8 KB)
 const SIMPLIFY = 20;
 const MAX_POINTS = 1000;
-
-const polyline = new Polyline();
 
 // the track of a geom_detail (GeoJSON in EPSG:3857) as an encoded polyline of WGS 84 points, or null without a line
 export function encodeTrack(geomDetail: string | null | undefined): string | null {
@@ -52,15 +50,13 @@ export function encodeTrack(geomDetail: string | null | undefined): string | nul
     return null;
   }
 
-  const full = new LineString(points);
   let tolerance = SIMPLIFY;
-  let line = full.simplify(tolerance) as LineString;
-  while (line.getCoordinates().length > MAX_POINTS) {
+  let line = simplify(points, tolerance);
+  while (line.length > MAX_POINTS) {
     tolerance *= 2;
-    line = full.simplify(tolerance) as LineString;
+    line = simplify(points, tolerance);
   }
-  const lonLat = line.getCoordinates().map((coordinate) => toLonLat(coordinate));
-  return polyline.writeGeometry(new LineString(lonLat));
+  return encodePolyline(line.map(toLonLat));
 }
 
 // lower case, without accents: "Écrins" matches "ecrins"

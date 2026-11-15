@@ -36,12 +36,12 @@
 </template>
 
 <script lang="ts">
-import { transform } from 'ol/proj';
 import { onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import debounce from '@/js/debounce';
 import bus from '@/js/event-bus';
+import { toLonLat } from '@/js/geo/projection';
 import d3 from '@/js/libs/d3';
 import { documentProperty } from '@/js/properties';
 
@@ -160,8 +160,8 @@ function createChart() {
 
     if (i > 0) {
       // convert from web mercator to lng/lat
-      const deg1 = transform([coords[i][0], coords[i][1]], 'EPSG:3857', 'EPSG:4326');
-      const deg2 = transform([coords[i - 1][0], coords[i - 1][1]], 'EPSG:3857', 'EPSG:4326');
+      const deg1 = toLonLat([coords[i][0], coords[i][1]]);
+      const deg2 = toLonLat([coords[i - 1][0], coords[i - 1][1]]);
       // arc distance x earth radius
       d = d3.geoDistance(deg1, deg2) * 6371;
     }
