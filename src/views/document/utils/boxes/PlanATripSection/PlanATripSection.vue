@@ -175,7 +175,6 @@
 </template>
 
 <script setup lang="ts">
-import { transform } from 'ol/proj';
 import { computed, nextTick, onMounted, ref, useTemplateRef, watch, type PropType } from 'vue';
 
 import PlanATripForm from './PlanATripForm.vue';
@@ -187,6 +186,7 @@ import { documentOverlayFilters } from '@/components/map/density-overlays';
 import NavitiaService, { type DatetimeRepresents, type Journey, type JourneyOptions } from '@/js/apis/navitia-service';
 import transportService from '@/js/apis/transport-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { fromLonLat, toLonLat } from '@/js/geo/projection';
 import planATripUtils, { type Section } from '@/js/plan-a-trip-utils';
 import { documentProperty, useDocumentType } from '@/js/properties';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
@@ -362,7 +362,7 @@ const mapDocuments = computed<MapDocument[]>(() => {
         version: 1,
         geom: JSON.stringify({
           type: 'Point',
-          coordinates: transform(waypoint.coordinates, 'EPSG:4326', 'EPSG:3857'),
+          coordinates: fromLonLat(waypoint.coordinates),
         }),
       },
       properties: {
@@ -683,7 +683,7 @@ function prepareRouteDocuments(scheduleRecenter = true) {
           geom_detail: JSON.stringify({
             type: 'LineString',
             coordinates: section.geojson.coordinates.map((coord) => {
-              const mercatorCoord = transform([coord[0], coord[1]], 'EPSG:4326', 'EPSG:3857');
+              const mercatorCoord = fromLonLat([coord[0], coord[1]]);
               return [...mercatorCoord, 0.0, 0.0];
             }),
           }),
@@ -701,7 +701,7 @@ function prepareRouteDocuments(scheduleRecenter = true) {
 
       if (index === 0) {
         const startCoord = section.geojson.coordinates[0];
-        const startMercatorCoord = transform([startCoord[0], startCoord[1]], 'EPSG:4326', 'EPSG:3857');
+        const startMercatorCoord = fromLonLat([startCoord[0], startCoord[1]]);
 
         const startPointDocument = {
           document_id: `route-start-origin`,
@@ -728,7 +728,7 @@ function prepareRouteDocuments(scheduleRecenter = true) {
       if (!isWalkingSection) {
         if (index > 0) {
           const startCoord = section.geojson.coordinates[0];
-          const startMercatorCoord = transform([startCoord[0], startCoord[1]], 'EPSG:4326', 'EPSG:3857');
+          const startMercatorCoord = fromLonLat([startCoord[0], startCoord[1]]);
 
           const startPointDocument = {
             document_id: `route-start-point-${index}`,
@@ -752,7 +752,7 @@ function prepareRouteDocuments(scheduleRecenter = true) {
         }
 
         const endCoord = section.geojson.coordinates[section.geojson.coordinates.length - 1];
-        const endMercatorCoord = transform([endCoord[0], endCoord[1]], 'EPSG:4326', 'EPSG:3857');
+        const endMercatorCoord = fromLonLat([endCoord[0], endCoord[1]]);
 
         const endPointDocument = {
           document_id: `route-end-point-${index}`,
@@ -957,7 +957,7 @@ async function loadReachableWaypoints() {
       reachableWaypoints.value.push({
         id: result.waypoint.document_id,
         title: locale.title,
-        coordinates: transform(geom.coordinates, 'EPSG:3857', 'EPSG:4326'),
+        coordinates: toLonLat(geom.coordinates),
       });
     }
   }

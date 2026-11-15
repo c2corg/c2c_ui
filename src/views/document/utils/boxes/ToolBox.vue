@@ -178,8 +178,6 @@
 </template>
 
 <script setup lang="ts">
-import { format as formatCoordinate } from 'ol/coordinate';
-import { toLonLat } from 'ol/proj';
 import { computed, ref, useTemplateRef } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -198,6 +196,7 @@ import c2c from '@/js/apis/c2c';
 import { useEditable } from '@/js/composables/editable';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
+import { toLonLat } from '@/js/geo/projection';
 import getFundraiser from '@/js/get-fundraiser';
 import { cookedDocumentProperty, useDocumentType } from '@/js/properties';
 
@@ -326,8 +325,8 @@ const linkToMeteoBlue = computed(() => {
     default:
       lang = 'en/weather/week';
   }
-  const lonLat = toLonLat(coordinates());
-  const coords = formatCoordinate(lonLat, '{y}N{x}E', 4);
+  const [lon, lat] = toLonLat(coordinates());
+  const coords = `${lat.toFixed(4)}N${lon.toFixed(4)}E`;
   // use waypoint elevation, or elevation of difficuties or max elevation for routes, otherwise nothing
   const elevation =
     props.document.elevation ?? props.document.difficulties_height ?? props.document.elevation_max ?? '';
@@ -342,8 +341,8 @@ const shouldAddDirections = computed(
 );
 
 const linkToGoogleMapsDirections = computed(() => {
-  const lonLat = toLonLat(coordinates());
-  const coords = formatCoordinate(lonLat, '{y},{x}', 4);
+  const [lon, lat] = toLonLat(coordinates());
+  const coords = `${lat.toFixed(4)},${lon.toFixed(4)}`;
   return `https://www.google.com/maps/dir/?api=1&destination=${coords}`;
 });
 

@@ -2,11 +2,10 @@
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import type { ExpandedTags } from 'exifreader';
-import { containsXY } from 'ol/extent';
-import { get as getProjection, transform } from 'ol/proj';
 
 import Worker from '@/js/Worker';
 import c2c from '@/js/apis/c2c';
+import { fromLonLat } from '@/js/geo/projection';
 
 dayjs.extend(customParseFormat);
 
@@ -34,8 +33,8 @@ export type Metadata = {
 // the image document being built from the file
 type ImageDocument = Record<string, unknown>;
 
-// get all world extent. sometimes, geoloc in exif is outside this extent.
-const worldExtent = getProjection('EPSG:4326')!.getExtent();
+// sometimes, geoloc in exif is outside the world
+const inWorld = (lon: number, lat: number) => lon >= -180 && lon <= 180 && lat >= -90 && lat <= 90;
 
 // this worker will handle network upload : only on upload at a time
 const worker = new Worker();
@@ -63,11 +62,11 @@ const parseDate = ({ date, offset }: Metadata) => {
 };
 
 const parseGeometry = ({ latitude: lat, longitude: lon }: Metadata) => {
-  if (lat === undefined || lon === undefined || !containsXY(worldExtent, lon, lat)) {
+  if (lat === undefined || lon === undefined || !inWorld(lon, lat)) {
     return undefined;
   }
 
-  const location = transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
+  const location = fromLonLat([lon, lat]);
   const geom = { coordinates: location, type: 'Point' };
 
   return { geom: JSON.stringify(geom) };
