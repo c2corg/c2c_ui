@@ -85,7 +85,7 @@
 
     <div class="view-count" v-if="viewCount">
       <icon-view-count fixed-width></icon-view-count>
-      {{ viewCount.value }} <span>{{ viewCount.i18nName }}</span>
+      <span>{{ viewCount.i18nName }}</span> {{ viewCount.value }}
     </div>
 
     <tool-box-button
@@ -269,8 +269,12 @@ const quality = computed(() => {
 
 const viewCount = computed(() => {
   const fields = constants.objectDefinitions[documentType.value].fields;
-  const value = (props.document as Record<string, unknown>)[fields.view_count?.name];
-  if (!fields.view_count || value === null || value === undefined) {
+  if (!fields.view_count) {
+    return undefined;
+  }
+  // null when the API hides the counter (disabled on this outing, viewer not associated with it)
+  const value = (props.document as Record<string, unknown>)[fields.view_count.name];
+  if (value === null || value === undefined) {
     return undefined;
   }
   return {
