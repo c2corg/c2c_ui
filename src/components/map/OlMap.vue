@@ -935,18 +935,37 @@ function setDocumentGeometryFromGeoFileFeatures(features: Feature[]) {
   if (lineFeatures.length === 1) {
     setDocumentGeometryFromFeature(lineFeatures[0]);
   } else if (lineFeatures.length > 1) {
+    const geometries = lineFeatures.map((feature) => feature.getGeometry() as SimpleGeometry);
+    // the merged track drops the times when a track has none: the outing date is read from each track, the first
+    // timed one gives it
+    geometries.forEach((geometry) => setOutingStartDate(props.editedDocument!, geometry));
+    const lines = geometries.flatMap((geometry) =>
+      geometry instanceof MultiLineString
+        ? geometry.getLineStrings()
+        : [geometry as InstanceType<typeof ol.geom.LineString>]
+    );
+    // an area is a polygon: as rings of one polygon, the other tracks would be holes, outside of it most of the time.
+    // Each track is a polygon of its own instead
     setDocumentGeometryFromFeature(
-      new ol.Feature(mergeLines(lineFeatures.map((feature) => feature.getGeometry() as SimpleGeometry)))
+      new ol.Feature(props.editedDocument!.type === 'a' ? linesToPolygons(lines) : mergeLines(lines))
     );
   }
 }
 
-function mergeLines(geometries: SimpleGeometry[]) {
-  const lines = geometries.flatMap((geometry) =>
-    geometry instanceof MultiLineString
-      ? geometry.getLineStrings()
-      : [geometry as InstanceType<typeof ol.geom.LineString>]
-  );
+function linesToPolygons(lines: InstanceType<typeof ol.geom.LineString>[]) {
+  const polygons = lines.map((line) => {
+    const ring = line.getCoordinates().map((coord) => [coord[0], coord[1]]);
+    const [first, last] = [ring[0], ring[ring.length - 1]];
+    if (first[0] !== last[0] || first[1] !== last[1]) {
+      // close the loop
+      ring.push([...first]);
+    }
+    return [ring];
+  });
+  return new ol.geom.MultiPolygon(polygons, 'XY');
+}
+
+function mergeLines(lines: InstanceType<typeof ol.geom.LineString>[]) {
   // the tracks may not all have elevations or times: only the dimensions they all have are kept
   const hasZ = lines.every((line) => line.getLayout().includes('Z'));
   const hasM = lines.every((line) => line.getLayout().endsWith('M'));

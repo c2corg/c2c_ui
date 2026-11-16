@@ -362,9 +362,10 @@ describe('OlMap', () => {
     const pt = (tag: string, lat: number, lon: number) => `<${tag} lat="${lat}" lon="${lon}"><ele>1000</ele></${tag}>`;
     const segment = (lat: number) => `<trkseg>${pt('trkpt', lat, 6.8)}${pt('trkpt', lat + 0.01, 6.81)}</trkseg>`;
 
-    const readFile = async (file: string) => {
+    const readFile = async (file: string, type = 'o') => {
       const editedDocument = reactive({
-        type: 'o',
+        type,
+        date_start: undefined as string | undefined,
         geometry: { geom: null, geom_detail: null } as Record<string, unknown>,
       });
       const { wrapper, vm } = await mountMap({ editedDocument, geomDetailEditable: true });
@@ -375,6 +376,7 @@ describe('OlMap', () => {
       const parse = <T>(value: unknown) =>
         value ? (JSON.parse(value as string) as { type: string; coordinates: T }) : null;
       return {
+        dateStart: editedDocument.date_start,
         geom: parse<number[]>(editedDocument.geometry.geom),
         // a LineString (number[][]) for a GPX route
         geomDetail: parse<number[][][]>(editedDocument.geometry.geom_detail),
@@ -429,6 +431,75 @@ describe('OlMap', () => {
 
       expect(Math.round(ol.proj.toLonLat(geom!.coordinates)[1] * 10) / 10).toBe(45.5);
       expect(geomDetail!.coordinates).toHaveLength(2);
+    });
+
+    describe('the outing date', () => {
+      const timedTrack = (lat: number, day: string) =>
+        `<trk><trkseg><trkpt lat="${lat}" lon="6.8"><ele>1000</ele><time>${day}T12:00:00Z</time></trkpt>
+        <trkpt lat="${lat + 0.01}" lon="6.81"><ele>1100</ele><time>${day}T13:00:00Z</time></trkpt></trkseg></trk>`;
+
+      it('is read from the first timed track, when another track has no times', async () => {
+        const { dateStart, geomDetail } = await readFile(
+          gpx(`<trk>${segment(45.8)}</trk>${timedTrack(45.9, '2026-01-01')}${timedTrack(46.1, '2026-02-01')}`)
+        );
+
+        // the merged track has no times (the first track has none): the date still comes from the tracks
+        expect(geomDetail!.coordinates.flat().every((coord) => coord.length === 3)).toBe(true);
+        // the specs' $dateUtils.toLocalizedString gives the date back as is
+        expect(dateStart).toEqual(new Date('2026-01-01T12:00:00Z'));
+      });
+
+      it('is not set when no track has times', async () => {
+        const { dateStart } = await readFile(gpx(`<trk>${segment(45.9)}</trk><trk>${segment(46.1)}</trk>`));
+
+        expect(dateStart).toBeUndefined();
+      });
+    });
+
+    describe('of an area', () => {
+      // a closed square of 0.01°, its south west corner at lat, lon
+      const square = (lat: number, lon: number) =>
+        `<trk><trkseg>${[
+          [lat, lon],
+          [lat, lon + 0.01],
+          [lat + 0.01, lon + 0.01],
+          [lat + 0.01, lon],
+          [lat, lon],
+        ]
+          .map(([la, lo]) => pt('trkpt', la, lo))
+          .join('')}</trkseg></trk>`;
+
+      it('makes a polygon of each track, not holes of the first one', async () => {
+        // the second square is outside of the first: as a hole of it, the area would be invalid
+        const { geomDetail } = await readFile(gpx(`${square(45.9, 6.8)}${square(46.1, 7.0)}`), 'a');
+        const polygons = geomDetail!.coordinates as unknown as number[][][][];
+
+        expect(geomDetail!.type).toBe('MultiPolygon');
+        expect(polygons).toHaveLength(2);
+        polygons.forEach((polygon) => {
+          // one exterior ring, no hole, closed and in 2D
+          expect(polygon).toHaveLength(1);
+          expect(polygon[0]).toHaveLength(5);
+          expect(polygon[0][0]).toEqual(polygon[0][4]);
+          expect(polygon[0][0]).toHaveLength(2);
+        });
+        expect(polygons.map((polygon) => firstLatitudes(polygon))).toEqual([[45.9], [46.1]]);
+      });
+
+      it('closes the tracks that are not closed', async () => {
+        const open = `<trk><trkseg>${pt('trkpt', 46.1, 7.0)}${pt('trkpt', 46.1, 7.01)}${pt('trkpt', 46.11, 7.01)}</trkseg></trk>`;
+        const { geomDetail } = await readFile(gpx(`${square(45.9, 6.8)}${open}`), 'a');
+        const ring = (geomDetail!.coordinates as unknown as number[][][][])[1][0];
+
+        expect(ring).toHaveLength(4);
+        expect(ring[0]).toEqual(ring[3]);
+      });
+
+      it('still makes a polygon of a single track', async () => {
+        const { geomDetail } = await readFile(gpx(square(45.9, 6.8)), 'a');
+
+        expect(geomDetail!.type).toBe('Polygon');
+      });
     });
   });
 });
