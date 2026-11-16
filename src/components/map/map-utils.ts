@@ -1,13 +1,20 @@
 import type { Extent } from 'ol/extent';
 import type Style from 'ol/style/Style';
 
-import { type FeatureProperties, getDocumentIcon, getSvgSrcByDocumentType } from './map-documents';
+import {
+  DOCUMENT_HIGHLIGHTED_EXTRA_WIDTH,
+  type FeatureProperties,
+  getDocumentIcon,
+  getSvgSrcByDocumentType,
+  LINE_CASING_COLOR,
+  LINE_CASING_WIDTH,
+  LINE_WIDTH,
+  PUBLIC_TRANSPORT_EXTRA_WIDTH,
+} from './map-documents';
 
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
-
-export { getDocumentIcon, type FeatureProperties };
 
 const buildTextStyle = function (title: string, highlight: boolean, isPublicTransport: boolean) {
   if (!highlight) {
@@ -28,33 +35,6 @@ const buildTextStyle = function (title: string, highlight: boolean, isPublicTran
       color: 'black',
     }),
     textBaseline: 'middle',
-  });
-};
-
-export const buildPolygonStyle = function (opacity = 0.7) {
-  return new ol.style.Style({
-    stroke: new ol.style.Stroke({
-      color: [100, 100, 100, opacity * 0.5],
-      width: 1.5,
-    }),
-    fill: new ol.style.Fill({
-      color: [251, 201, 0, opacity * 0.5],
-    }),
-  });
-};
-
-export const buildDiffStyle = function (isOld: boolean) {
-  return new ol.style.Style({
-    stroke: new ol.style.Stroke({
-      color: isOld ? 'red' : 'green',
-      width: isOld ? 5 : 3,
-    }),
-    image: new ol.style.Circle({
-      fill: new ol.style.Fill({
-        color: isOld ? 'rgba(255, 0, 0, 0.5)' : 'rgba(0, 255, 0, 0.9)',
-      }),
-      radius: isOld ? 10 : 5,
-    }),
   });
 };
 
@@ -191,19 +171,6 @@ export const getDocumentPointStyle = function (document: C2cDocument, title: str
 
   return buildPointStyle(title, svgSrc, color, highlight);
 };
-
-// One width scale for every line of the map (documents, overlays tracks): a line on a wider casing, so that it reads on
-// any background. Under the pointer, the documents mostly change colour (red) and grow a little; the tracks of the
-// overlays grow more, to be followed among many others. The public transport lines are a little wider, in their own
-// colours.
-export const LINE_WIDTH = 2.5;
-export const LINE_CASING_WIDTH = 4.5;
-export const LINE_HIGHLIGHTED_WIDTH = 4.5;
-export const LINE_HIGHLIGHTED_CASING_WIDTH = 7.5;
-const DOCUMENT_HIGHLIGHTED_EXTRA_WIDTH = 0.5;
-// the casing of the documents lines, dark enough for the yellow to read on light rock and snow (also in 3D)
-const LINE_CASING_COLOR = '#404040';
-const PUBLIC_TRANSPORT_EXTRA_WIDTH = 1;
 
 const casedLine = (color: string, casingColor: string, highlight: boolean, extra = 0, lineDash?: number[]) => {
   const width = extra + (highlight ? DOCUMENT_HIGHLIGHTED_EXTRA_WIDTH : 0);

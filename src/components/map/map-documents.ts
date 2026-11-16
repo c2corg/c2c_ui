@@ -70,6 +70,19 @@ export const getDocumentIcon = function (document: C2cDocument): { svgSrc: strin
   return null;
 };
 
+// One width scale for every line of the map (documents, overlays tracks): a line on a wider casing, so that it reads on
+// any background. Under the pointer, the documents mostly change colour (red) and grow a little; the tracks of the
+// overlays grow more, to be followed among many others. The public transport lines are a little wider, in their own
+// colours.
+export const LINE_WIDTH = 2.5;
+export const LINE_CASING_WIDTH = 4.5;
+export const LINE_HIGHLIGHTED_WIDTH = 4.5;
+export const LINE_HIGHLIGHTED_CASING_WIDTH = 7.5;
+export const DOCUMENT_HIGHLIGHTED_EXTRA_WIDTH = 0.5;
+// the casing of the documents lines, dark enough for the yellow to read on light rock and snow (also in 3D)
+export const LINE_CASING_COLOR = '#404040';
+export const PUBLIC_TRANSPORT_EXTRA_WIDTH = 1;
+
 // What a feature is drawn with. Lines and outlines: a casing under a stroke. Points: a circle under an icon, ordered
 // by their sort keys (the z-index of the OpenLayers styles).
 type Style = {
@@ -216,31 +229,36 @@ function pointStyle(document: C2cDocument, highlight: boolean): Style | null {
   throw new Error('Wrong document specification');
 }
 
-function lineStyle(highlight: boolean, properties?: FeatureProperties | null): Style {
-  if (highlight && !properties) {
-    // same slim dark border as the line when not highlighted, so the red line stays readable on any background
-    return { casing: 'grey', casingWidth: 4, stroke: 'red', strokeWidth: 3 };
-  }
-  if (highlight && properties?.color) {
-    return { stroke: 'red', strokeWidth: 5 };
-  }
-  if (properties?.color) {
-    return {
-      casing: 'white',
-      casingWidth: 7,
-      stroke: `#${properties.color}`,
-      strokeWidth: 5,
-      dashed: !!properties.isWalking,
-    };
-  }
-  return { casing: 'grey', casingWidth: 3, stroke: 'yellow', strokeWidth: 2 };
+// a line on a wider casing, a little wider under the pointer
+function casedLine(stroke: string, casing: string, highlight: boolean, extra = 0, dashed = false): Style {
+  const width = extra + (highlight ? DOCUMENT_HIGHLIGHTED_EXTRA_WIDTH : 0);
+  return {
+    casing,
+    casingWidth: LINE_CASING_WIDTH + width,
+    stroke,
+    strokeWidth: LINE_WIDTH + width,
+    ...(dashed ? { dashed } : {}),
+  };
 }
 
-function lineLabel(title: string, highlight: boolean, properties?: FeatureProperties | null) {
-  if (highlight && !properties) return label(title, true);
-  if (highlight && properties?.color) return label(properties.name, true, true);
-  return undefined;
+function lineStyle(highlight: boolean, properties?: FeatureProperties | null): Style {
+  if (properties?.color) {
+    // public transport: its colour on white, red under the pointer
+    const dashed = !highlight && !!properties.isWalking;
+    return casedLine(
+      highlight ? 'red' : `#${properties.color}`,
+      'white',
+      highlight,
+      PUBLIC_TRANSPORT_EXTRA_WIDTH,
+      dashed
+    );
+  }
+  // the documents: yellow on dark grey, red under the pointer
+  return casedLine(highlight ? 'red' : 'yellow', LINE_CASING_COLOR, highlight);
 }
+
+const lineLabel = (title: string, highlight: boolean, properties?: FeatureProperties | null) =>
+  properties?.color ? label(properties.name, highlight, true) : label(title, highlight);
 
 function polygonStyle(highlight: boolean, properties?: FeatureProperties | null): Style {
   if (properties) {
@@ -376,6 +394,11 @@ const has = (property: string): ExpressionSpecification => ['has', property];
 const get = (property: string): ExpressionSpecification => ['get', property];
 const lineLayout = { 'line-cap': 'round', 'line-join': 'round' } as const;
 
+const WALK_WIDTHS = {
+  casing: LINE_CASING_WIDTH + PUBLIC_TRANSPORT_EXTRA_WIDTH,
+  stroke: LINE_WIDTH + PUBLIC_TRANSPORT_EXTRA_WIDTH,
+};
+
 // the lines of the documents: a casing and a stroke, dashed (8 px dashes) or not
 function lineLayers(prefix: 'casing' | 'stroke', source: string): LayerSpecification[] {
   const width = prefix === 'casing' ? 'casingWidth' : 'strokeWidth';
@@ -395,8 +418,8 @@ function lineLayers(prefix: 'casing' | 'stroke', source: string): LayerSpecifica
       source,
       filter: ['all', has(prefix), has('dashed')],
       layout: lineLayout,
-      // in line widths: 8 px for the 7 px casing and the 5 px line of the walks
-      paint: { ...paint, 'line-dasharray': prefix === 'casing' ? [8 / 7, 8 / 7] : [8 / 5, 8 / 5] },
+      // in line widths: 8 px dashes for the casing and the line of the walks (public transport, not highlighted)
+      paint: { ...paint, 'line-dasharray': [8 / WALK_WIDTHS[prefix], 8 / WALK_WIDTHS[prefix]] },
     },
   ] as LayerSpecification[];
 }
