@@ -41,6 +41,12 @@ const outing = (id: number, extra: Partial<DeletedDocument> = {}): DeletedDocume
 
 const Empty = { render: () => null };
 
+const InputDocumentStub = {
+  name: 'InputDocument',
+  emits: ['update:modelValue'],
+  template: '<input class="input-document" />',
+};
+
 let router: Router;
 
 beforeEach(async () => {
@@ -65,6 +71,7 @@ const global = (isModerator = true) => ({
     IconDocument: true,
     IconActivity: true,
     IconForum: true,
+    InputDocument: InputDocumentStub,
     ContributorLink: { props: ['contributor'], template: '<a class="contributor">{{ contributor.name }}</a>' },
     ModalConfirmation: {
       emits: ['confirm'],
@@ -78,6 +85,7 @@ const global = (isModerator = true) => ({
   config: {
     globalProperties: {
       $gettext: (s: string) => s,
+      $filters: { uppercaseFirstLetter: (s: string) => s },
       $user: { isModerator },
       $dateUtils: { toLocalizedString: (value: string) => 'date:' + value },
     } as never,
@@ -129,15 +137,67 @@ describe('DeletedDocuments', () => {
     const wrapper = mount(DeletedDocuments, { global: global() });
     await flushPromises();
 
-    expect(api.getDeletedDocuments).toHaveBeenCalledWith(0, 30);
+    expect(api.getDeletedDocuments).toHaveBeenCalledWith(0, 30, expect.any(Object));
     expect(wrapper.findAllComponents(DeletedDocumentItem)).toHaveLength(2);
 
     await wrapper.find('button.button:not(.is-small)').trigger('click');
     await flushPromises();
 
-    expect(api.getDeletedDocuments).toHaveBeenLastCalledWith(2, 30);
+    expect(api.getDeletedDocuments).toHaveBeenLastCalledWith(2, 30, expect.any(Object));
     expect(wrapper.findAllComponents(DeletedDocumentItem)).toHaveLength(3);
     expect(wrapper.find('button.button:not(.is-small)').exists()).toBe(false);
+  });
+
+  it('filters by type, user and dates, from the first page, and clears the filters', async () => {
+    api.getDeletedDocuments.mockReturnValue(answer({ total: 1, documents: [outing(1)] }));
+    const wrapper = mount(DeletedDocuments, { global: global() });
+    await flushPromises();
+    // the offset and the filters given, without the empty ones
+    const lastQuery = () => {
+      const [offset, , filters] = api.getDeletedDocuments.mock.lastCall!;
+      return [offset, Object.fromEntries(Object.entries(filters).filter(([, value]) => value !== undefined))];
+    };
+
+    await wrapper.find('select').setValue('o');
+    await (wrapper.findAllComponents(InputDocumentStub)[0] as ReturnType<typeof mount>).vm.$emit('update:modelValue', {
+      document_id: 3,
+      name: 'alice',
+    });
+    const [since, until] = wrapper.findAll('input[type="date"]');
+    await since!.setValue('2026-11-01');
+    await until!.setValue('2026-11-15');
+    await flushPromises();
+
+    expect(lastQuery()).toEqual([
+      0,
+      { type: 'o', author: 3, deleted_since: '2026-11-01', deleted_until: '2026-11-15' },
+    ]);
+    expect(wrapper.find('.user-filter .tag').text()).toContain('alice');
+    expect(wrapper.text()).toContain('Found: 1');
+
+    await wrapper
+      .findAll('button')
+      .find((b) => b.text() === 'Clear the filters')!
+      .trigger('click');
+    await flushPromises();
+
+    expect(lastQuery()).toEqual([0, {}]);
+    expect(wrapper.find('.user-filter .tag').exists()).toBe(false);
+  });
+
+  it('drops a page answered after the filters changed', async () => {
+    let answerFirst!: (value: unknown) => void;
+    api.getDeletedDocuments
+      .mockReturnValueOnce(new ApiData(new Promise((resolve) => (answerFirst = resolve)) as never))
+      .mockReturnValueOnce(answer({ total: 1, documents: [outing(2)] }));
+    const wrapper = mount(DeletedDocuments, { global: global() });
+
+    await wrapper.find('select').setValue('o');
+    await flushPromises();
+    answerFirst({ data: { total: 1, documents: [outing(1)] } });
+    await flushPromises();
+
+    expect(wrapper.findAllComponents(DeletedDocumentItem).map((item) => item.props('document').id)).toEqual([2]);
   });
 
   it('says when there is nothing to restore', async () => {

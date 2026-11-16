@@ -11,6 +11,9 @@ export function documentRoute(letterType: string, documentId: number, lang?: str
   return { name: constants.letterToDocumentType[letterType], params: { id: documentId, ...(lang ? { lang } : {}) } };
 }
 
+/** The types of the documents a moderator can delete (as the API; not coverages, unknown here), for the filter */
+export const DELETABLE_TYPES = ['waypoint', 'route', 'outing', 'image', 'article', 'book', 'xreport'];
+
 /** The days left before a deleted document can no longer be restored, at least 0 */
 export function daysLeft(expiresAt: string, now = Date.now()): number {
   return Math.max(0, Math.ceil((new Date(expiresAt).getTime() - now) / DAY));

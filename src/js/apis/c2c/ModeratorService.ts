@@ -31,8 +31,10 @@ export default class ModeratorService {
   /*
    * Deleted documents, kept 29 days by the API to be restored
    */
-  getDeletedDocuments(offset = 0, limit = 30) {
-    return this.api.getValidated('/documents/deleted', deletedDocumentsPage, { params: { offset, limit } });
+  getDeletedDocuments(offset = 0, limit = 30, filters: DeletedDocumentsFilters = {}) {
+    return this.api.getValidated('/documents/deleted', deletedDocumentsPage, {
+      params: { offset, limit, ...filters },
+    });
   }
 
   getDeletedDocument(id: number) {
@@ -97,4 +99,13 @@ export default class ModeratorService {
       version_id: versionId,
     });
   }
+}
+
+/** The filters of the deleted documents: a type letter, user ids, days (YYYY-MM-DD, included) */
+export interface DeletedDocumentsFilters {
+  type?: string;
+  author?: number;
+  deleted_by?: number;
+  deleted_since?: string;
+  deleted_until?: string;
 }
