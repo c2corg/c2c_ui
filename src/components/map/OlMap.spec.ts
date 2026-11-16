@@ -500,6 +500,29 @@ describe('OlMap', () => {
 
         expect(geomDetail!.type).toBe('Polygon');
       });
+
+      it('skips the empty segments', async () => {
+        // OpenLayers keeps <trkseg/> as an empty line: it has no ends to close
+        const withEmptySegment = square(45.9, 6.8).replace('</trk>', '<trkseg/></trk>');
+        const { geomDetail } = await readFile(gpx(`${withEmptySegment}${square(46.1, 7.0)}`), 'a');
+        const polygons = geomDetail!.coordinates as unknown as number[][][][];
+
+        expect(polygons).toHaveLength(2);
+        expect(polygons.map((polygon) => firstLatitudes(polygon))).toEqual([[45.9], [46.1]]);
+      });
+
+      it('leaves the area as it is when all the tracks are empty', async () => {
+        const { geomDetail } = await readFile(gpx('<trk><trkseg/></trk><trk><trkseg/></trk>'), 'a');
+
+        expect(geomDetail).toBeNull();
+      });
+    });
+
+    it('skips the empty segments, keeping the elevations of the other tracks', async () => {
+      const { geomDetail } = await readFile(gpx(`<trk>${segment(45.9)}<trkseg/></trk><trk>${segment(46.1)}</trk>`));
+
+      expect(firstLatitudes(geomDetail!.coordinates)).toEqual([45.9, 46.1]);
+      expect(geomDetail!.coordinates.flat().map((coord) => coord[2])).toEqual([1000, 1000, 1000, 1000]);
     });
   });
 });

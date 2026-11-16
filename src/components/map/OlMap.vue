@@ -939,11 +939,18 @@ function setDocumentGeometryFromGeoFileFeatures(features: Feature[]) {
     // the merged track drops the times when a track has none: the outing date is read from each track, the first
     // timed one gives it
     geometries.forEach((geometry) => setOutingStartDate(props.editedDocument!, geometry));
-    const lines = geometries.flatMap((geometry) =>
-      geometry instanceof MultiLineString
-        ? geometry.getLineStrings()
-        : [geometry as InstanceType<typeof ol.geom.LineString>]
-    );
+    const lines = geometries
+      .flatMap((geometry) =>
+        geometry instanceof MultiLineString
+          ? geometry.getLineStrings()
+          : [geometry as InstanceType<typeof ol.geom.LineString>]
+      )
+      // an empty segment (<trkseg/>) is kept as an empty line: it has no ends to close a ring, and its layout without
+      // elevations would drop those of the other tracks
+      .filter((line) => line.getCoordinates().length);
+    if (!lines.length) {
+      return;
+    }
     // an area is a polygon: as rings of one polygon, the other tracks would be holes, outside of it most of the time.
     // Each track is a polygon of its own instead
     setDocumentGeometryFromFeature(
