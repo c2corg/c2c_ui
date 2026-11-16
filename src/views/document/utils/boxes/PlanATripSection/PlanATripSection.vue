@@ -181,7 +181,7 @@ import PlanATripForm from './PlanATripForm.vue';
 import PlanATripResults from './PlanATripResults.vue';
 
 import start from '@/assets/img/boxes/geoloc-2.svg';
-import type OlMap from '@/components/map/OlMap.vue';
+import type C2cMap from '@/components/map/C2cMap.vue';
 import { documentOverlayFilters } from '@/components/map/density-overlays';
 import NavitiaService, { type DatetimeRepresents, type Journey, type JourneyOptions } from '@/js/apis/navitia-service';
 import transportService from '@/js/apis/transport-service';
@@ -245,7 +245,7 @@ const { documentType } = useDocumentType(props);
 // the "Tracks" and "Routes" overlays of the map show what is linked to the document
 const overlayFilters = computed(() => documentOverlayFilters(props.document));
 
-const olMap = useTemplateRef<InstanceType<typeof OlMap>>('olMap');
+const olMap = useTemplateRef<InstanceType<typeof C2cMap>>('olMap');
 
 /** The local date, YYYY-MM-DD: toISOString() gives the UTC one, the day before after midnight in Europe */
 function localDate(date: Date) {
