@@ -1,24 +1,14 @@
-import type { IconLookup } from '@fortawesome/fontawesome-svg-core';
 import type { Extent } from 'ol/extent';
 import type { Options as StrokeOptions } from 'ol/style/Stroke';
 import type Style from 'ol/style/Style';
 
-import iconSvg from '@/js/icon-svg';
+import { type FeatureProperties, getDocumentIcon, getSvgSrcByDocumentType } from './map-documents';
+
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-// the drawing properties given by other services: transport lines and stops, start points, areas
-export type FeatureProperties = {
-  color?: string;
-  strokeColor?: string;
-  border_color?: string;
-  border_width?: number;
-  radius?: number;
-  image_url?: string;
-  name?: string;
-  isWalking?: boolean;
-};
+export { getDocumentIcon, type FeatureProperties };
 
 const buildTextStyle = function (title: string, highlight: boolean, isPublicTransport: boolean) {
   if (!highlight) {
@@ -107,55 +97,6 @@ const buildPointStyle = function (title: string, svgSrc: string, color: string, 
   });
 
   return [circleStyle, iconStyle];
-};
-
-// the custom icons have their own prefixes, unknown to Font Awesome types
-const customIconSvg = (prefix: string, iconName: string) => iconSvg({ prefix, iconName } as IconLookup);
-
-// built on first use: icons are only registered when the font-awesome plugin is installed,
-// which happens after this module is evaluated
-let svgSrcByDocumentTypeCache: Record<string, string> | undefined;
-const getSvgSrcByDocumentType = function () {
-  svgSrcByDocumentTypeCache ??= {
-    i: iconSvg({ prefix: 'fas', iconName: 'image' }),
-    o: customIconSvg('document-type', 'outing'),
-    r: iconSvg({ prefix: 'fas', iconName: 'route' }),
-    u: iconSvg({ prefix: 'fas', iconName: 'user' }),
-    x: iconSvg({ prefix: 'fas', iconName: 'flag-checkered' }),
-    s: iconSvg({ prefix: 'fas', iconName: 'bus' }),
-    z: customIconSvg('waypoint', 'access'),
-  };
-  return svgSrcByDocumentTypeCache;
-};
-
-const colorByConditionRating: Record<string, string> = {
-  excellent: '#008000',
-  good: '#9ACD32',
-  average: '#FFFF00',
-  poor: '#FF0000',
-  awful: '#8B0000',
-};
-
-/** The icon of a document marker and its colour (condition, public transport), when it has a plain one */
-export const getDocumentIcon = function (document: C2cDocument): { svgSrc: string; color: string } | null {
-  const type = document.type;
-  let color = document.condition_rating ? colorByConditionRating[document.condition_rating] : '#F93';
-
-  if (type === 'i' || type === 'u' || type === 'x' || type === 'o' || type === 'r' || type === 's') {
-    return { svgSrc: getSvgSrcByDocumentType()[type], color };
-  }
-  if (type === 'w') {
-    if (
-      (document.waypoint_type === 'access' &&
-        document.public_transportation_rating &&
-        document.public_transportation_rating !== 'no service') ||
-      (document.properties && document.properties!.color === 'green')
-    ) {
-      color = '#4baf50';
-    }
-    return { svgSrc: customIconSvg('waypoint', document.waypoint_type || 'misc'), color };
-  }
-  return null;
 };
 
 export const getDocumentPointStyle = function (document: C2cDocument, title: string, highlight: boolean) {

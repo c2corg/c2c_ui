@@ -187,7 +187,7 @@ const queryHasTags = ref(false);
 const offset = ref(0);
 const limit = ref(30);
 const promise = ref<ResultPromise | Record<string, never>>({});
-const map = useTemplateRef<{ map: { updateSize(): void } }>('map');
+const map = useTemplateRef<{ resize(): void }>('map');
 
 const showMap = computed(() => ['both', 'map'].includes(displayMode.value));
 const showResults = computed(() => ['result', 'both'].includes(displayMode.value));
@@ -243,7 +243,7 @@ function getDocumentTypeTitle(documentType: string) {
 // openLayer need an explicit resize
 watch(displayMode, (newValue, oldValue) => {
   if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
-    nextTick(() => map.value?.map.updateSize());
+    nextTick(() => map.value?.resize());
   }
 });
 

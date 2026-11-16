@@ -5,7 +5,7 @@
 
 import type { App } from 'vue';
 
-import type { FeatureProperties } from '@/components/map/map-utils';
+import type { FeatureProperties } from '@/components/map/map-documents';
 import c2c from '@/js/apis/c2c';
 import type {
   Area,
