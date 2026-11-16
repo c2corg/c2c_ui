@@ -52,6 +52,7 @@
     <span v-translate>description</span>
     <span v-translate>difficulties_height</span>
     <span v-translate>disable_comments</span>
+    <span v-translate>disable_view_count</span>
     <span v-translate>durations</span>
     <span v-translate>editor</span>
     <span v-translate>elevation</span>
@@ -187,6 +188,7 @@
     <span v-translate>url</span>
     <span v-translate>users</span>
     <span v-translate>via_ferrata_rating</span>
+    <span v-translate>view_count</span>
     <span v-translate>waypoint_slope</span>
     <span v-translate>waypoint_type</span>
     <span v-translate>waypoints</span>
