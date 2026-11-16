@@ -1,6 +1,11 @@
 <template>
   <div ref="root" class="columns" v-infinite-scroll="{ load, disabled: loading, distance: 500 }">
+    <!-- first load: grey cards the shape of a feed card, instead of an empty page for seconds on a slow network -->
+    <p v-if="showSkeleton" class="is-sr-only" role="status">{{ $gettext('Loading...') }}</p>
     <div v-for="(column, i) of columns" :key="i" :class="'column ' + cssColumnsClass">
+      <template v-if="showSkeleton">
+        <skeleton-card v-for="n in 2" :key="n" class="feed-card" />
+      </template>
       <feed-card v-for="item of column.items" :key="item.id" :item="item" class="feed-card" />
     </div>
     <!-- <loading-notification :promise="promise" /> -->
@@ -13,9 +18,11 @@ import { useRoute } from 'vue-router';
 import type * as z from 'zod/mini';
 
 import FeedCard from '@/components/cards/FeedCard.vue';
+import SkeletonCard from '@/components/cards/SkeletonCard.vue';
 import c2c from '@/js/apis/c2c';
 import type { feed } from '@/js/apis/c2c/schemas';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { usePullRefresh } from '@/js/composables/pull-refresh';
 import vInfiniteScroll from '@/js/directives/infinite-scroll';
 
 // the documents of the feed have more than the schema checks: their summary, figures and images
@@ -50,6 +57,7 @@ const cssColumnsClass = ref<string | null>(null);
 const root = useTemplateRef<HTMLElement>('root');
 
 const loading = computed(() => (promise.value ? Boolean(promise.value.loading) : false));
+const showSkeleton = computed(() => loading.value && columns.value.every((column) => !column.items.length));
 
 function estimateSize(item: FeedItem) {
   const headerSize = 47;
@@ -184,6 +192,11 @@ function initialize() {
 }
 
 watch([() => route.fullPath, () => props.type], initialize);
+// the latest items, from the start
+usePullRefresh(() => {
+  initialize();
+  return promise.value;
+});
 
 onMounted(() => {
   window.addEventListener('resize', initializeColumns);

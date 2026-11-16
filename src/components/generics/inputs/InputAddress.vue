@@ -46,6 +46,7 @@ import { onBeforeUnmount, onMounted, reactive, watch } from 'vue';
 import { default as c2c } from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { getPosition } from '@/js/geolocation';
 import { toast } from '@/js/toast';
 
 type Proposition = {
@@ -173,30 +174,16 @@ async function reverseGeocode(lon: number, lat: number) {
 }
 
 /** Try to use geolocation from browser */
-function useCurrentLocation() {
-  if (!navigator.geolocation) {
-    toast({
-      message: $gettext('Geolocation is not supported by your browser.'),
-      type: 'is-warning',
-    });
+async function useCurrentLocation() {
+  let position;
+  try {
+    position = await getPosition($gettext);
+  } catch (error) {
+    toast({ message: (error as Error).message, type: 'is-warning' });
     return;
   }
-
-  navigator.geolocation.getCurrentPosition(
-    async (position) => {
-      const coords = [position.coords.longitude, position.coords.latitude];
-
-      localData.coordinates = coords;
-      await reverseGeocode(coords[0], coords[1]);
-    },
-    (error) => {
-      console.warn('Geolocation error:', error);
-      toast({
-        message: $gettext('Unable to get your current location.'),
-        type: 'is-warning',
-      });
-    }
-  );
+  localData.coordinates = [position.longitude, position.latitude];
+  await reverseGeocode(position.longitude, position.latitude);
 }
 
 /** If the user is authenticated and has entered their address in their profile, it is put in the address field */

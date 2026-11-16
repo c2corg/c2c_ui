@@ -139,9 +139,27 @@ const waypoint_types = computed(() => constants.waypoint_types);
     max-width: 700px;
     margin: auto;
   }
+
+  /* on a phone, the title near the top and the nine bubbles three by three: all on the first screen */
+  @media (max-width: 768px) {
+    padding-top: 12px;
+    padding-bottom: 12px;
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+  }
 }
 
 .title {
   line-height: 1.5 !important;
+}
+
+/* In the phone layout of the app: the gap of these columns (is-variable is-8, 2rem) pushed them out of the screen on
+   both sides, 28px wider than it: the page scrolled sideways and the bars of the app showed a white band */
+html[data-shell='mobile'] .section.columns {
+  margin-left: 0;
+  margin-right: 0;
 }
 </style>
