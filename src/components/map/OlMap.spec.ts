@@ -355,4 +355,80 @@ describe('OlMap', () => {
     // the outing tracks stay as recorded (it read the type of window.document: always fixed)
     expect(await elevations('o')).toEqual([1000, 0, 1200]);
   });
+
+  describe('reads all the tracks of a GPS file', () => {
+    const gpx = (content: string) =>
+      `<?xml version="1.0"?><gpx version="1.1" creator="test" xmlns="http://www.topografix.com/GPX/1/1">${content}</gpx>`;
+    const pt = (tag: string, lat: number, lon: number) => `<${tag} lat="${lat}" lon="${lon}"><ele>1000</ele></${tag}>`;
+    const segment = (lat: number) => `<trkseg>${pt('trkpt', lat, 6.8)}${pt('trkpt', lat + 0.01, 6.81)}</trkseg>`;
+
+    const readFile = async (file: string) => {
+      const editedDocument = reactive({
+        type: 'o',
+        geometry: { geom: null, geom_detail: null } as Record<string, unknown>,
+      });
+      const { wrapper, vm } = await mountMap({ editedDocument, geomDetailEditable: true });
+
+      vm.setDocumentGeometryFromGeoFile(file);
+
+      wrapper.unmount();
+      const parse = <T>(value: unknown) =>
+        value ? (JSON.parse(value as string) as { type: string; coordinates: T }) : null;
+      return {
+        geom: parse<number[]>(editedDocument.geometry.geom),
+        // a LineString (number[][]) for a GPX route
+        geomDetail: parse<number[][][]>(editedDocument.geometry.geom_detail),
+      };
+    };
+    // the latitudes of the first point of each line, back in WGS 84
+    const firstLatitudes = (lines: number[][][]) =>
+      lines.map((line) => Math.round(ol.proj.toLonLat(line[0])[1] * 100) / 100);
+
+    it('keeps both tracks of a file with two tracks', async () => {
+      const { geomDetail } = await readFile(gpx(`<trk>${segment(45.9)}</trk><trk>${segment(46.1)}</trk>`));
+
+      expect(geomDetail!.type).toBe('MultiLineString');
+      expect(firstLatitudes(geomDetail!.coordinates)).toEqual([45.9, 46.1]);
+    });
+
+    it('keeps both segments of a track with two segments', async () => {
+      const { geomDetail } = await readFile(gpx(`<trk>${segment(45.9)}${segment(46.1)}</trk>`));
+
+      expect(geomDetail!.type).toBe('MultiLineString');
+      expect(firstLatitudes(geomDetail!.coordinates)).toEqual([45.9, 46.1]);
+    });
+
+    it('keeps all the segments of several tracks, in order', async () => {
+      const { geomDetail } = await readFile(
+        gpx(`<trk>${segment(45.9)}${segment(46.0)}</trk><trk>${segment(46.1)}</trk>`)
+      );
+
+      expect(firstLatitudes(geomDetail!.coordinates)).toEqual([45.9, 46.0, 46.1]);
+    });
+
+    it('reads a file with a route only', async () => {
+      const { geomDetail } = await readFile(gpx(`<rte>${pt('rtept', 45.9, 6.8)}${pt('rtept', 45.91, 6.81)}</rte>`));
+
+      expect(geomDetail!.type).toBe('LineString');
+      expect(geomDetail!.coordinates).toHaveLength(2);
+    });
+
+    it('merges tracks with and without times, keeping the dimensions they share', async () => {
+      const timed = `<trk><trkseg><trkpt lat="45.9" lon="6.8"><ele>1000</ele><time>2026-01-01T08:00:00Z</time></trkpt>
+        <trkpt lat="45.91" lon="6.81"><ele>1100</ele><time>2026-01-01T09:00:00Z</time></trkpt></trkseg></trk>`;
+      const { geomDetail } = await readFile(gpx(`${timed}<trk>${segment(46.1)}</trk>`));
+
+      expect(geomDetail!.coordinates.flat().map((coord) => coord.length)).toEqual([3, 3, 3, 3]);
+      expect(geomDetail!.coordinates[0].map((coord) => coord[2])).toEqual([1000, 1100]);
+    });
+
+    it('keeps the waypoint of a file with a waypoint and tracks', async () => {
+      const { geom, geomDetail } = await readFile(
+        gpx(`${pt('wpt', 45.5, 6.5)}<trk>${segment(45.9)}</trk><trk>${segment(46.1)}</trk>`)
+      );
+
+      expect(Math.round(ol.proj.toLonLat(geom!.coordinates)[1] * 10) / 10).toBe(45.5);
+      expect(geomDetail!.coordinates).toHaveLength(2);
+    });
+  });
 });
