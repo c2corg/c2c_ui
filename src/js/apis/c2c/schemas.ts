@@ -521,3 +521,73 @@ export type ValidationError = z.input<typeof validationError>;
 
 // the 422 answer of invalid parameters or body: { detail: [...] } (FastAPI, see v6_api#2546)
 export const validationErrorResponse = z.object({ detail: z.array(validationError) });
+
+// GET /documents/deleted, GET /documents/deleted/{id}, POST /documents/deleted/{id}/restore: the deleted documents a
+// moderator can restore (kept 29 days by the API)
+
+// a user as the deleted documents name them: only the id once the account was removed
+const deletedDocumentUser = z.object({
+  user_id: z.number(),
+  name: z.nullable(z.string()),
+  forum_username: z.nullable(z.string()),
+});
+
+export type DeletedDocumentUser = z.input<typeof deletedDocumentUser>;
+
+const deletedDocument = z.object({
+  id: z.number(),
+  document_id: z.number(),
+  document_type: z.string(),
+  // the deleted locale, null when the whole document was deleted
+  lang: z.nullable(z.string()),
+  title: z.nullable(z.string()),
+  author: z.nullable(deletedDocumentUser),
+  created_at: z.nullable(z.string()),
+  // a few fields by document type: the dates and activities of an outing, the type of a waypoint...
+  fields: z.record(z.string(), z.unknown()),
+  deleted_at: z.string(),
+  deleted_by: z.nullable(deletedDocumentUser),
+  expires_at: z.string(),
+  restored_at: z.nullable(z.string()),
+});
+
+export type DeletedDocument = z.input<typeof deletedDocument>;
+
+export const deletedDocumentsPage = z.object({
+  total: z.number(),
+  documents: z.array(deletedDocument),
+});
+
+export const deletedDocumentDetails = z.extend(deletedDocument, {
+  locales: z.array(z.object({ lang: z.string(), title: z.nullable(z.string()) })),
+  last_edited_by: z.nullable(deletedDocumentUser),
+  last_edited_at: z.nullable(z.string()),
+  versions: z.number(),
+  contributors: z.array(deletedDocumentUser),
+  // the linked documents as they are now: exists is false for a document deleted since
+  associations: z.array(
+    z.object({
+      document_id: z.number(),
+      document_type: z.string(),
+      title: z.nullable(z.string()),
+      exists: z.boolean(),
+    })
+  ),
+  // the comment topics of the forum, by language
+  topics: z.array(z.object({ lang: z.string(), topic_id: z.number() })),
+  merged_document_ids: z.array(z.number()),
+  rows: z.record(z.string(), z.number()),
+});
+
+export type DeletedDocumentDetails = z.input<typeof deletedDocumentDetails>;
+
+export const restoreResult = z.object({
+  document_id: z.number(),
+  lang: z.nullable(z.string()),
+  // the rows not restored, by table: their other end was deleted since (associations, tags...)
+  skipped: z.record(z.string(), z.number()),
+  // the image files without a version left in the bucket
+  missing_files: z.array(z.string()),
+});
+
+export type RestoreResult = z.input<typeof restoreResult>;

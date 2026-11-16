@@ -1,3 +1,4 @@
+import { deletedDocumentDetails, deletedDocumentsPage, restoreResult } from './schemas';
 import type { Api, DocumentId } from './types';
 
 export default class ModeratorService {
@@ -25,6 +26,26 @@ export default class ModeratorService {
   deleteLocale(documentId: DocumentId, lang: string) {
     const url = '/documents/delete/' + String(documentId) + '/' + lang;
     return this.api.delete(url, {});
+  }
+
+  /*
+   * Deleted documents, kept 29 days by the API to be restored
+   */
+  getDeletedDocuments(offset = 0, limit = 30) {
+    return this.api.getValidated('/documents/deleted', deletedDocumentsPage, { params: { offset, limit } });
+  }
+
+  getDeletedDocument(id: number) {
+    return this.api.getValidated('/documents/deleted/' + id, deletedDocumentDetails);
+  }
+
+  restoreDeletedDocument(id: number) {
+    // $gettext('This document was already restored', 'API message')
+    // $gettext('This document was deleted too long ago', 'API message')
+    // $gettext('The document exists', 'API message')
+    // $gettext('The document was deleted: restore it first', 'API message')
+    // $gettext('The locale was written again since its deletion', 'API message')
+    return this.api.postValidated('/documents/deleted/' + id + '/restore', restoreResult, {});
   }
 
   /*

@@ -153,5 +153,8 @@ export function useAccountLinks() {
       text: $gettext('My bookmarks'),
       icon: 'star',
     },
+    ...($user.isModerator
+      ? [{ key: 'moderation', to: { name: 'moderation' }, text: $gettext('Moderation'), icon: 'broom' }]
+      : []),
   ]);
 }
