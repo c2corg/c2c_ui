@@ -11,8 +11,9 @@ import { sampleTerrain } from './map-3d-terrain';
 
 // the casing of the lines, as on the 2D map (getDocumentLineStyle)
 export const CASING_COLOR: [number, number, number] = [64, 64, 64];
-// the flights in red, apart from the walk
-export const FLIGHT_COLOR: [number, number, number] = [214, 39, 40];
+// the flights in light cyan (#33ccff): apart from the yellow walk, also for the red-green colour blind (a red or an
+// orange looks like a dark olive or a mustard to them, lost in the forests or close to the yellow)
+export const FLIGHT_COLOR: [number, number, number] = [51, 204, 255];
 // the point under the profile cursor, on the ground under a flight
 const CURSOR_GROUND_COLOR: [number, number, number] = [70, 70, 70];
 
