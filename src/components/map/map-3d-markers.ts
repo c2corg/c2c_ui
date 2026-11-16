@@ -1,12 +1,12 @@
 // the document markers of the 3D view (waypoints): the icon and colours of the 2D ones (map-utils
-// buildPointStyle) on a pin, bigger with its name on hover (styles in Map3dView). HTML elements placed by MapLibre
+// buildPointStyle) on a pin, bigger with its name on hover (styles in C2cMap). HTML elements placed by MapLibre
 // on the terrain: a document has a handful of them.
 import type { RouteLocationRaw } from 'vue-router';
 
 export type Marker3d = {
   lonLat: [number, number];
   title: string;
-  // the icon SVG (currentColor) and its colour, from map-utils getDocumentIcon
+  // the icon SVG (currentColor) and its colour, from map-documents getDocumentIcon
   svgSrc: string;
   color: string;
   // where a click goes, null for the document of the page

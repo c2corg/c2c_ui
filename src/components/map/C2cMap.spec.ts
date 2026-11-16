@@ -106,7 +106,9 @@ describe('C2cMap', () => {
 
     it('highlights the hovered document, and tells the page only when it changes', async () => {
       const { wrapper, map } = await mountMap({ documents: [route] });
-      map.rendered = [{ layer: { id: 'documents-icon' }, properties: { key: 'documents:r:1:point' } }];
+      map.rendered = [
+        { layer: { id: 'documents-icon' }, geometry: { type: 'Point' }, properties: { key: 'documents:r:1:point' } },
+      ];
 
       move(map);
       move(map);
@@ -132,7 +134,9 @@ describe('C2cMap', () => {
       const { wrapper, map } = await mountMap({ documents: [route, { ...route, document_id: 2 }] });
       const push = vi.spyOn(wrapper.vm.$router, 'push');
       const open = vi.spyOn(window, 'open').mockReturnValue(null);
-      map.rendered = [{ layer: { id: 'documents-icon' }, properties: { key: 'documents:r:2:point' } }];
+      map.rendered = [
+        { layer: { id: 'documents-icon' }, geometry: { type: 'Point' }, properties: { key: 'documents:r:2:point' } },
+      ];
 
       click(map);
       click(map, { ctrlKey: true });
@@ -193,6 +197,30 @@ describe('C2cMap', () => {
 
     wrapper.unmount();
     bus.emit('elevation_profile', { action: 'cursor_move', coord: fromLonLat([6.8, 45.9]) });
+  });
+
+  it('shows the density of the Outings overlay, and turns the overlays off when the API does (503)', async () => {
+    const heatmap = vi
+      .spyOn(c2c, 'getOutingsHeatmap')
+      .mockResolvedValueOnce({ data: { buckets: [{ x: 750000, y: 5760000, count: 3 }] } } as never)
+      .mockRejectedValueOnce({ response: { status: 503 } });
+    const { wrapper, map } = await mountMap();
+    const outings = () => wrapper.findAll('.layer-button').filter((button) => button.text() === 'Outings');
+
+    await outings()[0].trigger('click');
+    await flushPromises();
+    expect(heatmap).toHaveBeenCalledTimes(1);
+    expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+    expect((map.data['heatmap-outing'] as FeatureCollection).features).toHaveLength(1);
+
+    map.zoom = 5;
+    map.extent = [0, 40, 10, 50];
+    map.fire('moveend');
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    await flushPromises();
+    expect(outings()).toHaveLength(0);
+    expect(map.layout['heatmap-outing'].visibility).toBe('none');
+    wrapper.unmount();
   });
 
   describe('biodiv-sports areas', () => {

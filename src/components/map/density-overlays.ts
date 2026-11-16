@@ -2,13 +2,12 @@
 // individual tracks of the viewport are drawn. Both are fed by the /<documents>/map/{heatmap,tracks} endpoints, which
 // take the search filters of the documents listing.
 
-import { markRaw } from 'vue';
+import type { ExpressionSpecification, LayerSpecification } from 'maplibre-gl';
 import type * as z from 'zod/mini';
 
 import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import type { densityHeatmap, densityTrack, densityTracks } from '@/js/apis/c2c/schemas';
-import ol from '@/js/libs/ol';
 
 export type DensityType = 'outing' | 'route';
 
@@ -101,40 +100,67 @@ export const DENSITY_OVERLAYS: Record<
   },
 };
 
-// The heatmap layer of an overlay (aggregated density, at low and medium zoom). It is created when the overlay is first
-// shown: the layer allocates a canvas for its gradient. OpenLayers objects must not be wrapped in Vue reactive proxies.
-export function createHeatmapLayer(type: DensityType) {
-  return markRaw(
-    new ol.layer.Heatmap({
-      source: new ol.source.Vector(),
-      blur: HEATMAP_BLUR,
-      radius: HEATMAP_RADIUS,
-      gradient: DENSITY_OVERLAYS[type].heatmapGradient,
-      weight: (feature) => feature.get('weight'),
-    })
-  );
-}
+// the gradient of a heatmap, its transparency following the density as the OpenLayers heatmap did
+const heatmapColor = (gradient: string[]): ExpressionSpecification => [
+  'interpolate',
+  ['linear'],
+  ['heatmap-density'],
+  0,
+  'rgba(0, 0, 0, 0)',
+  ...gradient.flatMap((color, i) => {
+    const density = (i + 1) / gradient.length;
+    const [r, g, b] = [1, 3, 5].map((start) => parseInt(color.slice(start, start + 2), 16));
+    return [density, `rgba(${r}, ${g}, ${b}, ${density})`];
+  }),
+];
 
-// a track: its color, on a wider line of another color around it
-function trackStyle(type: DensityType, casingWidth: number, width: number) {
+const trackLayers = (id: string, type: DensityType, casingWidth: number, width: number): LayerSpecification[] => {
   const { casingColor, trackColor } = DENSITY_OVERLAYS[type];
+  const layout = { 'line-cap': 'round', 'line-join': 'round' } as const;
   return [
-    new ol.style.Style({ stroke: new ol.style.Stroke({ color: casingColor, width: casingWidth }) }),
-    new ol.style.Style({ stroke: new ol.style.Stroke({ color: trackColor, width }) }),
+    {
+      id: `${id}-casing`,
+      type: 'line',
+      source: id,
+      layout,
+      paint: { 'line-color': casingColor, 'line-width': casingWidth },
+    },
+    { id: `${id}-line`, type: 'line', source: id, layout, paint: { 'line-color': trackColor, 'line-width': width } },
   ];
-}
+};
 
-// the layers of an overlay that exist from the start: the individual tracks of the viewport (high zoom)
-export function createDensityLayers(type: DensityType) {
-  return markRaw({
-    tracks: markRaw(new ol.layer.VectorImage({ source: new ol.source.Vector(), visible: false })),
-    trackStyle: markRaw(trackStyle(type, 4.5, 2.5)),
-    // under the pointer
-    trackHighlightedStyle: markRaw(trackStyle(type, 8, 4.5)),
-  });
-}
+/**
+ * The layers of an overlay, hidden at first: its density (heatmap, at low and medium zoom), under its tracks (high
+ * zoom), a track on a wider line of another color around it. Sources: heatmap-<type> (points with a weight) and
+ * tracks-<type>.
+ */
+export const densityLayers = (type: DensityType): LayerSpecification[] => [
+  {
+    id: `heatmap-${type}`,
+    type: 'heatmap',
+    source: `heatmap-${type}`,
+    layout: { visibility: 'none' },
+    paint: {
+      'heatmap-weight': ['get', 'weight'],
+      // the OpenLayers heatmap drew discs of the radius with a blur around them: MapLibre draws a gaussian, wider and
+      // stronger to look the same
+      'heatmap-radius': 1.2 * (HEATMAP_RADIUS + HEATMAP_BLUR),
+      'heatmap-intensity': 1.4,
+      'heatmap-color': heatmapColor(DENSITY_OVERLAYS[type].heatmapGradient),
+    },
+  },
+  ...trackLayers(`tracks-${type}`, type, 4.5, 2.5).map(
+    (layer) => ({ ...layer, layout: { ...layer.layout, visibility: 'none' } }) as LayerSpecification
+  ),
+];
 
-export type DensityLayers = ReturnType<typeof createDensityLayers>;
+/** The track under the pointer, drawn again on top, thicker, in the colors of its overlay (source: track-highlight) */
+export const trackHighlightLayers = (): LayerSpecification[] =>
+  DENSITY_TYPES.flatMap((type) =>
+    trackLayers('track-highlight', type, 8, 4.5).map(
+      (layer) => ({ ...layer, id: `${layer.id}-${type}`, filter: ['==', ['get', 'type'], type] }) as LayerSpecification
+    )
+  );
 
 type DocumentRef = {
   type?: string;

@@ -8,8 +8,6 @@ import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export { getDocumentIcon, type FeatureProperties };
-
 const buildTextStyle = function (title: string, highlight: boolean, isPublicTransport: boolean) {
   if (!highlight) {
     return undefined;
@@ -29,33 +27,6 @@ const buildTextStyle = function (title: string, highlight: boolean, isPublicTran
       color: 'black',
     }),
     textBaseline: 'middle',
-  });
-};
-
-export const buildPolygonStyle = function (opacity = 0.7) {
-  return new ol.style.Style({
-    stroke: new ol.style.Stroke({
-      color: [100, 100, 100, opacity * 0.5],
-      width: 1.5,
-    }),
-    fill: new ol.style.Fill({
-      color: [251, 201, 0, opacity * 0.5],
-    }),
-  });
-};
-
-export const buildDiffStyle = function (isOld: boolean) {
-  return new ol.style.Style({
-    stroke: new ol.style.Stroke({
-      color: isOld ? 'red' : 'green',
-      width: isOld ? 5 : 3,
-    }),
-    image: new ol.style.Circle({
-      fill: new ol.style.Fill({
-        color: isOld ? 'rgba(255, 0, 0, 0.5)' : 'rgba(0, 255, 0, 0.9)',
-      }),
-      radius: isOld ? 10 : 5,
-    }),
   });
 };
 
