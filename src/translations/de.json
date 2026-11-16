@@ -376,6 +376,7 @@
     "Fold section": "Abschnitt falten",
     "Followed users": "Gefolgte Benutzer",
     "Forgot password?": "Passwort vergessen?",
+    "Forum messages": "Forumnachricht",
     "Forum username": "Forumname",
     "Forum: a place to chat about technical matters, or just petty talk": "Forum: dort kann man sich über technische Fragen unterhalten, oder nur miteinander reden.",
     "From": "Von",
@@ -611,6 +612,9 @@
     "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Keine Bearbeitungen — Wenn Sie das Material remixen, verändern oder darauf anderweitig direkt aufbauen dürfen Sie die bearbeitete Fassung der Materials nicht verbreiten.",
     "Non sensitive period": "keine Empfindlichkeit",
     "NonCommercial — You may not use the material for commercial purposes.": "Nicht kommerziell — Sie dürfen das Material nicht für kommerzielle Zwecke nutzen.",
+    "North up": {
+      "Map controls": "Nord oben"
+    },
     "Not simplified yet": "Noch nicht vereinfacht",
     "Note that comments have to be transferred manually in Discourse before merging.": "Beachten Sie, dass Kommentare vor der Vereinigung in Discourse manuell übergeben werden müssen.",
     "Note that the topoguide username will be the one mentioned in the attribution of the content you contributed to.": "Der Topoführername ist der, der in den Zuordnungen der Inhalte, zu denen Sie beitragen, genannt wird.",
