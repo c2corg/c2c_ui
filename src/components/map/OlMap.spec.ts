@@ -115,6 +115,30 @@ describe('the edition map', () => {
       expect(geomDetail!.coordinates).toHaveLength(2);
     });
 
+    describe('the order of the tracks', () => {
+      const timedTrack = (lat: number, day: string) =>
+        `<trk><trkseg><trkpt lat="${lat}" lon="6.8"><ele>1000</ele><time>${day}T12:00:00Z</time></trkpt>
+        <trkpt lat="${lat + 0.01}" lon="6.81"><ele>1100</ele><time>${day}T13:00:00Z</time></trkpt></trkseg></trk>`;
+
+      it('follows the times, when all the tracks have times', async () => {
+        const { geomDetail } = await readFile(
+          gpx(`${timedTrack(46.1, '2026-01-03')}${timedTrack(45.9, '2026-01-01')}${timedTrack(46.0, '2026-01-02')}`)
+        );
+
+        expect(firstLatitudes(geomDetail!.coordinates)).toEqual([45.9, 46.0, 46.1]);
+        // the times are kept
+        expect(geomDetail!.coordinates.flat().every((coord) => coord.length === 4)).toBe(true);
+      });
+
+      it('is the order of the file, when a track has no times', async () => {
+        const { geomDetail } = await readFile(
+          gpx(`${timedTrack(46.1, '2026-01-03')}<trk>${segment(45.8)}</trk>${timedTrack(45.9, '2026-01-01')}`)
+        );
+
+        expect(firstLatitudes(geomDetail!.coordinates)).toEqual([46.1, 45.8, 45.9]);
+      });
+    });
+
     describe('the outing date', () => {
       const timedTrack = (lat: number, day: string) =>
         `<trk><trkseg><trkpt lat="${lat}" lon="6.8"><ele>1000</ele><time>${day}T12:00:00Z</time></trkpt>
@@ -128,6 +152,12 @@ describe('the edition map', () => {
         // the merged track has no times (the first track has none): the date still comes from the tracks
         expect(geomDetail!.coordinates.flat().every((coord) => coord.length === 3)).toBe(true);
         // the specs' $dateUtils.toLocalizedString gives the date back as is
+        expect(dateStart).toEqual(new Date('2026-01-01T12:00:00Z'));
+      });
+
+      it('is read from the earliest track, when the tracks of the file are not in order', async () => {
+        const { dateStart } = await readFile(gpx(`${timedTrack(46.1, '2026-02-01')}${timedTrack(45.9, '2026-01-01')}`));
+
         expect(dateStart).toEqual(new Date('2026-01-01T12:00:00Z'));
       });
 

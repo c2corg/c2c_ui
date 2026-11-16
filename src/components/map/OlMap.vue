@@ -416,9 +416,6 @@ function setDocumentGeometryFromGeoFileFeatures(features: Feature[]) {
     setDocumentGeometryFromFeature(lineFeatures[0]);
   } else if (lineFeatures.length > 1) {
     const geometries = lineFeatures.map((feature) => feature.getGeometry() as SimpleGeometry);
-    // the merged track drops the times when a track has none: the outing date is read from each track, the first
-    // timed one gives it
-    geometries.forEach((geometry) => setOutingStartDate(props.editedDocument!, geometry));
     const lines = geometries
       .flatMap((geometry) =>
         geometry instanceof MultiLineString
@@ -431,12 +428,26 @@ function setDocumentGeometryFromGeoFileFeatures(features: Feature[]) {
     if (!lines.length) {
       return;
     }
+    // the tracks of a file are not always in the order they were recorded (files joined by hand): when they all have
+    // times, they are put in order. Otherwise, they stay in the order of the file
+    if (lines.every((line) => startTime(line) !== undefined)) {
+      lines.sort((line1, line2) => startTime(line1)! - startTime(line2)!);
+    }
+    // the merged track drops the times when a track has none: the outing date is read from each track, the first
+    // timed one gives it
+    lines.forEach((line) => setOutingStartDate(props.editedDocument!, line));
     // an area is a polygon: as rings of one polygon, the other tracks would be holes, outside of it most of the time.
     // Each track is a polygon of its own instead
     setDocumentGeometryFromFeature(
       new ol.Feature(props.editedDocument!.type === 'a' ? linesToPolygons(lines) : mergeLines(lines))
     );
   }
+}
+
+/** The time of the first point of a line, when it has times */
+function startTime(line: InstanceType<typeof ol.geom.LineString>) {
+  const layout = line.getLayout();
+  return layout.endsWith('M') ? line.getFirstCoordinate()[layout.length - 1] || undefined : undefined;
 }
 
 function linesToPolygons(lines: InstanceType<typeof ol.geom.LineString>[]) {
