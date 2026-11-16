@@ -169,7 +169,7 @@ const router = useRouter();
 const { $gettext } = useGlobalProperties();
 
 // the map component: OpenLayers needs an explicit resize when its container changes
-const olMap = useTemplateRef<{ map: { updateSize(): void } }>('olMap');
+const olMap = useTemplateRef<{ resize(): void }>('olMap');
 // the list scrolls in its own container on large screens, which the router knows nothing about
 const documentsContainer = useTemplateRef<HTMLElement>('documentsContainer');
 
@@ -266,7 +266,7 @@ function getDocumentTypeTitle(documentType: string) {
 // openLayer need an explicit resize
 function updateMapSize(newValue: string, oldValue: string) {
   if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
-    nextTick(() => olMap.value?.map.updateSize());
+    nextTick(() => olMap.value?.resize());
   }
 }
 

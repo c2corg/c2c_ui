@@ -1,11 +1,10 @@
-import Polyline from 'ol/format/Polyline';
-import { LineString } from 'ol/geom';
-import { fromLonLat } from 'ol/proj';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { effectScope, nextTick, ref } from 'vue';
 
 import { DEBOUNCE, MORE, PAGE, encodeTrack, normalize, useRouteProposals } from './route-proposals';
 
+import { decodePolyline } from '@/js/geo/polyline';
+import { fromLonLat } from '@/js/geo/projection';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 const api = vi.hoisted(() => ({ getAll: vi.fn(), suggestRoutes: vi.fn() }));
@@ -24,8 +23,7 @@ const TRACK = lineString([
   [6.88, 45.94],
 ]);
 
-const decode = (encoded: string) =>
-  (new Polyline().readGeometry(encoded) as LineString).getCoordinates().map(([lon, lat]) => [lon, lat]);
+const decode = decodePolyline;
 
 const route = (id: number, title: string, activities = ['skitouring']): C2cDocument => ({
   document_id: id,
