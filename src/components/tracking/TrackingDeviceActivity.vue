@@ -6,32 +6,29 @@
         <div>{{ activity.type[$user.lang] }}</div>
         <div class="has-text-right">{{ $dateUtils.toTechnicalString(activity.date) }}</div>
       </div>
-      <div>
-        <span v-if="activity.name">{{ activity.name }}&nbsp;</span>
-        <span :class="{ 'is-size-7 is-italic': activity.name }">
-          <a v-if="activity.vendor === 'strava'" :href="'https://www.strava.com/activities/' + activity.vendorId">{{
-            $gettext(activity.vendor)
-          }}</a>
-          <a
-            v-else-if="activity.vendor === 'garmin'"
-            :href="'https://connect.garmin.com/modern/activity/' + activity.vendorId"
-            >{{ $gettext(activity.vendor) }}</a
-          >
-          <template v-else>{{ $gettext(activity.vendor) }}</template>
-        </span>
-      </div>
+      <div v-if="activity.name">{{ activity.name }}</div>
     </div>
-    <div class="activity-bottom is-flex is-justify-content-space-between is-size-7 is-italic px-2">
-      <div v-if="duration">
-        <span role="img" :title="$gettext('Duration')" :aria-label="$gettext('Duration')"
-          ><fa-icon :icon="['far', 'clock']" /></span
-        >&hairsp;<span v-html="duration"></span>
+    <div class="activity-bottom is-size-7 is-italic px-2">
+      <div class="activity-sources">
+        <template v-for="(source, i) in sources" :key="source.vendor">
+          <template v-if="i > 0">&#32;·</template>
+          <a v-if="vendorUrl(source)" :href="vendorUrl(source)">{{ $gettext(source.vendor) }}</a>
+          <template v-else>{{ $gettext(source.vendor) }}</template>
+        </template>
       </div>
-      <div v-if="length">
-        <span role="img" :title="$gettext('length')" :aria-label="$gettext('length')"><fa-icon icon="ruler" /></span
-        >&hairsp;<span v-html="length"></span>&nbsp;
+      <div class="is-flex is-justify-content-space-between">
+        <div v-if="duration" class="stat">
+          <span role="img" :title="$gettext('Duration')" :aria-label="$gettext('Duration')"
+            ><fa-icon :icon="['far', 'clock']"
+          /></span>
+          <span v-html="duration"></span>
+        </div>
+        <div v-if="length" class="stat">
+          <span role="img" :title="$gettext('length')" :aria-label="$gettext('length')"><fa-icon icon="ruler" /></span>
+          <span v-html="length"></span>
+        </div>
+        <div v-if="heightDiffUp" class="stat"><icon-height-diff-up /><span v-html="heightDiffUp"></span></div>
       </div>
-      <div v-if="heightDiffUp"><icon-height-diff-up />&hairsp;<span v-html="heightDiffUp"></span></div>
     </div>
     <div class="activity-center" v-show="hover">
       <slot />
@@ -42,6 +39,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
+import type { ActivitySource } from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
 
@@ -62,6 +60,20 @@ const duration = computed(() =>
 );
 const heightDiffUp = computed(() => $documentUtils.heightDiffUpWithUnit(props.activity.heightDiffUp));
 const length = computed(() => $documentUtils.lengthWithUnit(props.activity.length));
+
+// the vendors that have this outing (tracking before 3.4.0 sends none)
+const sources = computed<ActivitySource[]>(() => props.activity.sources ?? [props.activity as ActivitySource]);
+
+const vendorUrl = ({ vendor, vendorId }: ActivitySource): string | undefined => {
+  switch (vendor) {
+    case 'strava':
+      return `https://www.strava.com/activities/${vendorId}`;
+    case 'garmin':
+      return `https://connect.garmin.com/modern/activity/${vendorId}`;
+    default:
+      return undefined;
+  }
+};
 </script>
 
 <style scoped>
@@ -95,6 +107,12 @@ a {
 
 .activity-bottom {
   bottom: 0;
+}
+
+.stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
 }
 
 .activity-top {
