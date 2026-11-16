@@ -398,7 +398,8 @@ if ($user.isModerator && documentType.value === 'profile') {
 }
 
 .lang-switcher-box-list span:not(:last-child)::after {
-  content: ' \2022 '; /* \2022 is bull */
+  /* \2022 is bull; the space after an escape ends it, so the space shown after it is the second one */
+  content: ' \2022  ';
 }
 
 /* a colon after the label, with a non-breaking space before it in French */
