@@ -218,6 +218,19 @@ describe('InputDocument', () => {
       expect(loadSuggestions).toHaveBeenCalledTimes(1);
     });
 
+    it('shows a user on one line, name · forum name, without the icon of the only type searched', async () => {
+      vi.useFakeTimers();
+      const { wrapper } = mountUsers();
+      await wrapper.find('input').trigger('focus');
+      await flushPromises();
+
+      const item = wrapper.findAll('.dropdown-item-option')[0]!;
+      expect(item.classes()).toContain('is-mobile');
+      expect(item.find('br').exists()).toBe(false);
+      expect(item.find('.column:not(.is-narrow)').text()).toBe('· @anna');
+      expect(item.find('.column.is-narrow').text()).toBe('');
+    });
+
     it('filters the suggestions on the name or the forum name, without accents nor case', async () => {
       vi.useFakeTimers();
       const { wrapper } = mountUsers();
