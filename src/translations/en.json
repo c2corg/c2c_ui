@@ -154,6 +154,7 @@
     "Ice and dry climbing gear": "Ice-climbing and dry-tooling",
     "Information about the terrain, like elevations, lengths...": "Information about the terrain, like height diffs, lengths...",
     "Interpolate value should be a number > 0": "Interpolate value should be a positive number",
+    "It has already been used, has expired, or was replaced by a more recent request: only the link of the last email sent works.": "The link has already been used, has expired, or was replaced by a more recent request: only the link of the last email sent works.",
     "Itinevert": "Itinévert",
     "Login": "Sign in",
     "Logout": "Sign out",
