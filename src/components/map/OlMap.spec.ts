@@ -130,6 +130,17 @@ describe('the edition map', () => {
         expect(geomDetail!.coordinates.flat().every((coord) => coord.length === 4)).toBe(true);
       });
 
+      it('follows the times for the segments of a single track', async () => {
+        const timedSegment = (track: string) => track.replace(/^<trk>(.*)<\/trk>$/s, '$1');
+        const { geomDetail } = await readFile(
+          gpx(
+            `<trk>${timedSegment(timedTrack(46.1, '2026-01-02'))}${timedSegment(timedTrack(45.9, '2026-01-01'))}</trk>`
+          )
+        );
+
+        expect(firstLatitudes(geomDetail!.coordinates)).toEqual([45.9, 46.1]);
+      });
+
       it('is the order of the file, when a track has no times', async () => {
         const { geomDetail } = await readFile(
           gpx(`${timedTrack(46.1, '2026-01-03')}<trk>${segment(45.8)}</trk>${timedTrack(45.9, '2026-01-01')}`)
@@ -228,6 +239,12 @@ describe('the edition map', () => {
 
         expect(geomDetail).toBeNull();
       });
+    });
+
+    it('skips the empty segments of a single track', async () => {
+      const { geomDetail } = await readFile(gpx(`<trk><trkseg/>${segment(45.9)}</trk>`));
+
+      expect(firstLatitudes(geomDetail!.coordinates)).toEqual([45.9]);
     });
 
     it('skips the empty segments, keeping the elevations of the other tracks', async () => {

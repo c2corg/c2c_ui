@@ -118,6 +118,29 @@ describe('ElevationProfile', () => {
     vi.unstubAllGlobals();
   });
 
+  it('reads a track whose first line is empty', async () => {
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe() {}
+        unobserve() {}
+      }
+    );
+    const lines = JSON.parse(track()).coordinates;
+    const wrapper = mountProfile(JSON.stringify({ type: 'MultiLineString', coordinates: [[], lines] }));
+
+    expect(wrapper.emitted('has-data')).toHaveLength(1);
+    await vi.waitFor(() => expect(wrapper.find('.elevation-profile-chart svg path.line').exists()).toBe(true), {
+      timeout: 10000,
+    });
+    // the 3 points of the second line, and nothing else
+    const path = wrapper.find('path.line').attributes('d')!;
+    expect(path).not.toContain('NaN');
+    expect(path.match(/[ML]/g)).toEqual(['M', 'L', 'L']);
+    wrapper.unmount();
+    vi.unstubAllGlobals();
+  });
+
   it('shows nothing for a track without elevations', () => {
     const wrapper = mountProfile(track(false));
 

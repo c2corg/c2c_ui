@@ -412,9 +412,11 @@ function setDocumentGeometryFromGeoFileFeatures(features: Feature[]) {
   const lineFeatures = features.filter(isLine);
 
   features.filter((feature) => !isLine(feature)).forEach(setDocumentGeometryFromFeature);
-  if (lineFeatures.length === 1) {
+  // a single line is kept as it is. The segments of a single track go through the same checks as several tracks: empty
+  // segments skipped, put in the order of their times
+  if (lineFeatures.length === 1 && !(lineFeatures[0].getGeometry() instanceof MultiLineString)) {
     setDocumentGeometryFromFeature(lineFeatures[0]);
-  } else if (lineFeatures.length > 1) {
+  } else if (lineFeatures.length) {
     const geometries = lineFeatures.map((feature) => feature.getGeometry() as SimpleGeometry);
     const lines = geometries
       .flatMap((geometry) =>
@@ -460,7 +462,8 @@ function linesToPolygons(lines: InstanceType<typeof ol.geom.LineString>[]) {
     }
     return [ring];
   });
-  return new ol.geom.MultiPolygon(polygons, 'XY');
+  // a single track stays a polygon
+  return polygons.length === 1 ? new ol.geom.Polygon(polygons[0], 'XY') : new ol.geom.MultiPolygon(polygons, 'XY');
 }
 
 function mergeLines(lines: InstanceType<typeof ol.geom.LineString>[]) {

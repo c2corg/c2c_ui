@@ -176,8 +176,11 @@ const i18n_ = {
 
 function computeCoords() {
   const geom_detail = JSON.parse(props.document.geometry!.geom_detail!);
-  // the lines of a MultiLineString (or equivalent splitted data), or the single line of a LineString
-  lines = Array.isArray(geom_detail.coordinates[0][0]) ? geom_detail.coordinates : [geom_detail.coordinates];
+  // the single line of a LineString, or the lines of a MultiLineString (or equivalent splitted data), without the
+  // empty ones (an empty GPX segment)
+  lines = (geom_detail.type === 'LineString' ? [geom_detail.coordinates] : geom_detail.coordinates).filter(
+    (line: number[][]) => line.length
+  );
   coords = lines.flat();
 
   // is there any elevation data?
