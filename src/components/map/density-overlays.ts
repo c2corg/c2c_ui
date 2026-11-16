@@ -5,6 +5,8 @@
 import { markRaw } from 'vue';
 import type * as z from 'zod/mini';
 
+import { LINE_CASING_WIDTH, LINE_HIGHLIGHTED_CASING_WIDTH, LINE_HIGHLIGHTED_WIDTH, LINE_WIDTH } from './map-utils';
+
 import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import type { densityHeatmap, densityTrack, densityTracks } from '@/js/apis/c2c/schemas';
@@ -128,9 +130,9 @@ function trackStyle(type: DensityType, casingWidth: number, width: number) {
 export function createDensityLayers(type: DensityType) {
   return markRaw({
     tracks: markRaw(new ol.layer.VectorImage({ source: new ol.source.Vector(), visible: false })),
-    trackStyle: markRaw(trackStyle(type, 4.5, 2.5)),
+    trackStyle: markRaw(trackStyle(type, LINE_CASING_WIDTH, LINE_WIDTH)),
     // under the pointer
-    trackHighlightedStyle: markRaw(trackStyle(type, 8, 4.5)),
+    trackHighlightedStyle: markRaw(trackStyle(type, LINE_HIGHLIGHTED_CASING_WIDTH, LINE_HIGHLIGHTED_WIDTH)),
   });
 }
 

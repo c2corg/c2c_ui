@@ -153,7 +153,9 @@ import bus from '@/js/event-bus';
 setWorkerUrl(workerUrl);
 registerNoBlankProtocol();
 
-const DOCUMENT_COLOR = '#f93';
+// the lines as on the 2D map (getDocumentLineStyle): yellow on a grey casing, a little wider for the tilted view
+const DOCUMENT_COLOR = '#ffff00';
+const CASING_COLOR = '#404040';
 const EXAGGERATION = 1.2;
 // $gettext('Relief', 'Map layer')
 const RELIEF = 'Relief';
@@ -294,7 +296,7 @@ let profileMarker: Marker | null = null;
 function profileMarkerElement(): HTMLElement {
   const element = document.createElement('div');
   element.style.cssText = `width: 10px; height: 10px; border-radius: 50%; background: ${DOCUMENT_COLOR};
-    border: 1px solid grey; pointer-events: none`;
+    border: 1px solid ${CASING_COLOR}; pointer-events: none`;
   return element;
 }
 
@@ -502,6 +504,14 @@ onMounted(() => {
             source: 'protection',
             layout: { visibility: 'none' },
             paint: { 'line-color': 'rgb(120, 95, 0)', 'line-opacity': 0.6, 'line-width': 1.5 },
+          },
+          {
+            id: 'documents-casing',
+            type: 'line',
+            source: 'documents',
+            filter: ['in', ['geometry-type'], ['literal', ['LineString', 'MultiLineString']]],
+            layout: { 'line-join': 'round', 'line-cap': 'round' },
+            paint: { 'line-color': CASING_COLOR, 'line-width': 7 },
           },
           {
             id: 'documents-line',

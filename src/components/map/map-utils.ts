@@ -1,6 +1,5 @@
 import type { IconLookup } from '@fortawesome/fontawesome-svg-core';
 import type { Extent } from 'ol/extent';
-import type { Options as StrokeOptions } from 'ol/style/Stroke';
 import type Style from 'ol/style/Style';
 
 import iconSvg from '@/js/icon-svg';
@@ -252,74 +251,53 @@ export const getDocumentPointStyle = function (document: C2cDocument, title: str
   return buildPointStyle(title, svgSrc, color, highlight);
 };
 
+// One width scale for every line of the map (documents, overlays tracks): a line on a wider casing, so that it reads on
+// any background. Under the pointer, the documents mostly change colour (red) and grow a little; the tracks of the
+// overlays grow more, to be followed among many others. The public transport lines are a little wider, in their own
+// colours.
+export const LINE_WIDTH = 2.5;
+export const LINE_CASING_WIDTH = 4.5;
+export const LINE_HIGHLIGHTED_WIDTH = 4.5;
+export const LINE_HIGHLIGHTED_CASING_WIDTH = 7.5;
+const DOCUMENT_HIGHLIGHTED_EXTRA_WIDTH = 0.5;
+// the casing of the documents lines, dark enough for the yellow to read on light rock and snow (also in 3D)
+const LINE_CASING_COLOR = '#404040';
+const PUBLIC_TRANSPORT_EXTRA_WIDTH = 1;
+
+const casedLine = (color: string, casingColor: string, highlight: boolean, extra = 0, lineDash?: number[]) => {
+  const width = extra + (highlight ? DOCUMENT_HIGHLIGHTED_EXTRA_WIDTH : 0);
+  return [
+    new ol.style.Style({
+      stroke: new ol.style.Stroke({ color: casingColor, width: LINE_CASING_WIDTH + width, lineDash }),
+    }),
+    new ol.style.Style({
+      stroke: new ol.style.Stroke({ color, width: LINE_WIDTH + width, lineDash }),
+    }),
+  ];
+};
+
 export const getDocumentLineStyle = function (
   title: string,
   highlight: boolean,
   properties?: FeatureProperties | null
 ): Style | Style[] {
-  if (highlight && !properties) {
-    // same slim dark border as the line when not highlighted, so the red line stays readable on any background
-    return [
-      new ol.style.Style({
-        stroke: new ol.style.Stroke({
-          color: 'grey',
-          width: 4,
-        }),
-      }),
-      new ol.style.Style({
-        stroke: new ol.style.Stroke({
-          color: 'red',
-          width: 3,
-        }),
-        text: buildTextStyle(title, highlight, false),
-      }),
-    ];
-  } else if (highlight && properties && properties.color) {
-    return new ol.style.Style({
-      stroke: new ol.style.Stroke({
-        color: 'red',
-        width: 5,
-      }),
-      text: buildTextStyle(properties.name!, highlight, true),
-    });
-  } else if (properties && properties.color) {
-    const strokeConfigs: StrokeOptions[] = [
-      {
-        color: 'white',
-        width: 7,
-      },
-      {
-        color: `#${properties.color}`,
-        width: 5,
-      },
-    ];
-    if (properties.isWalking) {
-      strokeConfigs[1].lineDash = [8, 8];
-      strokeConfigs[0].lineDash = [8, 8];
-    }
-
-    return strokeConfigs.map(
-      (config) =>
-        new ol.style.Style({
-          stroke: new ol.style.Stroke(config),
-        })
+  if (properties && properties.color) {
+    // public transport: its colour on white, red under the pointer
+    const lineDash = !highlight && properties.isWalking ? [8, 8] : undefined;
+    const styles = casedLine(
+      highlight ? 'red' : `#${properties.color}`,
+      'white',
+      highlight,
+      PUBLIC_TRANSPORT_EXTRA_WIDTH,
+      lineDash
     );
-  } else {
-    return [
-      new ol.style.Style({
-        stroke: new ol.style.Stroke({
-          color: 'grey',
-          width: 3,
-        }),
-      }),
-      new ol.style.Style({
-        stroke: new ol.style.Stroke({
-          color: 'yellow',
-          width: 2,
-        }),
-      }),
-    ];
+    styles[1].setText(buildTextStyle(properties.name!, highlight, true) ?? null);
+    return styles;
   }
+  // the documents: yellow on dark grey, red under the pointer
+  const styles = casedLine(highlight ? 'red' : 'yellow', LINE_CASING_COLOR, highlight);
+  styles[1].setText(buildTextStyle(title, highlight, false) ?? null);
+  return styles;
 };
 
 export const getDocumentPolygonStyle = function (
@@ -371,7 +349,7 @@ export const getElevationProfileMarkerStyle = function () {
           color: 'yellow',
         }),
         stroke: new ol.style.Stroke({
-          color: 'grey',
+          color: LINE_CASING_COLOR,
           width: 0.5,
         }),
         radius: 5,

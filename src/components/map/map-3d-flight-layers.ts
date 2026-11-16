@@ -9,6 +9,9 @@ import type { Map as MapLibreMap } from 'maplibre-gl';
 import { type FlightSplit, splitFlights, type TrackPart } from './map-3d-flight';
 import { sampleTerrain } from './map-3d-terrain';
 
+// the casing of the lines, as on the 2D map (getDocumentLineStyle)
+export const CASING_COLOR: [number, number, number] = [64, 64, 64];
+// the flights in red, apart from the walk
 export const FLIGHT_COLOR: [number, number, number] = [214, 39, 40];
 // the point under the profile cursor, on the ground under a flight
 const CURSOR_GROUND_COLOR: [number, number, number] = [70, 70, 70];
@@ -182,6 +185,20 @@ export async function addFlightLayers(map: MapLibreMap, flights: Flights): Promi
       getTargetPosition: (drop) => drop[1] as [number, number, number],
       getColor: [...FLIGHT_COLOR, 120],
       getWidth: 1,
+    }),
+    // as the lines on the ground: the flight on a wider grey casing
+    new PathLayer<Position[]>({
+      id: 'flight-casing',
+      data: flights.paths,
+      getPath: (path) => path as [number, number, number][],
+      getColor: CASING_COLOR,
+      getWidth: 6,
+      widthUnits: 'pixels',
+      capRounded: true,
+      jointRounded: true,
+      billboard: true,
+      // at the depth of the flight: without this, the flight drawn next would lose to it in places
+      parameters: { depthWriteEnabled: false },
     }),
     new PathLayer<Position[]>({
       id: 'flight-paths',
