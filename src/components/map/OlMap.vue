@@ -837,13 +837,7 @@ function setDragAndDropInteraction() {
   });
 
   dragAndDrop.on('addfeatures', (event) => {
-    event.features!.map((feature) => {
-      // the GPS elevations of an outing are kept as they are (was window.document.type, always undefined)
-      if (props.editedDocument!.type !== 'o') {
-        cleanZeroElevationFromGeoFileFeature(feature as Feature);
-      }
-      return setDocumentGeometryFromFeature(feature);
-    });
+    setDocumentGeometryFromGeoFileFeatures(event.features as Feature[]);
   });
 
   map.addInteraction(dragAndDrop);
@@ -915,13 +909,7 @@ function setDocumentGeometryFromGeoFile(file: string | ArrayBuffer) {
   for (const format of [new ol.format.GPX(), new ol.format.KML(), new ol.format.GeoJSON(), new FIT(), new TCX()]) {
     const features = tryReadFeaturesFromGeoFile(file, format, { featureProjection: 'EPSG:3857' });
     if (features?.length) {
-      features.map((feature) => {
-        // the GPS elevations of an outing are kept as they are (was window.document.type, always undefined)
-        if (props.editedDocument!.type !== 'o') {
-          cleanZeroElevationFromGeoFileFeature(feature);
-        }
-        return setDocumentGeometryFromFeature(feature);
-      });
+      setDocumentGeometryFromGeoFileFeatures(features as Feature[]);
       return;
     }
   }
@@ -929,6 +917,78 @@ function setDocumentGeometryFromGeoFile(file: string | ArrayBuffer) {
     message: $gettext('No data could be extracted from GPS file'),
     type: 'is-danger',
   });
+}
+
+function setDocumentGeometryFromGeoFileFeatures(features: Feature[]) {
+  // the GPS elevations of an outing are kept as they are (was window.document.type, always undefined)
+  if (props.editedDocument!.type !== 'o') {
+    features.forEach(cleanZeroElevationFromGeoFileFeature);
+  }
+
+  // a GPS file can hold several lines: a GPX gives one feature per track (its segments in a MultiLineString), a KML
+  // one per placemark. Each feature used to replace the track of the previous one: they are merged in one track
+  const isLine = (feature: Feature) =>
+    feature.getGeometry() instanceof ol.geom.LineString || feature.getGeometry() instanceof MultiLineString;
+  const lineFeatures = features.filter(isLine);
+
+  features.filter((feature) => !isLine(feature)).forEach(setDocumentGeometryFromFeature);
+  if (lineFeatures.length === 1) {
+    setDocumentGeometryFromFeature(lineFeatures[0]);
+  } else if (lineFeatures.length > 1) {
+    const geometries = lineFeatures.map((feature) => feature.getGeometry() as SimpleGeometry);
+    // the merged track drops the times when a track has none: the outing date is read from each track, the first
+    // timed one gives it
+    geometries.forEach((geometry) => setOutingStartDate(props.editedDocument!, geometry));
+    const lines = geometries
+      .flatMap((geometry) =>
+        geometry instanceof MultiLineString
+          ? geometry.getLineStrings()
+          : [geometry as InstanceType<typeof ol.geom.LineString>]
+      )
+      // an empty segment (<trkseg/>) is kept as an empty line: it has no ends to close a ring, and its layout without
+      // elevations would drop those of the other tracks
+      .filter((line) => line.getCoordinates().length);
+    if (!lines.length) {
+      return;
+    }
+    // an area is a polygon: as rings of one polygon, the other tracks would be holes, outside of it most of the time.
+    // Each track is a polygon of its own instead
+    setDocumentGeometryFromFeature(
+      new ol.Feature(props.editedDocument!.type === 'a' ? linesToPolygons(lines) : mergeLines(lines))
+    );
+  }
+}
+
+function linesToPolygons(lines: InstanceType<typeof ol.geom.LineString>[]) {
+  const polygons = lines.map((line) => {
+    const ring = line.getCoordinates().map((coord) => [coord[0], coord[1]]);
+    const [first, last] = [ring[0], ring[ring.length - 1]];
+    if (first[0] !== last[0] || first[1] !== last[1]) {
+      // close the loop
+      ring.push([...first]);
+    }
+    return [ring];
+  });
+  return new ol.geom.MultiPolygon(polygons, 'XY');
+}
+
+function mergeLines(lines: InstanceType<typeof ol.geom.LineString>[]) {
+  // the tracks may not all have elevations or times: only the dimensions they all have are kept
+  const hasZ = lines.every((line) => line.getLayout().includes('Z'));
+  const hasM = lines.every((line) => line.getLayout().endsWith('M'));
+  const layout = `XY${hasZ ? 'Z' : ''}${hasM ? 'M' : ''}` as 'XY' | 'XYZ' | 'XYM' | 'XYZM';
+  const coordinates = lines.map((line) => {
+    const lineLayout = line.getLayout();
+    return line
+      .getCoordinates()
+      .map((coord) => [
+        coord[0],
+        coord[1],
+        ...(hasZ ? [coord[2]] : []),
+        ...(hasM ? [coord[lineLayout.indexOf('M')]] : []),
+      ]);
+  });
+  return new MultiLineString(coordinates, layout);
 }
 
 function setDocumentGeometryFromFeature(feature: FeatureLike) {
