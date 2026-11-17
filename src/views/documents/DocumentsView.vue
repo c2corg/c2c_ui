@@ -192,7 +192,7 @@ const router = useRouter();
 const { $gettext } = useGlobalProperties();
 
 // the map component: OpenLayers needs an explicit resize when its container changes
-const olMap = useTemplateRef<{ map: { updateSize(): void } }>('olMap');
+const olMap = useTemplateRef<{ resize(): void }>('olMap');
 // the list scrolls in its own container on large screens, which the router knows nothing about
 const documentsContainer = useTemplateRef<HTMLElement>('documentsContainer');
 
@@ -307,7 +307,7 @@ function getDocumentTypeTitle(documentType: string) {
 // openLayer need an explicit resize
 function updateMapSize(newValue: string, oldValue: string) {
   if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
-    nextTick(() => olMap.value?.map.updateSize());
+    nextTick(() => olMap.value?.resize());
   }
 }
 
@@ -330,8 +330,8 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
 @import '@/assets/css/media.css';
 
 /*
- * On mobile the search bars are fixed on top, and the heights are calculated: section padding 0.5rem, header 56px,
- * filters 25px.
+ * On mobile the search bars stick on top, under the ad when there is one, and the map height is calculated: section
+ * padding 0.5rem, header 56px, filters 25px.
  */
 
 .header-section {
@@ -353,22 +353,17 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
 }
 
 @media screen and (--c2c-max-tablet) {
+  /* sticky, not fixed: a fixed bar would hide the top of the ad, which is in the flow above the page */
   .search-infos {
-    position: fixed;
+    position: sticky;
     top: var(--c2c-navbar-height);
-    left: 0;
-    right: 0;
     z-index: 24;
     background-color: var(--c2c-body-background-color);
     padding-top: 0.5rem;
   }
 
-  .result-section {
-    padding-top: calc(2 * 0.5rem + 56px + 25px);
-  }
-
   .documents-view {
-    padding-top: 0.5rem;
+    padding-top: 0;
     padding-left: 0;
     padding-right: 0;
     padding-bottom: 0;

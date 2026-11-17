@@ -40,13 +40,13 @@
 </template>
 
 <script setup lang="ts">
-import { toLonLat, transform } from 'ol/proj';
 import { onBeforeUnmount, onMounted, reactive, watch } from 'vue';
 
 import { default as c2c } from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { getPosition } from '@/js/geolocation';
+import { toLonLat } from '@/js/geo/projection';
 import { toast } from '@/js/toast';
 
 type Proposition = {
@@ -68,10 +68,6 @@ const props = defineProps({
   showAddressPropositions: {
     type: Boolean,
     default: false,
-  },
-  mapView: {
-    type: Object,
-    default: null,
   },
   defaultAddress: {
     type: [Object, String],
@@ -199,7 +195,7 @@ async function loadUserAddressIfLoggedIn() {
     if (geomData.type !== 'Point' || !geomData.coordinates) return;
 
     const [x, y] = geomData.coordinates;
-    const [lon, lat] = transform([x, y], 'EPSG:3857', 'EPSG:4326');
+    const [lon, lat] = toLonLat([x, y]);
 
     localData.coordinates = [lon, lat];
     await reverseGeocode(lon, lat);
@@ -221,9 +217,7 @@ function searchAddressPropositions() {
 
   searchTimeout = setTimeout(async () => {
     try {
-      const center = props.mapView?.view?.getCenter();
-      const centerWgs84 = center ? (toLonLat(center) as [number, number]) : undefined;
-      const response = await photon.getPropositions(localData.address, $language.current!, centerWgs84);
+      const response = await photon.getPropositions(localData.address, $language.current!);
       localData.addressPropositions = response.data.features.slice(0, 6) || [];
       localData.showAddressPropositions = localData.addressPropositions?.length > 0;
     } catch (error) {

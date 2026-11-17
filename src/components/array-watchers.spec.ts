@@ -42,7 +42,7 @@ describe('array watchers', () => {
 
   it('OlMap: a document added to the list is drawn', async () => {
     const documents = reactive<Record<string, unknown>[]>([]);
-    const { wrapper, vm } = await mountMap({ documents });
+    const { wrapper, vm } = await mountMap({ documents, editedDocument: { geometry: {} } });
     const drawn = () =>
       vm.map
         .getLayers()

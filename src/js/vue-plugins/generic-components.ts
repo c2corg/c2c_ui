@@ -26,10 +26,10 @@ export default function install(app: App) {
 
   // other globals components
   app.component('DocumentCard', DocumentCard);
-  // OpenLayers is about half of the startup JS: loaded with the first map shown (#4876). Its template ref is null
+  // the map library is about half of the startup JS: loaded with the first map shown (#4876). Its template ref is null
   // until then
   app.component(
     'MapView',
-    defineAsyncComponent(() => import('@/components/map/OlMap.vue'))
+    defineAsyncComponent(() => import('@/components/map/C2cMap.vue'))
   );
 }

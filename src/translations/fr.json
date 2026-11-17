@@ -418,6 +418,7 @@
     "Invalid parameters were sent to public transport data service.": "Des paramètres invalides ont été envoyés au service de données des transports en commun.",
     "Invalid value": "Valeur invalide",
     "Issue report": "Signalement d'un problème",
+    "It has already been used, has expired, or was replaced by a more recent request: only the link of the last email sent works.": "Le lien a déjà été utilisé, a expiré, ou a été remplacé par une requête plus récente : seul le lien du dernier email envoyé fonctionne.",
     "It seems your trip can not be completed on the selected date and time": "Il semblerait que votre trajet ne puisse être réalisé à la date et aux horaires indiqués",
     "Itinevert": "Itinévert",
     "Join us": "Adhérer",
@@ -553,6 +554,9 @@
     "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Pas de modifications — Dans le cas où vous effectuez un remix, que vous transformez, ou créez à partir du matériel composant l'Oeuvre originale, vous n'êtes pas autorisé à distribuer ou mettre à disposition l'Oeuvre modifiée. ",
     "Non sensitive period": "Pas de sensibilité",
     "NonCommercial — You may not use the material for commercial purposes.": "Pas d’Utilisation Commerciale — Vous n'êtes pas autorisé à faire un usage commercial de cette Oeuvre, tout ou partie du matériel la composant. ",
+    "North up": {
+      "Map controls": "Nord en haut"
+    },
     "Not simplified yet": "Non encore simplifié",
     "Note that comments have to be transferred manually in Discourse before merging.": "Les commentaires doivent être transférés manuellement dans Discourse avant de fusionner les documents.",
     "Note that the topoguide username will be the one mentioned in the attribution of the content you contributed to.": "Le pseudo topoguide sera celui mentionné dans les attributions des contenus auxquels vous contribuez.",
@@ -565,6 +569,7 @@
       "API message": "Seuls les documents récents (24h) peuvent être supprimés. Contactez la modération pour supprimer ce document."
     },
     "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Seuls les documents qui concernent les régions et les activités sélectionnées sont affichés dans le fil de la page d'accueil.\nLes documents des utilisateurs suivis sont toujours visibles.",
+    "Only the most recent ones are listed": "Seul les plus récentes sont listées",
     "Opacity": "Opacité",
     "Open fields to deeply explain the event circumstances.": "Champs libres pour raconter au mieux les circonstances de l'évènement.",
     "Open fields to detail the picture's context": "Champs libre pour décrire le contexte de l'image",
@@ -577,6 +582,7 @@
     "Orientations:": "Orientations :",
     "Other options": "Autres options",
     "Other tools can complement Itinévert:": "D'autres outils peuvent venir compléter Itinévert :",
+    "Others here:": "Autres ici :",
     "Oups! Something went wrong with forum. Here is the message :": "Oups ! Il y a eu un souci avec le forum. Voici le message :",
     "Oups! something went wrong...": "Oups ! Il y a eu un problème…",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Notre site Web utilise des cookies fournis par nous et par des tiers. Certains cookies sont nécessaires au fonctionnement du site Web, tandis que d'autres peuvent être ajustés par vous à tout moment, en particulier ceux qui nous permettent de comprendre les performances de notre site Web et de vous fournir des fonctionnalités de médias sociaux. Vous pouvez les accepter ou les refuser tous ou bien",
@@ -652,6 +658,7 @@
     "Remove": "Retirer",
     "Report an issue": "Signaler un problème",
     "Report title, activity, linked routes or outings.": "Titre du rapport, activité, liens avec des itinéraires ou sorties.",
+    "Request a new link": "Demander un nouveau lien",
     "Required": {
       "API message": "Requis"
     },
@@ -703,6 +710,9 @@
     "Set a maximum time to reach the access point (from the selected departure time)": "Définir une durée maximum pour atteindre le point d’accès (à compter de l’heure de départ sélectionnée)",
     "Settings": "Paramètres",
     "Several days?": "Plusieurs jours ?",
+    "Shading": {
+      "Map layer": "Ombres"
+    },
     "Share": "Partager",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Partage dans les Mêmes Conditions — Dans le cas où vous effectuez un remix, que vous transformez, ou créez à partir du matériel composant l'Oeuvre originale, vous devez diffuser l'Oeuvre modifiée dans les même conditions, c'est à dire avec la même licence avec laquelle l'Oeuvre originale a été diffusée. ",
     "Shorter than minimum length 1": {
@@ -719,6 +729,7 @@
     "Sign in to camptocamp today, it's free": "Créez votre compte sur Camptocamp, c'est gratuit !",
     "Simplify": "Simplifier",
     "Skiability": "Skiabilité",
+    "Skip the file next time: link your Strava, Garmin, Suunto, Polar, Coros or Decathlon account and pick your outings directly, with the activity prefilled.": "Évitez un chargement de fichier : liez votre compte Strava, Garmin, Suunto, Polar, Coros ou Decathlon et sélectionnez votre sortie directement, avec l'activité préremplie.",
     "Skitouring gear": "Ski, surf, raquette",
     "Slopes": "Cartes de pentes",
     "Small group = 2 to 4 people": "Petit groupe = 2 à 4 personnes",
@@ -761,6 +772,7 @@
     },
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Grâce aux cookies statistiques ou analytiques, fournis par nous et d'autres sociétés, nous pouvons compter les visites sur notre site Web et connaître les sources de trafic. Les données que nous obtenons nous aident à comprendre ce que les visiteurs aiment et améliorer le site Web. Si vous ne les acceptez pas, nous ne pourrons pas améliorer votre expérience.",
     "The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.": "La méthode MRD (débutant) est autorisée avec un niveau de danger de 3 maximum. Choisissez la méthode MRE ou MRP.",
+    "The Outings and Routes overlays are temporarily unavailable": "Les calques de sorties et d'itinéraires sont temporairement indisponibles. ",
     "The current criteria will be retained": "Les critères de recherche seront conservés",
     "The destination can be a mountain range or a maximum travel time from your starting point.": "La destination peut être un massif ou une durée maximale autour de votre point de départ.",
     "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "Le potentiel de danger est calculé à partir du niveau de danger du bulletin d'avalanche. Il peut être affiné en sélectionnant un potentiel dans la plage correspondant au niveau du danger. Par exemple : Le bulletin évoque un danger 3 juste après une période en danger 4. On pourra alors indiquer un potentiel de danger de 12 au lieu de 8. ",
@@ -788,6 +800,7 @@
     "This is the first version": "Ceci est la première version",
     "This is the last version": "Ceci est la dernière version",
     "This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don't forget to mention the route history if you know it.": "Description complète de l'itinéraire (résumé, approche, descente, etc.) N'oubliez pas l'historique si vous le connaissez.",
+    "This password reset link is no longer valid": "Ce lien de réinitialisation de mot de passe n'est plus valide",
     "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Cette image montre une couverture de livre. Elle est la propriété de l'éditeur et/ou de l'auteur et n'est présentée ici qu'à des fins d'illustration.",
     "This profile is only available to authenticated users.": "Ce profil est accessible aux seuls utilisateurs authentifiés.",
     "This route guide has an estimated theoretical duration of": "Ce itinéraire a une durée théorique estimée à",
@@ -811,6 +824,7 @@
     "Too much points": "Trop de points",
     "Trace": "Trace GPS",
     "Tracking devices": "Dispositifs GPS",
+    "Tracks here": "Traces ici",
     "Translate": "Traduire",
     "Transport & road or PT access": "Accès routier/TC",
     "Tricky sections": "Passages délicats",

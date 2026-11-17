@@ -26,7 +26,7 @@
             v-for="document of group.documents"
             :key="document.document_id"
             @mousedown="toggle(document)"
-            class="dropdown-item dropdown-item-option columns is-gapless has-cursor-pointer"
+            class="dropdown-item dropdown-item-option columns is-mobile is-gapless is-vcentered has-cursor-pointer"
           >
             <div v-if="isSelected(document)" class="column has-text-success is-size-1 is-narrow">
               <fa-icon icon="check-circle" />
@@ -34,29 +34,39 @@
 
             <div class="column is-size-6">
               <document-title :document="document" />
-              <br />
-              <span v-if="document.elevation || document.elevation_max">
-                <span :title="$gettext('elevation_max')">
-                  <fa-icon icon="sort-amount-up" class="has-text-primary" />
+              <template v-if="document.forum_username">
+                <span class="has-text-grey-light">·</span>
+                <span class="is-italic">@{{ document.forum_username }}</span>
+              </template>
+              <template
+                v-if="document.elevation || document.elevation_max || document.height_diff_up || document.area_type"
+              >
+                <br />
+                <span v-if="document.elevation || document.elevation_max">
+                  <span :title="$gettext('elevation_max')">
+                    <fa-icon icon="sort-amount-up" class="has-text-primary" />
+                  </span>
+                  {{ document.elevation || document.elevation_max }}&nbsp;m
                 </span>
-                {{ document.elevation || document.elevation_max }}&nbsp;m
-              </span>
 
-              <span v-if="document.height_diff_up">
-                <icon-height-diff-up class="has-text-primary" />
-                {{ document.height_diff_up }}&nbsp;m
-              </span>
-              <span v-if="document.forum_username" class="is-italic"> @{{ document.forum_username }} </span>
-              <span v-if="document.area_type" class="is-italic">
-                {{ $filters.uppercaseFirstLetter($gettext(document.area_type, 'area_types')) }}
-              </span>
-
-              &nbsp;
+                <span v-if="document.height_diff_up">
+                  <icon-height-diff-up class="has-text-primary" />
+                  {{ document.height_diff_up }}&nbsp;m
+                </span>
+                <span v-if="document.area_type" class="is-italic">
+                  {{ $filters.uppercaseFirstLetter($gettext(document.area_type, 'area_types')) }}
+                </span>
+              </template>
             </div>
 
             <div class="column has-text-primary is-size-2 is-narrow">
-              <icon-document v-if="document.type == 'u'" document-type="profile" />
-              <icon-document v-else-if="document.type == 'a'" document-type="area" />
+              <!-- the icon of the type only tells something when several types are searched -->
+              <template v-if="document.type == 'u' || document.type == 'a'">
+                <icon-document
+                  v-if="documentTypes_.length > 1"
+                  :document-type="document.type == 'u' ? 'profile' : 'area'"
+                />
+              </template>
               <activities v-else-if="document.activities" :activities="document.activities" />
               <icon-waypoint-type v-else-if="document.waypoint_type" :waypoint-type="document.waypoint_type" />
             </div>
@@ -349,9 +359,10 @@ div.dropdown-item-option:hover {
   width: 100%;
 }
 
+/* not wider than the window on mobile, where the input is near its left edge */
 .dropdown-menu {
-  max-width: 30rem;
-  min-width: 30rem;
+  width: min(30rem, calc(100vw - 2rem));
+  min-width: 0;
 }
 .dropdown-content {
   max-height: 80vh;
@@ -360,5 +371,10 @@ div.dropdown-item-option:hover {
 
 .columns {
   margin-bottom: 0 !important;
+}
+
+/* the icon, on the right of the text */
+.column.is-narrow:last-child {
+  padding-left: 0.5rem !important;
 }
 </style>

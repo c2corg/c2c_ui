@@ -36,12 +36,12 @@
 </template>
 
 <script lang="ts">
-import { transform } from 'ol/proj';
 import { onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import debounce from '@/js/debounce';
 import bus from '@/js/event-bus';
+import { toLonLat } from '@/js/geo/projection';
 import d3 from '@/js/libs/d3';
 import { documentProperty } from '@/js/properties';
 
@@ -57,11 +57,51 @@ export function emitCursorMoveEvent(coord: number[]) {
 export function emitToggleFullScreenEvent(hide = true) {
   bus.emit('elevation_profile', { action: 'toggle_fullscreen', hide });
 }
+
+// a point of the profile, in the part (track or segment) of the geometry it belongs to
+export type ProfilePoint = { date: Date | null; ele: number; d: number; elapsed: number | undefined; part: number };
+
+/**
+ * The points of the profile of the lines of a track (one for a LineString, several for a MultiLineString). The distance
+ * runs on along the lines, but the gap between two lines is not counted: it was not recorded.
+ */
+export function profilePoints(lines: number[][][], withTime: boolean): ProfilePoint[] {
+  const startTime = withTime ? lines.find((line) => line.length)?.[0][3] : undefined;
+  let totalDist = 0;
+  return lines.flatMap((line, part) =>
+    line.map((coord, i) => {
+      if (i > 0) {
+        // convert from web mercator to lng/lat, then arc distance x earth radius
+        const deg1 = toLonLat([coord[0], coord[1]]);
+        const deg2 = toLonLat([line[i - 1][0], line[i - 1][1]]);
+        totalDist += d3.geoDistance(deg1, deg2) * 6371;
+      }
+      return {
+        date: withTime ? new Date(coord[3] * 1000) : null,
+        ele: coord[2] ?? 0,
+        d: totalDist,
+        elapsed: withTime ? (coord[3] - startTime!) * 1000 : undefined,
+        part,
+      };
+    })
+  );
+}
+
+/** Splits the points by part: a line is drawn for each, never across the gap between two parts */
+export function pointsByPart(points: ProfilePoint[]): ProfilePoint[][] {
+  const parts: ProfilePoint[][] = [];
+  for (const point of points) {
+    if (!parts.length || parts[parts.length - 1][0].part !== point.part) {
+      parts.push([]);
+    }
+    parts[parts.length - 1].push(point);
+  }
+  return parts;
+}
 </script>
 
 <script setup lang="ts">
-// a point of the profile
-type Point = { date: Date | null; ele: number; d: number; elapsed: number | undefined };
+type Point = ProfilePoint;
 
 const props = defineProps({ ...documentProperty });
 
@@ -81,7 +121,9 @@ const mode = ref('distance');
 const fullScreenHidden = ref(false);
 
 // the chart, drawn by d3: kept out of reactive state
-/** Geometry coordinates */
+/** Lines of the geometry (several for a MultiLineString) */
+let lines: number[][][] = [];
+/** Geometry coordinates, all the lines one after the other */
 let coords: number[][] = [];
 /** Graph data */
 let data: Point[] = [];
@@ -134,9 +176,12 @@ const i18n_ = {
 
 function computeCoords() {
   const geom_detail = JSON.parse(props.document.geometry!.geom_detail!);
-  // concatenate MultiLineString or equivalent splitted data
-  const depth = Array.isArray(geom_detail.coordinates[0][0]) ? 1 : 0;
-  coords = geom_detail.coordinates.flat(depth);
+  // the single line of a LineString, or the lines of a MultiLineString (or equivalent splitted data), without the
+  // empty ones (an empty GPX segment)
+  lines = (geom_detail.type === 'LineString' ? [geom_detail.coordinates] : geom_detail.coordinates).filter(
+    (line: number[][]) => line.length
+  );
+  coords = lines.flat();
 
   // is there any elevation data?
   if (!coords.some((coord) => coord.length > 2 && coord[2] !== 0)) {
@@ -149,31 +194,7 @@ function computeCoords() {
 }
 
 function createChart() {
-  const withTime = timeAvailable.value;
-  const startDate = withTime ? new Date(coords[0][3] * 1000) : null;
-
-  let totalDist = 0;
-  data = coords.map((coord, i, coords) => {
-    const date = withTime ? new Date(coord[3] * 1000) : null;
-
-    let d = 0;
-
-    if (i > 0) {
-      // convert from web mercator to lng/lat
-      const deg1 = transform([coords[i][0], coords[i][1]], 'EPSG:3857', 'EPSG:4326');
-      const deg2 = transform([coords[i - 1][0], coords[i - 1][1]], 'EPSG:3857', 'EPSG:4326');
-      // arc distance x earth radius
-      d = d3.geoDistance(deg1, deg2) * 6371;
-    }
-    totalDist += d;
-
-    return {
-      date,
-      ele: coord[2] ?? 0,
-      d: totalDist,
-      elapsed: withTime ? date!.getTime() - startDate!.getTime() : undefined,
-    };
-  });
+  data = profilePoints(lines, timeAvailable.value);
 
   // create chart
   const wrapper = graph.value!;
@@ -243,17 +264,23 @@ function createChart() {
     .style('text-anchor', 'end')
     .text(i18n_.distance_legend);
 
-  // data lines
-  dLine = d3
-    .line()
-    .x((d: Point) => x1(d.d))
-    .y((d: Point) => y(d.ele));
+  // data lines: a line for each part of the track, in one path
+  const byPart = (partLine: (points: Point[]) => string) => (points: Point[]) =>
+    pointsByPart(points).map(partLine).join('');
+  dLine = byPart(
+    d3
+      .line()
+      .x((d: Point) => x1(d.d))
+      .y((d: Point) => y(d.ele))
+  );
 
   if (timeAvailable.value) {
-    tLine = d3
-      .line()
-      .x((d: Point) => x2(d.elapsed))
-      .y((d: Point) => y(d.ele));
+    tLine = byPart(
+      d3
+        .line()
+        .x((d: Point) => x2(d.elapsed))
+        .y((d: Point) => y(d.ele))
+    );
   }
 
   // display line path

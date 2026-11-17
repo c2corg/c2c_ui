@@ -28,7 +28,7 @@
 
     <dfm-ad-large v-if="!homePage() && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop" />
 
-    <div class="navigation-end">
+    <div class="navigation-end" :class="{ 'is-search-shown': !hideSearchInput }">
       <router-link
         :to="{ name: 'article', params: { id: 106732 } }"
         class="navigation-item has-text-centered"
@@ -37,7 +37,7 @@
         <icon-help fixed-width />
         <span class="is-hidden-mobile"> {{ $filters.uppercaseFirstLetter($gettext('help')) }} </span>
       </router-link>
-      <div ref="searchInputContainer">
+      <div ref="searchInputContainer" class="search-input-container">
         <input-document
           ref="searchInput"
           class="navigation-item search-input"
@@ -536,6 +536,23 @@ nav {
 
   .search-input {
     width: 160px;
+  }
+}
+
+/* on mobile, the search input shown takes the room left by the buttons */
+@media screen and (--c2c-mobile) {
+  .navigation-end.is-search-shown {
+    flex-grow: 1;
+  }
+
+  .is-search-shown .search-input-container {
+    flex-grow: 1;
+    display: flex;
+
+    .search-input {
+      flex-grow: 1;
+      width: auto;
+    }
   }
 }
 

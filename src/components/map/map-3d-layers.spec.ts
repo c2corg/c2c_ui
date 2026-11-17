@@ -1,7 +1,8 @@
 import { addProtocol } from 'maplibre-gl';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { clearWhite, orthoLayerAt, orthoLayers, registerNoBlankProtocol, worldLayer } from './map-3d-layers';
+import { clearWhite, orthoLayerAt, registerNoBlankProtocol } from './map-3d-layers';
+import { orthoLayers, worldLayer } from './map-layers';
 
 vi.mock('maplibre-gl', () => ({ addProtocol: vi.fn() }));
 

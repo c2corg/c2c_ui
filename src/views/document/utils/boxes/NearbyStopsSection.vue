@@ -94,7 +94,7 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, useTemplateRef, watch, type ComponentPublicInstance, type PropType } from 'vue';
 
-import type OlMap from '@/components/map/OlMap.vue';
+import type C2cMap from '@/components/map/C2cMap.vue';
 import { documentOverlayFilters } from '@/components/map/density-overlays';
 import transportService from '@/js/apis/transport-service';
 import { documentProperty, useDocumentType } from '@/js/properties';
@@ -125,7 +125,7 @@ const { documentType } = useDocumentType(props);
 // the "Tracks" and "Routes" overlays of the map show what is linked to the document
 const overlayFilters = computed(() => documentOverlayFilters(props.document));
 
-const olMap = useTemplateRef<InstanceType<typeof OlMap>>('olMap');
+const olMap = useTemplateRef<InstanceType<typeof C2cMap>>('olMap');
 const stopCardContainer = useTemplateRef<HTMLElement>('stopCardContainer');
 // the card of each stop group, by the id of its first stop
 const stopCards: Record<number, Element> = {};

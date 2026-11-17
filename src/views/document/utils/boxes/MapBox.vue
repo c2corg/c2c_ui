@@ -61,8 +61,6 @@
 </template>
 
 <script setup lang="ts">
-import type { Feature } from 'ol';
-import type FeatureFormat from 'ol/format/Feature';
 import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -72,6 +70,7 @@ import MapLinks from './MapLinks.vue';
 import { documentOverlayFilters } from '@/components/map/density-overlays';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import bus from '@/js/event-bus';
+import { writeGpx, writeKml, type ExportedFeature } from '@/js/geo/formats';
 import { documentProperty, useDocumentType } from '@/js/properties';
 import utils from '@/js/utils';
 
@@ -154,43 +153,23 @@ function resizePin() {
   togglePinToSide(false);
 }
 
-// the OpenLayers formats are only loaded for a download
-async function downloadKml() {
-  const { default: KML } = await import('ol/format/KML');
-  await downloadFeatures(new KML(), '.kml', 'application/vnd.google-earth.kml+xml');
+function downloadKml() {
+  downloadFeature(writeKml, '.kml', 'application/vnd.google-earth.kml+xml');
 }
 
-async function downloadGpx() {
-  const { default: GPX } = await import('ol/format/GPX');
-  await downloadFeatures(new GPX(), '.gpx', 'application/gpx+xml');
+function downloadGpx() {
+  downloadFeature(writeGpx, '.gpx', 'application/gpx+xml');
 }
 
-async function downloadFeatures(format: FeatureFormat, extension: string, mimetype: string) {
-  const { default: GeoJSONFormat } = await import('ol/format/GeoJSON');
-  const GeoJSON = new GeoJSONFormat();
-  const geometry = props.document.geometry!;
-  let features: Feature[] = [];
-  if (geometry.geom_detail) {
-    features = GeoJSON.readFeatures(geometry.geom_detail);
-  } else if (geometry.geom) {
-    features = GeoJSON.readFeatures(geometry.geom);
-  }
-  if (!features.length) {
+// only the geometry of the document, not the associated documents
+function downloadFeature(write: (features: ExportedFeature[]) => string, extension: string, mimetype: string) {
+  const { geom_detail: geomDetail, geom } = props.document.geometry!;
+  if (!geomDetail && !geom) {
     return;
   }
-
-  // Export only the current document geometry, not the associated features
-  const feature = features[0];
   const name = $documentUtils.getDocumentTitle(props.document, route.params.lang as string);
-
-  feature.set('name', name);
-
-  const filename = getDownloadedFileName(name, extension);
-  const content = format.writeFeatures([feature], {
-    featureProjection: 'EPSG:3857',
-  }) as string;
-
-  utils.download(content, filename, mimetype + ';charset=utf-8');
+  const content = write([{ name, geometry: JSON.parse((geomDetail ?? geom)!) }]);
+  utils.download(content, getDownloadedFileName(name, extension), mimetype + ';charset=utf-8');
 }
 
 function getDownloadedFileName(name: string, extension: string) {
