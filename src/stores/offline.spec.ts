@@ -39,6 +39,7 @@ vi.mock('@/js/vue-plugins/router', () => ({
     ],
   },
 }));
+vi.mock('@/components/map/C2cMap.vue', () => ({ default: {} }));
 vi.mock('@/components/map/OlMap.vue', () => ({ default: {} }));
 // the page of the app, kept for the offline starts
 const keepShell = vi.hoisted(() => vi.fn(async () => true));

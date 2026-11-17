@@ -45,8 +45,8 @@ import { onBeforeUnmount, onMounted, reactive, watch } from 'vue';
 import { default as c2c } from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
 import { useGlobalProperties } from '@/js/composables/global-properties';
-import { getPosition } from '@/js/geolocation';
 import { toLonLat } from '@/js/geo/projection';
+import { getPosition } from '@/js/geolocation';
 import { toast } from '@/js/toast';
 
 type Proposition = {
