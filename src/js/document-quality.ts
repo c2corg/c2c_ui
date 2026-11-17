@@ -6,6 +6,10 @@
  *
  * The outings with an "empty" quality are not listed on the pages of their routes (RecentOutingsBox.vue): an
  * outing with any text is never "empty".
+ *
+ * The rules of the outings have a copy in Python in the API (v6_api, c2corg_api/scripts/outings/quality_rules.py),
+ * with which recompute_quality.py gives the outings already saved the quality of the current rules. When they change
+ * here, add their new version there and run the script: see c2corg_api/scripts/outings/README.md in v6_api.
  */
 
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
