@@ -257,4 +257,9 @@ onBeforeUnmount(() => {
     min-height: calc(100% - 350px);
   }
 }
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): the box around the tiles while they load */
+html[data-theme='dark'] .map-container {
+  background: var(--app-dark-surface);
+}
 </style>

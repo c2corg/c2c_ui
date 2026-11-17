@@ -137,4 +137,9 @@ watch(() => props.document, checkAccessibility, { deep: true, immediate: true })
 :global(html) {
   scroll-behavior: smooth;
 }
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark box, its title light */
+html[data-theme='dark'] .accessible-transport-box .accessible-transport {
+  background-color: var(--app-dark-surface);
+}
 </style>

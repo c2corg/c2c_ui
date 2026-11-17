@@ -230,4 +230,11 @@ watch(showAccessibilityInfo, (value) => {
     }
   }
 }
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): the buttons not chosen are dark */
+html[data-theme='dark'] .public-transports-box .public-transports-button:not(.is-active) {
+  background-color: var(--app-dark-surface);
+  color: var(--app-dark-text);
+  border-color: var(--app-dark-border);
+}
 </style>

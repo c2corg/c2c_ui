@@ -45,6 +45,7 @@ import { onBeforeUnmount, onMounted, reactive, watch } from 'vue';
 import { default as c2c } from '@/js/apis/c2c';
 import photon from '@/js/apis/photon';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { getPosition } from '@/js/geolocation';
 import { toLonLat } from '@/js/geo/projection';
 import { toast } from '@/js/toast';
 
@@ -169,30 +170,16 @@ async function reverseGeocode(lon: number, lat: number) {
 }
 
 /** Try to use geolocation from browser */
-function useCurrentLocation() {
-  if (!navigator.geolocation) {
-    toast({
-      message: $gettext('Geolocation is not supported by your browser.'),
-      type: 'is-warning',
-    });
+async function useCurrentLocation() {
+  let position;
+  try {
+    position = await getPosition($gettext);
+  } catch (error) {
+    toast({ message: (error as Error).message, type: 'is-warning' });
     return;
   }
-
-  navigator.geolocation.getCurrentPosition(
-    async (position) => {
-      const coords = [position.coords.longitude, position.coords.latitude];
-
-      localData.coordinates = coords;
-      await reverseGeocode(coords[0], coords[1]);
-    },
-    (error) => {
-      console.warn('Geolocation error:', error);
-      toast({
-        message: $gettext('Unable to get your current location.'),
-        type: 'is-warning',
-      });
-    }
-  );
+  localData.coordinates = [position.longitude, position.latitude];
+  await reverseGeocode(position.longitude, position.latitude);
 }
 
 /** If the user is authenticated and has entered their address in their profile, it is put in the address field */
@@ -376,5 +363,44 @@ onBeforeUnmount(() => {
 
 .fullwidth {
   width: 100%;
+}
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark field and list, as the inputs of Bulma */
+html[data-theme='dark'] .from-container {
+  background-color: var(--app-dark-field);
+  border-color: var(--app-dark-border);
+
+  .autocomplete-container {
+    .from-address {
+      color: var(--app-dark-text);
+    }
+
+    .autocomplete-results {
+      background-color: var(--app-dark-surface);
+      border-color: var(--app-dark-border);
+      scrollbar-color: var(--app-text-muted) var(--app-dark-surface);
+
+      ul li {
+        color: var(--app-dark-text);
+
+        &:hover {
+          background-color: var(--app-dark-surface-hover);
+          color: var(--c2c-white);
+        }
+
+        &:not(:last-child) {
+          border-bottom-color: var(--app-dark-border-light);
+        }
+      }
+    }
+  }
+
+  .geolocalisation {
+    background-color: var(--app-dark-field);
+
+    &:hover {
+      background-color: var(--app-dark-surface-hover);
+    }
+  }
 }
 </style>
