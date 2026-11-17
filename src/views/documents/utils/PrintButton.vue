@@ -1,10 +1,11 @@
 <template>
-  <!-- the page shows the full content of every result: to read them one after the other, or to print them -->
+  <!-- the page shows the full content of the listed results (the current page of the list, with its query): to read
+    them one after the other, or to print them -->
   <router-link
     target="_blank"
     :to="path"
     rel="nofollow"
-    :title="$gettext('Show the full content of all results on a single page (to read or print)')"
+    :title="$gettext('Show the full content of the listed results, one after the other (to read or print)')"
   >
     <button v-if="display === 'button'" class="button is-primary is-size-7-mobile">
       <fa-icon icon="book-open"></fa-icon>
