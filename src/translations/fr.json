@@ -343,6 +343,7 @@
     "Hazard potential": "Potentiel de danger",
     "Hazard potential:": "Potentiel de danger :",
     "Heading": "Titre",
+    "Help": "Aide",
     "Help research activities to define new prevention means": "Aider la recherche scientifique à dégager des pistes de prévention",
     "Help us better target routes that may interest you by adding one or more filters.": "Aidez-nous à mieux cibler les itinéraires pouvant vous intéresser en ajoutant un à plusieurs filtres.",
     "Here is the last journey of the day :": "Le dernier trajet de la journée est le suivant :",
@@ -504,6 +505,7 @@
     "Modified the": {
       "modification date": "Modifié le"
     },
+    "More": "Plus",
     "More info": "Plus d'information",
     "More info on meteoblue.com": "Plus d'infos sur meteoblue.com",
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Plus d'itinéraires sont disponibles. Vous pouvez déplacer la carte, rentrer un nom ou choisir une activité pour les afficher.",
@@ -686,7 +688,10 @@
     "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC est conçu dans un esprit de bienveillance et de partage, merci de l’encourager",
     "SERAC: accidents and incidents in the mountains": "SERAC : accidents et incidents en montagne",
     "Save": "Enregistrer",
-    "Search": "Rechercher",
+    "Search": {
+      "$$noContext": "Rechercher",
+      "navigation": "Rechercher"
+    },
     "Search ...": "Rechercher…",
     "Search a document to associate...": "Rechercher un document à associer",
     "See lines details": "Voir le détail des lignes",
@@ -831,7 +836,6 @@
     "Try again later or": "Réessayez plus tard ou ",
     "Types and styles": "Types et styles",
     "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "Type d'assurage et de protection, vérifications entre grimpeurs, tests de stabilité du manteau neigeux, test des DVA, etc.",
-    "Unable to get your current location.": "Impossible de récupérer votre position.",
     "Unblock account": "Débloquer cet utilisateur",
     "Unfold section": "Déplier la section",
     "Unformatted text": "Texte brut",
