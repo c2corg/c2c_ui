@@ -104,7 +104,8 @@ export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { dr
 
   const service = () => c2c[documentType.value] as DocumentService;
 
-  function getCurrentPath() {
+  // without the query nor the hash
+  function getBasePath() {
     let title = document.value ? globals.$documentUtils.getDocumentTitle(document.value, lang.value) : '';
 
     // transform any unicode into its ascii value
@@ -113,13 +114,11 @@ export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { dr
     // and clean
     title = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-    let path = `/${documentType.value}s/${documentId.value}/${lang.value}/${title}`;
+    return `/${documentType.value}s/${documentId.value}/${lang.value}/${title}`;
+  }
 
-    if (route.hash) {
-      path += route.hash;
-    }
-
-    return path;
+  function getCurrentPath() {
+    return getBasePath() + route.hash;
   }
 
   function handleRedirection() {
@@ -154,7 +153,8 @@ export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { dr
 
     const currentPath = getCurrentPath();
     if (route.path !== currentPath) {
-      router.replace(currentPath);
+      // the query stays: it holds the settings of the map
+      router.replace({ path: getBasePath(), query: route.query, hash: route.hash });
     }
   }
 

@@ -33,6 +33,7 @@
             !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
           "
           :show-pin-to-top-button="true"
+          sync-url
           :show3d="show3d"
           @has-protection-area="$emit('has-protection-area')"
           @pin-to-top-clicked="togglePinToSide(true)"
@@ -61,13 +62,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 import ElevationProfile from './ElevationProfile.vue';
 import MapLinks from './MapLinks.vue';
 
 import { documentOverlayFilters } from '@/components/map/density-overlays';
+import { parseMapUrl } from '@/components/map/map-url-state';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import bus from '@/js/event-bus';
 import { writeGpx, writeKml, type ExportedFeature } from '@/js/geo/formats';
@@ -79,6 +81,7 @@ const props = defineProps({ ...documentProperty });
 defineEmits(['has-protection-area']);
 
 const route = useRoute();
+const router = useRouter();
 
 // the 3D view for routes, outings and waypoints: around their waypoints (an outing: those of its routes) or their point
 // when they have no track
@@ -181,7 +184,30 @@ function getDownloadedFileName(name: string, extension: string) {
   return filename.replace(/[/\\?%*:|"<>]/g, ' ').replace(/\s+/g, '_') + extension;
 }
 
+// the pinned side in the URL (the other settings of the map are written by the map): a reload or a shared link keeps it
+watch(pinnedSide, (side) => {
+  const query = { ...route.query };
+  if (side) query.pin = side;
+  else delete query.pin;
+  if (query.pin !== route.query.pin) router.replace({ query });
+});
+
+// pins the map on the side asked for by the URL; a side that is not available here (the right one on a phone) gives
+// the first one
+function pinFromUrl() {
+  const { pin } = parseMapUrl(route.query);
+  if (!pin) return;
+  // 0: unpinned, then the two sides, in the order of this screen
+  for (let i = 0; i < 2; i++) {
+    togglePinToSide(true);
+    if (pinnedSide.value === pin) return;
+  }
+  // the second side does not exist here (a phone): the first one
+  if (pinnedMode.value === 0) togglePinToSide(true);
+}
+
 onMounted(() => {
+  pinFromUrl();
   bus.on('elevation_profile', onElevationProfile);
   window.addEventListener('resize', resizePin);
 });

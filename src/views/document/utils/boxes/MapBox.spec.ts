@@ -94,4 +94,68 @@ describe('MapBox', () => {
     expect(kml).toContain('<kml');
     expect(kml).toMatch(/6\.557\d*,45\.810\d*/);
   });
+
+  describe('pinned map in the url', () => {
+    const mountAt = async (path: string, width: number) => {
+      vi.stubGlobal('innerWidth', width);
+      vi.stubGlobal('innerHeight', 900);
+      const router = createRouter({
+        history: createMemoryHistory(),
+        routes: [{ path: '/:p(.*)*', component: MapBox }],
+      });
+      await router.push(path);
+      const wrapper = mount(MapBox, {
+        props: { document: { type: 'r', document_id: 1, areas: [] } },
+        global: {
+          plugins: [router],
+          stubs: {
+            DocumentLink: true,
+            IconArea: true,
+            MapView: { template: '<div />', methods: { fitMapToDocuments() {} } },
+            MapLinks: true,
+            ElevationProfile: true,
+          },
+          config: {
+            globalProperties: {
+              $gettext: (value: string) => value,
+              $documentUtils: { getDocumentType: () => 'route' },
+              $screen: { isMobile: false },
+            } as never,
+          },
+        },
+      });
+      await flushPromises();
+      return { router, wrapper };
+    };
+
+    afterEach(() => {
+      vi.unstubAllGlobals();
+      document.body.style.paddingTop = '';
+      document.body.style.paddingRight = '';
+    });
+
+    it('pins the map on the side of the url', async () => {
+      const { wrapper } = await mountAt('/routes/1/fr?pin=right', 1400);
+
+      expect(wrapper.find('.map-container').classes()).toContain('pinned-to-right');
+      wrapper.unmount();
+    });
+
+    it('pins on the first side when the one of the url does not exist on a phone', async () => {
+      const { wrapper, router } = await mountAt('/routes/1/fr?pin=right', 600);
+
+      expect(wrapper.find('.map-container').classes()).toContain('pinned-to-top');
+      expect(router.currentRoute.value.query.pin).toBe('top');
+      wrapper.unmount();
+    });
+
+    it('does not write the url when it unpins the map on leaving the page', async () => {
+      const { wrapper, router } = await mountAt('/routes/1/fr?pin=top&overlays=outing', 600);
+      const replace = vi.spyOn(router, 'replace');
+      wrapper.unmount();
+      await flushPromises();
+
+      expect(replace).not.toHaveBeenCalled();
+    });
+  });
 });
