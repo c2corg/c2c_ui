@@ -189,7 +189,7 @@ watch(pinnedSide, (side) => {
   const query = { ...route.query };
   if (side) query.pin = side;
   else delete query.pin;
-  if (query.pin !== route.query.pin) router.replace({ query });
+  if (query.pin !== route.query.pin) router.replace({ query, hash: route.hash });
 });
 
 // pins the map on the side asked for by the URL; a side that is not available here (the right one on a phone) gives
@@ -202,7 +202,7 @@ function pinFromUrl() {
     togglePinToSide(true);
     if (pinnedSide.value === pin) return;
   }
-  // the second side does not exist here (a phone): the first one
+  // the second side does not exist here (a phone): the first one this screen offers
   if (pinnedMode.value === 0) togglePinToSide(true);
 }
 

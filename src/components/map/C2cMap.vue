@@ -1876,7 +1876,7 @@ function sendSettingsToUrl() {
     },
     baseLayers[0].title
   );
-  if (JSON.stringify(query) !== JSON.stringify(route.query)) router.replace({ query });
+  if (JSON.stringify(query) !== JSON.stringify(route.query)) router.replace({ query, hash: route.hash });
 }
 watch(
   [base, slopes, protectionAreasVisible, () => DENSITY_TYPES.map((type) => densityEnabled[type])],

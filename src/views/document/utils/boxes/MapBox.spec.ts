@@ -149,6 +149,16 @@ describe('MapBox', () => {
       wrapper.unmount();
     });
 
+    it('keeps the hash when the user pins the map', async () => {
+      const { wrapper, router } = await mountAt('/routes/1/fr#description', 1400);
+      wrapper.findComponent({ ref: 'olMap' }).vm.$emit('pin-to-top-clicked');
+      await flushPromises();
+
+      expect(router.currentRoute.value.query.pin).toBe('right');
+      expect(router.currentRoute.value.hash).toBe('#description');
+      wrapper.unmount();
+    });
+
     it('does not write the url when it unpins the map on leaving the page', async () => {
       const { wrapper, router } = await mountAt('/routes/1/fr?pin=top&overlays=outing', 600);
       const replace = vi.spyOn(router, 'replace');

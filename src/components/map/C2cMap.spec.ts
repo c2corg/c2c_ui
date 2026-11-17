@@ -265,6 +265,16 @@ describe('C2cMap', () => {
       wrapper.unmount();
     });
 
+    it('keeps the hash of the page', async () => {
+      const { wrapper } = await mountMap({ syncUrl: true }, '/routes/1/fr#description');
+      const [baseLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+
+      await baseLayers.findAll(':scope > *')[1].trigger('click');
+      await flushPromises();
+      expect((wrapper.vm as unknown as { $route: { hash: string } }).$route.hash).toBe('#description');
+      wrapper.unmount();
+    });
+
     it('does nothing to the URL of a page that did not ask for it (a listing: its query is its filters)', async () => {
       const { wrapper } = await mountMap({}, '/routes?act=skitouring&layer=es');
       const [baseLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
