@@ -222,7 +222,10 @@
         <strong>{{ $gettext('Tracks here') }}</strong>
         <button type="button" class="delete" :aria-label="$gettext('Close')" @click="closeTrackPanel" />
       </header>
-      <p v-if="trackPanelTruncated" class="track-panel-note">{{ $gettext('Only the most recent ones are listed') }}</p>
+      <p v-if="trackPanelTruncated" class="track-panel-note">
+        {{ $gettext('Only the most recent ones are listed') }}
+        <template v-if="trackPanelCount">({{ trackPanelCount.count }}{{ trackPanelCount.capped ? '+' : '' }})</template>
+      </p>
       <ul>
         <li
           v-for="entry of trackPanelEntries"
@@ -1046,6 +1049,8 @@ function openDocument(document: C2cDocument, newTab: boolean) {
 
 function onClick(event: MapMouseEvent) {
   if (is3d.value) return;
+  // a lookup of the most recent documents, still running, is for an older click
+  recentRequest?.abort();
   const touch = isTouch(event);
   const hits = hitsAt(event.point, touch ? TOUCH_HIT_TOLERANCE : HIT_TOLERANCE, [
     ...hoverableLayerIds,
@@ -1081,10 +1086,11 @@ function onClick(event: MapMouseEvent) {
   } else if (hit?.layer.id === 'protection-fill') {
     biodivData.value = JSON.parse(hit.properties.biodivData as string);
     biodivWindowEl.value!.show();
-  } else if (!hit && showDensityOverlays.value && listRecentTracks(event, touch)) {
+  } else if (!hit) {
     // a click on the density of an overlay: the most recent documents there
-    return;
-  } else if (!hit && protectionAreasVisible.value && props.showProtectionAreas) {
+    // (the identification of the protection areas goes on: they may be at the same place)
+    if (showDensityOverlays.value) listRecentTracks(event, touch);
+    if (!protectionAreasVisible.value || !props.showProtectionAreas) return;
     const extent = getExtent();
     if (!intersects(extent, swissExtent)) return;
     const canvas = map!.getContainer();
@@ -1134,6 +1140,8 @@ const tracks = new Map<string, TrackEntry>();
 // the tracks under a click or a tap, to choose from; only the most recent ones (a place too busy to draw its tracks)
 const trackPanelEntries = shallowRef<TrackEntry[]>([]);
 const trackPanelTruncated = ref(false);
+// how many documents there are in all, when the API knows, and whether there are even more
+const trackPanelCount = ref<{ count: number; capped: boolean } | null>(null);
 // false just after a tap opened the panel: the click that follows it would land on the panel
 const trackPanelReady = ref(true);
 // the track under the pointer, and how many others are there
@@ -1291,6 +1299,7 @@ let recentRequest: AbortController | undefined;
 function openTrackPanel(entries: TrackEntry[], touch: boolean) {
   trackPanelEntries.value = entries;
   trackPanelTruncated.value = false;
+  trackPanelCount.value = null;
   hideTrackTooltip();
   // a touch screen sends a click after the tap, where the panel now is: it must not open the first track
   clearTimeout(trackPanelTimeout);
@@ -1302,6 +1311,7 @@ function closeTrackPanel() {
   recentRequest?.abort();
   trackPanelEntries.value = [];
   trackPanelTruncated.value = false;
+  trackPanelCount.value = null;
   highlightTrack(null);
 }
 
@@ -1335,7 +1345,12 @@ function listRecentTracks(event: MapMouseEvent, touch: boolean) {
         { ...densityFilters(type), bbox, pl: $language.current, recent: RECENT_COUNT },
         signal
       );
-      return { entries: trackEntries(type, data.documents), truncated: data.truncated };
+      return {
+        entries: trackEntries(type, data.documents),
+        truncated: data.truncated,
+        count: data.count,
+        capped: data.count_capped ?? false,
+      };
     })
   )
     .then((answers) => {
@@ -1346,7 +1361,15 @@ function listRecentTracks(event: MapMouseEvent, touch: boolean) {
         tracksIn(entries.map((entry) => ({ layer: { id: '' }, properties: { key: trackKey(entry) } }))),
         touch
       );
-      trackPanelTruncated.value = answers.some((answer) => answer.truncated);
+      const truncated = answers.filter((answer) => answer.truncated);
+      trackPanelTruncated.value = truncated.length > 0;
+      // the total of the types that have more, if the API knows all of them
+      trackPanelCount.value = truncated.every((answer) => answer.count !== undefined)
+        ? {
+            count: truncated.reduce((sum, answer) => sum + (answer.count ?? 0), 0),
+            capped: truncated.some((answer) => answer.capped),
+          }
+        : null;
     })
     // the overlays are not critical: the click does nothing
     .catch(() => undefined);

@@ -111,6 +111,13 @@ export class FakeMap {
   setLayoutProperty(id: string, name: string, value: unknown) {
     (this.layout[id] ??= {})[name] = value;
   }
+  getLayoutProperty(id: string, name: string) {
+    return this.layout[id]?.[name];
+  }
+  // a pixel is a thousandth of a degree
+  unproject([x, y]: [number, number]) {
+    return { lng: x / 1000, lat: y / 1000 };
+  }
   setPaintProperty(id: string, name: string, value: unknown) {
     (this.paint[id] ??= {})[name] = value;
   }
