@@ -200,6 +200,7 @@ import itinevertService, {
 import navitiaService from '@/js/apis/navitia-service';
 import { itinevertBanners } from '@/js/asset-urls';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import constants from '@/js/constants';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 type Documents = { documents?: C2cDocument[]; total?: number };
@@ -316,9 +317,14 @@ const formQuery = computed(() => {
 });
 
 // filter query based on URL
-const filterQuery = computed(() => {
-  return route.query;
-});
+// the filters of the lists only (parent 'query') are not known to the Itinevert service: they stay out of its requests
+const listOnlyFilters = Object.values(constants.objectDefinitions.route.fields)
+  .filter((field) => field.parent === 'query')
+  .map((field) => field.url);
+
+const filterQuery = computed(() =>
+  Object.fromEntries(Object.entries(route.query).filter(([name]) => !listOnlyFilters.includes(name)))
+);
 
 const coverageDifferent = computed(() => {
   // only check if we are selecting a massif

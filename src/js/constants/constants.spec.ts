@@ -41,6 +41,12 @@ describe('has_track', () => {
     expect(constants.categorizedFieldsDefault.Miscs).toContain('has_track');
   });
 
+  it('has no "no info" choice, and no error in a document', () => {
+    const hasTrack = routeField('has_track');
+    expect(['true', 'false', 'null'].map((url) => hasTrack.urlToValue(url))).toEqual(['yes', 'no', undefined]);
+    expect(hasTrack.getError({ type: 'r' }, {})).toBeNull();
+  });
+
   it('does not come in a new document', () => {
     // buildDocument() gives a value to every field of the document
     const fields = Object.values(constants.objectDefinitions.outing.fields);

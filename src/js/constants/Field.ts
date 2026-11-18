@@ -284,7 +284,8 @@ export default class Field {
         return 'yes';
       } else if (url === 'false' || url === false) {
         return 'no';
-      } else if (url === 'null' || url === null) {
+      } else if ((url === 'null' || url === null) && this.nullable) {
+        // only the fields that can be unknown have this choice
         return 'no info';
       } else {
         return undefined;
@@ -338,6 +339,11 @@ export default class Field {
   }
 
   getError(document: FieldDocument, locale: Record<string, unknown>): FieldError | null {
+    // a filter of the lists: nothing to check in a document
+    if (this.parent === 'query') {
+      return null;
+    }
+
     if (!this.isVisibleFor(document)) {
       return null;
     }
