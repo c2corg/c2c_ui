@@ -11,8 +11,15 @@ import {
 type Diff = DiffPart[];
 type DiffCallback = (oldPart: string | null, newPart: string | null, isIdentical: boolean) => void;
 
-// words, runs of spaces, and single other characters (punctuation, markdown signs)
-const TOKENS = /[\p{L}\p{N}_]+|\s+|[^\p{L}\p{N}_\s]/gu;
+// words (with their combining marks), runs of spaces, and single other characters (punctuation, markdown signs)
+const WORDS = /[\p{L}\p{M}\p{N}_]+/gu;
+const TOKENS = /[\p{L}\p{M}\p{N}_]+|\s+|[^\p{L}\p{M}\p{N}_\s]/gu;
+
+// the UTF-16 code units free to encode tokens: all but the surrogate halves (0xD800 to 0xDFFF), which
+// could be read back in pairs
+const MAX_TOKENS = 0x10000 - 0x800;
+const tokenCode = (n: number) => String.fromCharCode(n < 0xd800 ? n : n + 0x800);
+const tokenIndex = (code: number) => (code < 0xd800 ? code : code - 0x800);
 
 // two old and new lines less similar than this are shown as a deletion and an addition, not as a change
 const MIN_SIMILARITY = 0.5;
@@ -24,7 +31,8 @@ const MIN_CONTAINED_WORDS = 4;
 const MAX_ALIGNMENT_CELLS = 250_000;
 
 // the word by word differences of two lines: diff-match-patch on words encoded as single characters,
-// so that a change shows whole words, then semantic cleanup merges small identical parts into the change
+// so that a change shows whole words, then semantic cleanup merges small identical parts into the change;
+// letter by letter when the two lines have more distinct tokens than characters to encode them
 export const diffWords = function (oldText: string, newText: string): Diff {
   const tokens: string[] = [];
   const codes = new Map<string, string>();
@@ -33,7 +41,7 @@ export const diffWords = function (oldText: string, newText: string): Diff {
       .map((token) => {
         let code = codes.get(token);
         if (code === undefined) {
-          code = String.fromCharCode(tokens.length);
+          code = tokenCode(tokens.length);
           codes.set(token, code);
           tokens.push(token);
         }
@@ -41,10 +49,22 @@ export const diffWords = function (oldText: string, newText: string): Diff {
       })
       .join('');
 
-  const diff = diffMain(encode(oldText), encode(newText), undefined, false);
+  const oldCodes = encode(oldText);
+  const newCodes = encode(newText);
+  if (tokens.length > MAX_TOKENS) {
+    const diff = diffMain(oldText, newText);
+    diffCleanupSemantic(diff);
+    return diff;
+  }
+
+  const diff = diffMain(oldCodes, newCodes, undefined, false);
   diffCleanupSemantic(diff);
   for (const part of diff) {
-    part[1] = Array.from(part[1], (code) => tokens[code.charCodeAt(0)]).join('');
+    let text = '';
+    for (let n = 0; n < part[1].length; n++) {
+      text += tokens[tokenIndex(part[1].charCodeAt(n))];
+    }
+    part[1] = text;
   }
   return diff;
 };
@@ -52,7 +72,7 @@ export const diffWords = function (oldText: string, newText: string): Diff {
 // the words of a line, lowercased, with their counts
 const wordCounts = function (line: string) {
   const counts = new Map<string, number>();
-  for (const word of line.toLowerCase().match(/[\p{L}\p{N}_]+/gu) ?? []) {
+  for (const word of line.toLowerCase().match(WORDS) ?? []) {
     counts.set(word, (counts.get(word) ?? 0) + 1);
   }
   return counts;
@@ -97,13 +117,17 @@ export const alignLines = function (oldLines: string[], newLines: string[]): Lin
   const k = oldLines.length;
   const m = newLines.length;
 
-  if (k === 0 || m === 0 || k * m > MAX_ALIGNMENT_CELLS) {
-    return Array.from({ length: Math.max(k, m) }, (_, i): LinePair => [oldLines[i], newLines[i], true]);
-  }
-
   const oldWords = oldLines.map(wordCounts);
   const newWords = newLines.map(wordCounts);
   const sim = (i: number, j: number) => similarity(oldLines[i], newLines[j], oldWords[i], newWords[j]);
+
+  if (k === 0 || m === 0 || k * m > MAX_ALIGNMENT_CELLS) {
+    return Array.from({ length: Math.max(k, m) }, (_, i): LinePair => [
+      oldLines[i],
+      newLines[i],
+      i < k && i < m && sim(i, i) >= MIN_SIMILARITY,
+    ]);
+  }
 
   // best[i][j]: the highest total similarity pairing the first i old lines with the first j new lines
   const best = Array.from({ length: k + 1 }, () => new Float64Array(m + 1));
@@ -124,14 +148,12 @@ export const alignLines = function (oldLines: string[], newLines: string[]): Lin
   let deleted: string[] = [];
   let added: string[] = [];
   const flush = () => {
-    deleted.reverse();
-    added.reverse();
-    const rows = Array.from({ length: Math.max(deleted.length, added.length) }, (_, n): LinePair => [
-      deleted[n],
-      added[n],
-      false,
-    ]);
-    pairs.push(...rows.reverse());
+    // deleted and added are in reverse order, as pairs: their last lines go side by side first
+    const d = deleted.length;
+    const a = added.length;
+    for (let n = Math.max(d, a) - 1; n >= 0; n--) {
+      pairs.push([deleted[d - 1 - n], added[a - 1 - n], false]);
+    }
     deleted = [];
     added = [];
   };
@@ -255,6 +277,15 @@ export class Row {
       // two different row on the same location, let's compute a precise diff
       const diff = diffWords(oldPart, newPart);
       computeDiff(diff, this.addItem.bind(this));
+
+      // a blank line changed into spaces, or the reverse, gives no part on one side: show it as an empty
+      // line, not as an absent one
+      if (this.oldPart.length === 0) {
+        this.oldPart.push(new Item('', true));
+      }
+      if (this.newPart.length === 0) {
+        this.newPart.push(new Item('', true));
+      }
     }
   }
 

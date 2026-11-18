@@ -4,7 +4,7 @@ import { h } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
 
 import DiffView from './DiffView.vue';
-import { alignLines, diffBlocks, hasChanged } from './utils/diff-rows';
+import { alignLines, diffBlocks, diffWords, hasChanged } from './utils/diff-rows';
 
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
@@ -167,10 +167,41 @@ describe('diff rows', () => {
     ]);
   });
 
+  it('keeps combining marks in their word', () => {
+    expect(changedRows('un cafe\u0301\n', 'un cafe\u0300\n')).toEqual([['un [cafe\u0301]', 'un [cafe\u0300]']]);
+  });
+
+  it('shows a blank line changed into spaces as a line on both sides', () => {
+    const [row] = diffBlocks('a\n\nz\n', 'a\n \nz\n')
+      .flatMap((block) => block.rows)
+      .filter((r) => !r.isIdentical);
+    expect([row.isFakeOld, row.isFakeNew]).toEqual([false, false]);
+  });
+
   it('shows unrelated deleted and added lines whole, side by side', () => {
     expect(changedRows('a\nAccès par le parking du col.\nz\n', 'a\nDescente en rappel sur la face nord.\nz\n')).toEqual(
       [['[Accès par le parking du col.]', '[Descente en rappel sur la face nord.]']]
     );
+  });
+});
+
+describe('diffWords', () => {
+  // the old and new texts a diff gives back
+  const texts = (diff: [number, string][]) => [
+    diff
+      .filter(([mode]) => mode <= 0)
+      .map(([, text]) => text)
+      .join(''),
+    diff
+      .filter(([mode]) => mode >= 0)
+      .map(([, text]) => text)
+      .join(''),
+  ];
+
+  it.each([60_000, 70_000])('gives back both texts with %i distinct words', (count) => {
+    const oldText = Array.from({ length: count }, (_, n) => `w${n}`).join(' ');
+    const newText = oldText + ' fin';
+    expect(texts(diffWords(oldText, newText))).toEqual([oldText, newText]);
   });
 });
 
@@ -187,6 +218,21 @@ describe('alignLines', () => {
       [undefined, 'à voir', false],
       ['quatre cinq six', 'quatre cinq six sept', true],
     ]);
+  });
+
+  it('pairs lines in order above the size limit, word by word only when similar', () => {
+    const pairs = alignLines(Array(501).fill('alpha beta common tail'), Array(500).fill('red green common end'));
+    expect(pairs).toHaveLength(501);
+    expect(pairs[0]).toEqual(['alpha beta common tail', 'red green common end', false]);
+    expect(pairs[500]).toEqual(['alpha beta common tail', undefined, false]);
+  });
+
+  it('puts many unpaired lines side by side', () => {
+    const added = Array.from({ length: 200_000 }, (_, n) => `ligne ${n}`);
+    const pairs = alignLines(['autre chose'], added);
+    expect(pairs).toHaveLength(200_000);
+    expect(pairs[0]).toEqual(['autre chose', 'ligne 0', false]);
+    expect(pairs[199_999]).toEqual([undefined, 'ligne 199999', false]);
   });
 
   it('pairs blank lines and lines without words only when equal', () => {
