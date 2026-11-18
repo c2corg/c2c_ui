@@ -23,6 +23,7 @@ export const PIN_SIDES = ['top', 'right'];
 const BASE_IDS: Record<string, string> = {
   OpenTopoMap: 'otm',
   'ESRI World Imagery': 'esri',
+  'Public transport': 'transport',
   'IGN maps': 'ign',
   'IGN ortho': 'ign-ortho',
   SwissTopo: 'swiss',
