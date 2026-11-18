@@ -41,7 +41,7 @@ describe('MobileMenu', () => {
     await flushPromises();
 
     expect(wrapper.find('#mobile-menu').exists()).toBe(true);
-    expect(wrapper.findAll('li').length).toBeGreaterThan(5);
+    expect(wrapper.findComponent({ name: 'MenuEntries' }).props('items').length).toBeGreaterThan(5);
     expect(wrapper.findComponent({ name: 'MenuFooter' }).exists()).toBe(true);
   });
 

@@ -4,38 +4,24 @@
     <a :href="'/'" class="menu-brand has-text-centered" aria-label="Camptocamp.org">
       <logo-ctc />
     </a>
-    <template v-for="item of menuItems" :key="item.key">
-      <template v-if="!item.tallOnly || isTall">
-        <!-- a plain link when asked, so that the page is refreshed if you are already on it (Itinevert) -->
-        <component
-          :is="item.reload ? 'a' : 'router-link'"
-          v-bind="item.reload ? { href: $router.resolve(item.to).href } : { to: item.to }"
-        >
-          <span
-            class="menu-item is-ellipsed"
-            :class="{ 'router-link-active': item.match.includes(String($route.name)) }"
-          >
-            <component :is="item.iconComponent" v-if="item.iconComponent" fixed-width />
-            <fa-icon v-else :icon="item.icon!" fixed-width />
-            <span class="menu-item-text"> {{ item.label }} </span>
-          </span>
-        </component>
-      </template>
-    </template>
+    <menu-entries :items="visibleItems" />
 
     <menu-footer class="menu-footer" />
   </aside>
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, ref } from 'vue';
+import { computed, onBeforeUnmount, ref } from 'vue';
 
 import LogoCtc from '@/components/app/LogoCtc.vue';
+import MenuEntries from '@/components/app/MenuEntries.vue';
 import MenuFooter from '@/components/app/MenuFooter.vue';
 import { useMainMenuItems } from '@/js/composables/main-menu';
 
 const menuItems = useMainMenuItems();
 const isTall = ref(false);
+// Yeti only when the window is tall enough
+const visibleItems = computed(() => menuItems.value.filter((item) => !item.tallOnly || isTall.value));
 
 function onHeightBreakpointChange() {
   isTall.value = mediaQueryList.matches;
@@ -79,28 +65,6 @@ aside {
   }
 }
 
-.menu-item {
-  display: block;
-  padding: 6px 10px;
-  border-left: 5px solid var(--c2c-white);
-  color: var(--c2c-text);
-}
-
-.menu-item:hover {
-  background: var(--c2c-light);
-  border-left: 5px solid var(--c2c-color-base-c2c-lighter);
-}
-
-.menu-item-text {
-  margin-left: 0;
-  font-size: 1.1rem;
-}
-
-.menu-item.router-link-active {
-  border-left: 5px solid var(--c2c-color-base-c2c);
-  font-weight: bold;
-}
-
 .menu-footer {
   position: absolute;
   width: 100%;
@@ -116,14 +80,5 @@ aside {
 /* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark menu */
 html[data-theme='dark'] aside {
   background: var(--app-dark-field);
-}
-
-/* the white left border of the items, the color of the dark menu (their text follows the tokens, App.vue) */
-html[data-theme='dark'] .menu-item {
-  border-left-color: var(--app-dark-field);
-}
-
-html[data-theme='dark'] .menu-item:hover {
-  background: var(--app-dark-surface);
 }
 </style>

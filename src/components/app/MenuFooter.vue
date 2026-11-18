@@ -1,5 +1,5 @@
 <template>
-  <div class="menu-footer is-size-7">
+  <div class="menu-footer" :class="touch ? 'is-size-6 is-touch' : 'is-size-7'">
     <div class="has-text-centered menu-links">
       <router-link :to="{ name: 'article', params: { id: 106727 } }" v-translate>contact</router-link>
       <span> &bull; </span>
@@ -42,6 +42,11 @@ import bus from '@/js/event-bus';
 
 defineOptions({ name: 'MenuFooter' });
 
+defineProps<{
+  // links and icons big enough for a finger
+  touch?: boolean;
+}>();
+
 // the legal links and the social networks of the site, at the end of the side menu and of the menu page of the phone layout
 function showGdpr() {
   bus.emit('show-gdpr');
@@ -74,6 +79,24 @@ function showGdpr() {
   color: hsl(348, 100%, 71%);
   &:hover {
     color: hsl(348, 100%, 51%);
+  }
+}
+
+/* for a finger: each link is a target of at least 44 px */
+.is-touch {
+  .menu-links a {
+    display: inline-block;
+    min-height: 44px;
+    padding: 12px 10px;
+    line-height: 20px;
+  }
+
+  .menu-socials a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    min-height: 48px;
   }
 }
 </style>
