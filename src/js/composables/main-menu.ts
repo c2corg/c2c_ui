@@ -1,0 +1,103 @@
+import { computed, type Component } from 'vue';
+import type { RouteLocationRaw } from 'vue-router';
+
+import { useGlobalProperties } from './global-properties';
+
+import IconForum from '@/components/generics/icons/IconForum.vue';
+import IconItinevert from '@/components/generics/icons/IconItinevert.vue';
+import IconTopoguide from '@/components/generics/icons/IconTopoguide.vue';
+import IconYeti from '@/components/generics/icons/IconYeti.vue';
+import IconArticle from '@/components/generics/icons/document/IconArticle.vue';
+import IconOuting from '@/components/generics/icons/document/IconOuting.vue';
+import IconXreport from '@/components/generics/icons/document/IconXreport.vue';
+import { uppercaseFirstLetter } from '@/js/vue-plugins/filters';
+
+export interface MainMenuItem {
+  key: string;
+  label: string;
+  to: RouteLocationRaw;
+  // the routes for which the entry is the current one
+  match: string[];
+  // an icon component, or the name of a font-awesome icon
+  iconComponent?: Component;
+  icon?: string;
+  // the sidebar only shows it when the window is tall enough
+  tallOnly?: boolean;
+  // a plain link, so that the page is refreshed when already on it
+  reload?: boolean;
+}
+
+/** The entries of the main menu: the side menu of the site, and the menu of the phone layout (bottom bar). */
+export function useMainMenuItems() {
+  const { $gettext } = useGlobalProperties();
+  const label = uppercaseFirstLetter;
+
+  return computed<MainMenuItem[]>(() => [
+    {
+      key: 'topoguide',
+      label: label($gettext('Topoguide')),
+      to: { name: 'topoguide' },
+      match: ['topoguide', 'routes', 'waypoints', 'areas', 'route', 'waypoint', 'area'],
+      iconComponent: IconTopoguide,
+    },
+    {
+      key: 'outings',
+      label: label($gettext('outings')),
+      to: { name: 'outings', query: { qa: 'draft,great', bbox: '-431698,3115462,1931123,8442818' } },
+      match: ['outings', 'outing'],
+      iconComponent: IconOuting,
+    },
+    {
+      key: 'forum',
+      label: label($gettext('Forum')),
+      to: { name: 'forum' },
+      match: [],
+      iconComponent: IconForum,
+    },
+    {
+      key: 'serac',
+      label: label($gettext('Accident database')),
+      to: { name: 'serac' },
+      match: ['serac', 'xreports', 'xreport'],
+      iconComponent: IconXreport,
+    },
+    {
+      key: 'articles',
+      label: label($gettext('articles')),
+      to: { name: 'articles' },
+      match: ['articles', 'article'],
+      iconComponent: IconArticle,
+    },
+    {
+      key: 'yeti',
+      label: label($gettext('yeti')),
+      to: { name: 'yeti' },
+      match: ['yeti'],
+      iconComponent: IconYeti,
+      tallOnly: true,
+    },
+    {
+      key: 'itinevert',
+      label: label($gettext('Itinevert')),
+      to: { name: 'itinevert' },
+      match: ['itinevert'],
+      iconComponent: IconItinevert,
+      reload: true,
+    },
+    // the pages of the app that its menu opens in the phone layout
+    {
+      key: 'offline',
+      label: $gettext('My topos'),
+      to: { name: 'offline' },
+      match: ['offline'],
+      icon: 'bookmark',
+    },
+    {
+      key: 'app-settings',
+      label: $gettext('Settings'),
+      to: { name: 'app-settings' },
+      match: ['app-settings'],
+      icon: 'palette',
+    },
+  ]);
+}

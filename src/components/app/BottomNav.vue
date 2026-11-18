@@ -4,7 +4,8 @@
       <li v-for="tab of tabs" :key="tab.key" class="bottom-nav-item">
         <router-link :to="tab.to" class="bottom-nav-link" :class="{ 'is-active': isActive(tab) }">
           <span class="bottom-nav-icon-wrap">
-            <fa-icon :icon="tab.icon" class="bottom-nav-icon" />
+            <component :is="tab.iconComponent" v-if="tab.iconComponent" class="bottom-nav-icon" />
+            <fa-icon v-else :icon="tab.icon!" class="bottom-nav-icon" />
             <span v-if="tab.badge" class="bottom-nav-badge" :aria-label="tab.badgeLabel">
               {{ tab.badge > 9 ? '9+' : tab.badge }}
             </span>
@@ -17,9 +18,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, type Component } from 'vue';
 import { type RouteLocationRaw, useRoute, useRouter } from 'vue-router';
 
+import IconForum from '@/components/generics/icons/IconForum.vue';
+import IconTopoguide from '@/components/generics/icons/IconTopoguide.vue';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useOutingQueueStore } from '@/stores/outing-queue';
 
@@ -28,7 +31,8 @@ defineOptions({ name: 'BottomNav' });
 interface Tab {
   key: string;
   label: string;
-  icon: string;
+  icon?: string;
+  iconComponent?: Component;
   to: RouteLocationRaw;
   // the routes for which the tab is the current one
   match: string[];
@@ -45,19 +49,19 @@ const queue = useOutingQueueStore();
 const tabs = computed<Tab[]>(() =>
   [
     {
-      key: 'search',
-      label: $gettext('Search', 'navigation'),
-      icon: 'magnifying-glass',
-      to: { name: 'topoguide' },
-      match: ['topoguide', 'routes', 'waypoints', 'areas', 'maps', 'images'],
-    },
-    {
       // the activity feed of the home page: latest outings, topo edits and forum posts
-      key: 'recent',
-      label: $gettext('Recent'),
-      icon: 'clock',
+      key: 'home',
+      label: $gettext('Home'),
+      icon: 'home',
       to: { name: 'home' },
       match: ['home'],
+    },
+    {
+      key: 'topoguide',
+      label: $gettext('Topoguide'),
+      iconComponent: IconTopoguide,
+      to: { name: 'topoguide' },
+      match: ['topoguide', 'routes', 'waypoints', 'areas', 'maps', 'images', 'route', 'waypoint', 'area'],
     },
     {
       // the documents saved on the device
@@ -70,18 +74,37 @@ const tabs = computed<Tab[]>(() =>
       badgeLabel: $gettext('Outings waiting for you to publish them:') + ' ' + queue.pending.length,
     },
     {
-      key: 'me',
-      label: $gettext('Me'),
-      icon: 'user',
-      to: { name: 'me' },
-      match: ['me', 'account', 'auth', 'auth-sso', 'preferences', 'following', 'trackers', 'app-settings'],
+      key: 'forum',
+      label: $gettext('Forum'),
+      iconComponent: IconForum,
+      to: { name: 'forum' },
+      match: [],
     },
     {
-      key: 'more',
-      label: $gettext('More'),
+      // the other pages: the entries of the side menu of the site
+      key: 'menu',
+      label: $gettext('Menu'),
       icon: 'bars',
       to: { name: 'more' },
-      match: ['more', 'articles', 'xreports', 'yeti', 'serac', 'itinevert', 'app-guide'],
+      match: [
+        'more',
+        'serac',
+        'xreports',
+        'xreport',
+        'articles',
+        'article',
+        'yeti',
+        'itinevert',
+        'app-settings',
+        'app-guide',
+        'me',
+        'account',
+        'auth',
+        'auth-sso',
+        'preferences',
+        'following',
+        'trackers',
+      ],
     },
   ].filter((tab) => router.hasRoute((tab.to as { name: string }).name))
 );
