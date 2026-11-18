@@ -225,7 +225,12 @@ describe('C2cMap', () => {
 
   describe('a click on the density of an overlay', () => {
     const outingLine = line([6.8, 45.9], [6.81, 45.91]);
-    const recentOuting = (title: string) => ({ document_id: 1, type: 'o', title, geometry: { geom_detail: outingLine } });
+    const recentOuting = (title: string) => ({
+      document_id: 1,
+      type: 'o',
+      title,
+      geometry: { geom_detail: outingLine },
+    });
     const mockLookups = (recent: (calls: number) => unknown) => {
       let calls = 0;
       vi.spyOn(c2c, 'getOutingsTracks').mockImplementation(((params: Record<string, unknown>) => {
@@ -255,7 +260,9 @@ describe('C2cMap', () => {
 
     it('lists the most recent documents, and says how many there are', async () => {
       mockLookups(() =>
-        Promise.resolve({ data: { documents: [recentOuting('Recent hike')], truncated: true, count: 412, count_capped: false } })
+        Promise.resolve({
+          data: { documents: [recentOuting('Recent hike')], truncated: true, count: 412, count_capped: false },
+        })
       );
       const { wrapper, map } = await showDensity();
 
@@ -316,7 +323,9 @@ describe('C2cMap', () => {
 
     it('goes on to identify the protection areas under the click', async () => {
       mockLookups(() => Promise.resolve({ data: { documents: [recentOuting('Recent hike')], truncated: true } }));
-      const identify = vi.mocked(respecterCestProtegerService.identify).mockResolvedValue({ data: { results: [] } } as never);
+      const identify = vi
+        .mocked(respecterCestProtegerService.identify)
+        .mockResolvedValue({ data: { results: [] } } as never);
       const { wrapper, map } = await showDensity({ showProtectionAreas: true });
 
       clickAt(map);
