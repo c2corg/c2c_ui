@@ -4,13 +4,20 @@
     <a :href="'/'" class="menu-brand has-text-centered" aria-label="Camptocamp.org">
       <logo-ctc />
     </a>
+    <!-- the waypoints, on the map with the density of the outings (the "Outings" overlay) -->
+    <router-link :to="{ name: 'waypoints', query: { overlays: 'outing,route' } }">
+      <span class="menu-item is-ellipsed" :class="{ 'router-link-active': isMapActive }">
+        <fa-icon icon="map" fixed-width />
+        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('map')) }} </span>
+      </span>
+    </router-link>
     <router-link :to="{ name: 'topoguide' }">
       <span
         class="menu-item is-ellipsed"
         :class="{
-          'router-link-active': ['topoguide', 'routes', 'waypoints', 'areas', 'route', 'waypoint', 'area'].includes(
-            String($route.name)
-          ),
+          'router-link-active':
+            !isMapActive &&
+            ['topoguide', 'routes', 'waypoints', 'areas', 'route', 'waypoint', 'area'].includes(String($route.name)),
         }"
       >
         <icon-topoguide fixed-width />
@@ -124,13 +131,17 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, ref } from 'vue';
+import { computed, onBeforeUnmount, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 import LogoCtc from '@/components/app/LogoCtc.vue';
 import IconYeti from '@/components/generics/icons/IconYeti.vue';
 import bus from '@/js/event-bus';
 
+const route = useRoute();
 const isTall = ref(false);
+// the waypoints opened from the "Map" link, with an overlay of the map
+const isMapActive = computed(() => route.name === 'waypoints' && !!route.query.overlays);
 
 function showGdpr() {
   bus.emit('show-gdpr');

@@ -453,6 +453,12 @@ const props = defineProps({
     type: Object as PropType<DensityFilters>,
     default: null,
   },
+  // the "Tracks" and "Routes" overlays the page turns on: when the map opens (unless its synced URL says otherwise), and
+  // whenever they change. The user can still turn them off.
+  overlays: {
+    type: Array as PropType<DensityType[]>,
+    default: null,
+  },
   biodivSportsActivities: {
     type: Array as PropType<string[] | null>,
     default: null,
@@ -1151,9 +1157,10 @@ type TrackEntry = { document: DensityTrack; type: DensityType; geometry: Geometr
 // the overlays are on every map, except when comparing two versions of a document
 const showDensityOverlays = computed(() => tracksOverlayEnabled && !props.oldDocument && !props.newDocument);
 // off by default: they are an opt-in addition, not a change to the look of the map
+const initialOverlays = urlState.overlays ?? props.overlays;
 const densityEnabled = reactive<Record<DensityType, boolean>>({
-  outing: showDensityOverlays.value && !!urlState.overlays?.includes('outing'),
-  route: showDensityOverlays.value && !!urlState.overlays?.includes('route'),
+  outing: showDensityOverlays.value && !!initialOverlays?.includes('outing'),
+  route: showDensityOverlays.value && !!initialOverlays?.includes('route'),
 });
 // set when the API answers that the overlays are turned off: they are no longer offered
 const densityUnavailable = ref(false);
@@ -1924,6 +1931,15 @@ watch(
 watch(
   () => JSON.stringify(props.routesFilters),
   () => updateDensityOverlay('route')
+);
+
+watch(
+  () => JSON.stringify(props.overlays),
+  () => {
+    for (const type of props.overlays ?? []) {
+      if (showDensityOverlays.value && !densityUnavailable.value && !densityEnabled[type]) toggleDensityOverlay(type);
+    }
+  }
 );
 
 watch(

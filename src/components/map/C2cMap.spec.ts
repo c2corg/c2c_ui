@@ -199,6 +199,28 @@ describe('C2cMap', () => {
     bus.emit('elevation_profile', { action: 'cursor_move', coord: fromLonLat([6.8, 45.9]) });
   });
 
+  it('turns on the overlays the page asks for: when it opens, and when they change', async () => {
+    const density = { data: { buckets: [{ x: 750000, y: 5760000, count: 3 }] } } as never;
+    const outingsHeatmap = vi.spyOn(c2c, 'getOutingsHeatmap').mockResolvedValue(density);
+    const routesHeatmap = vi.spyOn(c2c, 'getRoutesHeatmap').mockResolvedValue(density);
+    const { wrapper, map } = await mountMap({ overlays: ['outing', 'route'] });
+    expect(outingsHeatmap).toHaveBeenCalledTimes(1);
+    expect(routesHeatmap).toHaveBeenCalledTimes(1);
+    expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+    expect(map.layout['heatmap-route'].visibility).toBe('visible');
+
+    // turned off by the user, then asked for again (the "Map" link clicked again)
+    const outings = wrapper.findAll('.layer-button').find((button) => button.text() === 'Outings')!;
+    await outings.trigger('click');
+    expect(map.layout['heatmap-outing'].visibility).toBe('none');
+    await wrapper.setProps({ overlays: null });
+    await wrapper.setProps({ overlays: ['outing', 'route'] });
+    await flushPromises();
+    expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+    expect(map.layout['heatmap-route'].visibility).toBe('visible');
+    wrapper.unmount();
+  });
+
   it('shows the density of the Outings overlay, and turns the overlays off when the API does (503)', async () => {
     const heatmap = vi
       .spyOn(c2c, 'getOutingsHeatmap')

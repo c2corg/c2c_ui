@@ -142,6 +142,7 @@
           :highlighted-document="highlightedDocument"
           :tracks-filters="overlayFilters.outing"
           :routes-filters="overlayFilters.route"
+          :overlays="mapOverlays"
           @highlight-document="highlightedDocument = $event"
           show-filter-control
           show-center-on-geolocation
@@ -167,6 +168,7 @@ import QueryItems from './utils/QueryItems.vue';
 import { normalizedPageQuery } from './utils/page-query';
 
 import { searchOverlayFilters } from '@/components/map/density-overlays';
+import { MAP_URL_KEYS, parseMapUrl } from '@/components/map/map-url-state';
 import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
@@ -230,8 +232,18 @@ const queryWithoutOffsetAndSort = computed(() => {
   return result;
 });
 
+// the search: the query without the settings of the map (?overlays=outing, as the "Map" menu link opens it)
+const searchQuery = computed(() => {
+  const result = { ...route.query };
+  for (const key of MAP_URL_KEYS) delete result[key];
+  return result;
+});
+
+// the overlays the URL turns on
+const mapOverlays = computed(() => parseMapUrl(route.query).overlays ?? null);
+
 // the "Tracks" and "Routes" overlays of the map follow the search
-const overlayFilters = computed(() => searchOverlayFilters(documentType.value, route.query));
+const overlayFilters = computed(() => searchOverlayFilters(documentType.value, searchQuery.value));
 
 const documentsShownOnMap = computed(() =>
   filteredWaypoints.value.concat(documents.value ? documents.value.documents : [])
@@ -266,7 +278,7 @@ function load() {
 
   const requested = route.fullPath;
   promise.value = (c2c as unknown as Record<string, DocumentService>)[documentType.value]
-    .getAll(route.query)
+    .getAll(searchQuery.value)
     .then((response) => {
       // past the last page, which happens when the map is moved to a sparser area: show the last page instead
       const lastPageQuery = normalizedPageQuery(route, response.data.total);
