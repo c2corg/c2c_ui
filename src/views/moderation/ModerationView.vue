@@ -22,6 +22,7 @@
       </div>
 
       <deleted-documents v-if="activeTab === 'deleted'" />
+      <account-removals v-else-if="activeTab === 'accounts'" />
     </template>
   </div>
 </template>
@@ -30,6 +31,7 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 
+import AccountRemovals from './AccountRemovals.vue';
 import DeletedDocuments from './DeletedDocuments.vue';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
@@ -42,7 +44,7 @@ const { $gettext } = useGlobalProperties();
 const route = useRoute();
 const { topoguide: isTopoguideModerator, any: canModerate } = useModerationRoles();
 
-// the other tabs are planned: the removal and merge requests of the accounts, the edits to check. The deleted
+// the edits to check are planned. The deleted
 // documents are for the moderators of the topoguide only (the API refuses the others)
 const tabs = computed(() => [
   {
@@ -56,8 +58,9 @@ const tabs = computed(() => [
     name: 'accounts',
     title: $gettext('Accounts'),
     icon: 'users',
-    available: false,
-    unavailable: $gettext('Coming soon'),
+    // the removal requests are for the moderators of both sides
+    available: canModerate.value,
+    unavailable: $gettext('For the moderators'),
   },
   {
     name: 'edits',

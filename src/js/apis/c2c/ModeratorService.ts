@@ -1,4 +1,14 @@
-import { deletedDocumentDetails, deletedDocumentsPage, restoreResult } from './schemas';
+import {
+  accountRemoval,
+  accountRemovalsCount,
+  accountRemovalsPage,
+  deletedDocumentDetails,
+  deletedDocumentsPage,
+  restoreResult,
+  type AccountRemoval,
+  type AccountRemovalReason,
+  type AccountRemovalSide,
+} from './schemas';
 import type { Api, DocumentId } from './types';
 
 export default class ModeratorService {
@@ -48,6 +58,47 @@ export default class ModeratorService {
     // $gettext('The document was deleted: restore it first', 'API message')
     // $gettext('The locale was written again since its deletion', 'API message')
     return this.api.postValidated('/documents/deleted/' + id + '/restore', restoreResult, {});
+  }
+
+  /*
+   * Removal requests of user accounts: anonymization, merge with another account of the user, spam
+   */
+  // open: in progress or validated, the ones still to process
+  getAccountRemovals(status: 'open' | 'done' | 'cancelled', offset = 0, limit = 30) {
+    return this.api.getValidated('/users/removals', accountRemovalsPage, { params: { status, offset, limit } });
+  }
+
+  countAccountRemovals() {
+    return this.api.getValidated('/users/removals/count', accountRemovalsCount);
+  }
+
+  requestAccountRemoval(request: AccountRemovalRequest) {
+    return this.api.postValidated('/users/removals', accountRemoval, request);
+  }
+
+  // the forum discussion, while the request is in progress
+  updateAccountRemoval(id: number, forumUrl: string) {
+    return this.api.put<AccountRemoval>('/users/removals/' + id, { forum_url: forumUrl });
+  }
+
+  validateAccountRemoval(id: number, side: AccountRemovalSide) {
+    return this.api.postValidated(`/users/removals/${id}/validate`, accountRemoval, { side });
+  }
+
+  // a new forum discussion may be given, the same one is kept otherwise
+  unvalidateAccountRemoval(id: number, side: AccountRemovalSide, forumUrl?: string) {
+    return this.api.postValidated(`/users/removals/${id}/unvalidate`, accountRemoval, {
+      side,
+      ...(forumUrl ? { forum_url: forumUrl } : {}),
+    });
+  }
+
+  cancelAccountRemoval(id: number, forumUrl?: string) {
+    return this.api.postValidated(
+      `/users/removals/${id}/cancel`,
+      accountRemoval,
+      forumUrl ? { forum_url: forumUrl } : {}
+    );
   }
 
   /*
@@ -109,3 +160,15 @@ export interface DeletedDocumentsFilters {
   deleted_since?: string;
   deleted_until?: string;
 }
+
+// POST /users/removals: the API finds the forum accounts; an anonymization and a spam go to the closed account
+export type AccountRemovalRequest = {
+  user_id: number;
+  reason: AccountRemovalReason;
+  // when the user asked for it: required for an anonymization, which waits 7 days after it
+  user_request_date?: string;
+  executable_after: string;
+  // the other account of the user, for a merge
+  target_user_id?: number;
+  forum_url?: string;
+};

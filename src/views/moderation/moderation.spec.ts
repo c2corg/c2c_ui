@@ -3,22 +3,59 @@ import { flushPromises, mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createMemoryHistory, createRouter, type Router } from 'vue-router';
 
+import AccountRemovalItem from './AccountRemovalItem.vue';
+import AccountRemovals from './AccountRemovals.vue';
 import DeletedDocumentItem from './DeletedDocumentItem.vue';
 import DeletedDocuments from './DeletedDocuments.vue';
 import ModerationView from './ModerationView.vue';
 import { daysLeft, documentRoute } from './deleted-documents';
 
 import { ApiData } from '@/js/apis/BaseApi';
-import type { DeletedDocument } from '@/js/apis/c2c/schemas';
+import type { AccountRemoval, DeletedDocument } from '@/js/apis/c2c/schemas';
 import { isForumModerator } from '@/stores/forum-role';
 
 const api = vi.hoisted(() => ({
   getDeletedDocuments: vi.fn(),
   getDeletedDocument: vi.fn(),
   restoreDeletedDocument: vi.fn(),
+  getAccountRemovals: vi.fn(),
+  validateAccountRemoval: vi.fn(),
+  unvalidateAccountRemoval: vi.fn(),
+  cancelAccountRemoval: vi.fn(),
+  updateAccountRemoval: vi.fn(),
 }));
 
 vi.mock('@/js/apis/c2c', () => ({ default: { moderator: api } }));
+
+const roles = { topoguide: false, forum: true };
+
+const removal = (id: number, extra: Partial<AccountRemoval> = {}): AccountRemoval => ({
+  id,
+  user_id: 300 + id,
+  forum_id: 400 + id,
+  user_name: 'User ' + id,
+  user_forum_username: 'user' + id,
+  reason: 'anonymization',
+  user_request_date: '2026-11-15',
+  executable_after: '2026-11-22',
+  target_user_id: 811780,
+  target_forum_id: 49513,
+  forum_url: null,
+  created_at: '2026-11-16T09:00:00+00:00',
+  requested_by: { id: 7, name: 'Paul' },
+  topoguide_validated_by: null,
+  topoguide_validated_at: null,
+  forum_validated_by: null,
+  forum_validated_at: null,
+  cancelled_by: null,
+  cancelled_at: null,
+  done_at: null,
+  status: 'in_progress',
+  ready_at: null,
+  history: [{ action: 'create', by: { id: 7, name: 'Paul' }, at: '2026-11-16T09:00:00+00:00' }],
+  can: { validate: ['forum'], unvalidate: [], update: true, cancel: true },
+  ...extra,
+});
 
 const answer = (data: unknown) => new ApiData(Promise.resolve({ data } as never));
 
@@ -116,7 +153,7 @@ describe('ModerationView', () => {
     expect(wrapper.findComponent(DeletedDocuments).exists()).toBe(false);
   });
 
-  it('shows the deleted documents, the other tabs not yet available', async () => {
+  it('shows the deleted documents, the edits not yet available', async () => {
     api.getDeletedDocuments.mockReturnValue(answer({ total: 0, documents: [] }));
     const wrapper = mount(ModerationView, { global: global() });
     await flushPromises();
@@ -127,17 +164,21 @@ describe('ModerationView', () => {
       'Accounts',
       'Edits to check',
     ]);
-    expect(wrapper.findAll('.tabs a.is-disabled')).toHaveLength(2);
+    expect(wrapper.findAll('.tabs a.is-disabled')).toHaveLength(1);
   });
 
-  it('opens to a moderator of the forum only, without the deleted documents', () => {
+  it('opens on the accounts for a moderator of the forum only, without the deleted documents', async () => {
     isForumModerator.value = true;
+    api.getAccountRemovals.mockReturnValue(answer({ total: 0, removals: [], roles }));
     const wrapper = mount(ModerationView, { global: global(false) });
+    await flushPromises();
 
     expect(wrapper.text()).not.toContain('reserved to the moderators');
     expect(wrapper.findComponent(DeletedDocuments).exists()).toBe(false);
+    expect(wrapper.findComponent(AccountRemovals).exists()).toBe(true);
     expect(wrapper.find('.tabs a.is-disabled').attributes('title')).toBe('For the moderators of the topoguide');
     expect(api.getDeletedDocuments).not.toHaveBeenCalled();
+    expect(api.getAccountRemovals).toHaveBeenCalledWith('open', 0, 30);
   });
 });
 
@@ -304,5 +345,69 @@ describe('DeletedDocumentItem', () => {
     await details.trigger('click');
     await details.trigger('click');
     expect(api.getDeletedDocument).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('AccountRemovals', () => {
+  it('lists the open requests, and the done ones when asked', async () => {
+    api.getAccountRemovals.mockReturnValue(answer({ total: 1, removals: [removal(1)], roles }));
+    const wrapper = mount(AccountRemovals, { global: global(false) });
+    await flushPromises();
+
+    expect(wrapper.findAllComponents(AccountRemovalItem)).toHaveLength(1);
+    expect(wrapper.emitted('count')).toEqual([[1]]);
+
+    api.getAccountRemovals.mockReturnValue(answer({ total: 0, removals: [], roles }));
+    await wrapper.findAll('.tabs.is-toggle a')[1]!.trigger('click');
+    await flushPromises();
+    expect(api.getAccountRemovals).toHaveBeenLastCalledWith('done', 0, 30);
+    expect(wrapper.text()).toContain('No request.');
+  });
+});
+
+describe('AccountRemovalItem', () => {
+  it('shows the buttons the API allows, and takes the request it answers', async () => {
+    const validated = removal(1, {
+      status: 'in_progress',
+      forum_validated_by: { id: 9, name: 'Bob' },
+      forum_validated_at: '2026-11-18T10:00:00+00:00',
+      can: { validate: [], unvalidate: ['forum'], update: true, cancel: true },
+    });
+    api.validateAccountRemoval.mockReturnValue(answer(validated));
+    const wrapper = mount(AccountRemovalItem, { props: { removal: removal(1) }, global: global(false) });
+
+    const validate = wrapper.findAll('button').filter((b) => b.text() === 'Validate');
+    expect(validate).toHaveLength(1);
+    await validate[0]!.trigger('click');
+    await flushPromises();
+
+    expect(api.validateAccountRemoval).toHaveBeenCalledWith(1, 'forum');
+    expect(wrapper.emitted('changed')).toEqual([[validated]]);
+  });
+
+  it('shows what the removal script did', async () => {
+    const done = removal(2, {
+      reason: 'spam',
+      status: 'done',
+      done_at: '2026-11-18T13:00:00+00:00',
+      history: [
+        {
+          action: 'done',
+          by: null,
+          at: '2026-11-18T13:00:00+00:00',
+          forum: 'deleted',
+          topoguide: 'merged',
+          documents: [1, 2],
+        },
+      ],
+      can: { validate: [], unvalidate: [], update: false, cancel: false },
+    });
+    const wrapper = mount(AccountRemovalItem, { props: { removal: done }, global: global(false) });
+
+    expect(wrapper.find('.has-addons input').exists()).toBe(false);
+    expect(wrapper.text()).not.toContain('Cancel the request');
+    await wrapper.find('.buttons button').trigger('click');
+    expect(wrapper.text()).toContain('the removal script');
+    expect(wrapper.text()).toContain('documents deleted: 2');
   });
 });

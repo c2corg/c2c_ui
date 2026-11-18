@@ -591,3 +591,71 @@ export const restoreResult = z.object({
 });
 
 export type RestoreResult = z.input<typeof restoreResult>;
+
+// The removal requests of user accounts (v6_api views/user_removal.py): a request is validated by a moderator of the
+// topoguide and by one of the forum, then a script removes the account
+export const ACCOUNT_REMOVAL_REASONS = ['anonymization', 'merge', 'spam'] as const;
+export const ACCOUNT_REMOVAL_SIDES = ['topoguide', 'forum'] as const;
+export const ACCOUNT_REMOVAL_STATUSES = ['in_progress', 'validated', 'done', 'cancelled'] as const;
+export type AccountRemovalReason = (typeof ACCOUNT_REMOVAL_REASONS)[number];
+export type AccountRemovalSide = (typeof ACCOUNT_REMOVAL_SIDES)[number];
+export type AccountRemovalStatus = (typeof ACCOUNT_REMOVAL_STATUSES)[number];
+
+// a moderator: the name is null once their account was removed
+const removalPerson = z.object({ id: z.number(), name: z.nullable(z.string()) });
+
+const accountRemovalRoles = z.object({ topoguide: z.boolean(), forum: z.boolean() });
+export type AccountRemovalRoles = z.input<typeof accountRemovalRoles>;
+
+const accountRemoval = z.object({
+  id: z.number(),
+  user_id: z.number(),
+  forum_id: z.nullable(z.number()),
+  user_name: z.string(),
+  user_forum_username: z.string(),
+  reason: z.enum(ACCOUNT_REMOVAL_REASONS),
+  user_request_date: z.nullable(z.string()),
+  executable_after: z.string(),
+  target_user_id: z.number(),
+  target_forum_id: z.number(),
+  forum_url: z.nullable(z.string()),
+  created_at: z.string(),
+  requested_by: removalPerson,
+  topoguide_validated_by: z.nullable(removalPerson),
+  topoguide_validated_at: z.nullable(z.string()),
+  forum_validated_by: z.nullable(removalPerson),
+  forum_validated_at: z.nullable(z.string()),
+  cancelled_by: z.nullable(removalPerson),
+  cancelled_at: z.nullable(z.string()),
+  done_at: z.nullable(z.string()),
+  status: z.enum(ACCOUNT_REMOVAL_STATUSES),
+  // when the script will process it, once validated by both sides
+  ready_at: z.nullable(z.string()),
+  // every action, oldest first; the script's "done" one has no moderator (by: null) but what it removed
+  history: z.array(
+    z.looseObject({
+      action: z.string(),
+      by: z.nullable(removalPerson),
+      at: z.string(),
+      side: z.optional(z.string()),
+      forum_url: z.optional(z.nullable(z.string())),
+    })
+  ),
+  // what the signed in moderator may do with it
+  can: z.object({
+    validate: z.array(z.enum(ACCOUNT_REMOVAL_SIDES)),
+    unvalidate: z.array(z.enum(ACCOUNT_REMOVAL_SIDES)),
+    update: z.boolean(),
+    cancel: z.boolean(),
+  }),
+});
+export type AccountRemoval = z.input<typeof accountRemoval>;
+export { accountRemoval };
+
+export const accountRemovalsPage = z.object({
+  total: z.number(),
+  removals: z.array(accountRemoval),
+  roles: accountRemovalRoles,
+});
+
+export const accountRemovalsCount = z.object({ open: z.number(), roles: accountRemovalRoles });
