@@ -80,6 +80,32 @@ const tabs = computed<Tab[]>(() =>
       to: { name: 'forum' },
       match: [],
     },
+    {
+      // the other pages: the entries of the side menu of the site
+      key: 'menu',
+      label: $gettext('Menu'),
+      icon: 'bars',
+      to: { name: 'more' },
+      match: [
+        'more',
+        'serac',
+        'xreports',
+        'xreport',
+        'articles',
+        'article',
+        'yeti',
+        'itinevert',
+        'app-settings',
+        'app-guide',
+        'me',
+        'account',
+        'auth',
+        'auth-sso',
+        'preferences',
+        'following',
+        'trackers',
+      ],
+    },
   ].filter((tab) => router.hasRoute((tab.to as { name: string }).name))
 );
 

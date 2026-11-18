@@ -23,7 +23,7 @@ const mountApp = async (path = '/routes', { screen = 'isWidescreen' } = {}) => {
     attachTo: document.body,
     global: {
       plugins: [router],
-      // the windows, menus and banners of the app, stubbed: the top bar emits toggle-side-menu
+      // the windows, menus and banners of the app, stubbed
       stubs: {
         SideMenu: true,
         Navigation: true,
@@ -33,7 +33,7 @@ const mountApp = async (path = '/routes', { screen = 'isWidescreen' } = {}) => {
         HelperWindow: true,
         AlertWindow: true,
         GdprBanner: true,
-        MobileTopBar: { name: 'MobileTopBar', template: '<header />', emits: ['toggle-side-menu'] },
+        MobileTopBar: true,
         BottomNav: true,
         OnboardingTour: true,
         PullToRefresh: true,
@@ -58,20 +58,6 @@ describe('App', () => {
     await mountApp();
 
     expect(document.getElementById('splashscreen')!.style.display).toBe('none');
-  });
-
-  it('opens the side menu from the menu button of the top bar, and closes it on the next page', async () => {
-    const { wrapper, router } = await mountApp();
-
-    wrapper.findComponent({ name: 'MobileTopBar' }).vm.$emit('toggle-side-menu');
-    await flushPromises();
-    expect(wrapper.find('.alternative-side-menu').exists()).toBe(true);
-    expect(wrapper.find('.alternative-side-menu-shader').exists()).toBe(true);
-
-    await router.push('/outings');
-    await flushPromises();
-
-    expect(wrapper.find('.alternative-side-menu').exists()).toBe(false);
   });
 
   it('tells the home page from the others, and leaves room for the ad on large screens', async () => {

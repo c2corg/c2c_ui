@@ -25,23 +25,11 @@
       <button v-if="showBack" type="button" class="top-bar-btn back-btn" :aria-label="$gettext('Back')" @click="goBack">
         <fa-icon icon="chevron-left" />
       </button>
-      <!-- the pages of the tabs: the menu of the site (its side menu, as a drawer), then the logo -->
-      <template v-else>
-        <button
-          type="button"
-          class="top-bar-btn menu-btn"
-          :aria-label="$gettext('Menu')"
-          @click="$emit('toggle-side-menu')"
-        >
-          <fa-icon icon="bars" />
-        </button>
-        <router-link :to="{ name: 'home' }" class="top-bar-logo" aria-label="Camptocamp.org">
-          <logo-ctc />
-        </router-link>
-      </template>
+      <router-link v-else :to="{ name: 'home' }" class="top-bar-logo" aria-label="Camptocamp.org">
+        <logo-ctc />
+      </router-link>
 
-      <!-- the title of a sub-page; on the tabs, the bottom bar says where you are (the heading stays for screen readers) -->
-      <h1 class="top-bar-title" :class="{ 'is-sr-only': !showBack }">{{ title }}</h1>
+      <h1 class="top-bar-title">{{ title }}</h1>
 
       <div class="top-bar-actions">
         <!-- the help article of the site, as the side menu has it -->
@@ -116,10 +104,8 @@ import { ADDABLE_TYPES, HELP_ROUTE } from '@/js/composables/main-menu';
 
 defineOptions({ name: 'MobileTopBar' });
 
-defineEmits(['toggle-side-menu']);
-
-// the routes of the bottom bar tabs: the menu button and the logo on the left, no back arrow and no title
-const TAB_ROUTES = new Set(['home', 'topoguide', 'offline']);
+// the routes of the bottom bar tabs: the logo on the left, no back arrow
+const TAB_ROUTES = new Set(['home', 'topoguide', 'offline', 'more']);
 
 interface PickedDocument {
   document_id: number;
@@ -145,6 +131,7 @@ const title = computed(() => {
     home: $gettext('Home'),
     offline: $gettext('My topos'),
     me: $gettext('Me'),
+    more: $gettext('Menu'),
     'app-settings': $gettext('App settings'),
     'app-guide': $gettext('App guide'),
     outings: $gettext('outings'),
@@ -312,7 +299,6 @@ watch(picked, (document) => {
 
 .top-bar-actions {
   flex: 0 0 auto;
-  margin-left: auto;
   display: inline-flex;
   align-items: center;
   gap: 0.1rem;

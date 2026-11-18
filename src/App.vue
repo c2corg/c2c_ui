@@ -7,18 +7,16 @@
     }"
   >
     <environment-banner />
-    <side-menu class="side-menu no-print" :class="{ 'alternative-side-menu': alternativeSideMenu }" />
+    <side-menu class="side-menu no-print" />
     <navigation class="navigation no-print" />
     <dfm-ad-small v-if="!homePage && ($screen.isMobile || $screen.isTablet || $screen.isDesktop)" class="ad" />
     <site-notice class="no-print site-notice" />
     <image-viewer v-if="imageViewerRequested" />
     <helper-window />
     <alert-window />
-    <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu = false" />
 
-    <!-- the phone layout of the app (under DESKTOP_BREAKPOINT): a top bar and a bottom tab bar instead of the navigation,
-         the side menu becomes a drawer that the menu button of the top bar opens -->
-    <mobile-top-bar v-if="appSettings.isMobileShell" @toggle-side-menu="alternativeSideMenu = !alternativeSideMenu" />
+    <!-- the phone layout of the app (under DESKTOP_BREAKPOINT): a top bar and a bottom tab bar instead of the side menu and the navigation -->
+    <mobile-top-bar v-if="appSettings.isMobileShell" />
 
     <!-- keep router view in last -->
     <div class="page-content is-block-print">
@@ -47,7 +45,6 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent, onMounted, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
 
 import AlertWindow from './components/alert-window/AlertWindow.vue';
 import BottomNav from './components/app/BottomNav.vue';
@@ -72,10 +69,6 @@ const ImageViewer = defineAsyncComponent(() => import('./components/image-viewer
 
 defineOptions({ name: 'App' });
 
-const route = useRoute();
-
-const alternativeSideMenu = ref(false);
-
 const homePage = useIsHomePage();
 
 const appSettings = useAppSettingsStore();
@@ -88,20 +81,6 @@ watch(
   (online) => {
     if (online) {
       offlineBannerClosed.value = false;
-    }
-  }
-);
-
-// the drawer closes with the page, and when the window gets wide enough for the side menu to stay open
-watch(
-  () => route.fullPath,
-  () => (alternativeSideMenu.value = false)
-);
-watch(
-  () => appSettings.isMobileShell,
-  (isMobileShell) => {
-    if (!isMobileShell) {
-      alternativeSideMenu.value = false;
     }
   }
 );
@@ -140,18 +119,7 @@ body,
   top: 0px;
   z-index: 30;
   transition: 0.3s;
-  /* a drawer out of the screen, but in the desktop shell (below) and when opened (.alternative-side-menu) */
-  left: calc(-1 * var(--c2c-sidemenu-width));
-}
-
-.alternative-side-menu-shader {
-  z-index: 29;
-  position: fixed;
-  top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.2);
 }
 
 .site-notice {
@@ -211,19 +179,10 @@ body,
   }
 }
 
-/* The navigation of the site follows html[data-shell] (src/stores/app-settings.ts), set from DESKTOP_BREAKPOINT: under it,
-   the side menu is a drawer out of the screen and the page takes the whole width; from it, the side menu stays open
-   and the page leaves room for it */
-.alternative-side-menu {
-  left: 0;
-}
-
+/* The navigation of the site follows html[data-shell] (src/stores/app-settings.ts), set from DESKTOP_BREAKPOINT: from it,
+   the side menu is open and the page leaves room for it; under it, the phone layout hides them (below) */
 @media screen {
   html[data-shell='desktop'] {
-    .side-menu {
-      left: 0;
-    }
-
     .page-content,
     .ad {
       margin-left: var(--c2c-sidemenu-width);
@@ -300,6 +259,7 @@ html[data-shell='mobile'] {
   /* pulling the top of the page refreshes what it shows (PullToRefresh.vue), not the whole page as the browser would */
   overscroll-behavior-y: contain;
 
+  .side-menu,
   .navigation {
     display: none !important;
   }
