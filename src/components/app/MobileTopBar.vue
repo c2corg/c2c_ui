@@ -25,18 +25,23 @@
       <button v-if="showBack" type="button" class="top-bar-btn back-btn" :aria-label="$gettext('Back')" @click="goBack">
         <fa-icon icon="chevron-left" />
       </button>
-      <!-- the pages of the tabs: the menu of the site, whose drawer carries the logo -->
-      <button
-        v-else
-        type="button"
-        class="top-bar-btn back-btn"
-        :aria-label="$gettext('Menu')"
-        @click="$emit('toggle-side-menu')"
-      >
-        <fa-icon icon="bars" />
-      </button>
+      <!-- the pages of the tabs: the menu of the site (its side menu, as a drawer), then the logo -->
+      <template v-else>
+        <button
+          type="button"
+          class="top-bar-btn menu-btn"
+          :aria-label="$gettext('Menu')"
+          @click="$emit('toggle-side-menu')"
+        >
+          <fa-icon icon="bars" />
+        </button>
+        <router-link :to="{ name: 'home' }" class="top-bar-logo" aria-label="Camptocamp.org">
+          <logo-ctc />
+        </router-link>
+      </template>
 
-      <h1 class="top-bar-title">{{ title }}</h1>
+      <!-- the title of a sub-page; on the tabs, the bottom bar says where you are (the heading stays for screen readers) -->
+      <h1 class="top-bar-title" :class="{ 'is-sr-only': !showBack }">{{ title }}</h1>
 
       <div class="top-bar-actions">
         <!-- the help article of the site, as the side menu has it -->
@@ -102,6 +107,8 @@
 import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import LogoCtc from './LogoCtc.vue';
+
 import DropdownButton from '@/components/generics/DropdownButton.vue';
 import forum from '@/js/apis/forum';
 import { useGlobalProperties } from '@/js/composables/global-properties';
@@ -111,7 +118,7 @@ defineOptions({ name: 'MobileTopBar' });
 
 defineEmits(['toggle-side-menu']);
 
-// the routes of the bottom bar tabs: the menu button on the left, no back arrow
+// the routes of the bottom bar tabs: the menu button and the logo on the left, no back arrow and no title
 const TAB_ROUTES = new Set(['home', 'topoguide', 'offline']);
 
 interface PickedDocument {
@@ -278,6 +285,19 @@ watch(picked, (document) => {
   margin-right: 0.25rem;
 }
 
+.top-bar-logo {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 0.4rem;
+
+  .logo-ctc {
+    height: 28px;
+    width: auto;
+  }
+}
+
 .top-bar-title {
   flex: 1;
   text-align: center;
@@ -292,6 +312,7 @@ watch(picked, (document) => {
 
 .top-bar-actions {
   flex: 0 0 auto;
+  margin-left: auto;
   display: inline-flex;
   align-items: center;
   gap: 0.1rem;

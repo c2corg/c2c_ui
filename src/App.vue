@@ -140,6 +140,8 @@ body,
   top: 0px;
   z-index: 30;
   transition: 0.3s;
+  /* a drawer out of the screen, but in the desktop shell (below) and when opened (.alternative-side-menu) */
+  left: calc(-1 * var(--c2c-sidemenu-width));
 }
 
 .alternative-side-menu-shader {
@@ -212,10 +214,6 @@ body,
 /* The navigation of the site follows html[data-shell] (src/stores/app-settings.ts), set from DESKTOP_BREAKPOINT: under it,
    the side menu is a drawer out of the screen and the page takes the whole width; from it, the side menu stays open
    and the page leaves room for it */
-.side-menu {
-  left: calc(-1 * var(--c2c-sidemenu-width));
-}
-
 .alternative-side-menu {
   left: 0;
 }
