@@ -570,4 +570,12 @@ onBeforeUnmount(() => {
   padding-left: 0;
   padding-right: 0;
 }
+
+/*
+ * With overlay scrollbars (Windows 11, macOS, phones), ag-grid lays its horizontal scrollbar over the bottom of the
+ * rows, and hides half of the last one: it takes its own room below the rows instead.
+ */
+.ag-theme-balham .ag-body-horizontal-scroll.ag-scrollbar-invisible {
+  position: static;
+}
 </style>
