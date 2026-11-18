@@ -48,7 +48,13 @@ describe('QualityField', () => {
 
     document.locales![0].conditions = 'dry';
     await wrapper.vm.$nextTick();
-    // description 1, conditions 2
+    // description 1, conditions 1
+    expect(shownQuality(wrapper)).toBe('medium');
+
+    document.locales![0].timing = '5h';
+    document.locales![0].weather = 'sunny';
+    await wrapper.vm.$nextTick();
+    // and timing 0.5, weather 0.5
     expect(shownQuality(wrapper)).toBe('fine');
   });
 
@@ -59,14 +65,16 @@ describe('QualityField', () => {
         quality: 'draft',
         activities: ['skitouring'],
         avalanche_signs,
+        snow_quality: 'good',
+        condition_rating: 'good',
         associations: { waypoints: [], routes: [], images: [] },
         locales: [{ lang: 'fr', description: 'a description', avalanches: 'none seen' }],
       });
 
-    // description 0.5, avalanches 0.5
-    expect(shownQuality(mountQuality(skiOuting(['danger_sign'])))).toBe('draft');
+    // snow 0.5, condition rating 0.5, description 0.5, avalanches 0.5
+    expect(shownQuality(mountQuality(skiOuting(['danger_sign'])))).toBe('medium');
     // the avalanche signs are a list: ['no'] when none was seen
-    expect(shownQuality(mountQuality(skiOuting(['no'])))).toBe('empty');
+    expect(shownQuality(mountQuality(skiOuting(['no'])))).toBe('draft');
   });
 
   it('sets the computed quality before saving, unless unlocked', async () => {
@@ -75,13 +83,13 @@ describe('QualityField', () => {
     const { beforeSave } = wrapper.vm as unknown as { beforeSave(): void };
 
     beforeSave();
-    expect(document.quality).toBe('fine');
+    expect(document.quality).toBe('medium');
 
     // the lock
     await wrapper.findAll('.label > span')[1].trigger('click');
-    document.quality = 'medium';
+    document.quality = 'fine';
     beforeSave();
-    expect(document.quality).toBe('medium');
+    expect(document.quality).toBe('fine');
   });
 
   it('keeps a great quality, and the quality of collaborative documents', () => {
