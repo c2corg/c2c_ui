@@ -223,6 +223,122 @@ describe('C2cMap', () => {
     wrapper.unmount();
   });
 
+  describe('a click on the density of an overlay', () => {
+    const outingLine = line([6.8, 45.9], [6.81, 45.91]);
+    const recentOuting = (title: string) => ({
+      document_id: 1,
+      type: 'o',
+      title,
+      geometry: { geom_detail: outingLine },
+    });
+    const mockLookups = (recent: (calls: number) => unknown) => {
+      let calls = 0;
+      vi.spyOn(c2c, 'getOutingsTracks').mockImplementation(((params: Record<string, unknown>) => {
+        // too many tracks to draw them: the density
+        if (!params.recent) return Promise.resolve({ data: { documents: [], truncated: true } });
+        return recent(++calls);
+      }) as never);
+      vi.spyOn(c2c, 'getOutingsHeatmap').mockResolvedValue({ data: { buckets: [] } } as never);
+    };
+    const showDensity = async (props: Record<string, unknown> = {}) => {
+      const mounted = await mountMap(props);
+      mounted.map.zoom = 15;
+      await mounted.wrapper
+        .findAll('.layer-button')
+        .find((button) => button.text() === 'Outings')!
+        .trigger('click');
+      await flushPromises();
+      expect(mounted.map.layout['heatmap-outing'].visibility).toBe('visible');
+      return mounted;
+    };
+    const clickAt = (map: FakeMap) =>
+      map.fire('click', {
+        point: { x: 10, y: 10 },
+        lngLat: { lng: 6.8, lat: 45.9 },
+        originalEvent: { pointerType: 'mouse' },
+      });
+
+    it('lists the most recent documents, and says how many there are', async () => {
+      mockLookups(() =>
+        Promise.resolve({
+          data: { documents: [recentOuting('Recent hike')], truncated: true, count: 412, count_capped: false },
+        })
+      );
+      const { wrapper, map } = await showDensity();
+
+      clickAt(map);
+      await flushPromises();
+
+      const panel = wrapper.find('.ol-track-panel');
+      expect(panel.text()).toContain('Recent hike');
+      expect(panel.text()).toContain('Only the most recent ones are listed');
+      expect(panel.text()).toContain('(412)');
+      wrapper.unmount();
+    });
+
+    it('says that there are more when the count is capped, and nothing when the API does not know', async () => {
+      mockLookups((call) =>
+        Promise.resolve({
+          data:
+            call === 1
+              ? { documents: [recentOuting('Capped')], truncated: true, count: 1000, count_capped: true }
+              : { documents: [recentOuting('Unknown')], truncated: true },
+        })
+      );
+      const { wrapper, map } = await showDensity();
+
+      clickAt(map);
+      await flushPromises();
+      expect(wrapper.find('.ol-track-panel').text()).toContain('(1000+)');
+
+      clickAt(map);
+      await flushPromises();
+      expect(wrapper.find('.ol-track-panel').text()).toContain('Unknown');
+      expect(wrapper.find('.ol-track-panel').text()).not.toMatch(/\(\d+\+?\)/);
+      wrapper.unmount();
+    });
+
+    it('keeps the last click: the answer of an older one does not replace it', async () => {
+      let releaseOld: () => void = () => undefined;
+      mockLookups((call) =>
+        call === 1
+          ? // the first lookup is slow, the second one is fast
+            new Promise((resolve) => {
+              releaseOld = () => resolve({ data: { documents: [recentOuting('Old')], truncated: true } });
+            })
+          : Promise.resolve({ data: { documents: [recentOuting('New')], truncated: true } })
+      );
+      const { wrapper, map } = await showDensity();
+
+      clickAt(map);
+      clickAt(map);
+      await flushPromises();
+      releaseOld();
+      await flushPromises();
+
+      expect(wrapper.find('.ol-track-panel').text()).toContain('New');
+      expect(wrapper.find('.ol-track-panel').text()).not.toContain('Old');
+      wrapper.unmount();
+    });
+
+    it('goes on to identify the protection areas under the click', async () => {
+      mockLookups(() => Promise.resolve({ data: { documents: [recentOuting('Recent hike')], truncated: true } }));
+      vi.mocked(biodivSportsService.fetchData).mockResolvedValue({ data: { results: [] } } as never);
+      vi.mocked(respecterCestProtegerService.hasArea).mockResolvedValue(false);
+      const identify = vi
+        .mocked(respecterCestProtegerService.identify)
+        .mockResolvedValue({ data: { results: [] } } as never);
+      const { wrapper, map } = await showDensity({ showProtectionAreas: true });
+
+      clickAt(map);
+      await flushPromises();
+
+      expect(wrapper.find('.ol-track-panel').text()).toContain('Recent hike');
+      expect(identify).toHaveBeenCalledTimes(1);
+      wrapper.unmount();
+    });
+  });
+
   describe('settings in the URL of a document page', () => {
     const heatmap = () =>
       vi
