@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -53,5 +53,17 @@ describe('extract-messages', () => {
     const content = readFileSync(pot, 'utf8');
     expect(content).toContain('msgid "from the app"');
     expect(content).not.toContain('from a spec');
+  });
+
+  it('finds every message of the app: a message is always given to a function named $gettext', () => {
+    // a message given to gettext(), t()... is not extracted, and stays in English on the site
+    const sources = readdirSync('src', { recursive: true, encoding: 'utf8' }).filter(
+      (file) => /\.(js|ts|vue)$/.test(file) && !/\.spec\.ts$/.test(file)
+    );
+    const notExtracted = sources.filter((file) =>
+      /(?<!\$)\bgettext\(\s*['"`]/.test(readFileSync(join('src', file), 'utf8'))
+    );
+
+    expect(notExtracted).toEqual([]);
   });
 });

@@ -40,8 +40,9 @@ export type EditionHooks = {
 type Loading = { data?: C2cDocument | null; loading?: boolean | number };
 
 /** Whether to leave a form: with unsaved changes, the user is asked first */
-export function confirmLeave(modified: boolean, gettext: (text: string) => string): boolean {
-  return !modified || window.confirm(gettext('Do you really want to leave? you have unsaved changes!'));
+// the translation function is named $gettext: tools/extract-messages.ts only finds the messages of $gettext() calls
+export function confirmLeave(modified: boolean, $gettext: (text: string) => string): boolean {
+  return !modified || window.confirm($gettext('Do you really want to leave? you have unsaved changes!'));
 }
 
 export function useDocumentEdition(hooks: EditionHooks = {}) {
