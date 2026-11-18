@@ -16,7 +16,8 @@ export type QueryMode =
   | 'date'
   | 'dates';
 
-export type FieldParent = 'document' | 'locales' | 'associations';
+// 'query': only a filter of the lists, not an attribute of the documents
+export type FieldParent = 'document' | 'locales' | 'associations' | 'query';
 
 // the properties of a field: fieldsProperties.json, overridden per document type by documentsProperties.json
 export type FieldProperties = {
@@ -25,6 +26,8 @@ export type FieldProperties = {
   // the possible values; in the JSON, the name of a common attribute giving them
   values?: string[] | string;
   i18nContext?: string;
+  // the text of the filter, when it is not the translation of the name of the field
+  label?: string;
   i18n?: boolean;
   multiple?: boolean;
   required?: boolean;
@@ -137,6 +140,7 @@ export default class Field {
   declare parent: FieldParent;
   declare values?: string[];
   declare i18nContext?: string;
+  declare label?: string;
   declare i18n: boolean;
   declare multiple?: boolean;
   declare required?: boolean;
