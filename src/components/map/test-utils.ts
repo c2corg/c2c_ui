@@ -23,7 +23,7 @@ type MapVm = {
 };
 
 // the map, or a component rendering it
-export const mountMap = async (props: Record<string, unknown> = {}, component: Component = OlMap) => {
+export const mountMap = async (props: Record<string, unknown> = {}, component: Component = OlMap, path = '/') => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [
@@ -32,7 +32,7 @@ export const mountMap = async (props: Record<string, unknown> = {}, component: C
       { path: '/:path*', name: 'waypoint', component: { render: () => null } },
     ],
   });
-  await router.push('/');
+  await router.push(path);
   const wrapper = mount(component, {
     props,
     attachTo: document.body,

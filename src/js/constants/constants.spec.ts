@@ -25,6 +25,35 @@ describe('constants', () => {
   });
 });
 
+describe('has_track', () => {
+  it('is a yes/no filter of the outings and routes lists, not an attribute of the documents', () => {
+    for (const type of ['outing', 'route']) {
+      expect(constants.objectDefinitions[type].fields.has_track).toMatchObject({
+        parent: 'query',
+        url: 'trk',
+        queryMode: 'tristate',
+        label: 'GPS Track',
+        defaultUrlQuery: '',
+      });
+    }
+    expect(constants.objectDefinitions.waypoint.fields.has_track).toBeUndefined();
+    expect(routeField('has_track').nullable).toBeFalsy();
+    expect(constants.categorizedFieldsDefault.Miscs).toContain('has_track');
+  });
+
+  it('has no "no info" choice, and no error in a document', () => {
+    const hasTrack = routeField('has_track');
+    expect(['true', 'false', 'null'].map((url) => hasTrack.urlToValue(url))).toEqual(['yes', 'no', undefined]);
+    expect(hasTrack.getError({ type: 'r' }, {})).toBeNull();
+  });
+
+  it('does not come in a new document', () => {
+    // buildDocument() gives a value to every field of the document
+    const fields = Object.values(constants.objectDefinitions.outing.fields);
+    expect(fields.filter((field) => field.parent === 'document').map((field) => field.name)).not.toContain('has_track');
+  });
+});
+
 describe('Field', () => {
   it('derives its query mode and default URL query from its type', () => {
     expect(routeField('elevation_max')).toMatchObject({

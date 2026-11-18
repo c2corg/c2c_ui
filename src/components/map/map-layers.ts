@@ -85,6 +85,18 @@ export const baseLayers: MapLayer[] = [
     attribution: link('https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9', 'Esri'),
   },
   {
+    // $gettext('Public transport', 'Map layer')
+    title: 'Public transport',
+    image: 'publictransport.jpg',
+    // MeMoMaps sends no CORS header, which the map needs: its tiles are read through our media host
+    tiles: ['https://media.camptocamp.org/public-transport/tiles/{z}/{x}/{y}.png'],
+    maxzoom: 18,
+    attribution:
+      `© ${link('//openstreetmap.org/copyright', 'OpenStreetMap')} | ` + `© ${link('//memomaps.de', 'ÖPNVKarte')}`,
+    // in 3D too, until the public transport lines are drawn from vector tiles (a raster map is blurrier on the relief)
+    in3d: true,
+  },
+  {
     // $gettext('IGN maps', 'Map layer')
     title: 'IGN maps',
     image: 'ign.jpg',

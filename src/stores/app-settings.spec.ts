@@ -41,14 +41,21 @@ describe('app settings', () => {
   beforeEach(() => resetStorage());
   afterEach(() => vi.unstubAllGlobals());
 
-  it('defaults to auto, followed from the system and the screen', () => {
-    const media = fakeMedia({ dark: false, desktop: false });
+  it('defaults to light, whatever the system says, and to the layout of the screen', () => {
+    fakeMedia({ dark: true, desktop: false });
     const settings = useAppSettingsStore();
 
-    expect(settings.theme).toBe('auto');
+    expect(settings.theme).toBe('light');
     expect(html().getAttribute('data-theme')).toBe('light');
     expect(html().getAttribute('data-shell')).toBe('mobile');
     expect(html().getAttribute('data-text-size')).toBe('normal');
+  });
+
+  it('follows the system when auto, in both layouts', () => {
+    const media = fakeMedia({ dark: false, desktop: false });
+    const settings = useAppSettingsStore();
+    settings.setTheme('auto');
+    expect(html().getAttribute('data-theme')).toBe('light');
 
     media.set('dark', true);
     expect(html().getAttribute('data-theme')).toBe('dark');
@@ -99,7 +106,7 @@ describe('app settings', () => {
     fakeMedia({ dark: false, desktop: false });
     resetStorage({ theme: 'purple', textSize: 'large' });
     const settings = useAppSettingsStore();
-    expect(settings.theme).toBe('auto');
+    expect(settings.theme).toBe('light');
     expect(settings.textSize).toBe('large');
   });
 });

@@ -84,8 +84,8 @@ export function tileUrlsOf(geometry?: { geom?: string | null; geom_detail?: stri
     for (let x = tile(minX - MARGIN); x <= tile(maxX + MARGIN); x++) {
       // tiles count from the north
       for (let y = tile(-maxY - MARGIN); y <= tile(-minY + MARGIN); y++) {
-        // the server OpenLayers picks for the tile among {a-c} (ol/tileurlfunction.js)
-        urls.push(`https://${'abc'[((x << z) + y) % 3]}.tile.opentopomap.org/${z}/${x}/${y}.png`);
+        // a: the key of every tile in the cache, whatever server the map picks (tile-key.ts)
+        urls.push(`https://a.tile.opentopomap.org/${z}/${x}/${y}.png`);
       }
     }
     if (urls.length >= MAX_TILES) {

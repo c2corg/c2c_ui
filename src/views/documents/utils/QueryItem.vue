@@ -50,12 +50,12 @@
 
     <div v-else-if="field.queryMode === 'tristate'" class="control">
       <label class="label">
-        {{ $filters.uppercaseFirstLetter($gettext(field.name)) }}
+        {{ $filters.uppercaseFirstLetter($gettext(field.label ?? field.name)) }}
       </label>
 
       <multiselect
         v-model="value"
-        :options="['yes', 'no', 'no info']"
+        :options="field.nullable ? ['yes', 'no', 'no info'] : ['yes', 'no']"
         :custom-label="gettext"
         :placeholder="$gettext('Select option')"
         :select-label="$gettext('Press enter to select')"

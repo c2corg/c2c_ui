@@ -534,6 +534,12 @@
     "unit": "m",
     "queryMode": "input"
   },
+  "has_track": {
+    "type": "boolean",
+    "parent": "query",
+    "label": "GPS Track",
+    "queryMode": "tristate"
+  },
   "lift_access": {
     "type": "boolean",
     "nullable": true

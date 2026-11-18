@@ -112,7 +112,8 @@ const categorizedFields = computed(() => {
 
     for (const name of categorizedFieldsDefault[category]) {
       const field = routeFields[name];
-      if (field !== undefined && field.url) {
+      // the filters of the lists only (parent 'query') are not known to the Itinevert service
+      if (field !== undefined && field.url && field.parent !== 'query') {
         addCategory = true;
 
         if (route.query[field.url] !== undefined) {
