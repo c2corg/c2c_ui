@@ -4,6 +4,8 @@ import { isAxiosError } from 'axios';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
+import { isForumModerator } from './forum-role';
+
 import forum, { type CurrentForumUser, type MessageBusMessage, type NotificationCounts } from '@/js/apis/forum';
 
 const POLL_INTERVAL = 5 * 60 * 1000;
@@ -41,6 +43,7 @@ export const useForumNotificationsStore = defineStore('forum-notifications', () 
 
   function clear() {
     mode.value = 'off';
+    isForumModerator.value = false;
     unread.value = 0;
     unreadHighPriority.value = 0;
   }
@@ -66,6 +69,7 @@ export const useForumNotificationsStore = defineStore('forum-notifications', () 
       return false;
     }
     setCounts(user);
+    isForumModerator.value = Boolean(user.moderator || user.admin);
     channel = `/notification/${user.id}`;
     position = user.notification_channel_position ?? -1;
     return true;

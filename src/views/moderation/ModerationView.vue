@@ -3,9 +3,7 @@
     <html-header :title="$gettext('Moderation')" />
     <h1 class="title is-1" v-translate>Moderation</h1>
 
-    <div v-if="!$user.isModerator" class="notification is-warning" v-translate>
-      This page is reserved to the moderators.
-    </div>
+    <div v-if="!canModerate" class="notification is-warning" v-translate>This page is reserved to the moderators.</div>
 
     <template v-else>
       <div class="tabs is-boxed">
@@ -15,7 +13,7 @@
               <fa-icon :icon="tab.icon" class="mr-2" />
               <span>{{ tab.title }}</span>
             </router-link>
-            <a v-else class="is-disabled" :title="$gettext('Coming soon')" aria-disabled="true">
+            <a v-else class="is-disabled" :title="tab.unavailable" aria-disabled="true">
               <fa-icon :icon="tab.icon" class="mr-2" />
               <span>{{ tab.title }}</span>
             </a>
@@ -36,22 +34,44 @@ import DeletedDocuments from './DeletedDocuments.vue';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useNoRobots } from '@/js/composables/head';
+import { useModerationRoles } from '@/js/composables/moderation';
 
 useNoRobots();
 
 const { $gettext } = useGlobalProperties();
 const route = useRoute();
+const { topoguide: isTopoguideModerator, any: canModerate } = useModerationRoles();
 
-// the other tabs are planned: the removal and merge requests of the accounts, the edits to check
+// the other tabs are planned: the removal and merge requests of the accounts, the edits to check. The deleted
+// documents are for the moderators of the topoguide only (the API refuses the others)
 const tabs = computed(() => [
-  { name: 'deleted', title: $gettext('Deleted documents'), icon: 'trash', available: true },
-  { name: 'accounts', title: $gettext('Accounts'), icon: 'users', available: false },
-  { name: 'edits', title: $gettext('Edits to check'), icon: 'edit', available: false },
+  {
+    name: 'deleted',
+    title: $gettext('Deleted documents'),
+    icon: 'trash',
+    available: isTopoguideModerator.value,
+    unavailable: $gettext('For the moderators of the topoguide'),
+  },
+  {
+    name: 'accounts',
+    title: $gettext('Accounts'),
+    icon: 'users',
+    available: false,
+    unavailable: $gettext('Coming soon'),
+  },
+  {
+    name: 'edits',
+    title: $gettext('Edits to check'),
+    icon: 'edit',
+    available: false,
+    unavailable: $gettext('Coming soon'),
+  },
 ]);
 
 const activeTab = computed(() => {
   const tab = route.params.tab as string | undefined;
-  return tabs.value.some((t) => t.name === tab && t.available) ? tab : 'deleted';
+  const available = tabs.value.filter((t) => t.available);
+  return (available.find((t) => t.name === tab) ?? available[0])?.name;
 });
 </script>
 

@@ -53,6 +53,9 @@ const currentSession = z.object({
     username: z.string(),
     // id of the last message on the user's MessageBus notification channel
     notification_channel_position: z.nullable(z.number()),
+    // the staff of the forum: they see the moderation page
+    moderator: z.optional(z.boolean()),
+    admin: z.optional(z.boolean()),
   }),
 });
 export type CurrentForumUser = z.input<typeof currentSession>['current_user'];

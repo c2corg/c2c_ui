@@ -3,6 +3,7 @@ import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useForumNotificationsStore } from './forum-notifications';
+import { isForumModerator } from './forum-role';
 
 import forum from '@/js/apis/forum';
 
@@ -89,6 +90,24 @@ describe('forum notifications store', () => {
     await store.start('alice_forum');
 
     expect(store).toMatchObject({ mode: 'off', unread: 0, unreadHighPriority: 0 });
+  });
+
+  // shows the moderation page in the menus; cleared on sign out
+  it.each([
+    [{ moderator: true }, true],
+    [{ admin: true }, true],
+    [{ moderator: false, admin: false }, false],
+    [{}, false],
+  ])('reads the forum role of the session %o', async (role, expected) => {
+    getCurrentUser.mockResolvedValue({ ...forumUser(0, 0), ...role });
+    pollMessageBus.mockResolvedValue([]);
+    const store = useForumNotificationsStore();
+
+    await store.start('alice_forum');
+    expect(isForumModerator.value).toBe(expected);
+
+    store.stop();
+    expect(isForumModerator.value).toBe(false);
   });
 
   it('polls the session when the forum refuses MessageBus with credentials', async () => {

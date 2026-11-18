@@ -10,6 +10,7 @@ import { daysLeft, documentRoute } from './deleted-documents';
 
 import { ApiData } from '@/js/apis/BaseApi';
 import type { DeletedDocument } from '@/js/apis/c2c/schemas';
+import { isForumModerator } from '@/stores/forum-role';
 
 const api = vi.hoisted(() => ({
   getDeletedDocuments: vi.fn(),
@@ -50,6 +51,7 @@ const InputDocumentStub = {
 let router: Router;
 
 beforeEach(async () => {
+  isForumModerator.value = false;
   vi.clearAllMocks();
   router = createRouter({
     history: createMemoryHistory(),
@@ -86,7 +88,7 @@ const global = (isModerator = true) => ({
     globalProperties: {
       $gettext: (s: string) => s,
       $filters: { uppercaseFirstLetter: (s: string) => s },
-      $user: { isModerator },
+      $user: { isLogged: true, isModerator },
       $dateUtils: { toLocalizedString: (value: string) => 'date:' + value },
     } as never,
   },
@@ -126,6 +128,16 @@ describe('ModerationView', () => {
       'Edits to check',
     ]);
     expect(wrapper.findAll('.tabs a.is-disabled')).toHaveLength(2);
+  });
+
+  it('opens to a moderator of the forum only, without the deleted documents', () => {
+    isForumModerator.value = true;
+    const wrapper = mount(ModerationView, { global: global(false) });
+
+    expect(wrapper.text()).not.toContain('reserved to the moderators');
+    expect(wrapper.findComponent(DeletedDocuments).exists()).toBe(false);
+    expect(wrapper.find('.tabs a.is-disabled').attributes('title')).toBe('For the moderators of the topoguide');
+    expect(api.getDeletedDocuments).not.toHaveBeenCalled();
   });
 });
 
