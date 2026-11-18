@@ -2,7 +2,7 @@ import type TileLayer from 'ol/layer/Tile';
 import type UrlTile from 'ol/source/UrlTile';
 import { describe, expect, it } from 'vitest';
 
-import { swissExtent } from './map-layers';
+import { orthoLayers, swissExtent } from './map-layers';
 import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers-ol';
 
 const isSwisstopo = (layer: TileLayer<UrlTile>) =>
@@ -46,7 +46,15 @@ describe('map-layers', () => {
 
     expect(titles.slice(0, 3)).toEqual(['OpenTopoMap', 'ESRI World Imagery', 'Public transport']);
     const layer = cartoLayers()[2] as TileLayer<UrlTile>;
-    expect(layer.getSource()!.getUrls()).toEqual(['https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png']);
+    expect(layer.getSource()!.getUrls()).toEqual([
+      'https://media.camptocamp.org/public-transport/tiles/{z}/{x}/{y}.png',
+    ]);
     expect(layer.getVisible()).toBe(false);
+  });
+
+  it('offers the public transport map in 3D without making it the default one', () => {
+    expect(orthoLayers.map((layer) => layer.title)).toContain('Public transport');
+    // the 3D view opens on the orthophoto of a country, which this layer has none of
+    expect(orthoLayers.find((layer) => layer.title === 'Public transport')!.country).toBeUndefined();
   });
 });
