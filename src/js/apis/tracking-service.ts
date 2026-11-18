@@ -21,7 +21,11 @@ export type Activity = {
   miniature?: string;
   // the c2c activity matching the vendor's activity type, if any: to prefill the outing
   c2cActivities?: string[];
+  // the vendors that have this outing, the one of `id` first (tracking groups the copies of an outing)
+  sources?: ActivitySource[];
 };
+
+export type ActivitySource = { id: number; vendor: Vendor; vendorId: string };
 
 export type Geometry = { type: 'LineString'; coordinates: number[][] };
 

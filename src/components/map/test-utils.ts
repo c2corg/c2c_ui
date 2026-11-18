@@ -19,18 +19,6 @@ vi.stubGlobal(
 // what the specs reach of the map (Vue Test Utils gives the <script setup> bindings)
 type MapVm = {
   map: OlMapType;
-  mapLayers: { get(key: string): unknown }[];
-  geolocation: unknown;
-  highlightedFeature: unknown;
-  visibleLayer: { get(key: string): unknown };
-  setHighlightedFeature(feature: unknown): void;
-  onPointerMove(event: unknown): void;
-  onClick(event: unknown): void;
-  documentsLayer: unknown;
-  waypointsLayer: unknown;
-  imagesLayer: unknown;
-  protectionAreasLayer: import('ol/layer/Vector').default<import('ol/source/Vector').default>;
-  elevationProfileLayer: unknown;
   setDocumentGeometryFromGeoFile(file: string): void;
 };
 

@@ -25,4 +25,40 @@ describe('map-utils', () => {
       /^data:image\/svg\+xml;charset=utf-8,<svg width="20px"/
     );
   }, 180000); // a cold import of all the Font Awesome icons: over a minute under the load of the full suite
+
+  // the casing, then the line: [colour, width] of each
+  const strokes = (styles: Style | Style[]) =>
+    (styles as Style[]).map((style) => [style.getStroke()!.getColor(), style.getStroke()!.getWidth()]);
+
+  it('draws the documents lines in yellow on a dark casing, in red and a little wider under the pointer', async () => {
+    const { getDocumentLineStyle } = await import('./map-utils');
+
+    expect(strokes(getDocumentLineStyle('title', false))).toEqual([
+      ['#404040', 4.5],
+      ['yellow', 2.5],
+    ]);
+    expect(strokes(getDocumentLineStyle('title', true))).toEqual([
+      ['#404040', 5],
+      ['red', 3],
+    ]);
+  });
+
+  it('draws the public transport lines a little wider, on white also under the pointer', async () => {
+    const { getDocumentLineStyle } = await import('./map-utils');
+    const properties = { color: 'e2001a', name: 'Bus 1' };
+
+    expect(strokes(getDocumentLineStyle('title', false, properties))).toEqual([
+      ['white', 5.5],
+      ['#e2001a', 3.5],
+    ]);
+    expect(strokes(getDocumentLineStyle('title', true, properties))).toEqual([
+      ['white', 6],
+      ['red', 4],
+    ]);
+    const walking = getDocumentLineStyle('title', false, { ...properties, isWalking: true }) as Style[];
+    expect(walking.map((style) => style.getStroke()!.getLineDash())).toEqual([
+      [8, 8],
+      [8, 8],
+    ]);
+  });
 });

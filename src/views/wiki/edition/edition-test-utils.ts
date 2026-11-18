@@ -45,10 +45,11 @@ export function mountEdition(view: Component, documentType: string, errors: unkn
   };
 
   const fitMapToDocuments = vi.fn(() => Promise.resolve([600000, 5600000, 800000, 5800000]));
+  const setGeometry = vi.fn();
   const MapInputRow = defineComponent({
     name: 'MapInputRow',
     setup(_, { expose }) {
-      expose({ fitMapToDocuments });
+      expose({ fitMapToDocuments, setGeometry });
       return () => h('div');
     },
   });
@@ -87,6 +88,7 @@ export function mountEdition(view: Component, documentType: string, errors: unkn
   return {
     wrapper,
     fitMapToDocuments,
+    setGeometry,
     fields,
     hooks: () => hooks,
     document: () => document.value!,

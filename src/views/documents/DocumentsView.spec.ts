@@ -8,20 +8,26 @@ import PageNavigation from './utils/PageNavigation.vue';
 
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { getPreferences } from '@/js/vue-plugins/local-storage';
+import { useOfflineStore } from '@/stores/offline';
 
-const mountView = async (url = '/routes', total = 0) => {
+const mountView = async (url = '/routes', total = 0, documents: object[] = []) => {
   // what the API service returns: the response once loaded, and then(), which gives the object back, to be told when
   const apiData = {
-    data: { documents: [], total },
+    data: { documents, total },
     then(callback: (loaded: { data: { total: number } }) => void) {
       callback(apiData);
       return apiData;
     },
   };
   const getAll = vi.spyOn(c2c.route as DocumentService, 'getAll').mockReturnValue(apiData as never);
+  vi.spyOn(c2c.waypoint as DocumentService, 'getAll').mockReturnValue(apiData as never);
   const router = createRouter({
     history: createMemoryHistory(),
-    routes: [{ path: '/routes', name: 'routes', component: { render: () => null } }],
+    routes: [
+      { path: '/routes', name: 'routes', component: { render: () => null } },
+      { path: '/waypoints', name: 'waypoints', component: { render: () => null } },
+    ],
   });
   await router.push(url);
   const wrapper = shallowMount(DocumentsView, {
@@ -41,7 +47,12 @@ const mountView = async (url = '/routes', total = 0) => {
 };
 
 describe('DocumentsView', () => {
-  afterEach(() => vi.restoreAllMocks());
+  afterEach(() => {
+    vi.restoreAllMocks();
+    // the list mode is remembered
+    window.localStorage.clear();
+    getPreferences('DocumentsView').reload();
+  });
 
   // the display mode menu shows the icon of the cards, or of the list
   it('tells the display mode menu whether the results are a list', async () => {
@@ -72,5 +83,26 @@ describe('DocumentsView', () => {
     const { router } = await mountView('/routes?offset=240&limit=30', 45);
 
     expect(router.currentRoute.value.query).toEqual({ offset: '30', limit: '30' });
+  });
+
+  it('shows only the documents of the page saved offline, on demand', async () => {
+    const offline = useOfflineStore();
+    vi.spyOn(offline, 'isOfflineReady').mockImplementation((type, id) => type === 'route' && id === 2);
+    const { wrapper } = await mountView('/routes', 2, [{ document_id: 1 }, { document_id: 2 }]);
+    expect(wrapper.findAll('.card-container')).toHaveLength(2);
+
+    await wrapper.find('[title="Only the ones saved offline"]').trigger('click');
+    expect(wrapper.findAll('.card-container')).toHaveLength(1);
+  });
+
+  it('shows all the documents again in the list of another type', async () => {
+    vi.spyOn(useOfflineStore(), 'isOfflineReady').mockReturnValue(false);
+    const { wrapper, router } = await mountView('/routes', 2, [{ document_id: 1 }, { document_id: 2 }]);
+    await wrapper.find('[title="Only the ones saved offline"]').trigger('click');
+    expect(wrapper.findAll('.card-container')).toHaveLength(0);
+
+    await router.push('/waypoints');
+    await flushPromises();
+    expect(wrapper.findAll('.card-container')).toHaveLength(2);
   });
 });

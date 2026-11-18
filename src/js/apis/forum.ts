@@ -139,6 +139,13 @@ class Forum extends BaseApi {
     const template = user.avatar_template.startsWith('/') ? this.url + user.avatar_template : user.avatar_template;
     return template.replace('{size}', String(size));
   }
+
+  // the avatar of a user from their username, where no avatar_template is at hand (one picture for the wiki and the
+  // forum, through SSO): Discourse serves the current one at /user_avatar/<forum host>/<username>/<size>/1_1.png
+  getUserAvatarUrl(username: string, size: number | string) {
+    const host = this.url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    return `${this.url}/user_avatar/${host}/${encodeURIComponent(username.toLowerCase())}/${size}/1_1.png`;
+  }
 }
 
 export default new Forum();

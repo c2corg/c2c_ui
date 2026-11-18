@@ -492,6 +492,7 @@
     "Oups! Something went wrong with forum. Here is the message :": "Oops! C'è un errore sul forum: ",
     "Oups! something went wrong...": "Oops! c'è un errore: ",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Il nostro sito web utilizza cookie forniti da noi stessi e da terzi. Alcuni cookie sono necessari per il sito web, altri possono essere regolati in qualsiasi momento, in particolare quelli che ci permettono di capire il rendimento del nostro sito web e di offrirvi le funzionalità dei social media. È possibile accettare o rifiutare tutti, o",
+    "Outings": "Gite",
     "Outings statistics": "Statistiche delle gite",
     "Outings, with the latest conditions in the mountains": "Itinerari, con le recenti condizioni sulle montagne",
     "Page not found": "Pagina non trovata",
@@ -568,6 +569,7 @@
     "Rotate image left": "Girare a sinistra",
     "Rotate image right": "Girare a destra",
     "Route": "Itinerari",
+    "Routes": "Itinerari",
     "Routes to explore": "Percorsi da esplorare",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC è una base di dati mondiale sugli accidenti e incedenti in montagna. Il suo scopo è di migliorare la sicurezza delle attività di arrampicata e degli sport di montagna.",
     "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC è costruito su una mentalità di gentilezza. Vi ringraziamo per migliorarla",
@@ -1027,8 +1029,8 @@
     "descent": {
       "image_categories": "discesa"
     },
-    "describe conditions": "Condizioni del terreno, chiodatura, qualità della roccia... (nell'avvicinamento, nella via, ... )",
-    "describe route_conditions": "Descrivi brevemente l'itinerario che hai seguito solo nei casi seguenti : varianti, concatenamento di più itinerari, percorso parziale dell'itinerario...",
+    "describe conditions": "Condizioni del terreno, attrezzatura e qualità della roccia riscontrate (avvicinamento, via e nelle vicinanze).\nSe riscontrate attrezzature difettose, informate gli operatori locali (attrezzatori, ufficio delle guide, ufficio turistico...) ",
+    "describe route_conditions": "Descrivi brevemente l'itinerario che hai seguito solo nei casi seguenti : varianti, concatenamento di più itinerari, percorso parziale dell'itinerario...\nATTENZIONE: non caricate foto copiate da una guida o da un libro. I moderatori le elimineranno immediatamente, poiché si tratta di una pratica illegale che non rispetta le licenze utilizzate dal sito.",
     "describe timing": "Ora di partenza / orari:",
     "describe weather": "Condizioni meteorologiche incontrate durante la gita: copertura nuvolosa, precipitazioni, vento, temperatura...",
     "description": "Descrizione",

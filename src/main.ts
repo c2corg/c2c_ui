@@ -17,6 +17,8 @@ import imageViewer from '@/js/vue-plugins/image-viewer';
 import router, { addAuthenticationGuard } from '@/js/vue-plugins/router';
 import screen from '@/js/vue-plugins/screen';
 import user from '@/js/vue-plugins/user';
+import registerServiceWorker from '@/pwa/register-service-worker';
+import { useAppSettingsStore } from '@/stores/app-settings';
 
 // the global styles, in this order: the design tokens (custom properties) the styles use, the scrollbars and the
 // external links, Bulma (the main Sass manifest file), checkboxes, radios and switches, the helpers of the site and the
@@ -36,6 +38,7 @@ reloadOnStaleChunk(router);
 const app = createApp(App);
 
 app.use(createPinia()); // the stores (src/stores)
+app.runWithContext(useAppSettingsStore); // theme, text size and layout of this device, on <html> before the first render
 app.use(gdpr);
 app.use(analytics, { id: config.googleAnalyticsKey, router }); // after $gdpr: follows the statistics choice
 app.use(dateUtils); // date functions
@@ -55,3 +58,5 @@ app.use(router);
 
 app.config.globalProperties.$language.firstLoad();
 app.mount('#app-mount');
+
+registerServiceWorker(router);

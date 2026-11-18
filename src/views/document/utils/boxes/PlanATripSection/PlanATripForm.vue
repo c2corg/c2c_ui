@@ -490,4 +490,63 @@ const { documentType } = useDocumentType(props);
   flex-direction: column;
   gap: 15px;
 }
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): dark buttons and fields */
+html[data-theme='dark'] .plan-trip-from-to {
+  .addresses-container .swap-icon .swap-button {
+    background: var(--app-dark-surface);
+    border-color: var(--app-dark-border);
+  }
+
+  .addresses-container .swap-icon .swap-button:hover {
+    background: var(--app-dark-surface-hover);
+  }
+
+  .from-to-container {
+    .from-container,
+    .from-container-return,
+    .to-container,
+    .to-container-return {
+      border-color: var(--app-dark-border);
+
+      .from-text,
+      .to-text {
+        border-right-color: var(--app-dark-border);
+      }
+    }
+
+    .to-container,
+    .to-container-return {
+      .to-address {
+        color: var(--app-dark-text);
+      }
+
+      .chose-waypoint {
+        background-color: var(--app-dark-field);
+        color: var(--app-dark-text);
+      }
+    }
+  }
+}
+
+html[data-theme='dark'] .select-date-container .date-picker-container {
+  label {
+    color: var(--app-dark-text);
+    background-color: var(--app-dark-surface);
+  }
+
+  .input-container {
+    border-color: var(--app-dark-border);
+
+    .date-input,
+    .hour-input {
+      color: var(--app-dark-text);
+      background-color: var(--app-dark-field);
+    }
+
+    .calendar-icon {
+      color: var(--c2c-grey-light);
+    }
+  }
+}
 </style>

@@ -82,6 +82,11 @@
   margin: 1rem !important;
 }
 
+/* Bulma 0.9.4, for My topos */
+.mt-4 {
+  margin-top: 1rem !important;
+}
+
 .mb-4 {
   margin-bottom: 1rem !important;
 }

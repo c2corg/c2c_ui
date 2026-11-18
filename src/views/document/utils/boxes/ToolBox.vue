@@ -112,6 +112,31 @@
       :label="$gettext('Translate')"
     />
 
+    <!-- My topos (src/stores/offline.ts): a row with a real label, which the bookmark of the header cannot have -->
+    <template v-if="isNormalView && SAVABLE_TYPES.includes(documentType)">
+      <tool-box-button
+        v-if="offline.isOfflineReady(documentType, document.document_id!)"
+        :to="{ name: 'offline' }"
+        icon="circle-check"
+        icon-class="has-text-success"
+        :label="$gettext('Saved offline')"
+      />
+      <tool-box-button
+        v-else
+        @click="saveOffline"
+        :icon="savingOffline ? 'spinner' : 'download'"
+        :icon-class="savingOffline ? 'fa-spin' : undefined"
+        :label="savingOffline ? $gettext('Saving…') : $gettext('Save offline')"
+      />
+      <tool-box-button
+        v-if="documentType === 'route'"
+        @click="saveDayPack"
+        :icon="savingPack ? 'spinner' : 'layer-group'"
+        :icon-class="savingPack ? 'fa-spin' : undefined"
+        :label="savingPack ? $gettext('Saving…') : $gettext('Save as the pack of the day')"
+      />
+    </template>
+
     <tool-box-button
       :href="`mailto:${reportingIssueMail}?subject=${reportingSubject}&body=${reportingBody}`"
       :icon="['fas', 'exclamation-circle']"
@@ -178,8 +203,6 @@
 </template>
 
 <script setup lang="ts">
-import { format as formatCoordinate } from 'ol/coordinate';
-import { toLonLat } from 'ol/proj';
 import { computed, ref, useTemplateRef } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -198,18 +221,66 @@ import c2c from '@/js/apis/c2c';
 import { useEditable } from '@/js/composables/editable';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
+import { toLonLat } from '@/js/geo/projection';
 import getFundraiser from '@/js/get-fundraiser';
 import { cookedDocumentProperty, useDocumentType } from '@/js/properties';
+import { notify } from '@/js/toast';
+import { OFFLINE_MODE, SAVABLE_TYPES } from '@/pwa/offline-store';
+import { useOfflineStore } from '@/stores/offline';
 
 const reportingIssueMail = 'topo-fr@camptocamp.org';
 
 const props = defineProps({ ...cookedDocumentProperty });
 
 const route = useRoute();
-const { $gettext, $language, $user } = useGlobalProperties();
+const { $gettext, $language, $user, $documentUtils } = useGlobalProperties();
+const offline = useOfflineStore();
 // the view mode too: isDraftView, isVersionView...
 const { isNormalView, isEditable, isDeletable } = useEditable(() => props.document);
 const { documentType } = useDocumentType(props);
+
+const savingOffline = ref(false);
+const savingPack = ref(false);
+const thisDocument = () => ({
+  id: props.document.document_id!,
+  lang: props.document.cooked.lang!,
+  title: $documentUtils.getDocumentTitle(props.document, props.document.cooked.lang!),
+});
+
+async function saveOffline() {
+  if (savingOffline.value) {
+    return;
+  }
+  savingOffline.value = true;
+  try {
+    await offline.saveDocument({ type: documentType.value, ...thisDocument(), mode: OFFLINE_MODE });
+    notify($gettext('Saved offline'), 'is-success');
+  } catch {
+    notify($gettext('Download failed: check the network and try again'), 'is-warning');
+  } finally {
+    savingOffline.value = false;
+  }
+}
+
+async function saveDayPack() {
+  const route = thisDocument();
+  const folderName = window.prompt($gettext('Name of the pack?'), route.title)?.trim();
+  if (!folderName || savingPack.value) {
+    return;
+  }
+  savingPack.value = true;
+  try {
+    const waypoints = await offline.saveDayPack(route, folderName);
+    notify(
+      $gettext('Pack saved offline, in My topos: the route and its waypoints:') + ' ' + (waypoints + 1),
+      'is-success'
+    );
+  } catch {
+    notify($gettext('Download failed: check the network and try again'), 'is-warning');
+  } finally {
+    savingPack.value = false;
+  }
+}
 
 // the windows, named apart from their tags
 type Modal = { show(): void };
@@ -326,8 +397,8 @@ const linkToMeteoBlue = computed(() => {
     default:
       lang = 'en/weather/week';
   }
-  const lonLat = toLonLat(coordinates());
-  const coords = formatCoordinate(lonLat, '{y}N{x}E', 4);
+  const [lon, lat] = toLonLat(coordinates());
+  const coords = `${lat.toFixed(4)}N${lon.toFixed(4)}E`;
   // use waypoint elevation, or elevation of difficuties or max elevation for routes, otherwise nothing
   const elevation =
     props.document.elevation ?? props.document.difficulties_height ?? props.document.elevation_max ?? '';
@@ -342,8 +413,8 @@ const shouldAddDirections = computed(
 );
 
 const linkToGoogleMapsDirections = computed(() => {
-  const lonLat = toLonLat(coordinates());
-  const coords = formatCoordinate(lonLat, '{y},{x}', 4);
+  const [lon, lat] = toLonLat(coordinates());
+  const coords = `${lat.toFixed(4)},${lon.toFixed(4)}`;
   return `https://www.google.com/maps/dir/?api=1&destination=${coords}`;
 });
 
@@ -398,7 +469,8 @@ if ($user.isModerator && documentType.value === 'profile') {
 }
 
 .lang-switcher-box-list span:not(:last-child)::after {
-  content: ' \2022 '; /* \2022 is bull */
+  /* \2022 is bull; the space after an escape ends it, so the space shown after it is the second one */
+  content: ' \2022  ';
 }
 
 /* a colon after the label, with a non-breaking space before it in French */

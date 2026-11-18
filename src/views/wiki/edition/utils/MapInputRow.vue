@@ -81,7 +81,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['move', 'activities']);
+const emit = defineEmits(['move', 'activities', 'replace']);
 
 const { $user } = useGlobalProperties();
 
@@ -103,6 +103,8 @@ function openGPSModal() {
 
 // with the c2c activities of the tracking device activity, if any
 function setGeometry(geometry: unknown, c2cActivities: string[] = []) {
+  // a whole new track (a GPS file, a tracker activity), not an edit of the current one on the map
+  emit('replace');
   map.value!.setDocumentGeometryFromGeoFile(geometry as never);
   if (c2cActivities.length) {
     emit('activities', c2cActivities);
@@ -161,7 +163,7 @@ function fitMapToDocuments() {
 }
 
 // the edition views fit the map to the associated documents
-defineExpose({ fitMapToDocuments });
+defineExpose({ fitMapToDocuments, setGeometry });
 </script>
 
 <style scoped>

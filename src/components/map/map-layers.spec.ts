@@ -2,8 +2,8 @@ import type TileLayer from 'ol/layer/Tile';
 import type UrlTile from 'ol/source/UrlTile';
 import { describe, expect, it } from 'vitest';
 
-import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers';
-import { swissExtent } from './map-utils';
+import { swissExtent } from './map-layers';
+import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers-ol';
 
 const isSwisstopo = (layer: TileLayer<UrlTile>) =>
   layer
@@ -30,7 +30,7 @@ describe('map-layers', () => {
       'Swiss fauna protection zones',
     ]);
     layers.forEach((layer) => expect(layer.getExtent()).toEqual(swissExtent));
-  }, 180000); // map-utils imports all the Font Awesome icons, see map-utils.spec.ts
+  });
 
   it('opens the attribution links in a new tab, without referrer', () => {
     const links = [...cartoLayers(), ...dataLayers(), ...protectionAreasLayers()].flatMap(attributionLinks);

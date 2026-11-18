@@ -1,24 +1,20 @@
-import type { IconLookup } from '@fortawesome/fontawesome-svg-core';
 import type { Extent } from 'ol/extent';
-import type { Options as StrokeOptions } from 'ol/style/Stroke';
 import type Style from 'ol/style/Style';
 
-import iconSvg from '@/js/icon-svg';
+import {
+  DOCUMENT_HIGHLIGHTED_EXTRA_WIDTH,
+  type FeatureProperties,
+  getDocumentIcon,
+  getSvgSrcByDocumentType,
+  LINE_CASING_COLOR,
+  LINE_CASING_WIDTH,
+  LINE_WIDTH,
+  PUBLIC_TRANSPORT_EXTRA_WIDTH,
+} from './map-documents';
+
 import ol from '@/js/libs/ol';
 import utils from '@/js/utils';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
-
-// the drawing properties given by other services: transport lines and stops, start points, areas
-export type FeatureProperties = {
-  color?: string;
-  strokeColor?: string;
-  border_color?: string;
-  border_width?: number;
-  radius?: number;
-  image_url?: string;
-  name?: string;
-  isWalking?: boolean;
-};
 
 const buildTextStyle = function (title: string, highlight: boolean, isPublicTransport: boolean) {
   if (!highlight) {
@@ -39,33 +35,6 @@ const buildTextStyle = function (title: string, highlight: boolean, isPublicTran
       color: 'black',
     }),
     textBaseline: 'middle',
-  });
-};
-
-export const buildPolygonStyle = function (opacity = 0.7) {
-  return new ol.style.Style({
-    stroke: new ol.style.Stroke({
-      color: [100, 100, 100, opacity * 0.5],
-      width: 1.5,
-    }),
-    fill: new ol.style.Fill({
-      color: [251, 201, 0, opacity * 0.5],
-    }),
-  });
-};
-
-export const buildDiffStyle = function (isOld: boolean) {
-  return new ol.style.Style({
-    stroke: new ol.style.Stroke({
-      color: isOld ? 'red' : 'green',
-      width: isOld ? 5 : 3,
-    }),
-    image: new ol.style.Circle({
-      fill: new ol.style.Fill({
-        color: isOld ? 'rgba(255, 0, 0, 0.5)' : 'rgba(0, 255, 0, 0.9)',
-      }),
-      radius: isOld ? 10 : 5,
-    }),
   });
 };
 
@@ -107,55 +76,6 @@ const buildPointStyle = function (title: string, svgSrc: string, color: string, 
   });
 
   return [circleStyle, iconStyle];
-};
-
-// the custom icons have their own prefixes, unknown to Font Awesome types
-const customIconSvg = (prefix: string, iconName: string) => iconSvg({ prefix, iconName } as IconLookup);
-
-// built on first use: icons are only registered when the font-awesome plugin is installed,
-// which happens after this module is evaluated
-let svgSrcByDocumentTypeCache: Record<string, string> | undefined;
-const getSvgSrcByDocumentType = function () {
-  svgSrcByDocumentTypeCache ??= {
-    i: iconSvg({ prefix: 'fas', iconName: 'image' }),
-    o: customIconSvg('document-type', 'outing'),
-    r: iconSvg({ prefix: 'fas', iconName: 'route' }),
-    u: iconSvg({ prefix: 'fas', iconName: 'user' }),
-    x: iconSvg({ prefix: 'fas', iconName: 'flag-checkered' }),
-    s: iconSvg({ prefix: 'fas', iconName: 'bus' }),
-    z: customIconSvg('waypoint', 'access'),
-  };
-  return svgSrcByDocumentTypeCache;
-};
-
-const colorByConditionRating: Record<string, string> = {
-  excellent: '#008000',
-  good: '#9ACD32',
-  average: '#FFFF00',
-  poor: '#FF0000',
-  awful: '#8B0000',
-};
-
-/** The icon of a document marker and its colour (condition, public transport), when it has a plain one */
-export const getDocumentIcon = function (document: C2cDocument): { svgSrc: string; color: string } | null {
-  const type = document.type;
-  let color = document.condition_rating ? colorByConditionRating[document.condition_rating] : '#F93';
-
-  if (type === 'i' || type === 'u' || type === 'x' || type === 'o' || type === 'r' || type === 's') {
-    return { svgSrc: getSvgSrcByDocumentType()[type], color };
-  }
-  if (type === 'w') {
-    if (
-      (document.waypoint_type === 'access' &&
-        document.public_transportation_rating &&
-        document.public_transportation_rating !== 'no service') ||
-      (document.properties && document.properties!.color === 'green')
-    ) {
-      color = '#4baf50';
-    }
-    return { svgSrc: customIconSvg('waypoint', document.waypoint_type || 'misc'), color };
-  }
-  return null;
 };
 
 export const getDocumentPointStyle = function (document: C2cDocument, title: string, highlight: boolean) {
@@ -252,74 +172,40 @@ export const getDocumentPointStyle = function (document: C2cDocument, title: str
   return buildPointStyle(title, svgSrc, color, highlight);
 };
 
+const casedLine = (color: string, casingColor: string, highlight: boolean, extra = 0, lineDash?: number[]) => {
+  const width = extra + (highlight ? DOCUMENT_HIGHLIGHTED_EXTRA_WIDTH : 0);
+  return [
+    new ol.style.Style({
+      stroke: new ol.style.Stroke({ color: casingColor, width: LINE_CASING_WIDTH + width, lineDash }),
+    }),
+    new ol.style.Style({
+      stroke: new ol.style.Stroke({ color, width: LINE_WIDTH + width, lineDash }),
+    }),
+  ];
+};
+
 export const getDocumentLineStyle = function (
   title: string,
   highlight: boolean,
   properties?: FeatureProperties | null
 ): Style | Style[] {
-  if (highlight && !properties) {
-    // same slim dark border as the line when not highlighted, so the red line stays readable on any background
-    return [
-      new ol.style.Style({
-        stroke: new ol.style.Stroke({
-          color: 'grey',
-          width: 4,
-        }),
-      }),
-      new ol.style.Style({
-        stroke: new ol.style.Stroke({
-          color: 'red',
-          width: 3,
-        }),
-        text: buildTextStyle(title, highlight, false),
-      }),
-    ];
-  } else if (highlight && properties && properties.color) {
-    return new ol.style.Style({
-      stroke: new ol.style.Stroke({
-        color: 'red',
-        width: 5,
-      }),
-      text: buildTextStyle(properties.name!, highlight, true),
-    });
-  } else if (properties && properties.color) {
-    const strokeConfigs: StrokeOptions[] = [
-      {
-        color: 'white',
-        width: 7,
-      },
-      {
-        color: `#${properties.color}`,
-        width: 5,
-      },
-    ];
-    if (properties.isWalking) {
-      strokeConfigs[1].lineDash = [8, 8];
-      strokeConfigs[0].lineDash = [8, 8];
-    }
-
-    return strokeConfigs.map(
-      (config) =>
-        new ol.style.Style({
-          stroke: new ol.style.Stroke(config),
-        })
+  if (properties && properties.color) {
+    // public transport: its colour on white, red under the pointer
+    const lineDash = !highlight && properties.isWalking ? [8, 8] : undefined;
+    const styles = casedLine(
+      highlight ? 'red' : `#${properties.color}`,
+      'white',
+      highlight,
+      PUBLIC_TRANSPORT_EXTRA_WIDTH,
+      lineDash
     );
-  } else {
-    return [
-      new ol.style.Style({
-        stroke: new ol.style.Stroke({
-          color: 'grey',
-          width: 3,
-        }),
-      }),
-      new ol.style.Style({
-        stroke: new ol.style.Stroke({
-          color: 'yellow',
-          width: 2,
-        }),
-      }),
-    ];
+    styles[1].setText(buildTextStyle(properties.name!, highlight, true) ?? null);
+    return styles;
   }
+  // the documents: yellow on dark grey, red under the pointer
+  const styles = casedLine(highlight ? 'red' : 'yellow', LINE_CASING_COLOR, highlight);
+  styles[1].setText(buildTextStyle(title, highlight, false) ?? null);
+  return styles;
 };
 
 export const getDocumentPolygonStyle = function (
@@ -371,7 +257,7 @@ export const getElevationProfileMarkerStyle = function () {
           color: 'yellow',
         }),
         stroke: new ol.style.Stroke({
-          color: 'grey',
+          color: LINE_CASING_COLOR,
           width: 0.5,
         }),
         radius: 5,
@@ -381,10 +267,6 @@ export const getElevationProfileMarkerStyle = function () {
 };
 
 export const geoJSONFormat = new ol.format.GeoJSON();
-
-// extent of Switzerland in EPSG:3857 projection
-// (based on https://epsg.io/21781, [5.96, 45.82, 10.49, 47.81] in EPSG:4326)
-export const swissExtent: Extent = [663464.1651279106, 5751550.865005549, 1167741.4584214399, 6075303.611974082];
 
 export const isFiniteExtent = function (extent: Extent | null | undefined): extent is Extent {
   return !!extent && extent.filter(isFinite).length === 4;

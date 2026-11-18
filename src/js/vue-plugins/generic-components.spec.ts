@@ -8,7 +8,7 @@ import install from './generic-components';
 
 import DocumentCard from '@/components/cards/DocumentCard.vue';
 import InputDate from '@/components/generics/inputs/InputDate.vue';
-import OlMap from '@/components/map/OlMap.vue';
+import C2cMap from '@/components/map/C2cMap.vue';
 
 // vitest runs from the repository root
 const genericsDir = resolve('src/components/generics');
@@ -39,11 +39,11 @@ describe('generic-components', () => {
     expect(registered.get('DocumentCard')).toBe(DocumentCard);
   });
 
-  it('loads the MapView component (OpenLayers) on first use, not at startup', async () => {
+  it('loads the MapView component (MapLibre) on first use, not at startup', async () => {
     const mapView = registered.get('MapView') as { __asyncLoader?: () => Promise<Component> };
-    expect(mapView).not.toBe(OlMap);
+    expect(mapView).not.toBe(C2cMap);
     expect(mapView.__asyncLoader).toBeTypeOf('function');
-    expect(await mapView.__asyncLoader!()).toBe(OlMap);
+    expect(await mapView.__asyncLoader!()).toBe(C2cMap);
   });
 
   it('registers real components, not module namespaces', () => {

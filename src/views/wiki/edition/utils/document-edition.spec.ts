@@ -8,16 +8,26 @@ import { confirmLeave, useDocumentEdition } from './document-edition';
 import { ApiData } from '@/js/apis/BaseApi';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-const api = vi.hoisted(() => ({ get: vi.fn(), save: vi.fn(), create: vi.fn(), profile: vi.fn(), toast: vi.fn() }));
+const api = vi.hoisted(() => ({
+  get: vi.fn(),
+  save: vi.fn(),
+  create: vi.fn(),
+  profile: vi.fn(),
+  toast: vi.fn(),
+  queueAdd: vi.fn(),
+}));
 
 vi.mock('@/js/apis/c2c', () => ({
   default: {
     book: { get: api.get, save: api.save, create: api.create },
+    outing: { create: api.create },
     waypoint: { get: api.get },
     profile: { get: api.profile },
   },
 }));
 vi.mock('@/js/toast', () => ({ toast: api.toast }));
+// the outings kept on the phone (keepOnPhone)
+vi.mock('@/stores/outing-queue', () => ({ useOutingQueueStore: () => ({ add: api.queueAdd }) }));
 
 const response = (data: unknown) => new ApiData(Promise.resolve({ data } as never));
 const failure = (data: unknown) => new ApiData(Promise.reject({ response: { data } }));
@@ -57,6 +67,8 @@ async function mountAt(path: string, { isLogged = true } = {}) {
       { path: '/books/:id(\\d+)/:lang?', name: 'book', component: Empty },
       { path: '/books/edit/:id(\\d+)/:lang', name: 'book-edit', component: View },
       { path: '/books/add/:lang', name: 'book-add', component: View },
+      { path: '/outings/add/:lang', name: 'outing-add', component: View },
+      { path: '/outings/:id(\d+)/:lang?', name: 'outing', component: Empty },
     ],
   });
   await router.push(path);
@@ -152,6 +164,50 @@ describe('useDocumentEdition', () => {
     expect(api.save).toHaveBeenCalledExactlyOnceWith(document, 'typo');
     expect(hooks.afterSave).toHaveBeenCalledOnce();
     expect(router.currentRoute.value.fullPath).toBe('/books/12/fr');
+  });
+
+  it('keeps a document on the phone once, however many taps', async () => {
+    const { vm } = await mountAt('/books/edit/12/fr');
+    // the first save does not end: the second tap comes while it runs
+    api.queueAdd.mockImplementation(() => new Promise(() => undefined));
+
+    void vm.keepOnPhone('Kept');
+    void vm.keepOnPhone('Kept');
+    await flushPromises();
+
+    expect(api.queueAdd).toHaveBeenCalledOnce();
+  });
+
+  it('keeps a document on the phone for the author of the form, though the session went meanwhile', async () => {
+    const { wrapper, vm } = await mountAt('/books/edit/12/fr');
+    api.queueAdd.mockResolvedValue({});
+    // a 401 while saving: the user store signs the user out before the form keeps the outing
+    (wrapper.vm as unknown as { $user: { id: number | null } }).$user.id = null;
+
+    await vm.keepOnPhone('Kept');
+
+    expect(api.queueAdd).toHaveBeenCalledWith(vm.document, '', 7, false);
+  });
+
+  it('keeps an outing sent without an answer to be checked, not published again blindly', async () => {
+    api.profile.mockImplementation(() => response({ document_id: 7, type: 'u' }));
+    // the network goes while the API answers: no response
+    api.create.mockImplementation(() => new ApiData(Promise.reject({ code: 'ERR_NETWORK', message: 'Network Error' })));
+    api.queueAdd.mockResolvedValue({});
+    const { vm } = await mountAt('/outings/add/fr');
+    Object.assign(vm.document!, {
+      locales: [{ lang: 'fr', title: 'Arête des Cosmiques' }],
+      activities: ['mountain_climbing'],
+      date_start: '2026-11-16',
+      date_end: '2026-11-16',
+      associations: { routes: [{ document_id: 1, type: 'r' }], users: [{ document_id: 7, type: 'u' }] },
+    });
+
+    vm.save('');
+    await flushPromises();
+
+    expect(api.create).toHaveBeenCalledOnce();
+    expect(api.queueAdd).toHaveBeenCalledWith(vm.document, '', 7, true);
   });
 
   it('does not save a document with errors', async () => {

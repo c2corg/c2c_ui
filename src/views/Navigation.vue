@@ -28,7 +28,7 @@
 
     <dfm-ad-large v-if="!homePage() && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop" />
 
-    <div class="navigation-end">
+    <div class="navigation-end" :class="{ 'is-search-shown': !hideSearchInput }">
       <router-link
         :to="{ name: 'article', params: { id: 106732 } }"
         class="navigation-item has-text-centered"
@@ -37,7 +37,7 @@
         <icon-help fixed-width />
         <span class="is-hidden-mobile"> {{ $filters.uppercaseFirstLetter($gettext('help')) }} </span>
       </router-link>
-      <div ref="searchInputContainer">
+      <div ref="searchInputContainer" class="search-input-container">
         <input-document
           ref="searchInput"
           class="navigation-item search-input"
@@ -128,12 +128,7 @@
                 class="forum-avatar"
                 :class="{ 'has-notifications': forumLinks.some((link) => link.kind === 'notifications') }"
               >
-                <img
-                  width="24"
-                  height="24"
-                  alt="Avatar"
-                  :src="forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
-                />
+                <img width="24" height="24" alt="Avatar" :src="forum.getUserAvatarUrl($user.forumUsername ?? '', 24)" />
                 <!-- placed like on the forum: messages on the left, other notifications on the right -->
                 <span
                   v-for="link of forumLinks"
@@ -222,6 +217,7 @@ import DfmAdLarge from './DfmAdLarge.vue';
 import IconHelp from '@/components/generics/icons/IconHelp.vue';
 import IconJoinUs from '@/components/generics/icons/IconJoinUs.vue';
 import JoinUsLink from '@/components/generics/links/JoinUsLink.vue';
+import forum from '@/js/apis/forum';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useIsHomePage } from '@/js/composables/home-page';
 import config from '@/js/config';
@@ -543,6 +539,23 @@ nav {
   }
 }
 
+/* on mobile, the search input shown takes the room left by the buttons */
+@media screen and (--c2c-mobile) {
+  .navigation-end.is-search-shown {
+    flex-grow: 1;
+  }
+
+  .is-search-shown .search-input-container {
+    flex-grow: 1;
+    display: flex;
+
+    .search-input {
+      flex-grow: 1;
+      width: auto;
+    }
+  }
+}
+
 @media screen and (--c2c-min-tablet) and (--c2c-max-desktop) {
   .navigation-brand {
     img {
@@ -630,6 +643,11 @@ nav {
     width: 300px;
     margin-right: 0;
   }
+}
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark bar (the yellow one of the test servers stays) */
+html[data-theme='dark'] nav:not(.has-background-warning) {
+  background-color: var(--app-dark-field);
 }
 </style>
 
