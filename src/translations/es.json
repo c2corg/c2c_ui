@@ -58,6 +58,7 @@
     "Are you sure you want to revert to this version of the document?": "¿Está seguro de que desea volver a esta versión del documento?",
     "Area not covered": "Área no cubiertado",
     "Area too large": "Área demasiado grande",
+    "Articles": "Artículos",
     "Articles, waypoints or routes to be linked.": "Artículos, puntos de ruta o rutas a enlazar.",
     "Articles, waypoints, routes or books to be linked.": "Artículos, puntos de ruta, rutas o libros a enlazar.",
     "As the name suggests, this method is intended for beginners. Therefore, the safety margin must be particularly important. No parameter other than the danger level is specified. Orientation is ignored.": "Como su nombre indica, este método está destinado a principiantes. Por tanto, el margen de seguridad debe ser especialmente importante. No se especifica ningún otro parámetro otro que el nivel de peligro. Se ignora la orientación.",
@@ -260,6 +261,7 @@
     "Hazard potential": "Potencial de peligro",
     "Hazard potential:": "Potencial de peligro :",
     "Heading": "Titulo",
+    "Help": "Ayuda",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Aquí está la lista de usuarios que sigues y sus actividades que se pueden ver en su hilo personal.",
     "Here you may set activity and region filters that will apply to the homepage feed.": "Aquí puede establecer filtros de actividades y de regiones que se aplicarán en la página principal.",
     "High danger level from the avalanche bulletin": "peligro fuerte según el boletín de avalancha",
@@ -346,6 +348,7 @@
     "Modified the": {
       "modification date": "Cambia"
     },
+    "More": "Mas",
     "More info": "Mas informacion",
     "Multi-criteria search": "Búsqueda multicriterio",
     "My account": "Mi cuenta",
