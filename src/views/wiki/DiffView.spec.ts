@@ -4,7 +4,7 @@ import { h } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
 
 import DiffView from './DiffView.vue';
-import { diffBlocks, hasChanged } from './utils/diff-rows';
+import { alignLines, diffBlocks, hasChanged } from './utils/diff-rows';
 
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
@@ -109,7 +109,90 @@ describe('diff rows', () => {
     ]);
     const changed = blocks[1].rows[2];
     expect(changed.isIdentical).toBe(false);
-    expect(changed.oldPart.map((item) => item.text)).toEqual(['l', '6']);
-    expect(changed.newPart.map((item) => item.text)).toEqual(['L', '6']);
+    expect(changed.oldPart.map((item) => item.text)).toEqual(['l6']);
+    expect(changed.newPart.map((item) => item.text)).toEqual(['L6']);
+  });
+
+  // the old and new texts of each changed row, unchanged parts as is, changed parts in brackets
+  const changedRows = (oldText: string, newText: string) =>
+    diffBlocks(oldText, newText)
+      .flatMap((block) => block.rows)
+      .filter((row) => !row.isIdentical)
+      .map((row) =>
+        [row.oldPart, row.newPart].map((items) =>
+          items.map((item) => (item.isIdentical ? item.text : `[${item.text}]`)).join('')
+        )
+      );
+
+  it('shows the changed words of a line, not scattered letters', () => {
+    expect(
+      changedRows(
+        'L1 | 40m | 4c | Traversée vers la gauche puis dièdre jusqu’au relais sur béquet.\n',
+        'L1 | 45m | 5a | Traverser à gauche, puis remonter le dièdre jusqu’au relais sur deux spits.\n'
+      )
+    ).toEqual([
+      [
+        'L1 | [40m] | [4c] | [Traversée vers la] gauche puis dièdre jusqu’au relais sur [béquet].',
+        'L1 | [45m] | [5a] | [Traverser à] gauche[,] puis [remonter le ]dièdre jusqu’au relais sur [deux spits].',
+      ],
+    ]);
+  });
+
+  it('pairs each changed line with its most similar new line, a new line among them with none', () => {
+    expect(
+      changedRows(
+        'a\nL1 | 30m | 4b | dalle\nL2 | 35m | 5a | fissure\nz\n',
+        'a\nL1 | 30m | 4c | dalle\nUne nouvelle ligne\nL2 | 35m | 5b | fissure\nz\n'
+      )
+    ).toEqual([
+      ['L1 | 30m | [4b] | dalle', 'L1 | 30m | [4c] | dalle'],
+      ['', '[Une nouvelle ligne]'],
+      ['L2 | 35m | [5a] | fissure', 'L2 | 35m | [5b] | fissure'],
+    ]);
+  });
+
+  it('pairs a line with the same line with a text appended', () => {
+    expect(
+      changedRows(
+        'a\nL#2 | 6a/A0 5c | 30 m | 13 pts |\nL#3 | 4b | 35 m | 8 pts |\nz\n',
+        'a\nL#2 | 6a/A0 5c | 30 m | 13 pts | Du relais main gauche, jusqu’à atteindre le pilier.\n' +
+          'L#3 | 4b | 35 m | 8 pts | Le dièdre rampe incliné à gauche.\nz\n'
+      )
+    ).toEqual([
+      [
+        'L#2 | 6a/A0 5c | 30 m | 13 pts |',
+        'L#2 | 6a/A0 5c | 30 m | 13 pts |[ Du relais main gauche, jusqu’à atteindre le pilier.]',
+      ],
+      ['L#3 | 4b | 35 m | 8 pts |', 'L#3 | 4b | 35 m | 8 pts |[ Le dièdre rampe incliné à gauche.]'],
+    ]);
+  });
+
+  it('shows unrelated deleted and added lines whole, side by side', () => {
+    expect(changedRows('a\nAccès par le parking du col.\nz\n', 'a\nDescente en rappel sur la face nord.\nz\n')).toEqual(
+      [['[Accès par le parking du col.]', '[Descente en rappel sur la face nord.]']]
+    );
+  });
+});
+
+describe('alignLines', () => {
+  it('keeps the order of the lines, and puts unpaired lines side by side between pairs', () => {
+    expect(
+      alignLines(
+        ['un deux trois', 'autre chose', 'quatre cinq six'],
+        ['un deux trois quatre', 'rien', 'à voir', 'quatre cinq six sept']
+      )
+    ).toEqual([
+      ['un deux trois', 'un deux trois quatre', true],
+      ['autre chose', 'rien', false],
+      [undefined, 'à voir', false],
+      ['quatre cinq six', 'quatre cinq six sept', true],
+    ]);
+  });
+
+  it('pairs blank lines and lines without words only when equal', () => {
+    expect(alignLines(['', '---'], ['', '***'])).toEqual([
+      ['', '', true],
+      ['---', '***', false],
+    ]);
   });
 });
