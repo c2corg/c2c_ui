@@ -323,6 +323,8 @@ describe('C2cMap', () => {
 
     it('goes on to identify the protection areas under the click', async () => {
       mockLookups(() => Promise.resolve({ data: { documents: [recentOuting('Recent hike')], truncated: true } }));
+      vi.mocked(biodivSportsService.fetchData).mockResolvedValue({ data: { results: [] } } as never);
+      vi.mocked(respecterCestProtegerService.hasArea).mockResolvedValue(false);
       const identify = vi
         .mocked(respecterCestProtegerService.identify)
         .mockResolvedValue({ data: { results: [] } } as never);
