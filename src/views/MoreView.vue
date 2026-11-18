@@ -1,18 +1,16 @@
 <template>
   <section class="section more-view">
     <div class="container">
-      <!-- is-spaced: without it, Bulma pulls the subtitle up onto the title (margin-top: -1.25rem) -->
-      <h1 class="title is-5 is-spaced">{{ $gettext('More') }}</h1>
-      <p class="subtitle is-7">{{ $gettext('The other sections of Camptocamp') }}</p>
+      <h1 class="title is-5">{{ $gettext('Menu') }}</h1>
 
       <ul class="tile-grid">
-        <li v-for="tile of tiles" :key="tile.key">
-          <router-link :to="tile.to" class="tile-link">
-            <span class="tile-icon"><custom-icon :name="tile.icon" :size="34" /></span>
-            <span class="tile-text">
-              <span class="tile-label">{{ tile.label }}</span>
-              <span class="tile-desc">{{ tile.desc }}</span>
+        <li v-for="item of items" :key="item.key">
+          <router-link :to="item.to" class="tile-link">
+            <span class="tile-icon">
+              <component :is="item.iconComponent" v-if="item.iconComponent" fixed-width />
+              <fa-icon v-else :icon="item.icon!" fixed-width />
             </span>
+            <span class="tile-label">{{ item.label }}</span>
             <fa-icon icon="chevron-right" class="tile-chevron" />
           </router-link>
         </li>
@@ -22,79 +20,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import type { RouteLocationRaw } from 'vue-router';
-
-import CustomIcon from '@/components/app/CustomIcon.vue';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { useMainMenuItems } from '@/js/composables/main-menu';
 
 defineOptions({ name: 'MoreView' });
 
-interface Tile {
-  key: string;
-  label: string;
-  desc: string;
-  icon: string;
-  to: RouteLocationRaw;
-}
-
 const { $gettext } = useGlobalProperties();
 
-// the sections the bottom bar doesn't have, by their landing pages (as the side menu of the site)
-const tiles = computed<Tile[]>(() => [
-  {
-    key: 'topoguide',
-    label: $gettext('Topoguide'),
-    desc: $gettext('Routes, waypoints, outings'),
-    icon: 'mountain-trail',
-    to: { name: 'topoguide' },
-  },
-  {
-    key: 'articles',
-    label: $gettext('Articles'),
-    desc: $gettext('Techniques, advice, stories'),
-    icon: 'notebook',
-    to: { name: 'articles' },
-  },
-  {
-    key: 'serac',
-    label: 'SERAC',
-    desc: $gettext('Incidents and accidents'),
-    icon: 'serac-warning',
-    to: { name: 'serac' },
-  },
-  {
-    key: 'yeti',
-    label: 'Yeti',
-    desc: $gettext('Avalanche risk assessment'),
-    icon: 'snowflake-compass',
-    to: { name: 'yeti' },
-  },
-  {
-    key: 'itinevert',
-    label: 'Itinévert',
-    desc: $gettext('To the mountains by public transport'),
-    icon: 'bus-transport',
-    to: { name: 'itinevert' },
-  },
-  {
-    key: 'forum',
-    label: $gettext('Forum'),
-    desc: $gettext('Discussions of the community'),
-    icon: 'speech-bubbles',
-    to: { name: 'forum' },
-  },
-]);
+// the same entries as the side menu of the site
+const items = useMainMenuItems();
 </script>
 
 <style scoped>
 .title {
-  margin-bottom: 0.25rem;
-}
-
-.subtitle {
   margin-bottom: 1rem;
-  color: var(--app-text-muted);
 }
 
 .tile-grid {
@@ -137,21 +76,11 @@ const tiles = computed<Tile[]>(() => [
   border-radius: 4px;
 }
 
-.tile-text {
+.tile-label {
   flex: 1;
   min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.tile-label {
   font-weight: 600;
   font-size: 0.95rem;
-}
-
-.tile-desc {
-  font-size: 0.75rem;
-  color: var(--app-text-muted);
 }
 
 .tile-chevron {

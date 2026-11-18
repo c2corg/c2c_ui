@@ -111,7 +111,7 @@ defineOptions({ name: 'MobileTopBar' });
 const HELP_ARTICLE_ID = 106732;
 const ADDABLE_TYPES = ['outing', 'route', 'waypoint', 'article', 'book', 'xreport'];
 // the routes of the bottom bar tabs: the logo on the left, no back arrow
-const TAB_ROUTES = new Set(['topoguide', 'home', 'offline', 'me', 'more']);
+const TAB_ROUTES = new Set(['home', 'topoguide', 'offline', 'more']);
 
 interface PickedDocument {
   document_id: number;
@@ -133,11 +133,11 @@ const showBack = computed(() => !TAB_ROUTES.has(routeName.value));
 
 const title = computed(() => {
   const titles: Record<string, string> = {
-    topoguide: $gettext('Search', 'navigation'),
-    home: $gettext('Recent'),
+    topoguide: $gettext('Topoguide'),
+    home: $gettext('Home'),
     offline: $gettext('My topos'),
     me: $gettext('Me'),
-    more: $gettext('More'),
+    more: $gettext('Menu'),
     'app-settings': $gettext('App settings'),
     'app-guide': $gettext('App guide'),
     outings: $gettext('outings'),

@@ -4,85 +4,24 @@
     <a :href="'/'" class="menu-brand has-text-centered" aria-label="Camptocamp.org">
       <logo-ctc />
     </a>
-    <router-link :to="{ name: 'topoguide' }">
-      <span
-        class="menu-item is-ellipsed"
-        :class="{
-          'router-link-active': ['topoguide', 'routes', 'waypoints', 'areas', 'route', 'waypoint', 'area'].includes(
-            String($route.name)
-          ),
-        }"
-      >
-        <icon-topoguide fixed-width />
-        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('Topoguide')) }} </span>
-      </span>
-    </router-link>
-    <router-link :to="{ name: 'outings', query: { qa: 'draft,great', bbox: '-431698,3115462,1931123,8442818' } }">
-      <span
-        class="menu-item is-ellipsed"
-        :class="{
-          'router-link-active': ['outings', 'outing'].includes(String($route.name)),
-        }"
-      >
-        <icon-outing fixed-width />
-        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('outings')) }} </span>
-      </span>
-    </router-link>
-    <router-link :to="{ name: 'forum' }">
-      <span class="menu-item is-ellipsed">
-        <icon-forum />
-        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('Forum')) }} </span>
-      </span>
-    </router-link>
-    <router-link :to="{ name: 'serac' }">
-      <span
-        class="menu-item is-ellipsed"
-        :class="{
-          'router-link-active': ['serac', 'xreports', 'xreport'].includes(String($route.name)),
-        }"
-      >
-        <icon-xreport fixed-width />
-        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('Accident database')) }} </span>
-      </span>
-    </router-link>
-    <router-link :to="{ name: 'articles' }">
-      <span
-        class="menu-item is-ellipsed"
-        :class="{ 'router-link-active': ['articles', 'article'].includes(String($route.name)) }"
-      >
-        <icon-article fixed-width />
-        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('articles')) }} </span>
-      </span>
-    </router-link>
-    <router-link :to="{ name: 'yeti' }" v-if="isTall">
-      <span class="menu-item is-ellipsed" :class="{ 'router-link-active': ['yeti'].includes(String($route.name)) }">
-        <icon-yeti fixed-width />
-        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('yeti')) }} </span>
-      </span>
-    </router-link>
-    <!-- use of a href instead of router link so that the page is refreshed if you are already on Itinevert -->
-    <a :href="$router.resolve({ name: 'itinevert' }).href">
-      <span
-        class="menu-item is-ellipsed"
-        :class="{ 'router-link-active': ['itinevert'].includes(String($route.name)) }"
-      >
-        <icon-itinevert fixed-width />
-        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('Itinevert')) }} </span>
-      </span>
-    </a>
-    <!-- the pages of the app that its bottom tab bar opens in the phone layout -->
-    <router-link :to="{ name: 'offline' }">
-      <span class="menu-item is-ellipsed">
-        <fa-icon icon="bookmark" fixed-width />
-        <span class="menu-item-text">{{ $gettext('My topos') }}</span>
-      </span>
-    </router-link>
-    <router-link :to="{ name: 'app-settings' }">
-      <span class="menu-item is-ellipsed">
-        <fa-icon icon="palette" fixed-width />
-        <span class="menu-item-text">{{ $gettext('Settings') }}</span>
-      </span>
-    </router-link>
+    <template v-for="item of menuItems" :key="item.key">
+      <template v-if="!item.tallOnly || isTall">
+        <!-- a plain link when asked, so that the page is refreshed if you are already on it (Itinevert) -->
+        <component
+          :is="item.reload ? 'a' : 'router-link'"
+          v-bind="item.reload ? { href: $router.resolve(item.to).href } : { to: item.to }"
+        >
+          <span
+            class="menu-item is-ellipsed"
+            :class="{ 'router-link-active': item.match.includes(String($route.name)) }"
+          >
+            <component :is="item.iconComponent" v-if="item.iconComponent" fixed-width />
+            <fa-icon v-else :icon="item.icon!" fixed-width />
+            <span class="menu-item-text"> {{ item.label }} </span>
+          </span>
+        </component>
+      </template>
+    </template>
 
     <div class="menu-footer is-size-7">
       <div class="has-text-centered menu-links">
@@ -127,9 +66,10 @@
 import { onBeforeUnmount, ref } from 'vue';
 
 import LogoCtc from '@/components/app/LogoCtc.vue';
-import IconYeti from '@/components/generics/icons/IconYeti.vue';
+import { useMainMenuItems } from '@/js/composables/main-menu';
 import bus from '@/js/event-bus';
 
+const menuItems = useMainMenuItems();
 const isTall = ref(false);
 
 function showGdpr() {
