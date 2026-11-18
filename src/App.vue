@@ -17,6 +17,7 @@
 
     <!-- the phone layout of the app (under DESKTOP_BREAKPOINT): a top bar and a bottom tab bar instead of the side menu and the navigation -->
     <mobile-top-bar v-if="appSettings.isMobileShell" />
+    <mobile-menu v-if="appSettings.isMobileShell" />
 
     <!-- keep router view in last -->
     <div class="page-content is-block-print">
@@ -48,6 +49,7 @@ import { defineAsyncComponent, onMounted, ref, watch } from 'vue';
 
 import AlertWindow from './components/alert-window/AlertWindow.vue';
 import BottomNav from './components/app/BottomNav.vue';
+import MobileMenu from './components/app/MobileMenu.vue';
 import MobileTopBar from './components/app/MobileTopBar.vue';
 import OnboardingTour from './components/app/OnboardingTour.vue';
 import PullToRefresh from './components/app/PullToRefresh.vue';

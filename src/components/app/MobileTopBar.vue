@@ -105,7 +105,7 @@ import { ADDABLE_TYPES, HELP_ROUTE } from '@/js/composables/main-menu';
 defineOptions({ name: 'MobileTopBar' });
 
 // the routes of the bottom bar tabs: the logo on the left, no back arrow
-const TAB_ROUTES = new Set(['home', 'topoguide', 'offline', 'more']);
+const TAB_ROUTES = new Set(['home', 'topoguide', 'offline']);
 
 interface PickedDocument {
   document_id: number;
@@ -131,7 +131,6 @@ const title = computed(() => {
     home: $gettext('Home'),
     offline: $gettext('My topos'),
     me: $gettext('Me'),
-    more: $gettext('Menu'),
     'app-settings': $gettext('App settings'),
     'app-guide': $gettext('App guide'),
     outings: $gettext('outings'),

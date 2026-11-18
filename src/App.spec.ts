@@ -34,6 +34,7 @@ const mountApp = async (path = '/routes', { screen = 'isWidescreen' } = {}) => {
         AlertWindow: true,
         GdprBanner: true,
         MobileTopBar: true,
+        MobileMenu: true,
         BottomNav: true,
         OnboardingTour: true,
         PullToRefresh: true,
@@ -72,6 +73,7 @@ describe('App', () => {
     let { wrapper } = await mountApp();
     expect(wrapper.findComponent({ name: 'MobileTopBar' }).exists()).toBe(false);
     expect(wrapper.findComponent({ name: 'BottomNav' }).exists()).toBe(false);
+    expect(wrapper.findComponent({ name: 'MobileMenu' }).exists()).toBe(false);
 
     // a narrower one, with a new store reading it
     vi.unstubAllGlobals();
@@ -79,6 +81,7 @@ describe('App', () => {
     ({ wrapper } = await mountApp());
     expect(wrapper.findComponent({ name: 'MobileTopBar' }).exists()).toBe(true);
     expect(wrapper.findComponent({ name: 'BottomNav' }).exists()).toBe(true);
+    expect(wrapper.findComponent({ name: 'MobileMenu' }).exists()).toBe(true);
     expect(wrapper.findComponent({ name: 'OnboardingTour' }).exists()).toBe(true);
   });
 });

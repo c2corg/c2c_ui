@@ -55,7 +55,6 @@ const DiffView = () => import(`@/views/wiki/DiffView.vue`);
 const YetiView = () => import(`@/views/portals/YetiView.vue`);
 // the pages of the phone layout (bottom tab bar)
 const MeView = () => import('@/views/user/MeView.vue');
-const MoreView = () => import('@/views/MoreView.vue');
 const AppSettingsView = () => import('@/views/user/AppSettingsView.vue');
 const OfflineView = () => import('@/views/user/OfflineView.vue');
 const AppGuideView = () => import('@/views/static-views/AppGuideView.vue');
@@ -83,7 +82,6 @@ const routes: RouteRecordRaw[] = [
   { path: '/outings-stats', name: 'outings-stats', component: OutingsStatsView },
   { path: '/sophie-picture-contest/:year(\\d+)?', name: 'sophie-picture-contest', component: SophiePictureContestView },
   { path: '/me', name: 'me', component: MeView },
-  { path: '/more', name: 'more', component: MoreView },
   { path: '/app-settings', name: 'app-settings', component: AppSettingsView },
   // "My topos": the documents saved on the device (src/stores/offline.ts)
   { path: '/offline', name: 'offline', component: OfflineView },
