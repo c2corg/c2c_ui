@@ -22,8 +22,9 @@
         <p class="mt-1 is-size-7">
           <template v-if="document.author">
             <span v-translate>Written by</span>
-            <contributor-link :contributor="document.author" />
-            <span v-if="document.created_at">, {{ $dateUtils.toLocalizedString(document.created_at, 'll') }}</span>
+            <contributor-link :contributor="document.author" /><span v-if="document.created_at"
+              >, {{ $dateUtils.toLocalizedString(document.created_at, 'll') }}</span
+            >
             <br />
           </template>
           <span v-translate>Deleted</span>
@@ -51,7 +52,14 @@
 
     <deleted-document-details v-if="showDetails" :details="details" class="mt-4" />
 
-    <modal-confirmation ref="confirmation" :promise="restoring" @confirm="restore">
+    <!-- a restore destroys nothing: not the red and green of the deletions -->
+    <modal-confirmation
+      ref="confirmation"
+      :promise="restoring"
+      confirm-class="is-primary"
+      cancel-class=""
+      @confirm="restore"
+    >
       <template #title>
         <span v-translate>Restore this document</span>
       </template>

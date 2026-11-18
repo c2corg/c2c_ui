@@ -13,9 +13,9 @@
         <span>|</span>
         <a :href="forumUrl + '/u/' + contributor.forum_username + '/activity'">d</a>
       </span>
-      <span>)</span>
-    </span>
-  </span>
+      <span>)</span></span
+    ></span
+  >
 </template>
 
 <script setup lang="ts">
