@@ -88,10 +88,13 @@ export const baseLayers: MapLayer[] = [
     // $gettext('Public transport', 'Map layer')
     title: 'Public transport',
     image: 'publictransport.jpg',
-    tiles: ['https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png'],
+    // MeMoMaps sends no CORS header, which the map needs: its tiles are read through our media host
+    tiles: ['https://media.camptocamp.org/public-transport/tiles/{z}/{x}/{y}.png'],
     maxzoom: 18,
     attribution:
       `© ${link('//openstreetmap.org/copyright', 'OpenStreetMap')} | ` + `© ${link('//memomaps.de', 'ÖPNVKarte')}`,
+    // in 3D too, until the public transport lines are drawn from vector tiles (a raster map is blurrier on the relief)
+    in3d: true,
   },
   {
     // $gettext('IGN maps', 'Map layer')
