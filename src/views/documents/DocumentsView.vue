@@ -85,7 +85,14 @@
       <query-items class="filter-section" :list-mode="listMode" @documents-load="onQueryDocumentsLoad" />
     </div>
 
-    <div class="columns result-section" :class="['mobile-mode-' + displayMode, { 'query-has-tags': queryHasTags }]">
+    <div
+      ref="resultSection"
+      class="columns result-section"
+      :class="[
+        'mobile-mode-' + displayMode,
+        { 'query-has-tags': queryHasTags, 'has-splitter': showSplitter, 'is-resizing': splitter.resizing.value },
+      ]"
+    >
       <div
         v-if="showResults"
         ref="documentsContainer"
@@ -94,7 +101,9 @@
           'is-12': !showMap,
           'is-8 is-7-fullhd': showMap && listMode,
           'is-8 is-7-widescreen is-6-fullhd': showMap && !listMode,
+          'has-custom-width': hasCustomWidth,
         }"
+        :style="hasCustomWidth ? { '--results-width': `${splitter.width.value}%` } : undefined"
       >
         <loading-notification :promise="promise" />
 
@@ -112,7 +121,9 @@
             v-for="(document, index) in documents.documents"
             :key="index"
             :class="{
-              'is-full-mobile is-half-tablet is-half-desktop is-half-widescreen is-half-fullhd': showMap,
+              'is-full': showMap && cardsSingleColumn,
+              'is-full-mobile is-half-tablet is-half-desktop is-half-widescreen is-half-fullhd':
+                showMap && !cardsSingleColumn,
               'is-full-mobile is-one-third-tablet is-one-third-desktop is-one-quarter-widescreen is-one-quarter-fullhd':
                 !showMap,
             }"
@@ -135,6 +146,21 @@
 
         <page-navigation v-if="documents" :documents="documents" class="documents-navigation" />
       </div>
+      <div
+        v-if="showSplitter"
+        class="results-splitter"
+        role="separator"
+        tabindex="0"
+        aria-orientation="vertical"
+        :aria-label="$gettext('Resize the map')"
+        :aria-valuenow="splitter.valueNow.value"
+        :aria-valuemin="MIN_RESULTS_WIDTH"
+        :aria-valuemax="MAX_RESULTS_WIDTH"
+        :title="$gettext('Drag to resize the map, double-click to reset')"
+        @pointerdown="splitter.onPointerDown"
+        @keydown="splitter.onKeydown"
+        @dblclick="splitter.reset"
+      />
       <div v-if="showMap" class="column map-container">
         <map-view
           ref="olMap"
@@ -165,6 +191,7 @@ import PageNavigation from './utils/PageNavigation.vue';
 import PageSelector from './utils/PageSelector.vue';
 import QueryItems from './utils/QueryItems.vue';
 import { normalizedPageQuery } from './utils/page-query';
+import { MAX_RESULTS_WIDTH, MIN_RESULTS_WIDTH, useResultsSplitter } from './utils/results-splitter';
 
 import { searchOverlayFilters } from '@/components/map/density-overlays';
 import type { ApiData } from '@/js/apis/BaseApi';
@@ -189,7 +216,7 @@ const documentTypes = ['route', 'waypoint', 'outing', 'image', 'book', 'area'];
 
 const route = useRoute();
 const router = useRouter();
-const { $gettext } = useGlobalProperties();
+const { $gettext, $screen } = useGlobalProperties();
 
 // the map component: OpenLayers needs an explicit resize when its container changes
 const olMap = useTemplateRef<{ resize(): void }>('olMap');
@@ -205,6 +232,24 @@ const queryHasTags = ref(false);
 
 const showMap = computed(() => ['both', 'map'].includes(displayMode.value));
 const showResults = computed(() => ['result', 'both'].includes(displayMode.value));
+
+// on desktop, the results and the map share the width as the user drags it, one width for the list and one for the
+// cards, for all the document types
+const resultSection = useTemplateRef<HTMLElement>('resultSection');
+const splitter = useResultsSplitter({
+  preferences,
+  key: computed(() => (listMode.value ? 'resultsListWidth' : 'resultsGridWidth')),
+  row: resultSection,
+  results: documentsContainer,
+  onResize: () => olMap.value?.resize(),
+});
+const showSplitter = computed(() => showResults.value && showMap.value && !$screen.isMobile && !$screen.isTablet);
+const hasCustomWidth = computed(() => showSplitter.value && splitter.width.value !== undefined);
+// narrowed results: one card per row instead of two (the default widths always fit two)
+const CARDS_SINGLE_COLUMN_BELOW = 640;
+const cardsSingleColumn = computed(
+  () => hasCustomWidth.value && (splitter.pixelWidth.value ?? Infinity) < CARDS_SINGLE_COLUMN_BELOW
+);
 const offline = useOfflineStore();
 const offlineOnly = ref(false);
 // the documents of the page, or the ones of them saved offline
@@ -474,6 +519,51 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
       padding-left: 0;
       padding-top: 0;
       padding-bottom: 0;
+    }
+
+    /* the splitter takes most of the gutter between the results and the map: by default, the widths do not change */
+    &.has-splitter .documents-container {
+      padding-right: 0.25rem;
+    }
+
+    .documents-container.has-custom-width {
+      flex: none;
+      width: var(--results-width);
+      /* one card, or a few columns of the table, whatever the width of the screen the width was chosen on */
+      min-width: 20rem;
+    }
+
+    .results-splitter {
+      flex: 0 0 0.5rem;
+      position: relative;
+      cursor: col-resize;
+      touch-action: none;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: calc(50% - 1px);
+        width: 2px;
+        border-radius: 1px;
+        background-color: var(--c2c-grey-lighter);
+        transition: background-color 0.15s;
+      }
+
+      &:hover::after,
+      &:focus-visible::after {
+        background-color: var(--c2c-primary);
+      }
+    }
+
+    &.is-resizing {
+      cursor: col-resize;
+      user-select: none;
+
+      .results-splitter::after {
+        background-color: var(--c2c-primary);
+      }
     }
   }
 }
