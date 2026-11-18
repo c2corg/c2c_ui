@@ -51,6 +51,12 @@ class LocalStorageItem {
     this.commit_();
   }
 
+  remove(propertyName: string) {
+    this.reload();
+    delete this.data_[propertyName];
+    this.commit_();
+  }
+
   clear() {
     this.data_ = {};
     this.commit_();

@@ -26,6 +26,7 @@ describe('lazy documents table', () => {
           globalProperties: {
             $gettext: (text: string) => text,
             $filters: { uppercaseFirstLetter: (text: string) => text },
+            $screen: {},
           } as never,
         },
         directives: { translate: {} },

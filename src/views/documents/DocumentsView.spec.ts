@@ -11,7 +11,12 @@ import type DocumentService from '@/js/apis/c2c/DocumentService';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 import { useOfflineStore } from '@/stores/offline';
 
-const mountView = async (url = '/routes', total = 0, documents: object[] = []) => {
+const mountView = async (
+  url = '/routes',
+  total = 0,
+  documents: object[] = [],
+  $screen = { isMobile: false, isTablet: false }
+) => {
   // what the API service returns: the response once loaded, and then(), which gives the object back, to be told when
   const apiData = {
     data: { documents, total },
@@ -37,14 +42,19 @@ const mountView = async (url = '/routes', total = 0, documents: object[] = []) =
         globalProperties: {
           $gettext: (text: string) => text,
           $filters: { uppercaseFirstLetter: (text: string) => text },
+          $screen,
         } as never,
       },
       directives: { translate: {} },
+      // the map, resized when its container changes
+      stubs: { MapView: { render: () => null, methods: { resize: mapResize } } },
     },
   });
   await flushPromises();
   return { wrapper, router, getAll };
 };
+
+const mapResize = vi.fn();
 
 describe('DocumentsView', () => {
   afterEach(() => {
@@ -104,5 +114,115 @@ describe('DocumentsView', () => {
     await router.push('/waypoints');
     await flushPromises();
     expect(wrapper.findAll('.card-container')).toHaveLength(2);
+  });
+
+  describe('splitter between the results and the map', () => {
+    const stored = () => JSON.parse(window.localStorage.getItem('DocumentsView.preferences') ?? '{}');
+    const store = (data: object) => {
+      window.localStorage.setItem('DocumentsView.preferences', JSON.stringify(data));
+      getPreferences('DocumentsView').reload();
+    };
+
+    it('is only on desktop', async () => {
+      expect((await mountView()).wrapper.find('[role="separator"]').exists()).toBe(true);
+      expect(
+        (await mountView('/routes', 0, [], { isMobile: false, isTablet: true })).wrapper
+          .find('[role="separator"]')
+          .exists()
+      ).toBe(false);
+    });
+
+    it('keeps the widths of the Bulma classes until a width is chosen', async () => {
+      const { wrapper } = await mountView();
+
+      expect(wrapper.find('.documents-container').classes()).toContain('is-8');
+      expect(wrapper.find('.documents-container').classes()).not.toContain('has-custom-width');
+    });
+
+    it('gives the results the stored width of the cards or of the list, within the limits', async () => {
+      store({ resultsGridWidth: 40, resultsListWidth: 95 });
+      const { wrapper } = await mountView();
+      const container = () => wrapper.find<HTMLElement>('.documents-container');
+
+      expect(container().classes()).toContain('has-custom-width');
+      expect(container().element.style.getPropertyValue('--results-width')).toBe('40%');
+      expect(wrapper.find('[role="separator"]').attributes('aria-valuenow')).toBe('40');
+
+      await wrapper.find('.header-right > span.has-cursor-pointer').trigger('click');
+      expect(container().element.style.getPropertyValue('--results-width')).toBe('75%');
+    });
+
+    it('changes the width with the arrow keys, and stores it', async () => {
+      store({ resultsGridWidth: 50 });
+      const { wrapper } = await mountView();
+      const separator = wrapper.find('[role="separator"]');
+
+      await separator.trigger('keydown', { key: 'ArrowRight' });
+      await separator.trigger('keydown', { key: 'ArrowRight' });
+      await separator.trigger('keydown', { key: 'ArrowLeft' });
+
+      expect(separator.attributes('aria-valuenow')).toBe('52');
+      expect(stored()).toEqual({ resultsGridWidth: 52 });
+    });
+
+    it('follows the pointer when dragged, and stores the width when dropped', async () => {
+      const { wrapper } = await mountView();
+      const rect = (left: number, right: number) => ({ left, right, width: right - left }) as DOMRect;
+      vi.spyOn(wrapper.find('.result-section').element, 'getBoundingClientRect').mockReturnValue(rect(0, 1000));
+      vi.spyOn(wrapper.find('.documents-container').element, 'getBoundingClientRect').mockReturnValue(rect(0, 600));
+      const separator = wrapper.find('[role="separator"]');
+      const pointer = async (type: string, clientX = 0) => {
+        separator.element.dispatchEvent(new MouseEvent(type, { button: 0, clientX }));
+        await flushPromises();
+      };
+
+      // grabbed 4px right of the edge of the results
+      await pointer('pointerdown', 604);
+      await pointer('pointermove', 304);
+      expect(wrapper.find('.result-section').classes()).toContain('is-resizing');
+      expect(wrapper.find<HTMLElement>('.documents-container').element.style.getPropertyValue('--results-width')).toBe(
+        '30%'
+      );
+      await vi.waitFor(() => expect(mapResize).toHaveBeenCalled());
+      await pointer('pointermove', 100);
+      await pointer('pointerup');
+
+      expect(wrapper.find('.result-section').classes()).not.toContain('is-resizing');
+      expect(stored()).toEqual({ resultsGridWidth: 25 });
+    });
+
+    it('goes back to the default width on double click', async () => {
+      store({ resultsGridWidth: 40, resultsListWidth: 60 });
+      const { wrapper } = await mountView();
+
+      await wrapper.find('[role="separator"]').trigger('dblclick');
+
+      expect(wrapper.find('.documents-container').classes()).not.toContain('has-custom-width');
+      expect(stored()).toEqual({ resultsListWidth: 60 });
+    });
+
+    it('shows one card per row when the results are narrow', async () => {
+      store({ resultsGridWidth: 30 });
+      const observers: ResizeObserverCallback[] = [];
+      vi.stubGlobal(
+        'ResizeObserver',
+        class {
+          constructor(callback: ResizeObserverCallback) {
+            observers.push(callback);
+          }
+          observe() {}
+          disconnect() {}
+        }
+      );
+      const { wrapper } = await mountView('/routes', 2, [{ document_id: 1 }, { document_id: 2 }]);
+      vi.spyOn(wrapper.find('.result-section').element, 'clientWidth', 'get').mockReturnValue(1500);
+      vi.spyOn(wrapper.find<HTMLElement>('.documents-container').element, 'offsetWidth', 'get').mockReturnValue(450);
+      observers.forEach((callback) => callback([], {} as ResizeObserver));
+      await flushPromises();
+
+      expect(wrapper.find('.card-container').classes()).toContain('is-full');
+      expect(wrapper.find('.card-container').classes()).not.toContain('is-half-desktop');
+      vi.unstubAllGlobals();
+    });
   });
 });
