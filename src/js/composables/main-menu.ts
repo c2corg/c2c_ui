@@ -27,7 +27,7 @@ export interface MainMenuItem {
   reload?: boolean;
 }
 
-/** The entries of the main menu: the side menu of the site, and the menu of the phone layout (bottom bar). */
+/** The entries of the main menu: the side menu of the site, and its drawer in the phone layout. */
 export function useMainMenuItems() {
   const { $gettext } = useGlobalProperties();
   const label = uppercaseFirstLetter;
@@ -98,6 +98,57 @@ export function useMainMenuItems() {
       to: { name: 'app-settings' },
       match: ['app-settings'],
       icon: 'palette',
+    },
+  ]);
+}
+
+// the document types of the creation menu (the "+" button of the navigation and of the top bar of the phone layout)
+export const ADDABLE_TYPES = ['outing', 'route', 'waypoint', 'article', 'book', 'xreport'];
+
+// the help article of the site
+export const HELP_ROUTE: RouteLocationRaw = { name: 'article', params: { id: 106732 } };
+
+export interface AccountLink {
+  key: string;
+  text: string;
+  to: RouteLocationRaw;
+  icon?: string;
+  iconComponent?: string;
+}
+
+/** The destinations of the account of the signed in user: the user menu of the navigation, and the Me page. */
+export function useAccountLinks() {
+  const { $gettext, $user } = useGlobalProperties();
+
+  return computed<AccountLink[]>(() => [
+    { key: 'profile', to: { name: 'profile', params: { id: $user.id } }, text: $gettext('My profile'), icon: 'user' },
+    { key: 'account', to: { name: 'account' }, text: $gettext('My account'), icon: 'check-circle' },
+    { key: 'preferences', to: { name: 'preferences' }, text: $gettext('My preferences'), icon: 'gears' },
+    { key: 'trackers', to: { name: 'trackers' }, text: $gettext('Activity trackers'), icon: 'location-crosshairs' },
+    {
+      key: 'outings',
+      to: { name: 'outings', query: { u: $user.id } },
+      text: $gettext('My outings'),
+      iconComponent: 'icon-outing',
+    },
+    {
+      key: 'statistics',
+      to: { name: 'outings-stats', query: { u: $user.id } },
+      text: $gettext('My statistics'),
+      icon: 'chart-bar',
+    },
+    {
+      key: 'changes',
+      to: { name: 'whatsnew', query: { u: $user.id } },
+      text: $gettext('My changes'),
+      icon: 'edit',
+    },
+    { key: 'following', to: { name: 'following' }, text: $gettext('My followed users'), icon: 'heart' },
+    {
+      key: 'bookmarks',
+      to: { name: 'routes', query: { u: $user.id } },
+      text: $gettext('My bookmarks'),
+      icon: 'star',
     },
   ]);
 }

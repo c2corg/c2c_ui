@@ -1,7 +1,6 @@
 <template>
   <div
     id="app"
-    ref="app"
     :class="{
       'nav-dfm': !homePage && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
       'home-topoguide': homePage,
@@ -9,7 +8,7 @@
   >
     <environment-banner />
     <side-menu class="side-menu no-print" :class="{ 'alternative-side-menu': alternativeSideMenu }" />
-    <navigation class="navigation no-print" @toggle-side-menu="alternativeSideMenu = !alternativeSideMenu" />
+    <navigation class="navigation no-print" />
     <dfm-ad-small v-if="!homePage && ($screen.isMobile || $screen.isTablet || $screen.isDesktop)" class="ad" />
     <site-notice class="no-print site-notice" />
     <image-viewer v-if="imageViewerRequested" />
@@ -17,8 +16,9 @@
     <alert-window />
     <div v-if="alternativeSideMenu" class="alternative-side-menu-shader" @click="alternativeSideMenu = false" />
 
-    <!-- the phone layout of the app: a top bar and a bottom tab bar instead of the side menu and the navigation -->
-    <mobile-top-bar v-if="appSettings.isMobileShell" />
+    <!-- the phone layout of the app (under DESKTOP_BREAKPOINT): a top bar and a bottom tab bar instead of the navigation,
+         the side menu becomes a drawer that the menu button of the top bar opens -->
+    <mobile-top-bar v-if="appSettings.isMobileShell" @toggle-side-menu="alternativeSideMenu = !alternativeSideMenu" />
 
     <!-- keep router view in last -->
     <div class="page-content is-block-print">
@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { defineAsyncComponent, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 import AlertWindow from './components/alert-window/AlertWindow.vue';
@@ -73,7 +73,6 @@ const ImageViewer = defineAsyncComponent(() => import('./components/image-viewer
 defineOptions({ name: 'App' });
 
 const route = useRoute();
-const app = useTemplateRef<HTMLDivElement>('app');
 
 const alternativeSideMenu = ref(false);
 
@@ -93,40 +92,22 @@ watch(
   }
 );
 
-function hideSideMenuOnMobile() {
-  alternativeSideMenu.value = false;
-}
-
-watch(() => route.fullPath, hideSideMenuOnMobile);
-
-function updateWidth() {
-  // allows reactive css when body width changes because map is pinned
-  // (unlike the css @media(max-width) this is replacing)
-
-  const bulmaBreakpoints = {
-    tablet: 769,
-    desktop: 1024,
-    widescreen: 1216,
-    fullhd: 1408,
-  };
-  const width = app.value!.offsetWidth;
-  if (width <= bulmaBreakpoints.tablet) {
-    app.value!.dataset.width = 'mobile';
-  } else if (width <= bulmaBreakpoints.desktop) {
-    app.value!.dataset.width = 'tablet';
-  } else {
-    app.value!.dataset.width = 'desktop';
+// the drawer closes with the page, and when the window gets wide enough for the side menu to stay open
+watch(
+  () => route.fullPath,
+  () => (alternativeSideMenu.value = false)
+);
+watch(
+  () => appSettings.isMobileShell,
+  (isMobileShell) => {
+    if (!isMobileShell) {
+      alternativeSideMenu.value = false;
+    }
   }
-}
+);
 
 onMounted(() => {
   document.getElementById('splashscreen')!.style.display = 'none';
-  updateWidth();
-  window.addEventListener('resize', updateWidth);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', updateWidth);
 });
 </script>
 
@@ -228,57 +209,23 @@ body,
   }
 }
 
+/* The navigation of the site follows html[data-shell] (src/stores/app-settings.ts), set from DESKTOP_BREAKPOINT: under it,
+   the side menu is a drawer out of the screen and the page takes the whole width; from it, the side menu stays open
+   and the page leaves room for it */
+.side-menu {
+  left: calc(-1 * var(--c2c-sidemenu-width));
+}
+
+.alternative-side-menu {
+  left: 0;
+}
+
 @media screen {
-  [data-width='mobile'] {
-    .side-menu {
-      left: calc(-1 * var(--c2c-sidemenu-width));
-    }
-
-    .alternative-side-menu {
-      left: 0;
-    }
-
-    .page-content,
-    .ad {
-      margin-left: 0;
-    }
-    .ad {
-      padding-top: var(--c2c-navbar-height);
-    }
-
-    .section {
-      padding: 0.75rem !important;
-    }
-
-    .box:not(:last-child),
-    .feed-card {
-      margin-bottom: 0.75rem !important;
-    }
-  }
-
-  [data-width='tablet'] {
-    .side-menu {
-      left: calc(-1 * var(--c2c-sidemenu-width));
-    }
-
-    .alternative-side-menu {
-      left: 0;
-    }
-
-    .page-content,
-    .ad {
-      margin-left: 0;
-    }
-
-    .ad {
-      padding-top: var(--c2c-navbar-height);
-    }
-  }
-
-  [data-width='desktop'] {
+  html[data-shell='desktop'] {
     .side-menu {
       left: 0;
     }
+
     .page-content,
     .ad {
       margin-left: var(--c2c-sidemenu-width);
@@ -291,6 +238,18 @@ body,
     .site-notice {
       padding-left: var(--c2c-sidemenu-width);
     }
+  }
+}
+
+/* the narrow content of the phones (a width, not the navigation) */
+@media screen and (max-width: 769px) {
+  .section {
+    padding: 0.75rem !important;
+  }
+
+  .box:not(:last-child),
+  .feed-card {
+    margin-bottom: 0.75rem !important;
   }
 }
 
@@ -343,19 +302,15 @@ html[data-shell='mobile'] {
   /* pulling the top of the page refreshes what it shows (PullToRefresh.vue), not the whole page as the browser would */
   overscroll-behavior-y: contain;
 
-  .side-menu,
-  .navigation,
-  .alternative-side-menu-shader {
+  .navigation {
     display: none !important;
   }
 
   .page-content {
-    margin-left: 0;
     padding-bottom: var(--app-bottom-bar-height);
   }
 
   .ad {
-    margin-left: 0;
     padding-top: var(--app-top-bar-height);
   }
 
@@ -366,7 +321,6 @@ html[data-shell='mobile'] {
 
   .site-notice {
     top: var(--app-top-bar-height);
-    padding-left: 0;
   }
 
   /* the wide tables of the website (recent changes, associations history) scroll in their place, not the page */

@@ -45,6 +45,9 @@ describe('$screen', () => {
     [375, 'isMobile'],
     [768, 'isMobile'],
     [800, 'isTablet'],
+    // the desktop layout of the app starts at DESKTOP_BREAKPOINT (1024): the last tablet width is the one under it
+    [1023, 'isTablet'],
+    [1024, 'isDesktop'],
     [1100, 'isDesktop'],
     [1300, 'isWidescreen'],
     [1600, 'isFullHD'],

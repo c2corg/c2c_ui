@@ -8,8 +8,7 @@ import App from './App.vue';
 
 const page = { render: () => h('div') };
 
-const mountApp = async (path = '/routes', { width = 1300, screen = 'isWidescreen' } = {}) => {
-  vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(width);
+const mountApp = async (path = '/routes', { screen = 'isWidescreen' } = {}) => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [
@@ -24,17 +23,17 @@ const mountApp = async (path = '/routes', { width = 1300, screen = 'isWidescreen
     attachTo: document.body,
     global: {
       plugins: [router],
-      // the windows, menus and banners of the app, stubbed: Navigation emits toggle-side-menu
+      // the windows, menus and banners of the app, stubbed: the top bar emits toggle-side-menu
       stubs: {
         SideMenu: true,
-        Navigation: { name: 'Navigation', template: '<nav />', emits: ['toggle-side-menu'] },
+        Navigation: true,
         DfmAdSmall: true,
         SiteNotice: true,
         ImageViewer: true,
         HelperWindow: true,
         AlertWindow: true,
         GdprBanner: true,
-        MobileTopBar: true,
+        MobileTopBar: { name: 'MobileTopBar', template: '<header />', emits: ['toggle-side-menu'] },
         BottomNav: true,
         OnboardingTour: true,
         PullToRefresh: true,
@@ -61,29 +60,10 @@ describe('App', () => {
     expect(document.getElementById('splashscreen')!.style.display).toBe('none');
   });
 
-  it.each([
-    [400, 'mobile'],
-    [900, 'tablet'],
-    [1300, 'desktop'],
-  ])('at %ipx wide, sets the width to %s', async (width, expected) => {
-    const { wrapper } = await mountApp('/routes', { width });
-
-    expect(wrapper.attributes('data-width')).toBe(expected);
-  });
-
-  it('follows the window resizes', async () => {
-    const { wrapper } = await mountApp('/routes', { width: 1300 });
-
-    vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(400);
-    window.dispatchEvent(new Event('resize'));
-
-    expect(wrapper.attributes('data-width')).toBe('mobile');
-  });
-
-  it('opens the side menu from the navigation, and closes it on the next page', async () => {
+  it('opens the side menu from the menu button of the top bar, and closes it on the next page', async () => {
     const { wrapper, router } = await mountApp();
 
-    wrapper.findComponent({ name: 'Navigation' }).vm.$emit('toggle-side-menu');
+    wrapper.findComponent({ name: 'MobileTopBar' }).vm.$emit('toggle-side-menu');
     await flushPromises();
     expect(wrapper.find('.alternative-side-menu').exists()).toBe(true);
     expect(wrapper.find('.alternative-side-menu-shader').exists()).toBe(true);

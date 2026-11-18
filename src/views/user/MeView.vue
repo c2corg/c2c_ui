@@ -9,11 +9,7 @@
         <div class="me-header-text">
           <p class="me-display-name">{{ $user.name || $user.userName }}</p>
           <p class="me-username">@{{ $user.userName }}</p>
-          <router-link
-            v-if="$user.id"
-            :to="{ name: 'profile', params: { id: $user.id, lang: $user.lang } }"
-            class="public-profile-link"
-          >
+          <router-link v-if="$user.id" :to="accountTo('profile')" class="public-profile-link">
             {{ $gettext('See my profile') }}
             <fa-icon icon="chevron-right" />
           </router-link>
@@ -79,6 +75,7 @@ import { type RouteLocationRaw, RouterLink, useRouter } from 'vue-router';
 import CustomIcon from '@/components/app/CustomIcon.vue';
 import forum from '@/js/apis/forum';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { HELP_ROUTE, useAccountLinks } from '@/js/composables/main-menu';
 import install from '@/pwa/install';
 import { useAppSettingsStore } from '@/stores/app-settings';
 
@@ -103,6 +100,10 @@ interface Section {
 const { $gettext, $user } = useGlobalProperties();
 const appSettings = useAppSettingsStore();
 const router = useRouter();
+
+// the destinations of the account are those of the user menu of the navigation
+const accountLinks = useAccountLinks();
+const accountTo = (key: string) => accountLinks.value.find((link) => link.key === key)!.to;
 
 const avatarFailed = ref(false);
 const avatarUrl = computed(() => ($user.forumUsername ? forum.getUserAvatarUrl($user.forumUsername, 160) : null));
@@ -133,21 +134,20 @@ const sections = computed<Section[]>(() => {
   // only the lists of the API that filter by user: outings by participant, and the wiki changes of the user,
   // which cover all document types
   if ($user.isLogged && $user.id) {
-    const u = String($user.id);
     const contributions: Action[] = [
       {
         key: 'outings',
         label: $gettext('My outings'),
         desc: $gettext('The outings I took part in'),
         customIcon: 'footprint-arrow',
-        to: { name: 'outings', query: { u } },
+        to: accountTo('outings'),
       },
       {
         key: 'changes',
         label: $gettext('My edits'),
         desc: $gettext('Routes, waypoints, images, articles I created or edited'),
         customIcon: 'mountain-pencil',
-        to: { name: 'whatsnew', query: { u } },
+        to: accountTo('changes'),
       },
     ];
     if (router.hasRoute('offline')) {
@@ -170,28 +170,28 @@ const sections = computed<Section[]>(() => {
           label: $gettext('Preferences'),
           desc: $gettext('Followed activities, default filters'),
           customIcon: 'sliders',
-          to: { name: 'preferences' },
+          to: accountTo('preferences'),
         },
         {
           key: 'following',
           label: $gettext('Following'),
           desc: $gettext('Friends and mentors'),
           customIcon: 'two-hikers',
-          to: { name: 'following' },
+          to: accountTo('following'),
         },
         {
           key: 'account',
           label: $gettext('Account'),
           desc: $gettext('Email, password, settings'),
           customIcon: 'user-settings',
-          to: { name: 'account' },
+          to: accountTo('account'),
         },
         {
           key: 'trackers',
           label: $gettext('Trackers'),
           desc: 'Strava, Suunto, Polar, Garmin…',
           customIcon: 'gps-pin',
-          to: { name: 'trackers' },
+          to: accountTo('trackers'),
         },
       ],
     });
@@ -220,7 +220,7 @@ const sections = computed<Section[]>(() => {
         label: $gettext('Help'),
         desc: $gettext('User guide of Camptocamp'),
         icon: 'circle-info',
-        to: { name: 'article', params: { id: 106732 } },
+        to: HELP_ROUTE,
       },
       {
         key: 'app-guide',

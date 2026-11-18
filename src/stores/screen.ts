@@ -2,8 +2,12 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
+// the width from which the navigation of the site is on the side (side menu, top navigation), and under which it is
+// the phone layout (top bar with the menu button, bottom tab bar): the only one place to decide it. Bulma's desktop
+export const DESKTOP_BREAKPOINT = 1024;
+
 const BREAKPOINT_MOBILE = 768;
-const BREAKPOINT_TABLET = 1023;
+const BREAKPOINT_TABLET = DESKTOP_BREAKPOINT - 1;
 const BREAKPOINT_DESKTOP = 1215;
 const BREAKPOINT_WIDESCREEN = 1407;
 

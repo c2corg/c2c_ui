@@ -25,20 +25,22 @@
       <button v-if="showBack" type="button" class="top-bar-btn back-btn" :aria-label="$gettext('Back')" @click="goBack">
         <fa-icon icon="chevron-left" />
       </button>
-      <router-link v-else :to="{ name: 'home' }" class="top-bar-logo" aria-label="Camptocamp.org">
-        <logo-ctc />
-      </router-link>
+      <!-- the pages of the tabs: the menu of the site, whose drawer carries the logo -->
+      <button
+        v-else
+        type="button"
+        class="top-bar-btn back-btn"
+        :aria-label="$gettext('Menu')"
+        @click="$emit('toggle-side-menu')"
+      >
+        <fa-icon icon="bars" />
+      </button>
 
       <h1 class="top-bar-title">{{ title }}</h1>
 
       <div class="top-bar-actions">
         <!-- the help article of the site, as the side menu has it -->
-        <router-link
-          :to="{ name: 'article', params: { id: HELP_ARTICLE_ID } }"
-          class="top-bar-btn"
-          :aria-label="$gettext('Help')"
-          :title="$gettext('Help')"
-        >
+        <router-link :to="HELP_ROUTE" class="top-bar-btn" :aria-label="$gettext('Help')" :title="$gettext('Help')">
           <fa-icon icon="circle-info" />
         </router-link>
         <button type="button" class="top-bar-btn" :aria-label="$gettext('Search')" @click="openSearch">
@@ -100,18 +102,17 @@
 import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import LogoCtc from './LogoCtc.vue';
-
 import DropdownButton from '@/components/generics/DropdownButton.vue';
 import forum from '@/js/apis/forum';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { ADDABLE_TYPES, HELP_ROUTE } from '@/js/composables/main-menu';
 
 defineOptions({ name: 'MobileTopBar' });
 
-const HELP_ARTICLE_ID = 106732;
-const ADDABLE_TYPES = ['outing', 'route', 'waypoint', 'article', 'book', 'xreport'];
-// the routes of the bottom bar tabs: the logo on the left, no back arrow
-const TAB_ROUTES = new Set(['home', 'topoguide', 'offline', 'more']);
+defineEmits(['toggle-side-menu']);
+
+// the routes of the bottom bar tabs: the menu button on the left, no back arrow
+const TAB_ROUTES = new Set(['home', 'topoguide', 'offline']);
 
 interface PickedDocument {
   document_id: number;
@@ -137,7 +138,6 @@ const title = computed(() => {
     home: $gettext('Home'),
     offline: $gettext('My topos'),
     me: $gettext('Me'),
-    more: $gettext('Menu'),
     'app-settings': $gettext('App settings'),
     'app-guide': $gettext('App guide'),
     outings: $gettext('outings'),
@@ -276,19 +276,6 @@ watch(picked, (document) => {
 
 .back-btn {
   margin-right: 0.25rem;
-}
-
-.top-bar-logo {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  height: 38px;
-  padding: 0 0.4rem;
-
-  .logo-ctc {
-    height: 28px;
-    width: auto;
-  }
 }
 
 .top-bar-title {
