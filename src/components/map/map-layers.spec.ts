@@ -40,4 +40,13 @@ describe('map-layers', () => {
       expect([link.textContent, link.target, link.rel]).toEqual([link.textContent, '_blank', 'noreferrer noopener']);
     }
   });
+
+  it('offers the public transport map as a base layer, after the first two', () => {
+    const titles = cartoLayers().map((layer) => layer.get('title'));
+
+    expect(titles.slice(0, 3)).toEqual(['OpenTopoMap', 'ESRI World Imagery', 'Public transport']);
+    const layer = cartoLayers()[2] as TileLayer<UrlTile>;
+    expect(layer.getSource()!.getUrls()).toEqual(['https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png']);
+    expect(layer.getVisible()).toBe(false);
+  });
 });

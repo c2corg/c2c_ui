@@ -85,6 +85,15 @@ export const baseLayers: MapLayer[] = [
     attribution: link('https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9', 'Esri'),
   },
   {
+    // $gettext('Public transport', 'Map layer')
+    title: 'Public transport',
+    image: 'publictransport.jpg',
+    tiles: ['https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png'],
+    maxzoom: 18,
+    attribution:
+      `© ${link('//openstreetmap.org/copyright', 'OpenStreetMap')} | ` + `© ${link('//memomaps.de', 'ÖPNVKarte')}`,
+  },
+  {
     // $gettext('IGN maps', 'Map layer')
     title: 'IGN maps',
     image: 'ign.jpg',
