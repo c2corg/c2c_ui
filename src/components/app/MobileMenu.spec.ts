@@ -16,6 +16,10 @@ const mountMenu = async () => {
     routes: [
       { path: '/', component: page },
       { path: '/other', component: page },
+      // the entries of the menu: a plain link (Itinevert) resolves its route
+      ...['topoguide', 'outings', 'forum', 'serac', 'articles', 'yeti', 'itinevert', 'offline', 'app-settings'].map(
+        (name) => ({ path: `/${name}`, name, component: page })
+      ),
     ],
   });
   await router.push('/');
