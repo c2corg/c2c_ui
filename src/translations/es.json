@@ -103,7 +103,6 @@
     "Area too large": "Área demasiado grande",
     "Arrival": "Llegada",
     "Arrive before": "llegar antes",
-    "Articles": "Artículos",
     "Articles, waypoints or routes to be linked.": "Artículos, puntos de ruta o rutas a enlazar.",
     "Articles, waypoints, routes or books to be linked.": "Artículos, puntos de ruta, rutas o libros a enlazar.",
     "As the name suggests, this method is intended for beginners. Therefore, the safety margin must be particularly important. No parameter other than the danger level is specified. Orientation is ignored.": "Como su nombre indica, este método está destinado a principiantes. Por tanto, el margen de seguridad debe ser especialmente importante. No se especifica ningún otro parámetro otro que el nivel de peligro. Se ignora la orientación.",
@@ -127,7 +126,6 @@
     "Auto": "Automático",
     "Avalanche bulletins": "Pronósticos de avalancha",
     "Avalanche risk": "Riesgo de avalancha",
-    "Avalanche risk assessment": "Evaluación del riesgo de avalanchas",
     "Avalanche risk evaluation tool:": "Herramienta de evaluación del riesgo de avalanchas:",
     "Average slope (degrees)": "Inclinación media (grados)",
     "Average slope in degree": "inclinación media en grados",
@@ -313,12 +311,12 @@
     "Directions (Google Maps)": "Direcciones (Google Maps)",
     "Disabled at this zoom level": "Deshabilitado en este nivel de zoom",
     "Discovery": "Descubrimiento",
-    "Discussions of the community": "Discusiones de la comunidad.",
     "Dismiss": "Descartar",
     "Dispositions": "Disposiciones",
     "Distance": "Distancia",
     "Distance (km)": "Distancia (km)",
     "Distance from the route access point": "Distancia desde el punto de acceso a la ruta",
+    "Do you really want to leave? you have unsaved changes!": "No has salvaguardado tus cambios; de verdad quierres dejarlo.",
     "Document quality": "Calidad del documento",
     "Donate": "Hacer un donativo a la asociación Camptocamp",
     "Download": "Descargar",
@@ -603,7 +601,6 @@
     "Modified the": {
       "modification date": "Cambia"
     },
-    "More": "Mas",
     "More info": "Mas informacion",
     "More info on meteoblue.com": "Más información en meteoblue.com",
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Hay más rutas disponibles. Puede mover el mapa, especificar el nombre o establecer una actividad para filtrarlos.",
@@ -810,7 +807,6 @@
     "ROMMA stations": "Estaciones ROMMA",
     "Radius around your position:": "Radio alrededor de su posición:",
     "Read the app guide": "Lea la guía de la aplicación",
-    "Recent": "Reciente",
     "Recent changes": "Cambios nuevos",
     "Recent: the latest outings and changes of the community, with their photos.": "Recientes: las últimas salidas y cambios de la comunidad, con sus fotos.",
     "Recenter on your current position": "Centrar en mi posición actual",
@@ -862,7 +858,6 @@
     "Routes": "Itinerarios",
     "Routes to explore": "Rutas para explorar",
     "Routes, waypoints, images, articles I created or edited": "Rutas, puntos de paso, imágenes, artículos que creé o edité",
-    "Routes, waypoints, outings": "Rutas, puntos de paso, salidas",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC es una base de datos mundial de incidentes y accidentes cuyo objetivo es aumentar la seguridad en la escalada y los deportes de montaña.",
     "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC se basa en una mentalidad de bondad. Te agradecemos mejorarlo.",
     "SERAC: accidents and incidents in the mountains": "SERAC: accidentes e incidentes en la montaña",
@@ -884,10 +879,7 @@
     "Saved online: from My topos, save offline the ones you take to the mountain.": "Guardados en línea: desde Mis topos, guarda sin conexión los que lleves a la montaña.",
     "Saving…": "Guardando…",
     "Scan with your phone": "Escanea con tu teléfono",
-    "Search": {
-      "$$noContext": "Buscar",
-      "navigation": "Buscar"
-    },
+    "Search": "Buscar",
     "Search ...": "Buscar ...",
     "Search a document to associate...": "Buscar un documento para asociar...",
     "Search near me": "Buscar cerca de mí",
@@ -986,7 +978,6 @@
     "Tap Save offline (in the message that follows, or in My topos): the topo, its photos and the map around it are downloaded. It moves to the Offline tab, a green dot on its bookmark.": "Pulsa Guardar sin conexión (en el mensaje que sigue, o en Mis topos): se descargan el topos, sus fotos y el mapa que lo rodea. Se mueve a la pestaña Sin conexión, un punto verde en su marcador.",
     "Tap the menu": "Toca el menú",
     "Target:": "Objetivo:",
-    "Techniques, advice, stories": "Técnicas, consejos, historias.",
     "Terms of Service need to be accepted": {
       "API message": "Es necesario aceptar los Condiciones Generales de Uso"
     },
@@ -1005,7 +996,6 @@
     "The date of the copy shows on each topo: orange after a week, red after a month. Conditions change: download it again before leaving. Incomplete means the network cut the download: download it again.": "La fecha de la copia se muestra en cada topo: naranja después de una semana, rojo después de un mes. Las condiciones cambian: descárgala nuevamente antes de partir. Incompleto significa que la red cortó la descarga: descárguela nuevamente.",
     "The destination can be a mountain range or a maximum travel time from your starting point.": "El destino puede ser una cadena montañosa o un tiempo máximo de viaje desde tu punto de partida.",
     "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "El potencial de peligro se calcula a partir del nivel de peligro del boletín de avalanchas. Se puede ajustar seleccionando un potencial dentro del rango correspondiente al nivel de peligro. Por ejemplo: el boletín de avalanchas evoca un peligro 3 justo después de un período de peligro 4. Entonces podemos indicar un potencial de peligro de 12 en lugar de 8.",
-    "The other sections of Camptocamp": "Las otras secciones de Camptocamp",
     "The outing stays on the phone: complete and publish it from My topos.": "La salida permanece en el teléfono: complétala y publícala desde Mis topos.",
     "The outings I took part in": "Las salidas en las que participé",
     "The page you are looking for does not exist or is broken.": "La página que estas buscando no existe o contiene un error.",
@@ -1058,7 +1048,6 @@
     "To define your destination, choose one of these 2 approaches": "Para definir su destino, elija uno de estos 2 enfoques",
     "To go further": "para ir más lejos",
     "To report a problem: Me → Report a bug of the mobile app, the email leaves with the useful information.": "Para reportar un problema: Yo → Reportar un error de la aplicación móvil, el correo electrónico sale con la información útil.",
-    "To the mountains by public transport": "A la montaña en transporte público",
     "Toggle elevation profile": "Alternar perfil de elevación",
     "Toggle full-screen": {
       "Map Controls": "Alternar pantalla completa"
@@ -1649,12 +1638,6 @@
     "historical": {
       "book_types": "historial"
     },
-    "https://form.typeform.com/to/xRZnnp6u": {
-      "lineMissingFormUrl": "https://form.typeform.com/to/xRZnnp6u"
-    },
-    "https://forum.camptocamp.org/c/site-et-association/site-c2c-suggestions-bugs-et-problemes": {
-      "urlWhenNavitiaUnknownError": "https://forum.camptocamp.org/c/site-et-association/site-c2c-suggestions-bugs-et-problemes"
-    },
     "humidity": {
       "weather_station_types": "humedad"
     },
@@ -1810,11 +1793,8 @@
     "mountainbike_instructor": {
       "user_categories": "monitor-guía de MTB"
     },
-    "mtb_down_rating": "mtb_down_rating",
-    "mtb_height_diff_portages": "mtb_height_diff_portages",
     "mtb_length_asphalt": "Distancia del asfalto",
     "mtb_length_trail": "Distancia en el camino",
-    "mtb_up_rating": "mtb_up_rating",
     "multi": {
       "climbing_outdoor_types": "ruta de varios largos"
     },
@@ -2323,7 +2303,6 @@
       "$$noContext": "si",
       "parking_fee_types": "si"
     },
-    "yeti": "yeti",
     "zh": {
       "langs": "chinese"
     },
