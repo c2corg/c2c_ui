@@ -22,7 +22,7 @@
     --map-button-size: calc(1.14 * 1.375em + 2px);
 
     .ol-control button,
-    .ol-control a {
+    .ol-control > a {
       font-size: 1.14em;
     }
   }
@@ -39,7 +39,7 @@
   }
 
   .ol-control button,
-  .ol-control a {
+  .ol-control > a {
     display: block;
     margin: 1px;
     padding: 0;
@@ -58,8 +58,8 @@
 
   .ol-control button:hover,
   .ol-control button:focus,
-  .ol-control a:hover,
-  .ol-control a:focus {
+  .ol-control > a:hover,
+  .ol-control > a:focus {
     text-decoration: none;
     outline: 1px solid var(--ol-subtle-foreground-color);
     color: var(--ol-foreground-color);

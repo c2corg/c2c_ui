@@ -17,7 +17,12 @@
       </button>
     </div>
 
-    <div v-if="is3d" class="ol-control c2c-map-compass" :title="$gettext('North up', 'Map controls')">
+    <div
+      v-if="is3d"
+      class="ol-control c2c-map-compass"
+      :class="{ 'below-pin': showPinToTopButton && !isFullscreen }"
+      :title="$gettext('North up', 'Map controls')"
+    >
       <button type="button" :aria-label="$gettext('North up', 'Map controls')" @click="resetNorth">
         <span class="c2c-map-compass-needle" :style="{ transform: `rotate(${-bearing}deg)` }">▲</span>
       </button>
@@ -38,7 +43,7 @@
     </div>
 
     <div
-      v-show="showPinToTopButton && !isFullscreen && !is3d"
+      v-show="showPinToTopButton && !isFullscreen"
       class="ol-control ol-control-pin-to-top"
       :title="$gettext('Pin the map to a side of the screen')"
     >
@@ -727,6 +732,11 @@ const queryIds = (value: unknown) =>
 
 async function fitMapToDocuments(force?: boolean) {
   if (filterDocumentsWithMap.value && !force) {
+    return rounded(getExtent());
+  }
+  // the 3D view (pinned to a side or unpinned): back to its tilted view of the documents
+  if (is3d.value) {
+    resetCamera();
     return rounded(getExtent());
   }
   drawDocumentMarkers();
@@ -1935,9 +1945,10 @@ onMounted(() => {
       // the markers are shown at once, as the rest
       fadeDuration: 0,
       attributionControl: false,
+      // no rotation in 2D (setRotation); in 3D, the right button or Ctrl + drag also tilts the view, as the 3D view did
+      // before it moved into this map
       dragRotate: false,
       touchPitch: false,
-      pitchWithRotate: false,
     });
   } catch {
     // no WebGL 2: no map
@@ -2035,6 +2046,11 @@ defineExpose({
 .c2c-map-compass {
   top: calc(1.5em + 3 * var(--map-button-size));
   left: 0.5em;
+
+  /* the place of the geolocation button, which the 3D view hides */
+  &.below-pin {
+    top: calc(2em + 4 * var(--map-button-size));
+  }
 }
 
 .c2c-map-compass-needle {

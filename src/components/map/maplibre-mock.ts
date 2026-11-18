@@ -42,6 +42,8 @@ const handler = () => ({
 export class FakeMap {
   style: StyleSpecification;
   container: HTMLElement;
+  // the options the map was created with
+  options: Record<string, unknown>;
   // the data of each GeoJSON source, as last set
   data: Record<string, unknown> = {};
   layout: Record<string, Record<string, unknown>> = {};
@@ -67,6 +69,7 @@ export class FakeMap {
 
   constructor(options: { style: StyleSpecification; container: HTMLElement }) {
     if (!state.webgl) throw new Error('Failed to initialize WebGL');
+    this.options = options;
     this.style = options.style;
     this.container = options.container;
     for (const [id, source] of Object.entries(this.style.sources)) {
