@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { imageUrlsOf, tileUrlsOf } from './offline-assets';
+import { formerTileKeys, tileCacheKey } from './tile-key';
 
 import config from '@/js/config';
 
@@ -25,8 +26,7 @@ describe('the tiles of an offline document', () => {
     const urls = tileUrlsOf({ geom: JSON.stringify({ type: 'Point', coordinates: MIDI }) });
     for (const z of [11, 12, 13, 14, 15]) {
       const [x, y] = tileOf(MIDI, z);
-      const server = 'abc'[((x << z) + y) % 3];
-      expect(urls).toContain(`https://${server}.tile.opentopomap.org/${z}/${x}/${y}.png`);
+      expect(urls).toContain(`https://a.tile.opentopomap.org/${z}/${x}/${y}.png`);
     }
     // and only once each
     expect(new Set(urls).size).toBe(urls.length);
@@ -71,5 +71,21 @@ describe('the images of an offline document', () => {
 
   it('has none without text or images', () => {
     expect(imageUrlsOf({})).toEqual([]);
+  });
+});
+
+describe('the key of a tile in the cache', () => {
+  it('is the same whatever the server of OpenTopoMap, which each map picks its way', () => {
+    expect(tileCacheKey('https://c.tile.opentopomap.org/13/4247/2905.png')).toBe(
+      'https://a.tile.opentopomap.org/13/4247/2905.png'
+    );
+    expect(tileCacheKey('https://example.org/13/4247/2905.png')).toBe('https://example.org/13/4247/2905.png');
+  });
+
+  it('was the letter OpenLayers picked before: the service worker looks for a missing tile there', () => {
+    expect(formerTileKeys('https://a.tile.opentopomap.org/13/4247/2905.png')).toEqual([
+      'https://b.tile.opentopomap.org/13/4247/2905.png',
+      'https://c.tile.opentopomap.org/13/4247/2905.png',
+    ]);
   });
 });

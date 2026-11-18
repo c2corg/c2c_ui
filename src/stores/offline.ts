@@ -43,7 +43,12 @@ async function loadPagesOf(type: string) {
     .filter((route) => [type, 'offline', 'outing-add'].includes(String(route.name)))
     .map((route) => route.components?.default)
     .filter((view): view is () => Promise<unknown> => typeof view === 'function');
-  await Promise.all([import('@/components/map/OlMap.vue'), ...views.map((view) => view())]);
+  // the map of the pages (MapLibre), and the one of the outing form (OpenLayers)
+  await Promise.all([
+    import('@/components/map/C2cMap.vue'),
+    import('@/components/map/OlMap.vue'),
+    ...views.map((view) => view()),
+  ]);
 }
 
 // The browser says it is offline on some phones that still have a network: a request to the API decides
