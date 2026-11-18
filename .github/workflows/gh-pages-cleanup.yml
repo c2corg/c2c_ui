@@ -31,13 +31,21 @@ jobs:
           fi
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-          git rm -rq -- "$FOLDER"
-          git commit -m "Remove $BRANCH branch preview"
-          # another deploy or clean-up may have pushed meanwhile (each in its own folder): rebase on it and retry
+          # gh-pages is kept as a single parentless commit holding the current site (see ci.yml, #5084), force-pushed
+          # with a lease: another deploy or clean-up may have pushed meanwhile (each in its own folder), start again
+          # from it and retry
           for attempt in 1 2 3 4 5; do
-            git push origin gh-pages && exit 0
+            BASE=$(git rev-parse HEAD)
+            git rm -rq -- "$FOLDER"
+            COMMIT=$(git commit-tree "$(git write-tree)" -m "Remove $BRANCH branch preview")
+            git push --force-with-lease=gh-pages:"$BASE" origin "$COMMIT:refs/heads/gh-pages" && exit 0
             sleep $((attempt * 5))
-            git pull --rebase origin gh-pages
+            git fetch origin gh-pages
+            git reset -q --hard origin/gh-pages
+            if [ ! -d "$FOLDER" ]; then
+              echo "Preview folder for $BRANCH already removed"
+              exit 0
+            fi
           done
           exit 1
         env:

@@ -171,10 +171,13 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-          # another deploy or clean-up may have pushed meanwhile (each in its own folder): start again from it and
-          # redo this folder only. No rebase: two deploys of the same folder rewrite the same hashed assets and conflict
+          # gh-pages is kept as a single parentless commit holding the current site: one commit per deploy made the
+          # repository ~1 GB to clone (#5084). It is force-pushed with a lease on the commit we started from, so
+          # another deploy or clean-up pushed meanwhile (each in its own folder) is never overwritten: start again
+          # from it and redo this folder only. No rebase: two deploys of the same folder rewrite the same hashed assets
           publish() { # $1: commit message, $2: "remove" to delete the folder instead of deploying the build
             for attempt in 1 2 3 4 5; do
+              BASE=$(git rev-parse HEAD)
               rm -rf -- "$FOLDER"
               [ "$2" = remove ] || cp -r "$SITE" "$FOLDER"
               # no Jekyll: it hides the files starting with "_", like Vite's _plugin-vue_export-helper chunk
@@ -183,8 +186,11 @@ jobs:
               # Nothing to commit when the build output is unchanged (e.g. a PR
               # touching only CI config): skip instead of failing the job.
               git diff --cached --quiet && return 0
-              git commit -qm "$1"
-              git push origin gh-pages && return 0
+              COMMIT=$(git commit-tree "$(git write-tree)" -m "$1")
+              if git push --force-with-lease=gh-pages:"$BASE" origin "$COMMIT:refs/heads/gh-pages"; then
+                git reset -q --hard "$COMMIT"
+                return 0
+              fi
               sleep $((attempt * 5))
               git fetch origin gh-pages
               git reset -q --hard origin/gh-pages
