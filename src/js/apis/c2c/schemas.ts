@@ -445,7 +445,13 @@ export const densityTrack = z.looseObject({
   date_start: z.optional(z.string()),
   date_end: z.optional(z.string()),
 });
-export const densityTracks = z.object({ documents: z.array(densityTrack), truncated: z.boolean() });
+export const densityTracks = z.object({
+  documents: z.array(densityTrack),
+  truncated: z.boolean(),
+  // when there are too many tracks, how many (when the API knows), and whether there are even more
+  count: z.optional(z.number()),
+  count_capped: z.optional(z.boolean()),
+});
 
 // GET /search: a page per document type (routes, waypoints...)
 export const searchResults = z.record(z.string(), documentsPage);

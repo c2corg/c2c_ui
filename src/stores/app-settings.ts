@@ -24,7 +24,8 @@ export const useAppSettingsStore = defineStore('app-settings', () => {
   const preferences = getPreferences('AppSettings');
 
   const state = reactive({
-    theme: oneOf(THEMES, preferences.get('theme'), 'auto'),
+    // light by default, the site as it is: a system in dark mode does not turn the site dark by itself
+    theme: oneOf(THEMES, preferences.get('theme'), 'light'),
     textSize: oneOf(TEXT_SIZES, preferences.get('textSize'), 'normal'),
   });
 

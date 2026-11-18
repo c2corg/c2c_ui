@@ -12,6 +12,7 @@ import { CacheFirst } from 'workbox-strategies';
 import { networkFirst } from '@/pwa/network-first';
 import { docKey, isOfflineEntry, type SavedEntry } from '@/pwa/offline-store';
 import { keepShell, SHELL_CACHE, shellKey } from '@/pwa/shell';
+import { formerTileKeys, tileCacheKey } from '@/pwa/tile-key';
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -90,12 +91,27 @@ registerRoute(
 
 // The images and map tiles of the documents saved offline, downloaded by src/stores/offline.ts with CORS. Not the
 // opaque answers of the <img> and tiles of the pages (status 0): the browser counts several MB of quota for each
-const keptAWhile = (cacheName: string, maxEntries: number) =>
+const keptAWhile = (
+  cacheName: string,
+  maxEntries: number,
+  key = (url: string) => url,
+  former: (key: string) => string[] = () => []
+) =>
   new CacheFirst({
     cacheName,
     plugins: [
       new CacheableResponsePlugin({ statuses: [200] }),
       new ExpirationPlugin({ maxEntries, maxAgeSeconds: 90 * 24 * 3600, purgeOnQuotaError: true }),
+      {
+        cacheKeyWillBeUsed: async ({ request }) => key(request.url),
+        // missing under its key, it may be kept under a former one
+        cachedResponseWillBeUsed: async ({ cacheName, request, cachedResponse }) => {
+          for (const url of former(request.url)) {
+            cachedResponse ??= await caches.match(url, { cacheName });
+          }
+          return cachedResponse;
+        },
+      },
     ],
   });
 
@@ -107,4 +123,8 @@ registerRoute(
   keptAWhile('c2c-images', 1000)
 );
 
-registerRoute(({ url }) => url.hostname.endsWith('.tile.opentopomap.org'), keptAWhile('c2c-map-tiles', 3000));
+// one key per tile whatever its server letter (offline-assets.ts): the download and the maps pick it each their way
+registerRoute(
+  ({ url }) => url.hostname.endsWith('.tile.opentopomap.org'),
+  keptAWhile('c2c-map-tiles', 3000, tileCacheKey, formerTileKeys)
+);

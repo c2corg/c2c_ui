@@ -77,6 +77,7 @@ import ImageUploader from './ImageUploader.vue';
 
 import c2c from '@/js/apis/c2c';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { refreshOutingQuality } from '@/js/refresh-outing-quality';
 import { toast } from '@/js/toast';
 import uploadFile, { canRender } from '@/js/upload-file';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
@@ -103,7 +104,7 @@ const props = defineProps({
 });
 
 const route = useRoute();
-const { $documentUtils, $gettext, $language } = useGlobalProperties();
+const { $documentUtils, $gettext, $language, $user } = useGlobalProperties();
 
 const images = ref<Record<string, UploadedImage>>({});
 const categoriesEdition = ref(false);
@@ -288,6 +289,23 @@ function save() {
       );
       clean();
       hide();
+
+      // the images count in the quality of an outing
+      const imageIds = response.data.images.map((image: { document_id: number }) => image.document_id);
+      refreshOutingQuality(
+        props.parentDocument,
+        props.lang,
+        imageIds,
+        $user,
+        $gettext('Quality computed again after adding images')
+      )
+        .then((quality) => {
+          if (quality) {
+            props.parentDocument.quality = quality;
+          }
+        })
+        // not saved (the outing was changed meanwhile, the network went): the quality is computed on its next edit
+        .catch(() => undefined);
     })
     .catch(() => {
       clean();

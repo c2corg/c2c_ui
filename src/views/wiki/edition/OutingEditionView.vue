@@ -157,9 +157,11 @@
         </div>
       </form-section>
 
+      <!-- open on load: the conditions are what the readers of an outing look for, and they count most in its quality -->
       <form-section
         :title="$gettext('Weather & conditions')"
         :sub-title="$gettext('Describe the conditions you encountered during your outing')"
+        expanded-on-load
       >
         <div class="columns is-multiline">
           <form-field class="is-6" :document="document" :field="fields.condition_rating" />

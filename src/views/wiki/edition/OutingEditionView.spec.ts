@@ -41,6 +41,20 @@ describe('OutingEditionView', () => {
     vi.clearAllMocks();
   });
 
+  it('opens the general informations and the weather & conditions, the other sections stay closed', async () => {
+    const edition = mountEdition(OutingEditionView, 'outing');
+    edition.setDocument(outing(null));
+
+    await vi.waitFor(() =>
+      expect(edition.wrapper.findAllComponents({ name: 'FormSection' }).length).toBeGreaterThan(2)
+    );
+    const opened = edition.wrapper
+      .findAllComponents({ name: 'FormSection' })
+      .filter((section) => section.props('expandedOnLoad'))
+      .map((section) => section.props('title'));
+    expect(opened).toEqual(['general informations', 'Weather & conditions']);
+  });
+
   it('lists the routes the track followed, 10 first, then more on demand', async () => {
     const suggested = Array.from({ length: 25 }, (_, i) => route(i + 1));
     api.suggestRoutes.mockResolvedValue({ data: { documents: suggested, total: 25 } });

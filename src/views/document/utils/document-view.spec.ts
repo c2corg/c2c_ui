@@ -104,6 +104,16 @@ describe('useDocumentView', () => {
     expect(router.currentRoute.value.fullPath).toBe('/routes/12/fr/mont-blanc');
   });
 
+  it('keeps the query and the hash when it puts the title in the url (the settings of the map)', async () => {
+    await mountAt('/routes/12/fr?overlays=outing,route&pin=top#description');
+
+    expect(api.getCooked).toHaveBeenCalledOnce();
+    const { path, query, hash } = router.currentRoute.value;
+    expect(path).toBe('/routes/12/fr/mont-blanc');
+    expect(query).toEqual({ overlays: 'outing,route', pin: 'top' });
+    expect(hash).toBe('#description');
+  });
+
   it('asks the document in the language of the interface when the url has none', async () => {
     await mountAt('/routes/12');
 
