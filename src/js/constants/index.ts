@@ -148,6 +148,7 @@ class Constants {
         'lang',
         'frequentation',
         'public_transport',
+        'has_track',
         'lift_access',
         'access_time',
         'best_periods',
