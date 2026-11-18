@@ -391,6 +391,28 @@ describe('C2cMap', () => {
       wrapper.unmount();
     });
 
+    it('tilts the view with the rotation of the mouse (right button or Ctrl + drag)', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
+      // MapLibre's default (true): with false, the mouse would only turn the view around the vertical
+      expect(map.options.pitchWithRotate).not.toBe(false);
+      wrapper.unmount();
+    });
+
+    it('keeps the button that pins the map to a side, the compass below it', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route], show3d: true, showPinToTopButton: true });
+
+      await open3d(wrapper);
+
+      expect(wrapper.find('.ol-control-pin-to-top').isVisible()).toBe(true);
+      expect(wrapper.find('.c2c-map-compass').classes()).toContain('below-pin');
+
+      // the page fits the map to its documents once pinned: the 3D view stays tilted on them
+      map.cameras.length = 0;
+      await (wrapper.vm as unknown as { fitMapToDocuments(): Promise<unknown> }).fitMapToDocuments();
+      expect(map.cameras.at(-1)).toMatchObject({ pitch: 60 });
+      wrapper.unmount();
+    });
+
     it('multiplies the protection areas onto the ground, not the slopes', async () => {
       const { wrapper, map } = await mountMap({ documents: [route], show3d: true, showProtectionAreas: true });
       expect(map.paint['Swiss tranquility zones']['raster-layer-blend']).toBe('normal');
