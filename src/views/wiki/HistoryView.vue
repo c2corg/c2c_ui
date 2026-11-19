@@ -74,7 +74,7 @@
                 :lang="lang"
               />
             </td>
-            <td>
+            <td class="comment">
               {{ version.comment }}
             </td>
           </tr>
@@ -176,7 +176,8 @@ td {
   white-space: nowrap;
 }
 
-td:nth-child(4) {
+/* the comment takes the room left, whatever columns come before it (moderators have a visibility column) */
+td.comment {
   width: 100%;
   white-space: normal;
   font-style: italic;
