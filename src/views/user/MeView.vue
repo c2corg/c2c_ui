@@ -39,7 +39,7 @@
           <li v-for="action of section.actions" :key="action.key">
             <component :is="action.to ? RouterLink : 'a'" v-bind="linkAttributes(action)" class="action-link">
               <span class="action-icon">
-                <custom-icon v-if="action.customIcon" :name="action.customIcon" :size="28" />
+                <component :is="action.iconComponent" v-if="action.iconComponent" />
                 <fa-icon v-else :icon="action.icon!" />
               </span>
               <span class="action-text">
@@ -73,10 +73,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { type Component, computed, ref, watch } from 'vue';
 import { type RouteLocationRaw, RouterLink, useRouter } from 'vue-router';
 
-import CustomIcon from '@/components/app/CustomIcon.vue';
+import IconOuting from '@/components/generics/icons/document/IconOuting.vue';
 import forum from '@/js/apis/forum';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { HELP_ROUTE, useAccountLinks } from '@/js/composables/main-menu';
@@ -89,7 +89,7 @@ interface Action {
   key: string;
   label: string;
   desc?: string;
-  customIcon?: string;
+  iconComponent?: Component;
   icon?: string;
   to?: RouteLocationRaw;
   href?: string;
@@ -143,14 +143,14 @@ const sections = computed<Section[]>(() => {
         key: 'outings',
         label: $gettext('My outings'),
         desc: $gettext('The outings I took part in'),
-        customIcon: 'footprint-arrow',
+        iconComponent: IconOuting,
         to: accountTo('outings'),
       },
       {
         key: 'changes',
         label: $gettext('My edits'),
         desc: $gettext('Routes, waypoints, images, articles I created or edited'),
-        customIcon: 'mountain-pencil',
+        icon: 'edit',
         to: accountTo('changes'),
       },
     ];
@@ -159,7 +159,7 @@ const sections = computed<Section[]>(() => {
         key: 'offline',
         label: $gettext('My topos'),
         desc: $gettext('Saved for the field'),
-        customIcon: 'bookmark-download',
+        icon: 'bookmark',
         to: { name: 'offline' },
       });
     }
@@ -173,28 +173,28 @@ const sections = computed<Section[]>(() => {
           key: 'preferences',
           label: $gettext('Preferences'),
           desc: $gettext('Followed activities, default filters'),
-          customIcon: 'sliders',
+          icon: 'gears',
           to: accountTo('preferences'),
         },
         {
           key: 'following',
           label: $gettext('Following'),
           desc: $gettext('Their activity in your feed'),
-          customIcon: 'two-hikers',
+          icon: 'heart',
           to: accountTo('following'),
         },
         {
           key: 'account',
           label: $gettext('Account'),
           desc: $gettext('Email, password, settings'),
-          customIcon: 'user-settings',
+          icon: 'check-circle',
           to: accountTo('account'),
         },
         {
           key: 'trackers',
           label: $gettext('Activity trackers'),
           desc: 'Strava, Suunto, Polar, Garmin…',
-          customIcon: 'gps-pin',
+          icon: 'location-crosshairs',
           to: accountTo('trackers'),
         },
       ],
