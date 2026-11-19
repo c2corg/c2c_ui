@@ -31,7 +31,8 @@
 
           <span :title="$gettext('Add images')" v-if="isEditable && documentType !== 'image'" @click="uploader?.show()">
             <fa-layers>
-              <fa-icon icon="image" />
+              <!-- the image glyph stops 1/16 em above the baseline of the other icons: down to it -->
+              <fa-icon icon="image" transform="down-1" />
               <fa-icon icon="circle" :style="{ color: 'white' }" transform="shrink-5 right-5 up-6" />
               <fa-icon icon="plus-circle" :style="{ color: 'green' }" transform="shrink-5 right-5 up-5" />
             </fa-layers>
@@ -116,13 +117,15 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
 .button-bar > a.add-my-outing {
   display: inline-flex;
   align-items: center;
-  padding: 0.4rem 0.9rem;
+  /* as high as the icons beside it (the 1.5rem font size of the bar), level with them */
+  height: 1.5rem;
+  padding: 0 0.6rem;
   border-radius: 999px;
   background: var(--c2c-primary);
   color: var(--c2c-white);
   font-size: 0.95rem;
   font-weight: 600;
-  vertical-align: middle;
+  vertical-align: text-top;
 }
 
 .button-bar > span,
@@ -130,6 +133,7 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
   margin-left: 0.25rem;
   cursor: pointer;
 }
+
 .button-bar > *:hover {
   color: var(--c2c-black);
 }
