@@ -9,6 +9,7 @@
     "Associated routes": "Lotutako ibilbideak",
     "Association": "Camptocamp Elkartea",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Atribuzioa — Lanaren egilea zein den esan, lizentziara bideratzen duen lotura bat eman eta aldaketarik egin den esan behar da",
+    "Author": "Egilea",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org elkartearen helburuak mendiko kirolarien artean informazioa banatzea eta mendiko aktibitateen ziurtasuna hobetzen parte hartzea da. ",
     "Cancel": "Ezeztatu",
     "Change account parameters": "Kontuaren xehetasunak aldatu",
@@ -16,6 +17,7 @@
     "Close": "Itxi",
     "Comments": "Iruzkinak",
     "Compare selected versions": "Aukeratutako bertsioak alderatu",
+    "Contact": "Kontaktua",
     "Created on": "Sortze data",
     "Current password": "Oraingo pasahitza",
     "Date": "Data",
@@ -60,6 +62,7 @@
     "Login": "Konektatu",
     "Logout": "Deskonektatu",
     "Make profile page public": "Profilaren orria publikoa egin",
+    "More": "Gehiago",
     "My account": "Nire kontua",
     "My preferences": "Nire lehentasunak",
     "My profile": "Nire profila",
@@ -201,6 +204,7 @@
     "bus": {
       "public_transportation_types": "autobusa"
     },
+    "by": "egilea:",
     "c2c_meetings": {
       "article_categories": "c2c bilerak"
     },

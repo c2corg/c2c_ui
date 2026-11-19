@@ -98,7 +98,6 @@
     "Anonymity and confidentiality": "匿名与保密",
     "Application": "应用程序",
     "Applications": "应用",
-    "Are you sure you want to delete this document?": "你确定要删除此文档吗？",
     "Are you sure you want to delete this locale?": "你确定要删除这个语言版本吗？",
     "Are you sure you want to merge?": "你确定要合并吗？",
     "Are you sure you want to revert to this version of the document?": "你确定要还原到此版本的文档吗？",
@@ -217,6 +216,7 @@
     "Danger:": "危险:",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "朝向、岩石类型、路线类型(如原路返回或环线)以及线路地形类型(如山脊或冲沟)",
     "Delete": {
+      "$$noContext": "删除",
       "yeti": "删除"
     },
     "Delete a line chunk": "删除行块",

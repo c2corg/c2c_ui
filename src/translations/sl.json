@@ -66,7 +66,6 @@
     "An error occurred, couldn't save images": "Prišlo je do napake, slik ni bilo mogoče shraniti",
     "Anonymity and confidentiality": "Anonimnost in zaupnost",
     "Applications": "Aplikacije",
-    "Are you sure you want to delete this document?": "Ali ste prepričani, da želite izbrisati ta dokument? \nUpoštevajte, da povezane fotografije ne bodo izbrisane in bodo postale sirote. \nČe želite samo spremeniti naslov ali povezane dokumente (npr. premakniti vzpon na drugo smer), rabite samo urediti dokument. \nČe je ta dokument dvojnik s fotografijami, prosite Administracijo, da združi dvojnike, tako da bodo fotografije premaknjene v shranjeni dokument.",
     "Are you sure you want to delete this locale?": "Ali ste prepričani, da želite izbrisati to jezikovno različico?",
     "Are you sure you want to merge?": "Ali ste prepričani, da želite združiti?",
     "Are you sure you want to revert to this version of the document?": "Ali ste prepričani, da želite vrniti na to različico dokumenta?",
@@ -191,6 +190,7 @@
     "Danger:": "Nevarnost:",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Podatki, kot so orientacija, vrsta kamnine, vrsta itinerarja (povratno, zanka ...) in konfiguracija smeri (npr greben ali žleb).",
     "Delete": {
+      "$$noContext": "Izbrišite",
       "yeti": "Izbrišite"
     },
     "Delete a line chunk": "Izbrišite del črte",

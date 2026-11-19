@@ -31,11 +31,14 @@
       "severities": "de 4 jours à un mois"
     },
     "50 meters while descending": "50 mètres à la descente",
+    "7 days after the request of the user at the earliest.": "7 jours minimum à partir de la requête de l'utilisateur.",
     "A digit": "Un nombre",
     "A linked document changed meanwhile. Check it before publishing again.": "Un document lié a changé entre-temps. Vérifiez-le avant de republier.",
     "A lowercase letter": "Une lettre minuscule",
     "A message as been sent to the new address provided. You have to follow the link within to confirm the email address change.": "Un message a été envoyé à la nouvelle adresse renseignée. Vous devez cliquer sur le lien qu'il contient pour confirmer le changement d'adresse.",
+    "A moderator can restore it during 29 days.": "Un modérateur peut restaurer le document pendant 29 jours.",
     "A problem?": "Un souci ?",
+    "A request can also be made from the profile of the user: Remove account, in its tools.": "Une requête peut aussi être faite depuis le profil de l'utilisateur (section outils).",
     "A special character (e.g. ! ? - _ @ #)": "Un caractère spécial (par ex. ! ? - _ @ #)",
     "Access by public transport": "Accès en transport en commun",
     "Access points": "Points d'accès ",
@@ -46,6 +49,9 @@
     "Account not validated yet": {
       "API message": "Compte non encore validé"
     },
+    "Account removed": "Compte supprimé",
+    "Account to remove": "Compte à supprimer",
+    "Accounts": "Comptes utilisateurs",
     "Action is disabled. You must confirm simplified geometry first.": "Cette action est désactivée. Vous devez d’abord confirmer la simplification en cours.",
     "Activity feed": "Fil d'activité",
     "Activity trackers": "Traqueurs d'activité",
@@ -86,7 +92,6 @@
     "App guide": "Guide de l'application",
     "App settings": "Paramètres de l'application",
     "Apply filters": "Appliquer les filtres ",
-    "Are you sure you want to delete this document?": "Êtes-vous sûr(e) de vouloir supprimer ce document ? \nAttention, les photos associées ne seront pas supprimées et deviendront orphelines. \nSi vous souhaitez juste modifier le titre ou les documents associés (ex : déplacer une sortie vers un autre itinéraire), il suffit de modifier le document.\nSi ce document est un doublon comportant des photos, demandez @Modo_Topo_FR de fusionner les doublons pour déplacer les photos sur le document conservé.",
     "Are you sure you want to delete this locale?": "Êtes-vous sûr(e) de vouloir supprimer cette version linguistique ?",
     "Are you sure you want to merge?": "Êtes-vous sur de vouloir fusionner ?",
     "Are you sure you want to revert to this version of the document?": "Êtes-vous sûr de vouloir restaurer cette version du document ?",
@@ -111,6 +116,7 @@
       "API message": "Authentification nécessaire"
     },
     "Authentication to public transport data service error.": "Erreur d'authentification auprès du service de données de transports publics",
+    "Author": "Auteur",
     "Avalanche bulletins": "Bulletins d'avalanche",
     "Avalanche risk": "Risque d'avalanche",
     "Avalanche risk evaluation tool:": "Une aide à la gestion du risque d’avalanche :",
@@ -204,7 +210,6 @@
     "Connect": "Connecter",
     "Connect my account": "Connecter mon compte",
     "Connected to Strava, Garmin or Suunto? Your last activities show at the top of the form: one tap takes the trace, the date, the distance and the elevation gain.": "Connecté à Strava, Garmin ou Suunto ? Vos dernières activités s’affichent en haut du formulaire : un geste reprend la trace, la date, la distance et le dénivelé.",
-    "Contact / Report a problem": "Contact / Signaler un problème",
     "Contain invalid character(s)": {
       "API message": "Contient un ou plusieurs caractères invalides"
     },
@@ -247,6 +252,7 @@
     "Day(s)": "Jour(s)",
     "Define the mountain range I wish to travel to by public transport": "Définir le massif dans lequel je souhaite me rendre en transport en commun",
     "Delete": {
+      "$$noContext": "Supprimer",
       "yeti": "Supprimer"
     },
     "Delete a line chunk": "Supprimer une portion de ligne",
@@ -367,7 +373,6 @@
     "Forum notifications": "Notifications du forum",
     "Forum username": "Pseudo forum",
     "Forum: a place to chat about technical matters, or just petty talk": "Un forum pour discuter de sujets techniques ou bavarder",
-    "Friends and mentors": "Amis et mentors",
     "From": "De",
     "From danger 3, consider the slopes which dominate the route": "À partir du danger 3, prendre en compte les pentes qui dominent l'itinéraire",
     "From the interface": "Depuis l'interface",
@@ -575,12 +580,14 @@
     "Missing danger level": "Niveau de danger manquant",
     "Missing method": "Méthode manquante",
     "Mobile app bug — camptocamp.org": "Bug de l'app mobile — camptocamp.org",
+    "Moderation": "Modération",
     "Moderator role required": {
       "API message": "Vous devez être un modérateur"
     },
     "Modified the": {
       "modification date": "Modifié le"
     },
+    "More": "Plus",
     "More info": "Plus d'information",
     "More info on meteoblue.com": "Plus d'infos sur meteoblue.com",
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Plus d'itinéraires sont disponibles. Vous pouvez déplacer la carte, rentrer un nom ou choisir une activité pour les afficher.",
@@ -613,6 +620,7 @@
     "New folder": "Nouveau dossier",
     "New outing": "Nouvelle sortie",
     "New password": "Nouveau mot de passe",
+    "New request": "Nouvelle demande",
     "New route": "Nouvel itinéraire",
     "New waypoint": "Nouveau point de passage",
     "Next": "Suivant",
@@ -1022,6 +1030,7 @@
     "Toggle fullscreen": "Basculer en plein écran",
     "Too many results: please refine your search.": "Trop de résultats : merci de préciser votre recherche. ",
     "Too much points": "Trop de points",
+    "Topoguide moderator": "Modérateur topoguide",
     "Topos without a network": "Les topos sans réseau",
     "Topos, outings, conditions and stories of the mountains, in your pocket.": "Topos, sorties, conditions et récits de montagne, dans votre poche.",
     "Trace": "Trace GPS",
@@ -1252,6 +1261,7 @@
     },
     "book_types": "Type de livre",
     "books": "livres",
+    "by": "par",
     "c2c_meetings": {
       "article_categories": "réunions c2c"
     },
@@ -1370,6 +1380,7 @@
     "date_time": "date/heure",
     "day(s)": "jour(s)",
     "days": "jours",
+    "days left to restore it:": "jours restants pour la restauration :",
     "de": {
       "langs": "allemand"
     },
@@ -1627,6 +1638,7 @@
     "it": {
       "langs": "italien"
     },
+    "its author": "l'auteur",
     "key_needed": {
       "custodianship_types": "clé nécessaire pour ouvrir"
     },

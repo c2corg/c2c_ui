@@ -95,7 +95,6 @@
     "Application": "Aplicación",
     "Applications": "Aplicaciones",
     "Apply filters": "Aplicar filtros",
-    "Are you sure you want to delete this document?": "¿ Estas seguro de que quieres eliminar este documento ?",
     "Are you sure you want to delete this locale?": "¿Está seguro de que quiere eliminar esta local?",
     "Are you sure you want to merge?": "¿ Estas seguro de que quieres fusionar ?",
     "Are you sure you want to revert to this version of the document?": "¿Está seguro de que desea volver a esta versión del documento?",
@@ -123,6 +122,7 @@
       "API message": "Se requiere autenticación"
     },
     "Authentication to public transport data service error.": "Error de autenticación en el servicio de datos de transporte público.",
+    "Author": "Autor",
     "Auto": "Automático",
     "Avalanche bulletins": "Pronósticos de avalancha",
     "Avalanche risk": "Riesgo de avalancha",
@@ -219,7 +219,7 @@
     "Connect": "Conectar",
     "Connect my account": "Conectar mi cuenta",
     "Connected to Strava, Garmin or Suunto? Your last activities show at the top of the form: one tap takes the trace, the date, the distance and the elevation gain.": "¿Conectado a Strava, Garmin o Suunto? Sus últimas actividades se muestran en la parte superior del formulario: un toque toma el recorrido, la fecha, la distancia y el desnivel.",
-    "Contact / Report a problem": "Contactar / Informar un problema",
+    "Contact": "Contacto",
     "Contain invalid character(s)": {
       "API message": "Contiene caracteres no válidos"
     },
@@ -268,6 +268,7 @@
     "Day(s)": "Día(s)",
     "Define the mountain range I wish to travel to by public transport": "Definir la sierra a la que deseo viajar en transporte público",
     "Delete": {
+      "$$noContext": "Eliminar",
       "yeti": "Eliminar"
     },
     "Delete a line chunk": "Suprimir un tramo de la línea",
@@ -396,7 +397,6 @@
     "Forum notifications": "Notificaciones del foro",
     "Forum username": "Pseudónimo en el foro",
     "Forum: a place to chat about technical matters, or just petty talk": "Foro: un lugar para charlar sobre temas técnicos o simplemente charlas triviales",
-    "Friends and mentors": "Amigos y mentores",
     "From": "De",
     "From danger 3, consider the slopes which dominate the route": "desde el peligro 3, considera las pendientes que dominan la vía",
     "From the interface": "Desde la interfaz",
@@ -601,6 +601,7 @@
     "Modified the": {
       "modification date": "Cambia"
     },
+    "More": "Mas",
     "More info": "Mas informacion",
     "More info on meteoblue.com": "Más información en meteoblue.com",
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Hay más rutas disponibles. Puede mover el mapa, especificar el nombre o establecer una actividad para filtrarlos.",
@@ -1070,7 +1071,6 @@
     "Trace": "Seguimiento del GPS",
     "Trace and date taken from this activity, distance and elevation gain too when known. Check them before publishing.": "Trazo y fecha tomados de esta actividad, distancia y desnivel también cuando se conozcan. Compruébalos antes de publicar.",
     "Trace of the outing": "Rastro de la salida",
-    "Trackers": "Rastreadores",
     "Tracking devices": "Dispositivos GPS",
     "Tracks here": "Trayectos aquí",
     "Translate": "Traducir",
@@ -1309,6 +1309,7 @@
     },
     "book_types": "Tipos de libros",
     "books": "libros",
+    "by": "por",
     "c2c_meetings": {
       "article_categories": "reuniones c2c"
     },
