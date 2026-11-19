@@ -12,6 +12,10 @@
           <span v-if="document.lang" class="tag is-warning ml-2">
             {{ $gettext('deleted locale:') }}&nbsp;{{ document.lang }}
           </span>
+          <span v-if="document.deleted_images" class="tag is-info is-light ml-2">
+            <fa-icon icon="image" class="mr-1" />
+            {{ $gettext('images deleted with it:') }}&nbsp;{{ document.deleted_images }}
+          </span>
         </p>
 
         <p class="mt-1">
@@ -69,6 +73,9 @@
       <p class="mt-2" v-translate>
         It comes back with its history, associations and comments, as it was when deleted. The links to documents
         deleted since are not restored.
+      </p>
+      <p v-if="document.deleted_images" class="mt-2">
+        {{ $gettext('The images deleted with it are restored too:') }} {{ document.deleted_images }}
       </p>
       <template #confirm-label>
         <span v-translate>Restore</span>

@@ -5,6 +5,9 @@
     </template>
 
     <span v-translate>Are you sure you want to delete this document?</span>
+    <p v-if="documentType !== 'image'" class="mt-2" v-translate>
+      The personal images of its author linked to this document only are deleted with it.
+    </p>
     <p class="mt-2 has-text-grey" v-translate>A moderator can restore it during 29 days.</p>
   </modal-confirmation>
 </template>

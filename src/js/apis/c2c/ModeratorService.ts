@@ -4,6 +4,7 @@ import {
   accountRemovalsPage,
   deletedDocumentDetails,
   deletedDocumentsPage,
+  orphanImagesPage,
   restoreResult,
   type AccountRemoval,
   type AccountRemovalReason,
@@ -58,6 +59,15 @@ export default class ModeratorService {
     // $gettext('The document was deleted: restore it first', 'API message')
     // $gettext('The locale was written again since its deletion', 'API message')
     return this.api.postValidated('/documents/deleted/' + id + '/restore', restoreResult, {});
+  }
+
+  /*
+   * Images linked to no document
+   */
+  getOrphanImages(offset = 0, limit = 30, imageType?: string) {
+    return this.api.getValidated('/images/orphans', orphanImagesPage, {
+      params: { offset, limit, image_type: imageType || undefined },
+    });
   }
 
   /*

@@ -8,10 +8,11 @@ import AccountRemovals from './AccountRemovals.vue';
 import DeletedDocumentItem from './DeletedDocumentItem.vue';
 import DeletedDocuments from './DeletedDocuments.vue';
 import ModerationView from './ModerationView.vue';
+import OrphanImages from './OrphanImages.vue';
 import { daysLeft, documentRoute } from './deleted-documents';
 
 import { ApiData } from '@/js/apis/BaseApi';
-import type { AccountRemoval, DeletedDocument } from '@/js/apis/c2c/schemas';
+import type { AccountRemoval, DeletedDocument, OrphanImage } from '@/js/apis/c2c/schemas';
 import { isForumModerator } from '@/stores/forum-role';
 import RemoveAccountWindow from '@/views/document/utils/windows/RemoveAccountWindow.vue';
 
@@ -25,6 +26,8 @@ const api = vi.hoisted(() => ({
   cancelAccountRemoval: vi.fn(),
   updateAccountRemoval: vi.fn(),
   requestAccountRemoval: vi.fn(),
+  getOrphanImages: vi.fn(),
+  deleteDocument: vi.fn(),
 }));
 
 vi.mock('@/js/apis/c2c', () => ({ default: { moderator: api } }));
@@ -99,6 +102,7 @@ beforeEach(async () => {
       { path: '/outings/:id/:lang?', name: 'outing', component: Empty },
       { path: '/routes/:id/:lang?', name: 'route', component: Empty },
       { path: '/profiles/:id/:lang?', name: 'profile', component: Empty },
+      { path: '/images/:id/:lang?', name: 'image', component: Empty },
     ],
   });
   await router.push('/moderation');
@@ -112,6 +116,7 @@ const global = (isModerator = true) => ({
     IconDocument: true,
     IconActivity: true,
     IconForum: true,
+    Thumbnail: true,
     InputDocument: InputDocumentStub,
     ContributorLink: { props: ['contributor'], template: '<a class="contributor">{{ contributor.name }}</a>' },
     ModalConfirmation: {
@@ -163,6 +168,7 @@ describe('ModerationView', () => {
     expect(wrapper.findComponent(DeletedDocuments).exists()).toBe(true);
     expect(wrapper.findAll('.tabs li').map((li) => li.text())).toEqual([
       'Deleted documents',
+      'Orphan images',
       'Accounts',
       'Edits to check',
     ]);
@@ -178,7 +184,11 @@ describe('ModerationView', () => {
     expect(wrapper.text()).not.toContain('reserved to the moderators');
     expect(wrapper.findComponent(DeletedDocuments).exists()).toBe(false);
     expect(wrapper.findComponent(AccountRemovals).exists()).toBe(true);
-    expect(wrapper.find('.tabs a.is-disabled').attributes('title')).toBe('For the moderators of the topoguide');
+    expect(wrapper.findAll('.tabs a.is-disabled').map((a) => a.attributes('title'))).toEqual([
+      'For the moderators of the topoguide',
+      'For the moderators of the topoguide',
+      'Coming soon',
+    ]);
     expect(api.getDeletedDocuments).not.toHaveBeenCalled();
     expect(api.getAccountRemovals).toHaveBeenCalledWith('open', 0, 30);
   });
@@ -442,5 +452,103 @@ describe('RemoveAccountWindow', () => {
       expect.objectContaining({ user_id: 301, reason: 'anonymization' })
     );
     expect(wrapper.emitted('created')).toHaveLength(1);
+  });
+});
+
+const orphan = (id: number, extra: Partial<OrphanImage> = {}): OrphanImage => ({
+  document_id: 2000 + id,
+  filename: `1700000000_${id}.jpg`,
+  image_type: 'collaborative',
+  title: 'Image ' + id,
+  created_at: '2026-11-01T10:00:00+00:00',
+  author: user(3, 'alice'),
+  last_unlink: null,
+  ...extra,
+});
+
+describe('OrphanImages', () => {
+  const deleteButtons = (wrapper: ReturnType<typeof mount>) => wrapper.findAll('.orphan-image button');
+
+  it('lists the orphan images with their type, uploader and last link removed', async () => {
+    api.getOrphanImages.mockReturnValue(
+      answer({
+        total: 2,
+        images: [
+          orphan(1, { image_type: 'personal' }),
+          orphan(2, { last_unlink: { document_id: 12, document_type: 'r', by: user(9, 'bob'), at: '2026-11-02' } }),
+        ],
+      })
+    );
+    const wrapper = mount(OrphanImages, { global: global() });
+    await flushPromises();
+
+    expect(api.getOrphanImages).toHaveBeenCalledWith(0, 30, '');
+    const cards = wrapper.findAll('.orphan-image');
+    expect(cards).toHaveLength(2);
+    expect(cards[0]!.find('.tag').text()).toBe('personal');
+    expect(cards[0]!.text()).toContain('alice');
+    expect(cards[1]!.text()).toContain('Unlinked from');
+    expect(cards[1]!.text()).toContain('bob');
+    expect(wrapper.text()).toContain('Found: 2');
+  });
+
+  it('filters by image type, from the first page', async () => {
+    api.getOrphanImages.mockReturnValue(answer({ total: 0, images: [] }));
+    const wrapper = mount(OrphanImages, { global: global() });
+    await flushPromises();
+    expect(wrapper.text()).toContain('No orphan image.');
+
+    await wrapper.find('select').setValue('collaborative');
+    await flushPromises();
+
+    expect(api.getOrphanImages).toHaveBeenLastCalledWith(0, 30, 'collaborative');
+  });
+
+  it('deletes an image on a second click, and drops it from the list', async () => {
+    api.getOrphanImages.mockReturnValue(answer({ total: 2, images: [orphan(1), orphan(2)] }));
+    api.deleteDocument.mockReturnValue(answer({}));
+    const wrapper = mount(OrphanImages, { global: global() });
+    await flushPromises();
+
+    await deleteButtons(wrapper)[0]!.trigger('click');
+    expect(api.deleteDocument).not.toHaveBeenCalled();
+    expect(deleteButtons(wrapper)[0]!.text()).toBe('Confirm the deletion');
+
+    await deleteButtons(wrapper)[0]!.trigger('click');
+    await flushPromises();
+
+    expect(api.deleteDocument).toHaveBeenCalledWith(2001);
+    expect(wrapper.findAll('.orphan-image')).toHaveLength(1);
+    expect(wrapper.text()).toContain('Found: 1');
+  });
+
+  it('arms one button at a time, and tells when a deletion fails', async () => {
+    api.getOrphanImages.mockReturnValue(answer({ total: 2, images: [orphan(1), orphan(2)] }));
+    api.deleteDocument.mockReturnValue(new ApiData(Promise.reject(new Error('403'))));
+    const wrapper = mount(OrphanImages, { global: global() });
+    await flushPromises();
+
+    await deleteButtons(wrapper)[0]!.trigger('click');
+    await deleteButtons(wrapper)[1]!.trigger('click');
+    expect(api.deleteDocument).not.toHaveBeenCalled();
+    expect(deleteButtons(wrapper)[0]!.text()).toBe('Delete');
+
+    await deleteButtons(wrapper)[1]!.trigger('click');
+    await flushPromises();
+
+    expect(api.deleteDocument).toHaveBeenCalledWith(2002);
+    expect(wrapper.findAll('.orphan-image')).toHaveLength(2);
+    expect(wrapper.find('.notification.is-danger').text()).toContain('#2002');
+  });
+});
+
+describe('DeletedDocumentItem with images', () => {
+  it('tells how many images were deleted with the document', () => {
+    const wrapper = mount(DeletedDocumentItem, {
+      props: { document: outing(1, { deleted_images: 3 }) },
+      global: global(),
+    });
+    expect(wrapper.find('.tag.is-info').text()).toMatch(/images deleted with it:\s3/);
+    expect(wrapper.text()).toContain('The images deleted with it are restored too: 3');
   });
 });
