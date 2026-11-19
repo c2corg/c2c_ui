@@ -363,6 +363,11 @@ const sections = computed<Section[]>(() => {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     color: var(--c2c-color-text);
   }
+
+  /* as the entries of the desktop menu (MenuEntries.vue): the orange shows as a left border, here while pressed */
+  &:active {
+    box-shadow: inset 5px 0 0 var(--c2c-color-base-c2c-lighter);
+  }
 }
 
 .action-icon {
@@ -372,9 +377,8 @@ const sections = computed<Section[]>(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--app-accent-background);
-  color: var(--c2c-color-base-c2c);
-  border-radius: 4px;
+  /* the icons of the desktop menu: the color of the text, no tile */
+  color: var(--c2c-text);
 }
 
 .action-text {
