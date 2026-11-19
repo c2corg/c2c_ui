@@ -30,7 +30,8 @@ const mountMenu = async () => {
     global: {
       plugins: [router],
       stubs: { RouterLink: true, FaIcon: true, MenuFooter: true },
-      config: { globalProperties: { $gettext: (text: string) => text } as never },
+      // a visitor: the menu has no moderation entry
+      config: { globalProperties: { $gettext: (text: string) => text, $user: { isLogged: false } } as never },
     },
   });
   return { wrapper, router };
