@@ -142,7 +142,6 @@
     "Area too large": "Bereich zu groß",
     "Arrival": "Ankunft",
     "Arrive before": "vor anreisen",
-    "Articles": "Artikeln",
     "Articles, waypoints or routes to be linked.": "Artikeln, Wegpünkte oder Routen die verbunden werden sollen",
     "Articles, waypoints, routes or books to be linked.": "Artikeln, Wegpünkte, Routen oder Bücher die verbunden werden sollen",
     "As the name suggests, this method is intended for beginners. Therefore, the safety margin must be particularly important. No parameter other than the danger level is specified. Orientation is ignored.": "Wie der Name schon sagt, ist diese Methode für Einsteiger gedacht. Daher muss der Sicherheitsabstand besonders wichtig sein. Es wird kein anderer Parameter als die Gefahrenstufe angegeben. Die Ausrichtung wird ignoriert.",
@@ -165,7 +164,6 @@
     "Authentication to public transport data service error.": "Fehler bei der Authentifizierung für den Datendienst des öffentlichen Transportdienstes",
     "Avalanche bulletins": "Lawinenbulletin",
     "Avalanche risk": "Lawinengefahr ",
-    "Avalanche risk assessment": "Lawinengefahreneinschätzung",
     "Avalanche risk evaluation tool:": "Lawinenrisiko Einschätzungtool:",
     "Average slope (degrees)": "durchschnittliche Steigung (Grad)",
     "Average slope in degree": "durchschnittliche Steigung in grad.",
@@ -350,12 +348,12 @@
     "Disabled at this zoom level": "bei dieser Zoomstufe inaktiv",
     "Disclaimer": "Haftungsausschluss",
     "Discovery": "Entdecken",
-    "Discussions of the community": "Community-Diskussionen",
     "Dismiss": "Schließen ",
     "Dispositions": "Dispositionen",
     "Distance": "Länge",
     "Distance (km)": "Länge (km)",
     "Distance from the route access point": "Distanz vom Zufahrtsweg",
+    "Do you really want to leave? you have unsaved changes!": "Wollen Sie wirklich diese Seite schließen ? Änderungen werden nicht gespeichert !",
     "Document quality": "Dokumentqualität",
     "Donate": "Spenden Sie an den Verein Camptocamp",
     "Download": "Herunterladen ",
@@ -646,7 +644,6 @@
     "Modified the": {
       "modification date": "bearbeitet am"
     },
-    "More": "Mehr",
     "More info": "Mehr Info",
     "More info on meteoblue.com": "Mehr auf meteoblue.com",
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Es sind mehr Routen verfügbar. Sie können die Karte verschieben, den Namen angeben oder eine Aktivität festlegen, um sie herauszufiltern.",
@@ -851,7 +848,6 @@
     "ROMMA stations": "ROMMA-Stationen",
     "Radius around your position:": "Radius um deine Position:",
     "Read the app guide": "App-Anleitung lesen",
-    "Recent": "Aktuell",
     "Recent changes": "Letzte Veränderungen",
     "Recent: the latest outings and changes of the community, with their photos.": "Aktuell: die neuesten Touren und Änderungen der Community mit ihren Fotos.",
     "Recenter on your current position": "Auf aktuellen Standort zentrieren",
@@ -899,7 +895,6 @@
     "Routes": "Routen",
     "Routes to explore": "Routen zum Erkunden",
     "Routes, waypoints, images, articles I created or edited": "Von mir erstellte oder bearbeitete Routen, Wegpunkte, Bilder und Artikel",
-    "Routes, waypoints, outings": "Routen, Wegpunkte, Tourenberichte",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC ist eine weltweite Unfallberichtendatenbank, die strebt nach einer verbesserten Sicherheit in Klettern und Bergsporten.",
     "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC baut auf einer freundlichen Einstellung auf. Wir danken Ihnen, es zu verbessern.",
     "SERAC: accidents and incidents in the mountains": "SERAC: Unfälle und Vorfälle in den Bergen",
@@ -921,10 +916,7 @@
     "Saved online: from My topos, save offline the ones you take to the mountain.": "Online gespeichert: Speichere unter Meine Topos die Topos offline, die du mit in die Berge nimmst.",
     "Saving…": "Wird gespeichert …",
     "Scan with your phone": "Mit dem Telefon scannen",
-    "Search": {
-      "$$noContext": "Suchen",
-      "navigation": "Suchen"
-    },
+    "Search": "Suchen",
     "Search ...": "Suchen...",
     "Search a document to associate...": "Suchen Sie ein Dokument zu verbinden",
     "Search near me": "In meiner Nähe suchen",
@@ -1026,7 +1018,6 @@
     "Tap Save offline (in the message that follows, or in My topos): the topo, its photos and the map around it are downloaded. It moves to the Offline tab, a green dot on its bookmark.": "Tippe auf Offline speichern (in der folgenden Meldung oder unter Meine Topos): Der Topo, seine Fotos und die Karte um ihn herum werden heruntergeladen. Er wechselt in den Tab Offline; auf seinem Lesezeichen erscheint ein grüner Punkt.",
     "Tap the menu": "Tippe auf das Menü",
     "Target:": "Ziel:",
-    "Techniques, advice, stories": "Technik, Ratschläge, Geschichten",
     "Terms of Service need to be accepted": {
       "API message": "Allgemeine Nutzungsbedingungen müssen akzeptiert werden"
     },
@@ -1045,7 +1036,6 @@
     "The date of the copy shows on each topo: orange after a week, red after a month. Conditions change: download it again before leaving. Incomplete means the network cut the download: download it again.": "Das Datum der Kopie wird auf jedem Topo angezeigt: nach einer Woche orange, nach einem Monat rot. Die Bedingungen ändern sich: Lade ihn vor dem Aufbruch erneut herunter. „Unvollständig“ bedeutet, dass die Netzwerkverbindung den Download unterbrochen hat. Lade ihn erneut herunter.",
     "The destination can be a mountain range or a maximum travel time from your starting point.": "Als Zielort können Sie eine Bergkette oder die maximale Reisezeit von Ihrem Startpunkt angeben",
     "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "Das Gefahrenpotenzial wird aus der Gefahrenstufe des Lawinenbulletins berechnet. Es kann durch die Wahl eines Potenzials innerhalb des entsprechenden Bereichs der Gefahrenstufe feinjustiert werden. Beispiel: Das Lawinenbulletin ruft kurz nach einer Periode der Gefahrenstufe 4 die Gefahrenstufe 3 hervor. Wir können dann ein Gefahrenpotenzial von 12 statt 8 angeben.",
-    "The other sections of Camptocamp": "Die anderen Bereiche von Camptocamp",
     "The outing stays on the phone: complete and publish it from My topos.": "Der Tourenbericht bleibt auf dem Telefon: Vervollständige und veröffentliche ihn unter Meine Topos.",
     "The outings I took part in": "Tourenberichte, an denen ich teilgenommen habe",
     "The page you are looking for does not exist or is broken.": "Die von Ihnen angeforderte Seite existiert nicht oder ist fehlerhaft.",
@@ -1098,7 +1088,6 @@
     "To define your destination, choose one of these 2 approaches": "Um Ihr Ziel festzulegen, wählen Sie eine dieser beiden Möglichkeiten aus.",
     "To go further": "Weiterführend",
     "To report a problem: Me → Report a bug of the mobile app, the email leaves with the useful information.": "Um ein Problem zu melden: Ich → Fehler in der mobilen App melden. Die E-Mail enthält die erforderlichen Informationen.",
-    "To the mountains by public transport": "Mit öffentlichen Verkehrsmitteln in die Berge",
     "Toggle elevation profile": "Höhenprofil umschalten",
     "Toggle full-screen": {
       "Map Controls": "Vollbild"

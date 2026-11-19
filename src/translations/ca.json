@@ -244,6 +244,7 @@
     "Distance": "Distància",
     "Distance (km)": "Distància (km)",
     "Distance from the route access point": "Distància des del punt d'accés a la ruta",
+    "Do you really want to leave? you have unsaved changes!": "De debò voleu sortir? No heu desat els canvis!",
     "Document quality": "Qualitat del document",
     "Donate": "Feu un donatiu a l'associació Camptocamp",
     "Download outings": "Descarrega les sortides",
@@ -470,7 +471,6 @@
     "Modified the": {
       "modification date": "Modificat el"
     },
-    "More": "Més",
     "More info": "Més informació",
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Hi ha més itineraris disponibles. Us podeu desplaçar pel mapa, escriure un nom o seleccionar una activitat per mostrar-los",
     "Multi-criteria search": "Cerca multi-criteri",
