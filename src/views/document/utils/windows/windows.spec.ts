@@ -50,7 +50,7 @@ beforeEach(async () => {
   await router.push('/routes/version/12/fr/3');
 });
 
-const mountWindow = (component: object, props: object) =>
+const mountWindow = (component: object, props: object, isModerator = true) =>
   mount(component, {
     props: { document: montBlanc, ...props },
     global: {
@@ -61,6 +61,7 @@ const mountWindow = (component: object, props: object) =>
           $gettext: (s: string) => s,
           $filters: { uppercaseFirstLetter: (s: string) => s },
           $documentUtils: { getDocumentType: (type: string) => ({ r: 'route' })[type] },
+          $user: { isModerator },
         } as never,
       },
       directives: { translate: {} },
@@ -114,6 +115,11 @@ describe('document windows', () => {
     const text = wrapper.text().replace(/\s+/g, ' ');
     expect(text).toContain('Personal images of its author also deleted: 3');
     expect(text).toContain('Images kept, linked to no document any more: 3 (2 collaborative, 1 personal)');
+  });
+
+  it('tells the moderators only that a moderator can restore the document', () => {
+    expect(mountWindow(DeleteDocumentWindow, {}).text()).toContain('A moderator can restore it');
+    expect(mountWindow(DeleteDocumentWindow, {}, false).text()).not.toContain('A moderator can restore it');
   });
 
   it('says nothing about the images when none is concerned', async () => {

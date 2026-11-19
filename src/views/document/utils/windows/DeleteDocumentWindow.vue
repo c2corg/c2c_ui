@@ -24,7 +24,8 @@
     <p v-else-if="documentType !== 'image'" class="mt-2" v-translate>
       The personal images of its author linked to this document only are deleted with it.
     </p>
-    <p class="mt-2 has-text-grey" v-translate>A moderator can restore it during 29 days.</p>
+    <!-- for the moderators only: the users cannot restore it themselves, it would only confuse them -->
+    <p v-if="$user.isModerator" class="mt-2 has-text-grey" v-translate>A moderator can restore it during 29 days.</p>
   </modal-confirmation>
 </template>
 
