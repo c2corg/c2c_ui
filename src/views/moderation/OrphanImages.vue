@@ -55,16 +55,15 @@
               >#{{ image.last_unlink.document_id }}</router-link
             >
             <template v-if="image.last_unlink.by">
-              <span v-translate>by</span> <contributor-link :contributor="image.last_unlink.by" />
-            </template>
-            , {{ $dateUtils.toLocalizedString(image.last_unlink.at, 'll') }}
+              <span v-translate>by</span> <contributor-link :contributor="image.last_unlink.by" /></template
+            ><span>, {{ $dateUtils.toLocalizedString(image.last_unlink.at, 'll') }}</span>
           </p>
           <div class="mt-2">
             <!-- a first click arms the button, a second one deletes: one image at a time, without a window -->
             <button
               class="button is-small"
               :class="[
-                armed === image.document_id ? 'is-danger' : 'is-danger is-outlined',
+                armed === image.document_id ? 'is-danger' : 'is-danger is-light',
                 { 'is-loading': deleting.has(image.document_id) },
               ]"
               @click="onDelete(image)"

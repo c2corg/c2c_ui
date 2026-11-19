@@ -4,7 +4,12 @@
       <span v-translate>Delete this document</span>
     </template>
 
-    <span v-translate>Are you sure you want to delete this document?</span>
+    <!-- not the former sentence: its translations added that the linked photos are never deleted -->
+    <p v-translate>Do you want to delete this document?</p>
+    <p class="mt-2" v-translate>
+      To change its title or the documents linked to it, edit it instead. To keep the photos of a duplicate, ask a
+      moderator to merge it into the other document.
+    </p>
     <template v-if="images?.data">
       <p v-if="images.data.deleted" class="mt-2">
         {{ $gettext('Personal images of its author also deleted:') }} <strong>{{ images.data.deleted }}</strong>
