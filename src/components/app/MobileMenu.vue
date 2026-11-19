@@ -1,6 +1,12 @@
 <template>
   <!-- between the top bar and the bottom bar, which stay visible: the side menu of the site, for a finger -->
-  <nav v-if="menu.isOpen" id="mobile-menu" class="mobile-menu no-print" :aria-label="$gettext('Menu')">
+  <nav
+    v-if="menu.isOpen"
+    id="mobile-menu"
+    class="mobile-menu no-print"
+    :aria-label="$gettext('Menu')"
+    @click="onLinkClick"
+  >
     <menu-entries :items="items" touch />
     <menu-footer class="menu-footer" touch />
   </nav>
@@ -26,6 +32,13 @@ const route = useRoute();
 // the menu closes with the page, and with the phone layout (this component is unmounted by the desktop one)
 watch(() => route.fullPath, menu.close);
 onBeforeUnmount(menu.close);
+
+// any link closes it too, also the one of the page already shown, where the route does not change
+const onLinkClick = (event: MouseEvent) => {
+  if ((event.target as Element | null)?.closest('a')) {
+    menu.close();
+  }
+};
 
 // Escape closes it wherever the focus is
 const onKeydown = (event: KeyboardEvent) => {

@@ -64,4 +64,19 @@ describe('MobileMenu', () => {
     expect(menu.isOpen).toBe(false);
     expect(wrapper.find('#mobile-menu').exists()).toBe(false);
   });
+
+  it('closes on a link, also the one of the page already shown, but not elsewhere in the panel', async () => {
+    const { wrapper } = await mountMenu();
+    const menu = useMobileMenuStore();
+
+    menu.toggle();
+    await flushPromises();
+    await wrapper.find('#mobile-menu').trigger('click');
+    expect(menu.isOpen).toBe(true);
+
+    // the plain link of Itinevert: the route does not change
+    await wrapper.find('#mobile-menu a').trigger('click');
+    await flushPromises();
+    expect(menu.isOpen).toBe(false);
+  });
 });
