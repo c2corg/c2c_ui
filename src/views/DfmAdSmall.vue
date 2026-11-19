@@ -2,6 +2,7 @@
   <div class="ad-slot" :class="{ 'is-empty': empty }">
     <div
       id="camptocamp_htd"
+      :key="page"
       class="ams-ad is-flex is-justify-content-center"
       :style="empty ? undefined : { minHeight: `${height}px` }"
     />
@@ -11,10 +12,12 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
-import { adSlotHeight, loadAdScript, watchAdSlot } from '@/js/ad-script';
+import { adSlotHeight, loadAdScript, useAdPage, watchAdSlot } from '@/js/ad-script';
 import { useIsHomePage } from '@/js/composables/home-page';
 
 const DIV_ID = 'camptocamp_htd';
+
+const page = useAdPage();
 
 // the room of the ad is left from the start, so that the page does not shift when it comes; it is given back when the
 // slot gets no ad, or when the ad script does not load (blocked)

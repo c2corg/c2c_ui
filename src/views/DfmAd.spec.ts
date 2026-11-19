@@ -8,7 +8,12 @@ import DfmAdSmall from './DfmAdSmall.vue';
 
 import { adSlotHeight, loadAdScript, watchAdSlot } from '@/js/ad-script';
 
-vi.mock('@/js/ad-script', () => ({ loadAdScript: vi.fn(), adSlotHeight: vi.fn(), watchAdSlot: vi.fn() }));
+vi.mock('@/js/ad-script', async (importActual) => ({
+  ...(await importActual<typeof import('@/js/ad-script')>()),
+  loadAdScript: vi.fn(),
+  adSlotHeight: vi.fn(),
+  watchAdSlot: vi.fn(),
+}));
 
 const mountAt = async (component: typeof DfmAdSmall | typeof DfmAdLarge, path = '/routes/1') => {
   const page = { render: () => h('div') };
@@ -20,7 +25,8 @@ const mountAt = async (component: typeof DfmAdSmall | typeof DfmAdLarge, path = 
     ],
   });
   await router.push(path);
-  return mount(component, { attachTo: document.body, global: { plugins: [router] } });
+  const wrapper = mount(component, { attachTo: document.body, global: { plugins: [router] } });
+  return Object.assign(wrapper, { router });
 };
 
 describe.each([
@@ -43,6 +49,25 @@ describe.each([
 
     expect(loadAdScript).toHaveBeenCalledOnce();
     expect(divInPage).toBe(true);
+    wrapper.unmount();
+  });
+
+  it('has a new div on each page, which the ad script fills with a new slot', async () => {
+    const wrapper = await mountAt(component, '/routes/1');
+    const div = document.getElementById(divId)!;
+    // what Google Publisher Tag leaves in the div once the ad script destroys its slot
+    div.append(document.createElement('div'));
+
+    await wrapper.router.push('/routes/1#map');
+    expect(document.getElementById(divId)).toBe(div);
+
+    await wrapper.router.push('/routes/2');
+    const nextDiv = document.getElementById(divId)!;
+    expect(nextDiv).not.toBe(div);
+    expect(nextDiv.children).toHaveLength(0);
+
+    await wrapper.router.push('/routes/2?lang=fr');
+    expect(document.getElementById(divId)).not.toBe(nextDiv);
     wrapper.unmount();
   });
 });
