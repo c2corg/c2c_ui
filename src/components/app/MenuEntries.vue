@@ -1,10 +1,13 @@
 <template>
   <!-- the entries of the main menu, as the side menu of the site shows them -->
   <template v-for="item of items" :key="item.key">
-    <!-- a plain link when asked, so that the page is refreshed if you are already on it (Itinevert) -->
+    <!-- a plain link to another site (the forum), or when asked, so that the page is refreshed if you are already on
+         it (Itinevert) -->
     <component
-      :is="item.reload ? 'a' : 'router-link'"
-      v-bind="item.reload ? { href: $router.resolve(item.to).href } : { to: item.to }"
+      :is="item.href || item.reload ? 'a' : 'router-link'"
+      v-bind="
+        item.href ? { href: item.href } : item.reload ? { href: $router.resolve(item.to!).href } : { to: item.to }
+      "
     >
       <span
         class="menu-item is-ellipsed"
