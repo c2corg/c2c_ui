@@ -146,8 +146,8 @@ import {
   faWrench,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome';
-import type { App } from 'vue';
+import { FontAwesomeIcon, type FontAwesomeIconProps, FontAwesomeLayers } from '@fortawesome/vue-fontawesome';
+import { type App, type FunctionalComponent, h } from 'vue';
 
 import activityHiking from '@/assets/font-awesome-custom/js/activity/hiking';
 import activityIce_climbing from '@/assets/font-awesome-custom/js/activity/ice_climbing';
@@ -202,6 +202,17 @@ import waypointwaterpoint from '@/assets/font-awesome-custom/js/waypoint/waterpo
 import waypointwaypoints from '@/assets/font-awesome-custom/js/waypoint/waypoints';
 import waypointweather_station from '@/assets/font-awesome-custom/js/waypoint/weather_station';
 import waypointwebcam from '@/assets/font-awesome-custom/js/waypoint/webcam';
+
+// Font Awesome 7 renders no title on the svg, neither from the title prop nor from the attribute: an icon with a title
+// is wrapped in a span that carries it, so that the browser shows the tooltip. The other attributes stay on the icon.
+export const FaIcon: FunctionalComponent = (_props, { attrs }) => {
+  const { title, ...iconAttrs } = attrs;
+  // the attributes are the props of the icon: fa-icon declares none itself
+  const icon = h(FontAwesomeIcon, iconAttrs as unknown as FontAwesomeIconProps);
+  return title ? h('span', { title }, [icon]) : icon;
+};
+FaIcon.displayName = 'FaIcon';
+FaIcon.inheritAttrs = false;
 
 // registered globally
 export default function install(app: App) {
@@ -422,6 +433,6 @@ export default function install(app: App) {
     faYoutube
   );
 
-  app.component('FaIcon', FontAwesomeIcon);
+  app.component('FaIcon', FaIcon);
   app.component('FaLayers', FontAwesomeLayers);
 }
