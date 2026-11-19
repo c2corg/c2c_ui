@@ -458,7 +458,7 @@
       "Map layer": "Ráster ICGC (ca)"
     },
     "IGN Slopes": {
-      "Map slopes layer": "Trayectos IGN"
+      "Map slopes layer": "Pendientes IGN"
     },
     "IGN maps": {
       "Map layer": "mapas IGN"
@@ -967,7 +967,7 @@
     "Summary of camptocamp's articles": "Resumen de los artículos de camptocamp",
     "Sustainable mobility on Camptocamp": "Movilidad sostenible en Camptocamp",
     "SwissTopo Slopes": {
-      "Map slopes layer": "Trayectos SwissTopo"
+      "Map slopes layer": "Pendientes SwissTopo"
     },
     "SwissTopo ortho": {
       "Map layer": "SwissTopo orto"
