@@ -34,6 +34,7 @@ const SeracView = () => import('@/views/static-views/SeracView.vue');
 const TopoguideView = () => import('@/views/static-views/TopoguideView.vue');
 const AccountView = () => import('@/views/user/AccountView.vue');
 const FollowingView = () => import('@/views/user/FollowingView.vue');
+const ModerationView = () => import('@/views/moderation/ModerationView.vue');
 const LoginView = () => import('@/views/user/LoginView.vue');
 const PreferencesView = () => import('@/views/user/PreferencesView.vue');
 const TrackersExchangeTokenView = () => import('@/views/user/TrackersExchangeTokenView.vue');
@@ -70,6 +71,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/auth-sso', name: 'auth-sso', component: LoginView },
   { path: '/account', name: 'account', component: AccountView, meta: { requiresAuth: true } },
   { path: '/following', name: 'following', component: FollowingView, meta: { requiresAuth: true } },
+  { path: '/moderation/:tab?', name: 'moderation', component: ModerationView, meta: { requiresAuth: true } },
   { path: '/preferences', name: 'preferences', component: PreferencesView, meta: { requiresAuth: true } },
   { path: '/trackers', name: 'trackers', component: TrackersView, meta: { requiresAuth: true } },
   {

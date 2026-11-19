@@ -1,10 +1,11 @@
 <template>
-  <modal-confirmation ref="modalWindow" show-uncancelable-warning :promise="promise" @confirm="executeDelete">
+  <modal-confirmation ref="modalWindow" :promise="promise" @confirm="executeDelete">
     <template #title>
       <span v-translate>Delete this document</span>
     </template>
 
     <span v-translate>Are you sure you want to delete this document?</span>
+    <p class="mt-2 has-text-grey" v-translate>A moderator can restore it during 29 days.</p>
   </modal-confirmation>
 </template>
 

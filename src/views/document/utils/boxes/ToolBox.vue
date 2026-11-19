@@ -187,9 +187,19 @@
       />
     </template>
 
-    <hr v-if="isDeletable || (isEditable && $user.isModerator)" />
+    <!-- the moderators of the forum can ask for the removal of an account too, without being moderators of the topoguide -->
+    <tool-box-button
+      v-if="canRequestRemoval"
+      @click="removeAccountModal!.show()"
+      icon="user-slash"
+      :label="$gettext('Remove account')"
+    />
+
+    <hr v-if="isDeletable || (isEditable && $user.isModerator) || canRequestRemoval" />
 
     <license-box :document="document" />
+
+    <remove-account-window v-if="canRequestRemoval" ref="removeAccountModal" :document="document" />
 
     <!-- Modal windows -->
     <div v-if="isEditable">
@@ -209,6 +219,7 @@ import { useRoute } from 'vue-router';
 import DeleteDocumentWindow from '../windows/DeleteDocumentWindow.vue';
 import DeleteLocaleWindow from '../windows/DeleteLocaleWindow.vue';
 import MergeDocumentWindow from '../windows/MergeDocumentWindow.vue';
+import RemoveAccountWindow from '../windows/RemoveAccountWindow.vue';
 import TranslateWindow from '../windows/TranslateWindow.vue';
 
 import AssociatedDocuments from './AssociatedDocuments.vue';
@@ -220,6 +231,7 @@ import IconQuality from '@/components/generics/icons/IconQuality.vue';
 import c2c from '@/js/apis/c2c';
 import { useEditable } from '@/js/composables/editable';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { useModerationRoles } from '@/js/composables/moderation';
 import constants from '@/js/constants';
 import { toLonLat } from '@/js/geo/projection';
 import getFundraiser from '@/js/get-fundraiser';
@@ -238,6 +250,11 @@ const offline = useOfflineStore();
 // the view mode too: isDraftView, isVersionView...
 const { isNormalView, isEditable, isDeletable } = useEditable(() => props.document);
 const { documentType } = useDocumentType(props);
+const { any: canModerate } = useModerationRoles();
+// a moderator's own profile is not removable: the API refuses it too
+const canRequestRemoval = computed(
+  () => documentType.value === 'profile' && canModerate.value && props.document.document_id !== $user.id
+);
 
 const savingOffline = ref(false);
 const savingPack = ref(false);
@@ -287,6 +304,7 @@ type Modal = { show(): void };
 const mergeModal = useTemplateRef<Modal>('mergeModal');
 const deleteDocumentModal = useTemplateRef<Modal>('deleteDocumentModal');
 const deleteLocaleModal = useTemplateRef<Modal>('deleteLocaleModal');
+const removeAccountModal = useTemplateRef<Modal>('removeAccountModal');
 const translateModal = useTemplateRef<Modal>('translateModal');
 const associationsModal = useTemplateRef<Modal>('associationsModal');
 

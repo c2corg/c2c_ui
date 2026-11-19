@@ -2,6 +2,7 @@ import { computed, type Component } from 'vue';
 import type { RouteLocationRaw } from 'vue-router';
 
 import { useGlobalProperties } from './global-properties';
+import { useModerationRoles } from './moderation';
 
 import IconForum from '@/components/generics/icons/IconForum.vue';
 import IconItinevert from '@/components/generics/icons/IconItinevert.vue';
@@ -33,6 +34,7 @@ export interface MainMenuItem {
 /** The entries of the main menu: the side menu of the site, and its drawer in the phone layout. */
 export function useMainMenuItems() {
   const { $gettext } = useGlobalProperties();
+  const { any: canModerate } = useModerationRoles();
   const label = uppercaseFirstLetter;
 
   return computed<MainMenuItem[]>(() => [
@@ -102,6 +104,18 @@ export function useMainMenuItems() {
       match: ['app-settings'],
       icon: 'palette',
     },
+    // for the moderators of the topoguide or of the forum
+    ...(canModerate.value
+      ? [
+          {
+            key: 'moderation',
+            label: $gettext('Moderation'),
+            to: { name: 'moderation' },
+            match: ['moderation'],
+            icon: 'broom',
+          },
+        ]
+      : []),
   ]);
 }
 
@@ -122,6 +136,7 @@ export interface AccountLink {
 /** The destinations of the account of the signed in user: the user menu of the navigation, and the Me page. */
 export function useAccountLinks() {
   const { $gettext, $user } = useGlobalProperties();
+  const { any: canModerate } = useModerationRoles();
 
   return computed<AccountLink[]>(() => [
     { key: 'profile', to: { name: 'profile', params: { id: $user.id } }, text: $gettext('My profile'), icon: 'user' },
@@ -153,5 +168,8 @@ export function useAccountLinks() {
       text: $gettext('My bookmarks'),
       icon: 'star',
     },
+    ...(canModerate.value
+      ? [{ key: 'moderation', to: { name: 'moderation' }, text: $gettext('Moderation'), icon: 'broom' }]
+      : []),
   ]);
 }

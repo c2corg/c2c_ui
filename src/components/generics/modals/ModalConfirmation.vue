@@ -16,14 +16,14 @@
       <div>
         <button
           @click="$emit('confirm')"
-          class="button is-danger"
-          :class="{ 'is-loading': promise && promise.loading }"
+          class="button"
+          :class="[confirmClass, { 'is-loading': promise && promise.loading }]"
         >
           <slot name="confirm-label">
             <span v-translate>Confirm</span>
           </slot>
         </button>
-        <button @click="hide" class="button is-success" :disabled="promise && promise.loading" v-translate>
+        <button @click="hide" class="button" :class="cancelClass" :disabled="promise && promise.loading" v-translate>
           Cancel
         </button>
       </div>
@@ -45,6 +45,15 @@ const props = defineProps({
   promise: {
     type: Object,
     default: null,
+  },
+  // red to confirm and green to cancel by default, for the actions that destroy something
+  confirmClass: {
+    type: String,
+    default: 'is-danger',
+  },
+  cancelClass: {
+    type: String,
+    default: 'is-success',
   },
 });
 
