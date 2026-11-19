@@ -19,10 +19,33 @@
       </div>
     </div>
 
-    <h2 v-translate>Home page feed parameters</h2>
     <loading-notification :promise="promise" />
-    <div v-if="preferences">
-      <p v-translate>Here you may set activity and region filters that will apply to the homepage feed.</p>
+    <template v-if="preferences">
+      <!-- used by the home page feed, and by the button of the lists that applies them (LoadUserPreferencesButton) -->
+      <h2 v-translate>My activities and areas</h2>
+      <p v-translate>They filter the home page feed, and the lists of documents with the star button.</p>
+
+      <h3 v-translate>activities</h3>
+      <div class="field is-grouped">
+        <input-activity v-model="preferences.activities" @update:model-value="save" />
+      </div>
+
+      <h3>{{ $filters.uppercaseFirstLetter($gettext('areas')) }}</h3>
+
+      <div class="columns is-multiline">
+        <div class="column is-narrow">
+          <input-document document-type="area" @update:model-value="addArea" />
+        </div>
+        <div class="column">
+          <div class="columns is-multiline">
+            <div v-for="document in preferences.areas" :key="document.document_id" class="column is-3">
+              <document-card :document="document" show-delete-button @delete="removeArea(document)" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2 v-translate>Home page feed parameters</h2>
       <p v-translate>
         Only status updates with the selected activities and in the selected areas are shown in your homepage feed.
         Status updates from followed users will always be shown.
@@ -33,7 +56,8 @@
         </input-checkbox>
       </div>
 
-      <div v-if="!preferences.followed_only">
+      <!-- the languages only filter the feed: not used when it shows only the followed users -->
+      <template v-if="!preferences.followed_only">
         <h3 v-translate>langs</h3>
         <div class="field is-grouped">
           <div v-for="(language, key) of $language.availableUI" :key="key" class="control">
@@ -47,28 +71,8 @@
             </button>
           </div>
         </div>
-
-        <h3 v-translate>activities</h3>
-        <div class="field is-grouped">
-          <input-activity v-model="preferences.activities" @update:model-value="save" />
-        </div>
-
-        <h3>{{ $filters.uppercaseFirstLetter($gettext('areas')) }}</h3>
-
-        <div class="columns is-multiline">
-          <div class="column is-narrow">
-            <input-document document-type="area" @update:model-value="addArea" />
-          </div>
-          <div class="column">
-            <div class="columns is-multiline">
-              <div v-for="document in preferences.areas" :key="document.document_id" class="column is-3">
-                <document-card :document="document" show-delete-button @delete="removeArea(document)" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      </template>
+    </template>
   </div>
 </template>
 
