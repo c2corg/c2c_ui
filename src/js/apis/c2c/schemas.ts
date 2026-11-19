@@ -626,6 +626,16 @@ export const orphanImagesPage = z.object({
   images: z.array(orphanImage),
 });
 
+// GET /documents/delete/{id}/images: what deleting a document does to its images, asked before deleting it. The
+// personal images of its author linked to it only are deleted with it; the other images linked to it only stay,
+// linked to no document, by type
+export const imagesOfDeletion = z.object({
+  deleted: z.number(),
+  orphaned: z.record(z.string(), z.number()),
+});
+
+export type ImagesOfDeletion = z.input<typeof imagesOfDeletion>;
+
 // The removal requests of user accounts (v6_api views/user_removal.py): a request is validated by a moderator of the
 // topoguide and by one of the forum, then a script removes the account
 export const ACCOUNT_REMOVAL_REASONS = ['anonymization', 'merge', 'spam'] as const;

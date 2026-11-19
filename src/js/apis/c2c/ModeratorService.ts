@@ -4,6 +4,7 @@ import {
   accountRemovalsPage,
   deletedDocumentDetails,
   deletedDocumentsPage,
+  imagesOfDeletion,
   orphanImagesPage,
   restoreResult,
   type AccountRemoval,
@@ -32,6 +33,11 @@ export default class ModeratorService {
 
   deleteDocument(documentId: DocumentId) {
     return this.api.delete('/documents/delete/' + documentId);
+  }
+
+  // what the deletion does to the images linked to the document, asked before deleting it
+  getImagesOfDeletion(documentId: DocumentId) {
+    return this.api.getValidated('/documents/delete/' + documentId + '/images', imagesOfDeletion);
   }
 
   deleteLocale(documentId: DocumentId, lang: string) {
