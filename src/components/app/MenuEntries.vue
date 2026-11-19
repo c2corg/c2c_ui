@@ -16,6 +16,9 @@
         <component :is="item.iconComponent" v-if="item.iconComponent" fixed-width />
         <fa-icon v-else :icon="item.icon!" fixed-width />
         <span class="menu-item-text"> {{ item.label }} </span>
+        <span v-if="item.badge" class="tag is-danger is-rounded menu-badge" :title="$gettext('To handle')">{{
+          item.badge
+        }}</span>
       </span>
     </component>
   </template>
@@ -34,6 +37,13 @@ defineProps<{
 </script>
 
 <style scoped>
+.menu-badge {
+  margin-left: 0.4rem;
+  height: 1.4em;
+  padding: 0 0.5em;
+  font-size: 0.7rem;
+}
+
 .menu-item {
   display: block;
   padding: 6px 10px;

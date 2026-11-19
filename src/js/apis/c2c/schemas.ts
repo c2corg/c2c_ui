@@ -658,4 +658,9 @@ export const accountRemovalsPage = z.object({
   roles: accountRemovalRoles,
 });
 
-export const accountRemovalsCount = z.object({ open: z.number(), roles: accountRemovalRoles });
+export const accountRemovalsCount = z.object({
+  open: z.number(),
+  // the open requests the user can validate now; missing before v6_api#2669
+  actionable: z.optional(z.number()),
+  roles: accountRemovalRoles,
+});

@@ -12,6 +12,9 @@
             <router-link v-if="tab.available" :to="{ name: 'moderation', params: { tab: tab.name } }">
               <fa-icon :icon="tab.icon" class="mr-2" />
               <span>{{ tab.title }}</span>
+              <span v-if="tab.name === 'accounts' && actionable" class="tag is-danger is-rounded ml-2">{{
+                actionable
+              }}</span>
             </router-link>
             <a v-else class="is-disabled" :title="tab.unavailable" aria-disabled="true">
               <fa-icon :icon="tab.icon" class="mr-2" />
@@ -37,6 +40,7 @@ import DeletedDocuments from './DeletedDocuments.vue';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useNoRobots } from '@/js/composables/head';
 import { useModerationRoles } from '@/js/composables/moderation';
+import { actionableCount as actionable } from '@/stores/moderation-count';
 
 useNoRobots();
 
