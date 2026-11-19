@@ -44,7 +44,7 @@
               </span>
               <span class="action-text">
                 <span class="action-label">{{ action.label }}</span>
-                <span class="action-desc">{{ action.desc }}</span>
+                <span v-if="action.desc" class="action-desc">{{ action.desc }}</span>
               </span>
               <fa-icon icon="chevron-right" class="action-chevron" />
             </component>
@@ -88,7 +88,7 @@ defineOptions({ name: 'MeView' });
 interface Action {
   key: string;
   label: string;
-  desc: string;
+  desc?: string;
   customIcon?: string;
   icon?: string;
   to?: RouteLocationRaw;
@@ -129,7 +129,7 @@ const bugReportMailto = computed(() => {
     `Theme: ${appSettings.effectiveTheme}, text size: ${appSettings.textSize}`,
   ];
   const subject = encodeURIComponent($gettext('Mobile app bug — camptocamp.org'));
-  return `mailto:secretariat@camptocamp.org?subject=${subject}&body=${encodeURIComponent(lines.join('\n'))}`;
+  return `mailto:dev@camptocamp.org?subject=${subject}&body=${encodeURIComponent(lines.join('\n'))}`;
 });
 
 const sections = computed<Section[]>(() => {
@@ -179,7 +179,7 @@ const sections = computed<Section[]>(() => {
         {
           key: 'following',
           label: $gettext('Following'),
-          desc: $gettext('Friends and mentors'),
+          desc: $gettext('Their activity in your feed'),
           customIcon: 'two-hikers',
           to: accountTo('following'),
         },
@@ -192,7 +192,7 @@ const sections = computed<Section[]>(() => {
         },
         {
           key: 'trackers',
-          label: $gettext('Trackers'),
+          label: $gettext('Activity trackers'),
           desc: 'Strava, Suunto, Polar, Garmin…',
           customIcon: 'gps-pin',
           to: accountTo('trackers'),
@@ -235,8 +235,7 @@ const sections = computed<Section[]>(() => {
       },
       {
         key: 'contact',
-        label: $gettext('Contact / Report a problem'),
-        desc: 'secretariat@camptocamp.org',
+        label: $gettext('Contact'),
         icon: 'envelope',
         to: { name: 'article', params: { id: 106727 } },
       },
