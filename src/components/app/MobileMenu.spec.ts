@@ -16,10 +16,12 @@ const mountMenu = async () => {
     routes: [
       { path: '/', component: page },
       { path: '/other', component: page },
-      // the entries of the menu: a plain link (Itinevert) resolves its route
-      ...['topoguide', 'outings', 'forum', 'serac', 'articles', 'yeti', 'itinevert', 'offline', 'app-settings'].map(
-        (name) => ({ path: `/${name}`, name, component: page })
-      ),
+      // the entries of the menu: a plain link (Itinevert) resolves its route. The forum is another site
+      ...['topoguide', 'outings', 'serac', 'articles', 'yeti', 'itinevert', 'offline', 'app-settings'].map((name) => ({
+        path: `/${name}`,
+        name,
+        component: page,
+      })),
     ],
   });
   await router.push('/');
@@ -75,7 +77,7 @@ describe('MobileMenu', () => {
     expect(menu.isOpen).toBe(true);
 
     // the plain link of Itinevert: the route does not change
-    await wrapper.find('#mobile-menu a').trigger('click');
+    await wrapper.find('#mobile-menu a[href="/itinevert"]').trigger('click');
     await flushPromises();
     expect(menu.isOpen).toBe(false);
   });

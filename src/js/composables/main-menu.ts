@@ -10,12 +10,15 @@ import IconYeti from '@/components/generics/icons/IconYeti.vue';
 import IconArticle from '@/components/generics/icons/document/IconArticle.vue';
 import IconOuting from '@/components/generics/icons/document/IconOuting.vue';
 import IconXreport from '@/components/generics/icons/document/IconXreport.vue';
+import config from '@/js/config';
 import { uppercaseFirstLetter } from '@/js/vue-plugins/filters';
 
 export interface MainMenuItem {
   key: string;
   label: string;
-  to: RouteLocationRaw;
+  // a page of the UI, or another site (the forum) by its address
+  to?: RouteLocationRaw;
+  href?: string;
   // the routes for which the entry is the current one
   match: string[];
   // an icon component, or the name of a font-awesome icon
@@ -50,7 +53,7 @@ export function useMainMenuItems() {
     {
       key: 'forum',
       label: label($gettext('Forum')),
-      to: { name: 'forum' },
+      href: config.urls.forum,
       match: [],
       iconComponent: IconForum,
     },

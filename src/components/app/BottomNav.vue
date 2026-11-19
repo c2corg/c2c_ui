@@ -2,16 +2,23 @@
   <nav class="bottom-nav no-print" :aria-label="$gettext('Main navigation')">
     <ul class="bottom-nav-list">
       <li v-for="tab of tabs" :key="tab.key" class="bottom-nav-item">
-        <router-link :to="tab.to" class="bottom-nav-link" :class="{ 'is-active': isActive(tab) }" @click="menu.close()">
+        <!-- the forum is another site: a plain link to it -->
+        <component
+          :is="tab.href ? 'a' : 'router-link'"
+          v-bind="tab.href ? { href: tab.href } : { to: tab.to }"
+          class="bottom-nav-link"
+          :class="{ 'is-active': isActive(tab) }"
+          @click="menu.close()"
+        >
           <span class="bottom-nav-icon-wrap">
             <component :is="tab.iconComponent" v-if="tab.iconComponent" class="bottom-nav-icon" />
             <fa-icon v-else :icon="tab.icon!" class="bottom-nav-icon" />
-            <span v-if="tab.badge" class="bottom-nav-badge" :aria-label="tab.badgeLabel">
+            <span v-if="tab.badge" class="bottom-nav-badge" :class="tab.badgeClass" :aria-label="tab.badgeLabel">
               {{ tab.badge > 9 ? '9+' : tab.badge }}
             </span>
           </span>
           <span class="bottom-nav-label">{{ tab.label }}</span>
-        </router-link>
+        </component>
       </li>
       <li class="bottom-nav-item">
         <!-- opens the menu panel (MobileMenu.vue), the entries of the side menu of the site -->
@@ -32,12 +39,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, type Component } from 'vue';
+import { computed, shallowRef, watch, type Component } from 'vue';
 import { type RouteLocationRaw, useRoute, useRouter } from 'vue-router';
 
 import IconForum from '@/components/generics/icons/IconForum.vue';
 import IconTopoguide from '@/components/generics/icons/IconTopoguide.vue';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import config from '@/js/config';
+import type { useForumNotificationsStore } from '@/stores/forum-notifications';
 import { useMobileMenuStore } from '@/stores/mobile-menu';
 import { useOutingQueueStore } from '@/stores/outing-queue';
 
@@ -48,19 +57,49 @@ interface Tab {
   label: string;
   icon?: string;
   iconComponent?: Component;
-  to: RouteLocationRaw;
+  // a page of the UI, or another site by its address
+  to?: RouteLocationRaw;
+  href?: string;
   // the routes for which the tab is the current one
   match: string[];
   badge?: number;
   badgeLabel?: string;
+  badgeClass?: string;
 }
 
-const { $gettext } = useGlobalProperties();
+const { $gettext, $user } = useGlobalProperties();
 const route = useRoute();
 const router = useRouter();
 
 const queue = useOutingQueueStore();
 const menu = useMobileMenuStore();
+
+// the unread forum notifications of the signed in user: the store that the navigation starts (Navigation.vue, mounted
+// but hidden in this layout), loaded on the first sign in
+const forumNotifications = shallowRef<ReturnType<typeof useForumNotificationsStore> | null>(null);
+watch(
+  () => $user.isLogged && !!$user.forumUsername,
+  async (signedIn) => {
+    if (signedIn && !forumNotifications.value) {
+      const { useForumNotificationsStore } = await import('@/stores/forum-notifications');
+      forumNotifications.value = useForumNotificationsStore();
+    }
+  },
+  { immediate: true }
+);
+
+// like the forum's own avatar: its messages first (green), else its other notifications (blue)
+const forumBadge = computed(() => {
+  const highPriority = forumNotifications.value?.unreadHighPriority ?? 0;
+  const unread = forumNotifications.value?.unread ?? 0;
+  if (highPriority) {
+    return { badge: highPriority, badgeClass: 'is-forum-messages', badgeLabel: $gettext('Forum messages') };
+  }
+  if (unread) {
+    return { badge: unread, badgeClass: 'is-forum-notifications', badgeLabel: $gettext('Forum notifications') };
+  }
+  return {};
+});
 
 const tabs = computed<Tab[]>(() =>
   [
@@ -93,10 +132,11 @@ const tabs = computed<Tab[]>(() =>
       key: 'forum',
       label: $gettext('Forum'),
       iconComponent: IconForum,
-      to: { name: 'forum' },
+      href: config.urls.forum,
       match: [],
+      ...forumBadge.value,
     },
-  ].filter((tab) => router.hasRoute((tab.to as { name: string }).name))
+  ].filter((tab) => !tab.to || router.hasRoute((tab.to as { name: string }).name))
 );
 
 // the tab of the current route, unless the menu panel covers the page
@@ -187,6 +227,15 @@ const isActive = (tab: Tab) => !menu.isOpen && tab.match.includes(String(route.n
   border-radius: 7px;
   text-align: center;
   box-shadow: 0 0 0 2px var(--app-bar);
+
+  /* the forum's colors, as on its avatar badges (Navigation.vue) */
+  &.is-forum-notifications {
+    background: #337ab7;
+  }
+
+  &.is-forum-messages {
+    background: #090;
+  }
 }
 
 .bottom-nav-label {
