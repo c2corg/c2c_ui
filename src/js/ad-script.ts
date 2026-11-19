@@ -1,3 +1,6 @@
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
 // The script of the ad network (admysports), added once by the ad components. It then loads the whole ad stack (Google
 // Publisher Tag, AdSense, Prebid: about 600 KB of scripts), which competed with the site's own scripts and the largest
 // contentful paint while the page loaded. It is now added after the page's load event, when the browser is idle
@@ -39,6 +42,17 @@ export function loadAdScript() {
   } else {
     window.addEventListener('load', () => whenIdle(addAdScript), { once: true });
   }
+}
+
+/**
+ * The page, as the ad script tells them apart (path and query), to give its slot a new div on each page: the ad script
+ * then defines its slot again (it watches its divs), and Google Publisher Tag adds a new container to the div. In the
+ * same div, it left the previous ones, empty: side by side, they widened the div, and the buttons of the navigation bar
+ * wrapped on 4 lines, higher than the bar. A new div leaves them with the old one.
+ */
+export function useAdPage() {
+  const route = useRoute();
+  return computed(() => route.fullPath.split('#')[0]);
 }
 
 // The ad script chooses its ad units by device, which it tells from the user agent, not from the width of the page:
