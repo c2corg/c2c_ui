@@ -65,12 +65,13 @@ function filtersOf({ activities, areas }: UserPreferences): Record<string, strin
 const isEmpty = ({ activities, areas }: UserPreferences) => !activities.length && !areas.length;
 
 // the list already shows the preferences: nothing would change
-const applied = computed(
-  () =>
-    !!preferences.value &&
-    !isEmpty(preferences.value) &&
-    Object.entries(filtersOf(preferences.value)).every(([key, value]) => (route.query[key] ?? undefined) === value)
-);
+const applied = computed(() => {
+  if (!preferences.value || isEmpty(preferences.value)) return false;
+  const filters = filtersOf(preferences.value);
+  // the areas replace the map extent and the "near me" radius: still there, the list is narrower than the preferences
+  if (filters.a !== undefined && (route.query.bbox || route.query.nmr)) return false;
+  return Object.entries(filters).every(([key, value]) => (route.query[key] ?? undefined) === value);
+});
 
 function notifyWithPreferencesLink(text: string) {
   const message = document.createElement('div');

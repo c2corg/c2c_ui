@@ -80,6 +80,17 @@ describe('LoadUserPreferencesButton', () => {
     expect(toast).toHaveBeenCalledWith(expect.objectContaining({ message: 'Your preferences are already applied.' }));
   });
 
+  it('applies the areas again when the map extent still narrows the list', async () => {
+    const { wrapper, router } = await mountButton('/outings?act=hiking&a=14&bbox=1,2,3,4&nmr=10', {
+      activities: ['hiking'],
+      areas: [{ document_id: 14 }],
+    });
+    await click(wrapper);
+
+    expect(router.currentRoute.value.query).toEqual({ act: 'hiking', a: '14' });
+    expect(toast).not.toHaveBeenCalled();
+  });
+
   it('sends to the preferences page when there are none, without changing the list', async () => {
     const { wrapper, router } = await mountButton('/outings?act=hiking', { activities: [], areas: [] }, 'dropdown');
     await click(wrapper);
