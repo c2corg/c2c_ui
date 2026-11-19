@@ -7,13 +7,24 @@
       date.
     </p>
 
-    <div class="tabs is-small is-toggle mb-4">
-      <ul>
-        <li v-for="item of STATUSES" :key="item" :class="{ 'is-active': item === status }">
-          <a @click="setStatus(item)">{{ statusLabels[item] }}</a>
-        </li>
-      </ul>
+    <div class="is-flex is-justify-content-space-between is-align-items-center is-flex-wrap-wrap mb-4">
+      <div class="tabs is-small is-toggle mb-0">
+        <ul>
+          <li v-for="item of STATUSES" :key="item" :class="{ 'is-active': item === status }">
+            <a @click="setStatus(item)">{{ statusLabels[item] }}</a>
+          </li>
+        </ul>
+      </div>
+      <button class="button is-small is-primary" @click="requestWindow!.show()">
+        <fa-icon icon="user-slash" class="mr-1" />
+        <span v-translate>New request</span>
+      </button>
     </div>
+    <p class="help mb-4" v-translate>
+      A request can also be made from the profile of the user: Remove account, in its tools.
+    </p>
+
+    <remove-account-window ref="requestWindow" @created="setStatus('open')" />
 
     <div v-if="page.error" class="notification is-danger" v-translate>The removal requests could not be loaded.</div>
     <p v-else-if="!page.loading && removals.length === 0" class="has-text-grey">
@@ -38,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, shallowRef } from 'vue';
+import { computed, ref, shallowRef, useTemplateRef } from 'vue';
 
 import AccountRemovalItem from './AccountRemovalItem.vue';
 
@@ -46,6 +57,7 @@ import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import type { AccountRemoval } from '@/js/apis/c2c/schemas';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import RemoveAccountWindow from '@/views/document/utils/windows/RemoveAccountWindow.vue';
 
 const PAGE_SIZE = 30;
 // the open ones by default: the done and cancelled ones are only loaded when asked
@@ -61,6 +73,8 @@ const statusLabels = computed<Record<Status, string>>(() => ({
   done: $gettext('Done'),
   cancelled: $gettext('Cancelled'),
 }));
+
+const requestWindow = useTemplateRef<{ show(): void }>('requestWindow');
 
 const status = ref<Status>('open');
 const removals = ref<AccountRemoval[]>([]);

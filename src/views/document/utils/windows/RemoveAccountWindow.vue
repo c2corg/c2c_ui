@@ -1,13 +1,20 @@
 <template>
   <modal-card ref="modalWindow">
     <template #title>
-      <span v-translate>Remove this account</span>
+      <span v-if="document" v-translate>Remove this account</span>
+      <span v-else v-translate>Remove an account</span>
     </template>
 
     <section>
       <div class="notification is-warning has-text-centered has-text-weight-bold" v-translate>
         Once validated by a moderator of the topoguide and by a moderator of the forum, the account is merged into the
         target account, in the topoguide and in the forum: this cannot be undone.
+      </div>
+
+      <!-- opened from the moderation page: the account is chosen here, else it is the profile shown -->
+      <div v-if="!document" class="field">
+        <label class="label" v-translate>Account to remove</label>
+        <input-document v-model="source" document-type="profile" />
       </div>
 
       <div class="field">
@@ -86,16 +93,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, useTemplateRef, watch } from 'vue';
+import { computed, ref, useTemplateRef, watch, type PropType } from 'vue';
 import { useRouter } from 'vue-router';
 
 import c2c from '@/js/apis/c2c';
 import { apiErrors } from '@/js/apis/c2c/api-errors';
 import type { AccountRemovalReason } from '@/js/apis/c2c/schemas';
 import { useGlobalProperties } from '@/js/composables/global-properties';
-import { documentProperty } from '@/js/properties';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-const props = defineProps({ ...documentProperty });
+// the profile shown, or none on the moderation page, which then emits the created request
+const props = defineProps({ document: { type: Object as PropType<C2cDocument | null>, default: null } });
+
+const emit = defineEmits<{ created: [] }>();
 
 const router = useRouter();
 const { $gettext } = useGlobalProperties();
@@ -118,7 +128,9 @@ const today = isoDate(new Date());
 const reason = ref<AccountRemovalReason>('anonymization');
 const userRequestDate = ref(today);
 const executableAfter = ref(addDays(today, ANONYMIZATION_DELAY_DAYS));
+const source = ref<{ document_id: number } | null>(null);
 const target = ref<{ document_id: number } | null>(null);
+const userId = computed(() => (props.document ? Number(props.document.document_id) : source.value?.document_id));
 const forumUrl = ref('');
 const sending = ref(false);
 const error = ref('');
@@ -144,9 +156,10 @@ watch(reason, (value) => {
 const isValid = computed(
   () =>
     !sending.value &&
+    userId.value !== undefined &&
     executableAfter.value >= earliest.value &&
     (reason.value !== 'anonymization' || Boolean(userRequestDate.value)) &&
-    (reason.value !== 'merge' || (target.value !== null && target.value.document_id !== props.document.document_id))
+    (reason.value !== 'merge' || (target.value !== null && target.value.document_id !== userId.value))
 );
 
 const modalWindowRef = useTemplateRef<{ show(): void; hide(): void }>('modalWindow');
@@ -157,6 +170,7 @@ function hide() {
 
 function show() {
   error.value = '';
+  source.value = null;
   modalWindowRef.value!.show();
 }
 
@@ -165,7 +179,7 @@ function submit() {
   error.value = '';
   c2c.moderator
     .requestAccountRemoval({
-      user_id: Number(props.document.document_id),
+      user_id: userId.value!,
       reason: reason.value,
       executable_after: executableAfter.value,
       ...(reason.value !== 'spam' && userRequestDate.value ? { user_request_date: userRequestDate.value } : {}),
@@ -176,7 +190,11 @@ function submit() {
       () => {
         sending.value = false;
         hide();
-        router.push({ name: 'moderation', params: { tab: 'accounts' } });
+        if (props.document) {
+          router.push({ name: 'moderation', params: { tab: 'accounts' } });
+        } else {
+          emit('created');
+        }
       },
       (e: unknown) => {
         sending.value = false;

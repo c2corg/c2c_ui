@@ -13,6 +13,7 @@ import { daysLeft, documentRoute } from './deleted-documents';
 import { ApiData } from '@/js/apis/BaseApi';
 import type { AccountRemoval, DeletedDocument } from '@/js/apis/c2c/schemas';
 import { isForumModerator } from '@/stores/forum-role';
+import RemoveAccountWindow from '@/views/document/utils/windows/RemoveAccountWindow.vue';
 
 const api = vi.hoisted(() => ({
   getDeletedDocuments: vi.fn(),
@@ -23,6 +24,7 @@ const api = vi.hoisted(() => ({
   unvalidateAccountRemoval: vi.fn(),
   cancelAccountRemoval: vi.fn(),
   updateAccountRemoval: vi.fn(),
+  requestAccountRemoval: vi.fn(),
 }));
 
 vi.mock('@/js/apis/c2c', () => ({ default: { moderator: api } }));
@@ -409,5 +411,36 @@ describe('AccountRemovalItem', () => {
     await wrapper.find('.buttons button').trigger('click');
     expect(wrapper.text()).toContain('the removal script');
     expect(wrapper.text()).toContain('documents deleted: 2');
+  });
+});
+
+describe('RemoveAccountWindow', () => {
+  const ModalCard = {
+    setup(_: unknown, { expose }: { expose: (exposed: object) => void }) {
+      expose({ show: vi.fn(), hide: vi.fn() });
+    },
+    template: '<div><slot name="title" /><slot /><slot name="footer" /></div>',
+  };
+
+  it('asks for the account on the moderation page, and tells the list once created', async () => {
+    api.requestAccountRemoval.mockReturnValue(answer(removal(5)));
+    const options = global(false);
+    const wrapper = mount(RemoveAccountWindow, {
+      global: { ...options, stubs: { ...options.stubs, ModalCard } },
+    });
+    const submit = () => wrapper.findAll('button').find((b) => b.text() === 'Request the removal')!;
+
+    expect(wrapper.text()).toContain('Remove an account');
+    expect(submit().attributes('disabled')).toBeDefined();
+
+    wrapper.findComponent(InputDocumentStub).vm.$emit('update:modelValue', { document_id: 301 });
+    await wrapper.vm.$nextTick();
+    await submit().trigger('click');
+    await flushPromises();
+
+    expect(api.requestAccountRemoval).toHaveBeenCalledWith(
+      expect.objectContaining({ user_id: 301, reason: 'anonymization' })
+    );
+    expect(wrapper.emitted('created')).toHaveLength(1);
   });
 });
