@@ -34,3 +34,12 @@ onMounted(() => {
 
 onBeforeUnmount(() => stopWatching?.());
 </script>
+
+<style lang="css" scoped>
+/* on each page, the ad script defines its slot again: Google Publisher Tag adds a new container to the div, and leaves
+   the previous ones in it, empty. Side by side, they widened the div (wider than a phone): only the last one, the
+   slot's, is shown (DfmAdLarge.vue) */
+#camptocamp_htd > :deep(div:not(:last-child)) {
+  display: none;
+}
+</style>

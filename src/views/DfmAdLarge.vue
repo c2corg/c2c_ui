@@ -13,7 +13,16 @@ onMounted(loadAdScript);
 </script>
 
 <style lang="css" scoped>
+/* the width of its ad (728px), whatever the ad script puts in it */
 #camptocamp_htad {
-  min-width: 728px;
+  flex: none;
+  width: 728px;
+}
+
+/* on each page, the ad script defines its slot again: Google Publisher Tag adds a new container to the div, and leaves
+   the previous ones in it, empty. Side by side, they widened the div (in the navigation bar, its buttons then wrapped
+   on 4 lines, higher than the bar): only the last one, the slot's, is shown */
+#camptocamp_htad > :deep(div:not(:last-child)) {
+  display: none;
 }
 </style>
