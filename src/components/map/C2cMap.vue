@@ -355,6 +355,7 @@ import {
   worldLayer,
 } from './map-layers';
 import { parseMapUrl, withMapUrl } from './map-url-state';
+import { scrollPassthrough } from './scroll-passthrough';
 
 import biodivSportsService from '@/js/apis/biodivsports-service';
 import c2c from '@/js/apis/c2c';
@@ -1866,6 +1867,7 @@ function resetNorth() {
 // after the map changed size (full screen left or entered, map pinned to a side or unpinned), the 3D view goes back to
 // its documents, as the 2D map fits its documents again
 let resizeTimer: ReturnType<typeof setTimeout> | undefined;
+let stopScrollPassthrough: (() => void) | null = null;
 let lastSize = '';
 const resizeObserver = new ResizeObserver(([entry]) => {
   const size = `${Math.round(entry.contentRect.width)}x${Math.round(entry.contentRect.height)}`;
@@ -1998,6 +2000,8 @@ onMounted(() => {
   updateEditMapLink();
 
   document.addEventListener('fullscreenchange', onFullscreenChange);
+  // scrolling the page past the map does not zoom or pan it; nothing to scroll in full screen
+  stopScrollPassthrough = scrollPassthrough(mapElementEl.value!, rootElementEl.value!, () => !isFullscreen.value);
   bus.on('elevation_profile', onElevationProfile);
   resizeObserver.observe(rootElementEl.value!);
 });
@@ -2008,6 +2012,8 @@ onBeforeUnmount(() => {
   clearTimeout(resizeTimer);
   clearTimeout(tapTimeout);
   document.removeEventListener('fullscreenchange', onFullscreenChange);
+  stopScrollPassthrough?.();
+  stopScrollPassthrough = null;
   bus.off('elevation_profile', onElevationProfile);
   flightLayers?.remove();
   flightLayers = null;
@@ -2041,6 +2047,13 @@ defineExpose({
   /* MapLibre sets a 12px font on its map: the page's one, so that the controls placed in em (the scale) are where
      they are with the others */
   font: inherit;
+}
+
+/* while the page scrolls, a touch on the map scrolls the page (see scroll-passthrough.ts): MapLibre's own touch-action
+   (none) is on its canvas and its container */
+.c2c-map.page-scrolling :deep(.maplibregl-canvas-container),
+.c2c-map.page-scrolling :deep(.maplibregl-canvas) {
+  touch-action: pan-x pan-y !important;
 }
 
 .c2c-map-compass {
