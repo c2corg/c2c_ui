@@ -480,7 +480,7 @@ export const documentChanges = z.object({
       version_id: z.number(),
       comment: z.nullable(z.string()),
       document: z.object({ document_id: z.number(), type: z.string(), title: z.nullish(z.string()) }),
-      user: z.object({ user_id: z.number(), name: z.string() }),
+      user: z.object({ user_id: z.number(), name: z.string(), moderator: z.optional(z.boolean()) }),
     })
   ),
   pagination_token: z.optional(z.string()),
