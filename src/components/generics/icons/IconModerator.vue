@@ -1,3 +1,3 @@
 <template>
-  <fa-icon icon="broom" />
+  <fa-icon icon="broom" :title="$gettext('Topoguide moderator')" />
 </template>
