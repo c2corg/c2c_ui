@@ -2,14 +2,15 @@
   <div
     id="app"
     :class="{
-      'nav-dfm': !homePage && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
+      'nav-dfm': topAd && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
       'home-topoguide': homePage,
+      'no-top-ad': !topAd,
     }"
   >
     <environment-banner />
     <side-menu class="side-menu no-print" />
     <navigation class="navigation no-print" />
-    <dfm-ad-small v-if="!homePage && ($screen.isMobile || $screen.isTablet || $screen.isDesktop)" class="ad" />
+    <dfm-ad-small v-if="topAd && ($screen.isMobile || $screen.isTablet || $screen.isDesktop)" class="ad" />
     <site-notice class="no-print site-notice" />
     <image-viewer v-if="imageViewerRequested" />
     <helper-window />
@@ -61,7 +62,7 @@ import Navigation from './views/Navigation.vue';
 import SideMenu from './views/SideMenu.vue';
 import SiteNotice from './views/SiteNotice.vue';
 
-import { useIsHomePage } from '@/js/composables/home-page';
+import { useHasTopAd, useIsHomePage } from '@/js/composables/home-page';
 import { imageViewerRequested } from '@/js/vue-plugins/image-viewer';
 import { useAppSettingsStore } from '@/stores/app-settings';
 import { useOfflineStore } from '@/stores/offline';
@@ -72,6 +73,7 @@ const ImageViewer = defineAsyncComponent(() => import('./components/image-viewer
 defineOptions({ name: 'App' });
 
 const homePage = useIsHomePage();
+const topAd = useHasTopAd();
 
 const appSettings = useAppSettingsStore();
 
@@ -152,11 +154,12 @@ body,
   flex-flow: column;
 }
 
-.home-topoguide {
-  .page-content {
-    padding-top: var(--c2c-navbar-height);
-  }
+/* without the ad under the navigation, which leaves its room (.ad below), the page leaves it */
+.no-top-ad .page-content {
+  padding-top: var(--c2c-navbar-height);
+}
 
+.home-topoguide {
   .ams-ad {
     margin-left: auto !important;
     padding-top: 0px !important;
@@ -274,7 +277,7 @@ html[data-shell='mobile'] {
     padding-top: var(--app-top-bar-height);
   }
 
-  .home-topoguide .page-content,
+  .no-top-ad .page-content,
   .nav-dfm .page-content {
     padding-top: var(--app-top-bar-height);
   }

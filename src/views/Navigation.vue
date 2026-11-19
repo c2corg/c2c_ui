@@ -3,10 +3,10 @@
     class="is-size-5"
     :class="{
       'has-background-warning': siteConfiguration.urls.name != 'prod',
-      'with-ad': !homePage() && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
+      'with-ad': topAd && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
     }"
   >
-    <dfm-ad-large v-if="!homePage() && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop" />
+    <dfm-ad-large v-if="topAd && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop" />
 
     <div class="navigation-end" :class="{ 'is-search-shown': !hideSearchInput }">
       <router-link
@@ -199,7 +199,7 @@ import IconJoinUs from '@/components/generics/icons/IconJoinUs.vue';
 import JoinUsLink from '@/components/generics/links/JoinUsLink.vue';
 import forum from '@/js/apis/forum';
 import { useGlobalProperties } from '@/js/composables/global-properties';
-import { useIsHomePage } from '@/js/composables/home-page';
+import { useHasTopAd } from '@/js/composables/home-page';
 import { ADDABLE_TYPES, HELP_ROUTE, useAccountLinks } from '@/js/composables/main-menu';
 import config from '@/js/config';
 import { toast } from '@/js/toast';
@@ -331,10 +331,7 @@ function signout() {
   });
 }
 
-const isHomePage = useIsHomePage();
-function homePage() {
-  return isHomePage.value;
-}
+const topAd = useHasTopAd();
 
 window.addEventListener('click', onClick);
 
