@@ -23,7 +23,7 @@
     <template v-if="preferences">
       <!-- used by the home page feed, and by the button of the lists that applies them (LoadUserPreferencesButton) -->
       <h2 v-translate>My activities and areas</h2>
-      <p v-translate>They filter the home page feed, and the lists of documents with the star button.</p>
+      <p v-translate>They filter the home page feed, and the lists of documents with their “My preferences” button.</p>
 
       <h3 v-translate>activities</h3>
       <div class="field is-grouped">

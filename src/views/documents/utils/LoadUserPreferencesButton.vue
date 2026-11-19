@@ -2,14 +2,14 @@
   <button
     v-if="$user.isLogged && display === 'button'"
     type="button"
-    class="button is-small header-item"
-    :class="[applied ? 'is-primary' : 'is-primary is-outlined', { 'is-loading': loading }]"
-    :title="applied ? $gettext('Your preferences are applied') : undefined"
+    class="button"
+    :class="{ 'is-primary': applied, 'is-loading': loading }"
+    :title="applied ? $gettext('Your preferences are applied') : $gettext('Filter with my activities and areas')"
     @click="loadPreferences"
   >
     <fa-icon :icon="applied ? 'check' : 'star'" />
     <span>&nbsp;</span>
-    <span v-translate>Load my preferences</span>
+    <span v-translate>My preferences</span>
   </button>
   <a
     v-else-if="$user.isLogged && display === 'dropdown'"
@@ -19,7 +19,7 @@
   >
     <fa-icon :icon="loading ? 'spinner' : applied ? 'check' : 'star'" :spin="loading" />
     <span>&nbsp;</span>
-    <span v-translate>Load my preferences</span>
+    <span v-translate>My preferences</span>
   </a>
 </template>
 

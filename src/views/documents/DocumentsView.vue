@@ -29,8 +29,6 @@
           <page-selector :key="documentType" :documents="documents" />
         </span>
         <span class="is-pulled-right is-flex header-right" v-if="documentType != 'profile'">
-          <load-user-preferences-button class="is-hidden-mobile" />
-
           <span @click="setListMode(!listMode)" class="header-item is-size-3 has-cursor-pointer is-hidden-mobile">
             <fa-icon
               v-show="displayMode !== 'map'"
@@ -170,7 +168,6 @@ import { useRoute, useRouter } from 'vue-router';
 
 import DisplayModeSwitch from './utils/DisplayModeSwitch.vue';
 import ImageCards from './utils/ImageCards.vue';
-import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton.vue';
 import NearMeButton from './utils/NearMeButton.vue';
 import PageNavigation from './utils/PageNavigation.vue';
 import PageSelector from './utils/PageSelector.vue';

@@ -66,7 +66,7 @@ describe('LoadUserPreferencesButton', () => {
 
     await click(wrapper);
     expect(wrapper.find('[data-icon="check"]').exists()).toBe(true);
-    expect(wrapper.find('button').classes()).not.toContain('is-outlined');
+    expect(wrapper.find('button').classes()).toContain('is-primary');
   });
 
   it('tells when the preferences are already applied', async () => {

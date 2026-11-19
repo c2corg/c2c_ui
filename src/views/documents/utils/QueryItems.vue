@@ -8,6 +8,9 @@
         hide-label
       />
 
+      <!-- the activities and the areas of the user: next to the filters they set -->
+      <load-user-preferences-button class="is-hidden-mobile query-item-component" />
+
       <dropdown-button
         v-for="category of categorizedFields"
         :key="category.name"
