@@ -201,6 +201,24 @@ function checkBudgets(
   }
 }
 
+/**
+ * Dev server only: the prod API doesn't allow CORS from localhost, so the "prod" backend goes through a same-origin
+ * proxy (server.proxy below)
+ */
+function devProdApiProxy(): Plugin {
+  return {
+    name: 'c2c-dev-prod-api-proxy',
+    apply: 'serve',
+    config: () => {
+      if (process.env.VITEST) {
+        return;
+      }
+      config.urlsConfigurations.prod.api = '/api-prod';
+      return { define: { CAMPTOCAMP_CONFIG: JSON.stringify(config) } };
+    },
+  };
+}
+
 /** Injects the backend urls in index.html, which used to be an EJS template */
 function htmlConfig(): Plugin {
   return {
@@ -238,6 +256,7 @@ export default defineConfig({
       },
     }),
     htmlConfig(),
+    devProdApiProxy(),
     // No legacy bundle: only usage-based core-js polyfills, as babel did for Vue CLI
     legacy({
       renderLegacyChunks: false,
@@ -319,6 +338,15 @@ export default defineConfig({
   server: {
     port: 8080,
     strictPort: true,
+    proxy: {
+      '/api-prod': {
+        target: 'https://api.camptocamp.org',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api-prod/, ''),
+        // the prod API refuses the localhost Origin (login...): same-origin requests need none
+        configure: (proxy) => proxy.on('proxyReq', (proxyReq) => proxyReq.removeHeader('origin')),
+      },
+    },
   },
 
   build: {
