@@ -90,7 +90,6 @@
     "An error occurred, couldn't (un)mark route as to do": "Nem lehetséges a kedvelt útvonal hozzáadása vagy eltávolítása",
     "An error occurred, couldn't save images": "Nem lehetséges a képek mentése",
     "Anonymity and confidentiality": "Névtelenség és bizalmasan kezelt adatok.",
-    "Are you sure you want to delete this document?": "Boztosan törölni akarod ezt a dokumentumot?\nFigyelemm, a társított fotók nem törlődnek és árvák lesznek.\nAmennyiben csak a címet vagy a társított dokumentumokat akarod megváltoztatni (pl. egy másik útvonallal társítani a kiruccanást), elegendő módosítani a dokumentumot.\nAmennyiben ez a dokumentum egy duplikátum, társított fotókkal, lépj kapcsolatba @Modo_Topo_FR, hogy egyesítsék a duplikátumokat a társított fotók megőrzésével. ",
     "Are you sure you want to delete this locale?": "Biztosan törölni akarod ezt a nyelvi verziót?",
     "Are you sure you want to merge?": "Biztosan össze akarod vonni?",
     "Are you sure you want to revert to this version of the document?": "Biztosan vissza akarod állítani a dokumentumnak ezt a verzióját?",
@@ -192,6 +191,7 @@
     "Danger rating - very high": "Veszélyességi besorolás - nagyon magas",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Adatok, mint például orientáció, szikla típus, út típus (pl. oda-vissza, vagy körtúra) és út körülmények (pl. gerinc vagy vízmosás).",
     "Delete": {
+      "$$noContext": "Törlés",
       "yeti": "Törlés"
     },
     "Delete a line chunk": "Vonalszakasz törlése",
