@@ -44,6 +44,13 @@
             {{ topic.lang }}
           </a>
         </p>
+        <p v-if="details.data.deleted_images?.length">
+          <strong v-translate>Images deleted with it, restored with it</strong>
+          <br />
+          <span v-for="image of details.data.deleted_images" :key="image.document_id" class="mr-3">
+            #{{ image.document_id }} {{ image.title }}
+          </span>
+        </p>
         <p v-if="details.data.merged_document_ids.length">
           <strong v-translate>Merged documents, restored with it</strong>
           <br />

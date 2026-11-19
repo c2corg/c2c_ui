@@ -549,6 +549,8 @@ const deletedDocument = z.object({
   deleted_by: z.nullable(deletedDocumentUser),
   expires_at: z.string(),
   restored_at: z.nullable(z.string()),
+  // the personal images of its author linked to it only, deleted and restored with it (absent from older API versions)
+  deleted_images: z.optional(z.number()),
 });
 
 export type DeletedDocument = z.input<typeof deletedDocument>;
@@ -576,6 +578,9 @@ export const deletedDocumentDetails = z.extend(deletedDocument, {
   // the comment topics of the forum, by language
   topics: z.array(z.object({ lang: z.string(), topic_id: z.number() })),
   merged_document_ids: z.array(z.number()),
+  deleted_images: z.optional(
+    z.array(z.object({ document_id: z.number(), title: z.nullable(z.string()), filename: z.nullable(z.string()) }))
+  ),
   rows: z.record(z.string(), z.number()),
 });
 
@@ -591,6 +596,45 @@ export const restoreResult = z.object({
 });
 
 export type RestoreResult = z.input<typeof restoreResult>;
+
+// GET /images/orphans: the images linked to no document, the last created first (moderators)
+export const ORPHAN_IMAGE_TYPES = ['collaborative', 'personal', 'copyright'] as const;
+
+const orphanImage = z.object({
+  document_id: z.number(),
+  filename: z.string(),
+  image_type: z.nullable(z.enum(ORPHAN_IMAGE_TYPES)),
+  title: z.nullable(z.string()),
+  created_at: z.nullable(z.string()),
+  // who uploaded it
+  author: z.nullable(deletedDocumentUser),
+  // the last link removed, when known: the links of a deleted document are deleted with it
+  last_unlink: z.nullable(
+    z.object({
+      document_id: z.number(),
+      document_type: z.string(),
+      by: z.nullable(deletedDocumentUser),
+      at: z.string(),
+    })
+  ),
+});
+
+export type OrphanImage = z.input<typeof orphanImage>;
+
+export const orphanImagesPage = z.object({
+  total: z.number(),
+  images: z.array(orphanImage),
+});
+
+// GET /documents/delete/{id}/images: what deleting a document does to its images, asked before deleting it. The
+// personal images of its author linked to it only are deleted with it; the other images linked to it only stay,
+// linked to no document, by type
+export const imagesOfDeletion = z.object({
+  deleted: z.number(),
+  orphaned: z.record(z.string(), z.number()),
+});
+
+export type ImagesOfDeletion = z.input<typeof imagesOfDeletion>;
 
 // The removal requests of user accounts (v6_api views/user_removal.py): a request is validated by a moderator of the
 // topoguide and by one of the forum, then a script removes the account

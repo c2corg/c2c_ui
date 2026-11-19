@@ -4,6 +4,8 @@ import {
   accountRemovalsPage,
   deletedDocumentDetails,
   deletedDocumentsPage,
+  imagesOfDeletion,
+  orphanImagesPage,
   restoreResult,
   type AccountRemoval,
   type AccountRemovalReason,
@@ -33,6 +35,11 @@ export default class ModeratorService {
     return this.api.delete('/documents/delete/' + documentId);
   }
 
+  // what the deletion does to the images linked to the document, asked before deleting it
+  getImagesOfDeletion(documentId: DocumentId) {
+    return this.api.getValidated('/documents/delete/' + documentId + '/images', imagesOfDeletion);
+  }
+
   deleteLocale(documentId: DocumentId, lang: string) {
     const url = '/documents/delete/' + String(documentId) + '/' + lang;
     return this.api.delete(url, {});
@@ -58,6 +65,15 @@ export default class ModeratorService {
     // $gettext('The document was deleted: restore it first', 'API message')
     // $gettext('The locale was written again since its deletion', 'API message')
     return this.api.postValidated('/documents/deleted/' + id + '/restore', restoreResult, {});
+  }
+
+  /*
+   * Images linked to no document
+   */
+  getOrphanImages(offset = 0, limit = 30, imageType?: string) {
+    return this.api.getValidated('/images/orphans', orphanImagesPage, {
+      params: { offset, limit, image_type: imageType || undefined },
+    });
   }
 
   /*

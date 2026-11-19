@@ -10,7 +10,12 @@ import TranslateWindow from './TranslateWindow.vue';
 
 import { ApiData } from '@/js/apis/BaseApi';
 
-const api = vi.hoisted(() => ({ deleteDocument: vi.fn(), deleteLocale: vi.fn(), revertDocument: vi.fn() }));
+const api = vi.hoisted(() => ({
+  deleteDocument: vi.fn(),
+  deleteLocale: vi.fn(),
+  revertDocument: vi.fn(),
+  getImagesOfDeletion: vi.fn(),
+}));
 
 vi.mock('@/js/apis/c2c', () => ({ default: { moderator: api } }));
 
@@ -45,7 +50,7 @@ beforeEach(async () => {
   await router.push('/routes/version/12/fr/3');
 });
 
-const mountWindow = (component: object, props: object) =>
+const mountWindow = (component: object, props: object, isModerator = true) =>
   mount(component, {
     props: { document: montBlanc, ...props },
     global: {
@@ -56,6 +61,7 @@ const mountWindow = (component: object, props: object) =>
           $gettext: (s: string) => s,
           $filters: { uppercaseFirstLetter: (s: string) => s },
           $documentUtils: { getDocumentType: (type: string) => ({ r: 'route' })[type] },
+          $user: { isModerator },
         } as never,
       },
       directives: { translate: {} },
@@ -90,6 +96,42 @@ describe('document windows', () => {
 
     expect(api.deleteDocument).toHaveBeenCalledWith(12);
     expect(router.currentRoute.value.name).toBe('routes');
+  });
+
+  it('tells which images are deleted with the document, and which ones are left orphan', async () => {
+    api.getImagesOfDeletion.mockReturnValue(
+      new ApiData(
+        Promise.resolve({ data: { deleted: 3, orphaned: { collaborative: 2, personal: 1, copyright: 0 } } } as never)
+      )
+    );
+    const wrapper = mountWindow(DeleteDocumentWindow, {});
+    // the rule, until the API answers
+    expect(wrapper.text()).toContain('linked to this document only are deleted with it');
+
+    (wrapper.vm as unknown as { show(): void }).show();
+    await flushPromises();
+
+    expect(api.getImagesOfDeletion).toHaveBeenCalledWith(12);
+    const text = wrapper.text().replace(/\s+/g, ' ');
+    expect(text).toContain('Personal images of its author also deleted: 3');
+    expect(text).toContain('Images kept, linked to no document any more: 3 (2 collaborative, 1 personal)');
+  });
+
+  it('tells the moderators only that a moderator can restore the document', () => {
+    expect(mountWindow(DeleteDocumentWindow, {}).text()).toContain('A moderator can restore it');
+    expect(mountWindow(DeleteDocumentWindow, {}, false).text()).not.toContain('A moderator can restore it');
+  });
+
+  it('says nothing about the images when none is concerned', async () => {
+    api.getImagesOfDeletion.mockReturnValue(
+      new ApiData(Promise.resolve({ data: { deleted: 0, orphaned: { collaborative: 0 } } } as never))
+    );
+    const wrapper = mountWindow(DeleteDocumentWindow, {});
+
+    (wrapper.vm as unknown as { show(): void }).show();
+    await flushPromises();
+
+    expect(wrapper.text()).not.toContain('images');
   });
 
   it('goes back to the document once a locale is deleted', async () => {

@@ -25,6 +25,7 @@
       </div>
 
       <deleted-documents v-if="activeTab === 'deleted'" />
+      <orphan-images v-else-if="activeTab === 'orphans'" />
       <account-removals v-else-if="activeTab === 'accounts'" />
     </template>
   </div>
@@ -36,6 +37,7 @@ import { useRoute } from 'vue-router';
 
 import AccountRemovals from './AccountRemovals.vue';
 import DeletedDocuments from './DeletedDocuments.vue';
+import OrphanImages from './OrphanImages.vue';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useNoRobots } from '@/js/composables/head';
@@ -55,6 +57,13 @@ const tabs = computed(() => [
     name: 'deleted',
     title: $gettext('Deleted documents'),
     icon: 'trash',
+    available: isTopoguideModerator.value,
+    unavailable: $gettext('For the moderators of the topoguide'),
+  },
+  {
+    name: 'orphans',
+    title: $gettext('Orphan images'),
+    icon: 'image',
     available: isTopoguideModerator.value,
     unavailable: $gettext('For the moderators of the topoguide'),
   },
