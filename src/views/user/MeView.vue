@@ -9,7 +9,11 @@
         <div class="me-header-text">
           <p class="me-display-name">{{ $user.name || $user.userName }}</p>
           <p class="me-username">@{{ $user.userName }}</p>
-          <router-link v-if="$user.id" :to="accountTo('profile')" class="public-profile-link">
+          <router-link
+            v-if="$user.id"
+            :to="{ name: 'profile', params: { id: $user.id, lang: $user.lang } }"
+            class="public-profile-link"
+          >
             {{ $gettext('See my profile') }}
             <fa-icon icon="chevron-right" />
           </router-link>
