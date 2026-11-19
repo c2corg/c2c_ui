@@ -39,12 +39,12 @@
           <li v-for="action of section.actions" :key="action.key">
             <component :is="action.to ? RouterLink : 'a'" v-bind="linkAttributes(action)" class="action-link">
               <span class="action-icon">
-                <custom-icon v-if="action.customIcon" :name="action.customIcon" :size="28" />
+                <component :is="action.iconComponent" v-if="action.iconComponent" />
                 <fa-icon v-else :icon="action.icon!" />
               </span>
               <span class="action-text">
                 <span class="action-label">{{ action.label }}</span>
-                <span class="action-desc">{{ action.desc }}</span>
+                <span v-if="action.desc" class="action-desc">{{ action.desc }}</span>
               </span>
               <fa-icon icon="chevron-right" class="action-chevron" />
             </component>
@@ -73,10 +73,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { type Component, computed, ref, watch } from 'vue';
 import { type RouteLocationRaw, RouterLink, useRouter } from 'vue-router';
 
-import CustomIcon from '@/components/app/CustomIcon.vue';
+import IconOuting from '@/components/generics/icons/document/IconOuting.vue';
 import forum from '@/js/apis/forum';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { HELP_ROUTE, useAccountLinks } from '@/js/composables/main-menu';
@@ -88,8 +88,8 @@ defineOptions({ name: 'MeView' });
 interface Action {
   key: string;
   label: string;
-  desc: string;
-  customIcon?: string;
+  desc?: string;
+  iconComponent?: Component;
   icon?: string;
   to?: RouteLocationRaw;
   href?: string;
@@ -129,7 +129,7 @@ const bugReportMailto = computed(() => {
     `Theme: ${appSettings.effectiveTheme}, text size: ${appSettings.textSize}`,
   ];
   const subject = encodeURIComponent($gettext('Mobile app bug — camptocamp.org'));
-  return `mailto:secretariat@camptocamp.org?subject=${subject}&body=${encodeURIComponent(lines.join('\n'))}`;
+  return `mailto:dev@camptocamp.org?subject=${subject}&body=${encodeURIComponent(lines.join('\n'))}`;
 });
 
 const sections = computed<Section[]>(() => {
@@ -143,14 +143,14 @@ const sections = computed<Section[]>(() => {
         key: 'outings',
         label: $gettext('My outings'),
         desc: $gettext('The outings I took part in'),
-        customIcon: 'footprint-arrow',
+        iconComponent: IconOuting,
         to: accountTo('outings'),
       },
       {
         key: 'changes',
         label: $gettext('My edits'),
         desc: $gettext('Routes, waypoints, images, articles I created or edited'),
-        customIcon: 'mountain-pencil',
+        icon: 'edit',
         to: accountTo('changes'),
       },
     ];
@@ -159,7 +159,7 @@ const sections = computed<Section[]>(() => {
         key: 'offline',
         label: $gettext('My topos'),
         desc: $gettext('Saved for the field'),
-        customIcon: 'bookmark-download',
+        icon: 'bookmark',
         to: { name: 'offline' },
       });
     }
@@ -173,28 +173,28 @@ const sections = computed<Section[]>(() => {
           key: 'preferences',
           label: $gettext('Preferences'),
           desc: $gettext('Followed activities, default filters'),
-          customIcon: 'sliders',
+          icon: 'gears',
           to: accountTo('preferences'),
         },
         {
           key: 'following',
           label: $gettext('Following'),
-          desc: $gettext('Friends and mentors'),
-          customIcon: 'two-hikers',
+          desc: $gettext('Their activity in your feed'),
+          icon: 'heart',
           to: accountTo('following'),
         },
         {
           key: 'account',
           label: $gettext('Account'),
           desc: $gettext('Email, password, settings'),
-          customIcon: 'user-settings',
+          icon: 'check-circle',
           to: accountTo('account'),
         },
         {
           key: 'trackers',
-          label: $gettext('Trackers'),
+          label: $gettext('Activity trackers'),
           desc: 'Strava, Suunto, Polar, Garmin…',
-          customIcon: 'gps-pin',
+          icon: 'location-crosshairs',
           to: accountTo('trackers'),
         },
       ],
@@ -235,8 +235,7 @@ const sections = computed<Section[]>(() => {
       },
       {
         key: 'contact',
-        label: $gettext('Contact / Report a problem'),
-        desc: 'secretariat@camptocamp.org',
+        label: $gettext('Contact'),
         icon: 'envelope',
         to: { name: 'article', params: { id: 106727 } },
       },
@@ -364,6 +363,11 @@ const sections = computed<Section[]>(() => {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     color: var(--c2c-color-text);
   }
+
+  /* as the entries of the desktop menu (MenuEntries.vue): the orange shows as a left border, here while pressed */
+  &:active {
+    box-shadow: inset 5px 0 0 var(--c2c-color-base-c2c-lighter);
+  }
 }
 
 .action-icon {
@@ -373,9 +377,8 @@ const sections = computed<Section[]>(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--app-accent-background);
-  color: var(--c2c-color-base-c2c);
-  border-radius: 4px;
+  /* the icons of the desktop menu: the color of the text, no tile */
+  color: var(--c2c-text);
 }
 
 .action-text {

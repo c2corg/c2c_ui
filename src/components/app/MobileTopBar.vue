@@ -156,7 +156,7 @@ const title = computed(() => {
     account: $gettext('Account'),
     preferences: $gettext('Preferences'),
     following: $gettext('Following'),
-    trackers: $gettext('Trackers'),
+    trackers: $gettext('Activity trackers'),
     auth: $gettext('Login'),
     'auth-sso': $gettext('Login'),
     yeti: 'Yeti',
