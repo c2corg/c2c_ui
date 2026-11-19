@@ -2,7 +2,7 @@
   <nav class="bottom-nav no-print" :aria-label="$gettext('Main navigation')">
     <ul class="bottom-nav-list">
       <li v-for="tab of tabs" :key="tab.key" class="bottom-nav-item">
-        <router-link :to="tab.to" class="bottom-nav-link" :class="{ 'is-active': isActive(tab) }">
+        <router-link :to="tab.to" class="bottom-nav-link" :class="{ 'is-active': isActive(tab) }" @click="menu.close()">
           <span class="bottom-nav-icon-wrap">
             <component :is="tab.iconComponent" v-if="tab.iconComponent" class="bottom-nav-icon" />
             <fa-icon v-else :icon="tab.icon!" class="bottom-nav-icon" />
@@ -12,6 +12,20 @@
           </span>
           <span class="bottom-nav-label">{{ tab.label }}</span>
         </router-link>
+      </li>
+      <li class="bottom-nav-item">
+        <!-- opens the menu panel (MobileMenu.vue), the entries of the side menu of the site -->
+        <button
+          type="button"
+          class="bottom-nav-link"
+          :class="{ 'is-active': menu.isOpen }"
+          :aria-expanded="menu.isOpen"
+          aria-controls="mobile-menu"
+          @click="menu.toggle()"
+        >
+          <span class="bottom-nav-icon-wrap"><fa-icon icon="bars" class="bottom-nav-icon" /></span>
+          <span class="bottom-nav-label">{{ $gettext('Menu') }}</span>
+        </button>
       </li>
     </ul>
   </nav>
@@ -24,6 +38,7 @@ import { type RouteLocationRaw, useRoute, useRouter } from 'vue-router';
 import IconForum from '@/components/generics/icons/IconForum.vue';
 import IconTopoguide from '@/components/generics/icons/IconTopoguide.vue';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { useMobileMenuStore } from '@/stores/mobile-menu';
 import { useOutingQueueStore } from '@/stores/outing-queue';
 
 defineOptions({ name: 'BottomNav' });
@@ -45,6 +60,7 @@ const route = useRoute();
 const router = useRouter();
 
 const queue = useOutingQueueStore();
+const menu = useMobileMenuStore();
 
 const tabs = computed<Tab[]>(() =>
   [
@@ -80,37 +96,11 @@ const tabs = computed<Tab[]>(() =>
       to: { name: 'forum' },
       match: [],
     },
-    {
-      // the other pages: the entries of the side menu of the site
-      key: 'menu',
-      label: $gettext('Menu'),
-      icon: 'bars',
-      to: { name: 'more' },
-      match: [
-        'more',
-        'serac',
-        'xreports',
-        'xreport',
-        'articles',
-        'article',
-        'yeti',
-        'itinevert',
-        'app-settings',
-        'app-guide',
-        'me',
-        'account',
-        'auth',
-        'auth-sso',
-        'preferences',
-        'following',
-        'trackers',
-      ],
-    },
   ].filter((tab) => router.hasRoute((tab.to as { name: string }).name))
 );
 
-// the first tab whose routes contain the current one
-const isActive = (tab: Tab) => tab.match.includes(String(route.name ?? ''));
+// the tab of the current route, unless the menu panel covers the page
+const isActive = (tab: Tab) => !menu.isOpen && tab.match.includes(String(route.name ?? ''));
 </script>
 
 <style scoped>
@@ -151,6 +141,11 @@ const isActive = (tab: Tab) => tab.match.includes(String(route.name ?? ''));
   gap: 3px;
   color: var(--app-dark-text-muted);
   text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  cursor: pointer;
   font-size: 0.75rem;
   font-weight: 500;
   transition: color 0.15s;

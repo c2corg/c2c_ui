@@ -33,12 +33,7 @@
 
       <div class="top-bar-actions">
         <!-- the help article of the site, as the side menu has it -->
-        <router-link
-          :to="{ name: 'article', params: { id: HELP_ARTICLE_ID } }"
-          class="top-bar-btn"
-          :aria-label="$gettext('Help')"
-          :title="$gettext('Help')"
-        >
+        <router-link :to="HELP_ROUTE" class="top-bar-btn" :aria-label="$gettext('Help')" :title="$gettext('Help')">
           <fa-icon icon="circle-info" />
         </router-link>
         <button type="button" class="top-bar-btn" :aria-label="$gettext('Search')" @click="openSearch">
@@ -105,13 +100,12 @@ import LogoCtc from './LogoCtc.vue';
 import DropdownButton from '@/components/generics/DropdownButton.vue';
 import forum from '@/js/apis/forum';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { ADDABLE_TYPES, HELP_ROUTE } from '@/js/composables/main-menu';
 
 defineOptions({ name: 'MobileTopBar' });
 
-const HELP_ARTICLE_ID = 106732;
-const ADDABLE_TYPES = ['outing', 'route', 'waypoint', 'article', 'book', 'xreport'];
 // the routes of the bottom bar tabs: the logo on the left, no back arrow
-const TAB_ROUTES = new Set(['home', 'topoguide', 'offline', 'more']);
+const TAB_ROUTES = new Set(['home', 'topoguide', 'offline']);
 
 interface PickedDocument {
   document_id: number;
@@ -137,7 +131,6 @@ const title = computed(() => {
     home: $gettext('Home'),
     offline: $gettext('My topos'),
     me: $gettext('Me'),
-    more: $gettext('Menu'),
     'app-settings': $gettext('App settings'),
     'app-guide': $gettext('App guide'),
     outings: $gettext('outings'),

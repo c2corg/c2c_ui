@@ -6,31 +6,11 @@
       'with-ad': !homePage() && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
     }"
   >
-    <span
-      v-if="$screen.isMobile || $screen.isTablet"
-      class="navigation-item"
-      :class="{ 'is-hidden-mobile': !hideSearchInput }"
-      @click="$emit('toggle-side-menu')"
-    >
-      <span class="button">
-        <fa-icon icon="bars" />
-      </span>
-    </span>
-
-    <a
-      v-if="$screen.isMobile || $screen.isTablet"
-      :href="'/'"
-      class="navigation-item navigation-brand has-text-centered"
-      :class="{ 'is-hidden-mobile': !hideSearchInput }"
-    >
-      <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
-    </a>
-
     <dfm-ad-large v-if="!homePage() && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop" />
 
     <div class="navigation-end" :class="{ 'is-search-shown': !hideSearchInput }">
       <router-link
-        :to="{ name: 'article', params: { id: 106732 } }"
+        :to="HELP_ROUTE"
         class="navigation-item has-text-centered"
         :class="{ 'is-hidden-mobile': !hideSearchInput }"
       >
@@ -98,7 +78,7 @@
             </span>
           </template>
           <add-link
-            v-for="documentType of ['outing', 'route', 'waypoint', 'article', 'book', 'xreport']"
+            v-for="documentType of ADDABLE_TYPES"
             :key="documentType"
             :document-type="documentType"
             class="dropdown-item is-size-5 is-ellipsed"
@@ -166,7 +146,7 @@
 
           <router-link
             v-for="item of userMenuLinks"
-            :key="item.text"
+            :key="item.key"
             :to="item.to"
             class="dropdown-item is-size-5"
             @click="userMenu!.isActive = false"
@@ -220,12 +200,11 @@ import JoinUsLink from '@/components/generics/links/JoinUsLink.vue';
 import forum from '@/js/apis/forum';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useIsHomePage } from '@/js/composables/home-page';
+import { ADDABLE_TYPES, HELP_ROUTE, useAccountLinks } from '@/js/composables/main-menu';
 import config from '@/js/config';
 import { toast } from '@/js/toast';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 import type { useForumNotificationsStore } from '@/stores/forum-notifications';
-
-defineEmits(['toggle-side-menu']);
 
 const route = useRoute();
 const router = useRouter();
@@ -306,53 +285,7 @@ const userMenu = useTemplateRef<{ isActive: boolean }>('userMenu');
 
 const hideSearchInput = ref(true); // only on small screen
 
-const userMenuLinks = computed(() => [
-  {
-    to: { name: 'profile', params: { id: $user.id } },
-    text: $gettext('My profile'),
-    icon: 'user',
-  },
-  {
-    to: { name: 'account' },
-    text: $gettext('My account'),
-    icon: 'check-circle',
-  },
-  {
-    to: { name: 'preferences' },
-    text: $gettext('My preferences'),
-    icon: 'gears',
-  },
-  {
-    to: { name: 'trackers' },
-    text: $gettext('Activity trackers'),
-    icon: 'location-crosshairs',
-  },
-  {
-    to: { name: 'outings', query: { u: $user.id } },
-    text: $gettext('My outings'),
-    iconComponent: 'icon-outing',
-  },
-  {
-    to: { name: 'outings-stats', query: { u: $user.id } },
-    text: $gettext('My statistics'),
-    icon: 'chart-bar',
-  },
-  {
-    to: { name: 'whatsnew', query: { u: $user.id } },
-    text: $gettext('My changes'),
-    icon: 'edit',
-  },
-  {
-    to: { name: 'following' },
-    text: $gettext('My followed users'),
-    icon: 'heart',
-  },
-  {
-    to: { name: 'routes', query: { u: $user.id } },
-    text: $gettext('My bookmarks'),
-    icon: 'star',
-  },
-]);
+const userMenuLinks = useAccountLinks();
 
 function go(document: C2cDocument) {
   router.push({
@@ -420,13 +353,6 @@ nav {
   background-color: var(--c2c-white);
   box-shadow: 0 2px 0 var(--c2c-color-base-c2c);
   display: flex;
-}
-
-.navigation-brand {
-  padding: 4px 5px !important;
-  img {
-    height: calc(var(--c2c-navbar-height) - 8px);
-  }
 }
 
 .navigation-end {
@@ -519,13 +445,6 @@ nav {
 }
 
 @media screen and (--c2c-max-tablet) {
-  .navigation-brand {
-    img {
-      margin-left: 0px;
-      /* height:31px; */
-    }
-  }
-
   .navigation-item {
     padding: 0.5rem 0.1rem;
   }
@@ -557,12 +476,6 @@ nav {
 }
 
 @media screen and (--c2c-min-tablet) and (--c2c-max-desktop) {
-  .navigation-brand {
-    img {
-      margin-left: 5px;
-    }
-  }
-
   .navigation-item {
     padding: 0.5rem 0.2rem;
   }
@@ -577,12 +490,6 @@ nav {
 }
 
 @media screen and (--c2c-min-desktop) and (--c2c-max-widescreen) {
-  .navigation-brand {
-    img {
-      margin-left: 20px;
-    }
-  }
-
   .navigation-item {
     padding: 0.5rem 0.75rem;
   }
@@ -597,12 +504,6 @@ nav {
 }
 
 @media screen and (--c2c-min-widescreen) and (--c2c-max-fullhd) {
-  .navigation-brand {
-    img {
-      margin-left: 20px;
-    }
-  }
-
   .navigation-item {
     padding: 0.5rem 0.75rem;
   }
@@ -613,12 +514,6 @@ nav {
 }
 
 @media screen and (--c2c-min-fullhd) {
-  .navigation-brand {
-    img {
-      margin-left: 20px;
-    }
-  }
-
   .navigation-item {
     padding: 0.5rem 0.75rem;
   }

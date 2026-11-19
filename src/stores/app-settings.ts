@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 import { computed, reactive } from 'vue';
 
 import { getPreferences } from '@/js/vue-plugins/local-storage';
+import { DESKTOP_BREAKPOINT } from '@/stores/screen';
 
 const THEMES = ['auto', 'light', 'dark'] as const;
 const TEXT_SIZES = ['small', 'normal', 'large'] as const;
@@ -11,9 +12,9 @@ const TEXT_SIZES = ['small', 'normal', 'large'] as const;
 export type Theme = (typeof THEMES)[number];
 export type TextSize = (typeof TEXT_SIZES)[number];
 
-// The layout follows the width, there is no setting: under Bulma's desktop breakpoint (phones, tablets, a narrow
+// The layout follows the width, there is no setting: under DESKTOP_BREAKPOINT (the one of the screen store) (phones, tablets, a narrow
 // window), the top bar and the bottom tab bar of the app; from it, the side menu and the navigation of the site
-const DESKTOP_QUERY = '(min-width: 1024px)';
+const DESKTOP_QUERY = `(min-width: ${DESKTOP_BREAKPOINT}px)`;
 const DARK_QUERY = '(prefers-color-scheme: dark)';
 
 function oneOf<T extends string>(allowed: readonly T[], value: unknown, fallback: T): T {
