@@ -3,8 +3,8 @@
     <p class="mb-4" v-translate>
       An account is removed (anonymized, merged into another account of the user, or deleted with its contributions if
       it is spam) once a moderator of the topoguide and a moderator of the forum have validated the request: two
-      different persons, other than its author. It is processed one day after the last validation, and not before its
-      date.
+      different persons, other than its author. It is processed one hour after the last validation for a spammer, one
+      day for the others, and not before its date.
     </p>
 
     <div class="is-flex is-justify-content-space-between is-align-items-center is-flex-wrap-wrap mb-4">
@@ -57,6 +57,7 @@ import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import type { AccountRemoval } from '@/js/apis/c2c/schemas';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { refreshModerationCount } from '@/stores/moderation-count';
 import RemoveAccountWindow from '@/views/document/utils/windows/RemoveAccountWindow.vue';
 
 const PAGE_SIZE = 30;
@@ -66,7 +67,14 @@ type Status = (typeof STATUSES)[number];
 
 const emit = defineEmits<{ count: [open: number] }>();
 
-const { $gettext } = useGlobalProperties();
+const { $gettext, $user } = useGlobalProperties();
+
+// the pill of the menus: the requests change here
+function refreshCount() {
+  if ($user.id) {
+    refreshModerationCount($user.id, true);
+  }
+}
 
 const statusLabels = computed<Record<Status, string>>(() => ({
   open: $gettext('To handle'),
@@ -93,6 +101,7 @@ function load(offset: number): ApiData {
     total.value = response.data.total;
     if (status.value === 'open') {
       emit('count', total.value);
+      refreshCount();
     }
   });
 }
@@ -112,5 +121,6 @@ function loadMore() {
 // a request done or cancelled stays shown until the list is loaded again
 function onChanged(removal: AccountRemoval) {
   removals.value = removals.value.map((r) => (r.id === removal.id ? removal : r));
+  refreshCount();
 }
 </script>

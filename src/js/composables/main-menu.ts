@@ -2,7 +2,7 @@ import { computed, type Component } from 'vue';
 import type { RouteLocationRaw } from 'vue-router';
 
 import { useGlobalProperties } from './global-properties';
-import { useModerationRoles } from './moderation';
+import { useModerationCount, useModerationRoles } from './moderation';
 
 import IconForum from '@/components/generics/icons/IconForum.vue';
 import IconItinevert from '@/components/generics/icons/IconItinevert.vue';
@@ -29,12 +29,15 @@ export interface MainMenuItem {
   tallOnly?: boolean;
   // a plain link, so that the page is refreshed when already on it
   reload?: boolean;
+  // a count shown next to the label, when not zero
+  badge?: number;
 }
 
 /** The entries of the main menu: the side menu of the site, and its drawer in the phone layout. */
 export function useMainMenuItems() {
   const { $gettext } = useGlobalProperties();
   const { any: canModerate } = useModerationRoles();
+  const actionable = useModerationCount();
   const label = uppercaseFirstLetter;
 
   return computed<MainMenuItem[]>(() => [
@@ -113,6 +116,7 @@ export function useMainMenuItems() {
             to: { name: 'moderation' },
             match: ['moderation'],
             icon: 'broom',
+            badge: actionable.value,
           },
         ]
       : []),
@@ -131,12 +135,14 @@ export interface AccountLink {
   to: RouteLocationRaw;
   icon?: string;
   iconComponent?: string;
+  badge?: number;
 }
 
 /** The destinations of the account of the signed in user: the user menu of the navigation, and the Me page. */
 export function useAccountLinks() {
   const { $gettext, $user } = useGlobalProperties();
   const { any: canModerate } = useModerationRoles();
+  const actionable = useModerationCount();
 
   return computed<AccountLink[]>(() => [
     { key: 'profile', to: { name: 'profile', params: { id: $user.id } }, text: $gettext('My profile'), icon: 'user' },
@@ -169,7 +175,15 @@ export function useAccountLinks() {
       icon: 'star',
     },
     ...(canModerate.value
-      ? [{ key: 'moderation', to: { name: 'moderation' }, text: $gettext('Moderation'), icon: 'broom' }]
+      ? [
+          {
+            key: 'moderation',
+            to: { name: 'moderation' },
+            text: $gettext('Moderation'),
+            icon: 'broom',
+            badge: actionable.value,
+          },
+        ]
       : []),
   ]);
 }
