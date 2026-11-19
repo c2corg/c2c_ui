@@ -12,9 +12,11 @@ const mountApp = async (path = '/routes', { screen = 'isWidescreen' } = {}) => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [
-      { path: '/', component: page },
-      { path: '/routes', component: page },
-      { path: '/outings', component: page },
+      { path: '/', name: 'home', component: page },
+      { path: '/routes', name: 'routes', component: page },
+      { path: '/routes/:id', name: 'route', component: page },
+      { path: '/routes/edit/:id', name: 'route-edit', component: page },
+      { path: '/outings', name: 'outings', component: page },
     ],
   });
   await router.push(path);
@@ -61,10 +63,22 @@ describe('App', () => {
     expect(document.getElementById('splashscreen')!.style.display).toBe('none');
   });
 
-  it('tells the home page from the others, and leaves room for the ad on large screens', async () => {
-    expect((await mountApp('/')).wrapper.classes()).toEqual(['home-topoguide']);
-    expect((await mountApp('/routes')).wrapper.classes()).toEqual(['nav-dfm']);
-    expect((await mountApp('/routes', { screen: 'isMobile' })).wrapper.classes()).toEqual([]);
+  it('shows the top ad on the views of the documents only, in the navigation on large screens', async () => {
+    const topAd = async (path: string, screen = 'isWidescreen') => {
+      const { wrapper } = await mountApp(path, { screen });
+      return { classes: wrapper.classes(), band: wrapper.findComponent({ name: 'DfmAdSmall' }).exists() };
+    };
+
+    expect(await topAd('/routes/1')).toEqual({ classes: ['nav-dfm'], band: false });
+    expect(await topAd('/routes/1', 'isMobile')).toEqual({ classes: [], band: true });
+    expect(await topAd('/routes/1', 'isDesktop')).toEqual({ classes: [], band: true });
+
+    // the home page has its own, the lists, the edition... none
+    expect(await topAd('/')).toEqual({ classes: ['home-topoguide', 'no-top-ad'], band: false });
+    for (const path of ['/routes', '/routes/edit/1', '/outings']) {
+      expect(await topAd(path)).toEqual({ classes: ['no-top-ad'], band: false });
+      expect(await topAd(path, 'isMobile')).toEqual({ classes: ['no-top-ad'], band: false });
+    }
   });
 
   it('shows the bars of the app under the desktop width, and not from it', async () => {

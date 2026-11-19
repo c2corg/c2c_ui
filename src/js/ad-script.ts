@@ -15,6 +15,7 @@ function addAdScript() {
   const script = document.createElement('script');
   script.id = AD_SCRIPT_ID;
   script.src = AD_SCRIPT_URL;
+  script.addEventListener('error', onScriptError);
   document.head.appendChild(script);
 }
 
@@ -38,4 +39,72 @@ export function loadAdScript() {
   } else {
     window.addEventListener('load', () => whenIdle(addAdScript), { once: true });
   }
+}
+
+// The ad script chooses its ad units by device, which it tells from the user agent, not from the width of the page:
+// 300×250 on the home page and on phones and tablets, 728×90 on the other pages of the computers. The same test leaves
+// the room of the ad it will display, so that the page does not shift when the ad comes (the script comes after the
+// load event, the ad a few seconds later).
+const MOBILE_USER_AGENT = /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i;
+
+export function adSlotHeight(homePage: boolean) {
+  return homePage || MOBILE_USER_AGENT.test(navigator.userAgent) ? 250 : 90;
+}
+
+// the part of Google Publisher Tag, which the ad script loads, used here
+interface SlotRenderEndedEvent {
+  isEmpty: boolean;
+  slot: { getSlotElementId(): string };
+}
+type SlotRenderEndedListener = (event: SlotRenderEndedEvent) => void;
+interface GoogleTag {
+  cmd: { push(callback: () => void): void };
+  pubads?(): {
+    addEventListener(type: 'slotRenderEnded', listener: SlotRenderEndedListener): void;
+    removeEventListener(type: 'slotRenderEnded', listener: SlotRenderEndedListener): void;
+  };
+}
+
+declare global {
+  interface Window {
+    googletag?: GoogleTag;
+  }
+}
+
+const scriptFailureListeners = new Set<() => void>();
+let scriptFailed = false;
+
+function onScriptError() {
+  scriptFailed = true;
+  scriptFailureListeners.forEach((listener) => listener());
+}
+
+function runWithGoogleTag(callback: (googletag: Required<GoogleTag>) => void) {
+  // the commands run once Google Publisher Tag is loaded: never if it is not (blocked)
+  window.googletag ??= { cmd: [] };
+  window.googletag.cmd.push(() => callback(window.googletag as Required<GoogleTag>));
+}
+
+/**
+ * Tells whether the slot of the given div shows an ad, each time it is filled (it is refreshed), and that it shows none
+ * when the ad script does not load (blocked). Returns the function that stops watching it.
+ */
+export function watchAdSlot(divId: string, onRender: (filled: boolean) => void) {
+  const listener: SlotRenderEndedListener = (event) => {
+    if (event.slot.getSlotElementId() === divId) {
+      onRender(!event.isEmpty);
+    }
+  };
+  const onFailure = () => onRender(false);
+
+  if (scriptFailed) {
+    onFailure();
+  }
+  scriptFailureListeners.add(onFailure);
+  runWithGoogleTag((googletag) => googletag.pubads().addEventListener('slotRenderEnded', listener));
+
+  return () => {
+    scriptFailureListeners.delete(onFailure);
+    runWithGoogleTag((googletag) => googletag.pubads().removeEventListener('slotRenderEnded', listener));
+  };
 }

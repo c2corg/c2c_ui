@@ -222,8 +222,8 @@ function setProperty(property: keyof typeof toggles, value: boolean) {
   align-items: baseline;
 }
 
-/* the ad slot stays empty when there is no ad: no gap then */
-.ams-ad:not(:empty) {
+/* no gap when the slot gets no ad */
+.ad-slot:not(.is-empty) {
   margin-bottom: var(--c2c-size-7);
 }
 
