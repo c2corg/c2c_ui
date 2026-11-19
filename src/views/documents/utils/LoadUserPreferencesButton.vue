@@ -1,65 +1,113 @@
 <template>
   <button
     v-if="$user.isLogged && display === 'button'"
-    class="button is-small is-primary header-item"
-    :class="{ 'is-loading': promise.loading }"
+    type="button"
+    class="button is-small header-item"
+    :class="[applied ? 'is-primary' : 'is-primary is-outlined', { 'is-loading': loading }]"
+    :title="applied ? $gettext('Your preferences are applied') : undefined"
     @click="loadPreferences"
   >
-    <fa-icon icon="star" />
+    <fa-icon :icon="applied ? 'check' : 'star'" />
     <span>&nbsp;</span>
     <span v-translate>Load my preferences</span>
   </button>
-  <span
+  <a
     v-else-if="$user.isLogged && display === 'dropdown'"
     class="dropdown-item"
-    :class="{ 'is-loading': promise.loading }"
+    :class="{ 'is-active': applied }"
     @click="loadPreferences"
   >
-    <fa-icon icon="star" />
+    <fa-icon :icon="loading ? 'spinner' : applied ? 'check' : 'star'" :spin="loading" />
+    <span>&nbsp;</span>
     <span v-translate>Load my preferences</span>
-  </span>
+  </a>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router';
 
-import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { toast } from '@/js/toast';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-defineProps({
-  display: {
-    type: String,
-    default: 'button',
-  },
-});
+type UserPreferences = { activities: string[]; areas: C2cDocument[] };
 
+// the list types filtered by activity, and by area
+const ACTIVITY_TYPES = ['outing', 'route', 'image', 'xreport', 'book', 'article'];
+const AREA_TYPES = ['outing', 'route', 'image', 'xreport', 'waypoint'];
+
+withDefaults(defineProps<{ display?: 'button' | 'dropdown' }>(), { display: 'button' });
+
+const { $gettext } = useGlobalProperties();
 const route = useRoute();
 const router = useRouter();
 
-const promise = ref<ApiData | { loading?: boolean }>({});
+const loading = ref(false);
+// read at the first click, then known for this list: the button shows when they are applied
+const preferences = ref<UserPreferences>();
 
 const documentType = computed(() => String(route.name).slice(0, -1));
 
-function loadPreferences() {
-  promise.value = c2c.userProfile.preferences.get().then((result) => {
-    const preferences = result.data as { activities: string[]; areas: C2cDocument[] };
-    // undefined removes a parameter from the url
-    const query: Record<string, unknown> = Object.assign({}, route.query);
+// the filters the preferences give to this list: undefined removes a parameter from the url
+function filtersOf({ activities, areas }: UserPreferences): Record<string, string | undefined> {
+  const filters: Record<string, string | undefined> = {};
+  if (ACTIVITY_TYPES.includes(documentType.value)) {
+    filters.act = activities.join(',') || undefined;
+  }
+  if (AREA_TYPES.includes(documentType.value)) {
+    filters.a = areas.map((area) => area.document_id).join(',') || undefined;
+  }
+  return filters;
+}
 
-    if (['outing', 'route', 'image', 'xreport', 'books', 'articles'].includes(documentType.value)) {
-      const activities = preferences.activities.join(',');
-      query.act = activities === '' ? undefined : activities;
-    }
+const isEmpty = ({ activities, areas }: UserPreferences) => !activities.length && !areas.length;
 
-    if (['outing', 'route', 'image', 'xreport', 'waypoint'].includes(documentType.value)) {
-      const areas = preferences.areas.map((area) => area.document_id).join(',');
-      query.a = areas === '' ? undefined : areas;
+// the list already shows the preferences: nothing would change
+const applied = computed(
+  () =>
+    !!preferences.value &&
+    !isEmpty(preferences.value) &&
+    Object.entries(filtersOf(preferences.value)).every(([key, value]) => (route.query[key] ?? undefined) === value)
+);
+
+function notifyWithPreferencesLink(text: string) {
+  const message = document.createElement('div');
+  message.append(text, ' ');
+  const link = document.createElement('a');
+  link.href = router.resolve({ name: 'preferences' }).href;
+  link.textContent = $gettext('My preferences');
+  message.append(link);
+  toast({ message, type: 'is-info', duration: 6000 });
+}
+
+async function loadPreferences() {
+  if (loading.value) return;
+  loading.value = true;
+  let loaded: UserPreferences;
+  try {
+    loaded = (await c2c.userProfile.preferences.get()).data as UserPreferences;
+    preferences.value = loaded;
+  } catch {
+    toast({ message: $gettext('Your preferences could not be loaded.'), type: 'is-danger' });
+    return;
+  } finally {
+    loading.value = false;
+  }
+
+  if (isEmpty(loaded)) {
+    notifyWithPreferencesLink($gettext('You have no activity nor area in your preferences.'));
+  } else if (applied.value) {
+    toast({ message: $gettext('Your preferences are already applied.'), type: 'is-info' });
+  } else {
+    const query: LocationQueryRaw = { ...route.query, ...filtersOf(loaded), offset: undefined };
+    // the areas replace the extent of the map, and the "near me" radius
+    if (query.a !== undefined) {
       query.bbox = undefined;
+      query.nmr = undefined;
     }
-
-    router.push({ query: query as typeof route.query });
-  });
+    await router.push({ query });
+  }
 }
 </script>

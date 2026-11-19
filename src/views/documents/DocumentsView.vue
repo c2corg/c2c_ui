@@ -53,32 +53,18 @@
               @update:model-value="setDisplayMode"
             />
 
-            <span class="is-size-3 is-hidden-tablet">
-              <fa-icon
-                :icon="displayMode === 'map' ? 'th' : 'map-marked-alt'"
-                class="has-text-primary"
-                @click="setDisplayMode(displayMode === 'map' ? 'both' : 'map')"
-              />
-            </span>
+            <button
+              type="button"
+              class="button is-small header-item is-hidden-tablet"
+              :title="displayMode === 'map' ? $gettext('Show the results') : $gettext('Show the map')"
+              :aria-label="displayMode === 'map' ? $gettext('Show the results') : $gettext('Show the map')"
+              @click="setDisplayMode(displayMode === 'map' ? 'both' : 'map')"
+            >
+              <fa-icon :icon="displayMode === 'map' ? 'th' : 'map-marked-alt'" class="has-text-primary" />
+            </button>
           </template>
 
           <near-me-button v-if="documentAreGeoLocalized" class="header-item" />
-
-          <!-- "My topos" (src/stores/offline.ts): the page saved at once, and the ones of the page saved offline -->
-          <template v-if="SAVABLE_TYPES.includes(documentType)">
-            <bulk-offline-button
-              class="header-item"
-              :documents="documents?.documents ?? []"
-              :document-type="documentType"
-            />
-            <span
-              class="header-item is-size-3 has-cursor-pointer"
-              :title="$gettext('Only the ones saved offline')"
-              @click="offlineOnly = !offlineOnly"
-            >
-              <fa-icon icon="circle-check" :class="offlineOnly ? 'has-text-primary' : 'has-text-grey-light'" />
-            </span>
-          </template>
         </span>
       </div>
 
@@ -182,7 +168,6 @@
 import { computed, defineAsyncComponent, nextTick, ref, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import BulkOfflineButton from './utils/BulkOfflineButton.vue';
 import DisplayModeSwitch from './utils/DisplayModeSwitch.vue';
 import ImageCards from './utils/ImageCards.vue';
 import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton.vue';
@@ -203,8 +188,6 @@ import constants from '@/js/constants';
 import bus from '@/js/event-bus';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
-import { SAVABLE_TYPES } from '@/pwa/offline-store';
-import { useOfflineStore } from '@/stores/offline';
 
 // lazy (ag-grid is big): an async component, as Vue 3 no longer takes a plain function returning the import
 const DocumentsTable = defineAsyncComponent(() => import('@/components/datatable/DocumentsTable.vue'));
@@ -250,20 +233,7 @@ const CARDS_SINGLE_COLUMN_BELOW = 640;
 const cardsSingleColumn = computed(
   () => hasCustomWidth.value && (splitter.pixelWidth.value ?? Infinity) < CARDS_SINGLE_COLUMN_BELOW
 );
-const offline = useOfflineStore();
-const offlineOnly = ref(false);
-// the documents of the page, or the ones of them saved offline
-const documents = computed(() => {
-  const data = promise.value.data;
-  return offlineOnly.value && data
-    ? {
-        ...data,
-        documents: data.documents.filter((document: C2cDocument) =>
-          offline.isOfflineReady(documentType.value, document.document_id!)
-        ),
-      }
-    : data;
-});
+const documents = computed(() => promise.value.data);
 const documentType = computed(() => String(route.name).slice(0, -1));
 const documentAreGeoLocalized = computed(() => constants.objectDefinitions[documentType.value].geoLocalized === true);
 
@@ -365,8 +335,6 @@ function onQueryDocumentsLoad(documents: C2cDocument[]) {
 }
 
 watch(() => route.fullPath, load, { immediate: true });
-// the lists of all the types share this view: the filter of one would hide the documents of the next
-watch(documentType, () => (offlineOnly.value = false));
 watch(displayMode, updateMapSize);
 watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
 </script>

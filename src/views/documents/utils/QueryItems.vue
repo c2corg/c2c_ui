@@ -67,20 +67,20 @@
         @add="addTag"
       />
       <div class="is-hidden-mobile" style="display: inline">
-        <load-user-preferences-button class="is-hidden-tablet query-item-component" />
         <export-csv-button v-if="listMode" class="is-small-mobile query-item-component"></export-csv-button>
         <print-button v-show="showPrintButton" class="query-item-component" />
         <div class="query-items-tags is-inline-block">
           <query-tags :documents="tags" @remove="removeTag"></query-tags>
         </div>
       </div>
-      <dropdown-button class="is-hidden-tablet is-pulled-right">
+      <dropdown-button ref="moreMenu" class="is-hidden-tablet is-pulled-right">
         <template #button>
           <span class="button is-white is-size-7-mobile">
             <fa-icon icon="ellipsis-vertical" />
           </span>
         </template>
-        <div class="dropdown-items is-flex is-flex-direction-column">
+        <!-- the menu closes once an action is chosen -->
+        <div class="dropdown-items is-flex is-flex-direction-column" @click="moreMenu!.isActive = false">
           <load-user-preferences-button display="dropdown" />
           <print-button display="dropdown" v-show="showPrintButton" />
         </div>
@@ -96,7 +96,7 @@ const documentsCache: Record<string, CachedDocument> = {};
 </script>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router';
 
 import AssociationQueryItem from './AssociationQueryItem.vue';
@@ -148,6 +148,9 @@ defineProps({
 });
 
 const emit = defineEmits(['documents-load']);
+
+// the "more" menu of mobile, closed once one of its actions is chosen
+const moreMenu = useTemplateRef<{ isActive: boolean }>('moreMenu');
 
 const route = useRoute();
 const router = useRouter();

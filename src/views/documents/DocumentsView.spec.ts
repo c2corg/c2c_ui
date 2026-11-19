@@ -9,7 +9,6 @@ import PageNavigation from './utils/PageNavigation.vue';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
-import { useOfflineStore } from '@/stores/offline';
 
 const mountView = async (
   url = '/routes',
@@ -95,25 +94,14 @@ describe('DocumentsView', () => {
     expect(router.currentRoute.value.query).toEqual({ offset: '30', limit: '30' });
   });
 
-  it('shows only the documents of the page saved offline, on demand', async () => {
-    const offline = useOfflineStore();
-    vi.spyOn(offline, 'isOfflineReady').mockImplementation((type, id) => type === 'route' && id === 2);
-    const { wrapper } = await mountView('/routes', 2, [{ document_id: 1 }, { document_id: 2 }]);
-    expect(wrapper.findAll('.card-container')).toHaveLength(2);
+  it('switches between the map and the results with a button on mobile', async () => {
+    const { wrapper } = await mountView('/routes', 0, [], { isMobile: true, isTablet: false });
+    const toggle = () => wrapper.find('button[title="Show the map"], button[title="Show the results"]');
 
-    await wrapper.find('[title="Only the ones saved offline"]').trigger('click');
-    expect(wrapper.findAll('.card-container')).toHaveLength(1);
-  });
-
-  it('shows all the documents again in the list of another type', async () => {
-    vi.spyOn(useOfflineStore(), 'isOfflineReady').mockReturnValue(false);
-    const { wrapper, router } = await mountView('/routes', 2, [{ document_id: 1 }, { document_id: 2 }]);
-    await wrapper.find('[title="Only the ones saved offline"]').trigger('click');
-    expect(wrapper.findAll('.card-container')).toHaveLength(0);
-
-    await router.push('/waypoints');
-    await flushPromises();
-    expect(wrapper.findAll('.card-container')).toHaveLength(2);
+    expect(toggle().attributes('title')).toBe('Show the map');
+    await toggle().trigger('click');
+    expect(wrapper.find('.result-section').classes()).toContain('mobile-mode-map');
+    expect(toggle().attributes('title')).toBe('Show the results');
   });
 
   describe('splitter between the results and the map', () => {
