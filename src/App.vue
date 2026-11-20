@@ -5,11 +5,11 @@
       'nav-dfm': topAd && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
       'home-topoguide': homePage,
       'no-top-ad': !topAd,
-      'is-menu-pinned': sideMenuPinned,
+      'is-menu-pinned': sideMenuPinned || sideMenuKeptOpen,
     }"
   >
     <environment-banner />
-    <side-menu class="side-menu no-print" />
+    <side-menu :kept-open="sideMenuKeptOpen" class="side-menu no-print" />
     <navigation class="navigation no-print" />
     <dfm-ad-small v-if="topAd && ($screen.isMobile || $screen.isTablet || $screen.isDesktop)" class="ad" />
     <site-notice class="no-print site-notice" />
@@ -47,7 +47,8 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, onMounted, ref, watch } from 'vue';
+import { computed, defineAsyncComponent, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 import AlertWindow from './components/alert-window/AlertWindow.vue';
 import BottomNav from './components/app/BottomNav.vue';
@@ -79,6 +80,9 @@ defineOptions({ name: 'App' });
 const homePage = useIsHomePage();
 const topAd = useHasTopAd();
 const sideMenuPinned = useSideMenuPinned();
+// the welcome page and the settings show the menu open, without its pin
+const route = useRoute();
+const sideMenuKeptOpen = computed(() => homePage.value || route.name === 'app-settings');
 
 const appSettings = useAppSettingsStore();
 

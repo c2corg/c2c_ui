@@ -2,7 +2,7 @@
   <!-- a rail of icons, which opens over the page on hover or from the keyboard, or pinned open beside the page
        (src/js/composables/side-menu.ts) -->
   <aside
-    :class="{ 'is-expanded': expanded, 'is-pinned': pinned }"
+    :class="{ 'is-expanded': expanded || keptOpen, 'is-pinned': pinned || keptOpen }"
     @pointerenter="onPointerEnter"
     @pointerleave="onPointerLeave"
     @focusin="onFocusIn"
@@ -21,7 +21,12 @@
 
       <menu-footer class="menu-footer" />
 
-      <button type="button" class="menu-pin" @click="togglePinned">
+      <button
+        :style="{ visibility: keptOpen ? 'hidden' : undefined }"
+        type="button"
+        class="menu-pin"
+        @click="togglePinned"
+      >
         <fa-icon :icon="pinned ? 'angles-left' : 'angles-right'" fixed-width />
         <span class="menu-pin-text">
           {{ pinned ? $gettext('Collapse the menu') : $gettext('Keep the menu open') }}
@@ -39,6 +44,8 @@ import MenuEntries from '@/components/app/MenuEntries.vue';
 import MenuFooter from '@/components/app/MenuFooter.vue';
 import { useMainMenuItems } from '@/js/composables/main-menu';
 import { useSideMenu } from '@/js/composables/side-menu';
+
+defineProps<{ keptOpen?: boolean }>();
 
 const menuItems = useMainMenuItems();
 const isTall = ref(false);
