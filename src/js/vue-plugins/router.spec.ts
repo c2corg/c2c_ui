@@ -26,6 +26,13 @@ describe('router scroll behavior', () => {
     );
   });
 
+  it('restores the saved position at once, back or forward between map settings of the same page', () => {
+    const saved = { left: 0, top: 200 };
+    expect(scrollBehavior(route('', { layer: 'esri' }), route(), saved)).toEqual(saved);
+    // nothing left waiting for the view to trigger the scroll
+    expect(bus.all.get('trigger-scroll') ?? []).toEqual([]);
+  });
+
   it('scrolls to the top when other parameters change, as a new page of a list', () => {
     expect(scrollBehavior(route('', { offset: '30' }), route(), null)).toEqual({ left: 0, top: 0 });
     expect(scrollBehavior(route('', { offset: '30', layer: 'esri' }), route(), null)).toEqual({ left: 0, top: 0 });

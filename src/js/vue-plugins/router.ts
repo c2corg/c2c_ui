@@ -201,9 +201,11 @@ const router = createRouter({
       cancelPendingScroll = null;
     }
 
-    // the map writes its settings in the URL (base layer, slopes, overlays…): the page stays where the user is
+    // the map writes its settings in the URL (base layer, slopes, overlays…): the page stays where the user is, or
+    // goes back at once to the saved position of a history entry, as the view, already there, will not trigger the
+    // scroll
     if (onlyMapSettingsChanged(to, from)) {
-      return false;
+      return savedPosition ?? false;
     }
 
     let position: ScrollToOptions = {};
