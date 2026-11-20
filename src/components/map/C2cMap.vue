@@ -909,10 +909,26 @@ function filterExtent(): Extent {
   ];
 }
 
+// in 3D, the outline of the extent the documents are filtered with
+function showFilterOutline(extent: number[] | null) {
+  const source = map?.getSource('filter-outline') as GeoJSONSource | undefined;
+  if (!extent) return source?.setData(EMPTY_COLLECTION);
+  const [west, south, east, north] = extentToLonLat(extent) as Extent;
+  const ring = [
+    [west, south],
+    [east, south],
+    [east, north],
+    [west, north],
+    [west, south],
+  ];
+  source?.setData({ type: 'Polygon', coordinates: [ring] });
+}
+
 // the extent in the URL when the map filters the documents
 function sendBoundsToUrl() {
   const query: LocationQueryRaw = { ...route.query };
   const extent = filterDocumentsWithMap.value ? rounded(filterExtent()) : null;
+  showFilterOutline(is3d.value ? extent : null);
   query.bbox = extent?.join(',');
   if (query.bbox !== route.query.bbox && !String(route.name).endsWith('-print')) {
     router.push({ query });
@@ -1087,6 +1103,7 @@ function style() {
     'documents-3d': { type: 'geojson', data: EMPTY_COLLECTION },
     'flight-shadows': { type: 'geojson', data: EMPTY_COLLECTION },
     'track-highlight': { type: 'geojson', data: EMPTY_COLLECTION },
+    'filter-outline': { type: 'geojson', data: EMPTY_COLLECTION },
     ...Object.fromEntries(
       DENSITY_TYPES.flatMap((type) => [
         [`heatmap-${type}`, { type: 'geojson', data: EMPTY_COLLECTION }],
@@ -1129,6 +1146,12 @@ function style() {
       source: 'protection',
       layout: { visibility: 'none' },
       paint: { 'line-width': 1.5 },
+    },
+    {
+      id: 'filter-outline',
+      type: 'line',
+      source: 'filter-outline',
+      paint: { 'line-color': '#3e8ed0', 'line-width': 2.5, 'line-dasharray': [3, 2] },
     },
     ...DENSITY_TYPES.flatMap(densityLayers),
     ...documentsLayers,

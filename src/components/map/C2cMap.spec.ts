@@ -917,6 +917,7 @@ describe('C2cMap', () => {
         // tilted 60°: the top lowered by 15 / 40 of half the screen (y = 93.75), and as wide as the middle of what is
         // left, not as its top: the far corners left out
         [-0.703, 0, 0.703, 4.0625].forEach((value, i) => expect(sent()[i]).toBeCloseTo(value, 2));
+        expect(map.data['filter-outline']).toMatchObject({ type: 'Polygon' });
 
         // tilted 80°: lowered further, by 35 / 40 (y = 218.75)
         map.pitch = 80;
