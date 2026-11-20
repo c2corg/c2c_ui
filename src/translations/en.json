@@ -436,7 +436,6 @@
     "gas_unstaffed": "Gas if unstaffed",
     "gear": "Gear",
     "gender": "Gender",
-    "general informations": "General information",
     "geolocation": "Geolocation",
     "glacier_gear": "glacier gear",
     "glacier_rating": "glacier rating",
@@ -539,7 +538,6 @@
     },
     "lift_access": "Lift access",
     "lift_status": "Lift status",
-    "loading": "loading in progress",
     "local_product": {
       "waypoint_types": "local product"
     },

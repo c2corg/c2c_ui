@@ -117,7 +117,6 @@
     },
     "Avalanche bulletins": "雪崩公告",
     "Average slope (degrees)": "平均坡度",
-    "Average slope in degree": "平均坡度",
     "Back to code": "返回代码编辑模式",
     "Back to edit mode": "回到编辑模式",
     "Back to the top": "回到顶部",
@@ -206,7 +205,6 @@
     "Current password": "当前密码",
     "Danger level": "危险等级",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "雪崩公告中的危险等级适用于所有朝向。罗盘区分了风险增加的最关键区域。",
-    "Danger level:": "危险等级:",
     "Danger rating - considerable": "危险等级 - 可观的",
     "Danger rating - high": "危险等级 - 高",
     "Danger rating - high to very high": "危险等级 - 高到非常高",
@@ -335,7 +333,6 @@
     "Have an account?": "是否有账户？",
     "Have you (re)evaluated the risks at each change in the situation? What factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the leader of the group, etc.": "您是否（重新）评估了每次情况变化后的风险？ 哪些因素可能会影响您的意识，例如疲倦，压力，经过主要困难后的放松，在下降过程中，在据说容易的部分，有脚印或其他人的存在的时候，对团队领导者的完全信任等 。",
     "Hazard potential": "潜在危险",
-    "Hazard potential:": "潜在危险：",
     "Heading": "标题",
     "Help": "帮助",
     "Help research activities to define new prevention means": "帮助研究活动确定新的预防手段",
@@ -385,7 +382,6 @@
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "有关事件位置的信息。 请在上面的地图上标记位置，即使您无法非常精确地标记下来（在这种情况下，请在此处提供更多详细信息）。 完成报告后，您可以将其关联到路线，攀登地点或出行记录。",
     "Informations about the access": "关于交通节点的信息",
     "Infos": "信息",
-    "Insert a link": "插入链接",
     "Insert emoji": "插入表情",
     "Insert image": "插入图片",
     "Insert link": "插入链接",
@@ -515,7 +511,6 @@
     "Open in a new tab": "在新标签页中打开",
     "Ordered list": "有序列表",
     "Orientations": "朝向",
-    "Orientations:": "朝向:",
     "Other options": "其他选项",
     "Oups! Something went wrong with forum. Here is the message :": "哎呀！论坛出现错误。这是信息：",
     "Oups! something went wrong...": "哎呀！出现错误...",
@@ -1168,7 +1163,6 @@
       "article_categories": "装备"
     },
     "gender": "性别",
-    "general informations": "一般信息",
     "geolocation": "地理坐标",
     "geology": {
       "image_categories": "地质"
@@ -1350,7 +1344,6 @@
     },
     "lift_access": "可缆车进入",
     "lift_status": "缆车状态",
-    "loading": "加载中",
     "local_product": {
       "waypoint_types": "当地特产"
     },
