@@ -87,7 +87,7 @@
             />
           </div>
         </template>
-        <template v-if="showDensityOverlays && !densityUnavailable && !is3d">
+        <template v-if="showDensityOverlays && !densityUnavailable">
           <header v-translate>Overlays</header>
           <!-- $gettext('Outings') $gettext('Routes') -->
           <div class="layer-group">
@@ -1841,11 +1841,6 @@ function open3d() {
   setHoveredKey(null);
   closeTrackPanel();
   hideTrackTooltip();
-  // no overlays in 3D
-  DENSITY_TYPES.forEach((type) => {
-    cancelDensityRequest(type);
-    hideDensity(type);
-  });
   hideProfileCursor();
   map.setTerrain({ source: 'terrain', exaggeration: EXAGGERATION });
   map.setSky({ 'sky-color': '#9cc9f0', 'horizon-color': '#e6eef5', 'horizon-fog-blend': 0.6 });
