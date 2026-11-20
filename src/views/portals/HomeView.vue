@@ -222,7 +222,15 @@ function setProperty(property: keyof typeof toggles, value: boolean) {
   align-items: baseline;
 }
 
-/* no gap when the slot gets no ad */
+/* no gap when the slot gets no ad, going with its room (DfmAdSmall.vue) */
+.ad-slot {
+  transition: margin-bottom 0.3s ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
 .ad-slot:not(.is-empty) {
   margin-bottom: var(--c2c-size-7);
 }
