@@ -12,7 +12,7 @@ import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
 import bus from '@/js/event-bus';
-import { extentFromLonLat, fromLonLat } from '@/js/geo/projection';
+import { extentToLonLat, fromLonLat } from '@/js/geo/projection';
 import { useOfflineStore } from '@/stores/offline';
 
 vi.mock('maplibre-gl', () => import('./maplibre-mock'));
@@ -894,31 +894,35 @@ describe('C2cMap', () => {
         wrapper.unmount();
       });
 
-      it('filters in 3D at most twice the 2D view around the center, not the far away', async () => {
+      it('filters in 3D with the box within the ground seen, its top lowered with the tilt', async () => {
         const { wrapper, map } = await mountMap({ documents: [outing], show3d: true, showFilterControl: true });
         await wrapper.find('#filter-documents-with-map').setValue(true);
         await open3d(wrapper);
         Object.defineProperties(map.getContainer(), { clientWidth: { value: 1000 }, clientHeight: { value: 500 } });
-        const push = vi.spyOn(wrapper.vm.$router, 'push');
-        const [x, y] = fromLonLat([7, 46]);
-        // 2 × 1000 px at 76.437 m a pixel at zoom 10
-        const half = 76437;
-
-        map.zoom = 10;
-        map.extent = [6.9, 45.9, 7.1, 46.1];
-        map.fire('moveend');
-        await flushPromises();
-        expect(push).toHaveBeenLastCalledWith({
-          query: { bbox: extentFromLonLat([6.9, 45.9, 7.1, 46.1]).map(Math.round).join(',') },
+        // the ground seen: 5° deep, twice as wide at the top (far) as at the bottom (near)
+        map.unproject = ([x, y]: [number, number]) => ({
+          lng: ((x - 500) / 1000) * (1 + (500 - y) / 500),
+          lat: (500 - y) / 100,
         });
+        const push = vi.spyOn(wrapper.vm.$router, 'push');
+        const sent = () =>
+          extentToLonLat(
+            String((push.mock.lastCall![0] as { query: LocationQueryRaw }).query.bbox)
+              .split(',')
+              .map(Number)
+          );
 
-        map.extent = [5, 44, 9, 48];
         map.fire('moveend');
         await flushPromises();
-        const bbox = String((push.mock.lastCall![0] as { query: LocationQueryRaw }).query.bbox)
-          .split(',')
-          .map(Number);
-        [x - half, y - half, x + half, y + half].forEach((value, i) => expect(bbox[i]).toBeCloseTo(value, -1));
+        // tilted 60°: the top lowered by 15 / 40 of half the screen (y = 93.75), and as wide as the middle of what is
+        // left, not as its top: the far corners left out
+        [-0.703, 0, 0.703, 4.0625].forEach((value, i) => expect(sent()[i]).toBeCloseTo(value, 2));
+
+        // tilted 80°: lowered further, by 35 / 40 (y = 218.75)
+        map.pitch = 80;
+        map.fire('moveend');
+        await flushPromises();
+        expect(sent()[3]).toBeCloseTo(2.8125, 2);
         wrapper.unmount();
       });
 
