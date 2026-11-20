@@ -364,7 +364,7 @@ import {
   swissProtectionLayers,
   worldLayer,
 } from './map-layers';
-import { parseMapUrl, withMapUrl } from './map-url-state';
+import { parseMapUrl, storedMapSettings, storeMapSettings } from './map-url-state';
 import { scrollPassthrough } from './scroll-passthrough';
 
 import biodivSportsService from '@/js/apis/biodivsports-service';
@@ -449,9 +449,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  // the layers, overlays and pinned side of the map are kept in the query of the page (and read from it): only for the
-  // page of a document, whose query is not used for anything else (a listing's query is its search filters)
-  syncUrl: {
+  // the layers and overlays of the map are kept on this device, from a document page to the next one; the query of an
+  // old shared link (?layer=…) is read too: only for the page of a document, whose query is not used for anything else (a
+  // listing's query is its search filters)
+  rememberSettings: {
     type: Boolean,
     default: false,
   },
@@ -518,8 +519,8 @@ const emit = defineEmits([
 
 const route = useRoute();
 const router = useRouter();
-// what the URL of a document page says about the map
-const urlState = props.syncUrl ? parseMapUrl(route.query) : {};
+// the settings of the document maps on this device, and what an old shared link says (it wins, for this page)
+const initialSettings = props.rememberSettings ? { ...storedMapSettings(), ...parseMapUrl(route.query) } : {};
 const { $documentUtils, $gettext, $language } = useGlobalProperties();
 const trackTooltipEl = useTemplateRef<HTMLElement>('trackTooltip');
 
@@ -533,13 +534,13 @@ const swissWindowEl = useTemplateRef<{ show(): void }>('swissWindow');
 const isTouchDevice = 'ontouchstart' in window;
 
 // the layers shown: one base layer (in 2D and in 3D), the slopes, the protection areas, the shading in 3D
-const base = ref(urlState.base ?? baseLayers[0].title);
+const base = ref(initialSettings.base ?? baseLayers[0].title);
 const base3d = ref(worldLayer.title);
-const slopes = ref<string[]>(urlState.slopes ?? []);
+const slopes = ref<string[]>(initialSettings.slopes ?? []);
 const slopesOpacity = ref<Record<string, number>>(
   Object.fromEntries(slopeLayers.map((layer) => [layer.title, layer.opacity ?? 1]))
 );
-const protectionAreasVisible = ref(props.showProtectionAreas && urlState.protection !== false);
+const protectionAreasVisible = ref(props.showProtectionAreas && initialSettings.protection !== false);
 const protectionAreasOpacity = ref(swissProtectionLayers[0].opacity ?? 1);
 const shading = ref(false);
 
@@ -1176,8 +1177,8 @@ type TrackEntry = { document: DensityTrack; type: DensityType; geometry: Geometr
 const showDensityOverlays = computed(() => tracksOverlayEnabled && !props.oldDocument && !props.newDocument);
 // off by default: they are an opt-in addition, not a change to the look of the map
 const densityEnabled = reactive<Record<DensityType, boolean>>({
-  outing: showDensityOverlays.value && !!urlState.overlays?.includes('outing'),
-  route: showDensityOverlays.value && !!urlState.overlays?.includes('route'),
+  outing: showDensityOverlays.value && !!initialSettings.overlays?.includes('outing'),
+  route: showDensityOverlays.value && !!initialSettings.overlays?.includes('route'),
 });
 // set when the API answers that the overlays are turned off: they are no longer offered
 const densityUnavailable = ref(false);
@@ -1250,6 +1251,7 @@ function cancelDensityRequest(type: DensityType) {
 
 function toggleDensityOverlay(type: DensityType) {
   densityEnabled[type] = !densityEnabled[type];
+  storeSetting({ overlays: DENSITY_TYPES.filter((item) => densityEnabled[item]) });
   if (densityEnabled[type]) {
     updateDensityOverlay(type);
   } else {
@@ -1924,28 +1926,15 @@ watch(
 
 watch(filterDocumentsWithMap, () => sendBoundsToUrl());
 
-// the settings of the map in the URL, replacing the entry of the history: no new one for each click
-function sendSettingsToUrl() {
-  if (!props.syncUrl || String(route.name).endsWith('-print')) return;
-  const query = withMapUrl(
-    route.query,
-    {
-      base: base.value,
-      slopes: slopes.value,
-      overlays: DENSITY_TYPES.filter((type) => densityEnabled[type]),
-      // hidden by the user, not because the page has none
-      protection: !props.showProtectionAreas || protectionAreasVisible.value,
-      // the page that pins its map owns it: left as it is
-      pin: String(route.query.pin ?? ''),
-    },
-    baseLayers[0].title
-  );
-  if (JSON.stringify(query) !== JSON.stringify(route.query)) router.replace({ query, hash: route.hash });
+// what the user changes is kept on this device, for the next document pages: only that setting, not the others the page
+// shows (those of an old shared link). The base layer, the slopes and the protection areas change only by a click; the
+// overlays are stored by their toggle, as they are also turned off when unavailable (that is not a choice to keep)
+function storeSetting(change: Parameters<typeof storeMapSettings>[0]) {
+  if (props.rememberSettings) storeMapSettings(change, baseLayers[0].title);
 }
-watch(
-  [base, slopes, protectionAreasVisible, () => DENSITY_TYPES.map((type) => densityEnabled[type])],
-  sendSettingsToUrl
-);
+watch(base, (value) => storeSetting({ base: value }));
+watch(slopes, (value) => storeSetting({ slopes: value }));
+watch(protectionAreasVisible, (value) => storeSetting({ protection: value }));
 
 // the filters are compared by content: the parent may give a new (but identical) object each time the route changes
 watch(

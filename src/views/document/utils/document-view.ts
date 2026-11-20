@@ -153,7 +153,7 @@ export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { dr
 
     const currentPath = getCurrentPath();
     if (route.path !== currentPath) {
-      // the query stays: it holds the settings of the map
+      // the query stays: an old shared link holds the settings of its map there
       router.replace({ path: getBasePath(), query: route.query, hash: route.hash });
     }
   }

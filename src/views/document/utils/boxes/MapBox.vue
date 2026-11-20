@@ -33,7 +33,7 @@
             !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
           "
           :show-pin-to-top-button="true"
-          sync-url
+          remember-settings
           :show3d="show3d"
           @has-protection-area="$emit('has-protection-area')"
           @pin-to-top-clicked="togglePinToSide(true)"
@@ -62,8 +62,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue';
+import { useRoute } from 'vue-router';
 
 import ElevationProfile from './ElevationProfile.vue';
 import MapLinks from './MapLinks.vue';
@@ -81,7 +81,6 @@ const props = defineProps({ ...documentProperty });
 defineEmits(['has-protection-area']);
 
 const route = useRoute();
-const router = useRouter();
 
 // the 3D view for routes, outings and waypoints: around their waypoints (an outing: those of its routes) or their point
 // when they have no track
@@ -192,16 +191,8 @@ function getDownloadedFileName(name: string, extension: string) {
   return filename.replace(/[/\\?%*:|"<>]/g, ' ').replace(/\s+/g, '_') + extension;
 }
 
-// the pinned side in the URL (the other settings of the map are written by the map): a reload or a shared link keeps it
-watch(pinnedSide, (side) => {
-  const query = { ...route.query };
-  if (side) query.pin = side;
-  else delete query.pin;
-  if (query.pin !== route.query.pin) router.replace({ query, hash: route.hash });
-});
-
-// pins the map on the side (or the whole window) asked for by the URL; a side that is not available here (the right one
-// on a phone) gives the first one
+// pins the map on the side (or the whole window) asked for by an old shared link (?pin=top); a side that is not available
+// here (the right one on a phone) gives the first one
 function pinFromUrl() {
   const { pin } = parseMapUrl(route.query);
   if (!pin) return;
