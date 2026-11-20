@@ -82,7 +82,7 @@
     "@vitejs/plugin-vue": "6.0.10",
     "@vue/test-utils": "2.5.1",
     "@vue/tsconfig": "0.9.1",
-    "browserslist": "4.29.5",
+    "browserslist": "4.29.6",
     "cross-env": "10.1.0",
     "eslint": "10.14.0",
     "eslint-config-prettier": "10.1.8",
