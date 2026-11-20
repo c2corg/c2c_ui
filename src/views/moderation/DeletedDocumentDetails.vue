@@ -15,7 +15,7 @@
         <p>
           <strong v-translate>History</strong>
           <br />
-          {{ $gettext('Versions:') }} {{ details.data.versions }}
+          <span class="with-colon">{{ $gettext('Versions') }}</span> {{ details.data.versions }}
           <template v-if="details.data.last_edited_by">
             ·
             <span v-translate>last edited by</span>

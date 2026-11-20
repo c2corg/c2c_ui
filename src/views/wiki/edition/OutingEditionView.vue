@@ -10,7 +10,7 @@
         }}
       </div>
       <form-section
-        :title="$gettext('general informations')"
+        :title="$gettext('General information')"
         :sub-title="$gettext('Main informations about your outing')"
         expanded-on-load
       >

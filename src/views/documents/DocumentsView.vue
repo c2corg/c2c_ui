@@ -54,8 +54,8 @@
             <button
               type="button"
               class="button is-small header-item is-hidden-tablet"
-              :title="displayMode === 'map' ? $gettext('Show the results') : $gettext('Show the map')"
-              :aria-label="displayMode === 'map' ? $gettext('Show the results') : $gettext('Show the map')"
+              :title="displayMode === 'map' ? $gettext('Show results') : $gettext('Show the map')"
+              :aria-label="displayMode === 'map' ? $gettext('Show results') : $gettext('Show the map')"
               @click="setDisplayMode(displayMode === 'map' ? 'both' : 'map')"
             >
               <fa-icon :icon="displayMode === 'map' ? 'th' : 'map-marked-alt'" class="has-text-primary" />

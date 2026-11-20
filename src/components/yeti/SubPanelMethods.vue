@@ -83,7 +83,7 @@
       />
 
       <info v-if="method.orientation.length != 0">
-        <span v-translate key="tr1">Orientations</span>: {{ method.orientation.join(', ') }}
+        <span class="with-colon" v-translate key="tr1">Orientations</span> {{ method.orientation.join(', ') }}
       </info>
       <info type="warning" v-else>
         <span v-translate key="tr2">No orientation selected</span>
@@ -167,9 +167,9 @@
       </ul>
 
       <info v-if="method.potentialDanger">
-        <span v-translate key="tr1">Hazard potential:</span>
+        <span class="with-colon" v-translate key="tr1">Hazard potential</span>
         {{ method.potentialDanger }}
-        (<span v-translate>Danger level:</span> {{ bra.high }})
+        (<span class="with-colon" v-translate>Danger level</span> {{ bra.high }})
       </info>
       <info type="warning" v-else>
         <span v-translate key="tr2">No selected hazard potential. Set danger level first.</span>
