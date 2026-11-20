@@ -52,9 +52,14 @@ const selectedTitles = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']
       .join('+')
   );
 
-beforeEach(() => resetMocks());
+beforeEach(() => {
+  resetMocks();
+  // no network: a vector map shown in 3D gets no style unless the test gives one (a failed style is not cached)
+  vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('no network in tests'));
+});
 afterEach(() => {
   document.body.innerHTML = '';
+  vi.restoreAllMocks();
 });
 
 describe('C2cMap', () => {
@@ -611,6 +616,8 @@ describe('C2cMap', () => {
       await flushPromises();
     };
     const shownMarkers = () => state.markers.filter((marker) => marker.added && !marker.removed);
+    // the layer chosen in a test is stored: not for the next one
+    afterEach(() => window.localStorage.removeItem('DocumentMap.preferences'));
 
     it('tilts the same map on the terrain, and goes back to the 2D view', async () => {
       const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
@@ -667,6 +674,152 @@ describe('C2cMap', () => {
       });
       expect(map.paint['protection-fill']).toMatchObject({ 'fill-opacity': 0.4, 'fill-layer-blend': 'multiply' });
       expect(map.paint['IGN Slopes']).toEqual({ 'raster-opacity': 0.4 });
+      wrapper.unmount();
+    });
+
+    it('keeps SwissTopo, drawn from its vector tiles, and gives the layer chosen in 3D back to 2D', async () => {
+      const swissStyle = (raster?: boolean) => ({
+        version: 8,
+        glyphs: 'https://vectortiles.example/fonts/{fontstack}/{range}.pbf',
+        sprite: [{ id: 'default', url: 'https://vectortiles.example/sprite' }],
+        sources: {
+          'base_v1.0.0': { type: 'vector', url: 'https://vectortiles.example/base.json' },
+          ...(raster ? { swissimage: { type: 'raster', tiles: ['https://wmts.example/{z}/{x}/{y}.jpeg'] } } : {}),
+        },
+        layers: [
+          { id: 'background', type: 'background' },
+          ...(raster ? [{ id: 'swissimage', type: 'raster', source: 'swissimage' }] : []),
+          { id: 'water', type: 'fill', source: 'base_v1.0.0', 'source-layer': 'water' },
+          { id: 'peaks', type: 'symbol', source: 'base_v1.0.0', 'source-layer': 'mountain_peak' },
+        ],
+      });
+      const fetch = vi
+        .spyOn(globalThis, 'fetch')
+        .mockImplementation(async (url) => Response.json(swissStyle(String(url).includes('imagerybasemap'))));
+      const { wrapper, map } = await mountMap(
+        { documents: [route], show3d: true, rememberSettings: true },
+        '/routes/1/fr?layer=swiss'
+      );
+      const layerIds = () => map.style.layers.map((layer) => layer.id);
+
+      await open3d(wrapper);
+
+      // the raster map stays in 2D; in 3D, its vector tiles: the ground under our shading, the names over the slopes
+      expect(selectedTitles(wrapper)[0]).toBe('SwissTopo');
+      expect(map.layout.SwissTopo.visibility).toBe('none');
+      expect(map.layout.world.visibility).toBe('visible');
+      const ids = layerIds();
+      expect(ids.indexOf('vector-ground')).toBeLessThan(ids.indexOf('shading'));
+      expect(ids.indexOf('vector-water')).toBeLessThan(ids.indexOf('shading'));
+      expect(ids.indexOf('vector-peaks')).toBeGreaterThan(ids.indexOf('SwissTopo Slopes'));
+      expect(ids.indexOf('vector-peaks')).toBeLessThan(ids.indexOf('documents-3d'));
+      expect(map.glyphs).toBe('https://vectortiles.example/fonts/{fontstack}/{range}.pbf');
+      expect([...map.sprites.keys()]).toEqual(['default']);
+      // no relief drawn on a vector map: our shading goes on with it
+      expect(map.layout.shading.visibility).toBe('visible');
+
+      // the orthophoto, with the names of swisstopo over it: the first map is removed
+      await wrapper
+        .findAll('.layer-button')
+        .find((button) => button.text() === 'SwissTopo ortho')!
+        .trigger('click');
+      await flushPromises();
+      expect(map.layout['SwissTopo ortho'].visibility).toBe('visible');
+      expect(map.layout.shading.visibility).toBe('none');
+      expect(layerIds().filter((id) => id.startsWith('vector-'))).toEqual(['vector-water', 'vector-peaks']);
+      expect(Object.keys(map.style.sources).filter((id) => id.startsWith('vector-'))).toEqual(['vector-base_v1.0.0']);
+
+      await wrapper.find('.ol-control-3d button').trigger('click');
+      await flushPromises();
+      expect(map.layout['SwissTopo ortho'].visibility).toBe('visible');
+      expect(layerIds().filter((id) => id.startsWith('vector-'))).toEqual([]);
+      expect(map.sprites.size).toBe(0);
+      wrapper.unmount();
+      fetch.mockRestore();
+    });
+
+    it('keeps the IGN maps in 3D, with no shading of ours over their own', async () => {
+      const { wrapper, map } = await mountMap(
+        { documents: [route], show3d: true, rememberSettings: true },
+        '/routes/1/fr?layer=ign'
+      );
+
+      await open3d(wrapper);
+      // the TOP 25 at every zoom, also far from the camera (small zooms)
+      expect(map.layout['IGN maps'].visibility).toBe('none');
+      expect(map.layout['IGN maps 3D'].visibility).toBe('visible');
+      expect(map.style.sources['IGN maps 3D']).toMatchObject({ minzoom: 6, maxzoom: 16 });
+      expect((map.style.sources['IGN maps 3D'] as { tiles: string[] }).tiles[0]).toMatch(
+        /^https:\/\/data\.geopf\.fr\/private\/wmts\?apikey=/
+      );
+      expect((map.style.sources['IGN maps 3D'] as { tiles: string[] }).tiles[0]).toContain(
+        'LAYER=GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN25TOUR&'
+      );
+      // a raster map with its own relief: our shading stays off
+      expect(map.layout.shading.visibility).toBe('none');
+
+      await wrapper.find('.ol-control-3d button').trigger('click');
+      await flushPromises();
+      expect(map.layout['IGN maps'].visibility).toBe('visible');
+      expect(map.layout['IGN maps 3D'].visibility).toBe('none');
+      wrapper.unmount();
+    });
+
+    it('shows the orthophoto of the country of the documents when the 2D layer has no 3D one', async () => {
+      const { wrapper, map } = await mountMap(
+        { documents: [{ ...route, areas: [{ document_id: 14274 }] }], show3d: true, rememberSettings: true },
+        '/routes/1/fr?layer=esri'
+      );
+
+      await open3d(wrapper);
+      // not the IGN maps, also allowed in 3D
+      expect(map.layout['IGN ortho'].visibility).toBe('visible');
+      expect(map.layout['IGN maps'].visibility).toBe('none');
+      wrapper.unmount();
+    });
+
+    it('leaves our shading off when it was turned off on a vector map', async () => {
+      const fetch = vi
+        .spyOn(globalThis, 'fetch')
+        .mockImplementation(async () => Response.json({ version: 8, sources: {}, layers: [] }));
+      const { wrapper, map } = await mountMap(
+        { documents: [route], show3d: true, rememberSettings: true },
+        '/routes/1/fr?layer=swiss'
+      );
+      const click = (title: string) =>
+        wrapper
+          .findAll('.layer-button')
+          .find((button) => button.text() === title)!
+          .trigger('click');
+
+      await open3d(wrapper);
+      await click('Shading');
+      expect(map.layout.shading.visibility).toBe('none');
+      await click('SwissTopo ortho');
+      await click('Shading');
+      await click('SwissTopo');
+      await flushPromises();
+      // turned on by hand: kept on the next map
+      await click('SwissTopo ortho');
+      expect(map.layout.shading.visibility).toBe('visible');
+      wrapper.unmount();
+      fetch.mockRestore();
+    });
+
+    it('shades the relief softly (igor), at 40% until its slider is moved', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
+
+      await open3d(wrapper);
+      await wrapper
+        .findAll('.layer-button')
+        .find((button) => button.text() === 'Shading')!
+        .trigger('click');
+
+      expect(map.layout.shading.visibility).toBe('visible');
+      expect(map.style.layers.find((layer) => layer.id === 'shading')).toMatchObject({
+        paint: { 'hillshade-method': 'igor' },
+      });
+      expect(map.paint.shading).toEqual({ 'hillshade-exaggeration': 0.4 });
       wrapper.unmount();
     });
 
