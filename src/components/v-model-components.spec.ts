@@ -92,12 +92,13 @@ describe('v-model components', () => {
   });
 
   it('DisplayModeSwitch', async () => {
-    const wrapper = mountWithVModel(DisplayModeSwitch, 'both', ':list-mode="false"');
-    const items = wrapper.findAll('.dropdown-item');
-    expect(items.filter((item) => item.classes('is-active'))).toHaveLength(1);
+    const wrapper = mountWithVModel(DisplayModeSwitch, 'both');
+    const [results, map] = wrapper.findAll('button');
+    expect(wrapper.findAll('button[aria-pressed="true"]')).toHaveLength(2);
 
-    await items[0].trigger('click');
+    await map.trigger('click');
     expect(wrapper.vm.value).toBe('result');
+    expect(results.attributes('aria-disabled')).toBe('true');
   });
 
   it('user FormField', async () => {

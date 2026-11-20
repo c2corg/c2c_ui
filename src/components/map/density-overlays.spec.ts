@@ -105,7 +105,7 @@ describe('searchOverlayFilters', () => {
         pin: 'top',
       })
     ).toEqual({ outing: { act: 'hiking' }, route: { act: 'hiking' } });
-    expect(searchOverlayFilters('route', { overlays: 'outing' })).toEqual({ outing: null, route: {} });
+    expect(searchOverlayFilters('route', { overlays: 'outing', view: 'map' })).toEqual({ outing: null, route: {} });
   });
 
   it('applies the search filters to the overlay of the searched type', () => {

@@ -7,7 +7,7 @@ import {
   type RouteRecordRaw,
 } from 'vue-router';
 
-import { MAP_URL_KEYS } from '@/components/map/map-url-keys';
+import { DISPLAY_URL_KEYS } from '@/components/map/map-url-keys';
 import config from '@/js/config';
 import constants, { type DocumentDefinition } from '@/js/constants';
 import { once } from '@/js/event-bus';
@@ -172,17 +172,17 @@ routes.push({ path: '/:pathMatch(.*)*', name: '404', component: NotFoundView });
 // removes the trigger-scroll handler of the last navigation that waits for its view's data
 let cancelPendingScroll: (() => void) | null = null;
 
-// the same page, with only the settings of its map changed in the query
-function onlyMapSettingsChanged(to: RouteLocationNormalized, from: RouteLocationNormalized): boolean {
+// the same page, with only how it is shown changed in the query (the settings of its map, the view of a list)
+function onlyDisplaySettingsChanged(to: RouteLocationNormalized, from: RouteLocationNormalized): boolean {
   if (to.path !== from.path || to.hash !== from.hash) return false;
   const keys = new Set([...Object.keys(to.query), ...Object.keys(from.query)]);
-  let mapChanged = false;
+  let changed = false;
   for (const key of keys) {
     if (JSON.stringify(to.query[key]) === JSON.stringify(from.query[key])) continue;
-    if (!MAP_URL_KEYS.includes(key)) return false;
-    mapChanged = true;
+    if (!DISPLAY_URL_KEYS.includes(key)) return false;
+    changed = true;
   }
-  return mapChanged;
+  return changed;
 }
 
 const router = createRouter({
@@ -201,10 +201,10 @@ const router = createRouter({
       cancelPendingScroll = null;
     }
 
-    // the map writes its settings in the URL (base layer, slopes, overlays…): the page stays where the user is, or
+    // the map writes its settings in the URL (base layer, slopes, overlays…), a list its view: the page stays where the user is, or
     // goes back at once to the saved position of a history entry, as the view, already there, will not trigger the
     // scroll
-    if (onlyMapSettingsChanged(to, from)) {
+    if (onlyDisplaySettingsChanged(to, from)) {
       return savedPosition ?? false;
     }
 

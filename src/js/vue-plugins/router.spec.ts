@@ -18,7 +18,8 @@ describe('router scroll behavior', () => {
     expect(scrollBehavior(route(), route(), null)).toEqual({ left: 0, top: 0 });
   });
 
-  it('keeps the position when the map writes its settings in the URL', () => {
+  it('keeps the position when the map writes its settings in the URL, or a list its view', () => {
+    expect(scrollBehavior(route('', { act: 'hiking', view: 'map' }), route('', { act: 'hiking' }), null)).toBe(false);
     expect(scrollBehavior(route('', { layer: 'esri' }), route(), null)).toBe(false);
     expect(scrollBehavior(route('', { slopes: 'ign' }), route('', { slopes: 'ign,swiss' }), null)).toBe(false);
     expect(scrollBehavior(route('', { bbox: '1,2,3,4' }), route('', { bbox: '1,2,3,4', pin: 'left' }), null)).toBe(
