@@ -89,7 +89,7 @@
             />
           </div>
         </template>
-        <template v-if="showDensityOverlays && !densityUnavailable && !is3d && online">
+        <template v-if="showDensityOverlays && !densityUnavailable && online">
           <header v-translate>Overlays</header>
           <!-- $gettext('Outings') $gettext('Routes') -->
           <div class="layer-group">
@@ -1778,6 +1778,8 @@ async function onElevationProfile(event: unknown) {
 
 let shownMarkers: Marker[] = [];
 let flightLayers: FlightLayers | null = null;
+// changes with the documents of the 3D view: what is still being read for the previous ones is dropped
+let documents3dVersion = 0;
 // where the 3D view opened, and the 2D view to go back to
 let bounds3d: Extent | null = null;
 let view2d: { center: [number, number]; zoom: number } | null = null;
@@ -1810,8 +1812,11 @@ function marker3d(feature: DocumentFeature, interactive: boolean): Marker3d | nu
   };
 }
 
+const isList = computed(() => (props.documents?.length ?? 0) > 1);
+
 // the lines of the documents, and the markers: the waypoints, and the point of the document itself, a waypoint always
-// (among its child waypoints), another document only when there is nothing else to show (no track, no waypoint)
+// (among its child waypoints), another document only when there is nothing else to show (no track, no waypoint). In a
+// list, each document has its marker, which opens it: a result without a track must not disappear because another has one.
 function documents3d() {
   const documentFeatures3d = features.filter((feature) => feature.group === 'documents');
   const lines: FeatureCollection = {
@@ -1831,8 +1836,10 @@ function documents3d() {
   const points = documentFeatures3d.filter(isPoint);
   const markers = [
     ...points
-      .filter((feature) => feature.document.type === 'w' || !(lines.features.length || waypointMarkers.length))
-      .map((feature) => marker3d(feature, false)),
+      .filter(
+        (feature) => isList.value || feature.document.type === 'w' || !(lines.features.length || waypointMarkers.length)
+      )
+      .map((feature) => marker3d(feature, isList.value)),
     ...waypointMarkers,
   ].filter((marker): marker is Marker3d => !!marker);
   return { lines, markers };
@@ -1862,6 +1869,8 @@ function addMarkers(created: MapLibreMap, markers: Marker3d[]) {
 // an outing has no waypoint of its own: the 3D view also shows those of its routes (access, hut, summit), read when
 // it opens (a request per route, 3 routes at most)
 async function addRouteWaypoints(shown: Marker3d[]) {
+  // a list has the markers of its results: the routes of 3 of its outings would be an arbitrary pick
+  if (isList.value) return;
   const routeIds = [
     ...new Set(
       (props.documents ?? [])
@@ -1872,6 +1881,7 @@ async function addRouteWaypoints(shown: Marker3d[]) {
   ].slice(0, 3);
   if (!routeIds.length) return;
   const opened = map;
+  const version = documents3dVersion;
   const routes = await Promise.all(
     routeIds.map((id) =>
       Promise.resolve((c2c.route as DocumentService).get(id, $language.current!)).then(
@@ -1880,7 +1890,7 @@ async function addRouteWaypoints(shown: Marker3d[]) {
       )
     )
   );
-  if (!is3d.value || map !== opened || !map) return;
+  if (!is3d.value || map !== opened || !map || version !== documents3dVersion) return;
   const ids = new Set(shown.map((marker) => (marker.to as { params?: { id?: number } } | null)?.params?.id));
   const markers = routes
     .flatMap((route) => route?.associations?.waypoints ?? [])
@@ -1899,7 +1909,8 @@ async function addRouteWaypoints(shown: Marker3d[]) {
 const FLIGHTS_WAIT = 5000;
 async function showFlights(created: MapLibreMap, lines: FeatureCollection) {
   const source = () => created.getSource('documents-3d') as GeoJSONSource | undefined;
-  const opened = () => map === created && is3d.value;
+  const version = documents3dVersion;
+  const opened = () => map === created && is3d.value && version === documents3dVersion;
   if (!hasParaglidingTrack(lines)) {
     source()?.setData(lines);
     return;
@@ -1954,13 +1965,29 @@ function setRotation(enabled: boolean) {
   if (enabled) map.keyboard.enableRotation();
 }
 
+// the documents of a list that changed (another page of the results), while the 3D view is open
+function redraw3d() {
+  if (!map) return;
+  const { lines, markers } = documents3d();
+  documents3dVersion++;
+  shownMarkers.forEach((marker) => marker.remove());
+  shownMarkers = [];
+  flightLayers?.remove();
+  flightLayers = null;
+  (map.getSource('flight-shadows') as GeoJSONSource).setData(EMPTY_COLLECTION);
+  addMarkers(map, markers);
+  showFlights(map, lines);
+}
+
 function open3d() {
   if (!map) return;
   const created = map;
   const { lng, lat } = map.getCenter();
   view2d = { center: [lng, lat], zoom: map.getZoom() };
   const { lines, markers } = documents3d();
-  bounds3d = bounds3dOf(markers, lines);
+  documents3dVersion++;
+  // a list of documents (search results) can be anywhere: the 3D view tilts the view of the map, it does not fit them
+  bounds3d = isList.value ? getExtent('EPSG:4326') : bounds3dOf(markers, lines);
   const country = baseLayers.find((layer) => layer.title === base.value)?.country ?? documentsCountry();
   // the same layer in 3D when it has one there, else the orthophoto of its country
   base3d.value = (
@@ -1973,11 +2000,6 @@ function open3d() {
   setHoveredKey(null);
   closeTrackPanel();
   hideTrackTooltip();
-  // no overlays in 3D
-  DENSITY_TYPES.forEach((type) => {
-    cancelDensityRequest(type);
-    hideDensity(type);
-  });
   hideProfileCursor();
   map.setTerrain({ source: 'terrain', exaggeration: EXAGGERATION });
   map.setSky({ 'sky-color': '#9cc9f0', 'horizon-color': '#e6eef5', 'horizon-fog-blend': 0.6 });
@@ -2057,7 +2079,10 @@ watch(online, (isOnline) => {
 // deep 1: also when documents are added to or removed from the array, as Vue 2 array watchers did
 watch(
   () => props.documents,
-  () => drawDocumentMarkers(),
+  () => {
+    drawDocumentMarkers();
+    if (is3d.value) redraw3d();
+  },
   { deep: 1 }
 );
 

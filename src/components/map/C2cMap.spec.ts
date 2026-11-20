@@ -844,5 +844,46 @@ describe('C2cMap', () => {
       expect((map.data['documents-3d'] as FeatureCollection).features).toHaveLength(1);
       wrapper.unmount();
     });
+
+    it('drops the waypoints read for the documents it no longer shows', async () => {
+      let answer: (value: unknown) => void = () => {};
+      vi.spyOn(c2c.route as DocumentService, 'get').mockReturnValue(
+        new Promise((resolve) => (answer = resolve)) as never
+      );
+      const { wrapper } = await mountMap({ documents: [outing], show3d: true });
+      await open3d(wrapper);
+
+      await wrapper.setProps({ documents: [{ ...outing, document_id: 3, associations: {} }] });
+      answer({ data: { associations: { waypoints: [waypoint(11, 'summit', 6.285)] } } });
+      await flushPromises();
+
+      expect(shownMarkers()).toHaveLength(0);
+      wrapper.unmount();
+    });
+
+    describe('of a list of documents', () => {
+      const pointOnly = { document_id: 2, type: 'o', activities: ['hiking'], geometry: { geom: point(6.5, 45.95) } };
+
+      it('keeps the marker of a result without a track when another result has one', async () => {
+        const { wrapper } = await mountMap({ documents: [outing, pointOnly], show3d: true });
+
+        await open3d(wrapper);
+
+        expect(shownMarkers()).toHaveLength(1);
+        expect(shownMarkers()[0].lngLat![0]).toBeCloseTo(6.5, 6);
+        wrapper.unmount();
+      });
+
+      it('does not read the waypoints of the routes of its outings', async () => {
+        const get = vi.spyOn(c2c.route as DocumentService, 'get');
+        get.mockClear();
+        const { wrapper } = await mountMap({ documents: [outing, pointOnly], show3d: true });
+
+        await open3d(wrapper);
+
+        expect(get).not.toHaveBeenCalled();
+        wrapper.unmount();
+      });
+    });
   });
 });
