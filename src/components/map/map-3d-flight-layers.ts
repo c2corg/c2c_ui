@@ -188,12 +188,14 @@ export async function addFlightLayers(map: MapLibreMap, flights: Flights): Promi
       getWidth: 1,
     }),
     // as the lines on the ground: the flight on a wider grey casing
+    // 1 px thinner than the walk (4 on 7): the flight faces the camera at full width, while the walk draped on the
+    // terrain is foreshortened and blurred, so equal widths made the flight look the wider one
     new PathLayer<Position[]>({
       id: 'flight-casing',
       data: flights.paths,
       getPath: (path) => path as [number, number, number][],
       getColor: CASING_COLOR,
-      getWidth: 6,
+      getWidth: 5,
       widthUnits: 'pixels',
       capRounded: true,
       jointRounded: true,
@@ -206,7 +208,7 @@ export async function addFlightLayers(map: MapLibreMap, flights: Flights): Promi
       data: flights.paths,
       getPath: (path) => path as [number, number, number][],
       getColor: FLIGHT_COLOR,
-      getWidth: 4,
+      getWidth: 3,
       widthUnits: 'pixels',
       capRounded: true,
       jointRounded: true,
