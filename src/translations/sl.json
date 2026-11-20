@@ -315,7 +315,6 @@
     "Help": "FAQ",
     "Help research activities to define new prevention means": "Pomagati znanstvenim raziskavam pri opredelitvi novih preventivnih sredstev",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Tukaj je seznam uporabnikov, ki jih spremljate in katerih dejavnost boste videli v svojem osebnem toku.",
-    "Here you may set activity and region filters that will apply to the homepage feed.": "Tukaj lahko nastavite filtre za jezike, dejavnosti in regije, ki bodo veljali za tok domače strani.",
     "High danger level from the avalanche bulletin": "Visoka stopnja nevarnosti iz plazovnega biltena",
     "Hiking gear": "Planinarjenje",
     "History": {
@@ -433,6 +432,7 @@
     "Mark this route as to do": "Dodati to smer med priljubljene",
     "Masked": "Zamaskirano",
     "Massifs could not be loaded": "Gorskih skupin ni bilo mogoče naložiti",
+    "Me": "Jaz",
     "Merge documents": "Združi dokumente",
     "Merge with other document": "Združi z drugim dokumentom",
     "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "Združitev izvornega dokumenta s ciljnim dokumentom prenese vse povezave izvornega dokumenta na ciljni dokument in nastavi preusmeritev iz izvornega v ciljni dokument.",
@@ -449,6 +449,7 @@
     "Modified the": {
       "modification date": "Spremenjeno "
     },
+    "More": "Več",
     "More info": "Več informacij",
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Več smeri je na voljo. Zemljevid lahko premaknete, določite ime ali nastavite dejavnost, da jih filtrirate.",
     "Multi-criteria search": "Iskanje po več kriterijih",
@@ -750,6 +751,7 @@
     "We sent you an email, please click on the link to reset password.": "Poslali smo vam e-pošto. Kliknite povezavo, ki jo vsebuje, da ponastavite svoje geslo.",
     "Weather & conditions": "Vreme in razmere",
     "Weather forecast (meteoblue)": "Vremenska napoved (meteoblue)",
+    "Welcome to Camptocamp": "Dobrodošli pri Camptocamp",
     "Welcome to Camptocamp, the mountain sports community!": "Dobrodošli na Camptocampu, skupnost gorskih športov!",
     "Wet snow: orientation not taken into account": "Moker sneg: orientacija se ne upošteva",
     "Why did you choose this outing? When did you decide to engage. What influenced your decision (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)?": "Zakaj ste izbrali to turo? Koliko ste bili navezani na zastavljene cilje? Kaj je vplivalo na izbiro (prosti dnevi, dolgo potovanje, rezervacije za nočitev, čas, ki ste ga že porabili za priprave, malo priložnosti itd)?",
@@ -1388,6 +1390,7 @@
     "migmatite": {
       "rock_types": "migmatit"
     },
+    "minutes": "minute",
     "misc": {
       "image_categories": "razno",
       "waypoint_types": "razno"
