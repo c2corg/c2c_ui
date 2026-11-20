@@ -404,6 +404,47 @@ describe('C2cMap', () => {
       wrapper.unmount();
     });
 
+    it('stores only the setting the user changes, not the others of an old shared link', async () => {
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { layer: 'swiss' } }));
+      const { wrapper, map } = await mountMap({ rememberSettings: true }, '/routes/1/fr?layer=es');
+      const [, slopesLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+
+      await slopesLayers.findAll(':scope > *')[0].trigger('click');
+      await flushPromises();
+      expect(map.layout['IGN raster (es)'].visibility).toBe('visible');
+      expect(stored()).toEqual({ layer: 'swiss', slopes: 'ign' });
+      wrapper.unmount();
+    });
+
+    it('keeps the hidden protection areas when a map that does not offer them changes its layer', async () => {
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { protection: '0' } }));
+      const { wrapper } = await mountMap({ rememberSettings: true }, '/outings/1/fr');
+      const [baseLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+
+      await baseLayers.findAll(':scope > *')[1].trigger('click');
+      await flushPromises();
+      expect(stored()).toEqual({ layer: 'esri', protection: '0' });
+      wrapper.unmount();
+    });
+
+    it('keeps the overlays chosen when the API turns them off (503)', async () => {
+      vi.spyOn(c2c, 'getOutingsHeatmap')
+        .mockResolvedValueOnce({ data: { buckets: [{ x: 750000, y: 5760000, count: 3 }] } } as never)
+        .mockRejectedValueOnce({ response: { status: 503 } });
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { overlays: 'outing' } }));
+      const { wrapper, map } = await mountMap({ rememberSettings: true }, '/routes/1/fr');
+      await flushPromises();
+
+      map.zoom = 5;
+      map.extent = [0, 40, 10, 50];
+      map.fire('moveend');
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await flushPromises();
+      expect(map.layout['heatmap-outing'].visibility).toBe('none');
+      expect(stored()).toEqual({ overlays: 'outing' });
+      wrapper.unmount();
+    });
+
     it('neither reads nor stores them for a map that did not ask for it (a listing: its query is its filters)', async () => {
       window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { layer: 'es' } }));
       const { wrapper, map } = await mountMap({}, '/routes?act=skitouring&layer=es');

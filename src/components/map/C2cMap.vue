@@ -1228,6 +1228,7 @@ function cancelDensityRequest(type: DensityType) {
 
 function toggleDensityOverlay(type: DensityType) {
   densityEnabled[type] = !densityEnabled[type];
+  storeSetting({ overlays: DENSITY_TYPES.filter((item) => densityEnabled[item]) });
   if (densityEnabled[type]) {
     updateDensityOverlay(type);
   } else {
@@ -1896,21 +1897,15 @@ watch(
 
 watch(filterDocumentsWithMap, () => sendBoundsToUrl());
 
-// the settings of the map kept on this device, for the next document pages
-function storeSettings() {
-  if (!props.rememberSettings) return;
-  storeMapSettings(
-    {
-      base: base.value,
-      slopes: slopes.value,
-      overlays: DENSITY_TYPES.filter((type) => densityEnabled[type]),
-      // hidden by the user, not because the page has none
-      protection: !props.showProtectionAreas || protectionAreasVisible.value,
-    },
-    baseLayers[0].title
-  );
+// what the user changes is kept on this device, for the next document pages: only that setting, not the others the page
+// shows (those of an old shared link). The base layer, the slopes and the protection areas change only by a click; the
+// overlays are stored by their toggle, as they are also turned off when unavailable (that is not a choice to keep)
+function storeSetting(change: Parameters<typeof storeMapSettings>[0]) {
+  if (props.rememberSettings) storeMapSettings(change, baseLayers[0].title);
 }
-watch([base, slopes, protectionAreasVisible, () => DENSITY_TYPES.map((type) => densityEnabled[type])], storeSettings);
+watch(base, (value) => storeSetting({ base: value }));
+watch(slopes, (value) => storeSetting({ slopes: value }));
+watch(protectionAreasVisible, (value) => storeSetting({ protection: value }));
 
 // the filters are compared by content: the parent may give a new (but identical) object each time the route changes
 watch(

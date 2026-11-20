@@ -51,8 +51,12 @@ const invert = (ids: Record<string, string>) => Object.fromEntries(Object.entrie
 const baseTitles = invert(BASE_IDS);
 const slopeTitles = invert(SLOPE_IDS);
 
-const first = (value: LocationQuery[string] | undefined) => (Array.isArray(value) ? value[0] : value) ?? '';
-const list = (value: LocationQuery[string] | undefined) =>
+// anything but a string (a value of the local storage written by something else) is no value
+const first = (value: unknown): string => {
+  const item = Array.isArray(value) ? value[0] : value;
+  return typeof item === 'string' ? item : '';
+};
+const list = (value: unknown) =>
   first(value)
     .split(',')
     .map((item) => item.trim())
@@ -111,8 +115,10 @@ export function storedMapSettings(): Partial<MapUrlState> {
   return settings;
 }
 
-// only what differs from the default is stored; the pinned side is not a setting kept from a page to the next
-export function storeMapSettings(state: Omit<MapUrlState, 'pin'>, defaultBase: string) {
+// a setting the user changed, kept with the stored ones: the others shown by the page (from an old shared link) are not
+// stored. Only what differs from the default is written; the pinned side is not a setting kept from a page to the next
+export function storeMapSettings(change: Partial<Omit<MapUrlState, 'pin'>>, defaultBase: string) {
+  const state = { base: defaultBase, slopes: [], overlays: [], protection: true, ...storedMapSettings(), ...change };
   try {
     preferences().set('settings', withMapUrl({}, { ...state, pin: '' }, defaultBase));
   } catch {
