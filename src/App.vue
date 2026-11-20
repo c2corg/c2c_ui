@@ -261,6 +261,7 @@ html[data-text-size='large'] {
 html[data-shell='mobile'] {
   /* their offsets (listing header, pinned map) follow our top bar, whose height does not follow the text size */
   --c2c-navbar-height: var(--app-top-bar-height);
+  --c2c-bottom-bar-height: var(--app-bottom-bar-height);
   /* pulling the top of the page refreshes what it shows (PullToRefresh.vue), not the whole page as the browser would */
   overscroll-behavior-y: contain;
 
@@ -270,7 +271,7 @@ html[data-shell='mobile'] {
   }
 
   .page-content {
-    padding-bottom: var(--app-bottom-bar-height);
+    padding-bottom: var(--c2c-bottom-bar-height);
   }
 
   .ad {

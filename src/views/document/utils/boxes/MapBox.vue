@@ -280,7 +280,7 @@ onBeforeUnmount(() => {
   position: fixed;
   top: var(--c2c-navbar-height);
   right: 0;
-  bottom: 0;
+  bottom: var(--c2c-bottom-bar-height);
   left: 0;
   z-index: 10; /* as a pinned map */
   background: white;
@@ -291,12 +291,6 @@ onBeforeUnmount(() => {
 
 .nav-dfm .full-window:not(:fullscreen) {
   top: var(--c2c-navbarad-height);
-}
-
-/* the phone layout of the app (App.vue): between its top bar and its bottom bar */
-html[data-shell='mobile'] .full-window:not(:fullscreen) {
-  top: var(--c2c-navbar-height);
-  bottom: var(--app-bottom-bar-height);
 }
 
 /**
