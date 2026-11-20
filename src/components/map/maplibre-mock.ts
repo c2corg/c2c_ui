@@ -156,6 +156,12 @@ export class FakeMap {
   getBearing() {
     return this.bearing;
   }
+  getPitch() {
+    return this.pitch;
+  }
+  getVerticalFieldOfView() {
+    return 36.87;
+  }
   getContainer() {
     return this.container;
   }
