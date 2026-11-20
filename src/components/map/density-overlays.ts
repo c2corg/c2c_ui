@@ -148,6 +148,8 @@ export const densityLayers = (type: DensityType): LayerSpecification[] => [
       // stronger to look the same
       'heatmap-radius': 1.2 * (HEATMAP_RADIUS + HEATMAP_BLUR),
       'heatmap-intensity': 1.4,
+      // translucent, to see the map through it
+      'heatmap-opacity': 0.66,
       'heatmap-color': heatmapColor(DENSITY_OVERLAYS[type].heatmapGradient),
     },
   },
