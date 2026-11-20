@@ -9,37 +9,12 @@ import bus from '@/js/event-bus';
 type ScrollResult = Awaited<ReturnType<RouterScrollBehavior>>;
 
 const scrollBehavior = router.options.scrollBehavior!;
-const route = (hash = '', query = {}, path = '/routes/1') => ({ hash, query, path }) as RouteLocationNormalized;
+const route = (hash = '') => ({ hash }) as RouteLocationNormalized;
 // the saved position, given back once the view triggers the scroll
 const savedPosition = (top: number) => scrollBehavior(route(), route(), { left: 0, top }) as Promise<ScrollResult>;
 
 describe('router scroll behavior', () => {
   it('scrolls to the top of a new page at once', () => {
-    expect(scrollBehavior(route(), route(), null)).toEqual({ left: 0, top: 0 });
-  });
-
-  it('keeps the position when the map writes its settings in the URL', () => {
-    expect(scrollBehavior(route('', { layer: 'esri' }), route(), null)).toBe(false);
-    expect(scrollBehavior(route('', { slopes: 'ign' }), route('', { slopes: 'ign,swiss' }), null)).toBe(false);
-    expect(scrollBehavior(route('', { bbox: '1,2,3,4' }), route('', { bbox: '1,2,3,4', pin: 'left' }), null)).toBe(
-      false
-    );
-  });
-
-  it('restores the saved position at once, back or forward between map settings of the same page', () => {
-    const saved = { left: 0, top: 200 };
-    expect(scrollBehavior(route('', { layer: 'esri' }), route(), saved)).toEqual(saved);
-    // nothing left waiting for the view to trigger the scroll
-    expect(bus.all.get('trigger-scroll') ?? []).toEqual([]);
-  });
-
-  it('scrolls to the top when other parameters change, as a new page of a list', () => {
-    expect(scrollBehavior(route('', { offset: '30' }), route(), null)).toEqual({ left: 0, top: 0 });
-    expect(scrollBehavior(route('', { offset: '30', layer: 'esri' }), route(), null)).toEqual({ left: 0, top: 0 });
-    expect(scrollBehavior(route('', { layer: 'esri' }), route('', {}, '/routes/2'), null)).toEqual({ left: 0, top: 0 });
-  });
-
-  it('scrolls to the top of the same page navigated to again', () => {
     expect(scrollBehavior(route(), route(), null)).toEqual({ left: 0, top: 0 });
   });
 

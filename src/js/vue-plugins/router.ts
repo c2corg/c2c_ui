@@ -3,11 +3,9 @@ import {
   createWebHashHistory,
   createWebHistory,
   type RouteComponent,
-  type RouteLocationNormalized,
   type RouteRecordRaw,
 } from 'vue-router';
 
-import { MAP_URL_KEYS } from '@/components/map/map-url-keys';
 import config from '@/js/config';
 import constants, { type DocumentDefinition } from '@/js/constants';
 import { once } from '@/js/event-bus';
@@ -172,19 +170,6 @@ routes.push({ path: '/:pathMatch(.*)*', name: '404', component: NotFoundView });
 // removes the trigger-scroll handler of the last navigation that waits for its view's data
 let cancelPendingScroll: (() => void) | null = null;
 
-// the same page, with only the settings of its map changed in the query
-function onlyMapSettingsChanged(to: RouteLocationNormalized, from: RouteLocationNormalized): boolean {
-  if (to.path !== from.path || to.hash !== from.hash) return false;
-  const keys = new Set([...Object.keys(to.query), ...Object.keys(from.query)]);
-  let mapChanged = false;
-  for (const key of keys) {
-    if (JSON.stringify(to.query[key]) === JSON.stringify(from.query[key])) continue;
-    if (!MAP_URL_KEYS.includes(key)) return false;
-    mapChanged = true;
-  }
-  return mapChanged;
-}
-
 const router = createRouter({
   routes,
   history: config.routerMode === 'history' ? createWebHistory(import.meta.env.BASE_URL) : createWebHashHistory(),
@@ -199,13 +184,6 @@ const router = createRouter({
     if (cancelPendingScroll) {
       cancelPendingScroll();
       cancelPendingScroll = null;
-    }
-
-    // the map writes its settings in the URL (base layer, slopes, overlays…): the page stays where the user is, or
-    // goes back at once to the saved position of a history entry, as the view, already there, will not trigger the
-    // scroll
-    if (onlyMapSettingsChanged(to, from)) {
-      return savedPosition ?? false;
     }
 
     let position: ScrollToOptions = {};
