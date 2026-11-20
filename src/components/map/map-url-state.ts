@@ -6,6 +6,7 @@ import type { LocationQuery, LocationQueryRaw } from 'vue-router';
 
 import { DENSITY_TYPES, type DensityType } from './density-overlays';
 import { baseLayers, slopeLayers } from './map-layers';
+import { MAP_URL_KEYS } from './map-url-keys';
 
 export type MapUrlState = {
   base: string;
@@ -41,7 +42,7 @@ const SLOPE_IDS: Record<string, string> = {
   'SwissTopo Slopes': 'swiss',
 };
 
-export const MAP_URL_KEYS = ['layer', 'slopes', 'overlays', 'protection', 'pin'];
+export { MAP_URL_KEYS };
 
 const invert = (ids: Record<string, string>) => Object.fromEntries(Object.entries(ids).map(([k, v]) => [v, k]));
 const baseTitles = invert(BASE_IDS);
