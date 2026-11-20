@@ -3,7 +3,7 @@
     <fa-icon v-if="busy" icon="spinner" spin />
     <fa-icon v-else icon="bookmark" :class="entry ? 'has-text-primary' : 'has-text-grey-light'" />
     <!-- the one sign that the page opens without a network, read before walking out of coverage: not subtle -->
-    <span v-if="entry?.mode === OFFLINE_MODE" class="offline-dot" :class="'is-' + freshnessOf(entry)" />
+    <span v-if="entry?.mode === OFFLINE_MODE" class="offline-dot" :class="'is-' + (attentionOf(entry) ?? 'fresh')" />
   </span>
 </template>
 
@@ -12,7 +12,7 @@ import { computed } from 'vue';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { notify } from '@/js/toast';
-import { freshnessOf, OFFLINE_MODE, type SavedMode } from '@/pwa/offline-store';
+import { attentionOf, OFFLINE_MODE, type SavedMode } from '@/pwa/offline-store';
 import { useOfflineStore } from '@/stores/offline';
 
 // the document of the page, saved in "My topos" in the language it is shown in
@@ -34,9 +34,15 @@ const label = computed(() => {
   if (entry.value.mode !== OFFLINE_MODE) {
     return $gettext('Saved in My topos, not available offline');
   }
-  return freshnessOf(entry.value) === 'fresh'
-    ? $gettext('Saved offline')
-    : $gettext('Saved offline, an old copy: download it again from My topos');
+  switch (attentionOf(entry.value)) {
+    case 'incomplete':
+      return $gettext('Saved offline, incomplete: download it again from My topos');
+    case 'expired':
+    case 'update':
+      return $gettext('Saved offline, an old copy: download it again from My topos');
+    default:
+      return $gettext('Saved offline');
+  }
 });
 
 const save = (mode: SavedMode) =>
@@ -94,11 +100,13 @@ async function toggle() {
   border-radius: 50%;
   background: var(--c2c-green);
 
-  &.is-stale {
+  &.is-update {
     background: var(--c2c-yellow);
   }
 
-  &.is-very-stale {
+  /* it may not open fully without a network */
+  &.is-expired,
+  &.is-incomplete {
     background: var(--c2c-danger);
   }
 }

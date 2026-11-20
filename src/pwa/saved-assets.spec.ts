@@ -8,6 +8,7 @@ import {
   LEGACY_IMAGES_CACHE,
   LEGACY_TILES_CACHE,
   migrateLegacyAssets,
+  missingAssets,
   releaseAssets,
   SAVED_ASSETS_CACHE,
 } from './saved-assets';
@@ -84,5 +85,12 @@ describe('saved assets', () => {
 
     await deleteLegacyCaches();
     expect([...storage.stores.keys()]).toEqual([SAVED_ASSETS_CACHE]);
+  });
+
+  it('counts the files the cache no longer holds', async () => {
+    await keepAssets([IMAGE, TILE_A]);
+    expect(await missingAssets([IMAGE, TILE_A])).toBe(0);
+    await releaseAssets([IMAGE], new Set());
+    expect(await missingAssets([IMAGE, TILE_A])).toBe(1);
   });
 });

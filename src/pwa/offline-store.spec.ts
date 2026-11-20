@@ -54,10 +54,32 @@ describe('offline store', () => {
     expect(store.isDownloadComplete(entry)).toBe(true);
     expect(store.isDownloadComplete({ ...entry, assets: { done: false, failed: 0 } })).toBe(false);
     expect(store.isDownloadComplete({ ...entry, assets: { done: true, failed: 2 } })).toBe(false);
+    // files the browser cleared since
+    expect(store.isDownloadComplete({ ...entry, assets: { done: true, failed: 0, missing: 3 } })).toBe(false);
 
     expect(store.freshnessOf(entry, 1000 + 6 * DAY)).toBe('fresh');
     expect(store.freshnessOf(entry, 1000 + 8 * DAY)).toBe('stale');
     expect(store.freshnessOf(entry, 1000 + 31 * DAY)).toBe('very-stale');
     expect(store.freshnessOf({ ...entry, downloadedAt: null })).toBe('unknown');
+  });
+
+  it('says what an offline copy needs, files missing first, then its age', () => {
+    const entry = { ...route('offline'), savedAt: 0, downloadedAt: 1000 } as store.SavedEntry;
+    const complete = { done: true, failed: 0 };
+    expect(store.attentionOf({ ...entry, assets: complete }, 1000 + DAY)).toBeNull();
+    expect(store.attentionOf({ ...entry, assets: complete }, 1000 + 8 * DAY)).toBe('update');
+    expect(store.attentionOf({ ...entry, assets: complete }, 1000 + 31 * DAY)).toBe('expired');
+    expect(store.attentionOf({ ...entry, assets: { ...complete, missing: 1 } }, 1000 + 31 * DAY)).toBe('incomplete');
+    expect(store.attentionOf({ ...entry, assets: { done: true, failed: 1 } }, 1000 + DAY)).toBe('incomplete');
+    // being downloaded, or a bookmark: nothing to say
+    expect(store.attentionOf({ ...entry, assets: { done: false, failed: 0 } }, 1000 + 31 * DAY)).toBeNull();
+    expect(store.attentionOf({ ...entry, mode: 'online', data: null }, 1000 + 31 * DAY)).toBeNull();
+  });
+
+  it('records the files an offline copy lost', async () => {
+    await store.saveDocument(route('offline'));
+    await store.setAssets('route', 12, { done: true, failed: 0, keys: ['a'] });
+    await store.setMissing('route', 12, 1);
+    expect((await only()).assets).toEqual({ done: true, failed: 0, keys: ['a'], missing: 1 });
   });
 });
