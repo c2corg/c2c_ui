@@ -27,7 +27,6 @@
       "severities": "Menys d'un mes"
     },
     "50 meters while descending": "50 metres a la baixada",
-    "A message as been sent to the new address provided. You have to follow the link within to confirm the email address change.": "S'ha enviat un missatge a la nova adreça. Seguiu l'enllaç que hi trobareu per confirmar el canvi d'adreça de correu electrònic.",
     "Access by public transport": "Accés amb transport públic",
     "Accessible by public transport": "Accessible amb transport públic",
     "Accident database": "Base de dades d'accidents",
@@ -90,7 +89,6 @@
     "Avalanche risk": "Risc d'allaus",
     "Avalanche risk evaluation tool:": "Eina d'avaluació del risc d'allaus:",
     "Average slope (degrees)": "Pendent mitjà (graus)",
-    "Average slope in degree": "Pendent mitjà en graus",
     "Back to code": "Torna al codi",
     "Back to edit mode": "Torna al mode d'edició",
     "Back to the top": "Inici de la pàgina",
@@ -188,7 +186,6 @@
     "Current password": "Contrasenya actual",
     "Danger level": "Nivell de perill",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "El nivell de perill del butlletí d'allaus fa referència a totes les orientacions. La rosa dels vents distingeix els sectors crítics on el perill s'accentua.",
-    "Danger level:": "Nivell de perill:",
     "Danger rating - considerable": "Perill marcat",
     "Danger rating - high": "Perill fort",
     "Danger rating - high to very high": "Perill fort a molt fort",
@@ -200,7 +197,6 @@
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Dades tècniques, com l'orientació, el tipus de roca o la configuració general de l'itinerari (aresta, pilar, etc.)",
     "Data-Avalanche": "Info-allaus",
     "Date": "Data",
-    "Day(s)": "Dia(es)",
     "Delete": {
       "$$noContext": "Eliminar",
       "yeti": "Eliminar"
@@ -329,7 +325,6 @@
     "Have an account?": "Ja teniu un compte?",
     "Have you (re)evaluated the risks at each change in the situation? What factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the leader of the group, etc.": "Heu reavaluat els riscos a cada canvi de situació?\nConsidereu els factors que hagin pogut influir en el vostre nivell d'atenció, com la fatiga, l'estrès, la baixa atenció un cop superades les dificultats o bé a la baixada, un sector conegut o amb reputació de fàcil, la presència de traces o d'altra gent, una confiança total en el responsable del grup, etc.",
     "Hazard potential": "Potencial de perill",
-    "Hazard potential:": "Potencial de perill:",
     "Heading": "Títol",
     "Help": "Ajuda",
     "Help research activities to define new prevention means": "Ajudeu la recerca científica a definir nous mitjans de prevenció",
@@ -389,7 +384,6 @@
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Informació sobre la localització de l'incident. Posicioneu la localització al mapa d'aquí sobre, encara que sigui de manera poc precisa (cas en què podeu donar més detalls en aquest camp). Després d'haver completat l'informe, podreu associar-hi un itinerari, un punt de pas o una sortida.",
     "Informations about the access": "Informació relativa a l'accés per carretera o amb transport públic",
     "Infos": "Info",
-    "Insert a link": "Insereix un enllaç",
     "Insert emoji": "Insereix una emoticona",
     "Insert image": "Insereix una imatge",
     "Insert link": "Insereix l'enllaç",
@@ -1195,7 +1189,6 @@
       "article_categories": "material"
     },
     "gender": "gènere",
-    "general informations": "Informació general",
     "geolocation": "Geolocalització",
     "geology": {
       "image_categories": "geologia"
@@ -1366,7 +1359,6 @@
     },
     "lift_access": "Remuntadors mecànics",
     "lift_status": "Remuntadors mecànics",
-    "loading": "s'està carregant",
     "local_product": {
       "waypoint_types": "Producte local / comerç"
     },
