@@ -11,6 +11,11 @@ export function usePullRefresh(refresh: () => unknown) {
   onBeforeUnmount(() => refreshers.delete(refresh));
 }
 
+// whether a page shown refreshes anything: the others do not show the arrow
+export function canPullRefresh() {
+  return refreshers.size > 0;
+}
+
 // what the pages shown refresh, done or failed; false when no page refreshes anything
 export async function pullRefresh() {
   await Promise.allSettled([...refreshers].map((refresh) => refresh()));

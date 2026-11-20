@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
-import { pullRefresh } from '@/js/composables/pull-refresh';
+import { canPullRefresh, pullRefresh } from '@/js/composables/pull-refresh';
 
 // how far to pull to refresh, and how far the arrow follows
 const THRESHOLD = 70;
@@ -33,10 +33,19 @@ const indicatorStyle = computed(() => {
   return { transform: 'translate(-50%, -40px)', opacity: 0 };
 });
 
+// a finger dragging a map pans it, even down from the top of the page
+const NO_PULL_SELECTOR = '.c2c-map';
+
 const atTop = () => (document.scrollingElement?.scrollTop ?? window.scrollY) <= 0;
 
 function onTouchStart(event: TouchEvent) {
-  if (refreshing.value || !atTop() || event.touches.length !== 1) {
+  if (
+    refreshing.value ||
+    !canPullRefresh() ||
+    !atTop() ||
+    event.touches.length !== 1 ||
+    (event.target instanceof Element && event.target.closest(NO_PULL_SELECTOR))
+  ) {
     return;
   }
   startY = event.touches[0].clientY;
