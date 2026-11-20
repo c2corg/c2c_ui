@@ -184,6 +184,33 @@ describe('the map layers of an offline document', () => {
     expect(crossing.urls.filter((url) => url.includes('opentopomap')).length).toBeLessThanOrEqual(400);
   });
 
+  it('covers the waypoints of a route without a track, in circles when the whole extent is too many tiles', () => {
+    const waypointAt = (xy: number[]) => ({ geometry: { geom: JSON.stringify({ type: 'Point', coordinates: xy }) } });
+    const otm15 = (urls: string[]) => urls.filter((url) => url.includes('opentopomap.org/15/'));
+    const has = (urls: string[], xy: number[]) =>
+      urls.includes(`https://a.tile.opentopomap.org/15/${tileOf(xy, 15).join('/')}.png`);
+
+    // its hut 6 km away
+    const hut = [WEISSHORN[0] + 6000, WEISSHORN[1] - 3000];
+    const near = offlineTilesOf({ geometry: pointAt(WEISSHORN), associations: { waypoints: [waypointAt(hut)] } });
+    expect(has(near.urls, hut)).toBe(true);
+    // between them too: the whole extent
+    expect(has(near.urls, [WEISSHORN[0] + 3000, WEISSHORN[1] - 1500])).toBe(true);
+    expect(near.layers.OpenTopoMap).toBe(15);
+
+    // an access 40 km away: at zoom 15, circles around the point and the waypoints, not the land between
+    const far = [WEISSHORN[0] + 40000, WEISSHORN[1] - 20000];
+    const wide = offlineTilesOf({
+      geometry: pointAt(WEISSHORN),
+      associations: { waypoint_children: [waypointAt(far)] },
+    });
+    expect(wide.layers.OpenTopoMap).toBe(15);
+    expect(has(wide.urls, WEISSHORN)).toBe(true);
+    expect(has(wide.urls, far)).toBe(true);
+    expect(has(wide.urls, [WEISSHORN[0] + 20000, WEISSHORN[1] - 10000])).toBe(false);
+    expect(otm15(wide.urls).length).toBeLessThan(100);
+  });
+
   it('has none without a geometry', () => {
     expect(offlineTilesOf({ geometry: null })).toEqual({ urls: [], layers: {} });
   });

@@ -192,8 +192,9 @@ function tileNear(extent: Extent, a: number[], b: number[], distance: number) {
   return false;
 }
 
-// The margin around the geometry, and when the whole of it is too many tiles for a zoom, the band along the track, and
-// the circle around its waypoints (the track may miss the hut, the access): in meters on the ground
+// The margin around the geometry and its waypoints, and when the whole of it is too many tiles for a zoom, the band
+// along the track and the circle around its waypoints (the track may miss the hut, the access), or without a track the
+// circles around its point and its waypoints: in meters on the ground
 const BAND = 500;
 const WAYPOINT_RADIUS = 1000;
 
@@ -253,9 +254,10 @@ function waypointPoints(associations: OfflineDocument['associations']) {
 }
 
 /**
- * The tiles of each layer a document takes offline: the extent of its geometry with a margin, zoom after zoom; past the
- * budget of a layer, the band along the track for that zoom; still past it, that layer stops at the zoom before. With
- * the highest zoom kept of each layer, which the map offers without a network.
+ * The tiles of each layer a document takes offline: the extent of its geometry and its waypoints with a margin, zoom
+ * after zoom; past the budget of a layer, the band along the track (or the circles around its points) for that zoom;
+ * still past it, that layer stops at the zoom before. With the highest zoom kept of each layer, which the map offers
+ * without a network.
  */
 export function offlineTilesOf(document: OfflineDocument): { urls: string[]; layers: Record<string, number> } {
   const geometry = parse(document.geometry?.geom_detail) ?? parse(document.geometry?.geom);
@@ -264,8 +266,11 @@ export function offlineTilesOf(document: OfflineDocument): { urls: string[]; lay
     return { urls: [], layers: {} };
   }
   const track = linesOf(parse(document.geometry?.geom_detail));
+  // its waypoints too (access, hut, summit): a route without a track is a point, which may be far from them
   const waypoints = waypointPoints(document.associations);
-  const extent = points.reduce<Extent>(
+  // without a track, the band is the circles around the point and the waypoints
+  const bandPoints = track.length ? waypoints : [...points, ...waypoints];
+  const extent = [...points, ...waypoints].reduce<Extent>(
     ([x1, y1, x2, y2], [x, y]) => [Math.min(x1, x), Math.min(y1, y), Math.max(x2, x), Math.max(y2, y)],
     [Infinity, Infinity, -Infinity, -Infinity]
   );
@@ -281,8 +286,8 @@ export function offlineTilesOf(document: OfflineDocument): { urls: string[]; lay
     let budget = maxTiles;
     for (const z of zooms) {
       let tiles = tilesIn(withMargin, z, bounds);
-      if (tiles.length > budget && track.length) {
-        tiles = bandTiles(z, track, waypoints, scale, bounds);
+      if (tiles.length > budget) {
+        tiles = bandTiles(z, track, bandPoints, scale, bounds);
       }
       if (!tiles.length || tiles.length > budget) {
         break;
