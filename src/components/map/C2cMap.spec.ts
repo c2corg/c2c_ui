@@ -845,6 +845,22 @@ describe('C2cMap', () => {
       wrapper.unmount();
     });
 
+    it('drops the waypoints read for the documents it no longer shows', async () => {
+      let answer: (value: unknown) => void = () => {};
+      vi.spyOn(c2c.route as DocumentService, 'get').mockReturnValue(
+        new Promise((resolve) => (answer = resolve)) as never
+      );
+      const { wrapper } = await mountMap({ documents: [outing], show3d: true });
+      await open3d(wrapper);
+
+      await wrapper.setProps({ documents: [{ ...outing, document_id: 3, associations: {} }] });
+      answer({ data: { associations: { waypoints: [waypoint(11, 'summit', 6.285)] } } });
+      await flushPromises();
+
+      expect(shownMarkers()).toHaveLength(0);
+      wrapper.unmount();
+    });
+
     describe('of a list of documents', () => {
       const pointOnly = { document_id: 2, type: 'o', activities: ['hiking'], geometry: { geom: point(6.5, 45.95) } };
 

@@ -1778,6 +1778,8 @@ async function onElevationProfile(event: unknown) {
 
 let shownMarkers: Marker[] = [];
 let flightLayers: FlightLayers | null = null;
+// changes with the documents of the 3D view: what is still being read for the previous ones is dropped
+let documents3dVersion = 0;
 // where the 3D view opened, and the 2D view to go back to
 let bounds3d: Extent | null = null;
 let view2d: { center: [number, number]; zoom: number } | null = null;
@@ -1879,6 +1881,7 @@ async function addRouteWaypoints(shown: Marker3d[]) {
   ].slice(0, 3);
   if (!routeIds.length) return;
   const opened = map;
+  const version = documents3dVersion;
   const routes = await Promise.all(
     routeIds.map((id) =>
       Promise.resolve((c2c.route as DocumentService).get(id, $language.current!)).then(
@@ -1887,7 +1890,7 @@ async function addRouteWaypoints(shown: Marker3d[]) {
       )
     )
   );
-  if (!is3d.value || map !== opened || !map) return;
+  if (!is3d.value || map !== opened || !map || version !== documents3dVersion) return;
   const ids = new Set(shown.map((marker) => (marker.to as { params?: { id?: number } } | null)?.params?.id));
   const markers = routes
     .flatMap((route) => route?.associations?.waypoints ?? [])
@@ -1906,7 +1909,8 @@ async function addRouteWaypoints(shown: Marker3d[]) {
 const FLIGHTS_WAIT = 5000;
 async function showFlights(created: MapLibreMap, lines: FeatureCollection) {
   const source = () => created.getSource('documents-3d') as GeoJSONSource | undefined;
-  const opened = () => map === created && is3d.value;
+  const version = documents3dVersion;
+  const opened = () => map === created && is3d.value && version === documents3dVersion;
   if (!hasParaglidingTrack(lines)) {
     source()?.setData(lines);
     return;
@@ -1965,10 +1969,12 @@ function setRotation(enabled: boolean) {
 function redraw3d() {
   if (!map) return;
   const { lines, markers } = documents3d();
+  documents3dVersion++;
   shownMarkers.forEach((marker) => marker.remove());
   shownMarkers = [];
   flightLayers?.remove();
   flightLayers = null;
+  (map.getSource('flight-shadows') as GeoJSONSource).setData(EMPTY_COLLECTION);
   addMarkers(map, markers);
   showFlights(map, lines);
 }
@@ -1979,6 +1985,7 @@ function open3d() {
   const { lng, lat } = map.getCenter();
   view2d = { center: [lng, lat], zoom: map.getZoom() };
   const { lines, markers } = documents3d();
+  documents3dVersion++;
   // a list of documents (search results) can be anywhere: the 3D view tilts the view of the map, it does not fit them
   bounds3d = isList.value ? getExtent('EPSG:4326') : bounds3dOf(markers, lines);
   const country = baseLayers.find((layer) => layer.title === base.value)?.country ?? documentsCountry();
