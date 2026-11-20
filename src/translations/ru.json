@@ -108,7 +108,6 @@
     },
     "Avalanche bulletins": "Лавинный бюллетень",
     "Average slope (degrees)": "Средный наклон (градусы)",
-    "Average slope in degree": "Средный наклон в градусах",
     "Back to code": "Вернуться к коду",
     "Back to edit mode": "Вернуться в режим редактирования",
     "Base layer": "первая кожа",
@@ -253,7 +252,6 @@
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Информация о месте происшествия. Укажите место на карте ниже, даже если вы не можете сделать это точно (в этом случае дайте больше деталей). После заполнения отчета вы сможете привязать его к маршруту, сайту или выходу.",
     "Informations about the access": "Информация о подходе",
     "Infos": "информация",
-    "Insert a link": "Добавить ссылку",
     "Insert emoji": "Добавить смайл",
     "Insert image": "Добавить фотографию",
     "Invalid date": "Ошибочная дата",
@@ -757,7 +755,6 @@
       "article_categories": "снаряжение "
     },
     "gender": "Пол",
-    "general informations": "общая информация",
     "geolocation": "Геолокация",
     "glacier": {
       "route_configuration_types": "ледник"
@@ -842,7 +839,6 @@
     },
     "lift_access": "Подъемники",
     "lift_status": "Подъемники",
-    "loading": "загрузка",
     "locality": {
       "waypoint_types": "место"
     },
