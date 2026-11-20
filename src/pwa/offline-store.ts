@@ -38,6 +38,9 @@ export interface SavedEntry {
     // how many of those files the cache no longer holds, at the last check: the browser may clear the data of the site
     // when the phone is short of space, or the user may clear it
     missing?: number;
+    // the map layers downloaded, with their highest zoom (offline-assets.ts offlineTilesOf): the map offers them
+    // without a network. OpenTopoMap only for the copies saved before
+    layers?: Record<string, number>;
   };
 }
 

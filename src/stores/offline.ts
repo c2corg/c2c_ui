@@ -6,7 +6,7 @@ import { computed, ref } from 'vue';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import config from '@/js/config';
-import { imageUrlsOf, tileUrlsOf } from '@/pwa/offline-assets';
+import { imageUrlsOf, offlineTilesOf, tileUrlsOf } from '@/pwa/offline-assets';
 import * as idb from '@/pwa/offline-store';
 import {
   attentionOf,
@@ -28,8 +28,8 @@ import {
 } from '@/pwa/saved-assets';
 import { keepShell } from '@/pwa/shell';
 
-// the images of a document and the map tiles around it
-const assetUrlsOf = (data: SavedEntry['data']) => [...imageUrlsOf(data), ...tileUrlsOf(data?.geometry)];
+// the images of a document saved before the tiles of each layer, and its OpenTopoMap tiles, as they were downloaded
+const legacyAssetUrlsOf = (data: SavedEntry['data']) => [...imageUrlsOf(data), ...tileUrlsOf(data?.geometry)];
 // what the copy of the document itself weighs
 const sizeOf = (data: unknown) => new Blob([JSON.stringify(data)]).size;
 
@@ -122,7 +122,7 @@ export const useOfflineStore = defineStore('offline', () => {
         !isDownloading(entry.type, entry.id)
     );
     for (const entry of legacy) {
-      const kept = await migrateLegacyAssets(assetUrlsOf(entry.data));
+      const kept = await migrateLegacyAssets(legacyAssetUrlsOf(entry.data));
       await idb.setAssets(entry.type, entry.id, {
         done: true,
         // what failed before may be the code of the pages, which this does not check
@@ -215,7 +215,9 @@ export const useOfflineStore = defineStore('offline', () => {
           (kept) => (kept ? 0 : 1),
           () => 1
         );
-        const urls = assetUrlsOf(data);
+        // the images, and the tiles of each layer it takes offline
+        const tiles = offlineTilesOf(data);
+        const urls = [...imageUrlsOf(data), ...tiles.urls];
         const keys = new Set(urls.map(assetKey));
         downloadingKeys.add(keys);
         try {
@@ -225,6 +227,7 @@ export const useOfflineStore = defineStore('offline', () => {
             failed: kept.failed + (await pages) + (await shell),
             keys: kept.keys,
             bytes: kept.bytes + sizeOf(data),
+            layers: tiles.layers,
           });
         } finally {
           downloadingKeys.delete(keys);

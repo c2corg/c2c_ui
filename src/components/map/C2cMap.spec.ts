@@ -12,6 +12,7 @@ import type DocumentService from '@/js/apis/c2c/DocumentService';
 import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
 import bus from '@/js/event-bus';
 import { fromLonLat } from '@/js/geo/projection';
+import { useOfflineStore } from '@/stores/offline';
 
 vi.mock('maplibre-gl', () => import('./maplibre-mock'));
 vi.mock('@/js/apis/biodivsports-service', () => ({ default: { fetchData: vi.fn() } }));
@@ -184,6 +185,74 @@ describe('C2cMap', () => {
     await slopesLayers.findAll(':scope > *')[0].trigger('click');
     expect(selectedTitles(wrapper)[1]).toBe('');
     wrapper.unmount();
+  });
+
+  it('without a network, shows the downloaded base layer, says so, and offers only what works', async () => {
+    const { wrapper, map } = await mountMap({ show3d: true, showRecenterOn: true });
+    const [baseLayers, slopesLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+    await baseLayers.findAll(':scope > *')[3].trigger('click');
+    await slopesLayers.findAll(':scope > *')[0].trigger('click');
+    expect(map.layout['IGN maps'].visibility).toBe('visible');
+    expect(wrapper.find('.ol-control-3d').exists()).toBe(true);
+
+    const offline = useOfflineStore();
+    offline.online = false;
+    await flushPromises();
+
+    expect(map.layout.OpenTopoMap.visibility).toBe('visible');
+    expect(map.layout['IGN maps'].visibility).toBe('none');
+    expect(map.layout['IGN Slopes'].visibility).toBe('none');
+    expect(wrapper.find('.c2c-map-offline-notice').text()).toContain('IGN maps');
+    expect(wrapper.find('.ol-control-3d').exists()).toBe(false);
+    expect(wrapper.find('.ol-control-recenter-on').isVisible()).toBe(false);
+    // one base layer to choose, no slopes
+    expect(selectedTitles(wrapper)).toEqual(['OpenTopoMap']);
+
+    // the choice was kept for the network
+    offline.online = true;
+    await flushPromises();
+    expect(map.layout['IGN maps'].visibility).toBe('visible');
+    expect(map.layout['IGN Slopes'].visibility).toBe('visible');
+    expect(wrapper.find('.c2c-map-offline-notice').exists()).toBe(false);
+    wrapper.unmount();
+  });
+
+  it('without a network, offers the layers downloaded with the topo shown', async () => {
+    // the layers chosen: SwissTopo and both slopes, kept on the device
+    window.localStorage.setItem(
+      'DocumentMap.preferences',
+      JSON.stringify({ settings: { layer: 'swiss', slopes: 'swiss,ign' } })
+    );
+    const { wrapper, map } = await mountMap({ documents: [route], rememberSettings: true }, '/routes/1');
+    const offline = useOfflineStore();
+    // the route saved offline with SwissTopo and its slopes (offline-assets.ts)
+    offline.savedDocs = [
+      {
+        type: 'route',
+        id: 1,
+        lang: 'fr',
+        data: {},
+        title: 'Arête',
+        folderId: null,
+        mode: 'offline',
+        savedAt: 0,
+        downloadedAt: Date.now(),
+        assets: { done: true, failed: 0, layers: { OpenTopoMap: 15, SwissTopo: 16, 'SwissTopo Slopes': 15 } },
+      },
+    ];
+    offline.online = false;
+    await flushPromises();
+
+    expect(map.layout.SwissTopo.visibility).toBe('visible');
+    expect(map.layout['SwissTopo Slopes'].visibility).toBe('visible');
+    // the IGN slopes were not downloaded
+    expect(map.layout['IGN Slopes'].visibility).toBe('none');
+    expect(wrapper.find('.c2c-map-offline-notice').exists()).toBe(false);
+    const [baseButtons, slopeButtons] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+    expect(baseButtons.findAll(':scope > *').map((button) => button.text())).toEqual(['OpenTopoMap', 'SwissTopo']);
+    expect(slopeButtons.findAll(':scope > *').map((button) => button.text())).toEqual(['SwissTopo Slopes']);
+    wrapper.unmount();
+    window.localStorage.removeItem('DocumentMap.preferences');
   });
 
   it('shows the point under the cursor of the elevation profile', async () => {
