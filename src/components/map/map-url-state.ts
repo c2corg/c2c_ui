@@ -13,11 +13,11 @@ export type MapUrlState = {
   overlays: DensityType[];
   // false when the protection areas are hidden (they are shown by default where offered)
   protection: boolean;
-  // '' when the map is not pinned
+  // '' when the map is not pinned, 'window' when it fills the window
   pin: string;
 };
 
-export const PIN_SIDES = ['top', 'right'];
+export const PIN_SIDES = ['top', 'right', 'window'];
 
 // the ids are part of the URLs people share: never change one
 const BASE_IDS: Record<string, string> = {

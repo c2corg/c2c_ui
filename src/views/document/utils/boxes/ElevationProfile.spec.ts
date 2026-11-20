@@ -30,7 +30,18 @@ describe('elevation_profile event', () => {
             routes: [{ path: '/:p(.*)*', component: { render: () => null } }],
           }),
         ],
-        stubs: { MapView: true, MapLinks: true, ElevationProfile: true, FaIcon: true },
+        stubs: {
+          MapView: true,
+          MapLinks: true,
+          ElevationProfile: {
+            emits: ['has-data'],
+            mounted() {
+              this.$emit('has-data');
+            },
+            template: '<div />',
+          },
+          FaIcon: true,
+        },
         config: {
           globalProperties: {
             $gettext: (value: string) => value,
@@ -45,6 +56,7 @@ describe('elevation_profile event', () => {
 
   it('hides and shows the profile of the map box with the full screen toggle', async () => {
     const wrapper = mapBox();
+    await nextTick();
     expect(withProfile(wrapper)).toBe(true);
 
     emitToggleFullScreenEvent(true);

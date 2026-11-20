@@ -396,13 +396,18 @@ function onResize(graphWidth: number, graphHeight: number) {
   svg
     .attr('width', graphWidth)
     // while on fullscreen, the x axis switch is displayed in top right corner
-    .attr('height', !window.document.fullscreenElement ? graphHeight : graphHeight + margin.top);
+    .attr('height', !isFullView() ? graphHeight : graphHeight + margin.top);
 
   focus.style('display', 'none');
   focush.style('display', 'none');
   focusv.style('display', 'none');
   bubble1.style('display', 'none');
   bubble2.style('display', 'none');
+}
+
+// in the OS full screen, or in the map box pinned to the whole window (MapBox.vue)
+function isFullView() {
+  return !!window.document.fullscreenElement || !!graph.value?.closest('.full-window');
 }
 
 function updateXAxisTicks(width: number) {
@@ -417,8 +422,7 @@ function updateXAxisTicks(width: number) {
 }
 
 function toggleFullScreenProfile() {
-  const isFullScreen = window.document.fullscreenElement !== null;
-  if (!isFullScreen) {
+  if (!isFullView()) {
     return;
   }
 
@@ -561,7 +565,7 @@ onBeforeUnmount(() => {
   display: none;
 }
 
-:fullscreen .elevation-profile-container {
+:is(:fullscreen, .full-window) .elevation-profile-container {
   position: absolute;
   bottom: 0;
   height: 30%;
