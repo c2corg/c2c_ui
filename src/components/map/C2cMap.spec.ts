@@ -844,5 +844,19 @@ describe('C2cMap', () => {
       expect((map.data['documents-3d'] as FeatureCollection).features).toHaveLength(1);
       wrapper.unmount();
     });
+
+    describe('of a list of documents', () => {
+      const pointOnly = { document_id: 2, type: 'o', activities: ['hiking'], geometry: { geom: point(6.5, 45.95) } };
+
+      it('keeps the marker of a result without a track when another result has one', async () => {
+        const { wrapper } = await mountMap({ documents: [outing, pointOnly], show3d: true });
+
+        await open3d(wrapper);
+
+        expect(shownMarkers()).toHaveLength(1);
+        expect(shownMarkers()[0].lngLat![0]).toBeCloseTo(6.5, 6);
+        wrapper.unmount();
+      });
+    });
   });
 });

@@ -1810,8 +1810,11 @@ function marker3d(feature: DocumentFeature, interactive: boolean): Marker3d | nu
   };
 }
 
+const isList = computed(() => (props.documents?.length ?? 0) > 1);
+
 // the lines of the documents, and the markers: the waypoints, and the point of the document itself, a waypoint always
-// (among its child waypoints), another document only when there is nothing else to show (no track, no waypoint)
+// (among its child waypoints), another document only when there is nothing else to show (no track, no waypoint). In a
+// list, each document has its marker, which opens it: a result without a track must not disappear because another has one.
 function documents3d() {
   const documentFeatures3d = features.filter((feature) => feature.group === 'documents');
   const lines: FeatureCollection = {
@@ -1831,8 +1834,10 @@ function documents3d() {
   const points = documentFeatures3d.filter(isPoint);
   const markers = [
     ...points
-      .filter((feature) => feature.document.type === 'w' || !(lines.features.length || waypointMarkers.length))
-      .map((feature) => marker3d(feature, false)),
+      .filter(
+        (feature) => isList.value || feature.document.type === 'w' || !(lines.features.length || waypointMarkers.length)
+      )
+      .map((feature) => marker3d(feature, isList.value)),
     ...waypointMarkers,
   ].filter((marker): marker is Marker3d => !!marker);
   return { lines, markers };
@@ -1953,8 +1958,6 @@ function setRotation(enabled: boolean) {
   else map.touchZoomRotate.disableRotation();
   if (enabled) map.keyboard.enableRotation();
 }
-
-const isList = computed(() => (props.documents?.length ?? 0) > 1);
 
 // the documents of a list that changed (another page of the results), while the 3D view is open
 function redraw3d() {
