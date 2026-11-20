@@ -125,9 +125,15 @@ const trackLayers = (id: string, type: DensityType, casingWidth: number, width: 
       type: 'line',
       source: id,
       layout,
-      paint: { 'line-color': casingColor, 'line-width': casingWidth },
+      paint: { 'line-color': casingColor, 'line-width': casingWidth, 'line-layer-blend': 'multiply' },
     },
-    { id: `${id}-line`, type: 'line', source: id, layout, paint: { 'line-color': trackColor, 'line-width': width } },
+    {
+      id: `${id}-line`,
+      type: 'line',
+      source: id,
+      layout,
+      paint: { 'line-color': trackColor, 'line-width': width, 'line-layer-blend': 'multiply' },
+    },
   ];
 };
 

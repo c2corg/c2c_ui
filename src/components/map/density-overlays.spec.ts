@@ -1,12 +1,22 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  densityLayers,
   documentOverlayFilters,
   heatmapWeight,
   searchOverlayFilters,
   snapExtent,
   sortTracks,
 } from './density-overlays';
+
+describe('densityLayers', () => {
+  it('multiplies track strokes onto the map', () => {
+    const layers = densityLayers('outing').filter((layer) => layer.type === 'line');
+
+    expect(layers).toHaveLength(2);
+    expect(layers.every((layer) => layer.paint?.['line-layer-blend'] === 'multiply')).toBe(true);
+  });
+});
 
 describe('snapExtent', () => {
   it('contains the view, and is at most one and a half times as wide', () => {
