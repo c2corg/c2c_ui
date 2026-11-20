@@ -1867,6 +1867,8 @@ function addMarkers(created: MapLibreMap, markers: Marker3d[]) {
 // an outing has no waypoint of its own: the 3D view also shows those of its routes (access, hut, summit), read when
 // it opens (a request per route, 3 routes at most)
 async function addRouteWaypoints(shown: Marker3d[]) {
+  // a list has the markers of its results: the routes of 3 of its outings would be an arbitrary pick
+  if (isList.value) return;
   const routeIds = [
     ...new Set(
       (props.documents ?? [])

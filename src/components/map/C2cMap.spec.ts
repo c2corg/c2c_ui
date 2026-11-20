@@ -857,6 +857,17 @@ describe('C2cMap', () => {
         expect(shownMarkers()[0].lngLat![0]).toBeCloseTo(6.5, 6);
         wrapper.unmount();
       });
+
+      it('does not read the waypoints of the routes of its outings', async () => {
+        const get = vi.spyOn(c2c.route as DocumentService, 'get');
+        get.mockClear();
+        const { wrapper } = await mountMap({ documents: [outing, pointOnly], show3d: true });
+
+        await open3d(wrapper);
+
+        expect(get).not.toHaveBeenCalled();
+        wrapper.unmount();
+      });
     });
   });
 });
