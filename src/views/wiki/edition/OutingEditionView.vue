@@ -228,6 +228,11 @@
           />
           <form-field :document="document" :field="fields.disable_comments" />
         </div>
+        <!-- null: the API hides the flag from users who are neither associated with the outing nor moderators;
+          it is then left untouched (the API keeps the current value when it receives null) -->
+        <div class="columns" v-if="document.disable_view_count !== null">
+          <form-field :document="document" :field="fields.disable_view_count" />
+        </div>
       </form-section>
 
       <form-section
