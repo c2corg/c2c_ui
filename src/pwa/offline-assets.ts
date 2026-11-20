@@ -1,5 +1,5 @@
 // What a document taken offline needs besides itself, at the urls the page asks for them: the images (Markdown.vue,
-// Thumbnail.vue) and the OpenTopoMap tiles around it (map-layers.ts). Downloaded once, the service worker keeps them
+// Thumbnail.vue) and the OpenTopoMap tiles around it (map-layers.ts). Downloaded once into saved-assets.ts
 import config from '@/js/config';
 import { getEmbeddedImageUrl, getImageUrl, type Image, type ImageFormat } from '@/js/image-urls';
 
