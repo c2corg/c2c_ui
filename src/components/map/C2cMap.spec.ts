@@ -893,6 +893,17 @@ describe('C2cMap', () => {
         wrapper.unmount();
       });
 
+      it('goes back to 2D where it is, not to the view it left', async () => {
+        const { wrapper, map } = await mountMap({ documents: [outing, pointOnly], show3d: true });
+        map.zoom = 11;
+        await open3d(wrapper);
+
+        await wrapper.find('.ol-control-3d button').trigger('click');
+
+        expect(map.cameras.at(-1)).toEqual({ pitch: 0, bearing: 0 });
+        wrapper.unmount();
+      });
+
       it('does not read the waypoints of the routes of its outings', async () => {
         const get = vi.spyOn(c2c.route as DocumentService, 'get');
         get.mockClear();

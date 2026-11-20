@@ -2028,7 +2028,8 @@ function close3d() {
   map.setTerrain(null);
   setRotation(false);
   showLayers();
-  map.jumpTo({ ...view2d, bearing: 0, pitch: 0 });
+  // a list stays where it is (its box filters the results), a document goes back to its 2D view
+  map.jumpTo({ ...(isList.value ? {} : view2d), bearing: 0, pitch: 0 });
   bounds3d = null;
   updateDensityOverlays();
 }
