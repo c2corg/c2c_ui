@@ -863,10 +863,30 @@ function emitMoveEvent() {
   emit('move', rounded(getExtent()));
 }
 
+// at most FILTER_SPAN_3D times the 2D view around the center: a tilted view sees far away, its box is huge
+const FILTER_SPAN_3D = 2;
+const MERCATOR_WORLD = 2 * Math.PI * 6378137;
+
+function filterExtent(): Extent {
+  const extent = getExtent();
+  if (!is3d.value) return extent;
+  const { clientWidth, clientHeight } = map!.getContainer();
+  const metresPerPixel = MERCATOR_WORLD / (512 * 2 ** map!.getZoom());
+  const half = (FILTER_SPAN_3D * Math.max(clientWidth, clientHeight) * metresPerPixel) / 2;
+  const { lng, lat } = map!.getCenter();
+  const [x, y] = fromLonLat([lng, lat]);
+  return [
+    Math.max(extent[0], x - half),
+    Math.max(extent[1], y - half),
+    Math.min(extent[2], x + half),
+    Math.min(extent[3], y + half),
+  ];
+}
+
 // the extent in the URL when the map filters the documents
 function sendBoundsToUrl() {
   const query: LocationQueryRaw = { ...route.query };
-  query.bbox = filterDocumentsWithMap.value ? rounded(getExtent()).join(',') : undefined;
+  query.bbox = filterDocumentsWithMap.value ? rounded(filterExtent()).join(',') : undefined;
   if (query.bbox !== route.query.bbox && !String(route.name).endsWith('-print')) {
     router.push({ query });
   }
@@ -2154,7 +2174,7 @@ onMounted(() => {
   });
   created.on('moveend', () => {
     viewExtent.value = getExtent('EPSG:4326');
-    // in 3D, the box of what is seen (the tilted view is a trapezoid: its box is a little more)
+    // in 3D, the box of what is seen, not too far from the center
     sendBoundsToUrl();
     if (is3d.value) return;
     updateEditMapLink();

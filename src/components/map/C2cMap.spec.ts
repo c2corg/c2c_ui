@@ -1,6 +1,7 @@
 import { flushPromises } from '@vue/test-utils';
 import type { FeatureCollection } from 'geojson';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { LocationQueryRaw } from 'vue-router';
 
 import C2cMap from './C2cMap.vue';
 import { type FakeMap, resetMocks, state } from './maplibre-mock';
@@ -11,7 +12,7 @@ import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
 import bus from '@/js/event-bus';
-import { fromLonLat } from '@/js/geo/projection';
+import { extentFromLonLat, fromLonLat } from '@/js/geo/projection';
 import { useOfflineStore } from '@/stores/offline';
 
 vi.mock('maplibre-gl', () => import('./maplibre-mock'));
@@ -890,6 +891,34 @@ describe('C2cMap', () => {
         await flushPromises();
 
         expect(push).toHaveBeenCalledWith({ query: { bbox: expect.stringMatching(/^\d+(,\d+){3}$/) } });
+        wrapper.unmount();
+      });
+
+      it('filters in 3D at most twice the 2D view around the center, not the far away', async () => {
+        const { wrapper, map } = await mountMap({ documents: [outing], show3d: true, showFilterControl: true });
+        await wrapper.find('#filter-documents-with-map').setValue(true);
+        await open3d(wrapper);
+        Object.defineProperties(map.getContainer(), { clientWidth: { value: 1000 }, clientHeight: { value: 500 } });
+        const push = vi.spyOn(wrapper.vm.$router, 'push');
+        const [x, y] = fromLonLat([7, 46]);
+        // 2 × 1000 px at 76.437 m a pixel at zoom 10
+        const half = 76437;
+
+        map.zoom = 10;
+        map.extent = [6.9, 45.9, 7.1, 46.1];
+        map.fire('moveend');
+        await flushPromises();
+        expect(push).toHaveBeenLastCalledWith({
+          query: { bbox: extentFromLonLat([6.9, 45.9, 7.1, 46.1]).map(Math.round).join(',') },
+        });
+
+        map.extent = [5, 44, 9, 48];
+        map.fire('moveend');
+        await flushPromises();
+        const bbox = String((push.mock.lastCall![0] as { query: LocationQueryRaw }).query.bbox)
+          .split(',')
+          .map(Number);
+        [x - half, y - half, x + half, y + half].forEach((value, i) => expect(bbox[i]).toBeCloseTo(value, -1));
         wrapper.unmount();
       });
 
