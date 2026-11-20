@@ -130,7 +130,7 @@
       </button>
     </div>
 
-    <div v-show="showFilterControl && !is3d && online" class="ol-control ol-control-use-map-as-filter">
+    <div v-show="filterControlShown && online" class="ol-control ol-control-use-map-as-filter">
       <input
         id="filter-documents-with-map"
         class="switch is-rtl is-rounded is-info is-small"
@@ -149,7 +149,7 @@
     <div
       v-show="showRecenterOn && !is3d && online"
       class="ol-control ol-control-recenter-on"
-      :class="{ 'ol-control-recenter-on_on-top': !showFilterControl }"
+      :class="{ 'ol-control-recenter-on_on-top': !filterControlShown }"
     >
       <input
         type="text"
@@ -164,7 +164,7 @@
     <div
       v-show="showRecenterOnPropositions"
       class="ol-control ol-control-recenter-on-propositions"
-      :class="{ 'ol-control-recenter-on-propositions_on-top': !showFilterControl }"
+      :class="{ 'ol-control-recenter-on-propositions_on-top': !filterControlShown }"
     >
       <ul v-if="recenterPropositions?.data?.features">
         <li v-for="(item, i) of recenterPropositions.data.features" :key="i" @click="recenterOn(item)">
@@ -573,6 +573,8 @@ const isFullscreen = ref(false);
 const bearing = ref(0);
 const attributionCollapsed = ref(true);
 const filterDocumentsWithMap = ref(Boolean(route.query.bbox));
+// not in full screen, where the results are not shown
+const filterControlShown = computed(() => props.showFilterControl && !isFullscreen.value);
 const recenterPropositions = ref<{ data?: { features: PhotonFeature[] } | null } | null>(null);
 const showRecenterOnPropositions = ref(false);
 const biodivData = ref<Record<string, unknown>>({});
@@ -861,10 +863,30 @@ function emitMoveEvent() {
   emit('move', rounded(getExtent()));
 }
 
+// at most FILTER_SPAN_3D times the 2D view around the center: a tilted view sees far away, its box is huge
+const FILTER_SPAN_3D = 2;
+const MERCATOR_WORLD = 2 * Math.PI * 6378137;
+
+function filterExtent(): Extent {
+  const extent = getExtent();
+  if (!is3d.value) return extent;
+  const { clientWidth, clientHeight } = map!.getContainer();
+  const metresPerPixel = MERCATOR_WORLD / (512 * 2 ** map!.getZoom());
+  const half = (FILTER_SPAN_3D * Math.max(clientWidth, clientHeight) * metresPerPixel) / 2;
+  const { lng, lat } = map!.getCenter();
+  const [x, y] = fromLonLat([lng, lat]);
+  return [
+    Math.max(extent[0], x - half),
+    Math.max(extent[1], y - half),
+    Math.min(extent[2], x + half),
+    Math.min(extent[3], y + half),
+  ];
+}
+
 // the extent in the URL when the map filters the documents
 function sendBoundsToUrl() {
   const query: LocationQueryRaw = { ...route.query };
-  query.bbox = filterDocumentsWithMap.value ? rounded(getExtent()).join(',') : undefined;
+  query.bbox = filterDocumentsWithMap.value ? rounded(filterExtent()).join(',') : undefined;
   if (query.bbox !== route.query.bbox && !String(route.name).endsWith('-print')) {
     router.push({ query });
   }
@@ -2026,7 +2048,8 @@ function close3d() {
   map.setTerrain(null);
   setRotation(false);
   showLayers();
-  map.jumpTo({ ...view2d, bearing: 0, pitch: 0 });
+  // a list stays where it is (its box filters the results), a document goes back to its 2D view
+  map.jumpTo({ ...(isList.value ? {} : view2d), bearing: 0, pitch: 0 });
   bounds3d = null;
   updateDensityOverlays();
 }
@@ -2151,8 +2174,9 @@ onMounted(() => {
   });
   created.on('moveend', () => {
     viewExtent.value = getExtent('EPSG:4326');
-    if (is3d.value) return;
+    // in 3D, the box of what is seen, not too far from the center
     sendBoundsToUrl();
+    if (is3d.value) return;
     updateEditMapLink();
     emitMoveEvent();
     loadProtectionAreas();
