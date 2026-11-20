@@ -96,12 +96,12 @@ describe('DocumentsView', () => {
 
   it('switches between the map and the results with a button on mobile', async () => {
     const { wrapper } = await mountView('/routes', 0, [], { isMobile: true, isTablet: false });
-    const toggle = () => wrapper.find('button[title="Show the map"], button[title="Show the results"]');
+    const toggle = () => wrapper.find('button[title="Show the map"], button[title="Show results"]');
 
     expect(toggle().attributes('title')).toBe('Show the map');
     await toggle().trigger('click');
     expect(wrapper.find('.result-section').classes()).toContain('mobile-mode-map');
-    expect(toggle().attributes('title')).toBe('Show the results');
+    expect(toggle().attributes('title')).toBe('Show results');
   });
 
   describe('splitter between the results and the map', () => {

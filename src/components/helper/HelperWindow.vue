@@ -110,7 +110,7 @@ function load(newLang?: string) {
   // otherwise, use the previously used lang
   lang = newLang ?? lang;
 
-  html.value = $gettext('loading');
+  html.value = $gettext('Loading...');
   (c2c.article as DocumentService)
     .getCooked(Number(helper.value.documentId), c2c.getApiLang(lang ?? undefined)!)
     .then((response) => computeHtml(response.data as unknown as CookedArticle));

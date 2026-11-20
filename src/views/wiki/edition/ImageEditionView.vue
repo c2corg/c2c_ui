@@ -3,7 +3,7 @@
     <!-- shown once loaded, as the container is -->
     <template v-if="document">
       <form-section
-        :title="$gettext('general informations')"
+        :title="$gettext('General information')"
         :sub-title="$gettext('Title, activity and characteristics of the picture')"
       >
         <div class="columns is-multiline">

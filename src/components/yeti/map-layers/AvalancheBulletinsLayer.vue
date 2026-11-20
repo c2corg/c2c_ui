@@ -35,7 +35,7 @@
           <dd>{{ overlayDangerComment }}</dd>
         </template>
         <template v-if="overlayOrientationsComment">
-          <dt v-translate>Orientations:</dt>
+          <dt class="with-colon" v-translate>Orientations</dt>
           <dd>{{ overlayOrientationsComment }}</dd>
         </template>
       </dl>

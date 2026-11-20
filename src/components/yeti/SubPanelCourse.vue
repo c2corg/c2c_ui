@@ -140,7 +140,7 @@
           <span v-translate>a new point on an existing line</span>
         </li>
         <li><strong v-translate>Delete a point</strong> <span v-translate>with Alt + clic</span></li>
-        <li><strong v-translate>Split a line</strong> with Ctrl + clic</li>
+        <li><strong v-translate>Split line</strong> with Ctrl + clic</li>
       </ul>
       <p v-translate>From the interface</p>
       <ul class="content-ul">

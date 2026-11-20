@@ -106,7 +106,7 @@ function onShowProtectedAreas() {
 }
 
 const layerSelector = computed(() => ({
-  title: $gettext('Protected Areas'),
+  title: $gettext('Protected areas'),
   checked: showProtectedAreas.value,
   action: onShowProtectedAreas,
   image: 'protected-areas.jpg',
@@ -186,7 +186,7 @@ function onMapClick(evt: MapBrowserEvent<PointerEvent>) {
   overlay.setPosition(evt.coordinate);
 
   overlayData.value = {
-    category: $gettext('Data is loading...'),
+    category: $gettext('Loading...'),
   };
 
   // data can be from france or swiss,

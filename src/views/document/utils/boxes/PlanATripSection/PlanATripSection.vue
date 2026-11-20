@@ -1004,7 +1004,7 @@ function formatDurationForDisplay() {
   const durations = props.document.durations;
   const calculatedDuration = props.document.calculated_duration;
   if (durations?.length === 1 && durations[0] === '10+') {
-    return '10+ ' + $gettext('Day(s)').toLowerCase();
+    return '10+ ' + $gettext('day(s)');
   }
 
   const shouldUseCalculated = durations?.length && shortestDuration() === 1 && calculatedDuration;
@@ -1025,10 +1025,10 @@ function formatDurationForDisplay() {
   }
 
   if (durationInDays === 1) {
-    return `1 ${$gettext('Day(s)').toLowerCase()}`;
+    return `1 ${$gettext('day(s)')}`;
   }
 
-  return `${durationInDays} ${$gettext('Day(s)').toLowerCase()}`;
+  return `${durationInDays} ${$gettext('day(s)')}`;
 }
 
 /** Helper method to recenter the map on documents if available */
