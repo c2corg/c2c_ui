@@ -97,7 +97,10 @@ const isAsset = (url: URL) =>
   (url.origin !== self.location.origin &&
     /(^|\.)camptocamp\.org$/.test(url.hostname) &&
     (url.pathname.startsWith('/images/proxy/') || /\.(jpe?g|png|gif|svg|webp|avif)$/i.test(url.pathname))) ||
-  url.hostname.endsWith('.tile.opentopomap.org');
+  url.hostname.endsWith('.tile.opentopomap.org') ||
+  // the SwissTopo maps and slopes, the IGN slopes (offline-assets.ts)
+  /^wmts1[0-4]\.geo\.admin\.ch$/.test(url.hostname) ||
+  (url.hostname === 'data.geopf.fr' && url.pathname === '/wmts');
 
 registerRoute(
   ({ url, request }) => request.cache !== 'reload' && isAsset(url),

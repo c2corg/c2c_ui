@@ -217,6 +217,41 @@ describe('C2cMap', () => {
     wrapper.unmount();
   });
 
+  it('without a network, offers the layers downloaded with the topo shown', async () => {
+    const { wrapper, map } = await mountMap(
+      { documents: [route], syncUrl: true },
+      '/routes/1?layer=swiss&slopes=swiss,ign'
+    );
+    const offline = useOfflineStore();
+    // the route saved offline with SwissTopo and its slopes (offline-assets.ts)
+    offline.savedDocs = [
+      {
+        type: 'route',
+        id: 1,
+        lang: 'fr',
+        data: {},
+        title: 'Arête',
+        folderId: null,
+        mode: 'offline',
+        savedAt: 0,
+        downloadedAt: Date.now(),
+        assets: { done: true, failed: 0, layers: { OpenTopoMap: 15, SwissTopo: 16, 'SwissTopo Slopes': 15 } },
+      },
+    ];
+    offline.online = false;
+    await flushPromises();
+
+    expect(map.layout.SwissTopo.visibility).toBe('visible');
+    expect(map.layout['SwissTopo Slopes'].visibility).toBe('visible');
+    // the IGN slopes were not downloaded
+    expect(map.layout['IGN Slopes'].visibility).toBe('none');
+    expect(wrapper.find('.c2c-map-offline-notice').exists()).toBe(false);
+    const [baseButtons, slopeButtons] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+    expect(baseButtons.findAll(':scope > *').map((button) => button.text())).toEqual(['OpenTopoMap', 'SwissTopo']);
+    expect(slopeButtons.findAll(':scope > *').map((button) => button.text())).toEqual(['SwissTopo Slopes']);
+    wrapper.unmount();
+  });
+
   it('shows the point under the cursor of the elevation profile', async () => {
     const { wrapper, map } = await mountMap({ documents: [route] });
 

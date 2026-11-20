@@ -35,6 +35,9 @@ export interface SavedEntry {
     // copies saved before, until they are migrated (src/stores/offline.ts)
     keys?: string[];
     bytes?: number;
+    // the map layers downloaded, with their highest zoom (offline-assets.ts offlineTilesOf): the map offers them
+    // without a network. OpenTopoMap only for the copies saved before
+    layers?: Record<string, number>;
   };
 }
 

@@ -67,10 +67,10 @@
           />
         </div>
         <!-- no tiles without a network for the other layers, nor for the overlays: not offered -->
-        <header v-if="online" v-translate>Slopes</header>
-        <div v-if="online" class="layer-group">
+        <header v-if="shownSlopeButtons.length" v-translate>Slopes</header>
+        <div v-if="shownSlopeButtons.length" class="layer-group">
           <layer-button
-            v-for="layer of slopeButtons"
+            v-for="layer of shownSlopeButtons"
             :key="layer.title"
             :layer="layer"
             :selected="slopes.includes(layer.title)"
@@ -545,16 +545,28 @@ const shading = ref(false);
 
 const is3d = ref(false);
 
-// Without a network: the base layer downloaded with the offline topos, whatever the choice (kept for when the network
-// comes back), no slopes nor protection areas, no 3D
+// Without a network: the layers downloaded with the offline topos of the map (OpenTopoMap always, SwissTopo and the
+// slopes for some, src/pwa/offline-assets.ts), the choice kept for when the network comes back; no protection areas,
+// no 3D
 const offline = useOfflineStore();
 const online = computed(() => offline.online);
-const offlineBaseLayers = baseLayers.filter((layer) => layer.title === OFFLINE_BASE_LAYER);
-const shownBase = computed(() => (online.value ? base.value : OFFLINE_BASE_LAYER));
-const shownSlopes = computed(() => (online.value ? slopes.value : []));
-const offlineFallback = computed(() =>
-  !online.value && !is3d.value && base.value !== OFFLINE_BASE_LAYER ? base.value : null
+const downloadedLayers = computed(() => {
+  const titles = new Set([OFFLINE_BASE_LAYER]);
+  for (const document of props.documents ?? []) {
+    const type = $documentUtils.getDocumentType(document.type);
+    const layers = type && document.document_id && offline.find(type, document.document_id)?.assets?.layers;
+    Object.keys(layers ?? {}).forEach((title) => titles.add(title));
+  }
+  return titles;
+});
+const offlineBaseLayers = computed(() => baseLayers.filter((layer) => downloadedLayers.value.has(layer.title)));
+const shownBase = computed(() =>
+  online.value || downloadedLayers.value.has(base.value) ? base.value : OFFLINE_BASE_LAYER
 );
+const shownSlopes = computed(() =>
+  online.value ? slopes.value : slopes.value.filter((title) => downloadedLayers.value.has(title))
+);
+const offlineFallback = computed(() => (!is3d.value && shownBase.value !== base.value ? base.value : null));
 
 const showLayerSwitcher = ref(false);
 const isFullscreen = ref(false);
@@ -886,6 +898,11 @@ function showLayers() {
   set('flight-shadows', is3d.value);
   map.setPaintProperty('background', 'background-color', is3d.value ? '#e6eef5' : 'white');
 }
+
+// offline, the slopes downloaded only
+const shownSlopeButtons = computed(() =>
+  online.value ? slopeButtons : slopeButtons.filter((layer) => downloadedLayers.value.has(layer.title))
+);
 
 function toggleSlope(title: string) {
   slopes.value = slopes.value.includes(title) ? slopes.value.filter((t) => t !== title) : [...slopes.value, title];
