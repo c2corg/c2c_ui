@@ -62,8 +62,10 @@ import Navigation from './views/Navigation.vue';
 import SideMenu from './views/SideMenu.vue';
 import SiteNotice from './views/SiteNotice.vue';
 
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useHasTopAd, useIsHomePage } from '@/js/composables/home-page';
 import { imageViewerRequested } from '@/js/vue-plugins/image-viewer';
+import { remind, shouldRemind } from '@/pwa/offline-reminder';
 import { useAppSettingsStore } from '@/stores/app-settings';
 import { useOfflineStore } from '@/stores/offline';
 
@@ -88,6 +90,17 @@ watch(
     }
   }
 );
+
+// once a day, online: the offline topos to download again (incomplete or old), before leaving
+const { $gettext, $router } = useGlobalProperties();
+void offline.ready.then(() => {
+  const count = offline.needingAttention.length;
+  if (shouldRemind(count, offline.online)) {
+    remind(`${$gettext('Offline topos to check:')} ${count}.`, $gettext('My topos'), () => {
+      void $router.push({ name: 'offline', query: { tab: 'offline' } });
+    });
+  }
+});
 
 onMounted(() => {
   document.getElementById('splashscreen')!.style.display = 'none';

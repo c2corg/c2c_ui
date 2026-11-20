@@ -1,7 +1,7 @@
 // "My topos" (src/pwa/offline-store.ts) as the pages show them, the downloads for offline, and whether the network is
 // there
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
@@ -9,14 +9,23 @@ import config from '@/js/config';
 import { imageUrlsOf, tileUrlsOf } from '@/pwa/offline-assets';
 import * as idb from '@/pwa/offline-store';
 import {
+  attentionOf,
   isOfflineEntry,
   OFFLINE_MODE,
   ONLINE_MODE,
+  type Attention,
   type Folder,
   type SavedEntry,
   type SavedMode,
 } from '@/pwa/offline-store';
-import { assetKey, deleteLegacyCaches, keepAssets, migrateLegacyAssets, releaseAssets } from '@/pwa/saved-assets';
+import {
+  assetKey,
+  deleteLegacyCaches,
+  keepAssets,
+  migrateLegacyAssets,
+  missingAssets,
+  releaseAssets,
+} from '@/pwa/saved-assets';
 import { keepShell } from '@/pwa/shell';
 
 // the images of a document and the map tiles around it
@@ -128,9 +137,39 @@ export const useOfflineStore = defineStore('offline', () => {
     }
   }
 
-  // no IndexedDB (a private window of an old browser): no saved documents. No Cache API: nothing to migrate
-  refresh()
+  // The files of the offline copies still in the cache: the browser may have cleared them (short of space, data of the
+  // site cleared). A copy that lost some says it is incomplete, and can be downloaded again
+  async function checkAssets() {
+    let changed = false;
+    for (const entry of savedDocs.value) {
+      const keys = entry.assets?.keys;
+      if (!isOfflineEntry(entry) || !keys || !entry.assets?.done || isDownloading(entry.type, entry.id)) {
+        continue;
+      }
+      const missing = await missingAssets(keys);
+      if (missing !== (entry.assets.missing ?? 0)) {
+        await idb.setMissing(entry.type, entry.id, missing);
+        changed = true;
+      }
+    }
+    if (changed) {
+      await refresh();
+    }
+  }
+
+  // the offline copies that need something, the most urgent first
+  const ATTENTION_ORDER: Attention[] = ['incomplete', 'expired', 'update'];
+  const needingAttention = computed(() =>
+    savedDocs.value
+      .map((entry) => ({ entry, attention: attentionOf(entry) }))
+      .filter((item): item is { entry: SavedEntry; attention: Attention } => !!item.attention)
+      .sort((a, b) => ATTENTION_ORDER.indexOf(a.attention) - ATTENTION_ORDER.indexOf(b.attention))
+  );
+
+  // no IndexedDB (a private window of an old browser): no saved documents. No Cache API: nothing to migrate or check
+  const ready = refresh()
     .then(migrateLegacy)
+    .then(checkAssets)
     .catch(() => {});
 
   const find = (type: string, id: number) => savedDocs.value.find((entry) => entry.type === type && entry.id === id);
@@ -241,6 +280,10 @@ export const useOfflineStore = defineStore('offline', () => {
   return {
     online,
     savedDocs,
+    // the start is done: the saved documents read, migrated and checked
+    ready,
+    checkAssets: () => checkAssets().catch(() => {}),
+    needingAttention,
     folders,
     refresh,
     isSaved: (type: string, id: number) => !!find(type, id),

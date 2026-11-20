@@ -227,4 +227,30 @@ describe('offline store', () => {
       'waypoint/31/offline',
     ]);
   });
+
+  it('finds the files the browser cleared, and lists the copies to download again, the most urgent first', async () => {
+    const offline = useOfflineStore();
+    await offline.ready;
+    for (const id of [12, 13]) {
+      await offline.saveDocument({ type: 'route', id, lang: 'fr', title: 'Arête', mode: OFFLINE_MODE });
+    }
+    // the image of the text does not arrive (see beforeEach): both copies are incomplete. Say the other files arrived
+    for (const id of [12, 13]) {
+      const { keys, bytes } = offline.find('route', id)!.assets!;
+      await setAssets('route', id, { done: true, failed: 0, keys: [...keys!], bytes });
+    }
+    await offline.refresh();
+    expect(offline.needingAttention).toEqual([]);
+
+    // the browser cleared one tile, shared by both
+    const [tile] = storage.keysOf(SAVED_ASSETS_CACHE);
+    storage.stores.get(SAVED_ASSETS_CACHE)!.delete(tile);
+    await offline.checkAssets();
+
+    expect(offline.find('route', 12)?.assets?.missing).toBe(1);
+    expect(offline.needingAttention.map(({ entry, attention }) => `${entry.id}:${attention}`)).toEqual([
+      '12:incomplete',
+      '13:incomplete',
+    ]);
+  });
 });

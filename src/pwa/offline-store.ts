@@ -35,6 +35,9 @@ export interface SavedEntry {
     // copies saved before, until they are migrated (src/stores/offline.ts)
     keys?: string[];
     bytes?: number;
+    // how many of those files the cache no longer holds, at the last check: the browser may clear the data of the site
+    // when the phone is short of space, or the user may clear it
+    missing?: number;
   };
 }
 
@@ -53,7 +56,7 @@ export const isOfflineEntry = (entry?: SavedEntry | null): entry is SavedEntry =
   !!entry?.data && entry.mode === OFFLINE_MODE;
 
 export function isDownloadComplete(entry: SavedEntry) {
-  return !entry.assets || (entry.assets.done && entry.assets.failed === 0);
+  return !entry.assets || (entry.assets.done && entry.assets.failed === 0 && !entry.assets.missing);
 }
 
 async function update(key: string, change: (entry: SavedEntry) => Partial<SavedEntry>) {
@@ -90,6 +93,9 @@ export const makeOnline = (type: string, id: number) =>
 export const setAssets = (type: string, id: number, assets: SavedEntry['assets']) =>
   update(docKey(type, id), () => ({ assets }));
 
+export const setMissing = (type: string, id: number, missing: number) =>
+  update(docKey(type, id), (entry) => (entry.assets ? { assets: { ...entry.assets, missing } } : {}));
+
 export const setFolder = (type: string, id: number, folderId: string | null) =>
   update(docKey(type, id), () => ({ folderId }));
 
@@ -124,4 +130,20 @@ export function freshnessOf(entry: SavedEntry, now = Date.now()) {
   }
   const age = now - entry.downloadedAt;
   return age < 7 * DAY_MS ? 'fresh' : age < 30 * DAY_MS ? 'stale' : 'very-stale';
+}
+
+// What an offline copy needs, the most urgent first: files missing (it may not open fully without a network), then its
+// age. Never blocking: an old topo is better than none in a hut. Null for a bookmark, a copy being downloaded, or a
+// fresh complete one
+export type Attention = 'incomplete' | 'expired' | 'update';
+
+export function attentionOf(entry: SavedEntry, now = Date.now()): Attention | null {
+  if (!isOfflineEntry(entry) || entry.assets?.done === false) {
+    return null;
+  }
+  if (!isDownloadComplete(entry)) {
+    return 'incomplete';
+  }
+  const freshness = freshnessOf(entry, now);
+  return freshness === 'very-stale' ? 'expired' : freshness === 'stale' ? 'update' : null;
 }

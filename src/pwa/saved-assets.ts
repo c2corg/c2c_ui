@@ -109,6 +109,18 @@ export async function migrateLegacyAssets(urls: string[]): Promise<KeptAssets> {
   return result;
 }
 
+/** How many of the keys the cache no longer holds. */
+export async function missingAssets(keys: string[]) {
+  const cache = await caches.open(SAVED_ASSETS_CACHE);
+  let missing = 0;
+  for (const key of keys) {
+    if (!(await cache.match(key))) {
+      missing++;
+    }
+  }
+  return missing;
+}
+
 export async function deleteLegacyCaches() {
   await Promise.all([caches.delete(LEGACY_IMAGES_CACHE), caches.delete(LEGACY_TILES_CACHE)]);
 }
