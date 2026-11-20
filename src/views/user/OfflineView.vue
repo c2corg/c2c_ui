@@ -195,6 +195,14 @@
                     <span class="tag is-light" :class="FRESHNESS_CLASSES[freshnessOf(entry)]">
                       {{ $dateUtils.timeAgo(entry.downloadedAt!) }}
                     </span>
+                    <!-- the files it shares with another topo count in both: the device total above is the exact one -->
+                    <span
+                      v-if="entry.assets?.bytes"
+                      class="tag is-light"
+                      :title="$gettext('Space used by this topo, its images and its map')"
+                    >
+                      {{ formatSize(entry.assets.bytes) }}
+                    </span>
                   </span>
                 </span>
               </router-link>
@@ -359,17 +367,19 @@ function toggleGroup(folder: Folder | null) {
   }
 }
 
+// in MB, a decimal under 10
+const formatSize = (bytes: number) =>
+  new Intl.NumberFormat($language.current ?? undefined, {
+    style: 'unit',
+    unit: 'megabyte',
+    maximumFractionDigits: bytes < 1e7 ? 1 : 0,
+  }).format(Math.max(bytes, 1e5) / 1e6);
+
 // the space the site takes on the device (documents, images, tiles, the app itself)
 const usage = ref('');
 async function updateUsage() {
   const bytes = (await navigator.storage?.estimate?.())?.usage;
-  usage.value = bytes
-    ? new Intl.NumberFormat($language.current ?? undefined, {
-        style: 'unit',
-        unit: 'megabyte',
-        maximumFractionDigits: 0,
-      }).format(bytes / 1e6)
-    : '';
+  usage.value = bytes ? formatSize(bytes) : '';
 }
 onMounted(updateUsage);
 

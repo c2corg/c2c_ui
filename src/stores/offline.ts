@@ -8,29 +8,21 @@ import type DocumentService from '@/js/apis/c2c/DocumentService';
 import config from '@/js/config';
 import { imageUrlsOf, tileUrlsOf } from '@/pwa/offline-assets';
 import * as idb from '@/pwa/offline-store';
-import { OFFLINE_MODE, ONLINE_MODE, type Folder, type SavedEntry, type SavedMode } from '@/pwa/offline-store';
+import {
+  isOfflineEntry,
+  OFFLINE_MODE,
+  ONLINE_MODE,
+  type Folder,
+  type SavedEntry,
+  type SavedMode,
+} from '@/pwa/offline-store';
+import { assetKey, deleteLegacyCaches, keepAssets, migrateLegacyAssets, releaseAssets } from '@/pwa/saved-assets';
 import { keepShell } from '@/pwa/shell';
 
-// what a phone downloads at once without waiting on each file in turn
-const PARALLEL_REQUESTS = 6;
-
-// downloads the urls (the service worker keeps them), PARALLEL_REQUESTS at a time; how many failed
-async function download(urls: string[]) {
-  let next = 0;
-  let failed = 0;
-  const worker = async () => {
-    while (next < urls.length) {
-      // with CORS, the service worker keeps 200 only (see service-worker.ts). From the network: the copy of the HTTP
-      // cache of an image the page showed came without CORS headers, and would be refused
-      const response = await fetch(urls[next++], { credentials: 'omit', cache: 'reload' }).catch(() => null);
-      if (!response?.ok) {
-        failed++;
-      }
-    }
-  };
-  await Promise.all(Array.from({ length: Math.min(PARALLEL_REQUESTS, urls.length) }, worker));
-  return failed;
-}
+// the images of a document and the map tiles around it
+const assetUrlsOf = (data: SavedEntry['data']) => [...imageUrlsOf(data), ...tileUrlsOf(data?.geometry)];
+// what the copy of the document itself weighs
+const sizeOf = (data: unknown) => new Blob([JSON.stringify(data)]).size;
 
 // The code of the pages that show a document without a network: its view, "My topos" and the map load on first use,
 // and may never have been opened. Loaded now, the service worker keeps them. The router is imported here and not at
@@ -88,8 +80,58 @@ export const useOfflineStore = defineStore('offline', () => {
   async function refresh() {
     [savedDocs.value, folders.value] = await Promise.all([idb.listDocuments(), idb.listFolders()]);
   }
-  // no IndexedDB (a private window of an old browser): no saved documents
-  refresh().catch(() => {});
+  // The files of the downloads in progress: a document removed meanwhile must not take the ones they share
+  const downloadingKeys = new Set<Set<string>>();
+  function keysInUse() {
+    const used = new Set<string>();
+    for (const entry of savedDocs.value) {
+      if (entry.mode === OFFLINE_MODE) {
+        entry.assets?.keys?.forEach((key) => used.add(key));
+      }
+    }
+    downloadingKeys.forEach((keys) => keys.forEach((key) => used.add(key)));
+    return used;
+  }
+
+  // after a change of the saved documents: the files of keys that none of them uses any more go
+  async function release(keys?: string[]) {
+    await refresh();
+    if (keys?.length) {
+      await releaseAssets(keys, keysInUse()).catch(() => {});
+    }
+  }
+
+  // The documents saved offline before the cache of saved-assets.ts: their files copied there from the former caches,
+  // once, then those caches removed (with the files of the documents removed since, which nothing would remove)
+  async function migrateLegacy() {
+    const legacy = savedDocs.value.filter(
+      (entry) =>
+        isOfflineEntry(entry) &&
+        !entry.assets?.keys &&
+        // a download in progress, or one stopped halfway (the tab closed): its files are not in the former caches
+        entry.assets?.done !== false &&
+        !isDownloading(entry.type, entry.id)
+    );
+    for (const entry of legacy) {
+      const kept = await migrateLegacyAssets(assetUrlsOf(entry.data));
+      await idb.setAssets(entry.type, entry.id, {
+        done: true,
+        // what failed before may be the code of the pages, which this does not check
+        failed: Math.max(kept.failed, entry.assets?.failed ?? 0),
+        keys: kept.keys,
+        bytes: kept.bytes + sizeOf(entry.data),
+      });
+    }
+    await deleteLegacyCaches();
+    if (legacy.length) {
+      await refresh();
+    }
+  }
+
+  // no IndexedDB (a private window of an old browser): no saved documents. No Cache API: nothing to migrate
+  refresh()
+    .then(migrateLegacy)
+    .catch(() => {});
 
   const find = (type: string, id: number) => savedDocs.value.find((entry) => entry.type === type && entry.id === id);
   const isDownloading = (type: string, id: number) => downloading.value.has(`${type}/${id}`);
@@ -114,6 +156,8 @@ export const useOfflineStore = defineStore('offline', () => {
       const lang = c2c.getApiLang(args.lang);
       // whatever its type: kept as the API answered it
       const data: SavedEntry['data'] = (await (c2c[type] as DocumentService).getCooked(id, lang)).data;
+      // the files of the copy it replaces, which the new one may not use
+      const formerKeys = find(type, id)?.assets?.keys;
       await idb.saveDocument({ type, id, lang, data, title, folderId, mode });
       if (mode === OFFLINE_MODE) {
         // without it, the browser may clear the data of the site when the phone is short of space
@@ -132,14 +176,22 @@ export const useOfflineStore = defineStore('offline', () => {
           (kept) => (kept ? 0 : 1),
           () => 1
         );
-        const failed =
-          (await download(imageUrlsOf(data))) +
-          (await download(tileUrlsOf(data.geometry))) +
-          (await pages) +
-          (await shell);
-        await idb.setAssets(type, id, { done: true, failed });
+        const urls = assetUrlsOf(data);
+        const keys = new Set(urls.map(assetKey));
+        downloadingKeys.add(keys);
+        try {
+          const kept = await keepAssets(urls).catch(() => ({ keys: [], bytes: 0, failed: keys.size }));
+          await idb.setAssets(type, id, {
+            done: true,
+            failed: kept.failed + (await pages) + (await shell),
+            keys: kept.keys,
+            bytes: kept.bytes + sizeOf(data),
+          });
+        } finally {
+          downloadingKeys.delete(keys);
+        }
       }
-      await refresh();
+      await release(formerKeys);
     } finally {
       downloading.value.delete(key);
     }
@@ -199,8 +251,17 @@ export const useOfflineStore = defineStore('offline', () => {
     // a saved document to the offline section, or its copy downloaded again
     downloadForOffline: (entry: SavedEntry) =>
       saveDocument({ ...entry, folderId: entry.mode === OFFLINE_MODE ? entry.folderId : null, mode: OFFLINE_MODE }),
-    makeOnline: (type: string, id: number) => changed(idb.makeOnline(type, id)),
-    removeDocument: (type: string, id: number) => changed(idb.deleteDocument(type, id)),
+    // both free the space of its files
+    async makeOnline(type: string, id: number) {
+      const keys = find(type, id)?.assets?.keys;
+      await idb.makeOnline(type, id);
+      await release(keys);
+    },
+    async removeDocument(type: string, id: number) {
+      const keys = find(type, id)?.assets?.keys;
+      await idb.deleteDocument(type, id);
+      await release(keys);
+    },
     moveToFolder: (type: string, id: number, folderId: string | null) => changed(idb.setFolder(type, id, folderId)),
     createFolder,
     saveDayPack,
@@ -209,13 +270,15 @@ export const useOfflineStore = defineStore('offline', () => {
     foldersOf: (section: SavedMode) => folders.value.filter((folder) => folder.section === section),
     // the documents of a section and its folders
     async purge(section: SavedMode) {
+      const keys: string[] = [];
       for (const entry of savedDocs.value.filter((entry) => entry.mode === section)) {
+        keys.push(...(entry.assets?.keys ?? []));
         await idb.deleteDocument(entry.type, entry.id);
       }
       for (const folder of folders.value.filter((folder) => folder.section === section)) {
         await idb.deleteFolder(folder.id);
       }
-      await refresh();
+      await release(keys);
     },
   };
 });

@@ -28,7 +28,14 @@ export interface SavedEntry {
   // the last copy of the document received (offline only), what its age is counted from
   downloadedAt: number | null;
   // the images and tiles of an offline document: done when all were tried, failed is how many could not be downloaded
-  assets?: { done: boolean; failed: number };
+  assets?: {
+    done: boolean;
+    failed: number;
+    // the files it uses in the cache of saved-assets.ts, and what the copy weighs with them (bytes). Absent from the
+    // copies saved before, until they are migrated (src/stores/offline.ts)
+    keys?: string[];
+    bytes?: number;
+  };
 }
 
 export interface Folder {
