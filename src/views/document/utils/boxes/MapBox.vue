@@ -11,12 +11,12 @@
 
     <!-- The fullscreen map container is used to display both the map
          and the elevation profile in fullscreen (if the elevation profile exists) -->
-    <div id="fullscreen-map-container">
+    <div id="fullscreen-map-container" :class="{ 'full-window': fullWindow }">
       <div
         class="map-container"
         :class="{
-          'with-elevation-profile': showElevationProfile && !elevationProfileHidden,
-          pinned: pinnedMode,
+          'with-elevation-profile': showElevationProfile && elevationProfileHasData && !elevationProfileHidden,
+          pinned: pinnedMode && !fullWindow,
           'pinned-to-top': pinnedSide === 'top',
           'pinned-to-right': pinnedSide === 'right',
           'fill-parent': !pinnedMode,
@@ -97,8 +97,12 @@ const olMap = useTemplateRef<{ fitMapToDocuments(): void }>('olMap');
 const mapLinksAreVisible = ref(false);
 const elevationProfileHasData = ref(false);
 const elevationProfileHidden = ref(false);
+// 0: unpinned / 1: pinned side1 / 2: pinned side2 (not on a phone) / 3: the whole window below the navbar
 const pinnedMode = ref(0);
+const FULL_WINDOW = 3;
+// '', 'top', 'right' or 'window'
 const pinnedSide = ref('');
+const fullWindow = computed(() => pinnedSide.value === 'window');
 
 const showElevationProfile = computed(() => documentType.value === 'outing');
 
@@ -122,34 +126,38 @@ function togglePinToSide(toggle: boolean) {
   const height = window.innerHeight;
   const breakMobile = 769;
   // disable eg pin-to-right on mobile
-  const maxMode = width < breakMobile || height < breakMobile ? 2 : 3;
+  const isPhone = width < breakMobile || height < breakMobile;
 
-  const toggleAmount = toggle ? 1 : 0;
-  // 0: unpinned / 1: pinned side1 / 2: pinned side2
-  pinnedMode.value = (pinnedMode.value + toggleAmount) % maxMode;
+  let mode = toggle ? (pinnedMode.value + 1) % (FULL_WINDOW + 1) : pinnedMode.value;
+  if (isPhone && mode === 2) mode = toggle ? FULL_WINDOW : 0;
+  setPinnedMode(mode);
+}
+
+function setPinnedMode(mode: number) {
+  pinnedMode.value = mode;
 
   // side1 is the preferred side for comfort, ie the larger dimension
-  const [side1, side2] = width < height * 1.5 ? ['top', 'right'] : ['right', 'top'];
-  pinnedSide.value = pinnedMode.value === 0 ? '' : pinnedMode.value === 1 ? side1 : side2;
+  const [side1, side2] = window.innerWidth < window.innerHeight * 1.5 ? ['top', 'right'] : ['right', 'top'];
+  pinnedSide.value = ['', side1, side2, 'window'][mode];
 
   // the document prop shadows the global document
   const body = window.document.body;
-  if (pinnedSide.value === 'right') {
-    body.style.paddingRight = '30%';
-    body.style.paddingTop = '';
-  } else if (pinnedSide.value === 'top') {
-    body.style.paddingRight = '';
-    body.style.paddingTop = '45vh'; // as % is relative to width
-  } else {
-    body.style.paddingRight = '';
-    body.style.paddingTop = '';
-  }
+  body.style.paddingRight = pinnedSide.value === 'right' ? '30%' : '';
+  body.style.paddingTop = pinnedSide.value === 'top' ? '45vh' : ''; // as % is relative to width
+  // the page under the full window map does not scroll
+  window.document.documentElement.style.overflow = fullWindow.value ? 'hidden' : '';
+
   setTimeout(() => {
     // deferred so that map.getSize() gets updated
     if (olMap.value) {
       olMap.value.fitMapToDocuments();
     }
   });
+}
+
+// Esc leaves the full window map (in the OS full screen, the browser takes it to leave the full screen first)
+function onKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape' && fullWindow.value && !window.document.fullscreenElement) setPinnedMode(0);
 }
 
 function resizePin() {
@@ -192,31 +200,32 @@ watch(pinnedSide, (side) => {
   if (query.pin !== route.query.pin) router.replace({ query, hash: route.hash });
 });
 
-// pins the map on the side asked for by the URL; a side that is not available here (the right one on a phone) gives
-// the first one
+// pins the map on the side (or the whole window) asked for by the URL; a side that is not available here (the right one
+// on a phone) gives the first one
 function pinFromUrl() {
   const { pin } = parseMapUrl(route.query);
   if (!pin) return;
-  // 0: unpinned, then the two sides, in the order of this screen
-  for (let i = 0; i < 2; i++) {
+  // 0: unpinned, then the sides, in the order of this screen, then the whole window
+  for (let i = 0; i < FULL_WINDOW; i++) {
     togglePinToSide(true);
     if (pinnedSide.value === pin) return;
   }
   // the second side does not exist here (a phone): the first one this screen offers
-  if (pinnedMode.value === 0) togglePinToSide(true);
+  setPinnedMode(1);
 }
 
 onMounted(() => {
   pinFromUrl();
   bus.on('elevation_profile', onElevationProfile);
   window.addEventListener('resize', resizePin);
+  window.addEventListener('keydown', onKeydown);
 });
 
 onBeforeUnmount(() => {
   bus.off('elevation_profile', onElevationProfile);
   window.removeEventListener('resize', resizePin);
-  if (pinnedMode.value) togglePinToSide(true);
-  if (pinnedMode.value) togglePinToSide(true);
+  window.removeEventListener('keydown', onKeydown);
+  if (pinnedMode.value) setPinnedMode(0);
 });
 </script>
 
@@ -266,13 +275,31 @@ onBeforeUnmount(() => {
   }
 }
 
+/* the whole window below the navbar, with the elevation profile of an outing as in full screen */
+.full-window:not(:fullscreen) {
+  position: fixed;
+  top: var(--c2c-navbar-height);
+  right: 0;
+  bottom: var(--c2c-bottom-bar-height);
+  left: 0;
+  z-index: 10; /* as a pinned map */
+  background: white;
+  @media screen and (--c2c-min-desktop) {
+    left: var(--c2c-sidemenu-width);
+  }
+}
+
+.nav-dfm .full-window:not(:fullscreen) {
+  top: var(--c2c-navbarad-height);
+}
+
 /**
  * Fullscreen mode *with* elevation profile
  * Without the elevation profile it's the map-view
  * element that goes into fullscreen mode, so the
  * rule doesn't apply
  */
-:fullscreen .map-container {
+:is(:fullscreen, .full-window) .map-container {
   height: 100%;
   max-height: 100%;
   margin: 0;
@@ -285,7 +312,7 @@ onBeforeUnmount(() => {
 }
 
 /* the dark theme of the app (src/stores/app-settings.ts, App.vue): the box around the tiles while they load */
-html[data-theme='dark'] .map-container {
+html[data-theme='dark'] :is(.map-container, .full-window) {
   background: var(--app-dark-surface);
 }
 </style>

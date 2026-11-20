@@ -54,8 +54,8 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown));
 /* the look of the side menu: a plain white page, the rows with their orange left mark */
 .mobile-menu {
   position: fixed;
-  top: var(--app-top-bar-height);
-  bottom: var(--app-bottom-bar-height);
+  top: var(--c2c-navbar-height);
+  bottom: var(--c2c-bottom-bar-height);
   left: 0;
   right: 0;
   z-index: 27;

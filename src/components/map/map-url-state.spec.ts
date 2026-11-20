@@ -39,6 +39,7 @@ describe('parseMapUrl', () => {
 
   it('takes the first of a repeated parameter', () => {
     expect(parseMapUrl({ layer: ['ign', 'swiss'], pin: ['top', 'right'] })).toEqual({ base: 'IGN maps', pin: 'top' });
+    expect(parseMapUrl({ pin: 'window' })).toEqual({ pin: 'window' });
   });
 });
 

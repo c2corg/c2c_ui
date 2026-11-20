@@ -132,6 +132,56 @@ describe('MapBox', () => {
       vi.unstubAllGlobals();
       document.body.style.paddingTop = '';
       document.body.style.paddingRight = '';
+      document.documentElement.style.overflow = '';
+    });
+
+    const clickPin = async (wrapper: Awaited<ReturnType<typeof mountAt>>['wrapper']) => {
+      wrapper.findComponent({ ref: 'olMap' }).vm.$emit('pin-to-top-clicked');
+      await flushPromises();
+    };
+
+    it('fills the window after the two sides, then unpins', async () => {
+      const { wrapper, router } = await mountAt('/routes/1/fr', 1400);
+      const pins = [];
+      for (let i = 0; i < 4; i++) {
+        await clickPin(wrapper);
+        pins.push(router.currentRoute.value.query.pin);
+        if (i === 2) {
+          expect(wrapper.find('#fullscreen-map-container').classes()).toContain('full-window');
+          expect(wrapper.find('.map-container').classes()).not.toContain('pinned');
+          expect(document.documentElement.style.overflow).toBe('hidden');
+        }
+      }
+
+      expect(pins).toEqual(['right', 'top', 'window', undefined]);
+      expect(document.documentElement.style.overflow).toBe('');
+      wrapper.unmount();
+    });
+
+    it('fills the window after the top on a phone', async () => {
+      const { wrapper, router } = await mountAt('/routes/1/fr', 600);
+      await clickPin(wrapper);
+      await clickPin(wrapper);
+
+      expect(router.currentRoute.value.query.pin).toBe('window');
+      wrapper.unmount();
+    });
+
+    it('leaves the full window with Esc, and unlocks the page when it leaves', async () => {
+      const { wrapper, router } = await mountAt('/routes/1/fr?pin=window', 1400);
+      expect(wrapper.find('#fullscreen-map-container').classes()).toContain('full-window');
+
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      await flushPromises();
+      expect(wrapper.find('#fullscreen-map-container').classes()).not.toContain('full-window');
+      expect(router.currentRoute.value.query.pin).toBeUndefined();
+
+      await clickPin(wrapper);
+      await clickPin(wrapper);
+      await clickPin(wrapper);
+      expect(document.documentElement.style.overflow).toBe('hidden');
+      wrapper.unmount();
+      expect(document.documentElement.style.overflow).toBe('');
     });
 
     it('pins the map on the side of the url', async () => {
