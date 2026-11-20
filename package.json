@@ -22,7 +22,7 @@
     "update-c2c-common": "python3 tools/update-c2c-common.py"
   },
   "dependencies": {
-    "@c2corg/fit-parser-extract-geometry": "1.0.3",
+    "@c2corg/fit-parser-extract-geometry": "2.0.0",
     "@deck.gl/core": "9.4.1",
     "@deck.gl/layers": "9.4.1",
     "@deck.gl/mapbox": "9.4.1",
