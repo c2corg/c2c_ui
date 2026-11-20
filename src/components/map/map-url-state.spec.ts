@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import { baseLayers, slopeLayers } from './map-layers';
-import { parseMapUrl, withMapUrl, type MapUrlState } from './map-url-state';
+import { parseMapUrl, storedMapSettings, storeMapSettings, withMapUrl, type MapUrlState } from './map-url-state';
 
 const DEFAULT = baseLayers[0].title;
 const state = (change: Partial<MapUrlState> = {}): MapUrlState => ({
@@ -76,5 +76,29 @@ describe('withMapUrl', () => {
       const { slopes } = withMapUrl({}, state({ slopes: [layer.title] }), DEFAULT);
       expect(parseMapUrl({ slopes: slopes as string }).slopes).toEqual([layer.title]);
     }
+  });
+});
+
+describe('settings stored on this device', () => {
+  afterEach(() => window.localStorage.removeItem('DocumentMap.preferences'));
+
+  it('stores what differs from the default, with the ids of the URL, but no pinned side', () => {
+    storeMapSettings({ base: 'SwissTopo', slopes: ['IGN Slopes'], overlays: ['route'], protection: false }, DEFAULT);
+
+    expect(JSON.parse(window.localStorage.getItem('DocumentMap.preferences')!)).toEqual({
+      settings: { layer: 'swiss', slopes: 'ign', overlays: 'route', protection: '0' },
+    });
+    expect(storedMapSettings()).toEqual({
+      base: 'SwissTopo',
+      slopes: ['IGN Slopes'],
+      overlays: ['route'],
+      protection: false,
+    });
+  });
+
+  it('reads nothing when nothing, or something unknown, is stored', () => {
+    expect(storedMapSettings()).toEqual({});
+    window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { layer: 'nope', pin: 'top' } }));
+    expect(storedMapSettings()).toEqual({});
   });
 });

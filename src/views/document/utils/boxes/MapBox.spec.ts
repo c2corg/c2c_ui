@@ -95,7 +95,7 @@ describe('MapBox', () => {
     expect(kml).toMatch(/6\.557\d*,45\.810\d*/);
   });
 
-  describe('pinned map in the url', () => {
+  describe('pinned map', () => {
     const mountAt = async (path: string, width: number) => {
       vi.stubGlobal('innerWidth', width);
       vi.stubGlobal('innerHeight', 900);
@@ -145,7 +145,12 @@ describe('MapBox', () => {
       const pins = [];
       for (let i = 0; i < 4; i++) {
         await clickPin(wrapper);
-        pins.push(router.currentRoute.value.query.pin);
+        pins.push(
+          wrapper
+            .find('.map-container')
+            .classes()
+            .find((name) => name.startsWith('pinned-to-')) ?? ''
+        );
         if (i === 2) {
           expect(wrapper.find('#fullscreen-map-container').classes()).toContain('full-window');
           expect(wrapper.find('.map-container').classes()).not.toContain('pinned');
@@ -153,28 +158,29 @@ describe('MapBox', () => {
         }
       }
 
-      expect(pins).toEqual(['right', 'top', 'window', undefined]);
+      // the whole window is no side
+      expect(pins).toEqual(['pinned-to-right', 'pinned-to-top', '', '']);
+      expect(router.currentRoute.value.query).toEqual({});
       expect(document.documentElement.style.overflow).toBe('');
       wrapper.unmount();
     });
 
     it('fills the window after the top on a phone', async () => {
-      const { wrapper, router } = await mountAt('/routes/1/fr', 600);
+      const { wrapper } = await mountAt('/routes/1/fr', 600);
       await clickPin(wrapper);
       await clickPin(wrapper);
 
-      expect(router.currentRoute.value.query.pin).toBe('window');
+      expect(wrapper.find('#fullscreen-map-container').classes()).toContain('full-window');
       wrapper.unmount();
     });
 
     it('leaves the full window with Esc, and unlocks the page when it leaves', async () => {
-      const { wrapper, router } = await mountAt('/routes/1/fr?pin=window', 1400);
+      const { wrapper } = await mountAt('/routes/1/fr?pin=window', 1400);
       expect(wrapper.find('#fullscreen-map-container').classes()).toContain('full-window');
 
       window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
       await flushPromises();
       expect(wrapper.find('#fullscreen-map-container').classes()).not.toContain('full-window');
-      expect(router.currentRoute.value.query.pin).toBeUndefined();
 
       await clickPin(wrapper);
       await clickPin(wrapper);
@@ -184,34 +190,24 @@ describe('MapBox', () => {
       expect(document.documentElement.style.overflow).toBe('');
     });
 
-    it('pins the map on the side of the url', async () => {
+    it('pins the map on the side of an old shared link', async () => {
       const { wrapper } = await mountAt('/routes/1/fr?pin=right', 1400);
 
       expect(wrapper.find('.map-container').classes()).toContain('pinned-to-right');
       wrapper.unmount();
     });
 
-    it('pins on the first side when the one of the url does not exist on a phone', async () => {
-      const { wrapper, router } = await mountAt('/routes/1/fr?pin=right', 600);
+    it('pins on the first side when the one of the link does not exist on a phone', async () => {
+      const { wrapper } = await mountAt('/routes/1/fr?pin=right', 600);
 
       expect(wrapper.find('.map-container').classes()).toContain('pinned-to-top');
-      expect(router.currentRoute.value.query.pin).toBe('top');
       wrapper.unmount();
     });
 
-    it('keeps the hash when the user pins the map', async () => {
+    it('never writes the url, when the user pins the map or when it is unpinned on leaving the page', async () => {
       const { wrapper, router } = await mountAt('/routes/1/fr#description', 1400);
-      wrapper.findComponent({ ref: 'olMap' }).vm.$emit('pin-to-top-clicked');
-      await flushPromises();
-
-      expect(router.currentRoute.value.query.pin).toBe('right');
-      expect(router.currentRoute.value.hash).toBe('#description');
-      wrapper.unmount();
-    });
-
-    it('does not write the url when it unpins the map on leaving the page', async () => {
-      const { wrapper, router } = await mountAt('/routes/1/fr?pin=top&overlays=outing', 600);
       const replace = vi.spyOn(router, 'replace');
+      await clickPin(wrapper);
       wrapper.unmount();
       await flushPromises();
 

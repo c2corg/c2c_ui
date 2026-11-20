@@ -339,31 +339,21 @@ describe('C2cMap', () => {
     });
   });
 
-  describe('settings in the URL of a document page', () => {
+  describe('settings of the document maps, kept on this device', () => {
     const heatmap = () =>
       vi
         .spyOn(c2c, 'getOutingsHeatmap')
         .mockResolvedValue({ data: { buckets: [{ x: 750000, y: 5760000, count: 3 }] } } as never);
     const queryOf = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) =>
       (wrapper.vm as unknown as { $route: { query: unknown } }).$route.query;
+    const stored = () => JSON.parse(window.localStorage.getItem('DocumentMap.preferences') ?? '{}').settings;
 
-    it('reads the layer, the slopes and the overlays from it', async () => {
-      const outings = heatmap();
-      const { wrapper, map } = await mountMap(
-        { syncUrl: true },
-        '/routes/1/fr?layer=es&slopes=ign&overlays=outing&protection=0'
-      );
+    beforeEach(() => window.localStorage.removeItem('DocumentMap.preferences'));
+    afterEach(() => window.localStorage.removeItem('DocumentMap.preferences'));
 
-      expect(map.layout['IGN raster (es)'].visibility).toBe('visible');
-      expect(map.layout['IGN Slopes'].visibility).toBe('visible');
-      expect(outings).toHaveBeenCalled();
-      expect(map.layout['heatmap-outing'].visibility).toBe('visible');
-      wrapper.unmount();
-    });
-
-    it('writes the settings that differ from the default, and keeps the other parameters', async () => {
+    it('stores the settings that differ from the default, and leaves the URL alone', async () => {
       heatmap();
-      const { wrapper } = await mountMap({ syncUrl: true }, '/routes/1/fr?debug=1');
+      const { wrapper } = await mountMap({ rememberSettings: true }, '/routes/1/fr?debug=1#description');
       const [baseLayers, slopesLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
 
       await baseLayers.findAll(':scope > *')[1].trigger('click');
@@ -373,31 +363,57 @@ describe('C2cMap', () => {
         .find((button) => button.text() === 'Outings')!
         .trigger('click');
       await flushPromises();
-      expect(queryOf(wrapper)).toEqual({ debug: '1', layer: 'esri', slopes: 'ign', overlays: 'outing' });
+      expect(stored()).toEqual({ layer: 'esri', slopes: 'ign', overlays: 'outing' });
+      expect(queryOf(wrapper)).toEqual({ debug: '1' });
+      expect((wrapper.vm as unknown as { $route: { hash: string } }).$route.hash).toBe('#description');
 
       await baseLayers.findAll(':scope > *')[0].trigger('click');
       await flushPromises();
-      expect(queryOf(wrapper)).toEqual({ debug: '1', slopes: 'ign', overlays: 'outing' });
+      expect(stored()).toEqual({ slopes: 'ign', overlays: 'outing' });
       wrapper.unmount();
     });
 
-    it('keeps the hash of the page', async () => {
-      const { wrapper } = await mountMap({ syncUrl: true }, '/routes/1/fr#description');
-      const [baseLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+    it('shows the stored settings on the next document map', async () => {
+      const outings = heatmap();
+      window.localStorage.setItem(
+        'DocumentMap.preferences',
+        JSON.stringify({ settings: { layer: 'es', slopes: 'ign', overlays: 'outing' } })
+      );
+      const { wrapper, map } = await mountMap({ rememberSettings: true }, '/routes/2/fr');
 
-      await baseLayers.findAll(':scope > *')[1].trigger('click');
-      await flushPromises();
-      expect((wrapper.vm as unknown as { $route: { hash: string } }).$route.hash).toBe('#description');
+      expect(map.layout['IGN raster (es)'].visibility).toBe('visible');
+      expect(map.layout['IGN Slopes'].visibility).toBe('visible');
+      expect(outings).toHaveBeenCalled();
+      expect(map.layout['heatmap-outing'].visibility).toBe('visible');
       wrapper.unmount();
     });
 
-    it('does nothing to the URL of a page that did not ask for it (a listing: its query is its filters)', async () => {
-      const { wrapper } = await mountMap({}, '/routes?act=skitouring&layer=es');
+    it('shows the settings of an old shared link, over the stored ones, without storing them', async () => {
+      const outings = heatmap();
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { layer: 'swiss' } }));
+      const { wrapper, map } = await mountMap(
+        { rememberSettings: true },
+        '/routes/1/fr?layer=es&slopes=ign&overlays=outing&protection=0'
+      );
+
+      expect(map.layout['IGN raster (es)'].visibility).toBe('visible');
+      expect(map.layout['IGN Slopes'].visibility).toBe('visible');
+      expect(outings).toHaveBeenCalled();
+      expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+      expect(stored()).toEqual({ layer: 'swiss' });
+      wrapper.unmount();
+    });
+
+    it('neither reads nor stores them for a map that did not ask for it (a listing: its query is its filters)', async () => {
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { layer: 'es' } }));
+      const { wrapper, map } = await mountMap({}, '/routes?act=skitouring&layer=es');
       const [baseLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
 
+      expect(map.layout['IGN raster (es)']?.visibility).not.toBe('visible');
       await baseLayers.findAll(':scope > *')[1].trigger('click');
       await flushPromises();
       expect(queryOf(wrapper)).toEqual({ act: 'skitouring', layer: 'es' });
+      expect(stored()).toEqual({ layer: 'es' });
       wrapper.unmount();
     });
   });
