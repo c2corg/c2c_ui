@@ -534,6 +534,70 @@ describe('C2cMap', () => {
     });
   });
 
+  describe('settings in the URL of a list (syncUrl)', () => {
+    const queryOf = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) =>
+      (wrapper.vm as unknown as { $route: { query: unknown } }).$route.query;
+    const stored = () => window.localStorage.getItem('DocumentMap.preferences');
+
+    beforeEach(() => window.localStorage.removeItem('DocumentMap.preferences'));
+
+    it('shows the settings of the query, without storing them', async () => {
+      const outings = vi
+        .spyOn(c2c, 'getOutingsHeatmap')
+        .mockResolvedValue({ data: { buckets: [{ x: 750000, y: 5760000, count: 3 }] } } as never);
+      const { wrapper, map } = await mountMap(
+        { syncUrl: true },
+        '/routes?act=skitouring&layer=es&slopes=ign&overlays=outing'
+      );
+
+      expect(map.layout['IGN raster (es)'].visibility).toBe('visible');
+      expect(map.layout['IGN Slopes'].visibility).toBe('visible');
+      expect(outings).toHaveBeenCalled();
+      expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+      expect(stored()).toBeNull();
+      wrapper.unmount();
+    });
+
+    it('writes the settings the user changes in the query, next to the search filters, and not in the storage', async () => {
+      vi.spyOn(c2c, 'getOutingsHeatmap').mockResolvedValue({ data: { buckets: [] } } as never);
+      const { wrapper } = await mountMap({ syncUrl: true }, '/routes?act=skitouring&bbox=1,2,3,4');
+      const [baseLayers, slopesLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+
+      await baseLayers.findAll(':scope > *')[1].trigger('click');
+      await slopesLayers.findAll(':scope > *')[0].trigger('click');
+      await wrapper
+        .findAll('.layer-button')
+        .find((button) => button.text() === 'Routes')!
+        .trigger('click');
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({
+        act: 'skitouring',
+        bbox: '1,2,3,4',
+        layer: 'esri',
+        slopes: 'ign',
+        overlays: 'route',
+      });
+
+      await baseLayers.findAll(':scope > *')[0].trigger('click');
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({ act: 'skitouring', bbox: '1,2,3,4', slopes: 'ign', overlays: 'route' });
+      expect(stored()).toBeNull();
+      wrapper.unmount();
+    });
+
+    it('follows the query when it changes (back, another link)', async () => {
+      const { wrapper, map } = await mountMap({ syncUrl: true }, '/routes?layer=es');
+      const router = (wrapper.vm as unknown as { $router: { replace(to: object): Promise<unknown> } }).$router;
+
+      await router.replace({ query: { act: 'hiking', slopes: 'swiss' } });
+      await flushPromises();
+      expect(map.layout['IGN raster (es)'].visibility).not.toBe('visible');
+      expect(map.layout['SwissTopo Slopes'].visibility).toBe('visible');
+      expect(queryOf(wrapper)).toEqual({ act: 'hiking', slopes: 'swiss' });
+      wrapper.unmount();
+    });
+  });
+
   describe('biodiv-sports areas', () => {
     const fetchData = vi.mocked(biodivSportsService.fetchData);
     // an area around [lon, 45.9]

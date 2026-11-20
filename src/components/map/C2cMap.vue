@@ -361,7 +361,8 @@ import {
   swissProtectionLayers,
   worldLayer,
 } from './map-layers';
-import { parseMapUrl, storedMapSettings, storeMapSettings } from './map-url-state';
+import { MAP_URL_KEYS } from './map-url-keys';
+import { parseMapUrl, storedMapSettings, storeMapSettings, withMapUrl } from './map-url-state';
 import { scrollPassthrough } from './scroll-passthrough';
 
 import biodivSportsService from '@/js/apis/biodivsports-service';
@@ -453,6 +454,12 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  // the layers and overlays of the map are in the query of the page, next to its other parameters (those of a list of
+  // documents: its search filters), to share a list with its map
+  syncUrl: {
+    type: Boolean,
+    default: false,
+  },
   // search filters (the parameters of the documents listing) of the "Tracks" (outings) and "Routes" overlays, which
   // follow what the map shows. `null` means no filter.
   tracksFilters: {
@@ -517,7 +524,11 @@ const emit = defineEmits([
 const route = useRoute();
 const router = useRouter();
 // the settings of the document maps on this device, and what an old shared link says (it wins, for this page)
-const initialSettings = props.rememberSettings ? { ...storedMapSettings(), ...parseMapUrl(route.query) } : {};
+const initialSettings = props.rememberSettings
+  ? { ...storedMapSettings(), ...parseMapUrl(route.query) }
+  : props.syncUrl
+    ? parseMapUrl(route.query)
+    : {};
 const { $documentUtils, $gettext, $language } = useGlobalProperties();
 const trackTooltipEl = useTemplateRef<HTMLElement>('trackTooltip');
 
@@ -1440,16 +1451,22 @@ function cancelDensityRequest(type: DensityType) {
   delete densityRequests[type];
 }
 
-function toggleDensityOverlay(type: DensityType) {
-  densityEnabled[type] = !densityEnabled[type];
-  storeSetting({ overlays: DENSITY_TYPES.filter((item) => densityEnabled[item]) });
-  if (densityEnabled[type]) {
+function setDensityOverlay(type: DensityType, enabled: boolean) {
+  if (densityEnabled[type] === enabled) return;
+  densityEnabled[type] = enabled;
+  if (enabled) {
     updateDensityOverlay(type);
   } else {
     cancelDensityRequest(type);
     hideDensity(type);
     closeTrackPanel();
   }
+}
+
+function toggleDensityOverlay(type: DensityType) {
+  setDensityOverlay(type, !densityEnabled[type]);
+  storeSetting({ overlays: DENSITY_TYPES.filter((item) => densityEnabled[item]) });
+  writeSettingsToUrl();
 }
 
 async function updateDensityOverlay(type: DensityType) {
@@ -2170,6 +2187,43 @@ function storeSetting(change: Parameters<typeof storeMapSettings>[0]) {
 watch(base, (value) => storeSetting({ base: value }));
 watch(slopes, (value) => storeSetting({ slopes: value }));
 watch(protectionAreasVisible, (value) => storeSetting({ protection: value }));
+
+// On a list, the settings are in the query of the page (the other parameters are kept). The page is replaced, not added to
+// the history: it is still the same results
+const settingsInUrl = () => JSON.stringify(MAP_URL_KEYS.map((key) => route.query[key] ?? null));
+function writeSettingsToUrl() {
+  if (!props.syncUrl) return;
+  const query = withMapUrl(
+    route.query,
+    {
+      base: base.value,
+      slopes: slopes.value,
+      overlays: DENSITY_TYPES.filter((type) => densityEnabled[type]),
+      protection: !props.showProtectionAreas || protectionAreasVisible.value,
+      pin: '',
+    },
+    baseLayers[0].title
+  );
+  if (JSON.stringify(MAP_URL_KEYS.map((key) => query[key] ?? null)) !== settingsInUrl()) router.replace({ query });
+}
+watch([base, slopes, protectionAreasVisible], writeSettingsToUrl);
+
+// the settings of the query changed (back, a link to another list...): the map follows
+watch(settingsInUrl, () => {
+  if (!props.syncUrl) return;
+  const settings = {
+    base: baseLayers[0].title,
+    slopes: [],
+    overlays: [],
+    protection: true,
+    ...parseMapUrl(route.query),
+  };
+  base.value = settings.base;
+  if (settings.slopes.join() !== slopes.value.join()) slopes.value = settings.slopes;
+  protectionAreasVisible.value = props.showProtectionAreas && settings.protection;
+  for (const type of DENSITY_TYPES)
+    setDensityOverlay(type, showDensityOverlays.value && settings.overlays.includes(type));
+});
 
 // the filters are compared by content: the parent may give a new (but identical) object each time the route changes
 watch(

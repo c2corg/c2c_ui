@@ -2,12 +2,14 @@
 // short stable ids rather than the titles of the layers (which are translated keys and may change with the map engine):
 // they follow the user from a document to the next one, and survive a reload and a new tab, without changing the URL.
 // The links shared while they were written in the URL of the page (?layer=ign&slopes=ign,swiss&overlays=outing,route&pin=top)
-// are still read: their settings are shown on that page, and nothing writes them in the URL any more.
+// are still read: their settings are shown on that page. Only the maps of the lists of documents (/outings, /routes...)
+// still write them in the URL, to share a list with its map: they have no other storage.
 
 import type { LocationQuery, LocationQueryRaw } from 'vue-router';
 
 import { DENSITY_TYPES, type DensityType } from './density-overlays';
 import { baseLayers, slopeLayers } from './map-layers';
+import { MAP_URL_KEYS } from './map-url-keys';
 
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 
@@ -44,8 +46,6 @@ const SLOPE_IDS: Record<string, string> = {
   'IGN Slopes': 'ign',
   'SwissTopo Slopes': 'swiss',
 };
-
-const MAP_URL_KEYS = ['layer', 'slopes', 'overlays', 'protection', 'pin'];
 
 const invert = (ids: Record<string, string>) => Object.fromEntries(Object.entries(ids).map(([k, v]) => [v, k]));
 const baseTitles = invert(BASE_IDS);

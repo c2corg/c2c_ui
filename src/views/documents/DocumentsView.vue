@@ -152,6 +152,7 @@
           :highlighted-document="highlightedDocument"
           :tracks-filters="overlayFilters.outing"
           :routes-filters="overlayFilters.route"
+          sync-url
           @highlight-document="highlightedDocument = $event"
           :show-filter-control="displayMode !== 'map' || $screen.isMobile"
           show-center-on-geolocation
@@ -177,6 +178,7 @@ import { normalizedPageQuery } from './utils/page-query';
 import { MAX_RESULTS_WIDTH, MIN_RESULTS_WIDTH, useResultsSplitter } from './utils/results-splitter';
 
 import { searchOverlayFilters } from '@/components/map/density-overlays';
+import { withoutMapUrl } from '@/components/map/map-url-keys';
 import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
@@ -243,6 +245,11 @@ const queryWithoutOffsetAndSort = computed(() => {
   return result;
 });
 
+// the search filters: the query of the page, but for the settings of the map, that are in it too
+const searchQuery = computed(() => withoutMapUrl(route.query));
+// the page the results are those of: the settings of the map do not change them
+const searchKey = computed(() => JSON.stringify([route.path, searchQuery.value, route.hash]));
+
 // the "Tracks" and "Routes" overlays of the map follow the search
 const overlayFilters = computed(() => searchOverlayFilters(documentType.value, route.query));
 
@@ -277,13 +284,13 @@ function load() {
     return;
   }
 
-  const requested = route.fullPath;
+  const requested = searchKey.value;
   promise.value = (c2c as unknown as Record<string, DocumentService>)[documentType.value]
-    .getAll(route.query)
+    .getAll(searchQuery.value)
     .then((response) => {
       // past the last page, which happens when the map is moved to a sparser area: show the last page instead
       const lastPageQuery = normalizedPageQuery(route, response.data.total);
-      if (lastPageQuery && route.fullPath === requested) {
+      if (lastPageQuery && searchKey.value === requested) {
         router.replace(lastPageQuery);
         // the route watcher will call load
         return;
@@ -332,7 +339,7 @@ function onQueryDocumentsLoad(documents: C2cDocument[]) {
   filteredWaypoints.value.forEach((document) => delete document.associations);
 }
 
-watch(() => route.fullPath, load, { immediate: true });
+watch(searchKey, load, { immediate: true });
 watch(displayMode, updateMapSize);
 watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
 </script>
