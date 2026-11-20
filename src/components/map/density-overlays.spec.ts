@@ -95,6 +95,19 @@ describe('searchOverlayFilters', () => {
     });
   });
 
+  it('does not take the settings of the map in the URL for filters', () => {
+    expect(
+      searchOverlayFilters('outing', {
+        act: 'hiking',
+        layer: 'ign',
+        slopes: 'swiss',
+        overlays: 'outing,route',
+        pin: 'top',
+      })
+    ).toEqual({ outing: { act: 'hiking' }, route: { act: 'hiking' } });
+    expect(searchOverlayFilters('route', { overlays: 'outing' })).toEqual({ outing: null, route: {} });
+  });
+
   it('applies the search filters to the overlay of the searched type', () => {
     expect(searchOverlayFilters('outing', query)).toEqual({
       outing: { act: 'hiking', date: '2016-01-01' },

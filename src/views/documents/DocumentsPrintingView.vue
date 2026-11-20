@@ -38,6 +38,7 @@ import { useRoute } from 'vue-router';
 import PrintingOptions from './utils/PrintingOptions.vue';
 import PrintingSummary from './utils/PrintingSummary.vue';
 
+import { withoutMapUrl } from '@/components/map/map-url-keys';
 import { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
@@ -103,7 +104,7 @@ const service = () => c2c[documentType.value] as DocumentService;
 function load() {
   const lang = String(route.params.lang ?? $language.current);
 
-  const loading = service().getAll(route.query as Record<string, string>);
+  const loading = service().getAll(withoutMapUrl(route.query) as Record<string, string>);
   promise.value = loading;
   loading.then(() => {
     promises.value = (loading.data!.documents as C2cDocument[]).map((doc) => ({

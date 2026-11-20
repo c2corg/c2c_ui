@@ -94,6 +94,22 @@ describe('DocumentsView', () => {
     expect(router.currentRoute.value.query).toEqual({ offset: '30', limit: '30' });
   });
 
+  it('does not send the settings of the map to the API, nor reload the results when they change', async () => {
+    const { router, getAll } = await mountView('/routes?act=hiking&layer=ign&overlays=outing', 100);
+
+    expect(getAll).toHaveBeenCalledTimes(1);
+    expect(getAll).toHaveBeenCalledWith({ act: 'hiking' });
+
+    await router.replace({ query: { act: 'hiking', layer: 'esri', slopes: 'ign' } });
+    await flushPromises();
+    expect(getAll).toHaveBeenCalledTimes(1);
+
+    await router.replace({ query: { act: 'skitouring', layer: 'esri' } });
+    await flushPromises();
+    expect(getAll).toHaveBeenCalledTimes(2);
+    expect(getAll).toHaveBeenLastCalledWith({ act: 'skitouring' });
+  });
+
   it('switches between the map and the results with a button on mobile', async () => {
     const { wrapper } = await mountView('/routes', 0, [], { isMobile: true, isTablet: false });
     const toggle = () => wrapper.find('button[title="Show the map"], button[title="Show results"]');
