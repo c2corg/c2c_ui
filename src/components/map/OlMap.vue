@@ -18,7 +18,7 @@
         <header v-translate>Base layer</header>
         <div class="layer-group">
           <layer-button
-            v-for="layer of mapLayers"
+            v-for="layer of online ? mapLayers : [offlineLayer]"
             :key="layer.get('title')"
             @click="visibleLayer = layer"
             :selected="layer === visibleLayer"
@@ -26,8 +26,9 @@
             title-context="Map layer"
           ></layer-button>
         </div>
-        <header v-translate>Slopes</header>
-        <div class="layer-group">
+        <!-- no tiles without a network for the other layers: not offered -->
+        <header v-if="online" v-translate>Slopes</header>
+        <div v-if="online" class="layer-group">
           <layer-button
             v-for="layer of dataLayers"
             :key="layer.get('title')"
@@ -61,7 +62,7 @@
     </div>
 
     <div
-      v-show="showRecenterOn"
+      v-show="showRecenterOn && online"
       ref="recenterOnControl"
       class="ol-control ol-control-recenter-on ol-control-recenter-on_on-top"
     >
@@ -99,7 +100,14 @@
       <button @click="clearGeometry" v-translate>Clear</button>
     </div>
 
-    <div v-show="osmLayer" ref="editMapControl" class="ol-control ol-control-edit-map">
+    <!-- without a network, the layer chosen has no tiles: the downloaded one instead, said so -->
+    <div v-if="offlineFallback && !showLayerSwitcher" class="ol-map-offline-notice" role="status">
+      <fa-icon icon="plug" />
+      {{ $gettext('Not available offline:') }} {{ $gettext(offlineFallback, 'Map layer') }}. {{ $gettext('Showing:') }}
+      {{ $gettext(OFFLINE_BASE_LAYER, 'Map layer') }}
+    </div>
+
+    <div v-show="osmLayer && online" ref="editMapControl" class="ol-control ol-control-edit-map">
       <a :href="editMapLink ?? undefined" :title="$gettext('Edit and improve map on Openstreetmap.org')"
         ><fa-icon icon="pen"
       /></a>
@@ -136,6 +144,7 @@ import {
 } from 'vue';
 
 import LayerButton from './LayerButton.vue';
+import { OFFLINE_BASE_LAYER } from './map-layers';
 import { cartoLayers, dataLayers as dataLayersOf } from './map-layers-ol';
 import {
   geoJSONFormat,
@@ -154,6 +163,7 @@ import ol from '@/js/libs/ol';
 import { TCX } from '@/js/tcx/TCX';
 import { toast } from '@/js/toast';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+import { useOfflineStore } from '@/stores/offline';
 
 const DEFAULT_EXTENT = [-400000, 5200000, 1200000, 6000000];
 const DEFAULT_POINT_ZOOM = 14;
@@ -257,6 +267,28 @@ const visibleLayer = computed({
 });
 
 const osmLayer = computed(() => visibleLayer.value.get('title') === 'OpenTopoMap');
+
+// Without a network (a trace written in a hut): the base layer downloaded with the offline topos, no slopes. The layers
+// chosen come back with the network
+const offline = useOfflineStore();
+const online = computed(() => offline.online);
+const offlineLayer = mapLayers.find((layer) => layer.get('title') === OFFLINE_BASE_LAYER)!;
+const offlineFallback = ref<string | null>(null);
+let chosenLayers: BaseLayer[] = [];
+
+function followNetwork(isOnline: boolean) {
+  if (!isOnline) {
+    chosenLayers = [...mapLayers, ...dataLayers].filter((layer) => layer.getVisible());
+    offlineFallback.value = visibleLayer.value === offlineLayer ? null : visibleLayer.value.get('title');
+    dataLayers.forEach((layer) => layer.setVisible(false));
+    visibleLayer.value = offlineLayer;
+  } else if (chosenLayers.length) {
+    [...mapLayers, ...dataLayers].forEach((layer) => layer.setVisible(chosenLayers.includes(layer)));
+    chosenLayers = [];
+    offlineFallback.value = null;
+  }
+}
+watch(online, followNetwork);
 
 function setModifyInteractions() {
   const source = editionLayer.getSource()!;
@@ -911,6 +943,9 @@ onMounted(() => {
   // the point of the elevation profile under its cursor
   setElevationProfileInteraction();
   updateEditMapLink();
+  if (!online.value) {
+    followNetwork(false);
+  }
 });
 
 onBeforeUnmount(() => {
@@ -948,6 +983,22 @@ defineExpose({ fitMapToDocuments, setDocumentGeometryFromGeoFile });
 </style>
 
 <style scoped>
+/* above the map, centred at the top, under no control */
+.ol-map-offline-notice {
+  position: absolute;
+  z-index: 2;
+  top: 0.5em;
+  left: 50%;
+  max-width: calc(100% - 6em);
+  padding: 0.25em 0.75em;
+  border-radius: 4px;
+  background: var(--c2c-yellow);
+  color: var(--c2c-text);
+  font-size: 0.8rem;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
 /* the controls are 0.5em from the edges of the map */
 
 .ol-control-center-on-geolocation {

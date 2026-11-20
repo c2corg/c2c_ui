@@ -157,6 +157,14 @@
               <fa-icon :icon="group.folder ? 'folder' : 'list'" class="has-text-primary" />
               <span class="offline-group-name">{{ group.folder?.name ?? $gettext('No folder') }}</span>
               <span class="tag is-light">{{ group.entries.length }}</span>
+              <!-- a pack of the day with a topo to download again: seen before leaving -->
+              <span
+                v-if="attentionCount(group.entries)"
+                class="tag is-warning is-light"
+                :title="$gettext('Topos to download again')"
+              >
+                <fa-icon icon="triangle-exclamation" />&nbsp;{{ attentionCount(group.entries) }}
+              </span>
             </button>
             <template v-if="group.folder">
               <button
@@ -189,11 +197,24 @@
                   <span class="offline-card-title">{{ entry.title }}</span>
                   <span v-if="entry.mode === OFFLINE_MODE" class="offline-card-meta">
                     <!-- not the same question: a copy downloaded a minute ago in a tunnel is recent and incomplete -->
-                    <span v-if="!isDownloadComplete(entry)" class="tag is-warning is-light">
-                      <fa-icon icon="triangle-exclamation" />&nbsp;{{ $gettext('Incomplete') }}
+                    <span
+                      v-if="attentionOf(entry)"
+                      class="tag is-light"
+                      :class="ATTENTION[attentionOf(entry)!].class"
+                      :title="ATTENTION[attentionOf(entry)!].title(entry)"
+                    >
+                      <fa-icon icon="triangle-exclamation" />&nbsp;{{ ATTENTION[attentionOf(entry)!].label }}
                     </span>
                     <span class="tag is-light" :class="FRESHNESS_CLASSES[freshnessOf(entry)]">
                       {{ $dateUtils.timeAgo(entry.downloadedAt!) }}
+                    </span>
+                    <!-- the files it shares with another topo count in both: the device total above is the exact one -->
+                    <span
+                      v-if="entry.assets?.bytes"
+                      class="tag is-light"
+                      :title="$gettext('Space used by this topo, its images and its map')"
+                    >
+                      {{ formatSize(entry.assets.bytes) }}
                     </span>
                   </span>
                 </span>
@@ -215,8 +236,8 @@
                     v-if="!isDownloadComplete(entry) || freshnessOf(entry) !== 'fresh'"
                     type="button"
                     class="button is-small is-text"
-                    :disabled="isBusy(entry)"
-                    :title="$gettext('Download again')"
+                    :disabled="isBusy(entry) || !offline.online"
+                    :title="offline.online ? $gettext('Download again') : $gettext('Download again once online')"
                     @click="download(entry)"
                   >
                     <fa-icon icon="rotate" :spin="isBusy(entry)" />
@@ -258,13 +279,16 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { usePullRefresh } from '@/js/composables/pull-refresh';
 import { notify } from '@/js/toast';
 import {
+  attentionOf,
   freshnessOf,
   isDownloadComplete,
+  type Attention,
   OFFLINE_MODE,
   ONLINE_MODE,
   type Folder,
@@ -280,6 +304,29 @@ defineOptions({ name: 'OfflineView' });
 const FRESHNESS_CLASSES: Record<string, string> = { stale: 'is-warning', 'very-stale': 'is-danger' };
 
 const { $gettext, $language } = useGlobalProperties();
+
+// what an offline copy needs, as a tag; all only warn, an old topo is better than none
+const ATTENTION: Record<Attention, { label: string; class: string; title: (entry: SavedEntry) => string }> = {
+  incomplete: {
+    label: $gettext('Incomplete'),
+    class: 'is-warning',
+    title: (entry) =>
+      entry.assets?.missing
+        ? `${$gettext('Files no longer on this device:')} ${entry.assets.missing}`
+        : $gettext('Some files could not be downloaded'),
+  },
+  expired: {
+    label: $gettext('Expired'),
+    class: 'is-danger',
+    title: () => $gettext('Saved more than a month ago: conditions may have changed. Download it again.'),
+  },
+  update: {
+    label: $gettext('Update recommended'),
+    class: 'is-warning',
+    title: () => $gettext('Saved more than a week ago: download it again before leaving.'),
+  },
+};
+const attentionCount = (entries: SavedEntry[]) => entries.filter((entry) => attentionOf(entry)).length;
 const offline = useOfflineStore();
 const queue = useOutingQueueStore();
 // what another tab of the app may have changed meanwhile
@@ -325,7 +372,10 @@ function whyFrozen(item: PendingOuting) {
 }
 
 // without a network, what opens without one
-const section = ref<SavedMode>(offline.online ? ONLINE_MODE : OFFLINE_MODE);
+// and from the reminder of the topos to download again (?tab=offline)
+const section = ref<SavedMode>(
+  !offline.online || useRoute().query['tab'] === OFFLINE_MODE ? OFFLINE_MODE : ONLINE_MODE
+);
 const tabs = [
   { mode: ONLINE_MODE, icon: 'wifi', label: $gettext('Online') },
   { mode: OFFLINE_MODE, icon: 'circle-check', label: $gettext('Offline') },
@@ -359,19 +409,25 @@ function toggleGroup(folder: Folder | null) {
   }
 }
 
+// in MB, a decimal under 10
+const formatSize = (bytes: number) =>
+  new Intl.NumberFormat($language.current ?? undefined, {
+    style: 'unit',
+    unit: 'megabyte',
+    maximumFractionDigits: bytes < 1e7 ? 1 : 0,
+  }).format(Math.max(bytes, 1e5) / 1e6);
+
 // the space the site takes on the device (documents, images, tiles, the app itself)
 const usage = ref('');
 async function updateUsage() {
   const bytes = (await navigator.storage?.estimate?.())?.usage;
-  usage.value = bytes
-    ? new Intl.NumberFormat($language.current ?? undefined, {
-        style: 'unit',
-        unit: 'megabyte',
-        maximumFractionDigits: 0,
-      }).format(bytes / 1e6)
-    : '';
+  usage.value = bytes ? formatSize(bytes) : '';
 }
-onMounted(updateUsage);
+onMounted(() => {
+  void updateUsage();
+  // files the browser may have cleared since the start of the app
+  void offline.checkAssets();
+});
 
 const isBusy = (entry: SavedEntry) => offline.isDownloading(entry.type, entry.id);
 async function download(entry: SavedEntry) {

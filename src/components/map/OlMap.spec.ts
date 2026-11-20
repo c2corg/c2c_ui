@@ -1,9 +1,11 @@
+import { flushPromises } from '@vue/test-utils';
 import { describe, expect, it, vi } from 'vitest';
 import { reactive } from 'vue';
 
 import { mountMap } from './test-utils';
 
 import { toLonLat } from '@/js/geo/projection';
+import { useOfflineStore } from '@/stores/offline';
 
 // the point markers draw Font Awesome icons, which the specs don't load: plain styles instead
 vi.mock('@/components/map/map-utils', async (importOriginal) => ({
@@ -20,6 +22,31 @@ const GPX = `<?xml version="1.0"?>
 </trkseg></trk></gpx>`;
 
 describe('the edition map', () => {
+  it('without a network, shows the downloaded base layer and says so, then the layers chosen again', async () => {
+    const editedDocument = reactive({ type: 'o', geometry: { geom: null, geom_detail: null } });
+    const { wrapper, vm } = await mountMap({ editedDocument });
+    const layers = vm.map.getLayers().getArray();
+    const titled = (title: string) => layers.find((layer) => layer.get('title') === title)!;
+    titled('OpenTopoMap').setVisible(false);
+    titled('IGN maps').setVisible(true);
+    titled('IGN Slopes').setVisible(true);
+
+    useOfflineStore().online = false;
+    await flushPromises();
+    expect(titled('OpenTopoMap').getVisible()).toBe(true);
+    expect(titled('IGN maps').getVisible()).toBe(false);
+    expect(titled('IGN Slopes').getVisible()).toBe(false);
+    expect(wrapper.find('.ol-map-offline-notice').text()).toContain('IGN maps');
+
+    useOfflineStore().online = true;
+    await flushPromises();
+    expect(titled('IGN maps').getVisible()).toBe(true);
+    expect(titled('IGN Slopes').getVisible()).toBe(true);
+    expect(titled('OpenTopoMap').getVisible()).toBe(false);
+    expect(wrapper.find('.ol-map-offline-notice').exists()).toBe(false);
+    wrapper.unmount();
+  });
+
   it('fixes the missing GPS elevations of a route track, not of an outing one', async () => {
     const elevations = async (type: string) => {
       const editedDocument = reactive({ type, geometry: { geom: null, geom_detail: null } as Record<string, unknown> });

@@ -40,7 +40,12 @@ const handler = () => ({
 });
 
 export class FakeMap {
-  style: StyleSpecification;
+  // the style, as given then changed (addSource, addLayer...); addSprite is the one method of MapLibre's style used
+  style: StyleSpecification & {
+    addSprite(id: string, url: string, options: unknown, completion: () => void): void;
+  };
+  glyphs?: string | null;
+  sprites = new Map<string, string>();
   container: HTMLElement;
   // the options the map was created with
   options: Record<string, unknown>;
@@ -70,7 +75,15 @@ export class FakeMap {
   constructor(options: { style: StyleSpecification; container: HTMLElement }) {
     if (!state.webgl) throw new Error('Failed to initialize WebGL');
     this.options = options;
-    this.style = options.style;
+    this.style = {
+      ...options.style,
+      layers: [...options.style.layers],
+      sources: { ...options.style.sources },
+      addSprite: (id, url, _options, completion) => {
+        this.sprites.set(id, url);
+        completion();
+      },
+    };
     this.container = options.container;
     for (const [id, source] of Object.entries(this.style.sources)) {
       if ('data' in source) this.data[id] = source.data;
@@ -173,6 +186,30 @@ export class FakeMap {
   }
   addImage(id: string) {
     this.images.add(id);
+  }
+  addSource(id: string, source: StyleSpecification['sources'][string]) {
+    if (id in this.style.sources) throw new Error(`source ${id} already added`);
+    this.style.sources[id] = source;
+  }
+  removeSource(id: string) {
+    if (this.style.layers.some((layer) => 'source' in layer && layer.source === id)) {
+      throw new Error(`source ${id} still used`);
+    }
+    delete this.style.sources[id];
+  }
+  addLayer(layer: StyleSpecification['layers'][number], before?: string) {
+    if (this.getLayer(layer.id)) throw new Error(`layer ${layer.id} already added`);
+    const index = before ? this.style.layers.findIndex((l) => l.id === before) : -1;
+    this.style.layers.splice(index < 0 ? this.style.layers.length : index, 0, layer);
+  }
+  removeLayer(id: string) {
+    this.style.layers = this.style.layers.filter((layer) => layer.id !== id);
+  }
+  setGlyphs(glyphs: string | null) {
+    this.glyphs = glyphs;
+  }
+  removeSprite(id: string) {
+    this.sprites.delete(id);
   }
   setTerrain(terrain: unknown) {
     this.terrain = terrain;

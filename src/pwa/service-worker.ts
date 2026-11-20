@@ -1,9 +1,9 @@
 /// <reference lib="webworker" />
 // The service worker of the app, built by vite-plugin-pwa (injectManifest, see vite.config.ts): the start of the app
 // is cached at install, the other files of the build the first time they are used, and a page is the last index.html
-// received. A page opened once opens again without a network, and so do the documents of "My topos" saved offline
+// received. A page opened once opens again without a network, and so do the documents of "My topos" saved offline,
+// with their images and map tiles
 import { get, set } from 'idb-keyval';
-import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 import { ExpirationPlugin } from 'workbox-expiration';
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 import { NavigationRoute, registerRoute } from 'workbox-routing';
@@ -11,8 +11,8 @@ import { CacheFirst } from 'workbox-strategies';
 
 import { networkFirst } from '@/pwa/network-first';
 import { docKey, isOfflineEntry, type SavedEntry } from '@/pwa/offline-store';
+import { keptAsset } from '@/pwa/saved-assets';
 import { keepShell, SHELL_CACHE, shellKey } from '@/pwa/shell';
-import { formerTileKeys, tileCacheKey } from '@/pwa/tile-key';
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -89,42 +89,20 @@ registerRoute(
   }
 );
 
-// The images and map tiles of the documents saved offline, downloaded by src/stores/offline.ts with CORS. Not the
-// opaque answers of the <img> and tiles of the pages (status 0): the browser counts several MB of quota for each
-const keptAWhile = (
-  cacheName: string,
-  maxEntries: number,
-  key = (url: string) => url,
-  former: (key: string) => string[] = () => []
-) =>
-  new CacheFirst({
-    cacheName,
-    plugins: [
-      new CacheableResponsePlugin({ statuses: [200] }),
-      new ExpirationPlugin({ maxEntries, maxAgeSeconds: 90 * 24 * 3600, purgeOnQuotaError: true }),
-      {
-        cacheKeyWillBeUsed: async ({ request }) => key(request.url),
-        // missing under its key, it may be kept under a former one
-        cachedResponseWillBeUsed: async ({ cacheName, request, cachedResponse }) => {
-          for (const url of former(request.url)) {
-            cachedResponse ??= await caches.match(url, { cacheName });
-          }
-          return cachedResponse;
-        },
-      },
-    ],
-  });
-
-registerRoute(
-  ({ url }) =>
-    url.origin !== self.location.origin &&
+// The images and map tiles of the documents saved offline, downloaded by src/stores/offline.ts into a cache of their
+// own (saved-assets.ts): the <img> and the tiles of the maps from there, else from the network as before. Nothing else is
+// kept: the <img> and tiles of the pages are opaque answers (status 0), the browser counts several MB of quota for each.
+// The downloads themselves (cache: 'reload') go to the network untouched
+const isAsset = (url: URL) =>
+  (url.origin !== self.location.origin &&
     /(^|\.)camptocamp\.org$/.test(url.hostname) &&
-    (url.pathname.startsWith('/images/proxy/') || /\.(jpe?g|png|gif|svg|webp|avif)$/i.test(url.pathname)),
-  keptAWhile('c2c-images', 1000)
-);
+    (url.pathname.startsWith('/images/proxy/') || /\.(jpe?g|png|gif|svg|webp|avif)$/i.test(url.pathname))) ||
+  url.hostname.endsWith('.tile.opentopomap.org') ||
+  // the SwissTopo maps and slopes, the IGN slopes (offline-assets.ts)
+  /^wmts1[0-4]\.geo\.admin\.ch$/.test(url.hostname) ||
+  (url.hostname === 'data.geopf.fr' && url.pathname === '/wmts');
 
-// one key per tile whatever its server letter (offline-assets.ts): the download and the maps pick it each their way
 registerRoute(
-  ({ url }) => url.hostname.endsWith('.tile.opentopomap.org'),
-  keptAWhile('c2c-map-tiles', 3000, tileCacheKey, formerTileKeys)
+  ({ url, request }) => request.cache !== 'reload' && isAsset(url),
+  async ({ request }) => (await keptAsset(request.url)) ?? fetch(request)
 );

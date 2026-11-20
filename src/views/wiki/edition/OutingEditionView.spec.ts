@@ -52,7 +52,7 @@ describe('OutingEditionView', () => {
       .findAllComponents({ name: 'FormSection' })
       .filter((section) => section.props('expandedOnLoad'))
       .map((section) => section.props('title'));
-    expect(opened).toEqual(['general informations', 'Weather & conditions']);
+    expect(opened).toEqual(['General information', 'Weather & conditions']);
   });
 
   it('lists the routes the track followed, 10 first, then more on demand', async () => {

@@ -28,7 +28,20 @@ export interface SavedEntry {
   // the last copy of the document received (offline only), what its age is counted from
   downloadedAt: number | null;
   // the images and tiles of an offline document: done when all were tried, failed is how many could not be downloaded
-  assets?: { done: boolean; failed: number };
+  assets?: {
+    done: boolean;
+    failed: number;
+    // the files it uses in the cache of saved-assets.ts, and what the copy weighs with them (bytes). Absent from the
+    // copies saved before, until they are migrated (src/stores/offline.ts)
+    keys?: string[];
+    bytes?: number;
+    // how many of those files the cache no longer holds, at the last check: the browser may clear the data of the site
+    // when the phone is short of space, or the user may clear it
+    missing?: number;
+    // the map layers downloaded, with their highest zoom (offline-assets.ts offlineTilesOf): the map offers them
+    // without a network. OpenTopoMap only for the copies saved before
+    layers?: Record<string, number>;
+  };
 }
 
 export interface Folder {
@@ -46,7 +59,7 @@ export const isOfflineEntry = (entry?: SavedEntry | null): entry is SavedEntry =
   !!entry?.data && entry.mode === OFFLINE_MODE;
 
 export function isDownloadComplete(entry: SavedEntry) {
-  return !entry.assets || (entry.assets.done && entry.assets.failed === 0);
+  return !entry.assets || (entry.assets.done && entry.assets.failed === 0 && !entry.assets.missing);
 }
 
 async function update(key: string, change: (entry: SavedEntry) => Partial<SavedEntry>) {
@@ -83,6 +96,9 @@ export const makeOnline = (type: string, id: number) =>
 export const setAssets = (type: string, id: number, assets: SavedEntry['assets']) =>
   update(docKey(type, id), () => ({ assets }));
 
+export const setMissing = (type: string, id: number, missing: number) =>
+  update(docKey(type, id), (entry) => (entry.assets ? { assets: { ...entry.assets, missing } } : {}));
+
 export const setFolder = (type: string, id: number, folderId: string | null) =>
   update(docKey(type, id), () => ({ folderId }));
 
@@ -117,4 +133,20 @@ export function freshnessOf(entry: SavedEntry, now = Date.now()) {
   }
   const age = now - entry.downloadedAt;
   return age < 7 * DAY_MS ? 'fresh' : age < 30 * DAY_MS ? 'stale' : 'very-stale';
+}
+
+// What an offline copy needs, the most urgent first: files missing (it may not open fully without a network), then its
+// age. Never blocking: an old topo is better than none in a hut. Null for a bookmark, a copy being downloaded, or a
+// fresh complete one
+export type Attention = 'incomplete' | 'expired' | 'update';
+
+export function attentionOf(entry: SavedEntry, now = Date.now()): Attention | null {
+  if (!isOfflineEntry(entry) || entry.assets?.done === false) {
+    return null;
+  }
+  if (!isDownloadComplete(entry)) {
+    return 'incomplete';
+  }
+  const freshness = freshnessOf(entry, now);
+  return freshness === 'very-stale' ? 'expired' : freshness === 'stale' ? 'update' : null;
 }

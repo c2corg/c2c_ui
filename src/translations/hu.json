@@ -109,7 +109,6 @@
     },
     "Avalanche bulletins": "Lavina jelentés",
     "Average slope (degrees)": "Átlagos meredekség (fok)",
-    "Average slope in degree": "Átlagos meredeksêg fokban",
     "Back to code": "Vissza a kódhoz",
     "Back to edit mode": "Visszatérés a szerkesztési módba",
     "Base layer": "Térkép háttér",
@@ -182,7 +181,6 @@
     "Current password": "Jelenlegi jelszó",
     "Danger level": "Veszélyességi szint",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "A lavinahíradóban jelzett veszélyességi fokozat minden irányú fekvésre vonatkozik. A szélrózsa a legkritikusabb, nagyobb veszélyességű szektorokat jelzi.",
-    "Danger level:": "Veszélyességi szint:",
     "Danger rating - considerable": "Veszélyességi besorás - jelentős",
     "Danger rating - high": "Veszélyességi besorolás - magas",
     "Danger rating - high to very high": "Veszélyességi besorolás - magastól nagyon magasig",
@@ -283,12 +281,10 @@
     "Have an account?": "Van fiókod?",
     "Have you (re)evaluated the risks at each change in the situation? What factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the leader of the group, etc.": "Újraértékelted-e a rizikófaktorokat a helyzet változásaikor? Melyik faktorok befolyásolhatták a tudatosságodat? Például fáradtság, stressz, vagy a figyelmed lankadása a fő nehézségeken való túljutás után, ereszkedés közben, egy könnyű besorolású útszakaszon, más emberek lábnyomainak jelenléte, vagy a csoportvezetőbe vetett bizalom miatt, stb.",
     "Hazard potential": "Veszély lehetősége",
-    "Hazard potential:": "Veszély lehetősége:",
     "Heading": "Haladási irány",
     "Help": "Segítség",
     "Help research activities to define new prevention means": "Segíts a kutatási erőfeszítésekben új megelőzési módszereket kidolgozni",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "E az általad követett felhasználók listája, akiknek a bejegyzéseit látni fogod a személyes hírfolyamodban",
-    "Here you may set activity and region filters that will apply to the homepage feed.": "Itt állíthatsz be tevékenység vagy terület szerinti szűrőket, amik az oldal hírfolyamára lesznek alkalmazva.",
     "High danger level from the avalanche bulletin": "A lavinajelentés alapján nagy veszély",
     "Hiking gear": "Kiránduló felszerelés",
     "History": {
@@ -321,7 +317,6 @@
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Az esemény helyszínére vonatkozó információk. Jelöld be a helyszínt a fenti térképen, még ha nem is tudod nagyon pontosan (ez esetben itt adj meg további információkat). A jelentés befejezése után társíthatod egy úthoz, egy mászóhelyhez vagy egy kiruccanáshoz.",
     "Informations about the access": "Megközelítésre vonatkozó információk",
     "Infos": "Információk",
-    "Insert a link": "Link beszúrása",
     "Insert emoji": "Emoji beszúrása",
     "Insert image": "Kép beszúrása",
     "Insert link": "Link beszúrása",
@@ -432,7 +427,6 @@
     "Open in a new tab": "Megnyitás új fülben",
     "Ordered list": "Rendezett lista",
     "Orientations": "Tájolások",
-    "Orientations:": "Tájolások:",
     "Oups! Something went wrong with forum. Here is the message :": "Hoppácska! Valami hiba történt a fórumban. Ez az üzenet:",
     "Oups! something went wrong...": "Hoppácska, valami félresikerült...",
     "Outings statistics": "Kiruccanások statisztikája",
@@ -956,7 +950,6 @@
       "article_categories": "felszerelés"
     },
     "gender": "nem",
-    "general informations": "általános információ",
     "geolocation": "geolokáció",
     "geology": {
       "image_categories": "geológia"
@@ -1131,7 +1124,6 @@
     },
     "lift_access": "Megközelítés lifttel",
     "lift_status": "lift_állapot",
-    "loading": "feltöltés",
     "local_product": {
       "waypoint_types": "helyi_termék"
     },

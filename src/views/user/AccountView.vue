@@ -150,7 +150,7 @@ function save() {
       form.original_mail = form.email;
       toast({
         message: $gettext(
-          `A message as been sent to the new address provided. You have to follow the link within to confirm the email address change.`
+          `A message has been sent to the new address provided. You have to follow the link within to confirm the email address change.`
         ),
         type: 'is-warning',
         position: 'center',

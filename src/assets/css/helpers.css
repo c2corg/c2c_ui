@@ -112,3 +112,12 @@
     }
   }
 }
+
+/* a colon after a label, kept out of the translated text; French puts a non-breaking space before it */
+.with-colon::after {
+  content: ':';
+}
+
+:lang(fr) .with-colon::after {
+  content: '\00a0:';
+}

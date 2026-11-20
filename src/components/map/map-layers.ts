@@ -23,6 +23,9 @@ export type MapLayer = {
   opacity?: number;
   // allowed in the 3D view by the licence and service terms of the layer (assessment of 2026-11-10)
   in3d?: boolean;
+  // other tiles of the same map in 3D: the view reads the tiles of the small zooms away from the camera, where the
+  // service of the 2D layer may show other maps
+  tiles3d?: Pick<MapLayer, 'tiles' | 'minzoom' | 'maxzoom'>;
 };
 
 // the IGN France orthophotos are read through this protocol, which drops their white outside France (map-3d-layers.ts)
@@ -34,8 +37,9 @@ export const swissExtent = extentFromLonLat(SWISS_BOUNDS);
 
 const link = (href: string, text: string) => `<a href="${href}" target="_blank" rel="noreferrer noopener">${text}</a>`;
 
+// the SCAN maps (GEOGRAPHICALGRIDSYSTEMS.MAPS and its layers) are served under a key only
 const ignFr = (layer: string, format = 'jpeg') =>
-  (layer === 'GEOGRAPHICALGRIDSYSTEMS.MAPS'
+  (layer.startsWith('GEOGRAPHICALGRIDSYSTEMS.MAPS')
     ? 'https://data.geopf.fr/private/wmts?apikey=ign_scan_ws&'
     : 'https://data.geopf.fr/wmts?') +
   `SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=${layer}&STYLE=normal&TILEMATRIXSET=PM` +
@@ -104,6 +108,11 @@ export const baseLayers: MapLayer[] = [
     tiles: [ignFr('GEOGRAPHICALGRIDSYSTEMS.MAPS')],
     maxzoom: 17,
     attribution: IGN_FR,
+    // the licence of the SCAN 25 says nothing of 3D, the same use as 2D (checked 2026-11-20)
+    in3d: true,
+    // the TOP 25 only, at every zoom (6 to 16, enlarged past it): the IGN maps show the SCAN 100 and others at the
+    // small zooms, the 3D view would show them beyond the TOP 25 near the camera
+    tiles3d: { tiles: [ignFr('GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN25TOUR')], minzoom: 6, maxzoom: 16 },
   },
   {
     // $gettext('IGN ortho', 'Map layer')
@@ -205,8 +214,14 @@ export const baseLayers: MapLayer[] = [
   },
 ];
 
-// the base layers of the 3D view: the orthophotos, over the world one
+// the one base layer whose tiles a topo saved offline downloads (src/pwa/offline-assets.ts): the 2D map shows it without
+// a network, whatever layer was chosen
+export const OFFLINE_BASE_LAYER = baseLayers[0].title;
+
+// the base layers of the 3D view: the orthophotos and the maps allowed there, over the world one
 export const orthoLayers = baseLayers.filter((layer) => layer.in3d);
+// the national orthophotos: the layer of a country in 3D when the 2D one is not shown there
+export const nationalOrthoLayers = orthoLayers.filter((layer) => layer.country && / ortho\b/.test(layer.title));
 
 // covers the whole world in 3D, also under the national orthophotos, past their borders
 export const worldLayer: MapLayer = {

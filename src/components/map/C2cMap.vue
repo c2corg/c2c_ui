@@ -36,7 +36,8 @@
     </div>
 
     <!-- 3D view: the same map, tilted on the terrain -->
-    <div v-if="show3d" class="ol-control ol-control-3d" :title="is3d ? '2D' : '3D'">
+    <!-- the terrain and the imagery of the 3D view are not downloaded with the offline topos -->
+    <div v-if="show3d && online" class="ol-control ol-control-3d" :title="is3d ? '2D' : '3D'">
       <button :aria-label="is3d ? '2D' : '3D'" @click.stop="is3d ? close3d() : open3d()">
         <span>{{ is3d ? '2D' : '3D' }}</span>
       </button>
@@ -57,18 +58,19 @@
         <header v-translate>Base layer</header>
         <div class="layer-group">
           <layer-button
-            v-for="layer of is3d ? baseLayers3d : baseLayers"
+            v-for="layer of is3d ? baseLayers3d : online ? baseLayers : offlineBaseLayers"
             :key="layer.title"
             :layer="layer"
-            :selected="layer.title === (is3d ? base3d : base)"
+            :selected="layer.title === (is3d ? base3d : shownBase)"
             title-context="Map layer"
             @click="is3d ? (base3d = layer.title) : (base = layer.title)"
           />
         </div>
-        <header v-translate>Slopes</header>
-        <div class="layer-group">
+        <!-- no tiles without a network for the other layers, nor for the overlays: not offered -->
+        <header v-if="shownSlopeButtons.length" v-translate>Slopes</header>
+        <div v-if="shownSlopeButtons.length" class="layer-group">
           <layer-button
-            v-for="layer of slopeButtons"
+            v-for="layer of shownSlopeButtons"
             :key="layer.title"
             :layer="layer"
             :selected="slopes.includes(layer.title)"
@@ -76,7 +78,7 @@
             @click="toggleSlope(layer.title)"
           />
         </div>
-        <template v-if="showProtectionAreas">
+        <template v-if="showProtectionAreas && online">
           <header v-translate>Protection areas</header>
           <!-- $gettext('Fauna protection areas') -->
           <div class="layer-group">
@@ -87,7 +89,7 @@
             />
           </div>
         </template>
-        <template v-if="showDensityOverlays && !densityUnavailable">
+        <template v-if="showDensityOverlays && !densityUnavailable && online">
           <header v-translate>Overlays</header>
           <!-- $gettext('Outings') $gettext('Routes') -->
           <div class="layer-group">
@@ -103,12 +105,7 @@
         <template v-if="is3d">
           <header v-translate>Terrain</header>
           <div class="layer-group">
-            <layer-button
-              :layer="shadingButton"
-              :selected="shading"
-              title-context="Map layer"
-              @click="shading = !shading"
-            />
+            <layer-button :layer="shadingButton" :selected="shading" title-context="Map layer" @click="toggleShading" />
           </div>
         </template>
       </div>
@@ -133,7 +130,7 @@
       </button>
     </div>
 
-    <div v-show="showFilterControl && !is3d" class="ol-control ol-control-use-map-as-filter">
+    <div v-show="showFilterControl && !is3d && online" class="ol-control ol-control-use-map-as-filter">
       <input
         id="filter-documents-with-map"
         class="switch is-rtl is-rounded is-info is-small"
@@ -150,7 +147,7 @@
     </div>
 
     <div
-      v-show="showRecenterOn && !is3d"
+      v-show="showRecenterOn && !is3d && online"
       class="ol-control ol-control-recenter-on"
       :class="{ 'ol-control-recenter-on_on-top': !showFilterControl }"
     >
@@ -180,10 +177,17 @@
       <div v-else v-translate>Loading...</div>
     </div>
 
-    <div v-show="base === 'OpenTopoMap' && !is3d" class="ol-control ol-control-edit-map">
+    <div v-show="shownBase === 'OpenTopoMap' && !is3d && online" class="ol-control ol-control-edit-map">
       <a :href="editMapLink ?? undefined" :title="$gettext('Edit and improve map on Openstreetmap.org')"
         ><fa-icon icon="pen"
       /></a>
+    </div>
+
+    <!-- without a network, the layer chosen has no tiles: the downloaded one instead, said so -->
+    <div v-if="offlineFallback && !showLayerSwitcher" class="c2c-map-offline-notice" role="status">
+      <fa-icon icon="plug" />
+      {{ $gettext('Not available offline:') }} {{ $gettext(offlineFallback, 'Map layer') }}. {{ $gettext('Showing:') }}
+      {{ $gettext(OFFLINE_BASE_LAYER, 'Map layer') }}
     </div>
 
     <!-- the credits of the visible layers, collapsed at first -->
@@ -330,6 +334,7 @@ import {
 import { orthoLayerAt, registerNoBlankProtocol, reliefColors } from './map-3d-layers';
 import { type Marker3d, markerElement } from './map-3d-markers';
 import { terrainSource } from './map-3d-terrain';
+import { fetchStyle, prepareVectorMap, vectorMaps } from './map-3d-vector';
 import {
   type Diff,
   type DocumentFeature,
@@ -346,7 +351,9 @@ import {
 } from './map-documents';
 import {
   baseLayers,
+  OFFLINE_BASE_LAYER,
   type MapLayer,
+  nationalOrthoLayers,
   orthoLayers,
   rasterSource,
   slopeLayers,
@@ -354,7 +361,7 @@ import {
   swissProtectionLayers,
   worldLayer,
 } from './map-layers';
-import { parseMapUrl, withMapUrl } from './map-url-state';
+import { parseMapUrl, storedMapSettings, storeMapSettings } from './map-url-state';
 import { scrollPassthrough } from './scroll-passthrough';
 
 import biodivSportsService from '@/js/apis/biodivsports-service';
@@ -376,6 +383,7 @@ import {
 import { toast } from '@/js/toast';
 import { tracksOverlayEnabled } from '@/js/tracks-overlay';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+import { useOfflineStore } from '@/stores/offline';
 
 setWorkerUrl(workerUrl);
 registerNoBlankProtocol();
@@ -438,9 +446,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  // the layers, overlays and pinned side of the map are kept in the query of the page (and read from it): only for the
-  // page of a document, whose query is not used for anything else (a listing's query is its search filters)
-  syncUrl: {
+  // the layers and overlays of the map are kept on this device, from a document page to the next one; the query of an
+  // old shared link (?layer=…) is read too: only for the page of a document, whose query is not used for anything else (a
+  // listing's query is its search filters)
+  rememberSettings: {
     type: Boolean,
     default: false,
   },
@@ -507,8 +516,8 @@ const emit = defineEmits([
 
 const route = useRoute();
 const router = useRouter();
-// what the URL of a document page says about the map
-const urlState = props.syncUrl ? parseMapUrl(route.query) : {};
+// the settings of the document maps on this device, and what an old shared link says (it wins, for this page)
+const initialSettings = props.rememberSettings ? { ...storedMapSettings(), ...parseMapUrl(route.query) } : {};
 const { $documentUtils, $gettext, $language } = useGlobalProperties();
 const trackTooltipEl = useTemplateRef<HTMLElement>('trackTooltip');
 
@@ -522,17 +531,43 @@ const swissWindowEl = useTemplateRef<{ show(): void }>('swissWindow');
 const isTouchDevice = 'ontouchstart' in window;
 
 // the layers shown: one base layer (in 2D and in 3D), the slopes, the protection areas, the shading in 3D
-const base = ref(urlState.base ?? baseLayers[0].title);
+const base = ref(initialSettings.base ?? baseLayers[0].title);
 const base3d = ref(worldLayer.title);
-const slopes = ref<string[]>(urlState.slopes ?? []);
+const slopes = ref<string[]>(initialSettings.slopes ?? []);
 const slopesOpacity = ref<Record<string, number>>(
   Object.fromEntries(slopeLayers.map((layer) => [layer.title, layer.opacity ?? 1]))
 );
-const protectionAreasVisible = ref(props.showProtectionAreas && urlState.protection !== false);
+const protectionAreasVisible = ref(props.showProtectionAreas && initialSettings.protection !== false);
 const protectionAreasOpacity = ref(swissProtectionLayers[0].opacity ?? 1);
 const shading = ref(false);
+// our shading: its strength (hillshade-exaggeration), set by the slider of its button
+const shadingStrength = ref(0.4);
 
 const is3d = ref(false);
+
+// Without a network: the layers downloaded with the offline topos of the map (OpenTopoMap always, SwissTopo and the
+// slopes for some, src/pwa/offline-assets.ts), the choice kept for when the network comes back; no protection areas,
+// no 3D
+const offline = useOfflineStore();
+const online = computed(() => offline.online);
+const downloadedLayers = computed(() => {
+  const titles = new Set([OFFLINE_BASE_LAYER]);
+  for (const document of props.documents ?? []) {
+    const type = $documentUtils.getDocumentType(document.type);
+    const layers = type && document.document_id && offline.find(type, document.document_id)?.assets?.layers;
+    Object.keys(layers ?? {}).forEach((title) => titles.add(title));
+  }
+  return titles;
+});
+const offlineBaseLayers = computed(() => baseLayers.filter((layer) => downloadedLayers.value.has(layer.title)));
+const shownBase = computed(() =>
+  online.value || downloadedLayers.value.has(base.value) ? base.value : OFFLINE_BASE_LAYER
+);
+const shownSlopes = computed(() =>
+  online.value ? slopes.value : slopes.value.filter((title) => downloadedLayers.value.has(title))
+);
+const offlineFallback = computed(() => (!is3d.value && shownBase.value !== base.value ? base.value : null));
+
 const showLayerSwitcher = ref(false);
 const isFullscreen = ref(false);
 const bearing = ref(0);
@@ -548,8 +583,17 @@ const viewExtent = shallowRef<Extent | null>(null);
 
 const reliefLayer = { title: RELIEF, image: 'relief.jpg' };
 // $gettext('Shading', 'Map layer')
-const shadingButton = { title: 'Shading', image: 'shading.jpg' };
-const baseLayers3d = [...orthoLayers, worldLayer, reliefLayer];
+const shadingButton = {
+  title: 'Shading',
+  image: 'shading.jpg',
+  get: (name: string) => (name === 'configurable' ? true : name === 'opacity' ? shadingStrength.value : undefined),
+  set: (name: string, value: number) => {
+    if (name === 'opacity') shadingStrength.value = value;
+  },
+};
+// the national maps drawn from their vector tiles in 3D (map-3d-vector.ts), where the 2D map shows their raster maps
+const vectorLayers = baseLayers.filter((layer) => layer.title in vectorMaps && !layer.in3d);
+const baseLayers3d = [...orthoLayers, ...vectorLayers, worldLayer, reliefLayer];
 
 // the slope buttons, with their opacity slider
 const slopeButtons = slopeLayers.map((layer) => ({
@@ -580,10 +624,13 @@ const inView = (layer: MapLayer) => !layer.bounds || !viewExtent.value || inters
 // protection areas, the terrain in 3D
 const attributions = computed(() => {
   const shown = is3d.value
-    ? [...orthoLayers.filter((layer) => layer.title === base3d.value), ...(base3d.value === RELIEF ? [] : [worldLayer])]
-    : baseLayers.filter((layer) => layer.title === base.value);
-  shown.push(...slopeLayers.filter((layer) => slopes.value.includes(layer.title)));
-  if (props.showProtectionAreas && protectionAreasVisible.value) shown.push(...swissProtectionLayers);
+    ? [
+        ...[...orthoLayers, ...vectorLayers].filter((layer) => layer.title === base3d.value),
+        ...(base3d.value === RELIEF ? [] : [worldLayer]),
+      ]
+    : baseLayers.filter((layer) => layer.title === shownBase.value);
+  shown.push(...slopeLayers.filter((layer) => shownSlopes.value.includes(layer.title)));
+  if (props.showProtectionAreas && protectionAreasVisible.value && online.value) shown.push(...swissProtectionLayers);
   const credits = shown.filter(inView).map((layer) => layer.attribution);
   if (is3d.value) credits.push(terrainSource.attribution);
   return [...new Set(credits)];
@@ -833,17 +880,23 @@ function updateEditMapLink() {
 function showLayers() {
   if (!map) return;
   const set = (id: string, visible: boolean) => map!.setLayoutProperty(id, 'visibility', visibility(visible));
-  const shownBase = is3d.value ? base3d.value : base.value;
-  for (const layer of baseLayers) set(layer.title, layer.title === shownBase);
+  const visibleBase = is3d.value ? base3d.value : shownBase.value;
+  // in 3D, the raster maps not allowed there are drawn from their vector tiles instead (showVectorMap)
+  for (const layer of baseLayers) {
+    const shown = layer.title === visibleBase && (!is3d.value || !!layer.in3d);
+    set(layer.title, shown && !(is3d.value && layer.tiles3d));
+    if (layer.tiles3d) set(layer3dId(layer), shown && is3d.value);
+  }
   set('world', is3d.value && base3d.value !== RELIEF);
   set('relief', is3d.value && base3d.value === RELIEF);
   set('shading', is3d.value && shading.value);
+  map.setPaintProperty('shading', 'hillshade-exaggeration', shadingStrength.value);
   for (const layer of slopeLayers) {
-    set(layer.title, slopes.value.includes(layer.title));
+    set(layer.title, shownSlopes.value.includes(layer.title));
     map.setPaintProperty(layer.title, 'raster-opacity', slopesOpacity.value[layer.title]);
   }
   // the protection areas: lighter in 3D, multiplied onto the ground, which keeps its texture under their colours
-  const protection = props.showProtectionAreas && protectionAreasVisible.value;
+  const protection = props.showProtectionAreas && protectionAreasVisible.value && online.value;
   const opacity = protectionAreasOpacity.value;
   for (const layer of swissProtectionLayers) {
     set(layer.title, protection);
@@ -864,9 +917,94 @@ function showLayers() {
   map.setPaintProperty('background', 'background-color', is3d.value ? '#e6eef5' : 'white');
 }
 
+// offline, the slopes downloaded only
+const shownSlopeButtons = computed(() =>
+  online.value ? slopeButtons : slopeButtons.filter((layer) => downloadedLayers.value.has(layer.title))
+);
+
+// a flat vector map has no relief drawn: our shading goes on with it, and off when it was put on for it alone
+let shadingForVector = false;
+function toggleShading() {
+  shading.value = !shading.value;
+  shadingForVector = false;
+}
+watch([is3d, base3d], () => {
+  const vector = is3d.value && Boolean(vectorMaps[base3d.value]?.flat);
+  if (vector && !shading.value) {
+    shading.value = true;
+    shadingForVector = true;
+  } else if (!vector && shadingForVector) {
+    shading.value = false;
+    shadingForVector = false;
+  }
+});
+
+// the vector map on the map, in 3D: its title and what it added
+let vectorShown: { title: string; layers: string[]; sources: string[]; sprites: string[] } | null = null;
+const VECTOR_PREFIX = 'vector-';
+// their names and icons: over the slopes and the protection areas, under the documents
+const LABELS_BEFORE = DENSITY_TYPES.flatMap(densityLayers)[0].id;
+
+function removeVectorMap(from: MapLibreMap) {
+  if (!vectorShown) return;
+  vectorShown.layers.forEach((id) => from.removeLayer(id));
+  vectorShown.sources.forEach((id) => from.removeSource(id));
+  vectorShown.sprites.forEach((id) => from.removeSprite(id));
+  vectorShown = null;
+}
+
+// the vector map of the base layer of the 3D view, if it has one; none in 2D
+async function showVectorMap() {
+  const created = map;
+  if (!created) return;
+  const title = is3d.value && base3d.value in vectorMaps ? base3d.value : null;
+  if (vectorShown?.title === title) return;
+  removeVectorMap(created);
+  if (!title) return;
+  const vector = vectorMaps[title];
+  // claimed now: another choice while the style loads replaces it
+  const shown = { title, layers: [] as string[], sources: [] as string[], sprites: [] as string[] };
+  vectorShown = shown;
+  let prepared;
+  try {
+    prepared = prepareVectorMap(vector, await fetchStyle(vector.styleUrl), VECTOR_PREFIX);
+    await loaded;
+  } catch (error) {
+    // the world layer stays alone under the documents
+    console.warn(error);
+    if (vectorShown === shown) vectorShown = null;
+    return;
+  }
+  if (map !== created || vectorShown !== shown) return;
+  if (prepared.glyphs) created.setGlyphs(prepared.glyphs);
+  // the layers wait for their sprites: an icon missing when a tile is laid out stays missing in that tile
+  const sprites = prepared.sprites.map((sprite) => {
+    shown.sprites.push(sprite.id);
+    return new Promise<void>((resolve) => created.style.addSprite(sprite.id, sprite.url, {}, () => resolve()));
+  });
+  await Promise.all(sprites);
+  if (map !== created || vectorShown !== shown) return;
+  for (const [id, source] of Object.entries(prepared.sources)) {
+    created.addSource(id, source);
+    shown.sources.push(id);
+  }
+  for (const layer of prepared.ground) {
+    created.addLayer(layer, 'shading');
+    shown.layers.push(layer.id);
+  }
+  for (const layer of prepared.labels) {
+    created.addLayer(layer, LABELS_BEFORE);
+    shown.layers.push(layer.id);
+  }
+}
+
 function toggleSlope(title: string) {
   slopes.value = slopes.value.includes(title) ? slopes.value.filter((t) => t !== title) : [...slopes.value, title];
 }
+
+// the base layers with other tiles in 3D (tiles3d), drawn there by a layer of their own
+const baseLayers3dTiles = baseLayers.filter((layer) => layer.tiles3d);
+const layer3dId = (layer: MapLayer) => `${layer.title} 3D`;
 
 const raster = (layer: MapLayer, id = layer.title): LayerSpecification => ({
   id,
@@ -890,6 +1028,9 @@ function style() {
     world: rasterSource(worldLayer),
     ...Object.fromEntries(
       [...baseLayers, ...slopeLayers, ...swissProtectionLayers].map((layer) => [layer.title, rasterSource(layer)])
+    ),
+    ...Object.fromEntries(
+      baseLayers3dTiles.map((layer) => [layer3dId(layer), rasterSource({ ...layer, ...layer.tiles3d! })])
     ),
     protection: { type: 'geojson', data: EMPTY_COLLECTION },
     documents: { type: 'geojson', data: EMPTY_COLLECTION },
@@ -915,12 +1056,14 @@ function style() {
       paint: { 'color-relief-color': ['interpolate', ['linear'], ['elevation'], ...reliefColors] },
     },
     ...baseLayers.map((layer) => raster(layer)),
+    ...baseLayers3dTiles.map((layer) => raster(layer, layer3dId(layer))),
     {
       id: 'shading',
       type: 'hillshade',
       source: 'relief',
       layout: { visibility: 'none' },
-      paint: { 'hillshade-exaggeration': 0.5 },
+      // igor: the softest method, the closest to the swisstopo relief shading; its strength in showLayers()
+      paint: { 'hillshade-method': 'igor' },
     },
     ...slopeLayers.map((layer) => raster(layer)),
     ...swissProtectionLayers.map((layer) => raster(layer)),
@@ -1153,8 +1296,8 @@ type TrackEntry = { document: DensityTrack; type: DensityType; geometry: Geometr
 const showDensityOverlays = computed(() => tracksOverlayEnabled && !props.oldDocument && !props.newDocument);
 // off by default: they are an opt-in addition, not a change to the look of the map
 const densityEnabled = reactive<Record<DensityType, boolean>>({
-  outing: showDensityOverlays.value && !!urlState.overlays?.includes('outing'),
-  route: showDensityOverlays.value && !!urlState.overlays?.includes('route'),
+  outing: showDensityOverlays.value && !!initialSettings.overlays?.includes('outing'),
+  route: showDensityOverlays.value && !!initialSettings.overlays?.includes('route'),
 });
 // set when the API answers that the overlays are turned off: they are no longer offered
 const densityUnavailable = ref(false);
@@ -1227,6 +1370,7 @@ function cancelDensityRequest(type: DensityType) {
 
 function toggleDensityOverlay(type: DensityType) {
   densityEnabled[type] = !densityEnabled[type];
+  storeSetting({ overlays: DENSITY_TYPES.filter((item) => densityEnabled[item]) });
   if (densityEnabled[type]) {
     updateDensityOverlay(type);
   } else {
@@ -1496,7 +1640,8 @@ const contains = (outer: Extent, inner: Extent) =>
 
 // the areas of the view and half a view around it: small moves and zooming in reuse them
 function loadProtectionAreas() {
-  if (!map || !props.showProtectionAreas || !protectionAreasVisible.value) return;
+  // offline, the request fails, and its extent would never be asked again
+  if (!map || !props.showProtectionAreas || !protectionAreasVisible.value || !online.value) return;
   const view = getExtent();
   if (protectionAreasExtents.some((loaded) => contains(loaded, view))) return;
   const margin = (view[2] - view[0]) / 2;
@@ -1832,8 +1977,10 @@ function open3d() {
   // a list of documents (search results) can be anywhere: the 3D view tilts the view of the map, it does not fit them
   bounds3d = isList.value ? getExtent('EPSG:4326') : bounds3dOf(markers, lines);
   const country = baseLayers.find((layer) => layer.title === base.value)?.country ?? documentsCountry();
+  // the same layer in 3D when it has one there, else the orthophoto of its country
   base3d.value = (
-    orthoLayers.find((layer) => layer.country === country) ??
+    baseLayers3d.find((layer) => layer.title === base.value) ??
+    nationalOrthoLayers.find((layer) => layer.country === country) ??
     orthoLayerAt((bounds3d[0] + bounds3d[2]) / 2, (bounds3d[1] + bounds3d[3]) / 2) ??
     worldLayer
   ).title;
@@ -1855,6 +2002,8 @@ function open3d() {
 function close3d() {
   if (!map) return;
   is3d.value = false;
+  // back in 2D, the layer chosen in 3D if 2D has it
+  if (baseLayers.some((layer) => layer.title === base3d.value)) base.value = base3d.value;
   shownMarkers.forEach((marker) => marker.remove());
   shownMarkers = [];
   flightLayers?.remove();
@@ -1891,9 +2040,28 @@ const resizeObserver = new ResizeObserver(([entry]) => {
 
 // --- lifecycle ---
 
-watch([base, base3d, slopes, slopesOpacity, protectionAreasVisible, protectionAreasOpacity, shading], () => {
-  showLayers();
-  loadProtectionAreas();
+watch(
+  [
+    base,
+    base3d,
+    slopes,
+    slopesOpacity,
+    protectionAreasVisible,
+    protectionAreasOpacity,
+    shading,
+    online,
+    shadingStrength,
+  ],
+  () => {
+    showLayers();
+    loadProtectionAreas();
+  }
+);
+watch([is3d, base3d], () => showVectorMap());
+
+// the network lost in 3D: back to the 2D map, whose tiles may be downloaded
+watch(online, (isOnline) => {
+  if (!isOnline && is3d.value) close3d();
 });
 
 // deep 1: also when documents are added to or removed from the array, as Vue 2 array watchers did
@@ -1908,28 +2076,15 @@ watch(
 
 watch(filterDocumentsWithMap, () => sendBoundsToUrl());
 
-// the settings of the map in the URL, replacing the entry of the history: no new one for each click
-function sendSettingsToUrl() {
-  if (!props.syncUrl || String(route.name).endsWith('-print')) return;
-  const query = withMapUrl(
-    route.query,
-    {
-      base: base.value,
-      slopes: slopes.value,
-      overlays: DENSITY_TYPES.filter((type) => densityEnabled[type]),
-      // hidden by the user, not because the page has none
-      protection: !props.showProtectionAreas || protectionAreasVisible.value,
-      // the page that pins its map owns it: left as it is
-      pin: String(route.query.pin ?? ''),
-    },
-    baseLayers[0].title
-  );
-  if (JSON.stringify(query) !== JSON.stringify(route.query)) router.replace({ query, hash: route.hash });
+// what the user changes is kept on this device, for the next document pages: only that setting, not the others the page
+// shows (those of an old shared link). The base layer, the slopes and the protection areas change only by a click; the
+// overlays are stored by their toggle, as they are also turned off when unavailable (that is not a choice to keep)
+function storeSetting(change: Parameters<typeof storeMapSettings>[0]) {
+  if (props.rememberSettings) storeMapSettings(change, baseLayers[0].title);
 }
-watch(
-  [base, slopes, protectionAreasVisible, () => DENSITY_TYPES.map((type) => densityEnabled[type])],
-  sendSettingsToUrl
-);
+watch(base, (value) => storeSetting({ base: value }));
+watch(slopes, (value) => storeSetting({ slopes: value }));
+watch(protectionAreasVisible, (value) => storeSetting({ protection: value }));
 
 // the filters are compared by content: the parent may give a new (but identical) object each time the route changes
 watch(
@@ -1970,6 +2125,7 @@ onMounted(() => {
     return;
   }
   map = created;
+  vectorShown = null;
   loaded = new Promise((resolve) => created.once('load', () => resolve()));
   setRotation(false);
 
@@ -2077,6 +2233,22 @@ defineExpose({
   &.below-pin {
     top: calc(2em + 4 * var(--map-button-size));
   }
+}
+
+/* above the map, centred at the top, under no control: the left and right columns hold the buttons */
+.c2c-map-offline-notice {
+  position: absolute;
+  z-index: 2;
+  top: 0.5em;
+  left: 50%;
+  max-width: calc(100% - 2 * var(--map-button-size) - 3em);
+  padding: 0.25em 0.75em;
+  border-radius: 4px;
+  background: var(--c2c-yellow);
+  color: var(--c2c-text);
+  font-size: 0.8rem;
+  transform: translateX(-50%);
+  pointer-events: none;
 }
 
 .c2c-map-compass-needle {

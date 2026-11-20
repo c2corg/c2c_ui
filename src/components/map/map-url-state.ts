@@ -1,11 +1,15 @@
-// The settings of a document map kept in the URL of its page (?layer=ign&slopes=ign,swiss&overlays=outing,route&pin=top),
-// so that they survive a reload, a new tab and a shared link. Only what differs from the default is written, with short
-// stable ids rather than the titles of the layers (which are translated keys and may change with the map engine).
+// The settings of a document map (layers, overlays, protection areas) are kept on this device, in the local storage, with
+// short stable ids rather than the titles of the layers (which are translated keys and may change with the map engine):
+// they follow the user from a document to the next one, and survive a reload and a new tab, without changing the URL.
+// The links shared while they were written in the URL of the page (?layer=ign&slopes=ign,swiss&overlays=outing,route&pin=top)
+// are still read: their settings are shown on that page, and nothing writes them in the URL any more.
 
 import type { LocationQuery, LocationQueryRaw } from 'vue-router';
 
 import { DENSITY_TYPES, type DensityType } from './density-overlays';
 import { baseLayers, slopeLayers } from './map-layers';
+
+import { getPreferences } from '@/js/vue-plugins/local-storage';
 
 export type MapUrlState = {
   base: string;
@@ -19,7 +23,7 @@ export type MapUrlState = {
 
 export const PIN_SIDES = ['top', 'right', 'window'];
 
-// the ids are part of the URLs people share: never change one
+// the ids are stored on devices and part of the URLs people shared: never change one
 const BASE_IDS: Record<string, string> = {
   OpenTopoMap: 'otm',
   'ESRI World Imagery': 'esri',
@@ -41,14 +45,18 @@ const SLOPE_IDS: Record<string, string> = {
   'SwissTopo Slopes': 'swiss',
 };
 
-export const MAP_URL_KEYS = ['layer', 'slopes', 'overlays', 'protection', 'pin'];
+const MAP_URL_KEYS = ['layer', 'slopes', 'overlays', 'protection', 'pin'];
 
 const invert = (ids: Record<string, string>) => Object.fromEntries(Object.entries(ids).map(([k, v]) => [v, k]));
 const baseTitles = invert(BASE_IDS);
 const slopeTitles = invert(SLOPE_IDS);
 
-const first = (value: LocationQuery[string] | undefined) => (Array.isArray(value) ? value[0] : value) ?? '';
-const list = (value: LocationQuery[string] | undefined) =>
+// anything but a string (a value of the local storage written by something else) is no value
+const first = (value: unknown): string => {
+  const item = Array.isArray(value) ? value[0] : value;
+  return typeof item === 'string' ? item : '';
+};
+const list = (value: unknown) =>
   first(value)
     .split(',')
     .map((item) => item.trim())
@@ -93,4 +101,27 @@ export function withMapUrl(query: LocationQuery, state: MapUrlState, defaultBase
   if (state.pin) result.pin = state.pin;
 
   return result;
+}
+
+// the settings stored on this device are written as a query would be: the same ids, the same reading
+const preferences = () => getPreferences('DocumentMap');
+
+export function storedMapSettings(): Partial<MapUrlState> {
+  const stored = preferences();
+  // what another tab stored since this one read it
+  stored.reload();
+  const settings = parseMapUrl((stored.get('settings') ?? {}) as LocationQuery);
+  delete settings.pin;
+  return settings;
+}
+
+// a setting the user changed, kept with the stored ones: the others shown by the page (from an old shared link) are not
+// stored. Only what differs from the default is written; the pinned side is not a setting kept from a page to the next
+export function storeMapSettings(change: Partial<Omit<MapUrlState, 'pin'>>, defaultBase: string) {
+  const state = { base: defaultBase, slopes: [], overlays: [], protection: true, ...storedMapSettings(), ...change };
+  try {
+    preferences().set('settings', withMapUrl({}, { ...state, pin: '' }, defaultBase));
+  } catch {
+    // no storage (private window, full or blocked): the settings last as long as the page
+  }
 }

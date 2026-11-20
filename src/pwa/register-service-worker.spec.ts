@@ -1,8 +1,8 @@
 // A new version of the app reloads the page, but never under a form being filled
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { type RouteLocationNormalized, type Router } from 'vue-router';
 
-import { reloadOutOfForms, reloadedRecently } from './register-service-worker';
+import { reloadOutOfForms, reloadedRecently, watchLoadedAssets } from './register-service-worker';
 
 const route = (name: string) => ({ name }) as unknown as RouteLocationNormalized;
 
@@ -51,5 +51,51 @@ describe('reloadedRecently', () => {
     // the value of a former version
     sessionStorage.setItem('c2c.serviceWorkerReloaded', 'true');
     expect(reloadedRecently()).toBe(false);
+  });
+});
+
+describe('watchLoadedAssets', () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  // a PerformanceObserver that saw entries before it was created (buffered), and sees one more later
+  const stubObserver = (before: string[], later: string[]) => {
+    let callback: (list: { getEntries: () => { name: string }[] }) => void = () => {};
+    class Observer {
+      constructor(cb: typeof callback) {
+        callback = cb;
+      }
+      observe = vi.fn(() => callback({ getEntries: () => before.map((name) => ({ name })) }));
+      takeRecords = () => later.map((name) => ({ name }));
+      disconnect = vi.fn();
+    }
+    vi.stubGlobal('PerformanceObserver', Observer);
+  };
+
+  it('asks again, once, for the files of the build loaded before the service worker', async () => {
+    const asset = (name: string) => `${location.origin}/assets/${name}`;
+    stubObserver(
+      [asset('index-a1.js'), asset('RouteView-b2.js'), 'https://media.camptocamp.org/x.jpg', asset('index-a1.js')],
+      [asset('C2cMap-c3.js')]
+    );
+    const fetch = vi.fn<(url: string) => Promise<Response>>(async () => new Response(''));
+    vi.stubGlobal('fetch', fetch);
+
+    await watchLoadedAssets('/')();
+
+    expect(fetch.mock.calls.map(([url]) => url)).toEqual([
+      asset('index-a1.js'),
+      asset('RouteView-b2.js'),
+      asset('C2cMap-c3.js'),
+    ]);
+  });
+
+  it('does nothing without PerformanceObserver, and a file the network refuses stops nothing', async () => {
+    vi.stubGlobal('PerformanceObserver', undefined);
+    const fetch = vi.fn(async () => {
+      throw new TypeError('offline');
+    });
+    vi.stubGlobal('fetch', fetch);
+    await expect(watchLoadedAssets('/')()).resolves.toBeUndefined();
+    expect(fetch).not.toHaveBeenCalled();
   });
 });

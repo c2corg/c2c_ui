@@ -47,7 +47,7 @@
     <div class="field">
       <label class="label" v-translate>Average slope (degrees)</label>
       <div class="control">
-        <input v-model="slope" class="input" :placeholder="$gettext('Average slope in degree')" type="number" />
+        <input v-model="slope" class="input" :placeholder="$gettext('Average slope (degrees)')" type="number" />
       </div>
       <p class="help is-danger" v-if="errorSlope" v-translate>The slope must be between 0 and 80 deg</p>
     </div>

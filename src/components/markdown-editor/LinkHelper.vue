@@ -1,7 +1,7 @@
 <template>
   <modal-card ref="modal">
     <template #title>
-      <div v-translate>Insert a link</div>
+      <div v-translate>Insert link</div>
     </template>
     <div class="field">
       <label class="label">
