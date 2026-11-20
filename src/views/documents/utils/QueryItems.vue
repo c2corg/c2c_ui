@@ -110,7 +110,7 @@ import QueryItem from './QueryItem.vue';
 import QuerySortDropdown from './QuerySortDropdown.vue';
 import QueryTags from './QueryTags.vue';
 
-import { withoutMapUrl } from '@/components/map/map-url-keys';
+import { withoutDisplaySettings } from '@/components/map/map-url-keys';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import { useGlobalProperties } from '@/js/composables/global-properties';
@@ -303,8 +303,8 @@ function emitDocumentsLoad() {
   emit('documents-load', tags.value);
 }
 
-// not for the settings of the map, in the query too
-watch(() => JSON.stringify([route.path, withoutMapUrl(route.query), route.hash]), load, { immediate: true });
+// not for how the list is shown (the view, the settings of the map), in the query too
+watch(() => JSON.stringify([route.path, withoutDisplaySettings(route.query), route.hash]), load, { immediate: true });
 </script>
 
 <style scoped>

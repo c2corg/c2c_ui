@@ -46,7 +46,6 @@
           <template v-if="documentAreGeoLocalized">
             <display-mode-switch
               class="header-item is-hidden-mobile"
-              :list-mode="listMode"
               :model-value="displayMode"
               @update:model-value="setDisplayMode"
             />
@@ -178,7 +177,7 @@ import { normalizedPageQuery } from './utils/page-query';
 import { MAX_RESULTS_WIDTH, MIN_RESULTS_WIDTH, useResultsSplitter } from './utils/results-splitter';
 
 import { searchOverlayFilters } from '@/components/map/density-overlays';
-import { withoutMapUrl } from '@/components/map/map-url-keys';
+import { VIEW_URL_KEY, withoutDisplaySettings } from '@/components/map/map-url-keys';
 import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
@@ -245,9 +244,9 @@ const queryWithoutOffsetAndSort = computed(() => {
   return result;
 });
 
-// the search filters: the query of the page, but for the settings of the map, that are in it too
-const searchQuery = computed(() => withoutMapUrl(route.query));
-// the page the results are those of: the settings of the map do not change them
+// the search filters: the query of the page, but for how it is shown (the view, the settings of the map)
+const searchQuery = computed(() => withoutDisplaySettings(route.query));
+// the page the results are those of: how they are shown does not change them
 const searchKey = computed(() => JSON.stringify([route.path, searchQuery.value, route.hash]));
 
 // the "Tracks" and "Routes" overlays of the map follow the search
@@ -262,11 +261,22 @@ usePullRefresh(() => {
   return promise.value;
 });
 
+// what the list shows: what its URL says (a shared link, back), else the preference of this document type. The
+// documents without a location only have their results
+const DISPLAY_MODES = ['result', 'both', 'map'];
+function readDisplayMode() {
+  const fromUrl = String(route.query[VIEW_URL_KEY] ?? '');
+  if (!documentAreGeoLocalized.value) {
+    displayMode.value = 'result';
+  } else if (DISPLAY_MODES.includes(fromUrl)) {
+    displayMode.value = fromUrl;
+  } else {
+    displayMode.value = preferences.get(documentType.value + '.displayMode', 'both') as string;
+  }
+}
+
 function load() {
-  displayMode.value = preferences.get(
-    documentType.value + '.displayMode',
-    documentAreGeoLocalized.value ? 'both' : 'result'
-  ) as string;
+  readDisplayMode();
   listMode.value = preferences.get(documentType.value + '.listMode', false) as boolean;
 
   if (route.hash) {
@@ -314,9 +324,13 @@ function setListMode(value: boolean) {
   preferences.set(`${documentType.value}.listMode`, value);
 }
 
+// kept for this document type, and in the URL of the list to share it (the page is the same: replaced, not added to the
+// history), but for the default view
 function setDisplayMode(value: string) {
   displayMode.value = value;
   preferences.set(`${documentType.value}.displayMode`, value);
+  const view = value === 'both' ? undefined : value;
+  if (view !== route.query[VIEW_URL_KEY]) router.replace({ query: { ...route.query, [VIEW_URL_KEY]: view } });
 }
 
 function getDocumentTypeTitle(documentType: string) {
@@ -341,6 +355,7 @@ function onQueryDocumentsLoad(documents: C2cDocument[]) {
 
 watch(searchKey, load, { immediate: true });
 watch(displayMode, updateMapSize);
+watch(() => route.query[VIEW_URL_KEY], readDisplayMode);
 watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
 </script>
 

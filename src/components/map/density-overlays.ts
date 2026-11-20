@@ -6,7 +6,7 @@ import type { ExpressionSpecification, LayerSpecification } from 'maplibre-gl';
 import type * as z from 'zod/mini';
 
 import { LINE_CASING_WIDTH, LINE_HIGHLIGHTED_CASING_WIDTH, LINE_HIGHLIGHTED_WIDTH, LINE_WIDTH } from './map-documents';
-import { MAP_URL_KEYS } from './map-url-keys';
+import { DISPLAY_URL_KEYS } from './map-url-keys';
 
 import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
@@ -210,8 +210,8 @@ export function documentOverlayFilters(document: DocumentRef): Record<DensityTyp
   }
 }
 
-// the parameters of the listing that are not search filters (the settings of the map are in its URL too)
-const NOT_FILTERS = ['offset', 'limit', 'sort', 'bbox', 'pl', ...MAP_URL_KEYS];
+// the parameters of the listing that are not search filters (the display settings of the list are in its URL too)
+const NOT_FILTERS = ['offset', 'limit', 'sort', 'bbox', 'pl', ...DISPLAY_URL_KEYS];
 
 // The filters that mean the same for outings and routes: the activities, the areas, the waypoints, the users and the
 // ratings (the ones of an outing are the ones of its route). The others (the title, the dates, the quality...) are

@@ -63,15 +63,36 @@ describe('DocumentsView', () => {
     getPreferences('DocumentsView').reload();
   });
 
-  // the display mode menu shows the icon of the cards, or of the list
-  it('tells the display mode menu whether the results are a list', async () => {
-    const { wrapper } = await mountView();
+  it('shows what the URL says (view=), else the stored view, and writes the view chosen in the URL', async () => {
+    getPreferences('DocumentsView').set('route.displayMode', 'map');
+    const { wrapper, router, getAll } = await mountView('/routes?act=hiking&view=result');
     const displayModeSwitch = wrapper.findComponent(DisplayModeSwitch);
 
-    expect(displayModeSwitch.props('listMode')).toBe(false);
+    expect(displayModeSwitch.props('modelValue')).toBe('result');
+    expect(getAll).toHaveBeenCalledWith({ act: 'hiking' });
 
-    await wrapper.find('.header-right > span.has-cursor-pointer').trigger('click');
-    expect(displayModeSwitch.props('listMode')).toBe(true);
+    displayModeSwitch.vm.$emit('update:modelValue', 'both');
+    await flushPromises();
+    expect(router.currentRoute.value.query).toEqual({ act: 'hiking' });
+    expect(displayModeSwitch.props('modelValue')).toBe('both');
+
+    displayModeSwitch.vm.$emit('update:modelValue', 'map');
+    await flushPromises();
+    expect(router.currentRoute.value.query).toEqual({ act: 'hiking', view: 'map' });
+    expect(getPreferences('DocumentsView').get('route.displayMode')).toBe('map');
+    // how the list is shown is not a new search
+    expect(getAll).toHaveBeenCalledTimes(1);
+
+    // back to a URL without a view: the stored one
+    await router.replace({ query: { act: 'hiking' } });
+    await flushPromises();
+    expect(displayModeSwitch.props('modelValue')).toBe('map');
+  });
+
+  it('ignores an unknown view in the URL', async () => {
+    const { wrapper } = await mountView('/routes?view=nope');
+
+    expect(wrapper.findComponent(DisplayModeSwitch).props('modelValue')).toBe('both');
   });
 
   it('shows the pagination below the results, when there are several pages', async () => {
