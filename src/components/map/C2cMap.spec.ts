@@ -874,6 +874,25 @@ describe('C2cMap', () => {
         wrapper.unmount();
       });
 
+      it('keeps the filter on the extent of the map, with the box of what is seen', async () => {
+        const { wrapper, map } = await mountMap({
+          documents: [outing, pointOnly],
+          show3d: true,
+          showFilterControl: true,
+        });
+        await wrapper.find('#filter-documents-with-map').setValue(true);
+        await open3d(wrapper);
+        const push = vi.spyOn(wrapper.vm.$router, 'push');
+
+        expect(wrapper.find('.ol-control-use-map-as-filter').isVisible()).toBe(true);
+        map.extent = [6, 45, 7, 46];
+        map.fire('moveend');
+        await flushPromises();
+
+        expect(push).toHaveBeenCalledWith({ query: { bbox: expect.stringMatching(/^\d+(,\d+){3}$/) } });
+        wrapper.unmount();
+      });
+
       it('does not read the waypoints of the routes of its outings', async () => {
         const get = vi.spyOn(c2c.route as DocumentService, 'get');
         get.mockClear();

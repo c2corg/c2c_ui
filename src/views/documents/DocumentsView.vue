@@ -153,7 +153,7 @@
           :tracks-filters="overlayFilters.outing"
           :routes-filters="overlayFilters.route"
           @highlight-document="highlightedDocument = $event"
-          show-filter-control
+          :show-filter-control="displayMode !== 'map' || $screen.isMobile"
           show-center-on-geolocation
           show-recenter-on
           show3d

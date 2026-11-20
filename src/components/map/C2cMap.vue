@@ -130,7 +130,7 @@
       </button>
     </div>
 
-    <div v-show="showFilterControl && !is3d && online" class="ol-control ol-control-use-map-as-filter">
+    <div v-show="filterControlShown && online" class="ol-control ol-control-use-map-as-filter">
       <input
         id="filter-documents-with-map"
         class="switch is-rtl is-rounded is-info is-small"
@@ -149,7 +149,7 @@
     <div
       v-show="showRecenterOn && !is3d && online"
       class="ol-control ol-control-recenter-on"
-      :class="{ 'ol-control-recenter-on_on-top': !showFilterControl }"
+      :class="{ 'ol-control-recenter-on_on-top': !filterControlShown }"
     >
       <input
         type="text"
@@ -164,7 +164,7 @@
     <div
       v-show="showRecenterOnPropositions"
       class="ol-control ol-control-recenter-on-propositions"
-      :class="{ 'ol-control-recenter-on-propositions_on-top': !showFilterControl }"
+      :class="{ 'ol-control-recenter-on-propositions_on-top': !filterControlShown }"
     >
       <ul v-if="recenterPropositions?.data?.features">
         <li v-for="(item, i) of recenterPropositions.data.features" :key="i" @click="recenterOn(item)">
@@ -573,6 +573,8 @@ const isFullscreen = ref(false);
 const bearing = ref(0);
 const attributionCollapsed = ref(true);
 const filterDocumentsWithMap = ref(Boolean(route.query.bbox));
+// not in full screen, where the results are not shown
+const filterControlShown = computed(() => props.showFilterControl && !isFullscreen.value);
 const recenterPropositions = ref<{ data?: { features: PhotonFeature[] } | null } | null>(null);
 const showRecenterOnPropositions = ref(false);
 const biodivData = ref<Record<string, unknown>>({});
@@ -2151,8 +2153,9 @@ onMounted(() => {
   });
   created.on('moveend', () => {
     viewExtent.value = getExtent('EPSG:4326');
-    if (is3d.value) return;
+    // in 3D, the box of what is seen (the tilted view is a trapezoid: its box is a little more)
     sendBoundsToUrl();
+    if (is3d.value) return;
     updateEditMapLink();
     emitMoveEvent();
     loadProtectionAreas();
