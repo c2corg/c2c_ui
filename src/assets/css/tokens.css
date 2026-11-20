@@ -63,5 +63,9 @@
   /* what a fixed element ends above: nothing on the website, the bottom bar of the phone layout (App.vue) */
   --c2c-bottom-bar-height: 0px;
   --c2c-itinevert-header-height: 4rem;
-  --c2c-sidemenu-width: 200px;
+  /* the side menu (SideMenu.vue): a rail of icons, open over the page, or pinned open beside it */
+  --c2c-sidemenu-rail-width: 64px;
+  --c2c-sidemenu-open-width: 224px;
+  /* the room the page leaves for the side menu: its rail, or the open menu when pinned (.is-menu-pinned, App.vue) */
+  --c2c-sidemenu-width: var(--c2c-sidemenu-rail-width);
 }
