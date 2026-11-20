@@ -156,6 +156,7 @@
           show-filter-control
           show-center-on-geolocation
           show-recenter-on
+          show3d
         />
       </div>
     </div>

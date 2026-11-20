@@ -1809,13 +1809,28 @@ function setRotation(enabled: boolean) {
   if (enabled) map.keyboard.enableRotation();
 }
 
+const isList = computed(() => (props.documents?.length ?? 0) > 1);
+
+// the documents of a list that changed (another page of the results), while the 3D view is open
+function redraw3d() {
+  if (!map) return;
+  const { lines, markers } = documents3d();
+  shownMarkers.forEach((marker) => marker.remove());
+  shownMarkers = [];
+  flightLayers?.remove();
+  flightLayers = null;
+  addMarkers(map, markers);
+  showFlights(map, lines);
+}
+
 function open3d() {
   if (!map) return;
   const created = map;
   const { lng, lat } = map.getCenter();
   view2d = { center: [lng, lat], zoom: map.getZoom() };
   const { lines, markers } = documents3d();
-  bounds3d = bounds3dOf(markers, lines);
+  // a list of documents (search results) can be anywhere: the 3D view tilts the view of the map, it does not fit them
+  bounds3d = isList.value ? getExtent('EPSG:4326') : bounds3dOf(markers, lines);
   const country = baseLayers.find((layer) => layer.title === base.value)?.country ?? documentsCountry();
   base3d.value = (
     orthoLayers.find((layer) => layer.country === country) ??
@@ -1889,7 +1904,10 @@ watch([base, base3d, slopes, slopesOpacity, protectionAreasVisible, protectionAr
 // deep 1: also when documents are added to or removed from the array, as Vue 2 array watchers did
 watch(
   () => props.documents,
-  () => drawDocumentMarkers(),
+  () => {
+    drawDocumentMarkers();
+    if (is3d.value) redraw3d();
+  },
   { deep: 1 }
 );
 
