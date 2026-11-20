@@ -205,6 +205,10 @@ export const baseLayers: MapLayer[] = [
   },
 ];
 
+// the one base layer whose tiles a topo saved offline downloads (src/pwa/offline-assets.ts): the 2D map shows it without
+// a network, whatever layer was chosen
+export const OFFLINE_BASE_LAYER = baseLayers[0].title;
+
 // the base layers of the 3D view: the orthophotos, over the world one
 export const orthoLayers = baseLayers.filter((layer) => layer.in3d);
 

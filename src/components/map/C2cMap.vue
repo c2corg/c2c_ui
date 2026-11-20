@@ -36,7 +36,8 @@
     </div>
 
     <!-- 3D view: the same map, tilted on the terrain -->
-    <div v-if="show3d" class="ol-control ol-control-3d" :title="is3d ? '2D' : '3D'">
+    <!-- the terrain and the imagery of the 3D view are not downloaded with the offline topos -->
+    <div v-if="show3d && online" class="ol-control ol-control-3d" :title="is3d ? '2D' : '3D'">
       <button :aria-label="is3d ? '2D' : '3D'" @click.stop="is3d ? close3d() : open3d()">
         <span>{{ is3d ? '2D' : '3D' }}</span>
       </button>
@@ -57,16 +58,17 @@
         <header v-translate>Base layer</header>
         <div class="layer-group">
           <layer-button
-            v-for="layer of is3d ? baseLayers3d : baseLayers"
+            v-for="layer of is3d ? baseLayers3d : online ? baseLayers : offlineBaseLayers"
             :key="layer.title"
             :layer="layer"
-            :selected="layer.title === (is3d ? base3d : base)"
+            :selected="layer.title === (is3d ? base3d : shownBase)"
             title-context="Map layer"
             @click="is3d ? (base3d = layer.title) : (base = layer.title)"
           />
         </div>
-        <header v-translate>Slopes</header>
-        <div class="layer-group">
+        <!-- no tiles without a network for the other layers, nor for the overlays: not offered -->
+        <header v-if="online" v-translate>Slopes</header>
+        <div v-if="online" class="layer-group">
           <layer-button
             v-for="layer of slopeButtons"
             :key="layer.title"
@@ -76,7 +78,7 @@
             @click="toggleSlope(layer.title)"
           />
         </div>
-        <template v-if="showProtectionAreas">
+        <template v-if="showProtectionAreas && online">
           <header v-translate>Protection areas</header>
           <!-- $gettext('Fauna protection areas') -->
           <div class="layer-group">
@@ -87,7 +89,7 @@
             />
           </div>
         </template>
-        <template v-if="showDensityOverlays && !densityUnavailable && !is3d">
+        <template v-if="showDensityOverlays && !densityUnavailable && !is3d && online">
           <header v-translate>Overlays</header>
           <!-- $gettext('Outings') $gettext('Routes') -->
           <div class="layer-group">
@@ -133,7 +135,7 @@
       </button>
     </div>
 
-    <div v-show="showFilterControl && !is3d" class="ol-control ol-control-use-map-as-filter">
+    <div v-show="showFilterControl && !is3d && online" class="ol-control ol-control-use-map-as-filter">
       <input
         id="filter-documents-with-map"
         class="switch is-rtl is-rounded is-info is-small"
@@ -150,7 +152,7 @@
     </div>
 
     <div
-      v-show="showRecenterOn && !is3d"
+      v-show="showRecenterOn && !is3d && online"
       class="ol-control ol-control-recenter-on"
       :class="{ 'ol-control-recenter-on_on-top': !showFilterControl }"
     >
@@ -180,10 +182,17 @@
       <div v-else v-translate>Loading...</div>
     </div>
 
-    <div v-show="base === 'OpenTopoMap' && !is3d" class="ol-control ol-control-edit-map">
+    <div v-show="shownBase === 'OpenTopoMap' && !is3d && online" class="ol-control ol-control-edit-map">
       <a :href="editMapLink ?? undefined" :title="$gettext('Edit and improve map on Openstreetmap.org')"
         ><fa-icon icon="pen"
       /></a>
+    </div>
+
+    <!-- without a network, the layer chosen has no tiles: the downloaded one instead, said so -->
+    <div v-if="offlineFallback && !showLayerSwitcher" class="c2c-map-offline-notice" role="status">
+      <fa-icon icon="plug" />
+      {{ $gettext('Not available offline:') }} {{ $gettext(offlineFallback, 'Map layer') }}. {{ $gettext('Showing:') }}
+      {{ $gettext(OFFLINE_BASE_LAYER, 'Map layer') }}
     </div>
 
     <!-- the credits of the visible layers, collapsed at first -->
@@ -346,6 +355,7 @@ import {
 } from './map-documents';
 import {
   baseLayers,
+  OFFLINE_BASE_LAYER,
   type MapLayer,
   orthoLayers,
   rasterSource,
@@ -376,6 +386,7 @@ import {
 import { toast } from '@/js/toast';
 import { tracksOverlayEnabled } from '@/js/tracks-overlay';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+import { useOfflineStore } from '@/stores/offline';
 
 setWorkerUrl(workerUrl);
 registerNoBlankProtocol();
@@ -533,6 +544,18 @@ const protectionAreasOpacity = ref(swissProtectionLayers[0].opacity ?? 1);
 const shading = ref(false);
 
 const is3d = ref(false);
+
+// Without a network: the base layer downloaded with the offline topos, whatever the choice (kept for when the network
+// comes back), no slopes nor protection areas, no 3D
+const offline = useOfflineStore();
+const online = computed(() => offline.online);
+const offlineBaseLayers = baseLayers.filter((layer) => layer.title === OFFLINE_BASE_LAYER);
+const shownBase = computed(() => (online.value ? base.value : OFFLINE_BASE_LAYER));
+const shownSlopes = computed(() => (online.value ? slopes.value : []));
+const offlineFallback = computed(() =>
+  !online.value && !is3d.value && base.value !== OFFLINE_BASE_LAYER ? base.value : null
+);
+
 const showLayerSwitcher = ref(false);
 const isFullscreen = ref(false);
 const bearing = ref(0);
@@ -581,9 +604,9 @@ const inView = (layer: MapLayer) => !layer.bounds || !viewExtent.value || inters
 const attributions = computed(() => {
   const shown = is3d.value
     ? [...orthoLayers.filter((layer) => layer.title === base3d.value), ...(base3d.value === RELIEF ? [] : [worldLayer])]
-    : baseLayers.filter((layer) => layer.title === base.value);
-  shown.push(...slopeLayers.filter((layer) => slopes.value.includes(layer.title)));
-  if (props.showProtectionAreas && protectionAreasVisible.value) shown.push(...swissProtectionLayers);
+    : baseLayers.filter((layer) => layer.title === shownBase.value);
+  shown.push(...slopeLayers.filter((layer) => shownSlopes.value.includes(layer.title)));
+  if (props.showProtectionAreas && protectionAreasVisible.value && online.value) shown.push(...swissProtectionLayers);
   const credits = shown.filter(inView).map((layer) => layer.attribution);
   if (is3d.value) credits.push(terrainSource.attribution);
   return [...new Set(credits)];
@@ -833,17 +856,17 @@ function updateEditMapLink() {
 function showLayers() {
   if (!map) return;
   const set = (id: string, visible: boolean) => map!.setLayoutProperty(id, 'visibility', visibility(visible));
-  const shownBase = is3d.value ? base3d.value : base.value;
-  for (const layer of baseLayers) set(layer.title, layer.title === shownBase);
+  const visibleBase = is3d.value ? base3d.value : shownBase.value;
+  for (const layer of baseLayers) set(layer.title, layer.title === visibleBase);
   set('world', is3d.value && base3d.value !== RELIEF);
   set('relief', is3d.value && base3d.value === RELIEF);
   set('shading', is3d.value && shading.value);
   for (const layer of slopeLayers) {
-    set(layer.title, slopes.value.includes(layer.title));
+    set(layer.title, shownSlopes.value.includes(layer.title));
     map.setPaintProperty(layer.title, 'raster-opacity', slopesOpacity.value[layer.title]);
   }
   // the protection areas: lighter in 3D, multiplied onto the ground, which keeps its texture under their colours
-  const protection = props.showProtectionAreas && protectionAreasVisible.value;
+  const protection = props.showProtectionAreas && protectionAreasVisible.value && online.value;
   const opacity = protectionAreasOpacity.value;
   for (const layer of swissProtectionLayers) {
     set(layer.title, protection);
@@ -1496,7 +1519,8 @@ const contains = (outer: Extent, inner: Extent) =>
 
 // the areas of the view and half a view around it: small moves and zooming in reuse them
 function loadProtectionAreas() {
-  if (!map || !props.showProtectionAreas || !protectionAreasVisible.value) return;
+  // offline, the request fails, and its extent would never be asked again
+  if (!map || !props.showProtectionAreas || !protectionAreasVisible.value || !online.value) return;
   const view = getExtent();
   if (protectionAreasExtents.some((loaded) => contains(loaded, view))) return;
   const margin = (view[2] - view[0]) / 2;
@@ -1881,9 +1905,14 @@ const resizeObserver = new ResizeObserver(([entry]) => {
 
 // --- lifecycle ---
 
-watch([base, base3d, slopes, slopesOpacity, protectionAreasVisible, protectionAreasOpacity, shading], () => {
+watch([base, base3d, slopes, slopesOpacity, protectionAreasVisible, protectionAreasOpacity, shading, online], () => {
   showLayers();
   loadProtectionAreas();
+});
+
+// the network lost in 3D: back to the 2D map, whose tiles may be downloaded
+watch(online, (isOnline) => {
+  if (!isOnline && is3d.value) close3d();
 });
 
 // deep 1: also when documents are added to or removed from the array, as Vue 2 array watchers did
@@ -2064,6 +2093,22 @@ defineExpose({
   &.below-pin {
     top: calc(2em + 4 * var(--map-button-size));
   }
+}
+
+/* above the map, centred at the top, under no control: the left and right columns hold the buttons */
+.c2c-map-offline-notice {
+  position: absolute;
+  z-index: 2;
+  top: 0.5em;
+  left: 50%;
+  max-width: calc(100% - 2 * var(--map-button-size) - 3em);
+  padding: 0.25em 0.75em;
+  border-radius: 4px;
+  background: var(--c2c-yellow);
+  color: var(--c2c-text);
+  font-size: 0.8rem;
+  transform: translateX(-50%);
+  pointer-events: none;
 }
 
 .c2c-map-compass-needle {

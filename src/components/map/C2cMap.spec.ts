@@ -12,6 +12,7 @@ import type DocumentService from '@/js/apis/c2c/DocumentService';
 import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
 import bus from '@/js/event-bus';
 import { fromLonLat } from '@/js/geo/projection';
+import { useOfflineStore } from '@/stores/offline';
 
 vi.mock('maplibre-gl', () => import('./maplibre-mock'));
 vi.mock('@/js/apis/biodivsports-service', () => ({ default: { fetchData: vi.fn() } }));
@@ -183,6 +184,36 @@ describe('C2cMap', () => {
 
     await slopesLayers.findAll(':scope > *')[0].trigger('click');
     expect(selectedTitles(wrapper)[1]).toBe('');
+    wrapper.unmount();
+  });
+
+  it('without a network, shows the downloaded base layer, says so, and offers only what works', async () => {
+    const { wrapper, map } = await mountMap({ show3d: true, showRecenterOn: true });
+    const [baseLayers, slopesLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+    await baseLayers.findAll(':scope > *')[3].trigger('click');
+    await slopesLayers.findAll(':scope > *')[0].trigger('click');
+    expect(map.layout['IGN maps'].visibility).toBe('visible');
+    expect(wrapper.find('.ol-control-3d').exists()).toBe(true);
+
+    const offline = useOfflineStore();
+    offline.online = false;
+    await flushPromises();
+
+    expect(map.layout.OpenTopoMap.visibility).toBe('visible');
+    expect(map.layout['IGN maps'].visibility).toBe('none');
+    expect(map.layout['IGN Slopes'].visibility).toBe('none');
+    expect(wrapper.find('.c2c-map-offline-notice').text()).toContain('IGN maps');
+    expect(wrapper.find('.ol-control-3d').exists()).toBe(false);
+    expect(wrapper.find('.ol-control-recenter-on').isVisible()).toBe(false);
+    // one base layer to choose, no slopes
+    expect(selectedTitles(wrapper)).toEqual(['OpenTopoMap']);
+
+    // the choice was kept for the network
+    offline.online = true;
+    await flushPromises();
+    expect(map.layout['IGN maps'].visibility).toBe('visible');
+    expect(map.layout['IGN Slopes'].visibility).toBe('visible');
+    expect(wrapper.find('.c2c-map-offline-notice').exists()).toBe(false);
     wrapper.unmount();
   });
 

@@ -1,6 +1,7 @@
 // Mounting the map in specs: jsdom, a router, the global properties of the app
 import { mount } from '@vue/test-utils';
 import type OlMapType from 'ol/Map';
+import { createPinia } from 'pinia';
 import { vi } from 'vitest';
 import type { Component } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
@@ -37,7 +38,8 @@ export const mountMap = async (props: Record<string, unknown> = {}, component: C
     props,
     attachTo: document.body,
     global: {
-      plugins: [router],
+      // the offline store, which says whether there is a network
+      plugins: [router, createPinia()],
       config: {
         globalProperties: {
           $gettext: (text: string) => text,
