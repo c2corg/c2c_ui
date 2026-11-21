@@ -1,9 +1,8 @@
-// The follow and to-do buttons of a document page: their state comes from the API as soon as they are created
+// The follow button of a document page: its state comes from the API as soon as it is created
 import { flushPromises, mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import FollowButton from './FollowButton.vue';
-import TagsButton from './TagsButton.vue';
 
 import { ApiData } from '@/js/apis/BaseApi';
 
@@ -11,15 +10,11 @@ const api = vi.hoisted(() => ({
   isFollowing: vi.fn(),
   follow: vi.fn(),
   unfollow: vi.fn(),
-  hasTag: vi.fn(),
-  addTag: vi.fn(),
-  removeTag: vi.fn(),
 }));
 
 vi.mock('@/js/apis/c2c', () => ({
   default: {
     userProfile: { following: { isFollowing: api.isFollowing, add: api.follow, remove: api.unfollow } },
-    tags: { get: api.hasTag, add: api.addTag, remove: api.removeTag },
   },
 }));
 
@@ -64,28 +59,5 @@ describe('FollowButton', () => {
 
     expect(wrapper.find('a').exists()).toBe(false);
     expect(api.isFollowing).not.toHaveBeenCalled();
-  });
-});
-
-describe('TagsButton', () => {
-  const route = { document_id: 9, type: 'r' };
-
-  it('renders at once, then shows the to-do state of the route', async () => {
-    api.hasTag.mockReturnValue(response({ todo: true }));
-    api.addTag.mockResolvedValue({});
-    api.removeTag.mockResolvedValue({});
-    // a synchronous component: no Suspense needed around it
-    const wrapper = mountButton(TagsButton, route);
-
-    expect(wrapper.find('a').exists()).toBe(true);
-    await flushPromises();
-    expect(api.hasTag).toHaveBeenCalledWith(route);
-    expect(wrapper.find('a').classes()).toContain('active');
-
-    await wrapper.find('a').trigger('click');
-    await flushPromises();
-
-    expect(api.removeTag).toHaveBeenCalledWith(route);
-    expect(wrapper.find('a').classes()).not.toContain('active');
   });
 });

@@ -129,7 +129,7 @@ const title = computed(() => {
   const titles: Record<string, string> = {
     topoguide: $gettext('Topoguide'),
     home: $gettext('Home'),
-    offline: $gettext('My topos'),
+    offline: $gettext('Favourites'),
     me: $gettext('Me'),
     'app-settings': $gettext('App settings'),
     'app-guide': $gettext('App guide'),

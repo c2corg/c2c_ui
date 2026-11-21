@@ -1,5 +1,5 @@
 // The outings waiting on the phone (src/pwa/outing-queue.ts) as the pages show them, and their publication: only
-// when the user asks ("Publish now" in My topos), never by itself, so that nothing leaves the phone unexpectedly
+// when the user asks ("Publish now" in Favourites), never by itself, so that nothing leaves the phone unexpectedly
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
 
@@ -93,7 +93,7 @@ export const useOutingQueueStore = defineStore('outing-queue', () => {
     () => offline.online,
     (online) => {
       if (online && ready.value.length) {
-        notify($gettext('Outings are ready to be published: open My topos to send them.'), 'is-info');
+        notify($gettext('Outings are ready to be published: open Favourites to send them.'), 'is-info');
       }
     }
   );
@@ -217,11 +217,11 @@ export const useOutingQueueStore = defineStore('outing-queue', () => {
       notify($gettext('Outings published:') + ' ' + count('published'), 'is-success');
     }
     if (count('frozen')) {
-      notify($gettext('Some outings need your decision: see My topos.'), 'is-warning');
+      notify($gettext('Some outings need your decision: see Favourites.'), 'is-warning');
     } else if (!count('published') && count('unavailable') === results.length) {
       notify($gettext('Camptocamp is unavailable for now. Your outings stay waiting: try again later.'), 'is-warning');
     } else if (!count('published')) {
-      notify($gettext('Publishing failed. Your outings stay waiting: try again from My topos.'), 'is-warning');
+      notify($gettext('Publishing failed. Your outings stay waiting: try again from Favourites.'), 'is-warning');
     }
   }
 

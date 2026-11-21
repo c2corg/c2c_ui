@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 // The service worker of the app, built by vite-plugin-pwa (injectManifest, see vite.config.ts): the start of the app
 // is cached at install, the other files of the build the first time they are used, and a page is the last index.html
-// received. A page opened once opens again without a network, and so do the documents of "My topos" saved offline,
+// received. A page opened once opens again without a network, and so do the documents of Favourites saved offline,
 // with their images and map tiles
 import { get, set } from 'idb-keyval';
 import { ExpirationPlugin } from 'workbox-expiration';
@@ -60,7 +60,7 @@ registerRoute(
   )
 );
 
-// The documents of "My topos" saved offline (src/pwa/offline-store.ts): the API answers ?cook= with the saved copy
+// The documents of Favourites saved offline (src/pwa/offline-store.ts): the API answers ?cook= with the saved copy
 // when the network fails, whatever the language asked (there is one copy, the best answer without a network). Online,
 // the copy follows what the API answers in its language
 const COOKED_DOCUMENT = /^\/(article|book|image|outing|route|waypoint|xreport)s\/(\d+)$/;

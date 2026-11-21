@@ -112,3 +112,22 @@ export function notify(
 ): void {
   toast({ message, type, position: 'bottom-center', duration: 6000, dismissible: true, ...options });
 }
+
+// A notice with one button (Undo, Also save offline...): a click on the button runs its action and closes the notice
+export function notifyWithAction(
+  text: string,
+  label: string,
+  action: () => unknown,
+  type: 'is-info' | 'is-success' | 'is-warning' = 'is-info'
+): void {
+  const message = document.createElement('div');
+  message.textContent = text + ' ';
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'button is-small is-white';
+  button.textContent = label;
+  button.addEventListener('click', () => void action(), { once: true });
+  message.append(button);
+  // longer: time to read and to decide
+  notify(message, type, { duration: 8000 });
+}

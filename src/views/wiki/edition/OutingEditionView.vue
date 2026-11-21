@@ -5,7 +5,7 @@
       <div v-if="draftId" class="notification is-info is-light">
         {{
           $gettext(
-            'You are editing an outing saved on the phone, not published yet. Save updates it; publish it from My topos.'
+            'You are editing an outing saved on the phone, not published yet. Save updates it; publish it from Favourites.'
           )
         }}
       </div>
@@ -71,7 +71,7 @@
           </div>
         </div>
 
-        <!-- the routes of My topos saved offline: at hand without a network, or just after coming down from one -->
+        <!-- the routes of Favourites saved offline: at hand without a network, or just after coming down from one -->
         <div v-if="offlineRoutes.length" class="field">
           <label class="label"><fa-icon icon="bookmark" />&nbsp;{{ $gettext('My routes saved offline') }}</label>
           <div v-for="route of offlineRoutes" :key="route.document_id">
@@ -116,7 +116,7 @@
         </div>
 
         <!-- No route to link (none offline, or not on Camptocamp yet): a note says which one it is, and the outing waits
-             on the phone until it is linked from My topos -->
+             on the phone until it is linked from Favourites -->
         <template v-if="mode === 'add' && !document.associations?.routes?.length">
           <p v-if="!showRouteNote" class="help mb-3">
             <a @click="routeNoteOpened = true">{{ $gettext('Route not found? Save without a route') }}</a>
@@ -126,7 +126,7 @@
               {{ offline.online ? $gettext('Route not found') : $gettext('No route available offline') }}
             </p>
             <p class="mb-2">
-              {{ $gettext('Note which route this outing is: you will link it later from My topos.') }}
+              {{ $gettext('Note which route this outing is: you will link it later from Favourites.') }}
             </p>
             <textarea
               v-model="routeNote"
@@ -310,7 +310,7 @@
         >
           {{ $gettext('Save without publishing') }}
         </button>
-        <p class="help">{{ $gettext('The outing stays on the phone: complete and publish it from My topos.') }}</p>
+        <p class="help">{{ $gettext('The outing stays on the phone: complete and publish it from Favourites.') }}</p>
       </div>
     </template>
   </edition-container>
@@ -356,7 +356,7 @@ const cotometer = useTemplateRef<{ show(): void }>('cotometer');
 const showBothDates = ref(false);
 const currentDate = ref(getCurrentDateString());
 
-// the routes saved offline in My topos
+// the routes saved offline in Favourites
 const offlineRoutes = computed(() =>
   offline.savedDocs
     .filter((entry) => entry.type === 'route' && entry.mode === OFFLINE_MODE && entry.data)
@@ -380,7 +380,7 @@ function saveWithoutRoute() {
   }
   handleDates();
   void keepOnPhone(
-    $gettext('Outing saved on the phone. Link its route from My topos to publish it.'),
+    $gettext('Outing saved on the phone. Link its route from Favourites to publish it.'),
     'is-success',
     routeNote.value
   );

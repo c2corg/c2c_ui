@@ -1,8 +1,9 @@
-// "My topos": the documents saved on this device, in IndexedDB, which the service worker reads too (it answers the
-// API from it without a network, see service-worker.ts). Two sections:
-//   - 'online': a bookmark, a title and nothing else, read with a network;
+// The favourites kept on this device, in IndexedDB, which the service worker reads too (it answers the API from it
+// without a network, see service-worker.ts). Two modes:
+//   - 'online': a favourite of a user logged out, a title and nothing else, read with a network. A logged in user has
+//     their favourites on their account (src/stores/favourites.ts): theirs are sent there, then removed from here;
 //   - 'offline': the cooked document, its images and the map tiles around it (in the caches of the service worker),
-//     taken to the mountain.
+//     taken to the mountain. A favourite too, logged in or not.
 // One copy per document, in the language it was saved in.
 import { del, get, keys, set } from 'idb-keyval';
 
@@ -47,7 +48,7 @@ export interface SavedEntry {
 export interface Folder {
   id: string;
   name: string;
-  // a folder belongs to one section
+  // the section it was created in, before favourites had one set of folders for both: no longer read
   section: SavedMode;
 }
 
@@ -83,14 +84,13 @@ export async function saveDocument(
   } satisfies SavedEntry);
 }
 
-// back to a bookmark: the content goes, and the folder (folders are per section)
+// back to a favourite only: the content goes, the folder stays (one set of folders for both)
 export const makeOnline = (type: string, id: number) =>
   update(docKey(type, id), () => ({
     mode: ONLINE_MODE,
     data: null,
     downloadedAt: null,
     assets: undefined,
-    folderId: null,
   }));
 
 export const setAssets = (type: string, id: number, assets: SavedEntry['assets']) =>

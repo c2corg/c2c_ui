@@ -343,6 +343,9 @@ function load() {
       .catch(() => {
         mode.value = 'signin';
       });
+  } else if (query.signup !== undefined) {
+    // "Create an account" of the other pages (Favourites)
+    mode.value = 'signup';
   } else {
     mode.value = 'signin';
   }

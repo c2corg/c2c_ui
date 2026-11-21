@@ -157,7 +157,7 @@ const sections = computed<Section[]>(() => {
     if (router.hasRoute('offline')) {
       contributions.push({
         key: 'offline',
-        label: $gettext('My topos'),
+        label: $gettext('Favourites'),
         desc: $gettext('Saved for the field'),
         icon: 'bookmark',
         to: { name: 'offline' },

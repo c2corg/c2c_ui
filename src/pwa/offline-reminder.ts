@@ -1,5 +1,5 @@
 // Once a day at most, online only: a toast when offline topos need something (offline-store.ts attentionOf), with a
-// button to My topos. Online, because only then can they be downloaded again: before leaving, not in the hut
+// button to Favourites. Online, because only then can they be downloaded again: before leaving, not in the hut
 import { notify } from '@/js/toast';
 
 const LAST_REMINDER_KEY = 'c2c.offlineReminder';
@@ -32,6 +32,6 @@ export function remind(text: string, buttonText: string, open: () => void, now =
   button.textContent = buttonText;
   button.addEventListener('click', open, { once: true });
   message.append(button);
-  // a click on its button opens My topos and closes it
+  // a click on its button opens Favourites and closes it
   notify(message, 'is-warning', { duration: 10000, dismissible: true });
 }
