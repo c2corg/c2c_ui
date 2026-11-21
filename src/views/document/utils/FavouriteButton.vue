@@ -1,6 +1,7 @@
 <template>
   <span class="favourite-button" role="button" :title="label" :aria-label="label" @click="tap">
-    <fa-icon icon="bookmark" :class="favourite ? 'has-text-primary' : 'has-text-grey-light'" />
+    <!-- outline when not a favourite, filled when it is -->
+    <fa-icon :icon="favourite ? 'bookmark' : ['far', 'bookmark']" :class="favourite ? 'has-text-primary' : ''" />
     <!-- the one sign that the page opens without a network, read before walking out of coverage -->
     <span v-if="busy" class="offline-badge is-busy">
       <fa-icon icon="spinner" spin />

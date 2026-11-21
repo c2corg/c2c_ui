@@ -3,6 +3,7 @@ import { type IconDefinition, library } from '@fortawesome/fontawesome-svg-core'
 // wrappers tripled the icons' size in the startup bundle (#4878)
 import { faCreativeCommons, faFacebook, faGoogle, faInstagram, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import {
+  faBookmark as faBookmarkRegular,
   faCircle as faCircleRegular,
   faClock as faClockRegular,
   faFaceFrown as faFaceFrownRegular,
@@ -424,6 +425,7 @@ export default function install(app: App) {
     faArrowDown,
 
     // regular icons
+    faBookmarkRegular,
     faCircleRegular,
     faClockRegular,
     faFaceFrownRegular,

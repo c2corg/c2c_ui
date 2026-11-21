@@ -88,7 +88,9 @@ describe('FavouriteButton', () => {
 
   it('adds a favourite, and offers to save it offline', async () => {
     const wrapper = mountButton();
-    expect(bookmark(wrapper).classes()).toContain('has-text-grey-light');
+    // not a favourite: the outline bookmark
+    expect(wrapper.find('[data-icon="far,bookmark"]').exists()).toBe(true);
+    expect(bookmark(wrapper).exists()).toBe(false);
     expect(badge(wrapper).exists()).toBe(false);
     expect(button(wrapper).attributes('title')).toBe('Add to favourites');
 
