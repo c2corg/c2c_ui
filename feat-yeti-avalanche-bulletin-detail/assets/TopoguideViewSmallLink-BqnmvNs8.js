@@ -1,0 +1,2 @@
+import{Di as e,Li as t,Oi as n,fi as r,oi as i,ui as a,wi as o}from"./vendor-CDLKYQ09.js";import{t as s}from"./_plugin-vue_export-helper-BDNMzG2s.js";var c=s(r({__name:`TopoguideViewSmallLink`,props:{to:{type:Object,required:!0}},setup(r){return(s,c)=>{let l=n(`router-link`);return o(),i(`div`,null,[a(l,{to:r.to},{default:t(()=>[e(s.$slots,`default`,{},void 0,!0)]),_:3},8,[`to`])])}}}),[[`__scopeId`,`data-v-3728c177`]]);export{c as t};
+//# sourceMappingURL=TopoguideViewSmallLink-BqnmvNs8.js.map

@@ -1,0 +1,2 @@
+import{Qr as e,li as t}from"./vendor-CJnf7Ig4.js";var n={document:{type:Object,required:!0}},r={document:{type:Object,required:!0}},i={field:{type:Object,required:!0}},a={documentType:{type:String,required:!0,validator:e=>e.length>1}};function o(n){let r=t().appContext.config.globalProperties;return{documentType:e(()=>r.$documentUtils.getDocumentType(n.document.type))}}export{o as a,i,n,a as r,r as t};
+//# sourceMappingURL=properties-DHfRkGhP.js.map
