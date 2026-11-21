@@ -738,6 +738,28 @@ describe('C2cMap', () => {
       wrapper.unmount();
     });
 
+    it('does not fit the results of the first search after another one, the documents unchanged meanwhile', async () => {
+      const { wrapper, map } = await mountMap({ documents: [] }, '/outings?r=47805');
+      await wrapper.vm.$router.push({ query: { r: '47805', act: 'hiking' } });
+      await wrapper.vm.$router.push({ query: { r: '47805' } });
+      await flushPromises();
+      const cameras = map.cameras.length;
+
+      await wrapper.setProps({ documents: [outing] });
+      expect(map.cameras).toHaveLength(cameras);
+      wrapper.unmount();
+    });
+
+    it('still fits the results after a change of the layers of the map', async () => {
+      const { wrapper, map } = await mountMap({ documents: [] }, '/outings?r=47805');
+      await wrapper.vm.$router.push({ query: { r: '47805', layer: 'esri' } });
+      await flushPromises();
+
+      await wrapper.setProps({ documents: [outing] });
+      expect(lastLongitude(map)).toBeCloseTo(6.8, 6);
+      wrapper.unmount();
+    });
+
     it('does not fit the results after a zoom button or a place chosen by the user', async () => {
       const zoomed = await mountMap({ documents: [] }, '/outings?r=47805');
       await zoomed.wrapper.find('.ol-zoom-in').trigger('click');
