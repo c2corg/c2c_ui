@@ -40,3 +40,6 @@ export type YetiTab = {
   counter?: { title: string; text: string | number };
   problemIcon?: { title: string };
 };
+
+// the bulletin of a zone of the map, opened in the Bulletin tab
+export type SelectedBulletin = { regionId: string; name: string };

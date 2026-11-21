@@ -59,10 +59,14 @@ const tabLinks = useTemplateRef<HTMLElement[]>('tabLinks');
 
 const activeTab = computed(() => Yetix.activeTab as number);
 
-// focus active tab
-watch(activeTab, (index) => {
-  tabLinks.value![index].focus();
-});
+// focus active tab, once rendered: a tab may appear and be activated at once (the bulletin tab)
+watch(
+  activeTab,
+  (index) => {
+    tabLinks.value?.[index]?.focus();
+  },
+  { flush: 'post' }
+);
 
 function setActiveTab(index: number) {
   Yetix.setActiveTab(index);
