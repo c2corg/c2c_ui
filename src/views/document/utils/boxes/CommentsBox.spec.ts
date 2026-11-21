@@ -73,4 +73,27 @@ describe('CommentsBox', () => {
     expect(data.post_stream.posts[1].cooked).toBe(topic().post_stream.posts[1].cooked);
     expect(warn).not.toHaveBeenCalledWith(expect.stringContaining('Maximum recursive updates'), expect.anything());
   });
+
+  it('offers a new topic when the forum answers 404 for the topic', async () => {
+    // the topic was deleted in the forum: the API replaces it
+    const error = Object.assign(new Error('Request failed with status code 404'), { response: { status: 404 } });
+    vi.spyOn(forum, 'getTopic').mockReturnValue({ error } as unknown as ReturnType<typeof forum.getTopic>);
+
+    const wrapper = await mountCommentsBox(true);
+    await flushPromises();
+
+    expect(wrapper.find('.notification.is-danger').exists()).toBe(false);
+    expect(wrapper.find('button.is-primary').exists()).toBe(true);
+  });
+
+  it('shows other forum errors', async () => {
+    const error = Object.assign(new Error('Request failed with status code 502'), { response: { status: 502 } });
+    vi.spyOn(forum, 'getTopic').mockReturnValue({ error } as unknown as ReturnType<typeof forum.getTopic>);
+
+    const wrapper = await mountCommentsBox(true);
+    await flushPromises();
+
+    expect(wrapper.find('.notification.is-danger').text()).toContain('status code 502');
+    expect(wrapper.find('button.is-primary').exists()).toBe(false);
+  });
 });
