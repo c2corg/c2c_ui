@@ -854,8 +854,6 @@ const EMPTY: Extent = [Infinity, Infinity, -Infinity, -Infinity];
 
 // the map was shown before the documents of a search: it fits them when they come, if the search is still the same
 let fitOnFirstDocuments = false;
-const searchKey = () => JSON.stringify([route.path, withoutDisplaySettings(route.query)]);
-let firstSearchKey = '';
 
 const queryIds = (value: unknown) =>
   (Array.isArray(value) ? value.map(String) : String(value).split(',')).map(Number).filter(Boolean);
@@ -2246,8 +2244,7 @@ watch(
     drawDocumentMarkers();
     if (is3d.value) redraw3d();
     // the results of the search came after the map: it fits them, unless the user moved it meanwhile or changed the
-    // search (other filters, another page)
-    if (fitOnFirstDocuments && searchKey() !== firstSearchKey) fitOnFirstDocuments = false;
+    // search
     if (fitOnFirstDocuments && documents?.length) {
       fitOnFirstDocuments = false;
       if (is3d.value) {
@@ -2259,6 +2256,13 @@ watch(
     }
   },
   { deep: 1 }
+);
+
+// another search (other filters, another page), even one that comes back to the first: its results do not move the map,
+// how the map is shown (its layers) excepted
+watch(
+  () => JSON.stringify([route.path, withoutDisplaySettings(route.query)]),
+  () => (fitOnFirstDocuments = false)
 );
 
 watch(filterDocumentsWithMap, () => sendBoundsToUrl());
@@ -2417,7 +2421,6 @@ onMounted(() => {
     // no document yet (a search still loading): the map fits its first results, the areas and waypoints of the search
     // excepted, which the map already fits
     fitOnFirstDocuments = !props.documents?.length && !route.query.a && !route.query.w;
-    firstSearchKey = searchKey();
     fitMapToDocuments(true);
   }
   viewExtent.value = getExtent('EPSG:4326');
