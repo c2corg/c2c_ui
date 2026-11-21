@@ -54,8 +54,8 @@ class TrackingService {
     return this.axios.get(`/${vendor}/exchange-token/${userId}`, { params });
   }
 
-  requestGarminUnauthorizeRequestToken(userId: number) {
-    return this.axios.get<{ token: string }>(`/garmin/request-token/${userId}`);
+  requestGarminAuthorizationUrl(userId: number) {
+    return this.axios.get<{ url: string }>(`/garmin/request-token/${userId}`);
   }
 
   getStatus(userId: number) {
