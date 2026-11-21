@@ -263,6 +263,15 @@ export function countryOfAreas(areaIds: number[]): string | undefined {
   return undefined;
 }
 
+// all the countries of a document by its areas (a document on a border is in two), a region with its own layers instead
+// of its country (Catalonia, not Spain): the national maps it takes offline (src/pwa/offline-assets.ts)
+export function countriesOfAreas(areaIds: number[]): Set<string> {
+  const regions = areaIds.filter((id) => REGION_AREAS[id]).map((id) => REGION_AREAS[id]);
+  const countries = areaIds.filter((id) => COUNTRY_AREAS[id]).map((id) => COUNTRY_AREAS[id]);
+  // Spain only outside Catalonia
+  return new Set([...regions, ...countries.filter((country) => !(country === 'es' && regions.includes('catalonia')))]);
+}
+
 // the base layer of a category in a country: its national map or orthophoto, else OpenTopoMap or the world orthophoto
 export function baseLayerOf(category: LayerCategory, country?: string): string {
   const layers = baseLayers.filter((layer) => layer.category === category);

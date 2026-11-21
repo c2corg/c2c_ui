@@ -6,6 +6,7 @@ import {
   baseLayerOf,
   baseLayers,
   categoryOf,
+  countriesOfAreas,
   countryOfAreas,
   orthoLayers,
   swissExtent,
@@ -96,5 +97,16 @@ describe('layer categories', () => {
     expect(countryOfAreas([14270])).toBeUndefined();
     expect(baseLayerOf('national', 'catalonia')).toBe('ICGC raster (ca)');
     expect(baseLayerOf('ortho', 'catalonia')).toBe('ICGC ortho (ca)');
+  });
+
+  it('finds every country of a document on a border, Catalonia instead of Spain', () => {
+    // France, Switzerland
+    expect(countriesOfAreas([14274, 14067])).toEqual(new Set(['fr', 'ch']));
+    // France, Spain, Girona
+    expect(countriesOfAreas([14274, 14267, 279939])).toEqual(new Set(['catalonia', 'fr']));
+    // Spain, Zaragoza; Liechtenstein
+    expect(countriesOfAreas([14267, 279959])).toEqual(new Set(['es']));
+    expect(countriesOfAreas([14381])).toEqual(new Set(['ch']));
+    expect(countriesOfAreas([])).toEqual(new Set());
   });
 });

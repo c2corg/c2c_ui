@@ -1,6 +1,12 @@
 // What a document taken offline needs besides itself, at the urls the page asks for them: the images (Markdown.vue,
 // Thumbnail.vue) and the OpenTopoMap tiles around it (map-layers.ts). Downloaded once into saved-assets.ts
-import { baseLayers, OFFLINE_BASE_LAYER, slopeLayers, type MapLayer } from '@/components/map/map-layers';
+import {
+  baseLayers,
+  countriesOfAreas,
+  OFFLINE_BASE_LAYER,
+  slopeLayers,
+  type MapLayer,
+} from '@/components/map/map-layers';
 import config from '@/js/config';
 import { extentFromLonLat } from '@/js/geo/projection';
 import { getEmbeddedImageUrl, getImageUrl, type Image, type ImageFormat } from '@/js/image-urls';
@@ -124,12 +130,6 @@ const IGN_SLOPES: OfflineLayer = { layer: layerTitled('IGN Slopes'), zooms: ZOOM
 const IGN_ES: OfflineLayer = { layer: layerTitled('IGN raster (es)'), zooms: ZOOMS, maxTiles: 400 };
 const ICGC: OfflineLayer = { layer: layerTitled('ICGC raster (ca)'), zooms: ZOOMS, maxTiles: 400 };
 
-// the country areas of the API (document ids)
-const SWISSTOPO_COUNTRIES = [14067, 14381]; // Switzerland, Liechtenstein
-const FRANCE = 14274;
-const SPAIN = 14267;
-// Catalonia has no area of its own: its provinces (admin_limits) Barcelona, Girona, Lleida, Tarragona
-const CATALONIA = [279930, 279939, 279949, 279963];
 export const SLOPE_ACTIVITIES = ['skitouring', 'snowshoeing', 'snow_ice_mixed', 'ice_climbing'];
 
 interface OfflineDocument {
@@ -140,14 +140,12 @@ interface OfflineDocument {
 }
 
 export function offlineLayersOf(document: OfflineDocument): OfflineLayer[] {
-  const countries = (document.areas ?? [])
-    .filter((area) => area.area_type === 'country')
-    .map((area) => area.document_id);
-  const swiss = countries.some((id) => SWISSTOPO_COUNTRIES.includes(id!));
-  const france = countries.includes(FRANCE);
-  // in Catalonia, the map of the ICGC only: more detailed there than that of the IGN of Spain
-  const catalonia = (document.areas ?? []).some((area) => CATALONIA.includes(area.document_id!));
-  const spain = countries.includes(SPAIN) && !catalonia;
+  // Switzerland with Liechtenstein; Catalonia instead of Spain: the map of the ICGC only, more detailed there
+  const countries = countriesOfAreas((document.areas ?? []).map((area) => area.document_id!));
+  const swiss = countries.has('ch');
+  const france = countries.has('fr');
+  const spain = countries.has('es');
+  const catalonia = countries.has('catalonia');
   const slopes = (document.activities ?? []).some((activity) => SLOPE_ACTIVITIES.includes(activity));
   return [
     OPENTOPOMAP,
