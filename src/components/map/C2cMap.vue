@@ -3,10 +3,20 @@
     <div ref="mapElement" class="c2c-map-canvas" @click="showLayerSwitcher = false" />
 
     <div class="ol-zoom ol-unselectable ol-control">
-      <button class="ol-zoom-in" type="button" :title="$gettext('Zoom in', 'Map controls')" @click="map?.zoomIn()">
+      <button
+        class="ol-zoom-in"
+        type="button"
+        :title="$gettext('Zoom in', 'Map controls')"
+        @click="map?.zoomIn({}, { originalEvent: $event })"
+      >
         +
       </button>
-      <button class="ol-zoom-out" type="button" :title="$gettext('Zoom out', 'Map controls')" @click="map?.zoomOut()">
+      <button
+        class="ol-zoom-out"
+        type="button"
+        :title="$gettext('Zoom out', 'Map controls')"
+        @click="map?.zoomOut({}, { originalEvent: $event })"
+      >
         –
       </button>
     </div>
@@ -375,7 +385,7 @@ import {
   swissProtectionLayers,
   worldLayer,
 } from './map-layers';
-import { MAP_URL_KEYS } from './map-url-keys';
+import { MAP_URL_KEYS, withoutDisplaySettings } from './map-url-keys';
 import { parseMapUrl, storedLayerCategory, storedMapSettings, storeMapSettings, withMapUrl } from './map-url-state';
 import { scrollPassthrough } from './scroll-passthrough';
 
@@ -859,8 +869,10 @@ const extend = (a: Extent, b: Extent): Extent => [
 ];
 const EMPTY: Extent = [Infinity, Infinity, -Infinity, -Infinity];
 
-// the map was shown before the documents of a search: it fits them when they come
+// the map was shown before the documents of a search: it fits them when they come, if the search is still the same
 let fitOnFirstDocuments = false;
+const searchKey = () => JSON.stringify([route.path, withoutDisplaySettings(route.query)]);
+let firstSearchKey = '';
 
 const queryIds = (value: unknown) =>
   (Array.isArray(value) ? value.map(String) : String(value).split(',')).map(Number).filter(Boolean);
@@ -1700,7 +1712,10 @@ function listRecentTracks(event: MapMouseEvent, touch: boolean) {
 
 function centerOnGeolocation() {
   navigator.geolocation.getCurrentPosition(
-    ({ coords }) => map?.jumpTo({ center: [coords.longitude, coords.latitude], zoom: TRACKING_INITIAL_ZOOM }),
+    ({ coords }) => {
+      fitOnFirstDocuments = false;
+      map?.jumpTo({ center: [coords.longitude, coords.latitude], zoom: TRACKING_INITIAL_ZOOM });
+    },
     () => undefined,
     { enableHighAccuracy: true }
   );
@@ -1726,6 +1741,7 @@ function clearRecenterOnPropositions() {
 
 // https://github.com/c2corg/v6_ui/blob/c9962a6c3bac0670eab732d563f9f480379f84d1/c2corg_ui/static/js/map/search.js#L194
 function recenterOn(item: PhotonFeature) {
+  fitOnFirstDocuments = false;
   const extent = item.properties.extent;
   if (extent) {
     // from W N E S to W S E N
@@ -2245,9 +2261,16 @@ watch(
   (documents) => {
     drawDocumentMarkers();
     if (is3d.value) redraw3d();
-    // the results of the search came after the map: it fits them, unless the user moved it meanwhile
+    // the results of the search came after the map: it fits them, unless the user moved it meanwhile or changed the
+    // search (other filters, another page)
+    if (fitOnFirstDocuments && searchKey() !== firstSearchKey) fitOnFirstDocuments = false;
     if (fitOnFirstDocuments && documents?.length) {
       fitOnFirstDocuments = false;
+      if (is3d.value) {
+        // the 3D view opened while the search was loading: on the results, not on the view it opened on
+        const { lines, markers } = documents3d();
+        bounds3d = bounds3dOf(markers, lines);
+      }
       fitMapToDocuments(true);
     }
   },
@@ -2391,7 +2414,8 @@ onMounted(() => {
     trackTooltipMarker = new Marker({ element: trackTooltipEl.value!, anchor: 'bottom', offset: [0, -12] });
     created.on('moveend', debounce(updateDensityOverlays, DENSITY_FETCH_DEBOUNCE));
   }
-  // moved by the user (a move by code has no original event): the results that come later do not move it back
+  // moved by the user (a move by code has no original event, the place search and the geolocation say it themselves):
+  // the results that come later do not move it back
   created.on('movestart', (event) => {
     if (event.originalEvent) fitOnFirstDocuments = false;
   });
@@ -2409,6 +2433,7 @@ onMounted(() => {
     // no document yet (a search still loading): the map fits its first results, the areas and waypoints of the search
     // excepted, which the map already fits
     fitOnFirstDocuments = !props.documents?.length && !route.query.a && !route.query.w;
+    firstSearchKey = searchKey();
     fitMapToDocuments(true);
   }
   updateViewPlace();
