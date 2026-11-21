@@ -18,7 +18,6 @@ function buildConfig(overrides: Partial<BuildConfiguration> = {}): BuildConfigur
   return {
     isBackendSelectable: false,
     ordnanceSurveyApiKey: '',
-    addthisPublicId: '',
     googleAnalyticsKey: '',
     publicPath: '/',
     urlsConfigurations: { prod, demo },
