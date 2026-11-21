@@ -50,7 +50,8 @@
         </div>
         <div class="dropdown-menu">
           <div class="dropdown-content">
-            <a
+            <button
+              type="button"
               v-for="(urlsConfiguration, i) of Object.values(siteConfiguration.urlsConfigurations)"
               :key="i"
               class="dropdown-item is-size-5"
@@ -58,7 +59,7 @@
               @click="setUrlsConfiguration(urlsConfiguration.name)"
             >
               <span>{{ urlsConfiguration.name }}</span>
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -160,11 +161,11 @@
 
           <hr class="dropdown-divider" />
 
-          <a class="dropdown-item is-size-5" @click="signout()">
+          <button type="button" class="dropdown-item is-size-5" @click="signout()">
             <fa-icon icon="sign-out-alt" />
             <span>&nbsp;</span>
             <span v-translate>Logout</span>
-          </a>
+          </button>
         </dropdown-button>
       </div>
       <div v-if="!$user.isLogged" class="navigation-item">
@@ -174,7 +175,8 @@
               {{ $language.current }}
             </button>
           </template>
-          <a
+          <button
+            type="button"
             v-for="(language, key) in $language.availableUI"
             :key="key"
             class="dropdown-item is-size-5"
@@ -182,7 +184,7 @@
             @click="$language.setCurrent(key)"
           >
             {{ language }}
-          </a>
+          </button>
         </dropdown-button>
       </div>
     </div>
