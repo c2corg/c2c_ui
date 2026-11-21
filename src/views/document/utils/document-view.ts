@@ -298,6 +298,22 @@ export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { dr
     return meta;
   }
 
+  // the language versions of the document, for search engines (same as docker/lua/c2c_head.lua)
+  function alternates(doc: C2cDocument): HeadTag[] {
+    if (isVersionView.value || isDraftView.value) {
+      return [];
+    }
+    const path = `https://www.camptocamp.org/${documentType.value}s/${documentId.value}`;
+    const langs = ((doc.available_langs ?? []) as string[]).filter((lang) => constants.langs.includes(lang));
+    if (!langs.length) {
+      return [];
+    }
+    return [
+      ...langs.map((lang) => ({ rel: 'alternate', hreflang: lang, href: `${path}/${lang}`, id: `hreflang-${lang}` })),
+      { rel: 'alternate', hreflang: 'x-default', href: path, id: 'hreflang-x-default' },
+    ];
+  }
+
   useHead(() => {
     const doc = document.value;
     const robots = { name: 'robots', content: isVersionView.value ? 'noindex' : 'index', id: 'meta-robots' };
@@ -312,7 +328,10 @@ export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { dr
           ]
         : null,
       meta: doc ? [robots, ...documentOpenGraph(doc)] : [robots],
-      link: [{ rel: 'canonical', href: `https://www.camptocamp.org${getCurrentPath()}`, id: 'canonical' }],
+      link: [
+        { rel: 'canonical', href: `https://www.camptocamp.org${getCurrentPath()}`, id: 'canonical' },
+        ...(doc ? alternates(doc) : []),
+      ],
     };
   });
 

@@ -63,7 +63,7 @@ const mountNavigation = async (leave = true) => {
 
 const signout = (wrapper: Awaited<ReturnType<typeof mountNavigation>>['wrapper']) =>
   wrapper
-    .findAll('a.dropdown-item')
+    .findAll('.dropdown-item')
     .find((link) => link.text().includes('Logout'))!
     .trigger('click');
 

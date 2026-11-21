@@ -170,6 +170,28 @@ test('build: an image shows itself, with its license', function()
   equal(json_ld.license, 'http://creativecommons.org/licenses/by-nc-nd/3.0/fr/')
 end)
 
+test('alternates: a link per known language, and x-default', function()
+  local links = head.alternates({ 'fr', 'es', 'xx' }, 'route', '123')
+  equal(#links, 3)
+  equal(links[1], '<link rel="alternate" hreflang="fr" href="https://www.camptocamp.org/routes/123/fr" id="hreflang-fr" />')
+  equal(links[2], '<link rel="alternate" hreflang="es" href="https://www.camptocamp.org/routes/123/es" id="hreflang-es" />')
+  equal(
+    links[3],
+    '<link rel="alternate" hreflang="x-default" href="https://www.camptocamp.org/routes/123" id="hreflang-x-default" />'
+  )
+  equal(#head.alternates({}, 'route', '123'), 0)
+  equal(#head.alternates(cjson.null, 'route', '123'), 0)
+  equal(#head.alternates(nil, 'route', '123'), 0)
+end)
+
+test('build: the hreflang alternates of the language versions', function()
+  local _, tags = head.build(route({ lang = 'fr', title = 't' }, { available_langs = { 'fr', 'en' } }), 'outing', '7', 'fr', urls)
+  contains(tags, 'hreflang="fr" href="https://www.camptocamp.org/outings/7/fr"')
+  contains(tags, 'hreflang="en" href="https://www.camptocamp.org/outings/7/en"')
+  contains(tags, 'hreflang="x-default" href="https://www.camptocamp.org/outings/7"')
+  lacks(select(2, head.build(route({ lang = 'fr', title = 't' }), 'route', '1', 'fr', urls)), 'hreflang')
+end)
+
 test('build: the document text is escaped, and cannot close the JSON-LD script', function()
   local _, tags = head.build(route({ lang = 'fr', title = '"><script>alert(1)</script>' }), 'route', '1', 'fr', urls)
   lacks(tags, '<script>alert')

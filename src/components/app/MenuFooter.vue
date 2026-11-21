@@ -9,7 +9,7 @@
       <br />
       <router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>Association</router-link>
       <span> &bull; </span>
-      <a @click="showGdpr" v-translate>Cookies</a>
+      <button type="button" class="link-button" @click="showGdpr" v-translate>Cookies</button>
     </div>
 
     <div class="columns is-gapless has-text-centered is-mobile menu-socials">

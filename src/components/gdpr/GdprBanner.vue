@@ -8,7 +8,7 @@
           while you can adjust others at any time, in particular those that allow us to understand the performance of
           our website and to offer you social media features. You can accept or reject all, or
         </span>
-        <a @click="showGdprModal()" v-translate>configure your choices</a>.
+        <button type="button" class="link-button" @click="showGdprModal()" v-translate>configure your choices</button>.
       </div>
       <div class="buttons mt-2 is-flex is-justify-content-flex-end">
         <button @click="acceptGdpr(false)" class="button is-danger" v-translate>Deny all</button>

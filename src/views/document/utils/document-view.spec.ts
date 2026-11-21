@@ -149,6 +149,27 @@ describe('useDocumentView', () => {
     expect(head('#canonical')).toBeNull();
   });
 
+  it('lists the language versions of the document for search engines', async () => {
+    api.getCooked.mockImplementation(() => response({ ...montBlanc(), available_langs: ['fr', 'es', 'xx'] }));
+
+    const { wrapper } = await mountAt('/routes/12/fr');
+
+    const alternates = [...document.head.querySelectorAll('link[rel="alternate"]')].map((link) => [
+      link.getAttribute('hreflang'),
+      link.getAttribute('href'),
+      link.id,
+    ]);
+    expect(alternates).toEqual([
+      ['fr', 'https://www.camptocamp.org/routes/12/fr', 'hreflang-fr'],
+      ['es', 'https://www.camptocamp.org/routes/12/es', 'hreflang-es'],
+      ['x-default', 'https://www.camptocamp.org/routes/12', 'hreflang-x-default'],
+    ]);
+
+    wrapper.unmount();
+
+    expect(head('link[rel="alternate"]')).toBeNull();
+  });
+
   it('shows the first image of the document in link previews', async () => {
     api.getCooked.mockImplementation(() =>
       response({ ...montBlanc(), associations: { images: [{ document_id: 3, filename: '1_2.jpg' }] } })
@@ -169,7 +190,12 @@ describe('useDocumentView', () => {
 
   it('shows a version, not indexed and not editable, with the links to the next and previous ones', async () => {
     api.getVersion.mockImplementation(() =>
-      response({ document: montBlanc(), version: { version_id: 5 }, next_version_id: 6, previous_version_id: 4 })
+      response({
+        document: { ...montBlanc(), available_langs: ['fr', 'en'] },
+        version: { version_id: 5 },
+        next_version_id: 6,
+        previous_version_id: 4,
+      })
     );
 
     const { vm } = await mountAt('/routes/version/12/fr/5');
@@ -179,6 +205,7 @@ describe('useDocumentView', () => {
     expect(vm.document?.associations?.users).toEqual([]);
     expect(vm.isEditable).toBe(false);
     expect(head('#meta-robots')?.getAttribute('content')).toBe('noindex');
+    expect(head('link[rel="alternate"]')).toBeNull();
   });
 
   it('shows the cooked draft of the edition preview', async () => {

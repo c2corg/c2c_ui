@@ -147,6 +147,28 @@ body,
   box-shadow: 0 5px 10px 0px rgba(10, 10, 10, 0.5);
 }
 
+/* an action shown as a link (cookies settings...): a <button>, not an <a> without href, which crawlers report and
+   keyboards skip */
+.link-button {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--c2c-link);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--c2c-grey-darker);
+  }
+}
+
+/* the same for the actions of a dropdown menu (the colours are the ones of .dropdown-item) */
+button.dropdown-item {
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
 .offline-banner {
   display: flex;
   align-items: center;
