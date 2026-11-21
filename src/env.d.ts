@@ -29,7 +29,6 @@ interface BuildConfiguration {
   routerMode?: 'history';
   ordnanceSurveyApiKey: string;
   isBackendSelectable: boolean;
-  addthisPublicId: string;
   googleAnalyticsKey: string;
   urlsConfigurations: Record<string, UrlsConfiguration>;
   urls: UrlsConfiguration;

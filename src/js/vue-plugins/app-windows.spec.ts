@@ -88,17 +88,14 @@ describe('$helper and $imageViewer in App.vue', () => {
 describe('SocialNetworkSharing', () => {
   afterEach(() => vi.unstubAllGlobals());
 
-  it('shares the title of the document it is given', async () => {
-    const share = vi.fn();
-    vi.stubGlobal('navigator', { share });
-    const wrapper = mount(SocialNetworkSharing, {
+  const mountSharing = () =>
+    mount(SocialNetworkSharing, {
       props: { document: { type: 'r', locales: [{ lang: 'fr', title: 'Face nord' }] } },
       global: {
         stubs: { FaIcon: true },
         config: {
           globalProperties: {
             $gettext: (s: string) => s,
-            $gdpr: { get: () => null },
             $documentUtils: {
               getDocumentTitle: (document: { locales: { title: string }[] }) => document.locales[0].title,
             },
@@ -107,9 +104,28 @@ describe('SocialNetworkSharing', () => {
       },
     });
 
-    await wrapper.find('span[title=Share]').trigger('click');
+  it('shares the title of the document it is given', async () => {
+    const share = vi.fn(async () => {});
+    vi.stubGlobal('navigator', { share });
+
+    await mountSharing().find('span[title=Share]').trigger('click');
 
     expect(share).toHaveBeenCalledWith({ title: 'Face nord', url: window.location.href });
+  });
+
+  it('copies the link when the browser has no share sheet', async () => {
+    const writeText = vi.fn(async () => {});
+    vi.stubGlobal('navigator', { clipboard: { writeText } });
+
+    await mountSharing().find('span[title=Share]').trigger('click');
+
+    expect(writeText).toHaveBeenCalledWith(window.location.href);
+  });
+
+  it('shows nothing when it can neither share nor copy', () => {
+    vi.stubGlobal('navigator', {});
+
+    expect(mountSharing().find('span[title=Share]').exists()).toBe(false);
   });
 });
 
