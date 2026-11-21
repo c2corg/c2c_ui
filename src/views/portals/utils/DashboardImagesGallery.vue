@@ -36,7 +36,7 @@ const GALLERY_SIZE = 10;
 // more images than shown, so that the gallery can skip images of the same upload (see pickGalleryImages)
 const imagesPromise = ref(
   (c2c.image as DocumentService).getAll({
-    limit: 40,
+    limit: 60,
   })
 );
 

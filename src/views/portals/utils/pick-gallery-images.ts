@@ -6,7 +6,7 @@
 export function pickGalleryImages<T extends { document_id: number }>(
   images: T[],
   count: number,
-  maxPerUpload = 3
+  maxPerUpload = 2
 ): T[] {
   const uploads: number[] = [];
   images.forEach((image, index) => {
