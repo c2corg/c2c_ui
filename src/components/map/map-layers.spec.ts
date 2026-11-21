@@ -6,8 +6,11 @@ import {
   baseLayerOf,
   baseLayers,
   categoryOf,
+  COUNTRY_COVERAGE,
+  countriesAt,
   countriesOfAreas,
   countryOfAreas,
+  layerCovers,
   orthoLayers,
   swissExtent,
   worldLayer,
@@ -119,5 +122,32 @@ describe('layer categories', () => {
     expect(countriesOfAreas([14267, 279959])).toEqual(new Set(['es']));
     expect(countriesOfAreas([14381])).toEqual(new Set(['ch']));
     expect(countriesOfAreas([])).toEqual(new Set());
+  });
+});
+
+describe('coverage of the national layers', () => {
+  it('knows where every national layer has tiles', () => {
+    for (const layer of baseLayers.filter((layer) => layer.country)) {
+      expect(COUNTRY_COVERAGE[layer.country!], layer.title).toBeDefined();
+    }
+  });
+
+  it('applies a national layer in its country and near it, not far away, the world layers everywhere', () => {
+    const swisstopo = { country: 'ch' };
+    // Zermatt; Chamonix, 15 km from the border; Grenoble, 90 km; Kathmandu
+    expect(layerCovers(swisstopo, [7.75, 46.02])).toBe(true);
+    expect(layerCovers(swisstopo, [6.87, 45.92])).toBe(true);
+    expect(layerCovers(swisstopo, [5.72, 45.19])).toBe(false);
+    expect(layerCovers({}, [85.32, 27.71])).toBe(true);
+    // a view that reaches the country
+    expect(layerCovers(swisstopo, [4, 44, 5.6, 45.5])).toBe(true);
+    expect(layerCovers(swisstopo, [4, 44, 5, 45])).toBe(false);
+  });
+
+  it('gives the countries of a point, the smaller ones first', () => {
+    expect(countriesAt(7.75, 46.02)).toEqual(['ch', 'fr']);
+    expect(countriesAt(2.17, 41.39)).toEqual(['catalonia', 'es']);
+    expect(countriesAt(-15.6, 28.1)).toEqual(['es']);
+    expect(countriesAt(85.32, 27.71)).toEqual([]);
   });
 });

@@ -68,6 +68,7 @@
             :key="layer.title"
             :layer="layer"
             :selected="layer.title === (is3d ? base3d : shownBase)"
+            :outside="!appliesHere(layer)"
             title-context="Map layer"
             @click="chooseBase(layer.title)"
           />
@@ -80,6 +81,7 @@
             :key="layer.title"
             :layer="layer"
             :selected="slopes.includes(layer.title)"
+            :outside="!appliesHere(layer)"
             title-context="Map slopes layer"
             @click="toggleSlope(layer.title)"
           />
@@ -362,6 +364,7 @@ import {
   baseLayers,
   categoryOf,
   countryOfAreas,
+  layerCovers,
   OFFLINE_BASE_LAYER,
   type MapLayer,
   nationalOrthoLayers,
@@ -651,6 +654,8 @@ const swissProtectionAreaData = ref<Record<string, unknown>>({ properties: {} })
 const editMapLink = ref<string | null>(null);
 // the extent of the view, in longitude, latitude: what the attributions are about
 const viewExtent = shallowRef<Extent | null>(null);
+// the point of the ground at the center of the view: what the tilted 3D view is about, its extent reaches the horizon
+const viewCenter = shallowRef<[number, number] | null>(null);
 
 // $gettext('Shading', 'Map layer')
 const shadingButton = {
@@ -689,6 +694,12 @@ const protectionAreasLayerButton = {
 const intersects = (a: Extent, b: Extent) => a[0] <= b[2] && a[2] >= b[0] && a[1] <= b[3] && a[3] >= b[1];
 // the layers with tiles in the view
 const inView = (layer: MapLayer) => !layer.bounds || !viewExtent.value || intersects(layer.bounds, viewExtent.value);
+// a national layer far from the view is greyed out in the layer switcher, still a choice (the category it sets serves the
+// next documents); the layer shown never is
+function appliesHere(layer: MapLayer): boolean {
+  const place = is3d.value ? viewCenter.value : viewExtent.value;
+  return !place || layerCovers(layer, place);
+}
 
 // the credits of what is shown: the base layer (and the world one under the orthophotos in 3D), the slopes, the
 // protection areas, the terrain in 3D
@@ -797,6 +808,12 @@ const documentKey = (document: C2cDocument) =>
 // --- the view ---
 
 // the extent of the view in EPSG:3857, or in longitude, latitude
+function updateViewPlace() {
+  viewExtent.value = getExtent('EPSG:4326');
+  const { lng, lat } = map!.getCenter();
+  viewCenter.value = [lng, lat];
+}
+
 function getExtent(projection = 'EPSG:3857'): Extent {
   const bounds = map!.getBounds();
   const lonLat: Extent = [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()];
@@ -2359,7 +2376,7 @@ onMounted(() => {
     updateDensityOverlays();
   });
   created.on('moveend', () => {
-    viewExtent.value = getExtent('EPSG:4326');
+    updateViewPlace();
     // in 3D, the box of what is seen, not too far from the center
     sendBoundsToUrl();
     if (is3d.value) return;
@@ -2394,7 +2411,7 @@ onMounted(() => {
     fitOnFirstDocuments = !props.documents?.length && !route.query.a && !route.query.w;
     fitMapToDocuments(true);
   }
-  viewExtent.value = getExtent('EPSG:4326');
+  updateViewPlace();
   updateEditMapLink();
 
   document.addEventListener('fullscreenchange', onFullscreenChange);
