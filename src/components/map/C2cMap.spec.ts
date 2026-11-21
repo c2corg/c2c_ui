@@ -744,6 +744,49 @@ describe('C2cMap', () => {
       moved.wrapper.unmount();
     });
 
+    it('does not fit the results of another search, even after a first search without results', async () => {
+      const { wrapper, map } = await mountMap({ documents: [] }, '/outings?r=47805');
+      await wrapper.setProps({ documents: [] });
+      await wrapper.vm.$router.push({ query: { r: '47805', act: 'hiking' } });
+      const cameras = map.cameras.length;
+
+      await wrapper.setProps({ documents: [outing] });
+      expect(map.cameras).toHaveLength(cameras);
+      wrapper.unmount();
+    });
+
+    it('does not fit the results after a zoom button or a place chosen by the user', async () => {
+      const zoomed = await mountMap({ documents: [] }, '/outings?r=47805');
+      await zoomed.wrapper.find('.ol-zoom-in').trigger('click');
+      const before = zoomed.map.cameras.length;
+      await zoomed.wrapper.setProps({ documents: [outing] });
+      expect(zoomed.map.cameras).toHaveLength(before);
+      zoomed.wrapper.unmount();
+
+      const placed = await mountMap({ documents: [] }, '/outings?r=47805');
+      (placed.wrapper.vm as unknown as { recenterOn(item: unknown): void }).recenterOn({
+        geometry: { coordinates: [5, 45] },
+        properties: {},
+      });
+      const cameras = placed.map.cameras.length;
+      await placed.wrapper.setProps({ documents: [outing] });
+      expect(placed.map.cameras).toHaveLength(cameras);
+      placed.wrapper.unmount();
+    });
+
+    it('fits the results in the 3D view opened while they were loading', async () => {
+      const { wrapper, map } = await mountMap({ documents: [], show3d: true }, '/outings?r=47805');
+      await wrapper.find('.ol-control-3d button').trigger('click');
+      await flushPromises();
+
+      await wrapper.setProps({
+        documents: [outing, { ...outing, document_id: 3, geometry: { geom: point(6.9, 46) } }],
+      });
+      expect(lastLongitude(map)).toBeCloseTo(6.85, 6);
+      expect(map.pitch).toBeGreaterThan(0);
+      wrapper.unmount();
+    });
+
     it('keeps the extent of the URL', async () => {
       const { wrapper, map } = await mountMap({ documents: [] }, '/outings?r=47805&bbox=1,2,3,4');
       const cameras = map.cameras.length;

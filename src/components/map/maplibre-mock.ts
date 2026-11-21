@@ -184,6 +184,13 @@ export class FakeMap {
   easeTo(camera: Record<string, unknown>) {
     this.jumpTo(camera);
   }
+  // a zoom button: a move of the user when it gives its event
+  zoomIn(_options?: unknown, eventData: Record<string, unknown> = {}) {
+    this.fire('movestart', eventData);
+  }
+  zoomOut(_options?: unknown, eventData: Record<string, unknown> = {}) {
+    this.fire('movestart', eventData);
+  }
   fitBounds(bounds: Bounds) {
     this.cameras.push({ bounds });
   }
@@ -227,8 +234,6 @@ export class FakeMap {
   setSky(sky: unknown) {
     this.sky = sky;
   }
-  zoomIn() {}
-  zoomOut() {}
   resize() {}
   stop() {}
   remove() {
