@@ -53,8 +53,7 @@
           {{ $gettext('Requested by') }}
           <router-link :to="{ name: 'profile', params: { id: removal.requested_by.id } }">{{
             name(removal.requested_by)
-          }}</router-link
-          >, {{ $dateUtils.toLocalizedString(removal.created_at, 'lll') }}
+          }}</router-link>, {{ $dateUtils.toLocalizedString(removal.created_at, 'lll') }}
           <template v-if="removal.forum_url">
             ·
             <a :href="removal.forum_url" target="_blank" rel="noopener noreferrer">
@@ -86,8 +85,7 @@
             <fa-icon icon="check" class="has-text-success mr-1" />
             <router-link :to="{ name: 'profile', params: { id: validator(side)!.id } }">{{
               name(validator(side))
-            }}</router-link
-            >, {{ $dateUtils.toLocalizedString(validatedAt(side)!, 'lll') }}
+            }}</router-link>, {{ $dateUtils.toLocalizedString(validatedAt(side)!, 'lll') }}
           </p>
           <p v-else class="is-size-7 has-text-grey" v-translate>Waiting</p>
           <button

@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { enableAutoUnmount, shallowMount } from '@vue/test-utils';
 import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest';
 import { h } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
@@ -8,6 +8,8 @@ import EditionContainer from './EditionContainer.vue';
 import c2c from '@/js/apis/c2c';
 import MapView from '@/views/document/MapView.vue';
 
+enableAutoUnmount(afterEach);
+
 const mountEditionContainer = async (document = { type: 'w', locales: [{ lang: 'fr' }] }) => {
   const router = createRouter({
     history: createMemoryHistory(),
@@ -15,7 +17,9 @@ const mountEditionContainer = async (document = { type: 'w', locales: [{ lang: '
   });
   await router.push('/fr/edit');
 
+  // jsdom computes no style for a detached element (v-show hidden would read as visible): mounted in the document
   return shallowMount(EditionContainer, {
+    attachTo: window.document.body,
     props: { document, mode: 'edit', isLoading: false },
     slots: { default: '<form class="edit-form" />' },
     global: {
