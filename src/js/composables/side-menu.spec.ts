@@ -68,6 +68,14 @@ describe('useSideMenu', () => {
     expect(menu.expanded.value).toBe(true);
   });
 
+  it('closed from the keyboard, with the pointer away, opens on the next hover', () => {
+    const menu = sideMenu();
+    menu.close();
+    menu.onPointerEnter(pointer('mouse'));
+    vi.advanceTimersByTime(OPEN_DELAY);
+    expect(menu.expanded.value).toBe(true);
+  });
+
   it('opens for the keyboard, not for a click, until the focus leaves it', () => {
     const menu = sideMenu();
     const aside = document.createElement('aside');

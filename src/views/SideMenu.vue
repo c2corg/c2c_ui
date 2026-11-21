@@ -91,7 +91,9 @@ aside {
   --side-menu-close: 150ms cubic-bezier(0.4, 0, 1, 1);
 
   width: var(--c2c-sidemenu-rail-width);
-  overflow: hidden;
+  /* too tall for the window (large text, short screen): it scrolls, without a bar in the rail */
+  overflow: hidden auto;
+  scrollbar-width: none;
   /* border-right: 1px solid var(--c2c-secondary); */
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
   background: var(--c2c-white);
@@ -118,7 +120,7 @@ aside {
   display: flex;
   flex-direction: column;
   width: var(--c2c-sidemenu-open-width);
-  height: 100%;
+  min-height: 100%;
 }
 
 /* the labels, the logo and the footer: shown as the menu opens, hidden before it closes. Still read out on the rail */

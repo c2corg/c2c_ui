@@ -29,6 +29,8 @@ function setPinned(value: boolean) {
 
 export function useSideMenu() {
   const hovered = ref(false);
+  // the pointer is on the menu now (hovered follows it with a delay)
+  let inside = false;
   const focused = ref(false);
   // after a choice in the menu, or closed on purpose: the pointer must leave it before it opens again
   const held = ref(false);
@@ -44,12 +46,14 @@ export function useSideMenu() {
   // a finger opens nothing: its tap goes to the icon, the pin opens the menu
   function onPointerEnter(event: PointerEvent) {
     if (event.pointerType !== 'touch') {
+      inside = true;
       later(OPEN_DELAY, () => (hovered.value = true));
     }
   }
 
   function onPointerLeave(event: PointerEvent) {
     if (event.pointerType !== 'touch') {
+      inside = false;
       held.value = false;
       later(CLOSE_DELAY, () => (hovered.value = false));
     }
@@ -73,7 +77,7 @@ export function useSideMenu() {
     clearTimeout(timer);
     hovered.value = false;
     focused.value = false;
-    held.value = true;
+    held.value = inside;
   }
 
   function togglePinned() {
