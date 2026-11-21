@@ -89,14 +89,14 @@ describe('withMapUrl', () => {
 describe('settings stored on this device', () => {
   afterEach(() => window.localStorage.removeItem('DocumentMap.preferences'));
 
-  it('stores what differs from the default, with the ids of the URL, but no pinned side', () => {
+  it('stores what differs from the default, with the ids of the URL, but no overlays nor pinned side', () => {
     storeMapSettings({ category: 'national', slopes: ['IGN Slopes'] }, DEFAULT);
-    storeMapSettings({ overlays: ['route'], protection: false }, DEFAULT);
+    storeMapSettings({ protection: false }, DEFAULT);
 
     expect(JSON.parse(window.localStorage.getItem('DocumentMap.preferences')!)).toEqual({
-      settings: { category: 'national', slopes: 'ign', overlays: 'route', protection: '0' },
+      settings: { category: 'national', slopes: 'ign', protection: '0' },
     });
-    expect(storedMapSettings()).toEqual({ slopes: ['IGN Slopes'], overlays: ['route'], protection: false });
+    expect(storedMapSettings()).toEqual({ slopes: ['IGN Slopes'], protection: false });
     expect(storedLayerCategory()).toBe('national');
 
     // the category of the default layer is the default
@@ -126,6 +126,16 @@ describe('settings stored on this device', () => {
     expect(storedLayerCategory()).toBeUndefined();
   });
 
+  it('ignores the overlays a device stored before, and drops them at the next change', () => {
+    window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { overlays: 'outing,route' } }));
+    expect(storedMapSettings()).toEqual({});
+
+    storeMapSettings({ protection: false }, DEFAULT);
+    expect(JSON.parse(window.localStorage.getItem('DocumentMap.preferences')!)).toEqual({
+      settings: { protection: '0' },
+    });
+  });
+
   it('reads nothing when nothing, or something unknown, is stored', () => {
     expect(storedMapSettings()).toEqual({});
     window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { layer: 'nope', pin: 'top' } }));
@@ -137,7 +147,7 @@ describe('settings stored on this device', () => {
       'DocumentMap.preferences',
       JSON.stringify({ settings: { layer: 'ign', slopes: 42, overlays: { a: 1 }, protection: false } })
     );
-    expect(storedMapSettings()).toEqual({ slopes: [], overlays: [] });
+    expect(storedMapSettings()).toEqual({ slopes: [] });
     expect(storedLayerCategory()).toBe('national');
     window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: 42 }));
     expect(storedMapSettings()).toEqual({});
