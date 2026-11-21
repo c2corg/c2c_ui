@@ -236,8 +236,8 @@ export const baseLayers: MapLayer[] = [
 ];
 
 // the countries of the national maps and orthophotos, by the c2c areas of the countries (Liechtenstein is on the swisstopo
-// maps). Catalonia is not a country: its ICGC layers are chosen by a click only, the IGN Spain ones follow the category
-export const COUNTRY_AREAS: Record<number, string> = {
+// maps)
+const COUNTRY_AREAS: Record<number, string> = {
   14274: 'fr',
   14067: 'ch',
   14381: 'ch',
@@ -245,6 +245,22 @@ export const COUNTRY_AREAS: Record<number, string> = {
   14257: 'at',
   14081: 'gb',
 };
+// Catalonia is no c2c area: its four provinces (admin limits) give its ICGC layers, over the IGN Spain ones
+const REGION_AREAS: Record<number, string> = {
+  279930: 'catalonia', // Barcelona
+  279939: 'catalonia', // Girona
+  279949: 'catalonia', // Lleida
+  279963: 'catalonia', // Tarragona
+};
+
+// the country of a document by its areas: a region with its own layers first, whatever the order of the areas
+export function countryOfAreas(areaIds: number[]): string | undefined {
+  for (const areas of [REGION_AREAS, COUNTRY_AREAS]) {
+    const id = areaIds.find((areaId) => areas[areaId]);
+    if (id !== undefined) return areas[id];
+  }
+  return undefined;
+}
 
 // the base layer of a category in a country: its national map or orthophoto, else OpenTopoMap or the world orthophoto
 export function baseLayerOf(category: LayerCategory, country?: string): string {

@@ -519,6 +519,11 @@ describe('C2cMap', () => {
       expect(selectedTitles(wrapper)[0]).toBe('SwissTopo');
       expect(map.layout.SwissTopo.visibility).toBe('visible');
 
+      // in Catalonia (Spain, Girona): the ICGC map, not the IGN Spain one
+      await wrapper.setProps({ documents: [{ ...route, areas: [{ document_id: 14267 }, { document_id: 279939 }] }] });
+      await flushPromises();
+      expect(selectedTitles(wrapper)[0]).toBe('ICGC raster (ca)');
+
       // no national map in Italy
       await wrapper.setProps({ documents: [inCountry(14270)] });
       await flushPromises();

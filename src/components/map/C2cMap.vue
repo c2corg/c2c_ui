@@ -353,7 +353,7 @@ import {
   baseLayerOf,
   baseLayers,
   categoryOf,
-  COUNTRY_AREAS,
+  countryOfAreas,
   OFFLINE_BASE_LAYER,
   type MapLayer,
   nationalOrthoLayers,
@@ -1867,12 +1867,11 @@ let documents3dVersion = 0;
 let bounds3d: Extent | null = null;
 let view2d: { center: [number, number]; zoom: number } | null = null;
 
-// the country of the documents, by their areas: that of the first one in a country we have layers for
+// the country of the documents, by their areas: that of the first one in a country (or a region) we have layers for
 function documentsCountry(): string | undefined {
   for (const document of props.documents ?? []) {
-    for (const area of document.areas ?? []) {
-      if (COUNTRY_AREAS[area.document_id!]) return COUNTRY_AREAS[area.document_id!];
-    }
+    const country = countryOfAreas((document.areas ?? []).map((area) => area.document_id!));
+    if (country) return country;
   }
   return undefined;
 }
