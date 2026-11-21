@@ -98,9 +98,11 @@ const isAsset = (url: URL) =>
     /(^|\.)camptocamp\.org$/.test(url.hostname) &&
     (url.pathname.startsWith('/images/proxy/') || /\.(jpe?g|png|gif|svg|webp|avif)$/i.test(url.pathname))) ||
   url.hostname.endsWith('.tile.opentopomap.org') ||
-  // the SwissTopo maps and slopes, the IGN slopes (offline-assets.ts)
+  // the SwissTopo maps and slopes, the IGN slopes, the maps of the IGN of Spain and of the ICGC (offline-assets.ts)
   /^wmts1[0-4]\.geo\.admin\.ch$/.test(url.hostname) ||
-  (url.hostname === 'data.geopf.fr' && url.pathname === '/wmts');
+  (url.hostname === 'data.geopf.fr' && url.pathname === '/wmts') ||
+  (url.hostname === 'www.ign.es' && url.pathname === '/wmts/mapa-raster') ||
+  (url.hostname === 'geoserveis.icgc.cat' && url.pathname === '/icc_mapesmultibase/utm/wms/service');
 
 registerRoute(
   ({ url, request }) => request.cache !== 'reload' && isAsset(url),
