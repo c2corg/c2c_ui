@@ -22,6 +22,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
+import { pickGalleryImages } from './pick-gallery-images';
+
 import Gallery from '@/components/gallery/Gallery.vue';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
@@ -29,13 +31,19 @@ import type DocumentService from '@/js/apis/c2c/DocumentService';
 // the images come from the API: they have their ids
 type GalleryImages = InstanceType<typeof Gallery>['$props']['images'];
 
+const GALLERY_SIZE = 10;
+
+// more images than shown, so that the gallery can skip images of the same upload (see pickGalleryImages)
 const imagesPromise = ref(
   (c2c.image as DocumentService).getAll({
-    limit: 10,
+    limit: 40,
   })
 );
 
-const images = computed(() => imagesPromise.value.data?.documents as GalleryImages | undefined);
+const images = computed(() => {
+  const documents = imagesPromise.value.data?.documents as GalleryImages | undefined;
+  return documents && pickGalleryImages(documents, GALLERY_SIZE);
+});
 </script>
 
 <style scoped>
