@@ -1,12 +1,13 @@
-// The settings of a document map (layers, protection areas) are kept on this device, in the local storage, with
-// short stable ids rather than the titles of the layers (which are translated keys and may change with the map engine):
-// they follow the user from a document to the next one, and survive a reload and a new tab, without changing the URL.
+// The settings of a document map (layers, protection areas, pinned side) are kept on this device, in the local storage,
+// with short stable ids rather than the titles of the layers (which are translated keys and may change with the map
+// engine): they follow the user from a document to the next one, and survive a reload and a new tab.
 // Of the base layer, only its category is kept (map-layers.ts): each document shows the layer of that category in its
 // country, an IGN map in France and a swisstopo one in Switzerland. The "Tracks" and "Routes" overlays are not kept: they
 // are turned on to explore an area, and each one fetches data as the map moves.
-// The links shared while they were written in the URL of the page (?layer=ign&slopes=ign,swiss&overlays=outing,route&pin=top)
-// are still read: their settings are shown on that page. Only the maps of the lists of documents (/outings, /routes...)
-// still write them in the URL, to share a list with its map: they have no other storage.
+// What a map shows is also written in the URL of its page, with the same ids
+// (?layer=ign&slopes=ign,swiss&overlays=outing,route&pin=top), to share it or bookmark it: a link with them shows them on
+// its page, without changing what the device keeps. On the lists of documents (/outings, /routes...), the URL is the only
+// place of the settings: they are not stored.
 
 import type { LocationQuery, LocationQueryRaw } from 'vue-router';
 
@@ -116,6 +117,26 @@ function storedQuery(): LocationQuery {
   return (stored.get('settings') ?? {}) as LocationQuery;
 }
 
+// the pinned side kept on this device: 'top' or 'right' ('' when not pinned). The whole window is not kept: it hides the
+// page
+export function storedPin(): string {
+  const pin = first(storedQuery().pin);
+  return pin === 'top' || pin === 'right' ? pin : '';
+}
+
+// the side the user pinned the map on, or unpinned it (''); the whole window leaves the stored side as it was
+export function storePin(side: string) {
+  if (side === 'window') return;
+  try {
+    const query: LocationQueryRaw = { ...storedQuery() };
+    if (side) query.pin = side;
+    else delete query.pin;
+    preferences().set('settings', query);
+  } catch {
+    // no storage: the side lasts as long as the page
+  }
+}
+
 // the stored settings but the base layer: its category is stored instead (storedLayerCategory). The overlays some devices
 // stored before they were no longer kept are ignored
 export function storedMapSettings(): Partial<Omit<MapUrlState, 'base' | 'overlays' | 'pin'>> {
@@ -132,9 +153,9 @@ export function storedLayerCategory(): LayerCategory | undefined {
   return base ? categoryOf(base) : undefined;
 }
 
-// a setting the user changed, kept with the stored ones: the others shown by the page (from an old shared link) are not
-// stored. Only what differs from the default is written; the overlays and the pinned side are not settings kept from a page
-// to the next
+// a setting the user changed, kept with the stored ones: the others shown by the page (from its link) are not stored. Only
+// what differs from the default is written; the overlays are not kept from a page to the next, the pinned side is kept
+// apart (storePin)
 export function storeMapSettings(
   change: Partial<Omit<MapUrlState, 'base' | 'overlays' | 'pin'>> & { category?: LayerCategory },
   defaultBase: string
@@ -142,7 +163,7 @@ export function storeMapSettings(
   const { category = storedLayerCategory(), ...settings } = change;
   const state = { slopes: [], overlays: [], protection: true, ...storedMapSettings(), ...settings };
   try {
-    const query: LocationQueryRaw = withMapUrl({}, { ...state, base: defaultBase, pin: '' }, defaultBase);
+    const query: LocationQueryRaw = withMapUrl({}, { ...state, base: defaultBase, pin: storedPin() }, defaultBase);
     if (category && category !== categoryOf(defaultBase)) query.category = category;
     preferences().set('settings', query);
   } catch {

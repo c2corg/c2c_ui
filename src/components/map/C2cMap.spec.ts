@@ -1,7 +1,7 @@
 import { flushPromises } from '@vue/test-utils';
 import type { FeatureCollection } from 'geojson';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { LocationQueryRaw } from 'vue-router';
+import type { LocationQueryRaw, Router } from 'vue-router';
 
 import C2cMap from './C2cMap.vue';
 import { type FakeMap, resetMocks, state } from './maplibre-mock';
@@ -483,7 +483,7 @@ describe('C2cMap', () => {
     beforeEach(() => window.localStorage.removeItem('DocumentMap.preferences'));
     afterEach(() => window.localStorage.removeItem('DocumentMap.preferences'));
 
-    it('stores the settings that differ from the default but the overlays, and leaves the URL alone', async () => {
+    it('stores the settings that differ from the default but the overlays, and writes all of them in the URL', async () => {
       heatmap();
       const { wrapper } = await mountMap({ rememberSettings: true }, '/routes/1/fr?debug=1#description');
       const [baseLayers, slopesLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
@@ -496,12 +496,13 @@ describe('C2cMap', () => {
         .trigger('click');
       await flushPromises();
       expect(stored()).toEqual({ category: 'ortho', slopes: 'ign' });
-      expect(queryOf(wrapper)).toEqual({ debug: '1' });
+      expect(queryOf(wrapper)).toEqual({ debug: '1', layer: 'esri', slopes: 'ign', overlays: 'outing' });
       expect((wrapper.vm as unknown as { $route: { hash: string } }).$route.hash).toBe('#description');
 
       await baseLayers.findAll(':scope > *')[0].trigger('click');
       await flushPromises();
       expect(stored()).toEqual({ slopes: 'ign' });
+      expect(queryOf(wrapper)).toEqual({ debug: '1', slopes: 'ign', overlays: 'outing' });
       wrapper.unmount();
     });
 
@@ -521,7 +522,7 @@ describe('C2cMap', () => {
       wrapper.unmount();
     });
 
-    it('shows the settings of an old shared link, over the stored ones, keeping only the category of its layer', async () => {
+    it('shows the settings of a shared link, over the stored ones, without storing them', async () => {
       const outings = heatmap();
       window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { category: 'ortho' } }));
       const { wrapper, map } = await mountMap(
@@ -533,11 +534,13 @@ describe('C2cMap', () => {
       expect(map.layout['IGN Slopes'].visibility).toBe('visible');
       expect(outings).toHaveBeenCalled();
       expect(map.layout['heatmap-outing'].visibility).toBe('visible');
-      expect(stored()).toEqual({ category: 'national' });
+      expect(stored()).toEqual({ category: 'ortho' });
+      // the protection areas are not offered by this map: nothing to hide in its URL
+      expect(queryOf(wrapper)).toEqual({ layer: 'es', slopes: 'ign', overlays: 'outing' });
       wrapper.unmount();
     });
 
-    it('stores only the setting the user changes, not the others of an old shared link', async () => {
+    it('stores only the setting the user changes, not the others of a shared link', async () => {
       heatmap();
       window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { protection: '0' } }));
       const { wrapper, map } = await mountMap({ rememberSettings: true }, '/routes/1/fr?layer=es&overlays=outing');
@@ -546,7 +549,9 @@ describe('C2cMap', () => {
       await slopesLayers.findAll(':scope > *')[0].trigger('click');
       await flushPromises();
       expect(map.layout['IGN raster (es)'].visibility).toBe('visible');
-      expect(stored()).toEqual({ category: 'national', slopes: 'ign', protection: '0' });
+      expect(stored()).toEqual({ slopes: 'ign', protection: '0' });
+      // the protection areas are not offered by this map: nothing to hide in its URL
+      expect(queryOf(wrapper)).toEqual({ layer: 'es', slopes: 'ign', overlays: 'outing' });
       wrapper.unmount();
     });
 
@@ -615,6 +620,63 @@ describe('C2cMap', () => {
       );
       expect(selectedTitles(next.wrapper)[0]).toBe('IGN maps');
       next.wrapper.unmount();
+    });
+
+    it('writes the stored settings in the URL of a document page, and the side the page pinned the map on', async () => {
+      window.localStorage.setItem(
+        'DocumentMap.preferences',
+        JSON.stringify({ settings: { category: 'ortho', slopes: 'ign' } })
+      );
+      const { wrapper } = await mountMap({ rememberSettings: true }, '/routes/1/fr?debug=1');
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({ debug: '1', layer: 'esri', slopes: 'ign' });
+
+      await wrapper.setProps({ pinnedSide: 'top' });
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({ debug: '1', layer: 'esri', slopes: 'ign', pin: 'top' });
+
+      await wrapper.setProps({ pinnedSide: '' });
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({ debug: '1', layer: 'esri', slopes: 'ign' });
+      wrapper.unmount();
+    });
+
+    it('does not write its settings in the URL of the page the user goes to from the document', async () => {
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { slopes: 'ign' } }));
+      const { wrapper } = await mountMap({ rememberSettings: true }, '/routes/1');
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({ slopes: 'ign' });
+
+      const router = (wrapper.vm as unknown as { $router: Router }).$router;
+      await router.push('/outings/2');
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({});
+
+      wrapper.unmount();
+    });
+
+    it('writes its settings in the URL of the next document of the same view, whose link has none', async () => {
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { slopes: 'ign' } }));
+      const { wrapper } = await mountMap({ rememberSettings: true }, '/routes/1');
+      await flushPromises();
+
+      await (wrapper.vm as unknown as { $router: Router }).$router.push('/routes/3');
+      await flushPromises();
+      expect((wrapper.vm as unknown as { $route: { fullPath: string } }).$route.fullPath).toBe('/routes/3?slopes=ign');
+      wrapper.unmount();
+    });
+
+    it('leaves the URL of a document page clean without settings, and that of a printed list alone', async () => {
+      const clean = await mountMap({ rememberSettings: true }, '/routes/1/fr');
+      await flushPromises();
+      expect(queryOf(clean.wrapper)).toEqual({});
+      clean.wrapper.unmount();
+
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { slopes: 'ign' } }));
+      const printed = await mountMap({ rememberSettings: true }, '/routes/print');
+      await flushPromises();
+      expect(queryOf(printed.wrapper)).toEqual({});
+      printed.wrapper.unmount();
     });
 
     it('neither reads nor stores them for a map that did not ask for it (a listing: its query is its filters)', async () => {

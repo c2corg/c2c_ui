@@ -5,7 +5,9 @@ import {
   parseMapUrl,
   storedLayerCategory,
   storedMapSettings,
+  storedPin,
   storeMapSettings,
+  storePin,
   withMapUrl,
   type MapUrlState,
 } from './map-url-state';
@@ -115,6 +117,27 @@ describe('settings stored on this device', () => {
     expect(JSON.parse(window.localStorage.getItem('DocumentMap.preferences')!)).toEqual({
       settings: { category: 'ortho', slopes: 'ign' },
     });
+  });
+
+  it('stores the pinned side apart, keeps it when the other settings change, but not the whole window', () => {
+    storeMapSettings({ slopes: ['IGN Slopes'] }, DEFAULT);
+    storePin('top');
+    storeMapSettings({ protection: false }, DEFAULT);
+    expect(JSON.parse(window.localStorage.getItem('DocumentMap.preferences')!)).toEqual({
+      settings: { slopes: 'ign', protection: '0', pin: 'top' },
+    });
+    expect(storedPin()).toBe('top');
+
+    storePin('window');
+    expect(storedPin()).toBe('top');
+    storePin('');
+    expect(storedPin()).toBe('');
+    expect(JSON.parse(window.localStorage.getItem('DocumentMap.preferences')!)).toEqual({
+      settings: { slopes: 'ign', protection: '0' },
+    });
+
+    window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { pin: 'window' } }));
+    expect(storedPin()).toBe('');
   });
 
   it('ignores an unknown category', () => {

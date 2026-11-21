@@ -405,6 +405,7 @@ import {
   geometryToLonLat,
   toLonLat,
 } from '@/js/geo/projection';
+import { replaceRoute } from '@/js/replace-route';
 import { toast } from '@/js/toast';
 import { tracksOverlayEnabled } from '@/js/tracks-overlay';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
@@ -469,9 +470,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  // the layers of the map are kept on this device, from a document page to the next one (not the overlays); the query of an
-  // old shared link (?layer=…) is read too: only for the page of a document, whose query is not used for anything else (a
-  // listing's query is its search filters)
+  // the layers of the map are kept on this device, from a document page to the next one (not the overlays), and what the
+  // map shows is written in the query of the page (?layer=ign&slopes=ign…), to share it or bookmark it; a link with them
+  // shows them on its page. Only for the page of a document, whose query is not used for anything else (a listing's query
+  // is its search filters)
   rememberSettings: {
     type: Boolean,
     default: false,
@@ -481,6 +483,11 @@ const props = defineProps({
   syncUrl: {
     type: Boolean,
     default: false,
+  },
+  // the side the page pinned the map on ('top', 'right', 'window'), written in the URL with the settings of the map
+  pinnedSide: {
+    type: String,
+    default: '',
   },
   // search filters (the parameters of the documents listing) of the "Tracks" (outings) and "Routes" overlays, which
   // follow what the map shows. `null` means no filter.
@@ -545,7 +552,7 @@ const emit = defineEmits([
 
 const route = useRoute();
 const router = useRouter();
-// the settings of the document maps on this device, and what an old shared link says (it wins, for this page)
+// the settings of the document maps on this device, and what the link of the page says (it wins, for this page only)
 const initialSettings = props.rememberSettings
   ? { ...storedMapSettings(), ...parseMapUrl(route.query) }
   : props.syncUrl
@@ -570,7 +577,6 @@ const base = ref(
   initialSettings.base ??
     (props.rememberSettings ? baseLayerOf(storedLayerCategory() ?? 'topo', documentsCountry()) : baseLayers[0].title)
 );
-if (props.rememberSettings && initialSettings.base) storeSetting({ category: categoryOf(initialSettings.base) });
 const base3d = ref(worldLayer.title);
 const slopes = ref<string[]>(initialSettings.slopes ?? []);
 const slopesOpacity = ref<Record<string, number>>(
@@ -2280,8 +2286,8 @@ watch(
 watch(filterDocumentsWithMap, () => sendBoundsToUrl());
 
 // what the user changes is kept on this device, for the next document pages: only that setting, not the others the page
-// shows (those of an old shared link). The base layer (its category), the slopes and the protection areas change only by a
-// click. The overlays are not kept: they are turned on to explore an area. The layers the map shows by itself (in 3D,
+// shows (those of its link: a link someone shared does not change the settings of who opens it). The base layer (its
+// category), the slopes and the protection areas change only by a click. The overlays are not kept: they are turned on to explore an area. The layers the map shows by itself (in 3D,
 // without a network, in the country of a document) are not stored
 function storeSetting(change: Parameters<typeof storeMapSettings>[0]) {
   if (props.rememberSettings) storeMapSettings(change, baseLayers[0].title);
@@ -2302,19 +2308,25 @@ function chooseBase(title: string) {
   storeSetting({ category });
 }
 
+// the document whose link asked for a base layer (?layer=ign): the layer stays on its page, even in the URL the map writes
+const linkedDocument = initialSettings.base ? route.params.id : undefined;
 // another document in the same map (the page of a document followed by another one): the layer of its country
 watch(documentsCountry, (country) => {
-  if (props.rememberSettings && !parseMapUrl(route.query).base)
+  if (props.rememberSettings && (linkedDocument === undefined || route.params.id !== linkedDocument))
     base.value = baseLayerOf(storedLayerCategory() ?? 'topo', country);
 });
 watch(slopes, (value) => storeSetting({ slopes: value }));
 watch(protectionAreasVisible, (value) => storeSetting({ protection: value }));
 
-// On a list, the settings are in the query of the page (the other parameters are kept). The page is replaced, not added to
-// the history: it is still the same results
+// What the map shows is in the query of the page, for a link to share or bookmark it (the other parameters are kept); only
+// what differs from the default. The page is replaced, not added to the history: it is still the same page. The printed page
+// is left as it is
 const settingsInUrl = () => JSON.stringify(MAP_URL_KEYS.map((key) => route.query[key] ?? null));
+// the view of the map: leaving it for another one (a list, a document of another type), the map is still there for a moment
+const mapView = route.name;
 function writeSettingsToUrl() {
-  if (!props.syncUrl) return;
+  if (!props.syncUrl && !props.rememberSettings) return;
+  if (route.name !== mapView || String(route.name).endsWith('-print')) return;
   const query = withMapUrl(
     route.query,
     {
@@ -2322,13 +2334,21 @@ function writeSettingsToUrl() {
       slopes: slopes.value,
       overlays: DENSITY_TYPES.filter((type) => densityEnabled[type]),
       protection: !props.showProtectionAreas || protectionAreasVisible.value,
-      pin: '',
+      pin: props.pinnedSide,
     },
     baseLayers[0].title
   );
-  if (JSON.stringify(MAP_URL_KEYS.map((key) => query[key] ?? null)) !== settingsInUrl()) router.replace({ query });
+  if (JSON.stringify(MAP_URL_KEYS.map((key) => query[key] ?? null)) !== settingsInUrl())
+    // the document view may write the title of the document in the path at the same time
+    replaceRoute(router, { query, hash: route.hash }, writeSettingsToUrl);
 }
-watch([base, slopes, protectionAreasVisible], writeSettingsToUrl);
+watch([base, slopes, protectionAreasVisible, () => props.pinnedSide], writeSettingsToUrl);
+// a document page shows the settings kept on this device: they are written at once, and again on the page of the next
+// document (a link to it has none)
+if (props.rememberSettings) {
+  onMounted(writeSettingsToUrl);
+  watch(() => route.path, writeSettingsToUrl);
+}
 
 // the settings of the query changed (back, a link to another list...): the map follows
 watch(settingsInUrl, () => {
