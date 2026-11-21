@@ -64,9 +64,10 @@ const ignEs = (path: string, layer: string) =>
   '&TILEMATRIXSET=EPSG:3857&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/jpeg';
 const IGN_ES = `CC BY 4.0 ${link('https://www.scne.es', 'www.scne.es')}`;
 
+// JPEG: the same map as in PNG, 5 times lighter (26 KB a tile, not 136 KB), also downloaded offline (offline-assets.ts)
 const icgc = (layer: string) =>
   'https://geoserveis.icgc.cat/icc_mapesmultibase/utm/wms/service?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap' +
-  `&FORMAT=image/png&TRANSPARENT=true&LAYERS=${layer}&STYLES=&CRS=EPSG:3857&WIDTH=256&HEIGHT=256&BBOX={bbox-epsg-3857}`;
+  `&FORMAT=image/jpeg&LAYERS=${layer}&STYLES=&CRS=EPSG:3857&WIDTH=256&HEIGHT=256&BBOX={bbox-epsg-3857}`;
 const ICGC = `CC BY 4.0 ${link('http://www.icgc.cat', 'ICGC')}`;
 
 const basemapAt = (layer: string, format: string) =>

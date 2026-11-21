@@ -105,7 +105,8 @@ export function tileUrlsOf(geometry?: { geom?: string | null; geom_detail?: stri
 type Extent = [number, number, number, number];
 
 // The layers a document takes offline, with the zooms of their tiles and a budget of tiles each. OpenTopoMap always;
-// SwissTopo in Switzerland and Liechtenstein; the slopes for the activities on snow and ice, of the country. Not the IGN
+// SwissTopo in Switzerland and Liechtenstein; the slopes for the activities on snow and ice, of the country; the map of
+// the IGN of Spain in Spain, that of the ICGC in Catalonia. Not the IGN
 // maps of France: their licence forbids keeping their tiles (conditions of the Géoplateforme, SCAN 25)
 interface OfflineLayer {
   layer: MapLayer;
@@ -119,10 +120,16 @@ const OPENTOPOMAP: OfflineLayer = { layer: layerTitled(OFFLINE_BASE_LAYER), zoom
 const SWISSTOPO: OfflineLayer = { layer: layerTitled('SwissTopo'), zooms: [12, 13, 14, 15, 16], maxTiles: 600 };
 const SWISSTOPO_SLOPES: OfflineLayer = { layer: layerTitled('SwissTopo Slopes'), zooms: ZOOMS, maxTiles: 400 };
 const IGN_SLOPES: OfflineLayer = { layer: layerTitled('IGN Slopes'), zooms: ZOOMS, maxTiles: 400 };
+// CC BY 4.0, no limit on keeping their tiles (licences of the IGN of Spain, Orden FOM/2807/2015, and of the ICGC)
+const IGN_ES: OfflineLayer = { layer: layerTitled('IGN raster (es)'), zooms: ZOOMS, maxTiles: 400 };
+const ICGC: OfflineLayer = { layer: layerTitled('ICGC raster (ca)'), zooms: ZOOMS, maxTiles: 400 };
 
 // the country areas of the API (document ids)
 const SWISSTOPO_COUNTRIES = [14067, 14381]; // Switzerland, Liechtenstein
 const FRANCE = 14274;
+const SPAIN = 14267;
+// Catalonia has no area of its own: its provinces (admin_limits) Barcelona, Girona, Lleida, Tarragona
+const CATALONIA = [279930, 279939, 279949, 279963];
 export const SLOPE_ACTIVITIES = ['skitouring', 'snowshoeing', 'snow_ice_mixed', 'ice_climbing'];
 
 interface OfflineDocument {
@@ -138,18 +145,37 @@ export function offlineLayersOf(document: OfflineDocument): OfflineLayer[] {
     .map((area) => area.document_id);
   const swiss = countries.some((id) => SWISSTOPO_COUNTRIES.includes(id!));
   const france = countries.includes(FRANCE);
+  // in Catalonia, the map of the ICGC only: more detailed there than that of the IGN of Spain
+  const catalonia = (document.areas ?? []).some((area) => CATALONIA.includes(area.document_id!));
+  const spain = countries.includes(SPAIN) && !catalonia;
   const slopes = (document.activities ?? []).some((activity) => SLOPE_ACTIVITIES.includes(activity));
   return [
     OPENTOPOMAP,
     ...(swiss ? [SWISSTOPO] : []),
     ...(swiss && slopes ? [SWISSTOPO_SLOPES] : []),
     ...(france && slopes ? [IGN_SLOPES] : []),
+    ...(spain ? [IGN_ES] : []),
+    ...(catalonia ? [ICGC] : []),
   ];
+}
+
+// the bounding box of a WMS tile, written as MapLibre writes it (getTileBBox of maplibre-gl, src/tile/tile_id.ts): the
+// same digits, or the cache would not find the tile the map asks for
+function tileBBox(z: number, x: number, y: number) {
+  const tilesAtZoom = Math.pow(2, z);
+  const tileExtent = (2 * HALF_WORLD) / tilesAtZoom;
+  const gridMinY = HALF_WORLD - 2 * HALF_WORLD;
+  const rowFromBottom = tilesAtZoom - y - 1;
+  return `${-HALF_WORLD + x * tileExtent},${gridMinY + rowFromBottom * tileExtent},${-HALF_WORLD + (x + 1) * tileExtent},${gridMinY + (rowFromBottom + 1) * tileExtent}`;
 }
 
 // the tile url of a layer, as the map asks for it (the first server: the cache keeps one key per tile, tile-key.ts)
 const tileUrl = (layer: MapLayer, z: number, x: number, y: number) =>
-  layer.tiles[0].replace('{z}', String(z)).replace('{x}', String(x)).replace('{y}', String(y));
+  layer.tiles[0]
+    .replace('{z}', String(z))
+    .replace('{x}', String(x))
+    .replace('{y}', String(y))
+    .replace('{bbox-epsg-3857}', () => tileBBox(z, x, y));
 
 const tileExtent = (z: number, x: number, y: number): Extent => {
   const size = (2 * HALF_WORLD) / 2 ** z;

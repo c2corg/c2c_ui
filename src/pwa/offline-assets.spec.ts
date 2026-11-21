@@ -99,6 +99,10 @@ const WEISSHORN = [859990, 5796396];
 const ECRINS = [711000, 5603000];
 const SWITZERLAND = { document_id: 14067, area_type: 'country' };
 const FRANCE = { document_id: 14274, area_type: 'country' };
+const SPAIN = { document_id: 14267, area_type: 'country' };
+const LLEIDA = { document_id: 279949, area_type: 'admin_limits' };
+// Pedraforca, in Catalonia
+const PEDRAFORCA = [192500, 5175900];
 const pointAt = (xy: number[]) => ({ geom: JSON.stringify({ type: 'Point', coordinates: xy }) });
 const titles = (document: Parameters<typeof offlineLayersOf>[0]) =>
   offlineLayersOf(document).map(({ layer }) => layer.title);
@@ -121,6 +125,32 @@ describe('the map layers of an offline document', () => {
       'SwissTopo Slopes',
       'IGN Slopes',
     ]);
+  });
+
+  it('takes the map of the IGN of Spain in Spain, that of the ICGC alone in Catalonia', () => {
+    expect(titles({ areas: [SPAIN] })).toEqual(['OpenTopoMap', 'IGN raster (es)']);
+    expect(titles({ areas: [SPAIN, LLEIDA] })).toEqual(['OpenTopoMap', 'ICGC raster (ca)']);
+    expect(titles({ areas: [FRANCE, SPAIN], activities: ['skitouring'] })).toEqual([
+      'OpenTopoMap',
+      'IGN Slopes',
+      'IGN raster (es)',
+    ]);
+  });
+
+  it('writes the WMS tiles of the ICGC with the bounding box MapLibre asks for', async () => {
+    const { urls, layers } = offlineTilesOf({ geometry: pointAt(PEDRAFORCA), areas: [SPAIN, LLEIDA] });
+    expect(layers['ICGC raster (ca)']).toBe(15);
+    const [x, y] = tileOf(PEDRAFORCA, 14);
+    // the url MapLibre asks for (its source, not type-checked: the class is not exported, its sources not strict)
+    const tileIdModule = '../../node_modules/maplibre-gl/src/tile/tile_id';
+    const { CanonicalTileID } = (await import(/* @vite-ignore */ tileIdModule)) as {
+      CanonicalTileID: new (z: number, x: number, y: number) => { url(urls: string[], pixelRatio: number): string };
+    };
+    const bbox = new CanonicalTileID(14, x, y).url(['{bbox-epsg-3857}'], 1);
+    expect(urls.filter((url) => url.startsWith('https://geoserveis.icgc.cat/'))).toContain(
+      'https://geoserveis.icgc.cat/icc_mapesmultibase/utm/wms/service?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap' +
+        `&FORMAT=image/jpeg&LAYERS=topo&STYLES=&CRS=EPSG:3857&WIDTH=256&HEIGHT=256&BBOX=${bbox}`
+    );
   });
 
   it('downloads every zoom of each layer, as the map asks for them, with the highest zoom kept', () => {
