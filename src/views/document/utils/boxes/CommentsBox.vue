@@ -6,7 +6,7 @@
       <p v-translate>Comments are disabled.</p>
     </div>
 
-    <div v-else-if="promise && promise.error" class="notification is-danger">
+    <div v-else-if="promise && promise.error && !topicGone" class="notification is-danger">
       <p>
         <span v-translate>Oups! Something went wrong with forum. Here is the message :</span>
         <br />
@@ -50,7 +50,7 @@
 
         <!-- API bug with first comment creation? -->
         <button
-          v-else-if="locale.topic_id === null"
+          v-else-if="locale.topic_id === null || topicGone"
           key="no-topic"
           class="button is-primary"
           @click="createTopic"
@@ -115,6 +115,11 @@ const promise = ref<ApiData | { data?: undefined; error?: undefined }>({});
 const locale = computed(() => props.document.cooked);
 
 const topic = computed(() => promise.value.data);
+
+// a topic deleted in the forum, or moved out of sight: the API replaces it with a new one
+const topicGone = computed(
+  () => (promise.value.error as { response?: { status?: number } } | null | undefined)?.response?.status === 404
+);
 
 const discussionUrl = computed(() => {
   if (!topic.value) {
