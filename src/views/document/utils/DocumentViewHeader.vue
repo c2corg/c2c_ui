@@ -128,8 +128,15 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
 
 .button-bar > span,
 .button-bar > a {
-  margin-left: 0.25rem;
+  margin-left: 0.4rem;
   cursor: pointer;
+}
+
+/* every icon in a box of the same width (Font Awesome's fixed width): the glyphs are not as wide (bookmark, share,
+   image, pen), and the badges of the bookmark and of the image overflow them, which left the last ones too close */
+.button-bar :deep(.svg-inline--fa),
+.button-bar :deep(.fa-layers) {
+  width: 1.25em;
 }
 
 .button-bar > *:hover {

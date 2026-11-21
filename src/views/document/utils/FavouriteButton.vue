@@ -145,10 +145,11 @@ defineExpose({ tap });
   display: inline-block;
 }
 
-/* bottom right of the bookmark: a white arrow on the colour of the state of the copy */
-.offline-badge {
+/* bottom right of the bookmark: a white arrow on the colour of the state of the copy. Under .favourite-button, to
+   win over the fixed width the header gives every icon (DocumentViewHeader.vue) */
+.favourite-button .offline-badge {
   position: absolute;
-  right: -0.3em;
+  right: -0.05em;
   bottom: -0.1em;
   display: flex;
   align-items: center;
