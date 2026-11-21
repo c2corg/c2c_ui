@@ -6,6 +6,9 @@
 -- response, with the same ids: the app replaces them when it mounts, without duplicates. The canonical link is left to
 -- the app: it adds the title of the document to the path first.
 --
+-- The language versions of the document are listed as hreflang alternates: /<type>s/<id>/<lang> for each language,
+-- and /<type>s/<id> (the language of the browser) as x-default.
+--
 -- The functions are pure, except M.render (ngx): docker/lua/c2c_head_spec.lua tests them with a plain LuaJIT.
 local cjson = require('cjson.safe')
 
@@ -174,6 +177,28 @@ local function meta(attribute, name, content, id)
   return '<meta ' .. attribute .. '="' .. name .. '" content="' .. M.escape(content) .. '" id="' .. id .. '" />'
 end
 
+local function alternate(hreflang, href)
+  return '<link rel="alternate" hreflang="' .. hreflang .. '" href="' .. href .. '" id="hreflang-' .. hreflang .. '" />'
+end
+
+--- The hreflang alternate links of the language versions of a document (available_langs of the API response)
+function M.alternates(available_langs, doc_type, id)
+  local links = {}
+  if type(available_langs) ~= 'table' then
+    return links
+  end
+  local path = SITE_URL .. '/' .. doc_type .. 's/' .. id
+  for _, lang in ipairs(available_langs) do
+    if LANGS[lang] then
+      links[#links + 1] = alternate(lang, path .. '/' .. lang)
+    end
+  end
+  if #links > 0 then
+    links[#links + 1] = alternate('x-default', path)
+  end
+  return links
+end
+
 --- The page title and head tags of a document (the decoded ?cook= API response), nil when there is nothing to show
 -- (urls: api and media base URLs)
 function M.build(doc, doc_type, id, lang, urls)
@@ -204,6 +229,10 @@ function M.build(doc, doc_type, id, lang, urls)
   local image = preview_image(doc, doc_type)
   if image then
     tags[#tags + 1] = meta('property', 'og:image', M.image_url(image, 'BI', urls), 'meta-og-image')
+  end
+
+  for _, link in ipairs(M.alternates(doc.available_langs, doc_type, id)) do
+    tags[#tags + 1] = link
   end
 
   local json_ld = doc_type == 'image' and image_json_ld(doc, urls) or document_json_ld(title, image, urls)
