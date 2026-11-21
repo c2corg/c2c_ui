@@ -765,6 +765,123 @@ describe('C2cMap', () => {
     });
   });
 
+  describe('national layers far from the view', () => {
+    const buttons = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper'], group = 0) =>
+      wrapper.findAll('.ol-control-layer-switcher .layer-group')[group].findAll(':scope > .layer-button');
+    const outsideTitles = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper'], group = 0) =>
+      buttons(wrapper, group)
+        .filter((button) => button.classes('outside'))
+        .map((button) => button.text());
+    const moveTo = async (map: FakeMap, extent: [number, number, number, number]) => {
+      map.extent = extent;
+      map.fire('moveend');
+      await flushPromises();
+    };
+    // the layer chosen in a test is stored: not for the next one
+    afterEach(() => window.localStorage.removeItem('DocumentMap.preferences'));
+
+    it('are greyed out, still a choice, the world layers and the layer shown never', async () => {
+      const { wrapper, map } = await mountMap();
+      // the Mont Blanc: France and Switzerland near, not Spain, Catalonia, Austria nor Great Britain
+      expect(outsideTitles(wrapper)).toEqual([
+        'IGN raster (es)',
+        'IGN ortho (es)',
+        'ICGC raster (ca)',
+        'ICGC ortho (ca)',
+        'Basemap (at)',
+        'Basemap ortho (at)',
+        'Ordnance Survey (uk)',
+      ]);
+      expect(outsideTitles(wrapper, 1)).toEqual([]);
+      expect(
+        buttons(wrapper)
+          .find((button) => button.classes('outside'))!
+          .attributes('title')
+      ).toBe('Not available here');
+
+      // Barcelona: Spain and Catalonia, France is too far
+      await moveTo(map, [2.0, 41.3, 2.3, 41.5]);
+      expect(outsideTitles(wrapper)).toEqual([
+        'IGN maps',
+        'IGN ortho',
+        'SwissTopo',
+        'SwissTopo ortho',
+        'Basemap (at)',
+        'Basemap ortho (at)',
+        'Ordnance Survey (uk)',
+      ]);
+      expect(outsideTitles(wrapper, 1)).toEqual(['IGN Slopes', 'SwissTopo Slopes']);
+
+      // chosen all the same: shown, so not greyed out
+      await buttons(wrapper)
+        .find((button) => button.text() === 'SwissTopo')!
+        .trigger('click');
+      expect(selectedTitles(wrapper)[0]).toBe('SwissTopo');
+      expect(map.layout.SwissTopo.visibility).toBe('visible');
+      expect(outsideTitles(wrapper)).not.toContain('SwissTopo');
+
+      // zoomed out over Europe: every layer applies
+      await moveTo(map, [-10, 35, 20, 60]);
+      expect(outsideTitles(wrapper)).toEqual([]);
+      wrapper.unmount();
+    });
+
+    it('in the overseas departments, offer the IGN maps', async () => {
+      const { wrapper, map } = await mountMap();
+      // Réunion
+      await moveTo(map, [55.4, -21.2, 55.6, -21.0]);
+      expect(outsideTitles(wrapper)).not.toContain('IGN maps');
+      expect(outsideTitles(wrapper)).toContain('SwissTopo');
+      wrapper.unmount();
+    });
+
+    it('without a network, are greyed out among the layers offered offline', async () => {
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { layer: 'swiss' } }));
+      const { wrapper, map } = await mountMap(
+        { documents: [{ ...route, areas: [{ document_id: 14067 }] }], rememberSettings: true },
+        '/routes/1'
+      );
+      const offline = useOfflineStore();
+      offline.savedDocs = [savedRoute({ OpenTopoMap: 15, SwissTopo: 16 })];
+      offline.online = false;
+      await flushPromises();
+      expect(buttons(wrapper).map((button) => button.text())).toEqual(['OpenTopoMap', 'SwissTopo']);
+
+      // shown: never greyed out, even far away
+      await moveTo(map, [0.5, 42.6, 0.7, 42.8]);
+      expect(outsideTitles(wrapper)).toEqual([]);
+
+      await buttons(wrapper)[0].trigger('click');
+      expect(selectedTitles(wrapper)[0]).toBe('OpenTopoMap');
+      expect(outsideTitles(wrapper)).toEqual(['SwissTopo']);
+
+      // back near Switzerland
+      await moveTo(map, [6.7, 45.8, 6.9, 46.0]);
+      expect(outsideTitles(wrapper)).toEqual([]);
+      offline.online = true;
+      await flushPromises();
+      wrapper.unmount();
+    });
+
+    it('in 3D, by the ground at the center of the view, not by the extent that reaches the horizon', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
+      await wrapper.find('.ol-control-3d button').trigger('click');
+      await flushPromises();
+
+      // the center in Switzerland, the extent down to the Pyrenees
+      await moveTo(map, [2, 44, 12, 49.4]);
+      expect(outsideTitles(wrapper)).toContain('IGN ortho (es)');
+      expect(outsideTitles(wrapper)).not.toContain('SwissTopo ortho');
+      expect(outsideTitles(wrapper)).not.toContain('Sentinel-2');
+
+      // the same extent in 2D: Spain is in it
+      await wrapper.find('.ol-control-3d button').trigger('click');
+      await moveTo(map, [2, 44, 12, 49.4]);
+      expect(outsideTitles(wrapper)).not.toContain('IGN ortho (es)');
+      wrapper.unmount();
+    });
+  });
+
   describe('in 3D', () => {
     const outing = {
       document_id: 1,

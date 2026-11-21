@@ -2,7 +2,7 @@
 // France orthophotos, the orthophoto of a place.
 import { addProtocol } from 'maplibre-gl';
 
-import { NO_BLANK, orthoLayers, type MapLayer } from './map-layers';
+import { countriesAt, nationalOrthoLayers, NO_BLANK, type MapLayer } from './map-layers';
 
 // IGN France answers outside France with white: a plain white tile, white beside the photo in the tiles of the
 // border, or a 404 at some zooms. White is drawn transparent, so that the world layer shows there (the Italian side
@@ -109,17 +109,11 @@ export function registerNoBlankProtocol(): void {
   });
 }
 
-// the boxes of the countries of the orthophotos: Switzerland first, its box is inside the French one
-const ORTHO_AREAS: [string, [number, number, number, number]][] = [
-  ['SwissTopo ortho', [5.96, 45.82, 10.49, 47.81]],
-  ['IGN ortho', [-5.5, 41.3, 9.7, 51.2]],
-  ['IGN ortho (es)', [-9.5, 35.9, 4.4, 43.9]],
-];
-
-// the orthophoto of the country of a point, if we have one
+// the orthophoto of the country of a point, if we have one in 3D
 export function orthoLayerAt(lon: number, lat: number): MapLayer | undefined {
-  const area = ORTHO_AREAS.find(
-    ([, [west, south, east, north]]) => lon >= west && lon <= east && lat >= south && lat <= north
-  );
-  return area && orthoLayers.find((layer) => layer.title === area[0]);
+  for (const country of countriesAt(lon, lat)) {
+    const layer = nationalOrthoLayers.find((ortho) => ortho.country === country);
+    if (layer) return layer;
+  }
+  return undefined;
 }

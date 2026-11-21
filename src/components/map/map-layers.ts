@@ -236,6 +236,59 @@ export const baseLayers: MapLayer[] = [
   },
 ];
 
+type Box = [number, number, number, number];
+
+// where the national maps and orthophotos of a country have tiles, roughly: [west, south, east, north] boxes, several for
+// the islands and the overseas departments. The smaller countries first: a point in Switzerland is also in the French box
+export const COUNTRY_COVERAGE: Record<string, Box[]> = {
+  ch: [SWISS_BOUNDS],
+  catalonia: [[0.15, 40.5, 3.35, 42.9]],
+  at: [[9.5, 46.37, 17.17, 49.02]],
+  fr: [
+    // metropolitan France down to the Pyrenees, Corsica: not the north of Spain, whose orthophoto is that of Spain
+    [-5.2, 42.3, 8.3, 51.1],
+    [8.5, 41.3, 9.6, 43.1],
+    [-61.9, 14.35, -60.8, 16.55], // Guadeloupe, Martinique
+    [-54.6, 2.1, -51.6, 5.8], // French Guiana
+    [55.2, -21.4, 55.9, -20.85], // Réunion
+    [44.9, -13.1, 45.35, -12.6], // Mayotte
+    [-56.5, 46.7, -56.1, 47.2], // Saint-Pierre-et-Miquelon
+  ],
+  es: [
+    [-9.4, 35.2, 4.4, 43.8], // the mainland, the Balearic Islands, Ceuta and Melilla
+    [-18.2, 27.6, -13.4, 29.5], // the Canary Islands
+  ],
+  gb: [[-8.7, 49.85, 1.8, 60.9]],
+};
+
+// in degrees: a national layer is still offered near its country, only far away is it said not to apply
+const COVERAGE_MARGIN = 0.5;
+
+const touches = (a: Box, b: Box) => a[0] <= b[2] && a[2] >= b[0] && a[1] <= b[3] && a[3] >= b[1];
+const grown = ([west, south, east, north]: Box, margin: number): Box => [
+  west - margin,
+  south - margin,
+  east + margin,
+  north + margin,
+];
+
+// whether a layer applies to a place, a view [west, south, east, north] or a point [lon, lat]: the layers of the whole
+// world always, a national one in its country and near it
+export function layerCovers(layer: Pick<MapLayer, 'country'>, place: Box | [number, number]): boolean {
+  if (!layer.country) return true;
+  const boxes = COUNTRY_COVERAGE[layer.country];
+  if (!boxes) return true;
+  const box: Box = place.length === 2 ? [place[0], place[1], place[0], place[1]] : place;
+  return boxes.some((coverage) => touches(grown(coverage, COVERAGE_MARGIN), box));
+}
+
+// the countries of a point, by their boxes without margin, the smaller ones first
+export function countriesAt(lon: number, lat: number): string[] {
+  return Object.keys(COUNTRY_COVERAGE).filter((country) =>
+    COUNTRY_COVERAGE[country].some((coverage) => touches(coverage, [lon, lat, lon, lat]))
+  );
+}
+
 // the countries of the national maps and orthophotos, by the c2c areas of the countries (Liechtenstein is on the swisstopo
 // maps)
 const COUNTRY_AREAS: Record<number, string> = {

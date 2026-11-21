@@ -2,7 +2,8 @@
   <div
     class="layer-button"
     @click="$emit('click')"
-    :class="{ selected, 'show-slider': showSlider }"
+    :class="{ selected, outside: greyed, 'show-slider': showSlider }"
+    :title="greyed ? $gettext('Not available here') : undefined"
     :style="
       image
         ? { 'background-image': 'url(' + assetUrl('layers', image) + ')' }
@@ -51,6 +52,11 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  // a layer with no tiles at the place of the map, still a choice: greyed out, unless it is shown
+  outside: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 defineEmits(['click']);
@@ -64,6 +70,7 @@ const opacity = ref((props.layer.get?.('opacity') ?? 1) * 100);
 const titleId = computed(() => `layer-button-title-${uid}`);
 const image = computed(() => props.layer.image || props.layer.get?.('image'));
 const country = computed(() => props.layer.country || props.layer.get?.('country'));
+const greyed = computed(() => props.outside && !props.selected);
 const isConfigurable = computed(() => !!props.layer.get?.('configurable'));
 
 watch(
@@ -99,6 +106,14 @@ watch(opacity, () => {
 
   &:hover {
     filter: brightness(80%);
+  }
+
+  &.outside {
+    filter: grayscale(100%) opacity(45%);
+
+    &:hover {
+      filter: grayscale(100%) opacity(70%);
+    }
   }
 }
 

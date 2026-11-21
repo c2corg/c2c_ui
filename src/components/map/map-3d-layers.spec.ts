@@ -19,6 +19,10 @@ describe('orthoLayerAt', () => {
     ['Grenoble', 5.72, 45.19, 'IGN ortho'],
     ['Zermatt', 7.75, 46.02, 'SwissTopo ortho'],
     ['Madrid', -3.7, 40.42, 'IGN ortho (es)'],
+    // no ICGC orthophoto in 3D: that of Spain, not that of France
+    ['Barcelona', 2.17, 41.39, 'IGN ortho (es)'],
+    ['Ajaccio', 8.74, 41.92, 'IGN ortho'],
+    ['Réunion', 55.5, -21.1, 'IGN ortho'],
     ['Kathmandu', 85.32, 27.71, undefined],
   ])('%s', (_, lon, lat, title) => {
     expect(orthoLayerAt(lon, lat)?.title).toBe(title);
