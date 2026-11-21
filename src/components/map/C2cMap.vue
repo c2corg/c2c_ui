@@ -842,6 +842,9 @@ const extend = (a: Extent, b: Extent): Extent => [
 ];
 const EMPTY: Extent = [Infinity, Infinity, -Infinity, -Infinity];
 
+// the map was shown before the documents of a search: it fits them when they come
+let fitOnFirstDocuments = false;
+
 const queryIds = (value: unknown) =>
   (Array.isArray(value) ? value.map(String) : String(value).split(',')).map(Number).filter(Boolean);
 
@@ -2222,9 +2225,14 @@ watch(online, (isOnline) => {
 // deep 1: also when documents are added to or removed from the array, as Vue 2 array watchers did
 watch(
   () => props.documents,
-  () => {
+  (documents) => {
     drawDocumentMarkers();
     if (is3d.value) redraw3d();
+    // the results of the search came after the map: it fits them, unless the user moved it meanwhile
+    if (fitOnFirstDocuments && documents?.length) {
+      fitOnFirstDocuments = false;
+      fitMapToDocuments(true);
+    }
   },
   { deep: 1 }
 );
@@ -2366,6 +2374,10 @@ onMounted(() => {
     trackTooltipMarker = new Marker({ element: trackTooltipEl.value!, anchor: 'bottom', offset: [0, -12] });
     created.on('moveend', debounce(updateDensityOverlays, DENSITY_FETCH_DEBOUNCE));
   }
+  // moved by the user (a move by code has no original event): the results that come later do not move it back
+  created.on('movestart', (event) => {
+    if (event.originalEvent) fitOnFirstDocuments = false;
+  });
   created.on('click', onMapClick);
   created.on('dblclick', () => clearTimeout(tapTimeout));
 
@@ -2377,6 +2389,9 @@ onMounted(() => {
   } else if (props.initialExtent) {
     fit(props.initialExtent);
   } else {
+    // no document yet (a search still loading): the map fits its first results, the areas and waypoints of the search
+    // excepted, which the map already fits
+    fitOnFirstDocuments = !props.documents?.length && !route.query.a && !route.query.w;
     fitMapToDocuments(true);
   }
   viewExtent.value = getExtent('EPSG:4326');

@@ -695,6 +695,48 @@ describe('C2cMap', () => {
     });
   });
 
+  describe('a list shown before its results (a link to the outings of a route)', () => {
+    const outing = { document_id: 2, type: 'o', geometry: { geom: point(6.8, 45.9) } };
+    // the center of the last camera, in longitude
+    const lastLongitude = (map: FakeMap) => (map.cameras[map.cameras.length - 1].center as number[])[0];
+
+    it('fits the first results when they come', async () => {
+      const { wrapper, map } = await mountMap({ documents: [] }, '/outings?r=47805');
+      // France, until the results come
+      expect(lastLongitude(map)).not.toBeCloseTo(6.8, 2);
+
+      await wrapper.setProps({ documents: [outing] });
+      expect(lastLongitude(map)).toBeCloseTo(6.8, 6);
+      wrapper.unmount();
+    });
+
+    it('does not fit the next results, nor results the user moved the map away from', async () => {
+      const { wrapper, map } = await mountMap({ documents: [] }, '/outings?r=47805');
+      await wrapper.setProps({ documents: [outing] });
+      const cameras = map.cameras.length;
+
+      await wrapper.setProps({ documents: [{ ...outing, document_id: 3, geometry: { geom: point(7.5, 46) } }] });
+      expect(map.cameras).toHaveLength(cameras);
+      wrapper.unmount();
+
+      const moved = await mountMap({ documents: [] }, '/outings?r=47805');
+      moved.map.fire('movestart', { originalEvent: new MouseEvent('mousedown') });
+      const before = moved.map.cameras.length;
+      await moved.wrapper.setProps({ documents: [outing] });
+      expect(moved.map.cameras).toHaveLength(before);
+      moved.wrapper.unmount();
+    });
+
+    it('keeps the extent of the URL', async () => {
+      const { wrapper, map } = await mountMap({ documents: [] }, '/outings?r=47805&bbox=1,2,3,4');
+      const cameras = map.cameras.length;
+
+      await wrapper.setProps({ documents: [outing] });
+      expect(map.cameras).toHaveLength(cameras);
+      wrapper.unmount();
+    });
+  });
+
   describe('biodiv-sports areas', () => {
     const fetchData = vi.mocked(biodivSportsService.fetchData);
     // an area around [lon, 45.9]
