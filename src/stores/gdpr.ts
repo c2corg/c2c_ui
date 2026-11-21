@@ -6,7 +6,8 @@ import { getPreferences } from '@/js/vue-plugins/local-storage';
 
 const ONE_YEAR = 1000 * 60 * 60 * 24 * 365;
 
-// the user's choice, per kind of cookies, and when it was made
+// the user's choice, per kind of cookies, and when it was made. `social` was the consent to the AddThis share
+// widget, gone with it (#5168): no longer asked, but still in the choices made before
 export type GdprChoice = { statistics?: boolean; social?: boolean; ad?: boolean; date?: number };
 
 export const useGdprStore = defineStore('gdpr', () => {
@@ -42,7 +43,7 @@ export const useGdprStore = defineStore('gdpr', () => {
   }
 
   function setAll(accept: boolean) {
-    set(accept ? { statistics: true, social: true, ad: true } : { statistics: false, social: false, ad: false });
+    set(accept ? { statistics: true, ad: true } : { statistics: false, ad: false });
   }
 
   return { gdprValue, get, set, setAll };

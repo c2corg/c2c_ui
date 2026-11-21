@@ -54,19 +54,6 @@
           track your activities on the site in order to display relevant ads tailored to your interests. By disabling
           these cookies, you will continue to see ads, but they will no longer be tailored to your preferences.
         </p>
-        <div class="is-flex is-justify-content-space-between is-align-items-baseline">
-          <h2 class="is-size-3" v-translate>Social cookies</h2>
-          <div class="field">
-            <input type="checkbox" id="social" name="social" class="switch is-rounded" v-model="gdpr.social" />
-            <label for="social"></label>
-          </div>
-        </div>
-        <p v-translate>
-          These cookies allow you to interact from camptocamp.org website with social media modules and share content of
-          the website with other people or let them know of your consultation or opinion on it, e.g. when you click on
-          the "Share" module. By disabling these cookies, you won't be able to share content from camptocamp.org on
-          social networks.
-        </p>
       </div>
     </div>
 
@@ -84,18 +71,17 @@ import { ref, useTemplateRef } from 'vue';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
 
-type GdprChoices = { statistics: boolean; social: boolean; ad?: boolean };
+type GdprChoices = { statistics: boolean; ad?: boolean };
 
 const { $gdpr } = useGlobalProperties();
 
 const gdpr = ref<GdprChoices>({
   statistics: false,
-  social: false,
 });
 const modal = useTemplateRef<{ show(): void; hide(): void }>('modal');
 
 function show() {
-  gdpr.value = JSON.parse(JSON.stringify($gdpr.get())) || { statistics: false, social: false };
+  gdpr.value = JSON.parse(JSON.stringify($gdpr.get())) || { statistics: false };
   modal.value!.show();
 }
 
