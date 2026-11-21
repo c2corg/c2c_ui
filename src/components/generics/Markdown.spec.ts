@@ -110,9 +110,10 @@ describe('Markdown', () => {
     expect([imgs[0].width, imgs[0].height]).toEqual([1500, 1125]);
     // MI: bounded by min(400px, 25vw) on its longer side
     expect([imgs[1].width, imgs[1].height]).toEqual([400, 300]);
-    expect(imgs[1].style.width).toBe('min(400px, 400px, 25vw)');
+    // the browsers, and jsdom, drop the min() argument repeated with the same unit
+    expect(imgs[1].style.width).toBe('min(400px, 25vw)');
     expect(imgs[1].style.aspectRatio).toBe('400 / 300');
-    expect(imgs[2].style.height).toBe('min(400px, 400px, 25vw)');
+    expect(imgs[2].style.height).toBe('min(400px, 25vw)');
     expect(imgs[2].style.width).toBe('auto');
     // SI: cropped square; no size: the original
     expect([imgs[3].width, imgs[3].height]).toEqual([200, 200]);

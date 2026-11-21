@@ -33,8 +33,7 @@
         {{ $gettext('Choose') }}
         <span class="install-key">{{ $gettext('Install app') }}</span>
         {{ $gettext('or') }}
-        <span class="install-key">{{ $gettext('Add to Home screen') }}</span
-        >.
+        <span class="install-key">{{ $gettext('Add to Home screen') }}</span>.
       </li>
     </ol>
 
