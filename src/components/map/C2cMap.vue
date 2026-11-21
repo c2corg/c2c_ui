@@ -58,8 +58,7 @@
         <div v-if="offlineStatus.length" class="c2c-map-offline-status" role="status">
           <header><fa-icon icon="plug" /> {{ $gettext('Offline') }}</header>
           <p v-for="line of offlineStatus" :key="line.title">
-            <strong>{{ $gettext(line.title, 'Map layer') }}</strong
-            >: {{ line.status }}
+            <strong>{{ $gettext(line.title, 'Map layer') }}</strong>: {{ line.status }}
           </p>
         </div>
         <header v-translate>Base layer</header>
