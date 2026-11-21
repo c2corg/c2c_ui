@@ -66,6 +66,17 @@ describe('map-layers', () => {
     // the 3D view opens on the orthophoto of a country, which this layer has none of
     expect(orthoLayers.find((layer) => layer.title === 'Public transport')!.country).toBeUndefined();
   });
+
+  it('loads the basemap.at tiles from mapsneu only, maps1-4 no longer resolve', () => {
+    const tiles = [...baseLayers, ...orthoLayers]
+      .filter((layer) => layer.country === 'at')
+      .flatMap((layer) => layer.tiles);
+
+    expect(tiles).toEqual([
+      'https://mapsneu.wien.gv.at/basemap/bmapgrau/normal/google3857/{z}/{y}/{x}.png',
+      'https://mapsneu.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.jpeg',
+    ]);
+  });
 });
 
 describe('layer categories', () => {

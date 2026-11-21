@@ -70,10 +70,10 @@ const icgc = (layer: string) =>
   `&FORMAT=image/jpeg&LAYERS=${layer}&STYLES=&CRS=EPSG:3857&WIDTH=256&HEIGHT=256&BBOX={bbox-epsg-3857}`;
 const ICGC = `CC BY 4.0 ${link('http://www.icgc.cat', 'ICGC')}`;
 
-const basemapAt = (layer: string, format: string) =>
-  ['', '1', '2', '3', '4'].map(
-    (i) => `https://maps${i}.wien.gv.at/basemap/${layer}/normal/google3857/{z}/{y}/{x}.${format}`
-  );
+// maps1-4.wien.gv.at no longer resolve: mapsneu is the host of the current capabilities
+const basemapAt = (layer: string, format: string) => [
+  `https://mapsneu.wien.gv.at/basemap/${layer}/normal/google3857/{z}/{y}/{x}.${format}`,
+];
 const BASEMAP_AT = `© ${link('https://www.basemap.at', 'www.basemap.at')}`;
 
 // the base layers of the 2D map, one of them shown: OpenTopoMap first, the default
