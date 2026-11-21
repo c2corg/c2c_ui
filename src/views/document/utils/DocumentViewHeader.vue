@@ -103,7 +103,12 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
 <style scoped>
 @import '@/assets/css/media.css';
 
+/* the space between the buttons is a gap of the bar, not a margin of each: the scoped margin missed the components
+   with several roots (the favourite button and its dialog), which stuck to their neighbour */
 .button-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: 1.5rem;
 }
 
@@ -128,8 +133,12 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
 
 .button-bar > span,
 .button-bar > a {
-  margin-left: 0.4rem;
   cursor: pointer;
+}
+
+/* a button with nothing to show (no sharing on this browser) leaves no double gap */
+.button-bar > :empty {
+  display: none;
 }
 
 /* every icon in a box of the same width (Font Awesome's fixed width): the glyphs are not as wide (bookmark, share,
