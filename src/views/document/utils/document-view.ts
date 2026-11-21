@@ -15,6 +15,7 @@ import constants from '@/js/constants';
 import cooker from '@/js/cooker';
 import bus from '@/js/event-bus';
 import { getImageUrl, type Image } from '@/js/image-urls';
+import { replaceRoute } from '@/js/replace-route';
 import utils from '@/js/utils';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
@@ -153,8 +154,8 @@ export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { dr
 
     const currentPath = getCurrentPath();
     if (route.path !== currentPath) {
-      // the query stays: an old shared link holds the settings of its map there
-      router.replace({ path: getBasePath(), query: route.query, hash: route.hash });
+      // the query stays: it holds the settings of the map (C2cMap), which may write them at the same time
+      replaceRoute(router, { path: getBasePath(), query: route.query, hash: route.hash }, updateUrl);
     }
   }
 

@@ -133,7 +133,9 @@ describe('MapBox', () => {
       document.body.style.paddingTop = '';
       document.body.style.paddingRight = '';
       document.documentElement.style.overflow = '';
+      window.localStorage.removeItem('DocumentMap.preferences');
     });
+    const storedPin = () => JSON.parse(window.localStorage.getItem('DocumentMap.preferences') ?? '{}').settings?.pin;
 
     const clickPin = async (wrapper: Awaited<ReturnType<typeof mountAt>>['wrapper']) => {
       wrapper.findComponent({ ref: 'olMap' }).vm.$emit('pin-to-top-clicked');
@@ -190,7 +192,7 @@ describe('MapBox', () => {
       expect(document.documentElement.style.overflow).toBe('');
     });
 
-    it('pins the map on the side of an old shared link', async () => {
+    it('pins the map on the side of a shared link', async () => {
       const { wrapper } = await mountAt('/routes/1/fr?pin=right', 1400);
 
       expect(wrapper.find('.map-container').classes()).toContain('pinned-to-right');
@@ -204,7 +206,49 @@ describe('MapBox', () => {
       wrapper.unmount();
     });
 
-    it('never writes the url, when the user pins the map or when it is unpinned on leaving the page', async () => {
+    it('keeps the side the user pins the map on, for the next pages, but not the whole window', async () => {
+      const { wrapper } = await mountAt('/routes/1/fr', 1400);
+      await clickPin(wrapper);
+      expect(storedPin()).toBe('right');
+      await clickPin(wrapper);
+      expect(storedPin()).toBe('top');
+      await clickPin(wrapper);
+      expect(storedPin()).toBe('top');
+      await clickPin(wrapper);
+      expect(storedPin()).toBeUndefined();
+      wrapper.unmount();
+    });
+
+    it('pins the map on the stored side, the first one on a phone, and gives the side to the map', async () => {
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { pin: 'right' } }));
+      const desktop = await mountAt('/routes/1/fr', 1400);
+      expect(desktop.wrapper.find('.map-container').classes()).toContain('pinned-to-right');
+      expect(desktop.wrapper.findComponent({ ref: 'olMap' }).attributes('pinned-side')).toBe('right');
+      desktop.wrapper.unmount();
+
+      const phone = await mountAt('/routes/1/fr', 600);
+      expect(phone.wrapper.find('.map-container').classes()).toContain('pinned-to-top');
+      phone.wrapper.unmount();
+    });
+
+    it('pins the map on the side of the link, over the stored one, without storing it', async () => {
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { pin: 'right' } }));
+      const { wrapper } = await mountAt('/routes/1/fr?pin=top', 1400);
+      expect(wrapper.find('.map-container').classes()).toContain('pinned-to-top');
+      expect(storedPin()).toBe('right');
+      wrapper.unmount();
+    });
+
+    it('unpins for the next pages when Esc leaves the whole window', async () => {
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { pin: 'right' } }));
+      const { wrapper } = await mountAt('/routes/1/fr?pin=window', 1400);
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      await flushPromises();
+      expect(storedPin()).toBeUndefined();
+      wrapper.unmount();
+    });
+
+    it('leaves the url to the map, when the user pins the map or when it is unpinned on leaving the page', async () => {
       const { wrapper, router } = await mountAt('/routes/1/fr#description', 1400);
       const replace = vi.spyOn(router, 'replace');
       await clickPin(wrapper);

@@ -34,9 +34,10 @@
           "
           :show-pin-to-top-button="true"
           remember-settings
+          :pinned-side="pinnedSide"
           :show3d="show3d"
           @has-protection-area="$emit('has-protection-area')"
-          @pin-to-top-clicked="togglePinToSide(true)"
+          @pin-to-top-clicked="onPinClicked"
         />
       </div>
 
@@ -69,7 +70,7 @@ import ElevationProfile from './ElevationProfile.vue';
 import MapLinks from './MapLinks.vue';
 
 import { documentOverlayFilters } from '@/components/map/density-overlays';
-import { parseMapUrl } from '@/components/map/map-url-state';
+import { parseMapUrl, storedPin, storePin } from '@/components/map/map-url-state';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import bus from '@/js/event-bus';
 import { writeGpx, writeKml, type ExportedFeature } from '@/js/geo/formats';
@@ -132,6 +133,12 @@ function togglePinToSide(toggle: boolean) {
   setPinnedMode(mode);
 }
 
+// a click on the pin button: the side is kept on this device, for the next document pages (storePin)
+function onPinClicked() {
+  togglePinToSide(true);
+  storePin(pinnedSide.value);
+}
+
 function setPinnedMode(mode: number) {
   pinnedMode.value = mode;
 
@@ -156,7 +163,10 @@ function setPinnedMode(mode: number) {
 
 // Esc leaves the full window map (in the OS full screen, the browser takes it to leave the full screen first)
 function onKeydown(event: KeyboardEvent) {
-  if (event.key === 'Escape' && fullWindow.value && !window.document.fullscreenElement) setPinnedMode(0);
+  if (event.key === 'Escape' && fullWindow.value && !window.document.fullscreenElement) {
+    setPinnedMode(0);
+    storePin('');
+  }
 }
 
 function resizePin() {
@@ -191,10 +201,10 @@ function getDownloadedFileName(name: string, extension: string) {
   return filename.replace(/[/\\?%*:|"<>]/g, ' ').replace(/\s+/g, '_') + extension;
 }
 
-// pins the map on the side (or the whole window) asked for by an old shared link (?pin=top); a side that is not available
-// here (the right one on a phone) gives the first one
-function pinFromUrl() {
-  const { pin } = parseMapUrl(route.query);
+// pins the map on the side (or the whole window) asked for by the link of the page (?pin=top), else on the side kept on this
+// device; a side that is not available here (the right one on a phone) gives the first one
+function pinAtStart() {
+  const pin = parseMapUrl(route.query).pin ?? storedPin();
   if (!pin) return;
   // 0: unpinned, then the sides, in the order of this screen, then the whole window
   for (let i = 0; i < FULL_WINDOW; i++) {
@@ -206,7 +216,7 @@ function pinFromUrl() {
 }
 
 onMounted(() => {
-  pinFromUrl();
+  pinAtStart();
   bus.on('elevation_profile', onElevationProfile);
   window.addEventListener('resize', resizePin);
   window.addEventListener('keydown', onKeydown);

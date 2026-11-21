@@ -28,6 +28,7 @@ export const mountMap = async (props: Record<string, unknown> = {}, component: C
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [
+      { path: '/routes/print', name: 'routes-print', component: { render: () => null } },
       { path: '/outings/:id', name: 'outing', component: { render: () => null } },
       { path: '/routes/:id', name: 'route', component: { render: () => null } },
       { path: '/:path*', name: 'waypoint', component: { render: () => null } },
