@@ -274,8 +274,8 @@ export function categoryOf(title: string): LayerCategory | undefined {
   return [...baseLayers, worldLayer].find((layer) => layer.title === title)?.category;
 }
 
-// the one base layer whose tiles a topo saved offline downloads (src/pwa/offline-assets.ts): the 2D map shows it without
-// a network, whatever layer was chosen
+// the base layer whose tiles each topo saved offline downloads (src/pwa/offline-assets.ts): without a network, the 2D map
+// shows it under a layer without downloaded tiles, or instead of it when opened offline (C2cMap)
 export const OFFLINE_BASE_LAYER = baseLayers[0].title;
 
 // the base layers of the 3D view: the orthophotos and the maps allowed there, over the world one

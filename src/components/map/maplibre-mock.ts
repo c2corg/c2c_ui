@@ -66,6 +66,8 @@ export class FakeMap {
   queried: string[][] = [];
   cameras: Record<string, unknown>[] = [];
   removed = false;
+  // the raster sources whose tiles were asked again (setTiles)
+  reloaded: string[] = [];
   listeners = new Map<string, Listener[]>();
   dragRotate = handler();
   touchPitch = handler();
@@ -119,7 +121,9 @@ export class FakeMap {
 
   addControl() {}
   getSource(id: string) {
-    return id in this.data ? { setData: (data: unknown) => (this.data[id] = data) } : undefined;
+    if (id in this.data) return { setData: (data: unknown) => (this.data[id] = data) };
+    // a raster source: its tiles asked again
+    return id in this.style.sources ? { setTiles: () => this.reloaded.push(id) } : undefined;
   }
   getLayer(id: string) {
     return this.style.layers.find((layer) => layer.id === id);

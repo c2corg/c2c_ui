@@ -55,6 +55,12 @@
 
     <div v-show="showLayerSwitcher" class="ol-control ol-control-layer-switcher" @click.stop="">
       <div class="ol-control-layer-switcher-layers">
+        <div v-if="offlineStatus.length" class="c2c-map-offline-status" role="status">
+          <header><fa-icon icon="plug" /> {{ $gettext('Offline') }}</header>
+          <p v-for="line of offlineStatus" :key="line.title">
+            <strong>{{ $gettext(line.title, 'Map layer') }}</strong>: {{ line.status }}
+          </p>
+        </div>
         <header v-translate>Base layer</header>
         <div class="layer-group">
           <layer-button
@@ -183,11 +189,12 @@
       /></a>
     </div>
 
-    <!-- without a network, the layer chosen has no tiles: the downloaded one instead, said so -->
-    <div v-if="offlineFallback && !showLayerSwitcher" class="c2c-map-offline-notice" role="status">
-      <fa-icon icon="plug" />
-      {{ $gettext('Not available offline:') }} {{ $gettext(offlineFallback, 'Map layer') }}. {{ $gettext('Showing:') }}
-      {{ $gettext(OFFLINE_BASE_LAYER, 'Map layer') }}
+    <!-- without a network: said next to the layer switcher, which tells what each layer shows (offlineStatus) -->
+    <div v-if="offlineStatus.length && !showLayerSwitcher" class="ol-control c2c-map-offline-chip" role="status">
+      <button type="button" @click.stop="showLayerSwitcher = true">
+        <fa-icon icon="plug" />
+        {{ $gettext('Offline') }}
+      </button>
     </div>
 
     <!-- the credits of the visible layers, collapsed at first -->
@@ -286,6 +293,7 @@ import {
   type MapLayerMouseEvent,
   type MapMouseEvent,
   Marker,
+  type RasterTileSource,
   ScaleControl,
   setWorkerUrl,
   type SourceSpecification,
@@ -563,28 +571,71 @@ const shadingStrength = ref(0.4);
 
 const is3d = ref(false);
 
-// Without a network: the layers downloaded with the offline topos of the map (OpenTopoMap always, SwissTopo and the
-// slopes for some, src/pwa/offline-assets.ts), the choice kept for when the network comes back; no protection areas,
-// no 3D
+// Without a network: the layers downloaded with the offline topos of the map (OpenTopoMap for each, SwissTopo and the
+// slopes for some, src/pwa/offline-assets.ts); no protection areas, no 3D.
+// The base layer chosen stays, at best effort, when the map had the network: the tiles it already loaded are still in
+// its memory (not kept on the device: the licence of the IGN maps forbids it), the downloaded OpenTopoMap under it where
+// it has none. A map opened without a network has nothing in memory: the downloaded layer instead. A layer chosen
+// offline is not kept: back to the one chosen before when the network comes back
 const offline = useOfflineStore();
 const online = computed(() => offline.online);
 const downloadedLayers = computed(() => {
-  const titles = new Set([OFFLINE_BASE_LAYER]);
+  const titles = new Set<string>();
   for (const document of props.documents ?? []) {
     const type = $documentUtils.getDocumentType(document.type);
-    const layers = type && document.document_id && offline.find(type, document.document_id)?.assets?.layers;
-    Object.keys(layers ?? {}).forEach((title) => titles.add(title));
+    const assets = type && document.document_id ? offline.find(type, document.document_id)?.assets : undefined;
+    if (!assets) continue;
+    titles.add(OFFLINE_BASE_LAYER);
+    Object.keys(assets.layers ?? {}).forEach((title) => titles.add(title));
   }
   return titles;
 });
-const offlineBaseLayers = computed(() => baseLayers.filter((layer) => downloadedLayers.value.has(layer.title)));
-const shownBase = computed(() =>
-  online.value || downloadedLayers.value.has(base.value) ? base.value : OFFLINE_BASE_LAYER
+// the map had the network since it was opened: its tiles in memory
+const seenOnline = ref(online.value);
+const offlineBase = ref<string | null>(null);
+const shownBase = computed(() => {
+  if (online.value) return base.value;
+  if (offlineBase.value) return offlineBase.value;
+  const fallback = !seenOnline.value && !downloadedLayers.value.has(base.value);
+  return fallback && downloadedLayers.value.has(OFFLINE_BASE_LAYER) ? OFFLINE_BASE_LAYER : base.value;
+});
+// under a base layer without downloaded tiles: the downloaded OpenTopoMap, seen where the other one has no tile
+const underBase = computed(() =>
+  !online.value &&
+  !is3d.value &&
+  !downloadedLayers.value.has(shownBase.value) &&
+  downloadedLayers.value.has(OFFLINE_BASE_LAYER)
+    ? OFFLINE_BASE_LAYER
+    : null
+);
+// offline, the downloaded layers and the one chosen when the map had the network
+const offlineBaseLayers = computed(() =>
+  baseLayers.filter(
+    (layer) =>
+      downloadedLayers.value.has(layer.title) ||
+      layer.title === shownBase.value ||
+      (seenOnline.value && layer.title === base.value)
+  )
 );
 const shownSlopes = computed(() =>
   online.value ? slopes.value : slopes.value.filter((title) => downloadedLayers.value.has(title))
 );
-const offlineFallback = computed(() => (!is3d.value && shownBase.value !== base.value ? base.value : null));
+// what each base layer offers offline, said in the layer switcher
+const offlineStatus = computed(() => {
+  if (online.value || is3d.value) return [];
+  const shown = shownBase.value;
+  const replaced = shown !== base.value && !offlineBase.value;
+  const lines: { title: string; status: string }[] = [];
+  if (replaced) lines.push({ title: base.value, status: $gettext('not available offline') });
+  let status: string;
+  if (downloadedLayers.value.has(shown))
+    status = replaced ? $gettext('downloaded, shown instead') : $gettext('downloaded');
+  else if (seenOnline.value) status = $gettext('only the areas already seen');
+  else status = $gettext('not available offline');
+  lines.push({ title: shown, status });
+  if (underBase.value) lines.push({ title: underBase.value, status: $gettext('downloaded, shown underneath') });
+  return lines;
+});
 
 const showLayerSwitcher = ref(false);
 const isFullscreen = ref(false);
@@ -962,7 +1013,7 @@ function showLayers() {
   const visibleBase = is3d.value ? base3d.value : shownBase.value;
   // in 3D, the raster maps not allowed there are drawn from their vector tiles instead (showVectorMap)
   for (const layer of baseLayers) {
-    const shown = layer.title === visibleBase && (!is3d.value || !!layer.in3d);
+    const shown = (layer.title === visibleBase || layer.title === underBase.value) && (!is3d.value || !!layer.in3d);
     set(layer.title, shown && !(is3d.value && layer.tiles3d));
     if (layer.tiles3d) set(layer3dId(layer), shown && is3d.value);
   }
@@ -2142,6 +2193,9 @@ watch(
     protectionAreasOpacity,
     shading,
     online,
+    shownBase,
+    underBase,
+    shownSlopes,
     shadingStrength,
   ],
   () => {
@@ -2154,6 +2208,16 @@ watch([is3d, base3d], () => showVectorMap());
 // the network lost in 3D: back to the 2D map, whose tiles may be downloaded
 watch(online, (isOnline) => {
   if (!isOnline && is3d.value) close3d();
+});
+
+// the network back: the layer chosen before, its tiles that failed without the network asked again
+watch(online, (isOnline) => {
+  if (!isOnline) return;
+  seenOnline.value = true;
+  offlineBase.value = null;
+  const layer = baseLayers.find((item) => item.title === base.value);
+  const source = layer && (map?.getSource(layer.title) as RasterTileSource | undefined);
+  source?.setTiles?.(layer!.tiles);
 });
 
 // deep 1: also when documents are added to or removed from the array, as Vue 2 array watchers did
@@ -2179,6 +2243,11 @@ function storeSetting(change: Parameters<typeof storeMapSettings>[0]) {
 // a click on a base layer, in 2D or in 3D: its category is kept. A layer chosen in 3D that 2D has not (Sentinel-2) gives
 // 2D the layer of its category
 function chooseBase(title: string) {
+  // offline: for now only (offlineBase)
+  if (!online.value && !is3d.value) {
+    offlineBase.value = title;
+    return;
+  }
   const category = categoryOf(title);
   if (is3d.value) base3d.value = title;
   if (baseLayers.some((layer) => layer.title === title)) base.value = title;
@@ -2381,20 +2450,39 @@ defineExpose({
   }
 }
 
-/* above the map, centred at the top, under no control: the left and right columns hold the buttons */
-.c2c-map-offline-notice {
-  position: absolute;
-  z-index: 2;
-  top: 0.5em;
-  left: 50%;
-  max-width: calc(100% - 2 * var(--map-button-size) - 3em);
-  padding: 0.25em 0.75em;
+/* without a network: just above the layer switcher button, which it opens, where the 3D button is (not offered
+   offline); the bottom row has the scale, which a narrow map widens to its left */
+.c2c-map-offline-chip {
+  bottom: calc(1em + var(--map-button-size));
+  left: 0.5em;
+
+  button {
+    width: auto;
+    padding: 0 0.6em;
+    gap: 0.35em;
+    background: var(--c2c-yellow);
+    color: var(--c2c-text);
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+}
+
+/* at the top of the layer switcher: what each base layer shows without a network */
+.c2c-map-offline-status {
+  margin-bottom: 0.5em;
+  padding: 0.4em 0.5em;
   border-radius: 4px;
   background: var(--c2c-yellow);
   color: var(--c2c-text);
   font-size: 0.8rem;
-  transform: translateX(-50%);
-  pointer-events: none;
+
+  header {
+    font-weight: bold;
+  }
+
+  p {
+    margin: 0;
+  }
 }
 
 .c2c-map-compass-needle {
