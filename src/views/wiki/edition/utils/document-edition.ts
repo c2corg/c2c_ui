@@ -167,7 +167,7 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
                 onload();
               })
               .catch(() => {
-                // without a network, the copy of "My topos" if it was saved offline
+                // without a network, the copy of Favourites if it was saved offline
                 const saved = offline.find(type, Number(id))?.data;
                 if (saved) {
                   globals.$documentUtils.addAssociation(newDocument, saved);
@@ -312,7 +312,7 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
     return !displayErrors(false);
   }
 
-  // The outing on the phone instead of on Camptocamp (src/stores/outing-queue.ts): published later from My topos.
+  // The outing on the phone instead of on Camptocamp (src/stores/outing-queue.ts): published later from Favourites.
   // routeNote: the route could not be found, the user says which one it is
   // unanswered: sent to the API without an answer, it may be published already (see classifyFailure)
   async function keepOnPhone(
@@ -357,7 +357,7 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
 
   function saveWithoutPublishing() {
     if (isValid()) {
-      void keepOnPhone(globals.$gettext('Outing saved on the phone, not published. Publish it from My topos.'));
+      void keepOnPhone(globals.$gettext('Outing saved on the phone, not published. Publish it from Favourites.'));
     }
   }
 
@@ -380,14 +380,14 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
     const doc = document.value!;
 
     if (draftId.value) {
-      void keepOnPhone(globals.$gettext('Outing updated on the phone. Publish it from My topos when it is ready.'));
+      void keepOnPhone(globals.$gettext('Outing updated on the phone. Publish it from Favourites when it is ready.'));
       return;
     }
     // a new outing without a network: on the phone, published later
     const keepable = mode.value === 'add' && documentType.value === 'outing';
     if (keepable && !offline.online) {
       void keepOnPhone(
-        globals.$gettext('Outing saved on the phone. Publish it from My topos once the network is back.')
+        globals.$gettext('Outing saved on the phone. Publish it from Favourites once the network is back.')
       );
       return;
     }
@@ -422,7 +422,7 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
       if (keepable && status === 401) {
         void keepOnPhone(
           globals.$gettext(
-            'Your session expired: the outing is saved on the phone. Sign in, then publish it from My topos.'
+            'Your session expired: the outing is saved on the phone. Sign in, then publish it from Favourites.'
           ),
           'is-warning'
         );
@@ -431,7 +431,7 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
       if (keepable && status === undefined) {
         void keepOnPhone(
           globals.$gettext(
-            'No answer from Camptocamp: the outing may be published already. It is saved on the phone: check on the site, then decide from My topos.'
+            'No answer from Camptocamp: the outing may be published already. It is saved on the phone: check on the site, then decide from Favourites.'
           ),
           'is-warning',
           '',

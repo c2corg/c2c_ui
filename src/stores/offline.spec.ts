@@ -145,15 +145,6 @@ describe('offline store', () => {
     expect(offline.find('route', 13)?.assets).toBeUndefined();
   });
 
-  it('frees the files of the topos of a section emptied', async () => {
-    const offline = useOfflineStore();
-    await offline.saveDocument({ type: 'route', id: 12, lang: 'fr', title: 'Arête', mode: OFFLINE_MODE });
-    expect(storage.keysOf(SAVED_ASSETS_CACHE)).not.toEqual([]);
-
-    await offline.purge('offline');
-    expect(storage.keysOf(SAVED_ASSETS_CACHE)).toEqual([]);
-  });
-
   it('keeps the files of a topo downloaded again, and frees the ones its new copy does not use', async () => {
     const offline = useOfflineStore();
     await offline.saveDocument({ type: 'route', id: 12, lang: 'fr', title: 'Arête', mode: OFFLINE_MODE });
@@ -200,32 +191,39 @@ describe('offline store', () => {
     expect(fetch).not.toHaveBeenCalled();
   });
 
-  it('empties one section, documents and folders', async () => {
+  it('keeps a favourite without its content, with no network, in its folder', async () => {
     const offline = useOfflineStore();
-    const folder = await offline.createFolder('Écrins', 'online');
-    await offline.saveDocument({ type: 'route', id: 12, lang: 'fr', title: 'Arête', folderId: folder });
-    expect(offline.foldersOf('online')).toHaveLength(1);
+    const folder = await offline.createFolder('Écrins');
+    await offline.bookmark({ type: 'route', id: 12, lang: 'fr', title: 'Arête', folderId: folder });
+    expect(fetch).not.toHaveBeenCalled();
+    expect(offline.find('route', 12)).toMatchObject({ mode: 'online', data: null, folderId: folder });
 
-    await offline.purge('offline');
-    expect(offline.savedDocs).toHaveLength(1);
-
-    await offline.purge('online');
-    expect(offline.savedDocs).toEqual([]);
-    expect(offline.folders).toEqual([]);
+    // taken offline, then back to a favourite only: still in its folder
+    await offline.downloadForOffline(offline.find('route', 12)!);
+    expect(offline.find('route', 12)).toMatchObject({ mode: 'offline', folderId: folder });
+    await offline.makeOnline('route', 12);
+    expect(offline.find('route', 12)).toMatchObject({ mode: 'online', folderId: folder });
   });
 
-  it('saves the pack of the day: the route and its waypoints offline, in a new folder', async () => {
+  it('makes one folder of the folders of the same name of the former two sections', async () => {
     const offline = useOfflineStore();
-    const saved = await offline.saveDayPack({ id: 12, lang: 'fr', title: 'Arête' }, 'Samedi');
-    expect(saved).toBe(2);
-    const [folder] = offline.foldersOf('offline');
-    expect(folder.name).toBe('Samedi');
-    const inPack = offline.savedDocs.filter((entry) => entry.folderId === folder.id);
-    expect(inPack.map((entry) => `${entry.type}/${entry.id}/${entry.mode}`).sort()).toEqual([
-      'route/12/offline',
-      'waypoint/30/offline',
-      'waypoint/31/offline',
-    ]);
+    const online = await offline.createFolder('Écrins', 'online');
+    const offlineFolder = await offline.createFolder('écrins ', 'offline');
+    await offline.createFolder('Vanoise', 'offline');
+    await saveEntry({
+      type: 'route',
+      id: 12,
+      lang: 'fr',
+      data: { document_id: 12 },
+      title: 'Arête',
+      folderId: offlineFolder,
+      mode: OFFLINE_MODE,
+    });
+    await offline.refresh();
+
+    await offline.mergeFoldersByName();
+    expect(offline.folders.map((folder) => folder.name).sort()).toEqual(['Vanoise', 'Écrins']);
+    expect(offline.find('route', 12)?.folderId).toBe(online);
   });
 
   it('finds the files the browser cleared, and lists the copies to download again, the most urgent first', async () => {

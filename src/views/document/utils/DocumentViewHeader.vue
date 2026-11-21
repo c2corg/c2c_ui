@@ -10,7 +10,6 @@
         <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
           <gotop-button v-if="isPrintingView" />
           <follow-button v-if="!isPrintingView" :document="document" />
-          <tags-button v-if="!isPrintingView" :document="document" />
 
           <add-link
             v-if="isNormalView && documentType === 'route'"
@@ -20,7 +19,7 @@
           >
             <fa-icon icon="plus" />&nbsp;{{ $gettext('Add my outing') }}
           </add-link>
-          <offline-header-button
+          <favourite-button
             v-if="isNormalView && SAVABLE_TYPES.includes(documentType)"
             :document-type="documentType"
             :document-id="document.document_id!"
@@ -69,11 +68,10 @@
 import { computed, useTemplateRef } from 'vue';
 
 import DocumentVersionBanner from './DocumentVersionBanner.vue';
+import FavouriteButton from './FavouriteButton.vue';
 import FollowButton from './FollowButton.vue';
 import GotopButton from './GotopButton.vue';
-import OfflineHeaderButton from './OfflineHeaderButton.vue';
 import SocialNetworkSharing from './SocialNetworkSharing.vue';
-import TagsButton from './TagsButton.vue';
 
 import ImagesUploader from '@/components/images-uploader/ImagesUploader.vue';
 import { useEditable } from '@/js/composables/editable';
@@ -105,7 +103,12 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
 <style scoped>
 @import '@/assets/css/media.css';
 
+/* the space between the buttons is a gap of the bar, not a margin of each: the scoped margin missed the components
+   with several roots (the favourite button and its dialog), which stuck to their neighbour */
 .button-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: 1.5rem;
 }
 
@@ -130,8 +133,19 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
 
 .button-bar > span,
 .button-bar > a {
-  margin-left: 0.25rem;
   cursor: pointer;
+}
+
+/* a button with nothing to show (no sharing on this browser) leaves no double gap */
+.button-bar > :empty {
+  display: none;
+}
+
+/* every icon in a box of the same width (Font Awesome's fixed width): the glyphs are not as wide (bookmark, share,
+   image, pen), and the badges of the bookmark and of the image overflow them, which left the last ones too close */
+.button-bar :deep(.svg-inline--fa),
+.button-bar :deep(.fa-layers) {
+  width: 1.25em;
 }
 
 .button-bar > *:hover {

@@ -25,7 +25,7 @@
       <!-- without a network: what still opens -->
       <div v-if="!offline.online && !offlineBannerClosed" class="offline-banner no-print" role="status">
         <router-link :to="{ name: 'offline' }">
-          <fa-icon icon="plug" />&nbsp;{{ $gettext('Offline: open My topos') }}
+          <fa-icon icon="plug" />&nbsp;{{ $gettext('Offline: open Favourites') }}
         </router-link>
         <button
           type="button"
@@ -67,6 +67,7 @@ import { useHasTopAd, useIsHomePage } from '@/js/composables/home-page';
 import { imageViewerRequested } from '@/js/vue-plugins/image-viewer';
 import { remind, shouldRemind } from '@/pwa/offline-reminder';
 import { useAppSettingsStore } from '@/stores/app-settings';
+import { useFavouritesStore } from '@/stores/favourites';
 import { useOfflineStore } from '@/stores/offline';
 
 // loaded with the first image shown, with Swiper (#4877)
@@ -80,6 +81,9 @@ const topAd = useHasTopAd();
 const appSettings = useAppSettingsStore();
 
 const offline = useOfflineStore();
+// started at once: a logged in user's favourites of the device are sent to the account, the changes made without a
+// network too
+useFavouritesStore();
 // closed until the network comes back and goes again
 const offlineBannerClosed = ref(false);
 watch(
@@ -96,7 +100,7 @@ const { $gettext, $router } = useGlobalProperties();
 void offline.ready.then(() => {
   const count = offline.needingAttention.length;
   if (shouldRemind(count, offline.online)) {
-    remind(`${$gettext('Offline topos to check:')} ${count}.`, $gettext('My topos'), () => {
+    remind(`${$gettext('Offline topos to check:')} ${count}.`, $gettext('Favourites'), () => {
       void $router.push({ name: 'offline', query: { tab: 'offline' } });
     });
   }
@@ -493,7 +497,7 @@ html[data-theme='dark'] {
     }
   }
 
-  /* the tabs of My topos, and the light tags of Bulma */
+  /* the tabs of Favourites, and the light tags of Bulma */
   .tabs.is-boxed li.is-active a {
     background-color: var(--app-dark-surface);
     border-color: var(--app-dark-border);

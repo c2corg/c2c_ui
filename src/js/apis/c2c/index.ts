@@ -2,10 +2,10 @@ import type { AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } fr
 
 import AssociationService from './AssociationService';
 import DocumentService from './DocumentService';
+import FavouritesService from './FavouritesService';
 import FeedService from './FeedService';
 import ForumService from './ForumService';
 import ModeratorService from './ModeratorService';
-import TagsService from './TagsService';
 import UserProfileService from './UserProfileService';
 import { densityHeatmap, densityTracks, documentChanges, documentsPage, searchResults } from './schemas';
 import { type SessionRefusal, sentWithFormerToken, sessionRefusal } from './session-refusal';
@@ -21,7 +21,7 @@ export class CamptocampApi extends BaseApi {
   association: AssociationService;
   feed: FeedService;
   forum: ForumService;
-  tags: TagsService;
+  favourites: FavouritesService;
   // one DocumentService per document type (c2c.route, c2c.waypoint...), from constants.documentTypes
   [documentType: string]: unknown;
 
@@ -33,7 +33,7 @@ export class CamptocampApi extends BaseApi {
     this.association = new AssociationService(this);
     this.feed = new FeedService(this);
     this.forum = new ForumService(this);
-    this.tags = new TagsService(this);
+    this.favourites = new FavouritesService(this);
 
     for (const type of constants.documentTypes) {
       this[type] = new DocumentService(this, type);

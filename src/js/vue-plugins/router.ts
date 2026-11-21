@@ -59,7 +59,7 @@ const YetiView = () => import(`@/views/portals/YetiView.vue`);
 // the pages of the phone layout (bottom tab bar)
 const MeView = () => import('@/views/user/MeView.vue');
 const AppSettingsView = () => import('@/views/user/AppSettingsView.vue');
-const OfflineView = () => import('@/views/user/OfflineView.vue');
+const FavouritesView = () => import('@/views/user/FavouritesView.vue');
 const AppGuideView = () => import('@/views/static-views/AppGuideView.vue');
 
 const routes: RouteRecordRaw[] = [
@@ -87,8 +87,9 @@ const routes: RouteRecordRaw[] = [
   { path: '/sophie-picture-contest/:year(\\d+)?', name: 'sophie-picture-contest', component: SophiePictureContestView },
   { path: '/me', name: 'me', component: MeView },
   { path: '/app-settings', name: 'app-settings', component: AppSettingsView },
-  // "My topos": the documents saved on the device (src/stores/offline.ts)
-  { path: '/offline', name: 'offline', component: OfflineView },
+  // the favourites, and their offline copies (src/stores/favourites.ts). Its former name and URL kept: the service
+  // worker, the reminders and the links of the app use them
+  { path: '/offline', alias: '/favourites', name: 'offline', component: FavouritesView },
   { path: '/app-guide', name: 'app-guide', component: AppGuideView },
 
   // leaves the UI for the forum before any component is needed: vue-router's types want one on every route

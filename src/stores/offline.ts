@@ -1,5 +1,6 @@
-// "My topos" (src/pwa/offline-store.ts) as the pages show them, the downloads for offline, and whether the network is
-// there
+// The favourites kept on this device (src/pwa/offline-store.ts): the offline copies, and the favourites of a user logged
+// out; the downloads for offline, and whether the network is there. The favourites as the pages show them, on the
+// account or here, are src/stores/favourites.ts
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
@@ -33,7 +34,7 @@ const legacyAssetUrlsOf = (data: SavedEntry['data']) => [...imageUrlsOf(data), .
 // what the copy of the document itself weighs
 const sizeOf = (data: unknown) => new Blob([JSON.stringify(data)]).size;
 
-// The code of the pages that show a document without a network: its view, "My topos" and the map load on first use,
+// The code of the pages that show a document without a network: its view, the favourites and the map load on first use,
 // and may never have been opened. Loaded now, the service worker keeps them. The router is imported here and not at
 // the top: it imports the views, which use this store
 async function loadPagesOf(type: string) {
@@ -244,40 +245,48 @@ export const useOfflineStore = defineStore('offline', () => {
     await refresh();
   }
 
-  async function createFolder(name: string, section: SavedMode) {
+  async function createFolder(name: string, section: SavedMode = ONLINE_MODE) {
     const id = `f_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     await changed(idb.saveFolder({ id, name, section }));
     return id;
   }
 
-  // The pack of the day (CDC, lot 1): a route and its waypoints (hut, summit, access...) offline, in a new folder. A
-  // waypoint already saved stays where it is; one that fails does not stop the others. How many waypoints were saved
-  async function saveDayPack(route: { id: number; lang: string; title: string }, folderName: string) {
-    const folderId = await createFolder(folderName, OFFLINE_MODE);
-    await saveDocument({ type: 'route', ...route, folderId, mode: OFFLINE_MODE });
-    const associations = find('route', route.id)?.data?.associations ?? {};
-    const waypoints: { document_id?: number; locales?: { title?: string | null }[] }[] = [
-      ...(associations.waypoints ?? []),
-      ...(associations.waypoint_children ?? []),
-    ];
-    let saved = 0;
-    for (const waypoint of waypoints) {
-      if (!waypoint.document_id || find('waypoint', waypoint.document_id)) {
+  // A favourite of a user logged out, without its content: no network needed
+  async function bookmark(args: { type: string; id: number; lang: string; title: string; folderId?: string | null }) {
+    if (find(args.type, args.id)) {
+      return;
+    }
+    await changed(
+      idb.saveDocument({
+        ...args,
+        lang: c2c.getApiLang(args.lang),
+        data: null,
+        folderId: args.folderId ?? null,
+        mode: ONLINE_MODE,
+      })
+    );
+  }
+
+  // The folders of the two former sections (online, offline) are one set now: those of the same name become one
+  async function mergeFoldersByName() {
+    const kept = new Map<string, Folder>();
+    let merged = false;
+    for (const folder of folders.value) {
+      const name = folder.name.trim().toLowerCase();
+      const first = kept.get(name);
+      if (!first) {
+        kept.set(name, folder);
         continue;
       }
-      await saveDocument({
-        type: 'waypoint',
-        id: waypoint.document_id,
-        lang: route.lang,
-        title: waypoint.locales?.[0]?.title ?? '',
-        folderId,
-        mode: OFFLINE_MODE,
-      }).then(
-        () => saved++,
-        () => {}
-      );
+      for (const entry of savedDocs.value.filter((entry) => entry.folderId === folder.id)) {
+        await idb.setFolder(entry.type, entry.id, first.id);
+      }
+      await idb.deleteFolder(folder.id);
+      merged = true;
     }
-    return saved;
+    if (merged) {
+      await refresh();
+    }
   }
 
   return {
@@ -294,9 +303,8 @@ export const useOfflineStore = defineStore('offline', () => {
     isDownloading,
     find,
     saveDocument,
-    // a saved document to the offline section, or its copy downloaded again
-    downloadForOffline: (entry: SavedEntry) =>
-      saveDocument({ ...entry, folderId: entry.mode === OFFLINE_MODE ? entry.folderId : null, mode: OFFLINE_MODE }),
+    // a saved document taken offline, or its copy downloaded again: in the same folder
+    downloadForOffline: (entry: SavedEntry) => saveDocument({ ...entry, mode: OFFLINE_MODE }),
     // both free the space of its files
     async makeOnline(type: string, id: number) {
       const keys = find(type, id)?.assets?.keys;
@@ -310,21 +318,9 @@ export const useOfflineStore = defineStore('offline', () => {
     },
     moveToFolder: (type: string, id: number, folderId: string | null) => changed(idb.setFolder(type, id, folderId)),
     createFolder,
-    saveDayPack,
+    bookmark,
+    mergeFoldersByName,
     renameFolder: (folder: Folder, name: string) => changed(idb.saveFolder({ ...folder, name })),
     removeFolder: (id: string) => changed(idb.deleteFolder(id)),
-    foldersOf: (section: SavedMode) => folders.value.filter((folder) => folder.section === section),
-    // the documents of a section and its folders
-    async purge(section: SavedMode) {
-      const keys: string[] = [];
-      for (const entry of savedDocs.value.filter((entry) => entry.mode === section)) {
-        keys.push(...(entry.assets?.keys ?? []));
-        await idb.deleteDocument(entry.type, entry.id);
-      }
-      for (const folder of folders.value.filter((folder) => folder.section === section)) {
-        await idb.deleteFolder(folder.id);
-      }
-      await release(keys);
-    },
   };
 });

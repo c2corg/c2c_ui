@@ -112,7 +112,7 @@
       :label="$gettext('Translate')"
     />
 
-    <!-- My topos (src/stores/offline.ts): a row with a real label, which the bookmark of the header cannot have -->
+    <!-- the offline copy (src/stores/favourites.ts): a row with a real label, which the bookmark of the header cannot have -->
     <template v-if="isNormalView && SAVABLE_TYPES.includes(documentType)">
       <tool-box-button
         v-if="offline.isOfflineReady(documentType, document.document_id!)"
@@ -237,7 +237,8 @@ import { toLonLat } from '@/js/geo/projection';
 import getFundraiser from '@/js/get-fundraiser';
 import { cookedDocumentProperty, useDocumentType } from '@/js/properties';
 import { notify } from '@/js/toast';
-import { OFFLINE_MODE, SAVABLE_TYPES } from '@/pwa/offline-store';
+import { SAVABLE_TYPES } from '@/pwa/offline-store';
+import { useFavouritesStore } from '@/stores/favourites';
 import { useOfflineStore } from '@/stores/offline';
 
 const reportingIssueMail = 'topo-fr@camptocamp.org';
@@ -247,6 +248,7 @@ const props = defineProps({ ...cookedDocumentProperty });
 const route = useRoute();
 const { $gettext, $language, $user, $documentUtils } = useGlobalProperties();
 const offline = useOfflineStore();
+const favourites = useFavouritesStore();
 // the view mode too: isDraftView, isVersionView...
 const { isNormalView, isEditable, isDeletable } = useEditable(() => props.document);
 const { documentType } = useDocumentType(props);
@@ -270,7 +272,8 @@ async function saveOffline() {
   }
   savingOffline.value = true;
   try {
-    await offline.saveDocument({ type: documentType.value, ...thisDocument(), mode: OFFLINE_MODE });
+    // a favourite too
+    await favourites.saveOffline({ type: documentType.value, ...thisDocument() });
     notify($gettext('Saved offline'), 'is-success');
   } catch {
     notify($gettext('Download failed: check the network and try again'), 'is-warning');
@@ -287,9 +290,9 @@ async function saveDayPack() {
   }
   savingPack.value = true;
   try {
-    const waypoints = await offline.saveDayPack(route, folderName);
+    const waypoints = await favourites.saveDayPack(route, folderName);
     notify(
-      $gettext('Pack saved offline, in My topos: the route and its waypoints:') + ' ' + (waypoints + 1),
+      $gettext('Pack saved offline, in Favourites: the route and its waypoints:') + ' ' + (waypoints + 1),
       'is-success'
     );
   } catch {

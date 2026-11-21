@@ -1,5 +1,5 @@
 // The outings written on the phone and not published yet, in IndexedDB: without a network, or kept on purpose
-// ("Save without publishing"). Nothing goes out by itself: the user publishes them from "My topos"
+// ("Save without publishing"). Nothing goes out by itself: the user publishes them from Favourites
 // (src/stores/outing-queue.ts), which follows the rules below when the API refuses one.
 import { get, set } from 'idb-keyval';
 
