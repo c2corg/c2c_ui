@@ -103,7 +103,7 @@ describe('DfmAdSmall', () => {
 
     onRender(false);
     await flushPromises();
-    expect(slot().style.minHeight).toBe('');
+    expect(slot().style.minHeight).toBe('0px');
     expect(wrapper.classes()).toContain('is-empty');
 
     // a refresh of the slot brings an ad
@@ -114,5 +114,21 @@ describe('DfmAdSmall', () => {
 
     wrapper.unmount();
     expect(stopWatching).toHaveBeenCalledOnce();
+  });
+
+  it('leaves the room again on the next page, after a page without ad', async () => {
+    const wrapper = await mountAt(DfmAdSmall);
+    const onRender = vi.mocked(watchAdSlot).mock.calls[0]![1];
+
+    onRender(false);
+    await flushPromises();
+    expect(slot().style.minHeight).toBe('0px');
+
+    await wrapper.router.push('/routes/2');
+    await flushPromises();
+    expect(slot().style.minHeight).toBe('90px');
+    expect(wrapper.classes()).not.toContain('is-empty');
+
+    wrapper.unmount();
   });
 });
