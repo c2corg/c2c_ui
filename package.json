@@ -79,7 +79,7 @@
     "@types/node": "26.6.6",
     "@types/xml2js": "0.4.14",
     "@vitejs/plugin-legacy": "8.2.4",
-    "@vitejs/plugin-vue": "6.0.10",
+    "@vitejs/plugin-vue": "6.0.11",
     "@vue/test-utils": "2.5.1",
     "@vue/tsconfig": "0.9.1",
     "browserslist": "4.29.6",
