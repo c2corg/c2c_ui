@@ -29,4 +29,35 @@ describe('DocumentViewHeader', () => {
     expect(onError).not.toHaveBeenCalled();
     expect(wrapper.find('h1').exists()).toBe(false);
   });
+
+  it('repeats an outing date in the button bar, where a range breaks at its dash', async () => {
+    const router = createRouter({ history: createMemoryHistory(), routes: [{ path: '/:p(.*)*', component: {} }] });
+    await router.push('/outings/1');
+
+    const wrapper = shallowMount(DocumentViewHeader, {
+      props: { document: { document_id: 1, type: 'o', cooked: { lang: 'es' }, locales: [] } as never },
+      global: {
+        plugins: [router],
+        config: {
+          globalProperties: {
+            $user: { isLogged: false, isModerator: false, id: null },
+            $filters: { uppercaseFirstLetter: (s: string) => s },
+            $dateUtils: {},
+            $documentUtils: {
+              getDocumentType: () => 'outing',
+              getDocumentTitle: () => 'Sortie',
+              getOutingDatesLocalized: () => '28 de dic de 2025 - 2 de ene de 2026',
+            },
+          } as never,
+        },
+      },
+    });
+
+    const parts = wrapper.findAll('.bar-date .bar-date-part').map((part) => part.text());
+    expect(parts).toEqual(['28 de dic de 2025', '- 2 de ene de 2026']);
+    // a space between the parts, where the line may break
+    expect(wrapper.find('.bar-date').text()).toBe('28 de dic de 2025 - 2 de ene de 2026');
+    // and in the title, for wider screens
+    expect(wrapper.find('h1 .outing-date').text()).toBe('28 de dic de 2025 - 2 de ene de 2026');
+  });
 });

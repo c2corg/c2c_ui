@@ -8,6 +8,13 @@
 
       <div class="box">
         <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
+          <!-- phone only: the date shares the line of the buttons -->
+          <span v-if="headerDate" class="bar-date">
+            <template v-for="(part, i) in headerDate.split(' - ')" :key="i">
+              <!-- the space between the parts, where the range may break, would be dropped as template whitespace -->
+              {{ i ? ' ' : '' }}<span class="bar-date-part">{{ i ? '- ' : '' }}{{ part }}</span>
+            </template>
+          </span>
           <gotop-button v-if="isPrintingView" />
           <follow-button v-if="!isPrintingView" :document="document" />
 
@@ -47,14 +54,8 @@
           </slot>
           <document-title :document="document" uppercase-first-letter />
 
-          <!-- outing specific  -->
-          <span v-if="documentType == 'outing'" class="outing-date is-size-5">
-            {{ $filters.uppercaseFirstLetter($documentUtils.getOutingDatesLocalized(document)) }}
-          </span>
-
-          <!-- xreport specific  -->
-          <span v-else-if="documentType == 'xreport'" class="outing-date is-size-5">
-            {{ $filters.uppercaseFirstLetter($dateUtils.toLocalizedString(document.date, 'll')) }}
+          <span v-if="headerDate" class="outing-date is-size-5" :class="{ 'has-bar-date': !isDraftView }">
+            {{ headerDate }}
           </span>
         </h1>
       </div>
@@ -89,13 +90,24 @@ const props = defineProps({
   },
 });
 
-const { $documentUtils } = useGlobalProperties();
+const { $documentUtils, $filters, $dateUtils } = useGlobalProperties();
 const { documentType } = useDocumentType(props);
 const { isDraftView, isPrintingView, isNormalView, isEditable } = useEditable(() => props.document);
 
 const uploader = useTemplateRef<InstanceType<typeof ImagesUploader>>('uploader');
 
 const lang = computed(() => props.document.cooked?.lang);
+
+// outing dates, or xreport date
+const headerDate = computed(() => {
+  if (documentType.value === 'outing') {
+    return $filters.uppercaseFirstLetter($documentUtils.getOutingDatesLocalized(props.document));
+  }
+  if (documentType.value === 'xreport') {
+    return $filters.uppercaseFirstLetter($dateUtils.toLocalizedString(props.document.date, 'll'));
+  }
+  return null;
+});
 
 const title = computed(() => $documentUtils.getDocumentTitle(props.document, lang.value));
 </script>
@@ -158,6 +170,10 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
   }
 }
 
+.bar-date {
+  display: none !important;
+}
+
 /* on a phone the buttons take their own line, above the title: floated beside it, they left a long title a few
    letters per line ("Aig / uille de la République") */
 @media screen and (--c2c-max-tablet) {
@@ -168,6 +184,31 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
     justify-content: flex-end;
     align-items: center;
     margin-bottom: 0.5rem;
+  }
+
+  /* takes the room the buttons leave: the buttons keep their line, a long date goes on two */
+  .bar-date {
+    display: inline !important;
+    flex: 1 1 0;
+    margin-left: 0 !important;
+    font-size: 1rem;
+    cursor: default !important;
+  }
+
+  /* a range breaks at its dash first, inside one of its dates only when that date alone is too long */
+  .bar-date-part {
+    display: inline-block;
+  }
+
+  /* the left of the button line, as the date of an outing */
+  .button-bar > a.add-my-outing {
+    order: -1;
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  .title .outing-date.has-bar-date {
+    display: none;
   }
 }
 
