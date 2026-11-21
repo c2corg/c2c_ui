@@ -2,7 +2,15 @@ import type TileLayer from 'ol/layer/Tile';
 import type UrlTile from 'ol/source/UrlTile';
 import { describe, expect, it } from 'vitest';
 
-import { baseLayerOf, baseLayers, categoryOf, orthoLayers, swissExtent, worldLayer } from './map-layers';
+import {
+  baseLayerOf,
+  baseLayers,
+  categoryOf,
+  countryOfAreas,
+  orthoLayers,
+  swissExtent,
+  worldLayer,
+} from './map-layers';
 import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers-ol';
 
 const isSwisstopo = (layer: TileLayer<UrlTile>) =>
@@ -77,5 +85,16 @@ describe('layer categories', () => {
     expect(baseLayerOf('ortho', 'gb')).toBe('ESRI World Imagery');
     expect(baseLayerOf('topo', 'ch')).toBe('OpenTopoMap');
     expect(baseLayerOf('transport', 'fr')).toBe('Public transport');
+  });
+
+  it('finds Catalonia by its provinces, over Spain, whatever the order of the areas', () => {
+    // Spain, Lleida
+    expect(countryOfAreas([14267, 279949])).toBe('catalonia');
+    expect(countryOfAreas([279930, 14267])).toBe('catalonia');
+    // Spain, Zaragoza: not in Catalonia
+    expect(countryOfAreas([14267, 279959])).toBe('es');
+    expect(countryOfAreas([14270])).toBeUndefined();
+    expect(baseLayerOf('national', 'catalonia')).toBe('ICGC raster (ca)');
+    expect(baseLayerOf('ortho', 'catalonia')).toBe('ICGC ortho (ca)');
   });
 });
