@@ -1,8 +1,9 @@
-// The settings of a document map (layers, overlays, protection areas) are kept on this device, in the local storage, with
+// The settings of a document map (layers, protection areas) are kept on this device, in the local storage, with
 // short stable ids rather than the titles of the layers (which are translated keys and may change with the map engine):
 // they follow the user from a document to the next one, and survive a reload and a new tab, without changing the URL.
 // Of the base layer, only its category is kept (map-layers.ts): each document shows the layer of that category in its
-// country, an IGN map in France and a swisstopo one in Switzerland.
+// country, an IGN map in France and a swisstopo one in Switzerland. The "Tracks" and "Routes" overlays are not kept: they
+// are turned on to explore an area, and each one fetches data as the map moves.
 // The links shared while they were written in the URL of the page (?layer=ign&slopes=ign,swiss&overlays=outing,route&pin=top)
 // are still read: their settings are shown on that page. Only the maps of the lists of documents (/outings, /routes...)
 // still write them in the URL, to share a list with its map: they have no other storage.
@@ -115,12 +116,11 @@ function storedQuery(): LocationQuery {
   return (stored.get('settings') ?? {}) as LocationQuery;
 }
 
-// the stored settings but the base layer: its category is stored instead (storedLayerCategory)
-export function storedMapSettings(): Partial<MapUrlState> {
-  const settings = parseMapUrl(storedQuery());
-  delete settings.base;
-  delete settings.pin;
-  return settings;
+// the stored settings but the base layer: its category is stored instead (storedLayerCategory). The overlays some devices
+// stored before they were no longer kept are ignored
+export function storedMapSettings(): Partial<Omit<MapUrlState, 'base' | 'overlays' | 'pin'>> {
+  const { slopes, protection } = parseMapUrl(storedQuery());
+  return { ...(slopes && { slopes }), ...(protection !== undefined && { protection }) };
 }
 
 // the category of base layer chosen on this device; the devices that stored a layer (before the categories) keep its one
@@ -133,9 +133,10 @@ export function storedLayerCategory(): LayerCategory | undefined {
 }
 
 // a setting the user changed, kept with the stored ones: the others shown by the page (from an old shared link) are not
-// stored. Only what differs from the default is written; the pinned side is not a setting kept from a page to the next
+// stored. Only what differs from the default is written; the overlays and the pinned side are not settings kept from a page
+// to the next
 export function storeMapSettings(
-  change: Partial<Omit<MapUrlState, 'base' | 'pin'>> & { category?: LayerCategory },
+  change: Partial<Omit<MapUrlState, 'base' | 'overlays' | 'pin'>> & { category?: LayerCategory },
   defaultBase: string
 ) {
   const { category = storedLayerCategory(), ...settings } = change;

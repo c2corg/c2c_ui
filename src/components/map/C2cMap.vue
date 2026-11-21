@@ -456,7 +456,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  // the layers and overlays of the map are kept on this device, from a document page to the next one; the query of an
+  // the layers of the map are kept on this device, from a document page to the next one (not the overlays); the query of an
   // old shared link (?layer=…) is read too: only for the page of a document, whose query is not used for anything else (a
   // listing's query is its search filters)
   rememberSettings: {
@@ -1510,7 +1510,6 @@ function setDensityOverlay(type: DensityType, enabled: boolean) {
 
 function toggleDensityOverlay(type: DensityType) {
   setDensityOverlay(type, !densityEnabled[type]);
-  storeSetting({ overlays: DENSITY_TYPES.filter((item) => densityEnabled[item]) });
   writeSettingsToUrl();
 }
 
@@ -2234,8 +2233,8 @@ watch(filterDocumentsWithMap, () => sendBoundsToUrl());
 
 // what the user changes is kept on this device, for the next document pages: only that setting, not the others the page
 // shows (those of an old shared link). The base layer (its category), the slopes and the protection areas change only by a
-// click; the overlays are stored by their toggle, as they are also turned off when unavailable (that is not a choice to
-// keep). The layers the map shows by itself (in 3D, without a network, in the country of a document) are not stored
+// click. The overlays are not kept: they are turned on to explore an area. The layers the map shows by itself (in 3D,
+// without a network, in the country of a document) are not stored
 function storeSetting(change: Parameters<typeof storeMapSettings>[0]) {
   if (props.rememberSettings) storeMapSettings(change, baseLayers[0].title);
 }
