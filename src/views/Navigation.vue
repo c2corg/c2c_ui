@@ -430,7 +430,7 @@ nav {
 
 .with-ad {
   height: var(--c2c-navbarad-height);
-  margin-left: 200px;
+  margin-left: var(--c2c-sidemenu-width);
 
   .navigation-end {
     flex-shrink: 1;

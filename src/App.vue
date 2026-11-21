@@ -5,10 +5,11 @@
       'nav-dfm': topAd && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
       'home-topoguide': homePage,
       'no-top-ad': !topAd,
+      'is-menu-pinned': sideMenuPinned || sideMenuKeptOpen,
     }"
   >
     <environment-banner />
-    <side-menu class="side-menu no-print" />
+    <side-menu :kept-open="sideMenuKeptOpen" class="side-menu no-print" />
     <navigation class="navigation no-print" />
     <dfm-ad-small v-if="topAd && ($screen.isMobile || $screen.isTablet || $screen.isDesktop)" class="ad" />
     <site-notice class="no-print site-notice" />
@@ -46,7 +47,8 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, onMounted, ref, watch } from 'vue';
+import { computed, defineAsyncComponent, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 import AlertWindow from './components/alert-window/AlertWindow.vue';
 import BottomNav from './components/app/BottomNav.vue';
@@ -64,6 +66,7 @@ import SiteNotice from './views/SiteNotice.vue';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useHasTopAd, useIsHomePage } from '@/js/composables/home-page';
+import { useSideMenuPinned } from '@/js/composables/side-menu';
 import { imageViewerRequested } from '@/js/vue-plugins/image-viewer';
 import { remind, shouldRemind } from '@/pwa/offline-reminder';
 import { useAppSettingsStore } from '@/stores/app-settings';
@@ -76,6 +79,10 @@ defineOptions({ name: 'App' });
 
 const homePage = useIsHomePage();
 const topAd = useHasTopAd();
+const sideMenuPinned = useSideMenuPinned();
+// the welcome page and the settings show the menu open, without its pin
+const route = useRoute();
+const sideMenuKeptOpen = computed(() => homePage.value || route.name === 'app-settings');
 
 const appSettings = useAppSettingsStore();
 
@@ -130,13 +137,16 @@ body,
 }
 
 .side-menu {
-  width: var(--c2c-sidemenu-width);
   height: 100vh;
   position: fixed;
   top: 0px;
   z-index: 30;
-  transition: 0.3s;
   left: 0;
+}
+
+/* pinned open, the side menu takes its room beside the page, as the page's offsets below */
+.is-menu-pinned {
+  --c2c-sidemenu-width: var(--c2c-sidemenu-open-width);
 }
 
 .site-notice {
@@ -220,7 +230,8 @@ button.dropdown-item {
 }
 
 /* The navigation of the site follows html[data-shell] (src/stores/app-settings.ts), set from DESKTOP_BREAKPOINT: from it,
-   the side menu is open and the page leaves room for it; under it, the phone layout hides them (below) */
+   the side menu is shown and the page leaves room for it (its rail, or all of it when pinned); under it, the phone layout
+   hides them (below) */
 @media screen {
   html[data-shell='desktop'] {
     .page-content,

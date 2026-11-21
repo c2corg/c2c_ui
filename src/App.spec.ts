@@ -74,7 +74,7 @@ describe('App', () => {
     expect(await topAd('/routes/1', 'isDesktop')).toEqual({ classes: [], band: true });
 
     // the home page has its own, the lists, the edition... none
-    expect(await topAd('/')).toEqual({ classes: ['home-topoguide', 'no-top-ad'], band: false });
+    expect(await topAd('/')).toEqual({ classes: ['home-topoguide', 'no-top-ad', 'is-menu-pinned'], band: false });
     for (const path of ['/routes', '/routes/edit/1', '/outings']) {
       expect(await topAd(path)).toEqual({ classes: ['no-top-ad'], band: false });
       expect(await topAd(path, 'isMobile')).toEqual({ classes: ['no-top-ad'], band: false });
