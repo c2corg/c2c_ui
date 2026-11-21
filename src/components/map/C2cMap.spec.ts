@@ -229,7 +229,10 @@ describe('C2cMap', () => {
       'DocumentMap.preferences',
       JSON.stringify({ settings: { layer: 'swiss', slopes: 'swiss,ign' } })
     );
-    const { wrapper, map } = await mountMap({ documents: [route], rememberSettings: true }, '/routes/1');
+    const { wrapper, map } = await mountMap(
+      { documents: [{ ...route, areas: [{ document_id: 14067 }] }], rememberSettings: true },
+      '/routes/1'
+    );
     const offline = useOfflineStore();
     // the route saved offline with SwissTopo and its slopes (offline-assets.ts)
     offline.savedDocs = [
@@ -438,7 +441,7 @@ describe('C2cMap', () => {
         .find((button) => button.text() === 'Outings')!
         .trigger('click');
       await flushPromises();
-      expect(stored()).toEqual({ layer: 'esri', slopes: 'ign', overlays: 'outing' });
+      expect(stored()).toEqual({ category: 'ortho', slopes: 'ign', overlays: 'outing' });
       expect(queryOf(wrapper)).toEqual({ debug: '1' });
       expect((wrapper.vm as unknown as { $route: { hash: string } }).$route.hash).toBe('#description');
 
@@ -452,20 +455,21 @@ describe('C2cMap', () => {
       const outings = heatmap();
       window.localStorage.setItem(
         'DocumentMap.preferences',
-        JSON.stringify({ settings: { layer: 'es', slopes: 'ign', overlays: 'outing' } })
+        // a layer stored before the categories: its category
+        JSON.stringify({ settings: { layer: 'esri', slopes: 'ign', overlays: 'outing' } })
       );
       const { wrapper, map } = await mountMap({ rememberSettings: true }, '/routes/2/fr');
 
-      expect(map.layout['IGN raster (es)'].visibility).toBe('visible');
+      expect(map.layout['ESRI World Imagery'].visibility).toBe('visible');
       expect(map.layout['IGN Slopes'].visibility).toBe('visible');
       expect(outings).toHaveBeenCalled();
       expect(map.layout['heatmap-outing'].visibility).toBe('visible');
       wrapper.unmount();
     });
 
-    it('shows the settings of an old shared link, over the stored ones, without storing them', async () => {
+    it('shows the settings of an old shared link, over the stored ones, keeping only the category of its layer', async () => {
       const outings = heatmap();
-      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { layer: 'swiss' } }));
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { category: 'ortho' } }));
       const { wrapper, map } = await mountMap(
         { rememberSettings: true },
         '/routes/1/fr?layer=es&slopes=ign&overlays=outing&protection=0'
@@ -475,19 +479,19 @@ describe('C2cMap', () => {
       expect(map.layout['IGN Slopes'].visibility).toBe('visible');
       expect(outings).toHaveBeenCalled();
       expect(map.layout['heatmap-outing'].visibility).toBe('visible');
-      expect(stored()).toEqual({ layer: 'swiss' });
+      expect(stored()).toEqual({ category: 'national' });
       wrapper.unmount();
     });
 
     it('stores only the setting the user changes, not the others of an old shared link', async () => {
-      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { layer: 'swiss' } }));
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { overlays: 'outing' } }));
       const { wrapper, map } = await mountMap({ rememberSettings: true }, '/routes/1/fr?layer=es');
       const [, slopesLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
 
       await slopesLayers.findAll(':scope > *')[0].trigger('click');
       await flushPromises();
       expect(map.layout['IGN raster (es)'].visibility).toBe('visible');
-      expect(stored()).toEqual({ layer: 'swiss', slopes: 'ign' });
+      expect(stored()).toEqual({ category: 'national', slopes: 'ign', overlays: 'outing' });
       wrapper.unmount();
     });
 
@@ -498,8 +502,59 @@ describe('C2cMap', () => {
 
       await baseLayers.findAll(':scope > *')[1].trigger('click');
       await flushPromises();
-      expect(stored()).toEqual({ layer: 'esri', protection: '0' });
+      expect(stored()).toEqual({ category: 'ortho', protection: '0' });
       wrapper.unmount();
+    });
+
+    it('shows the layer of the stored category in the country of each document', async () => {
+      const inCountry = (id: number) => ({ ...route, areas: [{ document_id: 14400 }, { document_id: id }] });
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { category: 'national' } }));
+
+      const { wrapper, map } = await mountMap({ documents: [inCountry(14274)], rememberSettings: true }, '/routes/1');
+      expect(selectedTitles(wrapper)[0]).toBe('IGN maps');
+
+      // the page of another document, in the same map
+      await wrapper.setProps({ documents: [inCountry(14067)] });
+      await flushPromises();
+      expect(selectedTitles(wrapper)[0]).toBe('SwissTopo');
+      expect(map.layout.SwissTopo.visibility).toBe('visible');
+
+      // no national map in Italy
+      await wrapper.setProps({ documents: [inCountry(14270)] });
+      await flushPromises();
+      expect(selectedTitles(wrapper)[0]).toBe('OpenTopoMap');
+      expect(stored()).toEqual({ category: 'national' });
+      wrapper.unmount();
+
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { category: 'ortho' } }));
+      const other = await mountMap({ documents: [inCountry(14081)], rememberSettings: true }, '/routes/1');
+      // no orthophoto of the United Kingdom
+      expect(selectedTitles(other.wrapper)[0]).toBe('ESRI World Imagery');
+      other.wrapper.unmount();
+    });
+
+    it('keeps the category of a layer clicked on a document, not the layer', async () => {
+      const { wrapper } = await mountMap(
+        { documents: [{ ...route, areas: [{ document_id: 14274 }] }], rememberSettings: true },
+        '/routes/1'
+      );
+      const [baseLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+
+      await baseLayers
+        .findAll(':scope > *')
+        .find((button) => button.text() === 'SwissTopo')!
+        .trigger('click');
+      await flushPromises();
+      expect(selectedTitles(wrapper)[0]).toBe('SwissTopo');
+      expect(stored()).toEqual({ category: 'national' });
+      wrapper.unmount();
+
+      const next = await mountMap(
+        { documents: [{ ...route, areas: [{ document_id: 14274 }] }], rememberSettings: true },
+        '/routes/2'
+      );
+      expect(selectedTitles(next.wrapper)[0]).toBe('IGN maps');
+      next.wrapper.unmount();
     });
 
     it('keeps the overlays chosen when the API turns them off (503)', async () => {
@@ -801,6 +856,55 @@ describe('C2cMap', () => {
       expect(map.sprites.size).toBe(0);
       wrapper.unmount();
       fetch.mockRestore();
+    });
+
+    it('goes back to the 2D layer after the orthophoto that 3D chose by itself, and stores nothing', async () => {
+      const { wrapper, map } = await mountMap(
+        { documents: [{ ...route, areas: [{ document_id: 14274 }] }], show3d: true, rememberSettings: true },
+        '/routes/1/fr'
+      );
+
+      await open3d(wrapper);
+      expect(map.layout['IGN ortho'].visibility).toBe('visible');
+      await wrapper.find('.ol-control-3d button').trigger('click');
+      await flushPromises();
+      expect(selectedTitles(wrapper)[0]).toBe('OpenTopoMap');
+      expect(map.layout.OpenTopoMap.visibility).toBe('visible');
+      expect(map.layout['IGN ortho'].visibility).toBe('none');
+      expect(window.localStorage.getItem('DocumentMap.preferences')).toBeNull();
+      wrapper.unmount();
+    });
+
+    it('keeps the category of a layer clicked in 3D, and shows its 2D layer back in 2D', async () => {
+      const { wrapper, map } = await mountMap(
+        { documents: [{ ...route, areas: [{ document_id: 14274 }] }], show3d: true, rememberSettings: true },
+        '/routes/1/fr'
+      );
+
+      await open3d(wrapper);
+      // the world orthophoto has no 2D layer: the orthophoto of the country in 2D
+      await wrapper
+        .findAll('.layer-button')
+        .find((button) => button.text() === 'Sentinel-2')!
+        .trigger('click');
+      await flushPromises();
+      expect(JSON.parse(window.localStorage.getItem('DocumentMap.preferences')!).settings).toEqual({
+        category: 'ortho',
+      });
+      await wrapper.find('.ol-control-3d button').trigger('click');
+      await flushPromises();
+      expect(selectedTitles(wrapper)[0]).toBe('IGN ortho');
+      expect(map.layout['IGN ortho'].visibility).toBe('visible');
+      wrapper.unmount();
+    });
+
+    it('offers no relief layer in 3D', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
+
+      await open3d(wrapper);
+      expect(wrapper.findAll('.layer-button').map((button) => button.text())).not.toContain('Relief');
+      expect(map.style.layers.map((layer) => layer.id)).not.toContain('relief');
+      wrapper.unmount();
     });
 
     it('keeps the IGN maps in 3D, with no shading of ours over their own', async () => {

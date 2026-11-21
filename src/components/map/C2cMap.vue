@@ -63,7 +63,7 @@
             :layer="layer"
             :selected="layer.title === (is3d ? base3d : shownBase)"
             title-context="Map layer"
-            @click="is3d ? (base3d = layer.title) : (base = layer.title)"
+            @click="chooseBase(layer.title)"
           />
         </div>
         <!-- no tiles without a network for the other layers, nor for the overlays: not offered -->
@@ -331,7 +331,7 @@ import {
   loadFlightLayers,
   withoutParaglidingTracks,
 } from './map-3d-flight-layers';
-import { orthoLayerAt, registerNoBlankProtocol, reliefColors } from './map-3d-layers';
+import { orthoLayerAt, registerNoBlankProtocol } from './map-3d-layers';
 import { type Marker3d, markerElement } from './map-3d-markers';
 import { terrainSource } from './map-3d-terrain';
 import { fetchStyle, prepareVectorMap, vectorMaps } from './map-3d-vector';
@@ -350,7 +350,10 @@ import {
   toGeoJson,
 } from './map-documents';
 import {
+  baseLayerOf,
   baseLayers,
+  categoryOf,
+  COUNTRY_AREAS,
   OFFLINE_BASE_LAYER,
   type MapLayer,
   nationalOrthoLayers,
@@ -362,7 +365,7 @@ import {
   worldLayer,
 } from './map-layers';
 import { MAP_URL_KEYS } from './map-url-keys';
-import { parseMapUrl, storedMapSettings, storeMapSettings, withMapUrl } from './map-url-state';
+import { parseMapUrl, storedLayerCategory, storedMapSettings, storeMapSettings, withMapUrl } from './map-url-state';
 import { scrollPassthrough } from './scroll-passthrough';
 
 import biodivSportsService from '@/js/apis/biodivsports-service';
@@ -399,8 +402,6 @@ const TRACKING_INITIAL_ZOOM = 12;
 // the lines of the 3D view as on the 2D map: yellow on a dark casing, a little wider for the tilted view
 const DOCUMENT_COLOR = '#ffff00';
 const EXAGGERATION = 1.2;
-// $gettext('Relief', 'Map layer')
-const RELIEF = 'Relief';
 // the 3D camera: fitBounds ignores the terrain, closer the camera can end up inside a mountain
 const FIT_OPTIONS_3D = { padding: 80, maxZoom: 14 };
 const PITCH_3D = 60;
@@ -542,7 +543,13 @@ const swissWindowEl = useTemplateRef<{ show(): void }>('swissWindow');
 const isTouchDevice = 'ontouchstart' in window;
 
 // the layers shown: one base layer (in 2D and in 3D), the slopes, the protection areas, the shading in 3D
-const base = ref(initialSettings.base ?? baseLayers[0].title);
+// A document map shows the layer of the category chosen on this device, in the country of the document (the layer of an
+// old shared link, on its page, also chosen); a list shows the layer of its URL, else OpenTopoMap
+const base = ref(
+  initialSettings.base ??
+    (props.rememberSettings ? baseLayerOf(storedLayerCategory() ?? 'topo', documentsCountry()) : baseLayers[0].title)
+);
+if (props.rememberSettings && initialSettings.base) storeSetting({ category: categoryOf(initialSettings.base) });
 const base3d = ref(worldLayer.title);
 const slopes = ref<string[]>(initialSettings.slopes ?? []);
 const slopesOpacity = ref<Record<string, number>>(
@@ -594,7 +601,6 @@ const editMapLink = ref<string | null>(null);
 // the extent of the view, in longitude, latitude: what the attributions are about
 const viewExtent = shallowRef<Extent | null>(null);
 
-const reliefLayer = { title: RELIEF, image: 'relief.jpg' };
 // $gettext('Shading', 'Map layer')
 const shadingButton = {
   title: 'Shading',
@@ -606,7 +612,7 @@ const shadingButton = {
 };
 // the national maps drawn from their vector tiles in 3D (map-3d-vector.ts), where the 2D map shows their raster maps
 const vectorLayers = baseLayers.filter((layer) => layer.title in vectorMaps && !layer.in3d);
-const baseLayers3d = [...orthoLayers, ...vectorLayers, worldLayer, reliefLayer];
+const baseLayers3d = [...orthoLayers, ...vectorLayers, worldLayer];
 
 // the slope buttons, with their opacity slider
 const slopeButtons = slopeLayers.map((layer) => ({
@@ -637,10 +643,7 @@ const inView = (layer: MapLayer) => !layer.bounds || !viewExtent.value || inters
 // protection areas, the terrain in 3D
 const attributions = computed(() => {
   const shown = is3d.value
-    ? [
-        ...[...orthoLayers, ...vectorLayers].filter((layer) => layer.title === base3d.value),
-        ...(base3d.value === RELIEF ? [] : [worldLayer]),
-      ]
+    ? [...[...orthoLayers, ...vectorLayers].filter((layer) => layer.title === base3d.value), worldLayer]
     : baseLayers.filter((layer) => layer.title === shownBase.value);
   shown.push(...slopeLayers.filter((layer) => shownSlopes.value.includes(layer.title)));
   if (props.showProtectionAreas && protectionAreasVisible.value && online.value) shown.push(...swissProtectionLayers);
@@ -963,8 +966,7 @@ function showLayers() {
     set(layer.title, shown && !(is3d.value && layer.tiles3d));
     if (layer.tiles3d) set(layer3dId(layer), shown && is3d.value);
   }
-  set('world', is3d.value && base3d.value !== RELIEF);
-  set('relief', is3d.value && base3d.value === RELIEF);
+  set('world', is3d.value);
   set('shading', is3d.value && shading.value);
   map.setPaintProperty('shading', 'hillshade-exaggeration', shadingStrength.value);
   for (const layer of slopeLayers) {
@@ -1097,10 +1099,9 @@ const EMPTY_COLLECTION: FeatureCollection = { type: 'FeatureCollection', feature
 
 function style() {
   const sources: Record<string, SourceSpecification> = {
-    // a second source for the relief and the shading: sharing the terrain one makes MapLibre warn and render them
-    // at a lower zoom
+    // a second source for the shading: sharing the terrain one makes MapLibre warn and render it at a lower zoom
     terrain: terrainSource,
-    relief: terrainSource,
+    shading: terrainSource,
     world: rasterSource(worldLayer),
     ...Object.fromEntries(
       [...baseLayers, ...slopeLayers, ...swissProtectionLayers].map((layer) => [layer.title, rasterSource(layer)])
@@ -1125,19 +1126,12 @@ function style() {
   const layers: LayerSpecification[] = [
     { id: 'background', type: 'background', paint: { 'background-color': 'white' } },
     raster(worldLayer, 'world'),
-    {
-      id: 'relief',
-      type: 'color-relief',
-      source: 'relief',
-      layout: { visibility: 'none' },
-      paint: { 'color-relief-color': ['interpolate', ['linear'], ['elevation'], ...reliefColors] },
-    },
     ...baseLayers.map((layer) => raster(layer)),
     ...baseLayers3dTiles.map((layer) => raster(layer, layer3dId(layer))),
     {
       id: 'shading',
       type: 'hillshade',
-      source: 'relief',
+      source: 'shading',
       layout: { visibility: 'none' },
       // igor: the softest method, the closest to the swisstopo relief shading; its strength in showLayers()
       paint: { 'hillshade-method': 'igor' },
@@ -1873,13 +1867,11 @@ let documents3dVersion = 0;
 let bounds3d: Extent | null = null;
 let view2d: { center: [number, number]; zoom: number } | null = null;
 
-// c2c areas of the countries that have an orthophoto in 3D
-const ORTHO_COUNTRY_AREAS: Record<number, string> = { 14274: 'fr', 14067: 'ch', 14267: 'es' };
-
+// the country of the documents, by their areas: that of the first one in a country we have layers for
 function documentsCountry(): string | undefined {
   for (const document of props.documents ?? []) {
     for (const area of document.areas ?? []) {
-      if (ORTHO_COUNTRY_AREAS[area.document_id!]) return ORTHO_COUNTRY_AREAS[area.document_id!];
+      if (COUNTRY_AREAS[area.document_id!]) return COUNTRY_AREAS[area.document_id!];
     }
   }
   return undefined;
@@ -2103,8 +2095,7 @@ function open3d() {
 function close3d() {
   if (!map) return;
   is3d.value = false;
-  // back in 2D, the layer chosen in 3D if 2D has it
-  if (baseLayers.some((layer) => layer.title === base3d.value)) base.value = base3d.value;
+  // back in 2D, the layer shown before 3D, or that of the category chosen in 3D (chooseBase)
   shownMarkers.forEach((marker) => marker.remove());
   shownMarkers = [];
   flightLayers?.remove();
@@ -2179,12 +2170,28 @@ watch(
 watch(filterDocumentsWithMap, () => sendBoundsToUrl());
 
 // what the user changes is kept on this device, for the next document pages: only that setting, not the others the page
-// shows (those of an old shared link). The base layer, the slopes and the protection areas change only by a click; the
-// overlays are stored by their toggle, as they are also turned off when unavailable (that is not a choice to keep)
+// shows (those of an old shared link). The base layer (its category), the slopes and the protection areas change only by a
+// click; the overlays are stored by their toggle, as they are also turned off when unavailable (that is not a choice to
+// keep). The layers the map shows by itself (in 3D, without a network, in the country of a document) are not stored
 function storeSetting(change: Parameters<typeof storeMapSettings>[0]) {
   if (props.rememberSettings) storeMapSettings(change, baseLayers[0].title);
 }
-watch(base, (value) => storeSetting({ base: value }));
+
+// a click on a base layer, in 2D or in 3D: its category is kept. A layer chosen in 3D that 2D has not (Sentinel-2) gives
+// 2D the layer of its category
+function chooseBase(title: string) {
+  const category = categoryOf(title);
+  if (is3d.value) base3d.value = title;
+  if (baseLayers.some((layer) => layer.title === title)) base.value = title;
+  else if (category) base.value = baseLayerOf(category, documentsCountry());
+  storeSetting({ category });
+}
+
+// another document in the same map (the page of a document followed by another one): the layer of its country
+watch(documentsCountry, (country) => {
+  if (props.rememberSettings && !parseMapUrl(route.query).base)
+    base.value = baseLayerOf(storedLayerCategory() ?? 'topo', country);
+});
 watch(slopes, (value) => storeSetting({ slopes: value }));
 watch(protectionAreasVisible, (value) => storeSetting({ protection: value }));
 

@@ -1,6 +1,8 @@
 // The settings of a document map (layers, overlays, protection areas) are kept on this device, in the local storage, with
 // short stable ids rather than the titles of the layers (which are translated keys and may change with the map engine):
 // they follow the user from a document to the next one, and survive a reload and a new tab, without changing the URL.
+// Of the base layer, only its category is kept (map-layers.ts): each document shows the layer of that category in its
+// country, an IGN map in France and a swisstopo one in Switzerland.
 // The links shared while they were written in the URL of the page (?layer=ign&slopes=ign,swiss&overlays=outing,route&pin=top)
 // are still read: their settings are shown on that page. Only the maps of the lists of documents (/outings, /routes...)
 // still write them in the URL, to share a list with its map: they have no other storage.
@@ -8,7 +10,7 @@
 import type { LocationQuery, LocationQueryRaw } from 'vue-router';
 
 import { DENSITY_TYPES, type DensityType } from './density-overlays';
-import { baseLayers, slopeLayers } from './map-layers';
+import { baseLayers, categoryOf, LAYER_CATEGORIES, slopeLayers, type LayerCategory } from './map-layers';
 import { MAP_URL_KEYS } from './map-url-keys';
 
 import { getPreferences } from '@/js/vue-plugins/local-storage';
@@ -106,21 +108,42 @@ export function withMapUrl(query: LocationQuery, state: MapUrlState, defaultBase
 // the settings stored on this device are written as a query would be: the same ids, the same reading
 const preferences = () => getPreferences('DocumentMap');
 
-export function storedMapSettings(): Partial<MapUrlState> {
+function storedQuery(): LocationQuery {
   const stored = preferences();
   // what another tab stored since this one read it
   stored.reload();
-  const settings = parseMapUrl((stored.get('settings') ?? {}) as LocationQuery);
+  return (stored.get('settings') ?? {}) as LocationQuery;
+}
+
+// the stored settings but the base layer: its category is stored instead (storedLayerCategory)
+export function storedMapSettings(): Partial<MapUrlState> {
+  const settings = parseMapUrl(storedQuery());
+  delete settings.base;
   delete settings.pin;
   return settings;
 }
 
+// the category of base layer chosen on this device; the devices that stored a layer (before the categories) keep its one
+export function storedLayerCategory(): LayerCategory | undefined {
+  const query = storedQuery();
+  const category = first(query.category) as LayerCategory;
+  if (LAYER_CATEGORIES.includes(category)) return category;
+  const base = parseMapUrl(query).base;
+  return base ? categoryOf(base) : undefined;
+}
+
 // a setting the user changed, kept with the stored ones: the others shown by the page (from an old shared link) are not
 // stored. Only what differs from the default is written; the pinned side is not a setting kept from a page to the next
-export function storeMapSettings(change: Partial<Omit<MapUrlState, 'pin'>>, defaultBase: string) {
-  const state = { base: defaultBase, slopes: [], overlays: [], protection: true, ...storedMapSettings(), ...change };
+export function storeMapSettings(
+  change: Partial<Omit<MapUrlState, 'base' | 'pin'>> & { category?: LayerCategory },
+  defaultBase: string
+) {
+  const { category = storedLayerCategory(), ...settings } = change;
+  const state = { slopes: [], overlays: [], protection: true, ...storedMapSettings(), ...settings };
   try {
-    preferences().set('settings', withMapUrl({}, { ...state, pin: '' }, defaultBase));
+    const query: LocationQueryRaw = withMapUrl({}, { ...state, base: defaultBase, pin: '' }, defaultBase);
+    if (category && category !== categoryOf(defaultBase)) query.category = category;
+    preferences().set('settings', query);
   } catch {
     // no storage (private window, full or blocked): the settings last as long as the page
   }

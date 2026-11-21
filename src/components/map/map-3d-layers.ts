@@ -1,5 +1,5 @@
 // What the 3D view adds to the layers of the catalogue (map-layers.ts): the protocol that drops the white of the IGN
-// France orthophotos, the orthophoto of a place, the colours of the relief.
+// France orthophotos, the orthophoto of a place.
 import { addProtocol } from 'maplibre-gl';
 
 import { NO_BLANK, orthoLayers, type MapLayer } from './map-layers';
@@ -123,21 +123,3 @@ export function orthoLayerAt(lon: number, lat: number): MapLayer | undefined {
   );
   return area && orthoLayers.find((layer) => layer.title === area[0]);
 }
-
-// colours of the relief layer, by elevation in metres: valleys green, rock brown and grey, snow white
-export const reliefColors = [
-  0,
-  '#b7d39a',
-  700,
-  '#d9e0a6',
-  1400,
-  '#e6d3a3',
-  2000,
-  '#cfae8a',
-  2600,
-  '#b49c8c',
-  3200,
-  '#d6d6d6',
-  3800,
-  '#ffffff',
-];
