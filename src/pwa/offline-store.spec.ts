@@ -37,8 +37,8 @@ describe('offline store', () => {
 
     await store.setFolder('route', 12, 'f1');
     await store.makeOnline('route', 12);
-    // folders belong to a section
-    expect(await only()).toMatchObject({ mode: 'online', data: null, downloadedAt: null, folderId: null });
+    // one set of folders for favourites and offline copies: it stays in its folder
+    expect(await only()).toMatchObject({ mode: 'online', data: null, downloadedAt: null, folderId: 'f1' });
   });
 
   it('keeps the documents of a deleted folder, without folder', async () => {

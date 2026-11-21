@@ -10,7 +10,6 @@
         <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
           <gotop-button v-if="isPrintingView" />
           <follow-button v-if="!isPrintingView" :document="document" />
-          <tags-button v-if="!isPrintingView" :document="document" />
 
           <add-link
             v-if="isNormalView && documentType === 'route'"
@@ -20,7 +19,7 @@
           >
             <fa-icon icon="plus" />&nbsp;{{ $gettext('Add my outing') }}
           </add-link>
-          <offline-header-button
+          <favourite-button
             v-if="isNormalView && SAVABLE_TYPES.includes(documentType)"
             :document-type="documentType"
             :document-id="document.document_id!"
@@ -69,11 +68,10 @@
 import { computed, useTemplateRef } from 'vue';
 
 import DocumentVersionBanner from './DocumentVersionBanner.vue';
+import FavouriteButton from './FavouriteButton.vue';
 import FollowButton from './FollowButton.vue';
 import GotopButton from './GotopButton.vue';
-import OfflineHeaderButton from './OfflineHeaderButton.vue';
 import SocialNetworkSharing from './SocialNetworkSharing.vue';
-import TagsButton from './TagsButton.vue';
 
 import ImagesUploader from '@/components/images-uploader/ImagesUploader.vue';
 import { useEditable } from '@/js/composables/editable';

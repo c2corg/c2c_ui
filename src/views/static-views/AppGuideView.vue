@@ -43,7 +43,7 @@
         <ul>
           <li>{{ $gettext('Search: routes, outings, waypoints… with filters, as a list or on a map.') }}</li>
           <li>{{ $gettext('Recent: the latest outings and changes of the community, with their photos.') }}</li>
-          <li>{{ $gettext('My topos: the topos you saved, online or offline.') }}</li>
+          <li>{{ $gettext('Favourites: the topos you saved, and the ones taken offline.') }}</li>
           <li>{{ $gettext('Me: your account, your outings, the settings of the app and the help.') }}</li>
           <li>{{ $gettext('More: topoguide, articles, SERAC, Yeti, Itinévert, forum.') }}</li>
         </ul>
@@ -51,15 +51,15 @@
 
         <h2>{{ $gettext('Topos without a network') }}</h2>
         <ol>
-          <li>{{ $gettext('On a topo, tap the bookmark at the top: it goes to My topos, Online tab.') }}</li>
+          <li>{{ $gettext('On a topo, tap the bookmark at the top: it goes to your favourites.') }}</li>
           <li>
             {{
               $gettext(
-                'Tap Save offline (in the message that follows, or in My topos): the topo, its photos and the map around it are downloaded. It moves to the Offline tab, a green dot on its bookmark.'
+                'Tap Also save offline (in the message that follows, or in Favourites): the topo, its photos and the map around it are downloaded. Its bookmark gets a green arrow.'
               )
             }}
           </li>
-          <li>{{ $gettext('Without a network, open it from My topos: it opens as with one.') }}</li>
+          <li>{{ $gettext('Without a network, open it from Favourites: it opens as with one.') }}</li>
         </ol>
         <p>
           {{
@@ -83,14 +83,14 @@
           <li>
             {{
               $gettext(
-                'Route not found? Save without a route, with a note saying which one it is: link it later from My topos.'
+                'Route not found? Save without a route, with a note saying which one it is: link it later from Favourites.'
               )
             }}
           </li>
           <li>
             {{
               $gettext(
-                'Back with a network, open My topos and tap Publish now: nothing is sent without you. The number on the My topos tab counts the outings waiting.'
+                'Back with a network, open Favourites and tap Publish now: nothing is sent without you. The number on the Favourites tab counts the outings waiting.'
               )
             }}
           </li>

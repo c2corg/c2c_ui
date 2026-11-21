@@ -95,7 +95,7 @@ export function useMainMenuItems() {
     // the pages of the app that its menu opens in the phone layout
     {
       key: 'offline',
-      label: $gettext('My topos'),
+      label: $gettext('Favourites'),
       to: { name: 'offline' },
       match: ['offline'],
       icon: 'bookmark',
