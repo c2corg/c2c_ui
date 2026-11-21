@@ -2,7 +2,7 @@ import type TileLayer from 'ol/layer/Tile';
 import type UrlTile from 'ol/source/UrlTile';
 import { describe, expect, it } from 'vitest';
 
-import { orthoLayers, swissExtent } from './map-layers';
+import { baseLayerOf, baseLayers, categoryOf, orthoLayers, swissExtent, worldLayer } from './map-layers';
 import { cartoLayers, dataLayers, protectionAreasLayers } from './map-layers-ol';
 
 const isSwisstopo = (layer: TileLayer<UrlTile>) =>
@@ -56,5 +56,26 @@ describe('map-layers', () => {
     expect(orthoLayers.map((layer) => layer.title)).toContain('Public transport');
     // the 3D view opens on the orthophoto of a country, which this layer has none of
     expect(orthoLayers.find((layer) => layer.title === 'Public transport')!.country).toBeUndefined();
+  });
+});
+
+describe('layer categories', () => {
+  it('gives every base layer a category, in 2D and in 3D', () => {
+    expect([...baseLayers, worldLayer].filter((layer) => !layer.category)).toEqual([]);
+    expect(categoryOf('Sentinel-2')).toBe('ortho');
+    expect(categoryOf('Unknown')).toBeUndefined();
+  });
+
+  it('picks the national map or orthophoto of the country, else OpenTopoMap or ESRI', () => {
+    expect(baseLayerOf('national', 'fr')).toBe('IGN maps');
+    expect(baseLayerOf('national', 'ch')).toBe('SwissTopo');
+    expect(baseLayerOf('national', 'gb')).toBe('Ordnance Survey (uk)');
+    expect(baseLayerOf('national', undefined)).toBe('OpenTopoMap');
+    expect(baseLayerOf('ortho', 'ch')).toBe('SwissTopo ortho');
+    expect(baseLayerOf('ortho', 'at')).toBe('Basemap ortho (at)');
+    // no orthophoto of the Ordnance Survey
+    expect(baseLayerOf('ortho', 'gb')).toBe('ESRI World Imagery');
+    expect(baseLayerOf('topo', 'ch')).toBe('OpenTopoMap');
+    expect(baseLayerOf('transport', 'fr')).toBe('Public transport');
   });
 });

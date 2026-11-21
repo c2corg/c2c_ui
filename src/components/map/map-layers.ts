@@ -6,12 +6,19 @@ import type { RasterSourceSpecification } from 'maplibre-gl';
 import config from '@/js/config';
 import { extentFromLonLat } from '@/js/geo/projection';
 
+// the kinds of base layer: what a document map keeps from a document to the next one, rather than a layer, which may not
+// cover the next document (a national map, a national orthophoto)
+export const LAYER_CATEGORIES = ['topo', 'national', 'ortho', 'transport'] as const;
+export type LayerCategory = (typeof LAYER_CATEGORIES)[number];
+
 export type MapLayer = {
   // translated (Map layer context), also the image of the layer button, in src/assets/img/layers
   title: string;
   image?: string;
   // the flag shown on the button
   country?: string;
+  // the kind of a base layer
+  category?: LayerCategory;
   tiles: string[];
   // 128: tiles of the next zoom shown at half their size, for a sharper text (swisstopo maps)
   tileSize?: 128 | 256;
@@ -73,6 +80,7 @@ export const baseLayers: MapLayer[] = [
   {
     // $gettext('OpenTopoMap', 'Map layer')
     title: 'OpenTopoMap',
+    category: 'topo',
     image: 'opentopomap.jpg',
     tiles: ['a', 'b', 'c'].map((s) => `https://${s}.tile.opentopomap.org/{z}/{x}/{y}.png`),
     maxzoom: 17,
@@ -83,6 +91,7 @@ export const baseLayers: MapLayer[] = [
   {
     // $gettext('ESRI World Imagery', 'Map layer')
     title: 'ESRI World Imagery',
+    category: 'ortho',
     image: 'esri.jpg',
     tiles: ['https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
     maxzoom: 19,
@@ -91,6 +100,7 @@ export const baseLayers: MapLayer[] = [
   {
     // $gettext('Public transport', 'Map layer')
     title: 'Public transport',
+    category: 'transport',
     image: 'publictransport.jpg',
     // MeMoMaps sends no CORS header, which the map needs: its tiles are read through our media host
     tiles: ['https://media.camptocamp.org/public-transport/tiles/{z}/{x}/{y}.png'],
@@ -103,6 +113,7 @@ export const baseLayers: MapLayer[] = [
   {
     // $gettext('IGN maps', 'Map layer')
     title: 'IGN maps',
+    category: 'national',
     image: 'ign.jpg',
     country: 'fr',
     tiles: [ignFr('GEOGRAPHICALGRIDSYSTEMS.MAPS')],
@@ -117,6 +128,7 @@ export const baseLayers: MapLayer[] = [
   {
     // $gettext('IGN ortho', 'Map layer')
     title: 'IGN ortho',
+    category: 'ortho',
     image: 'ignortho.jpg',
     country: 'fr',
     tiles: [ignFr('ORTHOIMAGERY.ORTHOPHOTOS').replace('https://', `${NO_BLANK}://`)],
@@ -127,6 +139,7 @@ export const baseLayers: MapLayer[] = [
   {
     // $gettext('SwissTopo', 'Map layer')
     title: 'SwissTopo',
+    category: 'national',
     image: 'swisstopo.jpg',
     country: 'ch',
     tiles: swisstopo('ch.swisstopo.pixelkarte-farbe'),
@@ -138,6 +151,7 @@ export const baseLayers: MapLayer[] = [
   {
     // $gettext('SwissTopo ortho', 'Map layer')
     title: 'SwissTopo ortho',
+    category: 'ortho',
     image: 'swisstopoortho.jpg',
     country: 'ch',
     tiles: swisstopo('ch.swisstopo.swissimage'),
@@ -149,6 +163,7 @@ export const baseLayers: MapLayer[] = [
   {
     // $gettext('IGN raster (es)', 'Map layer')
     title: 'IGN raster (es)',
+    category: 'national',
     image: 'ignes.jpg',
     country: 'es',
     tiles: [ignEs('mapa-raster', 'MTN')],
@@ -158,6 +173,7 @@ export const baseLayers: MapLayer[] = [
   {
     // $gettext('IGN ortho (es)', 'Map layer')
     title: 'IGN ortho (es)',
+    category: 'ortho',
     image: 'ignesortho.jpg',
     country: 'es',
     tiles: [ignEs('pnoa-ma', 'OI.OrthoimageCoverage')],
@@ -168,6 +184,7 @@ export const baseLayers: MapLayer[] = [
   {
     // $gettext('ICGC raster (ca)', 'Map layer')
     title: 'ICGC raster (ca)',
+    category: 'national',
     image: 'icgc.jpg',
     country: 'catalonia',
     tiles: [icgc('topo')],
@@ -177,6 +194,7 @@ export const baseLayers: MapLayer[] = [
   {
     // $gettext('ICGC ortho (ca)', 'Map layer')
     title: 'ICGC ortho (ca)',
+    category: 'ortho',
     image: 'icgcortho.jpg',
     country: 'catalonia',
     tiles: [icgc('orto')],
@@ -186,6 +204,7 @@ export const baseLayers: MapLayer[] = [
   {
     // $gettext('Basemap (at)', 'Map layer')
     title: 'Basemap (at)',
+    category: 'national',
     image: 'at.jpg',
     country: 'at',
     tiles: basemapAt('bmapgrau', 'png'),
@@ -195,6 +214,7 @@ export const baseLayers: MapLayer[] = [
   {
     // $gettext('Basemap ortho (at)', 'Map layer')
     title: 'Basemap ortho (at)',
+    category: 'ortho',
     image: 'atortho.jpg',
     country: 'at',
     tiles: basemapAt('bmaporthofoto30cm', 'jpeg'),
@@ -204,6 +224,7 @@ export const baseLayers: MapLayer[] = [
   {
     // $gettext('Ordnance Survey (uk)', 'Map layer')
     title: 'Ordnance Survey (uk)',
+    category: 'national',
     image: 'uk.jpg',
     country: 'gb',
     // available backgrounds are Outdoor, Light, Road
@@ -213,6 +234,29 @@ export const baseLayers: MapLayer[] = [
     attribution: `© ${link('//www.ordnancesurvey.co.uk/', 'Ordnance Survey')}`,
   },
 ];
+
+// the countries of the national maps and orthophotos, by the c2c areas of the countries (Liechtenstein is on the swisstopo
+// maps). Catalonia is not a country: its ICGC layers are chosen by a click only, the IGN Spain ones follow the category
+export const COUNTRY_AREAS: Record<number, string> = {
+  14274: 'fr',
+  14067: 'ch',
+  14381: 'ch',
+  14267: 'es',
+  14257: 'at',
+  14081: 'gb',
+};
+
+// the base layer of a category in a country: its national map or orthophoto, else OpenTopoMap or the world orthophoto
+export function baseLayerOf(category: LayerCategory, country?: string): string {
+  const layers = baseLayers.filter((layer) => layer.category === category);
+  const national = country ? layers.find((layer) => layer.country === country) : undefined;
+  return (national ?? layers.find((layer) => !layer.country) ?? baseLayers[0]).title;
+}
+
+// the category of a layer, in 2D or in 3D
+export function categoryOf(title: string): LayerCategory | undefined {
+  return [...baseLayers, worldLayer].find((layer) => layer.title === title)?.category;
+}
 
 // the one base layer whose tiles a topo saved offline downloads (src/pwa/offline-assets.ts): the 2D map shows it without
 // a network, whatever layer was chosen
@@ -227,6 +271,7 @@ export const nationalOrthoLayers = orthoLayers.filter((layer) => layer.country &
 export const worldLayer: MapLayer = {
   // $gettext('Sentinel-2', 'Map layer')
   title: 'Sentinel-2',
+  category: 'ortho',
   image: 's2cloudless.jpg',
   // 2016 mosaic: CC BY 4.0 (the later years are non commercial)
   tiles: ['https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/g/{z}/{y}/{x}.jpg'],
