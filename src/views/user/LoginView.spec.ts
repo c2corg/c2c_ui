@@ -1,5 +1,5 @@
-import { flushPromises, mount } from '@vue/test-utils';
-import { describe, expect, it, vi } from 'vitest';
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { defineComponent, h } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
 
@@ -34,6 +34,8 @@ const BaseForm = defineComponent({
       ),
 });
 
+enableAutoUnmount(afterEach);
+
 const mountLogin = async (path: string, $user: object = { isLogged: false }) => {
   const router = createRouter({
     history: createMemoryHistory(),
@@ -45,7 +47,9 @@ const mountLogin = async (path: string, $user: object = { isLogged: false }) => 
   await router.push(path);
 
   focused.length = 0;
+  // jsdom computes no style for a detached element (v-show hidden would read as visible): mounted in the document
   const wrapper = mount(LoginView, {
+    attachTo: document.body,
     global: {
       plugins: [router],
       directives: { translate: {} },

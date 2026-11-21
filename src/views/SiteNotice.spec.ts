@@ -1,12 +1,16 @@
-import { mount } from '@vue/test-utils';
+import { enableAutoUnmount, mount } from '@vue/test-utils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import SiteNotice from './SiteNotice.vue';
 
 import forum from '@/js/apis/forum';
 
+enableAutoUnmount(afterEach);
+
+// jsdom computes no style for a detached element (v-show hidden would read as visible): mounted in the document
 const mountSiteNotice = () =>
   mount(SiteNotice, {
+    attachTo: document.body,
     global: {
       config: { globalProperties: { $user: { lang: 'fr' }, $gettext: (text: string) => text } as never },
     },

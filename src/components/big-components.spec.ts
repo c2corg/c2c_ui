@@ -1,5 +1,5 @@
 // the bigger components moved to <script setup lang="ts">: what their scripts do
-import { flushPromises, mount } from '@vue/test-utils';
+import { enableAutoUnmount, flushPromises, mount } from '@vue/test-utils';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { defineComponent, h } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
@@ -91,8 +91,12 @@ describe('FeedWidget', () => {
 });
 
 describe('cell renderers', () => {
+  enableAutoUnmount(afterEach);
+
   it('shows no GPS trace marker for a document without geometry', () => {
+    // jsdom computes no style for a detached element (v-show hidden would read as visible): mounted in the document
     const wrapper = mount(MarkerGpsTrace, {
+      attachTo: document.body,
       props: { params: { data: { geometry: null } } as never },
       global: { stubs: { GenericMarkerGpsTrace: { template: '<i class="trace" />' } } },
     });
