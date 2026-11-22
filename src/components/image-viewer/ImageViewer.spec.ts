@@ -154,4 +154,36 @@ describe('ImageViewer', () => {
       config.urls.modernThumbnailsTimestamp = 0;
     }
   });
+
+  it('shows the MI image when the BI ones fail, as offline where only the MI ones are saved', async () => {
+    config.urls.modernThumbnailsTimestamp = 1;
+    try {
+      const { wrapper } = await showViewer();
+      const picture = wrapper.findAll('picture')[1].element;
+      const img = picture.querySelector('img')!;
+      const source = picture.querySelector('source')!;
+      const fail = () => img.dispatchEvent(new Event('error'));
+
+      fail(); // BI AVIF
+      fail(); // BI JPG
+      expect(source.srcset).toBe('https://media.example.org/1588000000_2MI.avif');
+      expect(img.getAttribute('src')).toBe('https://media.example.org/1588000000_2MI.jpg');
+      fail(); // MI AVIF
+      expect(source.srcset).toBe('https://media.example.org/1588000000_2MI.jpg');
+      fail(); // MI JPG: nothing more to try
+      expect(source.srcset).toBe('https://media.example.org/1588000000_2MI.jpg');
+      expect(img.getAttribute('src')).toBe('https://media.example.org/1588000000_2MI.jpg');
+      wrapper.unmount();
+    } finally {
+      config.urls.modernThumbnailsTimestamp = 0;
+    }
+  });
+
+  it('shows the MI JPG image of an image without AVIF ones when the BI one fails', async () => {
+    const { wrapper } = await showViewer();
+    const img = wrapper.findAll('picture')[1].element.querySelector('img')!;
+    img.dispatchEvent(new Event('error'));
+    expect(img.getAttribute('src')).toBe('https://media.example.org/1588000000_2MI.jpg');
+    wrapper.unmount();
+  });
 });

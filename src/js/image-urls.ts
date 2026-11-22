@@ -152,3 +152,25 @@ export const getEmbeddedImageUrl = function (
 
   return config.urls.api + urlProxy + (format ? `&extension=${format}` : '');
 };
+
+/**
+ * The image document of an embedded image ([img=ID] tag cooked by the API), as the image viewer and the offline copy
+ * take it: its file name from its direct media server URL (c2c:url, the one of the size the tag asks for), so its other
+ * sizes come from the media server too, not from the API image proxy. Without it (older API, image unknown to the API,
+ * or another media host), only its id: the proxy.
+ */
+export const getEmbeddedImage = function (img: Element): Image {
+  const image: Image = { document_id: Number(img.getAttribute('c2c:document-id')) };
+  const url = img.getAttribute('c2c:url');
+  if (url && config.urls.media && url.startsWith(`${config.urls.media}/`)) {
+    // 123_456MI.jpg: 123_456.jpg (an SVG original has JPG thumbnails, which getImageUrl gives from either name)
+    image.filename = url.slice(config.urls.media.length + 1).replace(/(SI|MI|BI)(\.[a-z0-9]+)$/i, '$2');
+  }
+  const width = Number(img.getAttribute('c2c:width'));
+  const height = Number(img.getAttribute('c2c:height'));
+  if (width && height) {
+    image.width = width;
+    image.height = height;
+  }
+  return image;
+};

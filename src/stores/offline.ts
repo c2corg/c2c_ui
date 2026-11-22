@@ -8,7 +8,7 @@ import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import config from '@/js/config';
 import { forgetSyncedUsers, syncedUsers } from '@/pwa/favourites-cache';
-import { imageUrlsOf, offlineTilesOf, tileUrlsOf } from '@/pwa/offline-assets';
+import { imageUrlsOf, offlineImageUrlsOf, offlineTilesOf, tileUrlsOf } from '@/pwa/offline-assets';
 import * as idb from '@/pwa/offline-store';
 import {
   attentionOf,
@@ -30,7 +30,7 @@ import {
 } from '@/pwa/saved-assets';
 import { keepShell } from '@/pwa/shell';
 
-// the images of a document saved before the tiles of each layer, and its OpenTopoMap tiles, as they were downloaded
+// the images of a document saved before the tiles of each layer (MI only: before the BI ones too), and its OpenTopoMap tiles, as they were downloaded
 const legacyAssetUrlsOf = (data: SavedEntry['data']) => [...imageUrlsOf(data), ...tileUrlsOf(data?.geometry)];
 // what the copy of the document itself weighs
 const sizeOf = (data: unknown) => new Blob([JSON.stringify(data)]).size;
@@ -236,7 +236,7 @@ export const useOfflineStore = defineStore('offline', () => {
         );
         // the images, and the tiles of each layer it takes offline
         const tiles = offlineTilesOf(data);
-        const urls = [...imageUrlsOf(data), ...tiles.urls];
+        const urls = [...offlineImageUrlsOf(data), ...tiles.urls];
         const keys = new Set(urls.map(assetKey));
         downloadingKeys.add(keys);
         try {

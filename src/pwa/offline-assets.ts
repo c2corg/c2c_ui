@@ -9,7 +9,7 @@ import {
 } from '@/components/map/map-layers';
 import config from '@/js/config';
 import { extentFromLonLat } from '@/js/geo/projection';
-import { getEmbeddedImageUrl, getImageUrl, type Image, type ImageFormat } from '@/js/image-urls';
+import { getEmbeddedImage, getEmbeddedImageUrl, getImageUrl, type Image, type ImageFormat } from '@/js/image-urls';
 
 // The format the browser takes in the <picture> of Thumbnail.vue and Markdown.vue: AVIF where it exists (no WebP:
 // c2corg/c2c_images#1160), else the original.
@@ -36,17 +36,61 @@ function textImageUrls(html: string) {
   });
 }
 
-// the images of the text, and the thumbnails of the gallery (Gallery.vue)
-export function imageUrlsOf(document: {
+// The routes and the crags are where one looks at an image closely on the spot (the topo, the line): the BI images,
+// the ones of the image viewer (ImageViewer.vue), of at most that many of their images. The ones of the text first,
+// in its order, then the gallery's. The other documents keep only their MI ones: the viewer shows them instead.
+const BIG_IMAGES_MAX = 30;
+
+const takesBigImages = (document: { type?: string; waypoint_type?: string | null }) =>
+  document.type === 'r' || (document.type === 'w' && document.waypoint_type === 'climbing_outdoor');
+
+// the camptocamp images of a text ([img=123]), as Markdown.vue gives them to the viewer
+function textImages(html: string) {
+  if (!html.includes('c2c:document-id')) {
+    return [];
+  }
+  return [...new DOMParser().parseFromString(html, 'text/html').querySelectorAll('img[c2c\\:document-id]')]
+    .map(getEmbeddedImage)
+    .filter((image) => Number.isInteger(image.document_id) && image.document_id > 0);
+}
+
+// the BI images as the viewer asks for them: from their file name, else (unknown to the API) from the API proxy
+function bigImageUrls(texts: string[], images: Image[]) {
+  const byId = new Map<number, Image>();
+  for (const image of [...texts.flatMap(textImages), ...images]) {
+    if (!byId.has(image.document_id) || (!byId.get(image.document_id)!.filename && image.filename)) {
+      byId.set(image.document_id, image);
+    }
+  }
+  return [...byId.values()]
+    .slice(0, BIG_IMAGES_MAX)
+    .map((image) => bestOf((format) => getImageUrl(image, 'BI', format)));
+}
+
+type ImagesOf = {
+  type?: string;
+  waypoint_type?: string | null;
   cooked?: Record<string, unknown> | null;
   associations?: { images?: Image[] } | null;
-}) {
-  const texts = Object.values(document.cooked ?? {}).filter((value): value is string => typeof value === 'string');
+};
+
+const textsOf = (document: ImagesOf) =>
+  Object.values(document.cooked ?? {}).filter((value): value is string => typeof value === 'string');
+
+// the images of the text, and the thumbnails of the gallery (Gallery.vue): what a document saved before the BI images
+// has (legacy migration of src/stores/offline.ts)
+export function imageUrlsOf(document: ImagesOf) {
   const thumbnails = (document.associations?.images ?? []).map((image) =>
     bestOf((format) => getImageUrl(image, 'MI', format))
   );
-  const urls = [...thumbnails, ...texts.flatMap(textImageUrls)];
+  const urls = [...thumbnails, ...textsOf(document).flatMap(textImageUrls)];
   return [...new Set(urls.filter((url): url is string => !!url))];
+}
+
+// what a document saved now takes: those, and the BI ones of the routes and crags
+export function offlineImageUrlsOf(document: ImagesOf) {
+  const big = takesBigImages(document) ? bigImageUrls(textsOf(document), document.associations?.images ?? []) : [];
+  return [...new Set([...imageUrlsOf(document), ...big.filter((url): url is string => !!url)])];
 }
 
 // half the width of the world in web mercator (EPSG:3857, the projection of the geometries of the API), in meters

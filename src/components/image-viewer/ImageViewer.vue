@@ -36,7 +36,13 @@
         <div class="swiper-zoom-container">
           <picture>
             <source v-if="image.avifSrc" type="image/avif" :srcset="image.avifSrc" />
-            <img :src="image.imgSrc" :alt="image.locales[0].title ?? undefined" loading="lazy" />
+            <img
+              :src="image.imgSrc"
+              :data-mi-src="image.miSrc"
+              :data-mi-avif-src="image.miAvifSrc"
+              :alt="image.locales[0].title ?? undefined"
+              loading="lazy"
+            />
           </picture>
         </div>
       </swiper-slide>
@@ -83,7 +89,7 @@ import { fallBackToBasicImage, getImageUrl } from '@/js/image-urls';
 import { registerImageViewer, type ViewerImage } from '@/js/vue-plugins/image-viewer';
 
 type SwiperContainer = HTMLElement & { swiper: Swiper; initialize(): void };
-type ShownImage = ViewerImage & { imgSrc?: string; avifSrc?: string };
+type ShownImage = ViewerImage & { imgSrc?: string; avifSrc?: string; miSrc?: string; miAvifSrc?: string };
 // Safari
 type WebkitFullscreen = { webkitRequestFullscreen?(): void; webkitExitFullscreen?(): void };
 
@@ -125,16 +131,30 @@ function push(image: ViewerImage) {
       ...image,
       imgSrc: getImageUrl(image, 'BI'),
       avifSrc: getImageUrl(image, 'BI', 'avif'),
+      miSrc: getImageUrl(image, 'MI'),
+      miAvifSrc: getImageUrl(image, 'MI', 'avif'),
     });
   }
 }
 
 // the AVIF image may be missing (just uploaded, or never built): the JPG one. Listened to on the swiper (error events
 // don't bubble, hence capture), as the virtual slides are rendered by Swiper from their HTML, without Vue listeners
+// Then, when the BI image fails too, the MI one: offline, only the MI images of the documents saved offline are kept
+// (src/pwa/offline-assets.ts), AVIF where it exists, so its JPG one again if that fails. Once the MI JPG one is shown,
+// nothing more to try.
 function onImageError(event: Event) {
-  if (event.target instanceof HTMLImageElement) {
-    fallBackToBasicImage(event.target);
+  const img = event.target;
+  if (!(img instanceof HTMLImageElement) || fallBackToBasicImage(img)) {
+    return;
   }
+  const { miSrc, miAvifSrc } = img.dataset;
+  if (!miSrc || img.getAttribute('src') === miSrc) {
+    return;
+  }
+  for (const source of img.parentElement?.querySelectorAll('source') ?? []) {
+    source.srcset = miAvifSrc ?? miSrc;
+  }
+  img.src = miSrc;
 }
 
 function close() {

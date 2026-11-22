@@ -57,6 +57,15 @@ describe('Markdown', () => {
     expect(imageViewer.show).toHaveBeenCalledWith(image);
   });
 
+  it('gives the viewer the file name of an embedded image from its media url, so its BI comes from there too', async () => {
+    const { imageViewer } = await mountMarkdown(
+      '<figure c2c:role="embedded-figure"><img c2c:role="embedded-image" c2c:document-id="34" c2c:url-proxy="/images/proxy/34?size=MI" c2c:url="https://media.example.org/1588000000_34MI.jpg" c2c:size="MI" c2c:width="3000" c2c:height="2000" /></figure>'
+    );
+    expect(imageViewer.push).toHaveBeenCalledWith(
+      expect.objectContaining({ document_id: 34, filename: '1588000000_34.jpg', width: 3000, height: 2000 })
+    );
+  });
+
   it('offers the AVIF thumbnail of the recent embedded images, and no WebP', async () => {
     config.urls.modernThumbnailsId = 30;
     const embed = (id: number): string =>

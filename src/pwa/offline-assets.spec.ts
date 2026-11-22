@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { imageUrlsOf, offlineLayersOf, offlineTilesOf, tileUrlsOf } from './offline-assets';
+import { imageUrlsOf, offlineImageUrlsOf, offlineLayersOf, offlineTilesOf, tileUrlsOf } from './offline-assets';
 import { formerTileKeys, tileCacheKey } from './tile-key';
 
 import config from '@/js/config';
@@ -71,6 +71,53 @@ describe('the images of an offline document', () => {
 
   it('has none without text or images', () => {
     expect(imageUrlsOf({})).toEqual([]);
+  });
+
+  const gallery = (count: number) =>
+    Array.from({ length: count }, (_, i) => ({ document_id: 100 + i, filename: `123_${100 + i}.jpg` }));
+
+  it('takes the BI images of a route too, the ones of the text first, at most 30', () => {
+    const urls = offlineImageUrlsOf({
+      type: 'r',
+      cooked: { description: '<img c2c:document-id="5" c2c:url-proxy="/images/proxy/5?size=MI" alt="">' },
+      associations: { images: gallery(40) },
+    });
+    const big = urls.filter((url) => /BI\.|size=BI/.test(url));
+    expect(big).toHaveLength(30);
+    expect(big[0]).toBe(`${config.urls.api}/images/proxy/5?size=BI&extension=avif`);
+    expect(big[1]).toBe(`${config.urls.media}/123_100BI.avif`);
+    expect(big).not.toContain(`${config.urls.media}/123_129BI.avif`);
+    // and all the MI ones
+    expect(urls).toContain(`${config.urls.media}/123_139MI.avif`);
+  });
+
+  it('takes an image of the text from the media server when the API gives its url, once if in the gallery too', () => {
+    const urls = offlineImageUrlsOf({
+      type: 'r',
+      cooked: {
+        description:
+          `<img c2c:document-id="100" c2c:url-proxy="/images/proxy/100?size=MI" c2c:url="${config.urls.media}/123_100MI.jpg">` +
+          `<img c2c:document-id="6" c2c:url-proxy="/images/proxy/6?size=MI" c2c:url="${config.urls.media}/123_6MI.jpg">`,
+      },
+      associations: { images: gallery(1) },
+    });
+    expect(urls.filter((url) => /BI\.|size=BI/.test(url))).toEqual([
+      `${config.urls.media}/123_100BI.avif`,
+      `${config.urls.media}/123_6BI.avif`,
+    ]);
+  });
+
+  it('leaves the BI images out of what a document saved before them has', () => {
+    const route = { type: 'r', associations: { images: gallery(2) } };
+    expect(imageUrlsOf(route).filter((url) => url.includes('BI.'))).toEqual([]);
+  });
+
+  it('takes the BI images of a crag, not of the other waypoints and documents', () => {
+    const bigOf = (document: { type: string; waypoint_type?: string }) =>
+      offlineImageUrlsOf({ ...document, associations: { images: gallery(2) } }).filter((url) => url.includes('BI.'));
+    expect(bigOf({ type: 'w', waypoint_type: 'climbing_outdoor' })).toHaveLength(2);
+    expect(bigOf({ type: 'w', waypoint_type: 'hut' })).toEqual([]);
+    expect(bigOf({ type: 'o' })).toEqual([]);
   });
 });
 
