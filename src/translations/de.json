@@ -12,11 +12,11 @@
     "4": {
       "paragliding_ratings": "P4"
     },
-    "(MRD), you do not have to enter any parameters other than the danger level(s) given by the avalanche bulletin.": "(MRD) Sie müssen außer der/den im Lawinenbulletin angegebenen Gefahrenstufe(n) keine weiteren Parameter eingeben.",
-    "(MRE), you can enter the sectors of the compass rose that are reported as critical in the avalanche bulletin.": "(MRE), Sie können die Sektoren der Windrose eingeben, die im Lawinenbulletin als kritisch gemeldet werden.",
-    "(MRP), you can refine the hazard potential, set group size and any precautionary measures being considered.": "(MRP) Sie können das Gefährdungspotenzial, die eingestellte Gruppengröße und eventuell in Betracht gezogene Vorsichtsmaßnahmen verfeinern.",
+    "(MRD), you do not have to enter any parameters other than the danger level(s) given by the avalanche bulletin.": "(MRD) müssen Sie außer der/den im Lawinenbulletin angegebenen Gefahrenstufe(n) keine weiteren Parameter eingeben.",
+    "(MRE), you can enter the sectors of the compass rose that are reported as critical in the avalanche bulletin.": "(MRE) können Sie die Sektoren der Windrose eingeben, die im Lawinenbulletin als kritisch gemeldet werden.",
+    "(MRP), you can refine the hazard potential, set group size and any precautionary measures being considered.": "(MRP) können Sie das Gefahrenpotenzial verfeinern, die Gruppengröße festlegen und eventuell in Betracht gezogene Vorsichtsmaßnahmen angeben.",
     "(at the bottom of Safari, or next to the address).": "(unten in Safari oder neben der Adressleiste).",
-    "1 or 2 complications (steeper or narrow section...)": "1 oder 2 Schwierigkeiten (steiler oder enger Passagen ... )",
+    "1 or 2 complications (steeper or narrow section...)": "1 oder 2 Schwierigkeiten (steile oder enge Passage …)",
     "10 meters minimum while ascending": "10 Meter Minimum beim Aufsteigen",
     "10min": {
       "access_times": "10 min"
@@ -55,7 +55,7 @@
       "access_times": "3 h"
     },
     "3h+": {
-      "access_times": " 3 h +"
+      "access_times": "3 h+"
     },
     "45min": {
       "access_times": "45 min"
@@ -68,19 +68,19 @@
       "access_times": "5 min"
     },
     "7 days after the request of the user at the earliest.": "Frühestens 7 Tage nach der Anfrage des Benutzers.",
-    "A digit": "eine Ziffer",
+    "A digit": "Eine Ziffer",
     "A linked document changed meanwhile. Check it before publishing again.": "Ein verknüpftes Dokument wurde inzwischen geändert. Bitte überprüfen Sie es, bevor Sie es erneut veröffentlichen.",
     "A lowercase letter": "Kleinbuchstabe",
     "A message has been sent to the new address provided. You have to follow the link within to confirm the email address change.": "Eine Nachricht wurde an die neu angegebene E-Mail-Adresse gesendet. Sie müssen auf den darin enthaltenen Link klicken, um die Änderung der E-Mail-Adresse zu bestätigen.",
     "A moderator can restore it during 29 days.": "Ein Moderator kann das Dokument während 29 Tagen wiederherstellen.",
     "A problem?": "Ein Problem?",
     "A request can also be made from the profile of the user: Remove account, in its tools.": "Eine Anfrage kann auch über das Profil des Benutzers gestellt werden: „Konto entfernen“ in seinen Werkzeugen.",
-    "A special character (e.g. ! ? - _ @ #)": "Sonderzeichen",
-    "Access by public transport": "mit öffentlichen Verkehrsmitteln erreichbar ",
+    "A special character (e.g. ! ? - _ @ #)": "Ein Sonderzeichen (z. B. ! ? - _ @ #)",
+    "Access by public transport": "Zugang mit öffentlichen Verkehrsmitteln",
     "Access points": "Zugangspunkte",
-    "Accessible by public transport": "mit öffentlichen Verkehrsmitteln erreichbar",
+    "Accessible by public transport": "Mit öffentlichen Verkehrsmitteln erreichbar",
     "Accident database": "Unfalldatenbank",
-    "Accidents/Incidents database:": "Unfälle/Vorfälle Datenbank",
+    "Accidents/Incidents database:": "Unfall-/Vorfalldatenbank:",
     "Account": "Konto",
     "Account not validated yet": {
       "API message": "Konto noch nicht freigeschaltet"
@@ -104,14 +104,14 @@
     "Add": "Hinzufügen",
     "Add Camptocamp to your home screen: an icon like an app, the whole screen, and your data kept on the phone. On iPhone, Safari clears the data of a site that is not installed after seven days without a visit.": "Fügen Sie Camptocamp zu Ihrem Home-Bildschirm hinzu: mit einem Symbol wie bei einer App, im Vollbildmodus und mit lokal auf Ihrem Smartphone gespeicherten Daten. Auf dem iPhone löscht Safari die Daten einer Website, die nicht zum Home-Bildschirm hinzugefügt wurde, wenn sie sieben Tage lang nicht besucht wurde.",
     "Add a document": "Ein Dokument hinzufügen",
-    "Add here maps not automatically referenced": "Hier Karten hinzufügen, die nicht automatisch referenziert wurden.",
+    "Add here maps not automatically referenced": "Hier Karten hinzufügen, die nicht automatisch referenziert wurden",
     "Add images": "Bilder hinzufügen",
-    "Add more points": "Wegpunkte hinzufügen",
+    "Add more points": "Weitere Punkte hinzufügen",
     "Add my outing": "Tourenbericht",
-    "Add or remove point": "Einen Wegpunkt hinzufügen bzw. löschen",
+    "Add or remove point": "Punkt hinzufügen oder entfernen",
     "Add page break before each document": "Einen Seitenumbruch vor jedem Dokument einfügen",
     "Add the first outing": "Ersten Tourenbericht hinzufügen",
-    "Add title…": "Titel hinzufügen ...",
+    "Add title…": "Titel hinzufügen…",
     "Add to Home Screen": "Zum Home-Bildschirm hinzufügen",
     "Add to Home screen": "Zum Home-Bildschirm hinzufügen",
     "Add to favourites": "Zu Favoriten hinzufügen",
@@ -128,9 +128,9 @@
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "Die Höheneinstellung ist erforderlich, wenn die Gefahr hoch und niedrig unterschiedlich ist. Bitte stellen Sie die Höhe so ein, wie im Lawinenbulletin für das jeweilige Gebiet angegeben.",
     "An account is removed (anonymized, merged into another account of the user, or deleted with its contributions if it is spam) once a moderator of the topoguide and a moderator of the forum have validated the request: two different persons, other than its author. It is processed one hour after the last validation for a spammer, one day for the others, and not before its date.": "Ein Benutzerkonto wird entfernt (anonymisiert, mit einem anderen Benutzerkonto derselben Person zusammengeführt oder bei Spam einschließlich aller zugehörigen Beiträge gelöscht), sobald ein Moderator des Tourenportals und ein Forumsmoderator den Antrag bestätigt haben. Dabei muss es sich um zwei verschiedene Personen handeln, die nicht die antragstellende Person sein dürfen. Bei einem Spammer wird der Antrag eine Stunde nach der letzten Bestätigung bearbeitet, bei allen anderen Fällen einen Tag danach, jedoch nicht vor dem angegebenen Datum.",
     "An error occurred, connection status could not be retrieved. Please refresh the page.": "Ein Fehler ist aufgetreten: der Verbindungsstatus konnte nicht geladen werden. Bitte die Seite aktualisieren.",
-    "An error occurred, could not retrieve activities": "Ein Fehler ist aufgetreten: die Aktivitäten konnten nicht geladen werden.",
-    "An error occurred, couldn't (un)mask version": "Es ist ein Fehler aufgetreten, die Version konnte nicht (un)sichtbar gemacht werden.",
-    "An error occurred, couldn't save images": "Bilder konnten nicht geladen werden",
+    "An error occurred, could not retrieve activities": "Ein Fehler ist aufgetreten: Die Aktivitäten konnten nicht geladen werden",
+    "An error occurred, couldn't (un)mask version": "Es ist ein Fehler aufgetreten, die Version konnte nicht verborgen bzw. wieder angezeigt werden",
+    "An error occurred, couldn't save images": "Ein Fehler ist aufgetreten, die Bilder konnten nicht gespeichert werden",
     "An error occurred, please try again": "Ein Fehler ist aufgetreten, bitte nochmals probieren",
     "An icon on the home screen, and the app takes the whole screen, without the browser bar.": "Ein Symbol auf dem Home-Bildschirm, und die App wird im Vollbildmodus angezeigt – ohne Browserleiste.",
     "An outing refused by Camptocamp shows the reason: fix it with Edit, then Try again. If the connection was cut while sending, check on Camptocamp before trying again, so as not to publish it twice.": "Ein von Camptocamp abgelehnter Tourenbericht zeigt den Grund dafür an: Beheben Sie das Problem über „Bearbeiten“ und versuchen Sie es anschließend erneut. Wurde die Verbindung während der Übertragung unterbrochen, überprüfen Sie zuerst auf Camptocamp, ob die Tour bereits veröffentlicht wurde, bevor Sie es erneut versuchen. So vermeiden Sie eine doppelte Veröffentlichung.",
@@ -149,41 +149,41 @@
     "Apply filters": "Filter anwenden",
     "Are you sure you want to delete this locale?": "Sind Sie sicher, dass Sie diese Sprachversion löschen wollen?",
     "Are you sure you want to merge?": "Sind Sie sicher, dass Sie zusammenführen wollen?",
-    "Are you sure you want to revert to this version of the document?": "Sind Sie sicher, dass Sie diese Version des Dokuments wiederherstellen wollen ? ",
+    "Are you sure you want to revert to this version of the document?": "Sind Sie sicher, dass Sie zu dieser Version des Dokuments zurückkehren wollen?",
     "Area not covered": "Nicht abgedeckter Bereich",
     "Area too large": "Bereich zu groß",
     "Arrival": "Ankunft",
     "Arrive before": "Ankunft vor",
-    "Articles, waypoints or routes to be linked.": "Artikeln, Wegpünkte oder Routen die verbunden werden sollen",
-    "Articles, waypoints, routes or books to be linked.": "Artikeln, Wegpünkte, Routen oder Bücher die verbunden werden sollen",
+    "Articles, waypoints or routes to be linked.": "Artikel, Wegpunkte oder Routen, die verknüpft werden sollen.",
+    "Articles, waypoints, routes or books to be linked.": "Artikel, Wegpunkte, Routen oder Bücher, die verknüpft werden sollen.",
     "As the name suggests, this method is intended for beginners. Therefore, the safety margin must be particularly important. No parameter other than the danger level is specified. Orientation is ignored.": "Wie der Name schon sagt, ist diese Methode für Einsteiger gedacht. Daher muss der Sicherheitsabstand besonders wichtig sein. Es wird kein anderer Parameter als die Gefahrenstufe angegeben. Die Ausrichtung wird ignoriert.",
     "Asked by the user on:": "Vom Benutzer angefragt am:",
     "Associated outings": "Verbundene Tourenberichte",
     "Associated routes": "Verbundene Routen",
-    "Associated routes cotations": "Schwierigkeitsgrat der verbundenen Routen",
+    "Associated routes cotations": "Schwierigkeitsgrade der verbundenen Routen",
     "Association": "Verein Camptocamp",
     "Associations history": "Geschichte der Verbindungen",
     "At least 10 characters": "Mindestens 10 Zeichen",
     "At least one access point in the route do not have a public transport stop within 5km.": "Mindestens ein Zugangspunkt der Route hat keine Haltestelle öffentlicher Verkehrsmittel im Umkreis von 5 km.",
-    "At least one access point in the waypoint do not have a public transport stop within 5km.": "Mindestens ein Zugangspunkt verfügt über keine Haltesstelle für öffentliche Transportmitteln im Umkreis von 5 km ",
+    "At least one access point in the waypoint do not have a public transport stop within 5km.": "Mindestens ein Zugangspunkt des Wegpunkts hat keine Haltestelle öffentlicher Verkehrsmittel im Umkreis von 5 km.",
     "Attempts:": "Versuche:",
-    "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Namensnennung — Sie müssen angemessene Urheber- und Rechteangaben machen, einen Link zur Lizenz beifügen und angeben, ob Änderungen vorgenommen wurden. ",
+    "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Namensnennung — Sie müssen angemessene Urheber- und Rechteangaben machen, einen Link zur Lizenz beifügen und angeben, ob Änderungen vorgenommen wurden.",
     "Attributions": {
-      "Map controls": "Zuschreibung"
+      "Map controls": "Quellenangaben"
     },
     "Authentication required": {
       "API message": "Authentifizierung erforderlich"
     },
-    "Authentication to public transport data service error.": "Fehler bei der Authentifizierung für den Datendienst des öffentlichen Transportdienstes",
+    "Authentication to public transport data service error.": "Fehler bei der Authentifizierung beim Datendienst für öffentliche Verkehrsmittel.",
     "Author": "Autor",
-    "Avalanche bulletins": "Lawinenbulletin",
-    "Avalanche risk": "Lawinengefahr ",
-    "Avalanche risk evaluation tool:": "Lawinenrisiko Einschätzungtool:",
-    "Average slope (degrees)": "durchschnittliche Steigung (Grad)",
+    "Avalanche bulletins": "Lawinenbulletins",
+    "Avalanche risk": "Lawinengefahr",
+    "Avalanche risk evaluation tool:": "Tool zur Einschätzung des Lawinenrisikos:",
+    "Average slope (degrees)": "Durchschnittliche Hangneigung (Grad)",
     "Back": "Zurück",
-    "Back to code": "Zurück zur Code",
+    "Back to code": "Zurück zum Code",
     "Back to edit mode": "Zurück zur Bearbeitung",
-    "Back to the top": "zum Seitenanfang",
+    "Back to the top": "Zum Seitenanfang",
     "Back with a network, open Favourites and tap Publish now: nothing is sent without you. The number on the Favourites tab counts the outings waiting.": "Sobald Sie wieder eine Internetverbindung haben, öffnen Sie „Favoriten“ und tippen Sie auf „Jetzt veröffentlichen“: Ohne Ihr Zutun wird nichts übertragen. Die Zahl auf dem Tab „Favoriten“ zeigt an, wie viele Tourenberichte auf die Veröffentlichung warten.",
     "Base layer": "Kartenhintergrund",
     "Base layers": "Grundkarte",
@@ -193,27 +193,27 @@
     "Basemap ortho (at)": {
       "Map layer": "Österreich Luftbild"
     },
-    "Be careful,": "Achtung, ",
-    "Be careful, in wet snow, no factor to reduce orientation or attendance can be applied.": "Vorsicht, bei nassem Schnee kann kein Faktor zur Reduzierung der Orientierung oder Anwesenheit angewendet werden.",
-    "Be mindful of the departure time for your return trip!": "Achten Sie bitte auf die Abfahrtszeit für Ihre Rückreise",
+    "Be careful,": "Achtung,",
+    "Be careful, in wet snow, no factor to reduce orientation or attendance can be applied.": "Vorsicht, bei Nassschnee kann kein Reduktionsfaktor für Exposition oder Begehungshäufigkeit angewendet werden.",
+    "Be mindful of the departure time for your return trip!": "Achten Sie auf die Abfahrtszeit für Ihre Rückreise!",
     "Beginner": "Einsteiger",
     "Beginner Reduction Method": "Einsteiger-Reduktionsmethode",
-    "Beware of case-sensitive login and password": "Vorsicht vor Groß- und Kleinschreibung bei Login und Passwort.",
+    "Beware of case-sensitive login and password": "Achten Sie bei Login und Passwort auf Groß- und Kleinschreibung",
     "Block account": "Konto blockieren",
     "Bolted rock climbing gear": "Mehrseillängensportkletterei",
-    "Book content": "Buch Inhalt",
+    "Book content": "Buchinhalt",
     "Books and websites not already associated to this route": "Geben Sie an, woher die Informationen stammen, die nicht aus Ihrer persönlichen Erfahrung stammen. Ein Buch oder eine Zeitschrift sollte einen eigenen Eintrag haben und mit dem Dokument verknüpft sein (bitte nicht in diesem Feld erwähnen). Dieses Feld ist für Links zu Websites, Online-Topos, Blogs, nicht verbreiteten Quellen (Notizbuch in einer Berghütte, Bar oder auf einem Campingplatz) oder für zusätzliche Informationen zu den Topoführern (falsches Schema usw.) vorgesehen. Ein Link muss mit den Chevrons < Link > aktiviert werden.",
     "Bouldering climbing gear": "Boulder-Kletterausrüstung",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Beschreiben Sie kurz die möglichen Verletzungen und was Sie heute im Nachhinein tun würden. Kommentare, die in kein anderes Feld passen, können hier eingegeben werden.",
     "Browse the topoguide": "Tourenportal durchsuchen",
     "Buoux is maintained by local volunteers. Help keep it bolted and open!": "Buoux wird von lokalen Ehrenamtlichen betreut. Helfen Sie mit, das Klettergebiet weiterhin gut abgesichert und offen zu halten!",
-    "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "Standardmäßig wird Ihr Topoführername Ihr Benutzername sein. Sie können ihn später in den Einstellungen frei ändern.",
+    "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "Standardmäßig ist Ihr Pseudonym im Tourenportal Ihr Benutzername. Sie können es später in den Einstellungen frei ändern.",
     "By month": "Monatlich",
     "By year": "Jahresweise",
     "Calculate my outbound trip": "Meine Hinreise berechnen",
     "Calculate my return trip": "Meine Rückreise berechnen",
-    "Calculate my trip": "Meine Route berechnen",
-    "Camptocamp Association": "Camptocamp Verein",
+    "Calculate my trip": "Meine Reise berechnen",
+    "Camptocamp Association": "Verein Camptocamp",
     "Camptocamp app": "Camptocamp-App",
     "Camptocamp app guide": "Anleitung zur Camptocamp-App",
     "Camptocamp has its app": "Camptocamp hat eine eigene App",
@@ -225,11 +225,11 @@
     "Cancelled": "Abgebrochen",
     "Cancelled by": "Abgebrochen von",
     "Candidates": "Alle Bilder",
-    "Cards mode": "Kartenmodus",
+    "Cards mode": "Kachelansicht",
     "Change account parameters": "Konto-Parameter ändern",
     "Change password": "Passwort ändern",
     "Changes sync when the network is back": "Sobald Sie wieder eine Internetverbindung haben, werden Änderungen synchronisiert",
-    "Checking...": "Überprüfen ...",
+    "Checking...": "Überprüfen…",
     "Child": "Kind",
     "Choice of massif": "Auswahl der Bergkette",
     "Choose": "Auswählen",
@@ -240,43 +240,43 @@
     "Click on the map to get weather forecasts": "Auf die Karte klicken, um die Wettervorhersage anzuzeigen",
     "Close": "Schließen",
     "Close the search": "Die Suche schließen",
-    "Collapse": "Zusammenbrechen",
+    "Collapse": "Einklappen",
     "Collapse the menu": "Menü einklappen",
     "Coming soon": "Demnächst verfügbar",
     "Comments": "Kommentare",
     "Comments are disabled.": "Kommentare sind deaktiviert.",
-    "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Kommunikation betreffend Ziele und Erwartungen der Teilnehmer sowie Bedenken und Beobachtungen im Laufe der Tour, Rücksprache um neue Strategien zu bestimmen, Gruppenführung und Verantwortung, Gruppenteilnehmer sind daran gewöhnt oder nicht, zusammen Touren zu unternehmen, Emulation, usw...",
+    "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Kommunikation betreffend Ziele und Erwartungen der Teilnehmer sowie Bedenken und Beobachtungen im Laufe der Tour, Rücksprache, um neue Strategien zu bestimmen, Gruppenführung und Verantwortung, Gruppenteilnehmer sind daran gewöhnt oder nicht, zusammen Touren zu unternehmen, Emulation usw.",
     "Compare selected versions": "Ausgewählte Versionen vergleichen",
     "Compute one for a specific zone from the “Risk” tab": "Berechnen Sie ein Risiko für ein bestimmtes Gebiet im Reiter \"Risiko\"",
     "Compute risk": "Risiko berechnen",
     "Computer: open camptocamp.org on your phone and follow the steps above.": "Am Computer: Öffnen Sie camptocamp.org auf Ihrem Smartphone und folgen Sie den oben beschriebenen Schritten.",
-    "Conditions": "Voraussetzungen",
+    "Conditions": "Verhältnisse",
     "Configure activity trackers": "Aktivitätentracker konfigurieren",
     "Configure cookies": "Cookies einstellen",
-    "Configure layer": "Schicht konfigurieren",
-    "Configure your connection to external services like Strava or your GPS device application to easily retrieve geometries.": "Hier können Sie Ihre Verbindung mit externen Diensten wie Strava oder der Anwendung Ihres GPS-Geräts, um GPX-Tracks Ihrer Aktivitäten einfach abzurufen.",
+    "Configure layer": "Ebene konfigurieren",
+    "Configure your connection to external services like Strava or your GPS device application to easily retrieve geometries.": "Konfigurieren Sie hier Ihre Verbindung zu externen Diensten wie Strava oder der App Ihres GPS-Geräts, um Geometrien einfach abzurufen.",
     "Configured": "Konfiguriert",
     "Confirm": "Bestätigen",
     "Confirm delete": "Löschung bestätigen",
     "Confirm the deletion": "Löschung bestätigen",
     "Conflict": "Konflikt",
-    "Conflict: version of document has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version.",
-    "Conflict: version of locale 'ca' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version.",
-    "Conflict: version of locale 'de' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version.",
-    "Conflict: version of locale 'en' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version.",
-    "Conflict: version of locale 'es' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version.",
-    "Conflict: version of locale 'eu' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version.",
-    "Conflict: version of locale 'fr' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version.",
-    "Conflict: version of locale 'it' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version.",
-    "Conflict: version of locale 'sl' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version.",
-    "Conflict: version of locale 'zh_CN' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version .",
+    "Conflict: version of document has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version",
+    "Conflict: version of locale 'ca' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version",
+    "Conflict: version of locale 'de' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version",
+    "Conflict: version of locale 'en' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version",
+    "Conflict: version of locale 'es' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version",
+    "Conflict: version of locale 'eu' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version",
+    "Conflict: version of locale 'fr' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version",
+    "Conflict: version of locale 'it' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version",
+    "Conflict: version of locale 'sl' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version",
+    "Conflict: version of locale 'zh_CN' has changed": "Das Dokument wurde zwischenzeitlich geändert und es existiert eine aktuellere Version",
     "Conflicting method and danger": "Widersprüchliche Methode und Gefahr",
     "Connect": "Verbinden",
     "Connect my account": "Mein Konto verbinden",
     "Connected to Strava, Garmin or Suunto? Your last activities show at the top of the form: one tap takes the trace, the date, the distance and the elevation gain.": "Mit Strava, Garmin oder Suunto verbunden? Ihre letzten Aktivitäten werden oben im Formular angezeigt: Mit einem einzigen Tippen werden die GPS-Aufzeichnung, das Datum, die Distanz und die Höhenmeter übernommen.",
     "Contact": "Kontakt",
     "Contain invalid character(s)": {
-      "API message": "enthält ein oder mehrere ungültige Zeichen"
+      "API message": "Enthält ein oder mehrere ungültige Zeichen"
     },
     "Contains consecutive special characters": {
       "API message": "Darf keine aufeinanderfolgenden Sonderzeichen enthalten (-, _, .)"
@@ -284,7 +284,7 @@
     "Continue the discussion": "Diskussion fortsetzen",
     "Contribute to common knowledge": "Tragen Sie zum Allgemeinwissen bei",
     "Contribute to maintainance": "lokale Akteure unterstützen",
-    "Contributions": "Beitragen",
+    "Contributions": "Beiträge",
     "Contributor": "Beiträger",
     "Contributors:": "Mitwirkende:",
     "Control the use of your personal data": "Verwendung Ihrer persönlichen Daten kontrollieren",
@@ -300,31 +300,31 @@
     "Create a simplified version of the geometry by reducing the amount of points": "Eine vereinfachte Version der Geometrie erstellen, indem die Anzahl der Punkte reduziert wird",
     "Create an account": "Ein Benutzerkonto anlegen",
     "Create an account to find your favourites on all your devices.": "Erstellen Sie ein Benutzerkonto, damit Sie Ihre Favoriten auf all Ihren Geräten finden können.",
-    "Create the first version in the following lang": "Erste Version des Dokuments in die folgende Sprache übersetzen",
+    "Create the first version in the following lang": "Erste Version in der folgenden Sprache erstellen",
     "Created on": "Erstellt am",
-    "Creation?": "Verfassung ?",
-    "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "Die aktuelle Kartenansicht wird nicht von YETI abgedeckt. Nur französische Berge sind ab jetzt (durch einen gestrichelten Strich bestimmt).",
-    "Current map view is too large. Please zoom to level": "Der Kartenbereich ist zu groß. Zoomen Sie",
+    "Creation?": "Erstellung?",
+    "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "Die aktuelle Kartenansicht wird nicht von YETI abgedeckt. Derzeit sind nur die französischen Berge abgedeckt (gestrichelt umrandet).",
+    "Current map view is too large. Please zoom to level": "Der Kartenausschnitt ist zu groß. Bitte zoomen Sie auf Stufe",
     "Current password": "Aktuelles Passwort",
-    "Danger level": "Lawinengefahr",
+    "Danger level": "Gefahrenstufe",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "Die Gefahrenstufe aus dem Lawinenbericht gilt für alle Ausrichtungen. Die Windrose kennzeichnet die kritischsten Sektoren, die ein erhöhtes Risiko darstellen.",
-    "Danger rating - considerable": "Erhebliche Gefahr",
-    "Danger rating - high": "Erheblich",
-    "Danger rating - high to very high": "Gross",
+    "Danger rating - considerable": "Erheblich",
+    "Danger rating - high": "Groß",
+    "Danger rating - high to very high": "Groß bis sehr groß",
     "Danger rating - low": "Gering",
-    "Danger rating - moderate": "Mässig",
-    "Danger rating - very high": "Sehr gross",
-    "Danger:": "Stufe :",
+    "Danger rating - moderate": "Mäßig",
+    "Danger rating - very high": "Sehr groß",
+    "Danger:": "Gefahrenstufe:",
     "Dark": "Dunkel",
     "Dark theme and larger text: Me → App settings.": "Dunkles Design und größere Schrift: Ich → App-Einstellungen.",
-    "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Technische Daten, wie Ausrichtung, Gestein oder Aufbau der Route (Kante, Rinne ...)",
+    "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Technische Daten wie Ausrichtung, Gesteinsart, Routentyp (z. B. Hin- und Rückweg oder Rundtour) und Aufbau der Route (z. B. Grat oder Rinne).",
     "Date": "Datum",
     "Define the mountain range I wish to travel to by public transport": "Definieren Sie das Gebirge, das Sie mit öffentlichen Verkehrsmitteln bereisen möchten.",
     "Delete": {
       "$$noContext": "Löschen",
       "yeti": "Löschen"
     },
-    "Delete a line chunk": "Löschen eines Zeilenstücks",
+    "Delete a line chunk": "Linienabschnitt löschen",
     "Delete a point": "Einen Punkt löschen",
     "Delete folder": "Ordner löschen",
     "Delete image": "Bild löschen",
@@ -342,33 +342,32 @@
     "Describe access": "Zustieg beschreiben",
     "Describe access period": "Öffnungszeit beschreiben",
     "Describe access restrictions": "Zugangsbeschränkungen beschreiben",
-    "Describe here the gear needed for this route": "Für die Route gebrauchte Ausrüstung auflisten. Nur aussergewöhnliche Ausrüstung soll gelistet werden.",
+    "Describe here the gear needed for this route": "Für die Route benötigte Ausrüstung auflisten. Nur außergewöhnliche Ausrüstung sollte aufgeführt werden.",
     "Describe here the waypoint": "Bitte Wegpunkt hier beschreiben",
     "Describe here your issue": "Problem hier beschreiben",
-    "Describe historical information about the route (date, names..) here": "Geben Sie hier die historischen Informationen der Route an: Öffnung (aus unten) oder Ausrüstung (aus oben), erste Anstiege, erste Abfahrt / Surfen, Umrüstung, Erdrutsche usw. Erwähnen Sie das Datum, den Namen der Protagonisten und den Verein oder die Organisation, die die Ausrüstung finanziert haben.",
+    "Describe historical information about the route (date, names..) here": "Geben Sie hier die historischen Informationen der Route an: Eröffnung (von unten) oder Einrichtung (von oben), erste Begehungen, erste Abfahrt / Surfen, Sanierung, Felsstürze usw. Erwähnen Sie das Datum, den Namen der Protagonisten und den Verein oder die Organisation, die die Einrichtung finanziert hat.",
     "Describe opening hours": "Öffnungszeiten beschreiben",
     "Describe opening periods": "Öffnungszeiten beschreiben",
     "Describe pedestrian access": {
       "$$noContext": "Zugang beschreiben",
       "hut": "Zugang beschreiben"
     },
-    "Describe pt access": "Wegpunktzugang beschreiben",
-    "Describe road access": "Strassenzugang  und Komfort (Herberge, Restaurant,usw.) beschreiben.",
+    "Describe pt access": "Zugang mit öffentlichen Verkehrsmitteln beschreiben",
+    "Describe road access": "Straßenzugang und Komfort (Herberge, Restaurant usw.) beschreiben.",
     "Describe the conditions you encountered during your outing": "Beschreiben Sie die Verhältnisse",
-    "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "Beschreiben Sie hier die vor der Tour gesammelten Informationen und deren Nachprüfung im Gelände. Hier sind gemeint : Wetterprognose, Lawinenbulletin, Gefrieren der Schneedecke, Schnee-/Eis-/Felsbeschaffenheit, Tourenberichte der vorangegangenen Tage, usw...",
+    "Describe the information gathered before the outing and how these evolved once on route: weather forecast, avalanche risk reports, amount of refreezing, condition of the snow/ice/rock, reports from the previous days, etc.": "Beschreiben Sie hier die vor der Tour gesammelten Informationen und deren Nachprüfung im Gelände. Gemeint sind: Wetterprognose, Lawinenbulletin, Gefrieren der Schneedecke, Schnee-/Eis-/Felsbeschaffenheit, Tourenberichte der vorangegangenen Tage usw.",
     "Describe the route following the structure below": "Bitte halten Sie sich an die folgende Struktur:\n## Zugang # Dauer in Stunden\nBeschreibung des Zugangs\n\n## Route # Dauer in Stunden\nL# | Bewertung | Länge | Beschreibung (erreichbar über den Button # oben)\n\n## Abstieg # Dauer in Stunden\nBeschreibung des Abstiegs",
     "Description": "Beschreibung",
     "Destination": "Zielort",
-    "Detailed figures, like ratings, height differences, frequentation...": "Genaue Daten (Schwierigkeitsgrat, Steigerung, Begehungsfrequenz ...)",
+    "Detailed figures, like ratings, height differences, frequentation...": "Genaue Daten (Schwierigkeitsgrade, Höhenunterschiede, Begehungsfrequenz …)",
     "Detailed information": "Weitere Informationen",
-    "Details": "Detail",
-    "Details of the actual outing and the incident. If you have already written up your outing, you only need to describe the incident, then link it to your outing report (after first uploading it)": "Beschreiben Sie den Ablauf der Tour und des Ereignisses/Unfalls. Falls Sie schon eine Tour eingetragen haben können Sie das Ereignis separat beschreiben und es später - nach dessen Speichern - mit dem Toureneintrag verbinden.",
+    "Details of the actual outing and the incident. If you have already written up your outing, you only need to describe the incident, then link it to your outing report (after first uploading it)": "Beschreiben Sie den Ablauf der Tour und des Ereignisses/Unfalls. Falls Sie schon einen Tourenbericht eingetragen haben, können Sie das Ereignis separat beschreiben und es später - nach dessen Speichern - mit dem Tourenbericht verbinden.",
     "Details on participants and event context": "Daten über Teilnehmer und Ereigniskontext",
-    "Differences between versions": "Unterschied zwischen Versionen",
-    "Different high/low danger?": "Unterschiedlich hohe/niedrige Gefahr?",
+    "Differences between versions": "Unterschiede zwischen Versionen",
+    "Different high/low danger?": "Unterschiedliche Gefahr oben/unten?",
     "Direction": "Richtung",
     "Directions (Google Maps)": "Anfahrtsbeschreibung (Google Maps)",
-    "Disabled at this zoom level": "bei dieser Zoomstufe inaktiv",
+    "Disabled at this zoom level": "Bei dieser Zoomstufe inaktiv",
     "Disclaimer": "Haftungsausschluss",
     "Discovery": "Entdecken",
     "Dismiss": "Schließen",
@@ -376,7 +375,7 @@
     "Dispositions": "Dispositionen",
     "Distance": "Länge",
     "Distance (km)": "Länge (km)",
-    "Distance from the route access point": "Distanz vom Zufahrtsweg",
+    "Distance from the route access point": "Entfernung vom Zugangspunkt der Route",
     "Do you really want to leave? you have unsaved changes!": "Wollen Sie diese Seite wirklich verlassen? Nicht gespeicherte Änderungen gehen verloren!",
     "Do you want to delete this document?": "Sind Sie sicher, dass Sie dieses Dokument löschen wollen?",
     "Document quality": "Dokumentqualität",
@@ -412,42 +411,42 @@
     "Edit associations": "Verbindungen bearbeiten",
     "Edit categories": "Kategorien bearbeiten",
     "Edit mode": "Bearbeitungsmodus",
-    "Edit titles": "Titeln bearbeiten",
+    "Edit titles": "Titel bearbeiten",
     "Edits to check": "Zu überprüfende Änderungen",
     "Elementary": "Elementar",
     "Elementary Reduction Method": "Elementare Reduktionsmethode",
     "Elevation": "Höhe",
     "Elevation (m)": "Höhe (m)",
     "Elevation profile": "Höhenprofil",
+    "Email": "E-Mail",
     "Email, password, settings": "E-Mail, Passwort, Einstellungen",
     "Enable drawing and editing features on map": "Aktivieren Sie das Zeichnen und Bearbeiten von Features auf der Karte",
     "Ended by confusing suffix": {
       "API message": "Darf kein Suffix wie '.json' enthalten"
     },
-    "Enter a departure address": "Bitte ein Abfahrtsadresse eingeben",
+    "Enter a departure address": "Bitte eine Abfahrtsadresse eingeben",
     "Enter a destination address": "Bitte Zielort eingeben",
-    "Enter a massif name": "Gebirgenname eingeben",
+    "Enter a massif name": "Gebirgsname eingeben",
     "Enter an address": "Adresse eingeben",
     "Error while loading data": "Fehler beim Laden der Daten",
-    "Everything about ratings : difficulties, exposition...": "Alle Bewertungen: Schwierigkeitsgrat, Aussetzung ...",
-    "Expand": "Entfalten",
-    "Expert": "Profi",
+    "Everything about ratings : difficulties, exposition...": "Alle Bewertungen: Schwierigkeitsgrade, Aussetzung …",
+    "Expand": "Ausklappen",
+    "Expert": "Experte",
     "Export": "Exportieren",
     "Export route": "Route exportieren",
     "Export to CSV": "Exportieren als CSV",
     "Extent": "Umfang",
-    "FAQ?": "FAQ ?",
     "FF Vol Libre": "Luftsportverband Frankreich",
-    "Fauna protection areas": "Naturschutzgebiet ",
-    "Fauna protection site:": "Naturschutzgebiet :",
+    "Fauna protection areas": "Wildschutzgebiete",
+    "Fauna protection site:": "Wildschutzgebiet:",
     "Favourites": "Favoriten",
     "Favourites saved on this device": "Auf diesem Gerät gespeicherte Favoriten",
     "Favourites: take a topo offline, with its photos and its map.": "Favoriten: Nehmen Sie ein Topo mit Fotos und Karte offline mit.",
     "Favourites: the topos you saved, and the ones taken offline.": "Favoriten: die Topos, die Sie gespeichert haben, und die offline mitgenommenen.",
     "Feature temporarily unavailable": "Aktion vorübergehend nicht verfügbar",
-    "Feel free to edit it.": "Bitte bearbeiten.",
+    "Feel free to edit it.": "Sie können es gerne bearbeiten.",
     "Files no longer on this device:": "Dateien nicht mehr auf diesem Gerät:",
-    "Filter on map extent": "Mit Karte filtern",
+    "Filter on map extent": "Nach Kartenausschnitt filtern",
     "Filter results": "Ergebnisse filtern",
     "Filter with my activities and areas": "Mit meinen Aktivitäten und Gebieten filtern",
     "Find here the traces of your Strava, Garmin, Suunto... activities.": "Hier finden Sie die GPS-Spuren Ihrer Aktivitäten von Strava, Garmin, Suunto …",
@@ -455,9 +454,9 @@
       "API message": "Das erste Zeichen muss ein alphanumerisches Zeichen des lateinischen Alphabets sein, einschließlich des Unterstrichs"
     },
     "Fit map to route": "Karte an die Route anpassen",
-    "FlowCapt sensor": "FlowCapt-Sensor ",
+    "FlowCapt sensor": "FlowCapt-Sensor",
     "FlowCapt sensors": "FlowCapt-Sensoren",
-    "Fold section": "Abschnitt falten",
+    "Fold section": "Abschnitt einklappen",
     "Folder": "Ordner",
     "Folder name": "Ordnername",
     "Folders sort your topos, one trip per folder for example.": "Mit Ordnern können Sie Ihre Touren organisieren, zum Beispiel eine Reise pro Ordner.",
@@ -475,45 +474,46 @@
     "Forum notifications": "Forum-Benachrichtigungen",
     "Forum username": "Forumname",
     "Forum validation": "Forumfreigabe",
-    "Forum: a place to chat about technical matters, or just petty talk": "Forum: dort kann man sich über technische Fragen unterhalten, oder nur miteinander reden.",
+    "Forum: a place to chat about technical matters, or just petty talk": "Forum: dort kann man sich über technische Fragen unterhalten oder einfach nur plaudern",
     "Found:": "Gefunden:",
     "Free this space": "Diesen Speicherplatz freigeben",
     "From": "Von",
-    "From danger 3, consider the slopes which dominate the route": "Betrachten Sie ab Gefahr 3 die Hängen, die die Route dominieren",
-    "From the interface": "Aus der Schnittstelle",
-    "Full bulletin": "Vollständiges Lawinenlagebricht",
+    "From danger 3, consider the slopes which dominate the route": "Betrachten Sie ab Gefahrenstufe 3 die Hänge, die die Route dominieren",
+    "From the interface": "Über die Oberfläche",
+    "Full bulletin": "Vollständiges Lawinenbulletin",
     "Full view": "Vollansicht",
-    "Fullname": "Topoführername",
+    "Fullname": "Name im Tourenportal",
     "GPS Track": "GPS-Strecke",
     "GPX file": "GPX-Datei",
     "General": "Allgemein",
     "General information": "Allgemeine Information",
-    "Generate elevations": "Die Höhen generieren",
+    "Generate elevations": "Höhen generieren",
     "Generate new elevations": "Neue Höhen generieren",
-    "Geographical data could not be retrieved": "Den GPS Track konnte nicht abgeruft werden",
-    "Geolocation is not supported by your browser.": "Geolokalisierung ist mit Ihrem Browser nicht möglich",
-    "Get ready for your climb": "Bereiten Sie sich für Ihr Klettern vor",
+    "Geographical data could not be retrieved": "Die geografischen Daten konnten nicht abgerufen werden",
+    "Geolocation": "Geolokalisierung",
+    "Geolocation is not supported by your browser.": "Geolokalisierung wird von Ihrem Browser nicht unterstützt.",
+    "Get ready for your climb": "Bereiten Sie Ihre Klettertour vor",
     "Getting around": "Navigation",
     "Give up": "Verwerfen",
     "Give up this outing? It will be lost.": "Diesen Tourenbericht verwerfen? Er geht dabei verloren.",
     "Go back to YETI": "Zurück zu YETI",
     "Go to the previous page": "Zur vorherigen Seite gehen",
-    "Go to website": "zur Website gehen",
+    "Go to website": "Zur Website gehen",
     "Group": "Gruppe",
     "Group size": "Gruppengröße",
-    "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?": "War ein Zeitplan vorhanden ? Wurde er eingehalten ? Hatte das Zeitmanagement einen Einfluss auf die Auslösung des Ereignisses ?",
-    "Has this experience changed your habits? Describe the lessons you have learned from this experience": "Hat diese Erfahrung Ihre Gewohnheiten verändert? Beschreiben Sie die Lehren, die Sie aus dieser Erfahrung gezogen haben.",
-    "Have an account?": "Schon registriert ?",
-    "Have you (re)evaluated the risks at each change in the situation? What factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the leader of the group, etc.": "Haben Sie bei jeder Änderung der Lage die Risiken neu beurteilt ?\nBitte Faktoren berücksichtigen, welche Ihre Aufmerksamkeit beeinflussen konnten : Ermüdung, Stress, Abnahme der Konzentration nach Ende der Schwierigkeiten oder bei der Abfahrt/Abstieg, vertrautes oder als einfach geltendes Gebiet, Anwesenheit von anderen Spuren oder Personen, blindes Vertrauen im Tourenleiter, usw...",
+    "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?": "War ein Zeitplan vorhanden? Wurde er eingehalten? Hatte das Zeitmanagement einen Einfluss auf die Auslösung des Ereignisses?",
+    "Has this experience changed your habits? Describe the lessons you have learned from this experience": "Hat diese Erfahrung Ihre Gewohnheiten verändert? Beschreiben Sie die Lehren, die Sie aus dieser Erfahrung gezogen haben",
+    "Have an account?": "Schon registriert?",
+    "Have you (re)evaluated the risks at each change in the situation? What factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the leader of the group, etc.": "Haben Sie bei jeder Änderung der Lage die Risiken neu beurteilt?\nBitte Faktoren berücksichtigen, welche Ihre Aufmerksamkeit beeinflussen konnten: Ermüdung, Stress, Abnahme der Konzentration nach Ende der Schwierigkeiten oder bei der Abfahrt/Abstieg, vertrautes oder als einfach geltendes Gebiet, Anwesenheit von anderen Spuren oder Personen, blindes Vertrauen in den Tourenleiter usw.",
     "Hazard potential": "Gefährdungspotential",
-    "Heading": "Titel",
+    "Heading": "Überschrift",
     "Help": "Hilfe",
     "Help and settings in the Me tab.": "Hilfe und Einstellungen finden Sie im Tab „Ich“.",
     "Help and support": "Hilfe und Support",
-    "Help research activities to define new prevention means": "Helfen Sie Forschungsaktivitäten, neue Präventionsmittel zu definieren.",
+    "Help research activities to define new prevention means": "Helfen Sie der Forschung, neue Präventionsmaßnahmen zu entwickeln",
     "Help us better target routes that may interest you by adding one or more filters.": "Helfen Sie uns, Ihnen passendere Routen anzuzeigen, indem Sie einen oder mehrere Filter hinzufügen.",
     "Here is the last journey of the day :": "Hier ist die letzte Verbindung des Tages:",
-    "Here is the list of users you are following and whose activity you will see in your personal feed.": "Hier ist die Liste der Benutzern, denen Sie folgen. Aktivitäten dieser Benutzern werden in Ihrem persönlichen Feed angezeigt.",
+    "Here is the list of users you are following and whose activity you will see in your personal feed.": "Hier ist die Liste der Benutzer, denen Sie folgen. Aktivitäten dieser Benutzer werden in Ihrem persönlichen Feed angezeigt.",
     "Hide details": "Details ausblenden",
     "Hide lines details": "Liniendetails ausblenden",
     "Hide results": "Ergebnisse ausblenden",
@@ -524,18 +524,18 @@
       "$$noContext": "Historie",
       "yeti": "Historie"
     },
-    "History is missing, please provide it if you have information.": "Routengeschichte fehlt. Bitte tragen Sie bei, fals Sie etwas wissen.",
+    "History is missing, please provide it if you have information.": "Die Routengeschichte fehlt. Bitte ergänzen Sie sie, falls Sie Informationen haben.",
     "Home": "Startseite",
-    "Home page feed parameters": "Parameter des Feed der Hauptseite",
-    "How is my testimony used ? How / why is it useful ?": "Was ist der Sinn meines Zeugnisses ?",
+    "Home page feed parameters": "Parameter des Feeds der Startseite",
+    "How is my testimony used ? How / why is it useful ?": "Wie wird mein Bericht verwendet? Wie / warum ist er nützlich?",
     "How to install it?": "Wie installiere ich die App?",
-    "I choose to cancel the outing": "Ich verzichte auf den Tour",
+    "I choose to cancel the outing": "Ich verzichte auf die Tour",
     "I contribute": "Ich mache mit",
     "I have read and agree to the": "Ich habe gelesen und akzeptiere die",
-    "I must not use slopes > 30°": "Ich verwende keine Neigungen über 30°.",
-    "I must not use slopes > 35°": "Ich verwende keine Neigungen über 35°.",
-    "I must not use slopes > 40°": "Ich verwende keine Neigungen über 40°.",
-    "I read and understood the interest and limitations of YETI": "Ich habe die Interessen und Einschränkungen von YETI gelesen und verstanden",
+    "I must not use slopes > 30°": "Ich darf keine Hänge über 30° begehen",
+    "I must not use slopes > 35°": "Ich darf keine Hänge über 35° begehen",
+    "I must not use slopes > 40°": "Ich darf keine Hänge über 40° begehen",
+    "I read and understood the interest and limitations of YETI": "Ich habe den Nutzen und die Grenzen von YETI gelesen und verstanden",
     "ICGC ortho (ca)": {
       "Map layer": "ICGC Sat"
     },
@@ -559,7 +559,7 @@
     },
     "Ice and dry climbing gear": "Eisklettern und Dry-Tooling",
     "If the route does not exists in our base, you can create it.": "Wenn die Route nicht in unserer Datenbank vorhanden ist, können Sie sie erstellen.",
-    "If you can't see this email, please check your spam folder.": "Wenn Sie diese Email nicht sehen können, überprüfen Sie bitte Ihren Spam-Ordner.",
+    "If you can't see this email, please check your spam folder.": "Wenn Sie diese E-Mail nicht sehen können, überprüfen Sie bitte Ihren Spam-Ordner.",
     "If you change your email, a message will be sent to the new address provided. You have to follow the link within to confirm the email address change.": "Wenn Sie Ihre E-Mail-Adresse ändern, wird eine Nachricht an die angegebene neue Adresse gesendet. Sie müssen dem darin enthaltenen Link folgen, um die Änderung der E-Mail-Adresse zu bestätigen.",
     "If you know of a line serving this access point, you can indicate it in this": "Falls Sie eine Linie kennen, die diesen Zugangspunkt bedient, melden Sie sie bitte über dieses",
     "If you see any improvements or missing lines, you can provide feedback via the links provided in": "Falls Ihnen Verbesserungsmöglichkeiten oder fehlende Linien auffallen, können Sie uns Feedback geben über die Links in",
@@ -583,7 +583,7 @@
     "Incomplete": "Unvollständig",
     "Information about the terrain, like elevations, lengths...": "Informationen über das Gelände, wie Höhen, Längen ...",
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Informationen zum Ort des Vorfalls. Markieren Sie den Ort auf der Karte oben, auch wenn Sie dies nicht sehr genau können. In diesem Fall geben Sie hier weitere Details an. Nachdem Sie den Bericht ausgefüllt haben, können Sie ihn einer Route, einem Klettergebiet oder einem Tourenbericht zuordnen.",
-    "Informations about the access": "Informationen über Strassenzugang und Öffis",
+    "Informations about the access": "Informationen über Straßenzugang und Öffis",
     "Insert emoji": "Emoji hinzufügen",
     "Insert image": "Bild hinzufügen",
     "Insert link": "Link hinzufügen",
@@ -593,69 +593,69 @@
     "Interpolate value should be a number > 0": "Der Interpolationswert muss > 0 sein",
     "Invalid date": "Ungültiges Datum",
     "Invalid email address": {
-      "API message": "Ungültige Email-Adresse"
+      "API message": "Ungültige E-Mail-Adresse"
     },
     "Invalid parameters were sent to public transport data service.": "Ungültige Parameter wurden an den Datendienst für öffentliche Verkehrsmittel übermittelt.",
     "Invalid value": "Ungültiger Wert",
     "Issue report": "Problembericht",
     "It comes back with its history, associations and comments, as it was when deleted. The links to documents deleted since are not restored.": "Das Dokument wird mit seiner Versionsgeschichte, seinen Verknüpfungen und Kommentaren wiederhergestellt, so wie es zum Zeitpunkt der Löschung war. Verknüpfungen zu Dokumenten, die inzwischen gelöscht wurden, werden nicht wiederhergestellt.",
     "It has already been used, has expired, or was replaced by a more recent request: only the link of the last email sent works.": "Der Link wurde bereits verwendet, ist abgelaufen oder durch eine neuere Anfrage ersetzt worden. Nur der Link in der zuletzt gesendeten E-Mail ist gültig.",
-    "It seems your trip can not be completed on the selected date and time": "Anscheinend kann Ihre Route nicht zu dem gewünschten Datum und zur gewünschter Zeit ausgeführt werden",
+    "It seems your trip can not be completed on the selected date and time": "Anscheinend kann Ihre Reise nicht zum gewählten Datum und zur gewählten Uhrzeit durchgeführt werden",
     "Join us": "Machen Sie mit",
     "Keep as favourite, remove the offline copy": "Als Favorit behalten, Offline-Kopie löschen",
     "Keep on this device": "Auf diesem Gerät behalten",
     "Keep the menu open": "Menü geöffnet lassen",
     "Kept on this device, they stay visible to anyone logged out.": "Auf diesem Gerät behalten, bleiben sie für alle sichtbar, die nicht angemeldet sind.",
-    "Know more about SERAC": "Lernen Sie mehr über SERAC.",
+    "Know more about SERAC": "Mehr über SERAC erfahren",
     "Languages": "Sprachen",
     "Large": "Groß",
     "Large group = 5 people and more": "Große Gruppe = 5 Personen und mehr",
-    "Large group with load shedding distance": "Große Gruppe mit Lastabwurfweite",
+    "Large group with load shedding distance": "Große Gruppe mit Entlastungsabständen",
     "Last activities": "Letzte Aktivitäten",
     "Last character is invalid": {
-      "API message": "Das letzte Zeichen muss ein Buchstabe oder eine Zahl sein."
+      "API message": "Das letzte Zeichen muss ein Buchstabe oder eine Zahl sein"
     },
     "Last error:": "Letzter Fehler:",
     "Last outings": "Letzte Tourenberichte",
     "Latitude": "Breitengrad",
     "Launch YETI": "YETI starten",
     "Layers": {
-      "$$noContext": "Schichte",
+      "$$noContext": "Ebenen",
       "Map controls": "Dargestellte Karten"
     },
     "Learn more": "Mehr dazu",
-    "Leave after": "Später abreisen",
+    "Leave after": "Abfahrt nach",
     "Leave earlier": "Früher abreisen",
     "Leave empty to keep your current password.": "Das Feld leer lassen, um das aktuelle Passwort zu behalten.",
     "Leave fullscreen": "Vollbild verlassen",
     "Leave later": "Später abreisen",
     "Legend": "Legende",
     "Let's go": "Los geht's!",
-    "Let's make our feedbacks valuable": "Machen wir unsere Feedback wertvoll",
+    "Let's make our feedbacks valuable": "Machen wir unser Feedback wertvoll",
     "Let's preserve our playground! I create an account on Outdoorvision to share my GPS tracks for the preservation and design of my practice sites in France.": "Bewahren wir unseren Spielplatz! Ich erstelle ein Konto auf Outdoorvision, um meine GPS-Tracks für die Erhaltung und Gestaltung meiner Übungsplätze in Frankreich zu teilen.",
-    "Library:": "Bibliothek :",
+    "Library:": "Bibliothek:",
     "Licenses": "Lizenzen",
     "Light": "Hell",
-    "Limit the number of connections": "Anzahl der Verbindungen einschränken ",
+    "Limit the number of connections": "Anzahl der Verbindungen einschränken",
     "Line": "Linie",
-    "Lines chunks": "Linien-Stücke",
+    "Lines chunks": "Linienabschnitte",
     "Link an account": "Ein Konto verknüpfen",
     "Link copied": "Link kopiert",
     "Link the route": "Die Route verknüpfen",
     "Linked documents": "Verknüpfte Dokumente",
     "Links not restored, their other document was deleted since:": "Nicht wiederhergestellte Verknüpfungen, da das andere Dokument inzwischen gelöscht wurde:",
-    "List mode": "Listemodus",
-    "List of versions for language:": "Versionenliste für diese Sprache:",
-    "Load my preferences": "Meine Einstellungen aktivieren",
-    "Load shedding distance": "Lastabwurfweite",
-    "Loading access points...": "Upload der Zugangspunkte …",
-    "Loading...": "Laden... ",
+    "List mode": "Listenmodus",
+    "List of versions for language:": "Versionsliste für die Sprache:",
+    "Load my preferences": "Meine Einstellungen laden",
+    "Load shedding distance": "Entlastungsabstand",
+    "Loading access points...": "Zugangspunkte werden geladen…",
+    "Loading...": "Laden...",
     "Local file": "Lokale Datei",
     "Location / elevation / orientation": "Standort / Höhe / Ausrichtung",
     "Location refused. Allow it in the settings of the browser, then try again.": "Standort abgelehnt. Bitte erlauben Sie den Zugriff in den Browsereinstellungen und versuchen Sie es anschließend erneut.",
     "Log in": "Anmelden",
     "Log in to find your outings and contributions.": "Melden Sie sich an, um Ihre Tourenberichte und Beiträge zu finden.",
-    "Log in to post a comment": "Einloggen, um Kommentar zu hinzufügen",
+    "Log in to post a comment": "Einloggen, um einen Kommentar zu schreiben",
     "Login": "Einloggen",
     "Login failed": {
       "API message": "Einloggen fehlgeschlagen"
@@ -667,34 +667,34 @@
     "Longitude": "Längengrad",
     "Low danger level from the avalanche bulletin": "Geringe Gefahrenstufe aus dem Lawinenbulletin",
     "Mail has been sent": "E-Mail gesendet",
-    "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Hauptdaten über die Route, wie Titel, Aktivitäten, Geolocation, Umgebung.",
+    "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Hauptdaten der Route wie Titel, Aktivität, GPS und Wegpunkt (welcher Berg, welcher Ort).",
     "Main informations about your outing": "Hauptdaten über Ihren Tourenbericht",
     "Main navigation": "Hauptnavigation",
     "Make profile page public": "Profil öffentlich verfügbar machen",
-    "Make sure your starting point is close enough to a train station": "Vergewissern Sie sich, dass sich der Startpunkt nah genug vom Bahnhof befindet.",
+    "Make sure your starting point is close enough to a train station": "Vergewissern Sie sich, dass Ihr Startpunkt nah genug an einem Bahnhof liegt",
     "Map filter off": "Kartenfilter aus",
     "Map filter on": "Kartenfilter ein",
     "Map of routes accessible by bike-train": "Karte der mit Fahrrad und Zug erreichbaren Routen",
     "Map shown alone": "Nur Karte angezeigt",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Karte, Topos, Kenntnis der Route, Antizipation eines Plans B, Neubewertung der ausgeführten Route?",
     "Masked": "Maskiert",
-    "Massifs could not be loaded": "Die Gebirgemassiven konnten nicht geladen werden",
+    "Massifs could not be loaded": "Die Gebirgsmassive konnten nicht geladen werden",
     "Me": "Ich",
     "Me → App settings: light or dark theme, text size, and the introduction to see again. These settings stay on this device.": "Ich → App-Einstellungen: helles oder dunkles Design, Textgröße und Einführung erneut anzeigen. Diese Einstellungen bleiben auf diesem Gerät.",
     "Me: your account, your outings, the settings of the app and the help.": "Ich: Ihr Konto, Ihre Tourenberichte, die App-Einstellungen und die Hilfe.",
     "Menu": "Menü",
     "Merge documents": "Dokumente vereinigen",
     "Merge with another account": "Mit einem anderen Konto zusammenführen",
-    "Merge with other document": "Mit anderen Dokumenten vereinigen",
+    "Merge with other document": "Mit einem anderen Dokument zusammenführen",
     "Merged documents, restored with it": "Zusammengeführte Dokumente, mit diesem wiederhergestellt",
     "Merged into": "Zusammengeführt in",
-    "Merged regions": "zusammengefasste Regionen",
+    "Merged regions": "Zusammengefasste Regionen",
     "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "Durch das Zusammenführen eines Quelldokuments mit einem Zieldokument werden alle Zuordnungen des Quelldokuments zum Zieldokument übertragen und eine Umleitung vom Quelldokument zum Zieldokument eingerichtet.",
     "Metaskirando: an aggregator of ski outings in Europe": "Metaskirando: eine Suchmaschine für Skitouren in Europa",
     "Meteo": "Wetter",
     "Meter(s)": "Meter",
     "Methods": "Methoden",
-    "Misc data about the waypoint": "Andere Daten über Wegpunkt",
+    "Misc data about the waypoint": "Weitere Daten zum Wegpunkt",
     "Miscs": "Sonstiges",
     "Missing altitude": "Fehlende Höhe",
     "Missing captcha": {
@@ -707,21 +707,21 @@
       "API message": "Moderatorenrolle erforderlich"
     },
     "Modified the": {
-      "modification date": "bearbeitet am"
+      "modification date": "Bearbeitet am"
     },
     "More": "Mehr",
     "More info": "Mehr Info",
     "More info on meteoblue.com": "Mehr auf meteoblue.com",
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Es sind mehr Routen verfügbar. Sie können die Karte verschieben, den Namen angeben oder eine Aktivität festlegen, um sie herauszufiltern.",
-    "More: topoguide, articles, SERAC, Yeti, Itinévert, forum.": "Mehr: Topoguide, Artikel, SERAC, Yeti, Itinévert, Forum.",
-    "Multi-criteria search": "Multikriterium Suche",
+    "More: topoguide, articles, SERAC, Yeti, Itinévert, forum.": "Mehr: Tourenportal, Artikel, SERAC, Yeti, Itinévert, Forum.",
+    "Multi-criteria search": "Multikriterien-Suche",
     "My account": "Mein Konto",
     "My activities and areas": "Meine Aktivitäten und Gebiete",
     "My bookmarks": "Meine Favoriten",
     "My changes": "Meine Beiträge",
     "My contributions": "Meine Beiträge",
     "My edits": "Meine Bearbeitungen",
-    "My followed users": "Meine Freunden",
+    "My followed users": "Meine gefolgten Benutzer",
     "My outing": "Mein Tourenbericht",
     "My outings": "Meine Tourenberichte",
     "My preferences": "Meine Einstellungen",
@@ -731,18 +731,18 @@
     "Name of the pack?": "Name des Packs?",
     "Narration": "Textbeschreibung",
     "Near me": "In meiner Nähe",
-    "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.": "Heikle Situation, die nicht zu körperlichen Verletzungen führet, aber zu einem viel ernsteren Ereignis hätte führen können.",
+    "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.": "Beinaheunfälle = heikle Situation, die nicht zu körperlichen Verletzungen führt, aber zu einem viel ernsteren Ereignis hätte führen können.",
     "Near-accidents are valuable": "Beinaheunfälle sind wertvoll",
     "Necessary cookies": "Benötigte Cookies",
     "Necessary cookies are essential for the proper functioning of our website and cannot be disabled. They are sent to your computer or device when you ask for a specific action or service, e.g. when you log in, fill out a form or define your cookie preferences. If you configure your computer to block these cookies or to warn you of their existence, our website will not function fully.": "Die benötigten Cookies sind für das ordnungsgemäße Funktionieren unserer Website unerlässlich und können nicht deaktiviert werden. Sie werden an Ihren Computer oder Ihr Gerät gesendet, wenn Sie eine bestimmte Aktion oder einen bestimmten Dienst anfordern, z. B. wenn Sie sich anmelden, ein Formular ausfüllen oder Ihre Cookie-Einstellungen festlegen. Wenn Sie Ihren Browser so einstellen, dass er diese Cookies blockiert oder Sie vor ihnen warnt, wird unsere Website nicht vollständig funktionieren.",
     "Need a network": "Internetverbindung erforderlich",
     "Network error.": "Netzwerkfehler.",
     "New folder": "Neuer Ordner",
-    "New outing": "Neue Tourenberichte",
+    "New outing": "Neuer Tourenbericht",
     "New password": "Neues Passwort",
     "New request": "Neue Anfrage",
     "New route": "Neue Route",
-    "New waypoint": "Neues Wegpunkt",
+    "New waypoint": "Neuer Wegpunkt",
     "Next": "Weiter",
     "Next day": "Nächster Tag",
     "Next page": "Nächste Seite",
@@ -753,10 +753,10 @@
     "No account yet?": "Noch kein Konto?",
     "No activity found": "Keine Aktivität gefunden",
     "No activity received from your account yet: it will show here once your watch is synchronized.": "Noch keine Aktivität von Ihrem Konto empfangen: Sie wird hier angezeigt, sobald Ihre Uhr synchronisiert ist.",
-    "No activity retrieved yet. Have you connected your trackers?": "Noch keine Aktivitäten abgeruft. Haben Sie Ihre Tracker verbunden ?",
+    "No activity retrieved yet. Have you connected your trackers?": "Noch keine Aktivitäten abgerufen. Haben Sie Ihre Tracker verbunden?",
     "No answer from Camptocamp: the outing may be published already. It is saved on the phone: check on the site, then decide from Favourites.": "Keine Antwort von Camptocamp: Die Tour wurde möglicherweise bereits veröffentlicht. Sie ist auf dem Smartphone gespeichert. Überprüfen Sie den Status auf der Website und entscheiden Sie anschließend unter „Favoriten“, wie Sie weiter vorgehen möchten.",
     "No avalanche bulletin right now": "Zurzeit kein Lawinenlagebericht",
-    "No data could be extracted from GPS file": "Es konnten keine Daten aus der GPS-Datei extrahiert werden.",
+    "No data could be extracted from GPS file": "Es konnten keine Daten aus der GPS-Datei extrahiert werden",
     "No deleted document matches these filters.": "Kein gelöschtes Dokument entspricht diesen Filtern.",
     "No deleted document to restore.": "Kein gelöschtes Dokument zum Wiederherstellen.",
     "No favourite yet": "Noch keine Favoriten",
@@ -765,12 +765,12 @@
     "No network: your outings stay waiting. Publish them once connected.": "Keine Netzwerkverbindung: Ihre Tourenberichte bleiben in der Warteschlange. Veröffentlichen Sie sie, sobald Sie wieder verbunden sind.",
     "No orientation selected": "Keine Ausrichtungen gewählt",
     "No orphan image.": "Keine verwaisten Bilder.",
-    "No public transport found": "Keine öffentliche Verkehrsmittel gefunden",
+    "No public transport found": "Keine öffentlichen Verkehrsmittel gefunden",
     "No reduction factor": "Kein Reduktionsfaktor",
     "No request to handle.": "Keine Anfrage zu bearbeiten.",
     "No request.": "Keine Anfrage.",
     "No result found": "Keine Ergebnisse",
-    "No risk to show yet": "Noch keine Gefahr aufzuweisen",
+    "No risk to show yet": "Noch kein Risiko anzuzeigen",
     "No route available offline": "Keine Route offline verfügbar",
     "No route right now": "Momentan keine Route",
     "No route saved offline: link it once the network is back.": "Keine Route offline gespeichert: Verknüpfen Sie sie, sobald die Netzwerkverbindung wieder besteht.",
@@ -779,9 +779,9 @@
     "No title": "Ohne Titel",
     "No topo saved offline": "Kein Topo offline gespeichert",
     "No user with this email": {
-      "API message": "kein Konto mit diesem email"
+      "API message": "Kein Konto mit dieser E-Mail-Adresse"
     },
-    "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Keine Bearbeitungen — Wenn Sie das Material remixen, verändern oder darauf anderweitig direkt aufbauen dürfen Sie die bearbeitete Fassung der Materials nicht verbreiten.",
+    "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Keine Bearbeitungen — Wenn Sie das Material remixen, verändern oder darauf anderweitig direkt aufbauen, dürfen Sie die bearbeitete Fassung des Materials nicht verbreiten.",
     "Non sensitive period": "Nicht sensibler Zeitraum",
     "NonCommercial — You may not use the material for commercial purposes.": "Nicht kommerziell — Sie dürfen das Material nicht für kommerzielle Zwecke nutzen.",
     "None": "Nichts",
@@ -794,8 +794,8 @@
     "Not logged in": "Nicht angemeldet",
     "Not removed before": "Nicht entfernt vor",
     "Not simplified yet": "Noch nicht vereinfacht",
-    "Note that comments have to be transferred manually in Discourse before merging.": "Beachten Sie, dass Kommentare vor der Vereinigung in Discourse manuell übergeben werden müssen.",
-    "Note that the topoguide username will be the one mentioned in the attribution of the content you contributed to.": "Der Topoführername ist der, der in den Zuordnungen der Inhalte, zu denen Sie beitragen, genannt wird.",
+    "Note that comments have to be transferred manually in Discourse before merging.": "Beachten Sie, dass Kommentare vor dem Zusammenführen in Discourse manuell übertragen werden müssen.",
+    "Note that the topoguide username will be the one mentioned in the attribution of the content you contributed to.": "Beachten Sie, dass Ihr Benutzername im Tourenportal in der Namensnennung der Inhalte erscheint, zu denen Sie beigetragen haben.",
     "Note which route this outing is: you will link it later from Favourites.": "Notieren Sie, zu welcher Route diese Tour gehört. Sie können sie später unter Favoriten damit verknüpfen.",
     "Number of documents": "Anzahl von Dokumenten",
     "Numbers": "Daten",
@@ -814,20 +814,20 @@
     "On your phone, open this site in the browser, then add it to the home screen from the Share menu (iPhone) or the ⋮ menu (Android).": "Öffnen Sie diese Website auf Ihrem Telefon im Browser und fügen Sie sie über das Teilen-Menü (iPhone) oder das ⋮-Menü (Android) zum Home-Bildschirm hinzu.",
     "Once validated by a moderator of the topoguide and by a moderator of the forum, the account is merged into the target account, in the topoguide and in the forum: this cannot be undone.": "Sobald ein Moderator des Tourenportals und ein Forumsmoderator den Vorgang bestätigt haben, wird das Benutzerkonto sowohl im Tourenportal als auch im Forum mit dem Zielkonto zusammengeführt. Dieser Vorgang kann nicht rückgängig gemacht werden.",
     "One or more line chunks will generate more than 3000 points. Adjust distance to generate less points.": "Ein bzw. mehrere Linienabschnitte werden mehr als 3000 Punkte generieren. Bitte die Distanz anpassen, um weniger Punkte zu generieren.",
-    "One or more route could not be processed:": "Ein bzw. mehrere Linienabschnitte konnten nicht verarbeitet werden :",
+    "One or more route could not be processed:": "Ein bzw. mehrere Linienabschnitte konnten nicht verarbeitet werden:",
     "Only document less than 24h old can be deleted": {
       "API message": "Es können nur aktuelle Dokumente (24h) gelöscht werden. Wenden Sie sich an die Moderation, um dieses Dokument zu löschen."
     },
-    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Nur Aktionen in den ausgewählten Gebieten und mit den ausgewählten Aktivitäten werden im Feed auf der Startseite gezeigt. Die Aktionen der gefolgten Benutzern sind auch sichtbar.",
+    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Nur Aktionen in den ausgewählten Gebieten und mit den ausgewählten Aktivitäten werden im Feed auf der Startseite gezeigt. Die Aktionen der gefolgten Benutzer werden immer angezeigt.",
     "Only the most recent ones are listed": "Nur die neuesten werden angezeigt",
     "Opacity": "Deckkraft",
     "Open a route, a waypoint or an outing, and tap the bookmark at the top.": "Öffnen Sie eine Route, einen Wegpunkt oder einen Tourenbericht und tippen Sie oben auf das Lesezeichen.",
-    "Open fields to deeply explain the event circumstances.": "Freies Feld, um bestens die Ereignisumstände zu beschreiben",
+    "Open fields to deeply explain the event circumstances.": "Freies Feld, um die Ereignisumstände genau zu beschreiben.",
     "Open fields to detail the picture's context": "Freies Feld, um den Kontext des Bilds zu beschreiben",
     "Open in a new tab": "In neuer Registerkarte öffnen",
     "Opens an email with the context filled in": "Öffnet eine E-Mail mit ausgefülltem Kontext",
     "Operator": "Betreiber",
-    "Ordered list": "geordnete Liste",
+    "Ordered list": "Nummerierte Liste",
     "Ordnance Survey (uk)": {
       "Map layer": "Ordnance Survey (UK)"
     },
@@ -836,8 +836,8 @@
     "Other options": "Andere Optionen",
     "Other tools can complement Itinévert:": "Andere Tools können Itinévert ergänzen:",
     "Others here:": "Andere hier:",
-    "Oups! Something went wrong with forum. Here is the message :": "Upsi ! Etwas is mit den Forum schief gegangen. Hier ist die Nachricht :",
-    "Oups! something went wrong...": "Upsi ! Etwas ist schief gegangen ...",
+    "Oups! Something went wrong with forum. Here is the message :": "Upsi! Etwas ist mit dem Forum schiefgegangen. Hier ist die Meldung:",
+    "Oups! something went wrong...": "Upsi! Etwas ist schiefgegangen...",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to tailor the advertising you see. You can accept or reject all, or": "Unsere Website verwendet Cookies, die von uns und von Drittparteien bereitgestellt werden. Einige Cookies sind für den Betrieb der Website erforderlich, während andere von Ihnen zu jeder Zeit eingestellt werden können, insbesondere solche, die es uns ermöglichen, die Leistung unserer Website zu verstehen und die Ihnen angezeigte Werbung anzupassen. Sie können alle annehmen oder ablehnen oder",
     "Outbound trip": "Hinreise",
     "Outing saved on the phone, not published. Publish it from Favourites.": "Tourenbericht auf dem Telefon gespeichert, aber nicht veröffentlicht. Veröffentlichen Sie ihn unter Favoriten.",
@@ -847,18 +847,18 @@
     "Outings": "Tourenberichte",
     "Outings are ready to be published: open Favourites to send them.": "Tourenberichte können veröffentlicht werden. Öffnen Sie Ihre Favoriten, um sie zu übertragen.",
     "Outings published:": "Veröffentlichte Tourenberichte:",
-    "Outings statistics": "Berichtenstatistiken",
+    "Outings statistics": "Statistik der Tourenberichte",
     "Outings using sustainable transportation on Camptocamp": "Tourenberichte mit nachhaltigen Verkehrsmitteln auf Camptocamp",
     "Outings waiting for you to publish them:": "Tourenberichte, die auf Ihre Veröffentlichung warten:",
     "Outings without a network": "Tourenberichte ohne Netzwerkverbindung",
-    "Outings, with the latest conditions in the mountains": "Skitouren mit den aktuellsten Bedingungen in den Bergen",
+    "Outings, with the latest conditions in the mountains": "Tourenberichte mit den aktuellsten Verhältnissen in den Bergen",
     "Overlays": "Kartenebenen",
     "Pack saved offline, in Favourites: the route and its waypoints:": "Pack offline in den Favoriten gespeichert: Route und Wegpunkte:",
     "Page not found": "Seite nicht gefunden",
     "Pagination": "Seitennummerierung",
     "Paragliding outings": "Gleitschirmberichte",
-    "Parameters of the Digital Camera": "Details des Kamera",
-    "Parent": "Eltern",
+    "Parameters of the Digital Camera": "Parameter der Digitalkamera",
+    "Parent": "Übergeordnet",
     "Participants and context": "Teilnehmer und Kontext",
     "Password": "Passwort",
     "Password must be at least 10 characters long and contain a lowercase letter, an uppercase letter, a digit and a special character": {
@@ -873,15 +873,15 @@
     "Paysage - prix du jury et du public": {
       "Sophie picture context": "Landschaft - Publikums- und Jurypreis"
     },
-    "People who were with you, and your feelings about this outing": "Leute, die mit Sie waren, und ihr Eindruck über dieses Tour",
+    "People who were with you, and your feelings about this outing": "Personen, die mit Ihnen unterwegs waren, und Ihr Eindruck von dieser Tour",
     "Period of protection": "Schutzdauer",
     "Personal data are confidential": "Persönliche Daten sind vertraulich",
-    "Personal feed off": "Persönliche Filter aus",
-    "Personal feed on": "Persönliche Filter ein",
+    "Personal feed off": "Persönlicher Feed aus",
+    "Personal feed on": "Persönlicher Feed ein",
     "Personal images of its author also deleted:": "Ebenfalls gelöschte persönliche Bilder des Autors:",
     "Personal informations": "Persönliche Daten",
     "Pin the map to a side of the screen": "Die Karte an eine Seite des Bildschirms anheften",
-    "Pitch description tag": "Seillängebeschreibungstag",
+    "Pitch description tag": "Tag für Seillängenbeschreibung",
     "Plan a public transport trip": "Eine Reise mit öffentlichen Verkehrsmitteln planen",
     "Plan my trip →": "Meine Reise planen →",
     "Please describe the problem above. Technical context:": "Bitte beschreiben Sie das Problem oben. Technischer Kontext:",
@@ -891,13 +891,13 @@
     "Please select a destination.": "Bitte ein Ziel auswählen.",
     "Please select a method before computing.": "Bitte wählen Sie vor dem Berechnen eine Methode aus.",
     "Please select a waypoint type to enable sort feature": "Bitte wählen Sie einen Wegpunkttyp aus, um die Sortierfunktion zu aktivieren",
-    "Please select an activity to enable sort feature": "Bitte wählen Sie eine Aktivität aus, um die Sortierfunktion zu aktivieren.",
+    "Please select an activity to enable sort feature": "Bitte wählen Sie eine Aktivität aus, um die Sortierfunktion zu aktivieren",
     "Please set danger level as specified on avalanche bulletin for the specific area.": "Stellen Sie die Gefahrenstufe ein, wie sie im Lawinenbulletin für das jeweilige Gebiet angegeben ist.",
-    "Please wait. Requesting authorization...": "Bitte warten, Berechtigung wird angefordert ...",
+    "Please wait. Requesting authorization...": "Bitte warten, Berechtigung wird angefordert...",
     "Position unavailable (weak GPS signal?). Try again outside, or in a few seconds.": "Position nicht verfügbar (schwaches GPS-Signal?). Versuchen Sie es draußen oder in einigen Sekunden erneut.",
     "Post the first comment": "Ersten Kommentar schreiben",
-    "Precise localisation of the shooting": "Geolocation des Schießens",
-    "Precise location of the event.": "Genaues Ort des Ereignis",
+    "Precise localisation of the shooting": "Genauer Aufnahmeort",
+    "Precise location of the event.": "Genauer Ort des Ereignisses.",
     "Preference": "Präferenz",
     "Preferences": "Einstellungen",
     "Press enter to select": "Drücken Sie die Eingabetaste, um auszuwählen",
@@ -906,7 +906,7 @@
     "Previous page": "Vorherige Seite",
     "Print": "Ausdrucken",
     "Print a selection of documents": "Auswahl von Dokumenten ausdrucken",
-    "Printed on": "gedruckt am",
+    "Printed on": "Gedruckt am",
     "Printing": "Ausdruck",
     "Processed from:": "Bearbeitung ab:",
     "Professional Reduction Method": "Profi-Reduktionsmethode",
@@ -924,7 +924,7 @@
     "Publish now": "Jetzt veröffentlichen",
     "Publishing failed. Your outings stay waiting: try again from Favourites.": "Veröffentlichung fehlgeschlagen. Ihre Touren bleiben in der Warteschlange: Versuchen Sie es erneut unter Favoriten.",
     "Publishing…": "Wird veröffentlicht …",
-    "Put it back": "Rücksetzen",
+    "Put it back": "Wiederherstellen",
     "Quality computed again after adding images": "Qualität nach dem Hinzufügen von Bildern neu berechnet",
     "Quote": "Zitat",
     "ROMMA station": "ROMMA-Station",
@@ -937,7 +937,7 @@
     "Recenter on your current position": "Auf aktuellen Standort zentrieren",
     "Recenter on...": "Zentrieren auf...",
     "Refresh": "Aktualisieren",
-    "Register": "Anmelden",
+    "Register": "Registrieren",
     "Regulatory zone": "Regulierte Zone",
     "Remember me": "Angemeldet bleiben",
     "Remove": "Entfernen",
@@ -968,8 +968,8 @@
     "Reset geometry": "Geometrie zurücksetzen",
     "Reset password": "Passwort zurücksetzen",
     "Residual risk >1": "Verbleibendes Risiko >1",
-    "Residual risk >1.3": "Verbleibendes Risiko >1.3",
-    "Residual risk >1.5": "Verbleibendes Risiko >1.5",
+    "Residual risk >1.3": "Verbleibendes Risiko >1,3",
+    "Residual risk >1.5": "Verbleibendes Risiko >1,5",
     "Resize the map": "Kartengröße anpassen",
     "Restore": "Wiederherstellen",
     "Restore this document": "Dieses Dokument wiederherstellen",
@@ -980,7 +980,7 @@
     "Return trip": "Rückreise",
     "Revoke": "Widerrufen",
     "Risk": "Risiko",
-    "Risky slopes": "Gefährliche Hängen",
+    "Risky slopes": "Gefährliche Hänge",
     "Risky slopes, increased risk due to orientation": "Gefährliche Hänge, kritische Ausrichtungen",
     "Rotate image left": "Nach links drehen",
     "Rotate image right": "Nach rechts drehen",
@@ -993,8 +993,8 @@
     "Routes": "Routen",
     "Routes to explore": "Routen zum Erkunden",
     "Routes, waypoints, images, articles I created or edited": "Von mir erstellte oder bearbeitete Routen, Wegpunkte, Bilder und Artikel",
-    "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC ist eine weltweite Unfallberichtendatenbank, die strebt nach einer verbesserten Sicherheit in Klettern und Bergsporten.",
-    "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC baut auf einer freundlichen Einstellung auf. Wir danken Ihnen, es zu verbessern.",
+    "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC ist eine weltweite Datenbank für Unfälle und Vorfälle, die die Sicherheit beim Klettern und im Bergsport verbessern soll.",
+    "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC beruht auf Wohlwollen. Danke, dass Sie zu seiner Verbesserung beitragen",
     "SERAC: accidents and incidents in the mountains": "SERAC: Unfälle und Vorfälle in den Bergen",
     "Save": "Speichern",
     "Save as the pack of the day": "Als Pack des Tages speichern",
@@ -1011,26 +1011,26 @@
     "Scan with your phone": "Mit dem Telefon scannen",
     "Search": "Suchen",
     "Search ...": "Suchen...",
-    "Search a document to associate...": "Suchen Sie ein Dokument zu verbinden",
+    "Search a document to associate...": "Suchen Sie ein Dokument zum Verknüpfen...",
     "Search near me": "In meiner Nähe suchen",
     "Search: routes, outings, waypoints… with filters, as a list or on a map.": "Suche nach Routen, Tourenberichten und Wegpunkten … mit Filtern, als Liste oder auf einer Karte.",
     "See lines details": "Liniendetails anzeigen",
     "See more": "Mehr dazu",
     "See more results": "Mehr Ergebnisse anzeigen",
     "See my profile": "Mein Profil ansehen",
-    "See other documents nearby": "In der Nähe von ...",
+    "See other documents nearby": "Andere Dokumente in der Nähe anzeigen",
     "See profile based on:": "Höhenprofil nach:",
     "See the activity of this contributor in your feed": "Aktivitäten dieses Benutzers im Feed anzeigen",
     "See the analysis of the submitted stories": "Lesen Sie die Analyse der eingereichten Geschichten",
     "See the introduction again": "Einführung erneut anzeigen",
     "See the latest version": "Letzte Version anschauen",
-    "Seems fine! :)": "Rechnung möglich ! :)",
-    "Select an activity to load geographical data into document.": "Eine Aktivität auswählen, um den GPS Track wiederherszustellen und ins Dokument zu laden.",
-    "Select one or more winter routes on the map": "Bitte eine bzw. mehrere Schi/Surf Touren auf der Karte auswählen",
+    "Seems fine! :)": "Scheint in Ordnung! :)",
+    "Select an activity to load geographical data into document.": "Eine Aktivität auswählen, um die geografischen Daten ins Dokument zu laden.",
+    "Select one or more winter routes on the map": "Bitte eine bzw. mehrere Winterrouten auf der Karte auswählen",
     "Select option": "Optionen wählen",
     "Select tolerance (preview result on map)": "Toleranz wählen (Vorschau auf der Karte)",
-    "Send reset email": "Reset-Email senden",
-    "Sensitive area:": "Empfindliches Naturgebiet",
+    "Send reset email": "E-Mail zum Zurücksetzen senden",
+    "Sensitive area:": "Empfindliches Naturgebiet:",
     "Sensitive areas": "Empfindliche Naturgebiete",
     "Sensitive period": "Sensibler Zeitraum",
     "Service is inactive right now": "Dienst ist momentan inaktiv",
@@ -1053,32 +1053,32 @@
     "Show document history": "Dokumentverlauf anzeigen",
     "Show more routes": "Weitere Routen anzeigen",
     "Show nearby stops": "Haltestellen in der Nähe anzeigen",
-    "Show only updates from followed users in the homepage feed": "Nur die Änderungen der gefolgten Benutzerr im Startseiten-Feed anzeigen",
+    "Show only updates from followed users in the homepage feed": "Nur die Änderungen der gefolgten Benutzer im Startseiten-Feed anzeigen",
     "Show results": "Ergebnisse anzeigen",
     "Show the full content of the listed results, one after the other (to read or print)": "Den vollständigen Inhalt der aufgelisteten Ergebnisse nacheinander anzeigen (zum Lesen oder Drucken)",
     "Show the map": "Karte anzeigen",
     "Showing:": "Angezeigt:",
-    "Sign in to camptocamp today, it's free": "Melden Sie sich bei camptocamp an, es ist kostenlos !",
+    "Sign in to camptocamp today, it's free": "Melden Sie sich noch heute bei camptocamp an, es ist kostenlos",
     "Sign in to publish your outings. They stay saved on the phone.": "Melden Sie sich an, um Ihre Tourenberichte zu veröffentlichen. Sie bleiben auf dem Telefon gespeichert.",
     "Simplify": "Vereinfachen",
-    "Skiability": "Schifahrengenuss",
+    "Skiability": "Befahrbarkeit",
     "Skip": "Überspringen",
     "Skip the file next time: link your Strava, Garmin, Suunto, Polar, Coros or Decathlon account and pick your outings directly, with the activity prefilled.": "Datei beim nächsten Mal überspringen: Verknüpfen Sie Ihr Strava-, Garmin-, Suunto-, Polar-, Coros- oder Decathlon-Konto und wählen Sie Ihre Tourenberichte direkt aus, mit vorausgefüllter Aktivität.",
     "Skitouring gear": "Ski-, Snowboard-, Schneeschuhtouren",
     "Slopes": "Hangneigung",
     "Small": "Klein",
     "Small group = 2 to 4 people": "Kleine Gruppe = 2 bis 4 Leute",
-    "Small group with load shedding distance": "Kleine Gruppe mit Lastabwurfweite",
+    "Small group with load shedding distance": "Kleine Gruppe mit Entlastungsabständen",
     "Small group without distance": "Kleingruppe ohne Abstand",
-    "Soft mobility outing": "Tour in sanfte Mobilität",
+    "Soft mobility outing": "Tour mit sanfter Mobilität",
     "Some changes to your favourites are not sent yet: without a network they will be lost. Sign out anyway?": "Einige Änderungen an Ihren Favoriten wurden noch nicht gesendet: Ohne Netzwerk gehen sie verloren. Trotzdem abmelden?",
     "Some files could not be downloaded": "Einige Dateien konnten nicht heruntergeladen werden",
     "Some outings need your decision: see Favourites.": "Bei einigen Tourenberichten ist eine Entscheidung erforderlich. Sehen Sie unter Favoriten nach.",
-    "Some points are out of extent": "Punkte ausserhalb des Gebietes",
-    "Some routes feature tricky sections where there is a risk of slipping dangerously (risk of impact or falling from a great height), falling into crevasses, collapsing seracs or drowning after falling through the ice on a mountain lake. To reduce the risk of slipping, it is often advisable to progress on foot, wearing crampons and suitably secured with rope.": "Einige Routen weisen heikle Stellen auf, die einem gefährlichen Rutschrisiko (Aufprallrisiko bzw. Absturzrisiko aus großer Höhe), Gletscherspalten, Eistürmen oder Ertrinken durch Eisbruch auf einem Bergsee ausgesetzt sind. Um das Rutschrisiko zu verringern wird empfohlen, zu Fuss mit Steigeisen und geeignetes Anseilen voranzukommen.",
+    "Some points are out of extent": "Einige Punkte liegen außerhalb des Gebiets",
+    "Some routes feature tricky sections where there is a risk of slipping dangerously (risk of impact or falling from a great height), falling into crevasses, collapsing seracs or drowning after falling through the ice on a mountain lake. To reduce the risk of slipping, it is often advisable to progress on foot, wearing crampons and suitably secured with rope.": "Einige Routen weisen heikle Stellen auf, die einem gefährlichen Rutschrisiko (Aufprallrisiko bzw. Absturzrisiko aus großer Höhe), Gletscherspalten, Eistürmen oder Ertrinken durch Eisbruch auf einem Bergsee ausgesetzt sind. Um das Rutschrisiko zu verringern, wird oft empfohlen, zu Fuß mit Steigeisen und geeigneter Seilsicherung voranzukommen.",
     "Something new does not show up: close the app completely and open it again, it then loads its latest version.": "Etwas Neues wird nicht angezeigt: Schließen Sie die App vollständig und öffnen Sie sie erneut. Dann wird die neueste Version geladen.",
     "Sophie Picture Contest": "Sophie-Fotowettbewerb",
-    "Sorry, euskara lang has been frozen. We're looking for a moderator, if you're interested, please contact board@camptocamp.org": "Leider wurde baskisch gesperrt. Wir suchen einen Moderator. Bei Interesse wende dich bitte an board@camptocamp.org",
+    "Sorry, euskara lang has been frozen. We're looking for a moderator, if you're interested, please contact board@camptocamp.org": "Leider wurde Baskisch eingefroren. Wir suchen einen Moderator. Bei Interesse wenden Sie sich bitte an board@camptocamp.org",
     "Sort by": "Sortieren nach",
     "Source:": "Quelle:",
     "Spam: its contributions are deleted, its forum account too": "Spam: Die Beiträge werden gelöscht, ebenso das Forumskonto.",
@@ -1092,10 +1092,10 @@
     "Step": "Schritt",
     "Stop": "Haltestelle",
     "Stop following this contributor": "Diesem Benutzer nicht mehr folgen",
-    "Subcription revokal failed": "Abo-Widerruf fehlgeschlagen.",
+    "Subcription revokal failed": "Abo-Widerruf fehlgeschlagen",
     "Subcription revoked": "Abo widerrufen",
-    "Submit": "Aufnehmen und fortsetzen",
-    "Suggested rating": "vorgeschlagene Schwierigkeitsgrad",
+    "Submit": "Auswahl speichern",
+    "Suggested rating": "Vorgeschlagener Schwierigkeitsgrad",
     "Summary": "Zusammenfassung",
     "Summary of camptocamp's articles": "Zusammenfassung von camptocamps Artikeln",
     "Sustainable mobility on Camptocamp": "Nachhaltige Mobilität auf Camptocamp",
@@ -1120,11 +1120,11 @@
       "API message": "Allgemeine Nutzungsbedingungen müssen akzeptiert werden"
     },
     "Terms of use": "Nutzungsbedingungen",
-    "Terrain": "Grund",
+    "Terrain": "Gelände",
     "Text size": "Textgröße",
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Dank der statistischen oder analytischen Cookies, die von uns und anderen Unternehmen zur Verfügung gestellt werden, können wir die Besuche auf unserer Website zählen und die Quellen des Verkehrs kennen. Die Daten, die wir erhalten, helfen uns zu verstehen, was den Besuchern gefällt und die Website zu verbessern. Wenn Sie diese Daten nicht akzeptieren, sind wir nicht in der Lage, Ihr Erlebnis zu verbessern.",
     "The + button at the top right adds an outing, a route, a waypoint…": "Mit der Schaltfläche + oben rechts fügen Sie einen Tourenbericht, eine Route, einen Wegpunkt … hinzu.",
-    "The Camptocamp app is camptocamp.org installed on your phone: the same account, the same topos, the same community. Nothing to download from an app store, and it updates by itself.": "Die Camptocamp-App ist camptocamp.org auf deinem Telefon: dasselbe Konto, dieselben Topos, dieselbe Community. Du musst nichts aus einem App-Store herunterladen; die App aktualisiert sich automatisch.",
+    "The Camptocamp app is camptocamp.org installed on your phone: the same account, the same topos, the same community. Nothing to download from an app store, and it updates by itself.": "Die Camptocamp-App ist camptocamp.org auf Ihrem Telefon: dasselbe Konto, dieselben Topos, dieselbe Community. Sie müssen nichts aus einem App-Store herunterladen; die App aktualisiert sich automatisch.",
     "The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.": "Die MRD-Methode (Anfänger) ist mit einer maximalen Gefahrenstufe von 3 zulässig. Wählen Sie die MRE- oder MRP-Methode.",
     "The Outings and Routes overlays are temporarily unavailable": "Die Overlays für Tourenberichte und Routen sind vorübergehend nicht verfügbar.",
     "The Recent feed: the latest outings and their photos.": "Der Feed „Aktuell“: die neuesten Tourenberichte und ihre Fotos.",
@@ -1133,7 +1133,7 @@
     "The base size of the whole interface.": "Die Grundgröße der gesamten Benutzeroberfläche.",
     "The closed account (&quot;Compte fermé&quot;), in the topoguide and in the forum.": "Das geschlossene Benutzerkonto (&quot;Compte fermé&quot;), im Tourenportal und im Forum.",
     "The current criteria will be retained": "Die aktuellen Suchkriterien werden beibehalten",
-    "The date of the copy shows on each topo: orange after a week, red after a month. Conditions change: download it again before leaving. Incomplete means the network cut the download: download it again.": "Das Datum der Kopie wird auf jedem Topo angezeigt: nach einer Woche orange, nach einem Monat rot. Die Bedingungen ändern sich: Lade ihn vor dem Aufbruch erneut herunter. „Unvollständig“ bedeutet, dass die Netzwerkverbindung den Download unterbrochen hat. Lade ihn erneut herunter.",
+    "The date of the copy shows on each topo: orange after a week, red after a month. Conditions change: download it again before leaving. Incomplete means the network cut the download: download it again.": "Das Datum der Kopie wird auf jedem Topo angezeigt: nach einer Woche orange, nach einem Monat rot. Die Bedingungen ändern sich: Laden Sie es vor dem Aufbruch erneut herunter. „Unvollständig“ bedeutet, dass die Netzwerkverbindung den Download unterbrochen hat. Laden Sie es erneut herunter.",
     "The deleted documents could not be loaded.": "Die gelöschten Dokumente konnten nicht geladen werden.",
     "The destination can be a mountain range or a maximum travel time from your starting point.": "Als Zielort können Sie eine Bergkette oder die maximale Reisezeit von Ihrem Startpunkt angeben.",
     "The details could not be loaded.": "Die Details konnten nicht geladen werden.",
@@ -1144,7 +1144,7 @@
       "API message": "Das Dokument wurde gelöscht: zuerst wiederherstellen"
     },
     "The documents deleted in the last 29 days. A moderator can restore them, with their history, associations and comments.": "Die in den letzten 29 Tagen gelöschten Dokumente. Ein Moderator kann sie wiederherstellen, zusammen mit ihrem Verlauf, Verknüpfungen und Kommentaren.",
-    "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "Das Gefahrenpotenzial wird aus der Gefahrenstufe des Lawinenbulletins berechnet. Es kann durch die Wahl eines Potenzials innerhalb des entsprechenden Bereichs der Gefahrenstufe feinjustiert werden. Beispiel: Das Lawinenbulletin ruft kurz nach einer Periode der Gefahrenstufe 4 die Gefahrenstufe 3 hervor. Wir können dann ein Gefahrenpotenzial von 12 statt 8 angeben.",
+    "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "Das Gefahrenpotenzial wird aus der Gefahrenstufe des Lawinenbulletins berechnet. Es kann durch die Wahl eines Potenzials innerhalb des entsprechenden Bereichs der Gefahrenstufe feinjustiert werden. Beispiel: Das Lawinenbulletin nennt kurz nach einer Periode mit Gefahrenstufe 4 die Gefahrenstufe 3. Wir können dann ein Gefahrenpotenzial von 12 statt 8 angeben.",
     "The image could not be deleted:": "Das Bild konnte nicht gelöscht werden:",
     "The images deleted with it are restored too:": "Bilder, die zusammen mit diesem Dokument gelöscht wurden, werden auch wiederhergestellt:",
     "The images linked to no document, the last uploaded first. Link them to a document from their page, or delete them: a moderator can restore them during 29 days, from the deleted documents.": "Die mit keinem Dokument verknüpften Bilder, die zuletzt hochgeladenen zuerst. Verknüpfen Sie sie über ihre Seite mit einem Dokument oder löschen Sie sie: Ein Moderator kann sie innerhalb von 29 Tagen über die gelöschten Dokumente wiederherstellen.",
@@ -1165,11 +1165,11 @@
     "The slope must be between 0 and 80 deg": "Die Steigung muss zwischen 0 und 80 Grad liegen",
     "The slope must be between 50 and 3000m high": "Die Höhe des Hanges muss zwischen 50 und 3000 m betragen",
     "The start and finish points are too far apart to find a route. Choose a start in a city closer to the route's access point.": "Start und Ziel liegen zu weit auseinander, um eine Route zu finden. Wählen Sie einen Startort in einer Stadt, die näher am Zugangspunkt der Route liegt.",
-    "The topoguide and the latest outings at hand, the whole screen: install it on your phone, free and without an app store.": "Der Topoguide und die neuesten Tourenberichte griffbereit, im Vollbild: Installiere ihn kostenlos und ohne App-Store auf deinem Telefon.",
-    "The topoguide at hand: search, map, filters.": "Der Topoguide griffbereit: Suche, Karte, Filter.",
+    "The topoguide and the latest outings at hand, the whole screen: install it on your phone, free and without an app store.": "Das Tourenportal und die neuesten Tourenberichte griffbereit, im Vollbild: Installieren Sie es kostenlos und ohne App-Store auf Ihrem Telefon.",
+    "The topoguide at hand: search, map, filters.": "Das Tourenportal griffbereit: Suche, Karte, Filter.",
     "The user asks for the anonymization of the account": "Der Benutzer bittet um die Anonymisierung des Kontos",
     "The user asks for the merge with another of their accounts": "Der Benutzer beantragt die Zusammenführung mit einem seiner anderen Konten",
-    "The “slope traveled frequently” factor is not taken into account by the application, as it is often difficult to ascertain when preparing for an outing.": "Der Faktor \"häufig befahrene Route\" wird in der Anwendung nicht berücksichtigt, da er bei der Vorbereitung eines Ausflugs oft schwer zu ermitteln ist.",
+    "The “slope traveled frequently” factor is not taken into account by the application, as it is often difficult to ascertain when preparing for an outing.": "Der Faktor „häufig befahrener Hang“ wird in der Anwendung nicht berücksichtigt, da er bei der Vorbereitung einer Tour oft schwer zu ermitteln ist.",
     "Their activity in your feed": "Die Aktivität anderer Benutzer in Ihrem Feed",
     "Theme": "Design",
     "Theme, text size": "Design, Textgröße",
@@ -1194,19 +1194,19 @@
     "This field is too long": "Dieses Feld ist zu lang",
     "This field is too short": "Dieses Feld ist zu kurz",
     "This field must be a valid ISBN.": {
-      "API message": "Dieses Feld muss eine gultige ISBN sein."
+      "API message": "Dieses Feld muss eine gültige ISBN sein."
     },
     "This is an archived version of this page, as of": "Dies ist eine archivierte Version dieser Seite, Stand",
     "This is the first version": "Das ist die erste Version",
     "This is the last version": "Das ist die letzte Version",
-    "This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don't forget to mention the route history if you know it.": "Hier können Sie die Route ausführlich beschreiben, möglicherweise mit einer kurzen Zusammenfassung beginnen und dann die Beschreibung entwickeln (einschließlich Anflug, Abstieg usw.). Vergessen Sie nicht, die Routenhistorie zu erwähnen, wenn Sie diese kennen.",
+    "This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don't forget to mention the route history if you know it.": "Hier können Sie die Route ausführlich beschreiben, möglicherweise mit einer kurzen Zusammenfassung beginnen und dann die Beschreibung entwickeln (einschließlich Zustieg, Abstieg usw.). Vergessen Sie nicht, die Routengeschichte zu erwähnen, wenn Sie diese kennen.",
     "This needs a network: try again once online.": "Eine Netzwerkverbindung ist erforderlich: Bitte erneut versuchen, sobald Sie online sind.",
     "This outing is no longer waiting: it was published or removed meanwhile.": "Dieser Tourenbericht wartet nicht mehr: Er wurde inzwischen veröffentlicht oder entfernt.",
     "This outing is no longer waiting: it was published or removed meanwhile. Your changes are not saved: copy them before leaving the page.": "Dieser Tourenbericht wartet nicht mehr: Er wurde inzwischen veröffentlicht oder entfernt. Ihre Änderungen wurden nicht gespeichert: Kopieren Sie sie, bevor Sie die Seite verlassen.",
     "This page is reserved to the moderators.": "Diese Seite ist den Moderatoren vorbehalten.",
     "This password reset link is no longer valid": "Dieser Link zum Zurücksetzen des Passworts ist nicht mehr gültig",
-    "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Dieses Bild zeigt ein Buch-Cover. Es ist Eigentum des Herausgebers und/oder Autor. Es wird hier nur zwecks Veranschaulichung vorgestellt.",
-    "This profile is only available to authenticated users.": "Dieses Profil ist nur für eingeloggte Benutzern zugänglich.",
+    "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Dieses Bild zeigt ein Buchcover. Es ist Eigentum des Herausgebers und/oder des Autors. Es wird hier nur zwecks Veranschaulichung vorgestellt.",
+    "This profile is only available to authenticated users.": "Dieses Profil ist nur für eingeloggte Benutzer zugänglich.",
     "This route guide has an estimated theoretical duration of": "Diese Routenführung hat eine geschätzte theoretische Dauer von",
     "This route is partially accessible by public transport.": "Diese Route ist nur teilweise mit öffentlichen Verkehrsmitteln erreichbar.",
     "This site is maintained by local actors. Support them to help keep it open!": "Dieses Gebiet wird von lokalen Akteuren betreut. Unterstützen Sie sie, damit es offen bleibt!",
@@ -1230,49 +1230,49 @@
       "Map Controls": "Vollbild"
     },
     "Toggle fullscreen": "Vollbild ein/aus",
-    "Too many results: please refine your search.": "Zu viele Ergebnisse: bitte Suche spezifieren.",
+    "Too many results: please refine your search.": "Zu viele Ergebnisse: Bitte verfeinern Sie Ihre Suche.",
     "Too much points": "Zu viele Punkte",
     "Topoguide": {
-      "$$noContext": "Topoführer",
-      "Sophie picture context": "Topoführer"
+      "$$noContext": "Tourenportal",
+      "Sophie picture context": "Tourenportal"
     },
     "Topoguide - prix du jury": {
-      "Sophie picture context": "Topoführer - Jurypreis"
+      "Sophie picture context": "Tourenportal - Jurypreis"
     },
     "Topoguide - prix du public": {
-      "Sophie picture context": "Topoführer - Publikumspreis"
+      "Sophie picture context": "Tourenportal - Publikumspreis"
     },
     "Topoguide id:": "Tourenportal-ID:",
     "Topoguide moderator": "Moderator des Tourenportals",
     "Topoguide validation": "Freigabe des Tourenportals",
     "Topos to download again": "Erneut herunterzuladende Topos",
     "Topos without a network": "Topos ohne Netzwerkverbindung",
-    "Topos, outings, conditions and stories of the mountains, in your pocket.": "Topos, Tourenberichte, Bedingungen und Geschichten aus den Bergen – in deiner Tasche.",
+    "Topos, outings, conditions and stories of the mountains, in your pocket.": "Topos, Tourenberichte, Bedingungen und Geschichten aus den Bergen – in Ihrer Tasche.",
     "Trace": "GPS-Track",
     "Trace and date taken from this activity, distance and elevation gain too when known. Check them before publishing.": "Spur und Datum stammen aus dieser Aktivität, ebenso Distanz und Höhenmeter, sofern bekannt. Prüfen Sie sie vor der Veröffentlichung.",
     "Trace of the outing": "Spur des Tourenberichts",
-    "Tracking devices": "GPS Geräte",
+    "Tracking devices": "GPS-Geräte",
     "Tracks here": "Spuren hier",
     "Translate": "Übersetzen",
-    "Transport & road or PT access": "Strassenzugang/Öffis",
-    "Tricky sections": "heikle Stellen",
+    "Transport & road or PT access": "Straßenzugang/Öffis",
+    "Tricky sections": "Heikle Stellen",
     "Try again": "Erneut versuchen",
     "Try again later or": "Bitte später neu versuchen oder",
     "Type": "Art",
     "Types and styles": "Art & Stile",
-    "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "Absicherungsmodus, gegenseitige Überprüfungen zwischen den Kletterern, Schneeprofile, Überprüfung der LVS-geräte, usw…",
+    "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "Absicherungsmodus, gegenseitige Überprüfungen zwischen den Kletterern, Schneeprofile, Überprüfung der LVS-Geräte usw.",
     "Unblock account": "Konto entsperren",
     "Undo": "Rückgängig machen",
-    "Unfold section": "Abschnitt entfalten",
+    "Unfold section": "Abschnitt ausklappen",
     "Unformatted text": "Roher Text",
     "Unfortunately, this route may not be deserved by public transport": "Leider wird diese Route möglicherweise nicht von öffentlichen Verkehrsmitteln bedient",
     "Unlinked from": "Verknüpfung gelöst von",
     "Unordered list": "Ungeordnete Liste",
-    "Unprotect document": "Dokument unschützen",
+    "Unprotect document": "Schutz des Dokuments aufheben",
     "Untitled outing": "Tourenbericht ohne Titel",
-    "Upload a GPS track": "GPS Strecke hochladen ",
+    "Upload a GPS track": "GPS-Track hochladen",
     "Upload a new version": "Neue Version hochladen",
-    "Use YETI to better analyze avalanche risk": "Bitte YETI nutzen, um die Lawinengefahr besser zu analysieren.",
+    "Use YETI to better analyze avalanche risk": "Nutzen Sie YETI, um das Lawinenrisiko besser zu analysieren",
     "Use current location": "Aktuellen Standort verwenden",
     "Use track": "Strecke benutzen",
     "Useful links": "Hilfreiche Links",
@@ -1282,39 +1282,39 @@
     "Username cannot be empty or whitespaces": {
       "API message": "Der Benutzername darf nicht leer sein oder nur Leerzeichen enthalten"
     },
-    "Username or email combined with the password will allow you to log in. Both username and email remain private. Username can not be changed, but email can.": "Mit dem Benutzernamen oder der Email in Verbindung mit dem Passwort können Sie sich identifizieren. Der Benutzername und die Email bleiben privat. Der Benutzername kann im Gegensatz zur Email nicht geändert werden.",
-    "Username_or_email": "Benutzername (oder Email)",
+    "Username or email combined with the password will allow you to log in. Both username and email remain private. Username can not be changed, but email can.": "Mit dem Benutzernamen oder der E-Mail-Adresse in Verbindung mit dem Passwort können Sie sich identifizieren. Der Benutzername und die E-Mail-Adresse bleiben privat. Der Benutzername kann im Gegensatz zur E-Mail-Adresse nicht geändert werden.",
+    "Username_or_email": "Benutzername oder E-Mail",
     "Validate": "Freigeben",
     "Validated": "Freigegeben",
     "Validation withdrawn": "Freigabe zurückgezogen",
     "Validity date expired": "Gültigkeitsdatum abgelaufen",
-    "Validity date:": "Gültig bis :",
+    "Validity date:": "Gültig bis:",
     "Versions": "Versionen",
-    "Very complex (steps, narrow sections, ridges...)": "Sehr komplexe (Schritte, schmale Abschnitte, Felsen, ...)",
-    "View all avalanche history": "Alle Ereignisse anzeigen",
+    "Very complex (steps, narrow sections, ridges...)": "Sehr komplex (Stufen, schmale Abschnitte, Grate …)",
+    "View all avalanche history": "Gesamte Lawinenhistorie anzeigen",
     "View details": "Details anzeigen",
     "View in other lang": "In anderer Sprache anzeigen",
-    "View next comments and continue the discussion": "Nächste Kommentare seen und Diskussion fortsetzen",
+    "View next comments and continue the discussion": "Weitere Kommentare anzeigen und Diskussion fortsetzen",
     "View xreports": "Unfallberichte sehen",
     "Visibility": "Sichtbarkeit",
     "Visible": "Sichtbar",
     "Visible layer": "Routen anzeigen",
     "Visible on map": "Auf der Karte sichtbar",
     "Waiting": "Wartend",
-    "Want to contribute financially (hosting, developing...)? Donate!": "Möchten Sie finanziell beitragen (hosting, Entwicklung...)? Bitte spenden!",
-    "Want to join us? Or donate?": "Möchten Sie mitmachen? bzw. spenden?",
-    "Want to take part or get involved? Join us!": "Möchten Sie teilnehmen bzw. aktiv werden ? Machen Sie mit !",
+    "Want to contribute financially (hosting, developing...)? Donate!": "Möchten Sie finanziell beitragen (Hosting, Entwicklung...)? Spenden Sie!",
+    "Want to join us? Or donate?": "Möchten Sie mitmachen? Oder spenden?",
+    "Want to take part or get involved? Join us!": "Möchten Sie teilnehmen bzw. aktiv werden? Machen Sie mit!",
     "Warning, this transport is on demand ⚠": "Achtung, dieser Transport ist auf Anfrage ⚠",
-    "Warning: This action cannot be undone!": "Achtung: Diese Aktion ist unumkehrbar !",
+    "Warning: This action cannot be undone!": "Achtung: Diese Aktion kann nicht rückgängig gemacht werden!",
     "Waypoint's main properties": "Hauptdaten des Wegpunkts",
     "Waypoint's textual description": "Textbeschreibung des Wegpunkts",
     "We can't find any results matching your search.": "Wir konnten keine Ergebnisse finden, die Ihrer Suche entsprechen.",
     "We did not find any public transport stop point in a 5 km foot range from any route access point.": "Wir haben im Umkreis von 5 km zu Fuß um die Zugangspunkte der Route keine Haltestelle öffentlicher Verkehrsmittel gefunden.",
-    "We sent you an email, please click on the link to reset password.": "Wir haben Ihnen eine Email zu gesendet. Bitten klicken Sie auf den gesendeten Link um das Passwort zurückzusetzen.",
+    "We sent you an email, please click on the link to reset password.": "Wir haben Ihnen eine E-Mail gesendet. Bitte klicken Sie auf den Link darin, um das Passwort zurückzusetzen.",
     "Weather & conditions": "Wetter und Verhältnisse",
     "Weather forecast (meteoblue)": "Wetterprognose (Meteoblue)",
     "Welcome to Camptocamp": "Willkommen bei Camptocamp",
-    "Welcome to Camptocamp, the mountain sports community!": "Willkommen bei Camptocamp, die Bergsport Gemeinschaft!",
+    "Welcome to Camptocamp, the mountain sports community!": "Willkommen bei Camptocamp, der Bergsport-Community!",
     "Welcome to Itinévert, the tool for planning your outing using public transport.": "Willkommen bei Itinévert, dem Tool zur Planung Ihrer Tour mit öffentlichen Verkehrsmitteln.",
     "Wet snow: orientation not taken into account": "Nasser Schnee: Ausrichtungen werden nicht berücksichtigt",
     "What activity(ies) would you like to do?": "Welche Aktivität(en) möchten Sie ausüben?",
@@ -1322,20 +1322,20 @@
     "What is your starting point?": "Was ist Ihr Ausgangspunkt?",
     "What the app gives you": "Was die App bietet",
     "When the user asked for it": "Wann der Benutzer es beantragt hat",
-    "Why did you choose this outing? When did you decide to engage. What influenced your decision (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)?": "Erklären Sie bitte, warum Sie gerade diese Tour ausgewählt haben und wie wichtig das Erreichen des Zieles für Sie war. Berücksichtigen Sie dabei den Einfluss der verschiedenen Optionen vorher (Urlaubstage, lange Anreise, Unterkunftsbuchungen...), der bisher dazu nötigen Bemühungen, der Seltenheit der Opportunität, usw...",
+    "Why did you choose this outing? When did you decide to engage. What influenced your decision (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)?": "Erklären Sie bitte, warum Sie gerade diese Tour ausgewählt haben und wie wichtig das Erreichen des Zieles für Sie war. Berücksichtigen Sie dabei den Einfluss der verschiedenen Optionen vorher (Urlaubstage, lange Anreise, Unterkunftsbuchungen...), der bisher dazu nötigen Bemühungen, der Seltenheit der Gelegenheit usw.",
     "Why install it?": "Warum installieren?",
     "Wide and constant": "Breit und konstant",
-    "Will generate new points along route, at regular interval, defined by distance in meters": "Legt neue Punkte der Route entlang, in regelmässigen Abständen, je nach der Distanz in Metern, an.",
+    "Will generate new points along route, at regular interval, defined by distance in meters": "Legt entlang der Route in regelmäßigen Abständen neue Punkte an, festgelegt durch die Distanz in Metern",
     "Winter hiking routes": "Ski/Surf Routen",
-    "Winter routes": "Schi/Surf Routen",
+    "Winter routes": "Winterrouten",
     "With the": "Mit der",
     "Withdraw": "Zurückziehen",
     "Withdraw the validation": "Freigabe zurückziehen",
     "Without a network, Save keeps the outing on the phone. With one, Save without publishing does the same.": "Ohne Netzwerkverbindung speichert „Speichern“ den Tourenbericht auf dem Telefon. Mit Netzwerkverbindung bewirkt „Ohne Veröffentlichung speichern“ dasselbe.",
     "Without a network, open it from Favourites: it opens as with one.": "Ohne Netzwerkverbindung öffnen Sie es unter Favoriten: Es öffnet sich wie mit Verbindung.",
-    "Without c2c account": "Ohne c2c Konto",
+    "Without c2c account": "Ohne c2c-Konto",
     "Written by": "Geschrieben von",
-    "YETI Risk": "YETI Risiko",
+    "YETI Risk": "YETI-Risiko",
     "Yeti: a tool to assess the avalanche risk": "YETI: ein Tool, um das Lawinenrisiko zu bewerten",
     "You are editing an outing saved on the phone, not published yet. Save updates it; publish it from Favourites.": "Sie bearbeiten einen auf dem Telefon gespeicherten, noch nicht veröffentlichten Tourenbericht. „Speichern“ aktualisiert ihn. Veröffentlichen Sie ihn anschließend unter Favoriten.",
     "You are looking for ____ accessible by public transport": "Suchen Sie nach ____, das mit öffentlichen Verkehrsmitteln erreichbar ist?",
@@ -1345,9 +1345,9 @@
     "You can choose to remain anonymous": "Sie können entscheiden, anonym zu bleiben",
     "You have no activity nor area in your preferences.": "Sie haben weder Aktivitäten noch Gebiete in Ihren Einstellungen.",
     "You have to be authorized. Please contact administrators of the service if interested.": "Sie müssen autorisiert sein. Bitte kontaktieren Sie bei Interesse die Administratoren des Dienstes.",
-    "You may add associated waypoints, books and articles": "Sie können Wegpunkte, Bücher oder Artikeln verbinden",
-    "You may also drag, draw or edit the track on the map.": "Sie können die Strecke auch direkt auf die Karte ziehen, zeichnen oder bearbeiten.",
-    "You need to activate your by clicking the link sent to your email address.": "Sie müssen Ihr Konto aktivieren, indem Sie auf den Link klicken, der an Ihre Email-Adresse gesendet wurde.",
+    "You may add associated waypoints, books and articles": "Sie können Wegpunkte, Bücher und Artikel verknüpfen",
+    "You may also drag, draw or edit the track on the map.": "Sie können die Strecke auch direkt auf der Karte ziehen, zeichnen oder bearbeiten.",
+    "You need to activate your by clicking the link sent to your email address.": "Sie müssen Ihr Konto aktivieren, indem Sie auf den Link klicken, der an Ihre E-Mail-Adresse gesendet wurde.",
     "Your account is blocked: you have been signed out.": "Ihr Konto ist gesperrt: Sie wurden abgemeldet.",
     "Your account is now bound to the new email address you filled in.": "Ihr Konto ist jetzt an die neue E-Mail-Adresse gebunden, die Sie eingegeben haben.",
     "Your account was successfully created": "Ihr Konto wurde erfolgreich erstellt",
@@ -1362,19 +1362,19 @@
     "Your session has ended: please sign in again.": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
     "Your settings and your session stay on the phone: on iPhone, Safari clears the data of a site that is not installed after seven days without a visit.": "Ihre Einstellungen und Ihre Sitzung bleiben auf dem Telefon. Auf dem iPhone löscht Safari die Daten einer nicht installierten Website nach sieben Tagen ohne Besuch.",
     "Zoom in": {
-      "Map controls": "Vergrössern"
+      "Map controls": "Vergrößern"
     },
     "Zoom out": {
       "Map controls": "Verkleinern"
     },
-    "Zoom out and it will be OK": "zum aktivieren bitte verkleinern",
+    "Zoom out and it will be OK": "Zum Aktivieren bitte herauszoomen",
     "a new point on an existing line": "ein neuer Punkt auf einer bestehenden Linie",
     "access": {
-      "$$noContext": "zustieg",
-      "waypoint_types": "zustieg"
+      "$$noContext": "Zustieg",
+      "waypoint_types": "Zugangspunkt"
     },
     "access_comment": "Kommentar zum Zustieg",
-    "access_condition": "Verhältnisse des Zustieg",
+    "access_condition": "Verhältnisse des Zustiegs",
     "access_period": "Periode der Schneeräumung oder Öffnung",
     "access_time": "Zustiegszeit",
     "accessible_when_wardened": {
@@ -1390,13 +1390,13 @@
     "activity": "Aktivität",
     "activity_rate": "Frequenz der Ausübung der Aktivität",
     "activity_rate_m2": {
-      "activity_rates": "ein-oder zweimal im Monat"
+      "activity_rates": "ein- oder zweimal im Monat"
     },
     "activity_rate_w1": {
       "activity_rates": "ein- oder zweimal pro Woche"
     },
     "activity_rate_y5": {
-      "activity_rates": "weniger als 5 mal im Jahr"
+      "activity_rates": "weniger als 5-mal im Jahr"
     },
     "add a book": "Buch hinzufügen",
     "add a map": "Karte hinzufügen",
@@ -1404,26 +1404,26 @@
     "add a waypoint": "Wegpunkt verfassen",
     "add an area": "Gebiet verfassen",
     "add an article": "Artikel verfassen",
-    "add an image": "Bilder hinzufügen",
-    "add an incident/accident report": "Umfallbericht hinzufügen",
+    "add an image": "Bild hinzufügen",
+    "add an incident/accident report": "Unfallbericht hinzufügen",
     "add an outing": "Tourenbericht hinzufügen",
     "admin_limits": {
       "area_types": "administrative Grenze"
     },
-    "after:": "nach :",
+    "after:": "nach:",
     "age": "Alter",
-    "aid_rating": "Technisches Klettern Schwierigkeitsgrad",
+    "aid_rating": "Schwierigkeitsgrad technisches Klettern",
     "alpine_climbing": {
       "event_activities": "Alpinklettern"
     },
     "already used email": {
-      "API message": "Email schon verwendet."
+      "API message": "E-Mail-Adresse wird bereits verwendet"
     },
     "already used forum_username": {
       "API message": "Forumname schon verwendet"
     },
     "already used username": {
-      "API message": "Benutzername schon verwendet."
+      "API message": "Benutzername wird bereits verwendet"
     },
     "always_accessible": {
       "custodianship_types": "immer geöffnet"
@@ -1439,13 +1439,13 @@
     "article": "Artikel",
     "article_categories": "Artikelkategorie",
     "article_type": "Artikelart",
-    "articles": "Artikeln",
+    "articles": "Artikel",
     "artificial": {
       "rock_types": "künstlich"
     },
     "ascending sort": "Sortierung in zunehmender Reihenfolge",
     "association": {
-      "article_categories": "Camptocamp Verein"
+      "article_categories": "Verein Camptocamp"
     },
     "associations": "Verbindungen",
     "at least one route required": {
@@ -1458,7 +1458,7 @@
       "tracking": "Die Verbindungsberechtigung zum Dienst wurde durch den Benutzer abgelehnt"
     },
     "author": "Autor",
-    "author_status": "Status des Autors ",
+    "author_status": "Status des Autors",
     "autonomous": {
       "autonomies": "selbstständig"
     },
@@ -1468,11 +1468,11 @@
       "event_types": "Lawine"
     },
     "avalanche_forecaster": {
-      "user_categories": "Lawinenvorhersage"
+      "user_categories": "Lawinenprognostiker"
     },
     "avalanche_level": "Lawinengefahr",
     "avalanche_signs": "Lawinenzeichen",
-    "avalanche_slope": "Steigung der Lawine",
+    "avalanche_slope": "Hangneigung der Lawine",
     "avalanches": "Lawinen",
     "average": {
       "condition_ratings": "mittel",
@@ -1480,9 +1480,9 @@
       "snow_quantity_ratings": "mittel"
     },
     "awful": {
-      "condition_ratings": "abscheulich",
-      "snow_quality_ratings": "abscheulich",
-      "snow_quantity_ratings": "abscheulich"
+      "condition_ratings": "sehr schlecht",
+      "snow_quality_ratings": "sehr schlecht",
+      "snow_quantity_ratings": "sehr schlecht"
     },
     "bar": {
       "product_types": "Bar"
@@ -1498,7 +1498,7 @@
       "book_types": "Biografie"
     },
     "bisse": {
-      "waypoint_types": "Suonen"
+      "waypoint_types": "Suone"
     },
     "bivouac": {
       "waypoint_types": "Biwak"
@@ -1518,7 +1518,7 @@
       "$$noContext": "Buch",
       "image_categories": "Buch"
     },
-    "book_types": "Buch Art",
+    "book_types": "Buchart",
     "books": "Bücher",
     "bus": {
       "public_transportation_types": "Bus"
@@ -1528,7 +1528,7 @@
       "article_categories": "C2C Treffen"
     },
     "ca": {
-      "langs": "katalanisch"
+      "langs": "Katalanisch"
     },
     "calcaire": {
       "rock_types": "Kalkstein"
@@ -1536,10 +1536,10 @@
     "camera settings": "Kameraeinstellungen",
     "camera_name": "Kameraname",
     "camp_site": {
-      "waypoint_types": "Lager"
+      "waypoint_types": "Campingplatz"
     },
     "canyon": {
-      "waypoint_types": "Kanyon"
+      "waypoint_types": "Canyon"
     },
     "capacity": {
       "$$noContext": "Anzahl der Betten (nicht bewartet)",
@@ -1554,28 +1554,28 @@
     "cleared": {
       "access_conditions": "schneegeräumt"
     },
-    "climbing rating": "Klettern Schwierigkeitsgrad",
+    "climbing rating": "Kletterschwierigkeit",
     "climbing_indoor": {
       "waypoint_types": "Indoor-Klettern"
     },
-    "climbing_indoor_types": "Indoor-Klettern Art",
+    "climbing_indoor_types": "Art des Indoor-Kletterns",
     "climbing_instructor": {
       "user_categories": "Kletterlehrer"
     },
     "climbing_outdoor": {
       "waypoint_types": "Outdoor-Klettern"
     },
-    "climbing_outdoor_type": "Outdoor-Klettern Art",
-    "climbing_outdoor_types": "Outdoor-Klettern Arten",
+    "climbing_outdoor_type": "Art des Outdoor-Kletterns",
+    "climbing_outdoor_types": "Arten des Outdoor-Kletterns",
     "climbing_rating_max": "Maximale Kletterschwierigkeit",
     "climbing_rating_median": "Mittlere Kletterschwierigkeit",
     "climbing_rating_min": "Minimale Kletterschwierigkeit",
-    "climbing_styles": "Kletter-Stile",
+    "climbing_styles": "Kletterstile",
     "closed": {
       "lift_status": "geschlossen"
     },
     "closed_cleared": {
-      "access_conditions": "geschlossen schneegeraümt"
+      "access_conditions": "geschlossen, schneegeräumt"
     },
     "closed_hut": {
       "hut_status": "geschlossen"
@@ -1584,7 +1584,7 @@
       "snow_clearance_ratings": "im Winter geschlossen"
     },
     "closed_snow": {
-      "access_conditions": "geschlossen wenn Schnee"
+      "access_conditions": "bei Schnee geschlossen"
     },
     "club": {
       "user_categories": "Klub"
@@ -1598,7 +1598,7 @@
       "image_types": "kollaborativ"
     },
     "comment": "Kommentar",
-    "condition_rating": "Verhältnisse Bewertung",
+    "condition_rating": "Bewertung der Verhältnisse",
     "conditions": "Verhältnisse",
     "conditions_levels": "Schneeverhältnisse per Zonen",
     "configuration": "Routengestaltung",
@@ -1630,7 +1630,7 @@
       "glacier_gear_types": "Steigeisen nötig"
     },
     "crampons_spring": {
-      "glacier_gear_types": "Steigeisen in Frühling notwendig"
+      "glacier_gear_types": "Steigeisen im Frühling notwendig"
     },
     "crevasse_fall": {
       "event_types": "Absturz in eine Spalte"
@@ -1644,20 +1644,20 @@
     "current zoom:": "aktueller Zoom:",
     "custodianship": "Hüttenwartung",
     "danger_sign": {
-      "avalanche_signs": "Warnzeichen anders als Lawinenspurren"
+      "avalanche_signs": "andere Warnzeichen als Lawinenspuren"
     },
     "dangerous": {
       "children_proof_types": "gefährlich"
     },
     "date": "Datum",
-    "date_end": "End-Datum",
-    "date_start": "Start-Datum",
+    "date_end": "Enddatum",
+    "date_start": "Startdatum",
     "date_time": "Datum/Uhrzeit",
     "day(s)": "Tag(e)",
     "days": "Tage",
     "days left to restore it:": "Verbleibende Tage zur Wiederherstellung:",
     "de": {
-      "langs": "deutsch"
+      "langs": "Deutsch"
     },
     "decathlon": "Decathlon",
     "deleted locale:": "gelöschte Sprachversion:",
@@ -1666,8 +1666,8 @@
     "descent": {
       "image_categories": "Abstieg"
     },
-    "describe conditions": "Grundverhältnisse, Ausrüstung und Gesteinsqualität beschreiben.\nFals Sie eine defekte Ausrüstung begegnen, wenden Sie sich an lokalen Bergführern oder Touristeninformation.",
-    "describe route_conditions": "Beschreiben Sie kurz  in den folgenden Fällen die Route, die Sie genommen haben: Route, die von der im Kletterführer angegebenen abweicht, Kletterführer mit Varianten, Rundroute, Routenkombination, Punkt, der bei einer Teilstrecke erreicht wurde.\nACHTUNG: Laden Sie keine Fotos hoch, die aus einem Wanderführer oder einem Buch kopiert wurden. Die Moderatoren löschen diese sofort, da dies illegal ist und gegen die von der Website verwendeten Lizenzen verstößt.",
+    "describe conditions": "Grundverhältnisse, Ausrüstung und Gesteinsqualität beschreiben.\nFalls Sie auf eine defekte Ausrüstung stoßen, wenden Sie sich an die lokalen Bergführer oder die Touristeninformation.",
+    "describe route_conditions": "Beschreiben Sie kurz in den folgenden Fällen die Route, die Sie genommen haben: Route, die von der im Kletterführer angegebenen abweicht, Kletterführer mit Varianten, Rundroute, Routenkombination, Punkt, der bei einer Teilstrecke erreicht wurde.\nACHTUNG: Laden Sie keine Fotos hoch, die aus einem Wanderführer oder einem Buch kopiert wurden. Die Moderatoren löschen diese sofort, da dies illegal ist und gegen die von der Website verwendeten Lizenzen verstößt.",
     "describe timing": "Zeiten (Abmarsch, Gesamtdauer, usw.)",
     "describe weather": "Wetterbedingungen während der Tour: Bewölkung, Niederschlag, Wind, Temperatur",
     "description": "Beschreibung",
@@ -1675,7 +1675,7 @@
       "image_categories": "Detail"
     },
     "difficult": {
-      "glacier_ratings": "schwer  "
+      "glacier_ratings": "schwer"
     },
     "difficulties_height": "Höhenunterschied der Schwierigkeiten",
     "disable_comments": "Kommentare deaktivieren",
@@ -1687,7 +1687,7 @@
       "quality_types": "Entwurf"
     },
     "durations": "Zeiten",
-    "durations (days)": "Länge (Tage)",
+    "durations (days)": "Dauer (Tage)",
     "easy": {
       "glacier_ratings": "einfach"
     },
@@ -1696,7 +1696,7 @@
     },
     "editor": "Herausgeber",
     "elevation": "Höhe",
-    "elevation_access": "Zuganghöhe",
+    "elevation_access": "Zugangshöhe",
     "elevation_down_snow": "Höhe Ski Ende",
     "elevation_max": "Maximale Höhe",
     "elevation_min": "Minimale Höhe",
@@ -1707,7 +1707,7 @@
     },
     "empty comment": "leerer Kommentar",
     "en": {
-      "langs": "englisch"
+      "langs": "Englisch"
     },
     "engagement_rating": "Ernsthaftigkeit",
     "environment": {
@@ -1719,10 +1719,10 @@
     "equipment_rating": "Ausrüstungsqualität",
     "equipment_ratings": "Ausrüstungsqualitäten",
     "es": {
-      "langs": "spanisch"
+      "langs": "Spanisch"
     },
     "eu": {
-      "langs": "baskisch"
+      "langs": "Baskisch"
     },
     "event_activity": "Aktivität",
     "event_type": "Ereignisart",
@@ -1738,7 +1738,7 @@
       "article_categories": "Expeditionen"
     },
     "expert": {
-      "autonomies": "Profis"
+      "autonomies": "Experte"
     },
     "exposed": {
       "rain_proof_types": "ausgesetzt"
@@ -1759,19 +1759,19 @@
       "image_categories": "Fauna"
     },
     "federal_supervision": {
-      "supervision": "Bundüberwachung"
+      "supervision": "Betreuung durch den Verband"
     },
     "federal_supervisor": {
       "qualification": "Kletterinitiator"
     },
     "federal_trainer": {
-      "qualification": "Bundestrainer"
+      "qualification": "Verbandstrainer"
     },
     "female": {
       "genders": "weiblich"
     },
     "file_size": "Dateigröße",
-    "filename": "Dokumentname",
+    "filename": "Dateiname",
     "fine": {
       "quality_types": "gut"
     },
@@ -1780,10 +1780,10 @@
     },
     "fnumber": "Blende",
     "focal_length": "Brennweite",
-    "form.": "Formular",
+    "form.": "Formular.",
     "forum": "Forum",
     "fr": {
-      "langs": "französisch"
+      "langs": "Französisch"
     },
     "frees": "gibt frei",
     "frequentation": "Begehungsfrequenz",
@@ -1794,7 +1794,7 @@
       "article_categories": "Ausrüstung"
     },
     "gender": "Geschlecht",
-    "geolocation": "Geolocation",
+    "geolocation": "Geolokalisierung",
     "geology": {
       "image_categories": "Geologie"
     },
@@ -1810,7 +1810,7 @@
     "glacier_gear": "Gletscherausrüstung",
     "glacier_rating": "Gletscherschwierigkeit",
     "glacier_safety_gear": {
-      "glacier_gear_types": "Gletscherausrüstung"
+      "glacier_gear_types": "Gletscher-Sicherheitsausrüstung"
     },
     "global_rating": "Globale Schwierigkeit",
     "gneiss": {
@@ -1839,7 +1839,7 @@
     "grocery": {
       "product_types": "Lebensmittelgeschäft"
     },
-    "ground_types": "Grundarten",
+    "ground_types": "Untergrundarten",
     "group_management": "Gruppenleitung",
     "has added images to area": "hat Fotos zu einer Region hinzugefügt",
     "has added images to article": "hat Fotos zu einem Artikel hinzugefügt",
@@ -1852,9 +1852,9 @@
     "has created a new book": "hat ein neues Buch verfasst",
     "has created a new image": "hat ein neues Foto hochgeladen",
     "has created a new outing": "hat einen neuen Tourenbericht verfasst",
-    "has created a new route": "hat eine neue Route verfasst.",
-    "has created a new waypoint": "hat einen neuen Wegpunkt verfasst.",
-    "has created a new xreport": "hat einen Unfallbericht verfasst.",
+    "has created a new route": "hat eine neue Route verfasst",
+    "has created a new waypoint": "hat einen neuen Wegpunkt verfasst",
+    "has created a new xreport": "hat einen Unfallbericht verfasst",
     "has updated the area": "hat eine Region editiert",
     "has updated the article": "hat einen Artikel editiert",
     "has updated the book": "hat ein Buch editiert",
@@ -1862,12 +1862,12 @@
     "has updated the outing": "hat einen Tourenbericht editiert",
     "has updated the route": "hat eine Route editiert",
     "has updated the waypoint": "hat einen Wegpunkt editiert",
-    "has updated the xreport": "hat einen Unfallbericht editiert.",
-    "heading text": "Titeltext",
+    "has updated the xreport": "hat einen Unfallbericht editiert",
+    "heading text": "Überschrift",
     "heating_unstaffed": "Heizung (nicht bewartet)",
     "height": "Höhe",
     "height_diff": "Höhenunterschied",
-    "height_diff_access": "Höhenunterschied des Zustieg",
+    "height_diff_access": "Höhenunterschied des Zustiegs",
     "height_diff_difficulties": "Höhenunterschied der Schwierigkeiten",
     "height_diff_down": "Abstieg",
     "height_diff_up": "Aufstieg",
@@ -1907,18 +1907,18 @@
       "event_activities": "Eisklettern"
     },
     "ice_cornice_collapse": {
-      "event_types": "Eis oder Gesims kollabieren"
+      "event_types": "Eisschlag oder Wechtenbruch"
     },
     "ice_rating": "Schwierigkeit (Eisklettern)",
     "image": "Bild",
     "image_categories": "Kategorien",
-    "image_type": "Bild Lizenz",
+    "image_type": "Bildlizenz",
     "images": "Bilder",
     "images deleted with it:": "mit diesem Dokument gelöschte Bilder:",
     "impossible": {
       "glacier_ratings": "unmöglich"
     },
-    "including dominant slopes": "einschließlich dominante Hängen",
+    "including dominant slopes": "einschließlich dominanter Hänge",
     "increase_impact": "erschwerender Faktor",
     "injury_without_fall": {
       "event_types": "Verletzung ohne Sturz"
@@ -1927,7 +1927,7 @@
       "rain_proof_types": "drinnen"
     },
     "insolation": {
-      "weather_station_types": "Sonnenschein"
+      "weather_station_types": "Sonneneinstrahlung"
     },
     "institution": {
       "user_categories": "Institution"
@@ -1939,7 +1939,7 @@
     "isbn": "ISBN",
     "iso_speed": "ISO-Empfindlichkeit",
     "it": {
-      "langs": "italienisch"
+      "langs": "Italienisch"
     },
     "its author": "der Autor",
     "key_needed": {
@@ -1957,7 +1957,7 @@
     "lang": "Sprache",
     "langs": "Sprachen",
     "last edited by": "zuletzt geändert von",
-    "last point with the Backspace key": "letzter Punkt mit der Backspace-Taste",
+    "last point with the Backspace key": "den letzten Punkt mit der Rücktaste",
     "length": "Länge",
     "length_total": "gesamte Länge",
     "level_1": {
@@ -1984,7 +1984,7 @@
       "waypoint_types": "lokale Produkte/Geschäfte"
     },
     "locality": {
-      "waypoint_types": "Gegend"
+      "waypoint_types": "Ortschaft"
     },
     "loop": {
       "route_types": "Rundweg"
@@ -2002,19 +2002,19 @@
     "map": "Karte",
     "maps": "Karten",
     "maps_info": "Karten",
-    "maps_references": "Karten Referenzen",
+    "maps_references": "Kartenreferenzen",
     "matress_unstaffed": "Matratzen (nicht bewartet)",
     "medium": {
       "quality_types": "durchschnittlich"
     },
     "meters": "m",
     "migmatite": {
-      "rock_types": "Migmatite"
+      "rock_types": "Migmatit"
     },
     "minutes": "Minuten",
     "misc": {
-      "image_categories": "sonstiges",
-      "waypoint_types": "sonstiges"
+      "image_categories": "Sonstiges",
+      "waypoint_types": "Sonstiges"
     },
     "missing field": "fehlendes Feld",
     "missing fields": "fehlende Felder",
@@ -2025,14 +2025,14 @@
     },
     "months": "Monate",
     "more_than_3m": {
-      "severities": "mehr als 3m"
+      "severities": "mehr als 3 Monate"
     },
     "motivations": "Motivation",
     "mountain_biking": {
       "activities": "Mountainbiking"
     },
     "mountain_climbing": {
-      "activities": "Alpine-Klettern"
+      "activities": "Alpinklettern"
     },
     "mountain_environment": {
       "article_categories": "Bergwelt"
@@ -2041,21 +2041,21 @@
       "user_categories": "Bergführer"
     },
     "mountain_leader": {
-      "user_categories": "Bergführer"
+      "user_categories": "Wanderleiter"
     },
     "mountainbike_instructor": {
       "user_categories": "MTB-Lehrer"
     },
     "mtb_down_rating": "MTB-Schwierigkeitsgrad (Downhill)",
-    "mtb_height_diff_portages": "Portagen-Länge",
+    "mtb_height_diff_portages": "Höhenunterschied Tragepassagen",
     "mtb_length_asphalt": "Asphalt-Länge",
     "mtb_length_trail": "Trail-Länge",
     "mtb_up_rating": "MTB-Schwierigkeitsgrad (Uphill)",
     "multi": {
-      "climbing_outdoor_types": "Mehrseilenlängen"
+      "climbing_outdoor_types": "Mehrseillängen"
     },
     "multipitch_climbing": {
-      "event_activities": "Mehrseilenlänge Klettern"
+      "event_activities": "Mehrseillängenklettern"
     },
     "name": "Name",
     "natural_avalanche": {
@@ -2066,11 +2066,11 @@
     },
     "nb_impacted": "Anzahl der Betroffenen",
     "nb_pages": "Anzahl der Seiten",
-    "nb_participants": "Anzahl der Teilnehmern",
+    "nb_participants": "Anzahl der Teilnehmer",
     "nearby service": {
       "public_transportation_ratings": "in der Nähe"
     },
-    "new lines chunks": "neue Zeilenabschnitte",
+    "new lines chunks": "neue Linienabschnitte",
     "next difference": "nächste Version vergleichen",
     "next version": "nächste Version",
     "nivology": {
@@ -2085,10 +2085,10 @@
     },
     "no info": "keine Info",
     "no service": {
-      "public_transportation_ratings": "keine Nahverkehr"
+      "public_transportation_ratings": "keine Anbindung"
     },
     "no_supervision": {
-      "supervision": "keine Überwachung"
+      "supervision": "keine Betreuung"
     },
     "no_warden": {
       "custodianship_types": "nicht bewartet"
@@ -2105,7 +2105,7 @@
     },
     "numbers": "Zahlen",
     "of": {
-      "1-30 of 200 results": "aus"
+      "1-30 of 200 results": "von"
     },
     "of the browser.": "des Browsers.",
     "offline on this device": "offline auf diesem Gerät",
@@ -2129,8 +2129,8 @@
     "or try the following pages:": "oder versuchen Sie die folgenden Seiten:",
     "orientations": "Ausrichtungen",
     "other": {
-      "event_activities": "anderes",
-      "event_types": "anderes"
+      "event_activities": "Sonstiges",
+      "event_types": "Sonstiges"
     },
     "other_comments": "Zusätzliche Kommentare",
     "outing": "Tourenbericht",
@@ -2202,7 +2202,7 @@
     "please consult the server logs": {
       "API message": "Unerwarteter Fehler, bitte kontaktieren Sie dev@camptocamp.org"
     },
-    "points": "Punkten",
+    "points": "Punkte",
     "points by moving them": "Punkte, indem Sie sie verschieben",
     "polar": "Polar",
     "poor": {
@@ -2238,32 +2238,32 @@
       "previous_injuries": "andere Verletzungen"
     },
     "primary_impacted": {
-      "author_statuses": "Hauptfaktor"
+      "author_statuses": "Hauptbetroffener"
     },
-    "product_types": "Produkt-Arten",
+    "product_types": "Produktarten",
     "professional_diploma": {
       "qualification": "Berufsdiplom"
     },
     "professional_supervision": {
-      "supervision": "professionelle Überachung"
+      "supervision": "professionelle Betreuung"
     },
     "profile": "Profil",
-    "profiles": "Profilen",
+    "profiles": "Profile",
     "progressive": {
-      "snow_clearance_ratings": "schrittweise Schneeräumung "
+      "snow_clearance_ratings": "schrittweise Schneeräumung"
     },
     "prominence": "Schartenhöhe/Prominenz",
     "protected": {
-      "$$noContext": "vor Regen geschutzt",
-      "rain_proof_types": "vor Regen geschutzt"
+      "$$noContext": "vor Regen geschützt",
+      "rain_proof_types": "vor Regen geschützt"
     },
     "psicobloc": {
       "climbing_outdoor_types": "Psicoblock"
     },
-    "public transportation access": "Zugang mit öffentlichem Verkehr",
-    "public_transport": "Tour in sanfte Mobilität",
-    "public_transportation_rating": "Anbindung an öffentlichen Verkehr",
-    "public_transportation_types": "Öffentlicher Verkehr",
+    "public transportation access": "Zugang mit öffentlichen Verkehrsmitteln",
+    "public_transport": "Tour mit sanfter Mobilität",
+    "public_transportation_rating": "Anbindung an öffentliche Verkehrsmittel",
+    "public_transportation_types": "Öffentliche Verkehrsmittel",
     "publication_date": "Veröffentlichung",
     "qualification": "Qualifikation",
     "quality": "Dokumentqualität",
@@ -2276,7 +2276,7 @@
     "raid": {
       "route_types": "Mehrtagesroute"
     },
-    "rain_proof": "regen-geschützt",
+    "rain_proof": "regengeschützt",
     "range": {
       "area_types": "Gebirge"
     },
@@ -2296,7 +2296,7 @@
     },
     "restricted_access": "eingeschränkter Zugang",
     "return_same_way": {
-      "route_types": "Rückkehr gleicher Weg"
+      "route_types": "Hin und zurück auf demselben Weg"
     },
     "rhyolite": {
       "rock_types": "Rhyolith"
@@ -2305,21 +2305,21 @@
       "image_categories": "Aufstieg"
     },
     "risk": "Risiko",
-    "risk of a rough fall on hard snow": "Gefahr eines groben Sturzes auf hartem Schnee",
+    "risk of a rough fall on hard snow": "Gefahr eines schweren Sturzes auf hartem Schnee",
     "risk_rating": "Risikobewertung",
-    "road access": "Strassenzugang",
-    "road or pedestrian access": "Fußgänger- oder Strassenzugang",
+    "road access": "Straßenzugang",
+    "road or pedestrian access": "Fußgänger- oder Straßenzugang",
     "rock_climbing": {
       "activities": "Klettern"
     },
-    "rock_free_rating": "Freiklettern Schwierigkeitsgrad",
+    "rock_free_rating": "Schwierigkeitsgrad Freiklettern",
     "rock_required_rating": "Schwierigkeitsgrad (obligatorisch)",
     "rock_types": "Gestein",
     "roof": {
       "climbing_styles": "Dach"
     },
     "route": "Route",
-    "route(s) added to your outing": "Tour(en) hinzugefügt",
+    "route(s) added to your outing": "Route(n) zu Ihrem Tourenbericht hinzugefügt",
     "route_description": "Routenbeschreibung",
     "route_history": "Routengeschichte",
     "route_length": "Routenlänge",
@@ -2345,15 +2345,15 @@
       "parking_fee_types": "saisonal"
     },
     "seasonal service": {
-      "public_transportation_ratings": "saisonsabhängiger Verkehr"
+      "public_transportation_ratings": "saisonabhängiger Verkehr"
     },
     "secondary_impacted": {
-      "author_statuses": "andere Faktoren"
+      "author_statuses": "weitere Betroffene"
     },
     "see actual version": "Letzte Version anschauen",
-    "sensitive_months:": "Aufpassenzeit",
+    "sensitive_months:": "Sensible Monate:",
     "service_on_demand": {
-      "public_transportation_types": "On-Demand Dienste"
+      "public_transportation_types": "On-Demand-Dienste"
     },
     "setup-failed": {
       "tracking": "Die Verbindung ist gescheitert"
@@ -2363,11 +2363,11 @@
       "severities": "harmlos"
     },
     "shelter": {
-      "waypoint_types": "Hütte"
+      "waypoint_types": "Unterstand"
     },
     "show all": "Alles zeigen",
     "single": {
-      "climbing_outdoor_types": "Seilklettern"
+      "climbing_outdoor_types": "Einseillängen"
     },
     "site_info": {
       "article_categories": "Seiteninformationen"
@@ -2381,8 +2381,8 @@
     },
     "ski_rating": "Ski-Schwierigkeit",
     "skitouring": {
-      "activities": "Ski-Touring",
-      "event_activities": "Ski-Touring"
+      "activities": "Skitouren",
+      "event_activities": "Skitouren"
     },
     "sl": {
       "langs": "Slowenisch"
@@ -2407,21 +2407,21 @@
     "slacklining": {
       "activities": "Slacklining"
     },
-    "slope": "Steigung",
+    "slope": "Hangneigung",
     "slope_30_35": {
-      "avalanche_slopes": "Steigung zwischen 30° und 35°"
+      "avalanche_slopes": "Hangneigung zwischen 30° und 35°"
     },
     "slope_35_40": {
-      "avalanche_slopes": "Steigung zwischen 35° und 40°"
+      "avalanche_slopes": "Hangneigung zwischen 35° und 40°"
     },
     "slope_40_45": {
-      "avalanche_slopes": "Steigung zwischen 40° und 45°"
+      "avalanche_slopes": "Hangneigung zwischen 40° und 45°"
     },
     "slope_gt_45": {
-      "avalanche_slopes": "Steigung größer als 45°"
+      "avalanche_slopes": "Hangneigung größer als 45°"
     },
     "slope_lt_30": {
-      "avalanche_slopes": "Steigung kleiner als 30°"
+      "avalanche_slopes": "Hangneigung kleiner als 30°"
     },
     "small_pillar": {
       "climbing_styles": "kleine Säule"
@@ -2438,15 +2438,15 @@
       "event_activities": "Hochtouren"
     },
     "snow_quality": "Schneequalität",
-    "snow_quantity": "Schneehöhe",
+    "snow_quantity": "Schneemenge",
     "snowshoe_rating": "Schwierigkeitsgrad (Schneeschuh)",
     "snowshoeing": {
-      "activities": "Schneeschuh-Touren"
+      "activities": "Schneeschuhtouren"
     },
     "snowy": {
       "access_conditions": "schneebedeckt"
     },
-    "soft snow": "Pulverschnee",
+    "soft snow": "Weichschnee",
     "soft_mobility": {
       "article_categories": "sanfte Mobilität"
     },
@@ -2454,7 +2454,7 @@
       "frequentation_types": "kaum besucht"
     },
     "sometimes": {
-      "snow_clearance_ratings": "gelegentliche Schneeraümung "
+      "snow_clearance_ratings": "gelegentliche Schneeräumung"
     },
     "sport_climbing": {
       "event_activities": "Sportklettern"
@@ -2474,7 +2474,7 @@
     "summit": {
       "waypoint_types": "Gipfel"
     },
-    "supervision": "Überwachung",
+    "supervision": "Betreuung",
     "suunto": "Suunto",
     "tags": {
       "article_categories": "Tags"
@@ -2494,23 +2494,23 @@
     "the closed account": "das geschlossene Benutzerkonto",
     "the removal script": "das Löschskript",
     "then Add.": "und dann „Hinzufügen“.",
-    "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "Vorschau : die Geometrie ist noch nicht vereinfacht. Interaktionen auf der Karte sowie der Export sind deaktiviert.",
+    "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "Vorschau: Die Geometrie ist noch nicht vereinfacht. Interaktionen auf der Karte sowie der Export sind deaktiviert.",
     "this message.": "dieser Nachricht.",
     "time_management": "Zeitmanagement",
     "timing": "Zeitpunkt",
     "title": "Titel",
     "to": {
-      "$$noContext": "zu",
-      "period": "zu"
+      "$$noContext": "bis",
+      "period": "bis"
     },
-    "to start or load a new one": "zum Starten oder Laden eines neuen",
+    "to start or load a new one": "um eine neue zu beginnen oder zu laden",
     "topo": {
       "book_types": "Topo",
       "image_categories": "Topo"
     },
     "topoguide": "Tourenportal",
     "topoguide_supplements": {
-      "article_categories": "Ergänzung der Topo"
+      "article_categories": "Ergänzungen zu den Topos"
     },
     "total snow": "gesamte Schneehöhe",
     "tourism": {
@@ -2527,7 +2527,7 @@
     },
     "training": "Training",
     "traverse": {
-      "route_types": "Überquerung"
+      "route_types": "Überschreitung"
     },
     "unknown": {
       "tracking": "Unbekannt"
@@ -2563,16 +2563,16 @@
       "slackline_types": "Waterline"
     },
     "waterpoint": {
-      "waypoint_types": "Wasseranschluss"
+      "waypoint_types": "Wasserstelle"
     },
     "waypoint": "Wegpunkt",
-    "waypoint_children": "Kinderwegpunkt",
+    "waypoint_children": "Untergeordnete Wegpunkte",
     "waypoint_slope": "Neigung",
     "waypoint_type": "Wegpunktart",
     "waypoints": "Wegpunkte",
     "weather": "Wetter",
     "weather_event": {
-      "event_types": "Wettererigniss"
+      "event_types": "Wetterereignis"
     },
     "weather_station": {
       "waypoint_types": "Wetterstation"
@@ -2582,7 +2582,7 @@
       "waypoint_types": "Webcam"
     },
     "whole year": {
-      "period": "Jahreslang"
+      "period": "ganzjährig"
     },
     "width": "Breite",
     "wind_direction": {
@@ -2591,11 +2591,11 @@
     "wind_speed": {
       "weather_station_types": "Windgeschwindigkeit"
     },
-    "with Alt + clic": "mit Alt + klick",
+    "with Alt + clic": "mit Alt + Klick",
     "write a summary": "Zusammenfassung",
     "write your comments": "Kommentare hinzufügen",
     "xreport": "Vorfall/Unfall",
-    "xreports": "Vorfall-/Unfallberichten",
+    "xreports": "Vorfall-/Unfallberichte",
     "yes": {
       "$$noContext": "Ja",
       "parking_fee_types": "Ja"
