@@ -14,10 +14,10 @@
     <!-- as wide as the open menu, which the rail clips: nothing wraps or moves while it opens -->
     <div class="side-menu-content">
       <!-- the logo inline (LogoCtc): its text turns light in the dark theme -->
-      <a :href="'/'" class="menu-brand" aria-label="Camptocamp.org">
+      <router-link :to="{ name: 'home' }" class="menu-brand" aria-label="Camptocamp.org">
         <logo-ctc class="menu-logo" />
         <logo-ctc mark class="menu-logo-mark" />
-      </a>
+      </router-link>
       <menu-entries :items="menuItems" />
 
       <menu-footer class="menu-footer" />
