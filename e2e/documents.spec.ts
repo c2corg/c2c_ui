@@ -49,3 +49,25 @@ test('the head tags follow an in-app navigation', async ({ page, data }) => {
   await expect(page).toHaveTitle(/E2E sommet/);
   expect(await page.locator('meta[property="og:title"]').getAttribute('content')).toContain('E2E sommet');
 });
+
+// ad blockers hide the elements named as ads (.ad, .ad-slot...): the room under the top bar must not depend on them
+const AD_BLOCKER_CSS = '.ad, .ad-slot, .ams-ad, #camptocamp_htd { display: none !important; }';
+
+for (const [layout, viewport, bar] of [
+  ['phone', { width: 390, height: 844 }, '.mobile-top-bar'],
+  ['computer', { width: 1100, height: 900 }, '.navigation'],
+] as const) {
+  test.describe(`on a ${layout}, with an ad blocker`, () => {
+    test.use({ viewport });
+
+    test('the top bar does not hide the buttons of a document', async ({ page, data }) => {
+      await page.goto(`/routes/${data.route}`);
+      await page.addStyleTag({ content: AD_BLOCKER_CSS });
+      await expect(page.locator('.view-container h1')).toContainText('E2E voie');
+
+      const barBottom = (await page.locator(bar).first().boundingBox())!;
+      const buttons = (await page.locator('.view-container .box .button-bar').first().boundingBox())!;
+      expect(buttons.y).toBeGreaterThanOrEqual(barBottom.y + barBottom.height);
+    });
+  });
+}
