@@ -85,3 +85,16 @@ describe('router scroll behavior', () => {
     expect(resolved).toEqual([{ left: 0, top: 300 }]);
   });
 });
+
+describe('the paths of the topographic maps', () => {
+  it('are /papermaps, /map being the map of the site; the former /maps paths lead there', () => {
+    expect(router.resolve({ name: 'map', params: { id: 1, lang: 'fr' } }).path).toBe('/papermaps/1/fr');
+    expect(router.resolve('/map').name).toBe('waypoints-map');
+    const redirect = router.getRoutes().find((record) => record.path.startsWith('/maps'))!.redirect as (
+      to: RouteLocationNormalized
+    ) => string;
+    expect(redirect(router.resolve('/maps/12/fr/a-title?x=1#h') as RouteLocationNormalized)).toBe(
+      '/papermaps/12/fr/a-title?x=1#h'
+    );
+  });
+});

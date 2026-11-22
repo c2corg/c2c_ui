@@ -565,6 +565,8 @@ const emit = defineEmits([
   'pin-to-top-clicked',
   'stop-clicked',
   'waypoint-clicked',
+  // the zoom of the map, when it is loaded and after each move
+  'zoom',
 ]);
 
 const route = useRoute();
@@ -2450,11 +2452,13 @@ onMounted(() => {
     loadProtectionAreas();
     // the overlays asked for by the URL
     updateDensityOverlays();
+    emit('zoom', created.getZoom());
   });
   created.on('moveend', () => {
     updateViewPlace();
     // in 3D, the box of what is seen, not too far from the center
     sendBoundsToUrl();
+    emit('zoom', created.getZoom());
     if (is3d.value) return;
     updateEditMapLink();
     emitMoveEvent();

@@ -714,6 +714,14 @@ describe('C2cMap', () => {
     });
   });
 
+  it('tells its zoom when it is loaded and after each move', async () => {
+    const { wrapper, map } = await mountMap();
+    map.zoom = 12.5;
+    map.fire('moveend');
+    expect(wrapper.emitted('zoom')).toEqual([[expect.any(Number)], [12.5]]);
+    wrapper.unmount();
+  });
+
   describe('the filter on the extent of the map', () => {
     const queryOf = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) =>
       (wrapper.vm as unknown as { $route: { query: Record<string, unknown> } }).$route.query;
@@ -818,6 +826,29 @@ describe('C2cMap', () => {
       expect(map.layout['IGN raster (es)'].visibility).not.toBe('visible');
       expect(map.layout['SwissTopo Slopes'].visibility).toBe('visible');
       expect(queryOf(wrapper)).toEqual({ act: 'hiking', slopes: 'swiss' });
+      wrapper.unmount();
+    });
+
+    it('turns the overlays on again when the "Map" menu link is followed after the user turned them off', async () => {
+      const density = { data: { buckets: [{ x: 750000, y: 5760000, count: 3 }] } } as never;
+      vi.spyOn(c2c, 'getOutingsHeatmap').mockResolvedValue(density);
+      vi.spyOn(c2c, 'getRoutesHeatmap').mockResolvedValue(density);
+      const { wrapper, map } = await mountMap({ syncUrl: true }, '/waypoints?overlays=outing,route');
+      expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+      expect(map.layout['heatmap-route'].visibility).toBe('visible');
+
+      await wrapper
+        .findAll('.layer-button')
+        .find((button) => button.text() === 'Outings')!
+        .trigger('click');
+      await flushPromises();
+      expect(map.layout['heatmap-outing'].visibility).toBe('none');
+      expect(queryOf(wrapper)).toEqual({ overlays: 'route' });
+
+      await (wrapper.vm as unknown as { $router: Router }).$router.push('/waypoints?overlays=outing,route');
+      await flushPromises();
+      expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+      expect(map.layout['heatmap-route'].visibility).toBe('visible');
       wrapper.unmount();
     });
   });
