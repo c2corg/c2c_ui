@@ -12,9 +12,22 @@ function sideMenu() {
 
 const pointer = (pointerType: string) => ({ pointerType }) as PointerEvent;
 
+// the screen store's media queries, for a window this wide
+const screenWidth = (width: number) =>
+  vi.stubGlobal('matchMedia', (query: string) => ({
+    matches: width <= Number(query.match(/max-width: (\d+)px/)![1]),
+    addEventListener: () => {},
+  }));
+
 describe('useSideMenu', () => {
-  beforeEach(() => vi.useFakeTimers());
-  afterEach(() => vi.useRealTimers());
+  beforeEach(() => {
+    vi.useFakeTimers();
+    screenWidth(1280);
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+  });
 
   it('opens once the pointer rests on it, and closes a while after it left', () => {
     const menu = sideMenu();
@@ -126,12 +139,11 @@ describe('useSideMenu', () => {
 
   it('is not pinned open under the desktop width, even when kept so on the device', async () => {
     localStorage.setItem('SideMenu.preferences', JSON.stringify({ pinned: true }));
-    vi.stubGlobal('matchMedia', () => ({ matches: false, addEventListener: () => {} }));
+    screenWidth(1023);
     vi.resetModules();
     const { useSideMenuCanPin, useSideMenuPinned } = await import('./side-menu');
     expect(useSideMenuPinned().value).toBe(false);
     expect(useSideMenuCanPin().value).toBe(false);
-    vi.unstubAllGlobals();
     localStorage.removeItem('SideMenu.preferences');
   });
 });

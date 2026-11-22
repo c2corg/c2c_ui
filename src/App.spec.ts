@@ -8,6 +8,17 @@ import App from './App.vue';
 
 const page = { render: () => h('div') };
 
+// window.matchMedia for a window this wide: the screen and app settings stores read it (no dark scheme)
+const screenWidth = (width: number) =>
+  vi.stubGlobal('matchMedia', (query: string) => {
+    const min = query.match(/min-width: (\d+)px/);
+    const max = query.match(/max-width: (\d+)px/);
+    return {
+      matches: (!!min || !!max) && (!min || width >= Number(min[1])) && (!max || width <= Number(max[1])),
+      addEventListener() {},
+    };
+  });
+
 const mountApp = async (path = '/routes', { screen = 'isWidescreen' } = {}) => {
   const router = createRouter({
     history: createMemoryHistory(),
@@ -52,10 +63,12 @@ const mountApp = async (path = '/routes', { screen = 'isWidescreen' } = {}) => {
 describe('App', () => {
   beforeEach(() => {
     document.body.innerHTML = '<div id="splashscreen"></div>';
+    screenWidth(1280);
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
   });
 
   it('hides the splash screen once mounted', async () => {
@@ -82,16 +95,19 @@ describe('App', () => {
     }
   });
 
-  it('shows the bars of the app under the desktop width, and not from it', async () => {
-    // the layout follows the width (src/stores/app-settings.ts): a screen as wide as a desktop one
-    vi.stubGlobal('matchMedia', (query: string) => ({ matches: query.includes('min-width'), addEventListener() {} }));
+  it('shows the bars of the app on a phone held upright only', async () => {
+    // the layout follows the width (src/stores/app-settings.ts): a phone on its side
+    screenWidth(640);
     let { wrapper } = await mountApp();
     expect(wrapper.findComponent({ name: 'MobileTopBar' }).exists()).toBe(false);
     expect(wrapper.findComponent({ name: 'BottomNav' }).exists()).toBe(false);
     expect(wrapper.findComponent({ name: 'MobileMenu' }).exists()).toBe(false);
+    // the welcome page leaves the menu a rail: kept open, it would squeeze the page
+    ({ wrapper } = await mountApp('/'));
+    expect(wrapper.classes()).not.toContain('is-menu-pinned');
 
-    // a narrower one, with a new store reading it
-    vi.unstubAllGlobals();
+    // a phone held upright, with a new store reading it
+    screenWidth(390);
     setActivePinia(createPinia());
     ({ wrapper } = await mountApp());
     expect(wrapper.findComponent({ name: 'MobileTopBar' }).exists()).toBe(true);
