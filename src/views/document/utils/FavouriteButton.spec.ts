@@ -113,6 +113,14 @@ describe('FavouriteButton', () => {
     expect(state.favourites.saveOffline).toHaveBeenCalledWith(ROUTE);
   });
 
+  it('is a button of the keyboard too', async () => {
+    const wrapper = mountButton();
+    expect(button(wrapper).attributes('tabindex')).toBe('0');
+    await button(wrapper).trigger('keydown', { key: 'Enter' });
+    await flushPromises();
+    expect(state.favourites.add).toHaveBeenCalledWith(ROUTE);
+  });
+
   it('says the favourite stays on the device when logged out', async () => {
     state.favourites.isLogged = false;
     await button(mountButton()).trigger('click');

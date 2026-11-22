@@ -1,5 +1,14 @@
 <template>
-  <span class="favourite-button" role="button" :title="label" :aria-label="label" @click="tap">
+  <span
+    class="favourite-button"
+    role="button"
+    tabindex="0"
+    :title="label"
+    :aria-label="label"
+    @click="tap"
+    @keydown.enter.prevent="tap"
+    @keydown.space.prevent="tap"
+  >
     <!-- outline when not a favourite, filled when it is -->
     <fa-icon :icon="favourite ? 'bookmark' : ['far', 'bookmark']" :class="favourite ? 'has-text-primary' : ''" />
     <!-- the one sign that the page opens without a network, read before walking out of coverage -->
@@ -138,9 +147,16 @@ defineExpose({ tap });
 </script>
 
 <style scoped>
+/* the pointer and the hover colour of the header buttons: its scoped styles miss this component, which has two roots
+   (the button and its dialog) */
 .favourite-button {
   position: relative;
   display: inline-block;
+  cursor: pointer;
+}
+
+.favourite-button:hover {
+  color: var(--c2c-black);
 }
 
 /* bottom right of the bookmark: a white arrow on the colour of the state of the copy. Under .favourite-button, to
