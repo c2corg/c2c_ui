@@ -46,7 +46,7 @@ describe('DocumentViewHeader', () => {
             $documentUtils: {
               getDocumentType: () => 'outing',
               getDocumentTitle: () => 'Sortie',
-              getOutingDatesLocalized: () => '28 de dic de 2025 - 2 de ene de 2026',
+              getOutingDatesLocalized: () => '28 de dic de 2025 – 2 de ene de 2026',
             },
           } as never,
         },
@@ -54,10 +54,10 @@ describe('DocumentViewHeader', () => {
     });
 
     const parts = wrapper.findAll('.bar-date .bar-date-part').map((part) => part.text());
-    expect(parts).toEqual(['28 de dic de 2025', '- 2 de ene de 2026']);
+    expect(parts).toEqual(['28 de dic de 2025', '– 2 de ene de 2026']);
     // a space between the parts, where the line may break
-    expect(wrapper.find('.bar-date').text()).toBe('28 de dic de 2025 - 2 de ene de 2026');
+    expect(wrapper.find('.bar-date').text()).toBe('28 de dic de 2025 – 2 de ene de 2026');
     // and in the title, for wider screens
-    expect(wrapper.find('h1 .outing-date').text()).toBe('28 de dic de 2025 - 2 de ene de 2026');
+    expect(wrapper.find('h1 .outing-date').text()).toBe('28 de dic de 2025 – 2 de ene de 2026');
   });
 });

@@ -10,9 +10,10 @@
         <span v-if="!isDraftView" class="is-pulled-right button-bar no-print">
           <!-- phone only: the date shares the line of the buttons -->
           <span v-if="headerDate" class="bar-date">
-            <template v-for="(part, i) in headerDate.split(' - ')" :key="i">
+            <!-- "28 dic 2025", "– 2 ene 2026": the dash between two dates starts the second part -->
+            <template v-for="(part, i) in headerDate.split(/ (?=[-–] )/)" :key="i">
               <!-- the space between the parts, where the range may break, would be dropped as template whitespace -->
-              {{ i ? ' ' : '' }}<span class="bar-date-part">{{ i ? '- ' : '' }}{{ part }}</span>
+              {{ i ? ' ' : '' }}<span class="bar-date-part">{{ part }}</span>
             </template>
           </span>
           <gotop-button v-if="isPrintingView" />
