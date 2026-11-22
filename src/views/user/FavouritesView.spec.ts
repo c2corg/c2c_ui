@@ -14,6 +14,9 @@ const state = vi.hoisted(() => ({
     favourites: Favourite[];
     folders: FavouriteFolder[];
     removeAllOfflineCopies: () => Promise<void>;
+    copyOf: (type: string, id: number) => SavedEntry | undefined;
+    othersCopies: SavedEntry[];
+    removeOthersCopies: () => Promise<void>;
   },
   offline: null as unknown as { online: boolean; entries: SavedEntry[] },
 }));
@@ -106,6 +109,11 @@ describe('FavouritesView', () => {
         { id: '6', name: 'Empty' },
       ],
       removeAllOfflineCopies: vi.fn(async () => {}),
+      // the copies of the user: all the copies of these tests
+      copyOf: (type: string, id: number) =>
+        state.offline.entries.find((entry) => entry.type === type && entry.id === id),
+      othersCopies: [],
+      removeOthersCopies: vi.fn(async () => {}),
     });
     state.offline = reactive({ online: true, entries: [offlineCopy('route', 1), offlineCopy('outing', 3)] });
   });

@@ -10,9 +10,14 @@
 //   - add, remove and move change the list at once, and are sent to the API; without a network they wait in a queue,
 //     sent in order when the network is back (the API makes them idempotent). The folders (create, rename, delete)
 //     need a network: they fail otherwise;
-//   - the favourites of the device are sent to the account at each start with a network: the local favourites without
-//     a copy are then removed from the device; the offline copies stay, their favourite ensured on the account. The
-//     folders go by name, all of them the first time, then those of the favourites sent.
+//   - their offline copies are their favourite: ensured on the account at each start with a network;
+//   - the favourites of the device (saved logged out, nobody's) are offered once the account is read: added, those
+//     without a copy leave the device and the copies become the user's (their folders go by name); kept on the device,
+//     they are not offered to that user again.
+//
+// A computer may be shared (src/pwa/offline-store.ts): the copies of the other users stay on the device, out of the
+// favourites of the user logged in. Signing out forgets the list of the account on the device, after sending the
+// changes still waiting.
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
 
@@ -20,10 +25,9 @@ import c2c from '@/js/apis/c2c';
 import type { ApiFavourite, ApiFavouriteFolder } from '@/js/apis/c2c/FavouritesService';
 import constants from '@/js/constants';
 import {
+  forgetUser,
   readList,
   readPending,
-  setSynced,
-  wasSynced,
   writeList,
   writePending,
   type Favourite,
@@ -111,6 +115,8 @@ export const useFavouritesStore = defineStore('favourites', () => {
   const user = useUserStore();
   const offline = useOfflineStore();
   const language = useLanguageStore();
+  // named $gettext: the extraction of the messages to translate (tools/extract-messages.ts) looks for it
+  const $gettext = (msgid: string) => language.gettext(msgid);
 
   // the list of the account (logged in only): from the cache, then from the API
   const account = ref<FavouritesList | null>(null);
@@ -125,19 +131,55 @@ export const useFavouritesStore = defineStore('favourites', () => {
   const isOnAccount = (type: string, id: number) =>
     !!account.value?.favourites.some((item) => item.type === type && item.id === id);
 
+  const isNobodys = (entry: SavedEntry) => !entry.owners?.length;
+  const isOwnedBy = (entry: SavedEntry, id: number) => !!entry.owners?.includes(id);
+  // logged out: all the copies, and the favourites of nobody; logged in: the copies of the user
+  const isShown = (entry: SavedEntry) =>
+    isLogged.value ? isOfflineEntry(entry) && isOwnedBy(entry, userId()) : isOfflineEntry(entry) || isNobodys(entry);
+  const shownEntries = computed(() => offline.savedDocs.filter(isShown));
+  // the offline copy of a document, if the user sees it
+  const copyOf = (type: string, id: number) => {
+    const entry = findEntry(type, id);
+    return entry && isOfflineEntry(entry) && isShown(entry) ? entry : undefined;
+  };
+
   // what the pages show
   const favourites = computed<Favourite[]>(() => {
     if (!isLogged.value) {
-      return offline.savedDocs.map(fromEntry).sort((a, b) => b.createdAt - a.createdAt);
+      return shownEntries.value.map(fromEntry).sort((a, b) => b.createdAt - a.createdAt);
     }
     const list = account.value?.favourites ?? [];
-    // the favourites of the device not on the account yet (sent at the next start with a network): its folders are
-    // not the ones of the account
-    const local = offline.savedDocs
+    // the copies of the user not on the account yet (sent at the next start with a network): their folders are not the
+    // ones of the account
+    const local = shownEntries.value
       .filter((entry) => !list.some((item) => item.type === entry.type && item.id === entry.id))
       .map((entry) => ({ ...fromEntry(entry), folderId: null }));
     return [...list, ...local].sort((a, b) => b.createdAt - a.createdAt);
   });
+
+  // logged in, the account read with a network: the favourites of nobody that the user did not keep out yet
+  const deviceOffer = computed(() => {
+    if (!isLogged.value || !account.value || syncing.value || !offline.online) {
+      return [];
+    }
+    const id = userId();
+    return offline.savedDocs.filter(
+      (entry) => isNobodys(entry) && !entry.declined?.includes(id) && !isOnAccount(entry.type, entry.id)
+    );
+  });
+
+  // logged in: the copies of the other users of the device (and those of nobody), which only take space here
+  const othersCopies = computed(() =>
+    isLogged.value ? offline.savedDocs.filter((entry) => isOfflineEntry(entry) && !isOwnedBy(entry, userId())) : []
+  );
+
+  // the user no longer has this copy: it goes when nobody else has it
+  async function disown(entry: SavedEntry) {
+    const owners = (entry.owners ?? []).filter((owner) => owner !== userId());
+    await (owners.length
+      ? offline.setOwners(entry.type, entry.id, owners)
+      : offline.removeDocument(entry.type, entry.id));
+  }
 
   const folders = computed<FavouriteFolder[]>(() =>
     isLogged.value
@@ -224,32 +266,44 @@ export const useFavouritesStore = defineStore('favourites', () => {
     }
   }
 
-  // The favourites of the device to the account (see the top). The folders by name: one of the account, or a new one
-  async function pushLocal() {
+  // the copies of the user are their favourites (see the top)
+  async function pushOwnCopies() {
+    for (const entry of shownEntries.value.filter((item) => !isOnAccount(item.type, item.id))) {
+      await change(
+        { op: 'add', type: entry.type, id: entry.id, folderId: null },
+        { type: entry.type, id: entry.id, title: entry.title, lang: entry.lang }
+      );
+    }
+  }
+
+  // The favourites of the device offered, to the account. The folders by name: one of the account, or a new one
+  async function acceptDeviceFavourites() {
+    const entries = deviceOffer.value;
     const id = userId();
-    const onAccount = (entry: SavedEntry) => isOnAccount(entry.type, entry.id);
-    const toSend = offline.savedDocs.filter((entry) => !onAccount(entry));
-    const firstTime = !(await wasSynced(id));
     const folderIds = new Map<string, string>();
-    for (const folder of offline.folders) {
-      if (firstTime || toSend.some((entry) => entry.folderId === folder.id)) {
-        folderIds.set(folder.id, await folderNamed(folder.name));
-      }
+    for (const folder of offline.folders.filter((item) => entries.some((entry) => entry.folderId === item.id))) {
+      folderIds.set(folder.id, await folderNamed(folder.name));
     }
-    for (const entry of offline.savedDocs) {
-      if (!onAccount(entry)) {
-        const folderId = entry.folderId ? (folderIds.get(entry.folderId) ?? null) : null;
-        await change(
-          { op: 'add', type: entry.type, id: entry.id, folderId },
-          { type: entry.type, id: entry.id, title: entry.title, lang: entry.lang }
-        );
-      }
+    for (const entry of entries) {
+      const folderId = entry.folderId ? (folderIds.get(entry.folderId) ?? null) : null;
+      await change(
+        { op: 'add', type: entry.type, id: entry.id, folderId },
+        { type: entry.type, id: entry.id, title: entry.title, lang: entry.lang }
+      );
       // a favourite without a copy: on the account only now
-      if (entry.mode !== OFFLINE_MODE) {
-        await offline.removeDocument(entry.type, entry.id);
-      }
+      const { type, id: documentId } = entry;
+      await (isOfflineEntry(entry)
+        ? offline.setOwners(type, documentId, [id])
+        : offline.removeDocument(type, documentId));
     }
-    await setSynced(id);
+  }
+
+  // they stay on the device, not offered to this user again
+  async function declineDeviceFavourites() {
+    const id = userId();
+    for (const entry of deviceOffer.value) {
+      await offline.setDeclined(entry.type, entry.id, [...(entry.declined ?? []), id]);
+    }
   }
 
   // the folder of the account of that name, created if needed: its id
@@ -269,7 +323,7 @@ export const useFavouritesStore = defineStore('favourites', () => {
       try {
         if (await flush()) {
           await load();
-          await pushLocal();
+          await pushOwnCopies();
         }
       } finally {
         syncing.value = false;
@@ -309,6 +363,31 @@ export const useFavouritesStore = defineStore('favourites', () => {
     },
     { immediate: true }
   );
+  // Before signing out: the changes still waiting are sent, then the list of the account leaves the device (another
+  // person may use it). Without a network they would be lost: the user decides. A session that ended keeps all
+  user.beforeSignOut(async () => {
+    if (!isLogged.value) {
+      return true;
+    }
+    const id = userId();
+    await started;
+    if (pending.value.length && offline.online) {
+      await flush().catch(() => false);
+    }
+    if (
+      pending.value.length &&
+      !window.confirm(
+        $gettext(
+          'Some changes to your favourites are not sent yet: without a network they will be lost. Sign out anyway?'
+        )
+      )
+    ) {
+      return false;
+    }
+    await forgetUser(id).catch(() => {});
+    return true;
+  });
+
   // the network is back: what waited is sent
   watch(
     () => offline.online,
@@ -331,13 +410,18 @@ export const useFavouritesStore = defineStore('favourites', () => {
     await change({ op: 'add', type: doc.type, id: doc.id, folderId }, doc);
   }
 
-  // the offline copy too
+  // the offline copy too: logged in, the copy of the user only (the others keep theirs)
   async function remove(type: string, id: number) {
-    if (isLogged.value) {
-      await change({ op: 'remove', type, id });
+    const entry = findEntry(type, id);
+    if (!isLogged.value) {
+      if (entry) {
+        await offline.removeDocument(type, id);
+      }
+      return;
     }
-    if (findEntry(type, id)) {
-      await offline.removeDocument(type, id);
+    await change({ op: 'remove', type, id });
+    if (entry && isOwnedBy(entry, userId())) {
+      await disown(entry);
     }
   }
 
@@ -364,6 +448,8 @@ export const useFavouritesStore = defineStore('favourites', () => {
       // logged in, the folders are the ones of the account: the copy keeps the folder of the device
       folderId: isLogged.value ? (entry?.folderId ?? null) : (folderId ?? entry?.folderId ?? null),
       mode: OFFLINE_MODE,
+      // one copy per document: the user is one more owner of it (logged out, the owners stay)
+      owners: isLogged.value ? [...new Set([...(entry?.owners ?? []), userId()])] : undefined,
     });
     // a favourite of the device not sent yet counts as missing: sent now
     if (
@@ -376,24 +462,34 @@ export const useFavouritesStore = defineStore('favourites', () => {
 
   // the favourite stays
   async function removeOfflineCopy(type: string, id: number) {
-    if (!isOfflineEntry(findEntry(type, id))) {
+    const entry = copyOf(type, id);
+    if (!entry) {
       return;
     }
     if (isLogged.value) {
       // the favourite is on the account
       if (!isOnAccount(type, id)) {
-        const entry = findEntry(type, id)!;
         await change({ op: 'add', type, id, folderId: null }, { type, id, title: entry.title, lang: entry.lang });
       }
-      await offline.removeDocument(type, id);
-    } else {
+      await disown(entry);
+    } else if (isNobodys(entry)) {
       await offline.makeOnline(type, id);
+    } else {
+      // the favourite of its owners is on their account
+      await offline.removeDocument(type, id);
     }
   }
 
   async function removeAllOfflineCopies() {
-    for (const entry of offline.savedDocs.filter(isOfflineEntry)) {
+    for (const entry of shownEntries.value.filter(isOfflineEntry)) {
       await removeOfflineCopy(entry.type, entry.id);
+    }
+  }
+
+  // the space they take, freed: their owners will download them again
+  async function removeOthersCopies() {
+    for (const entry of othersCopies.value) {
+      await offline.removeDocument(entry.type, entry.id);
     }
   }
 
@@ -454,7 +550,7 @@ export const useFavouritesStore = defineStore('favourites', () => {
     ];
     let saved = 0;
     for (const waypoint of waypoints) {
-      if (!waypoint.document_id || isOfflineEntry(findEntry('waypoint', waypoint.document_id))) {
+      if (!waypoint.document_id || copyOf('waypoint', waypoint.document_id)) {
         continue;
       }
       await saveOffline(
@@ -480,6 +576,12 @@ export const useFavouritesStore = defineStore('favourites', () => {
     whenReady: () => started,
     find,
     isFavourite,
+    copyOf,
+    deviceOffer,
+    acceptDeviceFavourites,
+    declineDeviceFavourites,
+    othersCopies,
+    removeOthersCopies,
     add,
     remove,
     move,

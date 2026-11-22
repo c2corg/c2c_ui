@@ -33,6 +33,11 @@ vi.mock('@/stores/favourites', () => ({
     remove: (...args: unknown[]) => state.favourites.remove(...args),
     saveOffline: (...args: unknown[]) => state.favourites.saveOffline(...args),
     removeOfflineCopy: (...args: unknown[]) => state.favourites.removeOfflineCopy(...args),
+    // the copy of the user: all the copies of these tests
+    copyOf: (type: string, id: number) =>
+      state.offline.entries.find(
+        (entry) => entry.type === type && entry.id === id && entry.mode === 'offline' && entry.data
+      ),
   }),
 }));
 vi.mock('@/stores/offline', () => ({

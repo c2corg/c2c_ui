@@ -38,6 +38,7 @@
       <router-view class="router-view" />
     </div>
     <gdpr-banner></gdpr-banner>
+    <device-favourites-prompt />
     <template v-if="appSettings.isMobileShell">
       <bottom-nav />
       <onboarding-tour />
@@ -52,6 +53,7 @@ import { useRoute } from 'vue-router';
 
 import AlertWindow from './components/alert-window/AlertWindow.vue';
 import BottomNav from './components/app/BottomNav.vue';
+import DeviceFavouritesPrompt from './components/app/DeviceFavouritesPrompt.vue';
 import MobileMenu from './components/app/MobileMenu.vue';
 import MobileTopBar from './components/app/MobileTopBar.vue';
 import OnboardingTour from './components/app/OnboardingTour.vue';
