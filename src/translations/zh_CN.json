@@ -95,7 +95,6 @@
     "An error occurred, couldn't (un)mask version": "发生错误，无法（取消）屏蔽版本",
     "An error occurred, couldn't save images": "发生错误，无法保存图像",
     "Anonymity and confidentiality": "匿名与保密",
-    "Application": "应用程序",
     "Applications": "应用",
     "Are you sure you want to delete this locale?": "你确定要删除这个语言版本吗？",
     "Are you sure you want to merge?": "你确定要合并吗？",
@@ -343,7 +342,6 @@
     },
     "History is missing, please provide it if you have information.": "缺少历史信息，如果你有相关信息，请补充。",
     "Home": "主页",
-    "Home page feed parameters": "主页订阅参数",
     "How is my testimony used ? How / why is it useful ?": "我的反馈是怎样被使用的？为什么它是有用的？",
     "I choose to cancel the outing": "我选择取消出行",
     "I contribute": "我贡献",
@@ -455,7 +453,6 @@
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "更多路线可供选择。您可以移动地图、指定名称或设置活动以筛选它们。",
     "Multi-criteria search": "多条件搜索",
     "My account": "我的账号",
-    "My bookmarks": "我的收藏",
     "My changes": "我的贡献",
     "My followed users": "我关注的用户",
     "My outings": "我的出行记录",
@@ -500,7 +497,6 @@
     "Only document less than 24h old can be deleted": {
       "API message": "只能删除24小时内的文档"
     },
-    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "主页订阅中仅显示所选运动和所选地区中的更新。 来自关注用户的状态更新将始终显示。",
     "Ooops": "哎呀",
     "Open fields to deeply explain the event circumstances.": "展开以深入解释事件情况。",
     "Open fields to detail the picture's context": "展开以详细说明图片背景",
