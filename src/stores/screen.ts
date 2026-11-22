@@ -2,9 +2,13 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
-// the width from which the navigation of the site is on the side (side menu, top navigation), and under which it is
-// the phone layout (top bar with the menu button, bottom tab bar): the only one place to decide it. Bulma's desktop
+// Bulma's desktop: from it, the side menu may be pinned open beside the page (src/js/composables/side-menu.ts)
 export const DESKTOP_BREAKPOINT = 1024;
+
+// the width from which the navigation of the site is on the side (the rail of the side menu, top navigation), and under
+// which it is the phone layout (top bar with the menu button, bottom tab bar): phones held upright only, a phone on its
+// side or a tablet has the rail (c2corg/c2c_ui#5154). The only one place to decide it
+export const PHONE_BREAKPOINT = 600;
 
 const BREAKPOINT_MOBILE = 768;
 const BREAKPOINT_TABLET = DESKTOP_BREAKPOINT - 1;

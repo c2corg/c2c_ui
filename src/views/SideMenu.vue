@@ -22,7 +22,7 @@
       <menu-footer class="menu-footer" />
 
       <button
-        :style="{ visibility: keptOpen ? 'hidden' : undefined }"
+        :style="{ visibility: keptOpen || !canPin ? 'hidden' : undefined }"
         type="button"
         class="menu-pin"
         @click="togglePinned"
@@ -52,7 +52,8 @@ const isTall = ref(false);
 // Yeti only when the window is tall enough
 const visibleItems = computed(() => menuItems.value.filter((item) => !item.tallOnly || isTall.value));
 
-const { pinned, expanded, onPointerEnter, onPointerLeave, onFocusIn, onFocusOut, close, togglePinned } = useSideMenu();
+const { pinned, canPin, expanded, onPointerEnter, onPointerLeave, onFocusIn, onFocusOut, close, togglePinned } =
+  useSideMenu();
 
 // a link followed (or the cookies opened): the menu closes over the page it opens
 function onClick(event: MouseEvent) {

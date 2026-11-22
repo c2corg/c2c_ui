@@ -1,11 +1,19 @@
 import { computed, nextTick, onBeforeUnmount, ref } from 'vue';
 
 import { getPreferences } from '@/js/vue-plugins/local-storage';
+import { DESKTOP_BREAKPOINT } from '@/stores/screen';
 
 // The side menu of the website (SideMenu.vue): a rail of icons, which opens over the page while the pointer rests on
 // it or the keyboard is in it, or pinned open beside the page (App.vue leaves it its room). Pinned is kept on this device
 const preferences = getPreferences('SideMenu');
 const pinned = ref(preferences.get<unknown>('pinned') === true);
+
+// pinned open only on a wide screen: on a phone on its side or a tablet, the menu open beside it would squeeze the page.
+// Without matchMedia (very old browsers, tests), the screen is taken as wide
+const wideQuery = window.matchMedia?.(`(min-width: ${DESKTOP_BREAKPOINT}px)`);
+const wide = ref(wideQuery?.matches ?? true);
+wideQuery?.addEventListener?.('change', (event) => (wide.value = event.matches));
+const effectivePinned = computed(() => pinned.value && wide.value);
 
 // the pointer rests a while before the menu opens, and may leave it a while: crossing the rail opens nothing,
 // a slip out of the menu does not close it
@@ -13,7 +21,11 @@ export const OPEN_DELAY = 120;
 export const CLOSE_DELAY = 250;
 
 export function useSideMenuPinned() {
-  return computed(() => pinned.value);
+  return effectivePinned;
+}
+
+export function useSideMenuCanPin() {
+  return computed(() => wide.value);
 }
 
 function setPinned(value: boolean) {
@@ -41,7 +53,7 @@ export function useSideMenu() {
     timer = setTimeout(action, delay);
   };
 
-  const expanded = computed(() => pinned.value || focused.value || (hovered.value && !held.value));
+  const expanded = computed(() => effectivePinned.value || focused.value || (hovered.value && !held.value));
 
   // a finger opens nothing: its tap goes to the icon, the pin opens the menu
   function onPointerEnter(event: PointerEvent) {
@@ -90,7 +102,8 @@ export function useSideMenu() {
   onBeforeUnmount(() => clearTimeout(timer));
 
   return {
-    pinned: computed(() => pinned.value),
+    pinned: effectivePinned,
+    canPin: computed(() => wide.value),
     expanded,
     onPointerEnter,
     onPointerLeave,

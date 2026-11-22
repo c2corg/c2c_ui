@@ -123,4 +123,15 @@ describe('useSideMenu', () => {
     expect(useSideMenuPinned().value).toBe(true);
     localStorage.removeItem('SideMenu.preferences');
   });
+
+  it('is not pinned open under the desktop width, even when kept so on the device', async () => {
+    localStorage.setItem('SideMenu.preferences', JSON.stringify({ pinned: true }));
+    vi.stubGlobal('matchMedia', () => ({ matches: false, addEventListener: () => {} }));
+    vi.resetModules();
+    const { useSideMenuCanPin, useSideMenuPinned } = await import('./side-menu');
+    expect(useSideMenuPinned().value).toBe(false);
+    expect(useSideMenuCanPin().value).toBe(false);
+    vi.unstubAllGlobals();
+    localStorage.removeItem('SideMenu.preferences');
+  });
 });
