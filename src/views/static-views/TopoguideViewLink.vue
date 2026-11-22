@@ -25,6 +25,8 @@ defineProps({
 </script>
 
 <style scoped>
+@import '@/assets/css/media.css';
+
 .topoguide-link-view {
   width: 150px;
   height: 150px;
@@ -60,7 +62,7 @@ defineProps({
   }
 
   /* phone: three bubbles per row, smaller icon and label */
-  @media (max-width: 768px) {
+  @media (--c2c-mobile) {
     width: min(110px, 32vw);
     height: min(110px, 32vw);
 

@@ -309,8 +309,6 @@ watch(
 </script>
 
 <style scoped>
-@import '@/assets/css/media.css';
-
 p:not(:last-child),
 ul:not(:last-child),
 table:not(:last-child) {
@@ -395,11 +393,13 @@ table:not(:last-child) {
   }
 }
 
-@media screen and (max-width: 490px),
-  screen and (--c2c-min-tablet) and (max-width: 970px),
-  screen and (--c2c-min-desktop) and (max-width: 1180px),
-  screen and (--c2c-min-widescreen) and (max-width: 1370px),
-  screen and (--c2c-min-fullhd) and (max-width: 1650px) {
+/* a narrow panel, whatever the window: the methods two by two, the dangers below their icons. From 340px, the three
+   methods fit side by side (the 490/970/1180/1370/1650px window widths this replaces flipped about there) */
+.yeti-subpanel {
+  container-type: inline-size;
+}
+
+@container (max-width: 339px) {
   .yetitabs {
     flex-wrap: wrap;
   }

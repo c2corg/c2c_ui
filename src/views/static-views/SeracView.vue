@@ -123,11 +123,11 @@ const eventActivities = constants.event_activities;
   background-size: cover;
   background-position: center;
   min-height: 100%;
-  /* 1224px because after 1024px breakpoint, we have an additional 200px wide menu on the left */
-  @media (min-width: 800px) and (max-width: 1224px) {
+  /* the smallest image as wide as the page, beside the 64px rail of the side menu (tokens.css) */
+  @media (min-width: 865px) {
     background-image: url('@/assets/img/backgrounds/cermygian-crevasse-1024w.jpg');
   }
-  @media (min-width: 1224px) {
+  @media (min-width: 1089px) {
     background-image: url('@/assets/img/backgrounds/cermygian-crevasse-1200w.jpg');
   }
 

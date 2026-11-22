@@ -82,8 +82,8 @@
         class="column documents-container"
         :class="{
           'is-12': !showMap,
-          'is-8 is-7-fullhd': showMap && listMode,
-          'is-8 is-7-widescreen is-6-fullhd': showMap && !listMode,
+          'is-8 is-7-widescreen': showMap && listMode,
+          'is-8 is-6-widescreen': showMap && !listMode,
           'has-custom-width': hasCustomWidth,
         }"
         :style="hasCustomWidth ? { '--results-width': `${splitter.width.value}%` } : undefined"
@@ -105,10 +105,8 @@
             :key="index"
             :class="{
               'is-full': showMap && cardsSingleColumn,
-              'is-full-mobile is-half-tablet is-half-desktop is-half-widescreen is-half-fullhd':
-                showMap && !cardsSingleColumn,
-              'is-full-mobile is-one-third-tablet is-one-third-desktop is-one-quarter-widescreen is-one-quarter-fullhd':
-                !showMap,
+              'is-full-mobile is-half-tablet': showMap && !cardsSingleColumn,
+              'is-full-mobile is-one-third-tablet is-one-quarter-widescreen': !showMap,
             }"
             class="column card-container"
             @mouseenter="highlightedDocument = document"

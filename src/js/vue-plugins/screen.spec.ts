@@ -49,13 +49,15 @@ describe('$screen', () => {
     [1023, 'isTablet'],
     [1024, 'isDesktop'],
     [1100, 'isDesktop'],
-    [1300, 'isWidescreen'],
-    [1600, 'isFullHD'],
+    [1215, 'isDesktop'],
+    [1216, 'isWidescreen'],
+    // no full HD (c2corg/c2c_ui#5200): widescreen to the widest
+    [1600, 'isWidescreen'],
   ])('at %ipx, only %s is true', (width, expected) => {
     fakeScreen(width);
     const { $screen } = installScreen();
 
-    const flags = ['isMobile', 'isTablet', 'isDesktop', 'isWidescreen', 'isFullHD'] as const;
+    const flags = ['isMobile', 'isTablet', 'isDesktop', 'isWidescreen'] as const;
     expect(flags.filter((flag) => $screen[flag])).toEqual([expected]);
   });
 

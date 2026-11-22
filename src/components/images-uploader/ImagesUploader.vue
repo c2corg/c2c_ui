@@ -4,7 +4,7 @@
       <div
         v-for="(image, key) of images"
         :key="key"
-        class="column is-one-third-fullhd is-one-third-widescreen is-half-desktop is-half-tablet is-12-mobile"
+        class="column is-one-third-widescreen is-half-desktop is-half-tablet is-12-mobile"
       >
         <image-uploader
           :categories-edition="categoriesEdition"
@@ -23,7 +23,7 @@
         />
       </div>
 
-      <div class="column is-one-third-fullhd is-one-third-widescreen is-half-desktop is-half-tablet is-12-mobile">
+      <div class="column is-one-third-widescreen is-half-desktop is-half-tablet is-12-mobile">
         <div class="images-uploader-message" :class="{ 'images-uploader-message-dragover': dragOver }">
           <input
             ref="fileInput"

@@ -2,10 +2,7 @@
   <div class="section">
     <html-header :title="$gettext('Camptocamp.org')" />
     <div class="columns">
-      <div
-        class="column is-12-mobile"
-        :class="feed ? 'is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd' : 'is-7 is-8-fullhd'"
-      >
+      <div class="column is-12-mobile" :class="feed ? 'is-7-tablet is-9-widescreen' : 'is-7 is-8-widescreen'">
         <!-- announces the app to the visitors of the website, hidden once installed -->
         <app-banner />
         <!-- Association and website introduction -->
@@ -72,7 +69,7 @@
       <div
         v-if="!$screen.isMobile"
         class="column"
-        :class="feed ? 'is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd' : 'is-5 is-4-fullhd'"
+        :class="feed ? 'is-5-tablet is-3-widescreen' : 'is-5 is-4-widescreen'"
       >
         <board-announcement-widget />
         <dfm-ad-small />

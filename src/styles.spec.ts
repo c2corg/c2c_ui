@@ -9,13 +9,7 @@ import { compileStyle, parse } from 'vue/compiler-sfc';
 
 import viteConfig from '../vite.config.ts';
 
-import {
-  DESKTOP_BREAKPOINT,
-  FULLHD_BREAKPOINT,
-  PHONE_BREAKPOINT,
-  TABLET_BREAKPOINT,
-  WIDESCREEN_BREAKPOINT,
-} from '@/stores/screen';
+import { DESKTOP_BREAKPOINT, PHONE_BREAKPOINT, TABLET_BREAKPOINT, WIDESCREEN_BREAKPOINT } from '@/stores/screen';
 
 // The styles are plain CSS, and compile as the build does (the specs run with `css: false`): the global CSS files of
 // src/assets/css, Bulma's included, and the <style> blocks of the components, with Vue and Lightning CSS.
@@ -123,8 +117,6 @@ describe('styles', () => {
       '--c2c-max-desktop': upTo(DESKTOP_BREAKPOINT),
       '--c2c-min-widescreen': from(WIDESCREEN_BREAKPOINT),
       '--c2c-max-widescreen': upTo(WIDESCREEN_BREAKPOINT),
-      '--c2c-min-fullhd': from(FULLHD_BREAKPOINT),
-      '--c2c-max-fullhd': upTo(FULLHD_BREAKPOINT),
     });
   });
 
@@ -171,6 +163,19 @@ describe('styles', () => {
       globalFiles.flatMap((file) => cssClasses(readFileSync(file, 'utf8')).filter((name) => !words.has(name)))
     );
     expect([...unused].sort()).toEqual(runTimeClasses);
+  });
+
+  // the other way round for the sized columns of Bulma, which a breakpoint names (`is-6-widescreen`): a missing one
+  // leaves the column at its smaller size without a word
+  it('has the rules of the sized columns the code uses', () => {
+    const defined = new Set(globalFiles.flatMap((file) => cssClasses(readFileSync(file, 'utf8'))));
+    const sized = [...codeWords()].filter((word) =>
+      /^is-(\d+|full|half|one-third|two-thirds|one-quarter|three-quarters)-(mobile|tablet|touch|desktop|widescreen)$/.test(
+        word
+      )
+    );
+    expect(sized.length).toBeGreaterThan(10);
+    expect(sized.filter((name) => !defined.has(name))).toEqual([]);
   });
 
   // a plain CSS style is valid CSS for Lightning CSS, scoped by Vue then bundled as Vite does with the options of
