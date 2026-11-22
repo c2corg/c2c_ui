@@ -40,6 +40,7 @@ const mountApp = async (path = '/routes', { screen = 'isWidescreen' } = {}) => {
         BottomNav: true,
         OnboardingTour: true,
         PullToRefresh: true,
+        DeviceFavouritesPrompt: true,
       },
       config: { globalProperties: { $screen: { [screen]: true } } as never },
     },

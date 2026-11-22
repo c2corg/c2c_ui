@@ -247,6 +247,18 @@
         </button>
         <p class="is-size-7 has-text-grey mt-1">{{ $gettext('They stay in your favourites.') }}</p>
       </div>
+
+      <!-- a shared computer: the copies of the other people only take space, their titles are theirs -->
+      <div v-if="favourites.othersCopies.length" class="remove-all-offline">
+        <p class="is-size-7 has-text-grey">
+          {{ $gettext('Offline copies of other people on this device') }}: {{ favourites.othersCopies.length }} ({{
+            formatSize(othersBytes)
+          }})
+        </p>
+        <button type="button" class="button is-small mt-1" @click="removeOthersCopies">
+          <fa-icon icon="trash" />&nbsp;{{ $gettext('Free this space') }}
+        </button>
+      </div>
     </div>
 
     <!-- the actions of one favourite -->
@@ -371,10 +383,14 @@ function whyFrozen(item: PendingOuting) {
 // Safari on iOS clears the data of a site not opened for 7 days, unless it is installed
 const iosBrowser = computed(() => devicePlatform() === 'ios' && !install.installed);
 
-const rows = computed(() => rowsOf(favourites.favourites, offline.find));
+const rows = computed(() => rowsOf(favourites.favourites, favourites.copyOf));
 const offlineRows = computed(() => rows.value.filter((row) => row.entry));
 const offlineBytes = computed(() =>
   offlineRows.value.reduce((total, row) => total + (row.entry?.assets?.bytes ?? 0), 0)
+);
+
+const othersBytes = computed(() =>
+  favourites.othersCopies.reduce((total, entry) => total + (entry.assets?.bytes ?? 0), 0)
 );
 
 const statusLine = computed(() => {
@@ -486,6 +502,14 @@ async function remove(row: FavouriteRow) {
     notifyWithAction($gettext('Removed from favourites.'), $gettext('Undo'), () =>
       favourites.add(docOf(row), folderId).catch(failed)
     );
+  }
+}
+
+async function removeOthersCopies() {
+  if (
+    window.confirm($gettext('Remove the offline copies of the other people? They will have to download them again.'))
+  ) {
+    await favourites.removeOthersCopies().catch(failed);
   }
 }
 

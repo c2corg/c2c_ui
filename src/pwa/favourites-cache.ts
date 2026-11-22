@@ -1,7 +1,7 @@
 // The favourites of a logged in user as the API last listed them, and the changes made since without a network, kept
 // in IndexedDB: the Favourites page opens without a network, and the changes are sent once it is back
 // (src/stores/favourites.ts). One copy per user of the device.
-import { del, get, set } from 'idb-keyval';
+import { del, get, keys, set } from 'idb-keyval';
 
 export interface Favourite {
   // the document type of the UI: route, waypoint...
@@ -33,8 +33,8 @@ export type PendingChange =
 
 const listKey = (userId: number) => `favourites:${userId}`;
 const pendingKey = (userId: number) => `favourites-pending:${userId}`;
-// the favourites of the device sent to the account once: its folders too, the first time only
-const syncedKey = (userId: number) => `favourites-synced:${userId}`;
+// written before the offline copies had owners: the favourites of the device were sent to that account
+const SYNCED_PREFIX = 'favourites-synced:';
 
 export const readList = (userId: number) => get<FavouritesList>(listKey(userId));
 export const writeList = (userId: number, list: FavouritesList) => set(listKey(userId), list);
@@ -43,5 +43,12 @@ export const readPending = async (userId: number) => (await get<PendingChange[]>
 export const writePending = (userId: number, changes: PendingChange[]) =>
   changes.length ? set(pendingKey(userId), changes) : del(pendingKey(userId));
 
-export const wasSynced = async (userId: number) => !!(await get<boolean>(syncedKey(userId)));
-export const setSynced = (userId: number) => set(syncedKey(userId), true);
+const syncedKeys = async () =>
+  (await keys()).filter((key): key is string => typeof key === 'string' && key.startsWith(SYNCED_PREFIX));
+
+// the users whose favourites of the device were sent to their account, before the copies had owners; then forgotten
+export const syncedUsers = async () => (await syncedKeys()).map((key) => Number(key.slice(SYNCED_PREFIX.length)));
+export const forgetSyncedUsers = async () => Promise.all((await syncedKeys()).map((key) => del(key)));
+
+// what a user signing out leaves of their account on the device: nothing
+export const forgetUser = (userId: number) => Promise.all([del(listKey(userId)), del(pendingKey(userId))]);

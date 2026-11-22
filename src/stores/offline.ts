@@ -7,6 +7,7 @@ import { computed, ref } from 'vue';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import config from '@/js/config';
+import { forgetSyncedUsers, syncedUsers } from '@/pwa/favourites-cache';
 import { imageUrlsOf, offlineTilesOf, tileUrlsOf } from '@/pwa/offline-assets';
 import * as idb from '@/pwa/offline-store';
 import {
@@ -158,6 +159,20 @@ export const useOfflineStore = defineStore('offline', () => {
     }
   }
 
+  // The entries saved before they had owners. A device where one account only had its favourites sent: the copies are
+  // that user's. Otherwise nobody's: the favourites of the device, which the next user signing in is asked about
+  async function migrateOwners() {
+    const legacy = savedDocs.value.filter((entry) => !entry.owners);
+    const users = await syncedUsers();
+    for (const entry of legacy) {
+      await idb.setOwners(entry.type, entry.id, users.length === 1 && isOfflineEntry(entry) ? users : []);
+    }
+    await forgetSyncedUsers();
+    if (legacy.length) {
+      await refresh();
+    }
+  }
+
   // the offline copies that need something, the most urgent first
   const ATTENTION_ORDER: Attention[] = ['incomplete', 'expired', 'update'];
   const needingAttention = computed(() =>
@@ -169,6 +184,7 @@ export const useOfflineStore = defineStore('offline', () => {
 
   // no IndexedDB (a private window of an old browser): no saved documents. No Cache API: nothing to migrate or check
   const ready = refresh()
+    .then(migrateOwners)
     .then(migrateLegacy)
     .then(checkAssets)
     .catch(() => {});
@@ -183,8 +199,10 @@ export const useOfflineStore = defineStore('offline', () => {
     title: string;
     folderId?: string | null;
     mode?: SavedMode;
+    // those of the copy it replaces when not given
+    owners?: number[];
   }) {
-    const { type, id, title, folderId = null, mode = ONLINE_MODE } = args;
+    const { type, id, title, folderId = null, mode = ONLINE_MODE, owners } = args;
     const key = `${type}/${id}`;
     // a bookmark of a saved document would drop its offline copy
     if (downloading.value.has(key) || (mode === ONLINE_MODE && find(type, id))) {
@@ -198,7 +216,7 @@ export const useOfflineStore = defineStore('offline', () => {
       const data: SavedEntry['data'] = (await (c2c[type] as DocumentService).getCooked(id, lang)).data;
       // the files of the copy it replaces, which the new one may not use
       const formerKeys = find(type, id)?.assets?.keys;
-      await idb.saveDocument({ type, id, lang, data, title, folderId, mode });
+      await idb.saveDocument({ type, id, lang, data, title, folderId, mode, owners });
       if (mode === OFFLINE_MODE) {
         // without it, the browser may clear the data of the site when the phone is short of space
         navigator.storage?.persist?.().catch(() => {});
@@ -263,6 +281,7 @@ export const useOfflineStore = defineStore('offline', () => {
         data: null,
         folderId: args.folderId ?? null,
         mode: ONLINE_MODE,
+        owners: [],
       })
     );
   }
@@ -321,6 +340,8 @@ export const useOfflineStore = defineStore('offline', () => {
       await release(keys);
     },
     moveToFolder: (type: string, id: number, folderId: string | null) => changed(idb.setFolder(type, id, folderId)),
+    setOwners: (type: string, id: number, owners: number[]) => changed(idb.setOwners(type, id, owners)),
+    setDeclined: (type: string, id: number, declined: number[]) => changed(idb.setDeclined(type, id, declined)),
     createFolder,
     bookmark,
     mergeFoldersByName,

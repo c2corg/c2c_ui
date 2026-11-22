@@ -189,9 +189,23 @@ export const useUserStore = defineStore('user', () => {
     });
   }
 
-  function signout() {
+  // asked before signing out (src/stores/favourites.ts sends what waits): one false keeps the session. Without any, the
+  // sign out is done at once
+  const signOutGuards: (() => Promise<boolean>)[] = [];
+  function beforeSignOut(guard: () => Promise<boolean>) {
+    signOutGuards.push(guard);
+  }
+
+  // whether the user is signed out
+  async function signout() {
+    for (const guard of signOutGuards) {
+      if (!(await guard().catch(() => true))) {
+        return false;
+      }
+    }
     c2c.userProfile.logout();
     forget();
+    return true;
   }
 
   // forget the session here, and in the other tabs through the storage
@@ -272,6 +286,7 @@ export const useUserStore = defineStore('user', () => {
     isLogged,
     remember,
     sessionEnded,
+    beforeSignOut,
     renewIfNeeded,
     signIn,
     signout,

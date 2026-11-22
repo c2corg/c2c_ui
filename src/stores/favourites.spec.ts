@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto';
-import { clear } from 'idb-keyval';
+import { clear, get, set } from 'idb-keyval';
 import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { reactive } from 'vue';
@@ -8,13 +8,23 @@ import { useFavouritesStore } from './favourites';
 import { useOfflineStore } from './offline';
 
 import { readList, readPending } from '@/pwa/favourites-cache';
-import { OFFLINE_MODE, saveDocument as saveEntry, saveFolder } from '@/pwa/offline-store';
+import { docKey, OFFLINE_MODE, saveDocument as saveEntry, saveFolder } from '@/pwa/offline-store';
 import { fakeCacheStorage } from '@/pwa/test-utils';
 
 // the user: logged out unless a test logs in
-const user = vi.hoisted(() => ({ state: null as unknown as { isLogged: boolean; id: number | null } }));
+const user = vi.hoisted(() => ({
+  state: null as unknown as {
+    isLogged: boolean;
+    id: number | null;
+    beforeSignOut: (guard: () => Promise<boolean>) => void;
+  },
+  // what the store asks before signing out
+  guards: [] as (() => Promise<boolean>)[],
+}));
 vi.mock('@/stores/user', () => ({ useUserStore: () => user.state }));
-vi.mock('@/stores/language', () => ({ useLanguageStore: () => ({ current: 'fr' }) }));
+vi.mock('@/stores/language', () => ({
+  useLanguageStore: () => ({ current: 'fr', gettext: (text: string) => text }),
+}));
 
 // the API of the favourites, and the documents downloaded for offline
 const api = vi.hoisted(() => ({
@@ -83,7 +93,8 @@ describe('favourites store', () => {
   beforeEach(async () => {
     await clear();
     setActivePinia(createPinia());
-    user.state = reactive({ isLogged: false, id: null });
+    user.guards = [];
+    user.state = reactive({ isLogged: false, id: null, beforeSignOut: (guard) => user.guards.push(guard) });
     vi.resetAllMocks();
     api.list.mockImplementation(() => ok(accountList()));
     api.add.mockImplementation(() => ok());
@@ -210,7 +221,7 @@ describe('favourites store', () => {
       expect(favourites.pendingCount).toBe(1);
     });
 
-    it('sends the favourites of the device to the account once, their folders by name', async () => {
+    it('offers the favourites of the device once the account is read, and adds them in folders by name', async () => {
       // logged out before: a favourite in a folder, an offline copy in a folder of the same name (former sections),
       // a folder the account already has, and an empty one
       await saveFolder({ id: 'a', name: 'Écrins', section: 'online' });
@@ -224,31 +235,42 @@ describe('favourites store', () => {
       const favourites = await startStore();
       const offline = useOfflineStore();
 
-      expect(api.createFolder.mock.calls.map(([name]) => name)).toEqual(['Écrins', 'Vide']);
+      // nothing sent without the user's answer, nor shown in their favourites
+      expect(api.add).not.toHaveBeenCalled();
+      expect(favourites.deviceOffer.map((entry) => entry.id).sort()).toEqual([70, 71, 72]);
+      expect(favourites.isFavourite('route', 71)).toBe(false);
+
+      await favourites.acceptDeviceFavourites();
+      // the folders of the favourites sent only
+      expect(api.createFolder.mock.calls.map(([name]) => name)).toEqual(['Écrins']);
       expect(api.add).toHaveBeenCalledWith(70, 101);
       expect(api.add).toHaveBeenCalledWith(71, 101);
       expect(api.add).toHaveBeenCalledWith(72, 5);
-      // the favourites without a copy leave the device, the offline copy stays
-      expect(offline.savedDocs.map((entry) => entry.id)).toEqual([71]);
+      // the favourites without a copy leave the device, the offline copy becomes the user's
+      expect(offline.savedDocs.map((entry) => [entry.id, entry.owners])).toEqual([[71, [7]]]);
       expect(favourites.find('route', 71)?.folderId).toBe('101');
-      expect(favourites.folders.map((folder) => folder.name)).toEqual(['Mont Blanc', 'Écrins', 'Vide']);
+      expect(favourites.copyOf('route', 71)).toBeDefined();
+      expect(favourites.deviceOffer).toEqual([]);
+    });
 
-      // the next start: nothing sent again
-      setActivePinia(createPinia());
-      api.createFolder.mockClear();
-      api.add.mockClear();
-      api.list.mockImplementation(() =>
-        ok({
-          ...accountList(),
-          favourites: [
-            ...accountList().favourites,
-            { document_id: 71, type: 'r', folder_id: 101, created_at: '', lang: 'fr', title: 'x' },
-          ],
-        })
-      );
-      await startStore();
-      expect(api.createFolder).not.toHaveBeenCalled();
+    it('keeps the favourites of the device out of an account that declines them, and offers them to another', async () => {
+      await saveEntry({ ...ROUTE, id: 70, data: null, folderId: null, mode: 'online' });
+
+      const favourites = await startStore();
+      await favourites.declineDeviceFavourites();
       expect(api.add).not.toHaveBeenCalled();
+      expect(favourites.deviceOffer).toEqual([]);
+      expect(favourites.isFavourite('route', 70)).toBe(false);
+      expect(useOfflineStore().find('route', 70)?.declined).toEqual([7]);
+
+      // not asked again to that user
+      setActivePinia(createPinia());
+      expect((await startStore()).deviceOffer).toEqual([]);
+
+      // another user of the computer is asked
+      setActivePinia(createPinia());
+      user.state.id = 8;
+      expect((await startStore()).deviceOffer.map((entry) => entry.id)).toEqual([70]);
     });
 
     it('removes the offline copy with the favourite, and keeps the favourite without its copy', async () => {
@@ -285,6 +307,129 @@ describe('favourites store', () => {
         'waypoint/30',
         'waypoint/31',
       ]);
+    });
+  });
+  describe('a computer shared by several people', () => {
+    const loginAs = async (id: number | null) => {
+      user.state.isLogged = id !== null;
+      user.state.id = id;
+      await vi.waitFor(() => expect(useFavouritesStore().loaded).toBe(true));
+      await useFavouritesStore().whenReady();
+    };
+
+    it('keeps the offline copies of each user to themselves, logged out showing them all', async () => {
+      const favourites = await startStore();
+      const offline = useOfflineStore();
+      await loginAs(7);
+      await favourites.saveOffline({ type: 'route', id: 60, lang: 'fr', title: 'Voie' });
+      expect(offline.find('route', 60)?.owners).toEqual([7]);
+
+      // another user: the copy is not in their favourites, nor sent to their account
+      api.add.mockClear();
+      await loginAs(8);
+      expect(api.add).not.toHaveBeenCalled();
+      expect(favourites.isFavourite('route', 60)).toBe(false);
+      expect(favourites.copyOf('route', 60)).toBeUndefined();
+      expect(favourites.othersCopies.map((entry) => entry.id)).toEqual([60]);
+      expect(favourites.deviceOffer).toEqual([]);
+
+      // they download it too: one copy, two owners; removing their favourite leaves the copy of the first one
+      await favourites.saveOffline({ type: 'route', id: 60, lang: 'fr', title: 'Voie' });
+      expect(offline.find('route', 60)?.owners).toEqual([7, 8]);
+      await favourites.remove('route', 60);
+      expect(api.remove).toHaveBeenCalledWith(60);
+      expect(offline.find('route', 60)?.owners).toEqual([7]);
+
+      // logged out (a session may end in the mountains): the copy shows
+      await loginAs(null);
+      expect(favourites.isFavourite('route', 60)).toBe(true);
+      expect(favourites.copyOf('route', 60)).toBeDefined();
+
+      // the first user removes their copy: nobody has it any more
+      await loginAs(7);
+      await favourites.removeOfflineCopy('route', 60);
+      expect(offline.find('route', 60)).toBeUndefined();
+    });
+
+    it('frees the space of the copies of the others', async () => {
+      await saveEntry({ ...ROUTE, id: 61, data: { document_id: 61 }, folderId: null, mode: OFFLINE_MODE, owners: [8] });
+      await saveEntry({ ...ROUTE, id: 62, data: { document_id: 62 }, folderId: null, mode: OFFLINE_MODE, owners: [7] });
+      user.state.isLogged = true;
+      user.state.id = 7;
+      const favourites = await startStore();
+
+      await favourites.removeOthersCopies();
+      expect(useOfflineStore().savedDocs.map((entry) => entry.id)).toEqual([62]);
+    });
+
+    it('gives the copies saved before owners to the one account synced on the device, or to nobody', async () => {
+      await set(docKey('route', 63), {
+        ...ROUTE,
+        id: 63,
+        data: { document_id: 63 },
+        folderId: null,
+        mode: OFFLINE_MODE,
+      });
+      await set(docKey('route', 64), { ...ROUTE, id: 64, data: null, folderId: null, mode: 'online' });
+      await set('favourites-synced:7', true);
+
+      await startStore();
+      const offline = useOfflineStore();
+      expect(offline.find('route', 63)?.owners).toEqual([7]);
+      expect(offline.find('route', 64)?.owners).toEqual([]);
+      expect(await get('favourites-synced:7')).toBeUndefined();
+
+      // two accounts synced: nobody's
+      await clear();
+      await set(docKey('route', 63), {
+        ...ROUTE,
+        id: 63,
+        data: { document_id: 63 },
+        folderId: null,
+        mode: OFFLINE_MODE,
+      });
+      await set('favourites-synced:7', true);
+      await set('favourites-synced:8', true);
+      setActivePinia(createPinia());
+      await startStore();
+      expect(useOfflineStore().find('route', 63)?.owners).toEqual([]);
+    });
+
+    it('sends the changes waiting before signing out, then forgets the account on the device', async () => {
+      user.state.isLogged = true;
+      user.state.id = 7;
+      const favourites = await startStore();
+      api.add.mockImplementationOnce(networkError);
+      await favourites.add({ type: 'book', id: 60, lang: 'fr', title: 'Livre' });
+      expect(favourites.pendingCount).toBe(1);
+
+      expect(await user.guards[0]()).toBe(true);
+      expect(api.add).toHaveBeenLastCalledWith(60, null);
+      expect(await readList(7)).toBeUndefined();
+      expect(await readPending(7)).toEqual([]);
+    });
+
+    it('asks before signing out with changes that cannot be sent, and keeps the session when refused', async () => {
+      user.state.isLogged = true;
+      user.state.id = 7;
+      const favourites = await startStore();
+      useOfflineStore().online = false;
+      await favourites.add({ type: 'book', id: 60, lang: 'fr', title: 'Livre' });
+
+      vi.stubGlobal(
+        'confirm',
+        vi.fn(() => false)
+      );
+      expect(await user.guards[0]()).toBe(false);
+      expect(await readPending(7)).toHaveLength(1);
+
+      vi.stubGlobal(
+        'confirm',
+        vi.fn(() => true)
+      );
+      expect(await user.guards[0]()).toBe(true);
+      expect(await readPending(7)).toEqual([]);
+      expect(await readList(7)).toBeUndefined();
     });
   });
 });

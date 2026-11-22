@@ -36,7 +36,6 @@ import { computed, useTemplateRef } from 'vue';
 import ModalCard from '@/components/generics/modals/ModalCard.vue';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { notify, notifyWithAction, toast } from '@/js/toast';
-import { isOfflineEntry } from '@/pwa/offline-store';
 import { useFavouritesStore } from '@/stores/favourites';
 import { useOfflineStore } from '@/stores/offline';
 import { copyStateOf } from '@/views/user/favourite-rows';
@@ -52,10 +51,8 @@ const dialog = useTemplateRef<InstanceType<typeof ModalCard>>('dialog');
 const doc = computed(() => ({ type: props.documentType, id: props.documentId, lang: props.lang, title: props.title }));
 const favourite = computed(() => favourites.isFavourite(props.documentType, props.documentId));
 const busy = computed(() => offline.isDownloading(props.documentType, props.documentId));
-const offlineEntry = computed(() => {
-  const entry = offline.find(props.documentType, props.documentId);
-  return isOfflineEntry(entry) ? entry : null;
-});
+// the copy of the user: on a shared computer, another one's copy is not theirs to remove
+const offlineEntry = computed(() => favourites.copyOf(props.documentType, props.documentId) ?? null);
 
 // the colour of the badge: fresh, an old copy, or one that may not open fully without a network
 const badge = computed(() => copyStateOf(offlineEntry.value));

@@ -5,6 +5,10 @@
 //   - 'offline': the cooked document, its images and the map tiles around it (in the caches of the service worker),
 //     taken to the mountain. A favourite too, logged in or not.
 // One copy per document, in the language it was saved in.
+//
+// A computer may be shared by several people (a family): each copy says who took it offline (owners), and a favourite
+// of a user logged out belongs to nobody. A user logged in sees their copies only; logged out, all the copies show (a
+// session may end in the mountains), with the favourites of nobody.
 import { del, get, keys, set } from 'idb-keyval';
 
 // the documents it keeps
@@ -25,6 +29,11 @@ export interface SavedEntry {
   title: string;
   folderId: string | null;
   mode: SavedMode;
+  // the ids of the users who took this copy offline; nobody for a favourite of a user logged out. Absent from the
+  // entries saved before, until they are migrated (src/stores/offline.ts)
+  owners?: number[];
+  // the users who chose to keep this favourite of nobody out of their account: it is not offered to them again
+  declined?: number[];
   savedAt: number;
   // the last copy of the document received (offline only), what its age is counted from
   downloadedAt: number | null;
@@ -71,7 +80,7 @@ async function update(key: string, change: (entry: SavedEntry) => Partial<SavedE
 }
 
 export async function saveDocument(
-  entry: Pick<SavedEntry, 'type' | 'id' | 'lang' | 'data' | 'title' | 'folderId' | 'mode'>
+  entry: Pick<SavedEntry, 'type' | 'id' | 'lang' | 'data' | 'title' | 'folderId' | 'mode' | 'owners'>
 ) {
   const key = docKey(entry.type, entry.id);
   const previous = await get<SavedEntry>(key);
@@ -79,6 +88,10 @@ export async function saveDocument(
   await set(key, {
     ...entry,
     data: offline ? entry.data : null,
+    // the owners of the copy it replaces stay, unless given
+    // a plain copy: IndexedDB cannot clone the reactive proxies
+    owners: [...(entry.owners ?? previous?.owners ?? [])],
+    declined: previous?.declined ?? [],
     savedAt: previous?.savedAt ?? Date.now(),
     downloadedAt: offline ? Date.now() : null,
   } satisfies SavedEntry);
@@ -98,6 +111,11 @@ export const setAssets = (type: string, id: number, assets: SavedEntry['assets']
 
 export const setMissing = (type: string, id: number, missing: number) =>
   update(docKey(type, id), (entry) => (entry.assets ? { assets: { ...entry.assets, missing } } : {}));
+
+export const setOwners = (type: string, id: number, owners: number[]) => update(docKey(type, id), () => ({ owners }));
+
+export const setDeclined = (type: string, id: number, declined: number[]) =>
+  update(docKey(type, id), () => ({ declined }));
 
 export const setFolder = (type: string, id: number, folderId: string | null) =>
   update(docKey(type, id), () => ({ folderId }));
