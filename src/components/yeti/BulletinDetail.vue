@@ -247,7 +247,7 @@ watch(
     failed.value = false;
     loading.value = true;
     try {
-      const bulletins = await avalancheBulletins.getBulletins(regionId);
+      const bulletins = await avalancheBulletins.getLatestBulletins(regionId);
       // another massif may have been opened meanwhile
       if (regionId === props.selected.regionId) {
         bulletin.value = bulletins[0] ?? null;

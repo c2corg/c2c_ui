@@ -83,7 +83,8 @@ export type AvalancheBulletin = {
   weatherForecast?: Texts;
   travelAdvisory?: Texts;
   tendency?: Tendency[];
-  customData?: { MeteoFrance?: MeteoFranceData };
+  // ALBINA.mainDate: the day the bulletin is valid for
+  customData?: { ALBINA?: { mainDate?: string }; MeteoFrance?: MeteoFranceData };
 };
 
 export type AvalancheBulletins = { bulletins: AvalancheBulletin[] };
@@ -95,16 +96,16 @@ class AvalancheBulletinService {
     this.axios = axios.create({ baseURL: config.urls.api });
   }
 
-  /** The bulletins of an EAWS region (FR-01 to FR-74 for now): none out of season */
-  getBulletins(regionId: string) {
+  /** The last bulletins published for an EAWS region (FR-01 to FR-74 for now): none out of season */
+  getLatestBulletins(regionId: string) {
     return this.axios
-      .get<AvalancheBulletins>(`/avalanche-bulletins/regions/${regionId}`)
+      .get<AvalancheBulletins>(`/avalanche-bulletins/regions/${regionId}/latest`)
       .then((response) => response.data.bulletins);
   }
 
   /** The official PDF, through the API: the key of Météo-France stays on the server */
   pdfUrl(regionId: string) {
-    return `${config.urls.api}/avalanche-bulletins/regions/${regionId}/pdf`;
+    return `${config.urls.api}/avalanche-bulletins/regions/${regionId}/latest/pdf`;
   }
 }
 
