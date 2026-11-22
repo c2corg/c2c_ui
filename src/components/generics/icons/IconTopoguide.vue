@@ -1,5 +1,5 @@
 <template>
-  <fa-icon icon="arrow-right" :fixed-width="fixedWidth" />
+  <fa-icon icon="compass" :fixed-width="fixedWidth" />
 </template>
 
 <script setup lang="ts">
