@@ -43,11 +43,11 @@
       </div>
 
       <div class="buttons is-flex-shrink-0 ml-3">
-        <button class="button is-small" @click="toggleDetails">
+        <button class="button" @click="toggleDetails">
           <fa-icon :icon="showDetails ? 'chevron-up' : 'chevron-down'" class="mr-1" />
           <span v-translate>Details</span>
         </button>
-        <button class="button is-small is-primary" @click="confirmRestore">
+        <button class="button is-primary" @click="confirmRestore">
           <fa-icon icon="history" class="mr-1" />
           <span v-translate>Restore</span>
         </button>

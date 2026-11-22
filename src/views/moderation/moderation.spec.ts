@@ -1,5 +1,5 @@
 // The moderation page: its tabs, and the deleted documents a moderator can restore
-import { flushPromises, mount } from '@vue/test-utils';
+import { flushPromises, mount, type VueWrapper } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createMemoryHistory, createRouter, type Router } from 'vue-router';
 
@@ -83,6 +83,9 @@ const outing = (id: number, extra: Partial<DeletedDocument> = {}): DeletedDocume
 });
 
 const Empty = { render: () => null };
+
+// the button loading the next page
+const moreButton = (wrapper: VueWrapper) => wrapper.findAll('button').find((button) => button.text() === 'More');
 
 const InputDocumentStub = {
   name: 'InputDocument',
@@ -205,12 +208,12 @@ describe('DeletedDocuments', () => {
     expect(api.getDeletedDocuments).toHaveBeenCalledWith(0, 30, expect.any(Object));
     expect(wrapper.findAllComponents(DeletedDocumentItem)).toHaveLength(2);
 
-    await wrapper.find('button.button:not(.is-small)').trigger('click');
+    await moreButton(wrapper)!.trigger('click');
     await flushPromises();
 
     expect(api.getDeletedDocuments).toHaveBeenLastCalledWith(2, 30, expect.any(Object));
     expect(wrapper.findAllComponents(DeletedDocumentItem)).toHaveLength(3);
-    expect(wrapper.find('button.button:not(.is-small)').exists()).toBe(false);
+    expect(moreButton(wrapper)).toBeUndefined();
   });
 
   it('filters by type, user and dates, from the first page, and clears the filters', async () => {
@@ -370,7 +373,7 @@ describe('AccountRemovals', () => {
     expect(wrapper.emitted('count')).toEqual([[1]]);
 
     api.getAccountRemovals.mockReturnValue(answer({ total: 0, removals: [], roles }));
-    await wrapper.findAll('.tabs.is-toggle a')[1]!.trigger('click');
+    await wrapper.findAll('.status-chips button')[1]!.trigger('click');
     await flushPromises();
     expect(api.getAccountRemovals).toHaveBeenLastCalledWith('done', 0, 30);
     expect(wrapper.text()).toContain('No request.');
@@ -395,6 +398,20 @@ describe('AccountRemovalItem', () => {
 
     expect(api.validateAccountRemoval).toHaveBeenCalledWith(1, 'forum');
     expect(wrapper.emitted('changed')).toEqual([[validated]]);
+  });
+
+  // the buttons of the rest of the site: their default size, and only the variants the CSS has (no is-outlined)
+  it('has the buttons of the site', () => {
+    const wrapper = mount(AccountRemovalItem, {
+      props: {
+        removal: removal(1, { can: { validate: ['forum'], unvalidate: ['topoguide'], update: true, cancel: true } }),
+      },
+      global: global(false),
+    });
+
+    const buttons = wrapper.findAll('button.button');
+    expect(buttons.length).toBeGreaterThan(4);
+    expect(buttons.filter((b) => b.classes('is-small') || b.classes('is-outlined'))).toEqual([]);
   });
 
   it('shows what the removal script did', async () => {

@@ -8,14 +8,21 @@
     </p>
 
     <div class="is-flex is-justify-content-space-between is-align-items-center is-flex-wrap-wrap mb-4">
-      <div class="tabs is-small is-toggle mb-0">
-        <ul>
-          <li v-for="item of STATUSES" :key="item" :class="{ 'is-active': item === status }">
-            <a @click="setStatus(item)">{{ statusLabels[item] }}</a>
-          </li>
-        </ul>
+      <!-- the filter chips of the other lists (favourites) -->
+      <div class="buttons status-chips mb-0">
+        <button
+          v-for="item of STATUSES"
+          :key="item"
+          type="button"
+          class="button is-small is-rounded"
+          :class="{ 'is-primary': item === status }"
+          :aria-pressed="item === status"
+          @click="setStatus(item)"
+        >
+          {{ statusLabels[item] }}
+        </button>
       </div>
-      <button class="button is-small is-primary" @click="requestWindow!.show()">
+      <button class="button is-primary" @click="requestWindow!.show()">
         <fa-icon icon="user-slash" class="mr-1" />
         <span v-translate>New request</span>
       </button>

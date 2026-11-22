@@ -64,11 +64,11 @@
       </div>
 
       <div class="buttons is-flex-shrink-0 ml-3">
-        <button class="button is-small" @click="showHistory = !showHistory">
+        <button class="button" @click="showHistory = !showHistory">
           <fa-icon :icon="showHistory ? 'chevron-up' : 'chevron-down'" class="mr-1" />
           <span v-translate>Request history</span>
         </button>
-        <button v-if="removal.can.cancel" class="button is-small is-danger is-outlined" @click="ask('cancel')">
+        <button v-if="removal.can.cancel" class="button is-danger is-light" @click="ask('cancel')">
           <span v-translate>Cancel the request</span>
         </button>
       </div>
@@ -90,7 +90,7 @@
           <p v-else class="is-size-7 has-text-grey" v-translate>Waiting</p>
           <button
             v-if="removal.can.validate.includes(side)"
-            class="button is-small is-success mt-1"
+            class="button is-success mt-2"
             :class="{ 'is-loading': sending }"
             @click="validate(side)"
             v-translate
@@ -99,7 +99,7 @@
           </button>
           <button
             v-if="removal.can.unvalidate.includes(side)"
-            class="button is-small is-warning is-light mt-1"
+            class="button is-warning is-light mt-2"
             @click="ask('unvalidate', side)"
             v-translate
           >
@@ -113,14 +113,14 @@
       <div class="control is-expanded">
         <input
           v-model="forumUrl"
-          class="input is-small"
+          class="input"
           type="url"
           placeholder="https://forum.camptocamp.org/t/…"
           :aria-label="$gettext('Forum discussion')"
         />
       </div>
       <div class="control">
-        <button class="button is-small" :disabled="!urlChanged" @click="saveUrl" v-translate>Save</button>
+        <button class="button" :disabled="!urlChanged" @click="saveUrl" v-translate>Save</button>
       </div>
     </div>
 
@@ -161,8 +161,8 @@
         }}
       </p>
       <div class="field mt-3">
-        <label class="label is-small" v-translate>Forum discussion (optional, the current one is kept)</label>
-        <input v-model="actionUrl" class="input is-small" type="url" placeholder="https://" />
+        <label class="label" v-translate>Forum discussion (optional, the current one is kept)</label>
+        <input v-model="actionUrl" class="input" type="url" placeholder="https://" />
       </div>
       <template #confirm-label>
         {{ action === 'cancel' ? $gettext('Cancel the request') : $gettext('Withdraw') }}
@@ -318,12 +318,12 @@ function confirm() {
 .validation {
   height: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1px dashed var(--bulma-border, #dbdbdb);
-  border-radius: 4px;
+  border: 1px dashed var(--c2c-grey-lighter);
+  border-radius: var(--c2c-radius);
 }
 
 .validation.is-validated {
   border-style: solid;
-  border-color: var(--bulma-success, #48c78e);
+  border-color: var(--c2c-green);
 }
 </style>
