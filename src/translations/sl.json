@@ -74,6 +74,7 @@
     "An error occurred, couldn't (un)mask version": "Prišlo je do napake, ni bilo mogoče (raz)maskirati različice",
     "An error occurred, couldn't save images": "Prišlo je do napake, slik ni bilo mogoče shraniti",
     "An unknown error occurred.": "Prišlo je do neznane napake.",
+    "An uppercase letter": "Velika črka",
     "Anonymity and confidentiality": "Anonimnost in zaupnost",
     "App settings": "Nastavitve aplikacije",
     "Applications": "Aplikacije",
@@ -432,6 +433,7 @@
       "$$noContext": "Izberi plasti",
       "Map controls": "Izberi plasti"
     },
+    "Leave empty to keep your current password.": "Pustite prazno, če želite obdržati trenutno geslo.",
     "Leave fullscreen": "Zapusti celozaslonski način",
     "Leave later": "Odhod po",
     "Legend": "Legenda",
@@ -450,6 +452,7 @@
     "Loading...": "Nalaganje...",
     "Local file": "Lokalna datoteka",
     "Location / elevation / orientation": "Kraj / višina / orientacija",
+    "Log in": "Prijava",
     "Log in to post a comment": "Prijavite se za objavo komentarja",
     "Login": "Prijava",
     "Login failed": {
@@ -630,6 +633,7 @@
     "Recenter on...": "Centriranje na ...",
     "Refresh": "Osveži",
     "Register": "Registriraj se",
+    "Remember me": "Zapomni si me",
     "Remove": "Odstrani",
     "Report an issue": "Prijavi problem",
     "Report title, activity, linked routes or outings.": "Naslov poročila, dejavnost, povezane smeri ali vzponi",
@@ -660,6 +664,7 @@
     "Save offline": "Shrani offline",
     "Saved for the field": "Shranjeno za uporabo na terenu",
     "Saved on this device only.": "Shranjeno samo v tej napravi.",
+    "Search": "Iskanje",
     "Search ...": "Iskanje ...",
     "Search a document to associate...": "Poišči dokument, ki ga želiš povezati",
     "See more": "Poglej več",
@@ -1487,6 +1492,7 @@
       "image_categories": "razno",
       "waypoint_types": "razno"
     },
+    "missing fields": "manjkajoča polja",
     "mixed_rating": "Ocena kombinirano",
     "modifications": "Posledice na prakse",
     "mollasse_calcaire": {
