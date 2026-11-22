@@ -22,7 +22,7 @@
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
           <topoguide-view-small-link
-            class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-3-fullhd"
+            class="column is-4-mobile is-3-tablet"
             v-for="activity of activities"
             :key="activity"
             :to="{ name: 'outings', query: { act: activity } }"
@@ -34,7 +34,7 @@
           </topoguide-view-small-link>
 
           <topoguide-view-small-link
-            class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-3-fullhd"
+            class="column is-4-mobile is-3-tablet"
             :to="{ name: 'outing-add', params: { lang: $language.current } }"
           >
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
@@ -48,7 +48,7 @@
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
           <topoguide-view-small-link
-            class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-3-fullhd"
+            class="column is-4-mobile is-3-tablet"
             v-for="activity of activities"
             :key="activity"
             :to="{ name: 'routes', query: { act: activity } }"
@@ -60,7 +60,7 @@
           </topoguide-view-small-link>
 
           <topoguide-view-small-link
-            class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-3-fullhd"
+            class="column is-4-mobile is-3-tablet"
             :to="{ name: 'route-add', params: { lang: $language.current } }"
           >
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
@@ -74,7 +74,7 @@
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
           <topoguide-view-small-link
-            class="column is-4-mobile is-2-tablet is-2-desktop is-2-widescreen is-2-fullhd"
+            class="column is-4-mobile is-2-tablet"
             v-for="waypoint_type of waypoint_types"
             :key="waypoint_type"
             :to="{ name: 'waypoints', query: { wtyp: waypoint_type } }"
@@ -86,7 +86,7 @@
           </topoguide-view-small-link>
 
           <topoguide-view-small-link
-            class="column is-4-mobile is-2-tablet is-2-desktop is-2-widescreen is-2-fullhd"
+            class="column is-4-mobile is-2-tablet"
             :to="{ name: 'waypoint-add', params: { lang: $language.current } }"
           >
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
@@ -112,6 +112,8 @@ const waypoint_types = computed(() => constants.waypoint_types);
 </script>
 
 <style scoped>
+@import '@/assets/css/media.css';
+
 .topoguide {
   background-image: url('@/assets/img/backgrounds/laurentf-sajama-800w.jpg');
   background-position-x: center;
@@ -119,11 +121,11 @@ const waypoint_types = computed(() => constants.waypoint_types);
   padding-top: 90px; /* keep the header on a deep color zone */
   padding-bottom: 25px;
   justify-content: center;
-  /* 1224px because after 1024px breakpoint, we have an additional 200px wide menu on the left */
-  @media (min-width: 800px) and (max-width: 1224px) {
+  /* the smallest image as wide as the page, beside the 64px rail of the side menu (tokens.css) */
+  @media (min-width: 865px) {
     background-image: url('@/assets/img/backgrounds/laurentf-sajama-1024w.jpg');
   }
-  @media (min-width: 1224px) {
+  @media (min-width: 1089px) {
     background-image: url('@/assets/img/backgrounds/laurentf-sajama-1200w.jpg');
   }
 
@@ -141,7 +143,7 @@ const waypoint_types = computed(() => constants.waypoint_types);
   }
 
   /* on a phone, the title near the top and the nine bubbles three by three: all on the first screen */
-  @media (max-width: 768px) {
+  @media (--c2c-mobile) {
     padding-top: 12px;
     padding-bottom: 12px;
 

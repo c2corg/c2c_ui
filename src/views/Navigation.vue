@@ -3,10 +3,10 @@
     class="is-size-5"
     :class="{
       'has-background-warning': siteConfiguration.urls.name != 'prod',
-      'with-ad': topAd && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
+      'with-ad': topAd && $screen.isWidescreen,
     }"
   >
-    <dfm-ad-large v-if="topAd && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop" />
+    <dfm-ad-large v-if="topAd && $screen.isWidescreen" />
 
     <div class="navigation-end" :class="{ 'is-search-shown': !hideSearchInput }">
       <router-link
@@ -492,17 +492,20 @@ nav {
   }
 }
 
-@media screen and (--c2c-max-tablet) {
+/* under the desktop width (a tablet, a phone on its side): the buttons closer together */
+@media screen and (--c2c-touch) {
   .navigation-item {
-    padding: 0.5rem 0.1rem;
+    padding: 0.5rem 0.2rem;
   }
 
   .navigation-end {
     margin-right: 5px;
   }
+}
 
-  .search-input {
-    width: 160px;
+@media screen and (--c2c-max-tablet) {
+  .navigation-item {
+    padding: 0.5rem 0.1rem;
   }
 }
 
@@ -523,35 +526,7 @@ nav {
   }
 }
 
-@media screen and (--c2c-min-tablet) and (--c2c-max-desktop) {
-  .navigation-item {
-    padding: 0.5rem 0.2rem;
-  }
-
-  .navigation-end {
-    margin-right: 5px;
-  }
-
-  .search-input {
-    width: 160px;
-  }
-}
-
-@media screen and (--c2c-min-desktop) and (--c2c-max-widescreen) {
-  .navigation-item {
-    padding: 0.5rem 0.75rem;
-  }
-
-  .navigation-end {
-    margin-right: 1rem;
-  }
-
-  .search-input {
-    width: 160px;
-  }
-}
-
-@media screen and (--c2c-min-widescreen) and (--c2c-max-fullhd) {
+@media screen and (--c2c-min-desktop) {
   .navigation-item {
     padding: 0.5rem 0.75rem;
   }
@@ -561,19 +536,12 @@ nav {
   }
 }
 
-@media screen and (--c2c-min-fullhd) {
-  .navigation-item {
-    padding: 0.5rem 0.75rem;
-  }
-
-  .navigation-end {
-    margin-right: 1rem;
-  }
+.search-input {
+  width: 160px;
 }
 
-/* search input : increase size to right on hover */
-/* only on screen wider than desktop */
-@media screen and (--c2c-min-fullhd) {
+/* on wide screens, a wider search input, wider still under the pointer */
+@media screen and (--c2c-min-widescreen) {
   .search-input {
     width: 250px;
     margin-right: 50px;

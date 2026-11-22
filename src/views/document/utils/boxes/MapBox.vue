@@ -231,8 +231,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-@import '@/assets/css/media.css';
-
 .map-container {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -255,9 +253,6 @@ onBeforeUnmount(() => {
     right: 0px;
     height: 45vh;
     width: 100%;
-    @media screen and (--c2c-min-desktop) {
-      left: var(--c2c-sidemenu-width); /* when sidemenu is shown, as in App.vue */
-    }
   }
   &.pinned-to-right {
     right: 0px;
@@ -285,7 +280,12 @@ onBeforeUnmount(() => {
   left: 0;
   z-index: 10; /* as a pinned map */
   background: white;
-  @media screen and (--c2c-min-desktop) {
+}
+
+/* beside the side menu, where it is shown (data-shell, as App.vue) */
+html[data-shell='desktop'] {
+  :not(:fullscreen) > .map-container.pinned-to-top,
+  .full-window:not(:fullscreen) {
     left: var(--c2c-sidemenu-width);
   }
 }

@@ -2,7 +2,7 @@
   <div
     id="app"
     :class="{
-      'nav-dfm': topAd && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
+      'nav-dfm': topAd && $screen.isWidescreen,
       'home-topoguide': homePage,
       'no-top-ad': !topAd,
       'is-menu-pinned': sideMenuPinned || sideMenuKeptOpen,
@@ -13,7 +13,7 @@
     <navigation class="navigation no-print" />
     <!-- the room under the navigation is left by this wrapper, not by the ad: ad blockers hide the elements named as
          ads (.ad, .ad-slot...), which then put the top of the page under the navigation -->
-    <div v-if="topAd && ($screen.isMobile || $screen.isTablet || $screen.isDesktop)" class="top-bar-room">
+    <div v-if="topAd && !$screen.isWidescreen" class="top-bar-room">
       <dfm-ad-small />
     </div>
     <site-notice class="no-print site-notice" />
@@ -124,6 +124,8 @@ onMounted(() => {
 </script>
 
 <style>
+@import '@/assets/css/media.css';
+
 html {
   overflow-x: hidden;
   overflow-y: scroll;
@@ -259,7 +261,7 @@ button.dropdown-item {
 }
 
 /* the narrow content of the phones (a width, not the navigation) */
-@media screen and (max-width: 769px) {
+@media screen and (--c2c-max-tablet) {
   .section {
     padding: 0.75rem !important;
   }

@@ -20,9 +20,3 @@
     max-width: 1152px;
   }
 }
-
-@media screen and (--c2c-min-fullhd) {
-  .container:not(.is-max-desktop):not(.is-max-widescreen) {
-    max-width: 1344px;
-  }
-}

@@ -25,8 +25,6 @@ export interface MainMenuItem {
   // an icon component, or the name of a font-awesome icon
   iconComponent?: Component;
   icon?: string;
-  // the sidebar only shows it when the window is tall enough
-  tallOnly?: boolean;
   // a plain link, so that the page is refreshed when already on it
   reload?: boolean;
   // a count shown next to the label, when not zero
@@ -63,26 +61,11 @@ export function useMainMenuItems() {
       iconComponent: IconForum,
     },
     {
-      key: 'serac',
-      label: label($gettext('Accident database')),
-      to: { name: 'serac' },
-      match: ['serac', 'xreports', 'xreport'],
-      iconComponent: IconXreport,
-    },
-    {
       key: 'articles',
       label: label($gettext('articles')),
       to: { name: 'articles' },
       match: ['articles', 'article'],
       iconComponent: IconArticle,
-    },
-    {
-      key: 'yeti',
-      label: label($gettext('yeti')),
-      to: { name: 'yeti' },
-      match: ['yeti'],
-      iconComponent: IconYeti,
-      tallOnly: true,
     },
     {
       key: 'itinevert',
@@ -91,6 +74,21 @@ export function useMainMenuItems() {
       match: ['itinevert'],
       iconComponent: IconItinevert,
       reload: true,
+    },
+    // at the bottom: the home page links to them too, and the side menu scrolls when the window is too short
+    {
+      key: 'serac',
+      label: label($gettext('Accident database')),
+      to: { name: 'serac' },
+      match: ['serac', 'xreports', 'xreport'],
+      iconComponent: IconXreport,
+    },
+    {
+      key: 'yeti',
+      label: label($gettext('yeti')),
+      to: { name: 'yeti' },
+      match: ['yeti'],
+      iconComponent: IconYeti,
     },
     // for the moderators of the topoguide or of the forum
     ...(canModerate.value

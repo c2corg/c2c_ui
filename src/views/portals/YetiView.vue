@@ -20,7 +20,7 @@
       </div>
 
       <div class="columns yeti-content">
-        <div class="column is-5-tablet is-5-desktop is-4-fullhd form-container">
+        <div class="column is-5-tablet is-4-widescreen form-container">
           <div class="columns is-mobile is-justify-content-space-between mb-5">
             <div class="is-flex is-align-items-center yeti-title">
               <h1 class="ml-3 mr-1 px-2 has-text-weight-bold has-background-primary has-text-white">YETI</h1>
