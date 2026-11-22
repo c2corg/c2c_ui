@@ -72,6 +72,44 @@ describe('the images of an offline document', () => {
   it('has none without text or images', () => {
     expect(imageUrlsOf({})).toEqual([]);
   });
+
+  const gallery = (count: number) =>
+    Array.from({ length: count }, (_, i) => ({ document_id: 100 + i, filename: `123_${100 + i}.jpg` }));
+
+  it('takes the BI images of a route too, the ones of the text first, at most 30', () => {
+    const urls = imageUrlsOf({
+      type: 'r',
+      cooked: { description: '<img c2c:document-id="5" c2c:url-proxy="/images/proxy/5?size=MI" alt="">' },
+      associations: { images: gallery(40) },
+    });
+    const big = urls.filter((url) => /BI\.|size=BI/.test(url));
+    expect(big).toHaveLength(30);
+    expect(big[0]).toBe(`${config.urls.api}/images/proxy/5?size=BI&extension=avif`);
+    expect(big[1]).toBe(`${config.urls.media}/123_100BI.avif`);
+    expect(big).not.toContain(`${config.urls.media}/123_129BI.avif`);
+    // and all the MI ones
+    expect(urls).toContain(`${config.urls.media}/123_139MI.avif`);
+  });
+
+  it('takes an image of both the text and the gallery both ways the viewer may ask for it', () => {
+    const urls = imageUrlsOf({
+      type: 'r',
+      cooked: { description: '<img c2c:document-id="100" c2c:url-proxy="/images/proxy/100?size=MI" alt="">' },
+      associations: { images: gallery(1) },
+    });
+    expect(urls.filter((url) => /BI\.|size=BI/.test(url))).toEqual([
+      `${config.urls.media}/123_100BI.avif`,
+      `${config.urls.api}/images/proxy/100?size=BI&extension=avif`,
+    ]);
+  });
+
+  it('takes the BI images of a crag, not of the other waypoints and documents', () => {
+    const bigOf = (document: { type: string; waypoint_type?: string }) =>
+      imageUrlsOf({ ...document, associations: { images: gallery(2) } }).filter((url) => url.includes('BI.'));
+    expect(bigOf({ type: 'w', waypoint_type: 'climbing_outdoor' })).toHaveLength(2);
+    expect(bigOf({ type: 'w', waypoint_type: 'hut' })).toEqual([]);
+    expect(bigOf({ type: 'o' })).toEqual([]);
+  });
 });
 
 describe('the key of a tile in the cache', () => {

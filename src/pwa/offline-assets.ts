@@ -36,16 +36,48 @@ function textImageUrls(html: string) {
   });
 }
 
-// the images of the text, and the thumbnails of the gallery (Gallery.vue)
+// The routes and the crags are where one looks at an image closely on the spot (the topo, the line): the BI images,
+// the ones of the image viewer (ImageViewer.vue), of at most that many of their images. The ones of the text first,
+// in its order, then the gallery's. The other documents keep only their MI ones: the viewer shows them instead.
+const BIG_IMAGES_MAX = 30;
+
+const takesBigImages = (document: { type?: string; waypoint_type?: string | null }) =>
+  document.type === 'r' || (document.type === 'w' && document.waypoint_type === 'climbing_outdoor');
+
+// the camptocamp images of a text ([img=123]), by their id
+function textImageIds(html: string) {
+  if (!html.includes('c2c:document-id')) {
+    return [];
+  }
+  return [...new DOMParser().parseFromString(html, 'text/html').querySelectorAll('img[c2c\\:document-id]')]
+    .map((img) => Number(img.getAttribute('c2c:document-id')))
+    .filter((id) => Number.isInteger(id) && id > 0);
+}
+
+// the BI images as the viewer asks for them: the gallery's from their file name, the text's from their id only (the
+// proxy of the API). An image of both may be asked for either way, whichever the page gave the viewer first: both.
+function bigImageUrls(texts: string[], images: Image[]) {
+  const inText = new Set(texts.flatMap(textImageIds));
+  const inGallery = new Map(images.map((image) => [image.document_id, image]));
+  const ids = [...new Set([...inText, ...inGallery.keys()])].slice(0, BIG_IMAGES_MAX);
+  return ids.flatMap((id) => {
+    const asked = [inGallery.get(id), inText.has(id) ? { document_id: id } : undefined];
+    return asked.filter((image) => !!image).map((image) => bestOf((format) => getImageUrl(image, 'BI', format)));
+  });
+}
+
+// the images of the text, and the thumbnails of the gallery (Gallery.vue); the BI ones of the routes and crags
 export function imageUrlsOf(document: {
+  type?: string;
+  waypoint_type?: string | null;
   cooked?: Record<string, unknown> | null;
   associations?: { images?: Image[] } | null;
 }) {
   const texts = Object.values(document.cooked ?? {}).filter((value): value is string => typeof value === 'string');
-  const thumbnails = (document.associations?.images ?? []).map((image) =>
-    bestOf((format) => getImageUrl(image, 'MI', format))
-  );
-  const urls = [...thumbnails, ...texts.flatMap(textImageUrls)];
+  const images = document.associations?.images ?? [];
+  const thumbnails = images.map((image) => bestOf((format) => getImageUrl(image, 'MI', format)));
+  const big = takesBigImages(document) ? bigImageUrls(texts, images) : [];
+  const urls = [...thumbnails, ...texts.flatMap(textImageUrls), ...big];
   return [...new Set(urls.filter((url): url is string => !!url))];
 }
 
