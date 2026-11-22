@@ -184,6 +184,8 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
     flex-wrap: wrap;
     justify-content: flex-end;
     align-items: center;
+    /* tighter than on a wider screen: "Ajouter ma sortie" and four buttons fit in 320px */
+    gap: 0.25rem;
     margin-bottom: 0.5rem;
   }
 
@@ -199,11 +201,6 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
   /* a range breaks at its dash first, inside one of its dates only when that date alone is too long */
   .bar-date-part {
     display: inline-block;
-  }
-
-  /* tighter on a phone: "Ajouter ma sortie" and four buttons fit in 320px */
-  .button-bar {
-    gap: 0.25rem;
   }
 
   /* the left of the button line, as the date of an outing. It takes the room the buttons leave, up to its text: a
