@@ -6,6 +6,7 @@ import {
   faBookmark as faBookmarkRegular,
   faCircle as faCircleRegular,
   faClock as faClockRegular,
+  faCompass as faCompassRegular,
   faFaceFrown as faFaceFrownRegular,
   faHourglass as faHourglassRegular,
   faTrashAlt as faTrashAltRegular,
@@ -437,6 +438,7 @@ export default function install(app: App) {
     faFaceFrownRegular,
     faHourglassRegular,
     faTrashAltRegular,
+    faCompassRegular,
     faWindowMaximizeRegular,
 
     // brands icons
