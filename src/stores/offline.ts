@@ -271,7 +271,11 @@ export const useOfflineStore = defineStore('offline', () => {
   async function mergeFoldersByName() {
     const kept = new Map<string, Folder>();
     let merged = false;
-    for (const folder of folders.value) {
+    // the online folder is the one kept: the ids, of the creation time, do not order folders created in the same ms
+    const onlineFirst = [...folders.value].sort(
+      (a, b) => Number(b.section === 'online') - Number(a.section === 'online')
+    );
+    for (const folder of onlineFirst) {
       const name = folder.name.trim().toLowerCase();
       const first = kept.get(name);
       if (!first) {

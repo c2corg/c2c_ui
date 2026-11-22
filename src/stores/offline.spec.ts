@@ -207,8 +207,12 @@ describe('offline store', () => {
 
   it('makes one folder of the folders of the same name of the former two sections', async () => {
     const offline = useOfflineStore();
+    // both created in the same ms, the offline one listed first: its id has the smaller random part
+    vi.spyOn(Date, 'now').mockReturnValue(1_800_000_000_000);
+    vi.spyOn(Math, 'random').mockReturnValueOnce(0.9).mockReturnValueOnce(0.1);
     const online = await offline.createFolder('Écrins', 'online');
     const offlineFolder = await offline.createFolder('écrins ', 'offline');
+    vi.restoreAllMocks();
     await offline.createFolder('Vanoise', 'offline');
     await saveEntry({
       type: 'route',
