@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { imageUrlsOf, offlineLayersOf, offlineTilesOf, tileUrlsOf } from './offline-assets';
+import { imageUrlsOf, offlineImageUrlsOf, offlineLayersOf, offlineTilesOf, tileUrlsOf } from './offline-assets';
 import { formerTileKeys, tileCacheKey } from './tile-key';
 
 import config from '@/js/config';
@@ -77,7 +77,7 @@ describe('the images of an offline document', () => {
     Array.from({ length: count }, (_, i) => ({ document_id: 100 + i, filename: `123_${100 + i}.jpg` }));
 
   it('takes the BI images of a route too, the ones of the text first, at most 30', () => {
-    const urls = imageUrlsOf({
+    const urls = offlineImageUrlsOf({
       type: 'r',
       cooked: { description: '<img c2c:document-id="5" c2c:url-proxy="/images/proxy/5?size=MI" alt="">' },
       associations: { images: gallery(40) },
@@ -92,7 +92,7 @@ describe('the images of an offline document', () => {
   });
 
   it('takes an image of the text from the media server when the API gives its url, once if in the gallery too', () => {
-    const urls = imageUrlsOf({
+    const urls = offlineImageUrlsOf({
       type: 'r',
       cooked: {
         description:
@@ -107,9 +107,14 @@ describe('the images of an offline document', () => {
     ]);
   });
 
+  it('leaves the BI images out of what a document saved before them has', () => {
+    const route = { type: 'r', associations: { images: gallery(2) } };
+    expect(imageUrlsOf(route).filter((url) => url.includes('BI.'))).toEqual([]);
+  });
+
   it('takes the BI images of a crag, not of the other waypoints and documents', () => {
     const bigOf = (document: { type: string; waypoint_type?: string }) =>
-      imageUrlsOf({ ...document, associations: { images: gallery(2) } }).filter((url) => url.includes('BI.'));
+      offlineImageUrlsOf({ ...document, associations: { images: gallery(2) } }).filter((url) => url.includes('BI.'));
     expect(bigOf({ type: 'w', waypoint_type: 'climbing_outdoor' })).toHaveLength(2);
     expect(bigOf({ type: 'w', waypoint_type: 'hut' })).toEqual([]);
     expect(bigOf({ type: 'o' })).toEqual([]);

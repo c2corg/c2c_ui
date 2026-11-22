@@ -67,19 +67,30 @@ function bigImageUrls(texts: string[], images: Image[]) {
     .map((image) => bestOf((format) => getImageUrl(image, 'BI', format)));
 }
 
-// the images of the text, and the thumbnails of the gallery (Gallery.vue); the BI ones of the routes and crags
-export function imageUrlsOf(document: {
+type ImagesOf = {
   type?: string;
   waypoint_type?: string | null;
   cooked?: Record<string, unknown> | null;
   associations?: { images?: Image[] } | null;
-}) {
-  const texts = Object.values(document.cooked ?? {}).filter((value): value is string => typeof value === 'string');
-  const images = document.associations?.images ?? [];
-  const thumbnails = images.map((image) => bestOf((format) => getImageUrl(image, 'MI', format)));
-  const big = takesBigImages(document) ? bigImageUrls(texts, images) : [];
-  const urls = [...thumbnails, ...texts.flatMap(textImageUrls), ...big];
+};
+
+const textsOf = (document: ImagesOf) =>
+  Object.values(document.cooked ?? {}).filter((value): value is string => typeof value === 'string');
+
+// the images of the text, and the thumbnails of the gallery (Gallery.vue): what a document saved before the BI images
+// has (legacy migration of src/stores/offline.ts)
+export function imageUrlsOf(document: ImagesOf) {
+  const thumbnails = (document.associations?.images ?? []).map((image) =>
+    bestOf((format) => getImageUrl(image, 'MI', format))
+  );
+  const urls = [...thumbnails, ...textsOf(document).flatMap(textImageUrls)];
   return [...new Set(urls.filter((url): url is string => !!url))];
+}
+
+// what a document saved now takes: those, and the BI ones of the routes and crags
+export function offlineImageUrlsOf(document: ImagesOf) {
+  const big = takesBigImages(document) ? bigImageUrls(textsOf(document), document.associations?.images ?? []) : [];
+  return [...new Set([...imageUrlsOf(document), ...big.filter((url): url is string => !!url)])];
 }
 
 // half the width of the world in web mercator (EPSG:3857, the projection of the geometries of the API), in meters
