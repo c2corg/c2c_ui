@@ -461,6 +461,11 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  // off: the waypoints in the colour of their category, not all in the one of the site
+  monochromeMarkers: {
+    type: Boolean,
+    default: true,
+  },
   showFilterControl: {
     type: Boolean,
     default: false,
@@ -815,7 +820,10 @@ async function renderDocuments() {
     const highlight = feature.key === hoveredKey.value || feature.key === stopKey.value;
     // a stop is named after its stop area
     const name = feature.key === stopKey.value ? (feature.document.stoparea_name as string) : title(feature.document);
-    const { style, label } = featureStyle(feature, name, highlight, props.compactMarkers);
+    const { style, label } = featureStyle(feature, name, highlight, {
+      compact: props.compactMarkers,
+      monochrome: props.monochromeMarkers,
+    });
     if (style) geoJson.push(toGeoJson(feature, style));
     if (label) labels.push({ label, at: labelAnchor(feature.geometry) });
   }
@@ -2319,6 +2327,7 @@ watch(
 );
 
 watch(filterDocumentsWithMap, () => sendBoundsToUrl());
+watch(() => props.monochromeMarkers, renderDocuments);
 watch(
   () => props.forceFilter,
   (force) => {

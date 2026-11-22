@@ -46,7 +46,7 @@ const mountView = async (url: string, isMobile = false) => {
       stubs: {
         MapView: {
           name: 'MapView',
-          props: { documents: Array, forceFilter: Boolean, compactMarkers: Boolean },
+          props: { documents: Array, forceFilter: Boolean, compactMarkers: Boolean, monochromeMarkers: Boolean },
           render: () => null,
         },
       },
@@ -79,7 +79,7 @@ describe('WaypointsMapView', () => {
   it('shows the waypoints of the view from zoom 11 (OpenLayers, 10 of MapLibre), up to 500, with the filters of the link', async () => {
     const { getAll, answers } = mockRequests();
     const { map, zoomTo, hint } = await mountView('/map?bbox=1,2,3,4&wtyp=summit&overlays=outing');
-    expect(map().props()).toMatchObject({ forceFilter: true, compactMarkers: true });
+    expect(map().props()).toMatchObject({ forceFilter: true, compactMarkers: true, monochromeMarkers: false });
 
     await zoomTo(9.4);
     expect(getAll).not.toHaveBeenCalled();
@@ -102,7 +102,9 @@ describe('WaypointsMapView', () => {
 
   it('keeps the waypoints shown until those of the last move come, and says when some are missing', async () => {
     const { answers } = mockRequests();
-    const { router, map, zoomTo, hint } = await mountView('/map?bbox=1,2,3,4');
+    const { router, map, zoomTo, hint } = await mountView('/map?bbox=1,2,3,4&monochrome=true');
+    // the markers all in the colour of the site, as asked
+    expect(map().props('monochromeMarkers')).toBe(true);
     await zoomTo(12);
     answers[0]([waypoint(1)], 1);
     await router.replace({ query: { bbox: '5,6,7,8' } });

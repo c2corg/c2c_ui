@@ -172,6 +172,49 @@ const circle = (radius: number, fill: string, stroke?: string, strokeWidth = 0) 
 const label = (text: string | undefined, highlight: boolean, publicTransport = false): Label | undefined =>
   highlight && text ? { text: utils.stringDivider(text, 30, '\n'), publicTransport } : undefined;
 
+// The waypoints in the colour of their category, after the points of interest of gpx.studio: green for the mountain
+// (summits, climbing), blue for the water, yellow to sleep, coral to eat, dark blue for the public transport, pink for
+// the air sports, dark grey for the others. The accesses without public transport are dark grey, as the car parks there.
+const CATEGORY_COLORS = {
+  mountain: '#008000',
+  water: '#00bfff',
+  sleep: '#e6c100',
+  food: '#ff7f50',
+  transport: '#00008b',
+  air: '#ff69b4',
+  other: '#444444',
+};
+const WAYPOINT_CATEGORIES: Record<string, keyof typeof CATEGORY_COLORS> = {
+  summit: 'mountain',
+  pass: 'mountain',
+  climbing_outdoor: 'mountain',
+  climbing_indoor: 'mountain',
+  slackline_spot: 'mountain',
+  lake: 'water',
+  waterfall: 'water',
+  waterpoint: 'water',
+  bisse: 'water',
+  canyon: 'water',
+  hut: 'sleep',
+  gite: 'sleep',
+  shelter: 'sleep',
+  bivouac: 'sleep',
+  camp_site: 'sleep',
+  base_camp: 'sleep',
+  local_product: 'food',
+  paragliding_takeoff: 'air',
+  paragliding_landing: 'air',
+};
+
+/** The colour of the category of a waypoint (monochrome off) */
+export function waypointCategoryColor(document: C2cDocument): string {
+  if (document.waypoint_type === 'access') {
+    const served = !!document.public_transportation_rating && document.public_transportation_rating !== 'no service';
+    return CATEGORY_COLORS[served ? 'transport' : 'other'];
+  }
+  return CATEGORY_COLORS[WAYPOINT_CATEGORIES[String(document.waypoint_type)] ?? 'other'];
+}
+
 // a document icon on a light circle, bigger when highlighted. Compact: smaller, a disc of the colour of the icon with
 // the icon in white on it: it reads on any background and hides less of the map
 const COMPACT_SCALE = 0.63;
@@ -197,7 +240,7 @@ function markerStyle(svgSrc: string, color: string, highlight: boolean, compact 
   };
 }
 
-function pointStyle(document: C2cDocument, highlight: boolean, compact: boolean): Style | null {
+function pointStyle(document: C2cDocument, highlight: boolean, compact: boolean, monochrome: boolean): Style | null {
   const properties = (document.properties ?? {}) as FeatureProperties;
   const type = document.type as string;
 
@@ -221,7 +264,8 @@ function pointStyle(document: C2cDocument, highlight: boolean, compact: boolean)
   }
   const icon = getDocumentIcon(document);
   if (icon) {
-    return markerStyle(icon.svgSrc, icon.color, highlight, compact);
+    const color = !monochrome && document.type === 'w' ? waypointCategoryColor(document) : icon.color;
+    return markerStyle(icon.svgSrc, color, highlight, compact);
   }
   if (type === 'z') {
     const color =
@@ -336,19 +380,22 @@ export function documentFeatures(document: C2cDocument | null, group: Group, dif
   ];
 }
 
-/** How a feature is drawn, and its label when highlighted. Compact: the markers smaller, without their light circle */
+/**
+ * How a feature is drawn, and its label when highlighted. Compact: the markers smaller, as discs. Not monochrome: the
+ * waypoints in the colour of their category
+ */
 export function featureStyle(
   { document, part, geometry, diff }: DocumentFeature,
   title: string,
   highlight: boolean,
-  compact = false
+  { compact = false, monochrome = true }: { compact?: boolean; monochrome?: boolean } = {}
 ): { style: Style | null; label?: Label } {
   if (diff) {
     return { style: diffStyle(diff === 'old') };
   }
   const properties = document.properties as FeatureProperties | null | undefined;
   if (part === 'point') {
-    return { style: pointStyle(document, highlight, compact), label: label(title, highlight) };
+    return { style: pointStyle(document, highlight, compact, monochrome), label: label(title, highlight) };
   }
   if (geometry.type === 'Polygon' || geometry.type === 'MultiPolygon') {
     return {

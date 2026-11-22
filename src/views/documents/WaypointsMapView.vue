@@ -12,6 +12,7 @@
       sync-url
       force-filter
       compact-markers
+      :monochrome-markers="route.query[MONOCHROME_URL_KEY] === 'true'"
       show-center-on-geolocation
       show-recenter-on
       show3d
@@ -28,7 +29,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 import { EUROPE_BBOX, WIDE_BBOX } from '@/components/map/default-extents';
 import { searchOverlayFilters } from '@/components/map/density-overlays';
-import { withoutDisplaySettings } from '@/components/map/map-url-keys';
+import { MONOCHROME_URL_KEY, withoutDisplaySettings } from '@/components/map/map-url-keys';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import { useGlobalProperties } from '@/js/composables/global-properties';

@@ -714,6 +714,24 @@ describe('C2cMap', () => {
     });
   });
 
+  it('draws the waypoints in the colour of their category when not monochrome', async () => {
+    const access = (rating: string) => ({ ...waypoint(5, 'access', 6.84), public_transportation_rating: rating });
+    const documents = [
+      waypoint(3, 'summit', 6.8),
+      waypoint(4, 'hut', 6.82),
+      access('good service'),
+      waypoint(6, 'webcam', 6.86),
+    ];
+    const fills = (map: FakeMap) => drawn(map).map((feature) => feature.properties!.circleFill);
+    const { wrapper, map } = await mountMap({ documents, compactMarkers: true });
+    expect(new Set(fills(map))).toEqual(new Set(['#F93', '#4baf50']));
+
+    await wrapper.setProps({ monochromeMarkers: false });
+    await flushPromises();
+    expect(fills(map)).toEqual(['#008000', '#e6c100', '#00008b', '#444444']);
+    wrapper.unmount();
+  });
+
   it('tells its zoom when it is loaded and after each move', async () => {
     const { wrapper, map } = await mountMap();
     map.zoom = 12.5;
