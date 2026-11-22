@@ -83,7 +83,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, wa
 import { useLayer } from './layer';
 
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
-import { bulletinRegionId } from '@/components/yeti/avalanche-bulletin';
+import { bulletinRegionId, plainText } from '@/components/yeti/avalanche-bulletin';
 import DangerLevel from '@/components/yeti/map-layers/DangerLevel.vue';
 import { useYetixStore } from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
@@ -103,6 +103,8 @@ type OverlayData = {
   country?: string | null;
   mountainName?: string | null;
   fullName?: string | null;
+  // of the bulletin of the c2c API, null when it has none
+  regionId?: string | null;
   validUntil?: string | null;
   danger: Danger;
   orientations: Record<string, boolean | string>;
@@ -282,6 +284,7 @@ const overlayData = ref<OverlayData>({
   country: null,
   mountainName: null,
   fullName: null,
+  regionId: null,
   validUntil: null,
   danger: {},
   orientations: {},
@@ -317,15 +320,17 @@ const overlayValidUntilExpired = computed(() => {
 
 const overlayDangerIcon = computed(() => bulletinsIcon(overlayData.value.danger.max));
 
-const overlayDangerComment = computed(() => (overlayData.value.danger.low ? overlayData.value.danger.comment : null));
+// api.ensg.eu gives <br/>
+const overlayDangerComment = computed(() =>
+  overlayData.value.danger.low ? plainText(overlayData.value.danger.comment) : null
+);
 
 const overlayOrientationsComment = computed(() => overlayData.value.orientations.comment);
 
-// the bulletins the c2c API has (the French massifs)
-const overlayRegionId = computed(() => bulletinRegionId(overlayData.value.country, overlayData.value.mountainName));
+const overlayRegionId = computed(() => overlayData.value.regionId);
 
 const overlayUrls = computed(() => {
-  if (!overlayRegionId.value) {
+  if (!overlayRegionId.value?.startsWith('FR-')) {
     return overlayData.value.urls;
   }
   // the official PDF through the c2c API, instead of the page of metaskirando (gone after 2026-12-16)
@@ -350,6 +355,8 @@ function getLayer() {
 
 function onMountainsResult(data: { data: unknown }) {
   const mountainsFeatures = getFeaturesFromData(data) as Feature<MultiPolygon>[];
+  // the order of api.ensg.eu, which the source does not keep
+  mountainsFeatures.forEach((mountain, i) => mountain.set('order', i));
 
   // add to mountains layer
   mountainsLayer.getSource()!.addFeatures(mountainsFeatures);
@@ -530,13 +537,21 @@ type Zone = {
 
 function onBulletinsResult(data: { data: { zones: Zone[] } }) {
   const bulletinsFeatures = data.data;
-  const mountainsFeatures = mountainsLayer.getSource()!.getFeatures();
+  // in the order of api.ensg.eu, as both lists give the zones whose names repeat (Region A of Piemonte, of Veneto…)
+  const mountainsFeatures = mountainsLayer
+    .getSource()!
+    .getFeatures()
+    .sort((a, b) => a.get('order') - b.get('order'));
 
   // match up bulletin data and zone
   bulletinsFeatures.zones.forEach((zone) => {
     mountainsFeatures.find((mountain) => {
       // if name and country match, create bulletin
-      if (mountain.get('name') === zone.zone && mountain.get('country') === zone.country) {
+      if (
+        mountain.get('name') === zone.zone &&
+        mountain.get('country') === zone.country &&
+        !mountain.get('bulletinsFeature')
+      ) {
         // check validity first
         // if no longer valid (expires 48h), set danger to null
         if ((Date.now() - new Date(zone.validUntil).getTime()) / 1000 > 60 * 60 * 24 * 2) {
@@ -565,6 +580,13 @@ function onBulletinsResult(data: { data: { zones: Zone[] } }) {
             country: mountain.get('country'),
             mountainName: mountain.get('name'),
             fullName: mountain.get('fullname'),
+            regionId: bulletinRegionId({
+              country: mountain.get('country'),
+              name: mountain.get('name'),
+              numZone: mountain.get('numZone'),
+              contains: (lonLat) =>
+                mountainGeometry.intersectsCoordinate(ol.proj.transform(lonLat, 'EPSG:4326', 'EPSG:3857')),
+            }),
             validUntil: zone.validUntil,
             danger: zone.danger,
             orientations: zone.orientations,
@@ -805,6 +827,9 @@ dd {
 }
 dt {
   font-weight: bold;
+}
+dd {
+  white-space: pre-line;
 }
 .button-close {
   position: absolute;

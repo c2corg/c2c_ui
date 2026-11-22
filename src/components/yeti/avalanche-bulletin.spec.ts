@@ -3,13 +3,36 @@ import { describe, expect, it } from 'vitest';
 import { bulletinRegionId, plainText, toDangerLevel } from './avalanche-bulletin';
 
 describe('bulletinRegionId', () => {
-  it('gives the EAWS id of the French massifs only', () => {
-    expect(bulletinRegionId('France', 'Mont-Blanc')).toBe('FR-03');
-    expect(bulletinRegionId('France', 'Cerdagne-Canigou')).toBe('FR-74');
+  // a zone as a box: [west, south, east, north]
+  const inBox =
+    ([west, south, east, north]: number[]) =>
+    ([lon, lat]: [number, number]) =>
+      lon >= west && lon <= east && lat >= south && lat <= north;
+
+  it('gives the EAWS id of the French massifs', () => {
+    expect(bulletinRegionId({ country: 'France', name: 'Mont-Blanc' })).toBe('FR-03');
+    expect(bulletinRegionId({ country: 'France', name: 'Cerdagne-Canigou' })).toBe('FR-74');
     // Andorra has its own service
-    expect(bulletinRegionId('France', 'Andorre-(massif)')).toBeNull();
-    expect(bulletinRegionId('Switzerland', 'Mont-Blanc')).toBeNull();
-    expect(bulletinRegionId(null, null)).toBeNull();
+    expect(bulletinRegionId({ country: 'France', name: 'Andorre-(massif)' })).toBeNull();
+    expect(bulletinRegionId({ country: null, name: null })).toBeNull();
+  });
+
+  it('gives a micro-region of its service that the zone covers', () => {
+    // Valle d'Aosta, south-east of Aosta (Champorcher, Gressoney…)
+    expect(bulletinRegionId({ country: 'Italy', numZone: 'IT-23', contains: inBox([7.4, 45.5, 8, 45.75]) })).toMatch(
+      /^IT-23-AO-/
+    );
+    // Davos
+    expect(
+      bulletinRegionId({ country: 'Switzerland', numZone: 'CH', contains: inBox([9.75, 46.75, 9.9, 46.83]) })
+    ).toBe('CH-5123');
+    // the same box, of another service
+    expect(
+      bulletinRegionId({ country: 'Italy', numZone: 'IT-23', contains: inBox([9.75, 46.75, 9.9, 46.83]) })
+    ).toBeNull();
+    // the services of the c2c API only
+    expect(bulletinRegionId({ country: 'Norway', numZone: 'NO', contains: () => true })).toBeNull();
+    expect(bulletinRegionId({ country: 'Switzerland', name: 'Davos', numZone: 'CH' })).toBeNull();
   });
 });
 
