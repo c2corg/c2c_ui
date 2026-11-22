@@ -581,6 +581,7 @@
     "On a topo, tap the bookmark at the top: it goes to your favourites.": "Tapnite zaznamek na vrhu opisa – s tem ga boste dodali med priljubljene.",
     "On this device only": "Samo v tej napravi",
     "On this device:": "Na tej napravi:",
+    "On your phone, open this site in the browser, then add it to the home screen from the Share menu (iPhone) or the ⋮ menu (Android).": "Na telefonu odprite to spletno mesto v brskalniku, nato pa ga dodajte na začetni zaslon prek menija za deljenje (iPhone) ali menija ⋮ (Android).",
     "One or more line chunks will generate more than 3000 points. Adjust distance to generate less points.": "En ali več delov črt bo ustvarilo več kot 3000 točk. Prilagodite razdaljo, da ustvarite manj točk.",
     "One or more route could not be processed:": "Enega ali več delov črt ni bilo mogoče obdelati:",
     "Only document less than 24h old can be deleted": {
@@ -772,7 +773,7 @@
     },
     "Tabs at the bottom of the screen. Everything is explained in the guide. Have a good outing!": "Zavihki na dnu zaslona. Vse je podrobneje pojasnjeno v vodniku. Želimo vam prijetno turo!",
     "Tabs at the bottom of the screen:": "Zavihki na dnu zaslona:",
-    "Tap Also save offline (in the message that follows, or in Favourites): the topo, its photos and the map around it are downloaded. Its bookmark gets a green arrow.": "Tapnite »Shrani tudi za uporabo offline« (v sporočilu, ki sledi, ali med priljubljenimi): opis, fotografije in zemljevid se prenesejo.",
+    "Tap Also save offline (in the message that follows, or in Favourites): the topo, its photos and the map around it are downloaded. Its bookmark gets a green arrow.": "Tapnite »Shrani tudi za uporabo offline« (v sporočilu, ki sledi, ali med priljubljenimi): opis, fotografije in zemljevid se prenesejo. Zaznamek dobi zeleno puščico.",
     "Target:": "Dokument, ki ga je treba hraniti (cilj): ",
     "Terms of Service need to be accepted": {
       "API message": "Sprejeti je treba pogoje storitve"
