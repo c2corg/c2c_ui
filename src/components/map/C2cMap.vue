@@ -456,6 +456,11 @@ const props = defineProps({
     type: Array as PropType<C2cDocument[]>,
     default: null,
   },
+  // the markers of the documents smaller, their icon alone: for many of them
+  compactMarkers: {
+    type: Boolean,
+    default: false,
+  },
   showFilterControl: {
     type: Boolean,
     default: false,
@@ -805,7 +810,7 @@ async function renderDocuments() {
     const highlight = feature.key === hoveredKey.value || feature.key === stopKey.value;
     // a stop is named after its stop area
     const name = feature.key === stopKey.value ? (feature.document.stoparea_name as string) : title(feature.document);
-    const { style, label } = featureStyle(feature, name, highlight);
+    const { style, label } = featureStyle(feature, name, highlight, props.compactMarkers);
     if (style) geoJson.push(toGeoJson(feature, style));
     if (label) labels.push({ label, at: labelAnchor(feature.geometry) });
   }

@@ -64,6 +64,27 @@ afterEach(() => {
 });
 
 describe('C2cMap', () => {
+  it('draws compact markers: smaller, the icon alone on a transparent circle that still catches the pointer', async () => {
+    const shown = async (compactMarkers: boolean) => {
+      const { wrapper, map } = await mountMap({ documents: [waypoint(3, 'summit', 6.8)], compactMarkers });
+      const { circleRadius, circleFill, circleStroke, icon } = drawn(map)[0].properties!;
+      wrapper.unmount();
+      return { circleRadius, circleFill, circleStroke, size: String(icon).split(':')[1] };
+    };
+
+    expect(await shown(false)).toEqual({
+      circleRadius: 14,
+      circleFill: 'rgba(255, 255, 255, 0.5)',
+      circleStroke: '#ddd',
+      size: '20',
+    });
+    expect(await shown(true)).toEqual({
+      circleRadius: 10.5,
+      circleFill: 'rgba(255, 255, 255, 0)',
+      circleStroke: undefined,
+      size: '14',
+    });
+  });
   it('draws the documents, their waypoints, and the images of an outing away from it', async () => {
     const outing = {
       document_id: 2,

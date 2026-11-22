@@ -172,19 +172,26 @@ const circle = (radius: number, fill: string, stroke?: string, strokeWidth = 0) 
 const label = (text: string | undefined, highlight: boolean, publicTransport = false): Label | undefined =>
   highlight && text ? { text: utils.stringDivider(text, 30, '\n'), publicTransport } : undefined;
 
-// a document icon on a light circle, bigger when highlighted
-function markerStyle(svgSrc: string, color: string, highlight: boolean): Style {
+// a document icon on a light circle, bigger when highlighted. Compact: smaller, the icon alone, on a transparent circle
+// that still catches the pointer
+const COMPACT_SCALE = 0.7;
+function markerStyle(svgSrc: string, color: string, highlight: boolean, compact = false): Style {
   const bus = svgSrc.includes('bus');
   const zIndex = highlight ? 101 : 1;
+  // the bus is white: it needs its circle
+  const scale = compact && !bus ? COMPACT_SCALE : 1;
+  const radius = (highlight ? 20 : 15) * scale;
   return {
-    ...circle(highlight ? 20 : 15, bus ? (highlight ? '#4baf50' : '#337ab7') : 'rgba(255, 255, 255, 0.5)', '#ddd', 2),
+    ...(scale === 1
+      ? circle(radius, bus ? (highlight ? '#4baf50' : '#337ab7') : 'rgba(255, 255, 255, 0.5)', '#ddd', 2)
+      : circle(radius, 'rgba(255, 255, 255, 0)')),
     circleSort: zIndex,
-    icon: svgIcon(svgSrc, color, highlight ? 30 : 20),
+    icon: svgIcon(svgSrc, color, Math.round((highlight ? 30 : 20) * scale)),
     iconSort: zIndex + 1,
   };
 }
 
-function pointStyle(document: C2cDocument, highlight: boolean): Style | null {
+function pointStyle(document: C2cDocument, highlight: boolean, compact: boolean): Style | null {
   const properties = (document.properties ?? {}) as FeatureProperties;
   const type = document.type as string;
 
@@ -208,7 +215,7 @@ function pointStyle(document: C2cDocument, highlight: boolean): Style | null {
   }
   const icon = getDocumentIcon(document);
   if (icon) {
-    return markerStyle(icon.svgSrc, icon.color, highlight);
+    return markerStyle(icon.svgSrc, icon.color, highlight, compact);
   }
   if (type === 'z') {
     const color =
@@ -323,18 +330,19 @@ export function documentFeatures(document: C2cDocument | null, group: Group, dif
   ];
 }
 
-/** How a feature is drawn, and its label when highlighted */
+/** How a feature is drawn, and its label when highlighted. Compact: the markers smaller, without their light circle */
 export function featureStyle(
   { document, part, geometry, diff }: DocumentFeature,
   title: string,
-  highlight: boolean
+  highlight: boolean,
+  compact = false
 ): { style: Style | null; label?: Label } {
   if (diff) {
     return { style: diffStyle(diff === 'old') };
   }
   const properties = document.properties as FeatureProperties | null | undefined;
   if (part === 'point') {
-    return { style: pointStyle(document, highlight), label: label(title, highlight) };
+    return { style: pointStyle(document, highlight, compact), label: label(title, highlight) };
   }
   if (geometry.type === 'Polygon' || geometry.type === 'MultiPolygon') {
     return {
