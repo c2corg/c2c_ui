@@ -38,6 +38,8 @@ interface BuildConfiguration {
 }
 
 declare const CAMPTOCAMP_CONFIG: BuildConfiguration;
+// a new value for each build (vite.config.ts)
+declare const C2C_BUILD_ID: string;
 
 // Backend urls given when the container starts, over the ones of the build: see src/js/runtime-config.ts
 interface RuntimeConfiguration {
