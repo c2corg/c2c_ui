@@ -109,6 +109,11 @@ describe('styles', () => {
     expect([...used].filter((name) => !tokens.has(name))).toEqual([]);
   });
 
+  // Bulma 0.9.4 defines no custom property: a var(--bulma-...) only ever gives its fallback, outside the tokens
+  it('uses no custom property of Bulma 1', () => {
+    expect(allCss().filter((css) => css.includes('var(--bulma-'))).toEqual([]);
+  });
+
   it('has no Sass', () => {
     expect(files(src, /\.s[ac]ss$/).map((file) => relative(src, file))).toEqual([]);
     expect(styleBlocks('scss').map(({ name }) => name)).toEqual([]);

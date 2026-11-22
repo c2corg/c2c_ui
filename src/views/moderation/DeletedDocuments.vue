@@ -7,8 +7,8 @@
 
     <div class="filters columns is-multiline is-variable is-2 mb-4">
       <div class="column is-narrow">
-        <label class="label is-small" v-translate>Type</label>
-        <div class="select is-small">
+        <label class="label" v-translate>Type</label>
+        <div class="select">
           <select v-model="filters.type" @change="reload">
             <option value="">{{ $gettext('All') }}</option>
             <option v-for="type of types" :key="type.letter" :value="type.letter">
@@ -18,7 +18,7 @@
         </div>
       </div>
       <div v-for="role of USER_FILTERS" :key="role" class="column is-narrow user-filter">
-        <label class="label is-small">{{ role === 'author' ? $gettext('Author') : $gettext('Deleted by') }}</label>
+        <label class="label">{{ role === 'author' ? $gettext('Author') : $gettext('Deleted by') }}</label>
         <span v-if="users[role]" class="tag is-medium">
           {{ users[role].name }}
           <button class="delete is-small" :aria-label="$gettext('Remove')" @click="setUser(role, null)" />
@@ -26,21 +26,20 @@
         <input-document
           v-else
           document-type="profile"
-          is-small
           :model-value="null"
           @update:model-value="setUser(role, $event)"
         />
       </div>
       <div class="column is-narrow">
-        <label class="label is-small" v-translate>Deleted since</label>
-        <input v-model="filters.deleted_since" class="input is-small" type="date" @change="reload" />
+        <label class="label" v-translate>Deleted since</label>
+        <input v-model="filters.deleted_since" class="input" type="date" @change="reload" />
       </div>
       <div class="column is-narrow">
-        <label class="label is-small" v-translate>Deleted until</label>
-        <input v-model="filters.deleted_until" class="input is-small" type="date" @change="reload" />
+        <label class="label" v-translate>Deleted until</label>
+        <input v-model="filters.deleted_until" class="input" type="date" @change="reload" />
       </div>
       <div v-if="isFiltered" class="column is-narrow is-flex is-align-items-flex-end">
-        <button class="button is-small is-text" @click="clearFilters" v-translate>Clear the filters</button>
+        <button class="button is-text" @click="clearFilters" v-translate>Clear the filters</button>
       </div>
     </div>
 

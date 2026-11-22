@@ -6,7 +6,7 @@
     </p>
 
     <div class="field is-grouped is-align-items-center mb-4">
-      <div class="select is-small">
+      <div class="select">
         <select v-model="imageType" @change="reload" :aria-label="$gettext('Image type')">
           <option value="">{{ $gettext('All') }}</option>
           <option v-for="type of ORPHAN_IMAGE_TYPES" :key="type" :value="type">
@@ -39,7 +39,7 @@
             </router-link>
           </p>
           <p class="is-size-7 mt-1">
-            <span v-if="image.image_type" class="tag is-small mr-1" :class="TYPE_CLASSES[image.image_type]">
+            <span v-if="image.image_type" class="tag mr-1" :class="TYPE_CLASSES[image.image_type]">
               {{ $gettext(image.image_type, 'image_types') }}
             </span>
             <template v-if="image.author">
@@ -61,7 +61,7 @@
           <div class="mt-2">
             <!-- a first click arms the button, a second one deletes: one image at a time, without a window -->
             <button
-              class="button is-small"
+              class="button"
               :class="[
                 armed === image.document_id ? 'is-danger' : 'is-danger is-light',
                 { 'is-loading': deleting.has(image.document_id) },
@@ -181,7 +181,7 @@ function onDelete(image: OrphanImage) {
 .thumbnail-link {
   display: block;
   aspect-ratio: 4 / 3;
-  background: #f5f5f5;
+  background: var(--c2c-white-ter);
 }
 
 .thumbnail {
