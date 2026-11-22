@@ -102,10 +102,10 @@ describe('$documentUtils', () => {
   it('localizes outing dates', () => {
     const utils = install();
     expect(utils.getOutingDatesLocalized({ date_start: '2026-07-14', date_end: '2026-07-16' })).toBe(
-      '14 - 16 juil. 2026'
+      '14–16 juil. 2026'
     );
     expect(utils.getOutingDatesLocalized({ date_start: '2026-07-30', date_end: '2026-08-02' })).toBe(
-      '30 juillet - 2 août 2026'
+      '30 juil. – 2 août 2026'
     );
     expect(utils.getOutingDatesLocalized({ date_start: '2026-07-14' })).toBe('mardi 14 juillet 2026');
     expect(utils.getOutingDatesLocalized({})).toBe('[Invalid date]');

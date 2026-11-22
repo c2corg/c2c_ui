@@ -426,15 +426,10 @@ function createDocumentUtils(app: App) {
       const start = app.config.globalProperties.$dateUtils.parseDate(date_start);
       const end = app.config.globalProperties.$dateUtils.parseDate(date_end);
 
-      if (!app.config.globalProperties.$dateUtils.isSameYear(start, end)) {
-        return this.formatDate(start, 'll') + ' - ' + this.formatDate(end, 'll');
-      } else if (!app.config.globalProperties.$dateUtils.isSameMonth(start, end)) {
-        return this.formatDate(start, 'D MMMM') + ' - ' + this.formatDate(end, 'll');
-      } else if (!app.config.globalProperties.$dateUtils.isSameDay(start, end)) {
-        return this.formatDate(start, 'D') + ' - ' + this.formatDate(end, 'll');
-      } else {
-        return this.formatDate(end, '@1');
+      if (!app.config.globalProperties.$dateUtils.isSameDay(start, end)) {
+        return app.config.globalProperties.$dateUtils.toLocalizedRange(start, end);
       }
+      return this.formatDate(end, '@1');
     },
 
     formatDate(arg: Parameters<DateUtilsOf['toLocalizedString']>[0], formatString: string): string {
