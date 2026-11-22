@@ -77,7 +77,7 @@ function notifyWithPreferencesLink(text: string) {
   const message = document.createElement('div');
   message.append(text, ' ');
   const link = document.createElement('a');
-  link.href = router.resolve({ name: 'preferences' }).href;
+  link.href = router.resolve({ name: 'settings', hash: '#account' }).href;
   link.textContent = $gettext('My preferences');
   message.append(link);
   toast({ message, type: 'is-info', duration: 6000 });

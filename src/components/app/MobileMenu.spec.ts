@@ -17,7 +17,7 @@ const mountMenu = async () => {
       { path: '/', component: page },
       { path: '/other', component: page },
       // the entries of the menu: a plain link (Itinevert) resolves its route. The forum is another site
-      ...['topoguide', 'outings', 'serac', 'articles', 'yeti', 'itinevert', 'offline', 'app-settings'].map((name) => ({
+      ...['topoguide', 'outings', 'serac', 'articles', 'yeti', 'itinevert'].map((name) => ({
         path: `/${name}`,
         name,
         component: page,

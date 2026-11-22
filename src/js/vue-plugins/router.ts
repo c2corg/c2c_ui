@@ -38,7 +38,6 @@ const AccountView = () => import('@/views/user/AccountView.vue');
 const FollowingView = () => import('@/views/user/FollowingView.vue');
 const ModerationView = () => import('@/views/moderation/ModerationView.vue');
 const LoginView = () => import('@/views/user/LoginView.vue');
-const PreferencesView = () => import('@/views/user/PreferencesView.vue');
 const TrackersExchangeTokenView = () => import('@/views/user/TrackersExchangeTokenView.vue');
 const TrackersView = () => import('@/views/user/TrackersView.vue');
 const AreaEditionView = () => import('@/views/wiki/edition/AreaEditionView.vue');
@@ -58,7 +57,7 @@ const DiffView = () => import(`@/views/wiki/DiffView.vue`);
 const YetiView = () => import(`@/views/portals/YetiView.vue`);
 // the pages of the phone layout (bottom tab bar)
 const MeView = () => import('@/views/user/MeView.vue');
-const AppSettingsView = () => import('@/views/user/AppSettingsView.vue');
+const SettingsView = () => import('@/views/user/SettingsView.vue');
 const FavouritesView = () => import('@/views/user/FavouritesView.vue');
 const AppGuideView = () => import('@/views/static-views/AppGuideView.vue');
 
@@ -74,7 +73,6 @@ const routes: RouteRecordRaw[] = [
   { path: '/account', name: 'account', component: AccountView, meta: { requiresAuth: true } },
   { path: '/following', name: 'following', component: FollowingView, meta: { requiresAuth: true } },
   { path: '/moderation/:tab?', name: 'moderation', component: ModerationView, meta: { requiresAuth: true } },
-  { path: '/preferences', name: 'preferences', component: PreferencesView, meta: { requiresAuth: true } },
   { path: '/trackers', name: 'trackers', component: TrackersView, meta: { requiresAuth: true } },
   {
     path: '/trackers/:vendor/exchange-token',
@@ -86,7 +84,11 @@ const routes: RouteRecordRaw[] = [
   { path: '/outings-stats', name: 'outings-stats', component: OutingsStatsView },
   { path: '/sophie-picture-contest/:year(\\d+)?', name: 'sophie-picture-contest', component: SophiePictureContestView },
   { path: '/me', name: 'me', component: MeView },
-  { path: '/app-settings', name: 'app-settings', component: AppSettingsView },
+  // the settings of the device and the preferences of the account, on one page. The former pages lead there: the
+  // preferences to the part of the account
+  { path: '/settings', name: 'settings', component: SettingsView },
+  { path: '/preferences', name: 'preferences', redirect: { name: 'settings', hash: '#account' } },
+  { path: '/app-settings', name: 'app-settings', redirect: { name: 'settings' } },
   // the favourites, and their offline copies (src/stores/favourites.ts). Its former name and URL kept: the service
   // worker, the reminders and the links of the app use them
   { path: '/offline', alias: '/favourites', name: 'offline', component: FavouritesView },

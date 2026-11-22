@@ -50,7 +50,11 @@
                 <span v-translate>Load my preferences</span>
               </label>
             </span>
-            <router-link to="preferences" class="has-text-normal" :title="$gettext('My preferences')">
+            <router-link
+              :to="{ name: 'settings', hash: '#account' }"
+              class="has-text-normal"
+              :title="$gettext('My preferences')"
+            >
               <fa-icon icon="gears" />
             </router-link>
           </span>
