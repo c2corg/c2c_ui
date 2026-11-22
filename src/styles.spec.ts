@@ -176,6 +176,8 @@ describe('styles', () => {
     );
     expect(sized.length).toBeGreaterThan(10);
     expect(sized.filter((name) => !defined.has(name))).toEqual([]);
+  });
+
   // and the code uses no variant of Bulma the global CSS left out: its class would change nothing (is-outlined gave a
   // solid button, is-toggle plain tabs)
   it('uses no variant of Bulma the global CSS left out', () => {

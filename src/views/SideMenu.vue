@@ -234,12 +234,6 @@ aside:not(.is-expanded) :deep(.menu-item.router-link-active) {
   }
 }
 
-@media screen and (max-height: 680px) {
-  .menu-footer :deep(.menu-socials) {
-    display: none !important;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   aside,
   aside *,
