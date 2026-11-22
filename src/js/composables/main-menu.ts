@@ -120,14 +120,14 @@ export interface AccountLink {
   to: RouteLocationRaw;
   icon?: string;
   iconComponent?: string;
-  badge?: number;
 }
 
-/** The destinations of the account of the signed in user: the user menu of the navigation, and the Me page. */
+/**
+ * The destinations of the account of the signed in user: the user menu of the navigation, and the Me page. The
+ * moderation page is not one of them: the main menu links it.
+ */
 export function useAccountLinks() {
   const { $gettext, $user } = useGlobalProperties();
-  const { any: canModerate } = useModerationRoles();
-  const actionable = useModerationCount();
 
   return computed<AccountLink[]>(() => [
     { key: 'profile', to: { name: 'profile', params: { id: $user.id } }, text: $gettext('My profile'), icon: 'user' },
@@ -156,16 +156,5 @@ export function useAccountLinks() {
     { key: 'following', to: { name: 'following' }, text: $gettext('My followed users'), icon: 'heart' },
     // the device settings and the preferences of the account, on one page
     { key: 'settings', to: { name: 'settings' }, text: $gettext('Settings'), icon: 'gears' },
-    ...(canModerate.value
-      ? [
-          {
-            key: 'moderation',
-            to: { name: 'moderation' },
-            text: $gettext('Moderation'),
-            icon: 'broom',
-            badge: actionable.value,
-          },
-        ]
-      : []),
   ]);
 }
