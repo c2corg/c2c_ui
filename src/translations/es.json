@@ -146,7 +146,7 @@
     "Back to code": "Volver al código",
     "Back to edit mode": "Volver al modo de edición",
     "Back to the top": "Volver arriba",
-    "Back with a network, open Favourites and tap Publish now: nothing is sent without you. The number on the Favourites tab counts the outings waiting.": "De vuelta con red, abre Favoritos y toca Publicar ahora: no se envía nada sin ti. El número de la pestaña Favoritos cuenta las salidas en espera.",
+    "Back with a network, open Favourites and tap Publish now: nothing is sent without you. The number on the Favourites tab counts the outings waiting.": "De vuelta con red, abre Favoritos y toca Publicar ahora: no se envía nada sin tu intervención. El número de la pestaña Favoritos cuenta las salidas en espera.",
     "Base layer": "Primera capa",
     "Base layers": "Capas base",
     "Basemap (at)": {
@@ -344,14 +344,14 @@
     "Do you want to delete this document?": "¿Quieres eliminar este documento?",
     "Document quality": "Calidad del documento",
     "Donate": "Hacer un donativo a la asociación Camptocamp",
-    "Done": "Hecha",
-    "Done on:": "Hecha el:",
+    "Done": "Realizada",
+    "Done on:": "Realizada el:",
     "Download": "Descargar",
     "Download again": "Descargar de nuevo",
     "Download again once online": "Descargar de nuevo cuando haya conexión",
     "Download failed: check the network and try again": "Falló la descarga: verifique la red y vuelva a intentarlo",
     "Download outings": "Descargar las salidas",
-    "Drag to resize the map, double-click to reset": "Arrastra para redimensionar el mapa, doble clic para restablecerlo",
+    "Drag to resize the map, double-click to reset": "Arrastra para redimensionar el mapa, haz doble clic para restablecerlo",
     "Draw": {
       "yeti": "Dibuja"
     },
@@ -412,7 +412,7 @@
     "Files no longer on this device:": "Archivos que ya no están en este dispositivo:",
     "Filter on map extent": "Filtro en la extensión de mapa",
     "Filter results": "Filtrar",
-    "Filter with my activities and areas": "Filtrar con mis actividades y regiones",
+    "Filter with my activities and areas": "Filtrar por mis actividades y regiones",
     "Find here the traces of your Strava, Garmin, Suunto... activities.": "Encuentra aquí los rastros de tus actividades en Strava, Garmin, Suunto....",
     "First character is invalid": {
       "API message": "El primer carácter no es válido."
@@ -667,7 +667,7 @@
     "Modified the": {
       "modification date": "Cambia"
     },
-    "More": "Mas",
+    "More": "Más",
     "More info": "Mas informacion",
     "More info on meteoblue.com": "Más información en meteoblue.com",
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Hay más rutas disponibles. Puede mover el mapa, especificar el nombre o establecer una actividad para filtrarlos.",
@@ -741,7 +741,7 @@
     "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Sin obras derivadas (No Derivate Works): la autorización para explotar la obra no incluye la transformación para crear una obra derivada.",
     "Non sensitive period": "Periodo no sensible",
     "NonCommercial — You may not use the material for commercial purposes.": "No Comercial (Non commercial): la explotación de la obra queda limitada a usos no comerciales.",
-    "None": "Ninguno",
+    "None": "Ninguna",
     "North up": {
       "Map controls": "norte arriba"
     },
@@ -765,7 +765,7 @@
     "On a drawn line": "En una línea dibujada",
     "On a route, tap Add my outing: the form opens even without a network.": "En una ruta, toque Agregar mi salida: el formulario se abre incluso sin red.",
     "On a topo, tap the bookmark at the top: it goes to your favourites.": "En un topo, toca el marcador de arriba: pasa a tus favoritos.",
-    "On iPhone, also install the app: Safari clears the data of a site not opened for 7 days.": "En iPhone, instala también la aplicación: Safari borra los datos de un sitio que no se abre durante 7 días.",
+    "On iPhone, also install the app: Safari clears the data of a site not opened for 7 days.": "En iPhone, instala también la aplicación: Safari borra los datos de un sitio que no se ha abierto en 7 días.",
     "On this device only": "Solo en este dispositivo",
     "On this device:": "En este dispositivo:",
     "On your phone, open this site in the browser, then add it to the home screen from the Share menu (iPhone) or the ⋮ menu (Android).": "En su teléfono, abra este sitio en el navegador, luego agréguelo a la pantalla de inicio desde el menú Compartir (iPhone) o el menú ⋮ (Android).",
@@ -811,7 +811,7 @@
     "Outings without a network": "Salidas sin red",
     "Outings, with the latest conditions in the mountains": "Salidas, con las últimas condiciones en la montaña.",
     "Overlays": "Superposiciones",
-    "Pack saved offline, in Favourites: the route and its waypoints:": "Pack guardado sin conexión, en Favoritos: la ruta y sus puntos de paso:",
+    "Pack saved offline, in Favourites: the route and its waypoints:": "Pack guardado sin conexión, en Favoritos: la ruta y sus puntos de ruta:",
     "Page not found": "Página no encontrada",
     "Pagination": "Paginación",
     "Paragliding outings": "Salidas en parapente",
@@ -1276,7 +1276,7 @@
     "What date and time would you like to leave?": "¿En qué fecha y hora te gustaría salir?",
     "What is your starting point?": "¿Cuál es tu punto de partida?",
     "What the app gives you": "Lo que ofrece la aplicación",
-    "When the user asked for it": "Cuándo la solicitó el usuario",
+    "When the user asked for it": "Fecha de la solicitud del usuario",
     "Why did you choose this outing? When did you decide to engage. What influenced your decision (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)?": "¿Por qué elegiste esta salida? ¿Cuándo decidiste comprometerte? ¿Qué influyó en su decisión (tiempo de vacaciones, viaje largo, reservas de hotel/cabaña, tiempo dedicado a la preparación, posibilidades limitadas, etc.)?",
     "Why install it?": "¿Por qué instalarlo?",
     "Wide and constant": "Amplio y regular",
