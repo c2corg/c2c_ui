@@ -28,7 +28,7 @@
         <button type="button" class="button is-fullwidth" @click="keepFavourite">
           {{ $gettext('Keep as favourite, remove the offline copy') }}
         </button>
-        <button type="button" class="button is-fullwidth is-danger is-outlined" @click="removeBoth">
+        <button type="button" class="button is-fullwidth is-danger is-light" @click="removeBoth">
           {{ $gettext('Remove from favourites') }}
         </button>
       </div>

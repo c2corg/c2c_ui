@@ -39,6 +39,39 @@ export function groupsOf(rows: FavouriteRow[], folders: FavouriteFolder[], withE
   return groups;
 }
 
+// what the page shows: a text in the title, and the chosen document types (all when none is chosen)
+export function filterRows(rows: FavouriteRow[], search: string, types: string[]) {
+  const words = normalize(search).split(/\s+/).filter(Boolean);
+  return rows.filter((row) => {
+    const title = normalize(row.favourite.title);
+    return words.every((word) => title.includes(word)) && (!types.length || types.includes(row.favourite.type));
+  });
+}
+
+// lower case, without accents: "ecrins" finds "Écrins"
+const normalize = (text: string) =>
+  text
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase();
+
+export type FavouriteOrder = 'alphabetical' | 'recent';
+
+// alphabetical on the title as shown, the summit of a route first ("Summit : route"): the routes of a summit together
+export function sortRows(rows: FavouriteRow[], order: FavouriteOrder, lang?: string | null) {
+  if (order === 'recent') {
+    return [...rows].sort((a, b) => b.favourite.createdAt - a.favourite.createdAt);
+  }
+  const collator = new Intl.Collator(lang ?? undefined, { sensitivity: 'base', numeric: true });
+  return [...rows].sort((a, b) => collator.compare(a.favourite.title, b.favourite.title));
+}
+
+// the document types of the favourites, in the order of the site, with their count
+export const typesOf = (rows: FavouriteRow[], order: readonly string[]) =>
+  order
+    .map((type) => ({ type, count: rows.filter((row) => row.favourite.type === type).length }))
+    .filter((item) => item.count);
+
 // in MB, a decimal under 10
 export const formatSize = (bytes: number, lang?: string | null) =>
   new Intl.NumberFormat(lang ?? undefined, {

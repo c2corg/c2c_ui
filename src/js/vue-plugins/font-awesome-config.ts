@@ -16,6 +16,7 @@ import {
   faAnglesLeft,
   faAnglesRight,
   faArrowDown,
+  faArrowDownAZ,
   faArrowLeft,
   faArrowRight,
   faArrowUp,
@@ -427,6 +428,7 @@ export default function install(app: App) {
     faTriangleExclamation,
     faWifi,
     faArrowDown,
+    faArrowDownAZ,
 
     // regular icons
     faBookmarkRegular,

@@ -171,11 +171,13 @@
           </button>
         </dropdown-button>
       </div>
+      <!-- logged out: the language, and what the user menu offers to anyone (favourites of the device, settings) -->
       <div v-if="!$user.isLogged" class="navigation-item">
-        <dropdown-button class="is-right">
+        <dropdown-button class="is-right" ref="settingsMenu">
           <template #button>
-            <button class="button">
-              {{ $language.current }}
+            <button class="button" :aria-label="$gettext('Settings')">
+              <fa-icon icon="gear" />
+              <span>&nbsp;{{ $language.current }}</span>
             </button>
           </template>
           <button
@@ -188,6 +190,23 @@
           >
             {{ language }}
           </button>
+          <hr class="dropdown-divider" />
+          <router-link
+            :to="{ name: 'offline' }"
+            class="dropdown-item is-size-5"
+            @click="settingsMenu!.isActive = false"
+          >
+            <fa-icon icon="bookmark" fixed-width />
+            <span>{{ $gettext('Favourites') }}</span>
+          </router-link>
+          <router-link
+            :to="{ name: 'settings' }"
+            class="dropdown-item is-size-5"
+            @click="settingsMenu!.isActive = false"
+          >
+            <fa-icon icon="gears" fixed-width />
+            <span>{{ $gettext('Settings') }}</span>
+          </router-link>
         </dropdown-button>
       </div>
     </div>
@@ -288,6 +307,7 @@ const searchInputContainer = useTemplateRef<HTMLDivElement>('searchInputContaine
 const searchInput = useTemplateRef<{ focus(): void }>('searchInput');
 const addDocumentMenu = useTemplateRef<{ isActive: boolean }>('addDocumentMenu');
 const userMenu = useTemplateRef<{ isActive: boolean }>('userMenu');
+const settingsMenu = useTemplateRef<{ isActive: boolean }>('settingsMenu');
 
 const hideSearchInput = ref(true); // only on small screen
 

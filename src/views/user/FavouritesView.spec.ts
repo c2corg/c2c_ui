@@ -83,6 +83,8 @@ function mountPage() {
         globalProperties: {
           $gettext: (s: string) => s,
           $language: { current: 'en' },
+          $user: { id: 7 },
+          $filters: { uppercaseFirstLetter: (s: string) => s },
           $dateUtils: { timeAgo: () => 'today' },
         } as never,
       },
@@ -122,7 +124,8 @@ describe('FavouritesView', () => {
     const wrapper = mountPage();
     expect(chips(wrapper)).toEqual(['All 3', 'Offline 2']);
     expect(groupNames(wrapper)).toEqual(['Mont Blanc', 'Empty', 'No folder']);
-    expect(cardTitles(wrapper)).toEqual(['route 1', 'waypoint 2', 'outing 3']);
+    // in each folder, from A to Z
+    expect(cardTitles(wrapper)).toEqual(['route 1', 'outing 3', 'waypoint 2']);
     expect(wrapper.find('.status-line').text()).toBe('Synced with your account · 4 MB offline on this device');
     // offline copies only: a tag, no colour
     expect(wrapper.findAll('.favourite-card .tag').map((tag) => tag.text())).toEqual(['Offline', 'Offline']);
@@ -189,7 +192,70 @@ describe('FavouritesView', () => {
 
     expect(icons(0)).toEqual(['rotate', 'ellipsis-vertical']);
     expect(wrapper.findAll('.favourite-card')[0].find('.tag.is-warning').text()).toBe('Old copy');
-    expect(icons(1)).toEqual(['download', 'ellipsis-vertical']);
-    expect(icons(2)).toEqual(['ellipsis-vertical']);
+    expect(icons(1)).toEqual(['ellipsis-vertical']);
+    expect(icons(2)).toEqual(['download', 'ellipsis-vertical']);
+  });
+
+  describe('the search, the types and the order', () => {
+    beforeEach(() => {
+      state.favourites.favourites = [
+        favourite('route', 1, '5'),
+        favourite('waypoint', 2),
+        favourite('outing', 3),
+        { ...favourite('route', 4), title: 'Écrins : Arête' },
+      ];
+    });
+
+    it('finds a text in the titles, whatever the accents and the case', async () => {
+      const wrapper = mountPage();
+      await wrapper.find('.favourites-tools input').setValue('ecrins');
+
+      expect(cardTitles(wrapper)).toEqual(['Écrins : Arête']);
+      // filtered: no empty folder
+      expect(groupNames(wrapper)).toEqual(['No folder']);
+    });
+
+    it('keeps the chosen document types, offering only the types of the favourites, with their count', async () => {
+      const wrapper = mountPage();
+      const chipsOfTypes = wrapper.findAll('.type-chips button');
+      expect(chipsOfTypes.map((chip) => chip.text().replace(/\s+/g, ' '))).toEqual([
+        'routes 2',
+        'waypoints 1',
+        'outings 1',
+      ]);
+
+      await chipsOfTypes[0].trigger('click');
+      expect(cardTitles(wrapper)).toEqual(['route 1', 'Écrins : Arête']);
+
+      await chipsOfTypes[2].trigger('click');
+      expect(cardTitles(wrapper)).toEqual(['route 1', 'Écrins : Arête', 'outing 3']);
+    });
+
+    it('says when nothing matches, and clears the filters', async () => {
+      const wrapper = mountPage();
+      await wrapper.find('.favourites-tools input').setValue('nothing like this');
+      expect(wrapper.text()).toContain('No favourite matches.');
+
+      await wrapper.find('.empty-state button').trigger('click');
+      expect(cardTitles(wrapper)).toHaveLength(4);
+    });
+
+    it('sorts the latest first on demand, and keeps that order on the device', async () => {
+      const wrapper = mountPage();
+      await wrapper.find('.order-toggle').trigger('click');
+
+      expect(cardTitles(wrapper)).toEqual(['route 1', 'Écrins : Arête', 'outing 3', 'waypoint 2']);
+      expect(JSON.parse(localStorage.getItem('FavouritesView.preferences')!)).toEqual({ order: 'recent' });
+      localStorage.removeItem('FavouritesView.preferences');
+    });
+
+    // the list of the routes filtered on the favourites of the user: its map and its own filters
+    it('links to the map of the favourite routes, logged in only', () => {
+      const link = mountPage().findComponent(RouterLinkStub);
+      expect(link.props('to')).toEqual({ name: 'routes', query: { u: 7 } });
+
+      state.favourites.isLogged = false;
+      expect(mountPage().find('.routes-map').exists()).toBe(false);
+    });
   });
 });

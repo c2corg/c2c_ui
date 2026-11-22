@@ -176,6 +176,13 @@ describe('styles', () => {
     );
     expect(sized.length).toBeGreaterThan(10);
     expect(sized.filter((name) => !defined.has(name))).toEqual([]);
+  // and the code uses no variant of Bulma the global CSS left out: its class would change nothing (is-outlined gave a
+  // solid button, is-toggle plain tabs)
+  it('uses no variant of Bulma the global CSS left out', () => {
+    const words = codeWords();
+    const css = new Set(globalFiles.flatMap((file) => cssClasses(readFileSync(file, 'utf8'))));
+    const variants = ['is-outlined', 'is-inverted', 'is-toggle', 'is-toggle-rounded', 'is-focused', 'is-hovered'];
+    expect(variants.filter((name) => words.has(name) && !css.has(name))).toEqual([]);
   });
 
   // a plain CSS style is valid CSS for Lightning CSS, scoped by Vue then bundled as Vite does with the options of

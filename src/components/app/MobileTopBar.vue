@@ -131,7 +131,7 @@ const title = computed(() => {
     home: $gettext('Home'),
     offline: $gettext('Favourites'),
     me: $gettext('Me'),
-    'app-settings': $gettext('App settings'),
+    settings: $gettext('Settings'),
     'app-guide': $gettext('App guide'),
     outings: $gettext('outings'),
     routes: $gettext('routes'),

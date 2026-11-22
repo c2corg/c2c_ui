@@ -53,7 +53,6 @@
 
 <script setup lang="ts">
 import { computed, defineAsyncComponent, onMounted, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
 
 import AlertWindow from './components/alert-window/AlertWindow.vue';
 import BottomNav from './components/app/BottomNav.vue';
@@ -88,9 +87,8 @@ const homePage = useIsHomePage();
 const topAd = useHasTopAd();
 const sideMenuPinned = useSideMenuPinned();
 const sideMenuCanPin = useSideMenuCanPin();
-// the welcome page and the settings show the menu open, without its pin, where the screen is wide enough
-const route = useRoute();
-const sideMenuKeptOpen = computed(() => sideMenuCanPin.value && (homePage.value || route.name === 'app-settings'));
+// the welcome page shows the menu open, without its pin, where the screen is wide enough
+const sideMenuKeptOpen = computed(() => sideMenuCanPin.value && homePage.value);
 
 const appSettings = useAppSettingsStore();
 

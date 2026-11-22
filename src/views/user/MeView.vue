@@ -158,7 +158,7 @@ const sections = computed<Section[]>(() => {
       contributions.push({
         key: 'offline',
         label: $gettext('Favourites'),
-        desc: $gettext('Saved for the field'),
+        desc: $gettext('Documents I bookmarked, and their offline copies'),
         icon: 'bookmark',
         to: { name: 'offline' },
       });
@@ -169,13 +169,6 @@ const sections = computed<Section[]>(() => {
       key: 'account',
       label: $gettext('My account'),
       actions: [
-        {
-          key: 'preferences',
-          label: $gettext('Preferences'),
-          desc: $gettext('Followed activities, default filters'),
-          icon: 'gears',
-          to: accountTo('preferences'),
-        },
         {
           key: 'following',
           label: $gettext('Following'),
@@ -201,16 +194,19 @@ const sections = computed<Section[]>(() => {
     });
   }
 
+  // the device settings, and the preferences of the account when logged in: one page
   result.push({
     key: 'app',
-    label: $gettext('Application'),
+    label: $gettext('Settings'),
     actions: [
       {
         key: 'settings',
-        label: $gettext('App settings'),
-        desc: $gettext('Theme, text size'),
-        icon: 'palette',
-        to: { name: 'app-settings' },
+        label: $gettext('Settings'),
+        desc: $user.isLogged
+          ? $gettext('Language, theme, text size, my activities and areas')
+          : $gettext('Language, theme, text size'),
+        icon: 'gears',
+        to: { name: 'settings' },
       },
     ],
   });
@@ -351,8 +347,11 @@ const sections = computed<Section[]>(() => {
   align-items: center;
   gap: 0.75rem;
   padding: 0.6rem 0.75rem;
+  /* the cards of the site (CardContainer.vue, Bulma's card) */
   background: var(--app-surface);
-  border: 1px solid var(--app-border);
+  border: var(--c2c-card-border);
+  border-radius: var(--c2c-radius);
+  box-shadow: 0 2px 3px rgba(4%, 4%, 4%, 0.1);
   color: var(--c2c-color-text);
   text-decoration: none;
   transition: box-shadow 0.15s;
@@ -360,7 +359,7 @@ const sections = computed<Section[]>(() => {
   &:hover,
   &:focus {
     text-decoration: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--c2c-card-hover-shadow);
     color: var(--c2c-color-text);
   }
 
