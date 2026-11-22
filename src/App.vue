@@ -21,7 +21,7 @@
     <helper-window />
     <alert-window />
 
-    <!-- the phone layout of the app (under DESKTOP_BREAKPOINT): a top bar and a bottom tab bar instead of the side menu and the navigation -->
+    <!-- the phone layout of the app (under PHONE_BREAKPOINT): a top bar and a bottom tab bar instead of the side menu and the navigation -->
     <mobile-top-bar v-if="appSettings.isMobileShell" />
     <mobile-menu v-if="appSettings.isMobileShell" />
 
@@ -72,7 +72,7 @@ import SiteNotice from './views/SiteNotice.vue';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useHasTopAd, useIsHomePage } from '@/js/composables/home-page';
-import { useSideMenuPinned } from '@/js/composables/side-menu';
+import { useSideMenuCanPin, useSideMenuPinned } from '@/js/composables/side-menu';
 import { imageViewerRequested } from '@/js/vue-plugins/image-viewer';
 import { remind, shouldRemind } from '@/pwa/offline-reminder';
 import { useAppSettingsStore } from '@/stores/app-settings';
@@ -87,9 +87,10 @@ defineOptions({ name: 'App' });
 const homePage = useIsHomePage();
 const topAd = useHasTopAd();
 const sideMenuPinned = useSideMenuPinned();
-// the welcome page and the settings show the menu open, without its pin
+const sideMenuCanPin = useSideMenuCanPin();
+// the welcome page and the settings show the menu open, without its pin, where the screen is wide enough
 const route = useRoute();
-const sideMenuKeptOpen = computed(() => homePage.value || route.name === 'app-settings');
+const sideMenuKeptOpen = computed(() => sideMenuCanPin.value && (homePage.value || route.name === 'app-settings'));
 
 const appSettings = useAppSettingsStore();
 
@@ -239,7 +240,7 @@ button.dropdown-item {
   }
 }
 
-/* The navigation of the site follows html[data-shell] (src/stores/app-settings.ts), set from DESKTOP_BREAKPOINT: from it,
+/* The navigation of the site follows html[data-shell] (src/stores/app-settings.ts), set from PHONE_BREAKPOINT: from it,
    the side menu is shown and the page leaves room for it (its rail, or all of it when pinned); under it, the phone layout
    hides them (below) */
 @media screen {

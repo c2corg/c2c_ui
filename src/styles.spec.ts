@@ -9,6 +9,14 @@ import { compileStyle, parse } from 'vue/compiler-sfc';
 
 import viteConfig from '../vite.config.ts';
 
+import {
+  DESKTOP_BREAKPOINT,
+  FULLHD_BREAKPOINT,
+  PHONE_BREAKPOINT,
+  TABLET_BREAKPOINT,
+  WIDESCREEN_BREAKPOINT,
+} from '@/stores/screen';
+
 // The styles are plain CSS, and compile as the build does (the specs run with `css: false`): the global CSS files of
 // src/assets/css, Bulma's included, and the <style> blocks of the components, with Vue and Lightning CSS.
 
@@ -95,6 +103,29 @@ describe('styles', () => {
     const media = readFileSync(join(src, 'assets/css/media.css'), 'utf8');
     const used = new Set(allCss().flatMap((css) => [...css.matchAll(/(?<!var)\((--c2c-[\w-]+)\)/g)].map((m) => m[1])));
     expect([...used].filter((name) => !media.includes(`@custom-media ${name} `))).toEqual([]);
+  });
+
+  // CSS cannot read the constants of the screen store: its custom media queries repeat them, and must agree
+  it('has the breakpoints of the screen store', () => {
+    const media = readFileSync(join(src, 'assets/css/media.css'), 'utf8');
+    const queries = Object.fromEntries(
+      [...media.matchAll(/@custom-media (--c2c-[\w-]+) (.+);/g)].map((m) => [m[1], m[2]])
+    );
+    const from = (width: number) => `(min-width: ${width}px)`;
+    const upTo = (width: number) => `(max-width: ${width}px)`;
+    expect(queries).toEqual({
+      '--c2c-phone': upTo(PHONE_BREAKPOINT - 1),
+      '--c2c-mobile': upTo(TABLET_BREAKPOINT - 1),
+      '--c2c-min-tablet': from(TABLET_BREAKPOINT),
+      '--c2c-max-tablet': upTo(TABLET_BREAKPOINT),
+      '--c2c-touch': upTo(DESKTOP_BREAKPOINT - 1),
+      '--c2c-min-desktop': from(DESKTOP_BREAKPOINT),
+      '--c2c-max-desktop': upTo(DESKTOP_BREAKPOINT),
+      '--c2c-min-widescreen': from(WIDESCREEN_BREAKPOINT),
+      '--c2c-max-widescreen': upTo(WIDESCREEN_BREAKPOINT),
+      '--c2c-min-fullhd': from(FULLHD_BREAKPOINT),
+      '--c2c-max-fullhd': upTo(FULLHD_BREAKPOINT),
+    });
   });
 
   // a data URL cannot use a custom property
