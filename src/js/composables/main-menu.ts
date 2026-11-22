@@ -25,8 +25,6 @@ export interface MainMenuItem {
   // an icon component, or the name of a font-awesome icon
   iconComponent?: Component;
   icon?: string;
-  // the sidebar only shows it when the window is tall enough
-  tallOnly?: boolean;
   // a plain link, so that the page is refreshed when already on it
   reload?: boolean;
   // a count shown next to the label, when not zero
@@ -82,7 +80,6 @@ export function useMainMenuItems() {
       to: { name: 'yeti' },
       match: ['yeti'],
       iconComponent: IconYeti,
-      tallOnly: true,
     },
     {
       key: 'itinevert',

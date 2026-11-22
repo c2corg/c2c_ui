@@ -44,6 +44,8 @@ export function useSideMenu() {
   // the pointer is on the menu now (hovered follows it with a delay)
   let inside = false;
   const focused = ref(false);
+  // opened from its button, over the page, where it cannot be pinned (a finger has no hover): not kept on the device
+  const opened = ref(false);
   // after a choice in the menu, or closed on purpose: the pointer must leave it before it opens again
   const held = ref(false);
   let timer: ReturnType<typeof setTimeout> | undefined;
@@ -55,9 +57,11 @@ export function useSideMenu() {
 
   const canPin = useSideMenuCanPin();
   const effectivePinned = usePinned(canPin);
-  const expanded = computed(() => effectivePinned.value || focused.value || (hovered.value && !held.value));
+  const expanded = computed(
+    () => effectivePinned.value || opened.value || focused.value || (hovered.value && !held.value)
+  );
 
-  // a finger opens nothing: its tap goes to the icon, the pin opens the menu
+  // a finger opens nothing: its tap goes to the icon, the pin (or the button opening it) opens the menu
   function onPointerEnter(event: PointerEvent) {
     if (event.pointerType !== 'touch') {
       inside = true;
@@ -89,6 +93,7 @@ export function useSideMenu() {
 
   function close() {
     clearTimeout(timer);
+    opened.value = false;
     hovered.value = false;
     focused.value = false;
     held.value = inside;
@@ -99,6 +104,15 @@ export function useSideMenu() {
       close();
     }
     setPinned(!pinned.value);
+  }
+
+  // where it cannot be pinned, its button opens and closes it over the page
+  function toggleOpened() {
+    if (expanded.value) {
+      close();
+    } else {
+      opened.value = true;
+    }
   }
 
   onBeforeUnmount(() => clearTimeout(timer));
@@ -113,5 +127,6 @@ export function useSideMenu() {
     onFocusOut,
     close,
     togglePinned,
+    toggleOpened,
   };
 }

@@ -2,6 +2,7 @@
   <!-- a rail of icons, which opens over the page on hover or from the keyboard, or pinned open beside the page
        (src/js/composables/side-menu.ts) -->
   <aside
+    ref="root"
     :class="{ 'is-expanded': expanded || keptOpen, 'is-pinned': pinned || keptOpen }"
     @pointerenter="onPointerEnter"
     @pointerleave="onPointerLeave"
@@ -17,12 +18,13 @@
         <logo-ctc class="menu-logo" />
         <logo-ctc mark class="menu-logo-mark" />
       </a>
-      <menu-entries :items="visibleItems" />
+      <menu-entries :items="menuItems" />
 
       <menu-footer class="menu-footer" />
 
       <button
-        :style="{ visibility: keptOpen || !canPin ? 'hidden' : undefined }"
+        v-if="canPin"
+        :style="{ visibility: keptOpen ? 'hidden' : undefined }"
         type="button"
         class="menu-pin"
         @click="togglePinned"
@@ -32,12 +34,17 @@
           {{ pinned ? $gettext('Collapse the menu') : $gettext('Keep the menu open') }}
         </span>
       </button>
+      <!-- too narrow to pin it (a tablet, a phone on its side): opened over the page, by a tap too -->
+      <button v-else type="button" class="menu-pin" :aria-expanded="expanded" @click="toggleOpened">
+        <fa-icon :icon="expanded ? 'angles-left' : 'angles-right'" fixed-width />
+        <span class="menu-pin-text">{{ expanded ? $gettext('Close') : $gettext('Menu') }}</span>
+      </button>
     </div>
   </aside>
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from 'vue';
+import { onBeforeUnmount, ref } from 'vue';
 
 import LogoCtc from '@/components/app/LogoCtc.vue';
 import MenuEntries from '@/components/app/MenuEntries.vue';
@@ -48,12 +55,29 @@ import { useSideMenu } from '@/js/composables/side-menu';
 defineProps<{ keptOpen?: boolean }>();
 
 const menuItems = useMainMenuItems();
-const isTall = ref(false);
-// Yeti only when the window is tall enough
-const visibleItems = computed(() => menuItems.value.filter((item) => !item.tallOnly || isTall.value));
 
-const { pinned, canPin, expanded, onPointerEnter, onPointerLeave, onFocusIn, onFocusOut, close, togglePinned } =
-  useSideMenu();
+const {
+  pinned,
+  canPin,
+  expanded,
+  onPointerEnter,
+  onPointerLeave,
+  onFocusIn,
+  onFocusOut,
+  close,
+  togglePinned,
+  toggleOpened,
+} = useSideMenu();
+
+// opened over the page, a tap beside it closes it
+const root = ref<HTMLElement>();
+function onPointerDownOutside(event: PointerEvent) {
+  if (expanded.value && !pinned.value && !root.value?.contains(event.target as Node)) {
+    close();
+  }
+}
+document.addEventListener('pointerdown', onPointerDownOutside);
+onBeforeUnmount(() => document.removeEventListener('pointerdown', onPointerDownOutside));
 
 // a link followed (or the cookies opened): the menu closes over the page it opens
 function onClick(event: MouseEvent) {
@@ -61,28 +85,6 @@ function onClick(event: MouseEvent) {
     close();
   }
 }
-
-function onHeightBreakpointChange() {
-  isTall.value = mediaQueryList.matches;
-}
-
-const mediaQueryList = window.matchMedia('only screen and (min-height: 715px)');
-if (mediaQueryList.addEventListener) {
-  mediaQueryList.addEventListener('change', onHeightBreakpointChange);
-} else {
-  // Safari < 14 support
-  mediaQueryList.addListener(onHeightBreakpointChange);
-}
-onHeightBreakpointChange();
-
-onBeforeUnmount(() => {
-  if (mediaQueryList.removeEventListener) {
-    mediaQueryList.removeEventListener('change', onHeightBreakpointChange);
-  } else {
-    // Safari < 14 support
-    mediaQueryList.removeListener(onHeightBreakpointChange);
-  }
-});
 </script>
 
 <style scoped>
@@ -208,11 +210,14 @@ aside:not(.is-expanded) :deep(.menu-item.router-link-active) {
 .menu-pin {
   display: block;
   flex: none;
+  /* in view when the rail scrolls (a phone on its side): the way a finger opens it */
+  position: sticky;
+  bottom: 0;
   width: 100%;
   padding: 10px 10px 10px calc(var(--c2c-sidemenu-rail-width) / 2 - 0.625em);
   border: 0;
   border-top: 1px solid var(--c2c-grey-lightest);
-  background: none;
+  background: var(--c2c-white);
   color: var(--c2c-grey);
   font-size: 1rem;
   white-space: nowrap;
@@ -253,6 +258,10 @@ html[data-theme='dark'] aside.is-expanded:not(.is-pinned) {
   box-shadow:
     1px 0 0 var(--app-dark-border),
     8px 0 24px -4px rgba(0, 0, 0, 0.6);
+}
+
+html[data-theme='dark'] .menu-pin {
+  background: var(--app-dark-field);
 }
 
 html[data-theme='dark'] .menu-pin:hover {

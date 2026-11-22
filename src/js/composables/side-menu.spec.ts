@@ -137,6 +137,29 @@ describe('useSideMenu', () => {
     localStorage.removeItem('SideMenu.preferences');
   });
 
+  it('opens from its button where it cannot be pinned, by a tap too, without keeping it on the device', () => {
+    screenWidth(800);
+    const menu = sideMenu();
+    expect(menu.canPin.value).toBe(false);
+    const stored = localStorage.getItem('SideMenu.preferences');
+
+    menu.toggleOpened();
+    expect(menu.expanded.value).toBe(true);
+    expect(menu.pinned.value).toBe(false);
+    expect(localStorage.getItem('SideMenu.preferences')).toBe(stored);
+    // a finger leaving it does not close it
+    menu.onPointerLeave(pointer('touch'));
+    vi.advanceTimersByTime(CLOSE_DELAY);
+    expect(menu.expanded.value).toBe(true);
+
+    menu.toggleOpened();
+    expect(menu.expanded.value).toBe(false);
+    // a link followed closes it too
+    menu.toggleOpened();
+    menu.close();
+    expect(menu.expanded.value).toBe(false);
+  });
+
   it('is not pinned open under the desktop width, even when kept so on the device', async () => {
     localStorage.setItem('SideMenu.preferences', JSON.stringify({ pinned: true }));
     screenWidth(1023);
