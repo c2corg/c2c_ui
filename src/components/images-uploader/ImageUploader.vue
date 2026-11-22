@@ -34,15 +34,13 @@
       </progress>
     </div>
 
-    <div class="card-content">
+    <div class="card-content" :class="{ 'is-categories': categoriesEdition && !isFailed }">
       <div v-if="!isFailed">
-        <div v-if="categoriesEdition" class="columns is-mobile is-multiline is-gapless category-select">
-          <div v-for="item of imageCategories" :key="item" class="column is-4">
-            <label class="checkbox">
-              <input type="checkbox" :checked="document.categories.includes(item)" @input="toggleCategory(item)" />
-              {{ $filters.uppercaseFirstLetter($gettext(item, 'image_categories')) }}
-            </label>
-          </div>
+        <div v-if="categoriesEdition" class="category-select">
+          <label v-for="item of imageCategories" :key="item" class="checkbox">
+            <input type="checkbox" :checked="document.categories.includes(item)" @input="toggleCategory(item)" />
+            {{ $filters.uppercaseFirstLetter($gettext(item, 'image_categories')) }}
+          </label>
         </div>
 
         <div v-else>
@@ -214,15 +212,32 @@ function applyRotation(angle: number) {
   overflow-y: hidden;
   padding: 0;
 
+  /* the 17 categories need more than the height of the title and licence rows */
+  &.is-categories {
+    height: auto;
+    min-height: 115px;
+  }
+
+  /* as many columns as fit: two on phones, where three cut the longer labels (nivologie et avalanches) */
   .category-select {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+    column-gap: 0.5rem;
     padding: 0.5rem;
 
+    /* a label wraps rather than being cut, and the whole row is the tap target */
     label {
-      display: inherit;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      padding: 0.2rem 0.25rem 0.2rem 0;
+      line-height: 1.25;
       user-select: none;
+      overflow-wrap: break-word;
+    }
+
+    input {
+      flex-shrink: 0;
     }
   }
 
