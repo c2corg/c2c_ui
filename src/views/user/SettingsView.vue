@@ -5,7 +5,7 @@
       <h1 class="title is-3">{{ $gettext('Settings') }}</h1>
 
       <!-- the language first: the one setting every visitor looks for; kept in the account when logged in -->
-      <h2 class="title is-5">{{ $gettext('Language') }}</h2>
+      <h2 class="title is-5">{{ $gettext('Interface language') }}</h2>
       <div class="buttons">
         <button
           v-for="(language, key) of $language.availableUI"
@@ -140,7 +140,7 @@
               {{
                 preferences.followed_only
                   ? $gettext(
-                      'The feed then ignores the activities, areas and languages: they still serve the “My preferences” button of the lists.'
+                      'The feed then ignores the activities, areas and languages. The activities and areas still serve the “My preferences” button of the lists.'
                     )
                   : $gettext('Status updates from followed users are always shown.')
               }}
@@ -149,6 +149,13 @@
             <!-- the languages only filter the feed: not used when it shows only the followed users -->
             <template v-if="!preferences.followed_only">
               <h3 class="section-label">{{ $gettext('Languages of the feed') }}</h3>
+              <p class="note">
+                {{
+                  $gettext(
+                    'Only for the home page feed: the dashboard and the “My preferences” button of the lists ignore them.'
+                  )
+                }}
+              </p>
               <div class="buttons">
                 <button
                   v-for="(language, key) of $language.availableUI"

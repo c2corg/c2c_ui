@@ -58,6 +58,7 @@ describe('SettingsView', () => {
     const { wrapper } = mountView({ followed_only: false, langs: ['fr'], activities: [], areas: [] });
 
     expect(wrapper.text()).toContain('Languages of the feed');
+    expect(wrapper.text()).toContain('Only for the home page feed');
     expect(wrapper.find('input-activity-stub').exists()).toBe(true);
   });
 
