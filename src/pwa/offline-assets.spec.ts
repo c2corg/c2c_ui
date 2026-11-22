@@ -91,15 +91,19 @@ describe('the images of an offline document', () => {
     expect(urls).toContain(`${config.urls.media}/123_139MI.avif`);
   });
 
-  it('takes an image of both the text and the gallery both ways the viewer may ask for it', () => {
+  it('takes an image of the text from the media server when the API gives its url, once if in the gallery too', () => {
     const urls = imageUrlsOf({
       type: 'r',
-      cooked: { description: '<img c2c:document-id="100" c2c:url-proxy="/images/proxy/100?size=MI" alt="">' },
+      cooked: {
+        description:
+          `<img c2c:document-id="100" c2c:url-proxy="/images/proxy/100?size=MI" c2c:url="${config.urls.media}/123_100MI.jpg">` +
+          `<img c2c:document-id="6" c2c:url-proxy="/images/proxy/6?size=MI" c2c:url="${config.urls.media}/123_6MI.jpg">`,
+      },
       associations: { images: gallery(1) },
     });
     expect(urls.filter((url) => /BI\.|size=BI/.test(url))).toEqual([
       `${config.urls.media}/123_100BI.avif`,
-      `${config.urls.api}/images/proxy/100?size=BI&extension=avif`,
+      `${config.urls.media}/123_6BI.avif`,
     ]);
   });
 

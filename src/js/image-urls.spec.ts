@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   type ImageSize,
   fallBackToBasicImage,
+  getEmbeddedImage,
   getEmbeddedImageUrl,
   getImageUrl,
   getResponsiveSrcset,
@@ -288,5 +289,37 @@ describe('getResponsiveSrcset', () => {
 
   it('gives nothing for SI, whose width is unknown (cropped)', () => {
     expect(getResponsiveSrcset(image, 'SI')).toBeUndefined();
+  });
+});
+
+describe('getEmbeddedImage', () => {
+  const img = (attributes: Record<string, string>) => {
+    const element = document.createElement('img');
+    Object.entries(attributes).forEach(([name, value]) => element.setAttribute(name, value));
+    return element;
+  };
+
+  it('gives the file name of the image from its direct media url, and the size of its original', () => {
+    expect(
+      getEmbeddedImage(
+        img({
+          'c2c:document-id': '12',
+          'c2c:url': `${config.urls.media}/1588000000_12MI.jpg`,
+          'c2c:width': '3000',
+          'c2c:height': '2000',
+        })
+      )
+    ).toEqual({ document_id: 12, filename: '1588000000_12.jpg', width: 3000, height: 2000 });
+    // an original ([img=12 orig])
+    expect(
+      getEmbeddedImage(img({ 'c2c:document-id': '12', 'c2c:url': `${config.urls.media}/1588000000_12.png` }))
+    ).toEqual({ document_id: 12, filename: '1588000000_12.png' });
+  });
+
+  it('gives only the id without a media url: the API proxy', () => {
+    expect(getEmbeddedImage(img({ 'c2c:document-id': '12' }))).toEqual({ document_id: 12 });
+    expect(getEmbeddedImage(img({ 'c2c:document-id': '12', 'c2c:url': 'https://elsewhere.org/1_12MI.jpg' }))).toEqual({
+      document_id: 12,
+    });
   });
 });

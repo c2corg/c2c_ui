@@ -9,7 +9,7 @@ import {
 } from '@/components/map/map-layers';
 import config from '@/js/config';
 import { extentFromLonLat } from '@/js/geo/projection';
-import { getEmbeddedImageUrl, getImageUrl, type Image, type ImageFormat } from '@/js/image-urls';
+import { getEmbeddedImage, getEmbeddedImageUrl, getImageUrl, type Image, type ImageFormat } from '@/js/image-urls';
 
 // The format the browser takes in the <picture> of Thumbnail.vue and Markdown.vue: AVIF where it exists (no WebP:
 // c2corg/c2c_images#1160), else the original.
@@ -44,26 +44,27 @@ const BIG_IMAGES_MAX = 30;
 const takesBigImages = (document: { type?: string; waypoint_type?: string | null }) =>
   document.type === 'r' || (document.type === 'w' && document.waypoint_type === 'climbing_outdoor');
 
-// the camptocamp images of a text ([img=123]), by their id
-function textImageIds(html: string) {
+// the camptocamp images of a text ([img=123]), as Markdown.vue gives them to the viewer
+function textImages(html: string) {
   if (!html.includes('c2c:document-id')) {
     return [];
   }
   return [...new DOMParser().parseFromString(html, 'text/html').querySelectorAll('img[c2c\\:document-id]')]
-    .map((img) => Number(img.getAttribute('c2c:document-id')))
-    .filter((id) => Number.isInteger(id) && id > 0);
+    .map(getEmbeddedImage)
+    .filter((image) => Number.isInteger(image.document_id) && image.document_id > 0);
 }
 
-// the BI images as the viewer asks for them: the gallery's from their file name, the text's from their id only (the
-// proxy of the API). An image of both may be asked for either way, whichever the page gave the viewer first: both.
+// the BI images as the viewer asks for them: from their file name, else (unknown to the API) from the API proxy
 function bigImageUrls(texts: string[], images: Image[]) {
-  const inText = new Set(texts.flatMap(textImageIds));
-  const inGallery = new Map(images.map((image) => [image.document_id, image]));
-  const ids = [...new Set([...inText, ...inGallery.keys()])].slice(0, BIG_IMAGES_MAX);
-  return ids.flatMap((id) => {
-    const asked = [inGallery.get(id), inText.has(id) ? { document_id: id } : undefined];
-    return asked.filter((image) => !!image).map((image) => bestOf((format) => getImageUrl(image, 'BI', format)));
-  });
+  const byId = new Map<number, Image>();
+  for (const image of [...texts.flatMap(textImages), ...images]) {
+    if (!byId.has(image.document_id) || (!byId.get(image.document_id)!.filename && image.filename)) {
+      byId.set(image.document_id, image);
+    }
+  }
+  return [...byId.values()]
+    .slice(0, BIG_IMAGES_MAX)
+    .map((image) => bestOf((format) => getImageUrl(image, 'BI', format)));
 }
 
 // the images of the text, and the thumbnails of the gallery (Gallery.vue); the BI ones of the routes and crags

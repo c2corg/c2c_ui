@@ -12,7 +12,13 @@ import { useRouter } from 'vue-router';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
 import iconSvg from '@/js/icon-svg';
-import { fallBackToBasicImage, getEmbeddedImageUrl, getThumbnailSize, type ImageSize } from '@/js/image-urls';
+import {
+  fallBackToBasicImage,
+  getEmbeddedImage,
+  getEmbeddedImageUrl,
+  getThumbnailSize,
+  type ImageSize,
+} from '@/js/image-urls';
 import { sanitizeRichHtml } from '@/js/sanitize-html';
 import type { ViewerImage } from '@/js/vue-plugins/image-viewer';
 
@@ -179,9 +185,11 @@ function reserveImageSpace(image: HTMLImageElement): boolean {
 
 function computeImages(images: Iterable<EmbeddedImage>) {
   for (const image of images) {
-    const document_id = parseInt(image.attributes.getNamedItem('c2c:document-id')!.value, 10);
+    // with its file name when known: the viewer then loads it from the media server, as the gallery's
+    const embedded = getEmbeddedImage(image);
+    const document_id = embedded.document_id;
     image.c2cExtrapoledDocument = {
-      document_id,
+      ...embedded,
       locales: [{ title: '...' }],
       available_langs: [$language.current!],
       type: 'i',
