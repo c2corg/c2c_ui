@@ -92,21 +92,6 @@ export function useMainMenuItems() {
       iconComponent: IconItinevert,
       reload: true,
     },
-    // the pages of the app that its menu opens in the phone layout
-    {
-      key: 'offline',
-      label: $gettext('Favourites'),
-      to: { name: 'offline' },
-      match: ['offline'],
-      icon: 'bookmark',
-    },
-    {
-      key: 'app-settings',
-      label: $gettext('Settings'),
-      to: { name: 'app-settings' },
-      match: ['app-settings'],
-      icon: 'palette',
-    },
     // for the moderators of the topoguide or of the forum
     ...(canModerate.value
       ? [
@@ -147,7 +132,8 @@ export function useAccountLinks() {
   return computed<AccountLink[]>(() => [
     { key: 'profile', to: { name: 'profile', params: { id: $user.id } }, text: $gettext('My profile'), icon: 'user' },
     { key: 'account', to: { name: 'account' }, text: $gettext('My account'), icon: 'check-circle' },
-    { key: 'preferences', to: { name: 'preferences' }, text: $gettext('My preferences'), icon: 'gears' },
+    // the favourites of every type; the map of the favourite routes is a button of their page
+    { key: 'favourites', to: { name: 'offline' }, text: $gettext('Favourites'), icon: 'bookmark' },
     { key: 'trackers', to: { name: 'trackers' }, text: $gettext('Activity trackers'), icon: 'location-crosshairs' },
     {
       key: 'outings',
@@ -168,12 +154,8 @@ export function useAccountLinks() {
       icon: 'edit',
     },
     { key: 'following', to: { name: 'following' }, text: $gettext('My followed users'), icon: 'heart' },
-    {
-      key: 'bookmarks',
-      to: { name: 'routes', query: { u: $user.id } },
-      text: $gettext('My bookmarks'),
-      icon: 'star',
-    },
+    // the device settings and the preferences of the account, on one page
+    { key: 'settings', to: { name: 'settings' }, text: $gettext('Settings'), icon: 'gears' },
     ...(canModerate.value
       ? [
           {

@@ -13,7 +13,7 @@ const mountButton = async (url: string, preferences: object, display: 'button' |
   vi.spyOn(c2c.userProfile.preferences, 'get').mockResolvedValue({ data: preferences } as never);
   const router = createRouter({
     history: createMemoryHistory(),
-    routes: ['outings', 'books', 'waypoints', 'preferences'].map((name) => ({
+    routes: ['outings', 'books', 'waypoints', 'settings'].map((name) => ({
       path: '/' + name,
       name,
       component: { render: () => null },
@@ -91,14 +91,14 @@ describe('LoadUserPreferencesButton', () => {
     expect(toast).not.toHaveBeenCalled();
   });
 
-  it('sends to the preferences page when there are none, without changing the list', async () => {
+  it('sends to the account part of the settings when there are none, without changing the list', async () => {
     const { wrapper, router } = await mountButton('/outings?act=hiking', { activities: [], areas: [] }, 'dropdown');
     await click(wrapper);
 
     expect(router.currentRoute.value.query).toEqual({ act: 'hiking' });
     const message = vi.mocked(toast).mock.calls[0]![0].message as HTMLElement;
     expect(message.textContent).toContain('You have no activity nor area in your preferences.');
-    expect(message.querySelector('a')!.getAttribute('href')).toBe('/preferences');
+    expect(message.querySelector('a')!.getAttribute('href')).toBe('/settings#account');
   });
 
   it('tells when the preferences cannot be loaded', async () => {

@@ -75,3 +75,20 @@ describe('the moderation link of the menus', () => {
     expect(countAccountRemovals).not.toHaveBeenCalled();
   });
 });
+
+describe('the settings and the favourites in the menus', () => {
+  // the main menu lists the sections of the site; what belongs to the user is in the user menu
+  it('are not in the main menu', () => {
+    const keys = keysFor({ isLogged: true, id: 1 });
+    expect(keys.menu).not.toContain('offline');
+    expect(keys.menu).not.toContain('app-settings');
+  });
+
+  // one page each: the former "My preferences" and "My bookmarks" are part of them
+  it('are in the user menu, in place of the preferences and the bookmarks', () => {
+    const keys = keysFor({ isLogged: true, id: 1 });
+    expect(keys.account).toEqual(expect.arrayContaining(['favourites', 'settings']));
+    expect(keys.account).not.toContain('preferences');
+    expect(keys.account).not.toContain('bookmarks');
+  });
+});
