@@ -94,6 +94,10 @@ const attentionTitle = computed(() => {
 
 <style scoped>
 .favourite-card {
+  /* the cards of the site (CardContainer.vue, Bulma's card), not the square box */
+  border: var(--c2c-card-border);
+  border-radius: var(--c2c-radius);
+  box-shadow: 0 2px 3px rgba(4%, 4%, 4%, 0.1);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -113,7 +117,8 @@ const attentionTitle = computed(() => {
 
 .favourite-card-icon {
   flex-shrink: 0;
-  color: var(--c2c-primary);
+  /* the colour of the text, as the icons of the menus */
+  color: var(--c2c-text);
   font-size: 1.25rem;
 }
 

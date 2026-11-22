@@ -153,9 +153,66 @@
             offlineRows.length
           }}</span>
         </button>
+        <!-- the map of the favourite routes is the list of the routes filtered on them, with its own filters -->
+        <router-link
+          v-if="favourites.isLogged && $user.id && hasRoutes"
+          :to="{ name: 'routes', query: { u: $user.id } }"
+          class="button is-small is-primary routes-map"
+        >
+          <fa-icon icon="map" />&nbsp;{{ $gettext('Routes on the map') }}
+        </router-link>
       </div>
 
-      <div v-if="!shown.length && !needNetwork.length" class="has-text-centered empty-state">
+      <!-- to find one among many: a text, the document types, an order -->
+      <div v-if="rows.length" class="favourites-tools">
+        <div class="control has-icons-left search-field">
+          <input
+            v-model="search"
+            class="input is-small"
+            type="search"
+            :placeholder="$gettext('Search in my favourites')"
+            :aria-label="$gettext('Search in my favourites')"
+          />
+          <span class="icon is-small is-left"><fa-icon icon="search" /></span>
+        </div>
+        <!-- one button for the two orders: it shows the current one, a tap gives the other -->
+        <button
+          type="button"
+          class="button is-small order-toggle"
+          :aria-label="
+            order === 'alphabetical'
+              ? $gettext('A to Z: sort recent first')
+              : $gettext('Recent first: sort from A to Z')
+          "
+          @click="order = order === 'alphabetical' ? 'recent' : 'alphabetical'"
+        >
+          <fa-icon :icon="order === 'alphabetical' ? 'arrow-down-a-z' : 'history'" />
+          <span>&nbsp;{{ order === 'alphabetical' ? $gettext('A to Z') : $gettext('Recent first') }}</span>
+        </button>
+      </div>
+      <div v-if="types.length > 1" class="buttons type-chips" role="group" :aria-label="$gettext('Document types')">
+        <button
+          v-for="item of types"
+          :key="item.type"
+          type="button"
+          class="button is-small is-rounded"
+          :class="{ 'is-primary is-light': chosenTypes.includes(item.type) }"
+          :aria-pressed="chosenTypes.includes(item.type)"
+          @click="toggleType(item.type)"
+        >
+          <icon-document :document-type="item.type" />&nbsp;{{
+            $filters.uppercaseFirstLetter($gettext(item.type + 's'))
+          }}
+          &nbsp;<span class="chip-count">{{ item.count }}</span>
+        </button>
+      </div>
+
+      <div v-if="filtering && !shown.length" class="has-text-centered empty-state">
+        <p class="subtitle is-6 has-text-grey">{{ $gettext('No favourite matches.') }}</p>
+        <button type="button" class="button is-small" @click="clearFilters">{{ $gettext('Clear the filters') }}</button>
+      </div>
+
+      <div v-else-if="!shown.length && !needNetwork.length" class="has-text-centered empty-state">
         <fa-icon icon="bookmark" size="3x" class="has-text-grey-lighter" />
         <p class="title is-5 mt-4">
           {{ filter === 'offline' ? $gettext('No topo saved offline') : $gettext('No favourite yet') }}
@@ -319,12 +376,23 @@ import { computed, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 import FavouriteCard from './FavouriteCard.vue';
-import { copyStateOf, formatSize, groupsOf, rowsOf, type FavouriteRow } from './favourite-rows';
+import {
+  copyStateOf,
+  filterRows,
+  formatSize,
+  groupsOf,
+  rowsOf,
+  sortRows,
+  typesOf,
+  type FavouriteOrder,
+  type FavouriteRow,
+} from './favourite-rows';
 
 import ModalCard from '@/components/generics/modals/ModalCard.vue';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { usePullRefresh } from '@/js/composables/pull-refresh';
 import { notify, notifyWithAction, toast } from '@/js/toast';
+import { getPreferences } from '@/js/vue-plugins/local-storage';
 import install, { devicePlatform } from '@/pwa/install';
 import type { PendingOuting } from '@/pwa/outing-queue';
 import { useFavouritesStore, type FavouriteFolder } from '@/stores/favourites';
@@ -333,7 +401,7 @@ import { useOutingQueueStore } from '@/stores/outing-queue';
 
 defineOptions({ name: 'FavouritesView' });
 
-const { $gettext, $language } = useGlobalProperties();
+const { $gettext, $language, $user } = useGlobalProperties();
 
 const favourites = useFavouritesStore();
 const offline = useOfflineStore();
@@ -416,13 +484,58 @@ watch(
     }
   }
 );
-const shown = computed(() => (filter.value === 'offline' ? offlineRows.value : rows.value));
+// the order is kept on this device; the text and the types are for this visit
+const preferences = getPreferences('FavouritesView');
+const order = ref<FavouriteOrder>(preferences.get<unknown>('order') === 'recent' ? 'recent' : 'alphabetical');
+watch(order, (value) => {
+  try {
+    preferences.set('order', value);
+  } catch {
+    // storage blocked or full: for this visit only
+  }
+});
+const search = ref('');
+const chosenTypes = ref<string[]>([]);
+// the types of the site that can be favourites, in the order of its menus
+const TYPE_ORDER = ['route', 'waypoint', 'outing', 'article', 'book', 'xreport'];
+const types = computed(() => typesOf(rows.value, TYPE_ORDER));
+const filtering = computed(() => !!search.value.trim() || chosenTypes.value.length > 0);
+function toggleType(type: string) {
+  chosenTypes.value = chosenTypes.value.includes(type)
+    ? chosenTypes.value.filter((item) => item !== type)
+    : [...chosenTypes.value, type];
+}
+function clearFilters() {
+  search.value = '';
+  chosenTypes.value = [];
+}
+// the button of the map: only with routes among the favourites
+const hasRoutes = computed(() => rows.value.some((row) => row.favourite.type === 'route'));
+
+const shown = computed(() =>
+  sortRows(
+    filterRows(filter.value === 'offline' ? offlineRows.value : rows.value, search.value, chosenTypes.value),
+    order.value,
+    $language.current
+  )
+);
 // without a network, in the Offline filter: the favourites that do not open, in a folded group
 const needNetwork = computed(() =>
-  filter.value === 'offline' && !offline.online ? rows.value.filter((row) => !row.entry) : []
+  filter.value === 'offline' && !offline.online
+    ? sortRows(
+        filterRows(
+          rows.value.filter((row) => !row.entry),
+          search.value,
+          chosenTypes.value
+        ),
+        order.value,
+        $language.current
+      )
+    : []
 );
 const needNetworkOpen = ref(false);
-const groups = computed(() => groupsOf(shown.value, favourites.folders, filter.value === 'all'));
+// filtered, the empty folders would only be noise
+const groups = computed(() => groupsOf(shown.value, favourites.folders, filter.value === 'all' && !filtering.value));
 
 const collapsed = ref(new Set<string>());
 const isCollapsed = (folder: FavouriteFolder | null) => collapsed.value.has(folder?.id ?? '');
@@ -591,6 +704,33 @@ async function removeFolder(folder: FavouriteFolder) {
 
 .filter-chips .chip-count {
   opacity: 0.75;
+}
+
+.favourites-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  /* as wide as a title, not the whole page */
+  .search-field {
+    flex: 0 1 16rem;
+    min-width: 10rem;
+  }
+}
+
+/* All / Offline on the left, the map of the routes on the right */
+.filter-chips .routes-map {
+  margin-left: auto;
+}
+
+.type-chips {
+  margin-bottom: 0.25rem;
+
+  .chip-count {
+    opacity: 0.75;
+  }
 }
 
 .empty-state {
