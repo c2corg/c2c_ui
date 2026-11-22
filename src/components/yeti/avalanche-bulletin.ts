@@ -1,0 +1,98 @@
+import type { DangerRating, DangerRatingValue, ValidTimePeriod } from '@/js/apis/avalanche-bulletin-service';
+
+// The bulletin zones of api.ensg.eu (France, by name) and the massifs of Météo-France, whose numbers are the EAWS
+// region ids FR-01 to FR-74. Andorra (71) has its own service. Goes away with the EAWS regions on the map (#5171).
+const FRENCH_MASSIFS: Record<string, number> = {
+  Chablais: 1,
+  Aravis: 2,
+  'Mont-Blanc': 3,
+  Bauges: 4,
+  Beaufortain: 5,
+  'Haute-Tarentaise': 6,
+  Chartreuse: 7,
+  Belledonne: 8,
+  Maurienne: 9,
+  Vanoise: 10,
+  'Haute-Maurienne': 11,
+  'Grandes-Rousses': 12,
+  Thabor: 13,
+  Vercors: 14,
+  Oisans: 15,
+  Pelvoux: 16,
+  Queyras: 17,
+  Devoluy: 18,
+  Champsaur: 19,
+  'Embrunais-Parpaillon': 20,
+  Ubaye: 21,
+  'Haut-Var-Haut-Verdon': 22,
+  Mercantour: 23,
+  'Cinto-Rotondo': 40,
+  'Renoso-Incudine': 41,
+  'Pays-Basque': 64,
+  'Aspe-Ossau': 65,
+  'Haute-Bigorre': 66,
+  'Aure-Louron': 67,
+  Luchonnais: 68,
+  Couserans: 69,
+  'Haute-Ariege': 70,
+  'Orlu-St-Barthelemy': 72,
+  'Capcir-Puymorens': 73,
+  'Cerdagne-Canigou': 74,
+};
+
+/** The EAWS region id of a bulletin zone of the map, null when the c2c API has no bulletin for it */
+export function bulletinRegionId(country?: string | null, name?: string | null): string | null {
+  const massif = country === 'France' && name ? FRENCH_MASSIFS[name] : undefined;
+  return massif ? `FR-${String(massif).padStart(2, '0')}` : null;
+}
+
+const DANGER_NUMBERS: Partial<Record<DangerRatingValue, number>> = {
+  low: 1,
+  moderate: 2,
+  considerable: 3,
+  high: 4,
+  very_high: 5,
+};
+
+export function dangerNumber(value?: DangerRatingValue): number | undefined {
+  return value ? DANGER_NUMBERS[value] : undefined;
+}
+
+/** The input of DangerLevel.vue: the altitude is its label, as api.ensg.eu gives it */
+export type DangerLevelInput = {
+  low?: number;
+  high?: number;
+  altitude?: string;
+  lowEvol?: number;
+  highEvol?: number;
+};
+
+/** The danger ratings as DangerLevel draws them: below and above the elevation threshold, and their afternoon change */
+export function toDangerLevel(ratings: DangerRating[] = []): DangerLevelInput {
+  const ofPeriod = (period: ValidTimePeriod) => ratings.filter((r) => (r.validTimePeriod ?? 'all_day') === period);
+  const later = ofPeriod('later');
+  const earlier = later.length ? ofPeriod('earlier') : ofPeriod('all_day');
+  const below = (rs: DangerRating[]) => rs.find((r) => !r.elevation?.lowerBound);
+  const above = (rs: DangerRating[]) => rs.find((r) => r.elevation?.lowerBound);
+  // the afternoon value, when it changes
+  const evolution = (morning?: DangerRating, afternoon?: DangerRating) => {
+    const value = dangerNumber(afternoon?.mainValue);
+    return value !== dangerNumber(morning?.mainValue) ? value : undefined;
+  };
+
+  const [morningBelow, morningAbove] = [below(earlier), above(earlier)];
+  if (morningBelow && morningAbove) {
+    return {
+      low: dangerNumber(morningBelow.mainValue),
+      high: dangerNumber(morningAbove.mainValue),
+      altitude: `${morningAbove.elevation!.lowerBound} m`,
+      lowEvol: later.length ? evolution(morningBelow, below(later)) : undefined,
+      highEvol: later.length ? evolution(morningAbove, above(later)) : undefined,
+    };
+  }
+  const single = morningBelow ?? morningAbove;
+  return {
+    low: dangerNumber(single?.mainValue),
+    lowEvol: later.length ? evolution(single, later[0]) : undefined,
+  };
+}

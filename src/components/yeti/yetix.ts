@@ -14,7 +14,14 @@ import type LineString from 'ol/geom/LineString';
 import { defineStore } from 'pinia';
 import { computed, markRaw, reactive } from 'vue';
 
-import type { BulletinMountain, SelectorLayer, WinterRouteLegendItem, YetiLegend, YetiTab } from './yetix-types';
+import type {
+  BulletinMountain,
+  SelectedBulletin,
+  SelectorLayer,
+  WinterRouteLegendItem,
+  YetiLegend,
+  YetiTab,
+} from './yetix-types';
 
 import ol from '@/js/libs/ol';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
@@ -97,6 +104,8 @@ const defaultState = () => ({
   },
   bulletinsLoaded: false,
   showAvalancheBulletins: false,
+  // the bulletin whose detail the Bulletin tab shows
+  selectedBulletin: null as SelectedBulletin | null,
 
   winterRoutes: [] as Feature[],
   showWinterRoute: false,
@@ -191,6 +200,7 @@ export const useYetixStore = defineStore('yetix', () => {
   const mountains = computed(() => state.mountains);
   const bulletinsLoaded = computed(() => state.bulletinsLoaded);
   const showAvalancheBulletins = computed(() => state.showAvalancheBulletins);
+  const selectedBulletin = computed(() => state.selectedBulletin);
   const winterRoutes = computed(() => state.winterRoutes);
   const hasWinterRoutes = computed(() => !!state.winterRoutes.length);
   const showWinterRoute = computed(() => state.showWinterRoute);
@@ -289,6 +299,9 @@ export const useYetixStore = defineStore('yetix', () => {
   }
   function setVisibleMountains(mountains: Record<string, BulletinMountain[]>) {
     state.mountains.visible = mountains;
+  }
+  function setSelectedBulletin(bulletin: SelectedBulletin | null) {
+    state.selectedBulletin = bulletin;
   }
   function setShowAvalancheBulletins(showAvalancheBulletins: boolean) {
     state.showAvalancheBulletins = showAvalancheBulletins;
@@ -474,6 +487,7 @@ export const useYetixStore = defineStore('yetix', () => {
     mountains,
     bulletinsLoaded,
     showAvalancheBulletins,
+    selectedBulletin,
     winterRoutes,
     hasWinterRoutes,
     showWinterRoute,
@@ -515,6 +529,7 @@ export const useYetixStore = defineStore('yetix', () => {
     setAllMountains,
     setVisibleMountains,
     setShowAvalancheBulletins,
+    setSelectedBulletin,
     setBulletinsLoaded,
     setWinterRoutes,
     setShowWinterRoute,

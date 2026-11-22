@@ -35,7 +35,7 @@
             </ul>
           </div>
           <div class="columns mb-0 is-mobile">
-            <tabs :tabs="yetiTabs" />
+            <tabs ref="yetiTabsElement" :tabs="yetiTabs" />
           </div>
           <div class="box">
             <panel :index="0">
@@ -66,6 +66,10 @@
 
             <panel :index="3">
               <sub-panel-meteo />
+            </panel>
+
+            <panel v-if="selectedBulletin" :index="bulletinTabIndex">
+              <bulletin-detail :selected="selectedBulletin" @close="closeBulletin" />
             </panel>
           </div>
 
@@ -110,6 +114,7 @@ import type { Extent } from 'ol/extent';
 import { computed, onMounted, ref, shallowRef, useTemplateRef, watch } from 'vue';
 
 import YetiArticle from '@/components/yeti/Article.vue';
+import BulletinDetail from '@/components/yeti/BulletinDetail.vue';
 import Panel from '@/components/yeti/Panel.vue';
 import SubPanelBra from '@/components/yeti/SubPanelBra.vue';
 import SubPanelCourse from '@/components/yeti/SubPanelCourse.vue';
@@ -170,6 +175,8 @@ const areaOk = computed(() => Yetix.areaOk);
 const hasFeatures = computed(() => Yetix.hasFeatures);
 const featuresLength = computed(() => Yetix.features.length);
 const validSimplifyTolerance = computed(() => Yetix.validSimplifyTolerance);
+const selectedBulletin = computed(() => Yetix.selectedBulletin);
+const yetiTabsElement = useTemplateRef<InstanceType<typeof Tabs>>('yetiTabsElement');
 // not named tabs: it would hide the <tabs> component
 const yetiTabs = computed(() => Yetix.tabs);
 const localTabs = computed(() => {
@@ -218,8 +225,19 @@ const localTabs = computed(() => {
   };
   tabs.push(tabMeteo);
 
+  // bulletin tab, once a bulletin is opened from the map
+  if (selectedBulletin.value) {
+    tabs.push({
+      id: 'bulletin',
+      name: $gettext('Bulletin'),
+      icon: 'mountain',
+      title: selectedBulletin.value.name,
+    });
+  }
+
   return tabs;
 });
+const bulletinTabIndex = computed(() => localTabs.value.findIndex((tab) => tab.id === 'bulletin'));
 const errors = computed(() => ({
   area: {
     simple: $gettext('Area not covered'),
@@ -273,6 +291,23 @@ watch(
   check
 );
 watch(localTabs, (tabs) => Yetix.setTabs(tabs), { deep: true });
+
+// a bulletin opened from the map: show its tab, above the map on small screens
+watch(
+  selectedBulletin,
+  (bulletin, previous) => {
+    if (bulletin && bulletin.regionId !== previous?.regionId) {
+      Yetix.setActiveTab(bulletinTabIndex.value);
+      (yetiTabsElement.value?.$el as HTMLElement | undefined)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  },
+  { flush: 'post' }
+);
+
+function closeBulletin() {
+  Yetix.setActiveTab(0);
+  Yetix.setSelectedBulletin(null);
+}
 
 // show disclaimer if not already validated
 if (!preferences.get('yeti-disclaimer')) {

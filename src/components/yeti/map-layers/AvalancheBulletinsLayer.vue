@@ -43,8 +43,13 @@
     <div v-else class="py-2">
       <p class="is-size-6 p-3"><span v-translate key="id2">No avalanche bulletin right now</span></p>
     </div>
-    <div class="is-size-7 px-3 pt-2 pb-2 bulletins-footer" v-if="overlayData.urls.length">
-      <p v-for="(url, i) in overlayData.urls" :key="i">
+    <div v-if="overlayRegionId" class="px-3 pb-3 has-text-centered">
+      <button class="button is-primary is-small" @click="openBulletin">
+        <span v-translate>Bulletin details</span>
+      </button>
+    </div>
+    <div class="is-size-7 px-3 pt-2 pb-2 bulletins-footer" v-if="overlayUrls.length">
+      <p v-for="(url, i) in overlayUrls" :key="i">
         <strong>©{{ url.title }}</strong>
         <a :href="url.url" target="_blank">
           <fa-icon icon="external-link-alt" />
@@ -78,10 +83,12 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, wa
 import { useLayer } from './layer';
 
 import DropdownContent from '@/components/yeti/DropdownContent.vue';
+import { bulletinRegionId } from '@/components/yeti/avalanche-bulletin';
 import DangerLevel from '@/components/yeti/map-layers/DangerLevel.vue';
 import { useYetixStore } from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import type { BulletinMountain } from '@/components/yeti/yetix-types';
+import avalancheBulletins from '@/js/apis/avalanche-bulletin-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
 
@@ -314,6 +321,20 @@ const overlayDangerComment = computed(() => (overlayData.value.danger.low ? over
 
 const overlayOrientationsComment = computed(() => overlayData.value.orientations.comment);
 
+// the bulletins the c2c API has (the French massifs)
+const overlayRegionId = computed(() => bulletinRegionId(overlayData.value.country, overlayData.value.mountainName));
+
+const overlayUrls = computed(() => {
+  if (!overlayRegionId.value) {
+    return overlayData.value.urls;
+  }
+  // the official PDF through the c2c API, instead of the page of metaskirando (gone after 2026-12-16)
+  return [
+    { title: 'Météo-France', url: avalancheBulletins.pdfUrl(overlayRegionId.value) },
+    ...overlayData.value.urls.filter((url) => !url.url.includes('metaskirando')),
+  ];
+});
+
 const layerSelector = computed(() => {
   return {
     title: $gettext('Avalanche bulletins'),
@@ -473,6 +494,11 @@ function onMapLoosePointerMove() {
     selectedFeature.setStyle(selectedFeature.get('normalStyle'));
     selectedFeature = null;
   }
+}
+
+function openBulletin() {
+  Yetix.setSelectedBulletin({ regionId: overlayRegionId.value!, name: overlayData.value.mountainName! });
+  closeOverlay(true);
 }
 
 function onShowAvalancheBulletins() {
