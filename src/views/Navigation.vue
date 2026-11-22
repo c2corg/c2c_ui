@@ -370,8 +370,17 @@ nav {
   line-height: 1.5;
 }
 
+/* "Join us": like the green add button next to it, no grey border and darker on hover;
+   the padding is on the link (below), so that the whole button can be clicked */
 .c2c-color {
   background-color: var(--c2c-color-base-c2c);
+  border-color: transparent;
+  padding: 0;
+
+  &:hover {
+    background-color: #e6791f;
+    border-color: transparent;
+  }
 }
 
 /* the avatar as close to the left border as to the top and bottom ones (3px) */
@@ -569,6 +578,8 @@ html[data-theme='dark'] nav:not(.has-background-warning) {
 @import '@/assets/css/media.css';
 
 .c2c-color > a {
+  /* Bulma's button padding */
+  padding: calc(0.375em - 1px) 0.75em;
   color: var(--c2c-color-text);
 }
 
