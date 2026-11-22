@@ -60,7 +60,11 @@ export const test = base.extend<{ loggedIn: boolean; gdprChosen: boolean }, { da
         return;
       }
       // a request still running when the test ends (e.g. the logout's) is dropped
-      const response = await route.fetch({ url: request.url().replace(UI_API, API) }).catch(() => null);
+      // without the origin of the UI, which the local API rejects on another port than 6553 (the answer gets its CORS
+      // headers here)
+      const headers = { ...request.headers() };
+      delete headers.origin;
+      const response = await route.fetch({ url: request.url().replace(UI_API, API), headers }).catch(() => null);
       await (response ? route.fulfill({ response, headers: { ...response.headers(), ...cors } }) : route.abort()).catch(
         () => {}
       );
