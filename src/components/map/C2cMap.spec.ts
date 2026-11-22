@@ -693,6 +693,50 @@ describe('C2cMap', () => {
     });
   });
 
+  describe('the filter on the extent of the map', () => {
+    const queryOf = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) =>
+      (wrapper.vm as unknown as { $route: { query: Record<string, unknown> } }).$route.query;
+
+    it('on by default: placed on the first results, then filters them in place of the page', async () => {
+      const { wrapper, map } = await mountMap({ documents: [], filterByDefault: true }, '/routes?act=hiking');
+      const push = vi.spyOn(wrapper.vm.$router, 'push');
+      const replace = vi.spyOn(wrapper.vm.$router, 'replace');
+
+      // still on the default extent, waiting for the results
+      map.fire('moveend');
+      await flushPromises();
+      expect(queryOf(wrapper).bbox).toBeUndefined();
+
+      await wrapper.setProps({ documents: [route] });
+      map.fire('moveend');
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({ act: 'hiking', bbox: expect.stringMatching(/^-?\d+(,-?\d+){3}$/) });
+      expect(replace).toHaveBeenCalled();
+      expect(push).not.toHaveBeenCalled();
+
+      // moved by the user: one more step of the history
+      map.fire('movestart', { originalEvent: {} });
+      map.extent = [6, 45, 7, 46];
+      map.fire('moveend');
+      await flushPromises();
+      expect(push).toHaveBeenCalledWith({ query: { act: 'hiking', bbox: expect.any(String) } });
+      wrapper.unmount();
+    });
+
+    it('turned on when the results are hidden', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route], showFilterControl: true }, '/routes');
+      map.fire('moveend');
+      await flushPromises();
+      expect(queryOf(wrapper).bbox).toBeUndefined();
+
+      await wrapper.setProps({ forceFilter: true });
+      await flushPromises();
+      expect(queryOf(wrapper).bbox).toEqual(expect.any(String));
+      expect((wrapper.find('#filter-documents-with-map').element as HTMLInputElement).checked).toBe(true);
+      wrapper.unmount();
+    });
+  });
+
   describe('settings in the URL of a list (syncUrl)', () => {
     const queryOf = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) =>
       (wrapper.vm as unknown as { $route: { query: unknown } }).$route.query;

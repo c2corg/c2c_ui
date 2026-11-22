@@ -95,6 +95,24 @@ describe('DocumentsView', () => {
     expect(wrapper.findComponent(DisplayModeSwitch).props('modelValue')).toBe('both');
   });
 
+  it('filters with the map when it is seen, always when the results are hidden (without the switch)', async () => {
+    const map = async (url: string, isMobile = false) =>
+      (await mountView(url, 0, [], { isMobile, isTablet: false })).wrapper.findComponent({ ref: 'olMap' });
+    const filter = (found: Awaited<ReturnType<typeof map>>) => {
+      const attrs = found.vm.$attrs;
+      return {
+        control: attrs['show-filter-control'],
+        byDefault: attrs['filter-by-default'],
+        forced: attrs['force-filter'],
+      };
+    };
+
+    expect(filter(await map('/routes'))).toEqual({ control: true, byDefault: true, forced: false });
+    expect(filter(await map('/routes?view=map'))).toEqual({ control: false, byDefault: true, forced: true });
+    // the phone layout: the map is hidden under the results
+    expect(filter(await map('/routes', true))).toEqual({ control: true, byDefault: false, forced: false });
+  });
+
   it('shows the pagination below the results, when there are several pages', async () => {
     const { wrapper } = await mountView('/routes', 100);
 
