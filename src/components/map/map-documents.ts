@@ -172,21 +172,27 @@ const circle = (radius: number, fill: string, stroke?: string, strokeWidth = 0) 
 const label = (text: string | undefined, highlight: boolean, publicTransport = false): Label | undefined =>
   highlight && text ? { text: utils.stringDivider(text, 30, '\n'), publicTransport } : undefined;
 
-// a document icon on a light circle, bigger when highlighted. Compact: smaller, the icon alone, on a transparent circle
-// that still catches the pointer
-const COMPACT_SCALE = 0.7;
+// a document icon on a light circle, bigger when highlighted. Compact: smaller, a disc of the colour of the icon with
+// the icon in white on it: it reads on any background and hides less of the map
+const COMPACT_SCALE = 0.63;
+const COMPACT_ICON_RATIO = 0.6;
 function markerStyle(svgSrc: string, color: string, highlight: boolean, compact = false): Style {
   const bus = svgSrc.includes('bus');
   const zIndex = highlight ? 101 : 1;
-  // the bus is white: it needs its circle
-  const scale = compact && !bus ? COMPACT_SCALE : 1;
-  const radius = (highlight ? 20 : 15) * scale;
+  const busFill = highlight ? '#4baf50' : '#337ab7';
+  if (compact) {
+    const radius = (highlight ? 20 : 15) * COMPACT_SCALE;
+    return {
+      ...circle(radius, bus ? busFill : color),
+      circleSort: zIndex,
+      icon: svgIcon(svgSrc, 'white', Math.round(2 * radius * COMPACT_ICON_RATIO)),
+      iconSort: zIndex + 1,
+    };
+  }
   return {
-    ...(scale === 1
-      ? circle(radius, bus ? (highlight ? '#4baf50' : '#337ab7') : 'rgba(255, 255, 255, 0.5)', '#ddd', 2)
-      : circle(radius, 'rgba(255, 255, 255, 0)')),
+    ...circle(highlight ? 20 : 15, bus ? busFill : 'rgba(255, 255, 255, 0.5)', '#ddd', 2),
     circleSort: zIndex,
-    icon: svgIcon(svgSrc, color, Math.round((highlight ? 30 : 20) * scale)),
+    icon: svgIcon(svgSrc, color, highlight ? 30 : 20),
     iconSort: zIndex + 1,
   };
 }
