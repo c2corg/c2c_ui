@@ -743,12 +743,39 @@ describe('C2cMap', () => {
       expect(replace).toHaveBeenCalled();
       expect(push).not.toHaveBeenCalled();
 
-      // moved by the user: one more step of the history
+      // moved by the user a moment later: one more step of the history
+      vi.spyOn(Date, 'now').mockReturnValue(Date.now() + 31_000);
       map.fire('movestart', { originalEvent: {} });
       map.extent = [6, 45, 7, 46];
       map.fire('moveend');
       await flushPromises();
       expect(push).toHaveBeenCalledWith({ query: { act: 'hiking', bbox: expect.any(String) } });
+      wrapper.unmount();
+    });
+
+    it('makes one step of the history of the moves close to each other', async () => {
+      let now = 1_000_000;
+      vi.spyOn(Date, 'now').mockImplementation(() => now);
+      const { wrapper, map } = await mountMap({ documents: [route] }, '/routes?bbox=1,2,3,4');
+      const push = vi.spyOn(wrapper.vm.$router, 'push');
+      const replace = vi.spyOn(wrapper.vm.$router, 'replace');
+      const move = async (extent: [number, number, number, number], after: number) => {
+        now += after;
+        map.fire('movestart', { originalEvent: {} });
+        map.extent = extent;
+        map.fire('moveend');
+        await flushPromises();
+      };
+
+      await move([6, 45, 7, 46], 0);
+      await move([6.1, 45, 7.1, 46], 20_000);
+      await move([6.2, 45, 7.2, 46], 20_000);
+      expect(push).toHaveBeenCalledTimes(1);
+      expect(replace).toHaveBeenCalledTimes(2);
+
+      // after a pause
+      await move([6.3, 45, 7.3, 46], 31_000);
+      expect(push).toHaveBeenCalledTimes(2);
       wrapper.unmount();
     });
 
@@ -1475,14 +1502,15 @@ describe('C2cMap', () => {
         });
         await wrapper.find('#filter-documents-with-map').setValue(true);
         await open3d(wrapper);
-        const push = vi.spyOn(wrapper.vm.$router, 'push');
+        // right after the filter was turned on: the same step of the history
+        const replace = vi.spyOn(wrapper.vm.$router, 'replace');
 
         expect(wrapper.find('.ol-control-use-map-as-filter').isVisible()).toBe(true);
         map.extent = [6, 45, 7, 46];
         map.fire('moveend');
         await flushPromises();
 
-        expect(push).toHaveBeenCalledWith({ query: { bbox: expect.stringMatching(/^\d+(,\d+){3}$/) } });
+        expect(replace).toHaveBeenCalledWith({ query: { bbox: expect.stringMatching(/^\d+(,\d+){3}$/) } });
         wrapper.unmount();
       });
 
@@ -1496,10 +1524,11 @@ describe('C2cMap', () => {
           lng: ((x - 500) / 1000) * (1 + (500 - y) / 500),
           lat: (500 - y) / 100,
         });
-        const push = vi.spyOn(wrapper.vm.$router, 'push');
+        // right after the filter was turned on: the same step of the history
+        const replace = vi.spyOn(wrapper.vm.$router, 'replace');
         const sent = () =>
           extentToLonLat(
-            String((push.mock.lastCall![0] as { query: LocationQueryRaw }).query.bbox)
+            String((replace.mock.lastCall![0] as { query: LocationQueryRaw }).query.bbox)
               .split(',')
               .map(Number)
           );

@@ -683,6 +683,9 @@ const filterDocumentsWithMap = ref(Boolean(route.query.bbox) || props.filterByDe
 // until the user moves the map or turns the filter on or off, the extent it writes replaces the page: it is not one more
 // step of the history (back would come to the page without it, which would write it again)
 let automaticBbox = true;
+// when the map last wrote its extent, and how long after it a move is a new step of the history (ms)
+let lastBboxWrite = 0;
+const BBOX_HISTORY_PAUSE = 30_000;
 // not in full screen, where the results are not shown
 const filterControlShown = computed(() => props.showFilterControl && !isFullscreen.value);
 const recenterPropositions = ref<{ data?: { features: PhotonFeature[] } | null } | null>(null);
@@ -1056,8 +1059,11 @@ function sendBoundsToUrl() {
   if (extent && fitOnFirstDocuments) return;
   query.bbox = extent?.join(',');
   if (query.bbox !== route.query.bbox && !String(route.name).endsWith('-print')) {
-    if (automaticBbox) router.replace({ query });
+    // moves close to each other are one step of the history: back goes to where the map was before them
+    const now = Date.now();
+    if (automaticBbox || now - lastBboxWrite < BBOX_HISTORY_PAUSE) router.replace({ query });
     else router.push({ query });
+    lastBboxWrite = now;
   }
 }
 
