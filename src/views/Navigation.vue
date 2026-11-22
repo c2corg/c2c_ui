@@ -376,6 +376,11 @@ nav {
   position: relative;
   display: inline-flex;
 
+  /* rounded square like the forum's avatars and the buttons around it */
+  img {
+    border-radius: 4px;
+  }
+
   /* room for the right badge before the name */
   &.has-notifications {
     margin-right: 9px;

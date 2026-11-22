@@ -261,7 +261,8 @@ watch(picked, (document) => {
   img {
     width: 100%;
     height: 100%;
-    border-radius: 50%;
+    /* rounded square like the forum's avatars and the top bar buttons */
+    border-radius: 4px;
     object-fit: cover;
     display: block;
   }
