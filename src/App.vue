@@ -11,7 +11,11 @@
     <environment-banner />
     <side-menu :kept-open="sideMenuKeptOpen" class="side-menu no-print" />
     <navigation class="navigation no-print" />
-    <dfm-ad-small v-if="topAd && ($screen.isMobile || $screen.isTablet || $screen.isDesktop)" class="ad" />
+    <!-- the room under the navigation is left by this wrapper, not by the ad: ad blockers hide the elements named as
+         ads (.ad, .ad-slot...), which then put the top of the page under the navigation -->
+    <div v-if="topAd && ($screen.isMobile || $screen.isTablet || $screen.isDesktop)" class="top-bar-room">
+      <dfm-ad-small />
+    </div>
     <site-notice class="no-print site-notice" />
     <image-viewer v-if="imageViewerRequested" />
     <helper-window />
@@ -205,7 +209,7 @@ button.dropdown-item {
   flex-flow: column;
 }
 
-/* without the ad under the navigation, which leaves its room (.ad below), the page leaves it */
+/* without the ad under the navigation, which leaves its room (.top-bar-room below), the page leaves it */
 .no-top-ad .page-content {
   padding-top: var(--c2c-navbar-height);
 }
@@ -241,11 +245,11 @@ button.dropdown-item {
 @media screen {
   html[data-shell='desktop'] {
     .page-content,
-    .ad {
+    .top-bar-room {
       margin-left: var(--c2c-sidemenu-width);
     }
 
-    .ad {
+    .top-bar-room {
       padding-top: var(--c2c-navbar-height);
     }
 
@@ -326,7 +330,7 @@ html[data-shell='mobile'] {
     padding-bottom: var(--c2c-bottom-bar-height);
   }
 
-  .ad {
+  .top-bar-room {
     padding-top: var(--app-top-bar-height);
   }
 
