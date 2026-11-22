@@ -107,7 +107,10 @@
             <span class="button user-menu-button">
               <span
                 class="forum-avatar"
-                :class="{ 'has-notifications': forumLinks.some((link) => link.kind === 'notifications') }"
+                :class="{
+                  'has-notifications': forumLinks.some((link) => link.kind === 'notifications'),
+                  'has-messages': forumLinks.some((link) => link.kind === 'messages'),
+                }"
               >
                 <img width="24" height="24" alt="Avatar" :src="forum.getUserAvatarUrl($user.forumUsername ?? '', 24)" />
                 <!-- placed like on the forum: messages on the left, other notifications on the right -->
@@ -371,11 +374,12 @@ nav {
   background-color: var(--c2c-color-base-c2c);
 }
 
-/* the forum's badges: its colors (tertiary, success), white text, rounded */
-/* the avatar as close to the left border as to the top and bottom ones */
+/* the avatar as close to the left border as to the top and bottom ones (3px) */
 .user-menu-button {
-  padding-left: calc(0.5em - 1px);
+  padding-left: 3px;
 }
+
+/* the forum's badges: its colors (tertiary, success), white text, rounded */
 
 .forum-avatar {
   position: relative;
@@ -389,6 +393,11 @@ nav {
   /* room for the right badge before the name */
   &.has-notifications {
     margin-right: 9px;
+  }
+
+  /* room for the left badge within the button */
+  &.has-messages {
+    margin-left: 6px;
   }
 }
 
