@@ -46,7 +46,8 @@
               v-if="problem.aspects?.length"
               disabled
               :model-value="problem.aspects"
-              class="problem-aspects ml-auto"
+              :size="44"
+              class="problem-aspects"
             />
           </div>
           <!-- SLF gives the same comment to the problems of a group -->
@@ -345,9 +346,17 @@ dd + dt {
   margin-top: 0.5rem;
 }
 
+/* the class lands on the wrapper div of input-orientation, size its svg */
 .bulletin-detail :deep(.problem-aspects) {
-  width: 40px;
-  height: 40px;
+  flex: none;
+  margin-left: auto;
+  padding-left: 0.5rem;
+}
+
+.bulletin-detail :deep(.problem-aspects .input-orientation) {
+  display: block;
+  width: 44px;
+  height: 44px;
 }
 
 .bulletin-source {
