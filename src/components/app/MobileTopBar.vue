@@ -254,14 +254,16 @@ watch(picked, (document) => {
   }
 }
 
+/* as big as the other buttons */
 .top-bar-avatar {
   overflow: hidden;
-  padding: 2px;
+  padding: 0;
 
   img {
     width: 100%;
     height: 100%;
-    border-radius: 50%;
+    /* rounded square like the forum's avatars and the top bar buttons */
+    border-radius: 4px;
     object-fit: cover;
     display: block;
   }
@@ -315,6 +317,12 @@ watch(picked, (document) => {
     background: #e6791f;
     color: var(--c2c-white);
   }
+}
+
+/* the coloured buttons and the avatar: a little apart, all the same, unlike the plain icons */
+.add-btn,
+.top-bar-avatar {
+  margin-left: 0.15rem;
 }
 
 /* add: green, as the is-success button of the site */

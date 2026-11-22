@@ -104,10 +104,13 @@
       <div v-else class="navigation-item">
         <dropdown-button class="is-right" ref="userMenu">
           <template #button>
-            <span class="button">
+            <span class="button user-menu-button">
               <span
                 class="forum-avatar"
-                :class="{ 'has-notifications': forumLinks.some((link) => link.kind === 'notifications') }"
+                :class="{
+                  'has-notifications': forumLinks.some((link) => link.kind === 'notifications'),
+                  'has-messages': forumLinks.some((link) => link.kind === 'messages'),
+                }"
               >
                 <img width="24" height="24" alt="Avatar" :src="forum.getUserAvatarUrl($user.forumUsername ?? '', 24)" />
                 <!-- placed like on the forum: messages on the left, other notifications on the right -->
@@ -367,18 +370,43 @@ nav {
   line-height: 1.5;
 }
 
+/* "Join us": like the green add button next to it, no grey border and darker on hover;
+   the padding is on the link (below), so that the whole button can be clicked */
 .c2c-color {
   background-color: var(--c2c-color-base-c2c);
+  border-color: transparent;
+  padding: 0;
+
+  &:hover {
+    background-color: #e6791f;
+    border-color: transparent;
+  }
+}
+
+/* the avatar as close to the left border as to the top and bottom ones (3px) */
+.user-menu-button {
+  padding-left: 3px;
 }
 
 /* the forum's badges: its colors (tertiary, success), white text, rounded */
+
 .forum-avatar {
   position: relative;
   display: inline-flex;
 
+  /* rounded square like the forum's avatars and the buttons around it */
+  img {
+    border-radius: 4px;
+  }
+
   /* room for the right badge before the name */
   &.has-notifications {
     margin-right: 9px;
+  }
+
+  /* room for the left badge within the button */
+  &.has-messages {
+    margin-left: 6px;
   }
 }
 
@@ -550,6 +578,8 @@ html[data-theme='dark'] nav:not(.has-background-warning) {
 @import '@/assets/css/media.css';
 
 .c2c-color > a {
+  /* Bulma's button padding */
+  padding: calc(0.375em - 1px) 0.75em;
   color: var(--c2c-color-text);
 }
 
