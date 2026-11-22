@@ -24,6 +24,7 @@
       </p>
 
       <p v-if="meteoFrance.headline" class="has-text-weight-bold mb-2">{{ meteoFrance.headline }}</p>
+      <p v-if="bulletin.highlights" class="has-text-weight-bold mb-2 text">{{ plainText(bulletin.highlights) }}</p>
 
       <div class="is-flex is-justify-content-space-around is-align-items-center mb-2">
         <danger-level v-if="danger.low" :danger="danger" />
@@ -32,9 +33,28 @@
       <p v-if="aspects.length" class="is-size-7 has-text-centered mb-2" v-translate>Most dangerous aspects</p>
       <p v-if="meteoFrance.dangerComment" class="mb-2">{{ meteoFrance.dangerComment }}</p>
 
-      <div v-if="problems.length" class="tags mb-2">
-        <span v-for="problem of problems" :key="problem" class="tag is-warning is-light">{{ problem }}</span>
-      </div>
+      <ul v-if="problems.length" class="mb-2">
+        <li v-for="(problem, i) of problems" :key="i" class="problem">
+          <div class="is-flex is-align-items-center">
+            <span class="tag is-warning is-light">{{ problemName(problem.problemType) }}</span>
+            <span class="is-size-7 ml-2">
+              {{ elevationText(problem.elevation) }}
+              <template v-if="problem.validTimePeriod === 'earlier'">({{ $gettext('morning') }})</template>
+              <template v-if="problem.validTimePeriod === 'later'">({{ $gettext('afternoon') }})</template>
+            </span>
+            <input-orientation
+              v-if="problem.aspects?.length"
+              disabled
+              :model-value="problem.aspects"
+              class="problem-aspects ml-auto"
+            />
+          </div>
+          <!-- SLF gives the same comment to the problems of a group -->
+          <p v-if="problem.comment && problem.comment !== problems[i - 1]?.comment" class="text is-size-7 mt-1">
+            {{ plainText(problem.comment) }}
+          </p>
+        </li>
+      </ul>
 
       <dl class="mb-3">
         <template v-if="meteoFrance.naturalAvalanches">
@@ -50,14 +70,14 @@
       <details v-if="bulletin.avalancheActivity" open>
         <summary v-translate>Snowpack stability</summary>
         <p v-if="bulletin.avalancheActivity.highlights" class="has-text-weight-bold">
-          {{ bulletin.avalancheActivity.highlights }}
+          {{ plainText(bulletin.avalancheActivity.highlights) }}
         </p>
-        <p class="text">{{ bulletin.avalancheActivity.comment }}</p>
+        <p class="text">{{ plainText(bulletin.avalancheActivity.comment) }}</p>
       </details>
 
       <details v-if="bulletin.snowpackStructure || snowCover">
         <summary v-translate>Snow quality and snow cover</summary>
-        <p v-if="bulletin.snowpackStructure" class="text">{{ bulletin.snowpackStructure.comment }}</p>
+        <p v-if="bulletin.snowpackStructure" class="text">{{ plainText(bulletin.snowpackStructure.comment) }}</p>
         <table v-if="snowCover?.levels?.length" class="table is-narrow is-size-7 mt-2">
           <thead>
             <tr>
@@ -105,9 +125,12 @@
         </table>
       </details>
 
-      <details v-if="bulletin.weatherForecast || forecasts.length">
+      <details v-if="bulletin.weatherForecast || bulletin.weatherReview || forecasts.length">
         <summary v-translate>Weather</summary>
-        <p v-if="bulletin.weatherForecast" class="text">{{ bulletin.weatherForecast.comment }}</p>
+        <p v-if="bulletin.weatherForecast" class="text">{{ plainText(bulletin.weatherForecast.comment) }}</p>
+        <p v-if="bulletin.weatherReview" class="text">
+          <strong v-translate>Past days</strong><br />{{ plainText(bulletin.weatherReview.comment) }}
+        </p>
         <div v-if="forecasts.length" class="table-container mt-2">
           <table class="table is-narrow is-size-7">
             <thead>
@@ -139,15 +162,15 @@
           <span v-translate>Trend</span>
           <fa-icon v-if="tendencyIcon" :icon="tendencyIcon" class="ml-2" />
         </summary>
-        <p v-if="tendency.highlights" class="has-text-weight-bold">{{ tendency.highlights }}</p>
-        <p v-if="tendency.comment" class="text">{{ tendency.comment }}</p>
+        <p v-if="tendency.highlights" class="has-text-weight-bold">{{ plainText(tendency.highlights) }}</p>
+        <p v-if="tendency.comment" class="text">{{ plainText(tendency.comment) }}</p>
       </details>
 
       <p class="is-size-7 mt-3 bulletin-source">
         <strong>©{{ bulletin.source?.provider?.name }}</strong>
         <span v-if="bulletin.publicationTime">, {{ formatDate(bulletin.publicationTime) }}</span>
         <br />
-        <a :href="pdfUrl" target="_blank" rel="noopener">
+        <a v-if="officialUrl" :href="officialUrl" target="_blank" rel="noopener">
           <fa-icon icon="external-link-alt" />
           <span class="ml-1" v-translate>Full bulletin</span>
         </a>
@@ -160,10 +183,10 @@
 import { computed, ref, watch, type PropType } from 'vue';
 
 import SubPanelTitle from '@/components/yeti/SubPanelTitle.vue';
-import { toDangerLevel } from '@/components/yeti/avalanche-bulletin';
+import { plainText, toDangerLevel } from '@/components/yeti/avalanche-bulletin';
 import DangerLevel from '@/components/yeti/map-layers/DangerLevel.vue';
 import type { SelectedBulletin } from '@/components/yeti/yetix-types';
-import avalancheBulletins, { type AvalancheBulletin } from '@/js/apis/avalanche-bulletin-service';
+import avalancheBulletins, { type AvalancheBulletin, type Elevation } from '@/js/apis/avalanche-bulletin-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 
 const props = defineProps({
@@ -175,7 +198,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close']);
 
-const { $dateUtils, $gettext } = useGlobalProperties();
+const { $dateUtils, $gettext, $language } = useGlobalProperties();
 
 const bulletin = ref<AvalancheBulletin | null>(null);
 const loading = ref(false);
@@ -189,7 +212,12 @@ const newSnowDays = computed(() => meteoFrance.value.newSnow?.days ?? []);
 const windElevations = computed(() => meteoFrance.value.weather?.windElevations ?? []);
 const forecasts = computed(() => meteoFrance.value.weather?.forecasts ?? []);
 const tendency = computed(() => bulletin.value?.tendency?.[0]);
-const pdfUrl = computed(() => avalancheBulletins.pdfUrl(props.selected.regionId));
+// the PDF of Météo-France, else the website of the service
+const officialUrl = computed(() =>
+  props.selected.regionId.startsWith('FR-')
+    ? avalancheBulletins.pdfUrl(props.selected.regionId)
+    : bulletin.value?.source?.provider?.website
+);
 const expired = computed(() => {
   const end = bulletin.value?.validTime?.endTime;
   return !!end && Date.now() > new Date(end).getTime();
@@ -205,9 +233,26 @@ const problemNames = computed<Record<string, string>>(() => ({
   no_distinct_avalanche_problem: $gettext('No distinct avalanche problem'),
   favourable_situation: $gettext('Favourable situation'),
 }));
-const problems = computed(() =>
-  (bulletin.value?.avalancheProblems ?? []).map((p) => problemNames.value[p.problemType] ?? p.problemType)
-);
+const problems = computed(() => bulletin.value?.avalancheProblems ?? []);
+
+function problemName(type: string) {
+  return problemNames.value[type] ?? type;
+}
+
+// an elevation band of a problem: '2200' (m) or 'treeline'
+function elevationText(elevation?: Elevation) {
+  const bound = (value: string) => (value === 'treeline' ? $gettext('treeline') : `${value} m`);
+  if (elevation?.lowerBound && elevation.upperBound) {
+    return `${bound(elevation.lowerBound)} – ${bound(elevation.upperBound)}`;
+  }
+  if (elevation?.lowerBound) {
+    return `${$gettext('above')} ${bound(elevation.lowerBound)}`;
+  }
+  if (elevation?.upperBound) {
+    return `${$gettext('below')} ${bound(elevation.upperBound)}`;
+  }
+  return '';
+}
 
 const tendencyIcon = computed(() => {
   switch (tendency.value?.tendencyType) {
@@ -241,13 +286,13 @@ function close() {
 }
 
 watch(
-  () => props.selected.regionId,
-  async (regionId) => {
+  () => [props.selected.regionId, $language.current] as const,
+  async ([regionId, lang]) => {
     bulletin.value = null;
     failed.value = false;
     loading.value = true;
     try {
-      const bulletins = await avalancheBulletins.getLatestBulletins(regionId);
+      const bulletins = await avalancheBulletins.getLatestBulletins(regionId, lang);
       // another massif may have been opened meanwhile
       if (regionId === props.selected.regionId) {
         bulletin.value = bulletins[0] ?? null;
@@ -294,6 +339,15 @@ dt {
 
 dd + dt {
   margin-top: 0.5rem;
+}
+
+.problem + .problem {
+  margin-top: 0.5rem;
+}
+
+.bulletin-detail :deep(.problem-aspects) {
+  width: 40px;
+  height: 40px;
 }
 
 .bulletin-source {

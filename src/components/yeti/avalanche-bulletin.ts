@@ -96,3 +96,14 @@ export function toDangerLevel(ratings: DangerRating[] = []): DangerLevelInput {
     lowEvol: later.length ? evolution(single, later[0]) : undefined,
   };
 }
+
+/** A text of a bulletin without its HTML (<br/>, and SLF's headings and lists), its lines kept */
+export function plainText(text?: string): string {
+  if (!text) {
+    return '';
+  }
+  const lines = text.replace(/<br\s*\/?>|<\/(?:p|li|div|h[1-6])>/gi, '\n').replace(/<li(?:\s[^>]*)?>/gi, '• ');
+  // parsed, not rendered: nothing runs
+  const plain = new DOMParser().parseFromString(lines, 'text/html').body.textContent ?? '';
+  return plain.replace(/\n\s*\n+/g, '\n').trim();
+}

@@ -2,8 +2,11 @@ import axios, { type AxiosInstance } from 'axios';
 
 import config from '@/js/config';
 
-// The avalanche bulletins of the c2c API, as CAAML v6 (the EAWS format): the French massifs only for now, with what
-// CAAML has no field for in customData.MeteoFrance.
+// The avalanche bulletins of the c2c API, as CAAML v6 (the EAWS format): the French massifs (with what CAAML has no
+// field for in customData.MeteoFrance), and the regions whose services publish CAAML (SLF, Euregio, AINEVA...).
+
+// the languages of the API (others would be refused): a service answers English when it lacks the one asked
+const API_LANGS = ['fr', 'it', 'de', 'en', 'es', 'ca', 'eu', 'sl', 'zh'];
 
 export type DangerRatingValue = 'low' | 'moderate' | 'considerable' | 'high' | 'very_high' | 'no_snow' | 'no_rating';
 export type ValidTimePeriod = 'all_day' | 'earlier' | 'later';
@@ -82,6 +85,7 @@ export type AvalancheBulletin = {
   snowpackStructure?: Texts;
   weatherForecast?: Texts;
   travelAdvisory?: Texts;
+  weatherReview?: Texts;
   tendency?: Tendency[];
   // ALBINA.mainDate: the day the bulletin is valid for
   customData?: { ALBINA?: { mainDate?: string }; MeteoFrance?: MeteoFranceData };
@@ -96,14 +100,15 @@ class AvalancheBulletinService {
     this.axios = axios.create({ baseURL: config.urls.api });
   }
 
-  /** The last bulletins published for an EAWS region (FR-01 to FR-74 for now): none out of season */
-  getLatestBulletins(regionId: string) {
+  /** The last bulletins published for an EAWS region (FR-03, CH-4231...): none out of season */
+  getLatestBulletins(regionId: string, lang?: string) {
+    const params = lang && API_LANGS.includes(lang) ? { lang } : {};
     return this.axios
-      .get<AvalancheBulletins>(`/avalanche-bulletins/regions/${regionId}/latest`)
+      .get<AvalancheBulletins>(`/avalanche-bulletins/regions/${regionId}/latest`, { params })
       .then((response) => response.data.bulletins);
   }
 
-  /** The official PDF, through the API: the key of Météo-France stays on the server */
+  /** The official PDF of a French massif, through the API: the key of Météo-France stays on the server */
   pdfUrl(regionId: string) {
     return `${config.urls.api}/avalanche-bulletins/regions/${regionId}/latest/pdf`;
   }
