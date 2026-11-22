@@ -201,11 +201,24 @@ const title = computed(() => $documentUtils.getDocumentTitle(props.document, lan
     display: inline-block;
   }
 
-  /* the left of the button line, as the date of an outing */
+  /* tighter on a phone: "Ajouter ma sortie" and four buttons fit in 320px */
+  .button-bar {
+    gap: 0.25rem;
+  }
+
+  /* the left of the button line, as the date of an outing. It takes the room the buttons leave, up to its text: a
+     long text ("Meinen Tourenbericht hinzufügen") goes on two lines rather than push the buttons to the next */
   .button-bar > a.add-my-outing {
     order: -1;
+    flex: 1 1 0;
+    max-width: max-content;
+    height: auto;
+    min-height: 1.5rem;
     margin-left: 0;
     margin-right: auto;
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.75rem;
+    line-height: 1.15;
   }
 
   .title .outing-date.has-bar-date {
