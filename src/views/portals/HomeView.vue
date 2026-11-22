@@ -6,8 +6,6 @@
         class="column is-12-mobile"
         :class="feed ? 'is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd' : 'is-7 is-8-fullhd'"
       >
-        <!-- announces the app to the visitors of the website, hidden once installed -->
-        <app-banner />
         <!-- Association and website introduction -->
         <div class="box intro">
           <div class="feed-title has-cursor-pointer">
@@ -98,7 +96,6 @@ import DashboardRoutesList from './utils/DashboardRoutesList.vue';
 import ForumWidget from './utils/ForumWidget.vue';
 import UsefulLinks from './utils/UsefulLinks.vue';
 
-import AppBanner from '@/components/app/AppBanner.vue';
 import FeedWidget from '@/components/feed-widget/FeedWidget.vue';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
