@@ -109,17 +109,20 @@ describe('LinkHelper', () => {
 
 describe('GdprModal', () => {
   it('shows the current choices, and saves the new ones', async () => {
-    $gdpr.get.mockReturnValue({ statistics: true, social: false, ad: false });
+    $gdpr.get.mockReturnValue({ statistics: true, ad: false });
     const wrapper = mount(GdprModal, { global });
 
     (wrapper.vm as unknown as { show(): void }).show();
     await nextTick();
     expect((wrapper.find('#statistics').element as HTMLInputElement).checked).toBe(true);
 
-    await wrapper.find('#social').setValue(true);
+    // no switch for the social networks: the share button needs no consent since AddThis is gone
+    expect(wrapper.find('#social').exists()).toBe(false);
+
+    await wrapper.find('#ad').setValue(true);
     await wrapper.find('.is-primary').trigger('click');
 
-    expect($gdpr.set).toHaveBeenCalledWith({ statistics: true, social: true, ad: false });
+    expect($gdpr.set).toHaveBeenCalledWith({ statistics: true, ad: true });
     expect(isShown(wrapper, ModalWindow)).toBe(false);
   });
 });

@@ -6,7 +6,7 @@
         <span v-translate class="has-text-justified">
           Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website,
           while you can adjust others at any time, in particular those that allow us to understand the performance of
-          our website and to offer you social media features. You can accept or reject all, or
+          our website and to tailor the advertising you see. You can accept or reject all, or
         </span>
         <button type="button" class="link-button" @click="showGdprModal()" v-translate>configure your choices</button>.
       </div>

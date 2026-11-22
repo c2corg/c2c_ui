@@ -37,9 +37,9 @@ describe('$gdpr', () => {
   it('stores the choice with its date, under the key existing users already have', async () => {
     const globals = await installGdpr();
 
-    globals.$gdpr.set({ statistics: true, social: false, ad: false });
+    globals.$gdpr.set({ statistics: true, ad: false });
 
-    const choice = { statistics: true, social: false, ad: false, date: NOW };
+    const choice = { statistics: true, ad: false, date: NOW };
     expect(globals.$gdpr.get()).toEqual(choice);
     expect(globals.$gdpr.gdprValue).toEqual(choice);
     expect(stored()).toEqual(choice);
@@ -50,11 +50,11 @@ describe('$gdpr', () => {
     const globals = await installGdpr();
 
     globals.$gdpr.setAll(false);
-    expect(globals.$gdpr.get()).toEqual({ statistics: false, social: false, ad: false, date: NOW });
+    expect(globals.$gdpr.get()).toEqual({ statistics: false, ad: false, date: NOW });
     expect(globals.$ga.disable).toHaveBeenCalled();
 
     globals.$gdpr.setAll(true);
-    expect(globals.$gdpr.get()).toMatchObject({ statistics: true, social: true, ad: true });
+    expect(globals.$gdpr.get()).toEqual({ statistics: true, ad: true, date: NOW });
     expect(globals.$ga.enable).toHaveBeenCalled();
   });
 
