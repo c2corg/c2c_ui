@@ -302,7 +302,7 @@
               ({{ $gettext('frees') }} {{ formatSize(actionsOf.entry.assets.bytes) }})
             </template>
           </button>
-          <button type="button" class="button is-fullwidth is-danger is-outlined" @click="remove(actionsOf)">
+          <button type="button" class="button is-fullwidth is-danger is-light" @click="remove(actionsOf)">
             <fa-icon icon="bookmark" />&nbsp;{{ $gettext('Remove from favourites') }}
           </button>
         </div>
