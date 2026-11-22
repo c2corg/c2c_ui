@@ -104,7 +104,7 @@
       <div v-else class="navigation-item">
         <dropdown-button class="is-right" ref="userMenu">
           <template #button>
-            <span class="button">
+            <span class="button user-menu-button">
               <span
                 class="forum-avatar"
                 :class="{ 'has-notifications': forumLinks.some((link) => link.kind === 'notifications') }"
@@ -372,6 +372,11 @@ nav {
 }
 
 /* the forum's badges: its colors (tertiary, success), white text, rounded */
+/* the avatar as close to the left border as to the top and bottom ones */
+.user-menu-button {
+  padding-left: calc(0.5em - 1px);
+}
+
 .forum-avatar {
   position: relative;
   display: inline-flex;
