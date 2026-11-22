@@ -33,6 +33,25 @@ describe('$dateUtils', () => {
     expect(install(lang).toLocalizedString('2026-07-14', '@1')).toBe(expected);
   });
 
+  // 5-7 Oct 2026, 28 Sep-2 Oct 2026, 28 Dec 2025-2 Jan 2026
+  it.each([
+    ['fr', '5–7 oct. 2026', '28 sept. – 2 oct. 2026', '28 déc. 2025 – 2 janv. 2026'],
+    ['en', '5–7 Oct 2026', '28 Sep – 2 Oct 2026', '28 Dec 2025 – 2 Jan 2026'],
+    ['de', '5.–7. Okt. 2026', '28. Sept. – 2. Okt. 2026', '28. Dez. 2025 – 2. Jan. 2026'],
+    ['it', '5–7 ott 2026', '28 set – 2 ott 2026', '28 dic 2025 – 2 gen 2026'],
+    ['es', '5–7 de oct de 2026', '28 de sep – 2 de oct de 2026', '28 de dic de 2025 – 2 de ene de 2026'],
+    ['ca', '5–7 Oct. 2026', '28 Set. – 2 Oct. 2026', '28 Des. 2025 – 2 Gen. 2026'], // dayjs capitalizes Catalan names
+    ['sl', '5.–7. okt. 2026', '28. sep. – 2. okt. 2026', '28. dec. 2025 – 2. jan. 2026'],
+    ['eu', '2026ko urr. 5a–7a', '2026ko ira. 28a – urr. 2a', '2025ko abe. 28a – 2026ko urt. 2a'],
+    ['hu', '2026. okt 5.–7.', '2026. szept 28. – okt 2.', '2025. dec 28. – 2026. jan 2.'],
+    ['zh_CN', '2026年10月5日–7日', '2026年9月28日 – 10月2日', '2025年12月28日 – 2026年1月2日'],
+  ])('formats date ranges the way %s writes them', (lang, month, year, other) => {
+    const utils = install(lang);
+    expect(utils.toLocalizedRange('2026-10-05', '2026-10-07')).toBe(month);
+    expect(utils.toLocalizedRange('2026-09-28', '2026-10-02')).toBe(year);
+    expect(utils.toLocalizedRange('2025-12-28', '2026-01-02')).toBe(other);
+  });
+
   it('names months in the current language', () => {
     expect(install('fr').month(6)).toBe('juillet');
     expect(install('en').month(0)).toBe('January');
