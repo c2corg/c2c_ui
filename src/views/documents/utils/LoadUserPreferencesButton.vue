@@ -4,8 +4,11 @@
     type="button"
     class="button"
     :class="{ 'is-primary': applied, 'is-loading': loading }"
-    :title="applied ? $gettext('Your preferences are applied') : $gettext('Filter with my activities and areas')"
-    @click="loadPreferences"
+    :title="
+      applied ? $gettext('Remove the filters of my preferences') : $gettext('Filter with my activities and areas')
+    "
+    :aria-pressed="applied"
+    @click="togglePreferences"
   >
     <fa-icon :icon="applied ? 'check' : 'star'" />
     <span>&nbsp;</span>
@@ -15,7 +18,7 @@
     v-else-if="$user.isLogged && display === 'dropdown'"
     class="dropdown-item"
     :class="{ 'is-active': applied }"
-    @click="loadPreferences"
+    @click="togglePreferences"
   >
     <fa-icon :icon="loading ? 'spinner' : applied ? 'check' : 'star'" :spin="loading" />
     <span>&nbsp;</span>
@@ -47,6 +50,11 @@ const router = useRouter();
 const loading = ref(false);
 // read at the first click, then known for this list: the button shows when they are applied
 const preferences = ref<UserPreferences>();
+// the filters of the list before the preferences replaced them, given back when they are removed
+let previousFilters: LocationQueryRaw | undefined;
+
+// the parameters the preferences set or remove
+const PREFERENCE_PARAMS = ['act', 'a', 'bbox', 'nmr'];
 
 const documentType = computed(() => String(route.name).slice(0, -1));
 
@@ -83,7 +91,8 @@ function notifyWithPreferencesLink(text: string) {
   toast({ message, type: 'is-info', duration: 6000 });
 }
 
-async function loadPreferences() {
+// a toggle: applies the preferences, or removes them when the list already shows them
+async function togglePreferences() {
   if (loading.value) return;
   loading.value = true;
   let loaded: UserPreferences;
@@ -100,15 +109,28 @@ async function loadPreferences() {
   if (isEmpty(loaded)) {
     notifyWithPreferencesLink($gettext('You have no activity nor area in your preferences.'));
   } else if (applied.value) {
-    toast({ message: $gettext('Your preferences are already applied.'), type: 'is-info' });
+    await removePreferences(loaded);
   } else {
-    const query: LocationQueryRaw = { ...route.query, ...filtersOf(loaded), offset: undefined };
-    // the areas replace the extent of the map, and the "near me" radius
-    if (query.a !== undefined) {
-      query.bbox = undefined;
-      query.nmr = undefined;
-    }
-    await router.push({ query });
+    await applyPreferences(loaded);
   }
+}
+
+async function applyPreferences(loaded: UserPreferences) {
+  previousFilters = Object.fromEntries(PREFERENCE_PARAMS.map((key) => [key, route.query[key] ?? undefined]));
+  const query: LocationQueryRaw = { ...route.query, ...filtersOf(loaded), offset: undefined };
+  // the areas replace the extent of the map, and the "near me" radius
+  if (query.a !== undefined) {
+    query.bbox = undefined;
+    query.nmr = undefined;
+  }
+  await router.push({ query });
+}
+
+async function removePreferences(loaded: UserPreferences) {
+  // without filters from before (the page was opened with the preferences), the list is no more filtered by them
+  const removed = Object.fromEntries(Object.keys(filtersOf(loaded)).map((key) => [key, undefined]));
+  const query: LocationQueryRaw = { ...route.query, ...(previousFilters ?? removed), offset: undefined };
+  previousFilters = undefined;
+  await router.push({ query });
 }
 </script>

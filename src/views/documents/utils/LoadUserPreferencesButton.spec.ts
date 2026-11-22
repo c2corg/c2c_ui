@@ -69,15 +69,33 @@ describe('LoadUserPreferencesButton', () => {
     expect(wrapper.find('button').classes()).toContain('is-primary');
   });
 
-  it('tells when the preferences are already applied', async () => {
-    const { wrapper, router } = await mountButton('/outings?act=hiking&a=14', {
+  it('removes the preferences when the list already shows them', async () => {
+    const { wrapper, router } = await mountButton('/outings?act=hiking&a=14&qa=draft&offset=30', {
       activities: ['hiking'],
       areas: [{ document_id: 14 }],
     });
     await click(wrapper);
 
-    expect(router.currentRoute.value.query).toEqual({ act: 'hiking', a: '14' });
-    expect(toast).toHaveBeenCalledWith(expect.objectContaining({ message: 'Your preferences are already applied.' }));
+    expect(router.currentRoute.value.query).toEqual({ qa: 'draft' });
+    expect(wrapper.find('[data-icon="check"]').exists()).toBe(false);
+    expect(toast).not.toHaveBeenCalled();
+  });
+
+  it('gives back the filters from before the preferences at the second click', async () => {
+    const { wrapper, router } = await mountButton('/outings?act=rock_climbing&bbox=1,2,3,4&u=7', {
+      activities: ['hiking'],
+      areas: [{ document_id: 14 }],
+    });
+    await click(wrapper);
+    expect(router.currentRoute.value.query).toEqual({ act: 'hiking', a: '14', u: '7' });
+    expect(wrapper.find('button').attributes('aria-pressed')).toBe('true');
+
+    await click(wrapper);
+    expect(router.currentRoute.value.query).toEqual({ act: 'rock_climbing', bbox: '1,2,3,4', u: '7' });
+    expect(wrapper.find('button').attributes('aria-pressed')).toBe('false');
+
+    await click(wrapper);
+    expect(router.currentRoute.value.query).toEqual({ act: 'hiking', a: '14', u: '7' });
   });
 
   it('applies the areas again when the map extent still narrows the list', async () => {
