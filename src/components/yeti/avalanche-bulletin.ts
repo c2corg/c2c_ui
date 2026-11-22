@@ -1,3 +1,4 @@
+import { MICRO_REGION_POINTS } from '@/components/yeti/eaws-micro-regions';
 import type { DangerRating, DangerRatingValue, ValidTimePeriod } from '@/js/apis/avalanche-bulletin-service';
 
 // The bulletin zones of api.ensg.eu (France, by name) and the massifs of Météo-France, whose numbers are the EAWS
@@ -40,10 +41,31 @@ const FRENCH_MASSIFS: Record<string, number> = {
   'Cerdagne-Canigou': 74,
 };
 
-/** The EAWS region id of a bulletin zone of the map, null when the c2c API has no bulletin for it */
-export function bulletinRegionId(country?: string | null, name?: string | null): string | null {
-  const massif = country === 'France' && name ? FRENCH_MASSIFS[name] : undefined;
-  return massif ? `FR-${String(massif).padStart(2, '0')}` : null;
+/** A bulletin zone of api.ensg.eu; `contains` tells whether a point ([lon, lat]) is in it */
+export type BulletinZone = {
+  country?: string | null;
+  name?: string | null;
+  // the EAWS id of its service (CH, IT-23…), none for the French massifs
+  numZone?: string | null;
+  contains?: (lonLat: [number, number]) => boolean;
+};
+
+/**
+ * The EAWS region id of a bulletin zone of the map, null when the c2c API has no bulletin for it: the French massif,
+ * else a micro-region the zone covers (its micro-regions all have the same bulletin)
+ */
+export function bulletinRegionId({ country, name, numZone, contains }: BulletinZone): string | null {
+  if (country === 'France') {
+    const massif = name ? FRENCH_MASSIFS[name] : undefined;
+    return massif ? `FR-${String(massif).padStart(2, '0')}` : null;
+  }
+  if (!numZone || !contains) {
+    return null;
+  }
+  const regionId = Object.keys(MICRO_REGION_POINTS).find(
+    (id) => id.startsWith(`${numZone}-`) && contains(MICRO_REGION_POINTS[id])
+  );
+  return regionId ?? null;
 }
 
 const DANGER_NUMBERS: Partial<Record<DangerRatingValue, number>> = {
@@ -95,4 +117,15 @@ export function toDangerLevel(ratings: DangerRating[] = []): DangerLevelInput {
     low: dangerNumber(single?.mainValue),
     lowEvol: later.length ? evolution(single, later[0]) : undefined,
   };
+}
+
+/** A text of a bulletin without its HTML (<br/>, and SLF's headings and lists), its lines kept */
+export function plainText(text?: string): string {
+  if (!text) {
+    return '';
+  }
+  const lines = text.replace(/<br\s*\/?>|<\/(?:p|li|div|h[1-6])>/gi, '\n').replace(/<li(?:\s[^>]*)?>/gi, '• ');
+  // parsed, not rendered: nothing runs
+  const plain = new DOMParser().parseFromString(lines, 'text/html').body.textContent ?? '';
+  return plain.replace(/\n\s*\n+/g, '\n').trim();
 }
