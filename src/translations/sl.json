@@ -74,12 +74,13 @@
     "An error occurred, could not retrieve activities": "Prišlo je do napake, dejavnosti ni bilo mogoče pridobiti",
     "An error occurred, couldn't (un)mask version": "Prišlo je do napake, ni bilo mogoče (raz)maskirati različice",
     "An error occurred, couldn't save images": "Prišlo je do napake, slik ni bilo mogoče shraniti",
+    "An icon on the home screen, and the app takes the whole screen, without the browser bar.": "Ikona na začetnem zaslonu, aplikacija pa zavzame celoten zaslon, brez vrstice brskalnika.",
+    "An outing refused by Camptocamp shows the reason: fix it with Edit, then Try again. If the connection was cut while sending, check on Camptocamp before trying again, so as not to publish it twice.": "Vzpon, ki ga je Camptocamp zavrnil, razkriva razlog: popravite ga z uporabo funkcije »Uredi« in nato »Poskusi znova«. Če je bila povezava med pošiljanjem prekinjena, pred ponovnim poskusom preverite stanje na Camptocamp-u, da vsebine ne bi objavili dvakrat.",
     "An unknown error occurred.": "Prišlo je do neznane napake.",
     "An uppercase letter": "Velika črka",
+    "Android: in Chrome, tap the ⋮ menu, then Install app (or Add to Home screen).": "Android: v Chrome tapnite meni ⋮ in nato Namesti aplikacijo (ali Dodaj na začetni zaslon).",
     "Anonymity and confidentiality": "Anonimnost in zaupnost",
     "App guide": "Priročnik za aplikacijo",
-    "App settings": "Nastavitve aplikacije",
-    "Application": "Aplikacija",
     "Applications": "Aplikacije",
     "Are you sure you want to delete this locale?": "Ali ste prepričani, da želite izbrisati to jezikovno različico?",
     "Are you sure you want to merge?": "Ali ste prepričani, da želite združiti?",
@@ -109,6 +110,7 @@
     "Back to code": "Nazaj na kodo",
     "Back to edit mode": "Nazaj k urejanju",
     "Back to the top": "Na vrh strani",
+    "Back with a network, open Favourites and tap Publish now: nothing is sent without you. The number on the Favourites tab counts the outings waiting.": "Ko ste znova povezani v omrežje, odprite Priljubljene in tapnite »Objavi zdaj«: brez vas se ne pošlje ničesar. Številka na Priljubljene prikazuje število vzponov, ki čakajo.",
     "Base layer": "Zemljevidi",
     "Basemap (at)": {
       "Map layer": "Avstrija"
@@ -133,6 +135,7 @@
     "By year": "Na leto",
     "Camptocamp Association": "Društvo Camptocamp",
     "Camptocamp app": "Aplikacija Camptocamp",
+    "Camptocamp app guide": "Vodnik po aplikaciji Camptocamp",
     "Camptocamp has its app": "Camptocamp ima svojo aplikacijo",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org ima cilj olajšati izmenjavo informacij med ljubitelji gorskih športov in prispevati k varnosti gorskih dejavnosti.",
     "Cancel": "Prekliči",
@@ -152,6 +155,7 @@
     "Communication of the individual objectives and expectations, the thoughts and observations during the outing, discussions on new strategies, the way the group conducted itself and divided responsibilities, was the group used to working together, core aspirations, etc.": "Sporočanje posameznih ciljev in pričakovanj, misli in opažanja med izletom, razprave o novih strategijah, način delovanja skupine in razdelitev odgovornosti, ali je skupina vajena delati skupaj, posnemanje itd.",
     "Compare selected versions": "Primerjaj izbrane različice",
     "Compute risk": "Izračun tveganja",
+    "Computer: open camptocamp.org on your phone and follow the steps above.": "Računalnik: na telefonu odprite camptocamp.org in sledite zgornjim korakom.",
     "Conditions": "Razmere",
     "Configure activity trackers": "Konfigurirajte sledilce dejavnosti",
     "Configure cookies": "Nastavitve piškotkov",
@@ -172,6 +176,7 @@
     "Conflict: version of locale 'zh_CN' has changed": "Dokument je bil medtem spremenjen in obstaja novejša različica. ",
     "Conflicting method and danger": "Metoda in stopnja nevarnosti sta nezdružljivi",
     "Connect": "Povežite se",
+    "Connected to Strava, Garmin or Suunto? Your last activities show at the top of the form: one tap takes the trace, the date, the distance and the elevation gain.": "Ste povezani s storitvami Strava, Garmin ali Suunto? Vaše zadnje dejavnosti so prikazane na vrhu obrazca – z enim dotikom prevzamete sled, datum, razdaljo in višinsko razliko.",
     "Contact": "Kontakt",
     "Contain invalid character(s)": {
       "API message": "Vsebuje enega ali več neveljavnih znakov"
@@ -322,7 +327,7 @@
     "FlowCapt sensors": "FlowCapt postaje",
     "Fold section": "Zapri razdelek",
     "Folder name": "Ime mape",
-    "Followed activities, default filters": "Spremljane dejavnosti, privzeti filtri",
+    "Folders sort your topos, one trip per folder for example.": "Mape razvrščajo vaše opise – na primer ena mapa za eno turo.",
     "Followed users": "Uporabniki ki jih spremljam",
     "Following": "Spremljanje",
     "Forgot password?": "Ste pozabili geslo?",
@@ -344,6 +349,7 @@
     "Geolocation": "Geolokacija",
     "Geolocation is not supported by your browser.": "Geolokacija v vašem brskalniku ni podprta.",
     "Get ready for your climb": "Pripravite se na turo",
+    "Getting around": "Navigacija",
     "Go back to YETI": "Vrni se na YETI",
     "Go to the previous page": "Pojdi na prejšnjo stran",
     "Go to website": "Pojdite na spletno stran",
@@ -370,7 +376,6 @@
     },
     "History is missing, please provide it if you have information.": "Zgodovina manjka, ne oklevajte in delite vse informacije, ki jih imate",
     "Home": "Domov",
-    "Home page feed parameters": "Parametri toka dejavnosti na domači strani",
     "How is my testimony used ? How / why is it useful ?": "Čemu služi moje pričevanje?",
     "I choose to cancel the outing": "Odpovem turo",
     "I contribute": "Prispevam",
@@ -412,6 +417,7 @@
     "Incidents and accidents": "Incidenti in nesreče",
     "Include image section": "Vključite povezane slike",
     "Include summary": "Vključi povzetek",
+    "Incomplete": "Prekinjeno",
     "Information about the terrain, like elevations, lengths...": "Podatki o terenu, kot so nadmorske višine, dolžine ...",
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Podatki o kraju dogodka. Označite lokacijo na zgornjem zemljevidu, tudi če ne zelo natančno (v tem primeru navedite več podrobnosti tukaj). Ko izpolnite poročilo, ga lahko povežete s smerjo, točko (npr plezališčem) ali vzponom.",
     "Informations about the access": "Informacije o izhodišču / javnem prevozu",
@@ -419,6 +425,7 @@
     "Insert emoji": "Vstavi emoji",
     "Insert image": "Vstavi sliko",
     "Insert link": "Vstavi povezavo",
+    "Install app": "Namesti aplikacijo",
     "Install the app": "Namesti aplikacijo",
     "Install, get around, settings": "Namestitev, navigacija, nastavitve",
     "Interpolate value should be a number > 0": "Interpolirana vrednost mora biti število > 0",
@@ -489,6 +496,8 @@
     "Masked": "Zamaskirano",
     "Massifs could not be loaded": "Gorskih skupin ni bilo mogoče naložiti",
     "Me": "Jaz",
+    "Me → App settings: light or dark theme, text size, and the introduction to see again. These settings stay on this device.": "Jaz → Nastavitve aplikacije: svetla ali temna tema, velikost besedila in ponovni ogled uvoda. Te nastavitve ostanejo v tej napravi.",
+    "Me: your account, your outings, the settings of the app and the help.": "Jaz: vaš račun, vaši vzponi, nastavitve aplikacije in pomoč.",
     "Menu": "Meni",
     "Merge documents": "Združi dokumente",
     "Merge with other document": "Združi z drugim dokumentom",
@@ -509,10 +518,10 @@
     "More": "Več",
     "More info": "Več informacij",
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Več smeri je na voljo. Zemljevid lahko premaknete, določite ime ali nastavite dejavnost, da jih filtrirate.",
+    "More: topoguide, articles, SERAC, Yeti, Itinévert, forum.": "Več: Wikivodnik, članki, SERAC, Yeti, Zelena pot, forum.",
     "Multi-criteria search": "Iskanje po več kriterijih",
     "My account": "Moj račun",
     "My activities and areas": "Moje dejavnosti in regije",
-    "My bookmarks": "Moje priljubljene",
     "My changes": "Moji prispevki",
     "My contributions": "Moji prispevki",
     "My edits": "Moji popravki",
@@ -568,13 +577,15 @@
     "Numbers": "Podatki",
     "Ok": "OK",
     "On a drawn line": "Na narisano črto",
+    "On a route, tap Add my outing: the form opens even without a network.": "Na dokumentu Smer, tapni »Dodaj moj vzpon«: obrazec se odpre tudi brez omrežja.",
+    "On a topo, tap the bookmark at the top: it goes to your favourites.": "Tapnite zaznamek na vrhu opisa – s tem ga boste dodali med priljubljene.",
     "On this device only": "Samo v tej napravi",
+    "On this device:": "Na tej napravi:",
     "One or more line chunks will generate more than 3000 points. Adjust distance to generate less points.": "En ali več delov črt bo ustvarilo več kot 3000 točk. Prilagodite razdaljo, da ustvarite manj točk.",
     "One or more route could not be processed:": "Enega ali več delov črt ni bilo mogoče obdelati:",
     "Only document less than 24h old can be deleted": {
       "API message": "Izbrišete lahko samo nedavne dokumente (24 ur). Za odstranitev tega dokumenta se obrnite na moderatorja. "
     },
-    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "V toku vaše domače strani so prikazani samo dokumenti, ki se nanašajo na izbrani jeziki, izbrane regije in izbrane dejavnosti.  \nDokumenti spremljanih uporabnikov so vedno vidni.",
     "Ooops": "Ups",
     "Open a route, a waypoint or an outing, and tap the bookmark at the top.": "Izberi smer, točko ali vzpon in tapni zaznamek na vrhu.",
     "Open fields to deeply explain the event circumstances.": "Prosta polja za poglobljeno razlago okoliščin dogodka",
@@ -592,6 +603,7 @@
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to tailor the advertising you see. You can accept or reject all, or": "Naše spletno mesto uporablja piškotke, ki jih zagotovimo mi in tretje osebe. Nekateri piškotki so potrebni za spletno mesto, medtem ko lahko druge kadar koli prilagodite, zlasti tiste, ki nam omogočajo razumeti delovanja našega spletnega mesta in prilagoditi oglase, ki jih vidite. Vse jih lahko sprejmete ali zavrnete oz lahko ",
     "Outings": "Vzponi",
     "Outings statistics": "Statistika vzponov",
+    "Outings without a network": "Vzponi brez omrežja",
     "Outings, with the latest conditions in the mountains": "Poročanje o turah, z najnovejšimi razmerami v gorah",
     "Page not found": "Stran ni najdena",
     "Paragliding outings": "Izleti jadralno padalstvo",
@@ -643,12 +655,14 @@
     "Public transport": {
       "Map layer": "Javni prevoz"
     },
+    "Publish now": "Objavi zdaj",
     "Put it back": "Daj nazaj",
     "Quote": "Citat",
     "ROMMA station": "ROMMA postaja",
     "ROMMA stations": "ROMMA postaje",
     "Read the app guide": "Preberi vodnik po aplikaciji",
     "Recent changes": "Nedavne spremembe",
+    "Recent: the latest outings and changes of the community, with their photos.": "Nedavno: najnovejši vzponi in prispevki, skupaj s fotografijami.",
     "Recenter on your current position": "Centriranje na trenutno pozicijo",
     "Recenter on...": "Centriranje na ...",
     "Refresh": "Osveži",
@@ -675,6 +689,7 @@
     "Rotate image left": "Zasukaj levo",
     "Rotate image right": "Zasukaj desno",
     "Route": "Smer",
+    "Route not found? Save without a route, with a note saying which one it is: link it later from Favourites.": "Dokumenta »Smer« ni mogoče najti? Shrani brez Smeri, z opombo, za katero smer gre; pozneje jo poveži prek Priljubljene.",
     "Route on map": "Smer na zemljevidu",
     "Routes": "Smeri",
     "Routes to explore": "Smeri, ki jih je treba odkriti",
@@ -684,11 +699,11 @@
     "SERAC: accidents and incidents in the mountains": "SERAC: nesreče in incidenti v gorah",
     "Save": "Shrani",
     "Save offline": "Shrani offline",
-    "Saved for the field": "Shranjeno za uporabo na terenu",
     "Saved on this device only.": "Shranjeno samo v tej napravi.",
     "Search": "Iskanje",
     "Search ...": "Iskanje ...",
     "Search a document to associate...": "Poišči dokument, ki ga želiš povezati",
+    "Search: routes, outings, waypoints… with filters, as a list or on a map.": "Iskanje: smeri, vzponi, točke … s filtri, v obliki seznama ali na zemljevidu.",
     "See more": "Poglej več",
     "See more results": "Več rezultatov",
     "See my profile": "Ogled mojega profila",
@@ -733,6 +748,7 @@
     "Small group without distance": "Mala skupina brez razbremenitvene razdalje",
     "Soft mobility outing": "Izlet z mehko mobilnostjo",
     "Some points are out of extent": "Nekatere točke so izven obsega",
+    "Something new does not show up: close the app completely and open it again, it then loads its latest version.": "Če se kaj novega ne prikaže: aplikacijo povsem zaprite in jo znova odprite – tako se bo naložila njena najnovejša različica.",
     "Sophie Picture Contest": "Foto Natečaj Sophie",
     "Sort by": "Razvrsti po",
     "Source:": "Dokument, ki ga je treba združiti (vir): ",
@@ -755,6 +771,8 @@
       "Map layer": "SwissTopo Sat"
     },
     "Tabs at the bottom of the screen. Everything is explained in the guide. Have a good outing!": "Zavihki na dnu zaslona. Vse je podrobneje pojasnjeno v vodniku. Želimo vam prijetno turo!",
+    "Tabs at the bottom of the screen:": "Zavihki na dnu zaslona:",
+    "Tap Also save offline (in the message that follows, or in Favourites): the topo, its photos and the map around it are downloaded. Its bookmark gets a green arrow.": "Tapnite »Shrani tudi za uporabo offline« (v sporočilu, ki sledi, ali med priljubljenimi): opis, fotografije in zemljevid se prenesejo.",
     "Target:": "Dokument, ki ga je treba hraniti (cilj): ",
     "Terms of Service need to be accepted": {
       "API message": "Sprejeti je treba pogoje storitve"
@@ -763,10 +781,13 @@
     "Terrain": "Teren",
     "Text size": "Velikost besedila",
     "Thanks to the statistical cookies provided by ourselves and other companies, we can evaluate the visit on our website and know the sources of traffic. Data we obtain help us understand what visitors like and improve our website. If you reject them, we cannot improve your experience.": "Zahvaljujoč statističnim in analitičnim piškotkom, ki jih zagotavljamo mi in druga podjetja, lahko ocenimo obisk naše spletne strani in poznamo vire prometa. Podatki, ki jih pridobimo, nam pomagajo razumeti, kaj je obiskovalcem všeč, in izboljšati naše spletno mesto. Če jih zavrnete, ne moremo izboljšati vaše izkušnje.",
+    "The + button at the top right adds an outing, a route, a waypoint…": "Gumb + zgoraj desno je za dodajanje vzpona, smeri, točke …",
+    "The Camptocamp app is camptocamp.org installed on your phone: the same account, the same topos, the same community. Nothing to download from an app store, and it updates by itself.": "Aplikacija Camptocamp je camptocamp.org, nameščeno na vašem telefonu: isti račun, isti opisi, ista skupnost. Ničesar vam ni treba prenesti iz »App store«, posodablja pa se samodejno.",
     "The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.": "Metoda MRD (začetnik) je dovoljena s stopnjo nevarnosti največ 3. Izberite metodo MRE ali MRP.",
     "The Recent feed: the latest outings and their photos.": "Recent feed: najnovejši vzponi, s fotografijami.",
     "The app is installed on this device.": "Aplikacija je nameščena na tej napravi.",
     "The base size of the whole interface.": "Osnovna velikost celotnega vmesnika.",
+    "The date of the copy shows on each topo: orange after a week, red after a month. Conditions change: download it again before leaving. Incomplete means the network cut the download: download it again.": "Na vsakem opisu je razviden datum kopiranja: po enem tednu je oranžen, po enem mesecu pa rdeč. Razmere se spreminjajo: pred odhodom ga znova prenesite. »Prekinjeno« pomeni, da je omrežje prekinilo prenos: prenesite datoteko znova.",
     "The document exists": {
       "API message": "Dokument obstaja"
     },
@@ -780,10 +801,8 @@
     "The “slope traveled frequently” factor is not taken into account by the application, as it is often difficult to ascertain when preparing for an outing.": "Aplikacija ne upošteva faktorja »znano pobočje«, ker ga je pri pripravi ture pogosto težko določiti.",
     "Their activity in your feed": "Njihove dejavnosti v vašem Toku dejavnosti",
     "Theme": "Tema",
-    "Theme, text size": "Tema, velikost besedila",
     "There are sensitive areas on this route. Please refer to the map.": "Ta smer prečka ali se nahaja v bližini občutljivih območij. Prosimo, oglejte si zemljevid.",
     "These are positive experiences that reveal usefull risk-management skills.": "Pozitivne izkušnje, ki razkrivajo uporabne veščine obvladovanja tveganj.",
-    "They filter the home page feed, and the lists of documents with their “My preferences” button.": "Filtriranje na domači strani in na seznamih dokumentov prek gumba »Moje nastavitve«.",
     "This book cover is the property of its editor and/or author": "Platnica te knjige je last njenega založnika in/ali avtorja",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "Ta vsebina je licencirana pod Creative Commons BY-NC-ND 3.0",
     "This content is licensed under Creative Commons BY-SA 3.0": "Ta vsebina je licencirana pod Creative Commons BY-SA 3.0",
@@ -807,6 +826,7 @@
     "Title, activity and characteristics of the picture": "Naslov, dejavnost, in značilnosti slike",
     "To define your destination, choose one of these 2 approaches": "Za določitev cilja izberite enega od teh 2 pristopov",
     "To go further": "Za več informacij",
+    "To report a problem: Me → Report a bug of the mobile app, the email leaves with the useful information.": "Za prijavo težave: »Jaz« → »Prijavi napako v mobilni aplikaciji«; pošlje se e-poštno sporočilo s koristnimi podatki.",
     "Toggle elevation profile": "preklopite na profil višine",
     "Toggle full-screen": {
       "Map Controls": "Celozaslonski način"
@@ -825,6 +845,7 @@
       "Sophie picture context": "Wikivodnik - nagrada občinstva"
     },
     "Topoguide moderator": "Moderator wikivodnika",
+    "Topos without a network": "Opisi brez omrežja",
     "Topos, outings, conditions and stories of the mountains, in your pocket.": "Opisi smeri in vzponov, razmere ter gorske zgodbe – kar v žepu.",
     "Trace": "GPS sled",
     "Tracking devices": "GPS naprave",
@@ -878,9 +899,12 @@
     "What is your starting point?": "Katero je vaše izhodišče?",
     "What the app gives you": "Kaj vam ponuja aplikacija",
     "Why did you choose this outing? When did you decide to engage. What influenced your decision (holiday time, long journey, hotel/hut bookings, time spent already in preparation, limited possibilities, etc.)?": "Zakaj ste izbrali to turo? Koliko ste bili navezani na zastavljene cilje? Kaj je vplivalo na izbiro (prosti dnevi, dolgo potovanje, rezervacije za nočitev, čas, ki ste ga že porabili za priprave, malo priložnosti itd)?",
+    "Why install it?": "Zakaj jo namestiti?",
     "Wide and constant": "Široko in konstantno",
     "Will generate new points along route, at regular interval, defined by distance in meters": "Ustvarjene bodo nove točke vzdolž črte, v rednem intervalu, določen po razdalji v metrih",
     "With the": "Z",
+    "Without a network, Save keeps the outing on the phone. With one, Save without publishing does the same.": "Brez omrežja funkcija »Shrani« ohrani vzpon na telefonu. Z omrežjem, »Shrani brez objave« deluje enako. ",
+    "Without a network, open it from Favourites: it opens as with one.": "Če nimate omrežja, ga odprite prek Priljubljenih: odpre se tako, kot da bi bilo omrežje na voljo.",
     "Without c2c account": "Udeleženci brez računa c2c",
     "Yeti: a tool to assess the avalanche risk": "Yeti: orodje za ocenjevanje nevarnosti plazov",
     "You are looking for ____ accessible by public transport": "Iščete ____ dostopno z javnim prevozom",
@@ -897,6 +921,7 @@
     "Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has more restrictions, mainly no accent and no space.": "Vaš vzdevek na forumu bo prikazan na forumu in ga v svojih nastavitvah lahko po želji spremenite . Več je omejitev, predvsem brez strešic in presledkov.",
     "Your outings written without a network, published when you choose.": "Vaši vzponi napisani brez internetne povezave – objavite jih, ko želite.",
     "Your password must contain:": "Vaše geslo mora vsebovati:",
+    "Your settings and your session stay on the phone: on iPhone, Safari clears the data of a site that is not installed after seven days without a visit.": "Vaše nastavitve in seja ostanejo v telefonu: na iPhonu Safari po sedmih dneh brez obiska izbriše podatke spletnega mesta, ki ni nameščeno.",
     "Zoom in": {
       "Map controls": "Približaj"
     },
@@ -1408,6 +1433,7 @@
     "hut_warden": {
       "user_categories": "oskrbnik koče"
     },
+    "iPhone, iPad: in Safari, tap Share, then Add to Home Screen and Add.": "iPhone, iPad: v Safari tapnite Deli, nato Dodaj na začetni zaslon in Dodaj.",
     "ice_climbing": {
       "activities": "Ledno plezanje",
       "event_activities": "Ledno plezanje"
@@ -1730,9 +1756,9 @@
     },
     "previous difference": "prejšna razlika",
     "previous version": "prejšna različica",
-    "previous_injuries": "Prejšnje poškodbe",
+    "previous_injuries": "Prejšnje_poškodbe",
     "previous_injuries_2": {
-      "previous_injuries": "druge poškodbe"
+      "previous_injuries": "druge_poškodbe_2"
     },
     "primary_impacted": {
       "author_statuses": "glavna žrtev"

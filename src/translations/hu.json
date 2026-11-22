@@ -291,7 +291,6 @@
     },
     "History is missing, please provide it if you have information.": "Történet hiányzik, kérlek add meg, ha van információd",
     "Home": "Otthon",
-    "Home page feed parameters": "Weboldal hírfolyam paraméterek",
     "How is my testimony used ? How / why is it useful ?": "Hogyan használják fel a beszámolómat? Miért hasznos?",
     "I choose to cancel the outing": "A kiruccanás lemondása mellett döntök",
     "I must not use slopes > 30°": "Nem szabad >30°-nál meredekebb lejtöket használnom",
@@ -377,7 +376,6 @@
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "További utak elérhetők. Mozgathatod a térképet, megadhatod a nevet vagy beállíthatsz egy tevékenységtípust a szűréshez.",
     "Multi-criteria search": "Több kritérium alapján történő keresés",
     "My account": "Fiókom",
-    "My bookmarks": "Könyvjelzőim",
     "My changes": "Változtatásaim",
     "My followed users": "Követett felhasználóim",
     "My outings": "Kiruccanásaim",
@@ -416,7 +414,6 @@
     "Only document less than 24h old can be deleted": {
       "API message": "Csak 24 óránál frissebb dokumentumokat lehet törölni"
     },
-    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "A hírfolyamodban csak a kiválasztott tevékenységhez és területhez tartozó állapotfrissítéseket mutatunk. A követett felhasználók frissítései mindig megjelennek.",
     "Ooops": "Hoppácska",
     "Open fields to deeply explain the event circumstances.": "Szabad mező az esemény körülményeinek igen részletes leírására",
     "Open fields to detail the picture's context": "Szabad mező a kép körülményeinek leírására",
