@@ -5,7 +5,7 @@
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import { isEditable } from '@/js/composables/editable';
-import { locateImages, readTrack } from '@/js/geo/locate-images';
+import { hasDefaultLocation, locateImages, readTrack } from '@/js/geo/locate-images';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 type User = { readonly isModerator: boolean; id: number | null };
@@ -18,9 +18,19 @@ const MAX_VERSIONS = 30;
 /** Whether the outing has a track with the times of its points, to locate its images on */
 export const hasTimedTrack = (outing: Outing) => readTrack(outing.geometry?.geom_detail).length > 1;
 
+// the locations an image without one got, that the outing gives without a request: its own and its routes'
+const currentLocations = (outing: Outing) => [
+  outing.geometry?.geom,
+  ...(outing.associations?.routes ?? []).map((route) => route.geometry?.geom),
+];
+
+const knownGeoms = (geoms: (string | null | undefined)[]) => [
+  ...new Set(geoms.filter((geom): geom is string => Boolean(geom))),
+];
+
 /** The locations an image added to the outing without its own got: the outing's (now and before) and its routes' */
 export async function defaultLocations(outing: Outing, lang: string): Promise<string[]> {
-  const geoms = [outing.geometry?.geom, ...(outing.associations?.routes ?? []).map((route) => route.geometry?.geom)];
+  const geoms = currentLocations(outing);
   const service = c2c.outing as DocumentService;
   try {
     const { data } = await service.getHistory(outing.document_id!, lang);
@@ -42,44 +52,43 @@ export async function defaultLocations(outing: Outing, lang: string): Promise<st
   } catch {
     // the current locations only
   }
-  return [...new Set(geoms.filter((geom): geom is string => Boolean(geom)))];
+  return knownGeoms(geoms);
 }
 
+type ImageDocument = C2cDocument & {
+  date_time?: string | null;
+  camera_name?: string | null;
+  elevation?: number | null;
+};
+
+/** The images of an outing to locate, read but not saved yet: applyPlan() saves them */
+export type Plan = { outing: Outing; changes: { document: ImageDocument; geom: string; elevation?: number }[] };
+
 /**
- * Save the images of the outing the user may edit with their location on its track. Return the images located, with
- * their new location (also set on the associations of the outing, for its map). minFit: see locateImages().
+ * The images of the outing the user may edit, with their location on its track (all the reads, no write). The locations
+ * of the associated images, given with the outing, spare requests: its history is read only when some image is not on
+ * its current locations, and the images only when one is on a default location. minFit: see locateImages().
  */
-export async function locateOutingImages(
-  outing: Outing,
-  lang: string,
-  user: User,
-  comment: string,
-  { minFit = 0 } = {}
-) {
+export async function planOutingImages(outing: Outing, lang: string, user: User, { minFit = 0 } = {}): Promise<Plan> {
+  const plan: Plan = { outing, changes: [] };
   const track = readTrack(outing.geometry?.geom_detail);
   const associated = outing.associations?.images ?? [];
   if (track.length < 2 || !associated.length) {
-    return [];
+    return plan;
   }
 
+  const current = knownGeoms(currentLocations(outing));
+  const allCurrent = associated.every((image) => hasDefaultLocation(image.geometry?.geom, current));
+  const defaults = allCurrent ? current : await defaultLocations(outing, lang);
+  if (!associated.some((image) => hasDefaultLocation(image.geometry?.geom, defaults))) {
+    return plan;
+  }
+
+  // all the images, also those with a location: they tell the clock shift of their camera and whether it has a GPS
   const service = c2c.image as DocumentService;
-  const [defaults, images] = await Promise.all([
-    defaultLocations(outing, lang),
-    // all the images, also those with a location: they tell the clock shift of their camera
-    // in a lang it has, so that it is saved with that locale
-    Promise.all(
-      associated.map(async (image) => {
-        const langs = image.available_langs ?? [];
-        const imageLang = langs.includes(lang) ? lang : (langs[0] ?? lang);
-        return (await service.get(image.document_id!, imageLang)).data;
-      })
-    ),
-  ]);
-  const documents = images as unknown as (C2cDocument & {
-    date_time?: string | null;
-    camera_name?: string | null;
-    elevation?: number | null;
-  })[];
+  const documents = (await Promise.all(
+    associated.map(async (image) => (await service.get(image.document_id!, imageLang(image, lang))).data)
+  )) as unknown as ImageDocument[];
 
   const locations = locateImages(
     documents.map((document) => ({ ...document, geom: document.geometry?.geom })),
@@ -88,21 +97,57 @@ export async function locateOutingImages(
     outing,
     { minFit }
   );
-
-  const located = [];
-  for (const [i, document] of documents.entries()) {
+  documents.forEach((document, i) => {
     const location = locations[i];
-    if (!location || !isEditable(document, 'image', user, true)) {
-      continue;
+    if (location && isEditable(document, 'image', user, true)) {
+      plan.changes.push({ document, ...location });
     }
-    document.geometry = { ...document.geometry, geom: location.geom };
-    document.elevation ??= location.elevation;
-    await service.save(document as { document_id: number }, comment);
-    const image = associated.find((image) => image.document_id === document.document_id);
+  });
+  return plan;
+}
+
+// in a lang the image has, so that it is saved with that locale
+const imageLang = (image: C2cDocument, lang: string) => {
+  const langs = image.available_langs ?? [];
+  return langs.includes(lang) ? lang : (langs[0] ?? lang);
+};
+
+/**
+ * Save the images of the plan at their location (also set on the associations of the outing, for its map). An image
+ * changed since it was read (its version is refused) is read again and saved once more. Return the images saved.
+ */
+export async function applyPlan(plan: Plan, comment: string) {
+  const service = c2c.image as DocumentService;
+  const located: ImageDocument[] = [];
+  for (const { document, geom, elevation } of plan.changes) {
+    const save = (image: ImageDocument) => {
+      image.geometry = { ...image.geometry, geom };
+      image.elevation ??= elevation;
+      return service.save(image as { document_id: number }, comment);
+    };
+    try {
+      await save(document);
+    } catch {
+      const lang = document.locales?.[0]?.lang ?? '';
+      const fresh = (await service.get(document.document_id!, lang)).data as unknown as ImageDocument;
+      await save(fresh);
+    }
+    const image = plan.outing.associations?.images?.find((image) => image.document_id === document.document_id);
     if (image) {
-      image.geometry = { ...image.geometry, geom: location.geom };
+      image.geometry = { ...image.geometry, geom };
     }
     located.push(document);
   }
   return located;
+}
+
+/** Locate the images of the outing on its track, and save them: the images saved. */
+export async function locateOutingImages(
+  outing: Outing,
+  lang: string,
+  user: User,
+  comment: string,
+  { minFit = 0 } = {}
+) {
+  return applyPlan(await planOutingImages(outing, lang, user, { minFit }), comment);
 }

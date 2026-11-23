@@ -68,6 +68,14 @@
       icon="chart-bar"
     />
 
+    <tool-box-button
+      v-if="documentType === 'profile' && document.document_id === $user.id"
+      :to="{ name: 'locate-images' }"
+      :label="$gettext('Locate my images on GPS tracks')"
+      rel="nofollow"
+      icon="map-marker-alt"
+    />
+
     <hr />
 
     <tool-box-button
