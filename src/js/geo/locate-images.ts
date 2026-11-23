@@ -207,7 +207,9 @@ export function positionAt(track: TrackPoint[], time: number): Omit<TrackPoint, 
 // A camera without GPS has (nearly) all its images on a default location; one with GPS may have an image shot right at the
 // route point (a summit): such a coincidence is not moved
 const MIN_DEFAULT_SHARE = 0.5;
-// a shift of the clock of a camera is trusted when the shifts as good as it are within this (see clockShift())
+// A shift of the clock of a camera is trusted when the shifts as good as it are within this (see clockShift()): when its
+// images fit the track, when the time from its first image to its last one is at least the duration of the track, less
+// 1 h 30 (2 h less the margins). Images over a part of the track only fit it with many shifts: the shift would be a guess.
 const MAX_SHIFT_SPREAD = 2 * 3600;
 // to locate the images without the user asking for it, most images of their camera must fit the track
 export const CONFIDENT_FIT = 0.8;
