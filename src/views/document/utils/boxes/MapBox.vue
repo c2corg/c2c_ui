@@ -128,8 +128,7 @@ function togglePinToSide(toggle: boolean) {
 
   let mode = toggle ? (pinnedMode.value + 1) % (FULL_WINDOW + 1) : pinnedMode.value;
   if (isPhone && mode === 2) mode = toggle ? FULL_WINDOW : 0;
-  const previousSide = pinnedSide.value;
-  setPinnedMode(mode, !toggle && previousSide);
+  setPinnedMode(mode);
 }
 
 // a click on the pin button: the side is kept on this device, for the next document pages (storePin)
@@ -138,9 +137,7 @@ function onPinClicked() {
   storePin(pinnedSide.value);
 }
 
-// keepView: the window was only resized (no click on the pin): when the side is unchanged, the map the user moved keeps its view
-// (scrolling up shows the top menu, which resizes the window)
-function setPinnedMode(mode: number, keepViewOfSide: string | false = false) {
+function setPinnedMode(mode: number) {
   pinnedMode.value = mode;
 
   // side1 is the preferred side for comfort, ie the larger dimension
@@ -154,10 +151,9 @@ function setPinnedMode(mode: number, keepViewOfSide: string | false = false) {
   // the page under the full window map does not scroll
   window.document.documentElement.style.overflow = fullWindow.value ? 'hidden' : '';
 
-  const keepView = keepViewOfSide !== false && keepViewOfSide === pinnedSide.value;
   setTimeout(() => {
-    // deferred so that map.getSize() gets updated
-    if (olMap.value && !(keepView && olMap.value.isMovedByUser())) {
+    // deferred so that map.getSize() gets updated; a map the user moved (resize of the window, pin) keeps its view
+    if (olMap.value && !olMap.value.isMovedByUser()) {
       olMap.value.fitMapToDocuments();
     }
   });

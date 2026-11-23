@@ -1938,7 +1938,7 @@ function onFullscreenChange() {
   isFullscreen.value = fullscreen;
   showLayerSwitcher.value = false;
   // the 3D view goes back to its documents after a resize (resetCamera)
-  if (!is3d.value) setTimeout(() => fitMapToDocuments(), 0);
+  if (!is3d.value && !movedByUser) setTimeout(() => fitMapToDocuments(), 0);
 }
 
 // --- the elevation profile ---
@@ -2161,6 +2161,7 @@ function bounds3dOf(markers: Marker3d[], lines: FeatureCollection): Extent {
 // back to the starting view of the 3D view, on the documents
 function resetCamera() {
   if (!map || !bounds3d) return;
+  movedByUser = false;
   const camera = map.cameraForBounds(bounds3d, { ...FIT_OPTIONS_3D, bearing: 0 });
   if (camera) map.jumpTo({ ...camera, pitch: PITCH_3D });
 }
@@ -2257,7 +2258,8 @@ let lastSize = '';
 const resizeObserver = new ResizeObserver(([entry]) => {
   const size = `${Math.round(entry.contentRect.width)}x${Math.round(entry.contentRect.height)}`;
   // the first call is the size at mount: nothing to reset
-  if (lastSize && size !== lastSize && is3d.value) {
+  // a camera the user moved stays where it is
+  if (lastSize && size !== lastSize && is3d.value && !movedByUser) {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(resetCamera, 200);
   }
