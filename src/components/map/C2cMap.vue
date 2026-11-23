@@ -913,10 +913,14 @@ let fitOnFirstDocuments = false;
 const queryIds = (value: unknown) =>
   (Array.isArray(value) ? value.map(String) : String(value).split(',')).map(Number).filter(Boolean);
 
+// the user panned, zoomed or rotated the map: a resize of the window must not take the view back to the documents
+let movedByUser = false;
+
 async function fitMapToDocuments(force?: boolean) {
   if (filterDocumentsWithMap.value && !force) {
     return rounded(getExtent());
   }
+  movedByUser = false;
   // the 3D view (pinned to a side or unpinned): back to its tilted view of the documents
   if (is3d.value) {
     resetCamera();
@@ -2506,6 +2510,7 @@ onMounted(() => {
     if (event.originalEvent) {
       fitOnFirstDocuments = false;
       automaticBbox = false;
+      movedByUser = true;
     }
   });
   created.on('click', onMapClick);
@@ -2552,6 +2557,7 @@ onBeforeUnmount(() => {
 // what the pages use
 defineExpose({
   fitMapToDocuments,
+  isMovedByUser: () => movedByUser,
   getExtent,
   highlightStop,
   goAndZoomOnStop,

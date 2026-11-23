@@ -93,7 +93,7 @@ const { documentType } = useDocumentType(props);
 const overlayFilters = computed(() => documentOverlayFilters(props.document));
 
 // named apart from the map-view tag
-const olMap = useTemplateRef<{ fitMapToDocuments(): void }>('olMap');
+const olMap = useTemplateRef<{ fitMapToDocuments(): void; isMovedByUser(): boolean }>('olMap');
 
 const mapLinksAreVisible = ref(false);
 const elevationProfileHasData = ref(false);
@@ -128,7 +128,8 @@ function togglePinToSide(toggle: boolean) {
 
   let mode = toggle ? (pinnedMode.value + 1) % (FULL_WINDOW + 1) : pinnedMode.value;
   if (isPhone && mode === 2) mode = toggle ? FULL_WINDOW : 0;
-  setPinnedMode(mode);
+  const previousSide = pinnedSide.value;
+  setPinnedMode(mode, !toggle && previousSide);
 }
 
 // a click on the pin button: the side is kept on this device, for the next document pages (storePin)
@@ -137,7 +138,9 @@ function onPinClicked() {
   storePin(pinnedSide.value);
 }
 
-function setPinnedMode(mode: number) {
+// keepView: the window was only resized (no click on the pin): when the side is unchanged, the map the user moved keeps its view
+// (scrolling up shows the top menu, which resizes the window)
+function setPinnedMode(mode: number, keepViewOfSide: string | false = false) {
   pinnedMode.value = mode;
 
   // side1 is the preferred side for comfort, ie the larger dimension
@@ -151,9 +154,10 @@ function setPinnedMode(mode: number) {
   // the page under the full window map does not scroll
   window.document.documentElement.style.overflow = fullWindow.value ? 'hidden' : '';
 
+  const keepView = keepViewOfSide !== false && keepViewOfSide === pinnedSide.value;
   setTimeout(() => {
     // deferred so that map.getSize() gets updated
-    if (olMap.value) {
+    if (olMap.value && !(keepView && olMap.value.isMovedByUser())) {
       olMap.value.fitMapToDocuments();
     }
   });
