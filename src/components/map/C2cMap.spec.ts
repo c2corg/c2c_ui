@@ -728,7 +728,36 @@ describe('C2cMap', () => {
 
     await wrapper.setProps({ monochromeMarkers: false });
     await flushPromises();
-    expect(fills(map)).toEqual(['#008000', '#e6c100', '#00008b', '#444444']);
+    expect(fills(map)).toEqual(['#008000', '#c99700', '#00008b', '#444444']);
+    wrapper.unmount();
+  });
+
+  it('draws the places to sleep by what they offer when not monochrome', async () => {
+    const hut = (id: number, category?: string) => ({ ...waypoint(id, 'hut', 6.8 + id / 100), hut_category: category });
+    const documents = [
+      hut(1, 'wardened'),
+      hut(2, 'no_warden'),
+      hut(3, 'key_needed'),
+      hut(4, 'shelter'),
+      waypoint(5, 'shelter', 6.85),
+      waypoint(6, 'gite', 6.86),
+      hut(7),
+    ];
+    const { wrapper, map } = await mountMap({ documents, compactMarkers: true, monochromeMarkers: false });
+    const looks = drawn(map).map((feature) => [
+      feature.properties!.circleFill,
+      /data-icon="([^"]+)"/.exec(String(feature.properties!.icon))![1],
+    ]);
+    expect(looks).toEqual([
+      ['#d32f2f', 'hut'],
+      ['#d32f2f', 'shelter'],
+      ['#c99700', 'key'],
+      ['#c99700', 'angle-up'],
+      ['#c99700', 'angle-up'],
+      ['#d32f2f', 'house-flag'],
+      // without its category (an older API): the colour of the places to sleep
+      ['#c99700', 'hut'],
+    ]);
     wrapper.unmount();
   });
 

@@ -138,6 +138,8 @@ export const waypoint = fullDocument(
     parking_fee: z.nullish(oneOf('parking_fee_types')),
     phone_custodian: z.nullish(z.string()),
     custodianship: z.nullish(oneOf('custodianship_types')),
+    // listings: what a hut offers (wardened, shelter, else its custodianship)
+    hut_category: z.nullish(z.string()),
     matress_unstaffed: z.nullish(z.boolean()),
     blanket_unstaffed: z.nullish(z.boolean()),
     gas_unstaffed: z.nullish(z.boolean()),

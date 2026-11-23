@@ -178,7 +178,9 @@ const label = (text: string | undefined, highlight: boolean, publicTransport = f
 const CATEGORY_COLORS = {
   mountain: '#008000',
   water: '#00bfff',
-  sleep: '#e6c100',
+  // darker than the one of gpx.studio: its white icon reads
+  sleep: '#c99700',
+  wardened: '#d32f2f',
   food: '#ff7f50',
   transport: '#00008b',
   air: '#ff69b4',
@@ -213,6 +215,33 @@ export function waypointCategoryColor(document: C2cDocument): string {
     return CATEGORY_COLORS[served ? 'transport' : 'other'];
   }
   return CATEGORY_COLORS[WAYPOINT_CATEGORIES[String(document.waypoint_type)] ?? 'other'];
+}
+
+// The places to sleep by what they offer: red for the huts and gîtes with beds, their own icon when wardened, the one
+// of the shelters when not; yellow for a roof only, or a key to fetch. The hut_category of the huts comes with the
+// listings (API): without it (an older API), a hut keeps the yellow of its category.
+const ROOF = { prefix: 'fas', iconName: 'angle-up' } as const;
+const SHELTER = { prefix: 'waypoint', iconName: 'shelter' } as const;
+const SLEEP_LOOKS: Record<string, { color: string; icon?: { prefix: string; iconName: string } }> = {
+  wardened: { color: CATEGORY_COLORS.wardened },
+  no_warden: { color: CATEGORY_COLORS.wardened, icon: SHELTER },
+  always_accessible: { color: CATEGORY_COLORS.wardened, icon: SHELTER },
+  key_needed: { color: CATEGORY_COLORS.sleep, icon: { prefix: 'fas', iconName: 'key' } },
+  shelter: { color: CATEGORY_COLORS.sleep, icon: ROOF },
+};
+
+/** The colour of a waypoint, and the icon that replaces its own (monochrome off) */
+export function waypointCategoryLook(document: C2cDocument): { color: string; svgSrc?: string } {
+  const look =
+    document.waypoint_type === 'hut'
+      ? SLEEP_LOOKS[String(document.hut_category)]
+      : document.waypoint_type === 'shelter'
+        ? SLEEP_LOOKS.shelter
+        : document.waypoint_type === 'gite'
+          ? { color: CATEGORY_COLORS.wardened, icon: { prefix: 'fas', iconName: 'house-flag' } }
+          : undefined;
+  if (!look) return { color: waypointCategoryColor(document) };
+  return { color: look.color, ...(look.icon ? { svgSrc: iconSvg(look.icon as IconLookup) } : {}) };
 }
 
 // a document icon on a light circle, bigger when highlighted. Compact: smaller, a disc of the colour of the icon with
@@ -264,8 +293,11 @@ function pointStyle(document: C2cDocument, highlight: boolean, compact: boolean,
   }
   const icon = getDocumentIcon(document);
   if (icon) {
-    const color = !monochrome && document.type === 'w' ? waypointCategoryColor(document) : icon.color;
-    return markerStyle(icon.svgSrc, color, highlight, compact);
+    if (!monochrome && document.type === 'w') {
+      const look = waypointCategoryLook(document);
+      return markerStyle(look.svgSrc ?? icon.svgSrc, look.color, highlight, compact);
+    }
+    return markerStyle(icon.svgSrc, icon.color, highlight, compact);
   }
   if (type === 'z') {
     const color =
