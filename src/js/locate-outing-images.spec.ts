@@ -141,4 +141,18 @@ describe('locateOutingImages', () => {
     expect(getImage).toHaveBeenCalledTimes(4);
     expect(most).toBe(1);
   });
+
+  it('reads only the images to locate when the outing gives the times and cameras of its images', async () => {
+    const document = outing();
+    const shot = new Date((T0 + 1800) * 1000).toISOString();
+    document.associations!.images = [
+      { document_id: 1, available_langs: ['fr'], geometry: { geom: point(0) }, date_time: shot, camera_name: null },
+      { document_id: 2, available_langs: ['fr'], geometry: { geom: point(42) }, date_time: shot, camera_name: 'phone' },
+    ];
+
+    const plan = await planOutingImages(document, 'fr', user);
+
+    expect(plan.changes.map((change) => change.document.document_id)).toEqual([1]);
+    expect(getImage.mock.calls.map(([id]) => id)).toEqual([1]);
+  });
 });

@@ -126,26 +126,31 @@ export async function planOutingImages(outing: Outing, lang: string, user: User,
     return plan;
   }
 
-  // all the images, also those with a location: they tell the clock shift of their camera and whether it has a GPS
+  // all the images, also those with a location: they tell the clock shift of their camera and whether it has a GPS. The
+  // API gives their time and camera with the outing (v6_api#2697): else each image is read
   const service = c2c.image as DocumentService;
-  const documents = (await oneByOne(
-    associated,
-    async (image) => (await request(() => service.get(image.document_id!, imageLang(image, lang)))).data
-  )) as unknown as ImageDocument[];
+  const read = async (image: C2cDocument) =>
+    (await request(() => service.get(image.document_id!, imageLang(image, lang)))).data as unknown as ImageDocument;
+  const listed = associated as ImageDocument[];
+  const documents = listed.every((image) => 'date_time' in image) ? null : await oneByOne(listed, read);
+  const images = documents ?? listed;
 
   const locations = locateImages(
-    documents.map((document) => ({ ...document, geom: document.geometry?.geom })),
+    images.map((image) => ({ ...image, geom: image.geometry?.geom })),
     track,
     defaults,
     outing,
     { minFit }
   );
-  documents.forEach((document, i) => {
-    const location = locations[i];
-    if (location && isEditable(document, 'image', user, true)) {
-      plan.changes.push({ document, ...location });
+  for (const [i, location] of locations.entries()) {
+    if (location) {
+      // the image to save, which tells who may edit it
+      const document = documents?.[i] ?? (await read(listed[i]!));
+      if (isEditable(document, 'image', user, true)) {
+        plan.changes.push({ document, ...location });
+      }
     }
-  });
+  }
   return plan;
 }
 
