@@ -8,13 +8,15 @@
 // (its template is inlined), so the container could not read it there.
 import { inject, onBeforeUnmount, provide, ref } from 'vue';
 
-// what the containers read: FormSection its visible and hasError, BaseForm its name, hasError, and errorMessage, that it
+import type { ShownApiError } from '@/js/apis/c2c/api-errors';
+
+// what the containers read: FormSection its visible and hasError, BaseForm its name, hasError, and error, that it
 // also sets from the API errors
 export type FormFieldState = {
   visible?: boolean;
   hasError?: boolean;
   name?: string;
-  errorMessage?: string | null;
+  error?: ShownApiError | null;
 };
 
 type Registry = {

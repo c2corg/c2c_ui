@@ -81,7 +81,7 @@
     :divisor="divisor"
     :type="field.type"
     :min="min || field.min"
-    :max="max || field.max"
+    :max="max || field.maxFor(document)"
     :disabled="field.disabled"
     :placeholder="placeholder || $gettext(field.name)"
     :required="field.required"

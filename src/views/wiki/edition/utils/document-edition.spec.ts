@@ -267,12 +267,17 @@ describe('useDocumentEdition', () => {
     await flushPromises();
 
     expect(vm.saving).toBe(false);
+    // the limit apart from the text, which is translated in the context of the API's messages
     expect(vm.fields.title.error).toEqual({
       location: 'body',
       name: 'locales.0.title',
-      description: 'Shorter than minimum length 1',
+      description: 'Shorter than minimum length',
+      limit: 1,
+      context: 'API message',
     });
     expect(api.toast).toHaveBeenCalledOnce();
+    const list = api.toast.mock.calls[0][0].message as HTMLElement;
+    expect(list.textContent).toMatch(/: Shorter than minimum length 1$/);
   });
 });
 

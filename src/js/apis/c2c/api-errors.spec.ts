@@ -3,7 +3,7 @@ import { AxiosError, AxiosHeaders, type AxiosResponse } from 'axios';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { nextTick, reactive } from 'vue';
 
-import { apiErrors, errorStatus } from './api-errors';
+import { apiErrors, errorStatus, errorText } from './api-errors';
 
 import ModalConfirmation from '@/components/generics/modals/ModalConfirmation.vue';
 
@@ -112,9 +112,39 @@ describe('apiErrors', () => {
 
       expect(errors).toEqual([
         { location: 'body', name: 'locales.0.title', description: 'Required' },
-        { location: 'body', name: 'name', description: 'Longer than maximum length 25' },
-        { location: 'body', name: 'username', description: 'Shorter than minimum length 3' },
-        { location: 'body', name: 'associations.routes', description: 'Shorter than minimum length 1' },
+        { location: 'body', name: 'name', description: 'Longer than maximum length', limit: 25 },
+        { location: 'body', name: 'username', description: 'Shorter than minimum length', limit: 3 },
+        { location: 'body', name: 'associations.routes', description: 'Shorter than minimum length', limit: 1 },
+      ]);
+    });
+
+    it('gives the range errors with their limit: of FastAPI, and of the API (its own text)', () => {
+      const errors = apiErrors(
+        invalid(
+          {
+            loc: ['body', 'height_diff_up'],
+            msg: 'Greater than maximum value 32767',
+            type: 'less_than_equal',
+            ctx: { le: 32767 },
+          },
+          {
+            loc: ['query', 'limit'],
+            msg: 'Input should be greater than or equal to 1',
+            type: 'greater_than_equal',
+            ctx: { ge: 1 },
+          },
+          {
+            loc: ['body', 'message'],
+            msg: 'Longer than maximum length 200',
+            type: 'invalid_string',
+          }
+        )
+      );
+
+      expect(errors).toEqual([
+        { location: 'body', name: 'height_diff_up', description: 'Greater than maximum value', limit: 32767 },
+        { location: 'querystring', name: 'limit', description: 'Less than minimum value', limit: 1 },
+        { location: 'body', name: 'message', description: 'Longer than maximum length', limit: 200 },
       ]);
     });
 
@@ -157,6 +187,30 @@ describe('apiErrors', () => {
         'Unexpected response to POST /routes'
       );
     });
+  });
+
+  it('splits the limit out of the texts of its own errors', () => {
+    const errors = [
+      { location: 'body', name: 'forum_username', description: 'Longer than maximum length 25' },
+      { location: 'body', name: 'elevation', description: 'Less than minimum value -32768' },
+      { location: 'body', name: 'title', description: 'Longer than maximum length' },
+    ];
+
+    expect(apiErrors(failed({ status: 400, data: { status: 'error', errors } }))).toEqual([
+      { location: 'body', name: 'forum_username', description: 'Longer than maximum length', limit: 25 },
+      { location: 'body', name: 'elevation', description: 'Less than minimum value', limit: -32768 },
+      { location: 'body', name: 'title', description: 'Longer than maximum length' },
+    ]);
+  });
+
+  it('gives the text of an error: translated, then its limit', () => {
+    const gettext = (text: string, context?: string) => `[${context ?? ''}] ${text}`;
+
+    expect(errorText({ description: 'Greater than maximum value', limit: 9000 }, gettext, 'API message')).toBe(
+      '[API message] Greater than maximum value 9000'
+    );
+    expect(errorText({ description: 'Required' }, gettext, 'API message')).toBe('[API message] Required');
+    expect(errorText({ description: 'required field' }, gettext, undefined)).toBe('[] required field');
   });
 
   it('gives the status of the answer', () => {
