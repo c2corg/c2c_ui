@@ -122,19 +122,28 @@ describe('styles', () => {
 
   // a width of its own in a media query guesses the size of a box from the window's, which the side menu and the
   // columns change: a component lays out by its own box (a container query, or flex-wrap), the page by the named
-  // breakpoints. Only the background images of the static pages, as wide as the window, pick their size by its width
+  // breakpoints. An image picks its size with srcset and sizes
   it('uses no width of its own in a media query', () => {
     const own = cssBlocks
       .filter(({ file }) => !file.endsWith('assets/css/media.css'))
       .flatMap(({ name, content }) =>
         [...content.matchAll(/@media[^{]*\((?:min-|max-)?width:\s*\d+px\)/g)].map((m) => `${name}: ${m[0]}`)
       );
-    expect(own).toEqual([
-      'views/static-views/SeracView.vue #1: @media (min-width: 865px)',
-      'views/static-views/SeracView.vue #1: @media (min-width: 1089px)',
-      'views/static-views/TopoguideView.vue #1: @media (min-width: 865px)',
-      'views/static-views/TopoguideView.vue #1: @media (min-width: 1089px)',
-    ]);
+    expect(own).toEqual([]);
+  });
+
+  // a height computed from the window's repeats the heights of the navigation, of the paddings and of the headers above,
+  // and is wrong as soon as one of them changes (filters on two lines, the text size): the page takes what is left with
+  // .fills-window (App.vue). Bulma's modals, and the image viewer, over the whole window with its own bars, are fine
+  it('computes no height from the window', () => {
+    const computed = cssBlocks
+      .filter(({ file }) => !file.includes('assets/css/bulma/'))
+      .flatMap(({ name, content }) =>
+        [...content.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/calc\([^;{}]*\d[dsl]?vh\b[^;{}]*/g)].map(
+          (m) => `${name}: ${m[0]}`
+        )
+      );
+    expect(computed).toEqual(['components/image-viewer/ImageViewer.vue #1: calc(100dvh - 3rem - 30px)']);
   });
 
   // what is under the navigation starts at --c2c-header-height, which App.vue alone switches with the large ad

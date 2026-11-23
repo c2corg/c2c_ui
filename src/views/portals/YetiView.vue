@@ -19,7 +19,7 @@
         <yeti-article :article="articles.faq"></yeti-article>
       </div>
 
-      <div class="columns yeti-content">
+      <div class="columns yeti-content fills-window-from-tablet">
         <div class="column is-5-tablet is-4-widescreen form-container">
           <div class="columns is-mobile is-justify-content-space-between mb-5">
             <div class="is-flex is-align-items-center yeti-title">
@@ -488,10 +488,9 @@ function onSubmitDisclaimer() {
   margin-top: calc(0.75rem + 2px);
 }
 
+/* from the tablet width, the form and the map take the window under the navigation (.fills-window, App.vue) */
 @media screen and (--c2c-min-tablet) {
   .yeti-content {
-    height: calc(100vh - var(--c2c-header-height));
-
     .form-container {
       max-width: 450px;
       height: calc(100% - 0.75rem);

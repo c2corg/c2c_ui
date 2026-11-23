@@ -2680,16 +2680,9 @@ defineExpose({
   .ol-control-layer-switcher {
     width: 320px;
   }
+  /* as high as the map, with or without the elevation profile under it (MapBox.vue) */
   .ol-control-layer-switcher-layers {
     width: 300px;
-    height: 100vh;
-  }
-
-  .with-elevation-profile .ol-control-layer-switcher-layers {
-    /* elevation profile occupies 30% of the screen, see MapBox.vue */
-    height: calc(100vh * 0.7);
-    max-height: calc(100vh - 200px);
-    min-height: calc(100vh - 350px);
   }
 }
 

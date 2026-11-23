@@ -56,7 +56,14 @@
         :show-print-button="false"
       ></query-items>
     </div>
-    <div class="columns result-section" :class="['mobile-mode-' + displayMode, { 'query-has-tags': queryHasTags }]">
+    <div
+      class="columns result-section"
+      :class="[
+        'mobile-mode-' + displayMode,
+        displayMode === 'map' ? 'fills-window' : 'fills-window-from-tablet',
+        { 'query-has-tags': queryHasTags },
+      ]"
+    >
       <div
         v-if="showResults"
         class="column documents-container"
@@ -408,8 +415,9 @@ onMounted(() => {
 @import '@/assets/css/media.css';
 
 /*
- * The heights: section padding 1.5rem, header 34px with a bottom padding of 1.5rem, filters 32px with a bottom
- * padding of 0.5rem, tags 28px. On mobile: section padding 0.5rem, header 56px, filters 25px.
+ * As the list of the documents (DocumentsView.vue): the results and the map take what the headers and the filters leave
+ * of the window (.fills-window, App.vue), and the list scrolls in its container from the tablet width. On phones the
+ * page scrolls, but the map alone fills the window.
  */
 
 .header-section {
@@ -473,14 +481,13 @@ onMounted(() => {
   }
 
   .map-container {
-    height: calc(100vh - var(--c2c-header-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
     padding: 0;
   }
 
   .mobile-mode-map {
     margin-top: 0;
     .map-container {
-      height: calc(100vh - var(--c2c-header-height) - 3 * 0.5rem - 56px - 25px);
+      height: 100%;
     }
 
     .documents-container {
@@ -491,7 +498,10 @@ onMounted(() => {
   .mobile-mode-result,
   .mobile-mode-both {
     .map-container {
-      visibility: hidden; /* map does not like to be in a display none... */
+      /* map does not like to be in a display none: hidden and without height, so that it leaves no blank page under the list */
+      visibility: hidden;
+      height: 0;
+      overflow: hidden;
     }
   }
 }
@@ -499,11 +509,7 @@ onMounted(() => {
 @media screen and (--c2c-min-tablet) {
   .result-section {
     margin-top: 0;
-    height: calc(100vh - var(--c2c-header-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
-
-    &.query-has-tags {
-      height: calc(100vh - var(--c2c-header-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px - 28px);
-    }
+    margin-bottom: 0;
 
     .documents-container {
       height: 100%;
