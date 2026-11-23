@@ -58,14 +58,16 @@ describe('the moderation link of the menus', () => {
   it('is shown to a moderator of the topoguide', () => {
     const keys = keysFor({ isLogged: true, isModerator: true, id: 1 });
     expect(keys.menu).toContain('moderation');
-    expect(keys.account).toContain('moderation');
+    // once: not in the user menu too
+    expect(keys.account).not.toContain('moderation');
   });
 
   it('is shown to a moderator of the forum', () => {
     isForumModerator.value = true;
     const keys = keysFor({ isLogged: true, isModerator: false, id: 1 });
     expect(keys.menu).toContain('moderation');
-    expect(keys.account).toContain('moderation');
+    // once: not in the user menu too
+    expect(keys.account).not.toContain('moderation');
   });
 
   it('is hidden from the others, who ask nothing', () => {

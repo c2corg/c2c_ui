@@ -159,7 +159,6 @@
             <span>
               {{ item.text }}
             </span>
-            <span v-if="item.badge" class="tag is-danger is-rounded ml-2">{{ item.badge }}</span>
           </router-link>
 
           <hr class="dropdown-divider" />
