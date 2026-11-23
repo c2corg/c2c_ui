@@ -135,6 +135,9 @@ const extraIsVisibleForHandlers: Record<string, (document: FieldDocument) => boo
 export default class Field {
   name: string;
   error: unknown = null;
+  // the text of its input was rejected (a length typed as "4.5 km"): the document keeps the previous value, so the
+  // edit form must not be saved until it is corrected or emptied
+  rejectedInput = false;
   // the properties of the JSON files, copied by the constructor
   declare type: string;
   declare parent: FieldParent;
@@ -346,6 +349,10 @@ export default class Field {
 
     if (!this.isVisibleFor(document)) {
       return null;
+    }
+
+    if (this.rejectedInput) {
+      return this.getErrorObject('Invalid value');
     }
 
     // a text, or a list for multiple values and associations

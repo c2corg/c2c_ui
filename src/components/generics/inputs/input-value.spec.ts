@@ -49,6 +49,8 @@ describe('useInputValue', () => {
     expect(invalid.value).toBe(true);
     value_.value = '-1';
     expect(invalid.value).toBe(true);
+    value_.value = '-0.0001'; // -0.1 m: would round to -0, accepted by min 0
+    expect(invalid.value).toBe(true);
     value_.value = '501';
     expect(invalid.value).toBe(true);
     expect(emitted).toEqual([]);

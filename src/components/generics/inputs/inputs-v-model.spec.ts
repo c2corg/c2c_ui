@@ -64,6 +64,26 @@ describe('inputs v-model', () => {
     expect(wrapper.vm.value).toBe(3000);
   });
 
+  it('InputSimple, with a divisor: reads a comma, tells when the text is rejected', async () => {
+    const wrapper = mount(InputSimple, {
+      props: { modelValue: 2500, type: 'number', divisor: 1000, min: 0 },
+      global,
+    });
+    const input = wrapper.find('input');
+    expect(input.attributes('inputmode')).toBe('decimal');
+
+    await input.setValue('4,5');
+    expect(wrapper.emitted('update:modelValue')).toEqual([[4500]]);
+
+    await input.setValue('4.5 km');
+    expect(wrapper.emitted('update:invalid')).toEqual([[true]]);
+    expect(input.classes()).toContain('is-danger');
+
+    await input.setValue('');
+    expect(wrapper.emitted('update:invalid')).toEqual([[true], [false]]);
+    expect(wrapper.emitted('update:modelValue')).toEqual([[4500], [null]]);
+  });
+
   it('InputDate', async () => {
     const wrapper = mountWithVModel(InputDate, '2026-10-01');
     const input = wrapper.find('input');

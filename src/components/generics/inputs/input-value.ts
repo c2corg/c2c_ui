@@ -80,12 +80,14 @@ export function useInputValue(props: InputProps, emit: Emit) {
       }
 
       const parsed = typeof value === 'number' ? value : parseDecimal(String(value));
-      const number = Math.round(parsed * (props.divisor as number));
-      // min and max are in the stored unit; a text input does not check them
+      const stored = parsed * (props.divisor as number);
+      // min and max are in the stored unit; a text input does not check them. Checked before rounding: -0.0001 km
+      // would round to -0, accepted by min 0
       invalid.value =
-        Number.isNaN(number) ||
-        (props.min !== null && props.min !== undefined && number < props.min) ||
-        (props.max !== null && props.max !== undefined && number > Number(props.max));
+        Number.isNaN(stored) ||
+        (props.min !== null && props.min !== undefined && stored < props.min) ||
+        (props.max !== null && props.max !== undefined && stored > Number(props.max));
+      const number = Math.round(stored);
 
       // the API stores integers (metres): 0.5605 km is 561 m, and 1.005 km 1005 m, not 1004.9999999999999
       if (!invalid.value) {
