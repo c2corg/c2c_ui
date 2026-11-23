@@ -147,6 +147,18 @@ describe('Field', () => {
     const route = { type: 'r', activities: ['hiking'], height_diff_down: 12000 };
     expect(routeHeightDiff.getError({ ...route, durations: ['1'] }, {})).toMatchObject({ limit: 9000 });
     expect(routeHeightDiff.getError({ ...route, durations: ['10+'] }, {})).toBeNull();
+    // the length and the height of the difficulties of a long journey
+    const bikeTour = { type: 'r', activities: ['mountain_biking'], durations: ['10+'] };
+    expect(routeField('route_length').getError({ ...bikeTour, route_length: 10300000 }, {})).toBeNull();
+    expect(routeField('mtb_length_asphalt').maxFor(bikeTour)).toBe(20000000);
+    expect(routeField('height_diff_difficulties').maxFor(bikeTour)).toBe(9000);
+    expect(routeField('route_length').maxFor({ ...bikeTour, durations: ['1'] })).toBe(500000);
+
+    // an approach that goes down to the climb
+    const access = routeField('height_diff_access');
+    const climb = { type: 'r', activities: ['rock_climbing'], durations: ['1'] };
+    expect(access.getError({ ...climb, height_diff_access: -200 }, {})).toBeNull();
+    expect(access.getError({ ...climb, height_diff_access: -600 }, {})).toMatchObject({ limit: -500 });
 
     // a field without multi-day max, and an empty value
     expect(outingField('elevation_max').maxFor(trek)).toBe(9000);

@@ -396,7 +396,7 @@
   },
   "height_diff_access": {
     "type": "number",
-    "min": 0,
+    "min": -500,
     "max": 3000,
     "unit": "m",
     "helper": "1063045#height-diff-access"
@@ -405,6 +405,7 @@
     "type": "number",
     "min": 0,
     "max": 3000,
+    "maxMultiDay": 9000,
     "unit": "m",
     "helper": "1063027#height-diff_difficulties",
     "sortable": true
@@ -591,12 +592,14 @@
     "type": "number",
     "min": 0,
     "max": 500000,
+    "maxMultiDay": 20000000,
     "unit": "m"
   },
   "mtb_length_trail": {
     "type": "number",
     "min": 0,
     "max": 500000,
+    "maxMultiDay": 20000000,
     "unit": "m"
   },
   "mtb_up_rating": {
@@ -773,6 +776,7 @@
     "type": "number",
     "min": 0,
     "max": 500000,
+    "maxMultiDay": 20000000,
     "unit": "m",
     "sortable": true
   },
