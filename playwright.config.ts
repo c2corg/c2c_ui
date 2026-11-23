@@ -18,6 +18,8 @@ export default defineConfig({
     baseURL: `http://localhost:${port}`,
     viewport: { width: 1400, height: 900 },
     trace: 'retain-on-failure',
+    // a preinstalled Chrome (Claude Code cloud sessions set it), when Playwright's own can't be downloaded
+    launchOptions: { executablePath: process.env.CHROME_PATH || undefined },
   },
   webServer: {
     command: `npx cross-env BUILD_ENV=local C2C_BACKEND=localhost vite build --outDir dist-e2e && npx vite preview --outDir dist-e2e --port ${port} --strictPort`,
