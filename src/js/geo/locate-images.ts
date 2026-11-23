@@ -120,8 +120,16 @@ const fitCount = (times: number[], track: TrackPoint[], shift: number, margin: n
  * preferably whole hours (time zones): none when they already are.
  */
 export function estimateClockShift(times: number[], track: TrackPoint[]): number {
+  return clockShift(times, track).shift;
+}
+
+/**
+ * The clock shift, and the spread of the shifts as good as it: a few images within a long track fit it with many
+ * shifts, the shift is then a guess, unless it is none (the clock of the camera is right)
+ */
+function clockShift(times: number[], track: TrackPoint[]): { shift: number; spread: number } {
   if (!times.length || !track.length) {
-    return 0;
+    return { shift: 0, spread: 0 };
   }
   const score = (shift: number) => fitCount(times, track, shift, SHIFT_MARGIN);
 
@@ -137,14 +145,20 @@ export function estimateClockShift(times: number[], track: TrackPoint[]): number
     }
     return Math.abs(shift) < Math.abs(best);
   };
+  const scores = new Map<number, number>();
   for (let shift = -MAX_SHIFT; shift <= MAX_SHIFT; shift += SHIFT_STEP) {
     const shiftScore = score(shift);
+    scores.set(shift, shiftScore);
     if (better(shift, shiftScore)) {
       best = shift;
       bestScore = shiftScore;
     }
   }
-  return bestScore ? best : 0;
+  if (!bestScore) {
+    return { shift: 0, spread: 0 };
+  }
+  const asGood = [...scores].filter(([, shiftScore]) => shiftScore === bestScore).map(([shift]) => shift);
+  return { shift: best, spread: Math.max(...asGood) - Math.min(...asGood) };
 }
 
 // meters on the ground between two points of EPSG:3857, which stretches them by 1 / cos(latitude)
@@ -193,6 +207,8 @@ export function positionAt(track: TrackPoint[], time: number): Omit<TrackPoint, 
 // A camera without GPS has (nearly) all its images on a default location; one with GPS may have an image shot right at the
 // route point (a summit): such a coincidence is not moved
 const MIN_DEFAULT_SHARE = 0.5;
+// a shift of the clock of a camera is trusted when the shifts as good as it are within this (see clockShift())
+const MAX_SHIFT_SPREAD = 2 * 3600;
 // to locate the images without the user asking for it, most images of their camera must fit the track
 export const CONFIDENT_FIT = 0.8;
 
@@ -228,15 +244,24 @@ export function locateImages(
   });
   for (const camera of cameras.values()) {
     if (camera.times.length && track.length) {
-      camera.shift = estimateClockShift(camera.times, track);
-      camera.fit = fitCount(camera.times, track, camera.shift, END_MARGIN) / camera.times.length;
+      const { shift, spread } = clockShift(camera.times, track);
+      camera.shift = shift;
+      // a guessed shift: its images are not located
+      camera.fit =
+        shift && spread > MAX_SHIFT_SPREAD ? 0 : fitCount(camera.times, track, shift, END_MARGIN) / camera.times.length;
     }
   }
 
   return images.map((image, i) => {
     const time = times[i];
     const camera = cameras.get(cameraOf(image))!;
-    if (time === null || !onDefault[i] || camera.defaults / camera.images < MIN_DEFAULT_SHARE || camera.fit < minFit) {
+    if (
+      time === null ||
+      !onDefault[i] ||
+      camera.defaults / camera.images < MIN_DEFAULT_SHARE ||
+      !camera.fit ||
+      camera.fit < minFit
+    ) {
       return null;
     }
     const position = positionAt(track, time + camera.shift);

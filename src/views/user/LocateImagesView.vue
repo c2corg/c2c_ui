@@ -70,6 +70,9 @@ const service = c2c.outing as DocumentService;
 // per user: the images another user may not edit are not located for them
 const stored = getPreferences(`LocateImagesView.${$user.id}`);
 
+// the images of the user, also for a moderator: not those the other participants of the outing added
+const asOwner = { isModerator: false, id: $user.id };
+
 const outings = ref<Outing[]>([]);
 const rows = ref<Row[]>([]);
 const scanned = ref(0);
@@ -117,7 +120,7 @@ async function scanOutings() {
       try {
         const lang = langOf(outing);
         const { data } = await service.get(outing.document_id!, lang);
-        const plan = await planOutingImages(data as unknown as Outing, lang, $user, { minFit: CONFIDENT_FIT });
+        const plan = await planOutingImages(data as unknown as Outing, lang, asOwner, { minFit: CONFIDENT_FIT });
         if (plan.changes.length) {
           rows.value.push({ outing, plan, status: 'planned' });
         } else {

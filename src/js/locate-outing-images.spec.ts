@@ -118,4 +118,27 @@ describe('locateOutingImages', () => {
     getHistory.mockRejectedValueOnce(new Error('network'));
     expect((await planOutingImages(outing(), 'fr', user)).complete).toBe(false);
   });
+
+  it('reads one image at a time, waiting when the API asks to slow down', async () => {
+    vi.useFakeTimers();
+    let running = 0;
+    let most = 0;
+    const respond = getImage.getMockImplementation()!;
+    getImage.mockImplementation(async (...args: unknown[]) => {
+      most = Math.max(most, ++running);
+      await Promise.resolve();
+      running--;
+      return respond(...args);
+    });
+    getImage.mockRejectedValueOnce({ response: { status: 429 } });
+
+    const planning = planOutingImages(outing(), 'fr', user);
+    await vi.advanceTimersByTimeAsync(2000);
+    const plan = await planning;
+    vi.useRealTimers();
+
+    expect(plan.changes.map((change) => change.document.document_id)).toEqual([1]);
+    expect(getImage).toHaveBeenCalledTimes(4);
+    expect(most).toBe(1);
+  });
 });

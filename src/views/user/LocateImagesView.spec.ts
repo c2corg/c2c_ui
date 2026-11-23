@@ -16,7 +16,11 @@ const mountView = async () => {
       stubs: { HtmlHeader: true, PrettyOutingLink: true, FaIcon: true },
       directives: { translate: {} },
       config: {
-        globalProperties: { $gettext: (text: string) => text, $language: { current: 'fr' }, $user: { id: 7 } } as never,
+        globalProperties: {
+          $gettext: (text: string) => text,
+          $language: { current: 'fr' },
+          $user: { id: 7, isModerator: true },
+        } as never,
       },
     },
   });
@@ -42,6 +46,8 @@ describe('LocateImagesView', () => {
     const wrapper = await mountView();
 
     expect(api.fullDownload).toHaveBeenCalledWith({ u: '7', trk: '1' });
+    // its own images only, also for a moderator
+    expect(api.plan.mock.calls[0][2]).toEqual({ isModerator: false, id: 7 });
     // neither the outing without images nor the one scanned before
     expect(api.get.mock.calls.map(([id]) => id)).toEqual([1, 2]);
     expect(wrapper.findAll('.locate-row')).toHaveLength(1);

@@ -14,6 +14,34 @@ type Outing = C2cDocument & { date_start?: string | null; date_end?: string | nu
 
 // the versions of the outing read for its former locations: its first ones and its last ones
 const MAX_VERSIONS = 30;
+// the waits before trying again a request the API refused as too many (429)
+const RETRY_WAITS = [2000, 5000, 15000];
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// a request tried again when the API asks to slow down
+async function request<T>(send: () => T): Promise<Awaited<T>> {
+  for (const wait of RETRY_WAITS) {
+    try {
+      return await send();
+    } catch (error) {
+      if ((error as { response?: { status?: number } } | undefined)?.response?.status !== 429) {
+        throw error;
+      }
+      await sleep(wait);
+    }
+  }
+  return await send();
+}
+
+// one request at a time: the API refuses too many at once
+async function oneByOne<T, R>(items: T[], send: (item: T) => Promise<R>): Promise<R[]> {
+  const results: R[] = [];
+  for (const item of items) {
+    results.push(await send(item));
+  }
+  return results;
+}
 
 /** Whether the outing has a track with the times of its points, to locate its images on */
 export const hasTimedTrack = (outing: Outing) => readTrack(outing.geometry?.geom_detail).length > 1;
@@ -37,22 +65,20 @@ export async function defaultLocations(outing: Outing, lang: string): Promise<{ 
   let complete = true;
   const service = c2c.outing as DocumentService;
   try {
-    const { data } = await service.getHistory(outing.document_id!, lang);
+    const { data } = await request(() => service.getHistory(outing.document_id!, lang));
     let versions = (data as { versions: { version_id: number }[] }).versions;
     if (versions.length > MAX_VERSIONS) {
       versions = [...versions.slice(0, MAX_VERSIONS / 2), ...versions.slice(-MAX_VERSIONS / 2)];
     }
-    const former = await Promise.all(
-      versions.map(async ({ version_id }) => {
-        try {
-          const { data } = await service.getVersion(outing.document_id!, lang, version_id);
-          return (data as { document?: C2cDocument }).document?.geometry?.geom;
-        } catch {
-          complete = false;
-          return undefined;
-        }
-      })
-    );
+    const former = await oneByOne(versions, async ({ version_id }) => {
+      try {
+        const { data } = await request(() => service.getVersion(outing.document_id!, lang, version_id));
+        return (data as { document?: C2cDocument }).document?.geometry?.geom;
+      } catch {
+        complete = false;
+        return undefined;
+      }
+    });
     geoms.push(...former);
   } catch {
     // the current locations only
@@ -102,8 +128,9 @@ export async function planOutingImages(outing: Outing, lang: string, user: User,
 
   // all the images, also those with a location: they tell the clock shift of their camera and whether it has a GPS
   const service = c2c.image as DocumentService;
-  const documents = (await Promise.all(
-    associated.map(async (image) => (await service.get(image.document_id!, imageLang(image, lang))).data)
+  const documents = (await oneByOne(
+    associated,
+    async (image) => (await request(() => service.get(image.document_id!, imageLang(image, lang)))).data
   )) as unknown as ImageDocument[];
 
   const locations = locateImages(
@@ -140,13 +167,13 @@ export async function applyPlan(plan: Plan, comment: string) {
     const save = (image: ImageDocument) => {
       image.geometry = { ...image.geometry, geom };
       image.elevation ??= elevation;
-      return service.save(image as { document_id: number }, comment);
+      return request(() => service.save(image as { document_id: number }, comment));
     };
     try {
       await save(document);
     } catch {
       const lang = document.locales?.[0]?.lang ?? '';
-      const fresh = (await service.get(document.document_id!, lang)).data as unknown as ImageDocument;
+      const fresh = (await request(() => service.get(document.document_id!, lang))).data as unknown as ImageDocument;
       // located by someone else meanwhile: kept
       if (fresh.geometry?.geom !== planned) {
         continue;

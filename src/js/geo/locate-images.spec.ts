@@ -147,4 +147,14 @@ describe('locateImages', () => {
     expect(locateImages(images, track, [outingGeom]).filter(Boolean)).toHaveLength(2);
     expect(locateImages(images, track, [outingGeom], {}, { minFit: CONFIDENT_FIT })).toEqual([null, null, null, null]);
   });
+
+  it('does not guess the shift of a camera whose images fit the track with any of many shifts', () => {
+    // camera glasses stamping their images when synced to the phone, hours after the track ended
+    const images = [5.5, 6, 7, 8].map((hours) => ({
+      geom: outingGeom,
+      date_time: iso(T0 + hours * 3600),
+      camera_name: 'glasses',
+    }));
+    expect(locateImages(images, track, [outingGeom])).toEqual([null, null, null, null]);
+  });
 });
