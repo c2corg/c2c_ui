@@ -1,6 +1,8 @@
 import { flushPromises, mount } from '@vue/test-utils';
 import { register } from 'swiper/element';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { createApp } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
 
 import ImageViewer from './ImageViewer.vue';
 
@@ -29,6 +31,19 @@ const config = vi.hoisted(() => ({
 }));
 vi.mock('@/js/config', () => ({ default: config }));
 
+// one router for all the tests: a router listens to the history for good
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [{ path: '/:path(.*)*', component: { template: '<div />' } }],
+});
+// the router resets itself when the last app using it is unmounted: an app keeps it for all the tests
+createApp({ render: () => null })
+  .use(router)
+  .mount(document.createElement('div'));
+
+// the popstate of history.back() comes in a task of its own
+const popstate = () => new Promise((resolve) => window.addEventListener('popstate', resolve, { once: true }));
+
 const image = (id: number) => ({
   document_id: id,
   filename: `1588000000_${id}.jpg`,
@@ -45,10 +60,15 @@ type SwiperElement = HTMLElement & {
 };
 
 // shows image 2 after image 1 was pushed, as the pages do through $imageViewer
+// a page of its own for each test
+let page = 0;
+
 async function showViewer({ isMobile = false, shown = image(2) as ViewerImage } = {}) {
+  await router.push(`/articles/${++page}`);
   const wrapper = mount(ImageViewer, {
     attachTo: document.body,
     global: {
+      plugins: [router],
       stubs: {
         DocumentLink: true,
         EditLink: true,
@@ -92,10 +112,86 @@ describe('ImageViewer', () => {
     const { wrapper } = await showViewer();
     expect(wrapper.find('.image-viewer').exists()).toBe(true);
 
+    const back = popstate();
     window.dispatchEvent(new WheelEvent('wheel'));
+    await back;
     await flushPromises();
 
     expect(wrapper.find('.image-viewer').exists()).toBe(false);
+    wrapper.unmount();
+  });
+
+  it('closes on back, and the page stays', async () => {
+    const { wrapper } = await showViewer();
+    const historyLength = history.length;
+    const afterEach = vi.fn();
+    const removeAfterEach = router.afterEach(afterEach);
+
+    history.back();
+    await popstate();
+    await flushPromises();
+
+    expect(wrapper.find('.image-viewer').exists()).toBe(false);
+    expect(router.currentRoute.value.fullPath).toBe(`/articles/${page}`);
+    expect(history.length).toBe(historyLength);
+    // the router took no navigation from it
+    expect(afterEach).not.toHaveBeenCalled();
+    expect(router.listening).toBe(true);
+    removeAfterEach();
+    wrapper.unmount();
+  });
+
+  it('leaves its history entry when closed by Escape, and the page stays', async () => {
+    const { wrapper } = await showViewer();
+    expect(history.state.c2cImageViewer).toBe(true);
+    const afterEach = vi.fn();
+    const removeAfterEach = router.afterEach(afterEach);
+
+    const back = popstate();
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    await back;
+    await flushPromises();
+
+    expect(wrapper.find('.image-viewer').exists()).toBe(false);
+    expect(history.state.c2cImageViewer).toBeUndefined();
+    expect(router.currentRoute.value.fullPath).toBe(`/articles/${page}`);
+    expect(afterEach).not.toHaveBeenCalled();
+    expect(router.listening).toBe(true);
+    removeAfterEach();
+    wrapper.unmount();
+  });
+
+  it('goes back to the page on forward to the entry of a closed viewer', async () => {
+    const { wrapper } = await showViewer();
+    const back = popstate();
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    await back;
+    await flushPromises();
+
+    // forward to the viewer's entry, then the router back to the page's one
+    const forwardAndBack = popstate().then(popstate);
+    history.forward();
+    await forwardAndBack;
+    await flushPromises();
+
+    expect(history.state.c2cImageViewer).toBeUndefined();
+    expect(router.currentRoute.value.fullPath).toBe(`/articles/${page}`);
+    expect(wrapper.find('.image-viewer').exists()).toBe(false);
+    wrapper.unmount();
+  });
+
+  it('closes on a link, whose page takes the place of its history entry', async () => {
+    const { wrapper } = await showViewer();
+    const historyLength = history.length;
+
+    await router.push('/images/2');
+    await flushPromises();
+
+    expect(wrapper.find('.image-viewer').exists()).toBe(false);
+    expect(router.currentRoute.value.fullPath).toBe('/images/2');
+    expect(history.length).toBe(historyLength);
+    expect(history.state.c2cImageViewer).toBeUndefined();
+    expect(router.listening).toBe(true);
     wrapper.unmount();
   });
 
