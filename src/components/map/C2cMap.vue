@@ -2318,6 +2318,19 @@ watch(
   { deep: 1 }
 );
 
+// the images of an outing added or located (on its GPS track) after the map was drawn
+watch(
+  () =>
+    (props.documents ?? [])
+      .flatMap((document) => (document.type === 'o' ? (document.associations?.images ?? []) : []))
+      .map((image) => image.geometry?.geom)
+      .join('|'),
+  () => {
+    drawDocumentMarkers();
+    if (is3d.value) redraw3d();
+  }
+);
+
 // another search (other filters, another page), even one that comes back to the first: its results do not move the map,
 // how the map is shown (its layers) excepted
 watch(

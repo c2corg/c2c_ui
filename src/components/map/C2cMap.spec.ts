@@ -1,6 +1,7 @@
 import { flushPromises } from '@vue/test-utils';
 import type { FeatureCollection } from 'geojson';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { reactive } from 'vue';
 import type { LocationQueryRaw, Router } from 'vue-router';
 
 import C2cMap from './C2cMap.vue';
@@ -84,6 +85,22 @@ describe('C2cMap', () => {
       circleStroke: undefined,
       size: '11',
     });
+  });
+  it('draws the images of an outing once they are located away from it', async () => {
+    const outing = reactive({
+      document_id: 2,
+      type: 'o',
+      geometry: { geom: point(6.8, 45.9) },
+      associations: { images: [{ document_id: 5, type: 'i', geometry: { geom: null as string | null } }] },
+    });
+    const { wrapper, map } = await mountMap({ documents: [outing] });
+    expect(drawnKeys(map)).toEqual(['documents:o:2:point']);
+
+    outing.associations.images[0]!.geometry = { geom: point(6.84, 45.9) };
+    await flushPromises();
+
+    expect(drawnKeys(map)).toEqual(['documents:o:2:point', 'images:i:5:point']);
+    wrapper.unmount();
   });
   it('draws the documents, their waypoints, and the images of an outing away from it', async () => {
     const outing = {
