@@ -151,7 +151,9 @@
           :routes-filters="overlayFilters.route"
           sync-url
           @highlight-document="highlightedDocument = $event"
-          :show-filter-control="displayMode !== 'map' || $screen.isMobile"
+          :show-filter-control="showResults"
+          :filter-by-default="mapVisible"
+          :force-filter="!showResults"
           show-center-on-geolocation
           show-recenter-on
           show3d
@@ -212,6 +214,8 @@ const queryHasTags = ref(false);
 
 const showMap = computed(() => ['both', 'map'].includes(displayMode.value));
 const showResults = computed(() => ['result', 'both'].includes(displayMode.value));
+// in the phone layout, the map is hidden under the results when both are shown
+const mapVisible = computed(() => displayMode.value === 'map' || (displayMode.value === 'both' && !$screen.isMobile));
 
 // on desktop, the results and the map share the width as the user drags it, one width for the list and one for the
 // cards, for all the document types

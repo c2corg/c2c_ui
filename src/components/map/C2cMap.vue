@@ -154,6 +154,7 @@
         class="switch is-rtl is-rounded is-info is-small"
         type="checkbox"
         v-model="filterDocumentsWithMap"
+        @change="automaticBbox = false"
       />
       <label
         for="filter-documents-with-map"
@@ -454,7 +455,27 @@ const props = defineProps({
     type: Array as PropType<C2cDocument[]>,
     default: null,
   },
+  // the markers of the documents smaller, their icon alone: for many of them
+  compactMarkers: {
+    type: Boolean,
+    default: false,
+  },
+  // off: the waypoints in the colour of their category, not all in the one of the site
+  monochromeMarkers: {
+    type: Boolean,
+    default: true,
+  },
   showFilterControl: {
+    type: Boolean,
+    default: false,
+  },
+  // the documents are filtered with the extent of the map when it opens, though its link has no bbox
+  filterByDefault: {
+    type: Boolean,
+    default: false,
+  },
+  // the results are not shown, only the map: it always filters them
+  forceFilter: {
     type: Boolean,
     default: false,
   },
@@ -548,6 +569,8 @@ const emit = defineEmits([
   'pin-to-top-clicked',
   'stop-clicked',
   'waypoint-clicked',
+  // the zoom of the map, when it is loaded and after each move
+  'zoom',
 ]);
 
 const route = useRoute();
@@ -660,7 +683,13 @@ const showLayerSwitcher = ref(false);
 const isFullscreen = ref(false);
 const bearing = ref(0);
 const attributionCollapsed = ref(true);
-const filterDocumentsWithMap = ref(Boolean(route.query.bbox));
+const filterDocumentsWithMap = ref(Boolean(route.query.bbox) || props.filterByDefault || props.forceFilter);
+// until the user moves the map or turns the filter on or off, the extent it writes replaces the page: it is not one more
+// step of the history (back would come to the page without it, which would write it again)
+let automaticBbox = true;
+// when the map last wrote its extent, and how long after it a move is a new step of the history (ms)
+let lastBboxWrite = 0;
+const BBOX_HISTORY_PAUSE = 30_000;
 // not in full screen, where the results are not shown
 const filterControlShown = computed(() => props.showFilterControl && !isFullscreen.value);
 const recenterPropositions = ref<{ data?: { features: PhotonFeature[] } | null } | null>(null);
@@ -790,7 +819,10 @@ async function renderDocuments() {
     const highlight = feature.key === hoveredKey.value || feature.key === stopKey.value;
     // a stop is named after its stop area
     const name = feature.key === stopKey.value ? (feature.document.stoparea_name as string) : title(feature.document);
-    const { style, label } = featureStyle(feature, name, highlight);
+    const { style, label } = featureStyle(feature, name, highlight, {
+      compact: props.compactMarkers,
+      monochrome: props.monochromeMarkers,
+    });
     if (style) geoJson.push(toGeoJson(feature, style));
     if (label) labels.push({ label, at: labelAnchor(feature.geometry) });
   }
@@ -1030,9 +1062,15 @@ function sendBoundsToUrl() {
   const query: LocationQueryRaw = { ...route.query };
   const extent = filterDocumentsWithMap.value ? rounded(filterExtent()) : null;
   showFilterOutline(is3d.value ? extent : null);
+  // on without a bbox in the link: the map is placed on the first results before it filters them
+  if (extent && fitOnFirstDocuments) return;
   query.bbox = extent?.join(',');
   if (query.bbox !== route.query.bbox && !String(route.name).endsWith('-print')) {
-    router.push({ query });
+    // moves close to each other are one step of the history: back goes to where the map was before them
+    const now = Date.now();
+    if (automaticBbox || now - lastBboxWrite < BBOX_HISTORY_PAUSE) router.replace({ query });
+    else router.push({ query });
+    lastBboxWrite = now;
   }
 }
 
@@ -2288,6 +2326,13 @@ watch(
 );
 
 watch(filterDocumentsWithMap, () => sendBoundsToUrl());
+watch(() => props.monochromeMarkers, renderDocuments);
+watch(
+  () => props.forceFilter,
+  (force) => {
+    if (force) filterDocumentsWithMap.value = true;
+  }
+);
 
 // what the user changes is kept on this device, for the next document pages: only that setting, not the others the page
 // shows (those of its link: a link someone shared does not change the settings of who opens it). The base layer (its
@@ -2421,11 +2466,13 @@ onMounted(() => {
     loadProtectionAreas();
     // the overlays asked for by the URL
     updateDensityOverlays();
+    emit('zoom', created.getZoom());
   });
   created.on('moveend', () => {
     updateViewPlace();
     // in 3D, the box of what is seen, not too far from the center
     sendBoundsToUrl();
+    emit('zoom', created.getZoom());
     if (is3d.value) return;
     updateEditMapLink();
     emitMoveEvent();
@@ -2441,7 +2488,10 @@ onMounted(() => {
   // moved by the user (a move by code has no original event, the place search and the geolocation say it themselves):
   // the results that come later do not move it back
   created.on('movestart', (event) => {
-    if (event.originalEvent) fitOnFirstDocuments = false;
+    if (event.originalEvent) {
+      fitOnFirstDocuments = false;
+      automaticBbox = false;
+    }
   });
   created.on('click', onMapClick);
   created.on('dblclick', () => clearTimeout(tapTimeout));

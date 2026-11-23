@@ -35,7 +35,7 @@
           name: 'outings',
           query: {
             qa: 'draft,great',
-            bbox: '-431698,3115462,1931123,8442818',
+            bbox: EUROPE_BBOX,
             offset: 0,
             limit: 100,
           },
@@ -52,6 +52,7 @@ import { computed, ref, watch } from 'vue';
 
 import DashboardOutingLink from './DashboardOutingLink.vue';
 
+import { EUROPE_BBOX } from '@/components/map/default-extents';
 import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';

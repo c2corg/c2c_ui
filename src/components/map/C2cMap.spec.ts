@@ -64,6 +64,27 @@ afterEach(() => {
 });
 
 describe('C2cMap', () => {
+  it('draws compact markers: smaller, the icon in white on a disc of its colour', async () => {
+    const shown = async (compactMarkers: boolean) => {
+      const { wrapper, map } = await mountMap({ documents: [waypoint(3, 'summit', 6.8)], compactMarkers });
+      const { circleRadius, circleFill, circleStroke, icon } = drawn(map)[0].properties!;
+      wrapper.unmount();
+      return { circleRadius, circleFill, circleStroke, size: String(icon).split(':')[1] };
+    };
+
+    expect(await shown(false)).toEqual({
+      circleRadius: 14,
+      circleFill: 'rgba(255, 255, 255, 0.5)',
+      circleStroke: '#ddd',
+      size: '20',
+    });
+    expect(await shown(true)).toEqual({
+      circleRadius: 9.45,
+      circleFill: '#F93',
+      circleStroke: undefined,
+      size: '11',
+    });
+  });
   it('draws the documents, their waypoints, and the images of an outing away from it', async () => {
     const outing = {
       document_id: 2,
@@ -693,6 +714,132 @@ describe('C2cMap', () => {
     });
   });
 
+  it('draws the waypoints in the colour of their category when not monochrome', async () => {
+    const access = (rating: string) => ({ ...waypoint(5, 'access', 6.84), public_transportation_rating: rating });
+    const documents = [
+      waypoint(3, 'summit', 6.8),
+      waypoint(4, 'hut', 6.82),
+      access('good service'),
+      waypoint(6, 'webcam', 6.86),
+    ];
+    const fills = (map: FakeMap) => drawn(map).map((feature) => feature.properties!.circleFill);
+    const { wrapper, map } = await mountMap({ documents, compactMarkers: true });
+    expect(new Set(fills(map))).toEqual(new Set(['#F93', '#4baf50']));
+
+    await wrapper.setProps({ monochromeMarkers: false });
+    await flushPromises();
+    expect(fills(map)).toEqual(['#008000', '#c99700', '#00008b', '#444444']);
+    wrapper.unmount();
+  });
+
+  it('draws the places to sleep by what they offer when not monochrome', async () => {
+    const hut = (id: number, category?: string) => ({ ...waypoint(id, 'hut', 6.8 + id / 100), hut_category: category });
+    const documents = [
+      hut(1, 'wardened'),
+      hut(2, 'no_warden'),
+      hut(3, 'key_needed'),
+      hut(4, 'shelter'),
+      waypoint(5, 'shelter', 6.85),
+      waypoint(6, 'gite', 6.86),
+      hut(7),
+    ];
+    const { wrapper, map } = await mountMap({ documents, compactMarkers: true, monochromeMarkers: false });
+    const looks = drawn(map).map((feature) => [
+      feature.properties!.circleFill,
+      /data-icon="([^"]+)"/.exec(String(feature.properties!.icon))![1],
+    ]);
+    expect(looks).toEqual([
+      ['#d32f2f', 'hut'],
+      ['#d32f2f', 'shelter'],
+      ['#c99700', 'key'],
+      ['#c99700', 'angle-up'],
+      ['#c99700', 'angle-up'],
+      ['#d32f2f', 'house-flag'],
+      // without its category (an older API): the colour of the places to sleep
+      ['#c99700', 'hut'],
+    ]);
+    wrapper.unmount();
+  });
+
+  it('tells its zoom when it is loaded and after each move', async () => {
+    const { wrapper, map } = await mountMap();
+    map.zoom = 12.5;
+    map.fire('moveend');
+    expect(wrapper.emitted('zoom')).toEqual([[expect.any(Number)], [12.5]]);
+    wrapper.unmount();
+  });
+
+  describe('the filter on the extent of the map', () => {
+    const queryOf = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) =>
+      (wrapper.vm as unknown as { $route: { query: Record<string, unknown> } }).$route.query;
+
+    it('on by default: placed on the first results, then filters them in place of the page', async () => {
+      const { wrapper, map } = await mountMap({ documents: [], filterByDefault: true }, '/routes?act=hiking');
+      const push = vi.spyOn(wrapper.vm.$router, 'push');
+      const replace = vi.spyOn(wrapper.vm.$router, 'replace');
+
+      // still on the default extent, waiting for the results
+      map.fire('moveend');
+      await flushPromises();
+      expect(queryOf(wrapper).bbox).toBeUndefined();
+
+      await wrapper.setProps({ documents: [route] });
+      map.fire('moveend');
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({ act: 'hiking', bbox: expect.stringMatching(/^-?\d+(,-?\d+){3}$/) });
+      expect(replace).toHaveBeenCalled();
+      expect(push).not.toHaveBeenCalled();
+
+      // moved by the user a moment later: one more step of the history
+      vi.spyOn(Date, 'now').mockReturnValue(Date.now() + 31_000);
+      map.fire('movestart', { originalEvent: {} });
+      map.extent = [6, 45, 7, 46];
+      map.fire('moveend');
+      await flushPromises();
+      expect(push).toHaveBeenCalledWith({ query: { act: 'hiking', bbox: expect.any(String) } });
+      wrapper.unmount();
+    });
+
+    it('makes one step of the history of the moves close to each other', async () => {
+      let now = 1_000_000;
+      vi.spyOn(Date, 'now').mockImplementation(() => now);
+      const { wrapper, map } = await mountMap({ documents: [route] }, '/routes?bbox=1,2,3,4');
+      const push = vi.spyOn(wrapper.vm.$router, 'push');
+      const replace = vi.spyOn(wrapper.vm.$router, 'replace');
+      const move = async (extent: [number, number, number, number], after: number) => {
+        now += after;
+        map.fire('movestart', { originalEvent: {} });
+        map.extent = extent;
+        map.fire('moveend');
+        await flushPromises();
+      };
+
+      await move([6, 45, 7, 46], 0);
+      await move([6.1, 45, 7.1, 46], 20_000);
+      await move([6.2, 45, 7.2, 46], 20_000);
+      expect(push).toHaveBeenCalledTimes(1);
+      expect(replace).toHaveBeenCalledTimes(2);
+
+      // after a pause
+      await move([6.3, 45, 7.3, 46], 31_000);
+      expect(push).toHaveBeenCalledTimes(2);
+      wrapper.unmount();
+    });
+
+    it('turned on when the results are hidden', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route], showFilterControl: true }, '/routes');
+      map.fire('moveend');
+      await flushPromises();
+      expect(queryOf(wrapper).bbox).toBeUndefined();
+
+      await wrapper.setProps({ forceFilter: true });
+      await flushPromises();
+      expect(queryOf(wrapper).bbox).toEqual(expect.any(String));
+      expect((wrapper.find('#filter-documents-with-map').element as HTMLInputElement).checked).toBe(true);
+      wrapper.unmount();
+    });
+  });
+
   describe('settings in the URL of a list (syncUrl)', () => {
     const queryOf = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) =>
       (wrapper.vm as unknown as { $route: { query: unknown } }).$route.query;
@@ -753,6 +900,29 @@ describe('C2cMap', () => {
       expect(map.layout['IGN raster (es)'].visibility).not.toBe('visible');
       expect(map.layout['SwissTopo Slopes'].visibility).toBe('visible');
       expect(queryOf(wrapper)).toEqual({ act: 'hiking', slopes: 'swiss' });
+      wrapper.unmount();
+    });
+
+    it('turns the overlays on again when the "Map" menu link is followed after the user turned them off', async () => {
+      const density = { data: { buckets: [{ x: 750000, y: 5760000, count: 3 }] } } as never;
+      vi.spyOn(c2c, 'getOutingsHeatmap').mockResolvedValue(density);
+      vi.spyOn(c2c, 'getRoutesHeatmap').mockResolvedValue(density);
+      const { wrapper, map } = await mountMap({ syncUrl: true }, '/waypoints?overlays=outing,route');
+      expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+      expect(map.layout['heatmap-route'].visibility).toBe('visible');
+
+      await wrapper
+        .findAll('.layer-button')
+        .find((button) => button.text() === 'Outings')!
+        .trigger('click');
+      await flushPromises();
+      expect(map.layout['heatmap-outing'].visibility).toBe('none');
+      expect(queryOf(wrapper)).toEqual({ overlays: 'route' });
+
+      await (wrapper.vm as unknown as { $router: Router }).$router.push('/waypoints?overlays=outing,route');
+      await flushPromises();
+      expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+      expect(map.layout['heatmap-route'].visibility).toBe('visible');
       wrapper.unmount();
     });
   });
@@ -1379,14 +1549,15 @@ describe('C2cMap', () => {
         });
         await wrapper.find('#filter-documents-with-map').setValue(true);
         await open3d(wrapper);
-        const push = vi.spyOn(wrapper.vm.$router, 'push');
+        // right after the filter was turned on: the same step of the history
+        const replace = vi.spyOn(wrapper.vm.$router, 'replace');
 
         expect(wrapper.find('.ol-control-use-map-as-filter').isVisible()).toBe(true);
         map.extent = [6, 45, 7, 46];
         map.fire('moveend');
         await flushPromises();
 
-        expect(push).toHaveBeenCalledWith({ query: { bbox: expect.stringMatching(/^\d+(,\d+){3}$/) } });
+        expect(replace).toHaveBeenCalledWith({ query: { bbox: expect.stringMatching(/^\d+(,\d+){3}$/) } });
         wrapper.unmount();
       });
 
@@ -1400,10 +1571,11 @@ describe('C2cMap', () => {
           lng: ((x - 500) / 1000) * (1 + (500 - y) / 500),
           lat: (500 - y) / 100,
         });
-        const push = vi.spyOn(wrapper.vm.$router, 'push');
+        // right after the filter was turned on: the same step of the history
+        const replace = vi.spyOn(wrapper.vm.$router, 'replace');
         const sent = () =>
           extentToLonLat(
-            String((push.mock.lastCall![0] as { query: LocationQueryRaw }).query.bbox)
+            String((replace.mock.lastCall![0] as { query: LocationQueryRaw }).query.bbox)
               .split(',')
               .map(Number)
           );

@@ -16,6 +16,7 @@ import WaypointView from './WaypointView.vue';
 import XreportView from './XreportView.vue';
 
 import { ApiData } from '@/js/apis/BaseApi';
+import { documentPathPrefix } from '@/js/document-paths';
 
 const api = vi.hoisted(() => ({ getCooked: vi.fn() }));
 
@@ -92,9 +93,9 @@ describe('document views', () => {
     api.getCooked.mockImplementation(() => response(documentOf(type)));
     const router = createRouter({
       history: createMemoryHistory(),
-      routes: [{ path: `/${type}s/:id(\\d+)/:lang?/:title?`, name: type, component: Empty }],
+      routes: [{ path: `${documentPathPrefix(type)}/:id(\\d+)/:lang?/:title?`, name: type, component: Empty }],
     });
-    await router.push(`/${type}s/12/fr`);
+    await router.push(`${documentPathPrefix(type)}/12/fr`);
     const errors = vi.spyOn(console, 'warn');
 
     const wrapper = shallowMount(view as Component, {

@@ -10,6 +10,7 @@ import {
 import { DISPLAY_URL_KEYS } from '@/components/map/map-url-keys';
 import config from '@/js/config';
 import constants, { type DocumentDefinition } from '@/js/constants';
+import { documentPathPrefix } from '@/js/document-paths';
 import { once } from '@/js/event-bus';
 import { forgetReturnUrl, relayTarget } from '@/js/trackers-oauth-relay';
 import NotFoundView from '@/views/static-views/NotFoundView.vue';
@@ -28,6 +29,7 @@ const WaypointView = () => import('@/views/document/WaypointView.vue');
 const XreportView = () => import('@/views/document/XreportView.vue');
 const DocumentsPrintingView = () => import('@/views/documents/DocumentsPrintingView.vue');
 const DocumentsView = () => import('@/views/documents/DocumentsView.vue');
+const WaypointsMapView = () => import('@/views/documents/WaypointsMapView.vue');
 const HomeView = () => import('@/views/portals/HomeView.vue');
 const ItinevertView = () => import('@/views/portals/ItinevertView.vue');
 const SophiePictureContestView = () => import('@/views/portals/SophiePictureContestView.vue');
@@ -65,6 +67,9 @@ const routes: RouteRecordRaw[] = [
   { path: '/', name: 'home', component: HomeView },
   { path: '/topoguide', name: 'topoguide', component: TopoguideView },
   { path: '/itinevert', name: 'itinevert', component: ItinevertView },
+  { path: '/map', name: 'waypoints-map', component: WaypointsMapView },
+  // the topographic maps were at /maps (links of the API, of other sites)
+  { path: '/maps/:rest(.*)*', redirect: (to) => '/papermaps' + to.fullPath.slice('/maps'.length) },
   { path: '/serac', name: 'serac', component: SeracView },
   { path: '/whatsnew', name: 'whatsnew', component: WhatsNewView },
   { path: '/associations-history', name: 'associations-history', component: AssociationsHistoryView },
@@ -108,52 +113,53 @@ const routes: RouteRecordRaw[] = [
 type Component = RouteComponent | (() => Promise<RouteComponent>);
 
 const addDocumentTypeView = function (def: DocumentDefinition, viewComponent: Component, editionComponent: Component) {
+  const prefix = documentPathPrefix(def.documentType);
   routes.push({
-    path: '/' + def.documentType + 's',
+    path: prefix,
     name: def.documentType + 's',
     component: DocumentsView,
   });
 
   routes.push({
-    path: '/' + def.documentType + 's/print',
+    path: prefix + '/print',
     name: def.documentType + 's-print',
     component: DocumentsPrintingView,
   });
 
   routes.push({
-    path: '/' + def.documentType + 's/:id(\\d+)/:lang?/:title?',
+    path: prefix + '/:id(\\d+)/:lang?/:title?',
     name: def.documentType,
     component: viewComponent,
   });
 
   routes.push({
-    path: '/' + def.documentType + 's/version/:id(\\d+)/:lang/:version',
+    path: prefix + '/version/:id(\\d+)/:lang/:version',
     name: def.documentType + '-version',
     component: viewComponent,
   });
 
   routes.push({
-    path: '/' + def.documentType + 's/history/:id(\\d+)/:lang',
+    path: prefix + '/history/:id(\\d+)/:lang',
     name: def.documentType + '-history',
     component: HistoryView,
   });
 
   routes.push({
-    path: '/' + def.documentType + 's/edit/:id(\\d+)/:lang',
+    path: prefix + '/edit/:id(\\d+)/:lang',
     name: def.documentType + '-edit',
     component: editionComponent,
     meta: { requiresAuth: true },
   });
 
   routes.push({
-    path: '/' + def.documentType + 's/add/:lang',
+    path: prefix + '/add/:lang',
     name: def.documentType + '-add',
     component: editionComponent,
     meta: { requiresAuth: true },
   });
 
   routes.push({
-    path: '/' + def.documentType + 's/diff/:id(\\d+)/:lang/:versionFrom/:versionTo',
+    path: prefix + '/diff/:id(\\d+)/:lang/:versionFrom/:versionTo',
     name: def.documentType + '-diff',
     component: DiffView,
   });

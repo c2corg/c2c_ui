@@ -11,6 +11,7 @@ import IconYeti from '@/components/generics/icons/IconYeti.vue';
 import IconArticle from '@/components/generics/icons/document/IconArticle.vue';
 import IconOuting from '@/components/generics/icons/document/IconOuting.vue';
 import IconXreport from '@/components/generics/icons/document/IconXreport.vue';
+import { EUROPE_BBOX } from '@/components/map/default-extents';
 import config from '@/js/config';
 import { uppercaseFirstLetter } from '@/js/vue-plugins/filters';
 
@@ -49,7 +50,7 @@ export function useMainMenuItems() {
     {
       key: 'outings',
       label: label($gettext('outings')),
-      to: { name: 'outings', query: { qa: 'draft,great', bbox: '-431698,3115462,1931123,8442818' } },
+      to: { name: 'outings', query: { qa: 'draft,great', bbox: EUROPE_BBOX } },
       match: ['outings', 'outing'],
       iconComponent: IconOuting,
     },
@@ -90,6 +91,19 @@ export function useMainMenuItems() {
       match: ['yeti'],
       iconComponent: IconYeti,
     },
+    // the waypoints, on the map with the density of the outings and of the routes (the overlays).
+    // Not yet on camptocamp.org pending community testing.
+    ...(config.isBackendSelectable || config.urls.name !== 'prod'
+      ? [
+          {
+            key: 'map',
+            label: label($gettext('map')),
+            to: { name: 'waypoints-map', query: { overlays: 'outing,route' } },
+            match: ['waypoints-map'],
+            icon: 'map',
+          },
+        ]
+      : []),
     // for the moderators of the topoguide or of the forum
     ...(canModerate.value
       ? [

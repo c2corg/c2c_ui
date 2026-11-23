@@ -13,6 +13,7 @@ import { useHead, type HeadTag } from '@/js/composables/head';
 import { useViewMode } from '@/js/composables/view-mode';
 import constants from '@/js/constants';
 import cooker from '@/js/cooker';
+import { documentPathPrefix } from '@/js/document-paths';
 import bus from '@/js/event-bus';
 import { getImageUrl, type Image } from '@/js/image-urls';
 import { replaceRoute } from '@/js/replace-route';
@@ -115,7 +116,7 @@ export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { dr
     // and clean
     title = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-    return `/${documentType.value}s/${documentId.value}/${lang.value}/${title}`;
+    return `${documentPathPrefix(documentType.value)}/${documentId.value}/${lang.value}/${title}`;
   }
 
   function getCurrentPath() {
@@ -278,7 +279,11 @@ export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { dr
     let meta: HeadTag[] = [
       { p: 'og:title', c: title, id: 'meta-og-title' },
       { p: 'og:type', c: documentType.value === 'article' ? 'article' : 'website', id: 'meta-og-type' },
-      { p: 'og:url', c: `https://www.camptocamp.org/${documentType.value}s/${documentId.value}`, id: 'meta-og-url' },
+      {
+        p: 'og:url',
+        c: `https://www.camptocamp.org${documentPathPrefix(documentType.value)}/${documentId.value}`,
+        id: 'meta-og-url',
+      },
       { p: 'og:locale', c: globals.$language.getIsoLanguageTerritory(lang.value), id: 'meta-og-locale' },
     ];
     const docLocale = globals.$documentUtils.getLocaleSmart(doc, lang.value);
@@ -304,7 +309,7 @@ export function useDocumentView<D extends C2cDocument = C2cDocument>(props: { dr
     if (isVersionView.value || isDraftView.value) {
       return [];
     }
-    const path = `https://www.camptocamp.org/${documentType.value}s/${documentId.value}`;
+    const path = `https://www.camptocamp.org${documentPathPrefix(documentType.value)}/${documentId.value}`;
     const langs = ((doc.available_langs ?? []) as string[]).filter((lang) => constants.langs.includes(lang));
     if (!langs.length) {
       return [];
