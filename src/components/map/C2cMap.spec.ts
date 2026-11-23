@@ -1529,6 +1529,24 @@ describe('C2cMap', () => {
       wrapper.unmount();
     });
 
+    it('keeps the waypoints of the routes when the images of the outing are located', async () => {
+      vi.spyOn(c2c.route as DocumentService, 'get').mockReturnValue(
+        Promise.resolve({ data: { associations: { waypoints: [waypoint(11, 'summit', 6.285)] } } }) as never
+      );
+      const located = reactive({ ...outing, associations: { ...outing.associations, images: [] as unknown[] } });
+      const { wrapper } = await mountMap({ documents: [located], show3d: true });
+      await open3d(wrapper);
+      expect(shownMarkers()).toHaveLength(1);
+
+      located.associations.images.push({ document_id: 5, type: 'i', geometry: { geom: point(6.29, 45.9) } });
+      await flushPromises();
+
+      expect(shownMarkers().map((marker) => marker.lngLat![0])).toEqual(
+        expect.arrayContaining([expect.closeTo(6.285, 6)])
+      );
+      wrapper.unmount();
+    });
+
     it('drops the waypoints read for the documents it no longer shows', async () => {
       let answer: (value: unknown) => void = () => {};
       vi.spyOn(c2c.route as DocumentService, 'get').mockReturnValue(

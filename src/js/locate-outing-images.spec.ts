@@ -104,4 +104,18 @@ describe('locateOutingImages', () => {
     expect(getImage).toHaveBeenLastCalledWith(1, '');
     expect(saveImage).toHaveBeenCalledTimes(2);
   });
+
+  it('keeps an image located by someone else since it was read', async () => {
+    const plan = await planOutingImages(outing(), 'fr', user);
+    saveImage.mockRejectedValueOnce({ response: { status: 409 } });
+    getImage.mockResolvedValueOnce({ data: image(1, point(42), 7) });
+
+    expect(await applyPlan(plan, 'comment')).toEqual([]);
+    expect(saveImage).toHaveBeenCalledTimes(1);
+  });
+
+  it('tells when the history of the outing could not be read', async () => {
+    getHistory.mockRejectedValueOnce(new Error('network'));
+    expect((await planOutingImages(outing(), 'fr', user)).complete).toBe(false);
+  });
 });

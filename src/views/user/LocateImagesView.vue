@@ -67,7 +67,8 @@ useNoRobots();
 
 const { $gettext, $language, $user } = useGlobalProperties();
 const service = c2c.outing as DocumentService;
-const stored = getPreferences('LocateImagesView');
+// per user: the images another user may not edit are not located for them
+const stored = getPreferences(`LocateImagesView.${$user.id}`);
 
 const outings = ref<Outing[]>([]);
 const rows = ref<Row[]>([]);
@@ -92,6 +93,17 @@ async function scan() {
   scanning.value = true;
   scanned.value = nothingToLocate.value = failures.value = 0;
   rows.value = [];
+  try {
+    await scanOutings();
+  } catch {
+    // the list of the outings could not be read
+    failures.value++;
+  } finally {
+    scanning.value = false;
+  }
+}
+
+async function scanOutings() {
   const found = (await service.fullDownload({ u: String($user.id), trk: '1' })) as Outing[];
   outings.value = found.filter((outing) => outing.img_count);
   // one outing at a time: gentle with the API
@@ -110,7 +122,10 @@ async function scan() {
           rows.value.push({ outing, plan, status: 'planned' });
         } else {
           nothingToLocate.value++;
-          markDone(outing);
+          // some of its history unread: scanned again next time
+          if (plan.complete) {
+            markDone(outing);
+          }
         }
       } catch {
         failures.value++;
@@ -118,7 +133,6 @@ async function scan() {
     }
     scanned.value++;
   }
-  scanning.value = false;
 }
 
 const comment = () => $gettext('Location computed from the GPS track of the outing');
@@ -158,7 +172,7 @@ function scanAgain() {
   }
 }
 
-onMounted(() => void scan().catch(() => (scanning.value = false)));
+onMounted(() => void scan());
 onBeforeUnmount(() => (stopped = true));
 </script>
 

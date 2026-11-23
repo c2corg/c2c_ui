@@ -2185,6 +2185,8 @@ function redraw3d() {
   (map.getSource('flight-shadows') as GeoJSONSource).setData(EMPTY_COLLECTION);
   addMarkers(map, markers);
   showFlights(map, lines);
+  // removed with the others: read again (the version drops a former request still running)
+  void addRouteWaypoints(markers);
 }
 
 function open3d() {

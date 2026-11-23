@@ -27,12 +27,13 @@ const mountView = async () => {
 describe('LocateImagesView', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    window.localStorage.setItem('LocateImagesView.preferences', JSON.stringify({ done: { 4: '1:5' } }));
+    window.localStorage.setItem('LocateImagesView.7.preferences', JSON.stringify({ done: { 4: '1:5' } }));
     api.fullDownload.mockResolvedValue([outing(1, 3), outing(2, 2), outing(3, 0), outing(4, 5)]);
     api.get.mockImplementation(async (id: number) => ({ data: { document_id: id } }));
     api.plan.mockImplementation(async (document: { document_id: number }) => ({
       outing: document,
       changes: document.document_id === 1 ? [{}, {}] : [],
+      complete: true,
     }));
     api.apply.mockResolvedValue([]);
   });
@@ -45,7 +46,7 @@ describe('LocateImagesView', () => {
     expect(api.get.mock.calls.map(([id]) => id)).toEqual([1, 2]);
     expect(wrapper.findAll('.locate-row')).toHaveLength(1);
     expect(wrapper.find('.locate-row').text()).toContain('2 / 3');
-    expect(JSON.parse(window.localStorage.getItem('LocateImagesView.preferences')!).done).toEqual({
+    expect(JSON.parse(window.localStorage.getItem('LocateImagesView.7.preferences')!).done).toEqual({
       2: '1:2',
       4: '1:5',
     });
@@ -61,6 +62,23 @@ describe('LocateImagesView', () => {
     expect(api.apply).toHaveBeenCalledOnce();
     expect(api.get).not.toHaveBeenCalled();
     expect(wrapper.find('.locate-row button').exists()).toBe(false);
-    expect(JSON.parse(window.localStorage.getItem('LocateImagesView.preferences')!).done[1]).toBe('1:3');
+    expect(JSON.parse(window.localStorage.getItem('LocateImagesView.7.preferences')!).done[1]).toBe('1:3');
+  });
+
+  it('scans again an outing whose history could not be read', async () => {
+    api.plan.mockImplementation(async (document: unknown) => ({ outing: document, changes: [], complete: false }));
+    await mountView();
+
+    expect(JSON.parse(window.localStorage.getItem('LocateImagesView.7.preferences')!).done).toEqual({ 4: '1:5' });
+  });
+
+  it('can scan again when the list of the outings could not be read', async () => {
+    api.fullDownload.mockRejectedValueOnce(new Error('network'));
+    const wrapper = await mountView();
+    expect(wrapper.find('progress').exists()).toBe(false);
+
+    await wrapper.find('a').trigger('click');
+    await flushPromises();
+    expect(wrapper.findAll('.locate-row')).toHaveLength(1);
   });
 });
