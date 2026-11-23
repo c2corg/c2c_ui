@@ -1,8 +1,23 @@
+// A number as the UI language writes it: 4 808 (fr), 4,808 (en), 4.808 (de), 4808 (it: no separator for 4 digits).
+// Whole by default; a value that is not a number (a numeric string from an API is read) is given back as text
+export const formatNumber = (
+  value: number | string | null | undefined,
+  lang?: string | null,
+  options: Intl.NumberFormatOptions = { maximumFractionDigits: 0 }
+): string => {
+  if (value === null || value === undefined || value === '') {
+    return '';
+  }
+  const number = Number(value);
+  // Intl wants zh-CN, the UI language is zh_CN
+  return Number.isFinite(number)
+    ? new Intl.NumberFormat(lang?.replace('_', '-') ?? undefined, options).format(number)
+    : String(value);
+};
+
 // A length stored in metres, as shown on a document: metres under 1 km, one decimal under 10 km, whole km above
 export const formatLength = (metres: number, lang?: string | null): { value: string; unit: string } => {
-  // Intl wants zh-CN, the UI language is zh_CN
-  const format = (value: number, maximumFractionDigits: number) =>
-    new Intl.NumberFormat(lang?.replace('_', '-') ?? undefined, { maximumFractionDigits }).format(value);
+  const format = (value: number, maximumFractionDigits: number) => formatNumber(value, lang, { maximumFractionDigits });
 
   if (Math.abs(metres) < 1000) {
     return { value: format(Math.round(metres), 0), unit: 'm' };

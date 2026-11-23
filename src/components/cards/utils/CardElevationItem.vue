@@ -1,7 +1,7 @@
 <template>
   <span v-if="elevation" :title="$gettext('elevation_max')" class="is-nowrap">
     <fa-icon icon="sort-amount-up" class="card-icon" />
-    {{ elevation }}&nbsp;m
+    {{ $filters.number(elevation) }}&nbsp;m
   </span>
 </template>
 

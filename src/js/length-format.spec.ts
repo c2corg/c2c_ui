@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatLength, parseDecimal } from './length-format';
+import { formatLength, formatNumber, parseDecimal } from './length-format';
 
 describe('formatLength', () => {
   it('shows metres under 1 km', () => {
@@ -23,6 +23,28 @@ describe('formatLength', () => {
   it('uses the decimal separator of the language, zh_CN included', () => {
     expect(formatLength(4520, 'fr')).toEqual({ value: '4,5', unit: 'km' });
     expect(formatLength(4520, 'zh_CN')).toEqual({ value: '4.5', unit: 'km' });
+  });
+});
+
+describe('formatNumber', () => {
+  it('writes the thousands as the language does', () => {
+    expect(formatNumber(4808, 'fr')).toBe('4\u202f808');
+    expect(formatNumber(4808, 'en')).toBe('4,808');
+    expect(formatNumber(4808, 'de')).toBe('4.808');
+    expect(formatNumber(4808, 'it')).toBe('4808');
+    expect(formatNumber(12345, 'it')).toBe('12.345');
+  });
+
+  it('rounds to whole numbers unless told, and reads numeric strings', () => {
+    expect(formatNumber(2399.6, 'en')).toBe('2,400');
+    expect(formatNumber(1.5, 'fr', { minimumFractionDigits: 2 })).toBe('1,50');
+    expect(formatNumber('2400', 'de')).toBe('2.400');
+  });
+
+  it('gives back what is not a number, and nothing for no value', () => {
+    expect(formatNumber('treeline', 'fr')).toBe('treeline');
+    expect(formatNumber(null, 'fr')).toBe('');
+    expect(formatNumber(undefined, 'fr')).toBe('');
   });
 });
 

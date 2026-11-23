@@ -67,6 +67,7 @@ import { StackedHistogram } from './outings-stats';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
 import common from '@/js/constants/common.json';
+import { formatLength } from '@/js/length-format';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 // an outing of the list
@@ -148,13 +149,10 @@ const compareGlobalRatings = function (a: string, b: string) {
   return aIndex < bIndex ? -1 : aIndex > bIndex ? +1 : 0;
 };
 
+// 560 m, 4,5 km, 12 km
 const formatLengthInMeter = function (length: number) {
-  if (length < 1000) {
-    return `${length}\u00a0m`;
-  } else {
-    length = Math.round(length / 1000);
-    return `${length}\u00a0km`;
-  }
+  const { value, unit } = formatLength(length, $language?.current);
+  return `${value}\u00a0${unit}`;
 };
 
 const activitySplittedValue = function (outing: Outing, value: number | null | undefined) {
@@ -189,7 +187,7 @@ const props = defineProps({
 
 const route = useRoute();
 const router = useRouter();
-const { $gettext, $dateUtils } = useGlobalProperties();
+const { $gettext, $dateUtils, $language } = useGlobalProperties();
 
 // the elements of the graphs
 const graphs = {

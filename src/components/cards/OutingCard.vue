@@ -24,7 +24,7 @@
 
       <span v-if="document.height_diff_up" :title="$gettext('height_diff_up')">
         <icon-height-diff-up class="card-icon" />
-        {{ document.height_diff_up }}&nbsp;m
+        {{ $filters.number(document.height_diff_up) }}&nbsp;m
       </span>
       <span v-else />
     </card-row>

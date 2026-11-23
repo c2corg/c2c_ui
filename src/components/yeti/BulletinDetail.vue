@@ -103,7 +103,7 @@
             </thead>
             <tbody>
               <tr v-for="level of snowCover.levels" :key="level.elevation">
-                <td>{{ level.elevation }} m</td>
+                <td>{{ $filters.number(level.elevation) }}&nbsp;m</td>
                 <td>{{ level.north }}</td>
                 <td>{{ level.south }}</td>
               </tr>
@@ -111,7 +111,8 @@
           </table>
           <p v-if="snowCover?.limitNorth !== undefined" class="is-size-7">
             <span v-translate>Snow cover from:</span>
-            {{ snowCover.limitNorth }} m <span v-translate>(north)</span>, {{ snowCover.limitSouth }} m
+            {{ $filters.number(snowCover.limitNorth) }}&nbsp;m <span v-translate>(north)</span>,
+            {{ $filters.number(snowCover.limitSouth) }}&nbsp;m
             <span v-translate>(south)</span>
           </p>
         </details>
@@ -124,7 +125,9 @@
                 <th></th>
                 <th>
                   <span v-translate>Fresh snow in 24 h (cm)</span>
-                  <span v-if="meteoFrance.newSnow?.elevation">&nbsp;– {{ meteoFrance.newSnow.elevation }} m</span>
+                  <span v-if="meteoFrance.newSnow?.elevation"
+                    >&nbsp;– {{ $filters.number(meteoFrance.newSnow.elevation) }}&nbsp;m</span
+                  >
                 </th>
               </tr>
             </thead>
@@ -152,7 +155,7 @@
                 <tr>
                   <th></th>
                   <th v-for="(elevation, i) of windElevations" :key="i">
-                    <span v-translate>Wind</span> {{ elevation ? `${elevation} m` : '' }}
+                    <span v-translate>Wind</span> {{ elevation ? `${$filters.number(elevation)}\u00a0m` : '' }}
                   </th>
                   <th v-translate>0 °C isotherm</th>
                   <th v-translate>Rain-snow limit</th>
@@ -205,6 +208,7 @@ import DangerLevel from '@/components/yeti/map-layers/DangerLevel.vue';
 import type { SelectedBulletin } from '@/components/yeti/yetix-types';
 import avalancheBulletins, { type AvalancheBulletin, type Elevation } from '@/js/apis/avalanche-bulletin-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { formatNumber } from '@/js/length-format';
 
 const props = defineProps({
   selected: {
@@ -290,7 +294,8 @@ function problemName(type: string) {
 
 // an elevation band of a problem: '2200' (m) or 'treeline'
 function elevationText(elevation?: Elevation) {
-  const bound = (value: string) => (value === 'treeline' ? $gettext('treeline') : `${value} m`);
+  const bound = (value: string) =>
+    value === 'treeline' ? $gettext('treeline') : `${formatNumber(value, $language.current)}\u00a0m`;
   if (elevation?.lowerBound && elevation.upperBound) {
     return `${bound(elevation.lowerBound)} – ${bound(elevation.upperBound)}`;
   }
@@ -321,7 +326,7 @@ function formatDate(date?: string, format = 'DD/MM/YYYY HH:mm') {
 }
 
 function meters(value?: number) {
-  return value === undefined ? '' : `${value} m`;
+  return value === undefined ? '' : `${formatNumber(value, $language.current)}\u00a0m`;
 }
 
 // the days after the publication are forecasts, the others observations

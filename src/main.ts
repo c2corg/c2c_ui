@@ -49,7 +49,7 @@ app.use(helperWindow); // vm.$helper property
 app.use(imageViewer);
 app.use(globalComponents); // Components available everywhere
 app.use(screen); // screen reactives properties
-app.use(filters); // $filters.uppercaseFirstLetter(), $filters.stripMarkdown()
+app.use(filters); // $filters.uppercaseFirstLetter(), $filters.stripMarkdown(), $filters.number(), $filters.length()
 app.use(user); // vm.$user property
 
 // installing the router starts the first navigation: guards first

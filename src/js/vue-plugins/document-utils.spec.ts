@@ -137,9 +137,11 @@ describe('$documentUtils', () => {
 
   it('formats lengths and height differences', () => {
     const utils = install();
-    expect(utils.lengthWithUnit(800)).toBe('800&nbsp;[meters]');
-    expect(utils.lengthWithUnit(12345)).toBe('12.3&nbsp;[kilometers]');
-    expect(utils.heightDiffUpWithUnit(1200)).toBe('1200&nbsp;[meters]');
+    // the same unit symbols in every language, the numbers as the language writes them
+    expect(utils.lengthWithUnit(800)).toBe('800&nbsp;m');
+    expect(utils.lengthWithUnit(4520)).toBe('4,5&nbsp;km');
+    expect(utils.lengthWithUnit(12345)).toBe('12&nbsp;km');
+    expect(utils.heightDiffUpWithUnit(1200)).toBe('1\u202f200&nbsp;m');
     expect(utils.heightDiffUpWithUnit(null)).toBe(undefined);
   });
 });

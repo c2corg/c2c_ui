@@ -1,6 +1,6 @@
 <template>
   <div ref="drawInfoElement">
-    <p><fa-icon icon="route" transform="shrink-3" /> {{ Number(drawInfo.distance).toLocaleString() }}&nbsp;m</p>
+    <p><fa-icon icon="route" transform="shrink-3" /> {{ $filters.number(drawInfo.distance) }}&nbsp;m</p>
     <p><fa-icon icon="compass" transform="shrink-3" /> {{ drawInfo.bearing }}°</p>
   </div>
 </template>

@@ -38,4 +38,9 @@ describe('DocumentField', () => {
   it('rounds other divided values', () => {
     expect(fieldText({ name: 'file_size' }, { file_size: 3000 }, { divisor: 1024, unit: 'ko' })).toBe('3\u00a0ko');
   });
+
+  it('writes an elevation in metres as the language does, not other numbers', () => {
+    expect(fieldText({ name: 'elevation', unit: 'm' }, { elevation: 4808 })).toBe('4\u202f808\u00a0m');
+    expect(fieldText({ name: 'focal_length', unit: 'mm' }, { focal_length: 1200 })).toBe('1200\u00a0mm');
+  });
 });

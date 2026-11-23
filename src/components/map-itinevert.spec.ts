@@ -19,7 +19,7 @@ const MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', '
 const globalProperties = {
   $gettext: (text: string) => text,
   $language: { current: 'de' },
-  $filters: { uppercaseFirstLetter: (text: string) => text },
+  $filters: { uppercaseFirstLetter: (text: string) => text, number: (value: unknown) => String(value) },
   $dateUtils: {
     month: (index: number) => MONTHS[index],
     // one run of months, possibly across the new year

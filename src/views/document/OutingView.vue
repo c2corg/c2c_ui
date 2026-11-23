@@ -74,7 +74,7 @@
                 show-signs
               />
               <label-value v-if="document.length_total" :label="$gettext('length_total')">
-                {{ document.length_total / 1000 }}&nbsp;km
+                {{ $filters.length(document.length_total) }}
               </label-value>
 
               <!-- snow block -->

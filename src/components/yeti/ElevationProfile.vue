@@ -63,6 +63,7 @@ import { useYetixStore } from '@/components/yeti/yetix';
 import yetixEvents from '@/components/yeti/yetix-events';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import debounce from '@/js/debounce';
+import { formatNumber } from '@/js/length-format';
 import d3 from '@/js/libs/d3';
 import ol from '@/js/libs/ol';
 
@@ -84,7 +85,7 @@ const props = defineProps({
   },
 });
 
-const { $gettext } = useGlobalProperties();
+const { $gettext, $language } = useGlobalProperties();
 
 const data = ref<ProfilePoint[][]>([]);
 const loading = ref(false);
@@ -341,7 +342,11 @@ function createChart() {
   axisX = d3.axisBottom().scale(scaleX);
 
   scaleY = d3.scaleLinear().range([height, 0]);
-  axisY = d3.axisRight().scale(scaleY).ticks(5).tickFormat(d3.format('.0f'));
+  axisY = d3
+    .axisRight()
+    .scale(scaleY)
+    .ticks(5)
+    .tickFormat((t: number) => formatNumber(t, $language?.current));
 
   // scales containers
   container.append('g').attr('class', 'y axis');
@@ -527,7 +532,7 @@ function setCursor(mouseMoveEvent: MouseEvent) {
   let bbox = popupAltitudeText.node().getBBox();
   popupAltitudeRect.attr('width', Math.round(bbox.width + 10)).attr('height', Math.round(bbox.height));
 
-  popupAltitudeText.text(Math.round(d.ele) + ' m');
+  popupAltitudeText.text(`${formatNumber(d.ele, $language?.current)}\u00a0m`);
 
   emitCursorMoveEvent(concatCoords[d === d0 ? i - 1 : i]);
 }
