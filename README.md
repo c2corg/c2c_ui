@@ -44,7 +44,8 @@ on `http://localhost:6543`, whose dev configuration allows this origin): `C2C_BA
 The backend (`prod`, `preprod`, `demo`, `localhost`), by precedence:
 
 1. `?backend=<name>` in the URL (also what the backend selector of the navigation bar does);
-2. the one chosen earlier **in this tab** (session storage: other tabs and other GitHub Pages previews keep theirs);
+2. the one chosen earlier **in this tab** (session storage: other tabs keep theirs; GitHub Pages previews opened in the
+   same tab share it, as they share one origin);
 3. `C2C_BACKEND` when the dev server starts or the app is built, otherwise `prod`.
 
 Other tasks: `npm run lint`, `npm test` (unit tests), `npm run e2e` (Playwright), `npm run type-check`,
@@ -78,8 +79,9 @@ docker run --rm -p 8081:80 -e LISTEN_FLAGS= -e C2C_API_URL=http://localhost:6543
 ```
 
 `npm run serve` reads the same `C2C_*_URL` variables for its `localhost` backend only (e.g. an API on another port:
-`C2C_BACKEND=localhost C2C_API_URL=http://localhost:6544 npm run serve`); `C2C_BACKEND` is only its default there. How it works: `docker/runtime-config.sh` writes `/config.js` when
-the container starts, `src/js/runtime-config.ts` applies it on top of the build configuration (`vite.config.ts`).
+`C2C_BACKEND=localhost C2C_API_URL=http://localhost:6544 npm run serve`); `C2C_BACKEND` is only its default there.
+How it works: `docker/runtime-config.sh` writes `/config.js` when the container starts, `src/js/runtime-config.ts`
+applies it on top of the build configuration (`vite.config.ts`).
 
 ## Previews de PR
 

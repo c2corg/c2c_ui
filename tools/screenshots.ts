@@ -55,13 +55,16 @@ const [command, ...args] = positionals;
 // eslint-disable-next-line no-console
 const print = (...items: unknown[]) => console.log(...items);
 
+// a preinstalled Chrome (Claude Code cloud sessions set it), when Playwright's own can't be downloaded
+const executablePath = process.env.CHROME_PATH || undefined;
+
 async function shoot(shotsFile: string, outDir: string) {
   const shots = (JSON.parse(readFileSync(shotsFile, 'utf8')) as Shot[]).filter((shot) =>
     shot.name.includes(values.filter)
   );
   mkdirSync(outDir, { recursive: true });
   const crossOrigin = values.backend === 'localhost' && new URL(values.base).port !== '8080';
-  const browser = await chromium.launch({ args: crossOrigin ? ['--disable-web-security'] : [] });
+  const browser = await chromium.launch({ executablePath, args: crossOrigin ? ['--disable-web-security'] : [] });
   for (const shot of shots) {
     const context = await browser.newContext({
       viewport: { width: shot.width, height: shot.height },
@@ -116,7 +119,7 @@ async function compare(beforeDir: string, afterDir: string, outDir: string) {
   const names = readdirSync(afterDir).filter(
     (name) => name.endsWith('.png') && before.has(name) && name.includes(values.filter)
   );
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ executablePath });
   const page = await browser.newPage();
   for (const name of names.sort()) {
     const [a, b] = [beforeDir, afterDir].map(

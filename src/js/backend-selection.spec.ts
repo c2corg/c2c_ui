@@ -52,6 +52,24 @@ describe('selectBackend', () => {
     expect(store.items.get(BACKEND_SESSION_KEY)).toBe('localhost');
   });
 
+  it('ignores the inherited names of the configurations', () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const store = session();
+    expect(selectBackend(buildConfig(), '?backend=constructor', store)).toBe('prod');
+    expect(store.items.size).toBe(0);
+  });
+
+  it('uses ?backend= even when the tab cannot keep it', () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const store = {
+      ...session(),
+      setItem: () => {
+        throw new DOMException('full', 'QuotaExceededError');
+      },
+    };
+    expect(selectBackend(buildConfig(), '?backend=demo', store)).toBe('demo');
+  });
+
   it('ignores an unknown backend, and forgets it in the tab', () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     expect(selectBackend(buildConfig(), '?backend=nope', session({ [BACKEND_SESSION_KEY]: 'demo' }))).toBe('demo');

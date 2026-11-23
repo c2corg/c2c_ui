@@ -5,8 +5,8 @@
  * 2. The backend chosen earlier in this tab (sessionStorage);
  * 3. The default of the build (`config.urls`): C2C_BACKEND when the dev server starts or the build runs, else prod.
  *
- * The choice belongs to one tab: neither the other tabs nor the other GitHub Pages previews (one origin for all) see
- * it.
+ * The choice belongs to one tab: the other tabs don't see it. The GitHub Pages previews share one origin, so the ones
+ * opened in the same tab share the choice (when their build knows that backend).
  */
 
 export const BACKEND_PARAM = 'backend';
@@ -18,7 +18,8 @@ type SessionStore = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 
 export function selectBackend(config: BuildConfiguration, search: string, session: SessionStore): string {
   const isKnown = (name: string) => {
-    if (config.urlsConfigurations[name]) {
+    // own names only: `?backend=constructor` is not a backend
+    if (Object.hasOwn(config.urlsConfigurations, name)) {
       return true;
     }
     console.warn(`Unknown backend "${name}", ignored`);
@@ -27,7 +28,12 @@ export function selectBackend(config: BuildConfiguration, search: string, sessio
 
   const fromUrl = new URLSearchParams(search).get(BACKEND_PARAM);
   if (fromUrl && isKnown(fromUrl)) {
-    session.setItem(BACKEND_SESSION_KEY, fromUrl);
+    try {
+      session.setItem(BACKEND_SESSION_KEY, fromUrl);
+    } catch (error) {
+      // storage full or denied: the choice still applies to this page
+      console.warn('Cannot keep the backend choice in this tab', error);
+    }
     return fromUrl;
   }
 
