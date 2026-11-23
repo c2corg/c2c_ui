@@ -159,6 +159,17 @@ describe('LoginView', () => {
     });
   });
 
+  it('opens the page asked for once signed in on a host the forum does not send back to (localhost)', async () => {
+    const $user = { isLogged: false, signIn: vi.fn(() => Promise.resolve({ data: {} })) };
+    const { wrapper, router } = await mountLogin('/auth?redirect=%2Fdone', $user);
+    router.addRoute({ path: '/done', name: 'done', component: { render: () => h('div') } });
+
+    await wrapper.findAll('form')[0].trigger('submit');
+    await flushPromises();
+
+    expect(router.currentRoute.value.path).toBe('/done');
+  });
+
   describe('remember me', () => {
     // the sign in stays pending: signed in, the view leaves for the forum session (window.location), which jsdom
     // cannot do

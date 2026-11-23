@@ -373,6 +373,17 @@ function signin() {
     });
 }
 
+// whether the forum is on the site of this page: their hosts the same but for their first label
+// (forum.camptocamp.org and www.camptocamp.org, forum.demov6.camptocamp.org and www.demov6.camptocamp.org)
+function sameSite(forumUrl: string) {
+  const parent = (host: string) => host.split('.').slice(1).join('.');
+  try {
+    return parent(new URL(forumUrl).hostname) === parent(window.location.hostname);
+  } catch {
+    return false;
+  }
+}
+
 function onSuccessSigin(data: { data: { redirect?: string } }) {
   // present when Discourse itself initiated the SSO handshake (see
   // signin()) - the user came from there and expects to land back on
@@ -392,6 +403,14 @@ function onSuccessSigin(data: { data: { redirect?: string } }) {
   // sends it back to return_path - provided the forum lists this host in
   // discourse_connect_allowed_redirect_domains, else it lands on the forum.
   const target = router.resolve(String(to?.query?.redirect ?? '/')).href;
+  // The forum sends the browser back only to the hosts of its own site (www.camptocamp.org for
+  // forum.camptocamp.org): elsewhere (a dev server on localhost, a preview) the user would be left on the forum, or on
+  // an error page when the forum is not reachable. There, the page asked for is opened, and the forum session opens
+  // when the user signs in on the forum (it starts the handshake itself, see auth-sso above).
+  if (!sameSite(config.urls.forum)) {
+    router.push(target);
+    return;
+  }
   const returnPath = new URL(target, window.location.origin).href;
   window.location.href = `${config.urls.forum}/session/sso?return_path=${encodeURIComponent(returnPath)}`;
 }
