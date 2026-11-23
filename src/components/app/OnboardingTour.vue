@@ -75,9 +75,10 @@
 import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
 
 import AppInstallSteps from './AppInstallSteps.vue';
-import { finishOnboarding, onboardingVisible } from './onboarding';
+import { finishOnboarding, offerOnboarding, onboardingVisible } from './onboarding';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { useIsHomePage } from '@/js/composables/home-page';
 import install from '@/pwa/install';
 
 defineOptions({ name: 'OnboardingTour' });
@@ -94,6 +95,9 @@ interface Slide {
 const { $gettext } = useGlobalProperties();
 
 const step = ref(0);
+
+// the page the app opens on, read from the history before the first navigation resolves
+offerOnboarding(useIsHomePage().value);
 
 // a modal dialog: the focus goes into it, Tab stays in it, Escape skips it, and the focus goes back where it was
 const card = useTemplateRef<HTMLElement>('card');

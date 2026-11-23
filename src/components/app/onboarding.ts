@@ -1,11 +1,26 @@
-// The welcome tour (OnboardingTour.vue): shown once per device, replayed from the app settings
+// The welcome tour (OnboardingTour.vue): shown by itself once per device, replayed from the app settings
 import { ref } from 'vue';
 
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 
 const preferences = getPreferences('Onboarding');
 
-export const onboardingVisible = ref(!preferences.get<boolean>('done', false));
+export const onboardingVisible = ref(false);
+
+// decided once per page load, at the first page
+let offered = false;
+
+// Shown by itself only at a launch on the home page: a link to a topo (search engine, forum, shared link) opens on the
+// topo, not behind the tour
+export function offerOnboarding(onHomePage: boolean) {
+  if (offered) {
+    return;
+  }
+  offered = true;
+  if (onHomePage && !preferences.get<boolean>('done', false)) {
+    onboardingVisible.value = true;
+  }
+}
 
 export function finishOnboarding() {
   try {
