@@ -22,13 +22,14 @@ const mountForm = ({ promise = null }: { promise?: FormPromise } = {}) =>
     { global: { stubs: { FaIcon: true }, mocks: { $gettext: (s: string) => s } } }
   );
 
-const errorOf = (wrapper: ReturnType<typeof mountForm>, name: string) =>
-  // FormField keeps its error message in its setup state
-  (
-    wrapper.findAllComponents(FormField).find((field) => field.props('name') === name)!.vm as unknown as {
-      errorMessage: string | null | undefined;
-    }
-  ).errorMessage;
+const errorOf = (wrapper: ReturnType<typeof mountForm>, name: string) => {
+  // FormField keeps its error in its setup state: its text here
+  const { error } = wrapper.findAllComponents(FormField).find((field) => field.props('name') === name)!
+    .vm as unknown as {
+    error: { description: string } | null | undefined;
+  };
+  return error ? error.description : error;
+};
 
 describe('BaseForm', () => {
   it('does not submit while a required field is empty', async () => {
@@ -68,6 +69,23 @@ describe('BaseForm', () => {
     expect(errorOf(wrapper, 'username')).toBe('already used username');
     expect(errorOf(wrapper, 'password')).toBe(undefined);
     expect(wrapper.find('.notification.is-danger').text()).toBe('Missing captcha');
+  });
+
+  it('shows the limit of an error after its translated text', async () => {
+    const wrapper = mountForm({ promise: { error: null } });
+
+    (wrapper.vm.promise as NonNullable<FormPromise>).error = {
+      response: {
+        data: {
+          status: 'error',
+          errors: [{ location: 'body', name: 'username', description: 'Longer than maximum length 200' }],
+        },
+      },
+    };
+    await wrapper.vm.$nextTick();
+
+    expect(errorOf(wrapper, 'username')).toBe('Longer than maximum length');
+    expect(wrapper.find('.label .has-text-danger').text()).toBe('Longer than maximum length 200');
   });
 
   it('shows an unexpected error above the form when the API did not answer', async () => {

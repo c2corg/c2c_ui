@@ -33,6 +33,7 @@ import { computed, reactive } from 'vue';
 
 import FormInput from './FormInput.vue';
 
+import { errorText } from '@/js/apis/c2c/api-errors';
 import { useFormField } from '@/js/composables/form-registration';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { documentProperty, fieldProperty } from '@/js/properties';
@@ -95,7 +96,7 @@ const { $gettext } = useGlobalProperties();
 const visible = computed(() => props.field.isVisibleFor(props.document));
 const hasError = computed(() => props.field.error !== null);
 const errorMessage = computed(() =>
-  hasError.value ? $gettext((props.field.error as { description: string }).description) : ''
+  props.field.error ? errorText(props.field.error, $gettext, props.field.error.context) : ''
 );
 const fieldLabel = computed(() => $gettext(props.field.name, props.context ?? undefined));
 

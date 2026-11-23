@@ -7,8 +7,7 @@
       <!-- $gettext('already used username', 'API message') -->
       <!-- $gettext('Invalid email address', 'API message') -->
       <!-- $gettext('already used email', 'API message') -->
-      <!-- $gettext('Shorter than minimum length 3', 'API message') -->
-      <!-- $gettext('Longer than maximum length 25', 'API message') -->
+      <!-- the texts with a limit (Longer than maximum length...) are in api-errors.ts -->
       <!-- $gettext('Contain invalid character(s)', 'API message') -->
       <!-- $gettext('First character is invalid', 'API message') -->
       <!-- $gettext('Last character is invalid', 'API message') -->
@@ -25,8 +24,8 @@
       <!-- $gettext('please consult the server logs', 'API message') -->
       <!-- $gettext('Terms of Service need to be accepted', 'API message') -->
 
-      <span class="has-text-danger has-text-weight-bold" v-if="errorMessage">
-        {{ $gettext(errorMessage, 'API message') }}
+      <span class="has-text-danger has-text-weight-bold" v-if="error">
+        {{ errorText(error, $gettext, 'API message') }}
       </span>
     </label>
     <div class="control has-icons-left has-icons-right">
@@ -40,7 +39,7 @@
         ref="input"
         v-model="value_"
         class="input"
-        :class="{ 'is-danger': hasError || errorMessage }"
+        :class="{ 'is-danger': hasError || error }"
       />
       <span v-if="type === 'password'" class="icon is-small is-right is-clickable" @click="onMaskToggle">
         <fa-icon
@@ -58,6 +57,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref, toRef, useTemplateRef } from 'vue';
 
+import { errorText, type ShownApiError } from '@/js/apis/c2c/api-errors';
 import { useFormField } from '@/js/composables/form-registration';
 
 const props = defineProps({
@@ -109,7 +109,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 // set by the BaseForm containing it, from the API errors
-const errorMessage = ref<string | null | undefined>(null);
+const error = ref<ShownApiError | null | undefined>(null);
 const unmasked = ref(false);
 
 const value_ = computed({
@@ -130,7 +130,7 @@ const hasError = computed(() => {
 });
 
 // registered with the BaseForm containing it
-useFormField('baseForm', reactive({ name: toRef(props, 'name'), hasError, errorMessage }));
+useFormField('baseForm', reactive({ name: toRef(props, 'name'), hasError, error }));
 
 function onMaskToggle() {
   unmasked.value = !unmasked.value;

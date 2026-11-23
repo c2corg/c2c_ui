@@ -2,7 +2,7 @@
   <form @submit="submit">
     <slot name="header" />
     <div v-for="(error, i) of serverMetaErrors" :key="i" class="notification is-danger has-text-centered">
-      {{ $gettext(error.description, 'API message') }}
+      {{ errorText(error, $gettext, 'API message') }}
     </div>
 
     <slot />
@@ -12,8 +12,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 
-import { apiErrors } from '@/js/apis/c2c/api-errors';
-import type { ApiError } from '@/js/apis/c2c/schemas';
+import { apiErrors, errorText, type ShownApiError } from '@/js/apis/c2c/api-errors';
 import { type FormFieldState, useFormContainer } from '@/js/composables/form-registration';
 
 const props = defineProps({
@@ -29,7 +28,7 @@ const emit = defineEmits(['submit']);
 // the form fields register themselves (user FormField)
 const { formFields } = useFormContainer('baseForm');
 
-const serverMetaErrors = ref<ApiError[]>([]); // errors that can't be linked to an input
+const serverMetaErrors = ref<ShownApiError[]>([]); // errors that can't be linked to an input
 
 const inputs = computed<Record<string, FormFieldState>>(() =>
   Object.fromEntries(formFields.value.map((field) => [field.name!, field]))
@@ -41,7 +40,7 @@ function cleanErrors() {
   serverMetaErrors.value = [];
 
   for (const input of Object.values(inputs.value)) {
-    input.errorMessage = undefined;
+    input.error = undefined;
   }
 }
 
@@ -55,7 +54,7 @@ function computeErrors() {
   for (const error of apiErrors(props.promise.error)) {
     const input = error.name ? inputs.value[error.name] : undefined;
     if (input) {
-      input.errorMessage = error.description;
+      input.error = error;
     } else {
       serverMetaErrors.value.push(error);
     }
@@ -72,7 +71,7 @@ function submit(event: Event) {
   }
 
   for (const input of Object.values(inputs.value)) {
-    input.errorMessage = null;
+    input.error = null;
   }
 
   serverMetaErrors.value = [];

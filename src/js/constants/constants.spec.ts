@@ -121,6 +121,38 @@ describe('Field', () => {
     });
   });
 
+  it('checks the range of the numbers, with a higher max for a multi-day outing or route', () => {
+    const outingField = (name: string) => constants.objectDefinitions.outing.fields[name];
+    const heightDiff = outingField('height_diff_up');
+    const day = { type: 'o', activities: ['hiking'], date_start: '2026-07-24', date_end: '2026-07-24' };
+    const trek = { ...day, date_end: '2026-08-20' };
+
+    expect(heightDiff.getError({ ...day, height_diff_up: 9000 }, {})).toBeNull();
+    expect(heightDiff.getError({ ...day, height_diff_up: 35000 }, {})).toEqual({
+      name: 'height_diff_up',
+      description: 'Greater than maximum value',
+      limit: 9000,
+    });
+    expect(heightDiff.getError({ ...day, height_diff_up: -1 }, {})).toEqual({
+      name: 'height_diff_up',
+      description: 'Less than minimum value',
+      limit: 0,
+    });
+    expect(heightDiff.maxFor(trek)).toBe(32767);
+    expect(heightDiff.getError({ ...trek, height_diff_up: 30000 }, {})).toBeNull();
+    expect(heightDiff.getError({ ...trek, height_diff_up: 35000 }, {})).toMatchObject({ limit: 32767 });
+
+    // a route of several days
+    const routeHeightDiff = routeField('height_diff_down');
+    const route = { type: 'r', activities: ['hiking'], height_diff_down: 12000 };
+    expect(routeHeightDiff.getError({ ...route, durations: ['1'] }, {})).toMatchObject({ limit: 9000 });
+    expect(routeHeightDiff.getError({ ...route, durations: ['10+'] }, {})).toBeNull();
+
+    // a field without multi-day max, and an empty value
+    expect(outingField('elevation_max').maxFor(trek)).toBe(9000);
+    expect(heightDiff.getError({ ...day, height_diff_up: null }, {})).toBeNull();
+  });
+
   it('is visible for its activities, and for rock climbing routes of the right kind', () => {
     const elevation = routeField('elevation_max');
     expect(elevation.isVisibleFor({ type: 'r', activities: ['hiking'] })).toBe(true);

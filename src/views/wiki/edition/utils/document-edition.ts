@@ -20,8 +20,7 @@ import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router';
 
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
-import { apiErrors } from '@/js/apis/c2c/api-errors';
-import type { ApiError } from '@/js/apis/c2c/schemas';
+import { apiErrors, errorText, type ShownApiError } from '@/js/apis/c2c/api-errors';
 import { useNoRobots } from '@/js/composables/head';
 import constants from '@/js/constants';
 import type Field from '@/js/constants/Field';
@@ -213,12 +212,10 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
 
   // display a popup with info from fields that contains an error
   // return true if popup is displayed, false otherwise
-  function displayErrors(isApiMessage: boolean) {
+  function displayErrors() {
     const fieldsWithError = Object.values(fields.value).filter((field) => field.error !== null);
-    const i18nContext = isApiMessage ? 'API message' : undefined;
 
     // list of possible API message (keep js syntax, for messages extraction)
-    // $gettext('Shorter than minimum length 1', 'API message');
     // $gettext('at least one route required', 'API message');
     // $gettext('at least one user required', 'API message');
     // $gettext('This field must be a valid ISBN.', 'API message');
@@ -226,7 +223,7 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
     if (fieldsWithError.length !== 0) {
       const messages = fieldsWithError.map(
         (field) =>
-          `${globals.$gettext(field.name)} : ${globals.$gettext((field.error as ApiError).description, i18nContext)}`
+          `${globals.$gettext(field.name)} : ${errorText(field.error!, globals.$gettext, field.error!.context)}`
       );
 
       const list = window.document.createElement('ul');
@@ -245,7 +242,7 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
     return false;
   }
 
-  function dispatchError(fieldName: string, error: ApiError) {
+  function dispatchError(fieldName: string, error: ShownApiError) {
     if (fields.value[fieldName] === undefined) {
       // $gettext('Conflict: version of locale \'en\' has changed')
       // $gettext('Conflict: version of locale \'es\' has changed')
@@ -258,19 +255,21 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
       // $gettext('Conflict: version of locale \'zh_CN\' has changed')
       // $gettext('Conflict: version of document has changed')
       toast({
-        // an error without name: the request had no answer of the API
-        message: error.name
-          ? globals.$gettext(`${error.name}: ${error.description}`)
-          : globals.$gettext(error.description, 'API message'),
+        // an error without name: the request had no answer of the API; with a limit: its text is translated alone
+        message: !error.name
+          ? errorText(error, globals.$gettext, 'API message')
+          : error.limit === undefined
+            ? globals.$gettext(`${error.name}: ${error.description}`)
+            : `${error.name}: ${errorText(error, globals.$gettext, 'API message')}`,
         type: 'is-danger',
         position: 'center',
       });
     } else {
-      fields.value[fieldName].error = error;
+      fields.value[fieldName].error = { ...error, context: 'API message' };
     }
   }
 
-  function dispatchErrors(errors: ApiError[]) {
+  function dispatchErrors(errors: ShownApiError[]) {
     cleanErrors();
 
     for (const error of errors) {
@@ -285,7 +284,7 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
       }
     }
 
-    displayErrors(true);
+    displayErrors();
   }
 
   // after saving, go to document
@@ -309,7 +308,7 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
       field.error = field.getError(doc, editedLocale.value!);
     }
 
-    return !displayErrors(false);
+    return !displayErrors();
   }
 
   // The outing on the phone instead of on Camptocamp (src/stores/outing-queue.ts): published later from Favourites.
