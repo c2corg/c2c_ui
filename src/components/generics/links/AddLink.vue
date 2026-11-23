@@ -2,6 +2,7 @@
   <router-link
     :to="{ name: documentType + '-add', params: { lang: getApiLang($language.current) }, query: query }"
     rel="nofollow"
+    :class="{ 'is-non-production-backend': isNonProductionBackend }"
   >
     <slot>
       {{ $filters.uppercaseFirstLetter($documentUtils.getCreationTitle(documentType)) }}
@@ -11,6 +12,7 @@
 
 <script setup lang="ts">
 import c2c from '@/js/apis/c2c';
+import { isNonProductionBackend } from '@/js/environment-label';
 import { documentTypeProperty } from '@/js/properties';
 
 // We always display this link, even when user is not logged: in this case, edition views redirect the user to /auth.

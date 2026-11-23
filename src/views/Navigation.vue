@@ -74,7 +74,7 @@
       <div class="navigation-item">
         <dropdown-button class="is-right add-button" ref="addDocumentMenu">
           <template #button>
-            <span class="button is-success">
+            <span class="button is-success" :class="{ 'is-non-production-backend': isNonProductionBackend }">
               <fa-icon icon="plus" />
             </span>
           </template>
@@ -226,6 +226,7 @@ import { urlWithBackend } from '@/js/backend-selection';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { ADDABLE_TYPES, HELP_ROUTE, useAccountLinks } from '@/js/composables/main-menu';
 import config from '@/js/config';
+import { isNonProductionBackend } from '@/js/environment-label';
 import { toast } from '@/js/toast';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 import type { useForumNotificationsStore } from '@/stores/forum-notifications';
