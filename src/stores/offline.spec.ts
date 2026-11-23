@@ -3,7 +3,7 @@ import { clear } from 'idb-keyval';
 import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { useOfflineStore } from './offline';
+import { reloadPagesAfterDeploy, useOfflineStore } from './offline';
 
 import { tileUrlsOf } from '@/pwa/offline-assets';
 import { listDocuments, OFFLINE_MODE, saveDocument as saveEntry, setAssets } from '@/pwa/offline-store';
@@ -44,6 +44,12 @@ vi.mock('@/js/vue-plugins/router', () => ({
 }));
 vi.mock('@/components/map/C2cMap.vue', () => ({ default: {} }));
 vi.mock('@/components/map/OlMap.vue', () => ({ default: {} }));
+// the viewer the images of a page open in
+const imageViewer = vi.hoisted(() => vi.fn());
+vi.mock('@/components/image-viewer/ImageViewer.vue', () => {
+  imageViewer();
+  return { default: {} };
+});
 // the page of the app, kept for the offline starts
 const keepShell = vi.hoisted(() => vi.fn(async () => true));
 vi.mock('@/pwa/shell', () => ({ keepShell }));
@@ -55,6 +61,7 @@ let storage: ReturnType<typeof fakeCacheStorage>;
 describe('offline store', () => {
   beforeEach(async () => {
     await clear();
+    localStorage.clear();
     setActivePinia(createPinia());
     storage = fakeCacheStorage();
     vi.stubGlobal('caches', storage.caches);
@@ -84,6 +91,7 @@ describe('offline store', () => {
     await vi.waitFor(() => expect(routeView).toHaveBeenCalled());
     expect(offlineView).toHaveBeenCalled();
     expect(outingForm).toHaveBeenCalled();
+    expect(imageViewer).toHaveBeenCalled();
 
     const [entry] = await listDocuments();
     expect(entry.data.document_id).toBe(12);
@@ -254,5 +262,50 @@ describe('offline store', () => {
       '12:incomplete',
       '13:incomplete',
     ]);
+  });
+
+  it('loads the code of the pages of the saved documents again once per build, the files of a deploy being new', async () => {
+    routeView.mockClear();
+    offlineView.mockClear();
+
+    await reloadPagesAfterDeploy(['route', 'route']);
+    expect(routeView).toHaveBeenCalledTimes(1);
+    expect(offlineView).toHaveBeenCalledTimes(1);
+
+    // the same build: already kept
+    await reloadPagesAfterDeploy(['route']);
+    expect(routeView).toHaveBeenCalledTimes(1);
+
+    // the next one
+    localStorage.setItem('c2c.offlinePagesBuild', 'a former build');
+    await reloadPagesAfterDeploy(['route']);
+    expect(routeView).toHaveBeenCalledTimes(2);
+  });
+
+  it('loads them again only once loaded, the next start retrying', async () => {
+    routeView.mockClear();
+    routeView.mockRejectedValueOnce(new Error('offline'));
+
+    await reloadPagesAfterDeploy(['route']);
+    await reloadPagesAfterDeploy(['route']);
+    expect(routeView).toHaveBeenCalledTimes(2);
+  });
+
+  it('loads them again when the app starts online with documents saved offline', async () => {
+    await saveEntry({
+      type: 'route',
+      id: 12,
+      lang: 'fr',
+      title: 'Arête',
+      data: {},
+      folderId: null,
+      mode: OFFLINE_MODE,
+      owners: [],
+    });
+    routeView.mockClear();
+
+    const offline = useOfflineStore();
+    await offline.ready;
+    await vi.waitFor(() => expect(routeView).toHaveBeenCalled());
   });
 });

@@ -237,6 +237,9 @@ export default defineConfig({
 
   define: {
     CAMPTOCAMP_CONFIG: JSON.stringify(config),
+    // tells one build from the next: the code of the pages of the documents saved offline is loaded again after a
+    // deploy, its files having new names (src/stores/offline.ts)
+    C2C_BUILD_ID: JSON.stringify(String(Date.now())),
   },
 
   plugins: [
