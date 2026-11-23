@@ -138,6 +138,7 @@
     "An error occurred, couldn't (un)mask version": "Es ist ein Fehler aufgetreten, die Version konnte nicht verborgen bzw. wieder angezeigt werden",
     "An error occurred, couldn't save images": "Ein Fehler ist aufgetreten, die Bilder konnten nicht gespeichert werden",
     "An error occurred, please try again": "Ein Fehler ist aufgetreten, bitte nochmals probieren",
+    "An error occurred, the images could not all be located": "Ein Fehler ist aufgetreten, alle Bilder konnten nicht lokalisiert werden",
     "An icon on the home screen, and the app takes the whole screen, without the browser bar.": "Ein Symbol auf dem Home-Bildschirm, und die App wird im Vollbildmodus angezeigt – ohne Browserleiste.",
     "An outing refused by Camptocamp shows the reason: fix it with Edit, then Try again. If the connection was cut while sending, check on Camptocamp before trying again, so as not to publish it twice.": "Ein von Camptocamp abgelehnter Tourenbericht zeigt den Grund dafür an: Beheben Sie das Problem über „Bearbeiten“ und versuchen Sie es anschließend erneut. Wurde die Verbindung während der Übertragung unterbrochen, überprüfen Sie zuerst auf Camptocamp, ob die Tour bereits veröffentlicht wurde, bevor Sie es erneut versuchen. So vermeiden Sie eine doppelte Veröffentlichung.",
     "An unexpected error occurred, please try again": {
@@ -314,6 +315,7 @@
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "Die aktuelle Kartenansicht wird nicht von YETI abgedeckt. Derzeit sind nur die französischen Berge abgedeckt (gestrichelt umrandet).",
     "Current map view is too large. Please zoom to level": "Der Kartenausschnitt ist zu groß. Bitte zoomen Sie auf Stufe",
     "Current password": "Aktuelles Passwort",
+    "Danger at the highest point of the route": "Gefahr am höchsten Punkt der Route",
     "Danger level": "Gefahrenstufe",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "Die Gefahrenstufe aus dem Lawinenbericht gilt für alle Ausrichtungen. Die Windrose kennzeichnet die kritischsten Sektoren, die ein erhöhtes Risiko darstellen.",
     "Danger rating - considerable": "Erheblich",
@@ -512,6 +514,10 @@
     "Go back to YETI": "Zurück zu YETI",
     "Go to the previous page": "Zur vorherigen Seite gehen",
     "Go to website": "Zur Website gehen",
+    "Greater than maximum value": {
+      "$$noContext": "Wert zu groß, Maximum:",
+      "API message": "Wert zu groß, Maximum:"
+    },
     "Group": "Gruppe",
     "Group size": "Gruppengröße",
     "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?": "War ein Zeitplan vorhanden? Wurde er eingehalten? Hatte das Zeitmanagement einen Einfluss auf die Auslösung des Ereignisses?",
@@ -585,6 +591,7 @@
     "Images are under license specified in the original document of each image": "Die Bilder stehen unter der im Originaldokument des jeweiligen Bildes angegebenen Lizenz",
     "Images deleted with it, restored with it": "Mit diesem Dokument gelöschte und wiederhergestellte Bilder.",
     "Images kept, linked to no document any more:": "Bilder beibehalten, mit keinem Dokument mehr verknüpft:",
+    "Images located on the GPS track of the outing:": "Bilder auf der GPS-Route der Tour lokalisiert:",
     "Impossible to know whether this outing was published: the connection was lost at the wrong moment. Check on Camptocamp before trying again, so as not to publish it twice.": "Es lässt sich nicht feststellen, ob diese Tour veröffentlicht wurde: Die Verbindung wurde zum ungünstigsten Zeitpunkt unterbrochen. Bitte überprüfen Sie auf Camptocamp, ob die Tour bereits veröffentlicht wurde, bevor Sie es erneut versuchen. So vermeiden Sie eine doppelte Veröffentlichung.",
     "Improve our understanding of risks": "Das Wissen über Risiken verbessern",
     "In favourites, saved offline": "In den Favoriten offline gespeichert.",
@@ -648,6 +655,10 @@
     "Leave fullscreen": "Vollbild verlassen",
     "Leave later": "Später abreisen",
     "Legend": "Legende",
+    "Less than minimum value": {
+      "$$noContext": "Wert zu klein, Minimum:",
+      "API message": "Wert zu klein, Minimum:"
+    },
     "Let's go": "Los geht's!",
     "Let's make our feedbacks valuable": "Machen wir unser Feedback wertvoll",
     "Let's preserve our playground! I create an account on Outdoorvision to share my GPS tracks for the preservation and design of my practice sites in France.": "Bewahren wir unseren Spielplatz! Ich erstelle ein Konto auf Outdoorvision, um meine GPS-Tracks für die Erhaltung und Gestaltung meiner Übungsplätze in Frankreich zu teilen.",
@@ -671,7 +682,9 @@
     "Loading the bulletin": "Lagebericht wird geladen",
     "Loading...": "Laden...",
     "Local file": "Lokale Datei",
+    "Locate images on the GPS track": "Bilder auf der GPS-Route lokalisieren",
     "Location / elevation / orientation": "Standort / Höhe / Ausrichtung",
+    "Location computed from the GPS track of the outing": "Standort anhand der GPS-Aufzeichnung ermittelt",
     "Location refused. Allow it in the settings of the browser, then try again.": "Standort abgelehnt. Bitte erlauben Sie den Zugriff in den Browsereinstellungen und versuchen Sie es anschließend erneut.",
     "Log in": "Anmelden",
     "Log in to find your outings and contributions.": "Melden Sie sich an, um Ihre Tourenberichte und Beiträge zu finden.",
@@ -681,8 +694,8 @@
       "API message": "Einloggen fehlgeschlagen"
     },
     "Logout": "Ausloggen",
-    "Longer than maximum length 25": {
-      "API message": "Feld zu lang (maximal 25 Zeichen)"
+    "Longer than maximum length": {
+      "API message": "Text zu lang, Maximum:"
     },
     "Longitude": "Längengrad",
     "Low danger level from the avalanche bulletin": "Geringe Gefahrenstufe aus dem Lawinenbulletin",
@@ -730,6 +743,7 @@
       "modification date": "Bearbeitet am"
     },
     "More": "Mehr",
+    "More details": "Mehr Details",
     "More info": "Mehr Info",
     "More info on meteoblue.com": "Mehr auf meteoblue.com",
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Es sind mehr Routen verfügbar. Sie können die Karte verschieben, den Namen angeben oder eine Aktivität festlegen, um sie herauszufiltern.",
@@ -785,6 +799,7 @@
     "No favourite matches.": "Kein passender Favorit.",
     "No favourite yet": "Noch keine Favoriten",
     "No folder": "Kein Ordner",
+    "No image to locate: they have a location, or no time matching the track": "Keine Bilder zu lokalisieren: Sie haben bereits einen Standort oder es gibt keine passende Zeitangabe in der GPS-Aufzeichnung.",
     "No match?": "Keine Ergebnisse?",
     "No network: your outings stay waiting. Publish them once connected.": "Keine Netzwerkverbindung: Ihre Tourenberichte bleiben in der Warteschlange. Veröffentlichen Sie sie, sobald Sie wieder verbunden sind.",
     "No orientation selected": "Keine Ausrichtungen gewählt",
@@ -850,6 +865,7 @@
     "Open a route, a waypoint or an outing, and tap the bookmark at the top.": "Öffnen Sie eine Route, einen Wegpunkt oder einen Tourenbericht und tippen Sie oben auf das Lesezeichen.",
     "Open fields to deeply explain the event circumstances.": "Freies Feld, um die Ereignisumstände genau zu beschreiben.",
     "Open fields to detail the picture's context": "Freies Feld, um den Kontext des Bilds zu beschreiben",
+    "Open in YETI": "in YETI öffnen",
     "Open in a new tab": "In neuer Registerkarte öffnen",
     "Opens an email with the context filled in": "Öffnet eine E-Mail mit ausgefülltem Kontext",
     "Operator": "Betreiber",
@@ -979,6 +995,7 @@
     "Remove from favourites": "Aus den Favoriten entfernen",
     "Remove from favourites? Its offline copy is removed too.": "Aus den Favoriten entfernen? Die Offline-Kopie wird ebenfalls gelöscht.",
     "Remove the filter": "Filter entfernen",
+    "Remove the filters of my preferences": "Filter meiner Einstellungen entfernen",
     "Remove the offline copies of the other people? They will have to download them again.": "Offline-Kopien der anderen Personen löschen? Sie müssen sie erneut herunterladen.",
     "Remove the offline copy": "Die Offline-Kopie löschen",
     "Remove this account": "Dieses Konto entfernen",
@@ -1069,6 +1086,7 @@
     "Sensitive period": "Sensibler Zeitraum",
     "Service is inactive right now": "Dienst ist momentan inaktiv",
     "Set a maximum time to reach the access point (from the selected departure time)": "Legen Sie eine maximale Zeit für das Erreichen des Zugangspunkts fest (ab der gewählten Abfahrtszeit).",
+    "Set the location of the images without one to where the GPS track was when they were shot (accounting for a time zone difference of the camera)?": "Den Bildern ohne Standort die Position zuweisen, an der sich die GPS-Aufzeichnung zum Zeitpunkt der Aufnahme befand (unter Berücksichtigung einer möglichen Zeitzonenabweichung der Kamera)?",
     "Settings": "Einstellungen",
     "Settings of this device, not synchronized with your Camptocamp account.": "Einstellungen dieses Geräts, nicht mit Ihrem Camptocamp-Konto synchronisiert.",
     "Several attempts failed. Try again later, or give up the outing.": "Mehrere Versuche sind fehlgeschlagen. Versuchen Sie es später erneut oder verwerfen Sie den Tourenbericht.",
@@ -1078,11 +1096,8 @@
     },
     "Share": "Teilen",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Weitergabe unter gleichen Bedingungen — Wenn Sie das Material remixen, verändern oder anderweitig direkt darauf aufbauen, dürfen Sie Ihre Beiträge nur unter derselben Lizenz wie das Original verbreiten.",
-    "Shorter than minimum length 1": {
-      "API message": "Feld notwendig"
-    },
-    "Shorter than minimum length 3": {
-      "API message": "Zu kurz, soll mindestens 3 Zeichen haben"
+    "Shorter than minimum length": {
+      "API message": "Text zu kurz, Minimum:"
     },
     "Show document history": "Dokumentverlauf anzeigen",
     "Show more routes": "Weitere Routen anzeigen",
@@ -1401,8 +1416,6 @@
     "Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has more restrictions, mainly no accent and no space.": "Ihr Forumsname wird im Forumsbereich der Website verwendet. Er kann jederzeit in den Einstellungen frei geändert werden. Es gibt mehr Einschränkungen bei den Zeichen, hauptsächlich keine Akzente und keine Leerzeichen.",
     "Your outings written without a network, published when you choose.": "Ihre ohne Netzwerkverbindung erstellten Tourenberichte, veröffentlicht, wann Sie möchten.",
     "Your password must contain:": "Ihr Passwort muss enthalten:",
-    "Your preferences are already applied.": "Ihre Einstellungen sind bereits aktiv.",
-    "Your preferences are applied": "Ihre Einstellungen sind aktiv",
     "Your preferences could not be loaded.": "Ihre Einstellungen konnten nicht geladen werden.",
     "Your search includes too many routes.": "Ihre Suche enthält zu viele Routen.",
     "Your session expired: the outing is saved on the phone. Sign in, then publish it from Favourites.": "Ihre Sitzung ist abgelaufen: Der Tourenbericht ist auf dem Telefon gespeichert. Melden Sie sich an und veröffentlichen Sie ihn anschließend unter Favoriten.",
@@ -1411,6 +1424,8 @@
     "Zoom in": {
       "Map controls": "Vergrößern"
     },
+    "Zoom in to see all the waypoints": "Zoomen Sie hinein, um alle Wegpunkte zu sehen.",
+    "Zoom in to see the waypoints": "Zoomen Sie hinein, um die Wegpunkte zu sehen.",
     "Zoom out": {
       "Map controls": "Verkleinern"
     },

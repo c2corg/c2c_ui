@@ -446,6 +446,10 @@
     "Go back to YETI": "Retour YETI",
     "Go to the previous page": "Retourner à la page précédente",
     "Go to website": "Accéder au site",
+    "Greater than maximum value": {
+      "$$noContext": "Valeur trop grande, maximum :",
+      "API message": "Valeur trop grande, maximum :"
+    },
     "Group": "Groupe",
     "Group size": "Taille du groupe",
     "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?": "Un horaire avait-il été prévu ? A t-il été tenu ? La gestion du temps a t-elle eu une influence sur le déclenchement de l'événement ?",
@@ -583,6 +587,10 @@
     "Leave fullscreen": "Quitter le mode plein écran",
     "Leave later": "Partir + tard",
     "Legend": "Légende",
+    "Less than minimum value": {
+      "$$noContext": "Valeur trop petite, minimum :",
+      "API message": "Valeur trop petite, minimum :"
+    },
     "Let's go": "C'est parti",
     "Let's make our feedbacks valuable": "Valorisons nos retours d’expérience",
     "Let's preserve our playground! I create an account on Outdoorvision to share my GPS tracks for the preservation and design of my practice sites in France.": "Préservons notre terrain de jeu ! Je crée un compte sur Outdoorvision pour y partager mes traces GPS pour la préservation et l’aménagement de mes sites de pratique en France.",
@@ -617,8 +625,8 @@
       "API message": "Identifiant ou mot de passe incorrects"
     },
     "Logout": "Me déconnecter",
-    "Longer than maximum length 25": {
-      "API message": "Champ trop long (25 caractères maximum)"
+    "Longer than maximum length": {
+      "API message": "Texte trop long, maximum :"
     },
     "Low danger level from the avalanche bulletin": "Niveau de danger bas du bulletin d'avalanche",
     "Mail has been sent": "Courriel envoyé",
@@ -905,6 +913,7 @@
     "Remove from favourites": "Retirer des favoris",
     "Remove from favourites? Its offline copy is removed too.": "Retirer des favoris ? Sa copie hors ligne est supprimée aussi.",
     "Remove the filter": "Retirer le filtre",
+    "Remove the filters of my preferences": "Retirer les filtres de mes préférences",
     "Remove the offline copies of the other people? They will have to download them again.": "Supprimer les copies hors ligne des autres personnes ? Elles devront les télécharger à nouveau.",
     "Remove the offline copy": "Supprimer la copie hors ligne",
     "Remove this account": "Supprimer ce compte",
@@ -1005,11 +1014,8 @@
     },
     "Share": "Partager",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Partage dans les Mêmes Conditions — Dans le cas où vous effectuez un remix, que vous transformez, ou créez à partir du matériel composant l'Oeuvre originale, vous devez diffuser l'Oeuvre modifiée dans les même conditions, c'est à dire avec la même licence avec laquelle l'Oeuvre originale a été diffusée. ",
-    "Shorter than minimum length 1": {
-      "API message": "Champ obligatoire"
-    },
-    "Shorter than minimum length 3": {
-      "API message": "Champ trop court (minimum 3 caractères)"
+    "Shorter than minimum length": {
+      "API message": "Texte trop court, minimum :"
     },
     "Show document history": "Voir l'historique du document",
     "Show more routes": "Voir plus de résultats",
@@ -1312,8 +1318,6 @@
     "Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has more restrictions, mainly no accent and no space.": "Votre pseudo forum sera utilisé sur la partie forum du site. Il peut être changé librement à tout moment dans les paramètres. Il y a plus de restrictions sur les caractères, principalement pas d'accents et pas d'espace.",
     "Your outings written without a network, published when you choose.": "Vos sorties écrites sans réseau, publiées quand vous le décidez.",
     "Your password must contain:": "Votre mot de passe doit contenir :",
-    "Your preferences are already applied.": "Vos préférences sont déjà appliquées.",
-    "Your preferences are applied": "Vos préférences sont appliquées",
     "Your preferences could not be loaded.": "Vos préférences n'ont pas pu être chargées.",
     "Your search includes too many routes.": "Votre recherche donne trop d'itinéraires.",
     "Your session expired: the outing is saved on the phone. Sign in, then publish it from Favourites.": "Votre session a expiré : la sortie est enregistrée sur le téléphone. Connectez-vous, puis publiez-la depuis Favoris.",

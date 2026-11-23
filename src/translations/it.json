@@ -469,6 +469,10 @@
     "Go back to YETI": "Tornare a YETI",
     "Go to the previous page": "Tornare alla pagina precedente",
     "Go to website": "Vai al sito internet",
+    "Greater than maximum value": {
+      "$$noContext": "Valore troppo alto, massimo:",
+      "API message": "Valore troppo alto, massimo:"
+    },
     "Group": "Gruppo",
     "Group size": "Dimensione del gruppo",
     "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?": "Era stato previsto un orario per il percorso? È stato mantenuto l'orario? Il tempo è stato un fattore che ha causato l'incidente?",
@@ -600,6 +604,10 @@
     "Leave fullscreen": "Esci da schermo intero",
     "Leave later": "Parti più tardi",
     "Legend": "Legenda",
+    "Less than minimum value": {
+      "$$noContext": "Valore troppo basso, minimo:",
+      "API message": "Valore troppo basso, minimo:"
+    },
     "Let's go": "Partiamo",
     "Let's make our feedbacks valuable": "Rendiamo preziosi i nostri feedback",
     "Let's preserve our playground! I create an account on Outdoorvision to share my GPS tracks for the preservation and design of my practice sites in France.": "Conserviamo il nostro parco giochi! Creo un account su Outdoorvision per condividere le mie tracce GPS per la conservazione e la progettazione dei miei siti di pratica in Francia.",
@@ -634,8 +642,8 @@
       "API message": "Nome utente o password errati"
     },
     "Logout": "Disconnettersi",
-    "Longer than maximum length 25": {
-      "API message": "Lunghezza eccessiva rispetto a quella permessa (25)"
+    "Longer than maximum length": {
+      "API message": "Testo troppo lungo, massimo:"
     },
     "Longitude": "Longitudine",
     "Low danger level from the avalanche bulletin": "Grado di pericolo del bollettino in bassa quota",
@@ -930,6 +938,7 @@
     "Remove from favourites": "Rimuovi dai preferiti",
     "Remove from favourites? Its offline copy is removed too.": "Rimuovere dai preferiti? Anche la sua copia offline viene rimossa.",
     "Remove the filter": "Rimuovi il filtro",
+    "Remove the filters of my preferences": "Rimuovi i filtri delle mie preferenze",
     "Remove the offline copies of the other people? They will have to download them again.": "Rimuovere le copie offline delle altre persone? Dovranno scaricarle di nuovo.",
     "Remove the offline copy": "Rimuovi la copia offline",
     "Remove this account": "Elimina questo account",
@@ -1029,11 +1038,8 @@
     },
     "Share": "Condividere",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "StessaLicenza — Se mischi, trasformi il materiale o ti basi su di esso, devi distribuire i tuoi contributi con la stessa licenza del materiale originario.",
-    "Shorter than minimum length 1": {
-      "API message": "Campo obbligatorio"
-    },
-    "Shorter than minimum length 3": {
-      "API message": "Campo troppo corto (almeno 3 caratteri)"
+    "Shorter than minimum length": {
+      "API message": "Testo troppo corto, minimo:"
     },
     "Show document history": "Mostrare la cronologia del documento",
     "Show more routes": "Mostra più itinerari",
@@ -1350,8 +1356,6 @@
     "Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has more restrictions, mainly no accent and no space.": "Il tuo nome utente del forum sarà visualizzato nel forum e può essere modificato liberamente in qualsiasi momento nelle impostazioni. Ha più restrizioni, principalmente niente accenti e niente spazi.",
     "Your outings written without a network, published when you choose.": "Le tue gite scritte senza connessione, pubblicate quando vuoi.",
     "Your password must contain:": "La password deve contenere:",
-    "Your preferences are already applied.": "Le tue preferenze sono già applicate.",
-    "Your preferences are applied": "Le tue preferenze sono applicate",
     "Your preferences could not be loaded.": "Impossibile caricare le tue preferenze.",
     "Your search includes too many routes.": "La ricerca include troppi itinerari.",
     "Your session expired: the outing is saved on the phone. Sign in, then publish it from Favourites.": "La sessione è scaduta: la gita è salvata sul telefono. Accedi, poi pubblicala da Preferiti.",

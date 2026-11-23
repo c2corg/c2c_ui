@@ -420,9 +420,6 @@
       "API message": "登录失败"
     },
     "Logout": "登出",
-    "Longer than maximum length 25": {
-      "API message": "长于最大长度 25"
-    },
     "Longitude": "经度",
     "Low danger level from the avalanche bulletin": "雪崩公告给出的低危险等级",
     "Mail has been sent": "邮件已发送",
@@ -603,12 +600,6 @@
     "Several days?": "多天行程？",
     "Share": "分享",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "相同方式共享 - 如果您重新组合，转换或在该材料上进行构建，则必须以与原始文件相同的许可分发您的贡献。",
-    "Shorter than minimum length 1": {
-      "API message": "必填项"
-    },
-    "Shorter than minimum length 3": {
-      "API message": "文本太短(至少3个字符)"
-    },
     "Show document history": "显示文档历史",
     "Show only updates from followed users in the homepage feed": "在主页订阅仅显示关注用户的更新",
     "Sign in to camptocamp today, it's free": "立即登录 camptocamp，它是免费的",
