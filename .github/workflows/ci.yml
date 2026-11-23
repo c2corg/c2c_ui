@@ -122,7 +122,8 @@ jobs:
       cancel-in-progress: false
     permissions:
       contents: write
-      pull-requests: read
+      # write: to comment the preview URL on the pull request
+      pull-requests: write
     # Une PR ouvre un environnement public (URL c2corg.github.io/c2c_ui/<branche>)
     # à partir de code non encore relu. On distingue donc :
     # - pull_request -> environnement "pr-preview", protégé par des reviewers
@@ -207,6 +208,29 @@ jobs:
           BRANCH: ${{ steps.branch-name.outputs.current_branch || steps.branch-name.outputs.tag }}
           FOLDER: ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
           SITE: ${{ runner.temp }}/site
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+      - name: Comment the preview URL on the pull request
+        # A single comment per pull request, found by its marker and updated on later deploys. Best effort: a failure
+        # here must not fail a deploy that went through
+        if: github.event_name == 'pull_request' && steps.branch-name.outcome == 'success'
+        continue-on-error: true
+        run: |
+          [ "$(gh pr view "$PR" --repo "$REPO" --json state --jq .state)" = OPEN ] || exit 0
+          MARKER='<!-- gh-pages-preview -->'
+          BODY="$MARKER
+          :rocket: Preview deployed: https://c2corg.github.io/c2c_ui/$FOLDER/ (commit $SHA, may take a minute to be served)"
+          ID=$(gh api --paginate "repos/$REPO/issues/$PR/comments" \
+            --jq ".[] | select(.user.login == \"github-actions[bot]\" and (.body | startswith(\"$MARKER\"))) | .id" | head -n 1)
+          if [ -n "$ID" ]; then
+            gh api --method PATCH "repos/$REPO/issues/comments/$ID" -f body="$BODY" > /dev/null
+          else
+            gh api --method POST "repos/$REPO/issues/$PR/comments" -f body="$BODY" > /dev/null
+          fi
+        env:
+          FOLDER: ${{ steps.clean_branch.outputs.CLEAN_BRANCH }}
+          SHA: ${{ github.event.pull_request.head.sha }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
