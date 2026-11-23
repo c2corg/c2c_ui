@@ -1,4 +1,4 @@
-import { flushPromises, shallowMount } from '@vue/test-utils';
+import { flushPromises, RouterLinkStub, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import Feature from 'ol/Feature';
 import LineString from 'ol/geom/LineString';
@@ -33,16 +33,25 @@ const YetiMapStub = defineComponent({
   },
 });
 
-const mountView = () =>
+const mountView = ($route = { query: {}, params: {}, fullPath: '/yeti' }) =>
   shallowMount(YetiView, {
     global: {
       config: { globalProperties: { $gettext: (text: string) => text } as never },
-      mocks: { $route: { query: {}, params: {}, fullPath: '/yeti' } },
+      mocks: { $route },
       directives: { translate: {} },
       // the panels hold the validation buttons
-      stubs: { YetiMap: YetiMapStub, Panel: { template: '<div><slot /></div>' } },
+      stubs: { YetiMap: YetiMapStub, Panel: { template: '<div><slot /></div>' }, RouterLink: RouterLinkStub },
     },
   });
+
+describe('YetiView FAQ link', () => {
+  it('keeps the query of the page out of the FAQ path', () => {
+    const wrapper = mountView({ query: { bulletin: 'FR-03' }, params: {}, fullPath: '/yeti?bulletin=FR-03' });
+
+    const faqLink = wrapper.findAllComponents(RouterLinkStub).find((link) => link.classes('yetitabs-link'));
+    expect(faqLink?.props('to')).toEqual({ name: 'yeti', params: { page: 'faq' }, query: { bulletin: 'FR-03' } });
+  });
+});
 
 describe('YetiView tabs', () => {
   it('shows the tabs once loaded', () => {

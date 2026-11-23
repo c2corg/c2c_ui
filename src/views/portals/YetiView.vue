@@ -28,7 +28,11 @@
             </div>
             <ul class="column is-narrow pb-0">
               <li>
-                <router-link class="is-block yetitabs-link" :to="$route.fullPath + '/faq'" v-translate>
+                <router-link
+                  class="is-block yetitabs-link"
+                  :to="{ name: 'yeti', params: { ...$route.params, page: 'faq' }, query: $route.query }"
+                  v-translate
+                >
                   FAQ?
                 </router-link>
               </li>
