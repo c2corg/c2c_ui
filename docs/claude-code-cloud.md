@@ -45,6 +45,10 @@ api.os.uk
 # production site and API: compare with production, `npm run serve` on the prod backend (HTTP 429 after many pages)
 www.camptocamp.org
 api.camptocamp.org
+media.camptocamp.org
+images.camptocamp.org
+# activity tracking (Strava, Garmin...): production's, also used by preprod
+tracking.camptocamp.org
 
 # preprod (a copy of production: ?backend=preprod) and the GitHub Pages previews of the pull requests
 www.preprod.camptocamp.org
@@ -53,8 +57,7 @@ media.preprod.camptocamp.org
 images.preprod.camptocamp.org
 c2corg.github.io
 
-# images of the dev database, 3D terrain, public transport tiles
-media.camptocamp.org
+# images of the dev database (also media.camptocamp.org), 3D terrain and public transport tiles (media.camptocamp.org)
 sos-ch-dk-2.exo.io
 images.demov6.camptocamp.org
 
