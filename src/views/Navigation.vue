@@ -74,7 +74,7 @@
       <div class="navigation-item">
         <dropdown-button class="is-right add-button" ref="addDocumentMenu">
           <template #button>
-            <span class="button is-success">
+            <span class="button is-success" :class="{ 'is-non-production-backend': isNonProductionBackend }">
               <fa-icon icon="plus" />
             </span>
           </template>
@@ -222,9 +222,11 @@ import IconHelp from '@/components/generics/icons/IconHelp.vue';
 import IconJoinUs from '@/components/generics/icons/IconJoinUs.vue';
 import JoinUsLink from '@/components/generics/links/JoinUsLink.vue';
 import forum from '@/js/apis/forum';
+import { urlWithBackend } from '@/js/backend-selection';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { ADDABLE_TYPES, HELP_ROUTE, useAccountLinks } from '@/js/composables/main-menu';
 import config from '@/js/config';
+import { isNonProductionBackend } from '@/js/environment-label';
 import { toast } from '@/js/toast';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 import type { useForumNotificationsStore } from '@/stores/forum-notifications';
@@ -322,9 +324,8 @@ function go(document: C2cDocument) {
 }
 
 function setUrlsConfiguration(name: string) {
-  config.setUrlsName(name);
-  // reload the page
-  router.go(0);
+  // reloads the page on the other backend, for this tab only
+  window.location.assign(urlWithBackend(window.location.href, name));
 }
 
 function onClick(event: MouseEvent) {

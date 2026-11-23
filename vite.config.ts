@@ -72,6 +72,19 @@ const urlsConfigurations: Record<string, UrlsConfiguration> = {
   },
 };
 
+// a copy of the production data, with production's tracking and its OAuth applications (as the preprod UI container:
+// docker_compose, ansible/inventory/group_vars/preprod_app.yml). Its API allows the CORS of GitHub Pages
+urlsConfigurations.preprod = {
+  ...urlsConfigurations.prod,
+  name: 'preprod',
+  api: 'https://api.preprod.camptocamp.org',
+  media: 'https://media.preprod.camptocamp.org/c2corg-preprod-active',
+  imageBackend: 'https://images.preprod.camptocamp.org',
+  forum: 'https://forum.preprod.camptocamp.org',
+  // Google's public test key: the production one is tied to the production domain
+  recaptchaKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', // gitleaks:allow
+};
+
 const config: BuildConfiguration = {
   routerMode: 'history', // for pretty urls
   ordnanceSurveyApiKey: 'eUaDulZ6AqXJo7iyoP2lRsgUjKfZWA71',
@@ -135,6 +148,19 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   config.isBackendSelectable = false; // explicit flag
 } else {
   throw new Error('Unknown BUILD_ENV');
+}
+
+// Selectable builds: the default backend of the dev server or of the build (e.g. C2C_BACKEND=localhost npm run serve),
+// which ?backend= or the selector of the navigation bar override in one tab (src/js/backend-selection.ts). Other
+// builds read C2C_BACKEND when the container starts (src/js/runtime-config.ts)
+if (config.isBackendSelectable && process.env.C2C_BACKEND) {
+  const defaultUrls = config.urlsConfigurations[process.env.C2C_BACKEND];
+  if (!defaultUrls) {
+    throw new Error(
+      `Unknown C2C_BACKEND "${process.env.C2C_BACKEND}": ${Object.keys(config.urlsConfigurations).join(', ')}`
+    );
+  }
+  config.urls = defaultUrls;
 }
 
 config.publicPath = base;
@@ -201,8 +227,8 @@ function checkBudgets(
 }
 
 /**
- * Dev server only: the prod API doesn't allow CORS from localhost, so the "prod" backend goes through a same-origin
- * proxy (server.proxy below)
+ * Dev server only: the prod and preprod APIs don't allow CORS from localhost, so their backends go through a
+ * same-origin proxy (server.proxy below)
  */
 function devProdApiProxy(): Plugin {
   return {
@@ -213,6 +239,7 @@ function devProdApiProxy(): Plugin {
         return;
       }
       config.urlsConfigurations.prod.api = '/api-prod';
+      config.urlsConfigurations.preprod.api = '/api-preprod';
       return { define: { CAMPTOCAMP_CONFIG: JSON.stringify(config) } };
     },
   };
@@ -346,6 +373,12 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api-prod/, ''),
         // the prod API refuses the localhost Origin (login...): same-origin requests need none
+        configure: (proxy) => proxy.on('proxyReq', (proxyReq) => proxyReq.removeHeader('origin')),
+      },
+      '/api-preprod': {
+        target: 'https://api.preprod.camptocamp.org',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api-preprod/, ''),
         configure: (proxy) => proxy.on('proxyReq', (proxyReq) => proxyReq.removeHeader('origin')),
       },
     },

@@ -2,20 +2,15 @@
 // Do not modify this file. If you need another build parameter
 // please go to vite.config.ts in root
 
+import { LEGACY_BACKEND_LOCAL_STORAGE_KEY, selectBackend } from './backend-selection';
 import { applyRuntimeConfig } from './runtime-config';
 
-const LOCAL_STORAGE_KEY = 'SiteConfiguration.urlsName';
-
-const config: BuildConfiguration & { setUrlsName(name: string): void } = Object.assign(CAMPTOCAMP_CONFIG, {
-  setUrlsName(name: string) {
-    window.localStorage.setItem(LOCAL_STORAGE_KEY, name);
-  },
-});
-
-const urlsName = window.localStorage.getItem(LOCAL_STORAGE_KEY) ?? config.urls.name;
+const config: BuildConfiguration = CAMPTOCAMP_CONFIG;
 
 if (config.isBackendSelectable) {
-  config.urls = config.urlsConfigurations[urlsName];
+  // per tab, see backend-selection.ts
+  config.urls = config.urlsConfigurations[selectBackend(config, location.search, window.sessionStorage)];
+  window.localStorage.removeItem(LEGACY_BACKEND_LOCAL_STORAGE_KEY);
 } else if (location.hostname === 'www.demov6.camptocamp.org') {
   // production builds use production urls by default.
   // use hostname to set urls for demo
