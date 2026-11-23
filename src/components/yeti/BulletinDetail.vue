@@ -1,11 +1,13 @@
 <template>
-  <div class="yeti-subpanel bulletin-detail">
-    <sub-panel-title><span v-translate>Avalanche bulletin</span></sub-panel-title>
+  <div class="yeti-subpanel bulletin-detail" :class="{ 'is-compact': compact }">
+    <template v-if="!embedded">
+      <sub-panel-title><span v-translate>Avalanche bulletin</span></sub-panel-title>
 
-    <div class="is-flex is-justify-content-space-between is-align-items-baseline">
-      <p class="title is-5 mb-2">{{ selected.name }}</p>
-      <button class="delete" :aria-label="$gettext('Close')" @click="close"></button>
-    </div>
+      <div class="is-flex is-justify-content-space-between is-align-items-baseline">
+        <p class="title is-5 mb-2">{{ regionName }}</p>
+        <button class="delete" :aria-label="$gettext('Close')" @click="close"></button>
+      </div>
+    </template>
 
     <p v-if="loading" class="py-3">
       <fa-icon icon="spinner" spin />
@@ -36,142 +38,156 @@
       <ul v-if="problems.length" class="mb-2">
         <li v-for="(problem, i) of problems" :key="i" class="problem">
           <div class="is-flex is-align-items-center">
-            <span class="tag is-warning is-light">{{ problemName(problem.problemType) }}</span>
-            <span class="is-size-7 ml-2">
-              {{ elevationText(problem.elevation) }}
-              <template v-if="problem.validTimePeriod === 'earlier'">({{ $gettext('morning') }})</template>
-              <template v-if="problem.validTimePeriod === 'later'">({{ $gettext('afternoon') }})</template>
+            <span class="tag is-warning is-light problem-name">{{ problemName(problem.problemType) }}</span>
+            <!-- where: on the next line when the name is long, rather than wider than a narrow column -->
+            <span class="problem-where">
+              <span class="is-size-7">
+                {{ elevationText(problem.elevation) }}
+                <template v-if="problem.validTimePeriod === 'earlier'">({{ $gettext('morning') }})</template>
+                <template v-if="problem.validTimePeriod === 'later'">({{ $gettext('afternoon') }})</template>
+              </span>
+              <input-orientation
+                v-if="problem.aspects?.length"
+                disabled
+                :model-value="problem.aspects"
+                :size="44"
+                class="problem-aspects"
+              />
             </span>
-            <input-orientation
-              v-if="problem.aspects?.length"
-              disabled
-              :model-value="problem.aspects"
-              :size="44"
-              class="problem-aspects"
-            />
           </div>
           <!-- SLF gives the same comment to the problems of a group -->
-          <p v-if="problem.comment && problem.comment !== problems[i - 1]?.comment" class="text is-size-7 mt-1">
+          <p
+            v-if="!compact && problem.comment && problem.comment !== problems[i - 1]?.comment"
+            class="text is-size-7 mt-1"
+          >
             {{ plainText(problem.comment) }}
           </p>
         </li>
       </ul>
 
-      <dl class="mb-3">
-        <template v-if="meteoFrance.naturalAvalanches">
-          <dt v-translate>Natural avalanches</dt>
-          <dd>{{ meteoFrance.naturalAvalanches }}</dd>
-        </template>
-        <template v-if="meteoFrance.triggeredAvalanches">
-          <dt v-translate>Triggered avalanches</dt>
-          <dd>{{ meteoFrance.triggeredAvalanches }}</dd>
-        </template>
-      </dl>
+      <!-- the digest of a narrow column: the rest of the bulletin on demand -->
+      <button v-if="compact" type="button" class="button is-small is-fullwidth mt-2" @click="emit('more')">
+        <fa-icon icon="expand" />
+        <span class="ml-1" v-translate>More details</span>
+      </button>
+      <template v-else>
+        <dl class="mb-3">
+          <template v-if="meteoFrance.naturalAvalanches">
+            <dt v-translate>Natural avalanches</dt>
+            <dd>{{ meteoFrance.naturalAvalanches }}</dd>
+          </template>
+          <template v-if="meteoFrance.triggeredAvalanches">
+            <dt v-translate>Triggered avalanches</dt>
+            <dd>{{ meteoFrance.triggeredAvalanches }}</dd>
+          </template>
+        </dl>
 
-      <details v-if="bulletin.avalancheActivity" open>
-        <summary v-translate>Snowpack stability</summary>
-        <p v-if="bulletin.avalancheActivity.highlights" class="has-text-weight-bold">
-          {{ plainText(bulletin.avalancheActivity.highlights) }}
-        </p>
-        <p class="text">{{ plainText(bulletin.avalancheActivity.comment) }}</p>
-      </details>
+        <details v-if="bulletin.avalancheActivity" open>
+          <summary v-translate>Snowpack stability</summary>
+          <p v-if="bulletin.avalancheActivity.highlights" class="has-text-weight-bold">
+            {{ plainText(bulletin.avalancheActivity.highlights) }}
+          </p>
+          <p class="text">{{ plainText(bulletin.avalancheActivity.comment) }}</p>
+        </details>
 
-      <details v-if="bulletin.snowpackStructure || snowCover">
-        <summary v-translate>Snow quality and snow cover</summary>
-        <p v-if="bulletin.snowpackStructure" class="text">{{ plainText(bulletin.snowpackStructure.comment) }}</p>
-        <table v-if="snowCover?.levels?.length" class="table is-narrow is-size-7 mt-2">
-          <thead>
-            <tr>
-              <th v-translate>Elevation</th>
-              <th v-translate>North (cm)</th>
-              <th v-translate>South (cm)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="level of snowCover.levels" :key="level.elevation">
-              <td>{{ level.elevation }} m</td>
-              <td>{{ level.north }}</td>
-              <td>{{ level.south }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <p v-if="snowCover?.limitNorth !== undefined" class="is-size-7">
-          <span v-translate>Snow cover from:</span>
-          {{ snowCover.limitNorth }} m <span v-translate>(north)</span>, {{ snowCover.limitSouth }} m
-          <span v-translate>(south)</span>
-        </p>
-      </details>
+        <details v-if="bulletin.snowpackStructure || snowCover">
+          <summary v-translate>Snow quality and snow cover</summary>
+          <p v-if="bulletin.snowpackStructure" class="text">{{ plainText(bulletin.snowpackStructure.comment) }}</p>
+          <table v-if="snowCover?.levels?.length" class="table is-narrow is-size-7 mt-2">
+            <thead>
+              <tr>
+                <th v-translate>Elevation</th>
+                <th v-translate>North (cm)</th>
+                <th v-translate>South (cm)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="level of snowCover.levels" :key="level.elevation">
+                <td>{{ level.elevation }} m</td>
+                <td>{{ level.north }}</td>
+                <td>{{ level.south }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <p v-if="snowCover?.limitNorth !== undefined" class="is-size-7">
+            <span v-translate>Snow cover from:</span>
+            {{ snowCover.limitNorth }} m <span v-translate>(north)</span>, {{ snowCover.limitSouth }} m
+            <span v-translate>(south)</span>
+          </p>
+        </details>
 
-      <details v-if="newSnowDays.length">
-        <summary v-translate>Fresh snow</summary>
-        <table class="table is-narrow is-size-7">
-          <thead>
-            <tr>
-              <th></th>
-              <th>
-                <span v-translate>Fresh snow in 24 h (cm)</span>
-                <span v-if="meteoFrance.newSnow?.elevation">&nbsp;– {{ meteoFrance.newSnow.elevation }} m</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="day of newSnowDays" :key="day.date">
-              <td>
-                {{ formatDate(day.date, 'ddd DD/MM') }}
-                <span v-if="isForecast(day.date)" class="has-text-grey" v-translate>(forecast)</span>
-              </td>
-              <td>{{ day.min === day.max ? day.min : `${day.min}–${day.max}` }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </details>
-
-      <details v-if="bulletin.weatherForecast || bulletin.weatherReview || forecasts.length">
-        <summary v-translate>Weather</summary>
-        <p v-if="bulletin.weatherForecast" class="text">{{ plainText(bulletin.weatherForecast.comment) }}</p>
-        <p v-if="bulletin.weatherReview" class="text">
-          <strong v-translate>Past days</strong><br />{{ plainText(bulletin.weatherReview.comment) }}
-        </p>
-        <div v-if="forecasts.length" class="table-container mt-2">
+        <details v-if="newSnowDays.length">
+          <summary v-translate>Fresh snow</summary>
           <table class="table is-narrow is-size-7">
             <thead>
               <tr>
                 <th></th>
-                <th v-for="(elevation, i) of windElevations" :key="i">
-                  <span v-translate>Wind</span> {{ elevation ? `${elevation} m` : '' }}
+                <th>
+                  <span v-translate>Fresh snow in 24 h (cm)</span>
+                  <span v-if="meteoFrance.newSnow?.elevation">&nbsp;– {{ meteoFrance.newSnow.elevation }} m</span>
                 </th>
-                <th v-translate>0 °C isotherm</th>
-                <th v-translate>Rain-snow limit</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="forecast of forecasts" :key="forecast.time">
-                <td>{{ formatDate(forecast.time, 'ddd HH:mm') }}</td>
-                <td v-for="(wind, i) of forecast.wind" :key="i">
-                  <template v-if="wind.speed !== undefined">{{ wind.direction }} {{ wind.speed }} km/h</template>
+              <tr v-for="day of newSnowDays" :key="day.date">
+                <td>
+                  {{ formatDate(day.date, 'ddd DD/MM') }}
+                  <span v-if="isForecast(day.date)" class="has-text-grey" v-translate>(forecast)</span>
                 </td>
-                <td>{{ meters(forecast.freezingLevel) }}</td>
-                <td>{{ meters(forecast.rainSnowLimit) }}</td>
+                <td>{{ day.min === day.max ? day.min : `${day.min}–${day.max}` }}</td>
               </tr>
             </tbody>
           </table>
-        </div>
-      </details>
+        </details>
 
-      <details v-if="tendency" open>
-        <summary>
-          <span v-translate>Trend</span>
-          <fa-icon v-if="tendencyIcon" :icon="tendencyIcon" class="ml-2" />
-        </summary>
-        <p v-if="tendency.highlights" class="has-text-weight-bold">{{ plainText(tendency.highlights) }}</p>
-        <p v-if="tendency.comment" class="text">{{ plainText(tendency.comment) }}</p>
-      </details>
+        <details v-if="bulletin.weatherForecast || bulletin.weatherReview || forecasts.length">
+          <summary v-translate>Weather</summary>
+          <p v-if="bulletin.weatherForecast" class="text">{{ plainText(bulletin.weatherForecast.comment) }}</p>
+          <p v-if="bulletin.weatherReview" class="text">
+            <strong v-translate>Past days</strong><br />{{ plainText(bulletin.weatherReview.comment) }}
+          </p>
+          <div v-if="forecasts.length" class="table-container mt-2">
+            <table class="table is-narrow is-size-7">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th v-for="(elevation, i) of windElevations" :key="i">
+                    <span v-translate>Wind</span> {{ elevation ? `${elevation} m` : '' }}
+                  </th>
+                  <th v-translate>0 °C isotherm</th>
+                  <th v-translate>Rain-snow limit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="forecast of forecasts" :key="forecast.time">
+                  <td>{{ formatDate(forecast.time, 'ddd HH:mm') }}</td>
+                  <td v-for="(wind, i) of forecast.wind" :key="i">
+                    <template v-if="wind.speed !== undefined">{{ wind.direction }} {{ wind.speed }} km/h</template>
+                  </td>
+                  <td>{{ meters(forecast.freezingLevel) }}</td>
+                  <td>{{ meters(forecast.rainSnowLimit) }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details v-if="tendency" open>
+          <summary>
+            <span v-translate>Trend</span>
+            <fa-icon v-if="tendencyIcon" :icon="tendencyIcon" class="ml-2" />
+          </summary>
+          <p v-if="tendency.highlights" class="has-text-weight-bold">{{ plainText(tendency.highlights) }}</p>
+          <p v-if="tendency.comment" class="text">{{ plainText(tendency.comment) }}</p>
+        </details>
+      </template>
 
       <p class="is-size-7 mt-3 bulletin-source">
         <strong>©{{ bulletin.source?.provider?.name }}</strong>
         <span v-if="bulletin.publicationTime">, {{ formatDate(bulletin.publicationTime) }}</span>
         <br />
-        <a v-if="officialUrl" :href="officialUrl" target="_blank" rel="noopener">
+        <!-- embedded: the page has its own link -->
+        <a v-if="officialUrl && !embedded" :href="officialUrl" target="_blank" rel="noopener">
           <fa-icon icon="external-link-alt" />
           <span class="ml-1" v-translate>Full bulletin</span>
         </a>
@@ -195,15 +211,47 @@ const props = defineProps({
     type: Object as PropType<SelectedBulletin>,
     required: true,
   },
+  // the bulletins of the region, already fetched (the avalanche box of a route): none fetched here. null while they
+  // are fetched
+  bulletins: {
+    type: Array as PropType<AvalancheBulletin[] | null>,
+    default: undefined,
+  },
+  // the given bulletins could not be fetched
+  failed: {
+    type: Boolean,
+    default: false,
+  },
+  // in a box of a page: no title nor close button of the YETI panel
+  embedded: {
+    type: Boolean,
+    default: false,
+  },
+  // a digest for a narrow column: the danger and the problems, the rest on demand (more)
+  compact: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'more']);
 
 const { $dateUtils, $gettext, $language } = useGlobalProperties();
 
-const bulletin = ref<AvalancheBulletin | null>(null);
-const loading = ref(false);
-const failed = ref(false);
+const given = computed(() => props.bulletins !== undefined);
+const fetched = ref<AvalancheBulletin | null>(null);
+const fetching = ref(false);
+const fetchFailed = ref(false);
+const bulletin = computed(() => (given.value ? (props.bulletins?.[0] ?? null) : fetched.value));
+const loading = computed(() => (given.value ? props.bulletins === null && !props.failed : fetching.value));
+const failed = computed(() => (given.value ? props.failed : fetchFailed.value));
+// a link may give the region alone (YETI opened from a route page)
+const regionName = computed(
+  () =>
+    props.selected.name ||
+    bulletin.value?.regions.find((region) => region.regionID === props.selected.regionId)?.name ||
+    props.selected.regionId
+);
 
 const meteoFrance = computed(() => bulletin.value?.customData?.MeteoFrance ?? {});
 const danger = computed(() => toDangerLevel(bulletin.value?.dangerRatings));
@@ -289,22 +337,23 @@ function close() {
 watch(
   () => [props.selected.regionId, $language.current] as const,
   async ([regionId, lang]) => {
-    bulletin.value = null;
-    failed.value = false;
-    loading.value = true;
+    if (given.value) return;
+    fetched.value = null;
+    fetchFailed.value = false;
+    fetching.value = true;
     try {
       const bulletins = await avalancheBulletins.getLatestBulletins(regionId, lang);
       // another massif may have been opened meanwhile
       if (regionId === props.selected.regionId) {
-        bulletin.value = bulletins[0] ?? null;
+        fetched.value = bulletins[0] ?? null;
       }
     } catch {
       if (regionId === props.selected.regionId) {
-        failed.value = true;
+        fetchFailed.value = true;
       }
     } finally {
       if (regionId === props.selected.regionId) {
-        loading.value = false;
+        fetching.value = false;
       }
     }
   },
@@ -340,6 +389,32 @@ dt {
 
 dd + dt {
   margin-top: 0.5rem;
+}
+
+.problem > div {
+  flex-wrap: wrap;
+  row-gap: 0.25rem;
+}
+
+/* a long name wraps in its tag */
+.problem-name {
+  white-space: normal;
+  height: auto;
+}
+
+.problem-where {
+  flex: 1 1 9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+  margin-left: 0.5rem;
+}
+
+/* a narrow column: the where under the name, always */
+.is-compact .problem-where {
+  flex-basis: 100%;
+  margin-left: 0;
 }
 
 .problem + .problem {

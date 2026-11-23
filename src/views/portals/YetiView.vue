@@ -112,6 +112,7 @@
 import axios, { type AxiosError, type AxiosResponse } from 'axios';
 import type { Extent } from 'ol/extent';
 import { computed, onMounted, ref, shallowRef, useTemplateRef, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 import YetiArticle from '@/components/yeti/Article.vue';
 import BulletinDetail from '@/components/yeti/BulletinDetail.vue';
@@ -320,6 +321,12 @@ yetixEvents.all.clear();
 
 // build tabs: here, after setDefault() resets them, then on each change of localTabs
 Yetix.setTabs(localTabs.value);
+
+// opened from the avalanche box of a route page (?bulletin=FR-03): the bulletin of its region, in its tab
+const linkedBulletin = useRoute().query.bulletin;
+if (typeof linkedBulletin === 'string' && /^[A-Z]{2}(-[A-Za-z0-9-]+)?$/.test(linkedBulletin)) {
+  Yetix.setSelectedBulletin({ regionId: linkedBulletin, name: '' });
+}
 
 onMounted(() => {
   check();

@@ -1,29 +1,105 @@
 <template>
-  <div v-if="showAvalancheInfo" class="box no-print is-relative">
+  <div
+    v-if="showAvalancheInfo"
+    class="box no-print is-relative avalanche-box"
+    @pointerenter="onPointerEnter"
+    @pointerleave="onPointerLeave"
+  >
     <div class="title" v-translate>Avalanche risk</div>
-    <template v-if="bras?.length">
-      <template v-if="bulletinsWithInfo">
-        <div class="icon-bra is-flex is-justify-content-center">
+    <template v-if="regions?.length">
+      <template v-if="hasInfo">
+        <div v-if="maxLevel > 0" class="icon-bra is-flex is-justify-content-center">
           <icon-bra :size="120" :level="maxLevel" />
         </div>
         <div class="has-text-centered">
-          <span v-for="(bra, index) in bras" :key="bra.id">
-            <a :href="bra.urls[0].url" :title="bra.fullname" target="_blank">
-              {{ bra.name }}<template v-if="bra.fullname"> ({{ bra.country }})</template>
+          <span v-for="(region, index) in sortedRegions" :key="region.bra.id">
+            <a :href="officialUrl(region)" :title="region.bra.fullname" target="_blank" rel="noopener">
+              {{ region.bra.name }}<template v-if="region.bra.fullname"> ({{ region.bra.country }})</template>
             </a>
-            <template v-if="index + 1 < bras.length">&bull; </template>
+            <template v-if="index + 1 < sortedRegions.length">&bull; </template>
           </span>
+        </div>
+        <p
+          v-if="atElevation"
+          class="is-size-7 has-text-centered has-text-grey"
+          :title="$gettext('Danger at the highest point of the route')"
+        >
+          <fa-icon icon="mountain" class="mr-1" />{{ elevation }} m
+        </p>
+
+        <!-- the full bulletin, unfolded in the box: by this button (touch, keyboard), or by a long hover -->
+        <button
+          v-if="withBulletins.length"
+          type="button"
+          class="button is-white is-small is-fullwidth bulletin-toggle"
+          :aria-expanded="unfolded"
+          :aria-controls="panelId"
+          @click="onToggleClick"
+        >
+          <span v-translate>Avalanche bulletin</span>
+          <fa-icon :icon="unfolded ? 'angle-up' : 'angle-down'" class="ml-1" />
+        </button>
+        <div v-if="unfolded && current" :id="panelId" class="bulletin-panel">
+          <div v-if="withBulletins.length > 1" class="tabs is-small is-centered mb-2">
+            <ul>
+              <li v-for="region of withBulletins" :key="region.regionId!" :class="{ 'is-active': region === current }">
+                <a href="#" @click.prevent="activeRegionId = region.regionId">{{ region.bra.name }}</a>
+              </li>
+            </ul>
+          </div>
+          <bulletin-detail
+            :selected="selected(current)"
+            :bulletins="current.bulletins ?? null"
+            :failed="current.failed"
+            embedded
+            :compact="!$screen.isMobile"
+            @more="fullBulletin?.show()"
+          />
         </div>
       </template>
       <div v-else class="py-2">
         <p><span v-translate key="id2">No avalanche bulletin right now</span></p>
       </div>
-      <hr />
+      <!-- unfolded, the links follow the bulletin: no rule between them -->
+      <hr v-if="!unfolded" />
+      <div v-else-if="current && officialUrl(current)" class="box-link mt-3">
+        <fa-icon icon="file-lines" fixed-width />
+        <a :href="officialUrl(current)" target="_blank" rel="noopener">
+          <span v-translate>Full bulletin</span> ({{ current.bra.name }})
+        </a>
+      </div>
     </template>
-    <div>
+    <div class="box-link">
       <icon-yeti fixed-width />
       <router-link :to="yetiUrl"><span v-translate>Use YETI to better analyze avalanche risk</span></router-link>
     </div>
+
+    <!-- the whole bulletin, too wide for the column of the box on a large screen -->
+    <modal-card v-if="current" ref="fullBulletin">
+      <template #title>{{ current.bra.name }}</template>
+      <bulletin-detail
+        :selected="selected(current)"
+        :bulletins="current.bulletins ?? null"
+        :failed="current.failed"
+        embedded
+      />
+      <template #footer>
+        <a
+          v-if="officialUrl(current)"
+          :href="officialUrl(current)"
+          target="_blank"
+          rel="noopener"
+          class="button is-small"
+        >
+          <fa-icon icon="file-lines" />
+          <span class="ml-1" v-translate>Full bulletin</span>
+        </a>
+        <router-link :to="yetiUrl" class="button is-small">
+          <icon-yeti fixed-width />
+          <span class="ml-1" v-translate>Open in YETI</span>
+        </router-link>
+      </template>
+    </modal-card>
   </div>
 </template>
 <script setup lang="ts">
@@ -31,16 +107,24 @@ import { booleanIntersects as turfBooleanIntersects } from '@turf/boolean-inters
 import { buffer as turfBuffer } from '@turf/buffer';
 import { simplify as turfSimplify } from '@turf/simplify';
 import type { Feature, FeatureCollection, Geometry, MultiPolygon, Polygon } from 'geojson';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, useId, useTemplateRef, watch } from 'vue';
 
 import IconBra from '@/components/generics/icons/IconBra.vue';
+import ModalCard from '@/components/generics/modals/ModalCard.vue';
+import BulletinDetail from '@/components/yeti/BulletinDetail.vue';
+import { bulletinRegionId, dangerAtElevation } from '@/components/yeti/avalanche-bulletin';
+import type { SelectedBulletin } from '@/components/yeti/yetix-types';
+import avalancheBulletins, { type AvalancheBulletin } from '@/js/apis/avalanche-bulletin-service';
 import yetiService from '@/js/apis/yeti-service';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { documentProperty } from '@/js/properties';
 
 const props = defineProps({ ...documentProperty });
 
+const { $language } = useGlobalProperties();
+
 // a zone of the avalanche bulletins (BRA), and its bulletin
-type Zone = Feature<Polygon | MultiPolygon, { name: string; country: string }>;
+type Zone = Feature<Polygon | MultiPolygon, { name: string; country: string; numZone?: string | null }>;
 type Bra = {
   id: string;
   name: string;
@@ -52,14 +136,52 @@ type Bra = {
   orientations: Record<string, unknown>;
   validUntil: string;
 };
+// a zone of the route, its EAWS region (none when the c2c API has no bulletin for it) and the bulletins of the API:
+// undefined until asked, null while fetched
+type Region = { bra: Bra; regionId: string | null; bulletins?: AvalancheBulletin[] | null; failed: boolean };
 
-const bras = ref<Bra[] | null>(null);
-const bulletinsWithInfo = ref(0);
+const regions = ref<Region[] | null>(null);
 
-// the highest danger level of the bulletins (shown when one has a level)
-const maxLevel = computed(() => Math.max(...(bras.value ?? []).map((bra) => bra.danger.max ?? 0)));
+// the danger is the one at the highest point of the route, once its bulletin is there
+const elevation = computed(() => props.document.elevation_max as number | null | undefined);
+const regionBulletin = (region: Region) => region.bulletins?.[0];
+const dangerOf = (region: Region) => {
+  const bulletin = regionBulletin(region);
+  return (bulletin && dangerAtElevation(bulletin.dangerRatings, elevation.value)) ?? region.bra.danger.max ?? 0;
+};
+// the most dangerous first
+const sortedRegions = computed(() => [...(regions.value ?? [])].sort((a, b) => dangerOf(b) - dangerOf(a)));
+const maxLevel = computed(() => Math.max(0, ...sortedRegions.value.map(dangerOf)));
+const atElevation = computed(() => !!elevation.value && sortedRegions.value.some(regionBulletin));
+const withBulletins = computed(() => sortedRegions.value.filter((region) => region.regionId));
+// a danger, or a bulletin of the API (being fetched, failed or there) though the summary has no danger
+const hasInfo = computed(
+  () =>
+    maxLevel.value > 0 ||
+    withBulletins.value.some((region) => region.bulletins !== undefined && (region.bulletins?.length ?? 1) > 0)
+);
 
-const yetiUrl = computed(() => ({ name: 'yeti', params: { document_id: props.document.document_id } }));
+const activeRegionId = ref<string | null>(null);
+const current = computed(
+  () => withBulletins.value.find((region) => region.regionId === activeRegionId.value) ?? withBulletins.value[0]
+);
+const selected = (region: Region): SelectedBulletin => ({ regionId: region.regionId!, name: region.bra.name });
+
+// the PDF of Météo-France, else the website of the service, else the link of the zone (not the ENSG page of the
+// French massifs, which goes away)
+function officialUrl(region: Region) {
+  if (region.regionId?.startsWith('FR-')) return avalancheBulletins.pdfUrl(region.regionId);
+  const website = regionBulletin(region)?.source?.provider?.website;
+  const zoneUrl = region.bra.urls[0]?.url;
+  return website ?? (zoneUrl && !zoneUrl.includes('showbra.php') ? zoneUrl : undefined);
+}
+
+// YETI on the route, its bulletin tab on the most dangerous region
+const yetiUrl = computed(() => ({
+  name: 'yeti',
+  params: { document_id: props.document.document_id },
+  query: withBulletins.value.length ? { bulletin: withBulletins.value[0].regionId } : {},
+}));
 
 const showAvalancheInfo = computed(() => {
   if (props.document?.type !== 'r') {
@@ -70,6 +192,68 @@ const showAvalancheInfo = computed(() => {
 
   return props.document.activities?.some((activity: string) => activities.includes(activity));
 });
+
+// --- unfolding: a long hover (cancelled when the pointer leaves before), folded a moment after it leaves; a click
+// pins it open, a second one folds it ---
+
+const HOVER_DELAY = 600;
+const LEAVE_DELAY = 400;
+const panelId = useId();
+const fullBulletin = useTemplateRef<InstanceType<typeof ModalCard>>('fullBulletin');
+const pinned = ref(false);
+const hovered = ref(false);
+const unfolded = computed(() => pinned.value || hovered.value);
+watch(unfolded, (open) => open && fetchBulletins());
+let hoverTimer: ReturnType<typeof setTimeout> | undefined;
+
+function onPointerEnter(event: PointerEvent) {
+  clearTimeout(hoverTimer);
+  // touch has no hover: the button
+  if (event.pointerType !== 'mouse' || !withBulletins.value.length) return;
+  if (!hovered.value) hoverTimer = setTimeout(() => (hovered.value = true), HOVER_DELAY);
+}
+
+function onPointerLeave() {
+  clearTimeout(hoverTimer);
+  if (hovered.value) hoverTimer = setTimeout(() => (hovered.value = false), LEAVE_DELAY);
+}
+
+function onToggleClick() {
+  clearTimeout(hoverTimer);
+  // unfolded by the hover: the click keeps it open
+  pinned.value = hovered.value && !pinned.value ? true : !pinned.value;
+  hovered.value = false;
+}
+
+// --- the bulletins, fetched in the background once the regions are known: there when the box unfolds ---
+
+const aborter = new AbortController();
+onBeforeUnmount(() => {
+  aborter.abort();
+  clearTimeout(hoverTimer);
+});
+
+function whenIdle(callback: () => void) {
+  if ('requestIdleCallback' in window) window.requestIdleCallback(callback, { timeout: 2000 });
+  else setTimeout(callback, 200);
+}
+
+// once: when the browser is idle, or earlier when the box is opened before
+let fetchStarted = false;
+function fetchBulletins() {
+  if (fetchStarted) return;
+  fetchStarted = true;
+  for (const region of regions.value ?? []) {
+    if (!region.regionId) continue;
+    region.bulletins = null;
+    avalancheBulletins
+      .getLatestBulletins(region.regionId, $language.current, aborter.signal)
+      .then((bulletins) => (region.bulletins = bulletins))
+      .catch(() => {
+        if (!aborter.signal.aborted) region.failed = true;
+      });
+  }
+}
 
 onMounted(() => {
   if (showAvalancheInfo.value) {
@@ -107,11 +291,21 @@ onMounted(() => {
         if (zones.length) {
           const m = new Map(zones.map((zone) => [zone.properties.name + '@' + zone.properties.country, zone]));
           yetiService.bra().then((response: { data: { zones: Bra[] } }) => {
-            const found = response.data.zones
+            regions.value = response.data.zones
               .filter((zone) => m.has(zone.zone + '@' + zone.country))
-              .map((zone) => ({ ...m.get(zone.zone + '@' + zone.country)!.properties, ...zone }));
-            bras.value = found;
-            bulletinsWithInfo.value = found.map((bra) => bra.danger.max).filter(Boolean).length;
+              .map((zone) => {
+                const feature = m.get(zone.zone + '@' + zone.country)!;
+                return {
+                  bra: { ...feature.properties, ...zone },
+                  regionId: bulletinRegionId({
+                    ...feature.properties,
+                    contains: (lonLat) =>
+                      turfBooleanIntersects({ type: 'Point', coordinates: lonLat }, feature.geometry),
+                  }),
+                  failed: false,
+                };
+              });
+            whenIdle(fetchBulletins);
           });
         }
       }
@@ -120,7 +314,26 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+@import '@/assets/css/media.css';
+
 .icon-bra {
   margin: -35px 0 -25px 0;
+}
+
+.bulletin-toggle {
+  margin-top: 0.5rem;
+}
+
+.bulletin-panel {
+  margin-top: 0.5rem;
+}
+
+/* the official bulletin and YETI: the two ways further, alike */
+.box-link {
+  font-size: 1.05rem;
+}
+
+.box-link + .box-link {
+  margin-top: 0.25rem;
 }
 </style>
