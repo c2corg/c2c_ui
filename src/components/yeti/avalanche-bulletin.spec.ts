@@ -95,6 +95,17 @@ describe('dangerAtElevation', () => {
   it('gives the highest danger when the elevation is unknown or no band can tell', () => {
     expect(dangerAtElevation([...ratings], null)).toBe(4);
     expect(dangerAtElevation([{ mainValue: 'low', elevation: { upperBound: 'treeline' } }], 1500)).toBe(1);
+    // a band of the treeline could be the one of the elevation
+    expect(
+      dangerAtElevation(
+        [
+          { mainValue: 'moderate' },
+          { mainValue: 'high', elevation: { lowerBound: 'treeline' } },
+          { mainValue: 'low', elevation: { upperBound: 'treeline' } },
+        ],
+        1500
+      )
+    ).toBe(4);
     expect(dangerAtElevation([], 1500)).toBeUndefined();
     expect(dangerAtElevation([{ mainValue: 'no_rating' }], 1500)).toBeUndefined();
   });

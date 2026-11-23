@@ -93,6 +93,12 @@ export function dangerAtElevation(ratings: DangerRating[] = [], elevation?: numb
   }
   // a bound in meters, or null when it cannot be compared (treeline)
   const meters = (bound?: string) => (bound === undefined ? undefined : /^\d+$/.test(bound) ? Number(bound) : null);
+  // a band that cannot be compared could be the one of the elevation: the highest, to be safe
+  const comparable = (r: DangerRating) =>
+    meters(r.elevation?.lowerBound) !== null && meters(r.elevation?.upperBound) !== null;
+  if (!ratings.every(comparable)) {
+    return max;
+  }
   const holding = ratings.filter((r) => {
     const [lower, upper] = [meters(r.elevation?.lowerBound), meters(r.elevation?.upperBound)];
     return (

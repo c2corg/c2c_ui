@@ -8,7 +8,7 @@
     <div class="title" v-translate>Avalanche risk</div>
     <template v-if="regions?.length">
       <template v-if="hasInfo">
-        <div class="icon-bra is-flex is-justify-content-center">
+        <div v-if="maxLevel > 0" class="icon-bra is-flex is-justify-content-center">
           <icon-bra :size="120" :level="maxLevel" />
         </div>
         <div class="has-text-centered">
@@ -43,13 +43,13 @@
           <div v-if="withBulletins.length > 1" class="tabs is-small is-centered mb-2">
             <ul>
               <li v-for="region of withBulletins" :key="region.regionId!" :class="{ 'is-active': region === current }">
-                <a @click="activeRegionId = region.regionId">{{ region.bra.name }}</a>
+                <a href="#" @click.prevent="activeRegionId = region.regionId">{{ region.bra.name }}</a>
               </li>
             </ul>
           </div>
           <bulletin-detail
             :selected="selected(current)"
-            :bulletins="current.bulletins"
+            :bulletins="current.bulletins ?? null"
             :failed="current.failed"
             embedded
             :compact="!$screen.isMobile"
@@ -77,7 +77,12 @@
     <!-- the whole bulletin, too wide for the column of the box on a large screen -->
     <modal-card v-if="current" ref="fullBulletin">
       <template #title>{{ current.bra.name }}</template>
-      <bulletin-detail :selected="selected(current)" :bulletins="current.bulletins" :failed="current.failed" embedded />
+      <bulletin-detail
+        :selected="selected(current)"
+        :bulletins="current.bulletins ?? null"
+        :failed="current.failed"
+        embedded
+      />
       <template #footer>
         <a
           v-if="officialUrl(current)"
@@ -102,7 +107,7 @@ import { booleanIntersects as turfBooleanIntersects } from '@turf/boolean-inters
 import { buffer as turfBuffer } from '@turf/buffer';
 import { simplify as turfSimplify } from '@turf/simplify';
 import type { Feature, FeatureCollection, Geometry, MultiPolygon, Polygon } from 'geojson';
-import { computed, onBeforeUnmount, onMounted, ref, useId, useTemplateRef } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, useId, useTemplateRef, watch } from 'vue';
 
 import IconBra from '@/components/generics/icons/IconBra.vue';
 import ModalCard from '@/components/generics/modals/ModalCard.vue';
@@ -147,9 +152,14 @@ const dangerOf = (region: Region) => {
 // the most dangerous first
 const sortedRegions = computed(() => [...(regions.value ?? [])].sort((a, b) => dangerOf(b) - dangerOf(a)));
 const maxLevel = computed(() => Math.max(0, ...sortedRegions.value.map(dangerOf)));
-const hasInfo = computed(() => maxLevel.value > 0);
 const atElevation = computed(() => !!elevation.value && sortedRegions.value.some(regionBulletin));
 const withBulletins = computed(() => sortedRegions.value.filter((region) => region.regionId));
+// a danger, or a bulletin of the API (being fetched, failed or there) though the summary has no danger
+const hasInfo = computed(
+  () =>
+    maxLevel.value > 0 ||
+    withBulletins.value.some((region) => region.bulletins !== undefined && (region.bulletins?.length ?? 1) > 0)
+);
 
 const activeRegionId = ref<string | null>(null);
 const current = computed(
@@ -193,6 +203,7 @@ const fullBulletin = useTemplateRef<InstanceType<typeof ModalCard>>('fullBulleti
 const pinned = ref(false);
 const hovered = ref(false);
 const unfolded = computed(() => pinned.value || hovered.value);
+watch(unfolded, (open) => open && fetchBulletins());
 let hoverTimer: ReturnType<typeof setTimeout> | undefined;
 
 function onPointerEnter(event: PointerEvent) {
@@ -227,7 +238,11 @@ function whenIdle(callback: () => void) {
   else setTimeout(callback, 200);
 }
 
+// once: when the browser is idle, or earlier when the box is opened before
+let fetchStarted = false;
 function fetchBulletins() {
+  if (fetchStarted) return;
+  fetchStarted = true;
   for (const region of regions.value ?? []) {
     if (!region.regionId) continue;
     region.bulletins = null;

@@ -144,6 +144,43 @@ describe('AvalancheBox', () => {
     expect(unfolded()).toBe(false);
   });
 
+  it('opened before the browser is idle: fetches the bulletins at once, once', async () => {
+    getLatest.mockReturnValue(new Promise(() => {}));
+    const wrapper = mount(AvalancheBox, {
+      props: { document: route as never },
+      global: {
+        config: {
+          globalProperties: {
+            $gettext: (t: string) => t,
+            $language: { current: 'fr' },
+            $screen: { isMobile: false },
+          } as never,
+        },
+        directives: { translate: {} },
+        stubs: {
+          IconBra: true,
+          IconYeti: true,
+          FaIcon: true,
+          RouterLink: true,
+          BulletinDetail: {
+            props: ['bulletins'],
+            template: '<div class="bulletin-detail">{{ bulletins === null }}</div>',
+          },
+          ModalCard: true,
+        },
+      },
+    });
+    await vi.waitFor(() => expect(wrapper.find('.bulletin-toggle').exists()).toBe(true));
+    await wrapper.find('.bulletin-toggle').trigger('click');
+    expect(getLatest).toHaveBeenCalledTimes(1);
+    // being fetched by the box, not by the detail
+    expect(wrapper.find('.bulletin-panel .bulletin-detail').text()).toBe('true');
+
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    expect(getLatest).toHaveBeenCalledTimes(1);
+    wrapper.unmount();
+  });
+
   it('unfolds the whole bulletin by the button on a phone (no hover)', async () => {
     const wrapper = await mountBox(true);
     await wrapper.find('.avalanche-box').trigger('pointerenter', { pointerType: 'touch' });
