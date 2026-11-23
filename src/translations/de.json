@@ -2010,7 +2010,6 @@
     "key_needed": {
       "custodianship_types": "Schlüssel nötig"
     },
-    "kilometers": "km",
     "labande_global_rating": "Allgemeiner globaler Ski-Schwierigkeitsgrad",
     "labande_ski_rating": "Allgemeiner punktueller Ski-Schwierigkeitsgrad",
     "lake": {
@@ -2072,7 +2071,6 @@
     "medium": {
       "quality_types": "durchschnittlich"
     },
-    "meters": "m",
     "migmatite": {
       "rock_types": "Migmatit"
     },

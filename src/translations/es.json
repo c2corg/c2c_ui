@@ -1912,7 +1912,6 @@
     "key_needed": {
       "custodianship_types": "llave necesaria para abrir"
     },
-    "kilometers": "kilómetros",
     "labande_global_rating": "Cotación global esquí",
     "labande_ski_rating": "Cotación puntual esquí",
     "lake": {
@@ -1974,7 +1973,6 @@
     "medium": {
       "quality_types": "medio"
     },
-    "meters": "metros",
     "migmatite": {
       "rock_types": "migmatita"
     },

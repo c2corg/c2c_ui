@@ -1073,7 +1073,6 @@
     "key_needed": {
       "custodianship_types": "kulcs_szükséges"
     },
-    "kilometers": "kilométer",
     "labande_global_rating": "labande_globális_besorolás",
     "labande_ski_rating": "labande_sí_besorolás",
     "lake": {
@@ -1134,7 +1133,6 @@
     "medium": {
       "quality_types": "közepes"
     },
-    "meters": "méter",
     "migmatite": {
       "rock_types": "migmatit"
     },

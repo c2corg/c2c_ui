@@ -1919,7 +1919,6 @@
     "key_needed": {
       "custodianship_types": "chiavi necessarie"
     },
-    "kilometers": "km",
     "labande_global_rating": "Difficoltà complessiva sciistica",
     "labande_ski_rating": "Difficoltà sciistica puntuale",
     "lake": {
@@ -1981,7 +1980,6 @@
     "medium": {
       "quality_types": "medio"
     },
-    "meters": "m",
     "minutes": "minuti",
     "misc": {
       "image_categories": "varie",

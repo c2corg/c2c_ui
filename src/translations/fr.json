@@ -1845,7 +1845,6 @@
     "key_needed": {
       "custodianship_types": "clé nécessaire pour ouvrir"
     },
-    "kilometers": "km",
     "labande_global_rating": "Cotation globale ski",
     "labande_ski_rating": "Cotation ponctuelle ski",
     "lake": {
@@ -1904,7 +1903,6 @@
     "medium": {
       "quality_types": "moyen"
     },
-    "meters": "m",
     "misc": {
       "image_categories": "divers",
       "waypoint_types": "divers"
