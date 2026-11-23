@@ -42,6 +42,10 @@ mapsneu.wien.gv.at
 tiles.maps.eox.at
 api.os.uk
 
+# production site and API: compare with production, `npm run serve` on the prod backend (HTTP 429 after many pages)
+www.camptocamp.org
+api.camptocamp.org
+
 # images of the dev database, 3D terrain, public transport tiles
 media.camptocamp.org
 sos-ch-dk-2.exo.io
@@ -52,9 +56,9 @@ photon.komoot.io
 cdn.jsdelivr.net
 ```
 
-Not needed: the production API (HTTP 429, and blocked by the e2e tests), the forum, ads and analytics (blocked by the
-e2e tests), Playwright's browser CDN (`CHROME_PATH`, the preinstalled Chrome, is used instead). The npm install scripts
-(`core-js`, `exifreader`, `unrs-resolver`) only use the npm registry.
+Not needed: the forum, ads and analytics (blocked by the e2e tests), Playwright's browser CDN (`CHROME_PATH`, the
+preinstalled Chrome, is used instead). The npm install scripts (`core-js`, `exifreader`, `unrs-resolver`) only use the
+npm registry.
 
 ## Network secrets
 
