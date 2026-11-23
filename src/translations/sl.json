@@ -87,6 +87,7 @@
     "Are you sure you want to revert to this version of the document?": "Ali ste prepričani, da želite vrniti na to različico dokumenta?",
     "Area not covered": "Območje ni pokrito",
     "Area too large": "Območje je preveliko",
+    "Arrive before": "Prihod pred",
     "Articles, waypoints or routes to be linked.": "Poveži članek, točko ali smer",
     "Articles, waypoints, routes or books to be linked.": "Povezani članki, točke, smeri ali knjige",
     "As the name suggests, this method is intended for beginners. Therefore, the safety margin must be particularly important. No parameter other than the danger level is specified. Orientation is ignored.": "Kot že ime pove, je ta metoda namenjena začetnikom. Zato mora biti varnostna meja zelo velika. Noben drug parameter ni določen razen stopnje nevarnosti plazovnega biltena. Orientacija je prezrta.",
@@ -148,6 +149,7 @@
     "Choice of massif": "Izbira gorske skupine",
     "Choose file": "Izberite datoteko",
     "Clear": "Briši",
+    "Click on the map to get weather forecasts": "Kliknite na zemljevid za pridobitev vremenskih napovedi",
     "Close": "Zapri",
     "Collapse": "Zapri",
     "Comments": "Komentarji",
@@ -413,6 +415,7 @@
     "Image could not be processed": "Slike ni bilo mogoče obdelati za nalaganje",
     "Image count": "Število slik",
     "Images are under license specified in the original document of each image": "Slike, povezane s to stranjo, so na voljo pod licenco, navedeno v izvirnem dokumentu vsake slike.",
+    "Import": "Uvoz",
     "Improve our understanding of risks": "Izboljšati razumevanje o tveganjih",
     "Incidents and accidents": "Incidenti in nesreče",
     "Include image section": "Vključite povezane slike",
@@ -428,6 +431,7 @@
     "Install app": "Namesti aplikacijo",
     "Install the app": "Namesti aplikacijo",
     "Install, get around, settings": "Namestitev, navigacija, nastavitve",
+    "Interface language": "Jezik vmesnika",
     "Interpolate value should be a number > 0": "Interpolirana vrednost mora biti število > 0",
     "Invalid date": "Neveljaven datum",
     "Invalid email address": {
@@ -435,7 +439,7 @@
     },
     "Invalid value": "Neveljavna vrednost",
     "Issue report": "Prijava problema",
-    "Itinevert": "Zelena pot",
+    "Itinevert": "Mehka mobilnost",
     "Join us": "Društvo",
     "Know more about SERAC": "Izvedite več o SERAC",
     "Languages": "Jeziki",
@@ -453,6 +457,7 @@
       "$$noContext": "Izberi plasti",
       "Map controls": "Izberi plasti"
     },
+    "Leave after": "Odhod po",
     "Leave empty to keep your current password.": "Pustite prazno, če želite obdržati trenutno geslo.",
     "Leave fullscreen": "Zapusti celozaslonski način",
     "Leave later": "Odhod po",
@@ -503,6 +508,7 @@
     "Merge with other document": "Združi z drugim dokumentom",
     "Merging a source document with a target document transfers all associations of the source document to the target document, and sets up a redirection from the source to the target document.": "Združitev izvornega dokumenta s ciljnim dokumentom prenese vse povezave izvornega dokumenta na ciljni dokument in nastavi preusmeritev iz izvornega v ciljni dokument.",
     "Metaskirando: an aggregator of ski outings in Europe": "Metaskirando: zbiralnik smučarskih tur v Evropi",
+    "Meteo": "Vremenska",
     "Methods": "Metode",
     "Misc data about the waypoint": "Razni podatki o točki",
     "Miscs": "Razno",
@@ -685,6 +691,7 @@
     "Restore this version": "Obnovi to različico",
     "Retry": "Poskusi znova",
     "Revoke": "Prekliči",
+    "Risk": "Tveganje",
     "Risky slopes": "Rizična pobočja",
     "Risky slopes, increased risk due to orientation": "Nevarna pobočja, povečano tveganje zaradi orientacije",
     "Rotate image left": "Zasukaj levo",
@@ -751,8 +758,11 @@
     "Some points are out of extent": "Nekatere točke so izven obsega",
     "Something new does not show up: close the app completely and open it again, it then loads its latest version.": "Če se kaj novega ne prikaže: aplikacijo povsem zaprite in jo znova odprite – tako se bo naložila njena najnovejša različica.",
     "Sophie Picture Contest": "Foto Natečaj Sophie",
+    "Sorry, euskara lang has been frozen. We're looking for a moderator, if you're interested, please contact board@camptocamp.org": "Žal je jezikovna različica v baskovščini (euskara) zamrznjena. Iščemo moderatorja; če vas to zanima, se obrnite na board@camptocamp.org.",
     "Sort by": "Razvrsti po",
     "Source:": "Dokument, ki ga je treba združiti (vir): ",
+    "Spam": "Neželena pošta",
+    "Split line": "Razdeli črto",
     "Start a search again": "Ponovno začni iskanje",
     "Static map images": "Statične slike zemljevidov",
     "Statistical cookies": "Statistični piškotki",
@@ -765,6 +775,7 @@
     "Suggested rating": "Predlagana ocena",
     "Summary": "Povzetek",
     "Summary of camptocamp's articles": "Povzetek člankov",
+    "Sustainable mobility on Camptocamp": "Trajnostna mobilnost na Camptocamp",
     "SwissTopo Slopes": {
       "Map slopes layer": "Švica (SwissTopo)"
     },
@@ -773,7 +784,9 @@
     },
     "Tabs at the bottom of the screen. Everything is explained in the guide. Have a good outing!": "Zavihki na dnu zaslona. Vse je podrobneje pojasnjeno v vodniku. Želimo vam prijetno turo!",
     "Tabs at the bottom of the screen:": "Zavihki na dnu zaslona:",
+    "Tap": "Tapni",
     "Tap Also save offline (in the message that follows, or in Favourites): the topo, its photos and the map around it are downloaded. Its bookmark gets a green arrow.": "Tapnite »Shrani tudi za uporabo offline« (v sporočilu, ki sledi, ali med priljubljenimi): opis, fotografije in zemljevid se prenesejo. Zaznamek dobi zeleno puščico.",
+    "Tap the download button of a favourite to take it to the mountain.": "Tapnite gumb za prenos priljubljene vsebine in jo vzemite s seboj v gore.",
     "Target:": "Dokument, ki ga je treba hraniti (cilj): ",
     "Terms of Service need to be accepted": {
       "API message": "Sprejeti je treba pogoje storitve"
@@ -882,6 +895,7 @@
     "View xreports": "Oglejte si poročila",
     "Visibility": "Vidnost",
     "Visible": "Vidno",
+    "Visible layer": "Vidna plast",
     "Visible on map": "Vidno na zemljevidu",
     "Want to contribute financially (hosting, developing...)? Donate!": "Za finančno podporo (strežniki, razvoj itd.) - prispevaj!",
     "Want to join us? Or donate?": "Se bi društvu pridružili? Ali donirali?",
@@ -903,6 +917,7 @@
     "Why install it?": "Zakaj jo namestiti?",
     "Wide and constant": "Široko in konstantno",
     "Will generate new points along route, at regular interval, defined by distance in meters": "Ustvarjene bodo nove točke vzdolž črte, v rednem intervalu, določen po razdalji v metrih",
+    "Winter routes": "Zimske smeri",
     "With the": "Z",
     "Without a network, Save keeps the outing on the phone. With one, Save without publishing does the same.": "Brez omrežja funkcija »Shrani« ohrani vzpon na telefonu. Z omrežjem, »Shrani brez objave« deluje enako. ",
     "Without a network, open it from Favourites: it opens as with one.": "Če nimate omrežja, ga odprite prek Priljubljenih: odpre se tako, kot da bi bilo omrežje na voljo.",
@@ -922,6 +937,7 @@
     "Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has more restrictions, mainly no accent and no space.": "Vaš vzdevek na forumu bo prikazan na forumu in ga v svojih nastavitvah lahko po želji spremenite . Več je omejitev, predvsem brez strešic in presledkov.",
     "Your outings written without a network, published when you choose.": "Vaši vzponi napisani brez internetne povezave – objavite jih, ko želite.",
     "Your password must contain:": "Vaše geslo mora vsebovati:",
+    "Your session has ended: please sign in again.": "Vaša seja se je končala; prosimo, prijavite se znova.",
     "Your settings and your session stay on the phone: on iPhone, Safari clears the data of a site that is not installed after seven days without a visit.": "Vaše nastavitve in seja ostanejo v telefonu: na iPhonu Safari po sedmih dneh brez obiska izbriše podatke spletnega mesta, ki ni nameščeno.",
     "Zoom in": {
       "Map controls": "Približaj"
@@ -929,6 +945,7 @@
     "Zoom out": {
       "Map controls": "Pomanjšaj"
     },
+    "Zoom out and it will be OK": "Pomanjšaj in bo vse v redu.",
     "a new point on an existing line": "novo točko na obstoječi črti",
     "access": {
       "$$noContext": "izhodišče / javni prevoz",
@@ -2113,6 +2130,7 @@
     "yeti": "Yeti",
     "zh": {
       "langs": "kitajščina"
-    }
+    },
+    "« Auto » follows the setting of your system.": "»Samodejno« sledi nastavitvam vašega sistema."
   }
 }
