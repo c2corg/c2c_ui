@@ -77,8 +77,9 @@ import ImageUploader from './ImageUploader.vue';
 
 import c2c from '@/js/apis/c2c';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { CONFIDENT_FIT, locateImages, readTrack } from '@/js/geo/locate-images';
 import { refreshOutingQuality } from '@/js/refresh-outing-quality';
-import { toast } from '@/js/toast';
+import { notify, toast } from '@/js/toast';
 import uploadFile, { canRender } from '@/js/upload-file';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
@@ -271,8 +272,35 @@ function onRotateImage(image: UploadedImage, angle: number) {
   computeReadyForSaving();
 }
 
+// the images of an outing without a location of their own (they got the outing's): located on its GPS track (#4259)
+function locateOnTrack(saved: C2cDocument[]) {
+  const parent = props.parentDocument as C2cDocument & { date_start?: string | null; date_end?: string | null };
+  const track = parent.type === 'o' ? readTrack(parent.geometry?.geom_detail) : [];
+  if (track.length < 2) {
+    return 0;
+  }
+  const images = saved as (C2cDocument & { date_time?: string; camera_name?: string; elevation?: number })[];
+  const defaults = [parent.geometry?.geom, ...(parent.associations?.routes ?? []).map((route) => route.geometry?.geom)];
+  const locations = locateImages(
+    images.map((image) => ({ ...image, geom: image.geometry?.geom })),
+    track,
+    defaults,
+    parent,
+    { minFit: CONFIDENT_FIT }
+  );
+  images.forEach((image, i) => {
+    const location = locations[i];
+    if (location) {
+      image.geometry = { ...image.geometry, geom: location.geom };
+      image.elevation ??= location.elevation;
+    }
+  });
+  return locations.filter(Boolean).length;
+}
+
 function save() {
   const saved = documents.value;
+  const located = locateOnTrack(saved);
   promise.value = c2c
     .createImages(saved)
     .then((response) => {
@@ -289,6 +317,10 @@ function save() {
       );
       clean();
       hide();
+
+      if (located) {
+        notify($gettext('Images located on the GPS track of the outing:') + ' ' + located, 'is-success');
+      }
 
       // the images count in the quality of an outing
       const imageIds = response.data.images.map((image: { document_id: number }) => image.document_id);
