@@ -6,7 +6,7 @@ import { createMemoryHistory, createRouter } from 'vue-router';
 import ImagesUploader from './ImagesUploader.vue';
 
 import c2c from '@/js/apis/c2c';
-import { toast } from '@/js/toast';
+import { notify, toast } from '@/js/toast';
 import uploadFile from '@/js/upload-file';
 
 // the real canRender: the rotation follows its format policy
@@ -14,7 +14,7 @@ vi.mock('@/js/upload-file', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/js/upload-file')>()),
   default: vi.fn(),
 }));
-vi.mock('@/js/toast', () => ({ toast: vi.fn() }));
+vi.mock('@/js/toast', () => ({ toast: vi.fn(), notify: vi.fn() }));
 
 const file = (name: string, type = 'image/jpeg') => ({ name, type, lastModified: 1, size: 1000 });
 const upload = vi.mocked(uploadFile);
@@ -160,6 +160,45 @@ describe('ImagesUploader', () => {
     expect(parentDocument.associations.images).toEqual([
       expect.objectContaining({ document_id: 123, filename: '1588000000_1.jpg', modernThumbnailsPending: true }),
     ]);
+  });
+
+  it('locates the images without GPS position on the timed track of the outing', async () => {
+    const createImages = vi.spyOn(c2c, 'createImages').mockResolvedValue({
+      data: { images: [{ document_id: 123 }, { document_id: 124 }] },
+    } as never);
+    const t0 = Date.UTC(2026, 10, 21, 9) / 1000;
+    const geom = (x: number) => JSON.stringify({ type: 'Point', coordinates: [x, 5600000] });
+    const parentDocument = {
+      type: 'o',
+      document_id: 1,
+      date_start: '2026-11-21',
+      geometry: {
+        geom: geom(500),
+        geom_detail: JSON.stringify({
+          type: 'LineString',
+          coordinates: [
+            [0, 5600000, 1000, t0],
+            [100, 5600000, 1010, t0 + 600],
+          ],
+        }),
+      },
+      associations: { images: [] },
+    };
+    const { uploader } = await mountUploader(router(), parentDocument);
+    uploader.onFilesChange({ target: { files: [file('a.jpg'), file('b.jpg')], value: 'x' } });
+    const shot = new Date((t0 + 300) * 1000).toISOString();
+    // a camera without GPS; a phone with its own position
+    upload.mock.calls[0][4]({ filename: 'a.jpg', date_time: shot });
+    upload.mock.calls[1][4]({ filename: 'b.jpg', date_time: shot, geometry: { geom: geom(42) } });
+
+    uploader.save();
+    await flushPromises();
+
+    expect(createImages.mock.calls[0][0]).toEqual([
+      expect.objectContaining({ geometry: { geom: geom(50) }, elevation: 1005 }),
+      expect.objectContaining({ geometry: { geom: geom(42) } }),
+    ]);
+    expect(notify).toHaveBeenCalledWith(expect.stringContaining('1'), 'is-success');
   });
 
   it('tells the user when the images could not be saved', async () => {
