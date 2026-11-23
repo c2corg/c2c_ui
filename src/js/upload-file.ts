@@ -110,6 +110,10 @@ const number = (tag: Tag) => {
   }
   return undefined;
 };
+// a value the form accepts, else none: a camera writes 0 for an unknown focal length or ISO, a GPS an altitude below
+// the sea or far above the summits
+const within = (value: number | undefined, min: number, max = Infinity) =>
+  value !== undefined && value >= min && value <= max ? value : undefined;
 
 // The metadata of the tags of ExifReader (exported for the specs)
 export const toMetadata = (tags: ExpandedTags): Metadata => {
@@ -120,15 +124,15 @@ export const toMetadata = (tags: ExpandedTags): Metadata => {
     // IPTC first, as edited by the photographers
     date: iptcDate ? `${iptcDate}T${iptcTime ?? '00:00:00'}` : (text(exif.DateTimeOriginal) ?? text(exif.DateTime)),
     offset: iptcDate ? undefined : (text(exif.OffsetTimeOriginal) ?? text(exif.OffsetTime)),
-    exposureTime: number(exif.ExposureTime),
-    iso: number(exif.ISOSpeedRatings),
-    focalLength: number(exif.FocalLengthIn35mmFilm),
+    exposureTime: within(number(exif.ExposureTime), Number.MIN_VALUE),
+    iso: within(number(exif.ISOSpeedRatings), 1),
+    focalLength: within(number(exif.FocalLengthIn35mmFilm), 1),
     fnumber: number(exif.FNumber),
     make: text(exif.Make),
     model: text(exif.Model),
     latitude: gps?.Latitude,
     longitude: gps?.Longitude,
-    altitude: gps?.Altitude,
+    altitude: within(gps?.Altitude, 0, 9000),
     width: number(exif.PixelXDimension) ?? number(file['Image Width']),
     height: number(exif.PixelYDimension) ?? number(file['Image Height']),
     orientation: number(exif.Orientation),

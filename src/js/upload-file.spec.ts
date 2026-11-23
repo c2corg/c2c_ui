@@ -96,6 +96,26 @@ describe('upload-file toMetadata', () => {
     });
   });
 
+  it('drops the values the form refuses: 0 for unknown, an altitude below the sea', () => {
+    const unknown = {
+      ...iphone,
+      exif: {
+        ...iphone.exif,
+        ExposureTime: { value: [0, 1], description: '0' },
+        ISOSpeedRatings: { value: 0, description: '0' },
+        FocalLengthIn35mmFilm: { value: 0, description: 'Unknown' },
+      },
+      gps: { ...iphone.gps, Altitude: -6 },
+    } as unknown as ExpandedTags;
+
+    expect(toMetadata(unknown)).toMatchObject({
+      exposureTime: undefined,
+      iso: undefined,
+      focalLength: undefined,
+      altitude: undefined,
+    });
+  });
+
   it('prefers the IPTC date, with its time and offset or not', () => {
     const iptc = (time?: string) =>
       toMetadata({
