@@ -1,8 +1,24 @@
+// A number with the decimal separator of the UI language (4,5 in French, 4.5 in English), and no thousands separator:
+// 4808 m, as the topoguide writes elevations (articles 151910 and 972435). Whole by default; a value that is not a
+// number (a numeric string from an API is read) is given back as text
+export const formatNumber = (
+  value: number | string | null | undefined,
+  lang?: string | null,
+  options: Intl.NumberFormatOptions = { maximumFractionDigits: 0 }
+): string => {
+  if (value === null || value === undefined || value === '') {
+    return '';
+  }
+  const number = Number(value);
+  // Intl wants zh-CN, the UI language is zh_CN
+  return Number.isFinite(number)
+    ? new Intl.NumberFormat(lang?.replace('_', '-') ?? undefined, { ...options, useGrouping: false }).format(number)
+    : String(value);
+};
+
 // A length stored in metres, as shown on a document: metres under 1 km, one decimal under 10 km, whole km above
 export const formatLength = (metres: number, lang?: string | null): { value: string; unit: string } => {
-  // Intl wants zh-CN, the UI language is zh_CN
-  const format = (value: number, maximumFractionDigits: number) =>
-    new Intl.NumberFormat(lang?.replace('_', '-') ?? undefined, { maximumFractionDigits }).format(value);
+  const format = (value: number, maximumFractionDigits: number) => formatNumber(value, lang, { maximumFractionDigits });
 
   if (Math.abs(metres) < 1000) {
     return { value: format(Math.round(metres), 0), unit: 'm' };

@@ -48,6 +48,7 @@ import { onBeforeUnmount, ref } from 'vue';
 
 import trackingService, { type Activity, type Geometry } from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { formatLength, formatNumber } from '@/js/length-format';
 import { toast } from '@/js/toast';
 
 defineProps<{ pickedId: number | null }>();
@@ -125,12 +126,11 @@ async function pick(activity: Activity) {
 function figuresOf(activity: Activity) {
   const parts = [];
   if (activity.length) {
-    parts.push(
-      `${(activity.length / 1000).toLocaleString($language.current ?? undefined, { maximumFractionDigits: 1 })} km`
-    );
+    const { value, unit } = formatLength(activity.length, $language.current);
+    parts.push(`${value} ${unit}`);
   }
   if (activity.heightDiffUp) {
-    parts.push(`+${Math.round(activity.heightDiffUp)} m`);
+    parts.push(`+${formatNumber(activity.heightDiffUp, $language.current)} m`);
   }
   return parts.join(' · ');
 }

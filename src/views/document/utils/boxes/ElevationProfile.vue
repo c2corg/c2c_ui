@@ -42,6 +42,7 @@ import { useGlobalProperties } from '@/js/composables/global-properties';
 import debounce from '@/js/debounce';
 import bus from '@/js/event-bus';
 import { toLonLat } from '@/js/geo/projection';
+import { formatNumber } from '@/js/length-format';
 import d3 from '@/js/libs/d3';
 import { documentProperty } from '@/js/properties';
 
@@ -107,7 +108,7 @@ const props = defineProps({ ...documentProperty });
 
 const emit = defineEmits(['has-data']);
 
-const { $gettext } = useGlobalProperties();
+const { $gettext, $language } = useGlobalProperties();
 
 const graph = useTemplateRef<HTMLDivElement>('graph');
 
@@ -165,10 +166,8 @@ let debouncedOnResize: (width: number, height: number) => void;
 const i18n_ = {
   elevation: $gettext('Elevation'),
   elevation_legend: $gettext('Elevation (m)'),
-  meters: $gettext('meters'),
   distance: $gettext('Distance'),
   distance_legend: $gettext('Distance (km)'),
-  km: $gettext('kilometers'),
   time: $gettext('Time'),
   duration: $gettext('Duration'),
   duration_legend: $gettext('Duration (hrs)'),
@@ -220,11 +219,17 @@ function createChart() {
 
   // Scales and axes
   y = d3.scaleLinear().range([height, 0]);
-  yAxis = d3.axisLeft().scale(y).tickFormat(d3.format('.0f'));
+  yAxis = d3
+    .axisLeft()
+    .scale(y)
+    .tickFormat((t: number) => formatNumber(t, $language?.current));
   y.domain(d3.extent(data, (d: Point) => d.ele)).nice();
 
   x1 = d3.scaleLinear().range([0, width]);
-  x1Axis = d3.axisBottom().scale(x1);
+  x1Axis = d3
+    .axisBottom()
+    .scale(x1)
+    .tickFormat((t: number) => formatNumber(t, $language?.current, { maximumFractionDigits: 2 }));
   x1.domain(d3.extent(data, (d: Point) => d.d)).nice();
 
   if (timeAvailable.value) {
@@ -434,10 +439,11 @@ function setCursor(mouseMoveEvent: MouseEvent) {
   const bisectDistance = d3.bisector((d: Point) => d.d).left;
   const bisectDate = d3.bisector((d: Point) => d.elapsed).left;
 
-  const formatDistance = d3.format('.2f');
+  const formatDistance = (km: number) =>
+    formatNumber(km, $language?.current, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const formatDate = d3.timeFormat('%H:%M');
   const formatMinutes = d3.format('02d');
-  const formatElevation = d3.format('d');
+  const formatElevation = (m: number) => formatNumber(m, $language?.current);
 
   const bisect = mode.value === 'distance' ? bisectDistance : bisectDate;
   const x0 =
@@ -463,12 +469,12 @@ function setCursor(mouseMoveEvent: MouseEvent) {
     i18n_.elevation +
       ' ' +
       formatElevation(d.ele) +
-      i18n_.meters +
+      '\u00a0m' +
       ' / ' +
       i18n_.distance +
       ' ' +
       formatDistance(d.d) +
-      i18n_.km
+      '\u00a0km'
   );
 
   if (timeAvailable.value) {

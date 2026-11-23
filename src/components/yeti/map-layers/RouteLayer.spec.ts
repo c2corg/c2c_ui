@@ -36,7 +36,13 @@ const mountRouteLayer = async () => {
     global: {
       plugins: [router],
       provide: { yetiMap: { map, getExtent: () => map.getView().calculateExtent([1000, 1000]) } },
-      config: { globalProperties: { $gettext: (text: string) => text, $language: { current: 'fr' } } as never },
+      config: {
+        globalProperties: {
+          $gettext: (text: string) => text,
+          $language: { current: 'fr' },
+          $filters: { number: (value: unknown) => String(value) },
+        } as never,
+      },
       stubs: { FaIcon: true },
     },
   });

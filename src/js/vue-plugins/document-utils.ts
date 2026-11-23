@@ -20,6 +20,7 @@ import type {
   Xreport,
 } from '@/js/apis/c2c/schemas';
 import constants from '@/js/constants';
+import { formatLength, formatNumber } from '@/js/length-format';
 
 // a locale of a document: its language, title...
 export type Locale = {
@@ -500,18 +501,16 @@ function createDocumentUtils(app: App) {
       if (!length) {
         return undefined;
       }
-      if (length > 1000) {
-        const l = (length / 1000.0).toFixed(1);
-        return `${l}&nbsp;${app.config.globalProperties.$gettext('kilometers')}`;
-      }
-      return `${length}&nbsp;${app.config.globalProperties.$gettext('meters')}`;
+      // the same unit symbols in every language: 560 m, 4,5 km, 12 km
+      const { value, unit } = formatLength(length, app.config.globalProperties.$language?.current);
+      return `${value}&nbsp;${unit}`;
     },
 
     heightDiffUpWithUnit(hdu?: number | null): string | undefined {
       if (!hdu) {
         return undefined;
       }
-      return `${hdu}&nbsp;${app.config.globalProperties.$gettext('meters')}`;
+      return `${formatNumber(hdu, app.config.globalProperties.$language?.current)}&nbsp;m`;
     },
   };
 
