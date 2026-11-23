@@ -1,6 +1,6 @@
 <template>
   <!-- the waypoints on a map filling the page, with the density of the outings and of the routes further out -->
-  <div class="waypoints-map-view">
+  <div class="waypoints-map-view fills-window">
     <html-header :title="$gettext('map')" />
     <map-view
       v-if="route.query.bbox"
@@ -107,23 +107,10 @@ const hint = computed(() => {
 </script>
 
 <style scoped>
-/* the map takes the whole page, under the navigation (and above the bottom bar of the phone layout) */
-:global(#app:has(.waypoints-map-view)) {
-  height: 100vh;
-  height: 100dvh;
-  display: flex;
-  flex-direction: column;
-}
-
-:global(#app:has(.waypoints-map-view) .page-content) {
-  flex: 1 1 0;
-  min-height: 0;
-}
-
+/* the map takes the whole page, under the navigation (and above the bottom bar of the phone layout): .fills-window,
+   App.vue */
 .waypoints-map-view {
   position: relative;
-  flex: 1 1 0;
-  min-height: 0;
 }
 
 .map-hint {

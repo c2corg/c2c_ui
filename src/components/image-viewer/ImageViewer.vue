@@ -377,7 +377,7 @@ onBeforeUnmount(() => {
 
   img {
     /* initially avoid overlap with title & scroll, but this is overridden when zooming */
-    max-height: calc(100vh - 3rem - 30px);
+    max-height: calc(100dvh - 3rem - 30px);
   }
 }
 
@@ -430,12 +430,12 @@ onBeforeUnmount(() => {
 }
 
 .image-viewer-info {
-  height: 100vh;
   width: 20rem;
   z-index: 1000;
   position: fixed;
   top: 3rem;
   right: 0;
+  bottom: 0;
 }
 
 .swiper-button-prev {

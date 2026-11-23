@@ -243,7 +243,7 @@ onBeforeUnmount(() => {
   &.pinned {
     position: fixed;
     top: var(--c2c-header-height);
-    margin-top: 0; /*avoid space between nav and map, where body text can be seen while scrolling*/
+    margin: 0; /*avoid space between nav and map, where body text can be seen while scrolling*/
     z-index: 10; /* on top of body but below navbar (z=25) and side-menu (z=30) */
     box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.4); /* <o-x> <o-y> <radius> */
   }
@@ -254,7 +254,7 @@ onBeforeUnmount(() => {
   }
   &.pinned-to-right {
     right: 0px;
-    height: calc(100vh - var(--c2c-header-height));
+    bottom: var(--c2c-bottom-bar-height);
     width: 30vw;
   }
 }

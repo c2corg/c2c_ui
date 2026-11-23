@@ -73,6 +73,7 @@
       class="columns result-section"
       :class="[
         'mobile-mode-' + displayMode,
+        displayMode === 'map' ? 'fills-window' : 'fills-window-from-tablet',
         { 'query-has-tags': queryHasTags, 'has-splitter': showSplitter, 'is-resizing': splitter.resizing.value },
       ]"
     >
@@ -365,8 +366,10 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
 @import '@/assets/css/media.css';
 
 /*
- * On mobile the search bars stick on top, under the ad when there is one, and the map height is calculated: section
- * padding 0.5rem, header 56px, filters 25px.
+ * The results and the map take what the header and the filters leave of the window (.fills-window, App.vue), whatever
+ * their height (the filters can wrap on two lines, the text size of the app settings): from the tablet width, the list
+ * scrolls in its container and the pagination stays below it. On phones the page scrolls under the search bars, which
+ * stick on top, but the map alone fills the window.
  */
 
 .header-section {
@@ -425,14 +428,13 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
   }
 
   .map-container {
-    height: calc(100vh - var(--c2c-header-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
     padding: 0;
   }
 
   .mobile-mode-map {
     margin-top: 0;
     .map-container {
-      height: calc(100vh - var(--c2c-header-height) - 3 * 0.5rem - 56px - 25px);
+      height: 100%;
     }
 
     .documents-container {
@@ -452,29 +454,6 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
 }
 
 @media screen and (--c2c-min-tablet) {
-  /*
-   * The app is as high as the window and the results take what is left under the header and the filters, whatever
-   * their height (the filters can wrap on two lines) and what comes above (the top bar, with or without the ad bar).
-   * The list scrolls in its container, and the pagination stays below it.
-   */
-  :global(#app:has(.documents-view)) {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  :global(#app:has(.documents-view) .page-content) {
-    flex: 1 1 0;
-    min-height: 0;
-  }
-
-  .documents-view {
-    flex: 1 1 0;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-  }
-
   .search-infos {
     flex: 0 0 auto;
   }
@@ -482,8 +461,6 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
   .result-section {
     margin-top: 0;
     margin-bottom: 0;
-    flex: 1 1 0;
-    min-height: 0;
 
     .documents-container {
       height: 100%;
