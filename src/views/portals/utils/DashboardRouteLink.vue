@@ -1,14 +1,14 @@
 <template>
   <dashboard-link :document="route">
     <span v-if="filteredDocument.height_diff_up" :title="$gettext('height_diff_up')" class="append-comma">
-      +{{ $filters.number(route.height_diff_up) }}&nbsp;m</span
+      +{{ route.height_diff_up }}&nbsp;m</span
     >
     <span
       v-if="filteredDocument.height_diff_difficulties"
       :title="$gettext('height_diff_difficulties')"
       class="append-comma"
     >
-      {{ $filters.number(route.height_diff_difficulties) }}&nbsp;m</span
+      {{ route.height_diff_difficulties }}&nbsp;m</span
     >
     <document-rating :document="filteredDocument" />
     <marker-quality :quality="route.quality" />

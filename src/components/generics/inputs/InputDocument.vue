@@ -46,12 +46,12 @@
                   <span :title="$gettext('elevation_max')">
                     <fa-icon icon="sort-amount-up" class="has-text-primary" />
                   </span>
-                  {{ $filters.number(document.elevation || document.elevation_max) }}&nbsp;m
+                  {{ document.elevation || document.elevation_max }}&nbsp;m
                 </span>
 
                 <span v-if="document.height_diff_up">
                   <icon-height-diff-up class="has-text-primary" />
-                  {{ $filters.number(document.height_diff_up) }}&nbsp;m
+                  {{ document.height_diff_up }}&nbsp;m
                 </span>
                 <span v-if="document.area_type" class="is-italic">
                   {{ $filters.uppercaseFirstLetter($gettext(document.area_type, 'area_types')) }}

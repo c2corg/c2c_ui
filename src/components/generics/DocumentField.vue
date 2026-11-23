@@ -52,7 +52,7 @@
 import { computed } from 'vue';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
-import { formatLength, formatNumber } from '@/js/length-format';
+import { formatLength } from '@/js/length-format';
 import { documentProperty, fieldProperty } from '@/js/properties';
 
 const props = defineProps({
@@ -88,11 +88,6 @@ const shown = computed(() => {
 
   if (props.divisor === 1000 && unit === 'km' && typeof value.value === 'number') {
     return formatLength(value.value, $language?.current);
-  }
-
-  // an elevation, a height difference...: 4 808 m (fr), 4,808 m (en), 4.808 m (de)
-  if (unit === 'm' && typeof value.value === 'number') {
-    return { value: formatNumber(value.value, $language?.current), unit };
   }
 
   return { value: props.divisor ? Math.round(value.value / props.divisor) : value.value, unit };

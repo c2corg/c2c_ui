@@ -5,9 +5,7 @@
     </span>
     <span>&#8239;</span>
     <!-- thin space -->
-    <document-title :document="waypoint" /><span class="has-text-normal"
-      >, {{ $filters.number(waypoint.elevation) }}&nbsp;m</span
-    >
+    <document-title :document="waypoint" /><span class="has-text-normal">, {{ waypoint.elevation }}&nbsp;m</span>
   </span>
 </template>
 

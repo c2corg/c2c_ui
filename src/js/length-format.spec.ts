@@ -6,7 +6,7 @@ describe('formatLength', () => {
   it('shows metres under 1 km', () => {
     expect(formatLength(560, 'en')).toEqual({ value: '560', unit: 'm' });
     expect(formatLength(0, 'en')).toEqual({ value: '0', unit: 'm' });
-    expect(formatLength(999.6, 'en')).toEqual({ value: '1,000', unit: 'm' });
+    expect(formatLength(999.6, 'en')).toEqual({ value: '1000', unit: 'm' });
   });
 
   it('shows one decimal under 10 km, none when it is zero', () => {
@@ -27,18 +27,20 @@ describe('formatLength', () => {
 });
 
 describe('formatNumber', () => {
-  it('writes the thousands as the language does', () => {
-    expect(formatNumber(4808, 'fr')).toBe('4\u202f808');
-    expect(formatNumber(4808, 'en')).toBe('4,808');
-    expect(formatNumber(4808, 'de')).toBe('4.808');
-    expect(formatNumber(4808, 'it')).toBe('4808');
-    expect(formatNumber(12345, 'it')).toBe('12.345');
+  it('writes no thousands separator, as the topoguide does, and the decimal separator of the language', () => {
+    for (const lang of ['fr', 'en', 'de', 'it', 'ru', 'zh_CN']) {
+      expect(formatNumber(4808, lang)).toBe('4808');
+      expect(formatNumber(12345, lang)).toBe('12345');
+    }
+    expect(formatNumber(4.5, 'fr', { maximumFractionDigits: 1 })).toBe('4,5');
+    expect(formatNumber(4.5, 'en', { maximumFractionDigits: 1 })).toBe('4.5');
+    expect(formatNumber(4.5, 'de', { maximumFractionDigits: 1 })).toBe('4,5');
   });
 
   it('rounds to whole numbers unless told, and reads numeric strings', () => {
-    expect(formatNumber(2399.6, 'en')).toBe('2,400');
+    expect(formatNumber(2399.6, 'en')).toBe('2400');
     expect(formatNumber(1.5, 'fr', { minimumFractionDigits: 2 })).toBe('1,50');
-    expect(formatNumber('2400', 'de')).toBe('2.400');
+    expect(formatNumber('2400', 'de')).toBe('2400');
   });
 
   it('gives back what is not a number, and nothing for no value', () => {

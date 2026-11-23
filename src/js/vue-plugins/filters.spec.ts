@@ -35,13 +35,13 @@ describe('filters', () => {
     const globals = app.config.globalProperties;
     globals.$language = { current: 'de' } as never;
 
-    expect(globals.$filters.number(4808)).toBe('4.808');
-    expect(globals.$filters.number('2400')).toBe('2.400');
+    expect(globals.$filters.number(4808)).toBe('4808');
+    expect(globals.$filters.number(1.5, { maximumFractionDigits: 1 })).toBe('1,5');
     expect(globals.$filters.number(null)).toBe('');
     expect(globals.$filters.length(4520)).toBe('4,5\u00a0km');
 
     globals.$language = { current: 'en' } as never;
-    expect(globals.$filters.number(4808)).toBe('4,808');
+    expect(globals.$filters.number(1.5, { maximumFractionDigits: 1 })).toBe('1.5');
     expect(globals.$filters.length(560)).toBe('560\u00a0m');
   });
 });

@@ -6,7 +6,7 @@
         <span v-if="field.i18n">{{
           $filters.uppercaseFirstLetter($gettext(String(value[0] ?? ''), field.i18nContext))
         }}</span>
-        <span v-else>{{ field.unit === 'm' ? $filters.number(value[0]) : value[0] }}</span>
+        <span v-else>{{ value[0] }}</span>
         <span v-if="field.unit">&nbsp;{{ field.unit }}</span>
       </div>
       <!-- class depends on i18n ???
@@ -22,7 +22,7 @@
         <span v-if="field.i18n">{{
           $filters.uppercaseFirstLetter($gettext(String(value[1] ?? ''), field.i18nContext))
         }}</span>
-        <span v-else>{{ field.unit === 'm' ? $filters.number(value[1]) : value[1] }}</span>
+        <span v-else>{{ value[1] }}</span>
         <span v-if="field.unit">&nbsp;{{ field.unit }}</span>
       </div>
     </div>

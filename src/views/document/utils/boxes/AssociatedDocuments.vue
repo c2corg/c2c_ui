@@ -16,9 +16,7 @@
         <div class="column is-paddingless">
           <document-title :document="waypoint" />
         </div>
-        <div class="column is-narrow has-text-grey is-paddingless is-size-7">
-          {{ $filters.number(waypoint.elevation) }}&nbsp;m
-        </div>
+        <div class="column is-narrow has-text-grey is-paddingless is-size-7">{{ waypoint.elevation }}&nbsp;m</div>
       </document-link>
       <hr />
     </div>

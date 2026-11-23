@@ -18,12 +18,12 @@
 
       <span v-if="document.height_diff_up" class="is-ellipsed" :title="$gettext('height_diff_up')">
         <icon-height-diff-up class="card-icon" />
-        {{ $filters.number(document.height_diff_up) }}&nbsp;m
+        {{ document.height_diff_up }}&nbsp;m
       </span>
 
       <span v-if="document.height_diff_difficulties" class="is-ellipsed" :title="$gettext('height_diff_difficulties')">
         <fa-icon icon="arrows-alt-v" class="card-icon" />
-        {{ $filters.number(document.height_diff_difficulties) }}&nbsp;m
+        {{ document.height_diff_difficulties }}&nbsp;m
       </span>
     </card-row>
 

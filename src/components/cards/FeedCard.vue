@@ -41,12 +41,12 @@
 
       <span v-if="item.document.height_diff_up" :title="$gettext('height_diff_up')">
         <icon-height-diff-up />
-        {{ $filters.number(item.document.height_diff_up) }}&nbsp;m
+        {{ item.document.height_diff_up }}&nbsp;m
       </span>
 
       <span v-if="item.document.height_diff_difficulties" :title="$gettext('height_diff_difficulties')">
         <fa-icon icon="arrows-alt-v" />
-        {{ $filters.number(item.document.height_diff_difficulties) }}&nbsp;m
+        {{ item.document.height_diff_difficulties }}&nbsp;m
       </span>
 
       <card-elevation-item v-if="item.document.elevation" :elevation="item.document.elevation" />

@@ -1,5 +1,6 @@
-// A number as the UI language writes it: 4 808 (fr), 4,808 (en), 4.808 (de), 4808 (it: no separator for 4 digits).
-// Whole by default; a value that is not a number (a numeric string from an API is read) is given back as text
+// A number with the decimal separator of the UI language (4,5 in French, 4.5 in English), and no thousands separator:
+// 4808 m, as the topoguide writes elevations (articles 151910 and 972435). Whole by default; a value that is not a
+// number (a numeric string from an API is read) is given back as text
 export const formatNumber = (
   value: number | string | null | undefined,
   lang?: string | null,
@@ -11,7 +12,7 @@ export const formatNumber = (
   const number = Number(value);
   // Intl wants zh-CN, the UI language is zh_CN
   return Number.isFinite(number)
-    ? new Intl.NumberFormat(lang?.replace('_', '-') ?? undefined, options).format(number)
+    ? new Intl.NumberFormat(lang?.replace('_', '-') ?? undefined, { ...options, useGrouping: false }).format(number)
     : String(value);
 };
 

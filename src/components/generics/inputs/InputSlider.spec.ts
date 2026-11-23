@@ -8,7 +8,7 @@ import InputSlider from './InputSlider.vue';
 import LayerButton from '@/components/map/LayerButton.vue';
 import QueryItem from '@/views/documents/utils/QueryItem.vue';
 
-const $filters = { uppercaseFirstLetter: (text: string) => text, number: (value: unknown) => String(value) };
+const $filters = { uppercaseFirstLetter: (text: string) => text };
 
 const handles = (wrapper: VueWrapper) => wrapper.findAll('[role=slider]');
 
@@ -96,7 +96,7 @@ describe('QueryItem ratings range', () => {
 });
 
 describe('slider labels', () => {
-  const mocks = { $gettext: (key: string) => key, $filters };
+  const mocks = { $gettext: (key: string) => key, $filters: { uppercaseFirstLetter: (text: string) => text } };
   // the accessible name of a handle: the text of the element its aria-labelledby points to
   const handleName = (wrapper: VueWrapper) =>
     document.getElementById(handles(wrapper)[0].attributes('aria-labelledby') ?? '')?.textContent?.trim();

@@ -95,7 +95,6 @@ import c2c from '@/js/apis/c2c';
 import type { DeletedDocument, DeletedDocumentDetails as Details, RestoreResult } from '@/js/apis/c2c/schemas';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
-import { formatNumber } from '@/js/length-format';
 
 const props = defineProps({
   document: {
@@ -115,7 +114,7 @@ const restoring = shallowRef<ApiData<RestoreResult> | null>(null);
 
 const documentType = computed(() => constants.letterToDocumentType[props.document.document_type]);
 const title = computed(() => props.document.title || '#' + props.document.document_id);
-const { $gettext, $dateUtils, $language } = useGlobalProperties();
+const { $gettext, $dateUtils } = useGlobalProperties();
 
 const fields = computed(() => props.document.fields as Record<string, unknown>);
 const activities = computed(() =>
@@ -135,7 +134,7 @@ const fieldTexts = computed(() =>
       return [$dateUtils.toLocalizedString(value as string, 'll')];
     }
     if (ELEVATION_FIELDS.has(name)) {
-      return [`${formatNumber(value as number, $language?.current)} m`];
+      return [`${String(value)} m`];
     }
     if (Array.isArray(value)) {
       return [value.map((v) => $gettext(String(v))).join(', ')];
