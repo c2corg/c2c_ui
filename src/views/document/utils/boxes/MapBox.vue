@@ -244,7 +244,7 @@ onBeforeUnmount(() => {
 :not(:fullscreen) > .map-container {
   &.pinned {
     position: fixed;
-    top: var(--c2c-navbar-height);
+    top: var(--c2c-header-height);
     margin-top: 0; /*avoid space between nav and map, where body text can be seen while scrolling*/
     z-index: 10; /* on top of body but below navbar (z=25) and side-menu (z=30) */
     box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.4); /* <o-x> <o-y> <radius> */
@@ -256,25 +256,15 @@ onBeforeUnmount(() => {
   }
   &.pinned-to-right {
     right: 0px;
-    height: calc(100vh - var(--c2c-navbar-height));
+    height: calc(100vh - var(--c2c-header-height));
     width: 30vw;
-  }
-}
-
-/* on wide screens the navbar is taller, with the ad (.nav-dfm, App.vue): below it, or it hides the top of the map */
-.nav-dfm :not(:fullscreen) > .map-container {
-  &.pinned {
-    top: var(--c2c-navbarad-height);
-  }
-  &.pinned-to-right {
-    height: calc(100vh - var(--c2c-navbarad-height));
   }
 }
 
 /* the whole window below the navbar, with the elevation profile of an outing as in full screen */
 .full-window:not(:fullscreen) {
   position: fixed;
-  top: var(--c2c-navbar-height);
+  top: var(--c2c-header-height);
   right: 0;
   bottom: var(--c2c-bottom-bar-height);
   left: 0;
@@ -288,10 +278,6 @@ html[data-shell='desktop'] {
   .full-window:not(:fullscreen) {
     left: var(--c2c-sidemenu-width);
   }
-}
-
-.nav-dfm .full-window:not(:fullscreen) {
-  top: var(--c2c-navbarad-height);
 }
 
 /**

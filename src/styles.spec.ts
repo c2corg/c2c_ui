@@ -137,6 +137,17 @@ describe('styles', () => {
     ]);
   });
 
+  // what is under the navigation starts at --c2c-header-height, which App.vue alone switches with the large ad
+  // (.nav-dfm): a style of its own for the ad (top: var(--c2c-navbarad-height) under .nav-dfm) duplicates that switch
+  it('switches the header height in one place', () => {
+    const uses = cssBlocks
+      .filter(({ content }) =>
+        /\.nav-dfm\b|var\(--c2c-navbarad-height\)/.test(content.replace(/\/\*[\s\S]*?\*\//g, ''))
+      )
+      .map(({ name }) => name);
+    expect(uses).toEqual(['App.vue #1', 'views/Navigation.vue #1']);
+  });
+
   // a data URL cannot use a custom property
   it('draws the external link icon in the color of the links', () => {
     const css = readFileSync(join(src, 'assets/css/external-links.css'), 'utf8');

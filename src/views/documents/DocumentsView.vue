@@ -392,7 +392,7 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
   /* sticky, not fixed: a fixed bar would hide the top of the ad, which is in the flow above the page */
   .search-infos {
     position: sticky;
-    top: var(--c2c-navbar-height);
+    top: var(--c2c-header-height);
     z-index: 24;
     background-color: var(--c2c-body-background-color);
     padding-top: 0.5rem;
@@ -417,14 +417,14 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
   }
 
   .map-container {
-    height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
+    height: calc(100vh - var(--c2c-header-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
     padding: 0;
   }
 
   .mobile-mode-map {
     margin-top: 0;
     .map-container {
-      height: calc(100vh - var(--c2c-navbar-height) - 3 * 0.5rem - 56px - 25px);
+      height: calc(100vh - var(--c2c-header-height) - 3 * 0.5rem - 56px - 25px);
     }
 
     .documents-container {

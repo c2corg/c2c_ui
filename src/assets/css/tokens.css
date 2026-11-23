@@ -56,9 +56,11 @@
   --c2c-card-hover-shadow: 1px 3px 4px rgba(4%, 4%, 4%, 0.1);
 
   /* layout */
+  /* the height of the bars: the navigation (the top bar of the phone layout, App.vue), with the large ad (Navigation.vue) */
   --c2c-navbar-height: 3.25rem;
   --c2c-navbarad-height: 90px;
-  /* what the page content starts under: the navigation bar, taller on the wide screens (see .nav-dfm in App.vue) */
+  /* what the page and the fixed elements start under (a pinned map, a sticky header...): the navigation bar, taller with
+     the large ad (.nav-dfm in App.vue, the only place to switch it) */
   --c2c-header-height: var(--c2c-navbar-height);
   /* what a fixed element ends above: nothing on the website, the bottom bar of the phone layout (App.vue) */
   --c2c-bottom-bar-height: 0px;
