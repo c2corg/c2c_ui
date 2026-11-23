@@ -162,7 +162,7 @@ body,
 
 .site-notice {
   position: absolute;
-  top: var(--c2c-navbar-height);
+  top: var(--c2c-header-height);
   width: 100%;
   z-index: 20;
   box-shadow: 0 5px 10px 0px rgba(10, 10, 10, 0.5);
@@ -211,8 +211,15 @@ button.dropdown-item {
 }
 
 /* without the ad under the navigation, which leaves its room (.top-bar-room below), the page leaves it */
-.no-top-ad .page-content {
-  padding-top: var(--c2c-navbar-height);
+.no-top-ad .page-content,
+.nav-dfm .page-content {
+  padding-top: var(--c2c-header-height);
+}
+
+@media screen {
+  .top-bar-room {
+    padding-top: var(--c2c-navbar-height);
+  }
 }
 
 .home-topoguide {
@@ -222,22 +229,9 @@ button.dropdown-item {
   }
 }
 
+/* the large ad in the navigation (Navigation.vue): what is under it starts lower */
 .nav-dfm {
   --c2c-header-height: var(--c2c-navbarad-height);
-
-  html,
-  body,
-  #app {
-    min-height: calc(100vh - var(--c2c-navbarad-height));
-  }
-
-  .site-notice {
-    top: var(--c2c-navbarad-height);
-  }
-
-  .page-content {
-    padding-top: var(--c2c-navbarad-height);
-  }
 }
 
 /* The navigation of the site follows html[data-shell] (src/stores/app-settings.ts), set from PHONE_BREAKPOINT: from it,
@@ -248,10 +242,6 @@ button.dropdown-item {
     .page-content,
     .top-bar-room {
       margin-left: var(--c2c-sidemenu-width);
-    }
-
-    .top-bar-room {
-      padding-top: var(--c2c-navbar-height);
     }
 
     .site-notice {
@@ -329,19 +319,6 @@ html[data-shell='mobile'] {
 
   .page-content {
     padding-bottom: var(--c2c-bottom-bar-height);
-  }
-
-  .top-bar-room {
-    padding-top: var(--app-top-bar-height);
-  }
-
-  .no-top-ad .page-content,
-  .nav-dfm .page-content {
-    padding-top: var(--app-top-bar-height);
-  }
-
-  .site-notice {
-    top: var(--app-top-bar-height);
   }
 
   /* the wide tables of the website (recent changes, associations history) scroll in their place, not the page */

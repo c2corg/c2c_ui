@@ -391,10 +391,12 @@ const { documentType } = useDocumentType(props);
     width: 107px;
   }
 }
+/* the number of connections beside the toggle, below it when the form is too narrow */
 .chose-transfer-limit {
   display: flex;
-  position: relative;
-  width: fit-content;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
   .chose-if-transfer-wanted {
     display: flex;
     align-items: center;
@@ -449,10 +451,6 @@ const { documentType } = useDocumentType(props);
   }
 
   .chose-nb-transfer {
-    margin-left: 14px;
-    position: absolute;
-    right: -108px;
-    top: -2px;
     display: flex;
     gap: 4px;
     align-items: center;
@@ -461,16 +459,6 @@ const { documentType } = useDocumentType(props);
       padding: 3px;
       text-align: center;
       border-radius: 4px;
-    }
-  }
-}
-
-@media only screen and (max-width: 1650px) {
-  .chose-transfer-limit {
-    display: block;
-    .chose-nb-transfer {
-      position: initial;
-      margin-top: 10px;
     }
   }
 }

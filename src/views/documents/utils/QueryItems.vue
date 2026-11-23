@@ -337,7 +337,7 @@ watch(() => JSON.stringify([route.path, withoutDisplaySettings(route.query), rou
     overflow-x: hidden;
     /*
       max-height should be calculated:
-      100vh-(var(--c2c-navbar-height))-height(.search-infos)
+      100vh-(var(--c2c-header-height))-height(.search-infos)
       but .search-infos height is not fixed
     */
     max-height: 70vh;

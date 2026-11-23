@@ -706,6 +706,7 @@ onMounted(() => {
 @import '@/assets/css/media.css';
 
 .centered {
+  container: itinevert-form / inline-size;
   margin: auto;
   min-height: 80vh;
   display: flex;
@@ -844,7 +845,9 @@ onMounted(() => {
   background-repeat: no-repeat;
 }
 
-@media screen and (max-width: 528px) {
+/* the date, the preference and the time side by side need 437px: the form is 60% of a column beside the banner image,
+   90% of the page under the tablet width */
+@container itinevert-form (max-width: 439px) {
   .select-date-container {
     width: 100%;
     flex-wrap: wrap;

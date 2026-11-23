@@ -325,8 +325,11 @@ input[type='file'] {
   cursor: pointer;
 }
 
+/* the formats wrap when the panel is too narrow for them side by side */
 .form-export {
   display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.5rem;
 }
 
 .control {
@@ -334,12 +337,6 @@ input[type='file'] {
 
   .is-checkradio[type='radio'] + label {
     line-height: 1.2rem;
-  }
-}
-
-@media screen and (max-width: 350px) {
-  .form-export {
-    display: block;
   }
 }
 

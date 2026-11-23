@@ -116,7 +116,8 @@ function selectLimit(l: number) {
   color: var(--c2c-black);
 }
 
-@media screen and (max-width: 340px) {
+/* the container is the header of the list (ItinevertResultView.vue) */
+@container documents-header (max-width: 319px) {
   .limit-selector {
     display: none;
   }

@@ -425,6 +425,11 @@ onMounted(() => {
   margin-left: 0.75rem;
 }
 
+/* the page selector (ItinevertPageSelector.vue) hides its "per page" choice when the header is narrow */
+.search-infos {
+  container: documents-header / inline-size;
+}
+
 .filter-section {
   padding-bottom: 0.5rem;
   clear: both;
@@ -433,7 +438,7 @@ onMounted(() => {
 @media screen and (--c2c-max-tablet) {
   .search-infos {
     position: fixed;
-    top: calc(var(--c2c-navbar-height) + var(--c2c-itinevert-header-height));
+    top: calc(var(--c2c-header-height) + var(--c2c-itinevert-header-height));
     left: 0;
     right: 0;
     z-index: 24;
@@ -442,7 +447,7 @@ onMounted(() => {
   }
 
   .result-section {
-    padding-top: calc(var(--c2c-navbar-height) + var(--c2c-itinevert-header-height) + 3.75rem);
+    padding-top: calc(var(--c2c-header-height) + var(--c2c-itinevert-header-height) + 3.75rem);
   }
 
   .documents-view {

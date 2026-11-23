@@ -432,16 +432,14 @@ function handleDocumentHighlight(document: MapDocument | null) {
 </script>
 
 <style scoped>
+/* narrow by default: the stops, then the map below them. Beside each other in a wide box (the container query below),
+   which iOS 15 phones (no container queries) never get */
 .public-transports-section {
-  margin-top: 20px;
-  display: flex;
-  gap: 20px;
-  height: 500px;
-
   .public-transports-result {
     display: flex;
     flex-direction: column;
     height: 100%;
+    margin-bottom: 10px;
 
     .stop-cards {
       height: inherit;
@@ -547,13 +545,13 @@ function handleDocumentHighlight(document: MapDocument | null) {
   }
 
   .public-transports-map {
-    height: auto;
-    width: 750px;
+    height: 275px;
     border: 1px solid lightgray;
     border-radius: 4px;
   }
   .public-transport-no-result {
     display: flex;
+    flex-direction: column;
     padding: 20px;
     border: 1px solid lightgray;
     border-radius: 4px;
@@ -563,9 +561,35 @@ function handleDocumentHighlight(document: MapDocument | null) {
     width: 100%;
 
     .public-transports-no-result-bus {
-      margin-left: 20px;
       width: 100px;
       height: 100px;
+    }
+  }
+}
+
+/* the container is the box around (TransportsBox.vue) */
+@container public-transports (min-width: 600px) {
+  .public-transports-section {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    height: 500px;
+
+    .public-transports-result {
+      margin-bottom: 0;
+    }
+
+    .public-transports-map {
+      height: auto;
+      width: 750px;
+    }
+
+    .public-transport-no-result {
+      flex-direction: row;
+
+      .public-transports-no-result-bus {
+        margin-left: 20px;
+      }
     }
   }
 }
@@ -573,35 +597,6 @@ function handleDocumentHighlight(document: MapDocument | null) {
 .public-transports-section-not-served {
   height: auto;
   margin-top: 0;
-}
-
-@media only screen and (max-width: 600px) {
-  .public-transports-section {
-    display: inline !important;
-
-    .stop-cards {
-      margin-bottom: 10px;
-    }
-    .public-transports-map {
-      height: 275px !important;
-      width: auto !important;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  }
-  .missing-transports-warning {
-    margin-top: 0px;
-    margin-bottom: 10px;
-  }
-
-  .public-transport-no-result {
-    flex-direction: column;
-
-    .public-transports-no-result-bus {
-      margin-left: 0;
-      margin-bottom: 15px;
-    }
-  }
 }
 
 /* the dark theme of the app (src/stores/app-settings.ts, App.vue): dark cards of the stops, their titles light */

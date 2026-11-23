@@ -490,19 +490,13 @@ function onSubmitDisclaimer() {
 
 @media screen and (--c2c-min-tablet) {
   .yeti-content {
-    height: calc(100vh - var(--c2c-navbar-height));
+    height: calc(100vh - var(--c2c-header-height));
 
     .form-container {
       max-width: 450px;
       height: calc(100% - 0.75rem);
       overflow: auto;
     }
-  }
-}
-
-@media screen and (--c2c-min-widescreen) {
-  .yeti-content {
-    height: calc(100vh - var(--c2c-navbarad-height));
   }
 }
 
