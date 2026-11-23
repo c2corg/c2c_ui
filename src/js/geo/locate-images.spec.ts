@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
-import { estimateClockShift, hasDefaultLocation, locateImages, positionAt, readTrack } from './locate-images';
+import {
+  CONFIDENT_FIT,
+  estimateClockShift,
+  hasDefaultLocation,
+  locateImages,
+  positionAt,
+  readTrack,
+} from './locate-images';
 
 // 2026-11-21T09:00:00Z
 const T0 = Date.UTC(2026, 10, 21, 9) / 1000;
@@ -61,9 +68,9 @@ describe('positionAt', () => {
     expect(positionAt(track, T0 + 90)).toEqual({ x: 700015, y: 5600000, z: 2001.5 });
   });
 
-  it('puts a photo shot a little before the start at the start, not long before', () => {
-    expect(positionAt(track, T0 - 600)).toMatchObject({ x: 700000 });
-    expect(positionAt(track, T0 - 3600)).toBeNull();
+  it('puts a photo shot before the start (at the car, on the approach) at the start, not long before', () => {
+    expect(positionAt(track, T0 - 45 * 60)).toMatchObject({ x: 700000 });
+    expect(positionAt(track, T0 - 2 * 3600)).toBeNull();
   });
 
   it('does not interpolate a long gap between far points', () => {
@@ -117,5 +124,27 @@ describe('locateImages', () => {
       null,
       null,
     ]);
+  });
+
+  it('leaves an image of a camera with GPS that happens to be on the route point', () => {
+    const phone = (x: number, minutes: number) => ({
+      geom: point(x, 5600000),
+      date_time: iso(T0 + minutes * 60),
+      camera_name: 'phone',
+    });
+    // shot at the summit, the route point: its other images have their own location
+    const images = [phone(700100, 10), phone(700200, 20), phone(701500, 150)];
+    expect(locateImages(images, track, [outingGeom])).toEqual([null, null, null]);
+  });
+
+  it('locates without being asked only the cameras whose images fit the track', () => {
+    // two images during the track, two the evening before: the camera may be on another day
+    const images = [-12, 1, 2, -10].map((hours) => ({
+      geom: outingGeom,
+      date_time: iso(T0 + hours * 3600),
+      camera_name: 'camera',
+    }));
+    expect(locateImages(images, track, [outingGeom]).filter(Boolean)).toHaveLength(2);
+    expect(locateImages(images, track, [outingGeom], {}, { minFit: CONFIDENT_FIT })).toEqual([null, null, null, null]);
   });
 });

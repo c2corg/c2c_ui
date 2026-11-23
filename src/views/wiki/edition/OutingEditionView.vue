@@ -334,7 +334,9 @@ import OutingTracePicker from '@/components/tracking/OutingTracePicker.vue';
 import c2c from '@/js/apis/c2c';
 import type { Activity, Geometry } from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
-import { toast } from '@/js/toast';
+import { CONFIDENT_FIT } from '@/js/geo/locate-images';
+import { hasTimedTrack, locateOutingImages } from '@/js/locate-outing-images';
+import { notify, toast } from '@/js/toast';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 import { OFFLINE_MODE } from '@/pwa/offline-store';
 import { giveBackTracePick, readTracePick, writeTracePick, type TracePick } from '@/pwa/outing-trace-pick';
@@ -346,6 +348,7 @@ const pageRoute = useRoute();
 const { fields, saving, mode, document, save, draftId, keepOnPhone, saveWithoutPublishing } = useDocumentEdition({
   afterLoad,
   beforeSave,
+  afterSaved,
 });
 const offline = useOfflineStore();
 
@@ -446,7 +449,11 @@ async function loadRecentPartners(): Promise<C2cDocument[]> {
   return response.data.partners;
 }
 
+// the track when the form opened: a track added or replaced locates the images of the outing (#4259)
+let loadedTrack: string | null | undefined;
+
 function afterLoad() {
+  loadedTrack = document.value!.geometry?.geom_detail;
   showBothDates.value = document.value!.date_start !== document.value!.date_end;
   // on creation, the user is already a participant
   proposePartners.value = (document.value!.associations?.users ?? []).some((user) => user.document_id === $user.id);
@@ -530,6 +537,23 @@ function setCurrentDate() {
 function beforeSave() {
   handleDates();
   quality.value!.beforeSave();
+}
+
+// the images without a location of their own, on the new track: only when the times of their camera fit it
+async function afterSaved(doc: C2cDocument) {
+  if (doc.geometry?.geom_detail === loadedTrack || !doc.associations?.images?.length || !hasTimedTrack(doc)) {
+    return;
+  }
+  const located = await locateOutingImages(
+    doc,
+    doc.locales![0]!.lang,
+    $user,
+    $gettext('Location computed from the GPS track of the outing'),
+    { minFit: CONFIDENT_FIT }
+  );
+  if (located.length) {
+    notify($gettext('Images located on the GPS track of the outing:') + ' ' + located.length, 'is-success');
+  }
 }
 
 function showCotometer() {

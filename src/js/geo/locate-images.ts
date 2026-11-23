@@ -19,8 +19,10 @@ export type LocatableImage = {
 
 export type ImageLocation = { geom: string; elevation?: number };
 
-// photos shot a little before starting the GPS, or after stopping it, are put at its ends
-const END_MARGIN = 15 * 60;
+// photos shot before starting the GPS (at the car, on the approach), or after stopping it, are put at its ends
+const END_MARGIN = 60 * 60;
+// the clock shift of a camera puts its images within the time of the track, give or take this
+const SHIFT_MARGIN = 15 * 60;
 // a gap of the track is interpolated when short in time or in distance (a pause), else the nearest point is taken
 const MAX_GAP = 10 * 60;
 const MAX_GAP_DISTANCE = 300;
@@ -105,6 +107,13 @@ export function usableTime(
   return time >= start - MAX_SHIFT && time <= end + MAX_SHIFT ? time : null;
 }
 
+// the number of times within the track, once shifted, give or take the margin
+const fitCount = (times: number[], track: TrackPoint[], shift: number, margin: number) => {
+  const first = track[0]!.t - margin;
+  const last = track[track.length - 1]!.t + margin;
+  return times.filter((time) => time + shift >= first && time + shift <= last).length;
+};
+
 /**
  * The seconds to add to the times of the images to read them on the track: their camera may be set to another time zone
  * than the GPS (or to winter time). The shift puts most images within the time of the track, the smallest one,
@@ -114,9 +123,7 @@ export function estimateClockShift(times: number[], track: TrackPoint[]): number
   if (!times.length || !track.length) {
     return 0;
   }
-  const first = track[0]!.t - END_MARGIN;
-  const last = track[track.length - 1]!.t + END_MARGIN;
-  const score = (shift: number) => times.filter((time) => time + shift >= first && time + shift <= last).length;
+  const score = (shift: number) => fitCount(times, track, shift, SHIFT_MARGIN);
 
   let best = 0;
   let bestScore = score(0);
@@ -183,37 +190,56 @@ export function positionAt(track: TrackPoint[], time: number): Omit<TrackPoint, 
   return Math.abs(nearest.t - time) <= MAX_NEAREST ? nearest : null;
 }
 
+// A camera without GPS has (nearly) all its images on a default location; one with GPS may have an image shot right at the
+// route point (a summit): such a coincidence is not moved
+const MIN_DEFAULT_SHARE = 0.5;
+// to locate the images without the user asking for it, most images of their camera must fit the track
+export const CONFIDENT_FIT = 0.8;
+
+type Camera = { times: number[]; images: number; defaults: number; shift: number; fit: number };
+
 /**
  * The locations of the images on the track, in their order: null for an image that has its own location, a time out of
  * the outing, or shot when the track was not recorded.
  *
- * DefaultGeoms are the locations an image without one got: the outing's (now and before) and its routes'.
+ * DefaultGeoms are the locations an image without one got: the outing's (now and before) and its routes'. With minFit,
+ * only the images of the cameras with that share of their images within the time of the track are located.
  */
 export function locateImages(
   images: LocatableImage[],
   track: TrackPoint[],
   defaultGeoms: (string | null | undefined)[],
-  dates: { date_start?: string | null; date_end?: string | null } = {}
+  dates: { date_start?: string | null; date_end?: string | null } = {},
+  { minFit = 0 } = {}
 ): (ImageLocation | null)[] {
   const times = images.map((image) => usableTime(image.date_time, track, dates));
-  // all the images of a camera with a time tell the shift of its clock, also those with their own location
-  const cameraTimes = new Map<string, number[]>();
+  const onDefault = images.map((image) => hasDefaultLocation(image.geom, defaultGeoms));
+  // all the images of a camera tell whether it has a GPS, and those with a time the shift of its clock
+  const cameras = new Map<string, Camera>();
+  const cameraOf = (image: LocatableImage) => image.camera_name ?? '';
   images.forEach((image, i) => {
-    const camera = image.camera_name ?? '';
+    const camera = cameras.get(cameraOf(image)) ?? { times: [], images: 0, defaults: 0, shift: 0, fit: 0 };
+    camera.images++;
+    camera.defaults += onDefault[i] ? 1 : 0;
     if (times[i] !== null) {
-      cameraTimes.set(camera, [...(cameraTimes.get(camera) ?? []), times[i]!]);
+      camera.times.push(times[i]!);
     }
+    cameras.set(cameraOf(image), camera);
   });
-  const shifts = new Map(
-    [...cameraTimes].map(([camera, cameraTime]) => [camera, estimateClockShift(cameraTime, track)])
-  );
+  for (const camera of cameras.values()) {
+    if (camera.times.length && track.length) {
+      camera.shift = estimateClockShift(camera.times, track);
+      camera.fit = fitCount(camera.times, track, camera.shift, END_MARGIN) / camera.times.length;
+    }
+  }
 
   return images.map((image, i) => {
     const time = times[i];
-    if (time === null || !hasDefaultLocation(image.geom, defaultGeoms)) {
+    const camera = cameras.get(cameraOf(image))!;
+    if (time === null || !onDefault[i] || camera.defaults / camera.images < MIN_DEFAULT_SHARE || camera.fit < minFit) {
       return null;
     }
-    const position = positionAt(track, time + shifts.get(image.camera_name ?? '')!);
+    const position = positionAt(track, time + camera.shift);
     if (!position) {
       return null;
     }

@@ -77,7 +77,7 @@ import ImageUploader from './ImageUploader.vue';
 
 import c2c from '@/js/apis/c2c';
 import { useGlobalProperties } from '@/js/composables/global-properties';
-import { locateImages, readTrack } from '@/js/geo/locate-images';
+import { CONFIDENT_FIT, locateImages, readTrack } from '@/js/geo/locate-images';
 import { refreshOutingQuality } from '@/js/refresh-outing-quality';
 import { notify, toast } from '@/js/toast';
 import uploadFile, { canRender } from '@/js/upload-file';
@@ -285,7 +285,8 @@ function locateOnTrack(saved: C2cDocument[]) {
     images.map((image) => ({ ...image, geom: image.geometry?.geom })),
     track,
     defaults,
-    parent
+    parent,
+    { minFit: CONFIDENT_FIT }
   );
   images.forEach((image, i) => {
     const location = locations[i];

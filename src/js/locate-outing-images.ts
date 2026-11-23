@@ -47,9 +47,15 @@ export async function defaultLocations(outing: Outing, lang: string): Promise<st
 
 /**
  * Save the images of the outing the user may edit with their location on its track. Return the images located, with
- * their new location (also set on the associations of the outing, for its map).
+ * their new location (also set on the associations of the outing, for its map). minFit: see locateImages().
  */
-export async function locateOutingImages(outing: Outing, lang: string, user: User, comment: string) {
+export async function locateOutingImages(
+  outing: Outing,
+  lang: string,
+  user: User,
+  comment: string,
+  { minFit = 0 } = {}
+) {
   const track = readTrack(outing.geometry?.geom_detail);
   const associated = outing.associations?.images ?? [];
   if (track.length < 2 || !associated.length) {
@@ -79,7 +85,8 @@ export async function locateOutingImages(outing: Outing, lang: string, user: Use
     documents.map((document) => ({ ...document, geom: document.geometry?.geom })),
     track,
     defaults,
-    outing
+    outing,
+    { minFit }
   );
 
   const located = [];
