@@ -91,14 +91,19 @@ export function useMainMenuItems() {
       match: ['yeti'],
       iconComponent: IconYeti,
     },
-    // the waypoints, on the map with the density of the outings and of the routes (the overlays)
-    {
-      key: 'map',
-      label: label($gettext('map')),
-      to: { name: 'waypoints-map', query: { overlays: 'outing,route' } },
-      match: ['waypoints-map'],
-      icon: 'map',
-    },
+    // the waypoints, on the map with the density of the outings and of the routes (the overlays).
+    // Not yet on camptocamp.org pending community testing.
+    ...(config.isBackendSelectable || config.urls.name !== 'prod'
+      ? [
+          {
+            key: 'map',
+            label: label($gettext('map')),
+            to: { name: 'waypoints-map', query: { overlays: 'outing,route' } },
+            match: ['waypoints-map'],
+            icon: 'map',
+          },
+        ]
+      : []),
     // for the moderators of the topoguide or of the forum
     ...(canModerate.value
       ? [
