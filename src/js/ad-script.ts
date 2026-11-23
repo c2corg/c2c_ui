@@ -10,6 +10,13 @@ import { useRoute } from 'vue-router';
 const AD_SCRIPT_ID = 'ad_script';
 const AD_SCRIPT_URL = 'https://static.admysports.com/hb/site/camptocamp/hb_camptocamp.js';
 const IDLE_TIMEOUT = 3000;
+// Google Publisher Tag, which the ad script adds as soon as it runs: ad blockers working on addresses (DNS filters such
+// as personalDNSfilter) block it, and not always the ad script itself
+const GOOGLE_TAG_URL = 'https://securepubads.g.doubleclick.net/tag/js/gpt.js';
+// The ad script asks for its ads at the latest 3.7 s after it runs (1.5 s waiting for the consent, 1.2 s of auction,
+// 1 s more), and Google Ad Manager answers within a few hundred milliseconds: a slot told nothing 5 s after the script
+// has loaded, or after a new page, gets no ad (Google Publisher Tag replaced by an ad blocker's stub, auction stuck).
+const AD_DEADLINE = 5000;
 
 function addAdScript() {
   if (document.getElementById(AD_SCRIPT_ID)) {
@@ -18,7 +25,10 @@ function addAdScript() {
   const script = document.createElement('script');
   script.id = AD_SCRIPT_ID;
   script.src = AD_SCRIPT_URL;
+  script.addEventListener('load', onScriptLoad);
   script.addEventListener('error', onScriptError);
+  // the error of a script does not bubble: it is only seen while it goes down from the window
+  window.addEventListener('error', onResourceError, true);
   document.head.appendChild(script);
 }
 
@@ -85,12 +95,30 @@ declare global {
   }
 }
 
+const scriptLoadListeners = new Set<() => void>();
+let scriptLoaded = false;
+
+function onScriptLoad() {
+  scriptLoaded = true;
+  scriptLoadListeners.forEach((listener) => listener());
+}
+
 const scriptFailureListeners = new Set<() => void>();
 let scriptFailed = false;
 
 function onScriptError() {
+  if (scriptFailed) {
+    return;
+  }
   scriptFailed = true;
   scriptFailureListeners.forEach((listener) => listener());
+}
+
+function onResourceError(event: Event) {
+  const target = event.target;
+  if (target instanceof HTMLScriptElement && target.src.startsWith(GOOGLE_TAG_URL)) {
+    onScriptError();
+  }
 }
 
 function runWithGoogleTag(callback: (googletag: Required<GoogleTag>) => void) {
@@ -101,23 +129,45 @@ function runWithGoogleTag(callback: (googletag: Required<GoogleTag>) => void) {
 
 /**
  * Tells whether the slot of the given div shows an ad, each time it is filled (it is refreshed), and that it shows none
- * when the ad script does not load (blocked). Returns the function that stops watching it.
+ * when the ad stack does not load (blocked), or when nothing is told about the slot in time (AD_DEADLINE, from the load
+ * of the ad script or from this call, whichever comes last; an ad coming later is still told). A new page has a new
+ * slot: it is watched again. Returns the function that stops watching it.
  */
 export function watchAdSlot(divId: string, onRender: (filled: boolean) => void) {
+  let told = false;
+  let deadline: ReturnType<typeof setTimeout> | undefined;
+
   const listener: SlotRenderEndedListener = (event) => {
     if (event.slot.getSlotElementId() === divId) {
+      told = true;
+      clearTimeout(deadline);
       onRender(!event.isEmpty);
     }
   };
-  const onFailure = () => onRender(false);
+  const onFailure = () => {
+    told = true;
+    clearTimeout(deadline);
+    onRender(false);
+  };
+  const startDeadline = () => {
+    if (!told) {
+      deadline = setTimeout(onFailure, AD_DEADLINE);
+    }
+  };
 
   if (scriptFailed) {
     onFailure();
+  } else if (scriptLoaded) {
+    startDeadline();
+  } else {
+    scriptLoadListeners.add(startDeadline);
   }
   scriptFailureListeners.add(onFailure);
   runWithGoogleTag((googletag) => googletag.pubads().addEventListener('slotRenderEnded', listener));
 
   return () => {
+    clearTimeout(deadline);
+    scriptLoadListeners.delete(startDeadline);
     scriptFailureListeners.delete(onFailure);
     runWithGoogleTag((googletag) => googletag.pubads().removeEventListener('slotRenderEnded', listener));
   };

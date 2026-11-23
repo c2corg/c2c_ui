@@ -23,19 +23,27 @@ const page = useAdPage();
 // slot gets no ad, or when the ad script does not load (blocked)
 const height = adSlotHeight(useIsHomePage().value);
 const empty = ref(false);
-// each page has its own slot (a new div): its room is left again, until the ad script says it has no ad either
-watch(page, () => {
-  empty.value = false;
-});
 
 let stopWatching: (() => void) | undefined;
+
+const watchSlot = () => {
+  stopWatching?.();
+  stopWatching = watchAdSlot(DIV_ID, (filled) => {
+    empty.value = !filled;
+  });
+};
+
+// each page has its own slot (a new div): its room is left again, until the ad script says it has no ad either, or
+// says nothing in time
+watch(page, () => {
+  empty.value = false;
+  watchSlot();
+});
 
 // the ad script displays its slots as soon as it runs, and Google Publisher Tag gives up on a slot whose div is not
 // in the page yet: it is only asked for once this div is mounted (it is then added after the page has loaded)
 onMounted(() => {
-  stopWatching = watchAdSlot(DIV_ID, (filled) => {
-    empty.value = !filled;
-  });
+  watchSlot();
   loadAdScript();
 });
 
