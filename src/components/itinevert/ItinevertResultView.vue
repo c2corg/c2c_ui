@@ -425,9 +425,13 @@ onMounted(() => {
   margin-left: 0.75rem;
 }
 
-/* the page selector (ItinevertPageSelector.vue) hides its "per page" choice when the header is narrow */
+/* the page selector (ItinevertPageSelector.vue) hides its "per page" choice when the header is narrow. Until Chrome 129, Firefox 133
+   and Safari 18.4, a container is also a stacking context: the header takes a level above the map (its controls go up
+   to 4), else the map covers the menus of the header (near me, filters). Under the site notice (20, App.vue) */
 .search-infos {
   container: documents-header / inline-size;
+  position: relative;
+  z-index: 10;
 }
 
 .filter-section {
