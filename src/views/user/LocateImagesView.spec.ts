@@ -87,4 +87,27 @@ describe('LocateImagesView', () => {
     await flushPromises();
     expect(wrapper.findAll('.locate-row')).toHaveLength(1);
   });
+
+  it('pauses once a page of outings to locate is found, and goes on when asked', async () => {
+    window.localStorage.removeItem('LocateImagesView.7.preferences');
+    api.fullDownload.mockResolvedValue(Array.from({ length: 13 }, (_, i) => outing(i + 1, 3)));
+    api.plan.mockImplementation(async (document: { document_id: number }) => ({
+      outing: document,
+      // all but the 3rd have images to locate
+      changes: document.document_id === 3 ? [] : [{}],
+      complete: true,
+    }));
+    const wrapper = await mountView();
+
+    expect(wrapper.findAll('.locate-row')).toHaveLength(10);
+    expect(api.get).toHaveBeenCalledTimes(11);
+
+    await wrapper
+      .findAll('button')
+      .find((button) => button.text() === 'Scan more')!
+      .trigger('click');
+    await flushPromises();
+    expect(wrapper.findAll('.locate-row')).toHaveLength(12);
+    expect(wrapper.findAll('button').some((button) => button.text() === 'Scan more')).toBe(false);
+  });
 });

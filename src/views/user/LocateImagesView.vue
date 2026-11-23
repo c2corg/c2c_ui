@@ -42,6 +42,10 @@
       <fa-icon v-else-if="row.status === 'located'" icon="circle-check" class="has-text-success" />
       <fa-icon v-else icon="exclamation-circle" class="has-text-danger" />
     </div>
+
+    <button v-if="!scanning && scanned < outings.length" class="button block" @click="scanMore" v-translate>
+      Scan more
+    </button>
   </div>
 </template>
 
@@ -92,11 +96,17 @@ const langOf = (outing: Outing) => {
   return langs.includes($language.current!) ? $language.current! : (langs[0] ?? $language.current!);
 };
 
+// the scan pauses once this many outings with images to locate are found: the user goes on with Scan more
+const PAGE = 10;
+
 async function scan() {
   scanning.value = true;
   scanned.value = nothingToLocate.value = failures.value = 0;
   rows.value = [];
+  outings.value = [];
   try {
+    const found = (await service.fullDownload({ u: String($user.id), trk: '1' })) as Outing[];
+    outings.value = found.filter((outing) => outing.img_count);
     await scanOutings();
   } catch {
     // the list of the outings could not be read
@@ -106,14 +116,14 @@ async function scan() {
   }
 }
 
+// the next outings, one at a time (gentle with the API), until a page of outings to locate is found
 async function scanOutings() {
-  const found = (await service.fullDownload({ u: String($user.id), trk: '1' })) as Outing[];
-  outings.value = found.filter((outing) => outing.img_count);
-  // one outing at a time: gentle with the API
-  for (const outing of outings.value) {
+  const found = rows.value.length + PAGE;
+  while (scanned.value < outings.value.length && rows.value.length < found) {
     if (stopped) {
       return;
     }
+    const outing = outings.value[scanned.value]!;
     if (done()[outing.document_id!] === doneKey(outing)) {
       nothingToLocate.value++;
     } else {
@@ -135,6 +145,15 @@ async function scanOutings() {
       }
     }
     scanned.value++;
+  }
+}
+
+async function scanMore() {
+  scanning.value = true;
+  try {
+    await scanOutings();
+  } finally {
+    scanning.value = false;
   }
 }
 
