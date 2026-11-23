@@ -25,6 +25,9 @@ static.lawinen-warnung.eu
 bollettini.aineva.it
 aws.slf.ch
 
+# public transport (Navitia), called by the API (c2corg_api/views/navitia.py)
+api.navitia.io
+
 # Yeti: BRA, and the WMS layers (routes, protected areas)
 api.ensg.eu
 
@@ -55,9 +58,15 @@ e2e tests), Playwright's browser CDN (`CHROME_PATH`, the preinstalled Chrome, is
 
 ## Network secrets
 
+The API sends both keys in a header that it fills from v6_api's `.env`. The proxy adds the real key to requests to
+the host; the `.env` value only has to be set.
+
+- Navitia (public transport): host `api.navitia.io`, header `Authorization`, no prefix, the association's key.
+  `.env` already has `NAVITIA_API_KEY="test-key"`: that value also skips the Navitia lookup when a waypoint is created.
 - Météo-France (French BERA): host `public-api.meteofrance.fr`, header `apikey`, no prefix, the association's key.
-  The API also needs `METEOFRANCE_API_KEY` set to any value in v6_api's `.env` to try the request. Not checked yet:
-  that the proxy replaces a header the request already has.
+  Add `METEOFRANCE_API_KEY=proxy` to `.env` (not committed), or the API doesn't try the request.
+
+Not checked yet: that the proxy replaces a header the request already has.
 
 The Transifex MCP server is a connector of your claude.ai account (OAuth), not a network secret.
 

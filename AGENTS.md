@@ -40,7 +40,7 @@ The e2e user: [e2e/README.md](e2e/README.md) (from another container: `python - 
 - UI only: `.claude/settings.json` runs `npm ci` at startup (`tools/cloud-session-start.sh`).
 - UI + API: attach both repositories to the session. Hooks don't run then: run `npm ci` here, and the v6_api README
   steps there (Docker is available).
-- The environment (allowed domains, Météo-France secret, setup script):
+- The environment (allowed domains, Navitia and Météo-France secrets, setup script):
   [docs/claude-code-cloud.md](docs/claude-code-cloud.md). The Transifex MCP server is a claude.ai connector; the
   production API stays out of reach.
 - `gh pr` / `gh issue` (GraphQL) are blocked by the GitHub proxy: use `gh api`.
