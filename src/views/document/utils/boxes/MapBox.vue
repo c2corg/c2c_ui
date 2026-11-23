@@ -76,6 +76,7 @@ import bus from '@/js/event-bus';
 import { writeGpx, writeKml, type ExportedFeature } from '@/js/geo/formats';
 import { documentProperty, useDocumentType } from '@/js/properties';
 import utils from '@/js/utils';
+import { TABLET_BREAKPOINT } from '@/stores/screen';
 
 const props = defineProps({ ...documentProperty });
 
@@ -122,11 +123,8 @@ function onElevationProfile(event: unknown) {
 }
 
 function togglePinToSide(toggle: boolean) {
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-  const breakMobile = 769;
-  // disable eg pin-to-right on mobile
-  const isPhone = width < breakMobile || height < breakMobile;
+  // no second side (pinned to the right) where the window is narrower than a tablet, either way up
+  const isPhone = Math.min(window.innerWidth, window.innerHeight) < TABLET_BREAKPOINT;
 
   let mode = toggle ? (pinnedMode.value + 1) % (FULL_WINDOW + 1) : pinnedMode.value;
   if (isPhone && mode === 2) mode = toggle ? FULL_WINDOW : 0;

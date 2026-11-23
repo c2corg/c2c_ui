@@ -29,14 +29,9 @@ export const useScreenStore = defineStore('screen', () => {
     matchingQueryIndex.value = breakpointsMediaQueryLists.findIndex((mediaQueryList) => mediaQueryList.matches);
   };
 
-  breakpointsMediaQueryLists.forEach((mediaQueryList) => {
-    if (mediaQueryList.addEventListener) {
-      mediaQueryList.addEventListener('change', onBreakpointMediaQueryChange);
-    } else {
-      // support Safari < 14
-      mediaQueryList.addListener(onBreakpointMediaQueryChange);
-    }
-  });
+  breakpointsMediaQueryLists.forEach((mediaQueryList) =>
+    mediaQueryList.addEventListener('change', onBreakpointMediaQueryChange)
+  );
   onBreakpointMediaQueryChange(); // init
 
   const isMobile = computed(() => matchingQueryIndex.value === 0);
