@@ -69,7 +69,7 @@ async function shoot(shotsFile: string, outDir: string) {
       hasTouch: Boolean(shot.touch),
     });
     await context.addInitScript((backend) => {
-      localStorage.setItem('SiteConfiguration.urlsName', backend);
+      sessionStorage.setItem('SiteConfiguration.backend', backend);
       localStorage.setItem('Gdpr.preferences', JSON.stringify({ choice: { date: Date.now() } }));
       localStorage.setItem('Onboarding.preferences', JSON.stringify({ done: true }));
     }, values.backend);

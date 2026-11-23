@@ -150,6 +150,19 @@ if (process.env.BUILD_ENV === 'local' || process.env.BUILD_ENV === undefined) {
   throw new Error('Unknown BUILD_ENV');
 }
 
+// Selectable builds: the default backend of the dev server or of the build (e.g. C2C_BACKEND=localhost npm run serve),
+// which ?backend= or the selector of the navigation bar override in one tab (src/js/backend-selection.ts). Other
+// builds read C2C_BACKEND when the container starts (src/js/runtime-config.ts)
+if (config.isBackendSelectable && process.env.C2C_BACKEND) {
+  const defaultUrls = config.urlsConfigurations[process.env.C2C_BACKEND];
+  if (!defaultUrls) {
+    throw new Error(
+      `Unknown C2C_BACKEND "${process.env.C2C_BACKEND}": ${Object.keys(config.urlsConfigurations).join(', ')}`
+    );
+  }
+  config.urls = defaultUrls;
+}
+
 config.publicPath = base;
 
 const isBudgetChecked = (fileName: string) => !/\.(map|pdf)$/.test(fileName);

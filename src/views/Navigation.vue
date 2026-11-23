@@ -222,6 +222,7 @@ import IconHelp from '@/components/generics/icons/IconHelp.vue';
 import IconJoinUs from '@/components/generics/icons/IconJoinUs.vue';
 import JoinUsLink from '@/components/generics/links/JoinUsLink.vue';
 import forum from '@/js/apis/forum';
+import { urlWithBackend } from '@/js/backend-selection';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { ADDABLE_TYPES, HELP_ROUTE, useAccountLinks } from '@/js/composables/main-menu';
 import config from '@/js/config';
@@ -322,9 +323,8 @@ function go(document: C2cDocument) {
 }
 
 function setUrlsConfiguration(name: string) {
-  config.setUrlsName(name);
-  // reload the page
-  router.go(0);
+  // reloads the page on the other backend, for this tab only
+  window.location.assign(urlWithBackend(window.location.href, name));
 }
 
 function onClick(event: MouseEvent) {

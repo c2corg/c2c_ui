@@ -72,7 +72,8 @@ export const test = base.extend<{ loggedIn: boolean; gdprChosen: boolean }, { da
 
     await page.addInitScript(
       ({ api, user, loggedIn, gdprChosen }) => {
-        window.localStorage.setItem('SiteConfiguration.urlsName', 'localhost');
+        // this tab on the local API, whatever the default of the server (E2E_REUSE_SERVER: npm run serve is on prod)
+        window.sessionStorage.setItem('SiteConfiguration.backend', 'localhost');
         if (window.sessionStorage.getItem('e2e-initialized')) {
           return; // set once: a reload keeps what the test changed
         }
