@@ -120,6 +120,23 @@ describe('styles', () => {
     });
   });
 
+  // a width of its own in a media query guesses the size of a box from the window's, which the side menu and the
+  // columns change: a component lays out by its own box (a container query, or flex-wrap), the page by the named
+  // breakpoints. Only the background images of the static pages, as wide as the window, pick their size by its width
+  it('uses no width of its own in a media query', () => {
+    const own = cssBlocks
+      .filter(({ file }) => !file.endsWith('assets/css/media.css'))
+      .flatMap(({ name, content }) =>
+        [...content.matchAll(/@media[^{]*\((?:min-|max-)?width:\s*\d+px\)/g)].map((m) => `${name}: ${m[0]}`)
+      );
+    expect(own).toEqual([
+      'views/static-views/SeracView.vue #1: @media (min-width: 865px)',
+      'views/static-views/SeracView.vue #1: @media (min-width: 1089px)',
+      'views/static-views/TopoguideView.vue #1: @media (min-width: 865px)',
+      'views/static-views/TopoguideView.vue #1: @media (min-width: 1089px)',
+    ]);
+  });
+
   // a data URL cannot use a custom property
   it('draws the external link icon in the color of the links', () => {
     const css = readFileSync(join(src, 'assets/css/external-links.css'), 'utf8');
