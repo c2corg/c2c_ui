@@ -1,6 +1,7 @@
 import { flushPromises } from '@vue/test-utils';
 import type { FeatureCollection } from 'geojson';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { reactive } from 'vue';
 import type { LocationQueryRaw, Router } from 'vue-router';
 
 import C2cMap from './C2cMap.vue';
@@ -84,6 +85,22 @@ describe('C2cMap', () => {
       circleStroke: undefined,
       size: '11',
     });
+  });
+  it('draws the images of an outing once they are located away from it', async () => {
+    const outing = reactive({
+      document_id: 2,
+      type: 'o',
+      geometry: { geom: point(6.8, 45.9) },
+      associations: { images: [{ document_id: 5, type: 'i', geometry: { geom: null as string | null } }] },
+    });
+    const { wrapper, map } = await mountMap({ documents: [outing] });
+    expect(drawnKeys(map)).toEqual(['documents:o:2:point']);
+
+    outing.associations.images[0]!.geometry = { geom: point(6.84, 45.9) };
+    await flushPromises();
+
+    expect(drawnKeys(map)).toEqual(['documents:o:2:point', 'images:i:5:point']);
+    wrapper.unmount();
   });
   it('draws the documents, their waypoints, and the images of an outing away from it', async () => {
     const outing = {
@@ -1509,6 +1526,24 @@ describe('C2cMap', () => {
       expect(shownMarkers()).toHaveLength(2);
       expect(shownMarkers()[0].lngLat![0]).toBeCloseTo(6.285, 6);
       expect((map.data['documents-3d'] as FeatureCollection).features).toHaveLength(1);
+      wrapper.unmount();
+    });
+
+    it('keeps the waypoints of the routes when the images of the outing are located', async () => {
+      vi.spyOn(c2c.route as DocumentService, 'get').mockReturnValue(
+        Promise.resolve({ data: { associations: { waypoints: [waypoint(11, 'summit', 6.285)] } } }) as never
+      );
+      const located = reactive({ ...outing, associations: { ...outing.associations, images: [] as unknown[] } });
+      const { wrapper } = await mountMap({ documents: [located], show3d: true });
+      await open3d(wrapper);
+      expect(shownMarkers()).toHaveLength(1);
+
+      located.associations.images.push({ document_id: 5, type: 'i', geometry: { geom: point(6.29, 45.9) } });
+      await flushPromises();
+
+      expect(shownMarkers().map((marker) => marker.lngLat![0])).toEqual(
+        expect.arrayContaining([expect.closeTo(6.285, 6)])
+      );
       wrapper.unmount();
     });
 

@@ -2185,6 +2185,8 @@ function redraw3d() {
   (map.getSource('flight-shadows') as GeoJSONSource).setData(EMPTY_COLLECTION);
   addMarkers(map, markers);
   showFlights(map, lines);
+  // removed with the others: read again (the version drops a former request still running)
+  void addRouteWaypoints(markers);
 }
 
 function open3d() {
@@ -2316,6 +2318,19 @@ watch(
     }
   },
   { deep: 1 }
+);
+
+// the images of an outing added or located (on its GPS track) after the map was drawn
+watch(
+  () =>
+    (props.documents ?? [])
+      .flatMap((document) => (document.type === 'o' ? (document.associations?.images ?? []) : []))
+      .map((image) => image.geometry?.geom)
+      .join('|'),
+  () => {
+    drawDocumentMarkers();
+    if (is3d.value) redraw3d();
+  }
 );
 
 // another search (other filters, another page), even one that comes back to the first: its results do not move the map,

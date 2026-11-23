@@ -34,6 +34,7 @@ const HomeView = () => import('@/views/portals/HomeView.vue');
 const ItinevertView = () => import('@/views/portals/ItinevertView.vue');
 const SophiePictureContestView = () => import('@/views/portals/SophiePictureContestView.vue');
 const OutingsStatsView = () => import('@/views/portals/outings-stats/OutingsStatsView.vue');
+const LocateImagesView = () => import('@/views/user/LocateImagesView.vue');
 const SeracView = () => import('@/views/static-views/SeracView.vue');
 const TopoguideView = () => import('@/views/static-views/TopoguideView.vue');
 const AccountView = () => import('@/views/user/AccountView.vue');
@@ -87,6 +88,7 @@ const routes: RouteRecordRaw[] = [
   },
   { path: '/yeti/:document_id(\\d+)?/:page?', name: 'yeti', component: YetiView },
   { path: '/outings-stats', name: 'outings-stats', component: OutingsStatsView },
+  { path: '/locate-images', name: 'locate-images', component: LocateImagesView, meta: { requiresAuth: true } },
   { path: '/sophie-picture-contest/:year(\\d+)?', name: 'sophie-picture-contest', component: SophiePictureContestView },
   { path: '/me', name: 'me', component: MeView },
   // the settings of the device and the preferences of the account, on one page. The former pages lead there: the
