@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { bulletinRegionId, plainText, toDangerLevel } from './avalanche-bulletin';
+import { bulletinRegionId, dangerAtElevation, plainText, toDangerLevel } from './avalanche-bulletin';
 
 describe('bulletinRegionId', () => {
   // a zone as a box: [west, south, east, north]
@@ -76,5 +76,26 @@ describe('plainText', () => {
     );
     expect(plainText('<img src=x onerror="alert(1)">texte')).toBe('texte');
     expect(plainText(undefined)).toBe('');
+  });
+});
+
+describe('dangerAtElevation', () => {
+  // 2 below 2400 m, 3 above, 4 above in the afternoon
+  const ratings = [
+    { mainValue: 'moderate', elevation: { upperBound: '2400' }, validTimePeriod: 'earlier' },
+    { mainValue: 'considerable', elevation: { lowerBound: '2400' }, validTimePeriod: 'earlier' },
+    { mainValue: 'high', elevation: { lowerBound: '2400' }, validTimePeriod: 'later' },
+  ] as const;
+
+  it('gives the danger of the band holding the elevation, the highest of the day', () => {
+    expect(dangerAtElevation([...ratings], 1800)).toBe(2);
+    expect(dangerAtElevation([...ratings], 3000)).toBe(4);
+  });
+
+  it('gives the highest danger when the elevation is unknown or no band can tell', () => {
+    expect(dangerAtElevation([...ratings], null)).toBe(4);
+    expect(dangerAtElevation([{ mainValue: 'low', elevation: { upperBound: 'treeline' } }], 1500)).toBe(1);
+    expect(dangerAtElevation([], 1500)).toBeUndefined();
+    expect(dangerAtElevation([{ mainValue: 'no_rating' }], 1500)).toBeUndefined();
   });
 });

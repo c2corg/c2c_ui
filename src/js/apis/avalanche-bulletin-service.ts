@@ -101,10 +101,10 @@ class AvalancheBulletinService {
   }
 
   /** The last bulletins published for an EAWS region (FR-03, CH-4231...): none out of season */
-  getLatestBulletins(regionId: string, lang?: string) {
+  getLatestBulletins(regionId: string, lang?: string, signal?: AbortSignal) {
     const params = lang && API_LANGS.includes(lang) ? { lang } : {};
     return this.axios
-      .get<AvalancheBulletins>(`/avalanche-bulletins/regions/${regionId}/latest`, { params })
+      .get<AvalancheBulletins>(`/avalanche-bulletins/regions/${regionId}/latest`, { params, signal })
       .then((response) => response.data.bulletins);
   }
 
