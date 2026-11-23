@@ -1,5 +1,5 @@
 <template>
-  <div class="yeti-subpanel bulletin-detail">
+  <div class="yeti-subpanel bulletin-detail" :class="{ 'is-compact': compact }">
     <template v-if="!embedded">
       <sub-panel-title><span v-translate>Avalanche bulletin</span></sub-panel-title>
 
@@ -38,19 +38,22 @@
       <ul v-if="problems.length" class="mb-2">
         <li v-for="(problem, i) of problems" :key="i" class="problem">
           <div class="is-flex is-align-items-center">
-            <span class="tag is-warning is-light">{{ problemName(problem.problemType) }}</span>
-            <span class="is-size-7 ml-2">
-              {{ elevationText(problem.elevation) }}
-              <template v-if="problem.validTimePeriod === 'earlier'">({{ $gettext('morning') }})</template>
-              <template v-if="problem.validTimePeriod === 'later'">({{ $gettext('afternoon') }})</template>
+            <span class="tag is-warning is-light problem-name">{{ problemName(problem.problemType) }}</span>
+            <!-- where: on the next line when the name is long, rather than wider than a narrow column -->
+            <span class="problem-where">
+              <span class="is-size-7">
+                {{ elevationText(problem.elevation) }}
+                <template v-if="problem.validTimePeriod === 'earlier'">({{ $gettext('morning') }})</template>
+                <template v-if="problem.validTimePeriod === 'later'">({{ $gettext('afternoon') }})</template>
+              </span>
+              <input-orientation
+                v-if="problem.aspects?.length"
+                disabled
+                :model-value="problem.aspects"
+                :size="44"
+                class="problem-aspects"
+              />
             </span>
-            <input-orientation
-              v-if="problem.aspects?.length"
-              disabled
-              :model-value="problem.aspects"
-              :size="44"
-              class="problem-aspects"
-            />
           </div>
           <!-- SLF gives the same comment to the problems of a group -->
           <p
@@ -183,7 +186,8 @@
         <strong>©{{ bulletin.source?.provider?.name }}</strong>
         <span v-if="bulletin.publicationTime">, {{ formatDate(bulletin.publicationTime) }}</span>
         <br />
-        <a v-if="officialUrl" :href="officialUrl" target="_blank" rel="noopener">
+        <!-- embedded: the page has its own link -->
+        <a v-if="officialUrl && !embedded" :href="officialUrl" target="_blank" rel="noopener">
           <fa-icon icon="external-link-alt" />
           <span class="ml-1" v-translate>Full bulletin</span>
         </a>
@@ -385,6 +389,32 @@ dt {
 
 dd + dt {
   margin-top: 0.5rem;
+}
+
+.problem > div {
+  flex-wrap: wrap;
+  row-gap: 0.25rem;
+}
+
+/* a long name wraps in its tag */
+.problem-name {
+  white-space: normal;
+  height: auto;
+}
+
+.problem-where {
+  flex: 1 1 9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+  margin-left: 0.5rem;
+}
+
+/* a narrow column: the where under the name, always */
+.is-compact .problem-where {
+  flex-basis: 100%;
+  margin-left: 0;
 }
 
 .problem + .problem {

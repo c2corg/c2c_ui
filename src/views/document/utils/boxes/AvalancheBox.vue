@@ -19,8 +19,12 @@
             <template v-if="index + 1 < sortedRegions.length">&bull; </template>
           </span>
         </div>
-        <p v-if="atElevation" class="is-size-7 has-text-centered has-text-grey">
-          {{ $gettext('Danger at the highest point of the route') }} ({{ elevation }} m)
+        <p
+          v-if="atElevation"
+          class="is-size-7 has-text-centered has-text-grey"
+          :title="$gettext('Danger at the highest point of the route')"
+        >
+          <fa-icon icon="mountain" class="mr-1" />{{ elevation }} m
         </p>
 
         <!-- the full bulletin, unfolded in the box: by this button (touch, keyboard), or by a long hover -->
@@ -56,9 +60,16 @@
       <div v-else class="py-2">
         <p><span v-translate key="id2">No avalanche bulletin right now</span></p>
       </div>
-      <hr />
+      <!-- unfolded, the links follow the bulletin: no rule between them -->
+      <hr v-if="!unfolded" />
+      <div v-else-if="current && officialUrl(current)" class="box-link mt-3">
+        <fa-icon icon="file-lines" fixed-width />
+        <a :href="officialUrl(current)" target="_blank" rel="noopener">
+          <span v-translate>Full bulletin</span> ({{ current.bra.name }})
+        </a>
+      </div>
     </template>
-    <div>
+    <div class="box-link">
       <icon-yeti fixed-width />
       <router-link :to="yetiUrl"><span v-translate>Use YETI to better analyze avalanche risk</span></router-link>
     </div>
@@ -68,6 +79,16 @@
       <template #title>{{ current.bra.name }}</template>
       <bulletin-detail :selected="selected(current)" :bulletins="current.bulletins" :failed="current.failed" embedded />
       <template #footer>
+        <a
+          v-if="officialUrl(current)"
+          :href="officialUrl(current)"
+          target="_blank"
+          rel="noopener"
+          class="button is-small"
+        >
+          <fa-icon icon="file-lines" />
+          <span class="ml-1" v-translate>Full bulletin</span>
+        </a>
         <router-link :to="yetiUrl" class="button is-small">
           <icon-yeti fixed-width />
           <span class="ml-1" v-translate>Open in YETI</span>
@@ -292,11 +313,12 @@ onMounted(() => {
   margin-top: 0.5rem;
 }
 
-/* in the column of a large screen: its own scroll, the page does not jump */
-@media screen and (--c2c-min-tablet) {
-  .bulletin-panel {
-    max-height: 70vh;
-    overflow-y: auto;
-  }
+/* the official bulletin and YETI: the two ways further, alike */
+.box-link {
+  font-size: 1.05rem;
+}
+
+.box-link + .box-link {
+  margin-top: 0.25rem;
 }
 </style>
