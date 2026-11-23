@@ -46,6 +46,13 @@ api.os.uk
 www.camptocamp.org
 api.camptocamp.org
 
+# preprod (a copy of production: ?backend=preprod) and the GitHub Pages previews of the pull requests
+www.preprod.camptocamp.org
+api.preprod.camptocamp.org
+media.preprod.camptocamp.org
+images.preprod.camptocamp.org
+c2corg.github.io
+
 # images of the dev database, 3D terrain, public transport tiles
 media.camptocamp.org
 sos-ch-dk-2.exo.io
