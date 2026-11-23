@@ -10,6 +10,14 @@ import YetiView from './YetiView.vue';
 import ValidationButton from '@/components/yeti/ValidationButton.vue';
 import { useYetixStore } from '@/components/yeti/yetix';
 
+// the query of the page (a route page links to the bulletin of its region)
+const routeQuery = vi.hoisted(() => ({ value: {} as Record<string, string> }));
+vi.mock('vue-router', async (original) => ({
+  ...(await original<typeof import('vue-router')>()),
+  useRoute: () => ({ query: routeQuery.value, params: {}, fullPath: '/yeti' }),
+}));
+afterEach(() => (routeQuery.value = {}));
+
 // the store of each test, in the Pinia src/test-setup.ts activates
 let Yetix: ReturnType<typeof useYetixStore>;
 beforeEach(() => {
@@ -41,6 +49,24 @@ describe('YetiView tabs', () => {
     mountView();
 
     expect((Yetix.tabs as { id: string }[]).map((tab) => tab.id)).toEqual(['layer', 'risk', 'route', 'meteo']);
+  });
+
+  it('opens the bulletin a route page links to', async () => {
+    routeQuery.value = { bulletin: 'FR-03' };
+    // jsdom does not scroll
+    Element.prototype.scrollIntoView = vi.fn();
+    mountView();
+    await flushPromises();
+
+    expect(Yetix.selectedBulletin).toEqual({ regionId: 'FR-03', name: '' });
+    expect((Yetix.tabs as { id: string }[]).map((tab) => tab.id)).toContain('bulletin');
+  });
+
+  it('ignores a bulletin that is no region id', () => {
+    routeQuery.value = { bulletin: '<script>' };
+    mountView();
+
+    expect(Yetix.selectedBulletin).toBeNull();
   });
 
   it('counts the drawn route on its tab', async () => {

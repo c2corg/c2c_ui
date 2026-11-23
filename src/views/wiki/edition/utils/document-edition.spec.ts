@@ -41,7 +41,7 @@ const book = () => ({
   associations: {},
 });
 
-const hooks = { afterLoad: vi.fn(), beforeSave: vi.fn(), afterSave: vi.fn() };
+const hooks = { afterLoad: vi.fn(), beforeSave: vi.fn(), afterSave: vi.fn(), afterSaved: vi.fn() };
 
 // the hooks are given by the view: its instance has none of them (as a <script setup> component in production)
 const View = {
@@ -163,6 +163,22 @@ describe('useDocumentEdition', () => {
     expect(hooks.beforeSave).toHaveBeenCalledOnce();
     expect(api.save).toHaveBeenCalledExactlyOnceWith(document, 'typo');
     expect(hooks.afterSave).toHaveBeenCalledOnce();
+    expect(router.currentRoute.value.fullPath).toBe('/books/12/fr');
+  });
+
+  it('shows the saved document once its follow-up is done, even when it failed', async () => {
+    api.save.mockImplementation(() => response({}));
+    let finish!: (value: unknown) => void;
+    hooks.afterSaved.mockReturnValueOnce(new Promise((_, reject) => (finish = reject)));
+    const { vm } = await mountAt('/books/edit/12/fr');
+
+    vm.save('typo');
+    await flushPromises();
+    expect(hooks.afterSaved).toHaveBeenCalledExactlyOnceWith(vm.document);
+    expect(router.currentRoute.value.fullPath).toBe('/books/edit/12/fr');
+
+    finish(new Error('network'));
+    await flushPromises();
     expect(router.currentRoute.value.fullPath).toBe('/books/12/fr');
   });
 

@@ -276,9 +276,8 @@ defineExpose({ getExtent });
 }
 @media screen and (--c2c-max-tablet) {
   .map-container {
-    /* the window, without the navbar, the section padding (1.5rem), the box padding (2 * 1.25rem), the header
-       (34px) and the box margins (2 * 1.5rem) */
-    height: calc(100vh - var(--c2c-navbar-height) - 1.5rem - 2 * 1.25rem - 34px - 1.5rem - 1.5rem);
+    /* under the form, the page scrolls: most of the window, which leaves room for the bars of the phone layout */
+    height: 75dvh;
     padding-left: 0;
     padding-top: 0;
     padding-bottom: 0;

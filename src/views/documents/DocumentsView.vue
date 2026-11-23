@@ -73,6 +73,7 @@
       class="columns result-section"
       :class="[
         'mobile-mode-' + displayMode,
+        displayMode === 'map' ? 'fills-window' : 'fills-window-from-tablet',
         { 'query-has-tags': queryHasTags, 'has-splitter': showSplitter, 'is-resizing': splitter.resizing.value },
       ]"
     >
@@ -151,7 +152,9 @@
           :routes-filters="overlayFilters.route"
           sync-url
           @highlight-document="highlightedDocument = $event"
-          :show-filter-control="displayMode !== 'map' || $screen.isMobile"
+          :show-filter-control="showResults"
+          :filter-by-default="mapVisible"
+          :force-filter="!showResults"
           show-center-on-geolocation
           show-recenter-on
           show3d
@@ -212,6 +215,8 @@ const queryHasTags = ref(false);
 
 const showMap = computed(() => ['both', 'map'].includes(displayMode.value));
 const showResults = computed(() => ['result', 'both'].includes(displayMode.value));
+// in the phone layout, the map is hidden under the results when both are shown
+const mapVisible = computed(() => displayMode.value === 'map' || (displayMode.value === 'both' && !$screen.isMobile));
 
 // on desktop, the results and the map share the width as the user drags it, one width for the list and one for the
 // cards, for all the document types
@@ -361,8 +366,10 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
 @import '@/assets/css/media.css';
 
 /*
- * On mobile the search bars stick on top, under the ad when there is one, and the map height is calculated: section
- * padding 0.5rem, header 56px, filters 25px.
+ * The results and the map take what the header and the filters leave of the window (.fills-window, App.vue), whatever
+ * their height (the filters can wrap on two lines, the text size of the app settings): from the tablet width, the list
+ * scrolls in its container and the pagination stays below it. On phones the page scrolls under the search bars, which
+ * stick on top, but the map alone fills the window.
  */
 
 .header-section {
@@ -378,6 +385,15 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
   margin-left: 0.75rem;
 }
 
+/* the page selector (PageSelector.vue) hides its "per page" choice when the header is narrow. Until Chrome 129, Firefox 133
+   and Safari 18.4, a container is also a stacking context: the header takes a level above the map (its controls go up
+   to 4), else the map covers the menus of the header (near me, filters). Under the site notice (20, App.vue) */
+.search-infos {
+  container: documents-header / inline-size;
+  position: relative;
+  z-index: 10;
+}
+
 .filter-section {
   padding-bottom: 0.5rem;
   clear: both;
@@ -387,7 +403,7 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
   /* sticky, not fixed: a fixed bar would hide the top of the ad, which is in the flow above the page */
   .search-infos {
     position: sticky;
-    top: var(--c2c-navbar-height);
+    top: var(--c2c-header-height);
     z-index: 24;
     background-color: var(--c2c-body-background-color);
     padding-top: 0.5rem;
@@ -412,14 +428,13 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
   }
 
   .map-container {
-    height: calc(100vh - var(--c2c-navbar-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
     padding: 0;
   }
 
   .mobile-mode-map {
     margin-top: 0;
     .map-container {
-      height: calc(100vh - var(--c2c-navbar-height) - 3 * 0.5rem - 56px - 25px);
+      height: 100%;
     }
 
     .documents-container {
@@ -439,29 +454,6 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
 }
 
 @media screen and (--c2c-min-tablet) {
-  /*
-   * The app is as high as the window and the results take what is left under the header and the filters, whatever
-   * their height (the filters can wrap on two lines) and what comes above (the top bar, with or without the ad bar).
-   * The list scrolls in its container, and the pagination stays below it.
-   */
-  :global(#app:has(.documents-view)) {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  :global(#app:has(.documents-view) .page-content) {
-    flex: 1 1 0;
-    min-height: 0;
-  }
-
-  .documents-view {
-    flex: 1 1 0;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-  }
-
   .search-infos {
     flex: 0 0 auto;
   }
@@ -469,8 +461,6 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
   .result-section {
     margin-top: 0;
     margin-bottom: 0;
-    flex: 1 1 0;
-    min-height: 0;
 
     .documents-container {
       height: 100%;

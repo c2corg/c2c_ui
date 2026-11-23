@@ -17,14 +17,15 @@
 
     <input
       v-else
-      :type="type"
-      :min="divisor ? min / divisor : min"
-      :max="divisor ? Number(max) / divisor : max"
+      :type="divided ? 'text' : type"
+      :inputmode="divided ? 'decimal' : undefined"
+      :min="divided ? undefined : min"
+      :max="divided ? undefined : max"
       :disabled="disabled"
       :placeholder="placeholder"
       v-model.lazy="value_"
       class="input"
-      :class="{ 'is-danger': hasError }"
+      :class="{ 'is-danger': hasError || invalid }"
     />
 
     <span v-if="postfix" class="icon is-right">
@@ -34,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from 'vue';
+import { computed, type PropType, watch } from 'vue';
 
 import { baseInputProps, useInputValue } from './input-value';
 
@@ -81,9 +82,15 @@ const props = defineProps({
     default: undefined,
   },
 });
-const emit = defineEmits(['update:modelValue', 'click-prefix']);
+// update:invalid: a divided number whose text is rejected (not a number, out of range), so that the form does not
+// save the previous value as if it were the one shown
+const emit = defineEmits(['update:modelValue', 'update:invalid', 'click-prefix']);
 
-const { value_ } = useInputValue(props, emit);
+const { value_, invalid } = useInputValue(props, emit);
+watch(invalid, (value) => emit('update:invalid', value));
+
+// a number shown divided (metres in km) is typed as text, read with a comma or a dot
+const divided = computed(() => props.type === 'number' && props.divisor !== undefined);
 </script>
 
 <style scoped>

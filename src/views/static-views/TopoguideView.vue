@@ -2,6 +2,18 @@
   <div>
     <html-header :title="$gettext('Topoguide')" />
     <div class="topoguide">
+      <!-- the browser picks the size by the width it shows it at: no breakpoint -->
+      <img
+        class="background-image"
+        src="@/assets/img/backgrounds/laurentf-sajama-800w.jpg"
+        srcset="
+          @/assets/img/backgrounds/laurentf-sajama-800w.jpg   800w,
+          @/assets/img/backgrounds/laurentf-sajama-1024w.jpg 1024w,
+          @/assets/img/backgrounds/laurentf-sajama-1200w.jpg 1200w
+        "
+        sizes="100vw"
+        alt=""
+      />
       <h1 class="has-text-centered has-text-weight-semibold" v-translate>Topoguide</h1>
       <div class="links is-flex">
         <topoguide-view-link to="outings" :label="$gettext('outings')" icon="icon-outing" />
@@ -115,18 +127,22 @@ const waypoint_types = computed(() => constants.waypoint_types);
 @import '@/assets/css/media.css';
 
 .topoguide {
-  background-image: url('@/assets/img/backgrounds/laurentf-sajama-800w.jpg');
-  background-position-x: center;
-  background-size: cover;
+  position: relative;
+  /* the image behind the content, above the background of the page */
+  isolation: isolate;
   padding-top: 90px; /* keep the header on a deep color zone */
   padding-bottom: 25px;
   justify-content: center;
-  /* the smallest image as wide as the page, beside the 64px rail of the side menu (tokens.css) */
-  @media (min-width: 865px) {
-    background-image: url('@/assets/img/backgrounds/laurentf-sajama-1024w.jpg');
-  }
-  @media (min-width: 1089px) {
-    background-image: url('@/assets/img/backgrounds/laurentf-sajama-1200w.jpg');
+
+  .background-image {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* the top of the image, as a background */
+    object-position: center top;
   }
 
   h1 {

@@ -14,6 +14,7 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import {
   faAngleDown,
+  faAngleUp,
   faAnglesLeft,
   faAnglesRight,
   faArrowDown,
@@ -72,6 +73,7 @@ import {
   faFileDownload,
   faFilter,
   faFlag,
+  faFileLines,
   faFlagCheckered,
   faFolder,
   faFolderPlus,
@@ -85,6 +87,7 @@ import {
   faHeart,
   faHistory,
   faHome,
+  faHouseFlag,
   faImage,
   faInfo,
   faInfoCircle,
@@ -290,6 +293,7 @@ export default function install(app: App) {
 
     // solid icons
     faAngleDown,
+    faAngleUp,
     faAnglesLeft,
     faAnglesRight,
     faArrowsAltV,
@@ -341,6 +345,7 @@ export default function install(app: App) {
     faFileDownload,
     faFilter,
     faFlag,
+    faFileLines,
     faFlagCheckered,
     faGear,
     faGears,
@@ -352,6 +357,7 @@ export default function install(app: App) {
     faHeart,
     faHistory,
     faHome,
+    faHouseFlag,
     faImage,
     faInfo,
     faInfoCircle,

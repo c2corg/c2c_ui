@@ -116,7 +116,9 @@ describe('DfmAdSmall', () => {
     expect(stopWatching).toHaveBeenCalledOnce();
   });
 
-  it('leaves the room again on the next page, after a page without ad', async () => {
+  it('leaves the room again on the next page, after a page without ad, and watches its new slot', async () => {
+    const stopWatching = vi.fn();
+    vi.mocked(watchAdSlot).mockReturnValue(stopWatching);
     const wrapper = await mountAt(DfmAdSmall);
     const onRender = vi.mocked(watchAdSlot).mock.calls[0]![1];
 
@@ -128,6 +130,9 @@ describe('DfmAdSmall', () => {
     await flushPromises();
     expect(slot().style.minHeight).toBe('90px');
     expect(wrapper.classes()).not.toContain('is-empty');
+    // the slot of the new page has its own deadline
+    expect(stopWatching).toHaveBeenCalledOnce();
+    expect(watchAdSlot).toHaveBeenCalledTimes(2);
 
     wrapper.unmount();
   });

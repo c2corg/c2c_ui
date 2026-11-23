@@ -165,6 +165,16 @@ describe('Field', () => {
     expect(heightDiff.getError({ ...day, height_diff_up: null }, {})).toBeNull();
   });
 
+  it('is invalid while the text of its input is rejected: the document keeps the previous value', () => {
+    const length = routeField('route_length');
+    const route = { type: 'r', activities: ['hiking'], route_length: 560 };
+
+    length.rejectedInput = true;
+    expect(length.getError(route, {})).toEqual({ name: 'route_length', description: 'Invalid value' });
+    length.rejectedInput = false;
+    expect(length.getError(route, {})).toBeNull();
+  });
+
   it('is visible for its activities, and for rock climbing routes of the right kind', () => {
     const elevation = routeField('elevation_max');
     expect(elevation.isVisibleFor({ type: 'r', activities: ['hiking'] })).toBe(true);

@@ -8,6 +8,11 @@
  * --c2c-mobile and --c2c-touch are those of Bulma: below the tablet and below the desktop breakpoints.
  * --c2c-phone: below PHONE_BREAKPOINT, the phone layout of the app. Where it is about the navigation (the bars of the
  * app or the side menu), prefer html[data-shell='mobile'], which follows the same width.
+ *
+ * A component inside the page does not guess its width from the window's (the side menu and the columns change it):
+ * it wraps (flex-wrap), or uses a container query on its box (TransportsBox.vue, SubPanelMethods.vue). iOS 15 has no
+ * container queries: write the narrow layout by default and the wide one in `@container (min-width: ...)`, so that
+ * it gets the narrow one. styles.spec.ts allows no other pixel width in a media query.
  */
 @custom-media --c2c-phone (max-width: 599px);
 @custom-media --c2c-min-tablet (min-width: 769px);

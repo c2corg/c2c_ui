@@ -1043,14 +1043,11 @@ function recenterMapOnDocuments() {
 </script>
 
 <style scoped>
+/* narrow by default: the form, then the map below it. Beside each other in a wide box (the container query below),
+   which iOS 15 phones (no container queries) never get */
 .plan-trip-section {
-  margin-top: 20px;
-  display: flex;
-  gap: 20px;
-  min-height: 650px;
-
   .plan-trip-info {
-    flex: 1;
+    margin-bottom: 20px;
     flex-direction: column;
     display: flex;
 
@@ -1211,27 +1208,31 @@ function recenterMapOnDocuments() {
   }
 
   .plan-trip-map {
-    height: auto;
-    width: 600px;
-    max-height: 650px;
+    height: 275px;
     border: 1px solid lightgray;
     border-radius: 4px;
   }
 }
 
-@media only screen and (max-width: 600px) {
+/* the container is the box around (TransportsBox.vue). The form needs about 420px: beside it, the map takes the rest,
+   up to 600px */
+@container public-transports (min-width: 760px) {
   .plan-trip-section {
-    display: inline !important;
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    min-height: 650px;
 
     .plan-trip-info {
-      margin-bottom: 20px;
+      flex: 1 0 420px;
+      margin-bottom: 0;
     }
 
     .plan-trip-map {
-      height: 275px !important;
-      width: auto !important;
-      margin-left: auto;
-      margin-right: auto;
+      height: auto;
+      width: 600px;
+      min-width: 0;
+      max-height: 650px;
     }
   }
 }

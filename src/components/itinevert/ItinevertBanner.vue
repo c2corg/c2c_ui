@@ -138,13 +138,11 @@
   flex-direction: column;
 }
 
-@media screen and (max-width: 528px) {
+@media screen and (--c2c-max-tablet) {
   .subtitle {
     margin-top: 8px;
   }
-}
 
-@media screen and (--c2c-max-tablet) {
   .banner-container {
     display: flex;
     flex-direction: column;

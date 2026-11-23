@@ -90,7 +90,8 @@ watch(() => props.documents, saveTotal);
 .pagination-link {
   height: 1.75em;
 }
-@media screen and (max-width: 340px) {
+/* the container is the header of the list (DocumentsView.vue); none elsewhere (printing options): always shown */
+@container documents-header (max-width: 319px) {
   .limit-selector {
     display: none;
   }

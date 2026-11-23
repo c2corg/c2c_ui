@@ -106,6 +106,14 @@
     />
 
     <tool-box-button
+      v-if="canLocateImages"
+      @click="locateImages"
+      :icon="locatingImages ? 'spinner' : 'map-marker-alt'"
+      :icon-class="locatingImages ? 'fa-spin' : undefined"
+      :label="$gettext('Locate images on the GPS track')"
+    />
+
+    <tool-box-button
       v-if="isEditable && hasMissingLangs"
       @click="translateModal!.show()"
       icon="globe"
@@ -235,6 +243,7 @@ import { useModerationRoles } from '@/js/composables/moderation';
 import constants from '@/js/constants';
 import { toLonLat } from '@/js/geo/projection';
 import getFundraiser from '@/js/get-fundraiser';
+import { hasTimedTrack, locateOutingImages } from '@/js/locate-outing-images';
 import { cookedDocumentProperty, useDocumentType } from '@/js/properties';
 import { notify } from '@/js/toast';
 import { SAVABLE_TYPES } from '@/pwa/offline-store';
@@ -299,6 +308,47 @@ async function saveDayPack() {
     notify($gettext('Download failed: check the network and try again'), 'is-warning');
   } finally {
     savingPack.value = false;
+  }
+}
+
+// the images of the outing without a location of their own, on its GPS track (#4259)
+const locatingImages = ref(false);
+const canLocateImages = computed(
+  () =>
+    documentType.value === 'outing' &&
+    isEditable.value &&
+    Boolean(props.document.associations?.images?.length) &&
+    hasTimedTrack(props.document)
+);
+
+async function locateImages() {
+  if (
+    locatingImages.value ||
+    !window.confirm(
+      $gettext(
+        'Set the location of the images without one to where the GPS track was when they were shot (accounting for a time zone difference of the camera)?'
+      )
+    )
+  ) {
+    return;
+  }
+  locatingImages.value = true;
+  try {
+    const located = await locateOutingImages(
+      props.document,
+      lang.value!,
+      $user,
+      $gettext('Location computed from the GPS track of the outing')
+    );
+    if (located.length) {
+      notify($gettext('Images located on the GPS track of the outing:') + ' ' + located.length, 'is-success');
+    } else {
+      notify($gettext('No image to locate: they have a location, or no time matching the track'), 'is-info');
+    }
+  } catch {
+    notify($gettext('An error occurred, the images could not all be located'), 'is-warning');
+  } finally {
+    locatingImages.value = false;
   }
 }
 

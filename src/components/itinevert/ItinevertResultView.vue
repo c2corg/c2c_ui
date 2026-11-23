@@ -56,7 +56,14 @@
         :show-print-button="false"
       ></query-items>
     </div>
-    <div class="columns result-section" :class="['mobile-mode-' + displayMode, { 'query-has-tags': queryHasTags }]">
+    <div
+      class="columns result-section"
+      :class="[
+        'mobile-mode-' + displayMode,
+        displayMode === 'map' ? 'fills-window' : 'fills-window-from-tablet',
+        { 'query-has-tags': queryHasTags },
+      ]"
+    >
       <div
         v-if="showResults"
         class="column documents-container"
@@ -408,8 +415,9 @@ onMounted(() => {
 @import '@/assets/css/media.css';
 
 /*
- * The heights: section padding 1.5rem, header 34px with a bottom padding of 1.5rem, filters 32px with a bottom
- * padding of 0.5rem, tags 28px. On mobile: section padding 0.5rem, header 56px, filters 25px.
+ * As the list of the documents (DocumentsView.vue): the results and the map take what the headers and the filters leave
+ * of the window (.fills-window, App.vue), and the list scrolls in its container from the tablet width. On phones the
+ * page scrolls, but the map alone fills the window.
  */
 
 .header-section {
@@ -425,6 +433,15 @@ onMounted(() => {
   margin-left: 0.75rem;
 }
 
+/* the page selector (ItinevertPageSelector.vue) hides its "per page" choice when the header is narrow. Until Chrome 129, Firefox 133
+   and Safari 18.4, a container is also a stacking context: the header takes a level above the map (its controls go up
+   to 4), else the map covers the menus of the header (near me, filters). Under the site notice (20, App.vue) */
+.search-infos {
+  container: documents-header / inline-size;
+  position: relative;
+  z-index: 10;
+}
+
 .filter-section {
   padding-bottom: 0.5rem;
   clear: both;
@@ -433,7 +450,7 @@ onMounted(() => {
 @media screen and (--c2c-max-tablet) {
   .search-infos {
     position: fixed;
-    top: calc(var(--c2c-navbar-height) + var(--c2c-itinevert-header-height));
+    top: calc(var(--c2c-header-height) + var(--c2c-itinevert-header-height));
     left: 0;
     right: 0;
     z-index: 24;
@@ -442,7 +459,7 @@ onMounted(() => {
   }
 
   .result-section {
-    padding-top: calc(var(--c2c-navbar-height) + var(--c2c-itinevert-header-height) + 3.75rem);
+    padding-top: calc(var(--c2c-header-height) + var(--c2c-itinevert-header-height) + 3.75rem);
   }
 
   .documents-view {
@@ -464,14 +481,13 @@ onMounted(() => {
   }
 
   .map-container {
-    height: calc(100vh - var(--c2c-header-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
     padding: 0;
   }
 
   .mobile-mode-map {
     margin-top: 0;
     .map-container {
-      height: calc(100vh - var(--c2c-header-height) - 3 * 0.5rem - 56px - 25px);
+      height: 100%;
     }
 
     .documents-container {
@@ -482,7 +498,10 @@ onMounted(() => {
   .mobile-mode-result,
   .mobile-mode-both {
     .map-container {
-      visibility: hidden; /* map does not like to be in a display none... */
+      /* map does not like to be in a display none: hidden and without height, so that it leaves no blank page under the list */
+      visibility: hidden;
+      height: 0;
+      overflow: hidden;
     }
   }
 }
@@ -490,11 +509,7 @@ onMounted(() => {
 @media screen and (--c2c-min-tablet) {
   .result-section {
     margin-top: 0;
-    height: calc(100vh - var(--c2c-header-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px);
-
-    &.query-has-tags {
-      height: calc(100vh - var(--c2c-header-height) - 2 * 1.5rem - 34px - 1.5rem - 0.5rem - 32px - 28px);
-    }
+    margin-bottom: 0;
 
     .documents-container {
       height: 100%;

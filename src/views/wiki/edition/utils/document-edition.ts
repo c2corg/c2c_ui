@@ -4,7 +4,7 @@
 //   const { document, fields, ... } = useDocumentEdition({ beforeSave });
 //
 // A view may give afterLoad(), beforeSave() and afterSave() hooks: they are called when the document is loaded,
-// before it's checked and saved, and once its saving has started.
+// before it's checked and saved, and once its saving has started; afterSaved() once an edited document is saved.
 import {
   computed,
   getCurrentInstance,
@@ -33,6 +33,8 @@ export type EditionHooks = {
   afterLoad?: () => void;
   beforeSave?: () => void;
   afterSave?: () => void;
+  // once an edited document is saved, before leaving the form: its failures do not stop it
+  afterSaved?: (document: C2cDocument) => unknown;
 };
 
 // the document being loaded: data is null until the document and its associations given in the url are loaded
@@ -398,8 +400,9 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
     if (mode.value === 'edit') {
       request = service(documentType.value)
         .save(doc as { document_id: number }, comment)
-        .then(() => {
+        .then(async () => {
           modified.value = false;
+          await Promise.resolve(hooks.afterSaved?.(doc)).catch(() => undefined);
           goToDocument(doc.document_id!);
         });
     } else {

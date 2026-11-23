@@ -120,6 +120,43 @@ describe('styles', () => {
     });
   });
 
+  // a width of its own in a media query guesses the size of a box from the window's, which the side menu and the
+  // columns change: a component lays out by its own box (a container query, or flex-wrap), the page by the named
+  // breakpoints. An image picks its size with srcset and sizes
+  it('uses no width of its own in a media query', () => {
+    const own = cssBlocks
+      .filter(({ file }) => !file.endsWith('assets/css/media.css'))
+      .flatMap(({ name, content }) =>
+        [...content.matchAll(/@media[^{]*\((?:min-|max-)?width:\s*\d+px\)/g)].map((m) => `${name}: ${m[0]}`)
+      );
+    expect(own).toEqual([]);
+  });
+
+  // a height computed from the window's repeats the heights of the navigation, of the paddings and of the headers above,
+  // and is wrong as soon as one of them changes (filters on two lines, the text size): the page takes what is left with
+  // .fills-window (App.vue). Bulma's modals, and the image viewer, over the whole window with its own bars, are fine
+  it('computes no height from the window', () => {
+    const computed = cssBlocks
+      .filter(({ file }) => !file.includes('assets/css/bulma/'))
+      .flatMap(({ name, content }) =>
+        [...content.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/calc\([^;{}]*\d[dsl]?vh\b[^;{}]*/g)].map(
+          (m) => `${name}: ${m[0]}`
+        )
+      );
+    expect(computed).toEqual(['components/image-viewer/ImageViewer.vue #1: calc(100dvh - 3rem - 30px)']);
+  });
+
+  // what is under the navigation starts at --c2c-header-height, which App.vue alone switches with the large ad
+  // (.nav-dfm): a style of its own for the ad (top: var(--c2c-navbarad-height) under .nav-dfm) duplicates that switch
+  it('switches the header height in one place', () => {
+    const uses = cssBlocks
+      .filter(({ content }) =>
+        /\.nav-dfm\b|var\(--c2c-navbarad-height\)/.test(content.replace(/\/\*[\s\S]*?\*\//g, ''))
+      )
+      .map(({ name }) => name);
+    expect(uses).toEqual(['App.vue #1', 'views/Navigation.vue #1']);
+  });
+
   // a data URL cannot use a custom property
   it('draws the external link icon in the color of the links', () => {
     const css = readFileSync(join(src, 'assets/css/external-links.css'), 'utf8');

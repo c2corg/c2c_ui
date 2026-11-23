@@ -146,7 +146,10 @@ watch(showAccessibilityInfo, (value) => {
 </script>
 
 <style scoped>
+/* the box and its sections (NearbyStopsSection, PlanATripSection) stack their content when the box is narrow: its
+   width depends on the column it is in (the window, the side menu), not on the window alone */
 .public-transports-box {
+  container: public-transports / inline-size;
   position: relative;
 
   .hide-box-content {
@@ -172,11 +175,14 @@ watch(showAccessibilityInfo, (value) => {
     position: absolute;
     top: -100px;
   }
+  /* one below the other by default, side by side in a wide box (the container query below), which iOS 15 phones (no
+     container queries) never get */
   .public-transport-buttons {
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    gap: 20px;
     margin-top: 24px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
 
   .public-transports-button {
@@ -221,13 +227,11 @@ watch(showAccessibilityInfo, (value) => {
   }
 }
 
-@media only screen and (max-width: 600px) {
-  .public-transport-buttons {
-    flex-direction: column;
-
-    .public-transports-button {
-      margin-bottom: 10px;
-    }
+@container public-transports (min-width: 600px) {
+  .public-transports-box .public-transport-buttons {
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 10px;
   }
 }
 

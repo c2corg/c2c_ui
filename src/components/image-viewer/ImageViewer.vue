@@ -9,12 +9,7 @@
           <fa-icon icon="eye" />
         </document-link>
 
-        <edit-link
-          :document="activeDocument"
-          :lang="activeDocument.available_langs?.[0]"
-          class="has-text-grey-lighter"
-          @click="close()"
-        >
+        <edit-link :document="activeDocument" :lang="activeDocument.available_langs?.[0]" class="has-text-grey-lighter">
           <fa-icon icon="edit" />
         </edit-link>
 
@@ -78,6 +73,7 @@ import 'swiper/css/zoom';
 import virtualStyles from 'swiper/element/css/virtual?inline';
 import { Keyboard, Navigation, Pagination, Virtual, Zoom } from 'swiper/modules';
 import { nextTick, onBeforeUnmount, ref, useTemplateRef } from 'vue';
+import { useRouter } from 'vue-router';
 import ZingTouch from 'zingtouch';
 
 import ImageInfo from './ImageInfo.vue';
@@ -113,6 +109,60 @@ const exitFullscreen = function () {
 };
 
 const { $screen } = useGlobalProperties();
+const router = useRouter();
+
+// The open viewer is a history entry of its own, on the same URL: the back button (browser, phone) closes it instead
+// of leaving the page. The router must not see this entry, it would take going back from it for a navigation to the
+// same page (route watchers, scroll to the top): it doesn't listen to the history while the viewer holds it.
+// - 'none': no entry
+// - 'open': the entry is the current one, the viewer is shown
+// - 'leaving': the viewer was closed by a button, Escape, the wheel or a swipe: history.back() is on its way
+const HISTORY_MARK = 'c2cImageViewer';
+let historyEntry: 'none' | 'open' | 'leaving' = 'none';
+
+function pushHistoryEntry() {
+  if (historyEntry !== 'none') {
+    return;
+  }
+  // the router's state is kept (position, scroll), so that it finds its way when it listens again
+  history.pushState({ ...history.state, [HISTORY_MARK]: true }, '');
+  historyEntry = 'open';
+  router.listening = false;
+  window.addEventListener('popstate', onPopstate);
+}
+
+function releaseHistoryEntry() {
+  historyEntry = 'none';
+  window.removeEventListener('popstate', onPopstate);
+  router.listening = true;
+}
+
+// the router's popstate listener, added first, has already ignored the event
+function onPopstate() {
+  const closedByBack = historyEntry === 'open';
+  releaseHistoryEntry();
+  if (closedByBack) {
+    close();
+  }
+}
+
+const removeNavigationGuard = router.beforeEach((to, from) => {
+  if (historyEntry === 'open') {
+    // a link of the viewer (document, edit) or of the page: the new page takes the place of the viewer's entry, back
+    // then goes to the page the viewer was opened on, as without the viewer
+    releaseHistoryEntry();
+    close();
+    // the router keeps the state of the entry it replaces
+    const state = { ...history.state };
+    delete state[HISTORY_MARK];
+    history.replaceState(state, '');
+    return { path: to.path, query: to.query, hash: to.hash, replace: true };
+  }
+  if (historyEntry === 'none' && history.state?.[HISTORY_MARK] && to.fullPath === from.fullPath) {
+    // forward to the entry of a closed viewer: cancelled, the router then goes back to the page's entry
+    return false;
+  }
+});
 
 const visible = ref(false);
 const images = ref<ShownImage[]>([]);
@@ -160,7 +210,6 @@ function onImageError(event: Event) {
 function close() {
   visible.value = false;
   // clean handlers
-  window.removeEventListener('popstate', close);
   window.removeEventListener('wheel', close);
   if (zt) {
     // the swiper element, still there until the viewer is hidden (was $refs.container, which did not exist)
@@ -170,6 +219,11 @@ function close() {
     zt = null;
   }
   hideButtons.value = false;
+  if (historyEntry === 'open') {
+    // closed in the viewer: its history entry goes, the router listens again once back on the page's entry
+    historyEntry = 'leaving';
+    history.back();
+  }
 }
 
 function toggleButtons() {
@@ -186,6 +240,7 @@ function show(image: ViewerImage) {
 
   activeDocument.value = images.value[initialSlide];
   visible.value = true;
+  pushHistoryEntry();
 
   nextTick(() => {
     const element = swiper.value!;
@@ -214,8 +269,6 @@ function show(image: ViewerImage) {
 
     // Swiper Element events are prefixed with "swiper" since Swiper 10 (eventsPrefix)
     element.addEventListener('swiperinit', () => {
-      // close when the user goes back in history
-      window.addEventListener('popstate', close);
       // close on mouse wheel
       window.addEventListener('wheel', close);
       // close on vertical swipe
@@ -285,6 +338,10 @@ window.addEventListener('keydown', onKeydown);
 
 onBeforeUnmount(() => {
   registerImageViewer(null);
+  removeNavigationGuard();
+  if (historyEntry !== 'none') {
+    releaseHistoryEntry();
+  }
 });
 </script>
 
@@ -377,7 +434,7 @@ onBeforeUnmount(() => {
 
   img {
     /* initially avoid overlap with title & scroll, but this is overridden when zooming */
-    max-height: calc(100vh - 3rem - 30px);
+    max-height: calc(100dvh - 3rem - 30px);
   }
 }
 
@@ -430,12 +487,12 @@ onBeforeUnmount(() => {
 }
 
 .image-viewer-info {
-  height: 100vh;
   width: 20rem;
   z-index: 1000;
   position: fixed;
   top: 3rem;
   right: 0;
+  bottom: 0;
 }
 
 .swiper-button-prev {

@@ -41,9 +41,9 @@
     <!-- no line break between prefix, value and unit: the templates keep whitespace, it would render as a space -->
     <span v-else
       ><span v-if="showPrefix">{{ prefix || field.prefix }}</span
-      >{{ divisor ? Math.round(value / divisor) : value }}</span
+      >{{ shown.value }}</span
     ><template v-if="showUnit"
-      ><template v-if="!field.skipSpaceBeforeUnit">&nbsp;</template>{{ unit || field.unit }}</template
+      ><template v-if="!field.skipSpaceBeforeUnit">&nbsp;</template>{{ shown.unit }}</template
     ></span
   >
 </template>
@@ -51,6 +51,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { formatLength } from '@/js/length-format';
 import { documentProperty, fieldProperty } from '@/js/properties';
 
 const props = defineProps({
@@ -77,6 +79,19 @@ const props = defineProps({
 // the value of the field, of any type (string, number, list...)
 
 const value = computed<any>(() => props.document[props.field.name]);
+
+const { $language } = useGlobalProperties();
+
+// the value and unit shown: a length in metres shown in km gets the unit that suits its size (560 m, 4.5 km, 12 km)
+const shown = computed(() => {
+  const unit = props.unit || props.field.unit;
+
+  if (props.divisor === 1000 && unit === 'km' && typeof value.value === 'number') {
+    return formatLength(value.value, $language?.current);
+  }
+
+  return { value: props.divisor ? Math.round(value.value / props.divisor) : value.value, unit };
+});
 
 const isArray = computed(() => Array.isArray(value.value));
 

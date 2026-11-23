@@ -19,7 +19,7 @@
         <yeti-article :article="articles.faq"></yeti-article>
       </div>
 
-      <div class="columns yeti-content">
+      <div class="columns yeti-content fills-window-from-tablet">
         <div class="column is-5-tablet is-4-widescreen form-container">
           <div class="columns is-mobile is-justify-content-space-between mb-5">
             <div class="is-flex is-align-items-center yeti-title">
@@ -112,6 +112,7 @@
 import axios, { type AxiosError, type AxiosResponse } from 'axios';
 import type { Extent } from 'ol/extent';
 import { computed, onMounted, ref, shallowRef, useTemplateRef, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 import YetiArticle from '@/components/yeti/Article.vue';
 import BulletinDetail from '@/components/yeti/BulletinDetail.vue';
@@ -321,6 +322,12 @@ yetixEvents.all.clear();
 // build tabs: here, after setDefault() resets them, then on each change of localTabs
 Yetix.setTabs(localTabs.value);
 
+// opened from the avalanche box of a route page (?bulletin=FR-03): the bulletin of its region, in its tab
+const linkedBulletin = useRoute().query.bulletin;
+if (typeof linkedBulletin === 'string' && /^[A-Z]{2}(-[A-Za-z0-9-]+)?$/.test(linkedBulletin)) {
+  Yetix.setSelectedBulletin({ regionId: linkedBulletin, name: '' });
+}
+
 onMounted(() => {
   check();
 });
@@ -488,21 +495,14 @@ function onSubmitDisclaimer() {
   margin-top: calc(0.75rem + 2px);
 }
 
+/* from the tablet width, the form and the map take the window under the navigation (.fills-window, App.vue) */
 @media screen and (--c2c-min-tablet) {
   .yeti-content {
-    height: calc(100vh - var(--c2c-navbar-height));
-
     .form-container {
       max-width: 450px;
       height: calc(100% - 0.75rem);
       overflow: auto;
     }
-  }
-}
-
-@media screen and (--c2c-min-widescreen) {
-  .yeti-content {
-    height: calc(100vh - var(--c2c-navbarad-height));
   }
 }
 

@@ -86,6 +86,9 @@ il attend l'approbation d'un reviewer avant de déployer quoi que ce soit —
 n'importe qui ne peut plus déclencher une publication publique juste en
 poussant sur une branche.
 
+Une fois la preview déployée, le job poste (puis met à jour aux déploiements
+suivants) un commentaire sur la PR avec son URL.
+
 **Configuration à faire une seule fois** (repo Settings, accès admin requis —
 pas quelque chose qu'un commit peut faire) :
 

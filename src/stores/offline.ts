@@ -46,12 +46,28 @@ async function loadPagesOf(type: string) {
     .filter((route) => [type, 'offline', 'outing-add'].includes(String(route.name)))
     .map((route) => route.components?.default)
     .filter((view): view is () => Promise<unknown> => typeof view === 'function');
-  // the map of the pages (MapLibre), and the one of the outing form (OpenLayers)
+  // the map of the pages (MapLibre), the one of the outing form (OpenLayers), and the viewer the images open in
   await Promise.all([
     import('@/components/map/C2cMap.vue'),
     import('@/components/map/OlMap.vue'),
+    import('@/components/image-viewer/ImageViewer.vue'),
     ...views.map((view) => view()),
   ]);
+}
+
+// A deploy gives the files of the pages new names: the ones kept for the documents saved offline are no longer the
+// ones the app asks for, and their pages opened blank without a network. Loaded again once per build, online
+const PAGES_BUILD_KEY = 'c2c.offlinePagesBuild';
+export async function reloadPagesAfterDeploy(types: string[]) {
+  try {
+    if (!types.length || localStorage.getItem(PAGES_BUILD_KEY) === C2C_BUILD_ID) {
+      return;
+    }
+    await Promise.all([...new Set(types)].map(loadPagesOf));
+    localStorage.setItem(PAGES_BUILD_KEY, C2C_BUILD_ID);
+  } catch {
+    // offline, or no local storage: next start
+  }
 }
 
 // The browser says it is offline on some phones that still have a network: a request to the API decides
@@ -188,6 +204,12 @@ export const useOfflineStore = defineStore('offline', () => {
     .then(migrateLegacy)
     .then(checkAssets)
     .catch(() => {});
+  // after the checks: not in the way of the start of the page
+  void ready.then(() => {
+    if (online.value) {
+      void reloadPagesAfterDeploy(savedDocs.value.filter(isOfflineEntry).map((entry) => entry.type));
+    }
+  });
 
   const find = (type: string, id: number) => savedDocs.value.find((entry) => entry.type === type && entry.id === id);
   const isDownloading = (type: string, id: number) => downloading.value.has(`${type}/${id}`);

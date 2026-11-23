@@ -2,7 +2,7 @@
   <div
     id="app"
     :class="{
-      'nav-dfm': topAd && $screen.isWidescreen,
+      'nav-dfm': largeTopAd,
       'home-topoguide': homePage,
       'no-top-ad': !topAd,
       'is-menu-pinned': sideMenuPinned || sideMenuKeptOpen,
@@ -10,10 +10,10 @@
   >
     <environment-banner />
     <side-menu :kept-open="sideMenuKeptOpen" class="side-menu no-print" />
-    <navigation class="navigation no-print" />
+    <navigation class="navigation no-print" :large-ad="largeTopAd" />
     <!-- the room under the navigation is left by this wrapper, not by the ad: ad blockers hide the elements named as
          ads (.ad, .ad-slot...), which then put the top of the page under the navigation -->
-    <div v-if="topAd && !$screen.isWidescreen" class="top-bar-room">
+    <div v-if="topAd && !largeTopAd" class="top-bar-room">
       <dfm-ad-small />
     </div>
     <site-notice class="no-print site-notice" />
@@ -85,6 +85,9 @@ defineOptions({ name: 'App' });
 
 const homePage = useIsHomePage();
 const topAd = useHasTopAd();
+const { $gettext, $router, $screen } = useGlobalProperties();
+// in the navigation on wide screens (Navigation.vue), under it otherwise
+const largeTopAd = computed(() => topAd.value && $screen.isWidescreen);
 const sideMenuPinned = useSideMenuPinned();
 const sideMenuCanPin = useSideMenuCanPin();
 // the welcome page shows the menu open, without its pin, where the screen is wide enough
@@ -108,7 +111,6 @@ watch(
 );
 
 // once a day, online: the offline topos to download again (incomplete or old), before leaving
-const { $gettext, $router } = useGlobalProperties();
 void offline.ready.then(() => {
   const count = offline.needingAttention.length;
   if (shouldRemind(count, offline.online)) {
@@ -131,12 +133,6 @@ html {
   overflow-y: scroll;
   text-rendering: optimizeLegibility;
   text-size-adjust: 100%;
-}
-
-html,
-body,
-#app {
-  min-height: calc(100vh - var(--c2c-navbar-height));
 }
 
 .navigation {
@@ -162,7 +158,7 @@ body,
 
 .site-notice {
   position: absolute;
-  top: var(--c2c-navbar-height);
+  top: var(--c2c-header-height);
   width: 100%;
   z-index: 20;
   box-shadow: 0 5px 10px 0px rgba(10, 10, 10, 0.5);
@@ -204,15 +200,77 @@ button.dropdown-item {
   }
 }
 
+/* the page is at least as high as the window (dvh: without the address bar of the phones, when it shows) */
 .page-content {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-flow: column;
 }
 
+/* A page as high as the window, whose parts share it (the list and its map, YETI...): .fills-window marks the part
+   that takes what the others leave (.fills-window-from-tablet: from the tablet width; under it, the page scrolls).
+   The shell is then as high as the window, and each box down to that part is a column that fills its parent: no page
+   adds up the heights of the navigation, of its paddings or of its headers */
+@media screen {
+  #app:has(.fills-window) {
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+
+    .page-content {
+      flex: 1 1 0;
+      min-height: 0;
+    }
+
+    .page-content :has(.fills-window) {
+      flex: 1 1 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .fills-window {
+    flex: 1 1 0;
+    min-height: 0;
+  }
+}
+
+@media screen and (--c2c-min-tablet) {
+  #app:has(.fills-window-from-tablet) {
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+
+    .page-content {
+      flex: 1 1 0;
+      min-height: 0;
+    }
+
+    .page-content :has(.fills-window-from-tablet) {
+      flex: 1 1 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .fills-window-from-tablet {
+    flex: 1 1 0;
+    min-height: 0;
+  }
+}
+
 /* without the ad under the navigation, which leaves its room (.top-bar-room below), the page leaves it */
-.no-top-ad .page-content {
-  padding-top: var(--c2c-navbar-height);
+.no-top-ad .page-content,
+.nav-dfm .page-content {
+  padding-top: var(--c2c-header-height);
+}
+
+@media screen {
+  .top-bar-room {
+    padding-top: var(--c2c-navbar-height);
+  }
 }
 
 .home-topoguide {
@@ -222,22 +280,9 @@ button.dropdown-item {
   }
 }
 
+/* the large ad in the navigation (Navigation.vue): what is under it starts lower */
 .nav-dfm {
   --c2c-header-height: var(--c2c-navbarad-height);
-
-  html,
-  body,
-  #app {
-    min-height: calc(100vh - var(--c2c-navbarad-height));
-  }
-
-  .site-notice {
-    top: var(--c2c-navbarad-height);
-  }
-
-  .page-content {
-    padding-top: var(--c2c-navbarad-height);
-  }
 }
 
 /* The navigation of the site follows html[data-shell] (src/stores/app-settings.ts), set from PHONE_BREAKPOINT: from it,
@@ -248,10 +293,6 @@ button.dropdown-item {
     .page-content,
     .top-bar-room {
       margin-left: var(--c2c-sidemenu-width);
-    }
-
-    .top-bar-room {
-      padding-top: var(--c2c-navbar-height);
     }
 
     .site-notice {
@@ -329,19 +370,6 @@ html[data-shell='mobile'] {
 
   .page-content {
     padding-bottom: var(--c2c-bottom-bar-height);
-  }
-
-  .top-bar-room {
-    padding-top: var(--app-top-bar-height);
-  }
-
-  .no-top-ad .page-content,
-  .nav-dfm .page-content {
-    padding-top: var(--app-top-bar-height);
-  }
-
-  .site-notice {
-    top: var(--app-top-bar-height);
   }
 
   /* the wide tables of the website (recent changes, associations history) scroll in their place, not the page */

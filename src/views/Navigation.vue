@@ -3,10 +3,10 @@
     class="is-size-5"
     :class="{
       'has-background-warning': siteConfiguration.urls.name != 'prod',
-      'with-ad': topAd && $screen.isWidescreen,
+      'with-ad': largeAd,
     }"
   >
-    <dfm-ad-large v-if="topAd && $screen.isWidescreen" />
+    <dfm-ad-large v-if="largeAd" />
 
     <div class="navigation-end" :class="{ 'is-search-shown': !hideSearchInput }">
       <router-link
@@ -159,7 +159,6 @@
             <span>
               {{ item.text }}
             </span>
-            <span v-if="item.badge" class="tag is-danger is-rounded ml-2">{{ item.badge }}</span>
           </router-link>
 
           <hr class="dropdown-divider" />
@@ -224,12 +223,14 @@ import IconJoinUs from '@/components/generics/icons/IconJoinUs.vue';
 import JoinUsLink from '@/components/generics/links/JoinUsLink.vue';
 import forum from '@/js/apis/forum';
 import { useGlobalProperties } from '@/js/composables/global-properties';
-import { useHasTopAd } from '@/js/composables/home-page';
 import { ADDABLE_TYPES, HELP_ROUTE, useAccountLinks } from '@/js/composables/main-menu';
 import config from '@/js/config';
 import { toast } from '@/js/toast';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 import type { useForumNotificationsStore } from '@/stores/forum-notifications';
+
+// the large ad of the documents' views on wide screens, decided by App.vue, which leaves its room under the navigation
+defineProps<{ largeAd?: boolean }>();
 
 const route = useRoute();
 const router = useRouter();
@@ -356,8 +357,6 @@ function signout() {
     }
   });
 }
-
-const topAd = useHasTopAd();
 
 window.addEventListener('click', onClick);
 

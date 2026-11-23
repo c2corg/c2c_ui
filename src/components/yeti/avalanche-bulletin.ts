@@ -80,6 +80,37 @@ export function dangerNumber(value?: DangerRatingValue): number | undefined {
   return value ? DANGER_NUMBERS[value] : undefined;
 }
 
+/**
+ * The danger at an elevation (the highest point of a route): the highest of the ratings whose elevation band holds it,
+ * morning and afternoon. The highest of all when the elevation is unknown, or no band can tell (treeline bounds).
+ */
+export function dangerAtElevation(ratings: DangerRating[] = [], elevation?: number | null): number | undefined {
+  const numbers = (rs: DangerRating[]) => rs.map((r) => dangerNumber(r.mainValue) ?? 0);
+  const all = numbers(ratings);
+  const max = all.length ? Math.max(...all) || undefined : undefined;
+  if (elevation === null || elevation === undefined) {
+    return max;
+  }
+  // a bound in meters, or null when it cannot be compared (treeline)
+  const meters = (bound?: string) => (bound === undefined ? undefined : /^\d+$/.test(bound) ? Number(bound) : null);
+  // a band that cannot be compared could be the one of the elevation: the highest, to be safe
+  const comparable = (r: DangerRating) =>
+    meters(r.elevation?.lowerBound) !== null && meters(r.elevation?.upperBound) !== null;
+  if (!ratings.every(comparable)) {
+    return max;
+  }
+  const holding = ratings.filter((r) => {
+    const [lower, upper] = [meters(r.elevation?.lowerBound), meters(r.elevation?.upperBound)];
+    return (
+      lower !== null &&
+      upper !== null &&
+      (lower === undefined || elevation >= lower) &&
+      (upper === undefined || elevation < upper)
+    );
+  });
+  return holding.length ? Math.max(...numbers(holding)) || undefined : max;
+}
+
 /** The input of DangerLevel.vue: the altitude is its label, as api.ensg.eu gives it */
 export type DangerLevelInput = {
   low?: number;

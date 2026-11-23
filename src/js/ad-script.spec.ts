@@ -131,4 +131,90 @@ describe('watchAdSlot', () => {
     watchAdSlot('camptocamp_htd', later);
     expect(later).toHaveBeenCalledWith(false);
   });
+
+  it('tells there is no ad when Google Publisher Tag does not load (blocked by address)', async () => {
+    const { loadAdScript, watchAdSlot } = await import('./ad-script');
+    const onRender = vi.fn();
+    watchAdSlot('camptocamp_htd', onRender);
+    loadAdScript();
+    adScript()!.dispatchEvent(new Event('load'));
+
+    // what the ad script adds to the page; another script of the ad stack failing is not enough
+    const addScript = (src: string) => {
+      const script = document.createElement('script');
+      script.src = src;
+      document.head.appendChild(script);
+      script.dispatchEvent(new Event('error'));
+      script.remove();
+    };
+    addScript('https://static.admysports.com/hb/lib/prebid/prebidams.js');
+    expect(onRender).not.toHaveBeenCalled();
+    addScript('https://securepubads.g.doubleclick.net/tag/js/gpt.js');
+    expect(onRender).toHaveBeenCalledExactlyOnceWith(false);
+
+    const later = vi.fn();
+    watchAdSlot('camptocamp_htd', later);
+    expect(later).toHaveBeenCalledWith(false);
+  });
+
+  describe('when nothing is told about the slot', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('tells there is no ad 5 s after the ad script has loaded, and still an ad coming later', async () => {
+      const { loadAdScript, watchAdSlot } = await import('./ad-script');
+      const onRender = vi.fn();
+      watchAdSlot('camptocamp_htd', onRender);
+      loadAdScript();
+
+      // the time the ad script takes to load does not count
+      vi.advanceTimersByTime(10_000);
+      expect(onRender).not.toHaveBeenCalled();
+
+      adScript()!.dispatchEvent(new Event('load'));
+      vi.advanceTimersByTime(4_999);
+      expect(onRender).not.toHaveBeenCalled();
+      vi.advanceTimersByTime(1);
+      expect(onRender).toHaveBeenCalledExactlyOnceWith(false);
+
+      loadGoogleTag().render('camptocamp_htd', false);
+      expect(onRender).toHaveBeenLastCalledWith(true);
+    });
+
+    it('counts from the call once the ad script has loaded (a new page)', async () => {
+      const { loadAdScript, watchAdSlot } = await import('./ad-script');
+      loadAdScript();
+      adScript()!.dispatchEvent(new Event('load'));
+      vi.advanceTimersByTime(60_000);
+
+      const onRender = vi.fn();
+      watchAdSlot('camptocamp_htd', onRender);
+      vi.advanceTimersByTime(4_999);
+      expect(onRender).not.toHaveBeenCalled();
+      vi.advanceTimersByTime(1);
+      expect(onRender).toHaveBeenCalledExactlyOnceWith(false);
+    });
+
+    it('does not tell anything more once the slot has been told in time, or once stopped', async () => {
+      const { loadAdScript, watchAdSlot } = await import('./ad-script');
+      loadAdScript();
+      adScript()!.dispatchEvent(new Event('load'));
+
+      const onRender = vi.fn();
+      watchAdSlot('camptocamp_htd', onRender);
+      const stopped = vi.fn();
+      const stop = watchAdSlot('camptocamp_htd', stopped);
+      stop();
+      loadGoogleTag().render('camptocamp_htd', false);
+
+      vi.advanceTimersByTime(60_000);
+      expect(onRender).toHaveBeenCalledExactlyOnceWith(true);
+      expect(stopped).not.toHaveBeenCalled();
+    });
+  });
 });

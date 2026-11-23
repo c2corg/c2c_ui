@@ -58,14 +58,16 @@ describe('the moderation link of the menus', () => {
   it('is shown to a moderator of the topoguide', () => {
     const keys = keysFor({ isLogged: true, isModerator: true, id: 1 });
     expect(keys.menu).toContain('moderation');
-    expect(keys.account).toContain('moderation');
+    // once: not in the user menu too
+    expect(keys.account).not.toContain('moderation');
   });
 
   it('is shown to a moderator of the forum', () => {
     isForumModerator.value = true;
     const keys = keysFor({ isLogged: true, isModerator: false, id: 1 });
     expect(keys.menu).toContain('moderation');
-    expect(keys.account).toContain('moderation');
+    // once: not in the user menu too
+    expect(keys.account).not.toContain('moderation');
   });
 
   it('is hidden from the others, who ask nothing', () => {
@@ -90,5 +92,17 @@ describe('the settings and the favourites in the menus', () => {
     expect(keys.account).toEqual(expect.arrayContaining(['favourites', 'settings']));
     expect(keys.account).not.toContain('preferences');
     expect(keys.account).not.toContain('bookmarks');
+  });
+});
+
+describe('the map in the main menu', () => {
+  afterEach(() => {
+    clearModerationCount();
+    sessionStorage.clear();
+  });
+
+  it('is the last section, before the moderation', () => {
+    expect(keysFor({ isLogged: false }).menu.at(-1)).toBe('map');
+    expect(keysFor({ isLogged: true, isModerator: true, id: 1 }).menu.slice(-2)).toEqual(['map', 'moderation']);
   });
 });

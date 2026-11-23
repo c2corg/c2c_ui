@@ -90,6 +90,7 @@
     :options="field.values"
     :has-error="hasError"
     @update:model-value="$emit('input', $event)"
+    @update:invalid="setRejectedInput"
     v-model="object[field.name]"
   />
 
@@ -192,4 +193,10 @@ const object = computed<Record<string, any>>(() => {
 const visible = computed(() => props.field.isVisibleFor(props.document));
 const simpleInputType = computed(() => ['text', 'number', 'url', 'tel'].includes(props.field.type));
 const hasError = computed(() => props.field.error !== null);
+
+// the text of a divided number was rejected: the edit form must not save the previous value (see Field.getError)
+function setRejectedInput(rejected: boolean) {
+  const field = props.field;
+  field.rejectedInput = rejected;
+}
 </script>
