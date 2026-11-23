@@ -425,6 +425,11 @@ onMounted(() => {
   margin-left: 0.75rem;
 }
 
+/* the page selector (ItinevertPageSelector.vue) hides its "per page" choice when the header is narrow */
+.search-infos {
+  container: documents-header / inline-size;
+}
+
 .filter-section {
   padding-bottom: 0.5rem;
   clear: both;
