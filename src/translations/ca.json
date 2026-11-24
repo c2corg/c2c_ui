@@ -465,6 +465,10 @@
     "Go back to YETI": "Torna a YETI",
     "Go to the previous page": "Torna a la pàgina anterior",
     "Go to website": "Accedeix al lloc web",
+    "Greater than maximum value": {
+      "$$noContext": "Valor massa alt, màxim:",
+      "API message": "Valor massa alt, màxim:"
+    },
     "Group": "Grup",
     "Group size": "Mida del grup",
     "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?": "S'havia establert un horari? S'havia respectat? La gestió del temps ha tingut influència sobre el desencadenament de l'esdeveniment?",
@@ -602,6 +606,10 @@
     "Leave fullscreen": "Surt del mode de pantalla completa",
     "Leave later": "Surt més tard",
     "Legend": "Llegenda",
+    "Less than minimum value": {
+      "$$noContext": "Valor massa baix, mínim:",
+      "API message": "Valor massa baix, mínim:"
+    },
     "Let's go": "Som-hi",
     "Let's make our feedbacks valuable": "Donem valor al nostre feedback",
     "Let's preserve our playground! I create an account on Outdoorvision to share my GPS tracks for the preservation and design of my practice sites in France.": "Preservem el nostre terreny de joc! Vull crear un compte a Outdoorvision per compartir-hi traces GPS per a la preservació i disseny dels llocs de pràctica a França.",
@@ -634,8 +642,8 @@
       "API message": "Nom d'usuari o contrasenya incorrectes"
     },
     "Logout": "Surt",
-    "Longer than maximum length 25": {
-      "API message": "Més llarg que l'allargada màxima 25 "
+    "Longer than maximum length": {
+      "API message": "Text massa llarg, màxim:"
     },
     "Longitude": "Longitud",
     "Low danger level from the avalanche bulletin": "Nivell de perill baix del butlletí d'allaus",
@@ -922,6 +930,7 @@
     "Remove from favourites": "Treu dels preferits",
     "Remove from favourites? Its offline copy is removed too.": "Voleu treure-ho dels preferits? També se n'elimina la còpia fora de línia.",
     "Remove the filter": "Treu el filtre",
+    "Remove the filters of my preferences": "Treu els filtres de les meves preferències",
     "Remove the offline copies of the other people? They will have to download them again.": "Voleu eliminar les còpies fora de línia de les altres persones? Les hauran de tornar a descarregar.",
     "Remove the offline copy": "Elimina la còpia fora de línia",
     "Remove this account": "Elimina aquest compte",
@@ -1022,11 +1031,8 @@
     },
     "Share": "Comparteix",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Compartir Igual — Si feu una remescla, transformeu o creeu a partir del material de l'Obra original, haureu de difondre l'Obra modificada amb les mateixes condicions, és a dir, amb la mateixa llicència amb la que es difonia l'Obra original.",
-    "Shorter than minimum length 1": {
-      "API message": "Camp obligatori"
-    },
-    "Shorter than minimum length 3": {
-      "API message": "Camp massa curt (mínim 3 caràcters)"
+    "Shorter than minimum length": {
+      "API message": "Text massa curt, mínim:"
     },
     "Show document history": "Mostra l'històric del document",
     "Show more routes": "Mostra més itineraris",
@@ -1328,8 +1334,6 @@
     "Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has more restrictions, mainly no accent and no space.": "El teu nom d'usuari apareixerà al fòrum i pot ser canviat als paràmetres quan vulguis. Té algunes restriccions, bàsicament no pots fer servir ni accents ni espais. ",
     "Your outings written without a network, published when you choose.": "Les vostres sortides escrites sense xarxa, publicades quan vulgueu.",
     "Your password must contain:": "La contrasenya ha de contenir:",
-    "Your preferences are already applied.": "Les vostres preferències ja estan aplicades.",
-    "Your preferences are applied": "S'han aplicat les vostres preferències",
     "Your preferences could not be loaded.": "No s'han pogut carregar les vostres preferències.",
     "Your search includes too many routes.": "La vostra cerca inclou massa itineraris.",
     "Your session expired: the outing is saved on the phone. Sign in, then publish it from Favourites.": "La sessió ha caducat: la sortida està desada al telèfon. Inicieu la sessió i després publiqueu-la des de Preferits.",
@@ -1875,7 +1879,6 @@
     "key_needed": {
       "custodianship_types": "clau necessària per obrir"
     },
-    "kilometers": "quilòmetres",
     "labande_global_rating": "Dificultat global en esquí",
     "labande_ski_rating": "Dificultat puntual en esquí",
     "lake": {
@@ -1937,7 +1940,6 @@
     "medium": {
       "quality_types": "mitjà"
     },
-    "meters": "metres",
     "migmatite": {
       "rock_types": "migmatita"
     },

@@ -156,9 +156,6 @@
     "Itinevert": "Itinévert",
     "Login": "Sign in",
     "Logout": "Sign out",
-    "Longer than maximum length 25": {
-      "API message": "Text is too long (at most 25 characters)"
-    },
     "Mail has been sent": "An e-mail has been sent",
     "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Main information about the route, such as title, activity, GPS data, and environment.",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Map, guidebook, known route, planning for a plan B, (re)evaluation of a route during a trip?",
@@ -198,12 +195,6 @@
     "See other documents nearby": "Other documents nearby...",
     "Seems fine! :)": "Computation possible ! :)",
     "Select option": "Choose option",
-    "Shorter than minimum length 1": {
-      "API message": "Required field"
-    },
-    "Shorter than minimum length 3": {
-      "API message": "Text is too short (at least 3 chars)"
-    },
     "Sign in to camptocamp today, it's free": "Sign in to camptocamp today, it's free!",
     "Skitouring gear": "Ski and snowboard touring, snowshoeing",
     "SwissTopo Slopes": {

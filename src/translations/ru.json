@@ -814,7 +814,6 @@
     "key_needed": {
       "custodianship_types": "чтобы от крыть необходим ключ"
     },
-    "kilometers": "километры",
     "labande_global_rating": "Общий лыжный рейтинг",
     "labande_ski_rating": "Уточненный лыжный рейтинг",
     "lake": {
@@ -850,7 +849,6 @@
     "medium": {
       "quality_types": "cредний"
     },
-    "meters": "метр",
     "migmatite": {
       "rock_types": "мигматит"
     },

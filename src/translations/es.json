@@ -473,6 +473,10 @@
     "Go back to YETI": "Volver a YETI",
     "Go to the previous page": "Ir a la página anterior",
     "Go to website": "Ir al sitio web",
+    "Greater than maximum value": {
+      "$$noContext": "Valor demasiado alto, máximo:",
+      "API message": "Valor demasiado alto, máximo:"
+    },
     "Group": "Grupo",
     "Group size": "Tamaño del grupo",
     "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?": "¿Se había previsto un calendario para la ruta? ¿Mantuviste el horario? ¿Fue el tiempo un factor que provocó el incidente?",
@@ -602,6 +606,10 @@
     "Leave fullscreen": "Salir de pantalla completa",
     "Leave later": "Salir más tarde",
     "Legend": "Leyenda",
+    "Less than minimum value": {
+      "$$noContext": "Valor demasiado bajo, mínimo:",
+      "API message": "Valor demasiado bajo, mínimo:"
+    },
     "Let's go": "Vamos",
     "Let's make our feedbacks valuable": "Hagamos que nuestros comentarios sean valiosos",
     "Let's preserve our playground! I create an account on Outdoorvision to share my GPS tracks for the preservation and design of my practice sites in France.": "¡Preservemos nuestro patio de recreo! Creo una cuenta en Outdoorvision para compartir mis pistas GPS para la preservación y el diseño de mis sitios de práctica en Francia.",
@@ -636,8 +644,8 @@
       "API message": "Identificación fallida"
     },
     "Logout": "Cerrar sesión",
-    "Longer than maximum length 25": {
-      "API message": "Más largo que la longitud máxima 25"
+    "Longer than maximum length": {
+      "API message": "Texto demasiado largo, máximo:"
     },
     "Longitude": "Longitud",
     "Low danger level from the avalanche bulletin": "Nivel de peligro bajo según el boletín de avalanchas",
@@ -932,6 +940,7 @@
     "Remove from favourites": "Quitar de favoritos",
     "Remove from favourites? Its offline copy is removed too.": "¿Quitar de favoritos? También se elimina su copia sin conexión.",
     "Remove the filter": "Quitar el filtro",
+    "Remove the filters of my preferences": "Quitar los filtros de mis preferencias",
     "Remove the offline copies of the other people? They will have to download them again.": "¿Eliminar las copias sin conexión de las otras personas? Tendrán que descargarlas de nuevo.",
     "Remove the offline copy": "Eliminar la copia sin conexión",
     "Remove this account": "Eliminar esta cuenta",
@@ -1032,11 +1041,8 @@
     },
     "Share": "Compartir",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Compartir igual: si remezclas, transformas o creas a partir del material, debes distribuir tus contribuciones bajo la misma licencia que el original.",
-    "Shorter than minimum length 1": {
-      "API message": "Campo obligatorio"
-    },
-    "Shorter than minimum length 3": {
-      "API message": "Más corto que la longitud mínima 3"
+    "Shorter than minimum length": {
+      "API message": "Texto demasiado breve, mínimo:"
     },
     "Show document history": "Mostrar historial del documento",
     "Show more routes": "Mostrar más rutas",
@@ -1352,8 +1358,6 @@
     "Your forum username will be displayed on the forum, and can be changed freely anytime in your settings. It has more restrictions, mainly no accent and no space.": "Tu nombre de usuario del foro se mostrará en el foro y podrás cambiarlo libremente en cualquier momento en tu configuración. Tiene más restricciones, principalmente sin acentos ni espacios.",
     "Your outings written without a network, published when you choose.": "Tus salidas escritas sin red, publicadas cuando tú elijas.",
     "Your password must contain:": "Tu contraseña debe contener:",
-    "Your preferences are already applied.": "Tus preferencias ya están aplicadas.",
-    "Your preferences are applied": "Tus preferencias están aplicadas",
     "Your preferences could not be loaded.": "No se han podido cargar tus preferencias.",
     "Your search includes too many routes.": "Tu búsqueda incluye demasiadas rutas.",
     "Your session expired: the outing is saved on the phone. Sign in, then publish it from Favourites.": "Tu sesión ha caducado: la salida está guardada en el teléfono. Inicia sesión y luego publícala desde Favoritos.",
@@ -1908,7 +1912,6 @@
     "key_needed": {
       "custodianship_types": "llave necesaria para abrir"
     },
-    "kilometers": "kilómetros",
     "labande_global_rating": "Cotación global esquí",
     "labande_ski_rating": "Cotación puntual esquí",
     "lake": {
@@ -1970,7 +1973,6 @@
     "medium": {
       "quality_types": "medio"
     },
-    "meters": "metros",
     "migmatite": {
       "rock_types": "migmatita"
     },

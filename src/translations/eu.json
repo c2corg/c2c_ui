@@ -534,7 +534,6 @@
     "key_needed": {
       "custodianship_types": "sartzeko giltza behar da"
     },
-    "kilometers": "kilometro",
     "labande_global_rating": "Eski kotazio orokorra",
     "labande_ski_rating": "Eski kotazio zehatza",
     "lake": {
@@ -570,7 +569,6 @@
     "medium": {
       "quality_types": "batazbeste"
     },
-    "meters": "metro",
     "migmatite": {
       "rock_types": "migmatita"
     },
