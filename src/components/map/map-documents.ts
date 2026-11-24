@@ -438,8 +438,8 @@ export function featureStyle(
   return { style: lineStyle(highlight, properties), label: lineLabel(title, highlight, properties) };
 }
 
-/** The GeoJSON feature drawn for a document feature */
-export const toGeoJson = (feature: DocumentFeature, style: Style): Feature => ({
+/** The GeoJSON feature drawn for a document feature. Highlighted: its point drawn above all the others */
+export const toGeoJson = (feature: DocumentFeature, style: Style, highlight = false): Feature => ({
   type: 'Feature',
   geometry: feature.geometry,
   // without the undefined values: they would pass the has filters of the layers
@@ -447,6 +447,7 @@ export const toGeoJson = (feature: DocumentFeature, style: Style): Feature => ({
     ...Object.fromEntries(Object.entries(style).filter(([, value]) => value !== undefined)),
     key: feature.key,
     group: feature.group,
+    ...(highlight ? { highlight: true } : {}),
   },
 });
 
@@ -517,12 +518,19 @@ function lineLayers(prefix: 'casing' | 'stroke', source: string): LayerSpecifica
   ] as LayerSpecification[];
 }
 
-function pointLayers(group: Group, source: string): LayerSpecification[] {
+// The circles of the points are drawn in one layer, their icons in the next one: the icon of a point is above the circle
+// of any other. The highlighted points have their own layers, above all the others: the icon of a neighbour would
+// otherwise be drawn on the bigger circle of the highlighted point.
+function pointLayers(id: Group | 'highlighted', source: string): LayerSpecification[] {
   // only points: on a line, MapLibre would draw them at every vertex
-  const inGroup: ExpressionSpecification = ['all', ['==', ['geometry-type'], 'Point'], ['==', get('group'), group]];
+  const inGroup: ExpressionSpecification = [
+    'all',
+    ['==', ['geometry-type'], 'Point'],
+    id === 'highlighted' ? has('highlight') : ['all', ['==', get('group'), id], ['!', has('highlight')]],
+  ];
   return [
     {
-      id: `${group}-circle`,
+      id: `${id}-circle`,
       type: 'circle',
       source,
       filter: ['all', inGroup, has('circleRadius')],
@@ -535,7 +543,7 @@ function pointLayers(group: Group, source: string): LayerSpecification[] {
       },
     },
     {
-      id: `${group}-icon`,
+      id: `${id}-icon`,
       type: 'symbol',
       source,
       filter: ['all', inGroup, has('icon')],
@@ -549,7 +557,10 @@ function pointLayers(group: Group, source: string): LayerSpecification[] {
   ] as LayerSpecification[];
 }
 
-/** The layers of the documents, bottom to top, then the ones of the waypoints (above the hovered track) */
+/**
+ * The layers of the documents, bottom to top, then the ones of the waypoints and of the highlighted points (above the
+ * hovered track)
+ */
 export function documentLayers(source: string): { documents: LayerSpecification[]; waypoints: LayerSpecification[] } {
   return {
     documents: [
@@ -559,6 +570,6 @@ export function documentLayers(source: string): { documents: LayerSpecification[
       ...lineLayers('stroke', source),
       ...pointLayers('documents', source),
     ] as LayerSpecification[],
-    waypoints: pointLayers('waypoints', source),
+    waypoints: [...pointLayers('waypoints', source), ...pointLayers('highlighted', source)],
   };
 }

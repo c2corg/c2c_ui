@@ -282,8 +282,9 @@ function createStopDocuments() {
           return uniqueStops;
         }
 
-        const coordKey = `${stop.coordinates.x},${stop.coordinates.y}`;
-        if (uniqueStops.coordsMap[coordKey]) {
+        // one marker per stop area, as one card: the first stop of its group, the one highlighted with the card. The
+        // stops of an area are not always at the same place (a few metres apart), their markers would overlap
+        if (uniqueStops.names[stop.stoparea_name]) {
           return uniqueStops;
         }
 
@@ -307,7 +308,7 @@ function createStopDocuments() {
           distance: stop.distance,
         };
 
-        uniqueStops.coordsMap[coordKey] = true;
+        uniqueStops.names[stop.stoparea_name] = true;
         uniqueStops.docs.push(stopDoc);
         return uniqueStops;
       } catch (error) {
@@ -315,7 +316,7 @@ function createStopDocuments() {
         return uniqueStops;
       }
     },
-    { docs: [] as MapDocument[], coordsMap: {} as Record<string, boolean> }
+    { docs: [] as MapDocument[], names: {} as Record<string, boolean> }
   ).docs;
 }
 
