@@ -216,6 +216,7 @@ import { apiErrors, errorStatus } from '@/js/apis/c2c/api-errors';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useNoRobots } from '@/js/composables/head';
 import config from '@/js/config';
+import { isForumSite } from '@/js/forum-site';
 import { toast } from '@/js/toast';
 
 // possible mode values :
@@ -373,44 +374,34 @@ function signin() {
     });
 }
 
-// whether the forum is on the site of this page: their hosts the same but for their first label
-// (forum.camptocamp.org and www.camptocamp.org, forum.demov6.camptocamp.org and www.demov6.camptocamp.org)
-function sameSite(forumUrl: string) {
-  const parent = (host: string) => host.split('.').slice(1).join('.');
-  try {
-    return parent(new URL(forumUrl).hostname) === parent(window.location.hostname);
-  } catch {
-    return false;
-  }
-}
-
 function onSuccessSigin(data: { data: { redirect?: string } }) {
   // present when Discourse itself initiated the SSO handshake (see
   // signin()) - the user came from there and expects to land back on
-  // it, so this must be a real top-level navigation, not the hidden
-  // iframe trick used below (which wouldn't navigate anywhere, and
-  // could hit third-party cookie restrictions on the Discourse side).
-  mode.value = 'forum';
+  // it, so this must be a real top-level navigation.
   if (data.data.redirect) {
+    mode.value = 'forum';
     window.location.href = data.data.redirect;
     return;
   }
 
-  // Open the forum session as well. Discourse binds the SSO nonce to the
+  const target = router.resolve(String(to?.query?.redirect ?? '/')).href;
+
+  // The forum sends the browser back only to the hosts of its own site (see isForumSite): elsewhere (a dev server on
+  // localhost, a preview) the user would be left on the forum, or on an error page when the forum is not reachable.
+  // There, the page asked for is opened, and the forum session opens when the user signs in on the forum (it starts
+  // the handshake itself, see the auth-sso route above).
+  if (!isForumSite(config.urls.forum, window.location.hostname)) {
+    router.push(target);
+    return;
+  }
+
+  // On the forum site, open the forum session as well. Discourse binds the SSO nonce to the
   // browser session that asked for it (discourse_connect_csrf_protection),
   // so the browser has to start the handshake itself: the forum sends it
   // to the auth-sso route (see the route entered above), then to its own sso_login, which
   // sends it back to return_path - provided the forum lists this host in
   // discourse_connect_allowed_redirect_domains, else it lands on the forum.
-  const target = router.resolve(String(to?.query?.redirect ?? '/')).href;
-  // The forum sends the browser back only to the hosts of its own site (www.camptocamp.org for
-  // forum.camptocamp.org): elsewhere (a dev server on localhost, a preview) the user would be left on the forum, or on
-  // an error page when the forum is not reachable. There, the page asked for is opened, and the forum session opens
-  // when the user signs in on the forum (it starts the handshake itself, see auth-sso above).
-  if (!sameSite(config.urls.forum)) {
-    router.push(target);
-    return;
-  }
+  mode.value = 'forum';
   const returnPath = new URL(target, window.location.origin).href;
   window.location.href = `${config.urls.forum}/session/sso?return_path=${encodeURIComponent(returnPath)}`;
 }
