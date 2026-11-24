@@ -13,7 +13,10 @@ Not run in CI: run them before merging a change that touches pages, forms, maps 
    E2E_PASSWORD=E2e-Test-Pass-42 python /path/to/c2c_ui/e2e/create-user.py development.ini
    ```
 
-3. Install the browser: `npx playwright install chromium`
+3. For `metaskirando.spec.ts`: v6_api with `partners_transport=fixtures` (the default of `config/env.dev`) and
+   `make harvest-partners` run once, as in v6_api `docs/partner-outings.md` ("Local demo"). Both sources end
+   `degraded`, which is the expected demo status. Without this, the spec fails on its first check.
+4. Install the browser: `npx playwright install chromium`
 
 ## Run
 
