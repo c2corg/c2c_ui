@@ -23,6 +23,8 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
   const items = ref<PartnerOuting[]>([]);
   const total = ref(0);
   const sources = ref<PartnerSourceHealth[]>([]);
+  // the sources with their site name and url (GET /partner-outings/sources), by source id; the list answer has neither
+  const sourceSites = ref<Record<string, PartnerSourceHealth>>({});
   const loading = ref(false);
   const error = ref<unknown>(null);
 
@@ -70,6 +72,16 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
     }
   }
 
+  /** Loads the site name and url of the sources; the footer falls back to the ids when this fails. */
+  async function loadSources() {
+    try {
+      const list = await service.getSources();
+      sourceSites.value = Object.fromEntries(list.map((source) => [source.source, source]));
+    } catch {
+      // only the names of the sources: the list shows without them
+    }
+  }
+
   /** Sets the filters from the `a` and `act` parameters of a route query; what is not valid is dropped. */
   function fromRouteQuery(query: LocationQuery) {
     filters.value = {
@@ -92,5 +104,18 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
     return query;
   }
 
-  return { filters, items, total, sources, loading, error, itemsByDate, load, fromRouteQuery, toRouteQuery };
+  return {
+    filters,
+    items,
+    total,
+    sources,
+    sourceSites,
+    loading,
+    error,
+    itemsByDate,
+    load,
+    loadSources,
+    fromRouteQuery,
+    toRouteQuery,
+  };
 });

@@ -56,6 +56,8 @@ test('the area filter keeps the outings of the area, and the URL follows', async
   await expect(page).toHaveURL(new RegExp(`[?&]a=${VANOISE}\\b`));
   await expect(rows).toHaveCount(inArea.length);
   await expect(rows.first().locator('.outing-area')).toHaveText('Vanoise');
+  // the selection stays visible next to the input
+  await expect(page.locator('[data-test=areas] .tag')).toContainText('Vanoise');
 
   // the query is a shareable link
   await page.goto(`/metaskirando?a=${VANOISE}`);
@@ -79,18 +81,38 @@ test('the activity filter keeps the outings of the activity', async ({ page }) =
 });
 
 test('the sources footer shows the health of each source', async ({ page }) => {
-  const { sources } = (await call('/partner-outings/sources')) as { sources: { source: string }[] };
+  const { sources } = (await call('/partner-outings/sources')) as {
+    sources: { source: string; site_name: string; site_url: string }[];
+  };
   expect(sources.map((s) => s.source).sort()).toEqual(['gulliver', 'skitour']);
 
   await page.goto('/metaskirando');
   const footer = page.locator('[data-test=sources] li');
   await expect(footer).toHaveCount(sources.length);
-  // (the list answer carries the id of the source only, which the footer then shows)
-  for (const { source: name } of sources) {
+  // the footer names the sources with `site_name`, linked to `site_url` (the list answer has the ids only)
+  for (const { source, site_name, site_url } of sources) {
+    const line = footer.filter({ hasText: site_name });
     // `degraded` is still shown as updated: the source answered, only some items did not parse
-    await expect(footer.filter({ hasText: name })).toContainText(/mis à jour|updated/i);
+    await expect(line).toContainText(/mis à jour|updated/i);
+    await expect(line.locator('a')).toHaveAttribute('href', site_url);
+    expect(source).toBeTruthy();
   }
   await expect(page.locator('[data-test=sources] .has-text-danger')).toHaveCount(0);
+});
+
+test('the activity icon of a non-ski row follows its activity', async ({ page }) => {
+  const all = (await call('/partner-outings?limit=100')) as { items: (Row & { title: string; author: unknown })[] };
+  await page.goto('/metaskirando');
+  const rows = page.locator('.partner-outing-row');
+  await expect(rows).toHaveCount(all.items.length);
+
+  // the activity icon of a non-ski row is the one of its activity, not the ski one
+  for (const activity of ['snowshoeing', 'hiking', 'rock_climbing']) {
+    const item = all.items.find((i) => i.source === 'gulliver' && i.activities.includes(activity));
+    expect(item, `a gulliver row of ${activity} in the demo data`).toBeTruthy();
+    const row = rows.filter({ hasText: item!.title }).first();
+    await expect(row.locator('.activity-icons svg')).toHaveAttribute('data-icon', activity);
+  }
 });
 
 test('an outing of c2c links inside the site', async ({ page }) => {

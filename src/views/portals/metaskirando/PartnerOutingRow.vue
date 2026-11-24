@@ -71,11 +71,12 @@ const rating = computed(() => {
 const area = computed(() => props.outing.areas.find((a) => a.area_type === 'range') ?? props.outing.areas[0]);
 
 // the licence of the sources asks for the credit on every row
-const credit = computed(() =>
-  $gettext('By {author} on {site}')
-    .replace('{author}', props.outing.author?.name ?? site.value)
-    .replace('{site}', site.value)
-);
+const credit = computed(() => {
+  const author = props.outing.author?.name;
+  return author
+    ? $gettext('By {author} on {site}').replace('{author}', author).replace('{site}', site.value)
+    : $gettext('On {site}').replace('{site}', site.value);
+});
 </script>
 
 <style scoped>
