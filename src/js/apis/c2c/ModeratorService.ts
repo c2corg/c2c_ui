@@ -5,6 +5,7 @@ import {
   deletedDocumentDetails,
   deletedDocumentsPage,
   imagesOfDeletion,
+  brokenEmbedsPage,
   orphanImagesPage,
   restoreResult,
   type AccountRemoval,
@@ -74,6 +75,13 @@ export default class ModeratorService {
     return this.api.getValidated('/images/orphans', orphanImagesPage, {
       params: { offset, limit, image_type: imageType || undefined },
     });
+  }
+
+  /*
+   * The images shown in the texts of documents ([img=ID]) that do not show: deleted, missing or not an image
+   */
+  getBrokenEmbeds(offset = 0, limit = 30) {
+    return this.api.getValidated('/images/broken-embeds', brokenEmbedsPage, { params: { offset, limit } });
   }
 
   /*

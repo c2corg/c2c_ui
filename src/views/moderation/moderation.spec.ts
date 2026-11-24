@@ -5,6 +5,7 @@ import { createMemoryHistory, createRouter, type Router } from 'vue-router';
 
 import AccountRemovalItem from './AccountRemovalItem.vue';
 import AccountRemovals from './AccountRemovals.vue';
+import BrokenEmbeds from './BrokenEmbeds.vue';
 import DeletedDocumentItem from './DeletedDocumentItem.vue';
 import DeletedDocuments from './DeletedDocuments.vue';
 import ModerationView from './ModerationView.vue';
@@ -12,7 +13,7 @@ import OrphanImages from './OrphanImages.vue';
 import { daysLeft, documentRoute } from './deleted-documents';
 
 import { ApiData } from '@/js/apis/BaseApi';
-import type { AccountRemoval, DeletedDocument, OrphanImage } from '@/js/apis/c2c/schemas';
+import type { AccountRemoval, BrokenEmbed, DeletedDocument, OrphanImage } from '@/js/apis/c2c/schemas';
 import { isForumModerator } from '@/stores/forum-role';
 import RemoveAccountWindow from '@/views/document/utils/windows/RemoveAccountWindow.vue';
 
@@ -27,6 +28,7 @@ const api = vi.hoisted(() => ({
   updateAccountRemoval: vi.fn(),
   requestAccountRemoval: vi.fn(),
   getOrphanImages: vi.fn(),
+  getBrokenEmbeds: vi.fn(),
   deleteDocument: vi.fn(),
 }));
 
@@ -106,6 +108,8 @@ beforeEach(async () => {
       { path: '/routes/:id/:lang?', name: 'route', component: Empty },
       { path: '/profiles/:id/:lang?', name: 'profile', component: Empty },
       { path: '/images/:id/:lang?', name: 'image', component: Empty },
+      { path: '/articles/:id/:lang?', name: 'article', component: Empty },
+      { path: '/waypoints/:id/:lang?', name: 'waypoint', component: Empty },
     ],
   });
   await router.push('/moderation');
@@ -172,6 +176,7 @@ describe('ModerationView', () => {
     expect(wrapper.findAll('.tabs li').map((li) => li.text())).toEqual([
       'Deleted documents',
       'Orphan images',
+      'Broken images',
       'Accounts',
       'Edits to check',
     ]);
@@ -188,6 +193,7 @@ describe('ModerationView', () => {
     expect(wrapper.findComponent(DeletedDocuments).exists()).toBe(false);
     expect(wrapper.findComponent(AccountRemovals).exists()).toBe(true);
     expect(wrapper.findAll('.tabs a.is-disabled').map((a) => a.attributes('title'))).toEqual([
+      'For the moderators of the topoguide',
       'For the moderators of the topoguide',
       'For the moderators of the topoguide',
       'Coming soon',
@@ -539,6 +545,23 @@ describe('OrphanImages', () => {
     expect(wrapper.text()).toContain('Found: 1');
   });
 
+  it('shows the documents showing an image in their texts, and does not delete it', async () => {
+    const embeddedIn = [{ document_id: 1063876, document_type: 'c', title: 'Nidification', langs: ['fr', 'it'] }];
+    api.getOrphanImages.mockReturnValue(
+      answer({ total: 2, images: [orphan(1, { embedded_in: embeddedIn }), orphan(2)] })
+    );
+    const wrapper = mount(OrphanImages, { global: global() });
+    await flushPromises();
+
+    const cards = wrapper.findAll('.orphan-image');
+    expect(cards[0]!.text()).toContain('Shown in the text of:');
+    expect(cards[0]!.find('.embedded-in a').attributes('href')).toBe('/articles/1063876/fr');
+    expect(cards[0]!.findAll('.embedded-in .tag').map((tag) => tag.text())).toEqual(['fr', 'it']);
+    expect(deleteButtons(wrapper)[0]!.attributes('disabled')).toBeDefined();
+    expect(cards[1]!.text()).not.toContain('Shown in the text of:');
+    expect(deleteButtons(wrapper)[1]!.attributes('disabled')).toBeUndefined();
+  });
+
   it('arms one button at a time, and tells when a deletion fails', async () => {
     api.getOrphanImages.mockReturnValue(answer({ total: 2, images: [orphan(1), orphan(2)] }));
     api.deleteDocument.mockReturnValue(new ApiData(Promise.reject(new Error('403'))));
@@ -567,5 +590,89 @@ describe('DeletedDocumentItem with images', () => {
     });
     expect(wrapper.find('.tag.is-info').text()).toMatch(/images deleted with it:\s3/);
     expect(wrapper.text()).toContain('The images deleted with it are restored too: 3');
+  });
+});
+
+const broken = (imageId: number, extra: Partial<BrokenEmbed> = {}): BrokenEmbed => ({
+  document_id: 1063876,
+  document_type: 'c',
+  title: 'Nidification',
+  langs: ['fr'],
+  image_id: imageId,
+  reason: 'missing',
+  image_document_type: null,
+  deleted: null,
+  ...extra,
+});
+
+const deletedWith = (documentId: number, documentType: string) => ({
+  entry_id: 55,
+  document_id: documentId,
+  document_type: documentType,
+  deleted_at: '2026-11-20T10:00:00+00:00',
+  expires_at: new Date(Date.now() + 3 * 24 * 3600 * 1000).toISOString(),
+  by: user(9, 'bob'),
+});
+
+describe('BrokenEmbeds', () => {
+  it('lists the broken images with their reason, who deleted them and the days left', async () => {
+    api.getBrokenEmbeds.mockReturnValue(
+      answer({
+        total: 3,
+        embeds: [
+          broken(1854248, { reason: 'deleted', deleted: deletedWith(1854248, 'i') }),
+          broken(9999999),
+          broken(37, { reason: 'not_image', image_document_type: 'w' }),
+        ],
+      })
+    );
+    const wrapper = mount(BrokenEmbeds, { global: global() });
+    await flushPromises();
+
+    expect(api.getBrokenEmbeds).toHaveBeenCalledWith(0, 30);
+    const rows = wrapper.findAll('.broken-embed');
+    expect(rows).toHaveLength(3);
+    expect(rows[0]!.find('a').attributes('href')).toBe('/articles/1063876/fr');
+    expect(rows[0]!.text()).toContain('[img=1854248]');
+    expect(rows[0]!.text()).toContain('Deleted image');
+    expect(rows[0]!.text()).toContain('bob');
+    expect(rows[0]!.text()).toContain('days left to restore it: 3');
+    expect(rows[0]!.find('button.is-primary').exists()).toBe(true);
+    expect(rows[1]!.text()).toContain('No such image');
+    expect(rows[1]!.find('button').exists()).toBe(false);
+    expect(rows[2]!.text()).toContain('Not an image');
+    expect(rows[2]!.findAll('a')[1]!.attributes('href')).toBe('/waypoints/37');
+    expect(wrapper.text()).toContain('Found: 3');
+  });
+
+  it('says when no image is broken', async () => {
+    api.getBrokenEmbeds.mockReturnValue(answer({ total: 0, embeds: [] }));
+    const wrapper = mount(BrokenEmbeds, { global: global() });
+    await flushPromises();
+
+    expect(wrapper.text()).toContain('No broken image.');
+  });
+
+  it('restores the document an image was deleted with, then reloads', async () => {
+    api.getBrokenEmbeds.mockReturnValueOnce(
+      answer({ total: 1, embeds: [broken(24, { reason: 'deleted', deleted: deletedWith(1001, 'o') })] })
+    );
+    api.getBrokenEmbeds.mockReturnValueOnce(answer({ total: 0, embeds: [] }));
+    api.restoreDeletedDocument.mockReturnValue(
+      answer({ document_id: 1001, lang: null, skipped: {}, missing_files: [] })
+    );
+    const wrapper = mount(BrokenEmbeds, { global: global() });
+    await flushPromises();
+
+    expect(wrapper.find('.broken-embed').text()).toContain('with');
+    await wrapper.find('.broken-embed button').trigger('click');
+    expect(wrapper.find('.confirmation').text()).toContain('both come back');
+    await (wrapper.findComponent('.confirmation') as ReturnType<typeof mount>).vm.$emit('confirm');
+    await flushPromises();
+
+    expect(api.restoreDeletedDocument).toHaveBeenCalledWith(55);
+    expect(api.getBrokenEmbeds).toHaveBeenCalledTimes(2);
+    expect(wrapper.find('.notification.is-success a').attributes('href')).toBe('/outings/1001');
+    expect(wrapper.text()).toContain('No broken image.');
   });
 });

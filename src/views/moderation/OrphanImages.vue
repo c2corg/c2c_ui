@@ -4,6 +4,10 @@
       The images linked to no document, the last uploaded first. Link them to a document from their page, or delete
       them: a moderator can restore them during 29 days, from the deleted documents.
     </p>
+    <p class="mb-4" v-translate>
+      An image shown in the text of a document is used, even without a link: link it to that document rather than delete
+      it.
+    </p>
 
     <div class="field is-grouped is-align-items-center mb-4">
       <div class="select">
@@ -58,14 +62,29 @@
               <span v-translate>by</span> <contributor-link :contributor="image.last_unlink.by" /></template
             ><span>, {{ $dateUtils.toLocalizedString(image.last_unlink.at, 'll') }}</span>
           </p>
+          <div v-if="image.embedded_in?.length" class="notification is-warning is-light is-size-7 p-2 mt-2 mb-0">
+            <p class="has-text-weight-semibold" v-translate>Shown in the text of:</p>
+            <p v-for="document of image.embedded_in" :key="document.document_id" class="embedded-in is-clipped">
+              <icon-document :document-type="letterToDocumentType[document.document_type]" fixed-width />
+              <router-link :to="documentRoute(document.document_type, document.document_id, document.langs[0])">
+                {{ document.title || '#' + document.document_id }}
+              </router-link>
+              <span v-for="lang of document.langs" :key="lang" class="tag is-white ml-1">{{ lang }}</span>
+            </p>
+          </div>
           <div class="mt-2">
-            <!-- a first click arms the button, a second one deletes: one image at a time, without a window -->
+            <!-- a first click arms the button, a second one deletes: one image at a time, without a window. An
+                 image shown in a text is used: not deleted from here -->
             <button
               class="button"
               :class="[
                 armed === image.document_id ? 'is-danger' : 'is-danger is-light',
                 { 'is-loading': deleting.has(image.document_id) },
               ]"
+              :disabled="!!image.embedded_in?.length"
+              :title="
+                image.embedded_in?.length ? $gettext('Shown in the text of a document: link it instead') : undefined
+              "
               @click="onDelete(image)"
             >
               <fa-icon icon="trash" class="mr-1" />
@@ -178,6 +197,11 @@ function onDelete(image: OrphanImage) {
 </script>
 
 <style scoped>
+.embedded-in {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .thumbnail-link {
   display: block;
   aspect-ratio: 4 / 3;
