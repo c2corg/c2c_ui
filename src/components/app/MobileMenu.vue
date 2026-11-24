@@ -13,19 +13,31 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 import MenuEntries from './MenuEntries.vue';
 import MenuFooter from './MenuFooter.vue';
 
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useMainMenuItems } from '@/js/composables/main-menu';
 import { useMobileMenuStore } from '@/stores/mobile-menu';
 
 defineOptions({ name: 'MobileMenu' });
 
 // the same entries as the side menu of the site
-const items = useMainMenuItems();
+const mainItems = useMainMenuItems();
+const { $gettext, $user } = useGlobalProperties();
+
+// logged out, the phone layout has no gear menu (the navigation of the site) nor Me page: Settings, with the language, is here
+const items = computed(() =>
+  $user.isLogged
+    ? mainItems.value
+    : [
+        ...mainItems.value,
+        { key: 'settings', label: $gettext('Settings'), to: { name: 'settings' }, match: ['settings'], icon: 'gears' },
+      ]
+);
 const menu = useMobileMenuStore();
 const route = useRoute();
 

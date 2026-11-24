@@ -10,14 +10,14 @@ import { useMobileMenuStore } from '@/stores/mobile-menu';
 
 const page = { render: () => h('div') };
 
-const mountMenu = async () => {
+const mountMenu = async (isLogged = false) => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [
       { path: '/', component: page },
       { path: '/other', component: page },
       // the entries of the menu: a plain link (Itinevert) resolves its route. The forum is another site
-      ...['topoguide', 'outings', 'articles', 'itinevert', 'serac', 'yeti'].map((name) => ({
+      ...['topoguide', 'outings', 'articles', 'itinevert', 'serac', 'yeti', 'settings'].map((name) => ({
         path: `/${name}`,
         name,
         component: page,
@@ -30,8 +30,8 @@ const mountMenu = async () => {
     global: {
       plugins: [router],
       stubs: { RouterLink: true, FaIcon: true, MenuFooter: true },
-      // a visitor: the menu has no moderation entry
-      config: { globalProperties: { $gettext: (text: string) => text, $user: { isLogged: false } } as never },
+      // no moderation entry: a visitor, or a user without a moderation role
+      config: { globalProperties: { $gettext: (text: string) => text, $user: { isLogged } } as never },
     },
   });
   return { wrapper, router };
@@ -81,5 +81,19 @@ describe('MobileMenu', () => {
     await wrapper.find('#mobile-menu a[href="/itinevert"]').trigger('click');
     await flushPromises();
     expect(menu.isOpen).toBe(false);
+  });
+
+  it('has Settings, with the language, only logged out: logged in, the Me page leads there', async () => {
+    const keys = async (isLogged: boolean) => {
+      const { wrapper } = await mountMenu(isLogged);
+      useMobileMenuStore().toggle();
+      await flushPromises();
+      const items = wrapper.findComponent({ name: 'MenuEntries' }).props('items') as { key: string }[];
+      wrapper.unmount();
+      return items.map((item) => item.key);
+    };
+
+    expect(await keys(false)).toContain('settings');
+    expect(await keys(true)).not.toContain('settings');
   });
 });
