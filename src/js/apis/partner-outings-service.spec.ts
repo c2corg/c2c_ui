@@ -58,8 +58,16 @@ describe('partner outings service', () => {
   });
 
   it('reads the health of the sources', async () => {
-    const rows = [{ source: 'skitour', status: 'ok', last_success_at: null, site_name: 'skitour.fr' }];
-    const get = vi.spyOn(service.axios, 'get').mockResolvedValue({ data: rows });
+    const rows = [
+      {
+        source: 'skitour',
+        status: 'degraded',
+        last_success_at: null,
+        site_name: 'skitour.fr',
+        last_skipped: { too_old: 1 },
+      },
+    ];
+    const get = vi.spyOn(service.axios, 'get').mockResolvedValue({ data: { sources: rows } });
     const { signal } = new AbortController();
 
     await expect(service.getSources(signal)).resolves.toEqual(rows);

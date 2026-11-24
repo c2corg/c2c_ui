@@ -14,6 +14,12 @@ export type PartnerOutingRating = {
   system: string | null;
 };
 
+export type PartnerOutingSnow = {
+  line_m?: number | null;
+  low_cm?: number | null;
+  top_cm?: number | null;
+};
+
 export type PartnerOuting = {
   // '<source>:<id on the source>', 'c2c:<document_id>' for the outings of c2c
   id: string;
@@ -36,7 +42,8 @@ export type PartnerOuting = {
   elevation_max: number | null;
   height_diff_up: number | null;
   orientations: string[];
-  snow: string | null;
+  // the snow cover reported by the source (snow line and depths, in m and cm), when it gives one
+  snow: PartnerOutingSnow | null;
   region: string | null;
   // `geom` is a GeoJSON string in EPSG:3857; `quality` tells how precise the location is ('summit' is the best)
   geometry: { geom: string; quality: string } | null;
@@ -54,7 +61,8 @@ export type PartnerSourceHealth = {
   status_detail?: string | null;
   last_run_at?: string | null;
   last_fetched?: number | null;
-  last_skipped?: number | null;
+  // the items left out by the last run, by reason (e.g. {too_old: 1})
+  last_skipped?: Record<string, number> | null;
 };
 
 export type PartnerOutingsAnswer = {
@@ -117,8 +125,8 @@ class PartnerOutingsService {
 
   getSources(signal?: AbortSignal) {
     return this.axios
-      .get<PartnerSourceHealth[] | { sources: PartnerSourceHealth[] }>('/partner-outings/sources', { signal })
-      .then((response) => (Array.isArray(response.data) ? response.data : response.data.sources));
+      .get<{ sources: PartnerSourceHealth[] }>('/partner-outings/sources', { signal })
+      .then((response) => response.data.sources);
   }
 }
 
