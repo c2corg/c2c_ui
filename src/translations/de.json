@@ -140,6 +140,7 @@
     "An error occurred, please try again": "Ein Fehler ist aufgetreten, bitte nochmals probieren",
     "An error occurred, the images could not all be located": "Ein Fehler ist aufgetreten, alle Bilder konnten nicht lokalisiert werden",
     "An icon on the home screen, and the app takes the whole screen, without the browser bar.": "Ein Symbol auf dem Home-Bildschirm, und die App wird im Vollbildmodus angezeigt – ohne Browserleiste.",
+    "An image shown in the text of a document is used, even without a link: link it to that document rather than delete it.": "Ein Bild, das im Text eines Dokuments angezeigt wird, wird verwendet, auch ohne Verknüpfung: Verknüpfen Sie es mit diesem Dokument, statt es zu löschen.",
     "An outing refused by Camptocamp shows the reason: fix it with Edit, then Try again. If the connection was cut while sending, check on Camptocamp before trying again, so as not to publish it twice.": "Ein von Camptocamp abgelehnter Tourenbericht zeigt den Grund dafür an: Beheben Sie das Problem über „Bearbeiten“ und versuchen Sie es anschließend erneut. Wurde die Verbindung während der Übertragung unterbrochen, überprüfen Sie zuerst auf Camptocamp, ob die Tour bereits veröffentlicht wurde, bevor Sie es erneut versuchen. So vermeiden Sie eine doppelte Veröffentlichung.",
     "An unexpected error occurred, please try again": {
       "API message": "Ein unerwarteter Fehler ist aufgetreten, bitte nochmals probieren"
@@ -211,6 +212,7 @@
     "Books and websites not already associated to this route": "Geben Sie an, woher die Informationen stammen, die nicht aus Ihrer persönlichen Erfahrung stammen. Ein Buch oder eine Zeitschrift sollte einen eigenen Eintrag haben und mit dem Dokument verknüpft sein (bitte nicht in diesem Feld erwähnen). Dieses Feld ist für Links zu Websites, Online-Topos, Blogs, nicht verbreiteten Quellen (Notizbuch in einer Berghütte, Bar oder auf einem Campingplatz) oder für zusätzliche Informationen zu den Topoführern (falsches Schema usw.) vorgesehen. Ein Link muss mit den Chevrons < Link > aktiviert werden.",
     "Bouldering climbing gear": "Boulder-Kletterausrüstung",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Beschreiben Sie kurz die möglichen Verletzungen und was Sie heute im Nachhinein tun würden. Kommentare, die in kein anderes Feld passen, können hier eingegeben werden.",
+    "Broken images": "Defekte Bilder",
     "Browse the topoguide": "Tourenportal durchsuchen",
     "Bulletin": "Lagebericht",
     "Bulletin details": "Details des Lageberichts",
@@ -345,6 +347,7 @@
     "Deleted": "Gelöscht",
     "Deleted by": "Gelöscht von",
     "Deleted documents": "Gelöschte Dokumente",
+    "Deleted image": "Gelöschtes Bild",
     "Deleted since": "Gelöscht seit",
     "Deleted until": "Gelöscht bis",
     "Deny all": "Alles ablehnen",
@@ -405,6 +408,7 @@
     },
     "Drawing tips": "Zeichentipps",
     "Drop images here or click to upload": "Bilder per Drag&Drop oder durch Klick hochladen",
+    "Duplicate images": "Doppelte Bilder",
     "Duration": "Zeit",
     "Duration (hrs)": "Zeit (Stunden)",
     "E.g. South face of the Dent du Requin, normal route": "Z. B. Südwand der Dent du Requin, Normalroute",
@@ -592,6 +596,7 @@
     "Images deleted with it, restored with it": "Mit diesem Dokument gelöschte und wiederhergestellte Bilder.",
     "Images kept, linked to no document any more:": "Bilder beibehalten, mit keinem Dokument mehr verknüpft:",
     "Images located on the GPS track of the outing:": "Bilder auf der GPS-Route der Tour lokalisiert:",
+    "Images without a GPS position of their own sit at the place of their outing. Where the outing has a GPS track with times, their place is read on it at the time they were shot.": "Bilder ohne eigene GPS-Position werden am Standort der Tour angezeigt. Wenn für die Tour eine GPS-Aufzeichnung mit Zeitangaben vorhanden ist, wird ihre Position anhand der Aufzeichnung zum Zeitpunkt der Aufnahme ermittelt.",
     "Impossible to know whether this outing was published: the connection was lost at the wrong moment. Check on Camptocamp before trying again, so as not to publish it twice.": "Es lässt sich nicht feststellen, ob diese Tour veröffentlicht wurde: Die Verbindung wurde zum ungünstigsten Zeitpunkt unterbrochen. Bitte überprüfen Sie auf Camptocamp, ob die Tour bereits veröffentlicht wurde, bevor Sie es erneut versuchen. So vermeiden Sie eine doppelte Veröffentlichung.",
     "Improve our understanding of risks": "Das Wissen über Risiken verbessern",
     "In favourites, saved offline": "In den Favoriten offline gespeichert.",
@@ -624,9 +629,11 @@
     "It has already been used, has expired, or was replaced by a more recent request: only the link of the last email sent works.": "Der Link wurde bereits verwendet, ist abgelaufen oder durch eine neuere Anfrage ersetzt worden. Nur der Link in der zuletzt gesendeten E-Mail ist gültig.",
     "It seems your trip can not be completed on the selected date and time": "Anscheinend kann Ihre Reise nicht zum gewählten Datum und zur gewählten Uhrzeit durchgeführt werden",
     "Join us": "Machen Sie mit",
+    "Keep": "Behalten",
     "Keep as favourite, remove the offline copy": "Als Favorit behalten, Offline-Kopie löschen",
     "Keep on this device": "Auf diesem Gerät behalten",
     "Keep the menu open": "Menü geöffnet lassen",
+    "Kept": "Behalten",
     "Kept on this device, they stay visible to anyone logged out.": "Auf diesem Gerät behalten, bleiben sie für alle sichtbar, die nicht angemeldet sind.",
     "Know more about SERAC": "Mehr über SERAC erfahren",
     "Language, theme, text size": "Sprache, Design, Textgröße",
@@ -672,6 +679,7 @@
     "Link copied": "Link kopiert",
     "Link the route": "Die Route verknüpfen",
     "Linked documents": "Verknüpfte Dokumente",
+    "Linked to": "Verknüpft mit",
     "Links not restored, their other document was deleted since:": "Nicht wiederhergestellte Verknüpfungen, da das andere Dokument inzwischen gelöscht wurde:",
     "List mode": "Listenmodus",
     "List of versions for language:": "Versionsliste für die Sprache:",
@@ -682,7 +690,10 @@
     "Loading the bulletin": "Lagebericht wird geladen",
     "Loading...": "Laden...",
     "Local file": "Lokale Datei",
+    "Locate": "lokalisieren",
+    "Locate all": "Alle lokalisieren",
     "Locate images on the GPS track": "Bilder auf der GPS-Route lokalisieren",
+    "Locate my images on GPS tracks": "Meine Bilder auf der GPS-Route lokalisieren",
     "Location / elevation / orientation": "Standort / Höhe / Ausrichtung",
     "Location computed from the GPS track of the outing": "Standort anhand der GPS-Aufzeichnung ermittelt",
     "Location refused. Allow it in the settings of the browser, then try again.": "Standort abgelehnt. Bitte erlauben Sie den Zugriff in den Browsereinstellungen und versuchen Sie es anschließend erneut.",
@@ -716,7 +727,11 @@
     "Me → App settings: light or dark theme, text size, and the introduction to see again. These settings stay on this device.": "Ich → App-Einstellungen: helles oder dunkles Design, Textgröße und Einführung erneut anzeigen. Diese Einstellungen bleiben auf diesem Gerät.",
     "Me: your account, your outings, the settings of the app and the help.": "Ich: Ihr Konto, Ihre Tourenberichte, die App-Einstellungen und die Hilfe.",
     "Menu": "Menü",
+    "Merge": "Vereinigen:",
+    "Merge all into kept": "Alle mit dem behaltenen vereinigen",
     "Merge documents": "Dokumente vereinigen",
+    "Merge into": "Vereinigen mit",
+    "Merge into kept": "Mit dem behaltenen vereinigen",
     "Merge with another account": "Mit einem anderen Konto zusammenführen",
     "Merge with other document": "Mit einem anderen Dokument zusammenführen",
     "Merged documents, restored with it": "Zusammengeführte Dokumente, mit diesem wiederhergestellt",
@@ -792,10 +807,13 @@
     "No activity retrieved yet. Have you connected your trackers?": "Noch keine Aktivitäten abgerufen. Haben Sie Ihre Tracker verbunden?",
     "No answer from Camptocamp: the outing may be published already. It is saved on the phone: check on the site, then decide from Favourites.": "Keine Antwort von Camptocamp: Die Tour wurde möglicherweise bereits veröffentlicht. Sie ist auf dem Smartphone gespeichert. Überprüfen Sie den Status auf der Website und entscheiden Sie anschließend unter „Favoriten“, wie Sie weiter vorgehen möchten.",
     "No avalanche bulletin right now": "Zurzeit kein Lawinenlagebericht",
+    "No broken image.": "Kein defektes Bild.",
     "No data could be extracted from GPS file": "Es konnten keine Daten aus der GPS-Datei extrahiert werden",
     "No deleted document matches these filters.": "Kein gelöschtes Dokument entspricht diesen Filtern.",
     "No deleted document to restore.": "Kein gelöschtes Dokument zum Wiederherstellen.",
     "No distinct avalanche problem": "Kein ausgeprägtes Lawinenproblem",
+    "No document": "Kein Dokument",
+    "No duplicate image.": "Kein doppeltes Bild.",
     "No favourite matches.": "Kein passender Favorit.",
     "No favourite yet": "Noch keine Favoriten",
     "No folder": "Kein Ordner",
@@ -815,6 +833,7 @@
     "No route saved offline: link it once the network is back.": "Keine Route offline gespeichert: Verknüpfen Sie sie, sobald die Netzwerkverbindung wieder besteht.",
     "No selected hazard potential. Set danger level first.": "Kein ausgewähltes Gefahrenpotenzial. Stellen Sie zuerst die Gefahrenstufe ein.",
     "No specific legend to show": "Noch keine spezifische Legende vorhanden",
+    "No such image": "Dieses Bild existiert nicht",
     "No title": "Ohne Titel",
     "No topo saved offline": "Kein Topo offline gespeichert",
     "No user with this email": {
@@ -828,9 +847,12 @@
     "North up": {
       "Map controls": "Norden oben"
     },
+    "Not a copy": "Keine Kopie",
+    "Not an image": "Kein Bild",
     "Not available here": "Hier nicht verfügbar",
     "Not available offline:": "Offline nicht verfügbar:",
     "Not before:": "Nicht vor:",
+    "Not duplicates": "Keine Duplikate",
     "Not logged in": "Nicht angemeldet",
     "Not removed before": "Nicht entfernt vor",
     "Not simplified yet": "Noch nicht vereinfacht",
@@ -850,6 +872,7 @@
     "On a route, tap Add my outing: the form opens even without a network.": "Tippen Sie bei einer Route auf „Tourenbericht hinzufügen“: Das Formular öffnet sich auch ohne Netzwerkverbindung.",
     "On a topo, tap the bookmark at the top: it goes to your favourites.": "Tippen Sie bei einem Topo oben auf das Lesezeichen: Es wird zu Ihren Favoriten hinzugefügt.",
     "On iPhone, also install the app: Safari clears the data of a site not opened for 7 days.": "Installieren Sie auf dem iPhone auch die App: Safari löscht die Daten einer Website, die 7 Tage lang nicht geöffnet wurde.",
+    "On the same document": "Im selben Dokument",
     "On this device only": "Nur auf diesem Gerät",
     "On this device:": "Auf diesem Gerät:",
     "On your phone, open this site in the browser, then add it to the home screen from the Share menu (iPhone) or the ⋮ menu (Android).": "Öffnen Sie diese Website auf Ihrem Telefon im Browser und fügen Sie sie über das Teilen-Menü (iPhone) oder das ⋮-Menü (Android) zum Home-Bildschirm hinzu.",
@@ -892,6 +915,7 @@
     "Outings statistics": "Statistik der Tourenberichte",
     "Outings using sustainable transportation on Camptocamp": "Tourenberichte mit nachhaltigen Verkehrsmitteln auf Camptocamp",
     "Outings waiting for you to publish them:": "Tourenberichte, die auf Ihre Veröffentlichung warten:",
+    "Outings with a GPS track and images:": "Routen mit einer GPS-Aufzeichnung und Bildern",
     "Outings without a network": "Tourenberichte ohne Netzwerkverbindung",
     "Outings, with the latest conditions in the mountains": "Tourenberichte mit den aktuellsten Verhältnissen in den Bergen",
     "Overlays": "Kartenebenen",
@@ -1020,6 +1044,7 @@
     "Residual risk >1.5": "Verbleibendes Risiko >1,5",
     "Resize the map": "Kartengröße anpassen",
     "Restore": "Wiederherstellen",
+    "Restore the image": "Bild wiederherstellen",
     "Restore this document": "Dieses Dokument wiederherstellen",
     "Restore this version": "Diese Version wiederherstellen",
     "Restored:": "Wiederhergestellt:",
@@ -1045,6 +1070,7 @@
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC ist eine weltweite Datenbank für Unfälle und Vorfälle, die die Sicherheit beim Klettern und im Bergsport verbessern soll.",
     "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC beruht auf Wohlwollen. Danke, dass Sie zu seiner Verbesserung beitragen",
     "SERAC: accidents and incidents in the mountains": "SERAC: Unfälle und Vorfälle in den Bergen",
+    "Same uploader": "Vom selben Benutzer hochgeladen",
     "Save": "Speichern",
     "Save as the pack of the day": "Als Pack des Tages speichern",
     "Save offline": "Offline speichern",
@@ -1058,6 +1084,8 @@
     "Saved on this device. Logged in, it is saved in your account.": "Auf diesem Gerät gespeichert. Wenn Sie angemeldet sind, wird sie in Ihrem Konto gespeichert.",
     "Saving offline…": "Wird offline gespeichert …",
     "Saving…": "Wird gespeichert …",
+    "Scan again": "Erneut scannen",
+    "Scan more": "Mehr scannen",
     "Scan with your phone": "Mit dem Telefon scannen",
     "Search": "Suchen",
     "Search ...": "Suchen...",
@@ -1107,6 +1135,10 @@
     "Show the full content of the listed results, one after the other (to read or print)": "Den vollständigen Inhalt der aufgelisteten Ergebnisse nacheinander anzeigen (zum Lesen oder Drucken)",
     "Show the map": "Karte anzeigen",
     "Showing:": "Angezeigt:",
+    "Shown in texts: merge it instead": "In Texten angezeigt: Vereinigen Sie es stattdessen",
+    "Shown in the text of": "Angezeigt im Text von",
+    "Shown in the text of a document: link it instead": "Im Text eines Dokuments angezeigt: Verknüpfen Sie es stattdessen",
+    "Shown in the text of:": "Angezeigt im Text von:",
     "Sign in to camptocamp today, it's free": "Melden Sie sich noch heute bei camptocamp an, es ist kostenlos",
     "Sign in to publish your outings. They stay saved on the phone.": "Melden Sie sich an, um Ihre Tourenberichte zu veröffentlichen. Sie bleiben auf dem Telefon gespeichert.",
     "Simplify": "Vereinfachen",
@@ -1183,8 +1215,10 @@
     "The Outings and Routes overlays are temporarily unavailable": "Die Overlays für Tourenberichte und Routen sind vorübergehend nicht verfügbar.",
     "The Recent feed: the latest outings and their photos.": "Der Feed „Aktuell“: die neuesten Tourenberichte und ihre Fotos.",
     "The account will not be removed. The request is kept, cancelled, and a new one can be made.": "Dieses Konto wird nicht entfernt. Der Antrag bleibt erhalten, wird aber zurückgezogen, und ein neuer Antrag kann erstellt werden.",
+    "The action failed for the image:": "Die Aktion ist für das Bild fehlgeschlagen:",
     "The app is installed on this device.": "Die App ist auf diesem Gerät installiert.",
     "The base size of the whole interface.": "Die Grundgröße der gesamten Benutzeroberfläche.",
+    "The broken images could not be loaded.": "Die defekten Bilder konnten nicht geladen werden.",
     "The bulletin could not be loaded": "Der Lagebericht konnte nicht geladen werden",
     "The closed account (&quot;Compte fermé&quot;), in the topoguide and in the forum.": "Das geschlossene Benutzerkonto (&quot;Compte fermé&quot;), im Tourenportal und im Forum.",
     "The current criteria will be retained": "Die aktuellen Suchkriterien werden beibehalten",
@@ -1199,11 +1233,16 @@
       "API message": "Das Dokument wurde gelöscht: zuerst wiederherstellen"
     },
     "The documents deleted in the last 29 days. A moderator can restore them, with their history, associations and comments.": "Die in den letzten 29 Tagen gelöschten Dokumente. Ein Moderator kann sie wiederherstellen, zusammen mit ihrem Verlauf, Verknüpfungen und Kommentaren.",
+    "The duplicate images could not be loaded.": "Die doppelten Bilder konnten nicht geladen werden.",
     "The feed then ignores the activities, areas and languages. The activities and areas still serve the “My preferences” button of the lists.": "Der Feed ignoriert dann Aktivitäten, Gebiete und Sprachen. Aktivitäten und Gebiete dienen weiterhin dem Knopf „Meine Einstellungen“ der Listen.",
     "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "Das Gefahrenpotenzial wird aus der Gefahrenstufe des Lawinenbulletins berechnet. Es kann durch die Wahl eines Potenzials innerhalb des entsprechenden Bereichs der Gefahrenstufe feinjustiert werden. Beispiel: Das Lawinenbulletin nennt kurz nach einer Periode mit Gefahrenstufe 4 die Gefahrenstufe 3. Wir können dann ein Gefahrenpotenzial von 12 statt 8 angeben.",
+    "The image comes back with its history and links, as it was when deleted.": "Das Bild kommt mit seiner Versionsgeschichte und seinen Verknüpfungen zurück, so wie es beim Löschen war.",
     "The image could not be deleted:": "Das Bild konnte nicht gelöscht werden:",
+    "The image was deleted with another document; both come back, as they were when deleted:": "Das Bild wurde mit einem anderen Dokument gelöscht; beide kommen zurück, so wie sie beim Löschen waren:",
     "The images deleted with it are restored too:": "Bilder, die zusammen mit diesem Dokument gelöscht wurden, werden auch wiederhergestellt:",
     "The images linked to no document, the last uploaded first. Link them to a document from their page, or delete them: a moderator can restore them during 29 days, from the deleted documents.": "Die mit keinem Dokument verknüpften Bilder, die zuletzt hochgeladenen zuerst. Verknüpfen Sie sie über ihre Seite mit einem Dokument oder löschen Sie sie: Ein Moderator kann sie innerhalb von 29 Tagen über die gelöschten Dokumente wiederherstellen.",
+    "The images shown in the text of a document ([img=…] tag) that do not show: deleted, never existing, or another type of document. Those that can still be restored come first.": "Die im Text eines Dokuments angezeigten Bilder (Tag [img=…]), die nicht erscheinen: gelöscht, nie vorhanden oder eine andere Art von Dokument. Die noch wiederherstellbaren kommen zuerst.",
+    "The images uploaded more than once: the same file (size, dimensions and date of the photo), the last uploaded first. Choose the image to keep, then merge the copies into it (their links and the texts showing them go to the kept image), delete a copy, or tell that the images are not copies.": "Die mehrfach hochgeladenen Bilder: dieselbe Datei (Größe, Abmessungen und Aufnahmedatum), die zuletzt hochgeladenen zuerst. Wählen Sie das zu behaltende Bild und vereinigen Sie dann die Kopien damit (ihre Verknüpfungen und die Texte, die sie anzeigen, gehen an das behaltene Bild), löschen Sie eine Kopie, oder geben Sie an, dass die Bilder keine Kopien sind.",
     "The link could not be copied": "Der Link konnte nicht kopiert werden",
     "The locale was written again since its deletion": {
       "API message": "Die Sprachversion wurde seit ihrer Löschung erneut bearbeitet."
@@ -1330,6 +1369,7 @@
     "Untitled outing": "Tourenbericht ohne Titel",
     "Upload a GPS track": "GPS-Track hochladen",
     "Upload a new version": "Neue Version hochladen",
+    "Uploaded within": "Hochgeladen innerhalb von",
     "Use YETI to better analyze avalanche risk": "Nutzen Sie YETI, um das Lawinenrisiko besser zu analysieren",
     "Use current location": "Aktuellen Standort verwenden",
     "Use track": "Strecke benutzen",
@@ -1674,6 +1714,8 @@
     "contact": "Kontakt",
     "contact us.": "kontaktieren Sie uns.",
     "contributor": "Beiträger",
+    "copies": "Kopien",
+    "copies into": "Kopien in",
     "copyright": {
       "$$noContext": "Urheberrecht",
       "image_types": "Urheberrecht"
@@ -1817,6 +1859,7 @@
     "face": {
       "route_configuration_types": "Wand"
     },
+    "failed:": "fehgeschlagen:",
     "farm_sale": {
       "product_types": "Direktvertrieb"
     },
@@ -1906,6 +1949,7 @@
     },
     "ground_types": "Untergrundarten",
     "group_management": "Gruppenleitung",
+    "h": "Std.",
     "has added images to area": "hat Fotos zu einer Region hinzugefügt",
     "has added images to article": "hat Fotos zu einem Artikel hinzugefügt",
     "has added images to book": "hat Fotos zu einem Buch hinzugefügt",
@@ -2006,6 +2050,8 @@
     "it": {
       "langs": "Italienisch"
     },
+    "it is the id of this document itself": "es ist die ID dieses Dokuments selbst",
+    "it is the id of:": "es ist die ID von:",
     "its author": "der Autor",
     "key_needed": {
       "custodianship_types": "Schlüssel nötig"
@@ -2074,6 +2120,7 @@
     "migmatite": {
       "rock_types": "Migmatit"
     },
+    "min": "Min.",
     "minutes": "Minuten",
     "misc": {
       "image_categories": "Sonstiges",
@@ -2164,6 +2211,7 @@
       "autonomies": "nicht selbstständig"
     },
     "not available offline": "Offline nicht verfügbar",
+    "nothing to locate:": "Nichts zu lokalisieren",
     "novel": {
       "book_types": "Roman"
     },
@@ -2560,6 +2608,7 @@
     "then Add.": "und dann „Hinzufügen“.",
     "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "Vorschau: Die Geometrie ist noch nicht vereinfacht. Interaktionen auf der Karte sowie der Export sind deaktiviert.",
     "this message.": "dieser Nachricht.",
+    "through": "über",
     "time_management": "Zeitmanagement",
     "timing": "Zeitpunkt",
     "title": "Titel",
@@ -2656,6 +2705,7 @@
     "wind_speed": {
       "weather_station_types": "Windgeschwindigkeit"
     },
+    "with": "mit",
     "with Alt + clic": "mit Alt + Klick",
     "write a summary": "Zusammenfassung",
     "write your comments": "Kommentare hinzufügen",
