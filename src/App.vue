@@ -46,7 +46,8 @@
     <template v-if="appSettings.isMobileShell">
       <bottom-nav />
       <onboarding-tour />
-      <pull-to-refresh />
+      <!-- the browser has its own; the installed app has none -->
+      <pull-to-refresh v-if="standalone" />
     </template>
   </div>
 </template>
@@ -73,6 +74,7 @@ import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useHasTopAd, useIsHomePage } from '@/js/composables/home-page';
 import { useSideMenuCanPin, useSideMenuPinned } from '@/js/composables/side-menu';
 import { imageViewerRequested } from '@/js/vue-plugins/image-viewer';
+import { isStandalone } from '@/pwa/install';
 import { remind, shouldRemind } from '@/pwa/offline-reminder';
 import { useAppSettingsStore } from '@/stores/app-settings';
 import { useFavouritesStore } from '@/stores/favourites';
@@ -94,6 +96,7 @@ const sideMenuCanPin = useSideMenuCanPin();
 const sideMenuKeptOpen = computed(() => sideMenuCanPin.value && homePage.value);
 
 const appSettings = useAppSettingsStore();
+const standalone = isStandalone();
 
 const offline = useOfflineStore();
 // started at once: a logged in user's favourites of the device are sent to the account, the changes made without a
@@ -360,8 +363,6 @@ html[data-shell='mobile'] {
   /* their offsets (listing header, pinned map) follow our top bar, whose height does not follow the text size */
   --c2c-navbar-height: var(--app-top-bar-height);
   --c2c-bottom-bar-height: var(--app-bottom-bar-height);
-  /* pulling the top of the page refreshes what it shows (PullToRefresh.vue), not the whole page as the browser would */
-  overscroll-behavior-y: contain;
 
   .side-menu,
   .navigation {

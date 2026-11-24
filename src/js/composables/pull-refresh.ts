@@ -1,5 +1,5 @@
-// Pulling the page down from its top refreshes it, in the phone layout (src/components/app/PullToRefresh.vue): each page
-// says what that means for it, as long as it is shown.
+// Pulling the page down from its top refreshes it, in the installed app (src/components/app/PullToRefresh.vue): a page
+// may say what that means for it, as long as it is shown (its data again, the rest kept); the others are reloaded.
 //
 //   usePullRefresh(() => load());
 import { onBeforeUnmount, onMounted } from 'vue';
@@ -11,13 +11,12 @@ export function usePullRefresh(refresh: () => unknown) {
   onBeforeUnmount(() => refreshers.delete(refresh));
 }
 
-// whether a page shown refreshes anything: the others do not show the arrow
-export function canPullRefresh() {
-  return refreshers.size > 0;
-}
-
-// what the pages shown refresh, done or failed; false when no page refreshes anything
+// what the pages shown refresh, done or failed; a page that refreshes nothing is reloaded, and this never resolves:
+// the arrow turns until the page goes
 export async function pullRefresh() {
+  if (!refreshers.size) {
+    window.location.reload();
+    return new Promise<never>(() => {});
+  }
   await Promise.allSettled([...refreshers].map((refresh) => refresh()));
-  return refreshers.size > 0;
 }

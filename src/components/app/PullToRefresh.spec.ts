@@ -46,6 +46,7 @@ const content = (className: string) => {
 afterEach(() => {
   mounted.splice(0).forEach((wrapper) => wrapper.unmount());
   document.body.innerHTML = '';
+  vi.unstubAllGlobals();
 });
 
 describe('PullToRefresh', () => {
@@ -75,14 +76,27 @@ describe('PullToRefresh', () => {
     expect(refresh).not.toHaveBeenCalled();
   });
 
-  it('shows no arrow on a page that refreshes nothing', async () => {
+  it('turns the arrow until the page is refreshed', async () => {
+    let done!: () => void;
+    mountOnPage(page(() => new Promise<void>((resolve) => (done = resolve))));
     const arrow = mountOnPage(PullToRefresh);
-    const element = content('card');
 
-    touch(element, 'touchstart', 10);
-    touch(element, 'touchmove', 110);
+    await pull(content('card'));
+    expect(arrow.find('fa-icon-stub').attributes('icon')).toBe('rotate');
+
+    done();
     await flushPromises();
+    expect(arrow.find('fa-icon-stub').attributes('icon')).toBe('arrow-down');
+  });
 
-    expect(arrow.classes()).not.toContain('is-pulling');
+  it('reloads a page that refreshes nothing, the arrow turning until it goes', async () => {
+    const reload = vi.fn();
+    vi.stubGlobal('location', { ...window.location, reload });
+    const arrow = mountOnPage(PullToRefresh);
+
+    await pull(content('card'));
+
+    expect(reload).toHaveBeenCalledTimes(1);
+    expect(arrow.find('fa-icon-stub').attributes('icon')).toBe('rotate');
   });
 });

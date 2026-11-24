@@ -13,7 +13,8 @@ interface BeforeInstallPromptEvent extends Event {
 
 export type DevicePlatform = 'ios' | 'android' | 'desktop';
 
-function isStandalone() {
+// the app opened from its icon, in its own window: no address bar, and no pull to refresh of the browser
+export function isStandalone() {
   return (
     window.matchMedia?.('(display-mode: standalone)').matches ||
     (window.navigator as Navigator & { standalone?: boolean }).standalone === true
