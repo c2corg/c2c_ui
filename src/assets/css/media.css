@@ -13,6 +13,9 @@
  * it wraps (flex-wrap), or uses a container query on its box (TransportsBox.vue, SubPanelMethods.vue). iOS 15 has no
  * container queries: write the narrow layout by default and the wide one in `@container (min-width: ...)`, so that
  * it gets the narrow one. styles.spec.ts allows no other pixel width in a media query.
+ *
+ * --c2c-short-window: a window too low for a page that fills it (a phone held sideways is wider than a tablet but
+ * 360 to 430px high): its parts would share a strip of a few lines, so the page scrolls (.fills-window, App.vue).
  */
 @custom-media --c2c-phone (max-width: 599px);
 @custom-media --c2c-min-tablet (min-width: 769px);
@@ -23,3 +26,4 @@
 @custom-media --c2c-max-widescreen (max-width: 1216px);
 @custom-media --c2c-mobile (max-width: 768px);
 @custom-media --c2c-touch (max-width: 1023px);
+@custom-media --c2c-short-window (max-height: 499px);

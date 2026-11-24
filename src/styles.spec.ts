@@ -117,6 +117,8 @@ describe('styles', () => {
       '--c2c-max-desktop': upTo(DESKTOP_BREAKPOINT),
       '--c2c-min-widescreen': from(WIDESCREEN_BREAKPOINT),
       '--c2c-max-widescreen': upTo(WIDESCREEN_BREAKPOINT),
+      // a height, which the screen store does not know: the windows too low for a page that fills them
+      '--c2c-short-window': '(max-height: 499px)',
     });
   });
 
@@ -134,7 +136,8 @@ describe('styles', () => {
 
   // a height computed from the window's repeats the heights of the navigation, of the paddings and of the headers above,
   // and is wrong as soon as one of them changes (filters on two lines, the text size): the page takes what is left with
-  // .fills-window (App.vue). Bulma's modals, and the image viewer, over the whole window with its own bars, are fine
+  // .fills-window (App.vue). Bulma's modals, and the image viewer, over the whole window with its own bars, are fine,
+  // as the part that fills a low window under the navigation (App.vue), whose height switches in App.vue alone
   it('computes no height from the window', () => {
     const computed = cssBlocks
       .filter(({ file }) => !file.includes('assets/css/bulma/'))
@@ -143,7 +146,11 @@ describe('styles', () => {
           (m) => `${name}: ${m[0]}`
         )
       );
-    expect(computed).toEqual(['components/image-viewer/ImageViewer.vue #1: calc(100dvh - 3rem - 30px)']);
+    expect(computed).toEqual([
+      'App.vue #1: calc(100dvh - var(--c2c-header-height))',
+      'App.vue #1: calc(100dvh - var(--c2c-header-height))',
+      'components/image-viewer/ImageViewer.vue #1: calc(100dvh - 3rem - 30px)',
+    ]);
   });
 
   // what is under the navigation starts at --c2c-header-height, which App.vue alone switches with the large ad

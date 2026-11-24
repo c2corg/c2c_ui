@@ -261,6 +261,40 @@ button.dropdown-item {
   }
 }
 
+/* in a window too low for it (a phone held sideways), the page scrolls: the part that fills the window takes its height
+   under the navigation instead of what the headers leave, a strip of a few lines */
+@media screen and (--c2c-short-window) {
+  #app:has(.fills-window) {
+    height: auto;
+
+    .page-content,
+    .page-content :has(.fills-window) {
+      flex: none;
+    }
+  }
+
+  .fills-window {
+    flex: none;
+    height: calc(100dvh - var(--c2c-header-height));
+  }
+}
+
+@media screen and (--c2c-min-tablet) and (--c2c-short-window) {
+  #app:has(.fills-window-from-tablet) {
+    height: auto;
+
+    .page-content,
+    .page-content :has(.fills-window-from-tablet) {
+      flex: none;
+    }
+  }
+
+  .fills-window-from-tablet {
+    flex: none;
+    height: calc(100dvh - var(--c2c-header-height));
+  }
+}
+
 /* without the ad under the navigation, which leaves its room (.top-bar-room below), the page leaves it */
 .no-top-ad .page-content,
 .nav-dfm .page-content {
