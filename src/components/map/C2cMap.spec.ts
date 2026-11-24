@@ -199,8 +199,9 @@ describe('C2cMap', () => {
 
     exposed.highlightStop(4);
     await flushPromises();
-    // the bus of the stops is green when highlighted
-    expect(drawn(map)[1].properties).toMatchObject({ circleFill: '#4baf50', circleRadius: 19 });
+    // the bus of the stops is green when highlighted, above the other points: their icons would be drawn on it
+    expect(drawn(map)[1].properties).toMatchObject({ circleFill: '#4baf50', circleRadius: 19, highlight: true });
+    expect(drawn(map)[0].properties).not.toHaveProperty('highlight');
     expect(
       state.markers.filter((marker) => marker.added && !marker.removed).map((m) => m.element?.textContent)
     ).toEqual(['Gare']);
@@ -208,6 +209,7 @@ describe('C2cMap', () => {
     exposed.resetStopStyles();
     await flushPromises();
     expect(drawn(map)[1].properties).toMatchObject({ circleFill: '#337ab7', circleRadius: 14 });
+    expect(drawn(map)[1].properties).not.toHaveProperty('highlight');
     wrapper.unmount();
   });
 

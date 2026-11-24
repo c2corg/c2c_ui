@@ -823,7 +823,7 @@ async function renderDocuments() {
       compact: props.compactMarkers,
       monochrome: props.monochromeMarkers,
     });
-    if (style) geoJson.push(toGeoJson(feature, style));
+    if (style) geoJson.push(toGeoJson(feature, style, highlight));
     if (label) labels.push({ label, at: labelAnchor(feature.geometry) });
   }
   await loaded;

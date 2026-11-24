@@ -83,10 +83,11 @@ describe('NearbyStopsSection', () => {
       'Stop :  Village',
     ]);
     expect(wrapper.emitted('accessibility-info-changed')).toEqual([[true]]);
-    // one stop document per stop location, for the map
+    // one stop document per stop area for the map, its first stop: the lines of the station, though a metre apart, would
+    // draw two markers one over the other
     expect(
       (wrapper.emitted('stops-updated')![0][0] as { document_id: number }[]).map((doc) => doc.document_id)
-    ).toEqual([10, 11, 20]);
+    ).toEqual([10, 20]);
   });
 
   it('expands and collapses the lines of a stop on click', async () => {
