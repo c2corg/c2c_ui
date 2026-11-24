@@ -654,6 +654,7 @@ const brokenEmbed = z.object({
   reason: z.enum(BROKEN_EMBED_REASONS),
   // the type of the document of this id, when it is not an image
   image_document_type: z.nullable(z.string()),
+  image_document_title: z.optional(z.nullable(z.string())),
   deleted: z.nullable(
     z.object({
       entry_id: z.number(),

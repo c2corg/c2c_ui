@@ -618,11 +618,12 @@ describe('BrokenEmbeds', () => {
   it('lists the broken images with their reason, who deleted them and the days left', async () => {
     api.getBrokenEmbeds.mockReturnValue(
       answer({
-        total: 3,
+        total: 4,
         embeds: [
           broken(1854248, { reason: 'deleted', deleted: deletedWith(1854248, 'i') }),
           broken(9999999),
-          broken(37, { reason: 'not_image', image_document_type: 'w' }),
+          broken(37, { reason: 'not_image', image_document_type: 'w', image_document_title: 'Refuge' }),
+          broken(1063876, { reason: 'not_image', image_document_type: 'c' }),
         ],
       })
     );
@@ -631,7 +632,7 @@ describe('BrokenEmbeds', () => {
 
     expect(api.getBrokenEmbeds).toHaveBeenCalledWith(0, 30);
     const rows = wrapper.findAll('.broken-embed');
-    expect(rows).toHaveLength(3);
+    expect(rows).toHaveLength(4);
     expect(rows[0]!.find('a').attributes('href')).toBe('/articles/1063876/fr');
     expect(rows[0]!.text()).toContain('[img=1854248]');
     expect(rows[0]!.text()).toContain('Deleted image');
@@ -641,8 +642,19 @@ describe('BrokenEmbeds', () => {
     expect(rows[1]!.text()).toContain('No such image');
     expect(rows[1]!.find('button').exists()).toBe(false);
     expect(rows[2]!.text()).toContain('Not an image');
+    expect(rows[2]!.text()).toContain('it is the id of:');
+    expect(rows[2]!.findAll('a')[1]!.text()).toBe('waypoint #37');
+    expect(rows[2]!.text()).toContain('« Refuge »');
     expect(rows[2]!.findAll('a')[1]!.attributes('href')).toBe('/waypoints/37');
-    expect(wrapper.text()).toContain('Found: 3');
+    expect(rows[3]!.text()).toContain('it is the id of this document itself');
+    // one colour per reason
+    expect(rows.map((row) => row.find('.tag.ml-2').classes())).toEqual([
+      ['tag', 'ml-2', 'is-danger', 'is-light'],
+      ['tag', 'ml-2'],
+      ['tag', 'ml-2', 'is-warning', 'is-light'],
+      ['tag', 'ml-2', 'is-warning', 'is-light'],
+    ]);
+    expect(wrapper.text()).toContain('Found: 4');
   });
 
   it('says when no image is broken', async () => {

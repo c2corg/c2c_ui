@@ -33,14 +33,16 @@
             <code>[img={{ embed.image_id }}]</code>
             <span class="tag ml-2" :class="REASON_CLASSES[embed.reason]">{{ reasonLabel(embed) }}</span>
             <template v-if="embed.reason === 'not_image' && embed.image_document_type">
-              <icon-document
-                :document-type="letterToDocumentType[embed.image_document_type]"
-                fixed-width
-                class="ml-2"
-              />
-              <router-link :to="documentRoute(embed.image_document_type, embed.image_id)"
-                >#{{ embed.image_id }}</router-link
-              >
+              <span v-if="embed.image_id === embed.document_id" class="ml-2" v-translate>
+                it is the id of this document itself
+              </span>
+              <template v-else>
+                <span class="ml-2">{{ $gettext('it is the id of:') }}</span>
+                <icon-document :document-type="letterToDocumentType[embed.image_document_type]" fixed-width />
+                <router-link :to="documentRoute(embed.image_document_type, embed.image_id)"
+                  >{{ $gettext(letterToDocumentType[embed.image_document_type]) }} #{{ embed.image_id }}</router-link
+                ><span v-if="embed.image_document_title"> « {{ embed.image_document_title }} »</span>
+              </template>
             </template>
           </p>
           <p v-if="embed.deleted" class="mt-1 is-size-7">
@@ -123,9 +125,10 @@ import constants from '@/js/constants';
 
 const PAGE_SIZE = 30;
 
+// red: restorable, before its purge; grey: gone, only an edit of the text helps; orange: a wrong id in the text
 const REASON_CLASSES: Record<BrokenEmbed['reason'], string> = {
   deleted: 'is-danger is-light',
-  missing: 'is-warning is-light',
+  missing: '',
   not_image: 'is-warning is-light',
 };
 
