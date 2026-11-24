@@ -95,7 +95,9 @@
     "An error occurred, couldn't (un)mask version": "Hi ha hagut un error: no s'ha pogut (des)emmascarar la versió.",
     "An error occurred, couldn't save images": "No s'ha pogut desar la imatge",
     "An error occurred, please try again": "S'ha produït un error, torneu-ho a provar",
+    "An error occurred, the images could not all be located": "S'ha produït un error, no s'han pogut localitzar totes les imatges",
     "An icon on the home screen, and the app takes the whole screen, without the browser bar.": "Una icona a la pantalla d'inici, i l'aplicació ocupa tota la pantalla, sense la barra del navegador.",
+    "An image shown in the text of a document is used, even without a link: link it to that document rather than delete it.": "Una imatge mostrada al text d'un document s'utilitza, fins i tot sense enllaç: enllaceu-la a aquest document en lloc de suprimir-la.",
     "An outing refused by Camptocamp shows the reason: fix it with Edit, then Try again. If the connection was cut while sending, check on Camptocamp before trying again, so as not to publish it twice.": "Una sortida rebutjada per Camptocamp mostra el motiu: corregiu-la amb Edita i després Torna-ho a provar. Si la connexió es va tallar durant l'enviament, comproveu-ho a Camptocamp abans de tornar-ho a provar, per no publicar-la dues vegades.",
     "An unexpected error occurred, please try again": {
       "API message": "S'ha produït un error inesperat, torneu-ho a provar"
@@ -166,6 +168,7 @@
     "Books and websites not already associated to this route": "Indiqueu l'origen de la informació que no vingui de l'experiència personal. Un llibre o una revista haurien de disposar de la seva pròpia fitxa i associar-se al document (no mencionar-lo en aquest camp). Aquest camp serveix per als enllaços a d'altres llocs web, ressenyes en línia, blogs, fonts no difoses (llibreta a un refugi, bar o càmping), o informació complementària sobre els llibres de ressenyes (esquema erroni, etc.). Per activar els enllaços cal emprar els símbols < enllaç >.",
     "Bouldering climbing gear": "Escalada en bloc",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Descrigueu breument les eventuals ferides, i allò que faríeu avui, vist en perspectiva. Els comentaris que no encaixin als altres camps es poden entrar aquí.",
+    "Broken images": "Imatges trencades",
     "Browse the topoguide": "Navega per la guia de ressenyes",
     "Buoux is maintained by local volunteers. Help keep it bolted and open!": "Buoux el mantenen voluntaris locals. Ajudeu a mantenir-lo equipat i obert!",
     "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "Per defecte, el vostre pseudònim serà el vostre identificador a la guia de ressenyes. El podeu canviar lliurement a continuació dins de la configuració.",
@@ -268,6 +271,7 @@
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "La vista actual del mapa no queda coberta per YETI. Només ho són els massissos muntanyosos de l'estat francès (delimitats per línies discontínues).",
     "Current map view is too large. Please zoom to level": "La zona del mapa és massa gran. Feu zoom",
     "Current password": "Contrasenya actual",
+    "Danger at the highest point of the route": "Perill al punt més alt de l'itinerari",
     "Danger level": "Nivell de perill",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "El nivell de perill del butlletí d'allaus fa referència a totes les orientacions. La rosa dels vents distingeix els sectors crítics on el perill s'accentua.",
     "Danger rating - considerable": "Perill marcat",
@@ -299,6 +303,7 @@
     "Deleted": "Suprimit",
     "Deleted by": "Suprimit per",
     "Deleted documents": "Documents suprimits",
+    "Deleted image": "Imatge suprimida",
     "Deleted since": "Suprimit des de",
     "Deleted until": "Suprimit fins a",
     "Deny all": "Rebutja-ho tot",
@@ -360,6 +365,7 @@
     },
     "Drawing tips": "Consells de dibuix",
     "Drop images here or click to upload": "Arrossegueu imatges aquí o cliqueu per carregar-ne",
+    "Duplicate images": "Imatges duplicades",
     "Duration": "Durada",
     "Duration (hrs)": "Durada (h)",
     "E.g. South face of the Dent du Requin, normal route": "P. ex. Cara sud de la Dent du Requin, via normal",
@@ -542,6 +548,8 @@
     "Images are under license specified in the original document of each image": "Les imatges associades a aquesta pàgina estan disponibles sota la llicència especificada al document d'origen de cada imatge.",
     "Images deleted with it, restored with it": "Imatges suprimides amb ell, restaurades amb ell",
     "Images kept, linked to no document any more:": "Imatges conservades, ja no enllaçades a cap document:",
+    "Images located on the GPS track of the outing:": "Imatges localitzades a la traça GPS de la sortida:",
+    "Images without a GPS position of their own sit at the place of their outing. Where the outing has a GPS track with times, their place is read on it at the time they were shot.": "Les imatges sense posició GPS pròpia se situen al lloc de la seva sortida. Quan la sortida té una traça GPS amb hores, la seva posició s'hi llegeix a l'hora en què es van fer.",
     "Import": "Importació",
     "Impossible to know whether this outing was published: the connection was lost at the wrong moment. Check on Camptocamp before trying again, so as not to publish it twice.": "No es pot saber si aquesta sortida s'ha publicat: la connexió s'ha perdut en mal moment. Comproveu-ho a Camptocamp abans de tornar-ho a provar, per no publicar-la dues vegades.",
     "Improve our understanding of risks": "Milloreu el coneixement dels riscos",
@@ -576,9 +584,11 @@
     "It has already been used, has expired, or was replaced by a more recent request: only the link of the last email sent works.": "Ja s'ha utilitzat, ha caducat o s'ha substituït per una sol·licitud més recent: només funciona l'enllaç de l'últim correu enviat.",
     "It seems your trip can not be completed on the selected date and time": "Sembla que la teva sortida no pot ser completada en la data i el temps seleccionat",
     "Join us": "Adherir-s'hi",
+    "Keep": "Conserva",
     "Keep as favourite, remove the offline copy": "Mantén als preferits, elimina la còpia fora de línia",
     "Keep on this device": "Mantén en aquest dispositiu",
     "Keep the menu open": "Mantén el menú obert",
+    "Kept": "Conservada",
     "Kept on this device, they stay visible to anyone logged out.": "Si els manteniu en aquest dispositiu, són visibles per a qualsevol persona que no hagi iniciat la sessió.",
     "Know more about SERAC": "Més sobre SERAC",
     "Language, theme, text size": "Llengua, tema, mida del text",
@@ -623,6 +633,7 @@
     "Link copied": "Enllaç copiat",
     "Link the route": "Enllaça l'itinerari",
     "Linked documents": "Documents enllaçats",
+    "Linked to": "Enllaçada a",
     "Links": "Enllaços",
     "Links not restored, their other document was deleted since:": "Enllaços no restaurats, el seu altre document s'ha suprimit des de llavors:",
     "List mode": "Visualització en llista",
@@ -632,7 +643,12 @@
     "Loading access points...": "Carregant punts d'accés...",
     "Loading...": "Carregant...",
     "Local file": "Document local",
+    "Locate": "Localitza",
+    "Locate all": "Localitza-les totes",
+    "Locate images on the GPS track": "Localitza les imatges a la traça GPS",
+    "Locate my images on GPS tracks": "Localitza les meves imatges a les traces GPS",
     "Location / elevation / orientation": "Lloc / altitud / orientació",
+    "Location computed from the GPS track of the outing": "Posició calculada a partir de la traça GPS de la sortida",
     "Location refused. Allow it in the settings of the browser, then try again.": "Ubicació denegada. Permeteu-la a la configuració del navegador i torneu-ho a provar.",
     "Log in": "Inicia la sessió",
     "Log in to find your outings and contributions.": "Inicieu la sessió per trobar les vostres sortides i contribucions.",
@@ -664,7 +680,11 @@
     "Me → App settings: light or dark theme, text size, and the introduction to see again. These settings stay on this device.": "Jo → Configuració de l'aplicació: tema clar o fosc, mida del text, i la introducció per tornar-la a veure. Aquesta configuració es queda en aquest dispositiu.",
     "Me: your account, your outings, the settings of the app and the help.": "Jo: el vostre compte, les vostres sortides, la configuració de l'aplicació i l'ajuda.",
     "Menu": "Menú",
+    "Merge": "Fusiona",
+    "Merge all into kept": "Fusiona-les totes a la conservada",
     "Merge documents": "Fusiona els documents",
+    "Merge into": "Fusiona a",
+    "Merge into kept": "Fusiona a la conservada",
     "Merge with another account": "Fusiona amb un altre compte",
     "Merge with other document": "Fusiona amb un altre document",
     "Merged documents, restored with it": "Documents fusionats, restaurats amb ell",
@@ -691,6 +711,7 @@
       "modification date": "Modificat el"
     },
     "More": "Més",
+    "More details": "Més detalls",
     "More info": "Més informació",
     "More info on meteoblue.com": "Més informació a meteoblue.com",
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Hi ha més itineraris disponibles. Us podeu desplaçar pel mapa, escriure un nom o seleccionar una activitat per mostrar-los",
@@ -735,12 +756,16 @@
     "No activity retrieved yet. Have you connected your trackers?": "Encara no s'ha recuperat cap activitat. Heu connectat els vostres rastrejadors?",
     "No answer from Camptocamp: the outing may be published already. It is saved on the phone: check on the site, then decide from Favourites.": "No hi ha resposta de Camptocamp: potser la sortida ja s'ha publicat. Està desada al telèfon: comproveu-ho al lloc web i després decidiu des de Preferits.",
     "No avalanche bulletin right now": "Ara mateix no hi ha cap butlletí d'allaus ",
+    "No broken image.": "Cap imatge trencada.",
     "No data could be extracted from GPS file": "No es pot extreure cap dada del fitxer GPS",
     "No deleted document matches these filters.": "Cap document suprimit coincideix amb aquests filtres.",
     "No deleted document to restore.": "No hi ha cap document suprimit per restaurar.",
+    "No document": "Cap document",
+    "No duplicate image.": "Cap imatge duplicada.",
     "No favourite matches.": "Cap preferit no coincideix.",
     "No favourite yet": "Encara no hi ha cap preferit",
     "No folder": "Sense carpeta",
+    "No image to locate: they have a location, or no time matching the track": "Cap imatge per localitzar: tenen una posició, o cap hora no coincideix amb la traça",
     "No match?": "No hi ha cap resultat satisfactori?",
     "No network: your outings stay waiting. Publish them once connected.": "Sense xarxa: les vostres sortides continuen en espera. Publiqueu-les quan tingueu connexió.",
     "No orientation selected": "No s'han seleccionat orientacions",
@@ -756,6 +781,7 @@
     "No route saved offline: link it once the network is back.": "No hi ha cap itinerari desat fora de línia: enllaceu-lo quan torni la xarxa.",
     "No selected hazard potential. Set danger level first.": "No s'ha seleccionat cap potencial de perill. Indiqueu el nivell de perill",
     "No specific legend to show": "No hi ha cap llegenda a  mostrar",
+    "No such image": "Aquesta imatge no existeix",
     "No title": "Sense títol",
     "No topo saved offline": "No hi ha cap ressenya desada fora de línia",
     "No user with this email": {
@@ -768,9 +794,12 @@
     "North up": {
       "Map controls": "Nord a dalt"
     },
+    "Not a copy": "No és una còpia",
+    "Not an image": "No és una imatge",
     "Not available here": "No disponible aquí",
     "Not available offline:": "No disponible fora de línia:",
     "Not before:": "No abans del:",
+    "Not duplicates": "No són duplicats",
     "Not logged in": "No heu iniciat la sessió",
     "Not removed before": "No eliminat abans del",
     "Not simplified yet": "Encara no s'ha simplificat",
@@ -791,6 +820,7 @@
     "On a route, tap Add my outing: the form opens even without a network.": "En un itinerari, toqueu «Afegeix la meva sortida»: el formulari s'obre fins i tot sense xarxa.",
     "On a topo, tap the bookmark at the top: it goes to your favourites.": "En una ressenya, toqueu el marcador de la part superior: s'afegeix als vostres preferits.",
     "On iPhone, also install the app: Safari clears the data of a site not opened for 7 days.": "A l'iPhone, instal·leu també l'aplicació: Safari esborra les dades d'un lloc que no s'ha obert en 7 dies.",
+    "On the same document": "Al mateix document",
     "On this device only": "Només en aquest dispositiu",
     "On this device:": "En aquest dispositiu:",
     "On your phone, open this site in the browser, then add it to the home screen from the Share menu (iPhone) or the ⋮ menu (Android).": "Al telèfon, obriu aquest lloc al navegador i afegiu-lo a la pantalla d'inici des del menú Comparteix (iPhone) o el menú ⋮ (Android).",
@@ -807,6 +837,7 @@
     "Open a route, a waypoint or an outing, and tap the bookmark at the top.": "Obriu un itinerari, un punt de pas o una sortida i toqueu el marcador de la part superior.",
     "Open fields to deeply explain the event circumstances.": "Camps lliures per explicar el millor possible les circumstàncies de l'esdeveniment.",
     "Open fields to detail the picture's context": "Camps lliures per descriure el context de la imatge",
+    "Open in YETI": "Obre a YETI",
     "Open in a new tab": "Obre a una pestanya nova",
     "Opens an email with the context filled in": "Obre un correu electrònic amb el context ja emplenat",
     "Operator": "Operador",
@@ -830,6 +861,7 @@
     "Outings statistics": "Estadística de sortides",
     "Outings using sustainable transportation on Camptocamp": "Sortides amb mobilitat sostenible a Camptocamp",
     "Outings waiting for you to publish them:": "Sortides pendents que les publiqueu:",
+    "Outings with a GPS track and images:": "Sortides amb una traça GPS i imatges:",
     "Outings without a network": "Sortides sense xarxa",
     "Outings, with the latest conditions in the mountains": "Sortides, amb les últimes condicions a la muntanya",
     "Overlays": "Capes superposades",
@@ -955,6 +987,7 @@
     "Residual risk >1.5": "Risc residual > 1.5",
     "Resize the map": "Redimensiona el mapa",
     "Restore": "Restaura",
+    "Restore the image": "Restaura la imatge",
     "Restore this document": "Restaura aquest document",
     "Restore this version": "Restaura aquesta versió",
     "Restored:": "Restaurat:",
@@ -981,6 +1014,7 @@
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC és una base de dades mundial sobre els accidents i incidents a la muntanya. La seva vocació és de millorar la seguretat a la pràctica de l'escalada i dels esports de muntanya.",
     "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC està concebut amb ànim de bona voluntat i de posta en comú, gràcies per fomentar-lo",
     "SERAC: accidents and incidents in the mountains": "SERAC: accident i incidents a la muntanya",
+    "Same uploader": "Mateix usuari",
     "Save": "Desa",
     "Save as the pack of the day": "Desa com a paquet del dia",
     "Save offline": "Desa fora de línia",
@@ -994,6 +1028,8 @@
     "Saved on this device. Logged in, it is saved in your account.": "Desada en aquest dispositiu. Si inicieu la sessió, es desa al vostre compte.",
     "Saving offline…": "Desant fora de línia…",
     "Saving…": "Desant…",
+    "Scan again": "Torna a analitzar",
+    "Scan more": "Analitza'n més",
     "Scan with your phone": "Escanegeu-ho amb el telèfon",
     "Search": "Cerca",
     "Search ...": "Cerca ...",
@@ -1022,6 +1058,7 @@
     "Sensitive period": "Període sensible",
     "Service is inactive right now": "El servei no funciona en aquest moment",
     "Set a maximum time to reach the access point (from the selected departure time)": "Definiu un temps màxim per arribar al punt d'accés (des de l'hora de sortida seleccionada)",
+    "Set the location of the images without one to where the GPS track was when they were shot (accounting for a time zone difference of the camera)?": "Voleu situar les imatges sense posició on passava la traça GPS en el moment de fer-les (tenint en compte una diferència de fus horari de la càmera)?",
     "Settings": "Propietats",
     "Settings of this device, not synchronized with your Camptocamp account.": "Paràmetres d'aquest dispositiu, no sincronitzats amb el vostre compte de Camptocamp.",
     "Several attempts failed. Try again later, or give up the outing.": "Diversos intents han fallat. Torneu-ho a provar més tard o abandoneu la sortida.",
@@ -1042,6 +1079,10 @@
     "Show the full content of the listed results, one after the other (to read or print)": "Mostra el contingut complet dels resultats de la llista, l'un darrere l'altre (per llegir o imprimir)",
     "Show the map": "Mostra el mapa",
     "Showing:": "Es mostra:",
+    "Shown in texts: merge it instead": "Mostrada en textos: fusioneu-la en lloc seu",
+    "Shown in the text of": "Mostrada al text de",
+    "Shown in the text of a document: link it instead": "Mostrada al text d'un document: enllaceu-la en lloc seu",
+    "Shown in the text of:": "Mostrada al text de:",
     "Sign in to camptocamp today, it's free": "Registreu-vos a Camptocamp avui, és gratuït",
     "Sign in to publish your outings. They stay saved on the phone.": "Inicieu la sessió per publicar les vostres sortides. Es mantenen desades al telèfon.",
     "Simplify": "Simplifica",
@@ -1110,8 +1151,10 @@
     "The Outings and Routes overlays are temporarily unavailable": "Les capes de sortides i d'itineraris no estan disponibles temporalment",
     "The Recent feed: the latest outings and their photos.": "El fil Recent: les últimes sortides i les seves fotos.",
     "The account will not be removed. The request is kept, cancelled, and a new one can be made.": "El compte no s'eliminarà. La sol·licitud es conserva com a cancel·lada i se'n pot fer una de nova.",
+    "The action failed for the image:": "L'acció ha fallat per a la imatge:",
     "The app is installed on this device.": "L'aplicació està instal·lada en aquest dispositiu.",
     "The base size of the whole interface.": "La mida base de tota la interfície.",
+    "The broken images could not be loaded.": "No s'han pogut carregar les imatges trencades.",
     "The closed account (&quot;Compte fermé&quot;), in the topoguide and in the forum.": "El compte tancat (&quot;Compte fermé&quot;), a la guia de ressenyes i al fòrum.",
     "The current criteria will be retained": "Es mantindran els criteris actuals",
     "The date of the copy shows on each topo: orange after a week, red after a month. Conditions change: download it again before leaving. Incomplete means the network cut the download: download it again.": "La data de la còpia es mostra a cada ressenya: taronja al cap d'una setmana, vermella al cap d'un mes. Les condicions canvien: torneu-la a descarregar abans de sortir. Incompleta vol dir que la xarxa va tallar la descàrrega: torneu-la a descarregar.",
@@ -1125,11 +1168,16 @@
       "API message": "El document s'ha suprimit: primer restaureu-lo"
     },
     "The documents deleted in the last 29 days. A moderator can restore them, with their history, associations and comments.": "Els documents suprimits els últims 29 dies. Un moderador els pot restaurar, amb el seu historial, les associacions i els comentaris.",
+    "The duplicate images could not be loaded.": "No s'han pogut carregar les imatges duplicades.",
     "The feed then ignores the activities, areas and languages. The activities and areas still serve the “My preferences” button of the lists.": "Llavors el fil ignora les activitats, regions i llengües. Les activitats i regions continuen servint per al botó «Les meves preferències» de les llistes.",
     "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "El potencial de perill es calcula a partir del nivell de perill del butlletí d'allaus. Es pot ajustar seleccionant un potencial dins del rang corresponent al nivell de perill. Per exemple: el butlletí indica un perill 3 just després d'un període de perill 4. Es podrà indicar aleshores un potencial de perill de 12 en comptes de 8.",
+    "The image comes back with its history and links, as it was when deleted.": "La imatge torna amb el seu historial i els seus enllaços, tal com era quan es va suprimir.",
     "The image could not be deleted:": "No s'ha pogut suprimir la imatge:",
+    "The image was deleted with another document; both come back, as they were when deleted:": "La imatge es va suprimir amb un altre document; tots dos tornen, tal com eren quan es van suprimir:",
     "The images deleted with it are restored too:": "També es restauren les imatges suprimides amb ell:",
     "The images linked to no document, the last uploaded first. Link them to a document from their page, or delete them: a moderator can restore them during 29 days, from the deleted documents.": "Les imatges no enllaçades a cap document, primer les últimes pujades. Enllaceu-les a un document des de la seva pàgina o suprimiu-les: un moderador les pot restaurar durant 29 dies, des dels documents suprimits.",
+    "The images shown in the text of a document ([img=…] tag) that do not show: deleted, never existing, or another type of document. Those that can still be restored come first.": "Les imatges mostrades al text d'un document (etiqueta [img=…]) que no es veuen: suprimides, inexistents o un altre tipus de document. Les que encara es poden restaurar surten primer.",
+    "The images uploaded more than once: the same file (size, dimensions and date of the photo), the last uploaded first. Choose the image to keep, then merge the copies into it (their links and the texts showing them go to the kept image), delete a copy, or tell that the images are not copies.": "Les imatges pujades més d'una vegada: el mateix fitxer (mida, dimensions i data de la foto), les últimes pujades primer. Trieu la imatge que voleu conservar, després fusioneu-hi les còpies (els seus enllaços i els textos que les mostren passen a la imatge conservada), suprimiu una còpia, o indiqueu que les imatges no són còpies.",
     "The link could not be copied": "No s'ha pogut copiar l'enllaç",
     "The locale was written again since its deletion": {
       "API message": "La versió lingüística s'ha tornat a escriure des que es va suprimir"
@@ -1254,6 +1302,7 @@
     "Untitled outing": "Sortida sense títol",
     "Upload a GPS track": "Afegiu-hi una traça GPS",
     "Upload a new version": "Carrega una versió nova",
+    "Uploaded within": "Pujades en",
     "Use YETI to better analyze avalanche risk": "Fes servir YETI per analitzar millor el perill d'allaus",
     "Use current location": "Utilitza la ubicació actual",
     "Use track": "Usa el track",
@@ -1342,6 +1391,8 @@
     "Zoom in": {
       "Map controls": "Apropa"
     },
+    "Zoom in to see all the waypoints": "Apropeu per veure tots els punts de pas",
+    "Zoom in to see the waypoints": "Apropeu per veure els punts de pas",
     "Zoom out": {
       "Map controls": "Allunya"
     },
@@ -1568,6 +1619,8 @@
     "contact": "Contacte",
     "contact us.": "contacteu amb nosaltres.",
     "contributor": "contribuïdor",
+    "copies": "còpies",
+    "copies into": "còpies a",
     "coros": "Coros",
     "corridor": {
       "route_configuration_types": "corredor"
@@ -1704,6 +1757,7 @@
     "face": {
       "route_configuration_types": "cara"
     },
+    "failed:": "fallides:",
     "farm_sale": {
       "product_types": "venda directa"
     },
@@ -1875,6 +1929,8 @@
     "it": {
       "langs": "italià"
     },
+    "it is the id of this document itself": "és l'id d'aquest mateix document",
+    "it is the id of:": "és l'id de:",
     "its author": "el seu autor",
     "key_needed": {
       "custodianship_types": "clau necessària per obrir"
@@ -1943,6 +1999,7 @@
     "migmatite": {
       "rock_types": "migmatita"
     },
+    "min": "mín",
     "minutes": "minuts",
     "misc": {
       "image_categories": "varis",
@@ -2025,6 +2082,7 @@
       "autonomies": "no autònom"
     },
     "not available offline": "no disponible fora de línia",
+    "nothing to locate:": "res per localitzar:",
     "novel": {
       "book_types": "novel·la"
     },
@@ -2411,6 +2469,7 @@
     "then Add.": "i després Afegeix.",
     "this is a preview. Geometry is not simplified yet. Map interactions and export are disabled.": "és una previsualització. La geometria encara no està simplificada. Les interaccions amb el mapa i l'exportació estan desactivades.",
     "this message.": "aquest missatge.",
+    "through": "a través de",
     "time_management": "Gestió de l'horari",
     "timing": "durada",
     "title": "Títol",
@@ -2497,6 +2556,7 @@
     "wind_speed": {
       "weather_station_types": "velocitat del vent"
     },
+    "with": "amb",
     "with Alt + clic": "amb Alt + clic",
     "write a summary": "Feu aquí un resum",
     "write your comments": "Feu-hi els vostres comentaris",
