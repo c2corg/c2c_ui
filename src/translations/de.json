@@ -592,6 +592,7 @@
     "Images deleted with it, restored with it": "Mit diesem Dokument gelöschte und wiederhergestellte Bilder.",
     "Images kept, linked to no document any more:": "Bilder beibehalten, mit keinem Dokument mehr verknüpft:",
     "Images located on the GPS track of the outing:": "Bilder auf der GPS-Route der Tour lokalisiert:",
+    "Images without a GPS position of their own sit at the place of their outing. Where the outing has a GPS track with times, their place is read on it at the time they were shot.": "Bilder ohne eigene GPS-Position werden am Standort der Tour angezeigt. Wenn für die Tour eine GPS-Aufzeichnung mit Zeitangaben vorhanden ist, wird ihre Position anhand der Aufzeichnung zum Zeitpunkt der Aufnahme ermittelt.",
     "Impossible to know whether this outing was published: the connection was lost at the wrong moment. Check on Camptocamp before trying again, so as not to publish it twice.": "Es lässt sich nicht feststellen, ob diese Tour veröffentlicht wurde: Die Verbindung wurde zum ungünstigsten Zeitpunkt unterbrochen. Bitte überprüfen Sie auf Camptocamp, ob die Tour bereits veröffentlicht wurde, bevor Sie es erneut versuchen. So vermeiden Sie eine doppelte Veröffentlichung.",
     "Improve our understanding of risks": "Das Wissen über Risiken verbessern",
     "In favourites, saved offline": "In den Favoriten offline gespeichert.",
@@ -682,7 +683,10 @@
     "Loading the bulletin": "Lagebericht wird geladen",
     "Loading...": "Laden...",
     "Local file": "Lokale Datei",
+    "Locate": "lokalisieren",
+    "Locate all": "Alle lokalisieren",
     "Locate images on the GPS track": "Bilder auf der GPS-Route lokalisieren",
+    "Locate my images on GPS tracks": "Meine Bilder auf der GPS-Route lokalisieren",
     "Location / elevation / orientation": "Standort / Höhe / Ausrichtung",
     "Location computed from the GPS track of the outing": "Standort anhand der GPS-Aufzeichnung ermittelt",
     "Location refused. Allow it in the settings of the browser, then try again.": "Standort abgelehnt. Bitte erlauben Sie den Zugriff in den Browsereinstellungen und versuchen Sie es anschließend erneut.",
@@ -892,6 +896,7 @@
     "Outings statistics": "Statistik der Tourenberichte",
     "Outings using sustainable transportation on Camptocamp": "Tourenberichte mit nachhaltigen Verkehrsmitteln auf Camptocamp",
     "Outings waiting for you to publish them:": "Tourenberichte, die auf Ihre Veröffentlichung warten:",
+    "Outings with a GPS track and images:": "Routen mit einer GPS-Aufzeichnung und Bildern",
     "Outings without a network": "Tourenberichte ohne Netzwerkverbindung",
     "Outings, with the latest conditions in the mountains": "Tourenberichte mit den aktuellsten Verhältnissen in den Bergen",
     "Overlays": "Kartenebenen",
@@ -1058,6 +1063,8 @@
     "Saved on this device. Logged in, it is saved in your account.": "Auf diesem Gerät gespeichert. Wenn Sie angemeldet sind, wird sie in Ihrem Konto gespeichert.",
     "Saving offline…": "Wird offline gespeichert …",
     "Saving…": "Wird gespeichert …",
+    "Scan again": "Erneut scannen",
+    "Scan more": "Mehr scannen",
     "Scan with your phone": "Mit dem Telefon scannen",
     "Search": "Suchen",
     "Search ...": "Suchen...",
@@ -1817,6 +1824,7 @@
     "face": {
       "route_configuration_types": "Wand"
     },
+    "failed:": "fehgeschlagen:",
     "farm_sale": {
       "product_types": "Direktvertrieb"
     },
@@ -2164,6 +2172,7 @@
       "autonomies": "nicht selbstständig"
     },
     "not available offline": "Offline nicht verfügbar",
+    "nothing to locate:": "Nichts zu lokalisieren",
     "novel": {
       "book_types": "Roman"
     },
