@@ -177,6 +177,7 @@ describe('ModerationView', () => {
       'Deleted documents',
       'Orphan images',
       'Broken images',
+      'Duplicate images',
       'Accounts',
       'Edits to check',
     ]);
@@ -193,6 +194,7 @@ describe('ModerationView', () => {
     expect(wrapper.findComponent(DeletedDocuments).exists()).toBe(false);
     expect(wrapper.findComponent(AccountRemovals).exists()).toBe(true);
     expect(wrapper.findAll('.tabs a.is-disabled').map((a) => a.attributes('title'))).toEqual([
+      'For the moderators of the topoguide',
       'For the moderators of the topoguide',
       'For the moderators of the topoguide',
       'For the moderators of the topoguide',

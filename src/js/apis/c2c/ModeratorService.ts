@@ -4,6 +4,8 @@ import {
   accountRemovalsPage,
   deletedDocumentDetails,
   deletedDocumentsPage,
+  dismissedDuplicates,
+  duplicateImagesPage,
   imagesOfDeletion,
   brokenEmbedsPage,
   orphanImagesPage,
@@ -82,6 +84,24 @@ export default class ModeratorService {
    */
   getBrokenEmbeds(offset = 0, limit = 30) {
     return this.api.getValidated('/images/broken-embeds', brokenEmbedsPage, { params: { offset, limit } });
+  }
+
+  /*
+   * Images uploaded more than once: merged with POST /documents/merge, deleted, or dismissed
+   */
+  getDuplicateImages(offset = 0, limit = 30, sameDocument = false) {
+    return this.api.getValidated('/images/duplicates', duplicateImagesPage, {
+      params: { offset, limit, same_document: sameDocument || undefined },
+    });
+  }
+
+  // without `against`: all the images of `imageIds` are not copies of each other. With `against`: each image of
+  // `imageIds` is not a copy of those of `against`
+  dismissDuplicateImages(imageIds: DocumentId[], against?: DocumentId[]) {
+    return this.api.postValidated('/images/duplicates/dismiss', dismissedDuplicates, {
+      image_ids: imageIds,
+      ...(against ? { against } : {}),
+    });
   }
 
   /*
