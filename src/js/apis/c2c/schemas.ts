@@ -599,6 +599,16 @@ export const restoreResult = z.object({
 
 export type RestoreResult = z.input<typeof restoreResult>;
 
+// A document showing an image in the texts of some of its locales ([img=ID] tag)
+const embeddingDocument = z.object({
+  document_id: z.number(),
+  document_type: z.string(),
+  title: z.nullable(z.string()),
+  langs: z.array(z.string()),
+});
+
+export type EmbeddingDocument = z.input<typeof embeddingDocument>;
+
 // GET /images/orphans: the images linked to no document, the last created first (moderators)
 export const ORPHAN_IMAGE_TYPES = ['collaborative', 'personal', 'copyright'] as const;
 
@@ -619,6 +629,8 @@ const orphanImage = z.object({
       at: z.string(),
     })
   ),
+  // the documents showing it in their texts: it is used, to link again rather than delete (optional: older API)
+  embedded_in: z.optional(z.array(embeddingDocument)),
 });
 
 export type OrphanImage = z.input<typeof orphanImage>;
@@ -627,6 +639,85 @@ export const orphanImagesPage = z.object({
   total: z.number(),
   images: z.array(orphanImage),
 });
+
+// GET /images/broken-embeds: the images shown in the texts of documents that do not show (moderators). Those that
+// can still be restored first, with the deleted entry bringing them back (the image, or the document it was deleted
+// with)
+export const BROKEN_EMBED_REASONS = ['deleted', 'missing', 'not_image'] as const;
+
+const brokenEmbed = z.object({
+  document_id: z.number(),
+  document_type: z.string(),
+  title: z.nullable(z.string()),
+  langs: z.array(z.string()),
+  image_id: z.number(),
+  reason: z.enum(BROKEN_EMBED_REASONS),
+  // the type of the document of this id, when it is not an image
+  image_document_type: z.nullable(z.string()),
+  image_document_title: z.optional(z.nullable(z.string())),
+  deleted: z.nullable(
+    z.object({
+      entry_id: z.number(),
+      document_id: z.number(),
+      document_type: z.string(),
+      deleted_at: z.string(),
+      expires_at: z.string(),
+      by: z.nullable(deletedDocumentUser),
+    })
+  ),
+});
+
+export type BrokenEmbed = z.input<typeof brokenEmbed>;
+
+export const brokenEmbedsPage = z.object({
+  total: z.number(),
+  embeds: z.array(brokenEmbed),
+});
+
+// GET /images/duplicates: the sets of images with the same file (size, dimensions, EXIF date), the last uploaded
+// first (moderators)
+const duplicateImageLink = z.object({
+  document_id: z.number(),
+  document_type: z.string(),
+  title: z.nullable(z.string()),
+});
+
+const duplicateImage = z.object({
+  document_id: z.number(),
+  filename: z.string(),
+  image_type: z.nullable(z.enum(ORPHAN_IMAGE_TYPES)),
+  title: z.nullable(z.string()),
+  file_size: z.nullable(z.number()),
+  width: z.nullable(z.number()),
+  height: z.nullable(z.number()),
+  date_time: z.nullable(z.string()),
+  camera_name: z.nullable(z.string()),
+  created_at: z.nullable(z.string()),
+  // who uploaded it
+  author: z.nullable(deletedDocumentUser),
+  // the documents it is linked to
+  documents: z.array(duplicateImageLink),
+  // the texts showing it with an [img=ID] tag, also through an image merged into it (`image_id`): deleting it
+  // breaks them, merging it keeps them
+  embedded_in: z.array(z.extend(duplicateImageLink, { lang: z.string(), image_id: z.number() })),
+});
+
+export type DuplicateImage = z.input<typeof duplicateImage>;
+
+const duplicateImageSet = z.object({
+  // two of the images are linked to the same document
+  same_document: z.boolean(),
+  images: z.array(duplicateImage),
+});
+
+export type DuplicateImageSet = z.input<typeof duplicateImageSet>;
+
+export const duplicateImagesPage = z.object({
+  total: z.number(),
+  sets: z.array(duplicateImageSet),
+});
+
+export const dismissedDuplicates = z.object({ dismissed: z.number() });
 
 // GET /documents/delete/{id}/images: what deleting a document does to its images, asked before deleting it. The
 // personal images of its author linked to it only are deleted with it; the other images linked to it only stay,
