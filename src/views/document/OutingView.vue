@@ -13,6 +13,7 @@
     <div v-if="document" class="columns is-multiline is-block-print">
       <div class="column is-3 no-print">
         <map-box :document="document" />
+        <avalanche-box :document="document" v-if="!$screen.isMobile" />
         <tool-box :document="document" v-if="!$screen.isMobile" />
       </div>
 
@@ -104,6 +105,8 @@
           <div style="clear: both" />
         </div>
 
+        <avalanche-box :document="document" v-if="$screen.isMobile" />
+
         <tool-box :document="document" v-if="$screen.isMobile" />
 
         <comments-box :document="document" />
@@ -117,6 +120,7 @@
 import DocumentPrintLicense from './utils/DocumentPrintLicense.vue';
 import DocumentViewHeader from './utils/DocumentViewHeader.vue';
 import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo.vue';
+import AvalancheBox from './utils/boxes/AvalancheBox.vue';
 import CommentsBox from './utils/boxes/CommentsBox.vue';
 import ImagesBox from './utils/boxes/ImagesBox.vue';
 import MapBox from './utils/boxes/MapBox.vue';

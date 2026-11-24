@@ -108,6 +108,21 @@ class AvalancheBulletinService {
       .then((response) => response.data.bulletins);
   }
 
+  /**
+   * The bulletins of an EAWS region for a day (YYYY-MM-DD, the day they are valid for): none when the API has nothing
+   * stored for it (404)
+   */
+  getBulletinsOfDay(regionId: string, day: string, lang?: string, signal?: AbortSignal) {
+    const params = lang && API_LANGS.includes(lang) ? { lang } : {};
+    return this.axios
+      .get<AvalancheBulletins>(`/avalanche-bulletins/regions/${regionId}/${day}`, { params, signal })
+      .then((response) => response.data.bulletins)
+      .catch((error: unknown) => {
+        if (axios.isAxiosError(error) && error.response?.status === 404) return [];
+        throw error;
+      });
+  }
+
   /** The official PDF of a French massif, through the API: the key of Météo-France stays on the server */
   pdfUrl(regionId: string) {
     return `${config.urls.api}/avalanche-bulletins/regions/${regionId}/latest/pdf`;

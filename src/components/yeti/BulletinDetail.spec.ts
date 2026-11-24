@@ -57,4 +57,10 @@ describe('BulletinDetail', () => {
     expect(mountDetail({ bulletins: null }).text()).toContain('Loading the bulletin');
     expect(mountDetail({ bulletins: null, failed: true }).text()).toContain('The bulletin could not be loaded');
   });
+
+  it('flags an expired bulletin, not the one of a past day', () => {
+    const old = { ...bulletin, validTime: { endTime: '2020-01-02T16:00:00Z' } };
+    expect(mountDetail({ bulletins: [old] }).text()).toContain('Validity date expired');
+    expect(mountDetail({ bulletins: [old], historical: true }).text()).not.toContain('Validity date expired');
+  });
 });

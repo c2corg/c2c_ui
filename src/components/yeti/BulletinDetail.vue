@@ -227,6 +227,11 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  // the bulletin of a past day (an outing): expired by nature, not flagged
+  historical: {
+    type: Boolean,
+    default: false,
+  },
   // a digest for a narrow column: the danger and the problems, the rest on demand (more)
   compact: {
     type: Boolean,
@@ -269,7 +274,7 @@ const officialUrl = computed(() =>
 );
 const expired = computed(() => {
   const end = bulletin.value?.validTime?.endTime;
-  return !!end && Date.now() > new Date(end).getTime();
+  return !props.historical && !!end && Date.now() > new Date(end).getTime();
 });
 
 const problemNames = computed<Record<string, string>>(() => ({

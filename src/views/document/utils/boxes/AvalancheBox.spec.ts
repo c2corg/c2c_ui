@@ -51,14 +51,15 @@ const bulletin = {
   ],
 };
 
-const mountBox = async (isMobile = false) => {
+const mountBox = async (isMobile = false, document: object = route, fetcher = () => getLatest) => {
   const wrapper = mount(AvalancheBox, {
-    props: { document: route as never },
+    props: { document: document as never },
     global: {
       config: {
         globalProperties: {
           $gettext: (text: string) => text,
           $language: { current: 'fr' },
+          $dateUtils: { toLocalizedString: (date: Date) => date.toISOString().slice(0, 10) },
           $screen: { isMobile },
         } as never,
       },
@@ -77,12 +78,13 @@ const mountBox = async (isMobile = false) => {
     },
   });
   // the zones, then the bulletins once the browser is idle
-  await vi.waitFor(() => expect(getLatest).toHaveBeenCalled());
+  await vi.waitFor(() => expect(fetcher()).toHaveBeenCalled());
   await flushPromises();
   return wrapper;
 };
 
 let getLatest: ReturnType<typeof vi.fn>;
+let getOfDay: ReturnType<typeof vi.fn>;
 
 describe('AvalancheBox', () => {
   beforeEach(() => {
@@ -91,6 +93,7 @@ describe('AvalancheBox', () => {
     } as never);
     vi.spyOn(yetiService, 'bra').mockResolvedValue({ data: { zones: [summary] } } as never);
     getLatest = vi.spyOn(avalancheBulletins, 'getLatestBulletins').mockResolvedValue([bulletin] as never) as never;
+    getOfDay = vi.spyOn(avalancheBulletins, 'getBulletinsOfDay').mockResolvedValue([bulletin] as never) as never;
   });
   afterEach(() => {
     vi.useRealTimers();
@@ -188,5 +191,62 @@ describe('AvalancheBox', () => {
 
     await wrapper.find('.bulletin-toggle').trigger('click');
     expect(wrapper.find('.bulletin-panel .bulletin-detail').attributes('data-compact')).toBe('false');
+  });
+
+  describe('on an outing', () => {
+    const outing = {
+      document_id: 2,
+      type: 'o',
+      activities: ['skitouring'],
+      date_start: '2026-02-10',
+      date_end: '2026-02-11',
+      elevation_max: 2000,
+      geometry: route.geometry,
+      associations: { routes: [{ document_id: 1, elevation_max: 3000, geometry: route.geometry }] },
+    };
+    const mountOuting = (document: object = outing) => mountBox(false, document, () => getOfDay);
+
+    it('fetches the bulletin of its first day, and gives the danger at its elevation', async () => {
+      const wrapper = await mountOuting();
+
+      expect(getOfDay).toHaveBeenCalledWith('FR-03', '2026-02-10', 'fr', expect.any(AbortSignal));
+      expect(getLatest).not.toHaveBeenCalled();
+      // 2 at 2000 m (the route goes up to 3000 m), not the 4 of the summary of today
+      expect(wrapper.find('.icon-bra-level').text()).toBe('2');
+      expect(wrapper.text()).toContain('2026-02-10');
+      // not today: no official bulletin (the PDF is the latest), YETI on the region without a route
+      expect(wrapper.find('a[href]').exists()).toBe(false);
+      expect(JSON.parse(wrapper.find('.router-link').attributes('data-to')!)).toMatchObject({
+        params: {},
+        query: { bulletin: 'FR-03' },
+      });
+    });
+
+    it('takes the elevation of its route without one, and its regions from the routes without geometry', async () => {
+      const wrapper = await mountOuting({ ...outing, elevation_max: null, geometry: null });
+      expect(wrapper.find('.icon-bra-level').text()).toBe('3');
+    });
+
+    it('keeps the official bulletin for today', async () => {
+      const today = new Date().toISOString().slice(0, 10);
+      const wrapper = await mountOuting({ ...outing, date_start: today });
+      expect(wrapper.find('a[href]').attributes('href')).toMatch(/FR-03\/latest\/pdf$/);
+    });
+
+    it('says when no bulletin is stored for the day', async () => {
+      getOfDay.mockResolvedValue([]);
+      const wrapper = await mountOuting();
+      expect(wrapper.text()).toContain('No avalanche bulletin stored for this day');
+      expect(wrapper.find('.icon-bra-level').exists()).toBe(false);
+      expect(wrapper.find('.bulletin-toggle').exists()).toBe(false);
+    });
+
+    it('is not shown for other activities', async () => {
+      const wrapper = mount(AvalancheBox, {
+        props: { document: { ...outing, activities: ['hiking'] } as never },
+        global: { config: { globalProperties: { $gettext: (t: string) => t, $language: { current: 'fr' } } as never } },
+      });
+      expect(wrapper.find('.avalanche-box').exists()).toBe(false);
+    });
   });
 });
