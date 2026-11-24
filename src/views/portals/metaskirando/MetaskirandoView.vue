@@ -9,7 +9,19 @@
       <p class="subtitle is-6">{{ $gettext('Outings from other sites') }}</p>
 
       <div class="filters">
-        <input-document v-model="areas" document-type="area" multiple @update:model-value="onFilter" />
+        <input-document
+          v-model="areas"
+          document-type="area"
+          multiple
+          clear-input-on-toggle
+          @update:model-value="onFilter"
+        />
+        <div v-if="areas.length" class="tags selected-areas" data-test="areas">
+          <span v-for="area of areas" :key="area.document_id" class="tag is-medium">
+            <document-title :document="area" />
+            <button type="button" class="delete is-small" :aria-label="$gettext('Remove')" @click="removeArea(area)" />
+          </span>
+        </div>
         <input-activity v-model="activities" @update:model-value="onFilter" />
       </div>
 
@@ -36,7 +48,10 @@
       <hr />
       <ul class="sources is-size-7" data-test="sources">
         <li v-for="source of store.sources" :key="source.source" :class="{ 'has-text-danger': !isHealthy(source) }">
-          <strong>{{ source.site_name ?? source.source }}</strong>:
+          <a v-if="site(source).url" :href="site(source).url" target="_blank" rel="noopener external">
+            <strong>{{ site(source).name }}</strong>
+          </a>
+          <strong v-else>{{ site(source).name }}</strong>:
           <template v-if="isHealthy(source) && source.last_success_at">
             {{ $gettext('Last updated {time}').replace('{time}', $dateUtils.timeAgo(source.last_success_at)) }}
           </template>
@@ -71,6 +86,17 @@ const activities = ref<string[]>([]);
 
 // a source that answered recently enough to be shown
 const isHealthy = (source: PartnerSourceHealth) => ['ok', 'degraded'].includes(source.status);
+
+// the name of a source, linked to its site, from the list of sources; the id when that did not load
+function site(source: PartnerSourceHealth) {
+  const info = store.sourceSites[source.source];
+  return { name: info?.site_name ?? source.site_name ?? source.source, url: info?.site_url };
+}
+
+function removeArea(area: C2cDocument) {
+  areas.value = areas.value.filter((a) => a.document_id !== area.document_id);
+  return onFilter();
+}
 
 function reload() {
   return store.load($language?.current);
@@ -120,12 +146,19 @@ watch(
   }
 );
 
-onMounted(syncFromRoute);
+onMounted(() => {
+  store.loadSources();
+  return syncFromRoute();
+});
 </script>
 
 <style scoped>
 .filters {
   margin-bottom: var(--c2c-size-6);
+}
+
+.selected-areas {
+  margin-top: var(--c2c-size-7);
 }
 
 .outing-date-header {

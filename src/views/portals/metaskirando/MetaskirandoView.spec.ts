@@ -8,7 +8,8 @@ import { c2cOuting, partnerOuting, sources } from './fixtures';
 import { usePartnerOutingsStore } from '@/stores/partner-outings';
 
 const getAll = vi.hoisted(() => vi.fn());
-vi.mock('@/js/apis/partner-outings-service', () => ({ default: { getAll } }));
+const getSources = vi.hoisted(() => vi.fn());
+vi.mock('@/js/apis/partner-outings-service', () => ({ default: { getAll, getSources } }));
 vi.mock('@/js/apis/c2c', () => ({
   default: {
     area: { get: vi.fn((id: number) => Promise.resolve({ data: { document_id: id, type: 'a', locales: [] } })) },
@@ -47,6 +48,17 @@ const mountView = () =>
 beforeEach(() => {
   getAll.mockReset();
   getAll.mockResolvedValue(answer());
+  getSources.mockReset();
+  getSources.mockResolvedValue([
+    {
+      source: 'gulliver',
+      status: 'ok',
+      last_success_at: null,
+      site_name: 'gulliver.it',
+      site_url: 'https://www.gulliver.it',
+    },
+    { source: 'skitour', status: 'ok', last_success_at: null, site_name: 'skitour.fr', site_url: 'https://skitour.fr' },
+  ]);
   replace.mockReset();
   route.query = {};
 });
@@ -95,7 +107,30 @@ describe('MetaskirandoView', () => {
     const wrapper = mountView();
     await flushPromises();
     const lines = wrapper.findAll('[data-test="sources"] li').map((li) => li.text().replace(/\s+/g, ' '));
-    expect(lines).toEqual(['Gulliver: Last updated 3 hours ago', 'Skitour: Source unavailable']);
+    expect(lines).toEqual(['gulliver.it: Last updated 3 hours ago', 'skitour.fr: Source unavailable']);
+  });
+
+  it('names the sources from the list of sources, linked to their site', async () => {
+    const wrapper = mountView();
+    await flushPromises();
+    const links = wrapper.findAll('[data-test="sources"] a');
+    expect(links.map((a) => [a.text(), a.attributes('href')])).toEqual([
+      ['gulliver.it', 'https://www.gulliver.it'],
+      ['skitour.fr', 'https://skitour.fr'],
+    ]);
+  });
+
+  it('falls back to the ids of the sources when the list of sources does not load', async () => {
+    getSources.mockRejectedValue(new Error('boom'));
+    usePartnerOutingsStore().sourceSites = {};
+    getAll.mockResolvedValue({ ...answer(), sources: sources.map((source) => ({ ...source, site_name: undefined })) });
+    const wrapper = mountView();
+    await flushPromises();
+    expect(wrapper.findAll('[data-test="sources"] a')).toHaveLength(0);
+    expect(wrapper.findAll('[data-test="sources"] li').map((li) => li.text().split(':')[0])).toEqual([
+      'gulliver',
+      'skitour',
+    ]);
   });
 
   it('treats a degraded source as available, and a blocked one as unavailable', async () => {
@@ -109,7 +144,7 @@ describe('MetaskirandoView', () => {
     const wrapper = mountView();
     await flushPromises();
     const lines = wrapper.findAll('[data-test="sources"] li').map((li) => li.text().replace(/\s+/g, ' '));
-    expect(lines).toEqual(['Gulliver: Last updated 3 hours ago', 'Skitour: Source unavailable']);
+    expect(lines).toEqual(['gulliver.it: Last updated 3 hours ago', 'skitour.fr: Source unavailable']);
   });
 
   it('puts a changed filter in the route query and loads again', async () => {
@@ -133,5 +168,20 @@ describe('MetaskirandoView', () => {
     wrapper.findComponent({ name: 'InputDocument' }).vm.$emit('update:modelValue', [{ document_id: 14 }]);
     await flushPromises();
     expect(replace).toHaveBeenCalledWith({ query: { a: '14' } });
+  });
+
+  it('shows the selected areas, and removes one from the filter', async () => {
+    const wrapper = mountView();
+    await flushPromises();
+    wrapper
+      .findComponent({ name: 'InputDocument' })
+      .vm.$emit('update:modelValue', [{ document_id: 14 }, { document_id: 15 }]);
+    await flushPromises();
+    expect(wrapper.findAll('[data-test="areas"] .tag')).toHaveLength(2);
+
+    await wrapper.find('[data-test="areas"] .tag .delete').trigger('click');
+    await flushPromises();
+    expect(wrapper.findAll('[data-test="areas"] .tag')).toHaveLength(1);
+    expect(replace).toHaveBeenLastCalledWith({ query: { a: '15' } });
   });
 });
