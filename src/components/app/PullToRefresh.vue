@@ -84,6 +84,12 @@ async function onTouchEnd() {
 }
 
 // the only way to refresh the installed app: kept, without its arrow turning
+// a touch the system took back (a scroll, a call): no refresh
+function onTouchCancel() {
+  pulling.value = false;
+  pullY.value = 0;
+}
+
 const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
 onMounted(() => {
@@ -92,7 +98,7 @@ onMounted(() => {
   window.addEventListener('touchstart', onTouchStart, { passive: true });
   window.addEventListener('touchmove', onTouchMove, { passive: true });
   window.addEventListener('touchend', onTouchEnd);
-  window.addEventListener('touchcancel', onTouchEnd);
+  window.addEventListener('touchcancel', onTouchCancel);
 });
 
 onBeforeUnmount(() => {
@@ -100,7 +106,7 @@ onBeforeUnmount(() => {
   window.removeEventListener('touchstart', onTouchStart);
   window.removeEventListener('touchmove', onTouchMove);
   window.removeEventListener('touchend', onTouchEnd);
-  window.removeEventListener('touchcancel', onTouchEnd);
+  window.removeEventListener('touchcancel', onTouchCancel);
 });
 </script>
 

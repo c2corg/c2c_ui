@@ -76,6 +76,21 @@ describe('PullToRefresh', () => {
     expect(refresh).not.toHaveBeenCalled();
   });
 
+  it('does not refresh a pull the system cancels', async () => {
+    const reload = vi.fn();
+    vi.stubGlobal('location', { ...window.location, reload });
+    const arrow = mountOnPage(PullToRefresh);
+    const element = content('card');
+
+    touch(element, 'touchstart', 10);
+    touch(element, 'touchmove', 110);
+    touch(element, 'touchcancel');
+    await flushPromises();
+
+    expect(reload).not.toHaveBeenCalled();
+    expect(arrow.classes()).not.toContain('is-pulling');
+  });
+
   it('turns the arrow until the page is refreshed', async () => {
     let done!: () => void;
     mountOnPage(page(() => new Promise<void>((resolve) => (done = resolve))));
