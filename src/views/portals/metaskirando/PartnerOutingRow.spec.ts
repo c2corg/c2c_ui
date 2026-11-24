@@ -45,9 +45,9 @@ describe('PartnerOutingRow', () => {
     expect(wrapper.find('.outing-credit').text()).toBe('By Marco on Gulliver');
   });
 
-  it('credits the site when the author is unknown', () => {
+  it('credits the site only when the author is unknown', () => {
     const wrapper = mountRow(partnerOuting({ author: null }));
-    expect(wrapper.find('.outing-credit').text()).toBe('By Gulliver on Gulliver');
+    expect(wrapper.find('.outing-credit').text()).toBe('On Gulliver');
   });
 
   it('shows the rating as the source writes it, else the range of ski ratings', () => {
