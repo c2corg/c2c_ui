@@ -19,16 +19,27 @@ mcp.transifex.ai
 
 # avalanche bulletins, fetched by the API (c2corg_api/avalanche_bulletins/)
 public-api.meteofrance.fr
+portail-api.meteofrance.fr
+rwg.meteofrance.com
 static.avalanche.report
 static.lauegi.report
 static.lawinen-warnung.eu
 bollettini.aineva.it
 aws.slf.ch
 
+# outing reports and snow conditions of other sites (the sources of metaskirando): scraped HTML, Atom feed
+skitourenportal.eu
+www.gipfelbuch.ch
+www.bivouak.net
+www.volopress.net
+www.gulliver.it
+on-ice.it
+www.data-avalanche.org
+
 # public transport (Navitia), called by the API (c2corg_api/views/navitia.py)
 api.navitia.io
 
-# Yeti: BRA, and the WMS layers (routes, protected areas)
+# Yeti: BRA, station list, and the WMS layers (routes, protected areas)
 api.ensg.eu
 
 # map base layers (src/components/map/map-layers.ts, src/components/yeti/map-layers/)
