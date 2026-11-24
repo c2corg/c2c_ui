@@ -1,20 +1,24 @@
 <template>
   <!-- the arrow that follows the finger pulling the top of the page, then turns while the page refreshes -->
   <div class="pull-to-refresh" :class="{ 'is-pulling': pulling }" :style="indicatorStyle" aria-hidden="true">
-    <fa-icon :icon="refreshing ? 'rotate' : 'arrow-down'" :spin="refreshing" :class="{ 'is-ready': ready }" />
+    <fa-icon
+      :icon="refreshing ? 'rotate' : 'arrow-down'"
+      :spin="refreshing && !reducedMotion"
+      :class="{ 'is-ready': ready }"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
-import { canPullRefresh, pullRefresh } from '@/js/composables/pull-refresh';
+import { pullRefresh } from '@/js/composables/pull-refresh';
 
 // how far to pull to refresh, and how far the arrow follows
 const THRESHOLD = 70;
 const MAX_PULL = 110;
-// a refresh that takes longer: the arrow goes, the page goes on loading
-const MAX_SPIN_MS = 4000;
+// the arrow turns until the page is refreshed, as the browser's does; a refresh stuck longer than that leaves it
+const MAX_SPIN_MS = 30000;
 
 const pulling = ref(false);
 const refreshing = ref(false);
@@ -41,7 +45,6 @@ const atTop = () => (document.scrollingElement?.scrollTop ?? window.scrollY) <= 
 function onTouchStart(event: TouchEvent) {
   if (
     refreshing.value ||
-    !canPullRefresh() ||
     !atTop() ||
     event.touches.length !== 1 ||
     (event.target instanceof Element && event.target.closest(NO_PULL_SELECTOR))
@@ -80,23 +83,30 @@ async function onTouchEnd() {
   refreshing.value = false;
 }
 
+// the only way to refresh the installed app: kept, without its arrow turning
+// a touch the system took back (a scroll, a call): no refresh
+function onTouchCancel() {
+  pulling.value = false;
+  pullY.value = 0;
+}
+
 const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
 onMounted(() => {
-  if (reducedMotion) {
-    return;
-  }
+  // the top of the page pulled down shows the arrow, it does not stretch the page
+  document.documentElement.style.overscrollBehaviorY = 'contain';
   window.addEventListener('touchstart', onTouchStart, { passive: true });
   window.addEventListener('touchmove', onTouchMove, { passive: true });
   window.addEventListener('touchend', onTouchEnd);
-  window.addEventListener('touchcancel', onTouchEnd);
+  window.addEventListener('touchcancel', onTouchCancel);
 });
 
 onBeforeUnmount(() => {
+  document.documentElement.style.overscrollBehaviorY = '';
   window.removeEventListener('touchstart', onTouchStart);
   window.removeEventListener('touchmove', onTouchMove);
   window.removeEventListener('touchend', onTouchEnd);
-  window.removeEventListener('touchcancel', onTouchEnd);
+  window.removeEventListener('touchcancel', onTouchCancel);
 });
 </script>
 

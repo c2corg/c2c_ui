@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { defineComponent, h } from 'vue';
 
 import { pullRefresh, usePullRefresh } from './pull-refresh';
@@ -12,20 +12,25 @@ const page = (refresh: () => unknown) =>
     },
   });
 
+afterEach(() => vi.unstubAllGlobals());
+
 describe('pull to refresh', () => {
-  it('refreshes the pages shown, even when one fails, and only them', async () => {
+  it('refreshes the pages shown, even when one fails, and reloads a page that refreshes nothing', async () => {
     const feed = vi.fn(async () => {});
     const broken = vi.fn(async () => Promise.reject(new Error('network')));
     const shown = mount(page(feed));
     const other = mount(page(broken));
 
-    expect(await pullRefresh()).toBe(true);
+    await pullRefresh();
     expect(feed).toHaveBeenCalledTimes(1);
     expect(broken).toHaveBeenCalledTimes(1);
 
     shown.unmount();
     other.unmount();
-    expect(await pullRefresh()).toBe(false);
+    const reload = vi.fn();
+    vi.stubGlobal('location', { ...window.location, reload });
+    void pullRefresh();
+    expect(reload).toHaveBeenCalledTimes(1);
     expect(feed).toHaveBeenCalledTimes(1);
   });
 });
