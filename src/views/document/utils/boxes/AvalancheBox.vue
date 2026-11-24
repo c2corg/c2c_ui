@@ -76,7 +76,7 @@
         </a>
       </div>
     </template>
-    <div class="box-link">
+    <div v-if="showYeti" class="box-link">
       <icon-yeti fixed-width />
       <router-link :to="yetiUrl"><span v-translate>Use YETI to better analyze avalanche risk</span></router-link>
     </div>
@@ -102,7 +102,7 @@
           <fa-icon icon="file-lines" />
           <span class="ml-1" v-translate>Full bulletin</span>
         </a>
-        <router-link :to="yetiUrl" class="button is-small">
+        <router-link v-if="showYeti" :to="yetiUrl" class="button is-small">
           <icon-yeti fixed-width />
           <span class="ml-1" v-translate>Open in YETI</span>
         </router-link>
@@ -184,6 +184,9 @@ function officialUrl(region: Region) {
   const zoneUrl = region.bra.urls[0]?.url;
   return website ?? (zoneUrl && !zoneUrl.includes('showbra.php') ? zoneUrl : undefined);
 }
+
+// YETI shows the latest bulletin: not for the day of an outing in the past
+const showYeti = computed(() => !isOuting.value || isToday.value);
 
 // YETI on the route (not on an outing), its bulletin tab on the most dangerous region
 const yetiUrl = computed(() => ({

@@ -214,12 +214,9 @@ describe('AvalancheBox', () => {
       // 2 at 2000 m (the route goes up to 3000 m), not the 4 of the summary of today
       expect(wrapper.find('.icon-bra-level').text()).toBe('2');
       expect(wrapper.text()).toContain('2026-02-10');
-      // not today: no official bulletin (the PDF is the latest), YETI on the region without a route
+      // not today: no official bulletin (the PDF is the latest), nor YETI (it shows the latest too)
       expect(wrapper.find('a[href]').exists()).toBe(false);
-      expect(JSON.parse(wrapper.find('.router-link').attributes('data-to')!)).toMatchObject({
-        params: {},
-        query: { bulletin: 'FR-03' },
-      });
+      expect(wrapper.find('.router-link').exists()).toBe(false);
     });
 
     it('takes the elevation of its route without one, and its regions from the routes without geometry', async () => {
@@ -231,6 +228,11 @@ describe('AvalancheBox', () => {
       const today = new Date().toISOString().slice(0, 10);
       const wrapper = await mountOuting({ ...outing, date_start: today });
       expect(wrapper.find('a[href]').attributes('href')).toMatch(/FR-03\/latest\/pdf$/);
+      // YETI on the region, without a route
+      expect(JSON.parse(wrapper.find('.router-link').attributes('data-to')!)).toMatchObject({
+        params: {},
+        query: { bulletin: 'FR-03' },
+      });
     });
 
     it('says when no bulletin is stored for the day', async () => {
