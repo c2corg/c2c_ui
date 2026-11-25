@@ -13,7 +13,12 @@
         <template v-for="(source, i) in sources" :key="source.vendor">
           <template v-if="i > 0">&#32;·</template>
           <a v-if="vendorUrl(source)" :href="vendorUrl(source)">{{ $gettext(source.vendor) }}</a>
-          <template v-else>{{ $gettext(source.vendor) }}</template>
+          <template v-else>{{ $gettext(source.vendor) }}</template><span
+            v-if="source.deviceName"
+            class="activity-device-name"
+            :title="source.deviceName"
+            >&#32;({{ source.deviceName }})</span
+          >
         </template>
       </div>
       <div class="is-flex is-justify-content-space-between">
@@ -39,6 +44,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
+import { distinctDeviceName } from './activity-device';
+
 import type { ActivitySource } from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
@@ -50,7 +57,7 @@ const props = defineProps({
   },
 });
 
-const { $dateUtils, $documentUtils } = useGlobalProperties();
+const { $dateUtils, $documentUtils, $gettext } = useGlobalProperties();
 
 const hover = ref(false);
 const miniaturesBaseUrl = config.urls.miniatures;
@@ -62,7 +69,12 @@ const heightDiffUp = computed(() => $documentUtils.heightDiffUpWithUnit(props.ac
 const length = computed(() => $documentUtils.lengthWithUnit(props.activity.length));
 
 // the vendors that have this outing (tracking before 3.4.0 sends none)
-const sources = computed<ActivitySource[]>(() => props.activity.sources ?? [props.activity as ActivitySource]);
+const sources = computed<ActivitySource[]>(() =>
+  (props.activity.sources ?? [props.activity as ActivitySource]).map((source) => ({
+    ...source,
+    deviceName: distinctDeviceName(source.deviceName, source.vendor, $gettext(source.vendor)),
+  }))
+);
 
 const vendorUrl = ({ vendor, vendorId }: ActivitySource): string | undefined => {
   switch (vendor) {
@@ -107,6 +119,15 @@ a {
 
 .activity-bottom {
   bottom: 0;
+}
+
+.activity-device-name {
+  display: inline-block;
+  max-width: 12em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+  white-space: nowrap;
 }
 
 .stat {

@@ -68,4 +68,37 @@ describe('TrackingDeviceActivity', () => {
 
     expect(wrapper.find('.activity-sources').text()).toBe('strava · coros');
   });
+
+  it('shows distinct device names without repeating a vendor name', () => {
+    const wrapper = mount(TrackingDeviceActivity, {
+      props: {
+        activity: {
+          ...activity,
+          sources: [
+            { id: 2, vendor: 'garmin', vendorId: '24919339767', deviceName: 'Garmin Forerunner 965' },
+            { id: 3, vendor: 'strava', vendorId: '20806619230', deviceName: 'STRAVA' },
+          ],
+        },
+      },
+      global,
+    });
+
+    expect(wrapper.find('.activity-sources').text()).toBe('garmin (Garmin Forerunner 965) · strava');
+  });
+
+  it('keeps the full device name available when the card label is truncated', () => {
+    const deviceName = 'Garmin Forerunner 965 with an exceptionally long model description';
+    const wrapper = mount(TrackingDeviceActivity, {
+      props: {
+        activity: {
+          ...activity,
+          sources: [{ id: 2, vendor: 'garmin', vendorId: '24919339767', deviceName }],
+        },
+      },
+      global,
+    });
+
+    const deviceLabel = wrapper.find('.activity-device-name');
+    expect(deviceLabel.attributes('title')).toBe(deviceName);
+  });
 });

@@ -13,6 +13,7 @@ export type Activity = {
   vendorId: string;
   date: string;
   name?: string;
+  deviceName?: string;
   // the activity type, translated per language
   type: Record<string, string | undefined>;
   length?: number;
@@ -25,7 +26,7 @@ export type Activity = {
   sources?: ActivitySource[];
 };
 
-export type ActivitySource = { id: number; vendor: Vendor; vendorId: string };
+export type ActivitySource = { id: number; vendor: Vendor; vendorId: string; deviceName?: string };
 
 export type Geometry = { type: 'LineString'; coordinates: number[][] };
 
