@@ -55,6 +55,47 @@ describe('OutingEditionView', () => {
     expect(opened).toEqual(['General information', 'Weather & conditions']);
   });
 
+  it('links avalanche reports for natural or accidental avalanches in the interface language', async () => {
+    const edition = mountEdition(OutingEditionView, 'outing');
+    const document = outing(null);
+    edition.setDocument(document);
+    const reportLink = () => edition.wrapper.findAll('a').find((link) => link.text().trim() === 'Add a report');
+    const homeLink = () => edition.wrapper.findAll('a').find((link) => link.text().trim() === 'data-avalanche.org');
+
+    expect(reportLink()).toBeUndefined();
+    expect(homeLink()).toBeUndefined();
+
+    edition.document().avalanche_signs = ['natural_avalanche'];
+    await vi.waitFor(() =>
+      expect(reportLink()?.attributes('href')).toBe('https://www.data-avalanche.org/ReportAnAvalanche?lang=fr')
+    );
+    expect(homeLink()?.attributes('href')).toBe('https://www.data-avalanche.org/?lang=fr');
+    expect(reportLink()?.classes()).not.toContain('external-link');
+    expect(homeLink()?.classes()).toContain('external-link');
+    const description = edition.wrapper.findAll('p.help span').find((span) => span.text().includes('dedicated'));
+    expect(description?.text().startsWith(',')).toBe(true);
+    expect(description?.text().length).toBeLessThanOrEqual(200);
+
+    edition.document().avalanche_signs = ['danger_sign', 'accidental_avalanche'];
+    edition.language.current = 'it';
+    await vi.waitFor(() =>
+      expect(reportLink()?.attributes('href')).toBe('https://www.data-avalanche.org/ReportAnAvalanche?lang=it')
+    );
+    expect(homeLink()?.attributes('href')).toBe('https://www.data-avalanche.org/?lang=it');
+
+    edition.language.current = 'de';
+    await vi.waitFor(() =>
+      expect(reportLink()?.attributes('href')).toBe('https://www.data-avalanche.org/ReportAnAvalanche?lang=en')
+    );
+    expect(homeLink()?.attributes('href')).toBe('https://www.data-avalanche.org/?lang=en');
+
+    edition.document().avalanche_signs = ['danger_sign'];
+    await vi.waitFor(() => {
+      expect(reportLink()).toBeUndefined();
+      expect(homeLink()).toBeUndefined();
+    });
+  });
+
   it('lists the routes the track followed, 10 first, then more on demand', async () => {
     const suggested = Array.from({ length: 25 }, (_, i) => route(i + 1));
     api.suggestRoutes.mockResolvedValue({ data: { documents: suggested, total: 25 } });

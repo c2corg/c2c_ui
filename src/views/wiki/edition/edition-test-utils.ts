@@ -7,7 +7,7 @@
 //   });
 import { shallowMount } from '@vue/test-utils';
 import { vi } from 'vitest';
-import { computed, defineComponent, h, ref, type Component } from 'vue';
+import { computed, defineComponent, h, reactive, ref, type Component } from 'vue';
 
 import type { EditionHooks, useDocumentEdition } from './utils/document-edition';
 
@@ -25,6 +25,7 @@ export function mountEdition(view: Component, documentType: string, errors: unkn
   const promise = ref<{ data?: C2cDocument | null }>({});
   const document = computed(() => promise.value.data ?? undefined);
   const fields = ref({ ...constants.objectDefinitions[documentType].fields });
+  const language = reactive({ current: 'fr' });
   let hooks: EditionHooks = {};
 
   fakeEdition.next = (given) => {
@@ -73,6 +74,7 @@ export function mountEdition(view: Component, documentType: string, errors: unkn
         globalProperties: {
           $gettext: (text: string) => text,
           $user: { isModerator: false, id: 7 },
+          $language: language,
           $filters: { uppercaseFirstLetter: (text: string) => text },
           $dateUtils: { toLocalizedString: () => '2026-10-29' },
           $documentUtils: {
@@ -90,6 +92,7 @@ export function mountEdition(view: Component, documentType: string, errors: unkn
     fitMapToDocuments,
     setGeometry,
     fields,
+    language,
     hooks: () => hooks,
     document: () => document.value!,
     setDocument: (doc: C2cDocument | null) => {

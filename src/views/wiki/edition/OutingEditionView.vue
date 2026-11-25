@@ -197,6 +197,23 @@
           />
           <form-field class="is-12" :document="document" :field="fields.avalanche_signs" />
           <form-field class="is-12" :document="document" :field="fields.avalanches" />
+          <div v-if="dataAvalancheLinks" class="column is-12">
+            <p class="help is-size-6">
+              <a :href="dataAvalancheLinks.report" target="_blank" rel="noopener noreferrer" v-translate
+                >Add a report</a
+              >
+              <span v-translate> on </span>
+              <a
+                :href="dataAvalancheLinks.home"
+                class="external-link"
+                target="_blank"
+                rel="noopener noreferrer"
+                v-translate
+              >
+                data-avalanche.org </a
+              ><span v-translate>, an association dedicated to improving and sharing knowledge about avalanches.</span>
+            </p>
+          </div>
         </div>
       </form-section>
 
@@ -342,7 +359,7 @@ import { OFFLINE_MODE } from '@/pwa/offline-store';
 import { giveBackTracePick, readTracePick, writeTracePick, type TracePick } from '@/pwa/outing-trace-pick';
 import { useOfflineStore } from '@/stores/offline';
 
-const { $documentUtils, $dateUtils, $user, $gettext } = useGlobalProperties();
+const { $documentUtils, $dateUtils, $user, $gettext, $language } = useGlobalProperties();
 const pageRoute = useRoute();
 
 const { fields, saving, mode, document, save, draftId, keepOnPhone, saveWithoutPublishing } = useDocumentEdition({
@@ -358,6 +375,19 @@ const cotometer = useTemplateRef<{ show(): void }>('cotometer');
 
 const showBothDates = ref(false);
 const currentDate = ref(getCurrentDateString());
+const dataAvalancheLinks = computed(() => {
+  if (
+    !document.value?.avalanche_signs?.some((sign) => sign === 'natural_avalanche' || sign === 'accidental_avalanche')
+  ) {
+    return null;
+  }
+
+  const lang = ['fr', 'en', 'es', 'it'].includes($language.current ?? '') ? $language.current : 'en';
+  return {
+    report: `https://www.data-avalanche.org/ReportAnAvalanche?lang=${lang}`,
+    home: `https://www.data-avalanche.org/?lang=${lang}`,
+  };
+});
 
 // the routes saved offline in Favourites
 const offlineRoutes = computed(() =>
