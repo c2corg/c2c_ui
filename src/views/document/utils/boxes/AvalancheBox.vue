@@ -1,85 +1,93 @@
 <template>
   <div
-    v-if="showAvalancheInfo"
+    v-if="showBox"
     class="box no-print is-relative avalanche-box"
     @pointerenter="onPointerEnter"
     @pointerleave="onPointerLeave"
   >
-    <div class="title" v-translate>Avalanche risk</div>
-    <p v-if="isOuting && regions?.length" class="is-size-7 has-text-centered has-text-grey mb-2">
-      {{ $dateUtils.toLocalizedString(new Date(day + 'T12:00:00'), 'dddd DD MMMM YYYY') }}
-    </p>
-    <template v-if="regions?.length">
-      <template v-if="hasInfo">
-        <div v-if="maxLevel > 0" class="icon-bra is-flex is-justify-content-center">
-          <icon-bra :size="120" :level="maxLevel" />
-        </div>
-        <div class="has-text-centered">
-          <span v-for="(region, index) in sortedRegions" :key="region.bra.id">
-            <component
-              :is="officialUrl(region) ? 'a' : 'span'"
-              :href="officialUrl(region)"
-              :title="region.bra.fullname"
-              :target="officialUrl(region) ? '_blank' : undefined"
-              rel="noopener"
-            >
-              {{ region.bra.name }}<template v-if="region.bra.fullname"> ({{ region.bra.country }})</template>
-            </component>
-            <template v-if="index + 1 < sortedRegions.length">&bull; </template>
-          </span>
-        </div>
-        <p v-if="atElevation" class="is-size-7 has-text-centered has-text-grey" :title="elevationTitle">
-          <fa-icon icon="mountain" class="mr-1" />{{ elevation }} m
-        </p>
-
-        <!-- the full bulletin, unfolded in the box: by this button (touch, keyboard), or by a long hover -->
-        <button
-          v-if="withBulletins.length"
-          type="button"
-          class="button is-white is-small is-fullwidth bulletin-toggle"
-          :aria-expanded="unfolded"
-          :aria-controls="panelId"
-          @click="onToggleClick"
-        >
-          <span v-translate>Avalanche bulletin</span>
-          <fa-icon :icon="unfolded ? 'angle-up' : 'angle-down'" class="ml-1" />
-        </button>
-        <div v-if="unfolded && current" :id="panelId" class="bulletin-panel">
-          <div v-if="withBulletins.length > 1" class="tabs is-small is-centered mb-2">
-            <ul>
-              <li v-for="region of withBulletins" :key="region.regionId!" :class="{ 'is-active': region === current }">
-                <a href="#" @click.prevent="activeRegionId = region.regionId">{{ region.bra.name }}</a>
-              </li>
-            </ul>
+    <!-- an outing with no bulletin for its day: only the text, in the normal font, to stay unobtrusive -->
+    <p v-if="outingWithoutBulletin"><span v-translate key="id3">No avalanche bulletin stored for this day</span></p>
+    <template v-else>
+      <div class="title" v-translate>Avalanche risk</div>
+      <!-- the day of the outing is the one of the page: shown only when the bulletin is for another one -->
+      <p v-if="isOuting && bulletinsDay && bulletinsDay !== day" class="is-size-7 has-text-centered has-text-grey mb-2">
+        {{ $dateUtils.toLocalizedString(new Date(bulletinsDay + 'T12:00:00'), 'dddd DD MMMM YYYY') }}
+      </p>
+      <template v-if="regions?.length">
+        <template v-if="hasInfo">
+          <div v-if="maxLevel > 0" class="icon-bra is-flex is-justify-content-center">
+            <icon-bra :size="120" :level="maxLevel" />
           </div>
-          <bulletin-detail
-            :selected="selected(current)"
-            :bulletins="current.bulletins ?? null"
-            :failed="current.failed"
-            embedded
-            :historical="isOuting && !isToday"
-            :compact="!$screen.isMobile"
-            @more="fullBulletin?.show()"
-          />
+          <div class="has-text-centered">
+            <span v-for="(region, index) in sortedRegions" :key="region.bra.id">
+              <component
+                :is="officialUrl(region) ? 'a' : 'span'"
+                :href="officialUrl(region)"
+                :title="region.bra.fullname"
+                :target="officialUrl(region) ? '_blank' : undefined"
+                rel="noopener"
+              >
+                {{ region.bra.name }}<template v-if="region.bra.fullname"> ({{ region.bra.country }})</template>
+              </component>
+              <template v-if="index + 1 < sortedRegions.length">&bull; </template>
+            </span>
+          </div>
+          <p v-if="atElevation" class="is-size-7 has-text-centered has-text-grey" :title="elevationTitle">
+            <fa-icon icon="mountain" class="mr-1" />{{ elevation }} m
+          </p>
+
+          <!-- the full bulletin, unfolded in the box: by this button (touch, keyboard), or by a long hover -->
+          <button
+            v-if="withBulletins.length"
+            type="button"
+            class="button is-white is-small is-fullwidth bulletin-toggle"
+            :aria-expanded="unfolded"
+            :aria-controls="panelId"
+            @click="onToggleClick"
+          >
+            <span v-translate>Avalanche bulletin</span>
+            <fa-icon :icon="unfolded ? 'angle-up' : 'angle-down'" class="ml-1" />
+          </button>
+          <div v-if="unfolded && current" :id="panelId" class="bulletin-panel">
+            <div v-if="withBulletins.length > 1" class="tabs is-small is-centered mb-2">
+              <ul>
+                <li
+                  v-for="region of withBulletins"
+                  :key="region.regionId!"
+                  :class="{ 'is-active': region === current }"
+                >
+                  <a href="#" @click.prevent="activeRegionId = region.regionId">{{ region.bra.name }}</a>
+                </li>
+              </ul>
+            </div>
+            <bulletin-detail
+              :selected="selected(current)"
+              :bulletins="current.bulletins ?? null"
+              :failed="current.failed"
+              embedded
+              :historical="isOuting && !isToday"
+              :compact="!$screen.isMobile"
+              @more="fullBulletin?.show()"
+            />
+          </div>
+        </template>
+        <div v-else class="py-2">
+          <p><span v-translate key="id2">No avalanche bulletin right now</span></p>
+        </div>
+        <!-- unfolded, the links follow the bulletin: no rule between them -->
+        <hr v-if="!unfolded" />
+        <div v-else-if="current && officialUrl(current)" class="box-link mt-3">
+          <fa-icon icon="file-lines" fixed-width />
+          <a :href="officialUrl(current)" target="_blank" rel="noopener">
+            <span v-translate>Full bulletin</span> ({{ current.bra.name }})
+          </a>
         </div>
       </template>
-      <div v-else class="py-2">
-        <p v-if="isOuting"><span v-translate key="id3">No avalanche bulletin stored for this day</span></p>
-        <p v-else><span v-translate key="id2">No avalanche bulletin right now</span></p>
-      </div>
-      <!-- unfolded, the links follow the bulletin: no rule between them -->
-      <hr v-if="!unfolded" />
-      <div v-else-if="current && officialUrl(current)" class="box-link mt-3">
-        <fa-icon icon="file-lines" fixed-width />
-        <a :href="officialUrl(current)" target="_blank" rel="noopener">
-          <span v-translate>Full bulletin</span> ({{ current.bra.name }})
-        </a>
+      <div v-if="showYeti" class="box-link">
+        <icon-yeti fixed-width />
+        <router-link :to="yetiUrl"><span v-translate>Use YETI to better analyze avalanche risk</span></router-link>
       </div>
     </template>
-    <div v-if="showYeti" class="box-link">
-      <icon-yeti fixed-width />
-      <router-link :to="yetiUrl"><span v-translate>Use YETI to better analyze avalanche risk</span></router-link>
-    </div>
 
     <!-- the whole bulletin, too wide for the column of the box on a large screen -->
     <modal-card v-if="current" ref="fullBulletin">
@@ -158,14 +166,24 @@ const sortedRegions = computed(() => [...(regions.value ?? [])].sort((a, b) => d
 const maxLevel = computed(() => Math.max(0, ...sortedRegions.value.map(dangerOf)));
 const atElevation = computed(() => !!elevation.value && sortedRegions.value.some(regionBulletin));
 const withBulletins = computed(() => sortedRegions.value.filter((region) => region.regionId));
-// the bulletins of an outing are not asked yet: not "no bulletin" for now
-const pending = computed(() => isOuting.value && withBulletins.value.some((region) => region.bulletins === undefined));
 // a danger, or a bulletin of the API (being fetched, failed or there) though the summary has no danger
 const hasInfo = computed(
   () =>
     maxLevel.value > 0 ||
-    pending.value ||
     withBulletins.value.some((region) => region.bulletins !== undefined && (region.bulletins?.length ?? 1) > 0)
+);
+// an outing: a danger, or a bulletin of its day that is there (not one being loaded, nor failed)
+const outingHasInfo = computed(
+  () =>
+    maxLevel.value > 0 ||
+    withBulletins.value.some((region) => Array.isArray(region.bulletins) && region.bulletins.length > 0)
+);
+// the day the bulletins are valid for, when the API gives it (the day of the outing, else)
+const bulletinsDay = computed(() =>
+  withBulletins.value
+    .flatMap((region) => region.bulletins ?? [])
+    .map((bulletin) => bulletin.customData?.ALBINA?.mainDate)
+    .find(Boolean)
 );
 
 const activeRegionId = ref<string | null>(null);
@@ -203,6 +221,20 @@ const showAvalancheInfo = computed(() => {
   const activities = ['skitouring', 'snow_ice_mixed', 'ice_climbing', 'snowshoeing'];
 
   return props.document.activities?.some((activity: string) => activities.includes(activity));
+});
+
+// --- an outing: the box waits for the bulletins of its day (none fetched yet, or loading: nothing shown), then shows
+// them, or only the "no bulletin" text; a failed fetch with no bulletin, nothing either ---
+
+// fetched (an array, even empty) or failed
+const settled = (region: Region) => Array.isArray(region.bulletins) || region.failed;
+const outingSettled = computed(() => regions.value !== null && withBulletins.value.every((region) => settled(region)));
+const anyFailed = computed(() => withBulletins.value.some((region) => region.failed));
+const outingWithoutBulletin = computed(() => isOuting.value && outingSettled.value && !outingHasInfo.value);
+const showBox = computed(() => {
+  if (!showAvalancheInfo.value) return false;
+  if (!isOuting.value) return true;
+  return outingSettled.value && (outingHasInfo.value || !anyFailed.value);
 });
 
 // --- unfolding: a long hover (cancelled when the pointer leaves before), folded a moment after it leaves; a click

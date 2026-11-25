@@ -213,7 +213,8 @@ describe('AvalancheBox', () => {
       expect(getLatest).not.toHaveBeenCalled();
       // 2 at 2000 m (the route goes up to 3000 m), not the 4 of the summary of today
       expect(wrapper.find('.icon-bra-level').text()).toBe('2');
-      expect(wrapper.text()).toContain('2026-02-10');
+      // the day of the outing is the one of the page: no date line
+      expect(wrapper.text()).not.toContain('2026-02-10');
       // not today: no official bulletin (the PDF is the latest), nor YETI (it shows the latest too)
       expect(wrapper.find('a[href]').exists()).toBe(false);
       expect(wrapper.find('.router-link').exists()).toBe(false);
@@ -235,12 +236,34 @@ describe('AvalancheBox', () => {
       });
     });
 
-    it('says when no bulletin is stored for the day', async () => {
+    it('is hidden until its bulletins are there', async () => {
+      getOfDay.mockReturnValue(new Promise(() => {}));
+      const wrapper = await mountOuting();
+      expect(wrapper.find('.avalanche-box').exists()).toBe(false);
+    });
+
+    it('is hidden when the bulletins cannot be fetched', async () => {
+      getOfDay.mockRejectedValue(new Error('500'));
+      const wrapper = await mountOuting();
+      expect(wrapper.find('.avalanche-box').exists()).toBe(false);
+    });
+
+    it('says only, in plain text, when no bulletin is stored for the day', async () => {
       getOfDay.mockResolvedValue([]);
       const wrapper = await mountOuting();
-      expect(wrapper.text()).toContain('No avalanche bulletin stored for this day');
+      const box = wrapper.find('.avalanche-box');
+      expect(box.find('p').text()).toBe('No avalanche bulletin stored for this day');
+      expect(box.find('.title').exists()).toBe(false);
+      expect(box.find('hr').exists()).toBe(false);
+      expect(box.find('.router-link').exists()).toBe(false);
       expect(wrapper.find('.icon-bra-level').exists()).toBe(false);
       expect(wrapper.find('.bulletin-toggle').exists()).toBe(false);
+    });
+
+    it('shows the day of the bulletin when it is not the one of the outing', async () => {
+      getOfDay.mockResolvedValue([{ ...bulletin, customData: { ALBINA: { mainDate: '2026-02-11' } } }]);
+      const wrapper = await mountOuting();
+      expect(wrapper.text()).toContain('2026-02-11');
     });
 
     it('is not shown for other activities', async () => {
