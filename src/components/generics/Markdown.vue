@@ -248,15 +248,23 @@ function computeAnchors(anchors: Iterable<HTMLAnchorElement>) {
   for (const anchor of anchors) {
     const attribute = (name: string) => anchor.attributes.getNamedItem(name)?.value;
 
-    const { fullPath, href } = router.resolve({
-      name: attribute('c2c:document-type')!.slice(0, -1),
-      params: {
-        id: parseInt(attribute('c2c:document-id')!, 10),
-        lang: attribute('c2c:lang'),
-        title: attribute('c2c:slug'),
-      },
-      hash: attribute('c2c:anchor') ? '#' + attribute('c2c:anchor') : undefined,
-    });
+    let resolved: ReturnType<typeof router.resolve>;
+    try {
+      resolved = router.resolve({
+        name: attribute('c2c:document-type')!.slice(0, -1),
+        params: {
+          id: parseInt(attribute('c2c:document-id')!, 10),
+          lang: attribute('c2c:lang'),
+          title: attribute('c2c:slug'),
+        },
+        hash: attribute('c2c:anchor') ? '#' + attribute('c2c:anchor') : undefined,
+      });
+    } catch {
+      // a type the site does not know ([[parkings/12|…]] of v5, a typo) and an id the API did not find: no page to
+      // lead to, the next links are built all the same
+      continue;
+    }
+    const { fullPath, href } = resolved;
 
     anchor.href = href;
     anchor.addEventListener('click', (e) => {

@@ -789,7 +789,7 @@ describe('BrokenLinks', () => {
       ['tag', 'ml-2', 'is-danger', 'is-light'],
       ['tag', 'ml-2', 'is-danger', 'is-light'],
       ['tag', 'ml-2', 'is-warning', 'is-light'],
-      ['tag', 'ml-2', 'is-danger', 'is-light'],
+      ['tag', 'ml-2', 'is-warning', 'is-light'],
       ['tag', 'ml-2', 'is-danger', 'is-light'],
     ]);
     expect(wrapper.text()).toContain('Found: 5');

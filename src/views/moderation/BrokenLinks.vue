@@ -1,9 +1,9 @@
 <template>
   <div>
     <p class="mb-4" v-translate>
-      The links in the texts of the collaborative documents ([[type/id|…]] or an address of the site) whose page does
-      not show the document: deleted, never existing, or of another type than the link says. Those that can still be
-      restored come first.
+      The links in the texts of the collaborative documents ([[type/id|…]] or an address of the site) that are wrong: to
+      a deleted or never existing document (they lead nowhere), or with a wrong or old type (they lead to the document
+      all the same, to correct). Those that can still be restored come first.
     </p>
 
     <div v-if="restored" class="notification is-success">
@@ -124,13 +124,13 @@ import constants from '@/js/constants';
 
 const PAGE_SIZE = 30;
 
-// red: the link leads nowhere (the Restore button tells the deleted ones); yellow: it leads to a document, the type in
-// the text is wrong
+// red: the link leads nowhere (the Restore button tells the deleted ones); yellow: the type in the text is wrong or
+// old, the API leads the link to the document of its id all the same
 const REASON_CLASSES: Record<BrokenLink['reason'], string> = {
   deleted: 'is-danger is-light',
   missing: 'is-danger is-light',
   wrong_type: 'is-warning is-light',
-  unknown_type: 'is-danger is-light',
+  unknown_type: 'is-warning is-light',
 };
 
 const { $gettext } = useGlobalProperties();
