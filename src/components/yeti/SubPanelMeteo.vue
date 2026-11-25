@@ -10,7 +10,10 @@
           allowtransparency="true"
           sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
         ></iframe>
-        <p>©meteoblue - <a :href="meteoBlueUrl" target="_blank" v-translate>More info on meteoblue.com</a></p>
+        <p>
+          ©meteoblue -
+          <a :href="meteoBlueUrl" class="external-link" target="_blank" v-translate>More info on meteoblue.com</a>
+        </p>
       </div>
     </div>
     <div v-else>
