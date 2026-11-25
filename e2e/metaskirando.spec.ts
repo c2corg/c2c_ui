@@ -3,7 +3,7 @@ import { expect, test } from './fixtures.ts';
 
 // The outings of the partner sites come from the local API in fixture mode (see README.md: partners_transport=fixtures
 // and `make harvest-partners` run once). The fixtures are synthetic, dated so that the newest ones are those of the
-// harvest day, and hold broken items on purpose: both sources are `degraded`, the expected demo status.
+// harvest day, and hold broken items on purpose: some sources may be `degraded`, which is fine.
 
 const VANOISE = 14409;
 
@@ -84,7 +84,8 @@ test('the sources footer shows the health of each source', async ({ page }) => {
   const { sources } = (await call('/partner-outings/sources')) as {
     sources: { source: string; site_name: string; site_url: string }[];
   };
-  expect(sources.map((s) => s.source).sort()).toEqual(['gulliver', 'skitour']);
+  // the demo data has at least these two; other sources may be added without breaking the test
+  expect(sources.map((s) => s.source)).toEqual(expect.arrayContaining(['gulliver', 'skitour']));
 
   await page.goto('/metaskirando');
   const footer = page.locator('[data-test=sources] li');
@@ -249,7 +250,9 @@ test('the steep toggle keeps the steep outings, and the URL follows', async ({ p
 
 test('the source chips list the sources of the API, and filter on them', async ({ page }) => {
   const { sources } = (await call('/partner-outings/sources')) as { sources: { source: string }[] };
-  const gulliver = (await call('/partner-outings?limit=100&sources=c2c,gulliver')) as { items: Item[] };
+  const kept = ['c2c', ...sources.map((s) => s.source).filter((source) => source !== 'skitour')];
+  expect(kept, 'the sources of the demo data include skitour').toHaveLength(sources.length);
+  const gulliver = (await call(`/partner-outings?limit=100&sources=${kept.join(',')}`)) as { items: Item[] };
   const all = (await call('/partner-outings?limit=100')) as { items: Item[] };
   expect(gulliver.items.length).toBeLessThan(all.items.length);
 
@@ -262,7 +265,8 @@ test('the source chips list the sources of the API, and filter on them', async (
   await expect(rows).toHaveCount(all.items.length);
 
   await page.locator('.source-chip[data-source=skitour]').click();
-  await expect(page).toHaveURL(/[?&]sources=c2c(,|%2C)gulliver\b/);
+  // the URL lists every source but skitour (in the order of the API)
+  await expect.poll(() => new URL(page.url()).searchParams.get('sources')?.split(',').sort()).toEqual([...kept].sort());
   await expect(rows).toHaveCount(gulliver.items.length);
   await expect(page.locator('.partner-outing-row .source-badge--skitour')).toHaveCount(0);
   await expect(page.locator('.source-chip[data-source=skitour]')).toHaveAttribute('aria-pressed', 'false');
@@ -402,6 +406,7 @@ test('"new since last visit": nothing at the first visit, then what the source d
   page,
 }) => {
   const all = (await call('/partner-outings?limit=100')) as { items: Item[] };
+  const { sources } = (await call('/partner-outings/sources')) as { sources: { source: string }[] };
   const rows = page.locator('.partner-outing-row');
 
   // the first visit: nothing is new, and each source is remembered
@@ -410,7 +415,7 @@ test('"new since last visit": nothing at the first visit, then what the source d
   await expect(page.locator('[data-test=new]')).toHaveCount(0);
   await expect(page.locator('[data-test=only-new]')).toHaveCount(0);
   const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('metaskirando.visits')!));
-  expect(Object.keys(stored).sort()).toEqual(['gulliver', 'skitour']);
+  expect(Object.keys(stored).sort()).toEqual(sources.map((s) => s.source).sort());
 
   // a visit long after one that saw all the skitour outings but the first
   const skitour = all.items.filter((item) => item.source === 'skitour').map((item) => item.id);
