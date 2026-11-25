@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { c2cOuting, geometry, partnerOuting } from './fixtures';
-import { bboxParam, isApproximate, markersOf, outingPosition, sourceColor } from './partner-outings-map';
+import { bboxParam, isApproximate, markersOf, outingPosition, sourceColor, sourceLabel } from './partner-outings-map';
 
 import { fromLonLat } from '@/js/geo/projection';
 
@@ -67,9 +67,16 @@ describe('partner outings map helpers', () => {
   });
 
   it('colours by source, as the badges', () => {
-    expect(sourceColor('skitour')).not.toBe(sourceColor('gulliver'));
+    const known = ['skitour', 'gulliver', 'gipfelbuch', 'bivouak', 'skitourenportal'];
+    expect(new Set(known.map(sourceColor)).size).toBe(known.length);
     expect(sourceColor('c2c')).toBe('#f93');
     expect(sourceColor('unknown')).toBe(sourceColor('other'));
+  });
+
+  it('labels the sources, falling back on the site name then the id', () => {
+    expect(sourceLabel('bivouak', 'x')).toBe('Bivouak');
+    expect(sourceLabel('newsite', 'New Site')).toBe('New Site');
+    expect(sourceLabel('newsite')).toBe('newsite');
   });
 
   it('rounds the extent to the metre', () => {

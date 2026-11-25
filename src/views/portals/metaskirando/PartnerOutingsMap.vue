@@ -27,7 +27,7 @@
     <ul class="map-legend is-size-7" data-test="legend">
       <li v-for="source of sourcesShown" :key="source">
         <span class="legend-dot" :style="{ backgroundColor: sourceColor(source) }" />
-        {{ sourceLabel(source) }}
+        {{ legendLabel(source) }}
       </li>
       <li v-if="hasApproximate" data-test="legend-approximate">
         <span class="legend-dot is-approximate" />
@@ -46,7 +46,7 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { computed, onBeforeUnmount, onMounted, type PropType, ref, useTemplateRef, watch } from 'vue';
 
-import { type OutingMarker, bboxParam, sourceColor } from './partner-outings-map';
+import { type OutingMarker, bboxParam, sourceColor, sourceLabel } from './partner-outings-map';
 
 import { getDocumentIcon } from '@/components/map/map-documents';
 import { baseLayers, rasterSource } from '@/components/map/map-layers';
@@ -95,8 +95,7 @@ const unsupported = ref(false);
 let map: MapLibreMap | null = null;
 let drawn: { marker: Marker; element: HTMLElement; id: string }[] = [];
 
-const LABELS: Record<string, string> = { c2c: 'camptocamp.org', skitour: 'Skitour', gulliver: 'Gulliver' };
-const sourceLabel = (source: string) => LABELS[source] ?? source;
+const legendLabel = (source: string) => (source === 'c2c' ? 'camptocamp.org' : sourceLabel(source));
 const sourcesShown = computed(() => [...new Set(props.markers.map((m) => m.outing.source))].sort());
 const hasApproximate = computed(() => props.markers.some((m) => m.approximate));
 

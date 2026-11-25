@@ -7,18 +7,18 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-// the short label of the sources of the registry; another source shows its name
-const LABELS: Record<string, string> = {
-  c2c: 'c2c',
-  skitour: 'Skitour',
-  gulliver: 'Gulliver',
-};
+import { SOURCE_LABELS, sourceLabel } from './partner-outings-map';
 
 const props = defineProps({
   // the name of a source of the registry, or 'c2c'
   source: {
     type: String,
     required: true,
+  },
+  // the name of the site, e.g. from /partner-outings/sources: the label of a source the UI does not know
+  siteName: {
+    type: String,
+    default: undefined,
   },
   // the full name of the site, shown on hover
   title: {
@@ -27,8 +27,8 @@ const props = defineProps({
   },
 });
 
-const known = computed(() => props.source in LABELS);
-const label = computed(() => LABELS[props.source] ?? props.source);
+const known = computed(() => props.source in SOURCE_LABELS);
+const label = computed(() => sourceLabel(props.source, props.siteName));
 </script>
 
 <style scoped>
@@ -50,6 +50,23 @@ const label = computed(() => LABELS[props.source] ?? props.source);
 .source-badge.source-badge--gulliver {
   background-color: #dcf1e0;
   color: #1f6a35;
+}
+
+/* the same light background and dark text in the light and the dark theme; each pair has a contrast of 5.5 or more
+   (WCAG AA asks 4.5) */
+.source-badge.source-badge--gipfelbuch {
+  background-color: #ebe2f7;
+  color: #54308a;
+}
+
+.source-badge.source-badge--bivouak {
+  background-color: #fbe5cf;
+  color: #8a4100;
+}
+
+.source-badge.source-badge--skitourenportal {
+  background-color: #fbdde8;
+  color: #8f1c48;
 }
 
 .source-badge.source-badge--other {

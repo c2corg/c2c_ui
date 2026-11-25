@@ -90,7 +90,7 @@
             :data-source="source"
             @click="toggleSource(source)"
           >
-            <source-badge :source="source" :title="siteName(source)" />
+            <source-badge :source="source" :title="siteName(source)" :site-name="siteName(source)" />
           </button>
           <button
             v-if="store.newIds.length"

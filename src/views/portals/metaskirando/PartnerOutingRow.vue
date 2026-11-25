@@ -20,7 +20,7 @@
       <span class="is-size-7 outing-credit">{{ credit }}</span>
     </span>
     <span class="outing-side">
-      <source-badge :source="outing.source" :title="outing.credit.site" />
+      <source-badge :source="outing.source" :title="outing.credit.site" :site-name="outing.credit.site" />
       <fa-icon v-if="isPartner" icon="external-link-alt" class="external-icon" />
     </span>
   </component>
