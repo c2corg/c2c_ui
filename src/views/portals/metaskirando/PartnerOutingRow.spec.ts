@@ -65,3 +65,37 @@ describe('PartnerOutingRow', () => {
     expect(wrapper.find('.outing-area').text()).toBe('Haute-Savoie');
   });
 });
+
+describe('PartnerOutingRow, new and approximate', () => {
+  it('tags an outing that is new since the last visit', () => {
+    const wrapper = shallowMount(PartnerOutingRow, {
+      props: { outing: partnerOuting(), isNew: true },
+      global: {
+        config: { globalProperties: { $gettext: (text: string) => text } as never },
+        stubs: { RouterLink: RouterLinkStub, SourceBadge },
+      },
+    });
+    expect(wrapper.find('[data-test="new"]').text()).toBe('New');
+    expect(mountRow(partnerOuting()).find('[data-test="new"]').exists()).toBe(false);
+  });
+
+  it('says when the location is only the summit or the middle of the area', () => {
+    const geometry = (quality: string) => ({ geom: '{}', quality });
+    expect(
+      mountRow(partnerOuting({ geometry: geometry('summit') }))
+        .find('[data-test="approximate"]')
+        .attributes('title')
+    ).toBe('Approximate location');
+    expect(
+      mountRow(partnerOuting({ geometry: geometry('area_centroid') }))
+        .find('[data-test="approximate"]')
+        .exists()
+    ).toBe(true);
+    expect(
+      mountRow(partnerOuting({ geometry: geometry('start') }))
+        .find('[data-test="approximate"]')
+        .exists()
+    ).toBe(false);
+    expect(mountRow(partnerOuting()).find('[data-test="approximate"]').exists()).toBe(false);
+  });
+});

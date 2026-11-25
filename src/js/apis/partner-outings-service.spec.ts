@@ -52,6 +52,12 @@ describe('partner outings service', () => {
   it('joins the extent, and leaves out one that is not four numbers', () => {
     expect(service.params({ bbox: [1, 2, 3, 4] })).toEqual({ bbox: '1,2,3,4' });
     expect(service.params({ bbox: [] })).toEqual({});
+    expect(service.params({ steep: true, sources: ['c2c', 'skitour'] })).toEqual({
+      steep: 'true',
+      sources: 'c2c,skitour',
+    });
+    expect(service.params({ steep: false })).toEqual({ steep: 'false' });
+    expect(service.params({ steep: undefined, sources: [] })).toEqual({});
   });
 
   it('passes the abort signal and returns the answer', async () => {
