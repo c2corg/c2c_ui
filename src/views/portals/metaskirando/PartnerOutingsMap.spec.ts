@@ -119,6 +119,12 @@ describe('PartnerOutingsMap', () => {
     expect(map().cameras).toHaveLength(1);
   });
 
+  it('keeps the extent of the link: the filter the page turns on for it does not send the default extent', async () => {
+    const wrapper = mountMap({ initialExtent: [700000, 5700000, 800000, 5800000] });
+    await wrapper.setProps({ filterByExtent: true });
+    expect(wrapper.emitted('extent-change')).toBeUndefined();
+  });
+
   it('gives the extent in EPSG:3857 after a move of the user, when it filters', () => {
     const wrapper = mountMap({ filterByExtent: true });
     map().fire('moveend', {});
@@ -139,13 +145,16 @@ describe('PartnerOutingsMap', () => {
 
   it('gives its extent when the filter is turned on, and tells when the user changes it', async () => {
     const wrapper = mountMap();
+    const input = wrapper.find<HTMLInputElement>('[data-test=filter-extent]');
+    input.element.checked = true;
+    await input.trigger('change');
+    expect(wrapper.emitted('update:filterByExtent')).toEqual([[true]]);
     await wrapper.setProps({ filterByExtent: true });
     expect(wrapper.emitted('extent-change')).toHaveLength(1);
 
-    const input = wrapper.find<HTMLInputElement>('[data-test=filter-extent]');
     input.element.checked = false;
     await input.trigger('change');
-    expect(wrapper.emitted('update:filterByExtent')).toEqual([[false]]);
+    expect(wrapper.emitted('update:filterByExtent')).toEqual([[true], [false]]);
   });
 
   it('says so when the map cannot be made', async () => {
