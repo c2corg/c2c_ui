@@ -70,7 +70,7 @@ const length = computed(() => $documentUtils.lengthWithUnit(props.activity.lengt
 
 // the vendors that have this outing (tracking before 3.4.0 sends none)
 const sources = computed<ActivitySource[]>(() =>
-  (props.activity.sources ?? [props.activity as ActivitySource]).map((source) => ({
+  (props.activity.sources ?? [props.activity as ActivitySource]).map((source: ActivitySource) => ({
     ...source,
     deviceName: distinctDeviceName(source.deviceName, source.vendor, $gettext(source.vendor)),
   }))
