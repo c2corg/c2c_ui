@@ -5,16 +5,20 @@ import { reactive } from 'vue';
 import MetaskirandoView from './MetaskirandoView.vue';
 import { c2cOuting, geometry, partnerOuting, sources } from './fixtures';
 
-import { usePartnerOutingsStore } from '@/stores/partner-outings';
+import { emptyFilters, usePartnerOutingsStore } from '@/stores/partner-outings';
 
 const getAll = vi.hoisted(() => vi.fn());
 const getSources = vi.hoisted(() => vi.fn());
 vi.mock('@/js/apis/partner-outings-service', () => ({ default: { getAll, getSources } }));
+const getPreferences = vi.hoisted(() => vi.fn());
 vi.mock('@/js/apis/c2c', () => ({
   default: {
     area: { get: vi.fn((id: number) => Promise.resolve({ data: { document_id: id, type: 'a', locales: [] } })) },
+    userProfile: { preferences: { get: getPreferences } },
   },
 }));
+const user = vi.hoisted(() => ({ isLogged: false }));
+vi.mock('@/stores/user', () => ({ useUserStore: () => user }));
 
 const route = reactive({ query: {} as Record<string, string> });
 const replace = vi.hoisted(() => vi.fn());
@@ -44,7 +48,12 @@ const mountView = () => {
         } as never,
       },
       stubs: {
-        PartnerOutingRow: { props: ['outing'], template: '<div class="row">{{ outing.id }}</div>' },
+        RouterLink: { template: '<a class="router-link"><slot /></a>' },
+        SourceBadge: { props: ['source'], template: '<span>{{ source }}</span>' },
+        PartnerOutingRow: {
+          props: ['outing', 'isNew'],
+          template: '<div class="row" :class="{ new: isNew }">{{ outing.id }}</div>',
+        },
         PartnerOutingsMap: {
           name: 'PartnerOutingsMap',
           props: ['markers', 'highlightedId', 'filterByExtent', 'initialExtent'],
@@ -76,6 +85,13 @@ beforeEach(() => {
   ]);
   replace.mockReset();
   route.query = {};
+  getPreferences.mockReset();
+  getPreferences.mockResolvedValue({ data: { activities: ['skitouring'], areas: [] } });
+  user.isLogged = false;
+  window.localStorage.clear();
+  const store = usePartnerOutingsStore();
+  store.filters = emptyFilters();
+  store.onlyNew = false;
 });
 
 describe('MetaskirandoView', () => {
@@ -198,6 +214,200 @@ describe('MetaskirandoView', () => {
     await flushPromises();
     expect(wrapper.findAll('[data-test="areas"] .tag')).toHaveLength(1);
     expect(replace).toHaveBeenLastCalledWith({ query: { a: '15' } });
+  });
+
+  describe('filters', () => {
+    it('loads every activity by default, with no steep nor source filter', async () => {
+      mountView();
+      await flushPromises();
+      const query = getAll.mock.calls[0][0];
+      expect(query.act).toEqual([]);
+      expect(query.steep).toBeUndefined();
+      expect(query.sources).toBeUndefined();
+    });
+
+    it('reads steep, the sources and the text of the link', async () => {
+      route.query = { steep: '1', sources: 'c2c,gulliver', q: 'monte' };
+      const wrapper = mountView();
+      await flushPromises();
+      expect(getAll.mock.calls[0][0]).toMatchObject({ steep: true, sources: ['c2c', 'gulliver'] });
+      expect((wrapper.find('[data-test="steep"]').element as HTMLInputElement).checked).toBe(true);
+      expect((wrapper.find('[data-test="text-filter"]').element as HTMLInputElement).value).toBe('monte');
+      expect(wrapper.findAll('.row').map((r) => r.text())).toEqual(['gulliver:1', 'gulliver:2'].filter((id) => id));
+    });
+
+    it('puts the steep toggle in the query and loads again', async () => {
+      const wrapper = mountView();
+      await flushPromises();
+      getAll.mockClear();
+      await wrapper.find('[data-test="steep"]').setValue(true);
+      await flushPromises();
+      expect(replace).toHaveBeenLastCalledWith({ query: { steep: '1' } });
+      expect(getAll.mock.calls[0][0]).toMatchObject({ steep: true });
+      await wrapper.find('[data-test="steep"]').setValue(false);
+      await flushPromises();
+      expect(replace).toHaveBeenLastCalledWith({ query: {} });
+      expect(getAll.mock.calls[1][0].steep).toBeUndefined();
+    });
+
+    it('shows a chip per source, c2c first, all on, and a click filters the sources', async () => {
+      const wrapper = mountView();
+      await flushPromises();
+      const chips = wrapper.findAll('[data-test="source-chips"] .source-chip');
+      expect(chips.map((chip) => chip.attributes('data-source'))).toEqual(['c2c', 'gulliver', 'skitour']);
+      expect(chips.map((chip) => chip.attributes('aria-pressed'))).toEqual(['true', 'true', 'true']);
+
+      getAll.mockClear();
+      await chips[2].trigger('click');
+      await flushPromises();
+      expect(replace).toHaveBeenLastCalledWith({ query: { sources: 'c2c,gulliver' } });
+      expect(getAll.mock.calls[0][0]).toMatchObject({ sources: ['c2c', 'gulliver'] });
+      expect(wrapper.findAll('[data-test="source-chips"] .source-chip').map((c) => c.classes('is-off'))).toEqual([
+        false,
+        false,
+        true,
+      ]);
+    });
+
+    it('filters the loaded outings with the text, without a request, and the URL follows', async () => {
+      const wrapper = mountView();
+      await flushPromises();
+      getAll.mockClear();
+
+      await wrapper.find('[data-test="text-filter"]').setValue('chalune');
+      expect(wrapper.findAll('.row').map((r) => r.text())).toEqual(['c2c:77']);
+      expect(replace).toHaveBeenLastCalledWith({ query: { q: 'chalune' } });
+      expect(getAll).not.toHaveBeenCalled();
+
+      await wrapper.find('[data-test="text-filter"]').setValue('nothing like it');
+      expect(wrapper.find('[data-test="empty"]').exists()).toBe(true);
+      expect(wrapper.findComponent({ name: 'PartnerOutingsMap' }).props('markers')).toEqual([]);
+    });
+
+    it('keeps steep, the sources and the text when another filter changes', async () => {
+      route.query = { steep: '1', sources: 'c2c', q: 'x' };
+      const wrapper = mountView();
+      await flushPromises();
+      wrapper.findComponent({ name: 'InputActivity' }).vm.$emit('update:modelValue', ['hiking']);
+      await flushPromises();
+      expect(replace).toHaveBeenLastCalledWith({ query: { act: 'hiking', steep: '1', sources: 'c2c', q: 'x' } });
+    });
+
+    it('follows the back button: a query without the filters clears them', async () => {
+      route.query = { steep: '1', q: 'x' };
+      const wrapper = mountView();
+      await flushPromises();
+      getAll.mockClear();
+      route.query = {};
+      await flushPromises();
+      expect(usePartnerOutingsStore().filters).toEqual(emptyFilters());
+      expect((wrapper.find('[data-test="steep"]').element as HTMLInputElement).checked).toBe(false);
+      expect(getAll).toHaveBeenCalledTimes(1);
+    });
+
+    it('works together with the extent of the map', async () => {
+      route.query = { bbox: '1,2,3,4', steep: '1' };
+      mountView();
+      await flushPromises();
+      expect(getAll.mock.calls[0][0]).toMatchObject({ bbox: [1, 2, 3, 4], steep: true });
+    });
+  });
+
+  describe('preferred areas', () => {
+    it('opens a logged-in user on the preferred areas of the account, in the query', async () => {
+      user.isLogged = true;
+      getPreferences.mockResolvedValue({
+        data: { activities: ['skitouring'], areas: [{ document_id: 14409, type: 'a', locales: [] }] },
+      });
+      const wrapper = mountView();
+      await flushPromises();
+      // the areas, not the activities of the preferences: the list covers every activity
+      expect(getAll).toHaveBeenCalledTimes(1);
+      expect(getAll.mock.calls[0][0]).toMatchObject({ a: [14409], act: [] });
+      expect(replace).toHaveBeenCalledWith({ query: { a: '14409' } });
+      expect(wrapper.findAll('[data-test="areas"] .tag')).toHaveLength(1);
+      expect(wrapper.find('[data-test="preferred-areas"]').exists()).toBe(true);
+    });
+
+    it('leaves a link with areas, or an extent, as it is', async () => {
+      user.isLogged = true;
+      route.query = { a: '15' };
+      mountView();
+      await flushPromises();
+      expect(getPreferences).not.toHaveBeenCalled();
+      expect(getAll.mock.calls[0][0]).toMatchObject({ a: [15] });
+
+      getAll.mockClear();
+      route.query = { bbox: '1,2,3,4' };
+      mountView();
+      await flushPromises();
+      expect(getPreferences).not.toHaveBeenCalled();
+    });
+
+    it('opens on all the areas when the preferences cannot be read or hold none', async () => {
+      user.isLogged = true;
+      getPreferences.mockRejectedValue(new Error('boom'));
+      mountView();
+      await flushPromises();
+      expect(getAll.mock.calls[0][0].a).toEqual([]);
+    });
+
+    it('uses the areas an anonymous visitor remembered', async () => {
+      window.localStorage.setItem('metaskirando.areas', JSON.stringify([14409]));
+      mountView();
+      await flushPromises();
+      expect(getPreferences).not.toHaveBeenCalled();
+      expect(getAll.mock.calls[0][0]).toMatchObject({ a: [14409] });
+      expect(replace).toHaveBeenCalledWith({ query: { a: '14409' } });
+    });
+
+    it('lets an anonymous visitor remember the selected areas, and forget them', async () => {
+      const wrapper = mountView();
+      await flushPromises();
+      expect(wrapper.find('[data-test="remember-areas"]').exists()).toBe(false);
+
+      wrapper.findComponent({ name: 'InputDocument' }).vm.$emit('update:modelValue', [{ document_id: 14 }]);
+      await flushPromises();
+      await wrapper.find('[data-test="remember-areas"]').trigger('click');
+      expect(JSON.parse(window.localStorage.getItem('metaskirando.areas')!)).toEqual([14]);
+      expect(wrapper.find('[data-test="remember-areas"]').text()).toBe('Forget my default areas');
+
+      await wrapper.find('[data-test="remember-areas"]').trigger('click');
+      expect(window.localStorage.getItem('metaskirando.areas')).toBeNull();
+    });
+
+    it('still opens when the local storage is blocked', async () => {
+      vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+        throw new Error('blocked');
+      });
+      mountView();
+      await flushPromises();
+      expect(getAll).toHaveBeenCalledTimes(1);
+      vi.restoreAllMocks();
+    });
+  });
+
+  describe('new since last visit', () => {
+    it('tags the outings a source did not show at the previous visit, and can show only them', async () => {
+      // the previous visit, long ago: gulliver showed its outing 1
+      window.localStorage.setItem(
+        'metaskirando.visits',
+        JSON.stringify({ gulliver: { seen: ['gulliver:1'], baseline: null, at: Date.now() - 3600_000 } })
+      );
+      getAll.mockResolvedValue(answer([partnerOuting({ id: 'gulliver:2' }), partnerOuting({ id: 'gulliver:1' })]));
+      const wrapper = mountView();
+      await flushPromises();
+      expect(wrapper.findAll('.row').map((r) => r.classes('new'))).toEqual([true, false]);
+      await wrapper.find('[data-test="only-new"]').trigger('click');
+      expect(wrapper.findAll('.row').map((r) => r.text())).toEqual(['gulliver:2']);
+    });
+
+    it('offers nothing at the first visit', async () => {
+      const wrapper = mountView();
+      await flushPromises();
+      expect(wrapper.find('[data-test="only-new"]').exists()).toBe(false);
+      expect(wrapper.findAll('.row.new')).toHaveLength(0);
+    });
   });
 
   describe('map', () => {

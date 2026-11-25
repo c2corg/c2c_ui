@@ -41,7 +41,69 @@
             <button type="button" class="delete is-small" :aria-label="$gettext('Remove')" @click="removeArea(area)" />
           </span>
         </div>
+        <p v-if="user.isLogged" class="is-size-7 default-areas" data-test="preferred-areas">
+          <router-link :to="{ name: 'settings', hash: '#account' }">
+            {{ $gettext('Change my preferred areas') }}
+          </router-link>
+        </p>
+        <p v-else-if="rememberLabel" class="is-size-7 default-areas">
+          <button type="button" class="button is-small is-text" data-test="remember-areas" @click="toggleRemembered">
+            {{ rememberLabel }}
+          </button>
+        </p>
         <input-activity v-model="activities" @update:model-value="onFilter" />
+        <div class="filter-row">
+          <span class="steep-filter">
+            <input
+              id="partner-outings-steep"
+              class="switch is-rounded is-info is-small"
+              type="checkbox"
+              data-test="steep"
+              :checked="store.filters.steep"
+              @change="setSteep(($event.target as HTMLInputElement).checked)"
+            />
+            <label
+              for="partner-outings-steep"
+              :title="$gettext('Steep outings: ski rating 4.1 or more, or very steep')"
+            >
+              {{ $gettext('Steep') }}
+            </label>
+          </span>
+          <input
+            class="input is-small text-filter"
+            type="search"
+            data-test="text-filter"
+            :value="store.filters.q"
+            :placeholder="$gettext('Filter these outings')"
+            :aria-label="$gettext('Filter these outings')"
+            @input="setText(($event.target as HTMLInputElement).value)"
+          />
+        </div>
+        <div class="source-chips" data-test="source-chips">
+          <button
+            v-for="source of store.sourceIds"
+            :key="source"
+            type="button"
+            class="source-chip"
+            :class="{ 'is-off': !isSourceOn(source) }"
+            :aria-pressed="isSourceOn(source)"
+            :data-source="source"
+            @click="toggleSource(source)"
+          >
+            <source-badge :source="source" :title="siteName(source)" />
+          </button>
+          <button
+            v-if="store.newIds.length"
+            type="button"
+            class="button is-small new-toggle"
+            :class="{ 'is-warning': store.onlyNew }"
+            :aria-pressed="store.onlyNew"
+            data-test="only-new"
+            @click="toggleOnlyNew"
+          >
+            {{ $gettext('New since last visit') }} ({{ store.newIds.length }})
+          </button>
+        </div>
       </div>
     </div>
 
@@ -55,13 +117,13 @@
         class="column documents-container"
         :class="showMap ? 'is-8 is-7-widescreen' : 'is-12'"
       >
-        <div v-if="store.loading" class="loading has-text-centered" data-test="loading">
+        <div v-if="store.loading || starting" class="loading has-text-centered" data-test="loading">
           <spinner-icon />
         </div>
         <div v-else-if="store.error" class="notification is-danger is-light" data-test="error">
           {{ $gettext('An error occurred, please try again') }}
         </div>
-        <p v-else-if="store.items.length === 0" class="has-text-centered is-italic empty" data-test="empty">
+        <p v-else-if="store.visibleItems.length === 0" class="has-text-centered is-italic empty" data-test="empty">
           {{ $gettext('No outing for these filters') }}
         </p>
         <div v-else>
@@ -77,6 +139,7 @@
                 v-for="outing of outings"
                 :key="outing.id"
                 :outing="outing"
+                :is-new="store.newIds.includes(outing.id)"
                 :data-outing-id="outing.id"
                 :class="{ 'is-highlighted': outing.id === highlightedId, 'is-selected': outing.id === selectedId }"
                 @mouseenter="highlightedId = outing.id"
@@ -123,6 +186,9 @@ import { useRoute, useRouter } from 'vue-router';
 
 import PartnerOutingRow from './PartnerOutingRow.vue';
 import PartnerOutingsMap from './PartnerOutingsMap.vue';
+import SourceBadge from './SourceBadge.vue';
+import { loadDefaultAreas } from './default-areas';
+import { readDefaultAreaIds, writeDefaultAreaIds } from './metaskirando-storage';
 import { markersOf } from './partner-outings-map';
 
 import { VIEW_URL_KEY } from '@/components/map/map-url-keys';
@@ -132,12 +198,14 @@ import type { PartnerSourceHealth } from '@/js/apis/partner-outings-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 import { usePartnerOutingsStore } from '@/stores/partner-outings';
+import { useUserStore } from '@/stores/user';
 import DisplayModeSwitch from '@/views/documents/utils/DisplayModeSwitch.vue';
 
 const { $gettext, $language } = useGlobalProperties();
 const route = useRoute();
 const router = useRouter();
 const store = usePartnerOutingsStore();
+const user = useUserStore();
 
 // the selected areas as documents (the filter of the store keeps their ids), and the activities
 const areas = ref<C2cDocument[]>([]);
@@ -162,7 +230,7 @@ const filterByExtent = ref(false);
 // the extent of the link, where the map opens
 const initialExtent = ref<number[] | null>(null);
 
-const located = computed(() => markersOf(store.items));
+const located = computed(() => markersOf(store.visibleItems));
 const markers = computed(() => located.value.markers);
 const withoutLocation = computed(() => located.value.withoutLocation);
 const withoutLocationText = computed(() =>
@@ -254,8 +322,73 @@ async function loadAreas() {
   areas.value = [...areas.value.filter((area) => store.filters.areas.includes(area.document_id!)), ...loaded];
 }
 
-function syncFromRoute() {
+// the page opened, and the default areas are not known yet
+const starting = ref(true);
+
+// the default areas of an anonymous visitor, as remembered in the browser
+const rememberedAreas = ref<number[]>(readDefaultAreaIds());
+
+const sameIds = (a: number[], b: number[]) => a.length === b.length && a.every((id) => b.includes(id));
+
+// the button of an anonymous visitor: remember the areas of the filter, or forget them
+const rememberLabel = computed(() => {
+  const current = areas.value.map((area) => area.document_id!);
+  if (current.length && !sameIds(current, rememberedAreas.value)) {
+    return $gettext('Use these areas by default');
+  }
+  return rememberedAreas.value.length && sameIds(current, rememberedAreas.value)
+    ? $gettext('Forget my default areas')
+    : null;
+});
+
+function toggleRemembered() {
+  const current = areas.value.map((area) => area.document_id!);
+  rememberedAreas.value = current.length && !sameIds(current, rememberedAreas.value) ? current : [];
+  writeDefaultAreaIds(rememberedAreas.value);
+}
+
+const isSourceOn = (source: string) => !store.filters.sources.length || store.filters.sources.includes(source);
+const siteName = (source: string) => store.sourceSites[source]?.site_name;
+
+function toggleSource(source: string) {
+  store.toggleSource(source);
+  writeQuery();
+  return reload();
+}
+
+function setSteep(value: boolean) {
+  store.filters = { ...store.filters, steep: value };
+  writeQuery();
+  return reload();
+}
+
+// the text filter works on the outings already loaded: no request
+function setText(value: string) {
+  store.filters = { ...store.filters, q: value.trim() };
+  writeQuery();
+}
+
+// the new outings of a visit are not part of a link: this filter lives in the page
+function toggleOnlyNew() {
+  store.onlyNew = !store.onlyNew;
+}
+
+// the default areas apply to a link that names no area nor extent
+async function defaultAreasOfLink() {
+  if (route.query.a !== undefined || route.query.bbox !== undefined) {
+    return null;
+  }
+  const defaults = await loadDefaultAreas(user.isLogged);
+  return defaults.ids.length ? defaults : null;
+}
+
+function syncFromRoute(defaults: Awaited<ReturnType<typeof loadDefaultAreas>> | null = null) {
   store.fromRouteQuery(route.query);
+  if (defaults) {
+    areas.value = defaults.documents;
+    store.filters = { ...store.filters, areas: defaults.ids };
+    writeQuery();
+  }
   readDisplayMode();
   filterByExtent.value = store.filters.bbox !== null;
   initialExtent.value ??= store.filters.bbox;
@@ -270,6 +403,9 @@ function onFilter() {
     areas: areas.value.map((area) => area.document_id!),
     activities: [...activities.value],
     bbox: store.filters.bbox,
+    steep: store.filters.steep,
+    sources: store.filters.sources,
+    q: store.filters.q,
   };
   writeQuery();
   return reload();
@@ -288,9 +424,12 @@ watch(
   }
 );
 
-onMounted(() => {
+onMounted(async () => {
+  store.onlyNew = false;
   store.loadSources();
-  return syncFromRoute();
+  const defaults = await defaultAreasOfLink();
+  starting.value = false;
+  return syncFromRoute(defaults);
 });
 </script>
 
@@ -316,6 +455,41 @@ onMounted(() => {
 
 .filters {
   margin-bottom: var(--c2c-size-6);
+}
+
+.default-areas {
+  margin-top: var(--c2c-size-7);
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: var(--c2c-size-7);
+}
+
+.text-filter {
+  max-width: 16rem;
+}
+
+.source-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: var(--c2c-size-7);
+}
+
+.source-chip {
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.source-chip.is-off {
+  opacity: 0.4;
 }
 
 .selected-areas {
