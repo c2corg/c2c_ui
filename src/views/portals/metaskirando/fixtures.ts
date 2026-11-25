@@ -44,3 +44,9 @@ export const sources: PartnerSourceHealth[] = [
   { source: 'gulliver', status: 'ok', last_success_at: '2026-02-14T09:00:00Z', site_name: 'Gulliver' },
   { source: 'skitour', status: 'down', last_success_at: null, site_name: 'Skitour' },
 ];
+
+// the geometry of an outing as the API answers it: GeoJSON in EPSG:3857 (x, y in metres)
+export const geometry = (quality = 'start', x = 700000, y = 5750000) => ({
+  geom: JSON.stringify({ type: 'Point', coordinates: [x, y] }),
+  quality,
+});

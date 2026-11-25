@@ -7,7 +7,8 @@ import type { LocationQuery, LocationQueryRaw } from 'vue-router';
 
 import service, { type PartnerOuting, type PartnerSourceHealth } from '@/js/apis/partner-outings-service';
 
-export type PartnerOutingsFilters = { areas: number[]; activities: string[] };
+// `bbox`: the extent of the map, [xmin, ymin, xmax, ymax] in EPSG:3857, or null
+export type PartnerOutingsFilters = { areas: number[]; activities: string[]; bbox: number[] | null };
 
 // the values of a query parameter, comma separated or repeated
 function listOf(value: LocationQuery[string] | undefined): string[] {
@@ -18,8 +19,14 @@ function listOf(value: LocationQuery[string] | undefined): string[] {
     .filter(Boolean);
 }
 
+// the four numbers of a bbox parameter, null when it is not one
+function bboxOf(value: LocationQuery[string] | undefined): number[] | null {
+  const bbox = listOf(value).map(Number);
+  return bbox.length === 4 && bbox.every(Number.isFinite) && bbox[0] < bbox[2] && bbox[1] < bbox[3] ? bbox : null;
+}
+
 export const usePartnerOutingsStore = defineStore('partner-outings', () => {
-  const filters = ref<PartnerOutingsFilters>({ areas: [], activities: [] });
+  const filters = ref<PartnerOutingsFilters>({ areas: [], activities: [], bbox: null });
   const items = ref<PartnerOuting[]>([]);
   const total = ref(0);
   const sources = ref<PartnerSourceHealth[]>([]);
@@ -47,7 +54,7 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
     error.value = null;
     try {
       const answer = await service.getAll(
-        { a: filters.value.areas, act: filters.value.activities, pl: lang },
+        { a: filters.value.areas, act: filters.value.activities, bbox: filters.value.bbox ?? undefined, pl: lang },
         current.signal
       );
       if (controller !== current) {
@@ -82,13 +89,14 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
     }
   }
 
-  /** Sets the filters from the `a` and `act` parameters of a route query; what is not valid is dropped. */
+  /** Sets the filters from the `a`, `act` and `bbox` parameters of a route query; what is not valid is dropped. */
   function fromRouteQuery(query: LocationQuery) {
     filters.value = {
       areas: listOf(query.a)
         .map(Number)
         .filter((id) => Number.isInteger(id) && id > 0),
       activities: listOf(query.act),
+      bbox: bboxOf(query.bbox),
     };
   }
 
@@ -100,6 +108,9 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
     }
     if (filters.value.activities.length) {
       query.act = filters.value.activities.join(',');
+    }
+    if (filters.value.bbox) {
+      query.bbox = filters.value.bbox.join(',');
     }
     return query;
   }
