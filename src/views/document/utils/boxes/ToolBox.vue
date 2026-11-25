@@ -200,6 +200,8 @@
         @click="deleteDocumentModal!.show()"
         :icon="['fas', 'trash']"
         :label="$gettext('Delete this document')"
+        :disabled="!!deletion?.blocked"
+        :title="deletionTitle ?? undefined"
       />
     </template>
 
@@ -263,11 +265,27 @@ const reportingIssueMail = 'topo-fr@camptocamp.org';
 const props = defineProps({ ...cookedDocumentProperty });
 
 const route = useRoute();
-const { $gettext, $language, $user, $documentUtils } = useGlobalProperties();
+const { $gettext, $language, $user, $documentUtils, $dateUtils } = useGlobalProperties();
 const offline = useOfflineStore();
 const favourites = useFavouritesStore();
 // the view mode too: isDraftView, isVersionView...
-const { isNormalView, isEditable, isDeletable } = useEditable(() => props.document);
+const { isNormalView, isEditable, isDeletable, deletion } = useEditable(() => props.document);
+// why the delete button is disabled, or until when it works (the authors only: 30 days)
+const deletionTitle = computed(() => {
+  const state = deletion.value;
+  if (!state) {
+    return null;
+  }
+  if (state.blocked === 'too_old') {
+    return $gettext('More than 30 days old');
+  }
+  if (state.blocked === 'other_participants') {
+    return $gettext('Other participants: unlink them first');
+  }
+  return state.until
+    ? $gettext('Deletable until') + ' ' + $dateUtils.toLocalizedString(state.until.toISOString(), 'll')
+    : null;
+});
 const { documentType } = useDocumentType(props);
 const { any: canModerate } = useModerationRoles();
 // a moderator's own profile is not removable: the API refuses it too

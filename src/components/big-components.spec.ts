@@ -137,6 +137,58 @@ describe('HelperWindow', () => {
 });
 
 describe('AssociationItems', () => {
+  it('offers no Remove without the right, and disables it with why when a rule of the API refuses it', () => {
+    const mountItems = (props: object, isModerator: boolean) =>
+      mount(AssociationItems, {
+        props: props as never,
+        global: {
+          config: { globalProperties: { ...globalProperties, $user: { isModerator, id: 7 } } as never },
+          stubs: { AssociationImageLink: true, PrettyRouteLink: true, PrettyWaypointLink: true },
+        },
+      });
+    const outing = { document_id: 1, type: 'o', title: 'Outing', associations: { routes: [{}], users: [{}] } };
+
+    // the last route of an outing: disabled, for the moderators too
+    const routes = mountItems(
+      { parent: outing, arrayName: 'routes', childType: 'route', current: [{ document_id: 2, type: 'r', title: 'R' }] },
+      true
+    );
+    expect(routes.find('button').attributes('disabled')).toBeDefined();
+    expect(routes.find('button').attributes('title')).toBe('Last route of the outing');
+
+    // an image linked to this outing only (read when the editor opened), another one linked elsewhere too
+    const images = mountItems(
+      {
+        parent: outing,
+        arrayName: 'images',
+        childType: 'image',
+        current: [
+          { document_id: 3, type: 'i', title: 'A' },
+          { document_id: 4, type: 'i', title: 'B' },
+        ],
+        imageCounts: { 3: 1, 4: 2 },
+      },
+      false
+    );
+    const [last, shared] = images.findAll('button');
+    expect(last!.attributes('title')).toBe('Last document of the image: delete the image instead');
+    expect(last!.attributes('disabled')).toBeDefined();
+    expect(shared!.attributes('disabled')).toBeUndefined();
+
+    // a route: not theirs to remove
+    const route = { document_id: 5, type: 'r', title: 'Route', associations: {} };
+    const waypoints = mountItems(
+      {
+        parent: route,
+        arrayName: 'waypoints',
+        childType: 'waypoint',
+        current: [{ document_id: 6, type: 'w', title: 'W' }],
+      },
+      false
+    );
+    expect(waypoints.find('button').exists()).toBe(false);
+  });
+
   it('associates a proposition, and puts back a removed document', async () => {
     vi.spyOn(c2c.association, 'create').mockReturnValue(apiData({}) as never);
     vi.spyOn(c2c.association, 'remove').mockReturnValue(apiData({}) as never);
@@ -149,7 +201,10 @@ describe('AssociationItems', () => {
         current,
         propositions: { total: 1, documents: [{ document_id: 3, type: 'w', title: 'Summit' }] },
       },
-      global: { config: { globalProperties: globalProperties as never }, stubs: { PrettyWaypointLink: true } },
+      global: {
+        config: { globalProperties: { ...globalProperties, $user: { isModerator: true, id: 1 } } as never },
+        stubs: { PrettyWaypointLink: true },
+      },
     });
     const buttons = () => wrapper.findAll('button').map((button) => button.text());
     expect(buttons()).toEqual(['Remove', 'Add']);

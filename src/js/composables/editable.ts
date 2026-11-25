@@ -11,8 +11,8 @@ type Document = {
   protected?: boolean;
   image_type?: string | null;
   article_type?: string | null;
-  author?: { user_id: number } | string | null;
-  creator?: { user_id: number } | null;
+  author?: { user_id: number; created_at?: string } | string | null;
+  creator?: { user_id: number; created_at?: string } | null;
   associations?: { users?: { document_id?: number }[] };
 };
 
@@ -85,8 +85,9 @@ export function isDeletable(document: Document, documentType: string, user: User
 
   // Each type of doc has it's own logic for all users (normal, or moderators)
   if (documentType === 'outing') {
-    // outing, if user is associated
-    if (isAssociatedUser(document, user)) {
+    // outing: its author only (the API before v6_api #2747 did not give it: one of its users)
+    const author = authorId(document);
+    if (author !== undefined ? author === user.id : isAssociatedUser(document, user)) {
       return true;
     }
   } else if (documentType === 'image') {
@@ -110,6 +111,49 @@ export function isDeletable(document: Document, documentType: string, user: User
   return documentType !== 'profile' && documentType !== 'area' && user.isModerator;
 }
 
+/** How long the author of a document may delete it, from its first version (v6_api DELETION_PERIOD) */
+export const DELETION_DAYS = 30;
+
+export type Deletion = {
+  // why the delete button is disabled, if it is
+  blocked: 'too_old' | 'other_participants' | null;
+  // the last day of the deletion period, when known (not for the moderators)
+  until: Date | null;
+};
+
+/**
+ * Whether the delete button is shown (null: hidden), and when it is, whether a rule of the API disables it: the author
+ * may delete their document during 30 days, an outing only when nobody else is linked to it. No rule for the
+ * moderators.
+ */
+export function deletion(
+  document: Document,
+  documentType: string,
+  user: User,
+  isNormalView: boolean,
+  now = new Date()
+): Deletion | null {
+  if (!isDeletable(document, documentType, user, isNormalView)) {
+    return null;
+  }
+  if (user.isModerator) {
+    return { blocked: null, until: null };
+  }
+  const created = documentType === 'image' ? document.creator : document.author;
+  const createdAt = typeof created === 'object' ? created?.created_at : undefined;
+  const until = createdAt ? new Date(new Date(createdAt).getTime() + DELETION_DAYS * 24 * 3600 * 1000) : null;
+  if (until && now > until) {
+    return { blocked: 'too_old', until };
+  }
+  if (
+    documentType === 'outing' &&
+    (document.associations?.users ?? []).some((associated) => associated.document_id !== user.id)
+  ) {
+    return { blocked: 'other_participants', until };
+  }
+  return { blocked: null, until };
+}
+
 /** The view mode, and whether the user can edit or delete the document (with a type letter) */
 export function useEditable(getDocument: () => Document & { type?: string }) {
   const globals = getCurrentInstance()!.appContext.config.globalProperties;
@@ -120,5 +164,6 @@ export function useEditable(getDocument: () => Document & { type?: string }) {
     ...viewMode,
     isEditable: computed(() => isEditable(getDocument(), documentType(), globals.$user, viewMode.isNormalView.value)),
     isDeletable: computed(() => isDeletable(getDocument(), documentType(), globals.$user, viewMode.isNormalView.value)),
+    deletion: computed(() => deletion(getDocument(), documentType(), globals.$user, viewMode.isNormalView.value)),
   };
 }

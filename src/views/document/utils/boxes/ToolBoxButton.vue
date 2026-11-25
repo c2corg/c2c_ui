@@ -11,7 +11,17 @@
       {{ $filters.uppercaseFirstLetter(label) }}
     </span>
   </router-link>
-  <component v-else :is="href ? 'a' : 'div'" @click="$emit('click')" :href="href" class="toolbox-button">
+  <!-- disabled: shown with why (title), not clickable -->
+  <component
+    v-else
+    :is="href ? 'a' : 'div'"
+    @click="disabled || $emit('click')"
+    :href="disabled ? undefined : href"
+    :title="title ?? undefined"
+    :aria-disabled="disabled || undefined"
+    class="toolbox-button"
+    :class="{ 'is-disabled': disabled }"
+  >
     <span class="toolbox-button-icon">
       <slot name="icon">
         <fa-icon v-if="icon" :icon="icon" fixed-width :class="iconClass" />
@@ -45,6 +55,14 @@ defineProps({
     type: String,
     default: null,
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  title: {
+    type: String,
+    default: null,
+  },
   to: {
     type: Object,
     default: null,
@@ -57,6 +75,11 @@ defineEmits(['click']);
 .toolbox-button {
   display: block;
   cursor: pointer;
+
+  &.is-disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 
   span {
     color: var(--c2c-link);
