@@ -209,6 +209,90 @@ describe('ImageViewer', () => {
     wrapper.unmount();
   });
 
+  describe('fullscreen', () => {
+    // jsdom has no Fullscreen API: the browser's side, which sets the element and tells it by fullscreenchange
+    let fullscreenElement: Element | null = null;
+    const setFullscreenElement = (element: Element | null) => {
+      fullscreenElement = element;
+      document.dispatchEvent(new Event('fullscreenchange'));
+    };
+    Object.defineProperty(document, 'fullscreenElement', { configurable: true, get: () => fullscreenElement });
+    const requestFullscreen = vi.fn(function (this: Element) {
+      setFullscreenElement(this);
+      return Promise.resolve();
+    });
+    const exitFullscreen = vi.fn(() => {
+      setFullscreenElement(null);
+      return Promise.resolve();
+    });
+    Element.prototype.requestFullscreen = requestFullscreen;
+    document.exitFullscreen = exitFullscreen;
+
+    afterEach(() => {
+      fullscreenElement = null;
+      requestFullscreen.mockClear();
+      exitFullscreen.mockClear();
+    });
+
+    const fullscreenIcon = (wrapper: Awaited<ReturnType<typeof showViewer>>['wrapper']) =>
+      wrapper.findAll('fa-icon-stub').find((icon) => ['expand', 'compress'].includes(icon.attributes('icon')!))!;
+
+    it('shows the exit icon in fullscreen, and the enter one once left by its icon', async () => {
+      const { wrapper } = await showViewer();
+      expect(fullscreenIcon(wrapper).attributes('icon')).toBe('expand');
+
+      await fullscreenIcon(wrapper).trigger('click');
+      expect(requestFullscreen).toHaveBeenCalledTimes(1);
+      expect(fullscreenIcon(wrapper).attributes('icon')).toBe('compress');
+
+      await fullscreenIcon(wrapper).trigger('click');
+      expect(exitFullscreen).toHaveBeenCalledTimes(1);
+      expect(fullscreenIcon(wrapper).attributes('icon')).toBe('expand');
+      wrapper.unmount();
+    });
+
+    it('shows the enter icon again when fullscreen is left by the browser (Escape, F11)', async () => {
+      const { wrapper } = await showViewer();
+      await fullscreenIcon(wrapper).trigger('click');
+      expect(fullscreenIcon(wrapper).attributes('icon')).toBe('compress');
+
+      // Escape in fullscreen goes to the browser, the page gets no keydown
+      setFullscreenElement(null);
+      await flushPromises();
+
+      expect(fullscreenIcon(wrapper).attributes('icon')).toBe('expand');
+      expect(wrapper.find('.image-viewer').exists()).toBe(true);
+      wrapper.unmount();
+    });
+
+    it('keeps the enter icon when the request is refused', async () => {
+      requestFullscreen.mockImplementationOnce(() => Promise.reject(new TypeError('refused')));
+      const { wrapper } = await showViewer();
+
+      await fullscreenIcon(wrapper).trigger('click');
+
+      expect(fullscreenIcon(wrapper).attributes('icon')).toBe('expand');
+      wrapper.unmount();
+    });
+
+    it('leaves fullscreen when closed, and opens again with the enter icon', async () => {
+      const { wrapper } = await showViewer();
+      await fullscreenIcon(wrapper).trigger('click');
+
+      history.back();
+      await popstate();
+      await flushPromises();
+
+      expect(exitFullscreen).toHaveBeenCalledTimes(1);
+      expect(wrapper.find('.image-viewer').exists()).toBe(false);
+
+      (wrapper.vm as unknown as ImageViewerApi).show(image(1));
+      await flushPromises();
+      expect(fullscreenIcon(wrapper).attributes('icon')).toBe('expand');
+      wrapper.unmount();
+    });
+  });
+
   it('offers the AVIF image of the recent images, and no WebP', async () => {
     config.urls.modernThumbnailsTimestamp = 1;
     try {

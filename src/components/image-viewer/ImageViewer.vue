@@ -91,7 +91,8 @@ type WebkitFullscreen = { webkitRequestFullscreen?(): void; webkitExitFullscreen
 
 const requestFullscreen = function (wrapper: HTMLElement & WebkitFullscreen) {
   if (wrapper.requestFullscreen) {
-    wrapper.requestFullscreen();
+    // refused (not allowed in an iframe, no user gesture): the icon stays, see onFullscreenChange
+    wrapper.requestFullscreen().catch(() => {});
   } else if (wrapper.webkitRequestFullscreen) {
     /* Safari */
     wrapper.webkitRequestFullscreen();
@@ -101,7 +102,8 @@ const requestFullscreen = function (wrapper: HTMLElement & WebkitFullscreen) {
 const exitFullscreen = function () {
   const doc = document as Document & WebkitFullscreen;
   if (doc.exitFullscreen) {
-    doc.exitFullscreen();
+    // already left by the browser
+    doc.exitFullscreen().catch(() => {});
   } else if (doc.webkitExitFullscreen) {
     /* Safari */
     doc.webkitExitFullscreen();
@@ -208,6 +210,9 @@ function onImageError(event: Event) {
 }
 
 function close() {
+  if (isFullscreen.value) {
+    exitFullscreen();
+  }
   visible.value = false;
   // clean handlers
   window.removeEventListener('wheel', close);
@@ -327,18 +332,28 @@ function toggleFullscreen() {
   } else {
     requestFullscreen(root.value!);
   }
+}
 
-  isFullscreen.value = !isFullscreen.value;
+// the icon follows the browser: fullscreen is also left by Escape, F11, the back button (the viewer is removed) or a
+// refused request, without a click on it
+function onFullscreenChange() {
+  const doc = document as Document & { webkitFullscreenElement?: Element | null };
+  const element = doc.fullscreenElement ?? doc.webkitFullscreenElement ?? null;
+  isFullscreen.value = !!element && element === root.value;
 }
 
 // in setup, not mounted(): pages call it while they are created, before the app tree is mounted
 registerImageViewer({ push, show, clear });
 // this component is never destroyed, don't need a call to removeListener
 window.addEventListener('keydown', onKeydown);
+document.addEventListener('fullscreenchange', onFullscreenChange);
+document.addEventListener('webkitfullscreenchange', onFullscreenChange);
 
 onBeforeUnmount(() => {
   registerImageViewer(null);
   removeNavigationGuard();
+  document.removeEventListener('fullscreenchange', onFullscreenChange);
+  document.removeEventListener('webkitfullscreenchange', onFullscreenChange);
   if (historyEntry !== 'none') {
     releaseHistoryEntry();
   }
