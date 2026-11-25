@@ -36,7 +36,7 @@ describe('partner outings store', () => {
   it('loads with the filters and the language', async () => {
     getAll.mockResolvedValue(answer([outing('skitour:1', '2026-11-23')], 57));
     const store = usePartnerOutingsStore();
-    store.filters = { areas: [1, 2], activities: ['skitouring'] };
+    store.filters = { areas: [1, 2], activities: ['skitouring'], bbox: null };
 
     const loading = store.load('fr');
     expect(store.loading).toBe(true);
@@ -129,33 +129,53 @@ describe('partner outings store', () => {
       const store = usePartnerOutingsStore();
       store.fromRouteQuery({ a: '14295,14296', act: 'skitouring,snowshoeing' });
 
-      expect(store.filters).toEqual({ areas: [14295, 14296], activities: ['skitouring', 'snowshoeing'] });
+      expect(store.filters).toEqual({ areas: [14295, 14296], activities: ['skitouring', 'snowshoeing'], bbox: null });
     });
 
     it('drops what is not valid, and accepts repeated parameters', () => {
       const store = usePartnerOutingsStore();
       store.fromRouteQuery({ a: ['1', 'x', '-3', '2.5', ''], act: [null, 'skitouring'] });
 
-      expect(store.filters).toEqual({ areas: [1], activities: ['skitouring'] });
+      expect(store.filters).toEqual({ areas: [1], activities: ['skitouring'], bbox: null });
     });
 
     it('clears the filters when the query has none', () => {
       const store = usePartnerOutingsStore();
-      store.filters = { areas: [1], activities: ['skitouring'] };
+      store.filters = { areas: [1], activities: ['skitouring'], bbox: [1, 2, 3, 4] };
       store.fromRouteQuery({});
 
-      expect(store.filters).toEqual({ areas: [], activities: [] });
+      expect(store.filters).toEqual({ areas: [], activities: [], bbox: null });
     });
 
     it('writes a and act, leaving out the empty filters', () => {
       const store = usePartnerOutingsStore();
       expect(store.toRouteQuery()).toEqual({});
 
-      store.filters = { areas: [1, 2], activities: [] };
+      store.filters = { areas: [1, 2], activities: [], bbox: null };
       expect(store.toRouteQuery()).toEqual({ a: '1,2' });
 
-      store.filters = { areas: [], activities: ['skitouring', 'snowshoeing'] };
+      store.filters = { areas: [], activities: ['skitouring', 'snowshoeing'], bbox: null };
       expect(store.toRouteQuery()).toEqual({ act: 'skitouring,snowshoeing' });
+    });
+
+    it('reads and writes the extent of the map (bbox, EPSG:3857), when it is four increasing numbers', () => {
+      const store = usePartnerOutingsStore();
+      store.fromRouteQuery({ bbox: '700000,5700000,800000,5800000' });
+      expect(store.filters.bbox).toEqual([700000, 5700000, 800000, 5800000]);
+      expect(store.toRouteQuery()).toEqual({ bbox: '700000,5700000,800000,5800000' });
+
+      for (const bad of ['1,2,3', 'a,b,c,d', '5,5,1,1', '']) {
+        store.fromRouteQuery({ bbox: bad });
+        expect(store.filters.bbox).toBeNull();
+      }
+    });
+
+    it('sends the extent to the API', async () => {
+      getAll.mockResolvedValue(answer([], 0));
+      const store = usePartnerOutingsStore();
+      store.filters = { areas: [], activities: [], bbox: [1, 2, 3, 4] };
+      await store.load();
+      expect(getAll).toHaveBeenCalledWith(expect.objectContaining({ bbox: [1, 2, 3, 4] }), expect.any(AbortSignal));
     });
 
     it('round-trips', () => {

@@ -1,9 +1,9 @@
 import { flushPromises, shallowMount } from '@vue/test-utils';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { reactive } from 'vue';
 
 import MetaskirandoView from './MetaskirandoView.vue';
-import { c2cOuting, partnerOuting, sources } from './fixtures';
+import { c2cOuting, geometry, partnerOuting, sources } from './fixtures';
 
 import { usePartnerOutingsStore } from '@/stores/partner-outings';
 
@@ -30,8 +30,10 @@ const answer = (items = [c2cOuting(), partnerOuting(), partnerOuting({ id: 'gull
   sources,
 });
 
-const mountView = () =>
-  shallowMount(MetaskirandoView, {
+// unmounted after each test: a page left mounted would also react to the route of the next one
+const mounted: { unmount(): void }[] = [];
+const mountView = () => {
+  const wrapper = shallowMount(MetaskirandoView, {
     global: {
       config: {
         globalProperties: {
@@ -41,9 +43,22 @@ const mountView = () =>
           $filters: { uppercaseFirstLetter: (text: string) => text },
         } as never,
       },
-      stubs: { PartnerOutingRow: { props: ['outing'], template: '<div class="row">{{ outing.id }}</div>' } },
+      stubs: {
+        PartnerOutingRow: { props: ['outing'], template: '<div class="row">{{ outing.id }}</div>' },
+        PartnerOutingsMap: {
+          name: 'PartnerOutingsMap',
+          props: ['markers', 'highlightedId', 'filterByExtent', 'initialExtent'],
+          methods: { resize: () => {} },
+          template: '<div class="map" />',
+        },
+      },
     },
   });
+  mounted.push(wrapper);
+  return wrapper;
+};
+
+afterEach(() => mounted.splice(0).forEach((wrapper) => wrapper.unmount()));
 
 beforeEach(() => {
   getAll.mockReset();
@@ -183,5 +198,142 @@ describe('MetaskirandoView', () => {
     await flushPromises();
     expect(wrapper.findAll('[data-test="areas"] .tag')).toHaveLength(1);
     expect(replace).toHaveBeenLastCalledWith({ query: { a: '15' } });
+  });
+
+  describe('map', () => {
+    const located = () =>
+      answer([
+        c2cOuting({ geometry: geometry('route') }),
+        partnerOuting({ geometry: geometry('start') }),
+        partnerOuting({ id: 'gulliver:2', date: '2026-02-13', geometry: geometry('area_centroid') }),
+        partnerOuting({ id: 'gulliver:3', date: '2026-02-13', geometry: null }),
+      ]);
+    const mapOf = (wrapper: ReturnType<typeof mountView>) => wrapper.findComponent({ name: 'PartnerOutingsMap' });
+
+    afterEach(() => vi.useRealTimers());
+
+    it('gives the map the outings that have a location, and says how many have none', async () => {
+      getAll.mockResolvedValue(located());
+      const wrapper = mountView();
+      await flushPromises();
+      const markers = mapOf(wrapper).props('markers') as { outing: { id: string }; approximate: boolean }[];
+      expect(markers.map((m) => [m.outing.id, m.approximate])).toEqual([
+        ['c2c:77', false],
+        ['gulliver:1', false],
+        ['gulliver:2', true],
+      ]);
+      expect(wrapper.find('[data-test="without-location"]').text()).toBe('1 outing without location');
+    });
+
+    it('counts the outings without location, and says nothing when all have one', async () => {
+      getAll.mockResolvedValue(answer([partnerOuting(), partnerOuting({ id: 'gulliver:2' })]));
+      const wrapper = mountView();
+      await flushPromises();
+      expect(wrapper.find('[data-test="without-location"]').text()).toBe('2 outings without location');
+
+      getAll.mockResolvedValue(answer([partnerOuting({ geometry: geometry() })]));
+      await usePartnerOutingsStore().load();
+      await flushPromises();
+      expect(wrapper.find('[data-test="without-location"]').exists()).toBe(false);
+    });
+
+    it('highlights the marker of a row under the pointer, and the row of a marker', async () => {
+      getAll.mockResolvedValue(located());
+      const wrapper = mountView();
+      await flushPromises();
+
+      const rows = wrapper.findAll('.row');
+      await rows[1].trigger('mouseenter');
+      expect(mapOf(wrapper).props('highlightedId')).toBe('gulliver:1');
+      expect(rows[1].classes()).toContain('is-highlighted');
+      await rows[1].trigger('mouseleave');
+      expect(mapOf(wrapper).props('highlightedId')).toBeNull();
+
+      mapOf(wrapper).vm.$emit('highlight', 'gulliver:2');
+      await flushPromises();
+      expect(wrapper.findAll('.row').map((r) => r.classes().includes('is-highlighted'))).toEqual([
+        false,
+        false,
+        true,
+        false,
+      ]);
+    });
+
+    it('scrolls to the row of a marker that is clicked', async () => {
+      getAll.mockResolvedValue(located());
+      const wrapper = mountView();
+      await flushPromises();
+      const scrollIntoView = vi.fn();
+      const target = wrapper.findAll('.row')[2].element as HTMLElement;
+      target.scrollIntoView = scrollIntoView;
+
+      mapOf(wrapper).vm.$emit('select', 'gulliver:2');
+      await flushPromises();
+      expect(scrollIntoView).toHaveBeenCalledTimes(1);
+      expect(wrapper.findAll('.row')[2].classes()).toContain('is-selected');
+    });
+
+    it('searches with the extent of the map once it stopped moving, and the URL follows', async () => {
+      vi.useFakeTimers();
+      const wrapper = mountView();
+      await flushPromises();
+      expect(mapOf(wrapper).props('filterByExtent')).toBe(false);
+      getAll.mockClear();
+
+      mapOf(wrapper).vm.$emit('update:filterByExtent', true);
+      mapOf(wrapper).vm.$emit('extent-change', [1, 2, 3, 4]);
+      mapOf(wrapper).vm.$emit('extent-change', [10, 20, 30, 40]);
+      await vi.advanceTimersByTimeAsync(400);
+
+      expect(getAll).toHaveBeenCalledTimes(1);
+      expect(getAll.mock.calls[0][0]).toMatchObject({ bbox: [10, 20, 30, 40] });
+      expect(replace).toHaveBeenLastCalledWith({ query: { bbox: '10,20,30,40' } });
+      expect(usePartnerOutingsStore().filters.bbox).toEqual([10, 20, 30, 40]);
+    });
+
+    it('keeps the extent when another filter changes, and drops it when the filter is turned off', async () => {
+      route.query = { bbox: '1,2,3,4' };
+      const wrapper = mountView();
+      await flushPromises();
+      expect(mapOf(wrapper).props('filterByExtent')).toBe(true);
+      expect(mapOf(wrapper).props('initialExtent')).toEqual([1, 2, 3, 4]);
+      expect(getAll.mock.calls[0][0]).toMatchObject({ bbox: [1, 2, 3, 4] });
+
+      wrapper.findComponent({ name: 'InputActivity' }).vm.$emit('update:modelValue', ['hiking']);
+      await flushPromises();
+      expect(replace).toHaveBeenLastCalledWith({ query: { act: 'hiking', bbox: '1,2,3,4' } });
+
+      getAll.mockClear();
+      mapOf(wrapper).vm.$emit('update:filterByExtent', false);
+      await flushPromises();
+      expect(replace).toHaveBeenLastCalledWith({ query: { act: 'hiking' } });
+      expect(getAll.mock.calls[0][0].bbox).toBeUndefined();
+      expect(mapOf(wrapper).props('filterByExtent')).toBe(false);
+    });
+
+    it('shows the results and the map side by side, and the toggle of a phone keeps it in the URL', async () => {
+      const wrapper = mountView();
+      await flushPromises();
+      expect(wrapper.find('.documents-container').exists()).toBe(true);
+      expect(mapOf(wrapper).exists()).toBe(true);
+      expect(wrapper.find('.result-section').classes()).toContain('mobile-mode-both');
+
+      await wrapper.find('[data-test="map-toggle"]').trigger('click');
+      expect(replace).toHaveBeenLastCalledWith({ query: { view: 'map' } });
+      expect(wrapper.find('.documents-container').exists()).toBe(false);
+      expect(wrapper.find('.result-section').classes()).toContain('fills-window');
+
+      await wrapper.find('[data-test="map-toggle"]').trigger('click');
+      expect(replace).toHaveBeenLastCalledWith({ query: {} });
+      expect(wrapper.find('.documents-container').exists()).toBe(true);
+    });
+
+    it('reads the display mode of the link', async () => {
+      route.query = { view: 'result' };
+      const wrapper = mountView();
+      await flushPromises();
+      expect(mapOf(wrapper).exists()).toBe(false);
+      expect(wrapper.find('.documents-container').classes()).toContain('is-12');
+    });
   });
 });
