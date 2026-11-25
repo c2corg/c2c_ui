@@ -49,6 +49,11 @@ describe('partner outings service', () => {
     expect(service.params({ offset: 0 })).toEqual({ offset: 0 });
   });
 
+  it('joins the extent, and leaves out one that is not four numbers', () => {
+    expect(service.params({ bbox: [1, 2, 3, 4] })).toEqual({ bbox: '1,2,3,4' });
+    expect(service.params({ bbox: [] })).toEqual({});
+  });
+
   it('passes the abort signal and returns the answer', async () => {
     const get = vi.spyOn(service.axios, 'get').mockResolvedValue({ data: answer });
     const { signal } = new AbortController();
