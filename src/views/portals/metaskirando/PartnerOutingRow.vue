@@ -6,9 +6,17 @@
   >
     <activities :activities="outing.activities" class="is-size-3 activity-icons" />
     <span class="partner-outing-main">
+      <span v-if="isNew" class="tag is-warning is-light outing-new" data-test="new">{{ $gettext('New') }}</span>
       <span class="outing-title has-text-weight-bold">{{ outing.title }}</span>
       <span v-if="rating" class="outing-rating"> &bull; {{ rating }}</span>
       <span v-if="area" class="is-size-7 is-italic outing-area">{{ area.title }}</span>
+      <fa-icon
+        v-if="approximate"
+        icon="map-marker-alt"
+        class="is-size-7 outing-approximate"
+        data-test="approximate"
+        :title="$gettext('Approximate location')"
+      />
       <span class="is-size-7 outing-credit">{{ credit }}</span>
     </span>
     <span class="outing-side">
@@ -22,6 +30,7 @@
 import { computed, type PropType } from 'vue';
 
 import SourceBadge from './SourceBadge.vue';
+import { isApproximate } from './partner-outings-map';
 
 import type { PartnerOuting } from '@/js/apis/partner-outings-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
@@ -31,12 +40,20 @@ const props = defineProps({
     type: Object as PropType<PartnerOuting>,
     required: true,
   },
+  // no source showed it at its previous visit
+  isNew: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const { $gettext } = useGlobalProperties();
 
 // the outings of c2c stay in the site, the others open the page of the partner site in a new tab
 const isPartner = computed(() => props.outing.source !== 'c2c' && !!props.outing.url);
+
+// the position of the outing is the summit or the middle of its area, not where it started
+const approximate = computed(() => isApproximate(props.outing));
 
 const site = computed(() => props.outing.credit.site);
 
@@ -103,6 +120,10 @@ const credit = computed(() => {
 
 .outing-area:before {
   content: '\2022\00a0';
+}
+
+.outing-approximate {
+  color: var(--c2c-grey-light);
 }
 
 .outing-credit {

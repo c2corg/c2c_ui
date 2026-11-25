@@ -6,9 +6,30 @@ import { computed, ref } from 'vue';
 import type { LocationQuery, LocationQueryRaw } from 'vue-router';
 
 import service, { type PartnerOuting, type PartnerSourceHealth } from '@/js/apis/partner-outings-service';
+import { createVisitTracker } from '@/views/portals/metaskirando/new-since-visit';
+import { filterByText, toId } from '@/views/portals/metaskirando/text-filter';
 
 // `bbox`: the extent of the map, [xmin, ymin, xmax, ymax] in EPSG:3857, or null
-export type PartnerOutingsFilters = { areas: number[]; activities: string[]; bbox: number[] | null };
+// `steep`: only the steep outings (`steep=1` in the URL)
+// `sources`: the sources to list, 'c2c' included; none means all of them
+// `q`: a text the loaded outings must hold: it filters on the client, the API does not see it
+export type PartnerOutingsFilters = {
+  areas: number[];
+  activities: string[];
+  bbox: number[] | null;
+  steep: boolean;
+  sources: string[];
+  q: string;
+};
+
+export const emptyFilters = (): PartnerOutingsFilters => ({
+  areas: [],
+  activities: [],
+  bbox: null,
+  steep: false,
+  sources: [],
+  q: '',
+});
 
 // the values of a query parameter, comma separated or repeated
 function listOf(value: LocationQuery[string] | undefined): string[] {
@@ -26,7 +47,7 @@ function bboxOf(value: LocationQuery[string] | undefined): number[] | null {
 }
 
 export const usePartnerOutingsStore = defineStore('partner-outings', () => {
-  const filters = ref<PartnerOutingsFilters>({ areas: [], activities: [], bbox: null });
+  const filters = ref<PartnerOutingsFilters>(emptyFilters());
   const items = ref<PartnerOuting[]>([]);
   const total = ref(0);
   const sources = ref<PartnerSourceHealth[]>([]);
@@ -37,10 +58,30 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
 
   let controller: AbortController | null = null;
 
+  // "new since last visit": the ids of the outings that no visit of their source showed before
+  const tracker = createVisitTracker();
+  const newIds = ref<string[]>([]);
+  const onlyNew = ref(false);
+
+  // the outings the filters keep: the loaded ones, narrowed by the text and, when asked, to the new ones
+  const visibleItems = computed(() =>
+    filterByText(items.value, filters.value.q).filter((item) => !onlyNew.value || newIds.value.includes(item.id))
+  );
+
+  // the sources to offer as chips: c2c, the sources of the registry, and those the filter names
+  const sourceIds = computed(() => [
+    ...new Set([
+      'c2c',
+      ...Object.keys(sourceSites.value),
+      ...sources.value.map((source) => source.source),
+      ...filters.value.sources,
+    ]),
+  ]);
+
   // the outings per date (YYYY-MM-DD), the newest date first, the order of the API kept inside a date
   const itemsByDate = computed(() => {
     const groups: Record<string, PartnerOuting[]> = {};
-    for (const item of items.value) {
+    for (const item of visibleItems.value) {
       (groups[item.date] ??= []).push(item);
     }
     return Object.fromEntries(Object.entries(groups).sort(([a], [b]) => (a < b ? 1 : a > b ? -1 : 0)));
@@ -54,7 +95,14 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
     error.value = null;
     try {
       const answer = await service.getAll(
-        { a: filters.value.areas, act: filters.value.activities, bbox: filters.value.bbox ?? undefined, pl: lang },
+        {
+          a: filters.value.areas,
+          act: filters.value.activities,
+          bbox: filters.value.bbox ?? undefined,
+          steep: filters.value.steep || undefined,
+          sources: filters.value.sources.length ? filters.value.sources : undefined,
+          pl: lang,
+        },
         current.signal
       );
       if (controller !== current) {
@@ -63,6 +111,8 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
       items.value = answer.items;
       total.value = answer.total;
       sources.value = answer.sources;
+      tracker.observe(answer.items);
+      newIds.value = answer.items.filter(tracker.isNew).map((item) => item.id);
     } catch (e) {
       // replaced by a newer load (or aborted by it): that one owns the state
       if (controller !== current || axios.isCancel(e)) {
@@ -89,14 +139,31 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
     }
   }
 
-  /** Sets the filters from the `a`, `act` and `bbox` parameters of a route query; what is not valid is dropped. */
+  /** Turns a source on or off in the chips. All of them on is no filter: `sources` is then empty, and never all off. */
+  function toggleSource(source: string) {
+    const all = sourceIds.value;
+    const selected = filters.value.sources.length ? filters.value.sources : all;
+    const next = selected.includes(source) ? selected.filter((s) => s !== source) : [...selected, source];
+    filters.value = {
+      ...filters.value,
+      sources: next.length === 0 || all.every((s) => next.includes(s)) ? [] : all.filter((s) => next.includes(s)),
+    };
+  }
+
+  /**
+   * Sets the filters from the parameters of a route query (`a`, `act`, `bbox`, `steep`, `sources`, `q`); what is not
+   * valid is dropped.
+   */
   function fromRouteQuery(query: LocationQuery) {
     filters.value = {
       areas: listOf(query.a)
-        .map(Number)
-        .filter((id) => Number.isInteger(id) && id > 0),
+        .map(toId)
+        .filter((id): id is number => id !== null),
       activities: listOf(query.act),
       bbox: bboxOf(query.bbox),
+      steep: listOf(query.steep).some((value) => ['1', 'true', 'on'].includes(value.toLowerCase())),
+      sources: listOf(query.sources),
+      q: (Array.isArray(query.q) ? query.q[0] : query.q)?.trim() ?? '',
     };
   }
 
@@ -112,6 +179,15 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
     if (filters.value.bbox) {
       query.bbox = filters.value.bbox.join(',');
     }
+    if (filters.value.steep) {
+      query.steep = '1';
+    }
+    if (filters.value.sources.length) {
+      query.sources = filters.value.sources.join(',');
+    }
+    if (filters.value.q) {
+      query.q = filters.value.q;
+    }
     return query;
   }
 
@@ -123,7 +199,12 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
     sourceSites,
     loading,
     error,
+    visibleItems,
     itemsByDate,
+    sourceIds,
+    newIds,
+    onlyNew,
+    toggleSource,
     load,
     loadSources,
     fromRouteQuery,

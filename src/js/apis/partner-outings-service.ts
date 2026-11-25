@@ -78,6 +78,8 @@ export type PartnerOutingsQuery = {
   act?: string[];
   // the outings located in this extent: [xmin, ymin, xmax, ymax] in EPSG:3857 (those without a location are left out)
   bbox?: number[];
+  // only the steep outings (`steep=true`); left out, the steep and the others
+  steep?: boolean;
   // 'YYYY-MM-DD' or 'start,end'; the API defaults to the last 14 days
   date?: string;
   // names of sources, 'c2c' included; the API defaults to all
@@ -106,6 +108,9 @@ class PartnerOutingsService {
     }
     if (query.bbox?.length === 4) {
       params.bbox = query.bbox.join(',');
+    }
+    if (query.steep !== undefined) {
+      params.steep = String(query.steep);
     }
     if (query.date) {
       params.date = query.date;

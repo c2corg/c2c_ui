@@ -13,7 +13,7 @@
         type="checkbox"
         data-test="filter-extent"
         :checked="filterByExtent"
-        @change="emit('update:filterByExtent', ($event.target as HTMLInputElement).checked)"
+        @change="onFilterByExtent(($event.target as HTMLInputElement).checked)"
       />
       <label
         for="partner-outings-filter-extent"
@@ -164,6 +164,13 @@ function extent() {
   return bboxParam(extentFromLonLat([bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()]));
 }
 
+// the user turned the filter on: the extent that follows is the one they see
+let askedByUser = false;
+function onFilterByExtent(value: boolean) {
+  askedByUser = value;
+  emit('update:filterByExtent', value);
+}
+
 // the map follows its container when the page shows it (it was hidden) or resizes it
 function resize() {
   map?.resize();
@@ -220,8 +227,10 @@ watch(() => props.highlightedId, showHighlight);
 watch(
   () => props.filterByExtent,
   (on) => {
-    // turned on: the outings of the extent of the map as it is
-    if (map && on) emit('extent-change', extent());
+    // turned on by the user: the outings of the extent of the map as it is. Not when the page turns it on for the extent
+    // of its link, which the map may not show yet: its extent is then still the default one
+    if (map && on && askedByUser) emit('extent-change', extent());
+    askedByUser = false;
   }
 );
 </script>

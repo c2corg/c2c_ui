@@ -216,3 +216,220 @@ test('the extent of the map filters the outings, and the URL follows', async ({ 
   await page.locator('label[for=partner-outings-filter-extent]').click();
   await expect(page).toHaveURL(/[?&]bbox=-?\d+,-?\d+,-?\d+,-?\d+/);
 });
+
+// the filters of the page: steep, sources, text, default areas, new since last visit
+type Item = Located & { steep: boolean | null; author: { name: string | null } | null };
+
+const normalize = (text: string) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+test('the steep toggle keeps the steep outings, and the URL follows', async ({ page }) => {
+  const all = (await call('/partner-outings?limit=100')) as { items: Item[] };
+  const { items: steep } = (await call('/partner-outings?limit=100&steep=true')) as { items: Item[] };
+  expect(steep.length, 'steep outings in the demo data').toBeGreaterThan(0);
+  expect(steep.length).toBeLessThan(all.items.length);
+
+  await page.goto('/metaskirando');
+  const rows = page.locator('.partner-outing-row');
+  await expect(rows).toHaveCount(all.items.length);
+
+  await page.locator('label[for=partner-outings-steep]').click();
+  await expect(page).toHaveURL(/[?&]steep=1\b/);
+  await expect(rows).toHaveCount(steep.length);
+
+  // a link keeps it, and the map follows
+  await page.goto('/metaskirando?steep=1');
+  await expect(page.locator('[data-test=steep]')).toBeChecked();
+  await expect(rows).toHaveCount(steep.length);
+  await expect(page.locator('.outing-marker')).toHaveCount(steep.filter((item) => item.geometry).length);
+
+  await page.locator('label[for=partner-outings-steep]').click();
+  await expect(page).not.toHaveURL(/steep=/);
+  await expect(rows).toHaveCount(all.items.length);
+});
+
+test('the source chips list the sources of the API, and filter on them', async ({ page }) => {
+  const { sources } = (await call('/partner-outings/sources')) as { sources: { source: string }[] };
+  const gulliver = (await call('/partner-outings?limit=100&sources=c2c,gulliver')) as { items: Item[] };
+  const all = (await call('/partner-outings?limit=100')) as { items: Item[] };
+  expect(gulliver.items.length).toBeLessThan(all.items.length);
+
+  await page.goto('/metaskirando');
+  const chips = page.locator('[data-test=source-chips] .source-chip');
+  await expect(chips).toHaveCount(sources.length + 1);
+  await expect(chips.first()).toHaveAttribute('data-source', 'c2c');
+  await expect(chips.and(page.locator('[aria-pressed=true]'))).toHaveCount(sources.length + 1);
+  const rows = page.locator('.partner-outing-row');
+  await expect(rows).toHaveCount(all.items.length);
+
+  await page.locator('.source-chip[data-source=skitour]').click();
+  await expect(page).toHaveURL(/[?&]sources=c2c(,|%2C)gulliver\b/);
+  await expect(rows).toHaveCount(gulliver.items.length);
+  await expect(page.locator('.partner-outing-row .source-badge--skitour')).toHaveCount(0);
+  await expect(page.locator('.source-chip[data-source=skitour]')).toHaveAttribute('aria-pressed', 'false');
+
+  // all of them on again is no filter
+  await page.locator('.source-chip[data-source=skitour]').click();
+  await expect(page).not.toHaveURL(/sources=/);
+  await expect(rows).toHaveCount(all.items.length);
+});
+
+test('the text filter works on the loaded outings, without a request, and the URL follows', async ({ page }) => {
+  const all = (await call('/partner-outings?limit=100')) as { items: Item[] };
+  const word = 'cima';
+  const matching = all.items.filter((item) => normalize(item.title).includes(word));
+  expect(matching.length, `titles with "${word}" in the demo data`).toBeGreaterThan(0);
+  expect(matching.length).toBeLessThan(all.items.length);
+
+  await page.goto('/metaskirando');
+  const rows = page.locator('.partner-outing-row');
+  await expect(rows).toHaveCount(all.items.length);
+
+  const requests: string[] = [];
+  page.on('request', (request) => request.url().includes('/partner-outings') && requests.push(request.url()));
+  await page.locator('[data-test=text-filter]').fill(word.toUpperCase());
+  await expect(rows).toHaveCount(matching.length);
+  await expect(page).toHaveURL(new RegExp(`[?&]q=${word}`, 'i'));
+  expect(requests).toEqual([]);
+  await expect(page.locator('.outing-marker')).toHaveCount(matching.filter((item) => item.geometry).length);
+
+  await page.locator('[data-test=text-filter]').fill('zzzz no such outing');
+  await expect(page.locator('[data-test=empty]')).toBeVisible();
+
+  // together with another filter, from a link
+  await page.goto(`/metaskirando?q=${word}&steep=1`);
+  await expect(page.locator('[data-test=text-filter]')).toHaveValue(word);
+  const { items: steep } = (await call('/partner-outings?limit=100&steep=true')) as { items: Item[] };
+  await expect(rows).toHaveCount(steep.filter((item) => normalize(item.title).includes(word)).length);
+});
+
+test('the default view covers every activity, not only skiing', async ({ page }) => {
+  const all = (await call('/partner-outings?limit=100')) as { items: Row[] };
+  const others = all.items.filter((item) => !item.activities.includes('skitouring'));
+  expect(others.length, 'outings of another activity in the demo data').toBeGreaterThan(0);
+
+  await page.goto('/metaskirando');
+  await expect(page.locator('.partner-outing-row')).toHaveCount(all.items.length);
+  await expect(page).not.toHaveURL(/act=/);
+  await expect(page.locator('.partner-outing-row .activity-icons svg[data-icon=snowshoeing]').first()).toBeVisible();
+});
+
+test('an anonymous visitor remembers default areas in the browser', async ({ page }) => {
+  const all = (await call('/partner-outings?limit=100')) as { items: Row[] };
+  const inArea = all.items.filter((item) => item.areas.some((area) => area.document_id === VANOISE));
+  expect(inArea.length).toBeGreaterThan(0);
+  expect(inArea.length).toBeLessThan(all.items.length);
+  const rows = page.locator('.partner-outing-row');
+
+  await page.goto(`/metaskirando?a=${VANOISE}`);
+  await expect(rows).toHaveCount(inArea.length);
+  await page.locator('[data-test=remember-areas]').click();
+  expect(await page.evaluate(() => localStorage.getItem('metaskirando.areas'))).toBe(`[${VANOISE}]`);
+
+  // a visit without areas opens on them, and the link says so
+  await page.goto('/metaskirando');
+  await expect(page).toHaveURL(new RegExp(`[?&]a=${VANOISE}\\b`));
+  await expect(rows).toHaveCount(inArea.length);
+  await expect(page.locator('[data-test=areas] .tag')).toContainText('Vanoise');
+
+  // the defaults come with the other filters of the link, and can be forgotten
+  await page.goto('/metaskirando?act=hiking');
+  await expect(page).toHaveURL(new RegExp(`[?&]a=${VANOISE}\\b`));
+  await page.locator('[data-test=remember-areas]').click();
+  expect(await page.evaluate(() => localStorage.getItem('metaskirando.areas'))).toBeNull();
+  await page.goto('/metaskirando');
+  await expect(rows).toHaveCount(all.items.length);
+  await expect(page).not.toHaveURL(/[?&]a=/);
+});
+
+test('a blocked local storage does not break the page', async ({ page }) => {
+  await page.addInitScript(() => {
+    const blocked = () => {
+      throw new Error('blocked');
+    };
+    for (const method of ['getItem', 'setItem', 'removeItem'] as const) {
+      const original = Storage.prototype[method];
+      // the other keys (the session, GDPR) keep working: the e2e fixtures need them
+      Storage.prototype[method] = function (this: Storage, key: string, ...rest: string[]) {
+        if (String(key).startsWith('metaskirando.')) {
+          return blocked();
+        }
+        return (original as (...args: string[]) => string | null).call(this, key, ...rest);
+      } as never;
+    }
+  });
+  const all = (await call('/partner-outings?limit=100')) as { items: Row[] };
+  await page.goto('/metaskirando');
+  await expect(page.locator('.partner-outing-row')).toHaveCount(all.items.length);
+});
+
+test.describe('logged in', () => {
+  test.use({ loggedIn: true });
+
+  test('opens on the preferred areas of the account', async ({ page, data }) => {
+    const all = (await call('/partner-outings?limit=100')) as { items: Row[] };
+    const inArea = all.items.filter((item) => item.areas.some((area) => area.document_id === VANOISE));
+    expect(inArea.length).toBeGreaterThan(0);
+    expect(inArea.length).toBeLessThan(all.items.length);
+
+    const { token } = data.user;
+    const before = await call('/users/preferences', { token });
+    const area = await call(`/areas/${VANOISE}`);
+    // the preferred activity is skiing: the list still covers every activity
+    await call('/users/preferences', {
+      token,
+      method: 'POST',
+      body: { ...before, activities: ['skitouring'], areas: [area] },
+    });
+    try {
+      await page.goto('/metaskirando');
+      await expect(page).toHaveURL(new RegExp(`[?&]a=${VANOISE}\\b`));
+      await expect(page).not.toHaveURL(/act=/);
+      await expect(page.locator('.partner-outing-row')).toHaveCount(inArea.length);
+      await expect(page.locator('[data-test=areas] .tag')).toContainText('Vanoise');
+      await expect(page.locator('[data-test=remember-areas]')).toHaveCount(0);
+      await expect(page.locator('[data-test=preferred-areas] a')).toHaveAttribute('href', /\/settings#account/);
+
+      // a link with areas wins over the preferences
+      await page.goto('/metaskirando?a=14295');
+      await expect(page).toHaveURL(/[?&]a=14295\b/);
+    } finally {
+      await call('/users/preferences', { token, method: 'POST', body: before });
+    }
+  });
+});
+
+test('"new since last visit": nothing at the first visit, then what the source did not show before', async ({
+  page,
+}) => {
+  const all = (await call('/partner-outings?limit=100')) as { items: Item[] };
+  const rows = page.locator('.partner-outing-row');
+
+  // the first visit: nothing is new, and each source is remembered
+  await page.goto('/metaskirando');
+  await expect(rows).toHaveCount(all.items.length);
+  await expect(page.locator('[data-test=new]')).toHaveCount(0);
+  await expect(page.locator('[data-test=only-new]')).toHaveCount(0);
+  const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('metaskirando.visits')!));
+  expect(Object.keys(stored).sort()).toEqual(['gulliver', 'skitour']);
+
+  // a visit long after one that saw all the skitour outings but the first
+  const skitour = all.items.filter((item) => item.source === 'skitour').map((item) => item.id);
+  const fresh = skitour[0];
+  await page.evaluate(
+    ({ seen }) =>
+      localStorage.setItem(
+        'metaskirando.visits',
+        JSON.stringify({ skitour: { seen, baseline: null, at: Date.now() - 3600_000 } })
+      ),
+    { seen: skitour.slice(1) }
+  );
+  await page.reload();
+  await expect(rows).toHaveCount(all.items.length);
+  const tagged = page.locator('.partner-outing-row:has([data-test=new])');
+  await expect(tagged).toHaveCount(1);
+  await expect(tagged).toHaveAttribute('data-outing-id', fresh);
+
+  await page.locator('[data-test=only-new]').click();
+  await expect(rows).toHaveCount(1);
+  await expect(page).not.toHaveURL(/new/);
+});
