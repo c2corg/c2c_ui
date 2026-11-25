@@ -82,8 +82,8 @@
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { distinctDeviceName } from '@/components/tracking/activity-device';
 import ApplicationCard from '@/components/tracking/ApplicationCard.vue';
+import { distinctDeviceName } from '@/components/tracking/activity-device';
 import trackingService, { type Activity, type Status, type Vendor } from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
