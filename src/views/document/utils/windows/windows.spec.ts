@@ -118,7 +118,7 @@ describe('document windows', () => {
   });
 
   it('lists the texts of other documents that show or link to it', async () => {
-    const text = (id: number, title: string) => ({ document_id: id, document_type: 'r', title, langs: ['fr'] });
+    const text = (id: number, title: string, langs = ['fr']) => ({ document_id: id, document_type: 'r', title, langs });
     api.getImagesOfDeletion.mockReturnValue(
       new ApiData(
         Promise.resolve({
@@ -126,7 +126,7 @@ describe('document windows', () => {
             deleted: 0,
             orphaned: {},
             embedded_in: [text(30, 'Arête')],
-            linked_from: [text(30, 'Arête'), text(31, 'Face nord')],
+            linked_from: [text(30, 'Arête', ['en', 'fr']), text(31, 'Face nord')],
           },
         } as never)
       )
@@ -138,6 +138,13 @@ describe('document windows', () => {
 
     expect(wrapper.text()).toContain('The texts of these documents show it or link to it:');
     expect(wrapper.findAll('.notification.is-light a').map((link) => link.text())).toEqual(['Arête', 'Face nord']);
+    // one row per document, with the langs of both lists
+    expect(
+      wrapper
+        .findAll('.notification.is-light p')[1]!
+        .findAll('.tag')
+        .map((tag) => tag.text())
+    ).toEqual(['en', 'fr']);
   });
 
   it('tells why the API would refuse, and does not offer to delete', async () => {
@@ -165,6 +172,18 @@ describe('document windows', () => {
 
     expect(wrapper.find('.notification.is-warning').text()).toBe('Only documents less than 30 days old can be deleted');
     expect(wrapper.findComponent(ModalStub).attributes('confirm-disabled')).toBe('true');
+  });
+
+  it('offers no deletion while the API is asked', async () => {
+    api.getImagesOfDeletion.mockReturnValue(new ApiData(new Promise<never>(() => {})));
+    const wrapper = mountWindow(DeleteDocumentWindow, {});
+
+    (wrapper.vm as unknown as { show(): void }).show();
+    await flushPromises();
+
+    expect(wrapper.findComponent(ModalStub).attributes('confirm-disabled')).toBe('true');
+    await confirm(wrapper);
+    expect(api.deleteDocument).not.toHaveBeenCalled();
   });
 
   it('tells the moderators only that a moderator can restore the document', () => {

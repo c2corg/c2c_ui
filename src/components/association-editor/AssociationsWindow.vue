@@ -117,6 +117,8 @@ function show() {
 
 // read when the editor opens: the links of the images may have changed since the page was read
 function readImageCounts() {
+  // the former counts are forgotten: a failed request leaves the count unknown, not obsolete
+  imageCounts.value = {};
   for (const image of props.document.associations?.images ?? []) {
     const id = image.document_id!;
     (c2c.image as DocumentService)

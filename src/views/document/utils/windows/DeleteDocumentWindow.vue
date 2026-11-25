@@ -1,5 +1,10 @@
 <template>
-  <modal-confirmation ref="modalWindow" :promise="promise" :confirm-disabled="!!refusal" @confirm="executeDelete">
+  <modal-confirmation
+    ref="modalWindow"
+    :promise="promise"
+    :confirm-disabled="!!refusal || checking"
+    @confirm="executeDelete"
+  >
     <template #title>
       <span v-translate>Delete this document</span>
     </template>
@@ -70,14 +75,21 @@ const images = shallowRef<ApiData<ImagesOfDeletion> | null>(null);
 const orphaned = computed(() => Object.entries(images.value?.data?.orphaned ?? {}).filter(([, count]) => count > 0));
 const orphanedTotal = computed(() => orphaned.value.reduce((sum, [, count]) => sum + count, 0));
 
-// the texts that break: showing the image, or linking to the document (once each)
+// the texts that break: showing the image, or linking to the document (once each, with all their langs)
 const breaking = computed(() => {
   const texts = new Map<number, EmbeddingDocument>();
   for (const text of [...(images.value?.data?.embedded_in ?? []), ...(images.value?.data?.linked_from ?? [])]) {
-    texts.set(text.document_id, text);
+    const known = texts.get(text.document_id);
+    texts.set(
+      text.document_id,
+      known ? { ...known, langs: [...new Set([...known.langs, ...text.langs])].sort() } : text
+    );
   }
   return [...texts.values()];
 });
+
+// the API is asked whether it would refuse: no deletion meanwhile
+const checking = computed(() => !!images.value?.loading);
 
 // the API refuses this deletion: its reason (a refused 4xx; not a network error)
 const refusal = computed(() => {
@@ -100,6 +112,9 @@ function show() {
 defineExpose({ show });
 
 function executeDelete() {
+  if (refusal.value || checking.value) {
+    return;
+  }
   promise.value = c2c.moderator.deleteDocument(props.document.document_id!).then(() => {
     router.push({ name: documentType.value + 's' });
   });

@@ -86,6 +86,9 @@ function onError() {
   // $gettext('This outing has other participants: unlink them first', 'API message')
   // $gettext('as the last document of the image, this document can not be disassociated: delete the image instead', 'API message')
   // $gettext('as the last user of the outing, this user can not be disassociated', 'API message')
+  // $gettext('This waypoint cannot be deleted because it is a main waypoint.', 'API message')
+  // $gettext('This waypoint cannot be deleted because it is the only waypoint associated to some routes.', 'API message')
+  // $gettext('This route cannot be deleted because it is the only route associated to some outings.', 'API message')
   window.alert($gettext(apiErrors(props.promise.error)[0].description, 'API message'));
 }
 
