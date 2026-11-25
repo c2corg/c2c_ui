@@ -103,6 +103,23 @@
               </p>
             </div>
 
+            <div v-if="image.linked_from?.length" class="is-size-7 mt-2">
+              <p class="has-text-weight-semibold" v-translate>Linked from the text of</p>
+              <p
+                v-for="text of image.linked_from"
+                :key="text.document_id + text.lang + text.image_id"
+                class="is-clipped"
+              >
+                <icon-document :document-type="letterToDocumentType[text.document_type]" fixed-width />
+                <router-link :to="documentRoute(text.document_type, text.document_id)">
+                  {{ text.title || '#' + text.document_id }}
+                </router-link>
+                ({{ text.lang }})<span v-if="text.image_id !== image.document_id" class="has-text-grey">
+                  {{ $gettext('through') }} #{{ text.image_id }}</span
+                >
+              </p>
+            </div>
+
             <!-- a first click arms a button, a second one does it: one action at a time, without a window -->
             <div v-if="image.document_id !== set.kept" class="buttons mt-3">
               <button
@@ -120,8 +137,8 @@
               <button
                 class="button is-small"
                 :class="[isArmed('delete', image.document_id) ? 'is-danger' : 'is-danger is-light', busyClass(image)]"
-                :disabled="image.embedded_in.length > 0"
-                :title="image.embedded_in.length ? $gettext('Shown in texts: merge it instead') : undefined"
+                :disabled="isUsed(image)"
+                :title="isUsed(image) ? $gettext('Shown in or linked from texts: merge it instead') : undefined"
                 @click="onDelete(set, image)"
               >
                 <fa-icon icon="trash" class="mr-1" />
@@ -222,6 +239,9 @@ const armed = ref<string | null>(null);
 let disarmTimer: ReturnType<typeof setTimeout> | undefined;
 const busy = reactive(new Set<number>());
 const actionError = ref<number | null>(null);
+
+/** Shown in a text, or linked from one: deleting it breaks them, merging it keeps them */
+const isUsed = (image: DuplicateImage) => image.embedded_in.length > 0 || !!image.linked_from?.length;
 
 function load(offset: number): ApiData {
   const current = generation;

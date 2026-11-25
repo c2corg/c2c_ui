@@ -631,6 +631,8 @@ const orphanImage = z.object({
   ),
   // the documents showing it in their texts: it is used, to link again rather than delete (optional: older API)
   embedded_in: z.optional(z.array(embeddingDocument)),
+  // the documents linking to it in their texts ([[images/ID|label]] or a URL): same (optional: older API)
+  linked_from: z.optional(z.array(embeddingDocument)),
 });
 
 export type OrphanImage = z.input<typeof orphanImage>;
@@ -645,6 +647,18 @@ export const orphanImagesPage = z.object({
 // with)
 export const BROKEN_EMBED_REASONS = ['deleted', 'missing', 'not_image'] as const;
 
+// the deleted entry bringing a target back: the target itself, or the document it was deleted with
+const deletedTarget = z.object({
+  entry_id: z.number(),
+  document_id: z.number(),
+  document_type: z.string(),
+  deleted_at: z.string(),
+  expires_at: z.string(),
+  by: z.nullable(deletedDocumentUser),
+});
+
+export type DeletedTarget = z.input<typeof deletedTarget>;
+
 const brokenEmbed = z.object({
   document_id: z.number(),
   document_type: z.string(),
@@ -655,16 +669,7 @@ const brokenEmbed = z.object({
   // the type of the document of this id, when it is not an image
   image_document_type: z.nullable(z.string()),
   image_document_title: z.optional(z.nullable(z.string())),
-  deleted: z.nullable(
-    z.object({
-      entry_id: z.number(),
-      document_id: z.number(),
-      document_type: z.string(),
-      deleted_at: z.string(),
-      expires_at: z.string(),
-      by: z.nullable(deletedDocumentUser),
-    })
-  ),
+  deleted: z.nullable(deletedTarget),
 });
 
 export type BrokenEmbed = z.input<typeof brokenEmbed>;
@@ -672,6 +677,34 @@ export type BrokenEmbed = z.input<typeof brokenEmbed>;
 export const brokenEmbedsPage = z.object({
   total: z.number(),
   embeds: z.array(brokenEmbed),
+});
+
+// GET /documents/broken-links: the links in the texts of collaborative documents ([[type/id|label]] or a URL of the
+// site) whose page does not show the document (moderators). Those that can still be restored first
+export const BROKEN_LINK_REASONS = ['deleted', 'missing', 'wrong_type', 'unknown_type'] as const;
+
+const brokenLink = z.object({
+  document_id: z.number(),
+  document_type: z.string(),
+  title: z.nullable(z.string()),
+  langs: z.array(z.string()),
+  target_id: z.number(),
+  // the type as written in the link: "routes", "summits" (v5)...
+  target_type: z.string(),
+  // written as a URL of the site, not as [[type/id|label]]
+  is_url: z.boolean(),
+  reason: z.enum(BROKEN_LINK_REASONS),
+  // the document of this id, when it exists
+  target_document_type: z.nullable(z.string()),
+  target_document_title: z.nullable(z.string()),
+  deleted: z.nullable(deletedTarget),
+});
+
+export type BrokenLink = z.input<typeof brokenLink>;
+
+export const brokenLinksPage = z.object({
+  total: z.number(),
+  links: z.array(brokenLink),
 });
 
 // GET /images/duplicates: the sets of images with the same file (size, dimensions, EXIF date), the last uploaded
@@ -700,6 +733,8 @@ const duplicateImage = z.object({
   // the texts showing it with an [img=ID] tag, also through an image merged into it (`image_id`): deleting it
   // breaks them, merging it keeps them
   embedded_in: z.array(z.extend(duplicateImageLink, { lang: z.string(), image_id: z.number() })),
+  // the texts linking to it ([[images/ID|label]] or a URL), the same way (optional: older API)
+  linked_from: z.optional(z.array(z.extend(duplicateImageLink, { lang: z.string(), image_id: z.number() }))),
 });
 
 export type DuplicateImage = z.input<typeof duplicateImage>;

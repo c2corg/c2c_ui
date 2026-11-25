@@ -26,7 +26,27 @@
 
       <deleted-documents v-if="activeTab === 'deleted'" />
       <orphan-images v-else-if="activeTab === 'orphans'" />
-      <broken-embeds v-else-if="activeTab === 'broken-images'" />
+      <template v-else-if="activeTab === 'broken-links'">
+        <div class="buttons has-addons mb-4">
+          <router-link
+            :to="{ name: 'moderation', params: { tab: 'broken-links' } }"
+            class="button"
+            :class="{ 'is-primary is-selected': !showImages }"
+            v-translate
+          >
+            Links to documents
+          </router-link>
+          <router-link
+            :to="{ name: 'moderation', params: { tab: 'broken-links' }, query: { kind: 'images' } }"
+            class="button"
+            :class="{ 'is-primary is-selected': showImages }"
+          >
+            {{ $gettext('Images') }}&nbsp;<code>[img]</code>
+          </router-link>
+        </div>
+        <broken-embeds v-if="showImages" />
+        <broken-links v-else />
+      </template>
       <image-duplicates v-else-if="activeTab === 'duplicates'" />
       <account-removals v-else-if="activeTab === 'accounts'" />
     </template>
@@ -39,6 +59,7 @@ import { useRoute } from 'vue-router';
 
 import AccountRemovals from './AccountRemovals.vue';
 import BrokenEmbeds from './BrokenEmbeds.vue';
+import BrokenLinks from './BrokenLinks.vue';
 import DeletedDocuments from './DeletedDocuments.vue';
 import ImageDuplicates from './ImageDuplicates.vue';
 import OrphanImages from './OrphanImages.vue';
@@ -72,8 +93,8 @@ const tabs = computed(() => [
     unavailable: $gettext('For the moderators of the topoguide'),
   },
   {
-    name: 'broken-images',
-    title: $gettext('Broken images'),
+    name: 'broken-links',
+    title: $gettext('Broken links'),
     icon: 'link-slash',
     available: isTopoguideModerator.value,
     unavailable: $gettext('For the moderators of the topoguide'),
@@ -102,8 +123,12 @@ const tabs = computed(() => [
   },
 ]);
 
+// the broken images had their own tab: its address shows them
+const showImages = computed(() => route.query.kind === 'images' || route.params.tab === 'broken-images');
+
 const activeTab = computed(() => {
-  const tab = route.params.tab as string | undefined;
+  const asked = route.params.tab as string | undefined;
+  const tab = asked === 'broken-images' ? 'broken-links' : asked;
   const available = tabs.value.filter((t) => t.available);
   return (available.find((t) => t.name === tab) ?? available[0])?.name;
 });

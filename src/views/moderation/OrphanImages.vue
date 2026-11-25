@@ -72,18 +72,28 @@
               <span v-for="lang of document.langs" :key="lang" class="tag is-white ml-1">{{ lang }}</span>
             </p>
           </div>
+          <div v-if="image.linked_from?.length" class="notification is-warning is-light is-size-7 p-2 mt-2 mb-0">
+            <p class="has-text-weight-semibold" v-translate>Linked from the text of:</p>
+            <p v-for="document of image.linked_from" :key="document.document_id" class="embedded-in is-clipped">
+              <icon-document :document-type="letterToDocumentType[document.document_type]" fixed-width />
+              <router-link :to="documentRoute(document.document_type, document.document_id, document.langs[0])">
+                {{ document.title || '#' + document.document_id }}
+              </router-link>
+              <span v-for="lang of document.langs" :key="lang" class="tag is-white ml-1">{{ lang }}</span>
+            </p>
+          </div>
           <div class="mt-2">
             <!-- a first click arms the button, a second one deletes: one image at a time, without a window. An
-                 image shown in a text is used: not deleted from here -->
+                 image shown in a text, or linked from one, is used: not deleted from here -->
             <button
               class="button"
               :class="[
                 armed === image.document_id ? 'is-danger' : 'is-danger is-light',
                 { 'is-loading': deleting.has(image.document_id) },
               ]"
-              :disabled="!!image.embedded_in?.length"
+              :disabled="isUsed(image)"
               :title="
-                image.embedded_in?.length ? $gettext('Shown in the text of a document: link it instead') : undefined
+                isUsed(image) ? $gettext('Shown in or linked from the text of a document: link it instead') : undefined
               "
               @click="onDelete(image)"
             >
@@ -143,6 +153,9 @@ const armed = ref<number | null>(null);
 let disarm: ReturnType<typeof setTimeout> | undefined;
 const deleting = reactive(new Set<number>());
 const deleteError = ref<number | null>(null);
+
+/** Shown in a text, or linked from one: used, to link again rather than delete */
+const isUsed = (image: OrphanImage) => !!(image.embedded_in?.length || image.linked_from?.length);
 
 function load(offset: number): ApiData {
   const current = generation;

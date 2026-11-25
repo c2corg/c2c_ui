@@ -189,7 +189,22 @@ describe('ImageDuplicates', () => {
 
     const deleteButton = button(wrapper, 1, 'Delete');
     expect(deleteButton.attributes('disabled')).toBeDefined();
-    expect(deleteButton.attributes('title')).toBe('Shown in texts: merge it instead');
+    expect(deleteButton.attributes('title')).toBe('Shown in or linked from texts: merge it instead');
+  });
+
+  it('does not delete an image linked from a text, and shows that text', async () => {
+    const wrapper = await mountList(
+      set([
+        image(1),
+        image(2, {
+          linked_from: [{ document_id: 61, document_type: 'r', title: 'Hut', lang: 'de', image_id: 2 }],
+        }),
+      ])
+    );
+
+    expect(wrapper.text()).toContain('Linked from the text of');
+    expect(wrapper.text()).toContain('Hut');
+    expect(button(wrapper, 1, 'Delete').attributes('disabled')).toBeDefined();
   });
 
   it('deletes a copy, and tells when it fails', async () => {
