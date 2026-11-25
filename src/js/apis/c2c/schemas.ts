@@ -58,6 +58,8 @@ const associatedDocuments = z.optional(z.array(document));
 export const associations = z.object({
   waypoints: associatedDocuments,
   waypoint_children: associatedDocuments,
+  // an outing: the waypoints of its routes (not associated with it), for its map
+  route_waypoints: associatedDocuments,
   routes: associatedDocuments,
   outings: associatedDocuments,
   images: associatedDocuments,

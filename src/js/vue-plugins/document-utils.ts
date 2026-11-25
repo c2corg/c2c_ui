@@ -36,6 +36,8 @@ export type Locale = {
 export type Associations = {
   waypoints?: C2cDocument[];
   waypoint_children?: C2cDocument[];
+  // the waypoints of the routes of an outing (not associated with it), for its map
+  route_waypoints?: C2cDocument[];
   routes?: C2cDocument[];
   outings?: C2cDocument[];
   images?: C2cDocument[];

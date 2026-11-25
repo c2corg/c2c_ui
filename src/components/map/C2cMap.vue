@@ -784,9 +784,11 @@ function collectFeatures() {
   features = [...diff(props.oldDocument, 'old'), ...diff(props.newDocument, 'new')];
   for (const document of props.documents ?? []) {
     features.push(...documentFeatures(document, 'documents'));
+    // an outing has no waypoint of its own: those of its routes (access, hut, summit)
     const waypoints = [
       ...(document.associations?.waypoints ?? []),
       ...(document.associations?.waypoint_children ?? []),
+      ...(document.associations?.route_waypoints ?? []),
     ].filter(isNotVirtual);
     waypoints.forEach((waypoint) => features.push(...documentFeatures(waypoint, 'waypoints')));
     // the images of an outing, where they are not at the place of the outing
@@ -2074,43 +2076,6 @@ function addMarkers(created: MapLibreMap, markers: Marker3d[]) {
   );
 }
 
-// an outing has no waypoint of its own: the 3D view also shows those of its routes (access, hut, summit), read when
-// it opens (a request per route, 3 routes at most)
-async function addRouteWaypoints(shown: Marker3d[]) {
-  // a list has the markers of its results: the routes of 3 of its outings would be an arbitrary pick
-  if (isList.value) return;
-  const routeIds = [
-    ...new Set(
-      (props.documents ?? [])
-        .filter((document) => document.type === 'o')
-        .flatMap((outing) => outing.associations?.routes?.map((route) => route.document_id) ?? [])
-        .filter((id): id is number => id !== undefined)
-    ),
-  ].slice(0, 3);
-  if (!routeIds.length) return;
-  const opened = map;
-  const version = documents3dVersion;
-  const routes = await Promise.all(
-    routeIds.map((id) =>
-      Promise.resolve((c2c.route as DocumentService).get(id, $language.current!)).then(
-        (response) => response.data as C2cDocument,
-        () => null
-      )
-    )
-  );
-  if (!is3d.value || map !== opened || !map || version !== documents3dVersion) return;
-  const ids = new Set(shown.map((marker) => (marker.to as { params?: { id?: number } } | null)?.params?.id));
-  const markers = routes
-    .flatMap((route) => route?.associations?.waypoints ?? [])
-    .filter(isNotVirtual)
-    .filter((waypoint) => !ids.has(waypoint.document_id) && ids.add(waypoint.document_id))
-    .flatMap((waypoint) => documentFeatures(waypoint, 'waypoints'))
-    .filter(isPoint)
-    .map((feature) => marker3d(feature, true))
-    .filter((marker): marker is Marker3d => !!marker);
-  addMarkers(map, markers);
-}
-
 // paragliding: the flights in the air, the walk on the ground. The search (terrain tiles) and deck.gl start as soon as
 // the view opens; the track is only drawn once split, so that it does not first lie on the ground then jump into the
 // air. If the search itself takes too long, the track is drawn on the ground meanwhile.
@@ -2185,8 +2150,6 @@ function redraw3d() {
   (map.getSource('flight-shadows') as GeoJSONSource).setData(EMPTY_COLLECTION);
   addMarkers(map, markers);
   showFlights(map, lines);
-  // removed with the others: read again (the version drops a former request still running)
-  void addRouteWaypoints(markers);
 }
 
 function open3d() {
@@ -2218,7 +2181,6 @@ function open3d() {
   addMarkers(created, markers);
   showFlights(created, lines);
   resetCamera();
-  addRouteWaypoints(markers);
 }
 
 function close3d() {

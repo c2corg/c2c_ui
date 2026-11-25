@@ -312,11 +312,12 @@ const parse = (json?: string | null): Geometry | null => {
   }
 };
 
-// the points of the waypoints associated with the document
+// the points of the waypoints associated with the document, and of the routes of an outing
 function waypointPoints(associations: OfflineDocument['associations']) {
   const waypoints = [
     ...((associations?.waypoints as { geometry?: { geom?: string | null } }[] | undefined) ?? []),
     ...((associations?.waypoint_children as { geometry?: { geom?: string | null } }[] | undefined) ?? []),
+    ...((associations?.route_waypoints as { geometry?: { geom?: string | null } }[] | undefined) ?? []),
   ];
   return waypoints.flatMap((waypoint) => pointsOf(parse(waypoint.geometry?.geom)));
 }

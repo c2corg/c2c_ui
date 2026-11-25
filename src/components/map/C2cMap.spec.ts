@@ -125,6 +125,19 @@ describe('C2cMap', () => {
     wrapper.unmount();
   });
 
+  it('draws the waypoints of the routes of an outing, which has none of its own', async () => {
+    const outing = {
+      document_id: 2,
+      type: 'o',
+      geometry: { geom: point(6.8, 45.9), geom_detail: line([6.8, 45.9], [6.81, 45.91]) },
+      associations: { route_waypoints: [waypoint(3, 'summit', 6.82), waypoint(4, 'virtual', 6.83)] },
+    };
+    const { wrapper, map } = await mountMap({ documents: [outing] });
+
+    expect(drawnKeys(map)).toEqual(['documents:o:2:detail', 'waypoints:w:3:point']);
+    wrapper.unmount();
+  });
+
   it('draws the two versions of the diff: the old one in red under the new one in green', async () => {
     const version = (lon: number) => ({
       ...route,
@@ -1509,21 +1522,20 @@ describe('C2cMap', () => {
       wrapper.unmount();
     });
 
-    it('also shows the waypoints of the routes of an outing, read when it opens', async () => {
-      const get = vi.spyOn(c2c.route as DocumentService, 'get').mockReturnValue(
-        Promise.resolve({
-          data: {
-            associations: {
-              waypoints: [waypoint(11, 'summit', 6.285), waypoint(12, 'access', 6.281), waypoint(13, 'virtual', 6.3)],
-            },
-          },
-        }) as never
-      );
-      const { wrapper, map } = await mountMap({ documents: [outing], show3d: true });
+    it('also shows the waypoints of the routes of an outing, without another request', async () => {
+      const get = vi.spyOn(c2c.route as DocumentService, 'get');
+      const withWaypoints = {
+        ...outing,
+        associations: {
+          ...outing.associations,
+          route_waypoints: [waypoint(11, 'summit', 6.285), waypoint(12, 'access', 6.281), waypoint(13, 'virtual', 6.3)],
+        },
+      };
+      const { wrapper, map } = await mountMap({ documents: [withWaypoints], show3d: true });
 
       await open3d(wrapper);
 
-      expect(get).toHaveBeenCalledWith(7, 'fr');
+      expect(get).not.toHaveBeenCalled();
       // the virtual waypoint is left out, as on the 2D map
       expect(shownMarkers()).toHaveLength(2);
       expect(shownMarkers()[0].lngLat![0]).toBeCloseTo(6.285, 6);
@@ -1532,10 +1544,14 @@ describe('C2cMap', () => {
     });
 
     it('keeps the waypoints of the routes when the images of the outing are located', async () => {
-      vi.spyOn(c2c.route as DocumentService, 'get').mockReturnValue(
-        Promise.resolve({ data: { associations: { waypoints: [waypoint(11, 'summit', 6.285)] } } }) as never
-      );
-      const located = reactive({ ...outing, associations: { ...outing.associations, images: [] as unknown[] } });
+      const located = reactive({
+        ...outing,
+        associations: {
+          ...outing.associations,
+          route_waypoints: [waypoint(11, 'summit', 6.285)],
+          images: [] as unknown[],
+        },
+      });
       const { wrapper } = await mountMap({ documents: [located], show3d: true });
       await open3d(wrapper);
       expect(shownMarkers()).toHaveLength(1);
@@ -1546,22 +1562,6 @@ describe('C2cMap', () => {
       expect(shownMarkers().map((marker) => marker.lngLat![0])).toEqual(
         expect.arrayContaining([expect.closeTo(6.285, 6)])
       );
-      wrapper.unmount();
-    });
-
-    it('drops the waypoints read for the documents it no longer shows', async () => {
-      let answer: (value: unknown) => void = () => {};
-      vi.spyOn(c2c.route as DocumentService, 'get').mockReturnValue(
-        new Promise((resolve) => (answer = resolve)) as never
-      );
-      const { wrapper } = await mountMap({ documents: [outing], show3d: true });
-      await open3d(wrapper);
-
-      await wrapper.setProps({ documents: [{ ...outing, document_id: 3, associations: {} }] });
-      answer({ data: { associations: { waypoints: [waypoint(11, 'summit', 6.285)] } } });
-      await flushPromises();
-
-      expect(shownMarkers()).toHaveLength(0);
       wrapper.unmount();
     });
 
