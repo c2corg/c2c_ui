@@ -9,8 +9,23 @@ export const SOURCE_COLORS: Record<string, string> = {
   c2c: '#f93',
   skitour: '#1c5a8c',
   gulliver: '#1f6a35',
+  gipfelbuch: '#54308a',
+  bivouak: '#8a4100',
+  skitourenportal: '#8f1c48',
 };
 export const OTHER_SOURCE_COLOR = '#444';
+
+// the short label of the sources of the registry; another source shows the name of its site if known, else its id
+export const SOURCE_LABELS: Record<string, string> = {
+  c2c: 'c2c',
+  skitour: 'Skitour',
+  gulliver: 'Gulliver',
+  gipfelbuch: 'Gipfelbuch',
+  bivouak: 'Bivouak',
+  skitourenportal: 'Skitourenportal',
+};
+
+export const sourceLabel = (source: string, siteName?: string) => SOURCE_LABELS[source] ?? (siteName || source);
 
 export const sourceColor = (source: string) => SOURCE_COLORS[source] ?? OTHER_SOURCE_COLOR;
 

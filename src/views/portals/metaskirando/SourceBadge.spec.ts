@@ -11,9 +11,25 @@ describe('SourceBadge', () => {
     expect(wrapper.attributes('title')).toBe('Skitour.fr');
   });
 
-  it('shows the name of another source, with a neutral colour', () => {
-    const wrapper = shallowMount(SourceBadge, { props: { source: 'gipfelbuch' } });
-    expect(wrapper.text()).toBe('gipfelbuch');
+  it.each([
+    ['gipfelbuch', 'Gipfelbuch'],
+    ['bivouak', 'Bivouak'],
+    ['skitourenportal', 'Skitourenportal'],
+  ])('has its own label and colour for %s', (source, label) => {
+    const wrapper = shallowMount(SourceBadge, { props: { source, siteName: 'ignored' } });
+    expect(wrapper.text()).toBe(label);
+    expect(wrapper.classes()).toContain(`source-badge--${source}`);
+  });
+
+  it('shows the site name of an unknown source, with a neutral colour', () => {
+    const wrapper = shallowMount(SourceBadge, { props: { source: 'newsite', siteName: 'New Site' } });
+    expect(wrapper.text()).toBe('New Site');
+    expect(wrapper.classes()).toContain('source-badge--other');
+  });
+
+  it('shows the id of an unknown source without a site name', () => {
+    const wrapper = shallowMount(SourceBadge, { props: { source: 'newsite' } });
+    expect(wrapper.text()).toBe('newsite');
     expect(wrapper.classes()).toContain('source-badge--other');
   });
 });
