@@ -331,12 +331,13 @@ function waypointPoints(associations: OfflineDocument['associations']) {
 export function offlineTilesOf(document: OfflineDocument): { urls: string[]; layers: Record<string, number> } {
   const geometry = parse(document.geometry?.geom_detail) ?? parse(document.geometry?.geom);
   const points = pointsOf(geometry);
-  if (!points.length) {
+  // its waypoints too (access, hut, summit): a route without a track is a point, which may be far from them; an
+  // outing without a geometry still has those of its routes
+  const waypoints = waypointPoints(document.associations);
+  if (!points.length && !waypoints.length) {
     return { urls: [], layers: {} };
   }
   const track = linesOf(parse(document.geometry?.geom_detail));
-  // its waypoints too (access, hut, summit): a route without a track is a point, which may be far from them
-  const waypoints = waypointPoints(document.associations);
   // without a track, the band is the circles around the point and the waypoints
   const bandPoints = track.length ? waypoints : [...points, ...waypoints];
   const extent = [...points, ...waypoints].reduce<Extent>(
