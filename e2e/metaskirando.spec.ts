@@ -129,3 +129,90 @@ test('an outing of c2c links inside the site', async ({ page }) => {
   await expect(row).toHaveAttribute('href', /^\/outings\/\d+/);
   await expect(row).not.toHaveAttribute('target', '_blank');
 });
+
+// the map beside the list: one marker per outing that has a geometry, coloured by source
+type Located = Row & { id: string; title: string; geometry: { geom: string; quality: string } | null };
+const APPROXIMATE = ['summit', 'area_centroid'];
+
+test('the map has a marker per located outing, coloured by source, the approximate ones apart', async ({ page }) => {
+  const all = (await call('/partner-outings?limit=100')) as { items: Located[] };
+  const located = all.items.filter((item) => item.geometry);
+  const approximate = located.filter((item) => APPROXIMATE.includes(item.geometry!.quality));
+  expect(located.length, 'located outings in the demo data').toBeGreaterThan(0);
+  expect(approximate.length, 'approximate outings (summit) in the demo data').toBeGreaterThan(0);
+  expect(approximate.length).toBeLessThan(located.length);
+
+  await page.goto('/metaskirando');
+  const markers = page.locator('.outing-marker');
+  await expect(markers).toHaveCount(located.length);
+  await expect(markers.and(page.locator('.is-approximate'))).toHaveCount(approximate.length);
+
+  // the colours of the badges, per source
+  const colorOf = (marker: ReturnType<typeof page.locator>) =>
+    marker.locator('.outing-marker-dot').evaluate((el) => el.style.getPropertyValue('--marker-color'));
+  expect(await colorOf(page.locator('.outing-marker[data-source=skitour]').first())).toBe('#1c5a8c');
+  expect(await colorOf(page.locator('.outing-marker[data-source=gulliver]').first())).toBe('#1f6a35');
+
+  // the tooltip says the location is approximate, and the legend explains it
+  const rough = page.locator(`.outing-marker[data-outing-id="${approximate[0].id}"]`);
+  await expect(rough).toHaveAttribute('title', /approximate|approximative/i);
+  await expect(page.locator('[data-test=legend-approximate]')).toBeVisible();
+
+  // the rows without a location stay in the list, and are counted
+  const without = all.items.length - located.length;
+  await expect(page.locator('.partner-outing-row')).toHaveCount(all.items.length);
+  if (without > 0) {
+    await expect(page.locator('[data-test=without-location]')).toContainText(String(without));
+  }
+});
+
+test('hovering a row highlights its marker and the other way round, a click on a marker scrolls to its row', async ({
+  page,
+}) => {
+  const all = (await call('/partner-outings?limit=100')) as { items: Located[] };
+  const located = all.items.filter((item) => item.geometry);
+  const target = located[located.length - 1];
+
+  await page.goto('/metaskirando');
+  await expect(page.locator('.outing-marker')).toHaveCount(located.length);
+  const row = page.locator(`.partner-outing-row[data-outing-id="${target.id}"]`);
+  const marker = page.locator(`.outing-marker[data-outing-id="${target.id}"]`);
+
+  await row.hover();
+  await expect(marker).toHaveClass(/is-highlighted/);
+  await page.locator('.metaskirando .subtitle').hover();
+  await expect(marker).not.toHaveClass(/is-highlighted/);
+
+  // a marker may be under another one: the event is what the page listens to
+  await marker.dispatchEvent('mouseenter');
+  await expect(row).toHaveClass(/is-highlighted/);
+  await marker.dispatchEvent('mouseleave');
+  await expect(row).not.toHaveClass(/is-highlighted/);
+
+  await marker.dispatchEvent('click');
+  await expect(row).toBeInViewport();
+  await expect(row).toHaveClass(/is-selected/);
+});
+
+test('the extent of the map filters the outings, and the URL follows', async ({ page }) => {
+  const all = (await call('/partner-outings?limit=100')) as { items: Located[]; total: number };
+  // a small extent in the Alps (EPSG:3857): some outings of the demo data, not all
+  const bbox = '650000,5600000,800000,5700000';
+  const inside = (await call(`/partner-outings?limit=100&bbox=${bbox}`)) as { items: Located[] };
+  expect(inside.items.length).toBeGreaterThan(0);
+  expect(inside.items.length).toBeLessThan(all.items.length);
+
+  await page.goto(`/metaskirando?bbox=${bbox}`);
+  await expect(page.locator('[data-test=filter-extent]')).toBeChecked();
+  await expect(page.locator('.partner-outing-row')).toHaveCount(inside.items.length);
+  await expect(page.locator('.outing-marker')).toHaveCount(inside.items.length);
+
+  // off: all the outings, and no bbox in the URL
+  await page.locator('label[for=partner-outings-filter-extent]').click();
+  await expect(page).not.toHaveURL(/bbox=/);
+  await expect(page.locator('.partner-outing-row')).toHaveCount(all.items.length);
+
+  // on: the extent of the map as it is
+  await page.locator('label[for=partner-outings-filter-extent]').click();
+  await expect(page).toHaveURL(/[?&]bbox=-?\d+,-?\d+,-?\d+,-?\d+/);
+});
