@@ -124,13 +124,13 @@ import constants from '@/js/constants';
 
 const PAGE_SIZE = 30;
 
-// red: restorable, before its purge; grey: gone, only an edit of the text helps; orange: a wrong type in the text;
-// blue: a type the site does not know (often of v5: summits, huts...)
+// red: the link leads nowhere (the Restore button tells the deleted ones); yellow: it leads to a document, the type in
+// the text is wrong
 const REASON_CLASSES: Record<BrokenLink['reason'], string> = {
   deleted: 'is-danger is-light',
-  missing: '',
+  missing: 'is-danger is-light',
   wrong_type: 'is-warning is-light',
-  unknown_type: 'is-info is-light',
+  unknown_type: 'is-danger is-light',
 };
 
 const { $gettext } = useGlobalProperties();

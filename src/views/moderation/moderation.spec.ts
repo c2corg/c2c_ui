@@ -693,7 +693,7 @@ describe('BrokenEmbeds', () => {
     // one colour per reason
     expect(rows.map((row) => row.find('.tag.ml-2').classes())).toEqual([
       ['tag', 'ml-2', 'is-danger', 'is-light'],
-      ['tag', 'ml-2'],
+      ['tag', 'ml-2', 'is-danger', 'is-light'],
       ['tag', 'ml-2', 'is-warning', 'is-light'],
       ['tag', 'ml-2', 'is-warning', 'is-light'],
     ]);
@@ -787,10 +787,10 @@ describe('BrokenLinks', () => {
     // one colour per reason
     expect(rows.map((row) => row.find('.tag.ml-2').classes())).toEqual([
       ['tag', 'ml-2', 'is-danger', 'is-light'],
-      ['tag', 'ml-2'],
+      ['tag', 'ml-2', 'is-danger', 'is-light'],
       ['tag', 'ml-2', 'is-warning', 'is-light'],
-      ['tag', 'ml-2', 'is-info', 'is-light'],
-      ['tag', 'ml-2'],
+      ['tag', 'ml-2', 'is-danger', 'is-light'],
+      ['tag', 'ml-2', 'is-danger', 'is-light'],
     ]);
     expect(wrapper.text()).toContain('Found: 5');
   });
