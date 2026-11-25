@@ -16,7 +16,7 @@
 
     <!-- content formatting done with DOM parser to decode html entities -->
     <p v-for="(descPar, i) of descriptionParagraphs" :key="i">{{ descPar }}</p>
-    <a :href="data.infoUrl" target="_blank" rel="noopener" v-translate>More info</a> |
+    <a :href="data.infoUrl" class="external-link" target="_blank" rel="noopener" v-translate>More info</a> |
     <a :href="data.kmlUrl" target="_blank" rel="noopener">KML</a>
   </modal-window>
 </template>

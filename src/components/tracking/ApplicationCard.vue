@@ -14,7 +14,7 @@
         </div>
         <div class="media-content">
           <p class="is-4 has-text-weight-bold">{{ $gettext(application.name) }}</p>
-          <a :href="application.website" class="is-6" target="_blank" v-translate>Go to website</a>
+          <a :href="application.website" class="is-6 external-link" target="_blank" v-translate>Go to website</a>
           <span
             class="status is-size-1"
             :class="application.status === 'configured' ? 'has-text-success' : 'has-text-warning'"
