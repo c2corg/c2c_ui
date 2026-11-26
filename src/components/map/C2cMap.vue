@@ -142,6 +142,7 @@
       v-show="showCenterOnGeolocation && !is3d"
       :title="$gettext('Recenter on your current position')"
       class="ol-control ol-control-center-on-geolocation"
+      :class="{ 'below-pin': showPinToTopButton && !isFullscreen }"
     >
       <button :aria-label="$gettext('Recenter on your current position')" @click="centerOnGeolocation">
         <fa-icon icon="bullseye" />
@@ -2602,9 +2603,14 @@ defineExpose({
   left: 0.5em;
 }
 
+/* just below the full-screen button, or below the pin button when it is shown */
 .ol-control-center-on-geolocation {
-  top: calc(2em + 4 * var(--map-button-size) + var(--map-inset-top));
+  top: calc(1.5em + 3 * var(--map-button-size) + var(--map-inset-top));
   left: 0.5em;
+
+  &.below-pin {
+    top: calc(2em + 4 * var(--map-button-size) + var(--map-inset-top));
+  }
 }
 
 .ol-control-layer-switcher {
@@ -2731,13 +2737,15 @@ defineExpose({
   bottom: calc(1em + var(--map-button-size) + var(--map-inset-bottom));
   right: 0.5em;
 
+  /* the pen in the middle of its button */
   a {
-    line-height: 0.4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   svg {
     height: 0.7em;
-    vertical-align: -0.45em;
   }
 }
 
