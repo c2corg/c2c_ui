@@ -26,15 +26,15 @@
       </div>
     </div>
     <footer class="card-footer">
-      <a @click="configure()" class="card-footer-item" v-if="canConnect">
+      <button type="button" class="card-footer-item" @click="configure()" v-if="canConnect">
         <fa-icon icon="plug"></fa-icon>&nbsp;{{ $gettext('Connect') }}
-      </a>
-      <a @click="configure()" class="card-footer-item" v-if="canRefresh">
+      </button>
+      <button type="button" class="card-footer-item" @click="configure()" v-if="canRefresh">
         <fa-icon icon="rotate"></fa-icon>&nbsp;{{ $gettext('Refresh') }}
-      </a>
-      <a @click="revoke()" class="card-footer-item" v-if="canRevoke">
+      </button>
+      <button type="button" class="card-footer-item" @click="revoke()" v-if="canRevoke">
         <fa-icon icon="trash"></fa-icon>&nbsp;{{ $gettext('Revoke') }}
-      </a>
+      </button>
     </footer>
   </div>
 </template>
@@ -74,6 +74,23 @@ function configure() {
 .grayed-out {
   filter: grayscale(0.8);
 }
+.card-footer-item {
+  background: none;
+  border: none;
+  color: var(--c2c-link);
+  cursor: pointer;
+  font: inherit;
+  touch-action: manipulation;
+
+  &:not(:last-child) {
+    border-right: 1px solid hsl(0, 0%, 93%);
+  }
+
+  &:hover {
+    color: var(--c2c-grey-darker);
+  }
+}
+
 .status {
   position: absolute;
   top: 20px;
