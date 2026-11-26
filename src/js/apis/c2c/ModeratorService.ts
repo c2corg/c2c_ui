@@ -8,6 +8,7 @@ import {
   duplicateImagesPage,
   imagesOfDeletion,
   brokenEmbedsPage,
+  brokenLinksPage,
   orphanImagesPage,
   restoreResult,
   type AccountRemoval,
@@ -84,6 +85,14 @@ export default class ModeratorService {
    */
   getBrokenEmbeds(offset = 0, limit = 30) {
     return this.api.getValidated('/images/broken-embeds', brokenEmbedsPage, { params: { offset, limit } });
+  }
+
+  /*
+   * The links in the texts of collaborative documents whose page does not show the document: deleted, missing, of
+   * another type, or of an unknown type
+   */
+  getBrokenLinks(offset = 0, limit = 30) {
+    return this.api.getValidated('/documents/broken-links', brokenLinksPage, { params: { offset, limit } });
   }
 
   /*

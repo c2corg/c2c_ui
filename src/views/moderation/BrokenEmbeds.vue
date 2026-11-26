@@ -125,10 +125,10 @@ import constants from '@/js/constants';
 
 const PAGE_SIZE = 30;
 
-// red: restorable, before its purge; grey: gone, only an edit of the text helps; orange: a wrong id in the text
+// red: the image shows nowhere (the Restore button tells the deleted ones); yellow: a wrong id in the text
 const REASON_CLASSES: Record<BrokenEmbed['reason'], string> = {
   deleted: 'is-danger is-light',
-  missing: '',
+  missing: 'is-danger is-light',
   not_image: 'is-warning is-light',
 };
 

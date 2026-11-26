@@ -45,6 +45,17 @@ describe('Markdown', () => {
     expect(router.currentRoute.value.fullPath).toBe('/routes/12/fr/arete');
   });
 
+  it('leaves a link of an unknown type without a page, and builds the next ones', async () => {
+    const { wrapper } = await mountMarkdown(
+      '<a c2c:role="internal-link" c2c:document-type="parkings" c2c:document-id="7">Parking</a> ' +
+        '<a c2c:role="internal-link" c2c:document-type="routes" c2c:document-id="12">Route</a>'
+    );
+    const links = wrapper.findAll('a');
+
+    expect(links[0]!.attributes('href')).toBeUndefined();
+    expect(links[1]!.attributes('href')).toBe('/routes/12');
+  });
+
   it('gives the embedded images to the image viewer, and opens it on click', async () => {
     const { wrapper, imageViewer } = await mountMarkdown(
       '<figure c2c:role="embedded-figure"><img c2c:role="embedded-image" c2c:document-id="34" c2c:url-proxy="/images/proxy/34" c2c:size="MI" /></figure>'

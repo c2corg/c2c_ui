@@ -6,6 +6,7 @@ import { createMemoryHistory, createRouter, type Router } from 'vue-router';
 import AccountRemovalItem from './AccountRemovalItem.vue';
 import AccountRemovals from './AccountRemovals.vue';
 import BrokenEmbeds from './BrokenEmbeds.vue';
+import BrokenLinks from './BrokenLinks.vue';
 import DeletedDocumentItem from './DeletedDocumentItem.vue';
 import DeletedDocuments from './DeletedDocuments.vue';
 import ModerationView from './ModerationView.vue';
@@ -13,7 +14,7 @@ import OrphanImages from './OrphanImages.vue';
 import { daysLeft, documentRoute } from './deleted-documents';
 
 import { ApiData } from '@/js/apis/BaseApi';
-import type { AccountRemoval, BrokenEmbed, DeletedDocument, OrphanImage } from '@/js/apis/c2c/schemas';
+import type { AccountRemoval, BrokenEmbed, BrokenLink, DeletedDocument, OrphanImage } from '@/js/apis/c2c/schemas';
 import { isForumModerator } from '@/stores/forum-role';
 import RemoveAccountWindow from '@/views/document/utils/windows/RemoveAccountWindow.vue';
 
@@ -29,6 +30,7 @@ const api = vi.hoisted(() => ({
   requestAccountRemoval: vi.fn(),
   getOrphanImages: vi.fn(),
   getBrokenEmbeds: vi.fn(),
+  getBrokenLinks: vi.fn(),
   deleteDocument: vi.fn(),
 }));
 
@@ -176,12 +178,35 @@ describe('ModerationView', () => {
     expect(wrapper.findAll('.tabs li').map((li) => li.text())).toEqual([
       'Deleted documents',
       'Orphan images',
-      'Broken images',
+      'Broken links',
       'Duplicate images',
       'Accounts',
       'Edits to check',
     ]);
     expect(wrapper.findAll('.tabs a.is-disabled')).toHaveLength(1);
+  });
+
+  it('shows the broken links, the broken images by a toggle and by the address of their former tab', async () => {
+    api.getBrokenLinks.mockReturnValue(answer({ total: 0, links: [] }));
+    api.getBrokenEmbeds.mockReturnValue(answer({ total: 0, embeds: [] }));
+    await router.push('/moderation/broken-links');
+    const wrapper = mount(ModerationView, { global: global() });
+    await flushPromises();
+
+    expect(wrapper.find('.tabs li.is-active').text()).toBe('Broken links');
+    expect(wrapper.findComponent(BrokenLinks).exists()).toBe(true);
+    expect(wrapper.findComponent(BrokenEmbeds).exists()).toBe(false);
+
+    await router.push('/moderation/broken-links?kind=images');
+    await flushPromises();
+    expect(wrapper.findComponent(BrokenEmbeds).exists()).toBe(true);
+    expect(wrapper.find('.buttons .is-selected').text()).toContain('[img]');
+
+    await router.push('/moderation/broken-images');
+    await flushPromises();
+    expect(wrapper.find('.tabs li.is-active').text()).toBe('Broken links');
+    expect(wrapper.findComponent(BrokenEmbeds).exists()).toBe(true);
+    await router.push('/moderation');
   });
 
   it('opens on the accounts for a moderator of the forum only, without the deleted documents', async () => {
@@ -564,6 +589,22 @@ describe('OrphanImages', () => {
     expect(deleteButtons(wrapper)[1]!.attributes('disabled')).toBeUndefined();
   });
 
+  it('shows the documents linking to an image in their texts, and does not delete it', async () => {
+    const linkedFrom = [{ document_id: 37, document_type: 'w', title: 'Refuge', langs: ['de'] }];
+    api.getOrphanImages.mockReturnValue(answer({ total: 1, images: [orphan(1, { linked_from: linkedFrom })] }));
+    const wrapper = mount(OrphanImages, { global: global() });
+    await flushPromises();
+
+    const card = wrapper.find('.orphan-image');
+    expect(card.text()).toContain('Linked from the text of:');
+    expect(card.text()).not.toContain('Shown in the text of:');
+    expect(card.find('.embedded-in a').attributes('href')).toBe('/waypoints/37/de');
+    expect(deleteButtons(wrapper)[0]!.attributes('disabled')).toBeDefined();
+    expect(deleteButtons(wrapper)[0]!.attributes('title')).toBe(
+      'Shown in or linked from the text of a document: link it instead'
+    );
+  });
+
   it('arms one button at a time, and tells when a deletion fails', async () => {
     api.getOrphanImages.mockReturnValue(answer({ total: 2, images: [orphan(1), orphan(2)] }));
     api.deleteDocument.mockReturnValue(new ApiData(Promise.reject(new Error('403'))));
@@ -652,7 +693,7 @@ describe('BrokenEmbeds', () => {
     // one colour per reason
     expect(rows.map((row) => row.find('.tag.ml-2').classes())).toEqual([
       ['tag', 'ml-2', 'is-danger', 'is-light'],
-      ['tag', 'ml-2'],
+      ['tag', 'ml-2', 'is-danger', 'is-light'],
       ['tag', 'ml-2', 'is-warning', 'is-light'],
       ['tag', 'ml-2', 'is-warning', 'is-light'],
     ]);
@@ -688,5 +729,97 @@ describe('BrokenEmbeds', () => {
     expect(api.getBrokenEmbeds).toHaveBeenCalledTimes(2);
     expect(wrapper.find('.notification.is-success a').attributes('href')).toBe('/outings/1001');
     expect(wrapper.text()).toContain('No broken image.');
+  });
+});
+
+const brokenLink = (targetId: number, extra: Partial<BrokenLink> = {}): BrokenLink => ({
+  document_id: 37,
+  document_type: 'w',
+  title: 'Refuge',
+  langs: ['fr', 'it'],
+  target_id: targetId,
+  target_type: 'routes',
+  is_url: false,
+  reason: 'missing',
+  target_document_type: null,
+  target_document_title: null,
+  deleted: null,
+  ...extra,
+});
+
+describe('BrokenLinks', () => {
+  it('lists the broken links with their reason, the document of the id and how to write it', async () => {
+    api.getBrokenLinks.mockReturnValue(
+      answer({
+        total: 5,
+        links: [
+          brokenLink(56, { target_type: 'waypoints', reason: 'deleted', deleted: deletedWith(56, 'w') }),
+          brokenLink(9999999),
+          brokenLink(38, { reason: 'wrong_type', target_document_type: 'w', target_document_title: 'Aiguille' }),
+          brokenLink(39, { target_type: 'summits', reason: 'unknown_type', target_document_type: 'w' }),
+          brokenLink(40, { is_url: true, target_type: 'outings' }),
+        ],
+      })
+    );
+    const wrapper = mount(BrokenLinks, { global: global() });
+    await flushPromises();
+
+    expect(api.getBrokenLinks).toHaveBeenCalledWith(0, 30);
+    const rows = wrapper.findAll('.broken-link');
+    expect(rows).toHaveLength(5);
+    expect(rows[0]!.find('a').attributes('href')).toBe('/waypoints/37/fr');
+    expect(rows[0]!.text()).toContain('[[waypoints/56|…]]');
+    expect(rows[0]!.text()).toContain('Deleted document');
+    expect(rows[0]!.text()).toContain('days left to restore it: 3');
+    expect(rows[0]!.find('button.is-primary').exists()).toBe(true);
+    expect(rows[1]!.text()).toContain('No such document');
+    expect(rows[1]!.text()).not.toContain('To write instead');
+    expect(rows[1]!.find('button').exists()).toBe(false);
+    expect(rows[2]!.text()).toContain('Wrong type');
+    expect(rows[2]!.findAll('a')[1]!.text()).toBe('waypoint #38');
+    expect(rows[2]!.findAll('a')[1]!.attributes('href')).toBe('/waypoints/38');
+    expect(rows[2]!.text()).toContain('« Aiguille »');
+    expect(rows[2]!.text()).toContain('To write instead: [[waypoints/38|…]]');
+    expect(rows[3]!.text()).toContain('[[summits/39|…]]');
+    expect(rows[3]!.text()).toContain('Unknown type');
+    expect(rows[3]!.text()).toContain('To write instead: [[waypoints/39|…]]');
+    expect(rows[4]!.text()).toContain('camptocamp.org/outings/40');
+    // one colour per reason
+    expect(rows.map((row) => row.find('.tag.ml-2').classes())).toEqual([
+      ['tag', 'ml-2', 'is-danger', 'is-light'],
+      ['tag', 'ml-2', 'is-danger', 'is-light'],
+      ['tag', 'ml-2', 'is-warning', 'is-light'],
+      ['tag', 'ml-2', 'is-warning', 'is-light'],
+      ['tag', 'ml-2', 'is-danger', 'is-light'],
+    ]);
+    expect(wrapper.text()).toContain('Found: 5');
+  });
+
+  it('says when no link is broken', async () => {
+    api.getBrokenLinks.mockReturnValue(answer({ total: 0, links: [] }));
+    const wrapper = mount(BrokenLinks, { global: global() });
+    await flushPromises();
+
+    expect(wrapper.text()).toContain('No broken link.');
+  });
+
+  it('restores a deleted document, then reloads', async () => {
+    api.getBrokenLinks.mockReturnValueOnce(
+      answer({ total: 1, links: [brokenLink(56, { reason: 'deleted', deleted: deletedWith(56, 'w') })] })
+    );
+    api.getBrokenLinks.mockReturnValueOnce(answer({ total: 0, links: [] }));
+    api.restoreDeletedDocument.mockReturnValue(answer({ document_id: 56, lang: null, skipped: {}, missing_files: [] }));
+    const wrapper = mount(BrokenLinks, { global: global() });
+    await flushPromises();
+
+    await wrapper.find('.broken-link button').trigger('click');
+    expect(wrapper.find('.confirmation').text()).toContain('comes back with its history');
+    await (wrapper.findComponent('.confirmation') as ReturnType<typeof mount>).vm.$emit('confirm');
+    await flushPromises();
+
+    expect(api.restoreDeletedDocument).toHaveBeenCalledWith(55);
+    expect(api.getBrokenLinks).toHaveBeenCalledTimes(2);
+    expect(wrapper.find('.notification.is-success a').attributes('href')).toBe('/waypoints/56');
+    expect(wrapper.text()).toContain('No broken link.');
   });
 });
