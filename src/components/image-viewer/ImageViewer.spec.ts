@@ -441,6 +441,26 @@ describe('ImageViewer', () => {
       wrapper.unmount();
     });
 
+    it('marks the title of an untitled image, hidden with the buttons, and not the one being added', async () => {
+      const shown = { ...image(38), locales: [{ title: null }], image_type: 'collaborative' } as ViewerImage;
+      const { wrapper } = await showViewer({ user, shown });
+      await flushPromises();
+      expect(wrapper.find('.image-viewer-title').classes()).toContain('is-untitled');
+      await wrapper.find('.image-viewer-edit-title').trigger('click');
+      expect(wrapper.find('.image-viewer-title').classes()).not.toContain('is-untitled');
+      wrapper.unmount();
+    });
+
+    it('does not mark a title as untitled', async () => {
+      const { wrapper } = await showViewer({
+        user,
+        shown: { ...image(39), image_type: 'collaborative' } as ViewerImage,
+      });
+      await flushPromises();
+      expect(wrapper.find('.image-viewer-title').classes()).not.toContain('is-untitled');
+      wrapper.unmount();
+    });
+
     it('shows only the icon by a title', async () => {
       const { wrapper } = await showViewer({
         user,
