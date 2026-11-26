@@ -1283,6 +1283,7 @@ describe('C2cMap', () => {
       // zoomed in 2D, then 3D and back without a move in 3D: still moved
       (state.maps.at(-1) as FakeMap).fire('movestart', { originalEvent: {} });
       await open3d(wrapper);
+      expect(isMovedByUser()).toBe(false);
       await close();
       expect(isMovedByUser()).toBe(true);
 
@@ -1336,6 +1337,19 @@ describe('C2cMap', () => {
         resized(700);
         await wait();
         expect(map.cameras).toHaveLength(0);
+        wrapper.unmount();
+      });
+
+      it('does not refit the 2D map when the 3D view is closed during the delay of a resize', async () => {
+        const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
+        await open3d(wrapper);
+        resized(800);
+        resized(700);
+        await wrapper.find('.ol-control-3d button').trigger('click');
+        const cameras = map.cameras.length;
+        await wait();
+        expect(map.cameras).toHaveLength(cameras);
+        expect(map.pitch).toBe(0);
         wrapper.unmount();
       });
 

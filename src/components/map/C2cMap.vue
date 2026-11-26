@@ -913,17 +913,19 @@ let fitOnFirstDocuments = false;
 const queryIds = (value: unknown) =>
   (Array.isArray(value) ? value.map(String) : String(value).split(',')).map(Number).filter(Boolean);
 
-// the user panned, zoomed or rotated the map: a resize of the window must not take the view back to the documents
-let movedByUser = false;
+// the user panned, zoomed or rotated the map since it was last fitted: the map does not go back to its documents on a
+// resize, a pin or a full screen change. It is the one rule of the camera, in 2D and in 3D
+let userMoved = false;
 
+// fits the map to its documents, in the mode shown: the documents in 2D, the tilted view of them in 3D (pinned to a side
+// or unpinned). A search filtering the map by its extent keeps it, unless forced
 async function fitMapToDocuments(force?: boolean) {
   if (filterDocumentsWithMap.value && !force) {
     return rounded(getExtent());
   }
-  movedByUser = false;
-  // the 3D view (pinned to a side or unpinned): back to its tilted view of the documents
+  userMoved = false;
   if (is3d.value) {
-    resetCamera();
+    fit3d();
     return rounded(getExtent());
   }
   drawDocumentMarkers();
@@ -1937,8 +1939,8 @@ function onFullscreenChange() {
   if (fullscreen === isFullscreen.value) return;
   isFullscreen.value = fullscreen;
   showLayerSwitcher.value = false;
-  // the 3D view goes back to its documents after a resize (resetCamera)
-  if (!is3d.value && !movedByUser) setTimeout(() => fitMapToDocuments(), 0);
+  // the map goes back to its documents after a resize, unless the user moved it (the 3D view: see the resize observer)
+  if (!is3d.value && !userMoved) setTimeout(() => fitMapToDocuments(), 0);
 }
 
 // --- the elevation profile ---
@@ -1995,11 +1997,10 @@ let shownMarkers: Marker[] = [];
 let flightLayers: FlightLayers | null = null;
 // changes with the documents of the 3D view: what is still being read for the previous ones is dropped
 let documents3dVersion = 0;
-// where the 3D view opened, and the 2D view to go back to
+// where the 3D view opened (the documents it fits), and the 2D view to go back to, with whether the user had moved it:
+// the 3D camera is the map's own, so the 2D one is kept here. The rest (center, zoom, pitch) is MapLibre's
 let bounds3d: Extent | null = null;
-let view2d: { center: [number, number]; zoom: number } | null = null;
-// whether the user had moved the 2D map: the 3D view resets its own camera, so it is kept here to come back with it
-let moved2d = false;
+let view2d: { center: [number, number]; zoom: number; moved: boolean } | null = null;
 
 // the country of the documents, by their areas: that of the first one in a country (or a region) we have layers for
 function documentsCountry(): string | undefined {
@@ -2160,10 +2161,9 @@ function bounds3dOf(markers: Marker3d[], lines: FeatureCollection): Extent {
   return [extent[0] - margin, extent[1] - margin, extent[2] + margin, extent[3] + margin];
 }
 
-// back to the starting view of the 3D view, on the documents
-function resetCamera() {
+// the tilted view of the documents of the 3D view (bounds3d): the framing of the 3D fit, see fitMapToDocuments
+function fit3d() {
   if (!map || !bounds3d) return;
-  movedByUser = false;
   const camera = map.cameraForBounds(bounds3d, { ...FIT_OPTIONS_3D, bearing: 0 });
   if (camera) map.jumpTo({ ...camera, pitch: PITCH_3D });
 }
@@ -2200,8 +2200,7 @@ function open3d() {
   if (!map) return;
   const created = map;
   const { lng, lat } = map.getCenter();
-  view2d = { center: [lng, lat], zoom: map.getZoom() };
-  moved2d = movedByUser;
+  view2d = { center: [lng, lat], zoom: map.getZoom(), moved: userMoved };
   const { lines, markers } = documents3d();
   documents3dVersion++;
   // a list of documents (search results) can be anywhere: the 3D view tilts the view of the map, it does not fit them
@@ -2225,7 +2224,8 @@ function open3d() {
   showLayers();
   addMarkers(created, markers);
   showFlights(created, lines);
-  resetCamera();
+  // the 3D view opens on its documents, whatever the 2D view was
+  void fitMapToDocuments(true);
   addRouteWaypoints(markers);
 }
 
@@ -2243,9 +2243,10 @@ function close3d() {
   map.setTerrain(null);
   setRotation(false);
   showLayers();
-  // a list stays where it is (its box filters the results), a document goes back to its 2D view
-  map.jumpTo({ ...(isList.value ? {} : view2d), bearing: 0, pitch: 0 });
-  movedByUser = moved2d;
+  // a list stays where it is (its box filters the results), a document goes back to its 2D view, as the user left it
+  const { moved, ...view } = view2d!;
+  map.jumpTo({ ...(isList.value ? {} : view), bearing: 0, pitch: 0 });
+  userMoved = moved;
   bounds3d = null;
   updateDensityOverlays();
 }
@@ -2263,11 +2264,11 @@ const resizeObserver = new ResizeObserver(([entry]) => {
   const size = `${Math.round(entry.contentRect.width)}x${Math.round(entry.contentRect.height)}`;
   // the first call is the size at mount: nothing to reset
   // a camera the user moved stays where it is
-  if (lastSize && size !== lastSize && is3d.value && !movedByUser) {
+  if (lastSize && size !== lastSize && is3d.value && !userMoved) {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-      // the user may have moved the camera during the delay: it stays where it is
-      if (!movedByUser) resetCamera();
+      // the same rule as the fit: the user may have moved the camera during the delay, or closed the 3D view
+      if (is3d.value && !userMoved) void fitMapToDocuments(true);
     }, 200);
   }
   lastSize = size;
@@ -2519,7 +2520,7 @@ onMounted(() => {
     if (event.originalEvent) {
       fitOnFirstDocuments = false;
       automaticBbox = false;
-      movedByUser = true;
+      userMoved = true;
     }
   });
   created.on('click', onMapClick);
@@ -2566,7 +2567,7 @@ onBeforeUnmount(() => {
 // what the pages use
 defineExpose({
   fitMapToDocuments,
-  isMovedByUser: () => movedByUser,
+  isMovedByUser: () => userMoved,
   getExtent,
   highlightStop,
   goAndZoomOnStop,
