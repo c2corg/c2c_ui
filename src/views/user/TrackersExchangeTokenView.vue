@@ -19,7 +19,8 @@ function exchangeToken() {
       router.push({ name: 'trackers' });
     },
     (error: { response?: { data?: unknown } }) => {
-      router.push({ name: 'trackers', params: { error: (error?.response?.data as string | undefined) ?? 'unknown' } });
+      // the trackers view shows the error from the query (the route has no error param: a param would be dropped)
+      router.push({ name: 'trackers', query: { error: (error?.response?.data as string | undefined) ?? 'unknown' } });
     }
   );
 }
