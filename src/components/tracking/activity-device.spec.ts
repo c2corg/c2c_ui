@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { shortDeviceName, vendorNames } from './activity-device';
+import { activityDevice, activitySources, shortDeviceName, vendorNames } from './activity-device';
 
 const translate = (vendor: string) => vendor.charAt(0).toUpperCase() + vendor.slice(1);
 
@@ -44,5 +44,64 @@ describe('shortDeviceName', () => {
         vendorNames(['decathlon'], () => 'Décathlon')
       )
     ).toBe('Watch');
+  });
+});
+
+describe('activityDevice', () => {
+  it('names a device once, the most precise name', () => {
+    expect(
+      activityDevice(
+        [
+          { vendor: 'strava', deviceName: 'APEX 4' },
+          { vendor: 'coros', deviceName: 'COROS APEX 4 46mm' },
+        ],
+        translate
+      )
+    ).toEqual({ name: 'APEX 4 46mm', fullName: 'COROS APEX 4 46mm' });
+  });
+
+  it('removes duplicates', () => {
+    expect(
+      activityDevice(
+        [
+          { vendor: 'strava', deviceName: 'Garmin Forerunner 965' },
+          { vendor: 'garmin', deviceName: 'forerunner 965' },
+        ],
+        translate
+      ).name
+    ).toBe('Forerunner 965');
+  });
+
+  it('lists different devices', () => {
+    expect(
+      activityDevice(
+        [
+          { vendor: 'strava', deviceName: 'iPhone' },
+          { vendor: 'garmin', deviceName: 'Edge 1040' },
+        ],
+        translate
+      ).name
+    ).toBe('iPhone / Edge 1040');
+  });
+
+  it('has no device when no vendor names one', () => {
+    expect(activityDevice([{ vendor: 'strava' }, { vendor: 'garmin', deviceName: 'Garmin' }], translate)).toEqual({
+      name: undefined,
+      fullName: 'Garmin',
+    });
+  });
+});
+
+describe('activitySources', () => {
+  it('puts Strava first', () => {
+    const coros = { vendor: 'coros' };
+    const strava = { vendor: 'strava' };
+    expect(activitySources({ ...coros, sources: [coros, strava] })).toEqual([strava, coros]);
+    expect(activitySources({ ...strava, sources: [strava, coros] })).toEqual([strava, coros]);
+  });
+
+  it('is the activity without sources', () => {
+    const garmin = { vendor: 'garmin' };
+    expect(activitySources(garmin)).toEqual([garmin]);
   });
 });
