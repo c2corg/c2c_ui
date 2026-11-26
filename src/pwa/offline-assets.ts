@@ -312,13 +312,16 @@ const parse = (json?: string | null): Geometry | null => {
   }
 };
 
-// the points of the waypoints associated with the document, and of the routes of an outing
+type WaypointGeometry = { geometry?: { geom?: string | null }; waypoint_type?: string | null };
+
+// the points of the waypoints associated with the document, and of the routes of an outing; not the virtual ones,
+// which the map does not show either
 function waypointPoints(associations: OfflineDocument['associations']) {
   const waypoints = [
-    ...((associations?.waypoints as { geometry?: { geom?: string | null } }[] | undefined) ?? []),
-    ...((associations?.waypoint_children as { geometry?: { geom?: string | null } }[] | undefined) ?? []),
-    ...((associations?.route_waypoints as { geometry?: { geom?: string | null } }[] | undefined) ?? []),
-  ];
+    ...((associations?.waypoints as WaypointGeometry[] | undefined) ?? []),
+    ...((associations?.waypoint_children as WaypointGeometry[] | undefined) ?? []),
+    ...((associations?.route_waypoints as WaypointGeometry[] | undefined) ?? []),
+  ].filter((waypoint) => waypoint.waypoint_type !== 'virtual');
   return waypoints.flatMap((waypoint) => pointsOf(parse(waypoint.geometry?.geom)));
 }
 

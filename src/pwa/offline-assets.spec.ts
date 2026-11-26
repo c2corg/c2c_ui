@@ -296,6 +296,9 @@ describe('the map layers of an offline document', () => {
     // even without a geometry of its own
     const located = offlineTilesOf({ geometry: null, associations: { route_waypoints: [waypointAt(far)] } });
     expect(has(located.urls, far)).toBe(true);
+    // not a virtual waypoint, which the map does not show
+    const virtual = { ...waypointAt(far), waypoint_type: 'virtual' };
+    expect(offlineTilesOf({ geometry: null, associations: { route_waypoints: [virtual] } }).urls).toEqual([]);
   });
 
   it('has none without a geometry', () => {
