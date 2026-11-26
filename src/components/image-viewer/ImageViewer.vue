@@ -19,14 +19,22 @@
           />
           <button
             type="submit"
-            class="button is-primary"
-            :class="{ 'is-loading': titleEdition.saving }"
+            class="image-viewer-title-button"
             :disabled="titleEdition.saving"
-            v-translate
+            :title="$gettext('Save')"
+            :aria-label="$gettext('Save')"
           >
-            Save
+            <fa-icon :icon="titleEdition.saving ? 'spinner' : 'check'" :spin="titleEdition.saving" />
           </button>
-          <button type="button" class="button" @click="titleEdition = null" v-translate>Cancel</button>
+          <button
+            type="button"
+            class="image-viewer-title-button"
+            :title="$gettext('Cancel')"
+            :aria-label="$gettext('Cancel')"
+            @click="titleEdition = null"
+          >
+            <fa-icon icon="xmark" />
+          </button>
         </form>
         <template v-else>
           {{ activeDocument.locales[0].title }}
@@ -35,10 +43,10 @@
             type="button"
             class="image-viewer-edit-title"
             :title="$gettext('Change the title')"
+            :aria-label="$gettext('Change the title')"
             @click="startTitleEdition"
           >
             <fa-icon icon="pen" />
-            <span v-translate>Change the title</span>
           </button>
         </template>
       </span>
@@ -522,15 +530,13 @@ onBeforeUnmount(() => {
     padding: 0 10px;
   }
 
-  .image-viewer-edit-title {
-    margin-left: 0.5rem;
-    padding: 0.1rem 0.5rem;
-    border: 1px solid currentColor;
-    border-radius: 4px;
+  /* the controls of the title, as the other ones of the viewer: light on its black */
+  .image-viewer-edit-title,
+  .image-viewer-title-button {
+    padding: 0 0.4rem;
+    border: 0;
     background: none;
     color: inherit;
-    font-size: 0.875rem;
-    vertical-align: middle;
     cursor: pointer;
     opacity: 0.8;
 
@@ -539,9 +545,19 @@ onBeforeUnmount(() => {
       opacity: 1;
     }
 
-    span {
-      margin-left: 0.25rem;
+    &:disabled {
+      cursor: default;
     }
+  }
+
+  .image-viewer-edit-title {
+    margin-left: 0.25rem;
+    font-size: 1rem;
+    vertical-align: middle;
+  }
+
+  .image-viewer-title-button {
+    font-size: 1.25rem;
   }
 
   .image-viewer-title.is-editing {
@@ -551,12 +567,26 @@ onBeforeUnmount(() => {
 
   .image-viewer-title-form {
     display: flex;
-    gap: 0.5rem;
+    align-items: center;
+    gap: 0.25rem;
     padding: 0.25rem 0;
 
     .input {
       flex: 1;
       min-width: 0;
+      border: 1px solid #fff;
+      background: #000;
+      color: #fff;
+      box-shadow: none;
+
+      &::placeholder {
+        color: #999;
+      }
+
+      &:focus {
+        border-color: #fff;
+        box-shadow: 0 0 0 1px #fff;
+      }
     }
   }
 
