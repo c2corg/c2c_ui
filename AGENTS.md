@@ -19,7 +19,8 @@ The Vue.js frontend of camptocamp.org: Vue 3, Vue Router, Pinia, Bulma (CSS), Ty
 ## Commands
 
 - `npm ci`; `npm run serve` (dev server on :8080, on the production API by default: see the README for the backend).
-- `npm run lint` fixes; `npm run lint:no-fix` checks (Prettier, Stylelint, ESLint, `type-check`).
+- `npm run lint` fixes; `npm run lint:no-fix` checks (Prettier, Stylelint, ESLint, markdownlint, `type-check`).
+  Markdown: 120 columns outside code blocks (`.markdownlint.json`, also what Codacy checks on the pull requests).
 - `npm test` (Vitest, `*.spec.ts` next to the code); `npm run e2e` (Playwright, see [e2e/README.md](e2e/README.md)).
 - Before a pull request, what CI runs: `npm run lint:no-fix && npm test && npm run build`.
 
