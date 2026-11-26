@@ -542,6 +542,8 @@ const deletedDocumentUser = z.object({
 export type DeletedDocumentUser = z.input<typeof deletedDocumentUser>;
 
 const deletedDocument = z.object({
+  // the merges are listed with the deletions (absent from older API versions: a deletion)
+  kind: z.optional(z.literal('deleted')),
   id: z.number(),
   document_id: z.number(),
   document_type: z.string(),
@@ -562,9 +564,44 @@ const deletedDocument = z.object({
 
 export type DeletedDocument = z.input<typeof deletedDocument>;
 
+// A merge a moderator can undo (POST /documents/merged/{id}/unmerge), listed with the deleted documents: the source
+// document, merged into the target. Listed while the source redirects to the target only: not when one of them was
+// deleted since (listed again once restored), nor when the target was merged since into another document.
+const mergedDocument = z.object({
+  kind: z.literal('merged'),
+  id: z.number(),
+  // the source
+  document_id: z.number(),
+  document_type: z.string(),
+  lang: z.null(),
+  title: z.nullable(z.string()),
+  author: z.nullable(deletedDocumentUser),
+  target_document_id: z.number(),
+  target_title: z.nullable(z.string()),
+  // when merged, by whom (the names of a deletion, for one list)
+  deleted_at: z.string(),
+  deleted_by: z.nullable(deletedDocumentUser),
+  expires_at: z.string(),
+  // what the merge moved and removed: associations_moved, associations_removed, favourites_moved...
+  counts: z.record(z.string(), z.number()),
+  // the merges into the source before, hidden while this one is not undone, the nearest first
+  earlier_merges: z.array(
+    z.object({
+      id: z.number(),
+      document_id: z.number(),
+      title: z.nullable(z.string()),
+      target_document_id: z.number(),
+    })
+  ),
+});
+
+export type MergedDocument = z.input<typeof mergedDocument>;
+
+export type DeletedEntry = DeletedDocument | MergedDocument;
+
 export const deletedDocumentsPage = z.object({
   total: z.number(),
-  documents: z.array(deletedDocument),
+  documents: z.array(z.union([mergedDocument, deletedDocument])),
 });
 
 export const deletedDocumentDetails = z.extend(deletedDocument, {
@@ -603,6 +640,17 @@ export const restoreResult = z.object({
 });
 
 export type RestoreResult = z.input<typeof restoreResult>;
+
+export const unmergeResult = z.object({
+  source_document_id: z.number(),
+  target_document_id: z.number(),
+  // what could not be moved back (changed since the merge) or inserted again, by table
+  skipped: z.record(z.string(), z.number()),
+  // the image files without a version left in the bucket
+  missing_files: z.array(z.string()),
+});
+
+export type UnmergeResult = z.input<typeof unmergeResult>;
 
 // A document showing an image in the texts of some of its locales ([img=ID] tag)
 const embeddingDocument = z.object({

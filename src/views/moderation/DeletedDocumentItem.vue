@@ -4,6 +4,8 @@
       <div>
         <p class="is-size-5">
           <icon-document :document-type="documentType" fixed-width />
+          <!-- tagged as the merges listed with it; a deleted locale has its own tag -->
+          <span v-if="!document.lang" class="tag is-danger is-light mr-2" v-translate>deleted</span>
           <!-- a deleted locale: its document is still there -->
           <router-link v-if="document.lang" :to="documentRoute(document.document_type, document.document_id)">
             {{ title }}

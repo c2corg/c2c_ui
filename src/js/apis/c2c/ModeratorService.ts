@@ -11,6 +11,7 @@ import {
   brokenLinksPage,
   orphanImagesPage,
   restoreResult,
+  unmergeResult,
   type AccountRemoval,
   type AccountRemovalReason,
   type AccountRemovalSide,
@@ -50,7 +51,7 @@ export default class ModeratorService {
   }
 
   /*
-   * Deleted documents, kept 29 days by the API to be restored
+   * Deleted documents and merges, kept 29 days by the API to be restored or undone
    */
   getDeletedDocuments(offset = 0, limit = 30, filters: DeletedDocumentsFilters = {}) {
     return this.api.getValidated('/documents/deleted', deletedDocumentsPage, {
@@ -69,6 +70,17 @@ export default class ModeratorService {
     // $gettext('The document was deleted: restore it first', 'API message')
     // $gettext('The locale was written again since its deletion', 'API message')
     return this.api.postValidated('/documents/deleted/' + id + '/restore', restoreResult, {});
+  }
+
+  unmergeDocument(id: number) {
+    // $gettext('This merge was already undone', 'API message')
+    // $gettext('This merge was done too long ago', 'API message')
+    // $gettext('Unknown format of the merge', 'API message')
+    // $gettext('The target was deleted: restore it first', 'API message')
+    // $gettext('The source was deleted: restore it first', 'API message')
+    // $gettext('The target was merged since into another document: undo that first', 'API message')
+    // $gettext('The source no longer redirects to the target', 'API message')
+    return this.api.postValidated('/documents/merged/' + id + '/unmerge', unmergeResult, {});
   }
 
   /*
@@ -212,6 +224,8 @@ export interface DeletedDocumentsFilters {
   deleted_by?: number;
   deleted_since?: string;
   deleted_until?: string;
+  // only the deletions, or only the merges
+  kind?: 'deleted' | 'merged';
 }
 
 // POST /users/removals: the API finds the forum accounts; an anonymization and a spam go to the closed account
