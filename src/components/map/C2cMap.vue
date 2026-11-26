@@ -1998,6 +1998,8 @@ let documents3dVersion = 0;
 // where the 3D view opened, and the 2D view to go back to
 let bounds3d: Extent | null = null;
 let view2d: { center: [number, number]; zoom: number } | null = null;
+// whether the user had moved the 2D map: the 3D view resets its own camera, so it is kept here to come back with it
+let moved2d = false;
 
 // the country of the documents, by their areas: that of the first one in a country (or a region) we have layers for
 function documentsCountry(): string | undefined {
@@ -2199,6 +2201,7 @@ function open3d() {
   const created = map;
   const { lng, lat } = map.getCenter();
   view2d = { center: [lng, lat], zoom: map.getZoom() };
+  moved2d = movedByUser;
   const { lines, markers } = documents3d();
   documents3dVersion++;
   // a list of documents (search results) can be anywhere: the 3D view tilts the view of the map, it does not fit them
@@ -2242,6 +2245,7 @@ function close3d() {
   showLayers();
   // a list stays where it is (its box filters the results), a document goes back to its 2D view
   map.jumpTo({ ...(isList.value ? {} : view2d), bearing: 0, pitch: 0 });
+  movedByUser = moved2d;
   bounds3d = null;
   updateDensityOverlays();
 }
@@ -2261,7 +2265,10 @@ const resizeObserver = new ResizeObserver(([entry]) => {
   // a camera the user moved stays where it is
   if (lastSize && size !== lastSize && is3d.value && !movedByUser) {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(resetCamera, 200);
+    resizeTimer = setTimeout(() => {
+      // the user may have moved the camera during the delay: it stays where it is
+      if (!movedByUser) resetCamera();
+    }, 200);
   }
   lastSize = size;
 });
