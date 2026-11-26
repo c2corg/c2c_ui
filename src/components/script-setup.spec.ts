@@ -172,6 +172,7 @@ describe('ApplicationCard', () => {
 
     const links = wrapper.findAll('.card-footer-item');
     expect(links.map((link) => link.text())).toEqual(['Connect']);
+    expect(links.map((link) => link.element.tagName)).toEqual(['BUTTON']);
     await links[0].trigger('click');
     expect(wrapper.emitted('configure')).toHaveLength(1);
   });
@@ -184,6 +185,7 @@ describe('ApplicationCard', () => {
 
     const links = wrapper.findAll('.card-footer-item');
     expect(links.map((link) => link.text())).toEqual(['Refresh', 'Revoke']);
+    expect(links.map((link) => link.attributes('type'))).toEqual(['button', 'button']);
     await links[1].trigger('click');
     expect(wrapper.emitted('revoke')).toHaveLength(1);
   });
