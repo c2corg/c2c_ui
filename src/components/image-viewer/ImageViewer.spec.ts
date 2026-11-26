@@ -431,6 +431,28 @@ describe('ImageViewer', () => {
       wrapper.unmount();
     });
 
+    it('offers to add a title to an untitled image, with words by the icon', async () => {
+      const shown = { ...image(36), locales: [{ title: null }], image_type: 'collaborative' } as ViewerImage;
+      const { wrapper } = await showViewer({ user, shown });
+      await flushPromises();
+      const button = wrapper.find('.image-viewer-edit-title');
+      expect(button.attributes('aria-label')).toBe('Add a title');
+      expect(button.find('.image-viewer-add-title').text()).toBe('Add a title');
+      wrapper.unmount();
+    });
+
+    it('shows only the icon by a title', async () => {
+      const { wrapper } = await showViewer({
+        user,
+        shown: { ...image(37), image_type: 'collaborative' } as ViewerImage,
+      });
+      await flushPromises();
+      const button = wrapper.find('.image-viewer-edit-title');
+      expect(button.attributes('aria-label')).toBe('Change the title');
+      expect(button.find('.image-viewer-add-title').exists()).toBe(false);
+      wrapper.unmount();
+    });
+
     it('loads a collaborative image only when its title is changed', async () => {
       imageTitle.loadEditableImage.mockReset();
       imageTitle.loadEditableImage.mockResolvedValue({ image: {}, editable: true });

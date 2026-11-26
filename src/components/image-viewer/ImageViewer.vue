@@ -42,11 +42,13 @@
             v-if="titleEditable[activeDocument.document_id]"
             type="button"
             class="image-viewer-edit-title"
-            :title="$gettext('Change the title')"
-            :aria-label="$gettext('Change the title')"
+            :title="activeDocument.locales[0].title ? $gettext('Change the title') : $gettext('Add a title')"
+            :aria-label="activeDocument.locales[0].title ? $gettext('Change the title') : $gettext('Add a title')"
             @click="startTitleEdition"
           >
             <fa-icon icon="pen" />
+            <!-- an untitled photo: the icon alone would sit on an empty title -->
+            <span v-if="!activeDocument.locales[0].title" class="image-viewer-add-title" v-translate>Add a title</span>
           </button>
         </template>
       </span>
@@ -577,6 +579,11 @@ onBeforeUnmount(() => {
 
   .image-viewer-title-button {
     font-size: 1.25rem;
+  }
+
+  .image-viewer-add-title {
+    margin-left: 0.4rem;
+    font-size: 0.85rem;
   }
 
   .image-viewer-title.is-editing {
