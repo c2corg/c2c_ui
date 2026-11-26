@@ -405,6 +405,33 @@ describe('DeletedDocuments with merges', () => {
     expect(notification.text()).toContain('Left with the other document, changed since the merge: 1');
   });
 
+  it('drops a next page asked before an undo: its offset counted the undone merge', async () => {
+    let answerPage!: (value: unknown) => void;
+    api.getDeletedDocuments
+      .mockReturnValueOnce(answer({ total: 3, documents: [merge(1), outing(1)] }))
+      .mockReturnValueOnce(new ApiData(new Promise((resolve) => (answerPage = resolve)) as never))
+      .mockReturnValueOnce(answer({ total: 2, documents: [outing(2)] }));
+    api.unmergeDocument.mockReturnValue(
+      answer({ source_document_id: 2001, target_document_id: 3001, skipped: {}, missing_files: [] })
+    );
+    const wrapper = mount(DeletedDocuments, { global: global() });
+    await flushPromises();
+
+    await moreButton(wrapper)!.trigger('click');
+    await (wrapper.findComponent('.confirmation') as ReturnType<typeof mount>).vm.$emit('confirm');
+    await flushPromises();
+    // the page asked at offset 2 is answered after the undo, one entry too far
+    answerPage({ data: { total: 2, documents: [outing(3)] } });
+    await flushPromises();
+
+    expect(wrapper.findAllComponents(DeletedDocumentItem).map((item) => item.props('document').id)).toEqual([1]);
+    await moreButton(wrapper)!.trigger('click');
+    await flushPromises();
+
+    expect(api.getDeletedDocuments).toHaveBeenLastCalledWith(1, 30, expect.any(Object));
+    expect(wrapper.findAllComponents(DeletedDocumentItem).map((item) => item.props('document').id)).toEqual([1, 2]);
+  });
+
   it('reloads the list once a merge with earlier merges is undone: the next one is listed', async () => {
     const chained = merge(1, {
       earlier_merges: [{ id: 7, document_id: 2007, title: 'Route 7', target_document_id: 2001 }],

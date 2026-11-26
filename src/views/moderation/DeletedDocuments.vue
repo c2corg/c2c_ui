@@ -7,9 +7,9 @@
 
     <div class="filters columns is-multiline is-variable is-2 mb-4">
       <div class="column is-narrow">
-        <label class="label" v-translate>Deleted or merged</label>
+        <label class="label" for="deleted-documents-kind" v-translate>Deleted or merged</label>
         <div class="select">
-          <select v-model="filters.kind" class="kind-filter" @change="reload">
+          <select id="deleted-documents-kind" v-model="filters.kind" class="kind-filter" @change="reload">
             <option value="">{{ $gettext('All') }}</option>
             <option value="deleted">{{ $gettext('Deleted') }}</option>
             <option value="merged">{{ $gettext('Merged') }}</option>
@@ -17,9 +17,9 @@
         </div>
       </div>
       <div class="column is-narrow">
-        <label class="label" v-translate>Type</label>
+        <label class="label" for="deleted-documents-type" v-translate>Type</label>
         <div class="select">
-          <select v-model="filters.type" class="type-filter" @change="reload">
+          <select id="deleted-documents-type" v-model="filters.type" class="type-filter" @change="reload">
             <option value="">{{ $gettext('All') }}</option>
             <option v-for="type of types" :key="type.letter" :value="type.letter">
               {{ $filters.uppercaseFirstLetter($gettext(type.name + 's')) }}
@@ -41,12 +41,24 @@
         />
       </div>
       <div class="column is-narrow">
-        <label class="label" v-translate>Deleted since</label>
-        <input v-model="filters.deleted_since" class="input" type="date" @change="reload" />
+        <label class="label" for="deleted-documents-since" v-translate>Deleted since</label>
+        <input
+          id="deleted-documents-since"
+          v-model="filters.deleted_since"
+          class="input"
+          type="date"
+          @change="reload"
+        />
       </div>
       <div class="column is-narrow">
-        <label class="label" v-translate>Deleted until</label>
-        <input v-model="filters.deleted_until" class="input" type="date" @change="reload" />
+        <label class="label" for="deleted-documents-until" v-translate>Deleted until</label>
+        <input
+          id="deleted-documents-until"
+          v-model="filters.deleted_until"
+          class="input"
+          type="date"
+          @change="reload"
+        />
       </div>
       <div v-if="isFiltered" class="column is-narrow is-flex is-align-items-flex-end">
         <button class="button is-text" @click="clearFilters" v-translate>Clear the filters</button>
@@ -220,6 +232,8 @@ function onRestored(document: DeletedDocument, result: RestoreResult) {
   if (filters.kind !== 'deleted') {
     reload();
   } else {
+    // a page asked before this removal has the offsets of the longer list: dropped, the next one asked again
+    generation += 1;
     documents.value = documents.value.filter((d) => d.kind === 'merged' || d.id !== document.id);
     total.value -= 1;
   }
@@ -241,6 +255,8 @@ function onUnmerged(merge: MergedDocument, result: UnmergeResult) {
     // the merge into its source before is listed now
     reload();
   } else {
+    // as for a restore: a page asked before this removal is dropped
+    generation += 1;
     documents.value = documents.value.filter((d) => d.kind !== 'merged' || d.id !== merge.id);
     total.value -= 1;
   }
