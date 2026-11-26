@@ -219,8 +219,7 @@
         :aria-expanded="!attributionCollapsed"
         @click="attributionCollapsed = !attributionCollapsed"
       >
-        <span v-if="attributionCollapsed" class="ol-attribution-expand">i</span>
-        <span v-else class="ol-attribution-collapse">›</span>
+        <fa-icon :icon="attributionCollapsed ? 'info' : 'chevron-right'" />
       </button>
       <ul>
         <!-- eslint-disable-next-line vue/no-v-html: our own constants (map-layers.ts, map-3d-terrain.ts) -->
