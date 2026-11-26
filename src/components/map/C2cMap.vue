@@ -872,12 +872,18 @@ const rounded = (extent: number[]) => extent.map(Math.round);
 const isFiniteExtent = (extent: number[] | null | undefined): extent is Extent =>
   !!extent && extent.filter(Number.isFinite).length === 4;
 
-// the extent (EPSG:3857) fills the view, a little smaller, and not too close
+// the one fit of the map, in 2D and in 3D: the center and the zoom go to the extent (EPSG:3857), the pitch and the bearing
+// are kept, as only the 2D<->3D toggle sets them. The 3D view frames its documents with more margin, and not as close
 function fit(extent: number[]) {
-  const camera = map!.cameraForBounds(extentToLonLat(extent) as Extent, { padding: 0 });
+  const framing = is3d.value ? FIT_OPTIONS_3D : { padding: 0 };
+  const camera = map!.cameraForBounds(extentToLonLat(extent) as Extent, {
+    ...framing,
+    bearing: map!.getBearing(),
+    pitch: map!.getPitch(),
+  });
   if (camera) {
-    // in OpenLayers zooms: 95 % of the zoom, at most the minimum zoom of a point
-    const zoom = Math.min(MIN_ZOOM_LEVEL + 1, ((camera.zoom ?? 0) + 1) * 0.95) - 1;
+    // in OpenLayers zooms: 95 % of the zoom, at most the minimum zoom of a point (2D; the 3D view keeps its zoom)
+    const zoom = is3d.value ? camera.zoom : Math.min(MIN_ZOOM_LEVEL + 1, ((camera.zoom ?? 0) + 1) * 0.95) - 1;
     map!.jumpTo({ center: camera.center, zoom });
   }
   return rounded(getExtent());
@@ -913,19 +919,20 @@ let fitOnFirstDocuments = false;
 const queryIds = (value: unknown) =>
   (Array.isArray(value) ? value.map(String) : String(value).split(',')).map(Number).filter(Boolean);
 
-// the user panned, zoomed or rotated the map since it was last fitted: the map does not go back to its documents on a
-// resize, a pin or a full screen change. It is the one rule of the camera, in 2D and in 3D
+// the user panned, zoomed or rotated the map since it was last fitted
 let userMoved = false;
 
-// fits the map to its documents, in the mode shown: the documents in 2D, the tilted view of them in 3D (pinned to a side
-// or unpinned). A search filtering the map by its extent keeps it, unless forced
+// the one rule of the fit, in 2D and in 3D. Forced: the documents came or changed, or the 3D view opened. Otherwise, after
+// a resize, a pin or a full screen change, the map keeps its view when the user moved it, and when it is the filter of
+// the search (its extent is then the results). Otherwise it fits its documents, the tilt and the bearing kept
 async function fitMapToDocuments(force?: boolean) {
-  if (filterDocumentsWithMap.value && !force) {
+  if (!force && (userMoved || filterDocumentsWithMap.value)) {
     return rounded(getExtent());
   }
   userMoved = false;
+  // the 3D view fits the documents it was opened on (the view of a list)
   if (is3d.value) {
-    fit3d();
+    if (bounds3d) fit(extentFromLonLat(bounds3d));
     return rounded(getExtent());
   }
   drawDocumentMarkers();
@@ -1939,8 +1946,8 @@ function onFullscreenChange() {
   if (fullscreen === isFullscreen.value) return;
   isFullscreen.value = fullscreen;
   showLayerSwitcher.value = false;
-  // the map goes back to its documents after a resize, unless the user moved it (the 3D view: see the resize observer)
-  if (!is3d.value && !userMoved) setTimeout(() => fitMapToDocuments(), 0);
+  // the size of the map changed: the same rule as a resize (see fitMapToDocuments)
+  setTimeout(() => fitMapToDocuments(), 0);
 }
 
 // --- the elevation profile ---
@@ -2161,13 +2168,6 @@ function bounds3dOf(markers: Marker3d[], lines: FeatureCollection): Extent {
   return [extent[0] - margin, extent[1] - margin, extent[2] + margin, extent[3] + margin];
 }
 
-// the tilted view of the documents of the 3D view (bounds3d): the framing of the 3D fit, see fitMapToDocuments
-function fit3d() {
-  if (!map || !bounds3d) return;
-  const camera = map.cameraForBounds(bounds3d, { ...FIT_OPTIONS_3D, bearing: 0 });
-  if (camera) map.jumpTo({ ...camera, pitch: PITCH_3D });
-}
-
 function setRotation(enabled: boolean) {
   if (!map) return;
   for (const handler of [map.dragRotate, map.touchPitch, map.keyboard]) {
@@ -2224,7 +2224,8 @@ function open3d() {
   showLayers();
   addMarkers(created, markers);
   showFlights(created, lines);
-  // the 3D view opens on its documents, whatever the 2D view was
+  // the tilt of the 3D view, then its documents, whatever the 2D view was
+  created.jumpTo({ bearing: 0, pitch: PITCH_3D });
   void fitMapToDocuments(true);
   addRouteWaypoints(markers);
 }
@@ -2232,6 +2233,8 @@ function open3d() {
 function close3d() {
   if (!map) return;
   is3d.value = false;
+  // a resize still waiting is for the 3D view: the 2D view is the one left
+  clearTimeout(resizeTimer);
   // back in 2D, the layer shown before 3D, or that of the category chosen in 3D (chooseBase)
   shownMarkers.forEach((marker) => marker.remove());
   shownMarkers = [];
@@ -2243,7 +2246,8 @@ function close3d() {
   map.setTerrain(null);
   setRotation(false);
   showLayers();
-  // a list stays where it is (its box filters the results), a document goes back to its 2D view, as the user left it
+  // the 2D<->3D toggle sets the tilt: a list stays where it is (its box filters the results), a document goes back to
+  // its 2D view, as the user left it
   const { moved, ...view } = view2d!;
   map.jumpTo({ ...(isList.value ? {} : view), bearing: 0, pitch: 0 });
   userMoved = moved;
@@ -2255,21 +2259,18 @@ function resetNorth() {
   map?.easeTo({ bearing: 0, pitch: PITCH_3D });
 }
 
-// after the map changed size (full screen left or entered, map pinned to a side or unpinned), the 3D view goes back to
-// its documents, as the 2D map fits its documents again
+// after the map changed size (window, full screen, map pinned to a side or unpinned), it fits its documents again, unless
+// the user moved it (see fitMapToDocuments)
 let resizeTimer: ReturnType<typeof setTimeout> | undefined;
 let stopScrollPassthrough: (() => void) | null = null;
 let lastSize = '';
 const resizeObserver = new ResizeObserver(([entry]) => {
   const size = `${Math.round(entry.contentRect.width)}x${Math.round(entry.contentRect.height)}`;
-  // the first call is the size at mount: nothing to reset
-  // a camera the user moved stays where it is
-  if (lastSize && size !== lastSize && is3d.value && !userMoved) {
+  // the first call is the size at mount: nothing to fit
+  if (lastSize && size !== lastSize) {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      // the same rule as the fit: the user may have moved the camera during the delay, or closed the 3D view
-      if (is3d.value && !userMoved) void fitMapToDocuments(true);
-    }, 200);
+    // the same rule as a pin or a full screen change, checked when it runs (the user may have moved the map meanwhile)
+    resizeTimer = setTimeout(() => void fitMapToDocuments(), 200);
   }
   lastSize = size;
 });

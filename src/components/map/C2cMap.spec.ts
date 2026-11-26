@@ -1317,14 +1317,55 @@ describe('C2cMap', () => {
       // the reset of the 3D view waits 200 ms
       const wait = () => new Promise((resolve) => setTimeout(resolve, 250));
 
-      it('resets the 3D view of an untouched map', async () => {
+      it('in 3D, refits the center and the zoom of an untouched map, keeping its tilt and bearing', async () => {
         const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
         await open3d(wrapper);
+        map.bearing = 30;
         resized(800);
         map.cameras.length = 0;
         resized(700);
         await wait();
-        expect(map.cameras.at(-1)).toMatchObject({ pitch: 60 });
+        // the fit sets the center and the zoom only: no pitch, no bearing
+        expect(map.cameras.at(-1)).toEqual({ center: expect.any(Array), zoom: expect.any(Number) });
+        expect(map.pitch).toBe(60);
+        expect(map.bearing).toBe(30);
+        wrapper.unmount();
+      });
+
+      it('in 2D, refits the documents of an untouched map', async () => {
+        const { wrapper, map } = await mountMap({ documents: [route] });
+        resized(800);
+        map.cameras.length = 0;
+        resized(700);
+        await wait();
+        expect(map.cameras.at(-1)).toEqual({ center: expect.any(Array), zoom: expect.any(Number) });
+        wrapper.unmount();
+      });
+
+      it('in 2D, keeps the view the user moved', async () => {
+        const { wrapper, map } = await mountMap({ documents: [route] });
+        map.fire('movestart', { originalEvent: {} });
+        resized(800);
+        map.cameras.length = 0;
+        resized(700);
+        await wait();
+        expect(map.cameras).toHaveLength(0);
+        wrapper.unmount();
+      });
+
+      it('keeps the view of a map that is the filter of the search, in 2D and in 3D', async () => {
+        const { wrapper, map } = await mountMap({ documents: [route], filterByDefault: true, show3d: true });
+        resized(800);
+        map.cameras.length = 0;
+        resized(700);
+        await wait();
+        expect(map.cameras).toHaveLength(0);
+        await open3d(wrapper);
+        map.cameras.length = 0;
+        resized(600);
+        await wait();
+        expect(map.cameras).toHaveLength(0);
+        expect(map.pitch).toBe(60);
         wrapper.unmount();
       });
 
@@ -1385,7 +1426,9 @@ describe('C2cMap', () => {
       // the page fits the map to its documents once pinned: the 3D view stays tilted on them
       map.cameras.length = 0;
       await (wrapper.vm as unknown as { fitMapToDocuments(): Promise<unknown> }).fitMapToDocuments();
-      expect(map.cameras.at(-1)).toMatchObject({ pitch: 60 });
+      // the fit moves the center and the zoom only: the tilt is kept
+      expect(map.cameras.at(-1)).toEqual({ center: expect.any(Array), zoom: expect.any(Number) });
+      expect(map.pitch).toBe(60);
       wrapper.unmount();
     });
 
