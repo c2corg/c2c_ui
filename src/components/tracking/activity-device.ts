@@ -66,3 +66,11 @@ export function activityDevice(
     fullName: fullNames.join(' / ') || undefined,
   };
 }
+
+/**
+ * The vendors of a (grouped) activity, Strava first: a group is Strava and the vendor of the watch that synced to it,
+ * so the device name, shown after the vendors, is next to the vendor of the device. Tracking only puts the vendor of
+ * the activity first. Tracking before 3.4.0 sends no sources: the activity is its only one.
+ */
+export const activitySources = <T extends { vendor: string }>(activity: T & { sources?: T[] }): T[] =>
+  [...(activity.sources ?? [activity])].sort((a, b) => Number(b.vendor === 'strava') - Number(a.vendor === 'strava'));

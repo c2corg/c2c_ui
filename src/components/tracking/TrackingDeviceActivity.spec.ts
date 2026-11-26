@@ -52,7 +52,7 @@ describe('TrackingDeviceActivity', () => {
     ]);
   });
 
-  it('names the vendors without activity page', () => {
+  it('names the vendors without activity page, Strava first', () => {
     const wrapper = mount(TrackingDeviceActivity, {
       props: {
         activity: {
@@ -83,7 +83,7 @@ describe('TrackingDeviceActivity', () => {
       global,
     });
 
-    expect(wrapper.find('.activity-sources').text()).toBe('garmin · strava (Forerunner 965)');
+    expect(wrapper.find('.activity-sources').text()).toBe('strava · garmin (Forerunner 965)');
   });
 
   it('removes the name of any vendor of the group from a device name', () => {
@@ -109,8 +109,8 @@ describe('TrackingDeviceActivity', () => {
         activity: {
           ...activity,
           sources: [
-            { id: 2, vendor: 'strava', vendorId: '20806619230', deviceName: 'APEX 4' },
             { id: 3, vendor: 'coros', vendorId: '3', deviceName: 'COROS APEX 4 46mm' },
+            { id: 2, vendor: 'strava', vendorId: '20806619230', deviceName: 'APEX 4' },
           ],
         },
       },

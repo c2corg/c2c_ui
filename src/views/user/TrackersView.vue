@@ -57,7 +57,7 @@
           >{{ activity.name }}&hairsp;&bull;&hairsp;</template
         >{{ activity.type[$user.lang] }}&hairsp;&bull;&hairsp;{{ activity.vendors
         }}<template v-if="activity.deviceName"
-          >&hairsp;&bull;&hairsp;<span :title="activity.fullDeviceName">{{ activity.deviceName }}</span></template
+          >&#32;<span :title="activity.fullDeviceName">({{ activity.deviceName }})</span></template
         ><template v-if="activity.duration"
           >&hairsp;&bull;&hairsp;<span role="img" :title="$gettext('Duration')" :aria-label="$gettext('Duration')"
             ><fa-icon :icon="['far', 'clock']" /></span
@@ -84,7 +84,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import ApplicationCard from '@/components/tracking/ApplicationCard.vue';
-import { activityDevice } from '@/components/tracking/activity-device';
+import { activityDevice, activitySources } from '@/components/tracking/activity-device';
 import trackingService, { type Activity, type Status, type Vendor } from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
@@ -217,8 +217,8 @@ function loadActivities() {
         ({ data }) => {
           activitiesLoading.value = false;
           activities.value = data.slice(0, 5).map((activity) => {
-            // a grouped activity: every vendor, then the device once (tracking before 3.4.0 sends no sources)
-            const sources = activity.sources ?? [activity];
+            // a grouped activity: every vendor, Strava first, then the device once
+            const sources = activitySources(activity);
             const device = activityDevice(sources, $gettext);
             return {
               ...activity,

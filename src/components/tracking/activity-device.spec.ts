@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { activityDevice, shortDeviceName, vendorNames } from './activity-device';
+import { activityDevice, activitySources, shortDeviceName, vendorNames } from './activity-device';
 
 const translate = (vendor: string) => vendor.charAt(0).toUpperCase() + vendor.slice(1);
 
@@ -89,5 +89,19 @@ describe('activityDevice', () => {
       name: undefined,
       fullName: 'Garmin',
     });
+  });
+});
+
+describe('activitySources', () => {
+  it('puts Strava first', () => {
+    const coros = { vendor: 'coros' };
+    const strava = { vendor: 'strava' };
+    expect(activitySources({ ...coros, sources: [coros, strava] })).toEqual([strava, coros]);
+    expect(activitySources({ ...strava, sources: [strava, coros] })).toEqual([strava, coros]);
+  });
+
+  it('is the activity without sources', () => {
+    const garmin = { vendor: 'garmin' };
+    expect(activitySources(garmin)).toEqual([garmin]);
   });
 });

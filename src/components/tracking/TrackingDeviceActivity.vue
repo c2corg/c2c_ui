@@ -42,9 +42,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-import { activityDevice } from './activity-device';
+import { activityDevice, activitySources } from './activity-device';
 
-import type { ActivitySource } from '@/js/apis/tracking-service';
+import type { Activity, ActivitySource } from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
 
@@ -66,8 +66,8 @@ const duration = computed(() =>
 const heightDiffUp = computed(() => $documentUtils.heightDiffUpWithUnit(props.activity.heightDiffUp));
 const length = computed(() => $documentUtils.lengthWithUnit(props.activity.length));
 
-// the vendors that have this outing (tracking before 3.4.0 sends none)
-const sources = computed<ActivitySource[]>(() => props.activity.sources ?? [props.activity as ActivitySource]);
+// the vendors that have this outing, Strava first
+const sources = computed(() => activitySources(props.activity as Activity));
 // the device, once after the vendors: the whole name on hover, the short one may be truncated
 const device = computed(() => activityDevice(sources.value, $gettext));
 
