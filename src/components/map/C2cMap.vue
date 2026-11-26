@@ -23,7 +23,7 @@
 
     <div class="ol-full-screen ol-unselectable ol-control">
       <button type="button" :title="$gettext('Toggle full-screen', 'Map Controls')" @click="toggleFullscreen">
-        {{ isFullscreen ? '\u00d7' : '\u26f6' }}
+        <fa-icon :icon="isFullscreen ? 'xmark' : 'expand'" />
       </button>
     </div>
 
@@ -2547,19 +2547,19 @@ defineExpose({
 }
 
 .c2c-map-compass {
-  top: calc(1.5em + 3 * var(--map-button-size));
+  top: calc(1.5em + 3 * var(--map-button-size) + var(--map-inset-top));
   left: 0.5em;
 
   /* the place of the geolocation button, which the 3D view hides */
   &.below-pin {
-    top: calc(2em + 4 * var(--map-button-size));
+    top: calc(2em + 4 * var(--map-button-size) + var(--map-inset-top));
   }
 }
 
 /* without a network: just above the layer switcher button, which it opens, where the 3D button is (not offered
    offline); the bottom row has the scale, which a narrow map widens to its left */
 .c2c-map-offline-chip {
-  bottom: calc(1em + var(--map-button-size));
+  bottom: calc(1em + var(--map-button-size) + var(--map-inset-bottom));
   left: 0.5em;
 
   button {
@@ -2598,12 +2598,12 @@ defineExpose({
 }
 
 .ol-control-pin-to-top {
-  top: calc(1.5em + 3 * var(--map-button-size));
+  top: calc(1.5em + 3 * var(--map-button-size) + var(--map-inset-top));
   left: 0.5em;
 }
 
 .ol-control-center-on-geolocation {
-  top: calc(2em + 4 * var(--map-button-size));
+  top: calc(2em + 4 * var(--map-button-size) + var(--map-inset-top));
   left: 0.5em;
 }
 
@@ -2669,13 +2669,13 @@ defineExpose({
 }
 
 .ol-control-layer-switcher-button {
-  bottom: 0.5em;
+  bottom: calc(0.5em + var(--map-inset-bottom));
   left: 0.5em;
 }
 
 /* just above the layer switcher button */
 .ol-control-3d {
-  bottom: calc(1em + var(--map-button-size));
+  bottom: calc(1em + var(--map-button-size) + var(--map-inset-bottom));
   left: 0.5em;
 
   /* a button of the same size as the others, with a smaller text so that two letters fit */
@@ -2686,7 +2686,7 @@ defineExpose({
 }
 
 .ol-control-use-map-as-filter {
-  top: 0.5em;
+  top: calc(0.5em + var(--map-inset-top));
   left: 3em;
   padding: 0 2px;
   background: rgba(255, 255, 255, 0.8);
@@ -2697,7 +2697,7 @@ defineExpose({
 }
 
 .ol-control-recenter-on {
-  top: 35px;
+  top: calc(35px + var(--map-inset-top));
   left: 3em;
   opacity: 0.8;
 
@@ -2708,11 +2708,11 @@ defineExpose({
 }
 
 .ol-control-recenter-on_on-top {
-  top: 0.5em;
+  top: calc(0.5em + var(--map-inset-top));
 }
 
 .ol-control-recenter-on-propositions {
-  top: 57px;
+  top: calc(57px + var(--map-inset-top));
   left: 3em;
   background: rgba(255, 255, 255, 0.9);
   padding: 5px;
@@ -2724,11 +2724,11 @@ defineExpose({
 }
 
 .ol-control-recenter-on-propositions_on-top {
-  top: 27px;
+  top: calc(27px + var(--map-inset-top));
 }
 
 .ol-control-edit-map {
-  bottom: calc(1em + var(--map-button-size));
+  bottom: calc(1em + var(--map-button-size) + var(--map-inset-bottom));
   right: 0.5em;
 
   a {
@@ -2762,7 +2762,7 @@ defineExpose({
   position: absolute;
   z-index: 2;
   right: 0.5em;
-  bottom: 0.5em;
+  bottom: calc(0.5em + var(--map-inset-bottom));
   left: 0.5em;
   max-width: 380px;
   margin-left: auto;
