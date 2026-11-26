@@ -361,7 +361,11 @@ function editableImage(image: ShownImage) {
   let loaded = editableImages.get(image.document_id);
   if (!loaded) {
     const lang = titleLang(image as Parameters<typeof titleLang>[0], $language.current ?? 'fr');
-    loaded = loadEditableImage(image.document_id, lang, $user).catch(() => null);
+    loaded = loadEditableImage(image.document_id, lang, $user).catch(() => {
+      // not known (the network): asked again the next time the image is shown
+      editableImages.delete(image.document_id);
+      return null;
+    });
     editableImages.set(image.document_id, loaded);
   }
   return loaded;
@@ -380,7 +384,9 @@ watch(
       titleEditable.value = { ...titleEditable.value, [image.document_id]: known };
     } else {
       void editableImage(image).then((loaded) => {
-        titleEditable.value = { ...titleEditable.value, [image.document_id]: !!loaded?.editable };
+        if (loaded) {
+          titleEditable.value = { ...titleEditable.value, [image.document_id]: loaded.editable };
+        }
       });
     }
   }
@@ -417,7 +423,11 @@ async function saveTitle() {
     await saveImageTitle(loaded.image, title, $gettext('Title changed from the image viewer'));
     // the locale of the page's image too (the viewer shares it): the gallery shows the new title
     image.locales[0].title = title;
-    titleEdition.value = null;
+    // the save doesn't answer the new versions: the image is loaded again for a next change
+    editableImages.delete(image.document_id);
+    if (titleEdition.value === edition) {
+      titleEdition.value = null;
+    }
   } catch {
     // the image changed meanwhile (its version), or the network: loaded again for the next try
     editableImages.delete(image.document_id);

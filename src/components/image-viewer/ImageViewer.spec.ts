@@ -448,6 +448,43 @@ describe('ImageViewer', () => {
       wrapper.unmount();
     });
 
+    it('asks again the next time when the image could not be loaded', async () => {
+      imageTitle.loadEditableImage.mockReset();
+      imageTitle.loadEditableImage.mockRejectedValueOnce(new Error('network'));
+      imageTitle.loadEditableImage.mockResolvedValue({ image: {}, editable: true });
+      const { wrapper, swiperElement } = await showViewer({ user, shown: image(34) });
+      await flushPromises();
+      expect(wrapper.find('.image-viewer-edit-title').exists()).toBe(false);
+
+      swiperElement.swiper.slideTo(0, 0);
+      await flushPromises();
+      swiperElement.swiper.slideTo(1, 0);
+      await flushPromises();
+
+      expect(imageTitle.loadEditableImage).toHaveBeenCalledWith(34, 'fr', user);
+      expect(wrapper.find('.image-viewer-edit-title').exists()).toBe(true);
+      wrapper.unmount();
+    });
+
+    it('loads the image again for a second change (its new versions)', async () => {
+      imageTitle.loadEditableImage.mockReset();
+      imageTitle.loadEditableImage.mockImplementation(async () => ({ image: {}, editable: true }));
+      imageTitle.saveImageTitle.mockResolvedValue(undefined);
+      const { wrapper } = await showViewer({ user, shown: image(35) });
+      await flushPromises();
+
+      for (const title of ['first', 'second']) {
+        await wrapper.find('.image-viewer-edit-title').trigger('click');
+        await wrapper.find('.image-viewer-title-form input').setValue(title);
+        await wrapper.find('.image-viewer-title-form').trigger('submit');
+        await flushPromises();
+      }
+
+      const loads = imageTitle.loadEditableImage.mock.calls.filter(([id]) => id === 35);
+      expect(loads).toHaveLength(2);
+      wrapper.unmount();
+    });
+
     it('keeps the arrows and Escape in the field', async () => {
       imageTitle.loadEditableImage.mockResolvedValue({ image: {}, editable: true });
       const { wrapper } = await showViewer({ user, shown: image(32) });

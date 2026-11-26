@@ -49,7 +49,7 @@
     <template #footer>
       <div class="buttons">
         <button
-          :disabled="documents.length === 0"
+          :disabled="Object.keys(images).length === 0"
           class="button is-information"
           @click="categoriesEdition = !categoriesEdition"
         >
@@ -89,6 +89,7 @@ import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 // a photo the document already has: the user chooses to change its title (retitle) or to add the copy (add)
 type SamePhoto = {
   documentId: number;
+  lang: string;
   title: string;
   // the image to save with the new title, once the user may change it; null while loaded or when it can't be
   image: C2cDocument | null;
@@ -244,20 +245,29 @@ function checkSamePhoto(image: UploadedImage) {
   }
   const lang = titleLang(same, props.lang);
   const title = same.locales?.[0]?.title ?? '';
-  image.samePhoto = { documentId: same.document_id, title, image: null, editable: null, choice: null };
+  image.samePhoto = { documentId: same.document_id, lang, title, image: null, editable: null, choice: null };
   // the title field of the card is the new title: the current one to start with
   image.document.locales![0].title = title;
-  loadEditableImage(same.document_id, lang, $user)
+  loadSamePhoto(image);
+}
+
+// the image to save with the new title (its current versions), and whether the user may change it
+function loadSamePhoto(image: UploadedImage) {
+  const same = image.samePhoto!;
+  same.image = null;
+  computeReadyForSaving();
+  loadEditableImage(same.documentId, same.lang, $user)
     .then(({ image: loaded, editable }) => {
-      if (image.samePhoto?.documentId === same.document_id) {
-        image.samePhoto.editable = editable;
-        image.samePhoto.image = editable ? loaded : null;
+      if (image.samePhoto === same) {
+        same.editable = editable;
+        same.image = editable ? loaded : null;
         computeReadyForSaving();
       }
     })
     .catch(() => {
-      if (image.samePhoto?.documentId === same.document_id) {
-        image.samePhoto.editable = false;
+      // not known (the network): only a copy can be added
+      if (image.samePhoto === same) {
+        same.editable = false;
         computeReadyForSaving();
       }
     });
@@ -371,6 +381,10 @@ function locateOnTrack(saved: C2cDocument[]) {
 }
 
 // the photos the document had, with the titles the user gave them in the uploader; the page shows the new titles
+// A title not saved (the image changed meanwhile, the network) keeps the uploader open: the image is loaded again with
+// its current versions, and Save tries again; the titles already saved are then unchanged, not sent again
+class TitleNotSaved extends Error {}
+
 async function saveTitles() {
   const comment = $gettext('Title changed from the image uploader');
   for (const image of retitled.value) {
@@ -379,7 +393,13 @@ async function saveTitles() {
     if (title === same.title) {
       continue;
     }
-    await saveImageTitle(same.image!, title, comment);
+    try {
+      await saveImageTitle(same.image!, title, comment);
+    } catch {
+      loadSamePhoto(image);
+      throw new TitleNotSaved();
+    }
+    same.title = title;
     const listed = props.parentDocument.associations?.images?.find((item) => item.document_id === same.documentId);
     if (listed?.locales?.[0]) {
       listed.locales[0].title = title;
@@ -434,7 +454,12 @@ function save() {
         // not saved (the outing was changed meanwhile, the network went): the quality is computed on its next edit
         .catch(() => undefined);
     })
-    .catch(() => {
+    .catch((error: unknown) => {
+      if (error instanceof TitleNotSaved) {
+        promise.value = {};
+        toast({ message: $gettext(`An error occurred, couldn't save the title`), type: 'is-danger' });
+        return;
+      }
       clean();
       hide();
       toast({

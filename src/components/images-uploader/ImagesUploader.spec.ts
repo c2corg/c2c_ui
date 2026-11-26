@@ -291,6 +291,31 @@ describe('ImagesUploader', () => {
       expect(parentDocument.associations.images[0].locales[0].title).toBe('New title');
     });
 
+    it('stays open when the title could not be saved, and tries again with the image loaded again', async () => {
+      const loaded = { document_id: 50, locales: [{ lang: 'fr', title: 'Old title' }] };
+      imageTitle.loadEditableImage.mockResolvedValue({ image: loaded, editable: true });
+      imageTitle.saveImageTitle.mockRejectedValueOnce(new Error('409')).mockResolvedValue(undefined);
+      vi.mocked(toast).mockClear();
+      const { uploader, image, parentDocument } = await mountWithPhoto();
+      uploader.onChoose(image, 'retitle');
+      image.document.locales[0].title = 'New title';
+
+      uploader.save();
+      await flushPromises();
+
+      expect(toast).toHaveBeenCalledWith(expect.objectContaining({ type: 'is-danger' }));
+      expect(Object.keys(uploader.images)).toHaveLength(1);
+      expect(imageTitle.loadEditableImage).toHaveBeenCalledTimes(2);
+      expect(uploader.readyForSaving).toBe(true);
+
+      uploader.save();
+      await flushPromises();
+
+      expect(imageTitle.saveImageTitle).toHaveBeenCalledTimes(2);
+      expect(parentDocument.associations.images[0].locales[0].title).toBe('New title');
+      expect(Object.keys(uploader.images)).toHaveLength(0);
+    });
+
     it('adds a copy with a title of its own', async () => {
       imageTitle.loadEditableImage.mockResolvedValue({ image: {}, editable: true });
       vi.spyOn(c2c, 'createImages').mockResolvedValue({ data: { images: [{ document_id: 51 }] } } as never);
