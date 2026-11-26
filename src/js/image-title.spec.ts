@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
-import { findSamePhoto, loadEditableImage, saveImageTitle, titleLang } from '@/js/image-title';
+import { editableFromListing, findSamePhoto, loadEditableImage, saveImageTitle, titleLang } from '@/js/image-title';
 
 const photo = { width: 4000, height: 3000, date_time: '2026-02-01T10:00:00+01:00', camera_name: 'Canon EOS' };
 
@@ -44,6 +44,20 @@ describe('titleLang', () => {
     expect(titleLang({ locales: [{ lang: 'it' }], available_langs: ['fr'] }, 'en')).toBe('it');
     expect(titleLang({ locales: [{}], available_langs: ['fr'] }, 'en')).toBe('fr');
     expect(titleLang({}, 'en')).toBe('en');
+  });
+});
+
+describe('editableFromListing', () => {
+  const user = { isLogged: true, isModerator: false, id: 7 };
+
+  it.each([
+    ['a collaborative image', { image_type: 'collaborative' }, user, true],
+    ['a protected collaborative image', { image_type: 'collaborative', protected: true }, user, false],
+    ['a personal image, for a moderator', { image_type: 'personal' }, { ...user, isModerator: true }, true],
+    ['a personal image: its creator is unknown', { image_type: 'personal' }, user, undefined],
+    ['anything, logged out', { image_type: 'collaborative' }, { isLogged: false, isModerator: false, id: null }, false],
+  ])('knows %s', (_, image, who, expected) => {
+    expect(editableFromListing(image, who)).toBe(expected);
   });
 });
 

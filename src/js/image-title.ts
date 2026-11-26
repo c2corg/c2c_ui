@@ -60,6 +60,26 @@ export function findSamePhoto<T extends ListedImage>(uploaded: ListedImage, imag
 export const titleLang = (image: ListedImage & { available_langs?: string[] | null }, fallback: string) =>
   image.locales?.[0]?.lang ?? image.available_langs?.[0] ?? fallback;
 
+/**
+ * Whether the user may change an image, from what the lists of the API give (image_type, protected, no creator): known
+ * for a moderator and for a collaborative image, undefined for a personal one (its creator is in the image only)
+ */
+export function editableFromListing(
+  image: { image_type?: string | null; protected?: boolean | null },
+  user: User
+): boolean | undefined {
+  if (user.isLogged === false || user.id === null) {
+    return false;
+  }
+  if (user.isModerator) {
+    return true;
+  }
+  if (image.image_type === 'collaborative') {
+    return !image.protected;
+  }
+  return undefined;
+}
+
 /** The image as its edit form gets it, with whether the user may change it (personal: its creator, or a moderator) */
 export async function loadEditableImage(documentId: number, lang: string, user: User) {
   const { data } = await (c2c.image as DocumentService).get(documentId, lang);

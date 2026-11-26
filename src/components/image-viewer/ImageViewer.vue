@@ -127,7 +127,7 @@ import ImageInfo from './ImageInfo.vue';
 import '@/js/swiper-element';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
-import { loadEditableImage, saveImageTitle, titleLang } from '@/js/image-title';
+import { editableFromListing, loadEditableImage, saveImageTitle, titleLang } from '@/js/image-title';
 import { fallBackToBasicImage, getImageUrl } from '@/js/image-urls';
 import { toast } from '@/js/toast';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
@@ -371,7 +371,14 @@ watch(
   () => (visible.value && $user.isLogged ? activeDocument.value : null),
   (image) => {
     titleEdition.value = null;
-    if (image && titleEditable.value[image.document_id] === undefined) {
+    if (!image || titleEditable.value[image.document_id] !== undefined) {
+      return;
+    }
+    // known from the page's image (collaborative, or a moderator): loaded only to save its title
+    const known = editableFromListing(image, $user);
+    if (known !== undefined) {
+      titleEditable.value = { ...titleEditable.value, [image.document_id]: known };
+    } else {
       void editableImage(image).then((loaded) => {
         titleEditable.value = { ...titleEditable.value, [image.document_id]: !!loaded?.editable };
       });
@@ -383,6 +390,8 @@ function startTitleEdition() {
   const image = activeDocument.value!;
   titleEdition.value = { documentId: image.document_id, title: image.locales[0].title ?? '', saving: false };
   nextTick(() => titleInput.value?.select());
+  // loaded while the user types: the save sends the whole image
+  void editableImage(image);
 }
 
 function onTitleKeydown(event: KeyboardEvent) {

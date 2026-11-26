@@ -431,6 +431,23 @@ describe('ImageViewer', () => {
       wrapper.unmount();
     });
 
+    it('loads a collaborative image only when its title is changed', async () => {
+      imageTitle.loadEditableImage.mockReset();
+      imageTitle.loadEditableImage.mockResolvedValue({ image: {}, editable: true });
+      const { wrapper } = await showViewer({
+        user,
+        shown: { ...image(33), image_type: 'collaborative' } as ViewerImage,
+      });
+      await flushPromises();
+
+      expect(wrapper.find('.image-viewer-edit-title').exists()).toBe(true);
+      expect(imageTitle.loadEditableImage).not.toHaveBeenCalled();
+
+      await wrapper.find('.image-viewer-edit-title').trigger('click');
+      expect(imageTitle.loadEditableImage).toHaveBeenCalledWith(33, 'fr', user);
+      wrapper.unmount();
+    });
+
     it('keeps the arrows and Escape in the field', async () => {
       imageTitle.loadEditableImage.mockResolvedValue({ image: {}, editable: true });
       const { wrapper } = await showViewer({ user, shown: image(32) });
