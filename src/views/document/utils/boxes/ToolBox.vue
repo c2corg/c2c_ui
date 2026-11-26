@@ -121,6 +121,24 @@
       :label="$gettext('Locate images on the GPS track')"
     />
 
+    <!-- a sideways image: a moderator turns any image, its author a personal one (v6_api POST /images/rotate) -->
+    <template v-if="canRotateImage">
+      <tool-box-button
+        @click="rotateImage(-90)"
+        :icon="rotatingImage ? 'spinner' : 'undo-alt'"
+        :icon-class="rotatingImage ? 'fa-spin' : undefined"
+        :label="$gettext('Rotate image left')"
+        :disabled="rotatingImage"
+      />
+      <tool-box-button
+        @click="rotateImage(90)"
+        :icon="rotatingImage ? 'spinner' : 'redo-alt'"
+        :icon-class="rotatingImage ? 'fa-spin' : undefined"
+        :label="$gettext('Rotate image right')"
+        :disabled="rotatingImage"
+      />
+    </template>
+
     <tool-box-button
       v-if="isEditable && hasMissingLangs"
       @click="translateModal!.show()"
@@ -514,6 +532,33 @@ const linkToGoogleMapsDirections = computed(() => {
   const coords = `${lat.toFixed(4)},${lon.toFixed(4)}`;
   return `https://www.google.com/maps/dir/?api=1&destination=${coords}`;
 });
+
+const rotatingImage = ref(false);
+const canRotateImage = computed(() => {
+  const image = props.document;
+  return (
+    documentType.value === 'image' &&
+    isEditable.value &&
+    !(image.filename ?? '').toLowerCase().endsWith('.svg') &&
+    ($user.isModerator || (image.image_type === 'personal' && image.creator?.user_id === $user.id))
+  );
+});
+
+async function rotateImage(rotation: 90 | -90) {
+  if (rotatingImage.value) {
+    return;
+  }
+  rotatingImage.value = true;
+  try {
+    const { data } = await c2c.rotateImage(props.document.document_id!, rotation);
+    // a new file: the page shows it at once, without any cache of the old one
+    props.document.filename = data.filename;
+  } catch {
+    notify($gettext('The image could not be rotated'), 'is-warning');
+  } finally {
+    rotatingImage.value = false;
+  }
+}
 
 function lockDocumentAction() {
   const document = props.document;

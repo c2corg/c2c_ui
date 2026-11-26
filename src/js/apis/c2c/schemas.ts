@@ -893,3 +893,8 @@ export const accountRemovalsCount = z.object({
   actionable: z.optional(z.number()),
   roles: accountRemovalRoles,
 });
+
+// POST /images/rotate: the new file of the image
+export const rotatedImage = z.object({
+  filename: z.string(),
+});
