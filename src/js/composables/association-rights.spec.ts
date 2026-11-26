@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { canAdd, canRemove } from './association-rights';
+import { associatedCount, canAdd, canRemove, removalBlock } from './association-rights';
 
 const user = { isModerator: false, id: 7 };
 const moderator = { isModerator: true, id: 1 };
@@ -22,15 +22,41 @@ describe('association rights', () => {
     expect(canAdd(waypoint, { type: 'x', document_id: 40 }, user)).toBe(false);
   });
 
-  it('keeps the last route of an outing, and the user in it', () => {
+  it('lets a user remove anything from their outing but themselves', () => {
     const outing = { type: 'o', document_id: 10, associations: { routes: [{}] } };
-    expect(canRemove(outing, { type: 'r', document_id: 20 }, moderator)).toBe(false);
-    expect(canRemove({ ...outing, associations: { routes: [{}, {}] } }, { type: 'r', document_id: 20 }, user)).toBe(
-      true
-    );
+    expect(canRemove(outing, { type: 'r', document_id: 20 }, user)).toBe(true);
     expect(canRemove(outing, { type: 'u', document_id: 7 }, user)).toBe(false);
-    // the outing list of routes missing: not blocked, as before
-    expect(canRemove({ type: 'o', document_id: 10 }, { type: 'r', document_id: 20 }, user)).toBe(true);
+    expect(canRemove(outing, { type: 'u', document_id: 8 }, user)).toBe(true);
+  });
+
+  it('blocks, for everyone, removing the last route or user of an outing', () => {
+    const outing = { type: 'o', document_id: 10, associations: { routes: [{}], users: [{}] } };
+    expect(removalBlock(outing, { type: 'r', document_id: 20 })).toBe('last_route');
+    expect(removalBlock(outing, { type: 'u', document_id: 7 })).toBe('last_user');
+    const shared = { ...outing, associations: { routes: [{}, {}], users: [{}, {}] } };
+    expect(removalBlock(shared, { type: 'r', document_id: 20 })).toBeNull();
+    expect(removalBlock(shared, { type: 'u', document_id: 7 })).toBeNull();
+    // the lists missing: not blocked, the API decides
+    expect(removalBlock({ type: 'o', document_id: 10 }, { type: 'r', document_id: 20 })).toBeNull();
+  });
+
+  it('blocks removing the last document of an image', () => {
+    // on the page of the image: its lists
+    const image = { type: 'i', document_id: 60, associations: { outings: [{}], routes: [] } };
+    expect(removalBlock(image, { type: 'o', document_id: 10 })).toBe('last_document_of_image');
+    const shared = { ...image, associations: { outings: [{}], routes: [{}] } };
+    expect(removalBlock(shared, { type: 'o', document_id: 10 })).toBeNull();
+    // listed on another page: the counts read when the editor opens
+    const outing = { type: 'o', document_id: 10 };
+    expect(removalBlock(outing, { type: 'i', document_id: 60 }, { 60: 1 })).toBe('last_document_of_image');
+    expect(removalBlock(outing, { type: 'i', document_id: 60 }, { 60: 2 })).toBeNull();
+    expect(removalBlock(outing, { type: 'i', document_id: 60 })).toBeNull();
+  });
+
+  it('counts the documents of the association lists, not the pages of recent outings', () => {
+    expect(
+      associatedCount({ associations: { routes: [{}, {}], users: [{}], recent_outings: { documents: [{}] } } })
+    ).toBe(3);
   });
 
   it('lets a user remove from their own profile, and their own outings', () => {

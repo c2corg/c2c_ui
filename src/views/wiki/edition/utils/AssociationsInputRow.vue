@@ -58,7 +58,7 @@ const props = defineProps({
   },
 });
 
-const { canRemove } = useAssociationRights();
+const { canRemove, removalBlock } = useAssociationRights();
 
 // as its input
 const visible = computed(() => props.field.isVisibleFor(props.document));
@@ -68,6 +68,7 @@ const hasError = computed(() => props.field.error !== null);
 useFormField('formSection', reactive({ visible, hasError }));
 
 function showDeleteButton(child: C2cDocument) {
-  return canRemove(props.document, child);
+  // the edit form has no disabled state: what a rule of the API refuses is not offered either
+  return canRemove(props.document, child) && !removalBlock(props.document, child);
 }
 </script>

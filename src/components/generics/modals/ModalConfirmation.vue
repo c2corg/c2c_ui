@@ -18,6 +18,7 @@
           @click="$emit('confirm')"
           class="button"
           :class="[confirmClass, { 'is-loading': promise && promise.loading }]"
+          :disabled="confirmDisabled || undefined"
         >
           <slot name="confirm-label">
             <span v-translate>Confirm</span>
@@ -55,6 +56,11 @@ const props = defineProps({
     type: String,
     default: 'is-success',
   },
+  // the action would be refused (the reason is in the content)
+  confirmDisabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 defineEmits(['confirm']);
@@ -75,7 +81,14 @@ function onError() {
     return;
   }
 
-  // $gettext('Only document less than 24h old can be deleted', 'API message')
+  // the messages of the API that a confirmation may get, for the catalog of the translations:
+  // $gettext('Only documents less than 30 days old can be deleted', 'API message')
+  // $gettext('This outing has other participants: unlink them first', 'API message')
+  // $gettext('as the last document of the image, this document can not be disassociated: delete the image instead', 'API message')
+  // $gettext('as the last user of the outing, this user can not be disassociated', 'API message')
+  // $gettext('This waypoint cannot be deleted because it is a main waypoint.', 'API message')
+  // $gettext('This waypoint cannot be deleted because it is the only waypoint associated to some routes.', 'API message')
+  // $gettext('This route cannot be deleted because it is the only route associated to some outings.', 'API message')
   window.alert($gettext(apiErrors(props.promise.error)[0].description, 'API message'));
 }
 

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { isDeletable, isEditable } from './editable';
+import { deletion, isDeletable, isEditable } from './editable';
 
 const user = { isModerator: false, id: 7 };
 const moderator = { isModerator: true, id: 1 };
@@ -55,5 +55,49 @@ describe('isDeletable', () => {
     expect(isDeletable({}, 'profile', moderator, true)).toBe(false);
     expect(isDeletable({}, 'area', moderator, true)).toBe(false);
     expect(isDeletable({}, 'route', moderator, false)).toBe(false);
+  });
+});
+
+describe('deletion', () => {
+  const now = new Date('2026-11-25T12:00:00Z');
+  const daysAgo = (days: number) => new Date(now.getTime() - days * 24 * 3600 * 1000).toISOString();
+  const outing = (createdDaysAgo: number, users = [{ document_id: 7 }]) => ({
+    author: { user_id: 7, created_at: daysAgo(createdDaysAgo) },
+    associations: { users },
+  });
+
+  it('shows the button to the author of an outing only, until 30 days after its creation', () => {
+    expect(deletion(outing(29), 'outing', user, true, now)).toEqual({
+      blocked: null,
+      until: new Date(daysAgo(-1)),
+    });
+    expect(deletion(outing(31), 'outing', user, true, now)?.blocked).toBe('too_old');
+    // another user of the outing: no button
+    expect(deletion(outing(1, [{ document_id: 7 }, { document_id: 8 }]), 'outing', { ...user, id: 8 }, true, now)).toBe(
+      null
+    );
+  });
+
+  it('disables it while other users are linked to the outing', () => {
+    expect(deletion(outing(1, [{ document_id: 7 }, { document_id: 8 }]), 'outing', user, true, now)?.blocked).toBe(
+      'other_participants'
+    );
+  });
+
+  it('reads the creation of an image from its creator', () => {
+    const image = { image_type: 'personal', creator: { user_id: 7, created_at: daysAgo(40) } };
+    expect(deletion(image, 'image', user, true, now)?.blocked).toBe('too_old');
+  });
+
+  it('knows no period without the date (older API), and no rule for the moderators', () => {
+    expect(deletion({ associations: { users: [{ document_id: 7 }] } }, 'outing', user, true, now)).toEqual({
+      blocked: null,
+      until: null,
+    });
+    expect(deletion(outing(100, [{ document_id: 7 }, { document_id: 8 }]), 'outing', moderator, true, now)).toEqual({
+      blocked: null,
+      until: null,
+    });
+    expect(deletion({}, 'route', user, true, now)).toBe(null);
   });
 });

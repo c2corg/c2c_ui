@@ -33,7 +33,9 @@
         <document-link v-else :document="child.document" target="_blank" />
       </div>
       <div class="column is-narrow">
+        <!-- no button when the user may not remove it; disabled with why when a rule of the API refuses it -->
         <button
+          v-if="!child.hidden"
           class="button is-small is-pulled-right"
           :class="{
             'is-loading': promise.loading,
@@ -42,6 +44,7 @@
             'is-success': child.status === 'proposition',
           }"
           :disabled="child.disabled"
+          :title="child.title ?? undefined"
           @click="onclick(child)"
         >
           {{ child.buttonLabel }}
@@ -67,7 +70,7 @@ import AssociationOutingLink from './AssociationOutingLink.vue';
 
 import c2c from '@/js/apis/c2c';
 import type { DocumentRef } from '@/js/apis/c2c/types';
-import { useAssociationRights } from '@/js/composables/association-rights';
+import { type RemovalBlock, useAssociationRights } from '@/js/composables/association-rights';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
@@ -77,6 +80,8 @@ type Child = {
   status: 'current' | 'deleted' | 'proposition';
   buttonLabel: string;
   disabled: boolean;
+  hidden: boolean;
+  title: string | null;
 };
 
 const props = defineProps({
@@ -104,10 +109,22 @@ const props = defineProps({
     type: Array as PropType<C2cDocument[]>,
     default: null,
   },
+  // how many documents each image listed is associated to, when known
+  imageCounts: {
+    type: Object as PropType<Record<number, number>>,
+    default: () => ({}),
+  },
 });
 
-const { canAdd, canRemove } = useAssociationRights();
+const { canAdd, canRemove, removalBlock } = useAssociationRights();
 const { $documentUtils, $gettext } = useGlobalProperties();
+
+// why a rule of the API refuses to remove an association
+const BLOCK_TITLES: Record<RemovalBlock, () => string> = {
+  last_route: () => $gettext('Last route of the outing'),
+  last_user: () => $gettext('Last user of the outing'),
+  last_document_of_image: () => $gettext('Last document of the image: delete the image instead'),
+};
 
 const promise = ref<{ loading?: boolean }>({});
 const deleted = ref<C2cDocument[]>([]);
@@ -118,15 +135,15 @@ const children = computed(() => {
   const append = (array: C2cDocument[] | undefined, status: Child['status'], buttonLabel: string) => {
     for (const document of array ?? []) {
       if (!uniqueDocuments.has(document.document_id!)) {
+        const block = status === 'current' ? removalBlock(props.parent, document, props.imageCounts) : null;
         uniqueDocuments.set(document.document_id!, {
           sortKey: $documentUtils.getDocumentTitle(document).toLowerCase() + document.document_id,
           document,
           status,
           buttonLabel,
-          disabled:
-            status === 'current'
-              ? !canRemove(props.parent, document)
-              : !canAdd(props.parent, document, props.forbiddenChildren),
+          hidden: status === 'current' && !canRemove(props.parent, document),
+          disabled: status === 'current' ? !!block : !canAdd(props.parent, document, props.forbiddenChildren),
+          title: block ? BLOCK_TITLES[block]() : null,
         });
       }
     }

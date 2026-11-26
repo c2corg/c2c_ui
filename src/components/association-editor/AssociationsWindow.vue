@@ -23,6 +23,7 @@
       :child-type="item.documentType"
       :current="item.current"
       :forbidden-children="item.forbiddenChildren"
+      :image-counts="imageCounts"
       :propositions="propositions[item.searchArrayName]"
     />
 
@@ -40,6 +41,8 @@ import { nextTick, reactive, ref, useTemplateRef } from 'vue';
 import AssociationItems from './AssociationItems.vue';
 
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { associatedCount } from '@/js/composables/association-rights';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
 import type Field from '@/js/constants/Field';
@@ -61,6 +64,8 @@ const { $language } = useGlobalProperties();
 
 const data = reactive<Record<string, AssociationItem>>({});
 const propositions = ref<Record<string, { total: number; documents: C2cDocument[] }>>({});
+// how many documents each image listed is associated to: an image is not removed from its last one (v6_api #2747)
+const imageCounts = ref<Record<number, number>>({});
 const modal = useTemplateRef<{ show(): void; hide(): void }>('modal');
 const input = useTemplateRef<HTMLInputElement>('input');
 
@@ -107,6 +112,24 @@ fields.forEach(addToData);
 function show() {
   modal.value!.show();
   nextTick(() => input.value!.focus());
+  readImageCounts();
+}
+
+// read when the editor opens: the links of the images may have changed since the page was read
+function readImageCounts() {
+  // the former counts are forgotten: a failed request leaves the count unknown, not obsolete
+  imageCounts.value = {};
+  for (const image of props.document.associations?.images ?? []) {
+    const id = image.document_id!;
+    (c2c.image as DocumentService)
+      .get(id)
+      .then((response) => {
+        imageCounts.value = { ...imageCounts.value, [id]: associatedCount(response.data as C2cDocument) };
+      })
+      .catch(() => {
+        // unknown: the API refuses, if it must
+      });
+  }
 }
 
 function hide() {

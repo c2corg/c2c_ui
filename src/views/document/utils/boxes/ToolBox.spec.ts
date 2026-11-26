@@ -31,7 +31,11 @@ const route = (): CookedDocument =>
     associations: { waypoints: [], waypoint_children: [] },
   });
 
-const mountToolBox = async (document: CookedDocument, stubs: Record<string, unknown> = {}) => {
+const mountToolBox = async (
+  document: CookedDocument,
+  stubs: Record<string, unknown> = {},
+  globals: Record<string, unknown> = {}
+) => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [{ path: '/:pathMatch(.*)*', name: 'route', component: { render: () => h('div') } }],
@@ -61,9 +65,11 @@ const mountToolBox = async (document: CookedDocument, stubs: Record<string, unkn
         globalProperties: {
           $gettext: (text: string) => text,
           $filters: { uppercaseFirstLetter: (text: string) => text },
-          $documentUtils: { getDocumentType: () => 'route' },
+          $documentUtils: { getDocumentType: (type: string) => (type === 'o' ? 'outing' : 'route') },
           $language: { current: 'fr' },
           $user: { isLogged: true, isModerator: true, id: 1 },
+          $dateUtils: { toLocalizedString: (value: string) => value.slice(0, 10) },
+          ...globals,
         } as never,
       },
     },
@@ -91,6 +97,35 @@ describe('ToolBox', () => {
     await button(wrapper, label).trigger('click');
 
     expect(shown).toEqual([name]);
+  });
+
+  it('shows until when its author may delete an outing, then disables the button with why', async () => {
+    const author = { $user: { isLogged: true, isModerator: false, id: 7 } };
+    const outing = (createdAt: string, users = [{ document_id: 7 }]) =>
+      reactive({
+        ...route(),
+        type: 'o',
+        author: { user_id: 7, name: 'Lionel', created_at: createdAt },
+        associations: { users, routes: [] },
+      }) as unknown as CookedDocument;
+    const recent = new Date(Date.now() - 2 * 24 * 3600 * 1000);
+    const until = new Date(recent.getTime() + 30 * 24 * 3600 * 1000).toISOString().slice(0, 10);
+
+    let deleteButton = button(await mountToolBox(outing(recent.toISOString()), {}, author), 'Delete this document');
+    expect(deleteButton.attributes('title')).toBe('Deletable until ' + until);
+    await deleteButton.trigger('click');
+    expect(shown).toEqual(['delete document']);
+
+    shown.length = 0;
+    deleteButton = button(await mountToolBox(outing('2026-01-01T00:00:00Z'), {}, author), 'Delete this document');
+    expect(deleteButton.attributes('title')).toBe('More than 30 days old');
+    expect(deleteButton.classes()).toContain('is-disabled');
+    await deleteButton.trigger('click');
+    expect(shown).toEqual([]);
+
+    const shared = outing(recent.toISOString(), [{ document_id: 7 }, { document_id: 8 }]);
+    deleteButton = button(await mountToolBox(shared, {}, author), 'Delete this document');
+    expect(deleteButton.attributes('title')).toBe('Other participants: unlink them first');
   });
 
   it('protects the document', async () => {

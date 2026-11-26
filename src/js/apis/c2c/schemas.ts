@@ -222,9 +222,14 @@ export const route = fullDocument(
   }
 );
 
+// who created a document, and when (its first version: the author may delete it for 30 days, v6_api #2747)
+const user = z.object({ user_id: z.number(), name: z.string(), created_at: z.optional(z.string()) });
+
 // GET /outings/:id (v6_api models/outing.py)
 export const outing = fullDocument(
   {
+    // who created it (v6_api #2747; not in the listings of older APIs)
+    author: z.nullish(user),
     activities: z.array(oneOf('activities')),
     date_start: z.string(),
     date_end: z.string(),
@@ -281,8 +286,6 @@ export type Route = z.input<typeof route>;
 export type Outing = z.input<typeof outing>;
 
 // a user, as the author of an article or an xreport, or the creator of an image
-const user = z.object({ user_id: z.number(), name: z.string() });
-
 // GET /areas/:id (v6_api models/area.py)
 export const area = fullDocument(
   {
@@ -762,6 +765,10 @@ export const dismissedDuplicates = z.object({ dismissed: z.number() });
 export const imagesOfDeletion = z.object({
   deleted: z.number(),
   orphaned: z.record(z.string(), z.number()),
+  // the texts of other documents that break: showing this image ([img=ID]), linking to it ([[type/ID|…]], a URL)
+  // (optional: v6_api #2748)
+  embedded_in: z.optional(z.array(embeddingDocument)),
+  linked_from: z.optional(z.array(embeddingDocument)),
 });
 
 export type ImagesOfDeletion = z.input<typeof imagesOfDeletion>;
