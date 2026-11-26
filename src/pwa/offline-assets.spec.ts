@@ -286,6 +286,19 @@ describe('the map layers of an offline document', () => {
     expect(has(wide.urls, far)).toBe(true);
     expect(has(wide.urls, [WEISSHORN[0] + 20000, WEISSHORN[1] - 10000])).toBe(false);
     expect(otm15(wide.urls).length).toBeLessThan(100);
+
+    // an outing: the waypoints of its routes
+    const outing = offlineTilesOf({
+      geometry: pointAt(WEISSHORN),
+      associations: { route_waypoints: [waypointAt(far)] },
+    });
+    expect(has(outing.urls, far)).toBe(true);
+    // even without a geometry of its own
+    const located = offlineTilesOf({ geometry: null, associations: { route_waypoints: [waypointAt(far)] } });
+    expect(has(located.urls, far)).toBe(true);
+    // not a virtual waypoint, which the map does not show
+    const virtual = { ...waypointAt(far), waypoint_type: 'virtual' };
+    expect(offlineTilesOf({ geometry: null, associations: { route_waypoints: [virtual] } }).urls).toEqual([]);
   });
 
   it('has none without a geometry', () => {

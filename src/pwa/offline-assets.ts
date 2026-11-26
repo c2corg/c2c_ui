@@ -312,12 +312,16 @@ const parse = (json?: string | null): Geometry | null => {
   }
 };
 
-// the points of the waypoints associated with the document
+type WaypointGeometry = { geometry?: { geom?: string | null }; waypoint_type?: string | null };
+
+// the points of the waypoints associated with the document, and of the routes of an outing; not the virtual ones,
+// which the map does not show either
 function waypointPoints(associations: OfflineDocument['associations']) {
   const waypoints = [
-    ...((associations?.waypoints as { geometry?: { geom?: string | null } }[] | undefined) ?? []),
-    ...((associations?.waypoint_children as { geometry?: { geom?: string | null } }[] | undefined) ?? []),
-  ];
+    ...((associations?.waypoints as WaypointGeometry[] | undefined) ?? []),
+    ...((associations?.waypoint_children as WaypointGeometry[] | undefined) ?? []),
+    ...((associations?.route_waypoints as WaypointGeometry[] | undefined) ?? []),
+  ].filter((waypoint) => waypoint.waypoint_type !== 'virtual');
   return waypoints.flatMap((waypoint) => pointsOf(parse(waypoint.geometry?.geom)));
 }
 
@@ -330,12 +334,13 @@ function waypointPoints(associations: OfflineDocument['associations']) {
 export function offlineTilesOf(document: OfflineDocument): { urls: string[]; layers: Record<string, number> } {
   const geometry = parse(document.geometry?.geom_detail) ?? parse(document.geometry?.geom);
   const points = pointsOf(geometry);
-  if (!points.length) {
+  // its waypoints too (access, hut, summit): a route without a track is a point, which may be far from them; an
+  // outing without a geometry still has those of its routes
+  const waypoints = waypointPoints(document.associations);
+  if (!points.length && !waypoints.length) {
     return { urls: [], layers: {} };
   }
   const track = linesOf(parse(document.geometry?.geom_detail));
-  // its waypoints too (access, hut, summit): a route without a track is a point, which may be far from them
-  const waypoints = waypointPoints(document.associations);
   // without a track, the band is the circles around the point and the waypoints
   const bandPoints = track.length ? waypoints : [...points, ...waypoints];
   const extent = [...points, ...waypoints].reduce<Extent>(

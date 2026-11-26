@@ -1,18 +1,21 @@
 # [camptocamp.org](https://www.camptocamp.org)
 
-[![GitHub license](https://img.shields.io/github/license/c2corg/c2c_ui.svg)](https://github.com/c2corg/c2c_ui/blob/master/LICENSE) ![Continuous integration](https://github.com/c2corg/c2c_ui/workflows/Continuous%20integration/badge.svg?branch=master) ![Github Code scanning](https://github.com/c2corg/c2c_ui/workflows/Github%20Code%20scanning/badge.svg?branch=master) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/659b18a55fcd4f638fa36c4aa2976de8)](https://www.codacy.com/gh/c2corg/c2c_ui/dashboard?utm_source=github.com&utm_medium=referral&utm_content=c2corg/c2c_ui&utm_campaign=Badge_Grade)
+[![GitHub license](https://img.shields.io/github/license/c2corg/c2c_ui.svg)](https://github.com/c2corg/c2c_ui/blob/master/LICENSE)
+![Continuous integration](https://github.com/c2corg/c2c_ui/workflows/Continuous%20integration/badge.svg?branch=master)
+![Github Code scanning](https://github.com/c2corg/c2c_ui/workflows/Github%20Code%20scanning/badge.svg?branch=master)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/659b18a55fcd4f638fa36c4aa2976de8)](https://www.codacy.com/gh/c2corg/c2c_ui/dashboard?utm_source=github.com&utm_medium=referral&utm_content=c2corg/c2c_ui&utm_campaign=Badge_Grade)
 
 ## Architecture
 
 This is the Vue3-based responsive web frontend of camptocamp.
 
-_(Click for the interactive version)_
+Click a diagram for its interactive version.
 
-#### Frontend (c2c_ui)
+### Frontend (c2c_ui)
 
 [![Frontend (c2c_ui)](docs/architecture/frontend.png)](https://c2corg.github.io/v6_api/architecture/frontend.html)
 
-#### Local development
+### Local development
 
 [![Local development](docs/architecture/local-dev.png)](https://c2corg.github.io/v6_api/architecture/local-dev.html)
 
