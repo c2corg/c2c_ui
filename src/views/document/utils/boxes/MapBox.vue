@@ -93,7 +93,7 @@ const { documentType } = useDocumentType(props);
 const overlayFilters = computed(() => documentOverlayFilters(props.document));
 
 // named apart from the map-view tag
-const olMap = useTemplateRef<{ fitMapToDocuments(): void }>('olMap');
+const olMap = useTemplateRef<{ fitMapToDocuments(): void; isMovedByUser(): boolean }>('olMap');
 
 const mapLinksAreVisible = ref(false);
 const elevationProfileHasData = ref(false);
@@ -152,8 +152,8 @@ function setPinnedMode(mode: number) {
   window.document.documentElement.style.overflow = fullWindow.value ? 'hidden' : '';
 
   setTimeout(() => {
-    // deferred so that map.getSize() gets updated
-    if (olMap.value) {
+    // deferred so that map.getSize() gets updated; a map the user moved (resize of the window, pin) keeps its view
+    if (olMap.value && !olMap.value.isMovedByUser()) {
       olMap.value.fitMapToDocuments();
     }
   });

@@ -96,7 +96,8 @@ describe('MapBox', () => {
   });
 
   describe('pinned map', () => {
-    const mountAt = async (path: string, width: number) => {
+    const fitMapToDocuments = vi.fn();
+    const mountAt = async (path: string, width: number, movedByUser = false) => {
       vi.stubGlobal('innerWidth', width);
       vi.stubGlobal('innerHeight', 900);
       const router = createRouter({
@@ -111,7 +112,10 @@ describe('MapBox', () => {
           stubs: {
             DocumentLink: true,
             IconArea: true,
-            MapView: { template: '<div />', methods: { fitMapToDocuments() {} } },
+            MapView: {
+              template: '<div />',
+              methods: { fitMapToDocuments, isMovedByUser: () => movedByUser },
+            },
             MapLinks: true,
             ElevationProfile: true,
           },
@@ -130,6 +134,7 @@ describe('MapBox', () => {
 
     afterEach(() => {
       vi.unstubAllGlobals();
+      fitMapToDocuments.mockClear();
       document.body.style.paddingTop = '';
       document.body.style.paddingRight = '';
       document.documentElement.style.overflow = '';
@@ -174,6 +179,23 @@ describe('MapBox', () => {
 
       expect(wrapper.find('#fullscreen-map-container').classes()).toContain('full-window');
       wrapper.unmount();
+    });
+
+    it('fits the map to its documents on pin, unless the user moved it', async () => {
+      // the fit is deferred with a timer, after the pin
+      const later = () => new Promise((resolve) => setTimeout(resolve));
+      const { wrapper } = await mountAt('/routes/1/fr', 1400);
+      await clickPin(wrapper);
+      await later();
+      expect(fitMapToDocuments).toHaveBeenCalledTimes(1);
+      wrapper.unmount();
+
+      fitMapToDocuments.mockClear();
+      const moved = await mountAt('/routes/1/fr', 1400, true);
+      await clickPin(moved.wrapper);
+      await later();
+      expect(fitMapToDocuments).not.toHaveBeenCalled();
+      moved.wrapper.unmount();
     });
 
     it('leaves the full window with Esc, and unlocks the page when it leaves', async () => {

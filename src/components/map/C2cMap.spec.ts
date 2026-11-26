@@ -1290,6 +1290,84 @@ describe('C2cMap', () => {
       wrapper.unmount();
     });
 
+    it('goes back to the 2D view as the user left it: moved or not', async () => {
+      const { wrapper } = await mountMap({ documents: [route], show3d: true });
+      const isMovedByUser = () => (wrapper.vm as unknown as { isMovedByUser(): boolean }).isMovedByUser();
+      const close = () => wrapper.find('.ol-control-3d button').trigger('click');
+
+      // zoomed in 2D, then 3D and back without a move in 3D: still moved
+      (state.maps.at(-1) as FakeMap).fire('movestart', { originalEvent: {} });
+      await open3d(wrapper);
+      await close();
+      expect(isMovedByUser()).toBe(true);
+
+      // an untouched 2D map stays untouched
+      const untouched = await mountMap({ documents: [route], show3d: true });
+      await open3d(untouched.wrapper);
+      await untouched.wrapper.find('.ol-control-3d button').trigger('click');
+      expect((untouched.wrapper.vm as unknown as { isMovedByUser(): boolean }).isMovedByUser()).toBe(false);
+      wrapper.unmount();
+      untouched.wrapper.unmount();
+    });
+
+    describe('when the window is resized', () => {
+      // the size the observer of the map reports: its callback is kept to call it here
+      let resized: (width: number) => void;
+      // the stub of test-utils, back after these tests
+      const observer = globalThis.ResizeObserver;
+      beforeEach(() => {
+        vi.stubGlobal(
+          'ResizeObserver',
+          class {
+            constructor(callback: (entries: { contentRect: { width: number; height: number } }[]) => void) {
+              resized = (width) => callback([{ contentRect: { width, height: 600 } }]);
+            }
+            observe() {}
+            disconnect() {}
+          }
+        );
+      });
+      afterEach(() => vi.stubGlobal('ResizeObserver', observer));
+      // the reset of the 3D view waits 200 ms
+      const wait = () => new Promise((resolve) => setTimeout(resolve, 250));
+
+      it('resets the 3D view of an untouched map', async () => {
+        const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
+        await open3d(wrapper);
+        resized(800);
+        map.cameras.length = 0;
+        resized(700);
+        await wait();
+        expect(map.cameras.at(-1)).toMatchObject({ pitch: 60 });
+        wrapper.unmount();
+      });
+
+      it('keeps the 3D view the user moved', async () => {
+        const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
+        await open3d(wrapper);
+        resized(800);
+        map.fire('movestart', { originalEvent: {} });
+        map.cameras.length = 0;
+        resized(700);
+        await wait();
+        expect(map.cameras).toHaveLength(0);
+        wrapper.unmount();
+      });
+
+      it('keeps the 3D view the user moves during the delay of the reset', async () => {
+        const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
+        await open3d(wrapper);
+        resized(800);
+        map.cameras.length = 0;
+        resized(700);
+        map.fire('movestart', { originalEvent: {} });
+        await wait();
+        expect(map.cameras).toHaveLength(0);
+        expect((wrapper.vm as unknown as { isMovedByUser(): boolean }).isMovedByUser()).toBe(true);
+        wrapper.unmount();
+      });
+    });
+
     it('tilts the view with the rotation of the mouse (right button or Ctrl + drag)', async () => {
       const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
       // MapLibre's default (true): with false, the mouse would only turn the view around the vertical
