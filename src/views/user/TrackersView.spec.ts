@@ -52,7 +52,7 @@ describe('TrackersView', () => {
     });
   });
 
-  it('shows distinct device names in the latest activity summary only once when it matches the vendor', async () => {
+  it('shows device names without the vendor names in the latest activity summary', async () => {
     const wrapper = mount(TrackersView, {
       global: {
         stubs: { ApplicationCard: true, FaIcon: true, HtmlHeader: true, IconHeightDiffUp: true, SpinnerIcon: true },
@@ -73,7 +73,8 @@ describe('TrackersView', () => {
     const firstActivity = heading?.element.nextElementSibling;
     const secondActivity = firstActivity?.nextElementSibling;
 
-    expect(firstActivity?.textContent).toContain('Garmin Forerunner 965');
+    expect(firstActivity?.textContent).toContain('Forerunner 965');
+    expect(firstActivity?.textContent?.match(/garmin/gi)).toHaveLength(1);
     expect(secondActivity?.textContent?.match(/garmin/gi)).toHaveLength(1);
   });
 });

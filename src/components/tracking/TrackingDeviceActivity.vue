@@ -16,7 +16,7 @@
           <template v-else>{{ $gettext(source.vendor) }}</template><span
             v-if="source.deviceName"
             class="activity-device-name"
-            :title="source.deviceName"
+            :title="source.fullDeviceName"
             >&#32;({{ source.deviceName }})</span
           >
         </template>
@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-import { distinctDeviceName } from './activity-device';
+import { shortDeviceName, vendorNames } from './activity-device';
 
 import type { ActivitySource } from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
@@ -69,12 +69,20 @@ const heightDiffUp = computed(() => $documentUtils.heightDiffUpWithUnit(props.ac
 const length = computed(() => $documentUtils.lengthWithUnit(props.activity.length));
 
 // the vendors that have this outing (tracking before 3.4.0 sends none)
-const sources = computed<ActivitySource[]>(() =>
-  (props.activity.sources ?? [props.activity as ActivitySource]).map((source: ActivitySource) => ({
+const sources = computed<(ActivitySource & { fullDeviceName?: string })[]>(() => {
+  const groupSources: ActivitySource[] = props.activity.sources ?? [props.activity as ActivitySource];
+  // a device may be named after any vendor of the group
+  const names = vendorNames(
+    groupSources.map(({ vendor }) => vendor),
+    $gettext
+  );
+  return groupSources.map((source) => ({
     ...source,
-    deviceName: distinctDeviceName(source.deviceName, source.vendor, $gettext(source.vendor)),
-  }))
-);
+    deviceName: shortDeviceName(source.deviceName, names),
+    // the whole name on hover, the short one may be truncated
+    fullDeviceName: source.deviceName?.trim(),
+  }));
+});
 
 const vendorUrl = ({ vendor, vendorId }: ActivitySource): string | undefined => {
   switch (vendor) {

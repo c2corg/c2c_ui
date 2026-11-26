@@ -83,7 +83,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import ApplicationCard from '@/components/tracking/ApplicationCard.vue';
-import { distinctDeviceName } from '@/components/tracking/activity-device';
+import { shortDeviceName, vendorNames } from '@/components/tracking/activity-device';
 import trackingService, { type Activity, type Status, type Vendor } from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
@@ -214,7 +214,14 @@ function loadActivities() {
           activitiesLoading.value = false;
           activities.value = data.slice(0, 5).map((activity) => ({
             ...activity,
-            deviceName: distinctDeviceName(activity.deviceName, activity.vendor, $gettext(activity.vendor)),
+            // a grouped activity: the device may be named after any vendor of the group
+            deviceName: shortDeviceName(
+              activity.deviceName,
+              vendorNames(
+                (activity.sources ?? [activity]).map(({ vendor }) => vendor),
+                $gettext
+              )
+            ),
             ...(activity.duration && { duration: $dateUtils.durationToTimeString(activity.duration) }),
             ...(activity.heightDiffUp && {
               heightDiffUp: $documentUtils.heightDiffUpWithUnit(activity.heightDiffUp),
