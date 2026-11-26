@@ -1290,6 +1290,113 @@ describe('C2cMap', () => {
       wrapper.unmount();
     });
 
+    describe('flyover', () => {
+      const play = async (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) => {
+        await wrapper.find('.ol-control-play button').trigger('click');
+        await vi.waitFor(() => expect(wrapper.find('.map-flyover-progress:not([disabled])').exists()).toBe(true));
+      };
+      // the animation is driven by the tests
+      const requestAnimationFrame = globalThis.requestAnimationFrame;
+      const matchMedia = globalThis.matchMedia;
+      // a phone: no tuning panel (the screen store reads matchMedia, which jsdom has not)
+      beforeEach(() => {
+        globalThis.requestAnimationFrame = () => 0;
+        globalThis.matchMedia = ((query: string) => {
+          const max = query.match(/max-width: (\d+)px/);
+          return { matches: !!max && 400 <= Number(max[1]), addEventListener() {} };
+        }) as unknown as typeof globalThis.matchMedia;
+      });
+      afterEach(() => {
+        globalThis.requestAnimationFrame = requestAnimationFrame;
+        globalThis.matchMedia = matchMedia;
+      });
+
+      it('is offered for the track of an outing only', async () => {
+        for (const [documents, offered] of [
+          [[outing], true],
+          [[route], false],
+          [[{ ...outing, geometry: { geom: point(6.28, 45.9) } }], false],
+          [[outing, { ...outing, document_id: 2 }], false],
+        ] as const) {
+          const { wrapper } = await mountMap({ documents, show3d: true });
+          expect(wrapper.find('.ol-control-play').exists()).toBe(offered);
+          wrapper.unmount();
+        }
+        const { wrapper } = await mountMap({ documents: [outing] });
+        expect(wrapper.find('.ol-control-play').exists()).toBe(false);
+        wrapper.unmount();
+      });
+
+      it('opens the 3D view over the window, plays the track, and goes back to 2D', async () => {
+        const { wrapper, map } = await mountMap({ documents: [outing], show3d: true });
+
+        await play(wrapper);
+
+        expect(map.terrain).toMatchObject({ source: 'terrain' });
+        // no Fullscreen API in jsdom
+        expect(wrapper.classes()).toEqual(expect.arrayContaining(['c2c-map--flyover', 'c2c-map--flyover-window']));
+        expect(map.getLayer('flyover-played')).toBeTruthy();
+        // the part not played yet: hidden (FLYOVER.showAhead)
+        expect(map.getLayer('flyover-ahead')).toMatchObject({ layout: { visibility: 'none' } });
+        expect(map.layout['documents-3d'].visibility).toBe('none');
+        expect(map.centerClampedToGround).toBe(false);
+        expect(state.markers.some((marker) => marker.element?.className === 'map-flyover-head')).toBe(true);
+
+        await wrapper.find('.map-flyover-close button').trigger('click');
+        await flushPromises();
+
+        expect(wrapper.find('.map-flyover').exists()).toBe(false);
+        expect(map.getLayer('flyover-played')).toBeUndefined();
+        expect(map.centerClampedToGround).toBe(true);
+        expect(map.terrain).toBeNull();
+        expect(wrapper.classes()).not.toContain('c2c-map--flyover');
+        wrapper.unmount();
+      });
+
+      it('keeps the 3D view it started from, with its camera', async () => {
+        const { wrapper, map } = await mountMap({ documents: [outing], show3d: true });
+        await open3d(wrapper);
+        map.zoom = 12.5;
+
+        await play(wrapper);
+        await wrapper.find('.map-flyover-close button').trigger('click');
+        await flushPromises();
+
+        expect(map.terrain).toMatchObject({ source: 'terrain' });
+        expect(map.cameras.at(-1)).toMatchObject({ zoom: 12.5, pitch: 60 });
+        expect(map.layout['documents-3d'].visibility).toBe('visible');
+        wrapper.unmount();
+      });
+
+      it('cycles the speeds, seeks, and stops following the track on a move of the user', async () => {
+        const { wrapper, map } = await mountMap({ documents: [outing], show3d: true });
+        await play(wrapper);
+
+        const speed = wrapper.find('.map-flyover-speed');
+        const speeds = [];
+        for (let i = 0; i < 5; i++) {
+          speeds.push(speed.text());
+          await speed.trigger('click');
+        }
+        expect(speeds).toEqual(['1×', '2×', '3×', '5×', '10×']);
+        expect(speed.text()).toBe('1×');
+
+        await wrapper.find('.map-flyover-progress').setValue('500');
+        expect(wrapper.find<HTMLInputElement>('.map-flyover-progress').element.value).toBe('500');
+
+        expect(wrapper.find('.map-flyover-recenter').exists()).toBe(false);
+        map.fire('dragstart', { originalEvent: new MouseEvent('mousedown') });
+        await flushPromises();
+        expect(wrapper.find('.map-flyover-recenter').exists()).toBe(true);
+        // a move of the camera itself: not the user
+        await wrapper.find('.map-flyover-recenter').trigger('click');
+        map.fire('zoomstart', {});
+        await flushPromises();
+        expect(wrapper.find('.map-flyover-recenter').exists()).toBe(false);
+        wrapper.unmount();
+      });
+    });
+
     it('tilts the view with the rotation of the mouse (right button or Ctrl + drag)', async () => {
       const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
       // MapLibre's default (true): with false, the mouse would only turn the view around the vertical

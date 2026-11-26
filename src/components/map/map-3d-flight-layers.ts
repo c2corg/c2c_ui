@@ -29,6 +29,8 @@ type Flights = {
   // the flight vertices in the air, by their place (cursorKey): where the profile cursor is in the air
   air: Map<string, Position>;
   exaggeration: number;
+  // the flights found, by track: for the flyover (map-3d-flyover.ts), which follows them in the air
+  splits: FlightSplit[];
 };
 
 /** What the flight layers show and do */
@@ -36,6 +38,11 @@ export type FlightLayers = {
   remove: () => void;
   // the profile cursor at [lon, lat]: drawn in the air when it is on a flight (true), else nothing (false)
   cursor: (lonLat: [number, number] | null) => Promise<boolean>;
+  // the flyover: the flights of the first track, and their altitude as drawn per vertex
+  air: () => { flights: [number, number][]; alt: Float64Array } | null;
+  // the flyover: the flights faint, those played so far ([lon, lat, altitude as drawn]) in full, and the playhead in
+  // the air with its line down to the terrain; null: back to the flights as they were
+  progress: (played: Position[][] | null, head: Position | null, ground?: number, ahead?: boolean) => void;
 };
 
 // the place of a vertex, to about a metre: the profile and the 3D view read the same track
@@ -116,6 +123,7 @@ export async function findFlights(documents: FeatureCollection, exaggeration: nu
     drops: [],
     air: new Map(),
     exaggeration,
+    splits: [],
   };
   for (const feature of documents.features) {
     const split = splits.get(feature);
@@ -123,6 +131,7 @@ export async function findFlights(documents: FeatureCollection, exaggeration: nu
       flights.documents.features.push(feature);
       continue;
     }
+    flights.splits.push(split);
     flights.documents.features.push(multiLine(lines(split, groundRanges(split))));
     flights.shadows.features.push(multiLine(lines(split, split.flights)));
     // in the air: the GPS altitude minus the offset of the track to the terrain, so that the flight leaves and meets
@@ -263,5 +272,67 @@ export async function addFlightLayers(map: MapLibreMap, flights: Flights): Promi
     });
     return true;
   };
-  return { remove: () => map.removeControl(overlay), cursor };
+
+  const air = () => {
+    const split = flights.splits[0];
+    if (!split) return null;
+    const alt = Float64Array.from(split.vertices, (v, i) => (v[2] - split.offset[i]) * flights.exaggeration);
+    return { flights: split.flights, alt };
+  };
+
+  // the flyover: drawn again at each frame, the layers keep their ids (deck.gl only updates their data)
+  const faint = (layer: (typeof layers)[number]) =>
+    layer.clone({ opacity: 0.35, ...(layer.id === 'flight-drops' ? { visible: false } : {}) });
+  const progress = (played: Position[][] | null, head: Position | null, ground = 0, ahead = true) => {
+    if (!played) {
+      overlay.setProps({ layers });
+      return;
+    }
+    const playedPaths = (id: string, color: [number, number, number], width: number) =>
+      new PathLayer<Position[]>({
+        id,
+        data: played,
+        getPath: (path) => path as [number, number, number][],
+        getColor: color,
+        getWidth: width,
+        widthUnits: 'pixels',
+        capRounded: true,
+        jointRounded: true,
+        billboard: true,
+        parameters: { depthWriteEnabled: false },
+      });
+    const bottom: Position | null = head && [head[0], head[1], ground];
+    overlay.setProps({
+      layers: [
+        // the flights not played yet, faint, or not at all
+        ...(ahead ? layers.map(faint) : []),
+        playedPaths('flyover-flight-casing', CASING_COLOR, 5),
+        playedPaths('flyover-flight-paths', FLIGHT_COLOR, 3),
+        new LineLayer<[Position, Position]>({
+          id: 'flyover-flight-drop',
+          data: head && bottom ? [[bottom, head]] : [],
+          getSourcePosition: (drop) => drop[0] as [number, number, number],
+          getTargetPosition: (drop) => drop[1] as [number, number, number],
+          getColor: [0, 0, 0, 200],
+          getWidth: 1,
+        }),
+        new ScatterplotLayer<Position>({
+          id: 'flyover-flight-head',
+          data: head ? [head] : [],
+          getPosition: (position) => position as [number, number, number],
+          getFillColor: FLIGHT_COLOR,
+          getLineColor: [255, 255, 255],
+          radiusUnits: 'pixels',
+          getRadius: 7,
+          stroked: true,
+          lineWidthUnits: 'pixels',
+          getLineWidth: 2,
+          billboard: true,
+          parameters: { depthCompare: 'always' },
+        }),
+      ],
+    });
+  };
+
+  return { remove: () => map.removeControl(overlay), cursor, air, progress };
 }

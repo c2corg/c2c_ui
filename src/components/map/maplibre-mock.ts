@@ -237,6 +237,31 @@ export class FakeMap {
   setSky(sky: unknown) {
     this.sky = sky;
   }
+  // the flyover: the terrain everywhere at `terrainElevation`, a camera looking from a point to another
+  terrainElevation: number | null = 1000;
+  centerElevation = 0;
+  centerClampedToGround = true;
+  queryTerrainElevation() {
+    return this.terrain ? this.terrainElevation : null;
+  }
+  getCenterElevation() {
+    return this.centerElevation;
+  }
+  getCenterClampedToGround() {
+    return this.centerClampedToGround;
+  }
+  setCenterClampedToGround(clamped: boolean) {
+    this.centerClampedToGround = clamped;
+  }
+  calculateCameraOptionsFromTo(
+    from: { lng: number; lat: number },
+    altitudeFrom: number,
+    to: { lng: number; lat: number },
+    altitudeTo = 0
+  ) {
+    const bearing = (Math.atan2(to.lng - from.lng, to.lat - from.lat) * 180) / Math.PI;
+    return { center: [to.lng, to.lat], elevation: altitudeTo, zoom: 13, pitch: 60, bearing, altitudeFrom };
+  }
   resize() {}
   stop() {}
   remove() {
@@ -272,6 +297,16 @@ export class FakeMarker {
   }
   remove() {
     this.removed = true;
+  }
+}
+
+export class LngLat {
+  constructor(
+    public lng: number,
+    public lat: number
+  ) {}
+  static convert(value: LngLat | [number, number] | { lng: number; lat: number }) {
+    return Array.isArray(value) ? new LngLat(value[0], value[1]) : new LngLat(value.lng, value.lat);
   }
 }
 

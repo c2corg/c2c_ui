@@ -65,8 +65,8 @@ function groundDistance(a: number[], b: number[]): number {
   return Math.hypot(dx, dy) * EARTH;
 }
 
-// linear interpolation of ys over increasing xs, clamped (numpy.interp)
-function interp(x: number, xs: ArrayLike<number>, ys: ArrayLike<number>): number {
+/** Linear interpolation of ys over increasing xs, clamped (numpy.interp) */
+export function interp(x: number, xs: ArrayLike<number>, ys: ArrayLike<number>): number {
   const n = xs.length;
   if (x <= xs[0]) return ys[0];
   if (x >= xs[n - 1]) return ys[n - 1];
