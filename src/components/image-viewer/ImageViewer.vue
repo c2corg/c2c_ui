@@ -1,6 +1,6 @@
 <template>
   <div v-if="visible && activeDocument" ref="root" class="image-viewer" :class="{ 'hide-buttons': hideButtons }">
-    <div class="is-flex has-text-grey-lighter image-viewer-header">
+    <div class="has-text-grey-lighter image-viewer-header">
       <span class="is-size-4 is-ellipsed-tablet image-viewer-title" :class="{ 'is-editing': titleEdition }">
         <!-- the keys stay in the field: not the arrows of the swiper, nor Escape that closes the viewer -->
         <form
@@ -537,13 +537,19 @@ onBeforeUnmount(() => {
   left: 0;
   right: 0;
   z-index: 3;
-  justify-content: space-between;
+  /* three columns, the two outer ones of the same width: the title centred on the viewer, not between its left edge
+     and the buttons (a title too long for that falls back on the room left of the buttons) */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  column-gap: 0.5rem;
+  align-items: center;
   padding: 0.5rem 1rem;
   margin-bottom: 0 !important;
   height: 3rem;
 
   .image-viewer-title {
-    margin: auto;
+    grid-column: 2;
+    min-width: 0;
     /* display title on top of the image with some alpha background in case it overlaps (eg when zooming or on mobile) */
     z-index: 2;
     background: rgba(0, 0, 0, 0.4);
@@ -587,8 +593,13 @@ onBeforeUnmount(() => {
   }
 
   .image-viewer-title.is-editing {
-    flex: 1;
-    max-width: 40rem;
+    width: 40rem;
+    max-width: 100%;
+  }
+
+  .image-viewer-buttons {
+    grid-column: 3;
+    justify-self: end;
   }
 
   .image-viewer-title-form {
