@@ -210,6 +210,7 @@ export class FakeMap {
   addSource(id: string, source: StyleSpecification['sources'][string]) {
     if (id in this.style.sources) throw new Error(`source ${id} already added`);
     this.style.sources[id] = source;
+    if ('data' in source) this.data[id] = source.data;
   }
   removeSource(id: string) {
     if (this.style.layers.some((layer) => 'source' in layer && layer.source === id)) {

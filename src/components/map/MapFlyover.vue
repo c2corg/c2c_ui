@@ -274,7 +274,7 @@ function tick(now: number) {
   draw(d);
   if (transition) {
     transition.start ??= now;
-    const t = Math.min(1, (now - transition.start) / transition.duration);
+    const t = transition.duration > 0 ? Math.min(1, (now - transition.start) / transition.duration) : 1;
     map.jumpTo(blend(transition.from, followCamera(d, dt, true), ease(t)));
     if (t >= 1) {
       const then = transition.then;

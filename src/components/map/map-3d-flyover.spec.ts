@@ -121,6 +121,26 @@ describe('prepareFlyover', () => {
     expect(pointAt(track, 1500).alt).toBeCloseTo(1500, -1);
   });
 
+  it('crosses the antimeridian the short way', async () => {
+    const asked: [number, number][] = [];
+    const ground = (points: [number, number][]) => {
+      asked.push(...points);
+      return flat(points);
+    };
+    const parts = [
+      [
+        [180 - KM, 0, 0],
+        [-180 + KM, 0, 0],
+      ],
+    ];
+    const track = (await prepareFlyover(parts, ground, 1))!;
+    expect(track.length).toBeCloseTo(2000, -1);
+    // continuous, east of 180°
+    for (const lon of track.lon) expect(lon).toBeGreaterThan(180 - 2 * KM);
+    for (const [lon] of asked) expect(Math.abs(lon)).toBeGreaterThan(180 - 2 * KM);
+    expect(Math.max(...asked.map(([lon]) => lon))).toBeLessThanOrEqual(180);
+  });
+
   it('has nothing to play without length', async () => {
     expect(await prepareFlyover([[[6, 45, 0]]], flat, 1)).toBeNull();
   });

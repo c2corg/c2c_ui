@@ -1369,6 +1369,10 @@ describe('C2cMap', () => {
       });
 
       it('cycles the speeds, seeks, and stops following the track on a move of the user', async () => {
+        // the frames of the animation, run by the test
+        const frames: FrameRequestCallback[] = [];
+        globalThis.requestAnimationFrame = (callback) => frames.push(callback);
+        const runFrames = () => frames.splice(0).forEach((callback) => callback(performance.now()));
         const { wrapper, map } = await mountMap({ documents: [outing], show3d: true });
         await play(wrapper);
 
@@ -1381,8 +1385,18 @@ describe('C2cMap', () => {
         expect(speeds).toEqual(['1×', '2×', '3×', '5×', '10×']);
         expect(speed.text()).toBe('1×');
 
+        const playedPoints = () =>
+          (map.data['flyover-played'] as { features: { geometry: { coordinates: unknown[][] } }[] }).features.flatMap(
+            (feature) => feature.geometry.coordinates.flat()
+          ).length;
+        await wrapper.find('.map-flyover-progress').setValue('0');
+        runFrames();
+        const atStart = playedPoints();
         await wrapper.find('.map-flyover-progress').setValue('500');
+        runFrames();
         expect(wrapper.find<HTMLInputElement>('.map-flyover-progress').element.value).toBe('500');
+        // half of the track played
+        expect(playedPoints()).toBeGreaterThan(atStart);
 
         expect(wrapper.find('.map-flyover-recenter').exists()).toBe(false);
         map.fire('dragstart', { originalEvent: new MouseEvent('mousedown') });

@@ -2429,6 +2429,12 @@ function setRotation(enabled: boolean) {
 // the documents of a list that changed (another page of the results), while the 3D view is open
 function redraw3d() {
   if (!map) return;
+  // the flyover plays the layers it was given: redrawn once it is closed
+  if (flyoverFrom) {
+    redraw3dPending = true;
+    return;
+  }
+  redraw3dPending = false;
   const { lines, markers } = documents3d();
   documents3dVersion++;
   shownMarkers.forEach((marker) => marker.remove());
@@ -2475,6 +2481,7 @@ function close3d() {
   if (!map) return;
   void stopFlyover();
   is3d.value = false;
+  redraw3dPending = false;
   // back in 2D, the layer shown before 3D, or that of the category chosen in 3D (chooseBase)
   shownMarkers.forEach((marker) => marker.remove());
   shownMarkers = [];
@@ -2502,10 +2509,19 @@ const flyoverWindow = ref(false);
 const flyoverParts = shallowRef<number[][][]>([]);
 // what to go back to: the 3D view or not, its camera, the full screen entered by the flyover
 let flyoverFrom: { was3d: boolean; camera: CameraOptions | null; fullscreen: boolean } | null = null;
+// the documents changed during the flyover (an image located on the track): the 3D view redrawn after it
+let redraw3dPending = false;
+// the map back to its size after the flyover: its camera restored, not reset to the documents (resizeObserver)
+let flyoverClosedAt = -Infinity;
 
 // in a chunk of its own, asked as soon as the play button is hovered or focused
 let flyoverModule: Promise<typeof import('./MapFlyover.vue')> | null = null;
-const loadFlyover = () => (flyoverModule ??= import('./MapFlyover.vue'));
+// a chunk that failed to load (network): asked again the next time
+const loadFlyover = () =>
+  (flyoverModule ??= import('./MapFlyover.vue').catch((error: unknown) => {
+    flyoverModule = null;
+    throw error;
+  }));
 const MapFlyover = defineAsyncComponent(loadFlyover);
 
 // the track of an outing (a single document), with the 3D view
@@ -2546,8 +2562,13 @@ async function startFlyover() {
   const entered: Promise<boolean> = document.fullscreenEnabled
     ? root.requestFullscreen().then(
         () => {
+          // granted after the flyover was closed: left at once
+          if (flyoverFrom !== from) {
+            if (document.fullscreenElement === root) document.exitFullscreen().catch(() => undefined);
+            return false;
+          }
           from.fullscreen = true;
-          if (flyoverFrom === from) flyoverWindow.value = false;
+          flyoverWindow.value = false;
           return true;
         },
         () => false
@@ -2555,12 +2576,20 @@ async function startFlyover() {
     : Promise.resolve(false);
   const fullscreen = Promise.race([entered, new Promise<boolean>((resolve) => setTimeout(resolve, 1500, false))]);
   if (!is3d.value) open3d();
-  const [inFullscreen] = await Promise.all([
+  const [inFullscreen, loaded] = await Promise.all([
     fullscreen,
-    loadFlyover().catch(() => null),
+    loadFlyover().then(
+      () => true,
+      () => false
+    ),
     flightsReady.catch(() => null),
   ]);
   if (flyoverFrom !== from || !map || !is3d.value) return;
+  // no player (its chunk did not load): the map as it was
+  if (!loaded) {
+    await stopFlyover();
+    return;
+  }
   flyoverLoading.value = false;
   flyoverWindow.value = !inFullscreen && !from.fullscreen;
   const geometry = line.geometry as LineString | MultiLineString;
@@ -2573,6 +2602,7 @@ async function stopFlyover() {
   const from = flyoverFrom;
   if (!from) return;
   flyoverFrom = null;
+  flyoverClosedAt = performance.now();
   flyover.value = false;
   flyoverLoading.value = false;
   flyoverWindow.value = false;
@@ -2586,7 +2616,10 @@ async function stopFlyover() {
   if (!is3d.value) return;
   if (!from.was3d) {
     close3d();
-  } else if (from.camera) {
+    return;
+  }
+  if (redraw3dPending) redraw3d();
+  if (from.camera) {
     map.stop();
     map.jumpTo(from.camera);
   }
@@ -2604,8 +2637,9 @@ let lastSize = '';
 const resizeObserver = new ResizeObserver(([entry]) => {
   const size = `${Math.round(entry.contentRect.width)}x${Math.round(entry.contentRect.height)}`;
   // the first call is the size at mount: nothing to reset
-  // the flyover has its own camera
-  if (lastSize && size !== lastSize && is3d.value && !flyoverFrom) {
+  // the flyover has its own camera, and the one from before it is restored when it closes
+  const flyoverResize = flyoverFrom || performance.now() - flyoverClosedAt < 1000;
+  if (lastSize && size !== lastSize && is3d.value && !flyoverResize) {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(resetCamera, 200);
   }

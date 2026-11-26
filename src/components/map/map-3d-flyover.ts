@@ -1,7 +1,7 @@
 // the flyover of a track in the 3D view (MapFlyover.vue): the track resampled at a constant step, the timing of the
 // playback and the camera that follows it. No map here: plain numbers, tested on their own.
 // Every value to tune after trying it lives in FLYOVER.
-import { interp, prepareTrack, type TrackPart } from './map-3d-flight';
+import { interp, lonDelta, prepareTrack, wrapLon, type TrackPart } from './map-3d-flight';
 
 export const FLYOVER = {
   // the duration at 1×, in seconds: logarithmic in the length, as the camera also goes farther on a longer track (the
@@ -177,6 +177,10 @@ export async function prepareFlyover(
   const airAlt = new Float64Array(n).fill(NaN);
   const inFlight = (i: number) => !!air?.flights.some(([a, b]) => a <= i && i < b);
 
+  // longitudes without the jump of 360° at the antimeridian: interpolated and smoothed the short way
+  const vertexLon = new Float64Array(vertices.length);
+  vertices.forEach(([x], j) => (vertexLon[j] = j ? vertexLon[j - 1] + lonDelta(vertices[j - 1][0], x) : x));
+
   let i = 0;
   for (let k = 0; k < n; k++) {
     const d = Math.min(k * step, length);
@@ -185,7 +189,7 @@ export async function prepareFlyover(
     const span = vertexDist[i + 1] - vertexDist[i];
     const f = span > 0 ? clamp((d - vertexDist[i]) / span, 0, 1) : 0;
     dist[k] = d;
-    lon[k] = vertices[i][0] + f * (vertices[i + 1][0] - vertices[i][0]);
+    lon[k] = vertexLon[i] + f * (vertexLon[i + 1] - vertexLon[i]);
     lat[k] = vertices[i][1] + f * (vertices[i + 1][1] - vertices[i][1]);
     part[k] = track.part[f < 1 ? i : i + 1];
     if (air && inFlight(i)) {
@@ -194,7 +198,7 @@ export async function prepareFlyover(
     }
   }
 
-  const terrain = await ground(Array.from(lon, (x, k) => [x, lat[k]] as [number, number]));
+  const terrain = await ground(Array.from(lon, (x, k) => [wrapLon(x), lat[k]] as [number, number]));
   const alt = new Float64Array(n);
   let last = 0;
   for (let k = 0; k < n; k++) {
