@@ -170,9 +170,6 @@
     "No user with this email": {
       "API message": "There is no user with this email"
     },
-    "Only document less than 24h old can be deleted": {
-      "API message": "Only recent documents (less than 24h old) can be deleted. Please contact moderators to delete this document."
-    },
     "Ordnance Survey (uk)": {
       "Map layer": "Ordn. Survey"
     },
@@ -263,6 +260,9 @@
     },
     "already used username": {
       "API message": "This username is already in use"
+    },
+    "already-linked": {
+      "tracking": "This account of the service is already linked to another camptocamp account"
     },
     "always_accessible": {
       "custodianship_types": "always accessible"
