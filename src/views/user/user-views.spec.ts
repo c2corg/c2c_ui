@@ -42,6 +42,25 @@ describe('TrackersExchangeTokenView', () => {
     expect(api.exchangeToken).toHaveBeenCalledWith('strava', 42, { code: 'abc' });
     expect(router.currentRoute.value.name).toBe('trackers');
   });
+
+  it.each([
+    ['the error answered by the tracking service', { response: { data: 'already-linked' } }, 'already-linked'],
+    ['unknown without an answer', new Error('Network Error'), 'unknown'],
+  ])('goes back to the trackers with %s', async (_, error, expected) => {
+    api.exchangeToken.mockRejectedValue(error);
+    mount(TrackersExchangeTokenView, {
+      global: {
+        plugins: [router],
+        stubs: { SpinnerIcon: true },
+        config: { globalProperties: { $user: { id: 42 } } as never },
+        directives: { translate: {} },
+      },
+    });
+    await flushPromises();
+
+    expect(router.currentRoute.value.name).toBe('trackers');
+    expect(router.currentRoute.value.query).toEqual({ error: expected });
+  });
 });
 
 describe('FormSubmitSuccessIndicator', () => {

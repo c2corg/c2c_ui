@@ -190,6 +190,7 @@ function load() {
     // $gettext('auth-denied', 'tracking')
     // $gettext('unsufficient-scopes', 'tracking')
     // $gettext('setup-failed', 'tracking')
+    // $gettext('already-linked', 'tracking')
     // $gettext('unknown', 'tracking')
     toast({ message: $gettext(String(error), 'tracking'), type: 'is-danger', position: 'center' });
   }
