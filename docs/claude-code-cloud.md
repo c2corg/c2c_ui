@@ -122,7 +122,52 @@ BASH_MAX_TIMEOUT_MS=1800000
 
 The first `docker compose up --build` and `setup.sh` of v6_api take more than the default 2 minutes.
 
-## To check in the first session
+## Running v6_api's stack in a session
 
-The session's traffic goes through Anthropic's HTTPS proxy. If the containers fail with certificate errors (apt, uv,
-the API's requests), they don't trust the proxy's certificate authority: report it here with the fix.
+What the first sessions needed on top of v6_api's README ("Without VS Code"):
+
+- **The Docker daemon may not be running** (the one of the setup script does not outlive it), and one started with
+  `&` from a command dies with that command's shell. Start it, and the long-running servers (`make serve`,
+  `npm run serve`), detached:
+
+  ```bash
+  docker info >/dev/null 2>&1 || (rm -f /var/run/docker.pid; setsid nohup dockerd >/tmp/dockerd.log 2>&1 </dev/null &)
+  ```
+
+- **Two fixes for the containers**, in a compose file outside the checkout (e.g. `/tmp/compose.override.yml`), added
+  to every `docker compose` command after v6_api's own:
+  `docker compose -p v6-api-dev -f .devcontainer/docker-compose.yml -f /tmp/compose.override.yml ...`
+  - Elasticsearch asks for 65536 open files; the sandbox caps it at 20000 (`ulimit -Hn`), and the container fails
+    with `error setting rlimit type 7: operation not permitted`.
+  - The app container doesn't trust the certificate authority of the session's HTTPS proxy: `uv` fails in `setup.sh`
+    with `invalid peer certificate: UnknownIssuer`. Mount the proxy's bundle and point the tools at it.
+
+  ```yaml
+  services:
+    elasticsearch:
+      ulimits:
+        nofile:
+          soft: 20000
+          hard: 20000
+    app:
+      volumes:
+        - /root/.ccr/ca-bundle.crt:/etc/ssl/ccr-ca-bundle.crt:ro
+      environment:
+        SSL_CERT_FILE: /etc/ssl/ccr-ca-bundle.crt
+        REQUESTS_CA_BUNDLE: /etc/ssl/ccr-ca-bundle.crt
+  ```
+
+- **Commit in v6_api from the app container** (`docker compose ... exec app git commit ...`): its pre-commit hook
+  runs `pre-commit` from the container's virtualenv, not found on the host.
+
+## Pushing a branch
+
+The checkouts are shallow, with a fetch refspec for `master` only: a push does not record
+`origin/<branch>`, and the stop hook then reports the branch as never pushed. After the first push of a branch, in
+each repository:
+
+```bash
+b=$(git branch --show-current) && git config --add remote.origin.fetch "+refs/heads/$b:refs/remotes/origin/$b" && git fetch -q origin "$b"
+```
+
+Not a refspec for all the branches (`refs/heads/*`): every `git fetch` would then download all of them.

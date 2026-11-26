@@ -42,6 +42,8 @@ The e2e user: [e2e/README.md](e2e/README.md) (from another container: `python - 
   steps there (Docker is available).
 - The environment (allowed domains, Navitia and Météo-France secrets, setup script):
   [docs/claude-code-cloud.md](docs/claude-code-cloud.md). The Transifex MCP server is a claude.ai connector.
+- Running v6_api's stack (Docker daemon, Elasticsearch and certificate fixes) and pushing a branch (record
+  `origin/<branch>`, or the stop hook reports it unpushed): [docs/claude-code-cloud.md](docs/claude-code-cloud.md).
 - `gh pr` / `gh issue` (GraphQL) are blocked by the GitHub proxy: use `gh api`.
 
 ## Testing (lessons learned)
