@@ -1,15 +1,25 @@
 <template>
   <div>
     <p class="mb-4" v-translate>
-      The documents deleted in the last 29 days. A moderator can restore them, with their history, associations and
-      comments.
+      The documents deleted or merged in the last 29 days. A moderator can restore them, with their history,
+      associations and comments, or undo the merge.
     </p>
 
     <div class="filters columns is-multiline is-variable is-2 mb-4">
       <div class="column is-narrow">
-        <label class="label" v-translate>Type</label>
+        <label class="label" for="deleted-documents-kind" v-translate>Deleted or merged</label>
         <div class="select">
-          <select v-model="filters.type" @change="reload">
+          <select id="deleted-documents-kind" v-model="filters.kind" class="kind-filter" @change="reload">
+            <option value="">{{ $gettext('All') }}</option>
+            <option value="deleted">{{ $gettext('Deleted') }}</option>
+            <option value="merged">{{ $gettext('Merged') }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="column is-narrow">
+        <label class="label" for="deleted-documents-type" v-translate>Type</label>
+        <div class="select">
+          <select id="deleted-documents-type" v-model="filters.type" class="type-filter" @change="reload">
             <option value="">{{ $gettext('All') }}</option>
             <option v-for="type of types" :key="type.letter" :value="type.letter">
               {{ $filters.uppercaseFirstLetter($gettext(type.name + 's')) }}
@@ -18,7 +28,7 @@
         </div>
       </div>
       <div v-for="role of USER_FILTERS" :key="role" class="column is-narrow user-filter">
-        <label class="label">{{ role === 'author' ? $gettext('Author') : $gettext('Deleted by') }}</label>
+        <label class="label">{{ role === 'author' ? $gettext('Author') : $gettext('Deleted or merged by') }}</label>
         <span v-if="users[role]" class="tag is-medium">
           {{ users[role].name }}
           <button class="delete is-small" :aria-label="$gettext('Remove')" @click="setUser(role, null)" />
@@ -31,12 +41,24 @@
         />
       </div>
       <div class="column is-narrow">
-        <label class="label" v-translate>Deleted since</label>
-        <input v-model="filters.deleted_since" class="input" type="date" @change="reload" />
+        <label class="label" for="deleted-documents-since" v-translate>Deleted since</label>
+        <input
+          id="deleted-documents-since"
+          v-model="filters.deleted_since"
+          class="input"
+          type="date"
+          @change="reload"
+        />
       </div>
       <div class="column is-narrow">
-        <label class="label" v-translate>Deleted until</label>
-        <input v-model="filters.deleted_until" class="input" type="date" @change="reload" />
+        <label class="label" for="deleted-documents-until" v-translate>Deleted until</label>
+        <input
+          id="deleted-documents-until"
+          v-model="filters.deleted_until"
+          class="input"
+          type="date"
+          @change="reload"
+        />
       </div>
       <div v-if="isFiltered" class="column is-narrow is-flex is-align-items-flex-end">
         <button class="button is-text" @click="clearFilters" v-translate>Clear the filters</button>
@@ -58,23 +80,43 @@
       </div>
     </div>
 
+    <div v-if="unmerged" class="notification is-success">
+      <button class="delete" @click="unmerged = null" :aria-label="$gettext('Close')" />
+      <span v-translate>Merge undone:</span>
+      <router-link :to="documentRoute(unmerged.document_type, unmerged.result.source_document_id)">
+        {{ unmerged.title }}
+      </router-link>
+      <div v-if="unmergedSkippedCount" class="mt-2">
+        {{ $gettext('Left with the other document, changed since the merge:') }} {{ unmergedSkippedCount }}
+      </div>
+      <div v-if="unmerged.result.missing_files.length" class="mt-2">
+        <span v-translate>Image files not found:</span>
+        {{ unmerged.result.missing_files.join(', ') }}
+      </div>
+      <div v-if="unmerged.earlier" class="mt-2">
+        {{ $gettext('The merges into it before are listed again:') }} {{ unmerged.earlier }}
+      </div>
+    </div>
+
     <div v-if="page.error" class="notification is-danger" v-translate>The deleted documents could not be loaded.</div>
 
     <p v-else-if="!page.loading && documents.length === 0" class="has-text-grey">
       {{
         isFiltered
-          ? $gettext('No deleted document matches these filters.')
-          : $gettext('No deleted document to restore.')
+          ? $gettext('No deleted or merged document matches these filters.')
+          : $gettext('No deleted document to restore, nor merge to undo.')
       }}
     </p>
     <p v-else-if="isFiltered" class="has-text-grey is-size-7 mb-2">{{ $gettext('Found:') }} {{ total }}</p>
 
-    <deleted-document-item
-      v-for="document of documents"
-      :key="document.id"
-      :document="document"
-      @restored="onRestored(document, $event)"
-    />
+    <template v-for="document of documents" :key="document.kind + '-' + document.id">
+      <merged-document-item
+        v-if="document.kind === 'merged'"
+        :merge="document"
+        @unmerged="onUnmerged(document, $event)"
+      />
+      <deleted-document-item v-else :document="document" @restored="onRestored(document, $event)" />
+    </template>
 
     <div class="has-text-centered mt-4">
       <button
@@ -95,12 +137,19 @@
 import { computed, reactive, ref, shallowRef } from 'vue';
 
 import DeletedDocumentItem from './DeletedDocumentItem.vue';
+import MergedDocumentItem from './MergedDocumentItem.vue';
 import { DELETABLE_TYPES, documentRoute } from './deleted-documents';
 
 import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
 import type { DeletedDocumentsFilters } from '@/js/apis/c2c/ModeratorService';
-import type { DeletedDocument, RestoreResult } from '@/js/apis/c2c/schemas';
+import type {
+  DeletedDocument,
+  DeletedEntry,
+  MergedDocument,
+  RestoreResult,
+  UnmergeResult,
+} from '@/js/apis/c2c/schemas';
 import constants from '@/js/constants';
 
 const PAGE_SIZE = 30;
@@ -110,7 +159,7 @@ const USER_FILTERS: UserFilter[] = ['author', 'deleted_by'];
 
 const types = DELETABLE_TYPES.map((name) => ({ name, letter: constants.objectDefinitions[name]!.letter }));
 
-const filters = reactive({ type: '', deleted_since: '', deleted_until: '' });
+const filters = reactive({ kind: '' as '' | 'deleted' | 'merged', type: '', deleted_since: '', deleted_until: '' });
 // the users chosen, shown by their name
 const users = reactive<Record<UserFilter, { document_id: number; name: string } | null>>({
   author: null,
@@ -119,19 +168,22 @@ const users = reactive<Record<UserFilter, { document_id: number; name: string } 
 
 const isFiltered = computed(() => Object.values(filters).some(Boolean) || Object.values(users).some(Boolean));
 
-const documents = ref<DeletedDocument[]>([]);
+const documents = ref<DeletedEntry[]>([]);
 const total = ref(0);
 // a page answered after the filters changed is dropped
 let generation = 0;
 const page = shallowRef<ApiData>(load(0));
 const restored = ref<{ title: string; document_type: string; result: RestoreResult } | null>(null);
 
-const skippedCount = computed(() =>
-  restored.value ? Object.values(restored.value.result.skipped).reduce((sum, n) => sum + n, 0) : 0
-);
+const unmerged = ref<{ title: string; document_type: string; result: UnmergeResult; earlier: number } | null>(null);
+
+const sum = (counts: Record<string, number>) => Object.values(counts).reduce((total, n) => total + n, 0);
+const skippedCount = computed(() => (restored.value ? sum(restored.value.result.skipped) : 0));
+const unmergedSkippedCount = computed(() => (unmerged.value ? sum(unmerged.value.result.skipped) : 0));
 
 function query(): DeletedDocumentsFilters {
   return {
+    kind: filters.kind || undefined,
     type: filters.type || undefined,
     author: users.author?.document_id,
     deleted_by: users.deleted_by?.document_id,
@@ -164,7 +216,7 @@ function setUser(role: UserFilter, user: { document_id: number; name: string } |
 }
 
 function clearFilters() {
-  Object.assign(filters, { type: '', deleted_since: '', deleted_until: '' });
+  Object.assign(filters, { kind: '', type: '', deleted_since: '', deleted_until: '' });
   Object.assign(users, { author: null, deleted_by: null });
   reload();
 }
@@ -174,13 +226,40 @@ function loadMore() {
 }
 
 function onRestored(document: DeletedDocument, result: RestoreResult) {
-  documents.value = documents.value.filter((d) => d.id !== document.id);
-  total.value -= 1;
+  // a restored document brings back the merges it was the source or target of (listed again): the list from the
+  // start, unless only the deletions are listed
+  unmerged.value = null;
+  if (filters.kind !== 'deleted') {
+    reload();
+  } else {
+    // a page asked before this removal has the offsets of the longer list: dropped, the next one asked again
+    generation += 1;
+    documents.value = documents.value.filter((d) => d.kind === 'merged' || d.id !== document.id);
+    total.value -= 1;
+  }
   restored.value = {
     title: document.title ?? String(document.document_id),
     document_type: document.document_type,
     result,
   };
+}
+function onUnmerged(merge: MergedDocument, result: UnmergeResult) {
+  restored.value = null;
+  unmerged.value = {
+    title: merge.title ?? String(merge.document_id),
+    document_type: merge.document_type,
+    result,
+    earlier: merge.earlier_merges.length,
+  };
+  if (merge.earlier_merges.length) {
+    // the merge into its source before is listed now
+    reload();
+  } else {
+    // as for a restore: a page asked before this removal is dropped
+    generation += 1;
+    documents.value = documents.value.filter((d) => d.kind !== 'merged' || d.id !== merge.id);
+    total.value -= 1;
+  }
 }
 </script>
 

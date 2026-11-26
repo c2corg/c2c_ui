@@ -9,12 +9,20 @@ import BrokenEmbeds from './BrokenEmbeds.vue';
 import BrokenLinks from './BrokenLinks.vue';
 import DeletedDocumentItem from './DeletedDocumentItem.vue';
 import DeletedDocuments from './DeletedDocuments.vue';
+import MergedDocumentItem from './MergedDocumentItem.vue';
 import ModerationView from './ModerationView.vue';
 import OrphanImages from './OrphanImages.vue';
 import { daysLeft, documentRoute } from './deleted-documents';
 
 import { ApiData } from '@/js/apis/BaseApi';
-import type { AccountRemoval, BrokenEmbed, BrokenLink, DeletedDocument, OrphanImage } from '@/js/apis/c2c/schemas';
+import type {
+  AccountRemoval,
+  BrokenEmbed,
+  BrokenLink,
+  DeletedDocument,
+  MergedDocument,
+  OrphanImage,
+} from '@/js/apis/c2c/schemas';
 import { isForumModerator } from '@/stores/forum-role';
 import RemoveAccountWindow from '@/views/document/utils/windows/RemoveAccountWindow.vue';
 
@@ -22,6 +30,7 @@ const api = vi.hoisted(() => ({
   getDeletedDocuments: vi.fn(),
   getDeletedDocument: vi.fn(),
   restoreDeletedDocument: vi.fn(),
+  unmergeDocument: vi.fn(),
   getAccountRemovals: vi.fn(),
   validateAccountRemoval: vi.fn(),
   unvalidateAccountRemoval: vi.fn(),
@@ -83,6 +92,24 @@ const outing = (id: number, extra: Partial<DeletedDocument> = {}): DeletedDocume
   deleted_by: user(9, 'bob'),
   expires_at: '2026-12-09T10:00:00+00:00',
   restored_at: null,
+  ...extra,
+});
+
+const merge = (id: number, extra: Partial<MergedDocument> = {}): MergedDocument => ({
+  kind: 'merged',
+  id,
+  document_id: 2000 + id,
+  document_type: 'r',
+  lang: null,
+  title: 'Route ' + id,
+  author: user(3, 'alice'),
+  target_document_id: 3000 + id,
+  target_title: 'Target ' + id,
+  deleted_at: '2026-11-12T10:00:00+00:00',
+  deleted_by: user(9, 'bob'),
+  expires_at: '2026-12-11T10:00:00+00:00',
+  counts: { associations_moved: 3, associations_removed: 0, favourites_moved: 1, routes: 0, redirected: 0, files: 0 },
+  earlier_merges: [],
   ...extra,
 });
 
@@ -259,7 +286,7 @@ describe('DeletedDocuments', () => {
       return [offset, Object.fromEntries(Object.entries(filters).filter(([, value]) => value !== undefined))];
     };
 
-    await wrapper.find('select').setValue('o');
+    await wrapper.find('select.type-filter').setValue('o');
     await (wrapper.findAllComponents(InputDocumentStub)[0] as ReturnType<typeof mount>).vm.$emit('update:modelValue', {
       document_id: 3,
       name: 'alice',
@@ -293,7 +320,7 @@ describe('DeletedDocuments', () => {
       .mockReturnValueOnce(answer({ total: 1, documents: [outing(2)] }));
     const wrapper = mount(DeletedDocuments, { global: global() });
 
-    await wrapper.find('select').setValue('o');
+    await wrapper.find('select.type-filter').setValue('o');
     await flushPromises();
     answerFirst({ data: { total: 1, documents: [outing(1)] } });
     await flushPromises();
@@ -306,7 +333,7 @@ describe('DeletedDocuments', () => {
     const wrapper = mount(DeletedDocuments, { global: global() });
     await flushPromises();
 
-    expect(wrapper.text()).toContain('No deleted document to restore.');
+    expect(wrapper.text()).toContain('No deleted document to restore, nor merge to undo.');
   });
 
   it('removes a restored document from the list, and links to it', async () => {
@@ -322,10 +349,143 @@ describe('DeletedDocuments', () => {
     await flushPromises();
 
     expect(api.restoreDeletedDocument).toHaveBeenCalledWith(1);
-    expect(wrapper.findAllComponents(DeletedDocumentItem)).toHaveLength(1);
+    // the list from the start: the merges of a restored document are listed again
+    expect(api.getDeletedDocuments).toHaveBeenCalledTimes(2);
+    expect(api.getDeletedDocuments).toHaveBeenLastCalledWith(0, 30, expect.any(Object));
     const notification = wrapper.find('.notification.is-success');
     expect(notification.find('a').attributes('href')).toBe('/outings/1001');
     expect(notification.text()).toContain('Outing 1');
+  });
+});
+
+describe('DeletedDocuments with merges', () => {
+  it('lists the merges with the deletions, each tagged, the same ids apart', async () => {
+    api.getDeletedDocuments.mockReturnValue(answer({ total: 2, documents: [merge(1), outing(1)] }));
+    const wrapper = mount(DeletedDocuments, { global: global() });
+    await flushPromises();
+
+    expect(wrapper.findAllComponents(MergedDocumentItem)).toHaveLength(1);
+    expect(wrapper.findAllComponents(DeletedDocumentItem)).toHaveLength(1);
+    expect(wrapper.findComponent(MergedDocumentItem).find('.tag').text()).toBe('merged');
+    expect(wrapper.findComponent(DeletedDocumentItem).find('.tag').text()).toBe('deleted');
+  });
+
+  it('filters the deletions or the merges', async () => {
+    api.getDeletedDocuments.mockReturnValue(answer({ total: 1, documents: [merge(1)] }));
+    const wrapper = mount(DeletedDocuments, { global: global() });
+    await flushPromises();
+
+    await wrapper.find('select.kind-filter').setValue('merged');
+    await flushPromises();
+
+    expect(api.getDeletedDocuments).toHaveBeenLastCalledWith(0, 30, expect.objectContaining({ kind: 'merged' }));
+    expect(wrapper.text()).toContain('Found: 1');
+  });
+
+  it('removes an undone merge from the list, and links to the document back', async () => {
+    api.getDeletedDocuments.mockReturnValue(answer({ total: 2, documents: [merge(1), outing(1)] }));
+    api.unmergeDocument.mockReturnValue(
+      answer({ source_document_id: 2001, target_document_id: 3001, skipped: { associations: 1 }, missing_files: [] })
+    );
+    const wrapper = mount(DeletedDocuments, { global: global() });
+    await flushPromises();
+
+    await (
+      wrapper.findComponent(MergedDocumentItem).findComponent('.confirmation') as ReturnType<typeof mount>
+    ).vm.$emit('confirm');
+    await flushPromises();
+
+    expect(api.unmergeDocument).toHaveBeenCalledWith(1);
+    expect(wrapper.findAllComponents(MergedDocumentItem)).toHaveLength(0);
+    // the deletion with the same id stays
+    expect(wrapper.findAllComponents(DeletedDocumentItem)).toHaveLength(1);
+    const notification = wrapper.find('.notification.is-success');
+    expect(notification.find('a').attributes('href')).toBe('/routes/2001');
+    expect(notification.text()).toContain('Route 1');
+    expect(notification.text()).toContain('Left with the other document, changed since the merge: 1');
+  });
+
+  it('drops a next page asked before an undo: its offset counted the undone merge', async () => {
+    let answerPage!: (value: unknown) => void;
+    api.getDeletedDocuments
+      .mockReturnValueOnce(answer({ total: 3, documents: [merge(1), outing(1)] }))
+      .mockReturnValueOnce(new ApiData(new Promise((resolve) => (answerPage = resolve)) as never))
+      .mockReturnValueOnce(answer({ total: 2, documents: [outing(2)] }));
+    api.unmergeDocument.mockReturnValue(
+      answer({ source_document_id: 2001, target_document_id: 3001, skipped: {}, missing_files: [] })
+    );
+    const wrapper = mount(DeletedDocuments, { global: global() });
+    await flushPromises();
+
+    await moreButton(wrapper)!.trigger('click');
+    await (wrapper.findComponent('.confirmation') as ReturnType<typeof mount>).vm.$emit('confirm');
+    await flushPromises();
+    // the page asked at offset 2 is answered after the undo, one entry too far
+    answerPage({ data: { total: 2, documents: [outing(3)] } });
+    await flushPromises();
+
+    expect(wrapper.findAllComponents(DeletedDocumentItem).map((item) => item.props('document').id)).toEqual([1]);
+    await moreButton(wrapper)!.trigger('click');
+    await flushPromises();
+
+    expect(api.getDeletedDocuments).toHaveBeenLastCalledWith(1, 30, expect.any(Object));
+    expect(wrapper.findAllComponents(DeletedDocumentItem).map((item) => item.props('document').id)).toEqual([1, 2]);
+  });
+
+  it('reloads the list once a merge with earlier merges is undone: the next one is listed', async () => {
+    const chained = merge(1, {
+      earlier_merges: [{ id: 7, document_id: 2007, title: 'Route 7', target_document_id: 2001 }],
+    });
+    api.getDeletedDocuments
+      .mockReturnValueOnce(answer({ total: 1, documents: [chained] }))
+      .mockReturnValueOnce(answer({ total: 1, documents: [merge(7)] }));
+    api.unmergeDocument.mockReturnValue(
+      answer({ source_document_id: 2001, target_document_id: 3001, skipped: {}, missing_files: [] })
+    );
+    const wrapper = mount(DeletedDocuments, { global: global() });
+    await flushPromises();
+
+    await (wrapper.findComponent('.confirmation') as ReturnType<typeof mount>).vm.$emit('confirm');
+    await flushPromises();
+
+    expect(api.getDeletedDocuments).toHaveBeenCalledTimes(2);
+    expect(wrapper.findComponent(MergedDocumentItem).props('merge').id).toBe(7);
+    expect(wrapper.find('.notification.is-success').text()).toContain('The merges into it before are listed again: 1');
+  });
+});
+
+describe('MergedDocumentItem', () => {
+  it('shows the source, the target linked, what was moved, who merged and the days left', () => {
+    const wrapper = mount(MergedDocumentItem, { props: { merge: merge(1) }, global: global() });
+
+    const text = wrapper.text();
+    expect(text).toContain('Route 1');
+    expect(wrapper.find('a[href="/routes/3001"]').text()).toBe('Target 1');
+    expect(text).toContain('links moved: 3 · favourites moved: 1');
+    // the counts at 0 are not shown
+    expect(text).not.toContain('routes of this main waypoint');
+    expect(wrapper.findAll('.contributor').map((c) => c.text())).toEqual(['alice', 'bob']);
+    expect(text).toContain('date:2026-11-12T10:00:00+00:00');
+    expect(text).toContain('days left to undo it:');
+    expect(wrapper.find('.earlier-merges').exists()).toBe(false);
+  });
+
+  it('hints the chain of the merges into its source before, nearest first', () => {
+    const wrapper = mount(MergedDocumentItem, {
+      props: {
+        merge: merge(1, {
+          earlier_merges: [
+            { id: 7, document_id: 2007, title: 'Route 7', target_document_id: 2001 },
+            { id: 8, document_id: 2008, title: null, target_document_id: 2007 },
+          ],
+        }),
+      },
+      global: global(),
+    });
+
+    expect(wrapper.find('.earlier-merges').text()).toContain(
+      'Merged into it before, to undo after this one: Route 7, #2008'
+    );
   });
 });
 
