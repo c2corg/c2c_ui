@@ -70,7 +70,9 @@
     "Activity trackers": "Rastreadores de actividad",
     "Add": "Añadir",
     "Add Camptocamp to your home screen: an icon like an app, the whole screen, and your data kept on the phone. On iPhone, Safari clears the data of a site that is not installed after seven days without a visit.": "Añade Camptocamp a tu pantalla de inicio: un icono como una aplicación, toda la pantalla y tus datos guardados en el teléfono. En iPhone, Safari borra los datos de un sitio que no está instalado después de siete días sin visitarlo.",
+    "Add a copy": "Añadir una copia",
     "Add a document": "Agregar un documento",
+    "Add a title": "Añadir un título",
     "Add here maps not automatically referenced": "Añade aquí los mapas no referenciados automáticamente",
     "Add images": "Agregar imágenes",
     "Add more points": "Añadir más puntos",
@@ -98,6 +100,7 @@
     "An error occurred, could not retrieve activities": "Se produjo un error, no se pudieron recuperar las actividades",
     "An error occurred, couldn't (un)mask version": "Se produjo un error, no se pudo (des)enmascarar la versión",
     "An error occurred, couldn't save images": "Ocurrió un error, no se pudieron guardar las imágenes",
+    "An error occurred, couldn't save the title": "Se ha producido un error, no se ha podido guardar el título",
     "An error occurred, please try again": "Se ha producido un error, inténtalo de nuevo",
     "An error occurred, the images could not all be located": "Se ha producido un error, no se han podido localizar todas las imágenes",
     "An icon on the home screen, and the app takes the whole screen, without the browser bar.": "Un icono en la pantalla de inicio; la aplicación ocupa toda la pantalla, sin la barra del navegador.",
@@ -199,7 +202,9 @@
     "Candidates": "Candidatos",
     "Cards mode": "Modo tarjetas",
     "Change account parameters": "Cambiar parámetros de cuenta",
+    "Change its title": "Cambiar su título",
     "Change password": "Cambiar contraseña",
+    "Change the title": "Cambiar el título",
     "Changes sync when the network is back": "Los cambios se sincronizan cuando vuelve la red",
     "Checking...": "Verificando...",
     "Child": "Hijo",
@@ -260,8 +265,11 @@
     "Contributor": "Colaborador",
     "Contributors:": "Contribuyentes:",
     "Control the use of your personal data": "Controlar el uso de sus datos personales",
+    "Copy of a photo already on this page": "Copia de una foto que ya está en esta página",
     "Cornices": "Cornisas",
     "Could not save your outing on the phone. Please try again.": "No se ha podido guardar tu salida en el teléfono. Inténtalo de nuevo.",
+    "Couldn't check whether you can change its title.": "No se ha podido comprobar si puedes cambiar su título.",
+    "Couldn't load this photo": "No se ha podido cargar esta foto",
     "Coup de coeur": {
       "Sophie picture context": "Nos enamoramos"
     },
@@ -749,6 +757,7 @@
     "New request": "Nueva solicitud",
     "New route": "Nueva ruta",
     "New snow": "Nieve reciente",
+    "New title of the photo already on this page": "Nuevo título de la foto que ya está en esta página",
     "New waypoint": "Nuevo punto de ruta",
     "Next": "Siguiente",
     "Next day": "Día siguiente",
@@ -838,7 +847,9 @@
       "API message": "Solo se pueden eliminar documentos con menos de 24 horas de antigüedad"
     },
     "Only for the home page feed: the dashboard and the “My preferences” button of the lists ignore them.": "Solo para el hilo de la página de inicio: el panel y el botón «Mis preferencias» de las listas los ignoran.",
+    "Only its author or a moderator can change its title.": "Solo su autor o un moderador puede cambiar su título.",
     "Only the most recent ones are listed": "Solo se enumeran los más recientes",
+    "Only the title of this photo changes.": "Solo cambia el título de esta foto.",
     "Ooops": "¡Ups!",
     "Opacity": "Opacidad",
     "Open a route, a waypoint or an outing, and tap the bookmark at the top.": "Abre una ruta, un punto de ruta o una salida y toca el marcador en la parte superior.",
@@ -1251,6 +1262,7 @@
     "This outing is no longer waiting: it was published or removed meanwhile. Your changes are not saved: copy them before leaving the page.": "Esta salida ya no está en espera: mientras tanto se ha publicado o eliminado. Tus cambios no se han guardado; cópialos antes de salir de la página.",
     "This page is reserved to the moderators.": "Esta página está reservada a los moderadores.",
     "This password reset link is no longer valid": "Este enlace para restablecer contraseña ya no es válido",
+    "This photo is already on this page": "Esta foto ya está en esta página",
     "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Esta imagen representa la portada de un libro. Es propiedad de su editor y/o autor. Se presenta aquí solo con fines ilustrativos.",
     "This profile is only available to authenticated users.": "Este perfil sólo está disponible para los usuarios autentificados.",
     "This route guide has an estimated theoretical duration of": "Esta guía de ruta tiene una duración teórica estimada de",
@@ -1262,6 +1274,8 @@
     "This version has been masked.": "Esta versión ha sido enmascarada.",
     "This waypoint is partially accessible by public transport.": "Este punto de ruta es parcialmente accesible en transporte público.",
     "Time": "Hora",
+    "Title changed from the image uploader": "Título cambiado desde la subida de imágenes",
+    "Title changed from the image viewer": "Título cambiado desde el visor de imágenes",
     "Title of the book, author, language and date of publication.": "Título de la obra, autor, idioma y fecha.",
     "Title, activity and characteristics of the picture": "Título, actividad y características de la imagen",
     "To": "A",
@@ -2542,6 +2556,7 @@
     "unsufficient-scopes": {
       "tracking": "permisos insuficientes"
     },
+    "untitled": "sin título",
     "users": "usuarios",
     "very_dangerous": {
       "children_proof_types": "muy peligroso"

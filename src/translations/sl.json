@@ -131,6 +131,7 @@
     "Attributions": {
       "Map controls": "Atribucije"
     },
+    "Authentication to public transport data service error.": "Napaka pri overjanju v storitvi s podatki o javnem prevozu.",
     "Author": "Avtor",
     "Auto": "Samodejno",
     "Avalanche bulletin": "Plazovni bilten",
@@ -326,7 +327,9 @@
     "Directions (Google Maps)": "Navodila za pot (Google Maps)",
     "Disabled at this zoom level": "Onemogočeno pri tej stopnji povečave",
     "Disclaimer": "Opozorilo",
+    "Discovery": "Odkritje",
     "Dismiss": "Opusti",
+    "Display": "Prikaz",
     "Dispositions": "Pravila obnašanja",
     "Distance": "Razdalja",
     "Distance (km)": "Razdalja (km)",
@@ -445,6 +448,10 @@
     "Go back to YETI": "Vrni se na YETI",
     "Go to the previous page": "Pojdi na prejšnjo stran",
     "Go to website": "Pojdite na spletno stran",
+    "Greater than maximum value": {
+      "$$noContext": "Večje od največje vrednosti",
+      "API message": "Večje od največje vrednosti"
+    },
     "Group": "Skupina",
     "Group size": "Velikost skupine",
     "Had a timetable for the route been foreseen? Did you maintain the schedule? Was time a factor in causing the incident?": "Ste imeli načrtovan urnik? Ste se držali urnika? Je bil čas dejavnik za nastanek incidenta?",
@@ -458,8 +465,10 @@
     "Help and support": "Pomoč in podpora",
     "Help research activities to define new prevention means": "Pomagati znanstvenim raziskavam pri opredelitvi novih preventivnih sredstev",
     "Help us better target routes that may interest you by adding one or more filters.": "Pomagajte nam bolje najti smeri, ki bi vas lahko zanimale, tako da dodate enega ali več filtrov.",
+    "Here is the last journey of the day :": "Tukaj je zadnja vožnja dneva:",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Tukaj je seznam uporabnikov, ki jih spremljate in katerih dejavnost boste videli v svojem osebnem toku.",
     "Hide details": "Skrij podrobnosti",
+    "Hide lines details": "Skrij podrobnosti linij",
     "Hide results": "Skrij rezultate",
     "Hide the map": "Skrij zemljevid",
     "High danger level from the avalanche bulletin": "Visoka stopnja nevarnosti iz plazovnega biltena",
@@ -767,6 +776,7 @@
       "API message": "Izbrišete lahko samo nedavne dokumente (24 ur). Za odstranitev tega dokumenta se obrnite na moderatorja. "
     },
     "Only for the home page feed: the dashboard and the “My preferences” button of the lists ignore them.": "Velja le za tok na domači strani; nadzorna plošča (Dashboard) in gumb »Moje nastavitve« na seznamih ne upoštevata teh nastavitev.",
+    "Only the most recent ones are listed": "Navedeni so le najnovejši",
     "Ooops": "Ups",
     "Opacity": "Neprosojnost",
     "Open a route, a waypoint or an outing, and tap the bookmark at the top.": "Izberi smer, točko ali vzpon in tapni zaznamek na vrhu.",
@@ -1173,6 +1183,7 @@
     "Trace and date taken from this activity, distance and elevation gain too when known. Check them before publishing.": "Sled in datum sta povzeta iz te dejavnosti; prav tako razdalja in višinska razlika, če sta znani. Pred objavo ju preverite.",
     "Trace of the outing": "Sled Vzpona",
     "Tracking devices": "GPS naprave",
+    "Tracks here": "Sledi tukaj",
     "Translate": "Prevedi",
     "Transport & road or PT access": "Izhodišče / javni prevoz",
     "Tricky sections": "Zahtevni odseki",
@@ -1285,6 +1296,7 @@
     },
     "Zoom out and it will be OK": "Pomanjšaj in bo vse v redu.",
     "a new point on an existing line": "novo točko na obstoječi črti",
+    "above": "nad",
     "access": {
       "$$noContext": "izhodišče / javni prevoz",
       "waypoint_types": "izhodišče / javni prevoz"
@@ -1407,6 +1419,7 @@
     "base_camp": {
       "waypoint_types": "bazni tabor"
     },
+    "below": "pod",
     "best_periods": "Najboljša obdobja",
     "biography": {
       "book_types": "biografija"
