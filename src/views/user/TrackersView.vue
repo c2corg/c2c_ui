@@ -56,7 +56,8 @@
         {{ $dateUtils.toTechnicalString(activity.date) }}&hairsp;&bull;&hairsp;<template v-if="activity.name"
           >{{ activity.name }}&hairsp;&bull;&hairsp;</template
         >{{ activity.type[$user.lang] }}&hairsp;&bull;&hairsp;{{ $gettext(activity.vendor)
-        }}<template v-if="activity.duration"
+        }}<template v-if="activity.deviceName">&hairsp;&bull;&hairsp;{{ activity.deviceName }}</template
+        ><template v-if="activity.duration"
           >&hairsp;&bull;&hairsp;<span role="img" :title="$gettext('Duration')" :aria-label="$gettext('Duration')"
             ><fa-icon :icon="['far', 'clock']" /></span
           >&hairsp;<span v-html="activity.duration"></span></template
@@ -82,6 +83,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import ApplicationCard from '@/components/tracking/ApplicationCard.vue';
+import { shortDeviceName, vendorNames } from '@/components/tracking/activity-device';
 import trackingService, { type Activity, type Status, type Vendor } from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
@@ -212,6 +214,14 @@ function loadActivities() {
           activitiesLoading.value = false;
           activities.value = data.slice(0, 5).map((activity) => ({
             ...activity,
+            // a grouped activity: the device may be named after any vendor of the group
+            deviceName: shortDeviceName(
+              activity.deviceName,
+              vendorNames(
+                (activity.sources ?? [activity]).map(({ vendor }) => vendor),
+                $gettext
+              )
+            ),
             ...(activity.duration && { duration: $dateUtils.durationToTimeString(activity.duration) }),
             ...(activity.heightDiffUp && {
               heightDiffUp: $documentUtils.heightDiffUpWithUnit(activity.heightDiffUp),
