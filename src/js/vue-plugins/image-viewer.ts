@@ -2,8 +2,13 @@ import { ref, type App } from 'vue';
 
 import type { Image } from '@/js/image-urls';
 
-// an image of the viewer: its title, and the languages it can be edited in
-export type ViewerImage = Image & { locales: { title?: string | null }[]; available_langs?: string[] | null };
+// an image of the viewer: its title, the languages it can be edited in, and what tells who may change it
+export type ViewerImage = Image & {
+  locales: { title?: string | null }[];
+  available_langs?: string[] | null;
+  image_type?: string | null;
+  protected?: boolean | null;
+};
 
 // What ImageViewer offers to the pages: the images of the page, and the one to show
 export type ImageViewer = {

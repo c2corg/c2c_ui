@@ -16,6 +16,13 @@ vi.mock('@/js/upload-file', async (importOriginal) => ({
 }));
 vi.mock('@/js/toast', () => ({ toast: vi.fn(), notify: vi.fn() }));
 
+// the photo already on the document, as its edit form gets it, and its save: the API is not called
+const imageTitle = vi.hoisted(() => ({ loadEditableImage: vi.fn(), saveImageTitle: vi.fn() }));
+vi.mock('@/js/image-title', async (importOriginal) => ({
+  ...(await importOriginal<object>()),
+  ...imageTitle,
+}));
+
 const file = (name: string, type = 'image/jpeg') => ({ name, type, lastModified: 1, size: 1000 });
 const upload = vi.mocked(uploadFile);
 
@@ -24,9 +31,16 @@ type Uploader = {
   onFilesChange(event: unknown): void;
   onDeleteImage(image: unknown): void;
   save(): void;
-  images: Record<string, unknown>;
+  onChoose(image: unknown, choice: 'retitle' | 'add' | null): void;
+  loadSamePhoto(image: unknown): void;
+  images: Record<
+    string,
+    { samePhoto: { choice: string | null; editable: boolean | null; loadFailed: boolean } | null; document: Doc }
+  >;
   readyForSaving: boolean;
 };
+
+type Doc = { locales: { title: string }[] };
 
 const router = () => {
   const result = createRouter({
@@ -68,8 +82,9 @@ const mountUploader = async (
         globalProperties: {
           $gettext: (value: string) => value,
           $language: { current: 'fr' },
+          $user: { isLogged: true, isModerator: false, id: 7 },
           $documentUtils: {
-            buildDocument: () => ({ geometry: {}, associations: {} }),
+            buildDocument: () => ({ geometry: {}, associations: {}, locales: [{ lang: 'fr', title: '' }] }),
             getAssociationArrayName: () => 'outings',
           },
         } as never,
@@ -220,5 +235,180 @@ describe('ImagesUploader', () => {
     await nextTick();
 
     expect(wrapper.findAll('.image-uploader')).toHaveLength(0);
+  });
+
+  describe('a photo the document already has', () => {
+    // the photo of the outing, as the lists of the API give it
+    const listed = () => ({
+      document_id: 50,
+      width: 4000,
+      height: 3000,
+      date_time: '2026-02-01T10:00:00+01:00',
+      camera_name: 'Canon EOS',
+      locales: [{ lang: 'fr', title: 'Old title' }],
+    });
+    // the same photo, uploaded again: as uploadFile reads it
+    const sameUpload = { filename: 'new.jpg', width: 4000, height: 3000, date_time: '2026-02-01T09:00:00Z' };
+
+    const mountWithPhoto = async () => {
+      const parentDocument = { type: 'o', document_id: 1, activities: [], associations: { images: [listed()] } };
+      const mounted = await mountUploader(router(), parentDocument);
+      mounted.uploader.onFilesChange({ target: { files: [file('new.jpg')], value: 'x' } });
+      upload.mock.calls[0][4]({ ...sameUpload });
+      await flushPromises();
+      const image = Object.values(mounted.uploader.images)[0];
+      return { ...mounted, parentDocument, image };
+    };
+
+    beforeEach(() => {
+      imageTitle.loadEditableImage.mockReset();
+      imageTitle.saveImageTitle.mockReset();
+    });
+
+    it('asks whether to change its title or add a copy, before saving', async () => {
+      imageTitle.loadEditableImage.mockResolvedValue({ image: { document_id: 50 }, editable: true });
+      const { uploader, image } = await mountWithPhoto();
+
+      expect(image.samePhoto).toMatchObject({ choice: null, editable: true });
+      expect(imageTitle.loadEditableImage).toHaveBeenCalledWith(50, 'fr', expect.anything());
+      // the title field starts with its title
+      expect(image.document.locales[0].title).toBe('Old title');
+      expect(uploader.readyForSaving).toBe(false);
+    });
+
+    it('changes the title of the photo, without a copy', async () => {
+      const loaded = { document_id: 50, locales: [{ lang: 'fr', title: 'Old title' }] };
+      imageTitle.loadEditableImage.mockResolvedValue({ image: loaded, editable: true });
+      imageTitle.saveImageTitle.mockResolvedValue(undefined);
+      const createImages = vi.spyOn(c2c, 'createImages');
+      const { uploader, image, parentDocument } = await mountWithPhoto();
+
+      uploader.onChoose(image, 'retitle');
+      image.document.locales[0].title = ' New title ';
+      expect(uploader.readyForSaving).toBe(true);
+      uploader.save();
+      await flushPromises();
+
+      expect(imageTitle.saveImageTitle).toHaveBeenCalledWith(loaded, 'New title', expect.any(String));
+      expect(createImages).not.toHaveBeenCalled();
+      expect(parentDocument.associations.images).toHaveLength(1);
+      expect(parentDocument.associations.images[0].locales[0].title).toBe('New title');
+    });
+
+    it('stays open when the title could not be saved, and tries again with the image loaded again', async () => {
+      const loaded = { document_id: 50, locales: [{ lang: 'fr', title: 'Old title' }] };
+      imageTitle.loadEditableImage.mockResolvedValue({ image: loaded, editable: true });
+      imageTitle.saveImageTitle.mockRejectedValueOnce(new Error('409')).mockResolvedValue(undefined);
+      vi.mocked(toast).mockClear();
+      const { uploader, image, parentDocument } = await mountWithPhoto();
+      uploader.onChoose(image, 'retitle');
+      image.document.locales[0].title = 'New title';
+
+      uploader.save();
+      await flushPromises();
+
+      expect(toast).toHaveBeenCalledWith(expect.objectContaining({ type: 'is-danger' }));
+      expect(Object.keys(uploader.images)).toHaveLength(1);
+      expect(imageTitle.loadEditableImage).toHaveBeenCalledTimes(2);
+      expect(uploader.readyForSaving).toBe(true);
+
+      uploader.save();
+      await flushPromises();
+
+      expect(imageTitle.saveImageTitle).toHaveBeenCalledTimes(2);
+      expect(parentDocument.associations.images[0].locales[0].title).toBe('New title');
+      expect(Object.keys(uploader.images)).toHaveLength(0);
+    });
+
+    it('compares the new title to the current one of the photo loaded again', async () => {
+      imageTitle.loadEditableImage
+        .mockResolvedValueOnce({ image: { document_id: 50, locales: [{ title: 'Old title' }] }, editable: true })
+        // saved meanwhile from elsewhere
+        .mockResolvedValue({ image: { document_id: 50, locales: [{ title: 'Other title' }] }, editable: true });
+      imageTitle.saveImageTitle.mockRejectedValueOnce(new Error('409')).mockResolvedValue(undefined);
+      const { uploader, image } = await mountWithPhoto();
+      uploader.onChoose(image, 'retitle');
+      image.document.locales[0].title = 'New title';
+      uploader.save();
+      await flushPromises();
+
+      // back to the title of the list: no longer the current one, it is saved
+      image.document.locales[0].title = 'Old title';
+      uploader.save();
+      await flushPromises();
+
+      expect(imageTitle.saveImageTitle).toHaveBeenLastCalledWith(expect.anything(), 'Old title', expect.any(String));
+    });
+
+    it('starts with the current title of the photo while the user has not changed it', async () => {
+      imageTitle.loadEditableImage.mockResolvedValue({
+        image: { document_id: 50, locales: [{ title: 'Other title' }] },
+        editable: true,
+      });
+      const { image } = await mountWithPhoto();
+
+      expect(image.document.locales[0].title).toBe('Other title');
+    });
+
+    it('offers to load the photo again when it could not be, rather than only a copy', async () => {
+      const loaded = { document_id: 50, locales: [{ lang: 'fr', title: 'Old title' }] };
+      imageTitle.loadEditableImage.mockResolvedValueOnce({ image: loaded, editable: true });
+      imageTitle.loadEditableImage.mockRejectedValueOnce(new Error('network'));
+      imageTitle.saveImageTitle.mockRejectedValueOnce(new Error('409')).mockResolvedValue(undefined);
+      const { uploader, image } = await mountWithPhoto();
+      uploader.onChoose(image, 'retitle');
+      image.document.locales[0].title = 'New title';
+      uploader.save();
+      await flushPromises();
+
+      // not known: not taken for a photo the user may not change
+      expect(image.samePhoto).toMatchObject({ choice: 'retitle', loadFailed: true, editable: true });
+      expect(uploader.readyForSaving).toBe(false);
+
+      imageTitle.loadEditableImage.mockResolvedValue({ image: loaded, editable: true });
+      uploader.loadSamePhoto(image);
+      await flushPromises();
+      expect(image.samePhoto).toMatchObject({ loadFailed: false });
+      expect(uploader.readyForSaving).toBe(true);
+      uploader.save();
+      await flushPromises();
+
+      expect(imageTitle.saveImageTitle).toHaveBeenLastCalledWith(loaded, 'New title', expect.any(String));
+      expect(Object.keys(uploader.images)).toHaveLength(0);
+    });
+
+    it('adds a copy with a title of its own', async () => {
+      imageTitle.loadEditableImage.mockResolvedValue({ image: {}, editable: true });
+      vi.spyOn(c2c, 'createImages').mockResolvedValue({ data: { images: [{ document_id: 51 }] } } as never);
+      const { uploader, image, parentDocument } = await mountWithPhoto();
+
+      uploader.onChoose(image, 'add');
+      // the title of the photo is not given to the copy
+      expect(image.document.locales[0].title).toBe('');
+      expect(uploader.readyForSaving).toBe(true);
+      uploader.save();
+      await flushPromises();
+
+      expect(imageTitle.saveImageTitle).not.toHaveBeenCalled();
+      expect(parentDocument.associations.images.map((item) => item.document_id)).toEqual([50, 51]);
+    });
+
+    it('offers only a copy when the user may not change it', async () => {
+      imageTitle.loadEditableImage.mockResolvedValue({ image: {}, editable: false });
+      const { image } = await mountWithPhoto();
+
+      expect(image.samePhoto).toMatchObject({ editable: false });
+    });
+
+    it('is not asked for another photo', async () => {
+      const parentDocument = { type: 'o', document_id: 1, activities: [], associations: { images: [listed()] } };
+      const { uploader } = await mountUploader(router(), parentDocument);
+      uploader.onFilesChange({ target: { files: [file('other.jpg')], value: 'x' } });
+      upload.mock.calls[0][4]({ ...sameUpload, date_time: '2026-02-01T09:00:05Z' });
+      await flushPromises();
+
+      expect(Object.values(uploader.images)[0].samePhoto).toBeNull();
+      expect(uploader.readyForSaving).toBe(true);
+    });
   });
 });

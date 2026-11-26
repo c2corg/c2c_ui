@@ -1,8 +1,56 @@
 <template>
   <div v-if="visible && activeDocument" ref="root" class="image-viewer" :class="{ 'hide-buttons': hideButtons }">
     <div class="is-flex has-text-grey-lighter image-viewer-header">
-      <span class="is-size-4 is-ellipsed-tablet image-viewer-title">
-        {{ activeDocument.locales[0].title }}
+      <span class="is-size-4 is-ellipsed-tablet image-viewer-title" :class="{ 'is-editing': titleEdition }">
+        <!-- the keys stay in the field: not the arrows of the swiper, nor Escape that closes the viewer -->
+        <form
+          v-if="titleEdition"
+          class="image-viewer-title-form"
+          @submit.prevent="saveTitle"
+          @keydown.stop="onTitleKeydown"
+        >
+          <input
+            ref="titleInput"
+            v-model="titleEdition.title"
+            class="input"
+            maxlength="150"
+            :placeholder="$gettext('title')"
+            :aria-label="$gettext('title')"
+          />
+          <button
+            type="submit"
+            class="image-viewer-title-button"
+            :disabled="titleEdition.saving"
+            :title="$gettext('Save')"
+            :aria-label="$gettext('Save')"
+          >
+            <fa-icon :icon="titleEdition.saving ? 'spinner' : 'check'" :spin="titleEdition.saving" />
+          </button>
+          <button
+            type="button"
+            class="image-viewer-title-button"
+            :title="$gettext('Cancel')"
+            :aria-label="$gettext('Cancel')"
+            @click="titleEdition = null"
+          >
+            <fa-icon icon="xmark" />
+          </button>
+        </form>
+        <template v-else>
+          {{ activeDocument.locales[0].title }}
+          <button
+            v-if="titleEditable[activeDocument.document_id]"
+            type="button"
+            class="image-viewer-edit-title"
+            :title="activeDocument.locales[0].title ? $gettext('Change the title') : $gettext('Add a title')"
+            :aria-label="activeDocument.locales[0].title ? $gettext('Change the title') : $gettext('Add a title')"
+            @click="startTitleEdition"
+          >
+            <fa-icon icon="pen" />
+            <!-- an untitled photo: the icon alone would sit on an empty title -->
+            <span v-if="!activeDocument.locales[0].title" class="image-viewer-add-title" v-translate>Add a title</span>
+          </button>
+        </template>
       </span>
       <span class="is-size-3 is-nowrap image-viewer-buttons">
         <document-link :document="activeDocument" class="has-text-grey-lighter">
@@ -72,7 +120,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/zoom';
 import virtualStyles from 'swiper/element/css/virtual?inline';
 import { Keyboard, Navigation, Pagination, Virtual, Zoom } from 'swiper/modules';
-import { nextTick, onBeforeUnmount, ref, useTemplateRef } from 'vue';
+import { nextTick, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import ZingTouch from 'zingtouch';
 
@@ -81,7 +129,10 @@ import ImageInfo from './ImageInfo.vue';
 import '@/js/swiper-element';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { editableFromListing, loadEditableImage, saveImageTitle, titleLang } from '@/js/image-title';
 import { fallBackToBasicImage, getImageUrl } from '@/js/image-urls';
+import { toast } from '@/js/toast';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 import { registerImageViewer, type ViewerImage } from '@/js/vue-plugins/image-viewer';
 
 type SwiperContainer = HTMLElement & { swiper: Swiper; initialize(): void };
@@ -110,7 +161,7 @@ const exitFullscreen = function () {
   }
 };
 
-const { $screen } = useGlobalProperties();
+const { $screen, $user, $gettext, $language } = useGlobalProperties();
 const router = useRouter();
 
 // The open viewer is a history entry of its own, on the same URL: the back button (browser, phone) closes it instead
@@ -301,6 +352,92 @@ function show(image: ViewerImage) {
   });
 }
 
+// The title changed here, without the edit form: offered once the image is known to be editable by the user (a
+// personal image: by its creator or a moderator), which needs the image itself (the pages give its title only)
+const editableImages = new Map<number, Promise<{ image: C2cDocument; editable: boolean } | null>>();
+const titleEditable = ref<Record<number, boolean>>({});
+const titleEdition = ref<{ documentId: number; title: string; saving: boolean } | null>(null);
+const titleInput = useTemplateRef<HTMLInputElement>('titleInput');
+
+function editableImage(image: ShownImage) {
+  let loaded = editableImages.get(image.document_id);
+  if (!loaded) {
+    const lang = titleLang(image as Parameters<typeof titleLang>[0], $language.current ?? 'fr');
+    loaded = loadEditableImage(image.document_id, lang, $user).catch(() => {
+      // not known (the network): asked again the next time the image is shown
+      editableImages.delete(image.document_id);
+      return null;
+    });
+    editableImages.set(image.document_id, loaded);
+  }
+  return loaded;
+}
+
+watch(
+  () => (visible.value && $user.isLogged ? activeDocument.value : null),
+  (image) => {
+    titleEdition.value = null;
+    if (!image || titleEditable.value[image.document_id] !== undefined) {
+      return;
+    }
+    // known from the page's image (collaborative, or a moderator): loaded only to save its title
+    const known = editableFromListing(image, $user);
+    if (known !== undefined) {
+      titleEditable.value = { ...titleEditable.value, [image.document_id]: known };
+    } else {
+      void editableImage(image).then((loaded) => {
+        if (loaded) {
+          titleEditable.value = { ...titleEditable.value, [image.document_id]: loaded.editable };
+        }
+      });
+    }
+  }
+);
+
+function startTitleEdition() {
+  const image = activeDocument.value!;
+  titleEdition.value = { documentId: image.document_id, title: image.locales[0].title ?? '', saving: false };
+  nextTick(() => titleInput.value?.select());
+  // loaded while the user types: the save sends the whole image
+  void editableImage(image);
+}
+
+function onTitleKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape') {
+    titleEdition.value = null;
+  }
+}
+
+async function saveTitle() {
+  const edition = titleEdition.value!;
+  const image = images.value.find((item) => item.document_id === edition.documentId)!;
+  const title = edition.title.trim();
+  if (title === (image.locales[0].title ?? '')) {
+    titleEdition.value = null;
+    return;
+  }
+  edition.saving = true;
+  try {
+    const loaded = await editableImage(image);
+    if (!loaded?.editable) {
+      throw new Error('not editable');
+    }
+    await saveImageTitle(loaded.image, title, $gettext('Title changed from the image viewer'));
+    // the locale of the page's image too (the viewer shares it): the gallery shows the new title
+    image.locales[0].title = title;
+    // the save doesn't answer the new versions: the image is loaded again for a next change
+    editableImages.delete(image.document_id);
+    if (titleEdition.value === edition) {
+      titleEdition.value = null;
+    }
+  } catch {
+    // the image changed meanwhile (its version), or the network: loaded again for the next try
+    editableImages.delete(image.document_id);
+    edition.saving = false;
+    toast({ message: $gettext(`An error occurred, couldn't save the title`), type: 'is-danger' });
+  }
+}
+
 function onPaginationClick(index: number) {
   swiper.value!.swiper.slideTo(index, 0, false);
 }
@@ -412,6 +549,71 @@ onBeforeUnmount(() => {
     background: rgba(0, 0, 0, 0.4);
     border-radius: 10px;
     padding: 0 10px;
+  }
+
+  /* the controls of the title, as the other ones of the viewer: light on its black */
+  .image-viewer-edit-title,
+  .image-viewer-title-button {
+    padding: 0 0.4rem;
+    border: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.8;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+    }
+
+    &:disabled {
+      cursor: default;
+    }
+  }
+
+  .image-viewer-edit-title {
+    margin-left: 0.25rem;
+    font-size: 1rem;
+    vertical-align: middle;
+  }
+
+  .image-viewer-title-button {
+    font-size: 1.25rem;
+  }
+
+  .image-viewer-add-title {
+    margin-left: 0.4rem;
+    font-size: 0.85rem;
+  }
+
+  .image-viewer-title.is-editing {
+    flex: 1;
+    max-width: 40rem;
+  }
+
+  .image-viewer-title-form {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0;
+
+    .input {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid #fff;
+      background: #000;
+      color: #fff;
+      box-shadow: none;
+
+      &::placeholder {
+        color: #999;
+      }
+
+      &:focus {
+        border-color: #fff;
+        box-shadow: 0 0 0 1px #fff;
+      }
+    }
   }
 
   .image-viewer-buttons > *:not(:last-child) {

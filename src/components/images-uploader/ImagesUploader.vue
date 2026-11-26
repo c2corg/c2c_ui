@@ -17,6 +17,9 @@
           :is-success="image.status === 'SUCCESS'"
           :is-failed="image.status === 'FAILED'"
           :can-rotate="Boolean(image.dataUrl) && canRender(image.file)"
+          :same-photo="image.samePhoto"
+          @choose="onChoose(image, $event)"
+          @reload-same-photo="loadSamePhoto(image)"
           @delete-image="onDeleteImage(image)"
           @rotate-image="onRotateImage(image, $event)"
           @retry-upload="startUpload(image)"
@@ -47,7 +50,7 @@
     <template #footer>
       <div class="buttons">
         <button
-          :disabled="documents.length === 0"
+          :disabled="Object.keys(images).length === 0"
           class="button is-information"
           @click="categoriesEdition = !categoriesEdition"
         >
@@ -78,10 +81,24 @@ import ImageUploader from './ImageUploader.vue';
 import c2c from '@/js/apis/c2c';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { CONFIDENT_FIT, locateImages, readTrack } from '@/js/geo/locate-images';
+import { findSamePhoto, loadEditableImage, saveImageTitle, titleLang, type ListedImage } from '@/js/image-title';
 import { refreshOutingQuality } from '@/js/refresh-outing-quality';
 import { notify, toast } from '@/js/toast';
 import uploadFile, { canRender } from '@/js/upload-file';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+
+// a photo the document already has: the user chooses to change its title (retitle) or to add the copy (add)
+type SamePhoto = {
+  documentId: number;
+  lang: string;
+  title: string;
+  // the image to save with the new title, once the user may change it; null while loaded or when it can't be
+  image: C2cDocument | null;
+  editable: boolean | null;
+  // the image could not be loaded (the network): whether the user may change it is not known, the load is asked again
+  loadFailed: boolean;
+  choice: 'retitle' | 'add' | null;
+};
 
 type UploadedImage = {
   file: File;
@@ -91,6 +108,7 @@ type UploadedImage = {
   percentCompleted: number;
   status: 'INITIAL' | 'SAVING' | 'SUCCESS' | 'FAILED';
   errorMessage: string | null;
+  samePhoto: SamePhoto | null;
 };
 
 const props = defineProps({
@@ -128,7 +146,13 @@ const imageType = computed(() => {
   return 'collaborative';
 });
 
-const documents = computed(() => Object.values(images.value).map((image) => image.document));
+// the images to create: not the photos the user chose to give another title
+const documents = computed(() =>
+  Object.values(images.value)
+    .filter((image) => image.samePhoto?.choice !== 'retitle')
+    .map((image) => image.document)
+);
+const retitled = computed(() => Object.values(images.value).filter((image) => image.samePhoto?.choice === 'retitle'));
 
 const associationsArrayName = computed(() => $documentUtils.getAssociationArrayName(props.parentDocument));
 
@@ -157,7 +181,15 @@ function clean() {
 
 function computeReadyForSaving() {
   const values = Object.values(images.value);
-  readyForSaving.value = values.length !== 0 && values.every((image) => image.status === 'SUCCESS');
+  readyForSaving.value =
+    values.length !== 0 &&
+    values.every(
+      (image) =>
+        image.status === 'SUCCESS' &&
+        (!image.samePhoto ||
+          image.samePhoto.choice === 'add' ||
+          (image.samePhoto.choice === 'retitle' && image.samePhoto.image !== null))
+    );
 }
 
 // the previews are object URLs of the files: freed when replaced or dropped
@@ -202,7 +234,75 @@ function buildImageObject(file: File, key: string): UploadedImage {
     percentCompleted: 0,
     status: 'INITIAL',
     errorMessage: null,
+    samePhoto: null,
   };
+}
+
+// the uploaded photo is one of the document already: the user is asked whether it was to change its title
+function checkSamePhoto(image: UploadedImage) {
+  const existing = props.parentDocument.associations?.images as (ListedImage & { document_id: number })[] | undefined;
+  const same = findSamePhoto(image.document as ListedImage, existing ?? []);
+  if (!same) {
+    image.samePhoto = null;
+    return;
+  }
+  const lang = titleLang(same, props.lang);
+  const title = same.locales?.[0]?.title ?? '';
+  image.samePhoto = {
+    documentId: same.document_id,
+    lang,
+    title,
+    image: null,
+    editable: null,
+    loadFailed: false,
+    choice: null,
+  };
+  // the title field of the card is the new title: the current one to start with
+  image.document.locales![0].title = title;
+  loadSamePhoto(image);
+}
+
+// the image to save with the new title (its current versions), and whether the user may change it
+function loadSamePhoto(image: UploadedImage) {
+  const same = image.samePhoto!;
+  same.image = null;
+  same.loadFailed = false;
+  computeReadyForSaving();
+  loadEditableImage(same.documentId, same.lang, $user)
+    .then(({ image: loaded, editable }) => {
+      if (image.samePhoto === same) {
+        same.editable = editable;
+        same.image = editable ? loaded : null;
+        // its current title (another one may have been saved meanwhile) is the one an unchanged title is compared to,
+        // and the new title to start with while the user has not changed it
+        const current = loaded.locales?.[0]?.title ?? same.title;
+        if (image.document.locales![0].title === same.title) {
+          image.document.locales![0].title = current;
+        }
+        same.title = current;
+        computeReadyForSaving();
+      }
+    })
+    .catch(() => {
+      // not known (the network): the card offers to try again
+      if (image.samePhoto === same) {
+        same.loadFailed = true;
+        computeReadyForSaving();
+      }
+    });
+}
+
+function onChoose(image: UploadedImage, choice: 'retitle' | 'add' | null) {
+  if (image.samePhoto) {
+    image.samePhoto.choice = choice;
+    if (choice === 'add' && image.document.locales![0].title === image.samePhoto.title) {
+      // a copy with the same title is what made the duplicates: the user gives it its own
+      image.document.locales![0].title = '';
+    } else if (choice === 'retitle' && !image.document.locales![0].title) {
+      image.document.locales![0].title = image.samePhoto.title;
+    }
+  }
+  computeReadyForSaving();
 }
 
 function onUploadProgress(event: { loaded: number; total: number }, image: UploadedImage) {
@@ -216,6 +316,7 @@ function onUploadSuccess(document: Record<string, unknown>, image: UploadedImage
   image.status = 'SUCCESS';
 
   Object.assign(image.document, document);
+  checkSamePhoto(image);
   computeReadyForSaving();
 }
 
@@ -298,12 +399,41 @@ function locateOnTrack(saved: C2cDocument[]) {
   return locations.filter(Boolean).length;
 }
 
+// the photos the document had, with the titles the user gave them in the uploader; the page shows the new titles
+// A title not saved (the image changed meanwhile, the network) keeps the uploader open: the image is loaded again with
+// its current versions, and Save tries again; the titles already saved are then unchanged, not sent again
+class TitleNotSaved extends Error {}
+
+async function saveTitles() {
+  const comment = $gettext('Title changed from the image uploader');
+  for (const image of retitled.value) {
+    const same = image.samePhoto!;
+    const title = (image.document.locales![0].title ?? '').trim();
+    if (title === same.title) {
+      continue;
+    }
+    try {
+      await saveImageTitle(same.image!, title, comment);
+    } catch {
+      loadSamePhoto(image);
+      throw new TitleNotSaved();
+    }
+    same.title = title;
+    const listed = props.parentDocument.associations?.images?.find((item) => item.document_id === same.documentId);
+    if (listed?.locales?.[0]) {
+      listed.locales[0].title = title;
+    }
+  }
+}
+
 function save() {
   const saved = documents.value;
   const located = locateOnTrack(saved);
-  promise.value = c2c
-    .createImages(saved)
-    .then((response) => {
+  promise.value = { loading: true };
+  saveTitles()
+    .then(async () => (saved.length ? (await c2c.createImages(saved)).data : { images: [] }))
+    .then((data: { images: { document_id: number }[] }) => {
+      const response = { data };
       // add result to parent, it will update page
       // we fake a valid img document with enough info to work
       props.parentDocument.associations!.images!.push(
@@ -324,6 +454,10 @@ function save() {
 
       // the images count in the quality of an outing
       const imageIds = response.data.images.map((image: { document_id: number }) => image.document_id);
+      if (imageIds.length === 0) {
+        // only titles changed
+        return;
+      }
       refreshOutingQuality(
         props.parentDocument,
         props.lang,
@@ -339,7 +473,12 @@ function save() {
         // not saved (the outing was changed meanwhile, the network went): the quality is computed on its next edit
         .catch(() => undefined);
     })
-    .catch(() => {
+    .catch((error: unknown) => {
+      if (error instanceof TitleNotSaved) {
+        promise.value = {};
+        toast({ message: $gettext(`An error occurred, couldn't save the title`), type: 'is-danger' });
+        return;
+      }
       clean();
       hide();
       toast({
