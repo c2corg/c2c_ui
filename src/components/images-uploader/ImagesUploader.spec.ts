@@ -32,7 +32,11 @@ type Uploader = {
   onDeleteImage(image: unknown): void;
   save(): void;
   onChoose(image: unknown, choice: 'retitle' | 'add' | null): void;
-  images: Record<string, { samePhoto: { choice: string | null; editable: boolean | null } | null; document: Doc }>;
+  loadSamePhoto(image: unknown): void;
+  images: Record<
+    string,
+    { samePhoto: { choice: string | null; editable: boolean | null; loadFailed: boolean } | null; document: Doc }
+  >;
   readyForSaving: boolean;
 };
 
@@ -313,6 +317,63 @@ describe('ImagesUploader', () => {
 
       expect(imageTitle.saveImageTitle).toHaveBeenCalledTimes(2);
       expect(parentDocument.associations.images[0].locales[0].title).toBe('New title');
+      expect(Object.keys(uploader.images)).toHaveLength(0);
+    });
+
+    it('compares the new title to the current one of the photo loaded again', async () => {
+      imageTitle.loadEditableImage
+        .mockResolvedValueOnce({ image: { document_id: 50, locales: [{ title: 'Old title' }] }, editable: true })
+        // saved meanwhile from elsewhere
+        .mockResolvedValue({ image: { document_id: 50, locales: [{ title: 'Other title' }] }, editable: true });
+      imageTitle.saveImageTitle.mockRejectedValueOnce(new Error('409')).mockResolvedValue(undefined);
+      const { uploader, image } = await mountWithPhoto();
+      uploader.onChoose(image, 'retitle');
+      image.document.locales[0].title = 'New title';
+      uploader.save();
+      await flushPromises();
+
+      // back to the title of the list: no longer the current one, it is saved
+      image.document.locales[0].title = 'Old title';
+      uploader.save();
+      await flushPromises();
+
+      expect(imageTitle.saveImageTitle).toHaveBeenLastCalledWith(expect.anything(), 'Old title', expect.any(String));
+    });
+
+    it('starts with the current title of the photo while the user has not changed it', async () => {
+      imageTitle.loadEditableImage.mockResolvedValue({
+        image: { document_id: 50, locales: [{ title: 'Other title' }] },
+        editable: true,
+      });
+      const { image } = await mountWithPhoto();
+
+      expect(image.document.locales[0].title).toBe('Other title');
+    });
+
+    it('offers to load the photo again when it could not be, rather than only a copy', async () => {
+      const loaded = { document_id: 50, locales: [{ lang: 'fr', title: 'Old title' }] };
+      imageTitle.loadEditableImage.mockResolvedValueOnce({ image: loaded, editable: true });
+      imageTitle.loadEditableImage.mockRejectedValueOnce(new Error('network'));
+      imageTitle.saveImageTitle.mockRejectedValueOnce(new Error('409')).mockResolvedValue(undefined);
+      const { uploader, image } = await mountWithPhoto();
+      uploader.onChoose(image, 'retitle');
+      image.document.locales[0].title = 'New title';
+      uploader.save();
+      await flushPromises();
+
+      // not known: not taken for a photo the user may not change
+      expect(image.samePhoto).toMatchObject({ choice: 'retitle', loadFailed: true, editable: true });
+      expect(uploader.readyForSaving).toBe(false);
+
+      imageTitle.loadEditableImage.mockResolvedValue({ image: loaded, editable: true });
+      uploader.loadSamePhoto(image);
+      await flushPromises();
+      expect(image.samePhoto).toMatchObject({ loadFailed: false });
+      expect(uploader.readyForSaving).toBe(true);
+      uploader.save();
+      await flushPromises();
+
+      expect(imageTitle.saveImageTitle).toHaveBeenLastCalledWith(loaded, 'New title', expect.any(String));
       expect(Object.keys(uploader.images)).toHaveLength(0);
     });
 

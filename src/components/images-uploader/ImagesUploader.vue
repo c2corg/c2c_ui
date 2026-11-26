@@ -19,6 +19,7 @@
           :can-rotate="Boolean(image.dataUrl) && canRender(image.file)"
           :same-photo="image.samePhoto"
           @choose="onChoose(image, $event)"
+          @reload-same-photo="loadSamePhoto(image)"
           @delete-image="onDeleteImage(image)"
           @rotate-image="onRotateImage(image, $event)"
           @retry-upload="startUpload(image)"
@@ -94,6 +95,8 @@ type SamePhoto = {
   // the image to save with the new title, once the user may change it; null while loaded or when it can't be
   image: C2cDocument | null;
   editable: boolean | null;
+  // the image could not be loaded (the network): whether the user may change it is not known, the load is asked again
+  loadFailed: boolean;
   choice: 'retitle' | 'add' | null;
 };
 
@@ -245,7 +248,15 @@ function checkSamePhoto(image: UploadedImage) {
   }
   const lang = titleLang(same, props.lang);
   const title = same.locales?.[0]?.title ?? '';
-  image.samePhoto = { documentId: same.document_id, lang, title, image: null, editable: null, choice: null };
+  image.samePhoto = {
+    documentId: same.document_id,
+    lang,
+    title,
+    image: null,
+    editable: null,
+    loadFailed: false,
+    choice: null,
+  };
   // the title field of the card is the new title: the current one to start with
   image.document.locales![0].title = title;
   loadSamePhoto(image);
@@ -255,19 +266,27 @@ function checkSamePhoto(image: UploadedImage) {
 function loadSamePhoto(image: UploadedImage) {
   const same = image.samePhoto!;
   same.image = null;
+  same.loadFailed = false;
   computeReadyForSaving();
   loadEditableImage(same.documentId, same.lang, $user)
     .then(({ image: loaded, editable }) => {
       if (image.samePhoto === same) {
         same.editable = editable;
         same.image = editable ? loaded : null;
+        // its current title (another one may have been saved meanwhile) is the one an unchanged title is compared to,
+        // and the new title to start with while the user has not changed it
+        const current = loaded.locales?.[0]?.title ?? same.title;
+        if (image.document.locales![0].title === same.title) {
+          image.document.locales![0].title = current;
+        }
+        same.title = current;
         computeReadyForSaving();
       }
     })
     .catch(() => {
-      // not known (the network): only a copy can be added
+      // not known (the network): the card offers to try again
       if (image.samePhoto === same) {
-        same.editable = false;
+        same.loadFailed = true;
         computeReadyForSaving();
       }
     });

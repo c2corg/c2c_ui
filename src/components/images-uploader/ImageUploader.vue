@@ -46,12 +46,23 @@
           <em v-if="samePhoto.title">{{ samePhoto.title }}</em>
           <em v-else class="has-text-grey" v-translate>untitled</em>
         </p>
-        <p v-if="samePhoto.editable === false" class="is-size-7 has-text-grey" v-translate>
+        <p v-if="samePhoto.loadFailed" class="is-size-7 has-text-grey" v-translate>
+          Couldn't check whether you can change its title.
+        </p>
+        <p v-else-if="samePhoto.editable === false" class="is-size-7 has-text-grey" v-translate>
           Only its author or a moderator can change its title.
         </p>
         <div class="buttons is-centered">
           <button
-            v-if="samePhoto.editable !== false"
+            v-if="samePhoto.loadFailed"
+            class="button is-small is-primary"
+            @click="$emit('reload-same-photo')"
+            v-translate
+          >
+            Try again
+          </button>
+          <button
+            v-else-if="samePhoto.editable !== false"
             class="button is-small is-primary"
             :class="{ 'is-loading': samePhoto.editable === null }"
             @click="$emit('choose', 'retitle')"
@@ -69,6 +80,11 @@
           ·
           <a @click="$emit('choose', null)" v-translate>Cancel</a>
         </p>
+        <p v-if="samePhoto.loadFailed" class="same-photo-label is-size-7 has-text-danger">
+          <span v-translate>Couldn't load this photo</span>
+          ·
+          <a @click="$emit('reload-same-photo')" v-translate>Try again</a>
+        </p>
         <div class="field title-input">
           <div class="control">
             <input
@@ -84,6 +100,11 @@
 
       <div v-else-if="!isFailed && samePhoto && samePhoto.choice === 'retitle'" class="same-photo">
         <p class="is-size-7 has-text-grey" v-translate>Only the title of this photo changes.</p>
+        <p v-if="samePhoto.loadFailed" class="is-size-7 has-text-danger">
+          <span v-translate>Couldn't load this photo</span>
+          ·
+          <a @click="$emit('reload-same-photo')" v-translate>Try again</a>
+        </p>
       </div>
 
       <div v-else-if="!isFailed">
@@ -184,12 +205,17 @@ const props = defineProps({
   },
   // the photo of the page this one is a copy of, and what the user chose to do (ImagesUploader)
   samePhoto: {
-    type: Object as PropType<{ title: string; editable: boolean | null; choice: 'retitle' | 'add' | null } | null>,
+    type: Object as PropType<{
+      title: string;
+      editable: boolean | null;
+      loadFailed: boolean;
+      choice: 'retitle' | 'add' | null;
+    } | null>,
     default: null,
   },
 });
 
-const emit = defineEmits(['delete-image', 'retry-upload', 'rotate-image', 'choose']);
+const emit = defineEmits(['delete-image', 'retry-upload', 'rotate-image', 'choose', 'reload-same-photo']);
 
 const { $gettext, $user } = useGlobalProperties();
 
