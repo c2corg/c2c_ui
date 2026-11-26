@@ -1,7 +1,10 @@
 <template>
   <div v-if="visible && activeDocument" ref="root" class="image-viewer" :class="{ 'hide-buttons': hideButtons }">
     <div class="has-text-grey-lighter image-viewer-header">
-      <span class="is-size-4 is-ellipsed-tablet image-viewer-title" :class="{ 'is-editing': titleEdition }">
+      <span
+        class="is-size-4 is-ellipsed-tablet image-viewer-title"
+        :class="{ 'is-editing': titleEdition, 'is-untitled': !titleEdition && !activeDocument.locales[0].title }"
+      >
         <!-- the keys stay in the field: not the arrows of the swiper, nor Escape that closes the viewer -->
         <form
           v-if="titleEdition"
@@ -513,7 +516,9 @@ onBeforeUnmount(() => {
   .swiper-button-prev,
   .swiper-button-next,
   .image-viewer-pagination,
-  .image-viewer-buttons {
+  .image-viewer-buttons,
+  .image-viewer-edit-title,
+  .image-viewer-title.is-untitled {
     visibility: visible;
     opacity: 1;
     transition:
@@ -521,11 +526,14 @@ onBeforeUnmount(() => {
       opacity 1s;
   }
 
+  /* with the buttons, the pen to change the title, and the title of an untitled image (only its "Add a title") */
   &.hide-buttons {
     .swiper-button-prev,
     .swiper-button-next,
     .image-viewer-pagination,
-    .image-viewer-buttons {
+    .image-viewer-buttons,
+    .image-viewer-edit-title,
+    .image-viewer-title.is-untitled {
       visibility: hidden;
       opacity: 0;
     }
