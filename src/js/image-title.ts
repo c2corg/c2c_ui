@@ -20,10 +20,20 @@ export type ListedImage = {
   locales?: { lang?: string; title?: string | null }[];
 };
 
-const sameInstant = (a: string, b: string) => {
+const QUARTER_HOUR = 15 * 60 * 1000;
+const MAX_ZONE_GAP = 14 * 3600 * 1000;
+
+// The EXIF time of a photo has no time zone: the uploader gives it the one of the browser, and the images of former
+// versions stored it as UTC. The same shot can then be stored hours apart: same time of the shot when the gap is a
+// whole number of time zone steps (quarters of an hour, Nepal is +5:45), with the same minutes and seconds
+const sameShotTime = (a: string, b: string) => {
   const ta = Date.parse(a);
   const tb = Date.parse(b);
-  return Number.isNaN(ta) || Number.isNaN(tb) ? a === b : ta === tb;
+  if (Number.isNaN(ta) || Number.isNaN(tb)) {
+    return a === b;
+  }
+  const gap = Math.abs(ta - tb);
+  return gap <= MAX_ZONE_GAP && gap % QUARTER_HOUR === 0;
 };
 
 /**
@@ -41,7 +51,7 @@ export function findSamePhoto<T extends ListedImage>(uploaded: ListedImage, imag
       image.width === uploaded.width &&
       image.height === uploaded.height &&
       !!image.date_time &&
-      sameInstant(image.date_time, uploaded.date_time!) &&
+      sameShotTime(image.date_time, uploaded.date_time!) &&
       (!image.camera_name || !uploaded.camera_name || image.camera_name === uploaded.camera_name)
   );
 }

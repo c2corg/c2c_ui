@@ -13,12 +13,20 @@ describe('findSamePhoto', () => {
     expect(findSamePhoto({ ...photo, date_time: '2026-02-01T09:00:00Z' }, listed)?.document_id).toBe(1);
   });
 
+  it('finds it when its time was stored in another time zone (as UTC by former versions)', () => {
+    const stored = [{ document_id: 3, ...photo, date_time: '2026-02-01T10:00:00+00:00' }];
+    expect(findSamePhoto(photo, stored)?.document_id).toBe(3);
+    expect(findSamePhoto({ ...photo, date_time: '2026-02-01T15:45:00+05:45' }, stored)?.document_id).toBe(3);
+  });
+
   it('finds it without a camera on one side', () => {
     expect(findSamePhoto({ ...photo, camera_name: null }, listed)?.document_id).toBe(1);
   });
 
   it.each([
     ['another time', { date_time: '2026-02-01T10:00:01+01:00' }],
+    ['another minute', { date_time: '2026-02-01T10:01:00+01:00' }],
+    ['a day apart', { date_time: '2026-02-02T10:00:00+01:00' }],
     ['another size', { width: 3999 }],
     ['another camera', { camera_name: 'Nikon' }],
     ['no time of shot', { date_time: null }],
