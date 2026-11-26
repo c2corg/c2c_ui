@@ -31,6 +31,17 @@ const config = vi.hoisted(() => ({
 }));
 vi.mock('@/js/config', () => ({ default: config }));
 
+// the image as its edit form gets it, and its save: the API is not called
+const imageTitle = vi.hoisted(() => ({
+  loadEditableImage: vi.fn(),
+  saveImageTitle: vi.fn(),
+}));
+vi.mock('@/js/image-title', async (importOriginal) => ({
+  ...(await importOriginal<object>()),
+  ...imageTitle,
+}));
+vi.mock('@/js/toast', () => ({ toast: vi.fn() }));
+
 // one router for all the tests: a router listens to the history for good
 const router = createRouter({
   history: createWebHistory(),
@@ -63,7 +74,10 @@ type SwiperElement = HTMLElement & {
 // a page of its own for each test
 let page = 0;
 
-async function showViewer({ isMobile = false, shown = image(2) as ViewerImage } = {}) {
+type User = { isLogged: boolean; isModerator: boolean; id: number | null };
+const loggedOut: User = { isLogged: false, isModerator: false, id: null };
+
+async function showViewer({ isMobile = false, shown = image(2) as ViewerImage, user = loggedOut } = {}) {
   await router.push(`/articles/${++page}`);
   const wrapper = mount(ImageViewer, {
     attachTo: document.body,
@@ -75,7 +89,14 @@ async function showViewer({ isMobile = false, shown = image(2) as ViewerImage } 
         FaIcon: true,
         ImageInfo: { template: '<div />', methods: { hide() {}, toggle() {} } },
       },
-      config: { globalProperties: { $screen: { isMobile } } as never },
+      config: {
+        globalProperties: {
+          $screen: { isMobile },
+          $user: user,
+          $language: { current: 'fr' },
+          $gettext: (text: string) => text,
+        } as never,
+      },
     },
   });
   const viewer = wrapper.vm as unknown as ImageViewerApi;
@@ -365,5 +386,63 @@ describe('ImageViewer', () => {
     img.dispatchEvent(new Event('error'));
     expect(img.getAttribute('src')).toBe('https://media.example.org/1588000000_2MI.jpg');
     wrapper.unmount();
+  });
+
+  describe('title', () => {
+    const user: User = { isLogged: true, isModerator: false, id: 7 };
+
+    it('is not offered to change when logged out', async () => {
+      imageTitle.loadEditableImage.mockClear();
+      const { wrapper } = await showViewer();
+      expect(wrapper.find('.image-viewer-edit-title').exists()).toBe(false);
+      expect(imageTitle.loadEditableImage).not.toHaveBeenCalled();
+      wrapper.unmount();
+    });
+
+    it('is not offered to change when the user may not edit the image', async () => {
+      imageTitle.loadEditableImage.mockResolvedValue({ image: {}, editable: false });
+      const { wrapper } = await showViewer({ user, shown: image(30) });
+      await flushPromises();
+      expect(wrapper.find('.image-viewer-edit-title').exists()).toBe(false);
+      wrapper.unmount();
+    });
+
+    it('is changed in the viewer, and in the page', async () => {
+      const loaded = { document_id: 31, locales: [{ lang: 'fr', title: 'image 31' }] };
+      imageTitle.loadEditableImage.mockResolvedValue({ image: loaded, editable: true });
+      imageTitle.saveImageTitle.mockResolvedValue(undefined);
+      const shown = image(31);
+      const { wrapper } = await showViewer({ user, shown });
+      await flushPromises();
+      expect(imageTitle.loadEditableImage).toHaveBeenCalledWith(31, 'fr', user);
+
+      await wrapper.find('.image-viewer-edit-title').trigger('click');
+      const input = wrapper.find<HTMLInputElement>('.image-viewer-title-form input');
+      expect(input.element.value).toBe('image 31');
+      await input.setValue('  Sunrise on the ridge ');
+      await wrapper.find('.image-viewer-title-form').trigger('submit');
+      await flushPromises();
+
+      expect(imageTitle.saveImageTitle).toHaveBeenCalledWith(loaded, 'Sunrise on the ridge', expect.any(String));
+      expect(wrapper.find('.image-viewer-title-form').exists()).toBe(false);
+      expect(wrapper.find('.image-viewer-title').text()).toContain('Sunrise on the ridge');
+      // the locale of the page's image
+      expect(shown.locales[0].title).toBe('Sunrise on the ridge');
+      wrapper.unmount();
+    });
+
+    it('keeps the arrows and Escape in the field', async () => {
+      imageTitle.loadEditableImage.mockResolvedValue({ image: {}, editable: true });
+      const { wrapper } = await showViewer({ user, shown: image(32) });
+      await flushPromises();
+      await wrapper.find('.image-viewer-edit-title').trigger('click');
+
+      await wrapper.find('.image-viewer-title-form input').trigger('keydown', { key: 'Escape' });
+
+      // the edition is cancelled, the viewer stays
+      expect(wrapper.find('.image-viewer-title-form').exists()).toBe(false);
+      expect(wrapper.find('.image-viewer').exists()).toBe(true);
+      wrapper.unmount();
+    });
   });
 });
