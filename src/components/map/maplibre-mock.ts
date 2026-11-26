@@ -138,6 +138,9 @@ export class FakeMap {
   unproject([x, y]: [number, number]) {
     return { lng: x / 1000, lat: y / 1000 };
   }
+  project([lng, lat]: [number, number]) {
+    return { x: lng * 1000, y: lat * 1000 };
+  }
   setPaintProperty(id: string, name: string, value: unknown) {
     (this.paint[id] ??= {})[name] = value;
   }
@@ -244,6 +247,7 @@ export class FakeMap {
 export class FakeMarker {
   element?: HTMLElement;
   lngLat?: [number, number];
+  rotation = 0;
   added = false;
   removed = false;
 
@@ -253,6 +257,13 @@ export class FakeMarker {
   }
   setLngLat(lngLat: [number, number]) {
     this.lngLat = lngLat;
+    return this;
+  }
+  getElement() {
+    return this.element!;
+  }
+  setRotation(rotation: number) {
+    this.rotation = rotation;
     return this;
   }
   addTo() {

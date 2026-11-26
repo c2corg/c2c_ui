@@ -2,6 +2,23 @@
   <div ref="rootElement" class="c2c-map" :class="{ 'ol-touch': isTouchDevice }">
     <div ref="mapElement" class="c2c-map-canvas" @click="showLayerSwitcher = false" />
 
+    <!-- the map moved away from the position followed: a line from the centre to it, and how far it is -->
+    <template v-if="positionLine">
+      <svg class="c2c-map-position-line" aria-hidden="true">
+        <line :x1="positionLine.x1" :y1="positionLine.y1" :x2="positionLine.x2" :y2="positionLine.y2" />
+        <circle :cx="positionLine.x1" :cy="positionLine.y1" r="3" />
+      </svg>
+      <span
+        class="c2c-map-position-distance"
+        :style="{
+          left: `${(positionLine.x1 + positionLine.x2) / 2}px`,
+          top: `${(positionLine.y1 + positionLine.y2) / 2}px`,
+          transform: `translate(-50%, -50%) rotate(${positionLine.angle}deg) translateY(-0.8em)`,
+        }"
+        >{{ positionLine.distance }}</span
+      >
+    </template>
+
     <!-- the buttons of the top left corner, stacked: a hidden one leaves no gap -->
     <div class="c2c-map-controls-top-left">
       <div class="ol-zoom ol-unselectable ol-control">
@@ -50,7 +67,12 @@
         :title="$gettext('Recenter on your current position')"
         class="ol-control ol-control-center-on-geolocation"
       >
-        <button :aria-label="$gettext('Recenter on your current position')" @click="centerOnGeolocation">
+        <button
+          :aria-label="$gettext('Recenter on your current position')"
+          :aria-pressed="followingPosition !== 'off'"
+          :class="['c2c-map-position-' + followingPosition, { 'c2c-map-position-blocked': positionBlocked }]"
+          @click="centerOnGeolocation"
+        >
           <fa-icon icon="bullseye" />
         </button>
       </div>
@@ -403,8 +425,10 @@ import {
   geometryToLonLat,
   toLonLat,
 } from '@/js/geo/projection';
+import { positionError } from '@/js/geolocation';
+import { formatDistance } from '@/js/length-format';
 import { replaceRoute } from '@/js/replace-route';
-import { toast } from '@/js/toast';
+import { notify, toast } from '@/js/toast';
 import { tracksOverlayEnabled } from '@/js/tracks-overlay';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 import { useOfflineStore } from '@/stores/offline';
@@ -481,6 +505,11 @@ const props = defineProps({
     default: false,
   },
   showCenterOnGeolocation: {
+    type: Boolean,
+    default: false,
+  },
+  // the geolocation button follows the position (the document page) instead of centring the map on it once
+  followPosition: {
     type: Boolean,
     default: false,
   },
@@ -1751,15 +1780,215 @@ function listRecentTracks(event: MapMouseEvent, touch: boolean) {
 
 // --- geolocation and places ---
 
+// the button follows the position: the map shows it (a dot, its accuracy around it, the direction the device points
+// to) and keeps it in the middle, until the map is moved by hand; then the button centres it again, and a tap on a
+// centred position stops following it
+const followingPosition = ref<'off' | 'waiting' | 'centred' | 'moved'>('off');
+// the location refused to the site: the icon is crossed out, a tap says how to allow it (and tries again)
+const positionBlocked = ref(false);
+// in pixels of the map, from its centre to the position, and the distance between them: when the map was moved away
+const positionLine = ref<{
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  angle: number;
+  distance: string;
+} | null>(null);
+// closer, the line is under the dot
+const POSITION_LINE_MIN_PIXELS = 30;
+// the dot is 16 px wide, its border and shadow around it: the line stops just before
+const POSITION_DOT_RADIUS = 13;
+let positionWatch: number | null = null;
+let positionMarker: Marker | null = null;
+let lastPosition: GeolocationCoordinates | null = null;
+// the direction of the compass, when the device has one, else that of the movement
+let compassHeading: number | null = null;
+let compassTime = 0;
+let headingFrame = 0;
+const COMPASS_TIMEOUT = 2000;
+// slower, the direction of the movement given by the GPS is noise (m/s)
+const HEADING_MIN_SPEED = 1;
+
+async function watchPositionPermission() {
+  try {
+    const status = await navigator.permissions.query({ name: 'geolocation' });
+    positionBlocked.value = status.state === 'denied';
+    status.addEventListener('change', () => (positionBlocked.value = status.state === 'denied'));
+  } catch {
+    // no Permissions API (or no geolocation in it): the icon is crossed out after a refusal only
+  }
+}
+
 function centerOnGeolocation() {
-  navigator.geolocation.getCurrentPosition(
-    ({ coords }) => {
-      fitOnFirstDocuments = false;
-      map?.jumpTo({ center: [coords.longitude, coords.latitude], zoom: TRACKING_INITIAL_ZOOM });
-    },
-    () => undefined,
-    { enableHighAccuracy: true }
-  );
+  if (!props.followPosition) {
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        fitOnFirstDocuments = false;
+        map?.jumpTo({ center: [coords.longitude, coords.latitude], zoom: TRACKING_INITIAL_ZOOM });
+      },
+      () => undefined,
+      { enableHighAccuracy: true }
+    );
+  } else if (followingPosition.value === 'moved' && lastPosition) {
+    followingPosition.value = 'centred';
+    positionLine.value = null;
+    centreOnPosition(lastPosition);
+  } else if (followingPosition.value === 'off') {
+    followingPosition.value = 'waiting';
+    positionWatch = navigator.geolocation.watchPosition(onPosition, onPositionError, { enableHighAccuracy: true });
+    startCompass();
+  } else {
+    stopFollowingPosition();
+  }
+}
+
+function onPosition({ coords }: GeolocationPosition) {
+  if (!map) return;
+  const first = followingPosition.value === 'waiting';
+  positionBlocked.value = false;
+  lastPosition = coords;
+  positionMarker ??= new Marker({ element: positionMarkerElement(), rotationAlignment: 'map', pitchAlignment: 'map' });
+  positionMarker.setLngLat([coords.longitude, coords.latitude]).addTo(map);
+  sizePositionAccuracy();
+  showHeading();
+  if (first) followingPosition.value = 'centred';
+  if (followingPosition.value === 'centred') centreOnPosition(coords, first);
+  else drawPositionLine();
+}
+
+// metres between two points (haversine): a line of a few kilometres, the sphere is close enough
+function distanceBetween([lng1, lat1]: [number, number], [lng2, lat2]: [number, number]) {
+  const radians = Math.PI / 180;
+  const a =
+    Math.sin(((lat2 - lat1) * radians) / 2) ** 2 +
+    Math.cos(lat1 * radians) * Math.cos(lat2 * radians) * Math.sin(((lng2 - lng1) * radians) / 2) ** 2;
+  return 2 * 6371008.8 * Math.asin(Math.sqrt(a));
+}
+
+function drawPositionLine() {
+  if (!map || !lastPosition || followingPosition.value !== 'moved') {
+    positionLine.value = null;
+    return;
+  }
+  const { lng, lat } = map.getCenter();
+  const position: [number, number] = [lastPosition.longitude, lastPosition.latitude];
+  const centre = map.project([lng, lat]);
+  const dot = map.project(position);
+  const pixels = Math.hypot(dot.x - centre.x, dot.y - centre.y);
+  // the line stops at the edge of the dot
+  const end = (pixels - POSITION_DOT_RADIUS) / pixels;
+  // the distance written along the line, never upside down
+  let angle = (Math.atan2(dot.y - centre.y, dot.x - centre.x) * 180) / Math.PI;
+  if (angle > 90) angle -= 180;
+  else if (angle < -90) angle += 180;
+  positionLine.value =
+    pixels < POSITION_LINE_MIN_PIXELS
+      ? null
+      : {
+          x1: centre.x,
+          y1: centre.y,
+          x2: centre.x + (dot.x - centre.x) * end,
+          y2: centre.y + (dot.y - centre.y) * end,
+          angle,
+          distance: formatDistance(distanceBetween([lng, lat], position), $language.current),
+        };
+}
+
+// a weak signal for a while, once the position is known, does not stop following it
+function onPositionError(error: GeolocationPositionError) {
+  if (error.code === error.PERMISSION_DENIED) positionBlocked.value = true;
+  else if (lastPosition) return;
+  stopFollowingPosition();
+  notify(positionError(error, $gettext), 'is-warning');
+}
+
+function centreOnPosition(coords: GeolocationCoordinates, first = false) {
+  fitOnFirstDocuments = false;
+  const center: [number, number] = [coords.longitude, coords.latitude];
+  // the first time, not farther than the usual zoom of a place, nor closer than what is shown
+  if (first) map?.jumpTo({ center, zoom: Math.max(map.getZoom(), TRACKING_INITIAL_ZOOM) });
+  else map?.easeTo({ center, duration: 300 });
+}
+
+function positionMarkerElement(): HTMLElement {
+  const element = document.createElement('div');
+  element.className = 'c2c-map-position';
+  element.innerHTML =
+    '<div class="c2c-map-position-accuracy"></div><div class="c2c-map-position-dot"></div>' +
+    // an arrowhead in front of the dot, pointing up (the marker turns it), its base an arc around the dot
+    '<svg class="c2c-map-position-heading" width="40" height="40" viewBox="0 0 40 40">' +
+    '<path d="M20 1 L27.1 11.6 A11 11 0 0 0 12.9 11.6 Z"/></svg>';
+  return element;
+}
+
+// the accuracy circle, in pixels at the zoom of the map (MapLibre tiles are 512 px)
+function sizePositionAccuracy() {
+  if (!map || !lastPosition || !positionMarker) return;
+  const metresPerPixel =
+    (40075016.686 * Math.cos((lastPosition.latitude * Math.PI) / 180)) / (512 * Math.pow(2, map.getZoom()));
+  const diameter = Math.min((2 * lastPosition.accuracy) / metresPerPixel, 4000);
+  const circle = positionMarker.getElement().firstElementChild as HTMLElement;
+  circle.style.width = circle.style.height = `${diameter}px`;
+}
+
+// --- the direction: the compass of the device, else the direction of the movement ---
+
+// the events come on Android and desktops without a prompt; iOS sends them only once the motion sensors are allowed,
+// which it asks within the tap that starts following (recent Chromium has requestPermission too, and answers alone)
+function startCompass() {
+  window.addEventListener('deviceorientationabsolute', onOrientation);
+  window.addEventListener('deviceorientation', onOrientation);
+  const orientation = (globalThis as { DeviceOrientationEvent?: { requestPermission?: () => Promise<string> } })
+    .DeviceOrientationEvent;
+  orientation?.requestPermission?.().catch(() => undefined);
+}
+
+function stopCompass() {
+  window.removeEventListener('deviceorientationabsolute', onOrientation);
+  window.removeEventListener('deviceorientation', onOrientation);
+  cancelAnimationFrame(headingFrame);
+  compassHeading = null;
+}
+
+function onOrientation(event: DeviceOrientationEvent) {
+  const ios = (event as DeviceOrientationEvent & { webkitCompassHeading?: number }).webkitCompassHeading;
+  let heading: number | null = null;
+  if (typeof ios === 'number') heading = ios;
+  // the relative one (alpha from where the page opened) says nothing of the north
+  else if (event.absolute && event.alpha !== null) heading = 360 - event.alpha;
+  if (heading === null) return;
+  // the screen turned (landscape): the top of the screen is no longer the top of the device
+  compassHeading = (heading + (screen.orientation?.angle ?? 0)) % 360;
+  compassTime = Date.now();
+  cancelAnimationFrame(headingFrame);
+  headingFrame = requestAnimationFrame(showHeading);
+}
+
+// the cone is turned with the map (rotationAlignment 'map'): a heading from the north, whatever the bearing
+function showHeading() {
+  if (!positionMarker) return;
+  let heading: number | null = null;
+  if (compassHeading !== null && Date.now() - compassTime < COMPASS_TIMEOUT) heading = compassHeading;
+  else if (
+    typeof lastPosition?.heading === 'number' &&
+    !isNaN(lastPosition.heading) &&
+    (lastPosition.speed ?? 0) >= HEADING_MIN_SPEED
+  )
+    heading = lastPosition.heading;
+  positionMarker.getElement().classList.toggle('with-heading', heading !== null);
+  if (heading !== null) positionMarker.setRotation(heading);
+}
+
+function stopFollowingPosition() {
+  if (positionWatch !== null) navigator.geolocation.clearWatch(positionWatch);
+  positionWatch = null;
+  stopCompass();
+  positionMarker?.remove();
+  positionMarker = null;
+  lastPosition = null;
+  positionLine.value = null;
+  followingPosition.value = 'off';
 }
 
 function searchRecenterOnPropositions(event: Event) {
@@ -2465,8 +2694,11 @@ onMounted(() => {
     if (event.originalEvent) {
       fitOnFirstDocuments = false;
       automaticBbox = false;
+      if (followingPosition.value === 'centred') followingPosition.value = 'moved';
     }
   });
+  created.on('zoom', sizePositionAccuracy);
+  created.on('move', () => followingPosition.value === 'moved' && drawPositionLine());
   created.on('click', onMapClick);
   created.on('dblclick', () => clearTimeout(tapTimeout));
 
@@ -2490,6 +2722,7 @@ onMounted(() => {
   // scrolling the page past the map does not zoom or pan it; nothing to scroll in full screen
   stopScrollPassthrough = scrollPassthrough(mapElementEl.value!, rootElementEl.value!, () => !isFullscreen.value);
   bus.on('elevation_profile', onElevationProfile);
+  if (props.followPosition && props.showCenterOnGeolocation) void watchPositionPermission();
   resizeObserver.observe(rootElementEl.value!);
 });
 
@@ -2502,6 +2735,7 @@ onBeforeUnmount(() => {
   stopScrollPassthrough?.();
   stopScrollPassthrough = null;
   bus.off('elevation_profile', onElevationProfile);
+  stopFollowingPosition();
   flightLayers?.remove();
   flightLayers = null;
   map?.remove();
@@ -2582,6 +2816,119 @@ defineExpose({
   display: inline-block;
   font-size: 0.8em;
   line-height: 1;
+}
+
+/* following the position: a white border, dashed once the map was moved by hand; no focus outline after a tap, which
+   would thicken it (the keyboard keeps it) */
+.ol-control-center-on-geolocation button:is(.c2c-map-position-centred, .c2c-map-position-waiting) {
+  border: 2px solid white;
+}
+
+.ol-control-center-on-geolocation button.c2c-map-position-moved {
+  border: 2px dashed white;
+}
+
+.ol-control-center-on-geolocation button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* above the map, under the buttons; it catches no pointer */
+.c2c-map-position-line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+
+  line {
+    stroke: rgba(0, 60, 136, 0.8);
+    stroke-width: 1.5px;
+    stroke-dasharray: 4 3;
+  }
+
+  circle {
+    fill: rgba(0, 60, 136, 0.8);
+  }
+}
+
+/* written like the scale */
+.c2c-map-position-distance {
+  position: absolute;
+  z-index: 1;
+  color: #333333;
+  font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  line-height: 1.3;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* the location refused: the icon crossed out */
+.ol-control-center-on-geolocation button.c2c-map-position-blocked {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 15%;
+    width: 70%;
+    height: 2px;
+    background: white;
+    box-shadow: 0 0 0 1px rgba(0, 60, 136, 0.9);
+    transform: rotate(-45deg);
+  }
+}
+
+.ol-control-center-on-geolocation button.c2c-map-position-waiting svg {
+  animation: c2c-map-position-blink 1s ease-in-out infinite alternate;
+}
+
+@keyframes c2c-map-position-blink {
+  to {
+    opacity: 0.3;
+  }
+}
+
+/* the markers are outside the template: not scoped */
+:global(.c2c-map-position) {
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+:global(.c2c-map-position > *) {
+  grid-area: 1 / 1;
+  border-radius: 50%;
+}
+
+:global(.c2c-map-position-accuracy) {
+  background: rgba(0, 60, 136, 0.15);
+  border: 1px solid rgba(0, 60, 136, 0.4);
+}
+
+:global(.c2c-map-position-heading) {
+  display: none;
+  overflow: visible;
+  fill: rgba(0, 60, 136, 0.6);
+  stroke: white;
+  stroke-width: 1px;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
+}
+
+:global(.c2c-map-position.with-heading .c2c-map-position-heading) {
+  display: block;
+}
+
+:global(.c2c-map-position-dot) {
+  width: 16px;
+  height: 16px;
+  /* the blue of the map buttons */
+  background: rgba(0, 60, 136, 0.6);
+  border: 1.5px solid white;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 }
 
 .ol-control-layer-switcher {

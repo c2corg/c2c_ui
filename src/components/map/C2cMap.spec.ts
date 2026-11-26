@@ -1658,4 +1658,200 @@ describe('C2cMap', () => {
       });
     });
   });
+
+  describe('the position of the device', () => {
+    type Watcher = { ok: PositionCallback; error: PositionErrorCallback };
+    let watchers: Map<number, Watcher>;
+    let geolocation: Record<string, ReturnType<typeof vi.fn>>;
+    const positionError = (code: number) =>
+      ({ code, PERMISSION_DENIED: 1, POSITION_UNAVAILABLE: 2, TIMEOUT: 3 }) as GeolocationPositionError;
+    // a position given by the GPS to every watch
+    const fix = (coords: Partial<GeolocationCoordinates>) =>
+      [...watchers.values()].forEach(({ ok }) =>
+        ok({ coords: { accuracy: 20, heading: null, speed: null, ...coords } } as GeolocationPosition)
+      );
+    const fail = (code: number) => [...watchers.values()].forEach(({ error }) => error(positionError(code)));
+    const positionMarker = () => state.markers.find((marker) => marker.element?.classList.contains('c2c-map-position'));
+    const button = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) =>
+      wrapper.find('.ol-control-center-on-geolocation button');
+    const mountFollowing = () => mountMap({ showCenterOnGeolocation: true, followPosition: true });
+
+    beforeEach(() => {
+      watchers = new Map();
+      let next = 1;
+      geolocation = {
+        watchPosition: vi.fn((ok: PositionCallback, error: PositionErrorCallback) => {
+          watchers.set(next, { ok, error });
+          return next++;
+        }),
+        clearWatch: vi.fn((id: number) => watchers.delete(id)),
+        getCurrentPosition: vi.fn((ok: PositionCallback) =>
+          ok({ coords: { longitude: 6.85, latitude: 45.9 } } as GeolocationPosition)
+        ),
+      };
+      Object.defineProperty(navigator, 'geolocation', { value: geolocation, configurable: true });
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback: FrameRequestCallback) => {
+        callback(0);
+        return 1;
+      });
+    });
+    afterEach(() => {
+      Reflect.deleteProperty(navigator, 'geolocation');
+      Reflect.deleteProperty(navigator, 'permissions');
+    });
+
+    it('centres the maps of the lists once, without following the position', async () => {
+      const { wrapper, map } = await mountMap({ showCenterOnGeolocation: true });
+
+      await button(wrapper).trigger('click');
+
+      expect(geolocation.getCurrentPosition).toHaveBeenCalled();
+      expect(geolocation.watchPosition).not.toHaveBeenCalled();
+      expect(map.cameras.at(-1)).toEqual({ center: [6.85, 45.9], zoom: 12 });
+      expect(positionMarker()).toBeUndefined();
+      wrapper.unmount();
+    });
+
+    it('follows the position on the document map: a dot kept in the middle, its accuracy around it', async () => {
+      const { wrapper, map } = await mountFollowing();
+      map.zoom = 14;
+
+      await button(wrapper).trigger('click');
+      expect(button(wrapper).classes()).toContain('c2c-map-position-waiting');
+      fix({ longitude: 6.85, latitude: 45.9, accuracy: 100 });
+      await flushPromises();
+
+      expect(button(wrapper).classes()).toContain('c2c-map-position-centred');
+      expect(button(wrapper).attributes('aria-pressed')).toBe('true');
+      expect(positionMarker()).toMatchObject({ lngLat: [6.85, 45.9], added: true });
+      // not zoomed out to the zoom of a place
+      expect(map.cameras.at(-1)).toEqual({ center: [6.85, 45.9], zoom: 14 });
+      // 100 m at zoom 14, latitude 45.9: 2 × 100 / (40075016.686 × cos(45.9°) / (512 × 2^14)) pixels
+      const accuracy = positionMarker()!.element!.firstElementChild as HTMLElement;
+      expect(parseFloat(accuracy.style.width)).toBeCloseTo(59.9, 0);
+
+      fix({ longitude: 6.86, latitude: 45.91 });
+      expect(map.cameras.at(-1)).toMatchObject({ center: [6.86, 45.91] });
+      wrapper.unmount();
+    });
+
+    it('stops keeping the position in the middle once the map is moved by hand, and draws how far it is', async () => {
+      const { wrapper, map } = await mountFollowing();
+      await button(wrapper).trigger('click');
+      fix({ longitude: 6.85, latitude: 45.9 });
+      await flushPromises();
+
+      map.fire('movestart', { originalEvent: new MouseEvent('mousedown') });
+      fix({ longitude: 6.85, latitude: 45.9 });
+      await flushPromises();
+      const cameras = map.cameras.length;
+      fix({ longitude: 6.851, latitude: 45.9 });
+      await flushPromises();
+
+      expect(map.cameras.length).toBe(cameras);
+      expect(button(wrapper).classes()).toContain('c2c-map-position-moved');
+      // from the centre of the map (6.8, 45.9), to the edge of the dot
+      const line = wrapper.find('.c2c-map-position-line line');
+      const [x1, y1, x2, y2] = ['x1', 'y1', 'x2', 'y2'].map((name) => Number(line.attributes(name)));
+      expect([x1, y1, x2, y2].map(Math.round)).toEqual([6800, 45900, 6838, 45900]);
+      expect(wrapper.find('.c2c-map-position-distance').text()).toBe('3,9 km');
+
+      // centred again by the button: no line
+      await button(wrapper).trigger('click');
+      expect(button(wrapper).classes()).toContain('c2c-map-position-centred');
+      expect(map.cameras.at(-1)).toMatchObject({ center: [6.851, 45.9] });
+      expect(wrapper.find('.c2c-map-position-line').exists()).toBe(false);
+      wrapper.unmount();
+    });
+
+    it('stops following the position at a tap on the button, or when the map goes', async () => {
+      const { wrapper } = await mountFollowing();
+      await button(wrapper).trigger('click');
+      fix({ longitude: 6.85, latitude: 45.9 });
+      await flushPromises();
+
+      await button(wrapper).trigger('click');
+
+      expect(geolocation.clearWatch).toHaveBeenCalledWith(1);
+      expect(positionMarker()!.removed).toBe(true);
+      expect(button(wrapper).classes()).toContain('c2c-map-position-off');
+
+      await button(wrapper).trigger('click');
+      wrapper.unmount();
+      expect(geolocation.clearWatch).toHaveBeenCalledWith(2);
+    });
+
+    it('shows the direction of the compass, else that of the movement when fast enough', async () => {
+      const { wrapper } = await mountFollowing();
+      await button(wrapper).trigger('click');
+      fix({ longitude: 6.85, latitude: 45.9, heading: 90, speed: 0.5 });
+      await flushPromises();
+      const marker = positionMarker()!;
+      // too slow: the direction of the GPS is noise
+      expect(marker.element!.classList.contains('with-heading')).toBe(false);
+
+      fix({ longitude: 6.85, latitude: 45.9, heading: 90, speed: 1.5 });
+      expect(marker.element!.classList.contains('with-heading')).toBe(true);
+      expect(marker.rotation).toBe(90);
+
+      // alpha goes counterclockwise from the north
+      window.dispatchEvent(Object.assign(new Event('deviceorientationabsolute'), { alpha: 300, absolute: true }));
+      expect(marker.rotation).toBe(60);
+      // the relative one says nothing of the north
+      window.dispatchEvent(Object.assign(new Event('deviceorientation'), { alpha: 10, absolute: false }));
+      expect(marker.rotation).toBe(60);
+      // iOS
+      window.dispatchEvent(Object.assign(new Event('deviceorientation'), { webkitCompassHeading: 200 }));
+      expect(marker.rotation).toBe(200);
+
+      wrapper.unmount();
+      window.dispatchEvent(Object.assign(new Event('deviceorientation'), { webkitCompassHeading: 10 }));
+      expect(marker.rotation).toBe(200);
+    });
+
+    it('crosses the icon out when the location is refused, and says how to allow it', async () => {
+      const { wrapper } = await mountFollowing();
+      await button(wrapper).trigger('click');
+
+      fail(1);
+      await flushPromises();
+
+      expect(button(wrapper).classes()).toEqual(
+        expect.arrayContaining(['c2c-map-position-off', 'c2c-map-position-blocked'])
+      );
+      expect(document.body.textContent).toContain('Location refused');
+      // a tap tries again: allowed since, the icon is no longer crossed out
+      await button(wrapper).trigger('click');
+      fix({ longitude: 6.85, latitude: 45.9 });
+      await flushPromises();
+      expect(button(wrapper).classes()).not.toContain('c2c-map-position-blocked');
+      wrapper.unmount();
+    });
+
+    it('crosses the icon out at once when the browser says the location is refused to the site', async () => {
+      Object.defineProperty(navigator, 'permissions', {
+        value: { query: vi.fn().mockResolvedValue({ state: 'denied', addEventListener: vi.fn() }) },
+        configurable: true,
+      });
+      const { wrapper } = await mountFollowing();
+
+      expect(button(wrapper).classes()).toContain('c2c-map-position-blocked');
+      wrapper.unmount();
+    });
+
+    it('keeps following through a weak signal once the position is known, not before', async () => {
+      const { wrapper } = await mountFollowing();
+      await button(wrapper).trigger('click');
+      fail(2);
+      await flushPromises();
+      expect(button(wrapper).classes()).toContain('c2c-map-position-off');
+
+      await button(wrapper).trigger('click');
+      fix({ longitude: 6.85, latitude: 45.9 });
+      fail(2);
+      await flushPromises();
+      expect(button(wrapper).classes()).toContain('c2c-map-position-centred');
+      wrapper.unmount();
+    });
+  });
 });

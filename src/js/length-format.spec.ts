@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatLength, formatNumber, parseDecimal } from './length-format';
+import { formatLength, formatNumber, parseDecimal, formatDistance } from './length-format';
 
 describe('formatLength', () => {
   it('shows metres under 1 km', () => {
@@ -47,6 +47,17 @@ describe('formatNumber', () => {
     expect(formatNumber('treeline', 'fr')).toBe('treeline');
     expect(formatNumber(null, 'fr')).toBe('');
     expect(formatNumber(undefined, 'fr')).toBe('');
+  });
+});
+
+describe('formatDistance', () => {
+  it('rounds to 10 m under 1 km, then as a length', () => {
+    expect(formatDistance(234, 'fr')).toBe('230 m');
+    expect(formatDistance(36, 'en')).toBe('40 m');
+    expect(formatDistance(996, 'fr')).toBe('1 km');
+    expect(formatDistance(1234, 'fr')).toBe('1,2 km');
+    expect(formatDistance(1234, 'en')).toBe('1.2 km');
+    expect(formatDistance(14321, 'fr')).toBe('14 km');
   });
 });
 

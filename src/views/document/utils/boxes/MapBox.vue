@@ -33,6 +33,8 @@
             !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
           "
           :show-pin-to-top-button="true"
+          show-center-on-geolocation
+          follow-position
           remember-settings
           :pinned-side="pinnedSide"
           :show3d="show3d"
