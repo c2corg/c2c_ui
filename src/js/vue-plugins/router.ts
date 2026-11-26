@@ -63,6 +63,8 @@ const MeView = () => import('@/views/user/MeView.vue');
 const SettingsView = () => import('@/views/user/SettingsView.vue');
 const FavouritesView = () => import('@/views/user/FavouritesView.vue');
 const AppGuideView = () => import('@/views/static-views/AppGuideView.vue');
+// an experiment, reached by its URL only
+const InclinometerView = () => import('@/views/static-views/InclinometerView.vue');
 
 const routes: RouteRecordRaw[] = [
   { path: '/', name: 'home', component: HomeView },
@@ -72,6 +74,7 @@ const routes: RouteRecordRaw[] = [
   // the topographic maps were at /maps (links of the API, of other sites)
   { path: '/maps/:rest(.*)*', redirect: (to) => '/papermaps' + to.fullPath.slice('/maps'.length) },
   { path: '/serac', name: 'serac', component: SeracView },
+  { path: '/inclinometer', name: 'inclinometer', component: InclinometerView },
   { path: '/whatsnew', name: 'whatsnew', component: WhatsNewView },
   { path: '/associations-history', name: 'associations-history', component: AssociationsHistoryView },
   { path: '/auth', name: 'auth', component: LoginView },
