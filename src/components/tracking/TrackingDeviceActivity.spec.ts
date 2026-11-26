@@ -83,7 +83,7 @@ describe('TrackingDeviceActivity', () => {
       global,
     });
 
-    expect(wrapper.find('.activity-sources').text()).toBe('garmin (Forerunner 965) · strava');
+    expect(wrapper.find('.activity-sources').text()).toBe('garmin · strava (Forerunner 965)');
   });
 
   it('removes the name of any vendor of the group from a device name', () => {
@@ -100,7 +100,25 @@ describe('TrackingDeviceActivity', () => {
       global,
     });
 
-    expect(wrapper.find('.activity-sources').text()).toBe('strava (Forerunner 965) · garmin (Forerunner 965)');
+    expect(wrapper.find('.activity-sources').text()).toBe('strava · garmin (Forerunner 965)');
+  });
+
+  it('names the device once, after the vendors', () => {
+    const wrapper = mount(TrackingDeviceActivity, {
+      props: {
+        activity: {
+          ...activity,
+          sources: [
+            { id: 2, vendor: 'strava', vendorId: '20806619230', deviceName: 'APEX 4' },
+            { id: 3, vendor: 'coros', vendorId: '3', deviceName: 'COROS APEX 4 46mm' },
+          ],
+        },
+      },
+      global,
+    });
+
+    expect(wrapper.find('.activity-sources').text()).toBe('strava · coros (APEX 4 46mm)');
+    expect(wrapper.find('.activity-device-name').attributes('title')).toBe('COROS APEX 4 46mm');
   });
 
   it('keeps the full device name available when the card label is truncated', () => {

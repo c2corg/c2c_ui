@@ -34,3 +34,35 @@ export function shortDeviceName(deviceName: string | undefined, vendorNames: str
 /** The names of every vendor of a (grouped) activity, raw and translated. */
 export const vendorNames = (vendors: string[], translate: (vendor: string) => string): string[] =>
   vendors.flatMap((vendor) => [vendor, translate(vendor)]);
+
+const containsWords = (name: string, part: string) =>
+  name !== part && new RegExp(`(?<![\\p{L}\\p{N}])${escapeRegExp(part)}(?![\\p{L}\\p{N}])`, 'iu').test(name);
+
+/** Unique names, case-insensitive, without the ones another name contains: "APEX 4" and "APEX 4 46mm" give the latter. */
+const distinctNames = (names: (string | undefined)[]): string[] => {
+  // the first spelling of each name
+  const unique = names
+    .filter((name): name is string => !!name)
+    .filter((name, i, all) => all.findIndex((other) => other.toLowerCase() === name.toLowerCase()) === i);
+  return unique.filter((name) => !unique.some((other) => containsWords(other.toLowerCase(), name.toLowerCase())));
+};
+
+/**
+ * The device of a (grouped) activity, shown once after its vendors, as each vendor may name the same device: Strava
+ * "APEX 4", COROS "COROS APEX 4 46mm". `name` is without the vendor names, `fullName` as the vendors give it.
+ */
+export function activityDevice(
+  sources: { vendor: string; deviceName?: string }[],
+  translate: (vendor: string) => string
+): { name?: string; fullName?: string } {
+  const names = vendorNames(
+    sources.map(({ vendor }) => vendor),
+    translate
+  );
+  const shortNames = distinctNames(sources.map(({ deviceName }) => shortDeviceName(deviceName, names)));
+  const fullNames = distinctNames(sources.map(({ deviceName }) => deviceName?.trim()));
+  return {
+    name: shortNames.join(' / ') || undefined,
+    fullName: fullNames.join(' / ') || undefined,
+  };
+}

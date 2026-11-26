@@ -13,13 +13,11 @@
         <template v-for="(source, i) in sources" :key="source.vendor">
           <template v-if="i > 0">&#32;·</template>
           <a v-if="vendorUrl(source)" :href="vendorUrl(source)">{{ $gettext(source.vendor) }}</a>
-          <template v-else>{{ $gettext(source.vendor) }}</template><span
-            v-if="source.deviceName"
-            class="activity-device-name"
-            :title="source.fullDeviceName"
-            >&#32;({{ source.deviceName }})</span
-          >
+          <template v-else>{{ $gettext(source.vendor) }}</template>
         </template>
+        <template v-if="device.name"
+          >&#32;<span class="activity-device-name" :title="device.fullName">({{ device.name }})</span></template
+        >
       </div>
       <div class="is-flex is-justify-content-space-between">
         <div v-if="duration" class="stat">
@@ -44,7 +42,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-import { shortDeviceName, vendorNames } from './activity-device';
+import { activityDevice } from './activity-device';
 
 import type { ActivitySource } from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
@@ -69,20 +67,9 @@ const heightDiffUp = computed(() => $documentUtils.heightDiffUpWithUnit(props.ac
 const length = computed(() => $documentUtils.lengthWithUnit(props.activity.length));
 
 // the vendors that have this outing (tracking before 3.4.0 sends none)
-const sources = computed<(ActivitySource & { fullDeviceName?: string })[]>(() => {
-  const groupSources: ActivitySource[] = props.activity.sources ?? [props.activity as ActivitySource];
-  // a device may be named after any vendor of the group
-  const names = vendorNames(
-    groupSources.map(({ vendor }) => vendor),
-    $gettext
-  );
-  return groupSources.map((source) => ({
-    ...source,
-    deviceName: shortDeviceName(source.deviceName, names),
-    // the whole name on hover, the short one may be truncated
-    fullDeviceName: source.deviceName?.trim(),
-  }));
-});
+const sources = computed<ActivitySource[]>(() => props.activity.sources ?? [props.activity as ActivitySource]);
+// the device, once after the vendors: the whole name on hover, the short one may be truncated
+const device = computed(() => activityDevice(sources.value, $gettext));
 
 const vendorUrl = ({ vendor, vendorId }: ActivitySource): string | undefined => {
   switch (vendor) {

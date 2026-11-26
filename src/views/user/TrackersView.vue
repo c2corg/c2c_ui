@@ -55,8 +55,9 @@
       <div v-for="activity in activities" :key="activity.id">
         {{ $dateUtils.toTechnicalString(activity.date) }}&hairsp;&bull;&hairsp;<template v-if="activity.name"
           >{{ activity.name }}&hairsp;&bull;&hairsp;</template
-        >{{ activity.type[$user.lang] }}&hairsp;&bull;&hairsp;{{ $gettext(activity.vendor)
-        }}<template v-if="activity.deviceName">&hairsp;&bull;&hairsp;{{ activity.deviceName }}</template
+        >{{ activity.type[$user.lang] }}&hairsp;&bull;&hairsp;{{ activity.vendors
+        }}<template v-if="activity.deviceName"
+          >&hairsp;&bull;&hairsp;<span :title="activity.fullDeviceName">{{ activity.deviceName }}</span></template
         ><template v-if="activity.duration"
           >&hairsp;&bull;&hairsp;<span role="img" :title="$gettext('Duration')" :aria-label="$gettext('Duration')"
             ><fa-icon :icon="['far', 'clock']" /></span
@@ -83,7 +84,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import ApplicationCard from '@/components/tracking/ApplicationCard.vue';
-import { shortDeviceName, vendorNames } from '@/components/tracking/activity-device';
+import { activityDevice } from '@/components/tracking/activity-device';
 import trackingService, { type Activity, type Status, type Vendor } from '@/js/apis/tracking-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
@@ -97,6 +98,8 @@ type ShownActivity = Omit<Activity, 'duration' | 'length' | 'heightDiffUp'> & {
   duration?: number | string;
   length?: number | string;
   heightDiffUp?: number | string;
+  vendors: string;
+  fullDeviceName?: string;
 };
 
 const route = useRoute();
@@ -213,22 +216,22 @@ function loadActivities() {
       trackingService.getActivities($user.id!, $user.lang ?? undefined).then(
         ({ data }) => {
           activitiesLoading.value = false;
-          activities.value = data.slice(0, 5).map((activity) => ({
-            ...activity,
-            // a grouped activity: the device may be named after any vendor of the group
-            deviceName: shortDeviceName(
-              activity.deviceName,
-              vendorNames(
-                (activity.sources ?? [activity]).map(({ vendor }) => vendor),
-                $gettext
-              )
-            ),
-            ...(activity.duration && { duration: $dateUtils.durationToTimeString(activity.duration) }),
-            ...(activity.heightDiffUp && {
-              heightDiffUp: $documentUtils.heightDiffUpWithUnit(activity.heightDiffUp),
-            }),
-            ...(activity.length && { length: $documentUtils.lengthWithUnit(activity.length) }),
-          }));
+          activities.value = data.slice(0, 5).map((activity) => {
+            // a grouped activity: every vendor, then the device once (tracking before 3.4.0 sends no sources)
+            const sources = activity.sources ?? [activity];
+            const device = activityDevice(sources, $gettext);
+            return {
+              ...activity,
+              vendors: sources.map(({ vendor }) => $gettext(vendor)).join(', '),
+              deviceName: device.name,
+              fullDeviceName: device.fullName,
+              ...(activity.duration && { duration: $dateUtils.durationToTimeString(activity.duration) }),
+              ...(activity.heightDiffUp && {
+                heightDiffUp: $documentUtils.heightDiffUpWithUnit(activity.heightDiffUp),
+              }),
+              ...(activity.length && { length: $documentUtils.lengthWithUnit(activity.length) }),
+            };
+          });
         },
         () => {
           activitiesLoading.value = false;
