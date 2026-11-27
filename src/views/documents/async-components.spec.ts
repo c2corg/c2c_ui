@@ -2,7 +2,6 @@ import { flushPromises, shallowMount } from '@vue/test-utils';
 import { describe, expect, it, vi } from 'vitest';
 import { createMemoryHistory, createRouter } from 'vue-router';
 
-import ItinevertResultView from '@/components/itinevert/ItinevertResultView.vue';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import DocumentsView from '@/views/documents/DocumentsView.vue';
@@ -40,29 +39,5 @@ describe('lazy documents table', () => {
     // loaded once shown
     expect(wrapper.findComponent({ name: 'DocumentsTable' }).exists()).toBe(true);
     vi.restoreAllMocks();
-  });
-
-  it('is an async component in ItinevertResultView', async () => {
-    const router = createRouter({
-      history: createMemoryHistory(),
-      routes: [{ path: '/', component: { render: () => null } }],
-    });
-    await router.push('/');
-    const wrapper = shallowMount(ItinevertResultView, {
-      props: { documentType: 'route', documents: { documents: [], total: 0 } },
-      global: {
-        plugins: [router],
-        config: { globalProperties: { $gettext: (text: string) => text } as never },
-        mocks: { $filters: { uppercaseFirstLetter: (text: string) => text } },
-        directives: { translate: {} },
-      },
-    });
-
-    // the list mode shows the table
-    (wrapper.vm as unknown as { listMode: boolean }).listMode = true;
-    await flushPromises();
-
-    // loaded once shown
-    expect(wrapper.findComponent({ name: 'DocumentsTable' }).exists()).toBe(true);
   });
 });

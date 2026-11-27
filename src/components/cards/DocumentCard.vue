@@ -6,6 +6,7 @@
       class="document-card"
       :target="target"
       :highlighted="highlighted"
+      v-bind="transportContext && ['route', 'waypoint'].includes(documentType) ? { transportContext } : {}"
     />
     <delete-button v-if="showDeleteButton" @click="$emit('delete')" class="delete-button" />
   </div>
@@ -23,6 +24,7 @@ import ProfileCard from './ProfileCard.vue';
 import RouteCard from './RouteCard.vue';
 import WaypointCard from './WaypointCard.vue';
 import XreportCard from './XreportCard.vue';
+import { transportContextProperty } from './utils/card';
 
 import { documentProperty, useDocumentType } from '@/js/properties';
 
@@ -42,6 +44,8 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+
+  ...transportContextProperty,
 });
 defineEmits(['delete']);
 

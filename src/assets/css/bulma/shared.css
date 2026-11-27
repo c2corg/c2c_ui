@@ -1,6 +1,6 @@
 /*
  * Bulma 0.9.4 (MIT License, see bulma/LICENSE): the rules several modules share, controls (button, input,
- * select...), unselectable, block margins, delete, loader
+ * select...), unselectable, block margins, delete
  */
 
 /**
@@ -210,7 +210,6 @@ fieldset[disabled] .button {
 
 .control.is-loading::after,
 .select.is-loading::after,
-.loader,
 .button.is-loading::after {
   animation: spinAround 500ms infinite linear;
   border: 2px solid var(--c2c-grey-lighter);

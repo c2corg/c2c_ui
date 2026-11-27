@@ -4,6 +4,7 @@
     class="ag-theme-balham"
     theme="legacy"
     :column-defs="columnDefs"
+    :context="gridContext"
     :default-col-def="defaultColDef"
     :row-data="documents.documents"
     :get-row-class="getRowClass"
@@ -31,9 +32,10 @@ import {
   type CellMouseOverEvent,
 } from 'ag-grid-community';
 import { AgGridVue } from 'ag-grid-vue3';
-import { onBeforeUnmount, onMounted, shallowRef, toRef, watch, type Component, type PropType } from 'vue';
+import { computed, onBeforeUnmount, onMounted, shallowRef, toRef, watch, type Component, type PropType } from 'vue';
 import { useRoute } from 'vue-router';
 
+import AccessibilityCellRenderer from './cell-renderers/AccessibilityCellRenderer.vue';
 import AreaList from './cell-renderers/AreaList.vue';
 import DocumentActivities from './cell-renderers/DocumentActivities.vue';
 import DocumentAuthor from './cell-renderers/DocumentAuthor.vue';
@@ -54,6 +56,7 @@ import constants from '@/js/constants';
 import type Field from '@/js/constants/Field';
 import bus from '@/js/event-bus';
 import { documentTypeProperty } from '@/js/properties';
+import type { TransportContext } from '@/js/transport-query';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -81,6 +84,11 @@ const props = defineProps({
   openInNewTab: {
     type: Boolean,
     default: false,
+  },
+  /** The public transport search of the list: a column of the round-trip checks of the routes or waypoints */
+  transportContext: {
+    type: Object as PropType<TransportContext | null>,
+    default: null,
   },
 });
 
@@ -235,6 +243,23 @@ function formatConditions(document: C2cDocument) {
 
 function formatQuality(document: C2cDocument) {
   return $gettext(document.quality!, 'quality_types');
+}
+
+// the cells of the accessibility column read the transport search from the grid context
+const gridContext = computed(() => ({ transportContext: props.transportContext }));
+
+function accessibilityColDefs(): C2cColDef[] {
+  return props.transportContext
+    ? [
+        {
+          headerName: capitalize($gettext('Public transport')),
+          cellRenderer: AccessibilityCellRenderer,
+          sortable: false,
+          filter: false,
+          width: 260,
+        },
+      ]
+    : [];
 }
 
 function computeColumnDefs() {
@@ -473,6 +498,7 @@ function computeColumnDefs() {
         _headerName: capitalize($gettext('Document quality')),
         width: 30,
       },
+      ...accessibilityColDefs(),
     ];
   }
 
@@ -491,6 +517,7 @@ function computeColumnDefs() {
         _headerName: capitalize($gettext('Document quality')),
         width: 30,
       },
+      ...accessibilityColDefs(),
     ];
   }
 
@@ -538,6 +565,17 @@ function exportCsv() {
 }
 
 watch(documentType, computeColumnDefs, { immediate: true });
+
+// the column shows up with a transport search, and its cells follow the checks of the page
+watch(
+  () => props.transportContext,
+  (newValue, oldValue) => {
+    if (!newValue !== !oldValue) {
+      computeColumnDefs();
+    }
+    gridApi?.refreshCells({ force: true });
+  }
+);
 
 watch(
   () => props.highlightedDocument,

@@ -4,16 +4,11 @@ import { describe, expect, it, vi } from 'vitest';
 import { defineComponent, h, nextTick } from 'vue';
 import { createMemoryHistory, createRouter } from 'vue-router';
 
-import DropdownButton from './generics/DropdownButton.vue';
-import ItinevertFilterView from './itinevert/ItinevertFilterView.vue';
 import ItinevertLoadingView from './itinevert/ItinevertLoadingView.vue';
-import ItinevertPageSelector from './itinevert/ItinevertPageSelector.vue';
 import BiodivInformation from './map/BiodivInformation.vue';
 import GpsFileUpload from './map/GpsFileUpload.vue';
 import LayerButton from './map/LayerButton.vue';
 import SwissProtectionAreaInformation from './map/SwissProtectionAreaInformation.vue';
-
-import { MAX_ROUTE_THRESHOLD } from '@/js/apis/itinevert-service';
 
 const MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 const globalProperties = {
@@ -56,46 +51,6 @@ describe('ItinevertLoadingView', () => {
 
     expect(percent(5, 20)).toContain('25');
     expect(percent(5, 0)).toContain('0');
-  });
-});
-
-describe('ItinevertPageSelector', () => {
-  it('pages through the documents, and changes the number per page', async () => {
-    const wrapper = mount(ItinevertPageSelector, {
-      props: { documents: { total: 75 }, offset: 30, limit: 30 },
-      global: { ...global, components: { ...global.components, DropdownButton } },
-    });
-    expect(wrapper.text()).toContain('31-60');
-
-    const [previous, next] = wrapper.findAll('.pagination-link:not(.is-disabled)');
-    await previous.trigger('click');
-    await next.trigger('click');
-    await wrapper.findAll('.dropdown-item')[2].trigger('click');
-
-    expect(wrapper.emitted('paginate')).toEqual([[[0, 30]], [[60, 30]], [[30, 100]]]);
-  });
-});
-
-describe('ItinevertFilterView', () => {
-  it('counts the routes, and allows the results under the maximum', async () => {
-    const router = createRouter({
-      history: createMemoryHistory(),
-      routes: [{ path: '/', component: { render: () => null } }],
-    });
-    await router.push('/?act=skitouring');
-    const wrapper = mount(ItinevertFilterView, {
-      props: { filteredRoutes: { total: MAX_ROUTE_THRESHOLD + 1 } },
-      global: { ...global, plugins: [router], stubs: { ...global.stubs, QueryItem: true, DropdownButton: true } },
-    });
-    const showResults = () => wrapper.findAll('.filter-buttons button')[1];
-
-    expect(wrapper.text().replace(/\s+/g, ' ')).toContain(`${MAX_ROUTE_THRESHOLD + 1} / ${MAX_ROUTE_THRESHOLD} routes`);
-    expect(showResults().attributes('disabled')).toBeDefined();
-
-    await wrapper.setProps({ filteredRoutes: { total: 12 } });
-    expect(showResults().attributes('disabled')).toBeUndefined();
-    await showResults().trigger('click');
-    expect(wrapper.emitted('computeJourneyReachableRoutes')).toHaveLength(1);
   });
 });
 
@@ -174,43 +129,36 @@ describe('LayerButton', () => {
   });
 });
 
-describe('ItinevertWizard', () => {
-  it('enables the search once the activity, the mountain range and the start are set', async () => {
-    const { default: ItinevertWizard } = await import('./itinevert/ItinevertWizard.vue');
+describe('TransportFilterForm', () => {
+  it('enables the search once the start is set, with a return after the departure', async () => {
+    const { default: TransportFilterForm } = await import('./itinevert/TransportFilterForm.vue');
     const router = createRouter({
       history: createMemoryHistory(),
       routes: [{ path: '/', component: { render: () => null } }],
     });
     await router.push('/');
-    const wrapper = mount(ItinevertWizard, {
+    const wrapper = mount(TransportFilterForm, {
+      props: { mode: 'navigate' },
       global: {
         ...global,
         plugins: [router],
-        stubs: {
-          ...global.stubs,
-          InputRadioButton: true,
-          InputActivity: true,
-          InputAddress: true,
-          InputAutocomplete: true,
-          ItinevertBanner: true,
-        },
+        stubs: { ...global.stubs, InputRadioButton: true, InputAddress: true },
       },
     });
-    const wizard = wrapper.vm as unknown as {
+    const form = wrapper.vm as unknown as {
       isSearchEnabled: boolean;
-      formData: {
-        activities: string[];
-        mountainRange: { selected: unknown };
-        startingPoint: { selectedAddress: unknown };
-      };
+      fromAddress: unknown;
+      minDeparture: string;
+      maxReturn: string;
     };
-    expect(wizard.isSearchEnabled).toBe(false);
+    expect(form.isSearchEnabled).toBe(false);
 
-    wizard.formData.activities = ['skitouring'];
-    wizard.formData.mountainRange.selected = { document_id: 1 };
-    expect(wizard.isSearchEnabled).toBe(false);
+    form.fromAddress = { geometry: { coordinates: [6, 45] } };
+    expect(form.isSearchEnabled).toBe(true);
 
-    wizard.formData.startingPoint.selectedAddress = { geometry: { coordinates: [6, 45] } };
-    expect(wizard.isSearchEnabled).toBe(true);
+    // a return the same day, before the departure
+    form.minDeparture = '10:00';
+    form.maxReturn = '09:00';
+    expect(form.isSearchEnabled).toBe(false);
   });
 });

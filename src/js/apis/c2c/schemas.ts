@@ -41,6 +41,8 @@ export const document = z.object({
   geometry: z.nullish(z.object({ geom: z.nullish(z.string()), geom_detail: z.nullish(z.string()) })),
   protected: z.optional(z.boolean()),
   areas: z.optional(z.array(z.object({ document_id: z.number() }))),
+  // a route of a public transport search whose duration is unknown: its accessibility cannot be verified
+  duration_unknown: z.optional(z.boolean()),
 });
 
 // GET /<type>s: a page of documents

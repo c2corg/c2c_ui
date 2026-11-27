@@ -365,6 +365,7 @@
     "Duplicate images": "Images en double",
     "Duration": "Durée",
     "Duration (hrs)": "Durée (h)",
+    "Duration unknown: not verifiable": "Durée inconnue : non vérifiable",
     "E.g. South face of the Dent du Requin, normal route": "Ex. : face sud de la Dent du Requin, voie normale",
     "ESRI World Imagery": {
       "Map layer": "ESRI Sat"
@@ -433,10 +434,11 @@
       "Map controls": "Suivre la trace"
     },
     "Followed users": "Contributeurs suivis",
+    "For a return the same day, the return time must be after the departure time.": "Pour un retour le même jour, l'heure de retour doit être après l'heure de départ.",
+    "Forgot password?": "Mot de passe oublié ?",
     "Following": "Personnes suivies",
     "For the moderators": "Pour les modérateurs",
     "For the moderators of the topoguide": "Pour les modérateurs du topoguide",
-    "Forgot password?": "Mot de passe oublié ?",
     "Forum discussion": "Discussion forum",
     "Forum discussion (optional, the current one is kept)": "Discussion forum (optionnel, l'actuelle est conservée)",
     "Forum discussion changed": "La discussion forum a changé",
@@ -957,6 +959,7 @@
     "Protection status": "Status de la protection",
     "Provide information and improve its quality, following the contribution rules and respecting copyright.": "Vous êtes invité à compléter les informations et améliorer la qualité du document en suivant les règles de contribution et dans le respect du droit d'auteur.",
     "Public transport": {
+      "$$noContext": "Transports en commun",
       "Map layer": "Transports en commun"
     },
     "Public transport data is currently unavailable.": "Les données de transport en commun sont actuellement indisponibles.",
@@ -1026,6 +1029,7 @@
     "Restored:": "Restauré :",
     "Results shown alone": "Résultats affichés seuls",
     "Retry": "Réessayer",
+    "Return date (optional)": "Date de retour (facultative)",
     "Return trip": "Trajet retour",
     "Revoke": "Révoquer",
     "Risk": "Risque",
@@ -1043,6 +1047,7 @@
     "Routes": "Itinéraires",
     "Routes on the map": "Itinéraires sur la carte",
     "Routes to explore": "des itinéraires à parcourir",
+    "Routes whose duration is unknown: they may be reachable, but their accessibility cannot be verified": "Itinéraires dont la durée est inconnue : ils sont peut-être accessibles, mais leur accessibilité ne peut pas être vérifiée",
     "Routes, waypoints, images, articles I created or edited": "Itinéraires, points, photos, articles que j'ai créés ou modifiés",
     "SERAC is a worldwide incidents and accidents database aiming at increasing safety in rock climbing and mountain sports.": "SERAC est une base de données mondiale sur les accidents et incidents en montagne. Sa vocation est d'améliorer la sécurité dans la pratique de l'escalade et des sports de montagne.",
     "SERAC is built upon a kindness mindset. We thank you to improve it": "SERAC est conçu dans un esprit de bienveillance et de partage, merci de l’encourager",
@@ -1188,6 +1193,7 @@
     "The + button at the top right adds an outing, a route, a waypoint…": "Le bouton + en haut à droite ajoute une sortie, un itinéraire, un point de passage…",
     "The Camptocamp app is camptocamp.org installed on your phone: the same account, the same topos, the same community. Nothing to download from an app store, and it updates by itself.": "L'application Camptocamp, c'est camptocamp.org installé sur votre téléphone : même compte, mêmes topos, même communauté. Rien à télécharger dans un magasin d'applications, et elle se met à jour toute seule.",
     "The MRD method (beginner) is allowed when danger is 3 maximum. Choose another method: MRE or MRP.": "La méthode MRD (débutant) est autorisée avec un niveau de danger de 3 maximum. Choisissez la méthode MRE ou MRP.",
+    "The duration of this route is unknown: its accessibility cannot be verified": "La durée de cet itinéraire est inconnue : son accessibilité ne peut pas être vérifiée",
     "The Outings and Routes overlays are temporarily unavailable": "Les calques de sorties et d'itinéraires sont temporairement indisponibles. ",
     "The Recent feed: the latest outings and their photos.": "Le fil Récent : les dernières sorties et leurs photos.",
     "The account will not be removed. The request is kept, cancelled, and a new one can be made.": "Le compte ne sera pas supprimé. La demande est conservée, annulée, et une nouvelle peut être faite.",
@@ -1239,6 +1245,9 @@
     "The removal requests could not be loaded.": "Les demandes de suppression n'ont pas pu être chargées.",
     "The request goes back in progress, until a moderator of this side validates it again.": "La demande repasse en cours, jusqu'à ce qu'un modérateur de ce côté la valide à nouveau.",
     "The results displayed take into account your departure date and time.": "Les résultats proposés tiennent compte de votre jour et heure de départ.",
+    "The return date must not be before the departure date.": "La date de retour ne peut pas être avant la date de départ.",
+    "The schedules cannot be checked: the duration of this route is unknown. You can still open the route.": "Les horaires ne peuvent pas être vérifiés : la durée de cet itinéraire est inconnue. Vous pouvez tout de même ouvrir l'itinéraire.",
+    "The schedules of the documents of this page are already checked, or cannot be checked because the duration of the route is unknown": "Les horaires des documents de cette page sont déjà vérifiés, ou ne peuvent pas l'être car la durée de l'itinéraire est inconnue",
     "The slope must be between 0 and 80 deg": "La pente doit être comprise entre 0 et 80 deg",
     "The slope must be between 50 and 3000m high": "La hauteur de la pente doit être comprise entre 50 et 3000m",
     "The source no longer redirects to the target": {
@@ -1359,6 +1368,7 @@
     "Transport & road or PT access": "Accès routier/TC",
     "Trend": "Tendance",
     "Tricky sections": "Passages délicats",
+    "Trip of several days: the outbound is on the departure date, the return on the return date.": "Séjour de plusieurs jours : l'aller a lieu à la date de départ, le retour à la date de retour.",
     "Triggered avalanches": "Déclenchements provoqués",
     "Try again": "Réessayer",
     "Try again later or": "Réessayez plus tard ou ",
@@ -2628,9 +2638,35 @@
       "parking_fee_types": "oui"
     },
     "yeti": "YETI",
+    "Advanced options": "Options avancées",
+    "Check schedules": "Vérifier les horaires",
+    "Date": "Date",
+    "Departure after": "Partir après",
+    "Estimated area match": "Dans la zone estimée",
+    "Hiking duration": "Durée de la randonnée",
+    "Hiking duration budget": "Budget durée de randonnée",
+    "Margin over hiking duration": "Marge par rapport à la durée de la randonnée",
+    "Maximum one-way transport duration": "Durée maximale du trajet aller",
+    "min": "min",
+    "No compatible trip found": "Aucun trajet compatible",
+    "No transport search context available": "Aucune recherche transport en cours",
+    "Not found": "Non trouvé",
+    "Outbound": "Aller",
+    "The schedules of the documents of this page are already checked": "Les horaires des documents de cette page sont déjà vérifiés",
+    "Return": "Retour",
+    "Return before": "Revenir avant",
+    "Show details": "Afficher le détail",
+    "Time between outbound and return": "Temps entre l'aller et le retour",
+    "Unable to check schedules right now.": "Impossible de vérifier les horaires pour le moment.",
+    "Verified: outbound only": "Vérifié : aller seul",
+    "Verified: return only": "Vérifié : retour seul",
+    "Verified: round trip possible": "Vérifié : aller-retour possible",
     "zh": {
       "langs": "chinois"
     },
-    "« Auto » follows the setting of your system.": "« Auto » suit le réglage de votre système."
+    "« Auto » follows the setting of your system.": "« Auto » suit le réglage de votre système.",
+    "The public transport search is unavailable for today. Please try again tomorrow.": "La recherche en transports en commun n'est plus disponible aujourd'hui. Réessayez demain.",
+    "The public transport search is temporarily unavailable.": "La recherche en transports en commun est temporairement indisponible.",
+    "The dates must be within the next 6 months.": "Les dates doivent être dans les 6 prochains mois."
   }
 }

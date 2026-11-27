@@ -14,7 +14,6 @@ const sourceFiles = (dir: string): string[] =>
 
 // the preferences each component reads and writes, as existing users have them in their browser
 const STORED_UNDER: Record<string, string> = {
-  'src/components/itinevert/ItinevertResultView.vue': 'ItinevertResultView',
   'src/components/yeti/SubPanelLayers.vue': 'Yeti',
   'src/components/yeti/YetiMap.vue': 'Yeti',
   'src/components/yeti/map-layers/BaseLayers.vue': 'Yeti',

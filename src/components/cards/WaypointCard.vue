@@ -18,6 +18,9 @@
 
       <marker-quality :quality="document.quality" />
     </card-row>
+    <card-row v-if="transportContext">
+      <transport-accessibility :document="document" :transport-context="transportContext" />
+    </card-row>
   </card-container>
 </template>
 
@@ -27,9 +30,9 @@ import CardElevationItem from './utils/CardElevationItem.vue';
 import CardRegionItem from './utils/CardRegionItem.vue';
 import CardRow from './utils/CardRow.vue';
 import CardTitle from './utils/CardTitle.vue';
-import { cardProps } from './utils/card';
+import { cardProps, transportContextProperty } from './utils/card';
 
 import { documentProperty } from '@/js/properties';
 
-defineProps({ ...cardProps, ...documentProperty });
+defineProps({ ...cardProps, ...documentProperty, ...transportContextProperty });
 </script>

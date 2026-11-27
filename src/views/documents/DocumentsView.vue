@@ -29,6 +29,23 @@
           <page-selector :key="documentType" :documents="documents" />
         </span>
         <span class="is-pulled-right is-flex header-right" v-if="documentType != 'profile'">
+          <span v-if="hasTransportContext" class="header-item verify-accessibility-batch">
+            <button
+              type="button"
+              class="button is-small is-primary"
+              :disabled="!canVerifyBatch || batchVerifying"
+              :title="canVerifyBatch ? undefined : verifyBatchDisabledReason"
+              @click="verifyBatch"
+            >
+              <fa-icon v-if="batchVerifying" icon="circle-notch" spin aria-hidden="true" />
+              <span v-else>
+                {{ $gettext('Check schedules') }}
+                <template v-if="documents">({{ documentsToVerify.length }})</template>
+              </span>
+            </button>
+            <span v-if="batchError" class="batch-error">{{ $gettext('Unable to check schedules right now.') }}</span>
+          </span>
+
           <span @click="setListMode(!listMode)" class="header-item is-size-3 has-cursor-pointer is-hidden-mobile">
             <fa-icon
               v-show="displayMode !== 'map'"
@@ -101,27 +118,39 @@
           v-if="documents && !listMode && documentType !== 'image'"
           class="columns is-multiline is-variable is-1 cards-list"
         >
-          <div
-            v-for="(document, index) in documents.documents"
-            :key="index"
-            :class="{
-              'is-full': showMap && cardsSingleColumn,
-              'is-full-mobile is-half-tablet': showMap && !cardsSingleColumn,
-              'is-full-mobile is-one-third-tablet is-one-quarter-widescreen': !showMap,
-            }"
-            class="column card-container"
-            @mouseenter="highlightedDocument = document"
-            @mouseleave="highlightedDocument = undefined"
-          >
-            <document-card :highlighted="highlightedDocument === document" :document="document" />
-          </div>
+          <template v-for="(document, index) in documents.documents" :key="index">
+            <p v-if="index === firstDurationUnknownIndex" class="column is-full duration-unknown-heading">
+              {{ durationUnknownNotice }}
+            </p>
+            <div
+              :class="{
+                'is-full': showMap && cardsSingleColumn,
+                'is-full-mobile is-half-tablet': showMap && !cardsSingleColumn,
+                'is-full-mobile is-one-third-tablet is-one-quarter-widescreen': !showMap,
+              }"
+              class="column card-container"
+              @mouseenter="highlightedDocument = document"
+              @mouseleave="highlightedDocument = undefined"
+            >
+              <document-card
+                :highlighted="highlightedDocument === document"
+                :document="document"
+                :transport-context="transportContext"
+              />
+            </div>
+          </template>
         </div>
+
+        <p v-if="listMode && durationUnknownCount" class="duration-unknown-heading">
+          {{ durationUnknownNotice }}
+        </p>
 
         <documents-table
           v-if="listMode"
           :documents="documents ? documents : {}"
           :document-type="documentType"
           :highlighted-document="highlightedDocument"
+          :transport-context="transportContext"
           @highlight-document="highlightedDocument = $event"
           class="documents-table"
         />
@@ -184,6 +213,7 @@ import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { usePullRefresh } from '@/js/composables/pull-refresh';
+import { useTransportSearch } from '@/js/composables/transport-search';
 import constants from '@/js/constants';
 import bus from '@/js/event-bus';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
@@ -255,8 +285,37 @@ const searchKey = computed(() => JSON.stringify([route.path, searchQuery.value, 
 // the "Tracks" and "Routes" overlays of the map follow the search
 const overlayFilters = computed(() => searchOverlayFilters(documentType.value, route.query));
 
+// the public transport search of the url, if any: the areas it reaches, and the round-trip checks of the page
+const {
+  transportContext,
+  hasTransportContext,
+  documentsToVerify,
+  durationUnknownCount,
+  firstDurationUnknownIndex,
+  canVerifyBatch,
+  batchVerifying,
+  batchError,
+  isochroneOverlays,
+  verifyBatch,
+} = useTransportSearch(
+  documentType,
+  computed(() => documents.value?.documents ?? [])
+);
+const durationUnknownNotice = computed(() =>
+  $gettext('Routes whose duration is unknown: they may be reachable, but their accessibility cannot be verified')
+);
+const verifyBatchDisabledReason = computed(() =>
+  durationUnknownCount.value
+    ? $gettext(
+        'The schedules of the documents of this page are already checked, or cannot be checked because the duration of the route is unknown'
+      )
+    : $gettext('The schedules of the documents of this page are already checked')
+);
+
 const documentsShownOnMap = computed(() =>
-  filteredWaypoints.value.concat(documents.value ? documents.value.documents : [])
+  filteredWaypoints.value
+    .concat(documents.value ? documents.value.documents : [])
+    .concat(isochroneOverlays.value as unknown as C2cDocument[])
 );
 
 usePullRefresh(() => {
@@ -397,6 +456,19 @@ watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
 .filter-section {
   padding-bottom: 0.5rem;
   clear: both;
+}
+
+.duration-unknown-heading {
+  font-weight: bold;
+  color: var(--c2c-grey-dark);
+  padding: 0.5rem 0.75rem;
+}
+
+.verify-accessibility-batch .batch-error {
+  display: block;
+  color: var(--c2c-danger);
+  font-size: var(--c2c-size-7);
+  white-space: nowrap;
 }
 
 @media screen and (--c2c-max-tablet) {

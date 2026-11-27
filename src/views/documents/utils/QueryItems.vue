@@ -59,6 +59,32 @@
         </div>
       </dropdown-button>
 
+      <dropdown-button v-if="['route', 'waypoint'].includes(documentType)" key="transport" class="query-item-component">
+        <template #button>
+          <span class="button is-size-7-mobile">
+            <fa-icon :icon="categoryIcon['Transport']" />
+            <span class="is-hidden-mobile"> &nbsp;{{ $gettext('Public transport') }} </span>
+            <span v-if="hasTransportFilter"> &nbsp;(1) </span>
+            <span>&nbsp;</span>
+            <fa-icon icon="angle-down" aria-hidden="true" />
+          </span>
+        </template>
+        <div class="sub-query-items">
+          <div class="dropdown-item">
+            <button
+              v-if="hasTransportFilter"
+              type="button"
+              class="button is-small is-text transport-reset-button"
+              @click="resetTransportFilter"
+            >
+              <fa-icon icon="undo-alt" aria-hidden="true" />
+              {{ $gettext('Reset') }}
+            </button>
+            <transport-filter-form mode="patch" :fixed-document-type="transportDocumentType" />
+          </div>
+        </div>
+      </dropdown-button>
+
       <query-sort-dropdown
         v-if="['waypoint', 'route', 'image', 'outing'].includes(documentType)"
         class="query-item-component"
@@ -110,12 +136,14 @@ import QueryItem from './QueryItem.vue';
 import QuerySortDropdown from './QuerySortDropdown.vue';
 import QueryTags from './QueryTags.vue';
 
+import TransportFilterForm from '@/components/itinevert/TransportFilterForm.vue';
 import { withoutDisplaySettings } from '@/components/map/map-url-keys';
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useUrlFilters } from '@/js/composables/url-filters';
 import constants from '@/js/constants';
+import { hasTransportQuery, withoutTransportQuery } from '@/js/transport-query';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 // the fields of each document type, per category
@@ -138,6 +166,7 @@ const categoryIcon: Record<string, string | string[]> = {
   Miscs: 'database',
   Terrain: ['waypoint', 'summit'],
   ratings: 'tachometer-alt',
+  Transport: 'bus',
 };
 
 defineProps({
@@ -302,6 +331,15 @@ function removeTag(document: C2cDocument) {
   setValue(documentType, value);
 }
 
+const hasTransportFilter = computed(() => hasTransportQuery(route.query));
+// the public transport section is only shown for these two types
+const transportDocumentType = computed(() => documentType.value as 'route' | 'waypoint');
+
+/** Clears the transport filter. The form keeps its last values (and starting points) for the next search */
+function resetTransportFilter() {
+  router.push({ query: withoutTransportQuery(route.query) });
+}
+
 function emitDocumentsLoad() {
   emit('documents-load', tags.value);
 }
@@ -328,6 +366,10 @@ watch(() => JSON.stringify([route.path, withoutDisplaySettings(route.query), rou
 .title-input {
   display: inline-flex;
   margin-bottom: 0 !important;
+}
+
+.transport-reset-button {
+  margin-bottom: 0.75rem;
 }
 
 .sub-query-items {
