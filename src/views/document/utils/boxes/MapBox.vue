@@ -33,6 +33,8 @@
             !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
           "
           :show-pin-to-top-button="true"
+          :show-center-on-geolocation="onTouchScreen"
+          follow-position
           remember-settings
           :pinned-side="pinnedSide"
           :show3d="show3d"
@@ -121,6 +123,10 @@ function onElevationProfile(event: unknown) {
     elevationProfileHidden.value = hide;
   }
 }
+
+// following the position on the map: on touch screens only (phones, tablets), the devices carried on the route; not on
+// a computer, whose position is that of its network
+const onTouchScreen = Boolean(window.matchMedia?.('(pointer: coarse)').matches);
 
 function togglePinToSide(toggle: boolean) {
   // no second side (pinned to the right) where the window is narrower than a tablet, either way up

@@ -13,7 +13,7 @@ export function getPosition($gettext: (text: string) => string): Promise<Geoloca
   );
 }
 
-function positionError(error: GeolocationPositionError, $gettext: (text: string) => string) {
+export function positionError(error: GeolocationPositionError, $gettext: (text: string) => string) {
   switch (error.code) {
     case error.PERMISSION_DENIED:
       return $gettext('Location refused. Allow it in the settings of the browser, then try again.');

@@ -30,6 +30,13 @@ export const formatLength = (metres: number, lang?: string | null): { value: str
   return Math.abs(km) < 9.95 ? { value: format(km, 1), unit: 'km' } : { value: format(km, 0), unit: 'km' };
 };
 
+// A distance measured on the map (from its centre to the position of the device), as text: to 10 m under 1 km, then as
+// a length (230 m, 1,2 km, 14 km)
+export const formatDistance = (metres: number, lang?: string | null): string => {
+  const { value, unit } = formatLength(metres < 1000 ? Math.round(metres / 10) * 10 : metres, lang);
+  return `${value} ${unit}`;
+};
+
 // A number typed by a user, with a comma or a dot as decimal separator; NaN when it is not a number
 export const parseDecimal = (text: string): number => {
   const normalized = text.trim().replace(/\s/g, '').replace(',', '.');
