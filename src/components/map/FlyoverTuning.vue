@@ -5,6 +5,8 @@
       {{ (length / 1000).toFixed(1) }} km · {{ duration.toFixed(0) }} s at 1× · camera {{ cameraDistance.toFixed(0) }} m
       away
     </p>
+    <!-- the frame interval against the time of the flyover in it: the rest is the drawing of MapLibre (GPU, tiles) -->
+    <p v-if="stats" class="flyover-tuning-info">{{ stats }}</p>
     <label class="flyover-tuning-check" title="showAhead">
       <input
         type="checkbox"
@@ -42,7 +44,7 @@ import { computed, ref } from 'vue';
 
 import type { FlyoverSettings } from './map-3d-flyover';
 
-const props = defineProps<{ settings: FlyoverSettings; length: number; duration: number }>();
+const props = defineProps<{ settings: FlyoverSettings; length: number; duration: number; stats?: string }>();
 defineEmits<{ tune: [path: string | null, value?: number | boolean] }>();
 
 type Field = { path: string; label: string; min: number; max: number; step: number };

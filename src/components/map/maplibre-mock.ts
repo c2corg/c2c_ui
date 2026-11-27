@@ -172,8 +172,26 @@ export class FakeMap {
   getContainer() {
     return this.container;
   }
+  // the flyover adapts them to the device (map-3d-quality.ts)
+  pixelRatio = 1;
+  lod: [number, number] | null = null;
   getPixelRatio() {
-    return 1;
+    return this.pixelRatio;
+  }
+  setPixelRatio(pixelRatio: number) {
+    this.pixelRatio = pixelRatio;
+  }
+  setSourceTileLodParams(maxZoomLevelsOnScreen: number, tileCountMaxMinRatio: number) {
+    this.lod = [maxZoomLevelsOnScreen, tileCountMaxMinRatio];
+  }
+  getCanvas() {
+    return { getContext: () => null };
+  }
+  getLayersOrder() {
+    return this.style.layers.map((layer) => layer.id);
+  }
+  getTerrain() {
+    return this.terrain;
   }
   cameraForBounds([west, south, east, north]: Bounds) {
     // as close as it can for a point

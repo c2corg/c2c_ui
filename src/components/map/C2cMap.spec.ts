@@ -1336,6 +1336,8 @@ describe('C2cMap', () => {
         // no Fullscreen API in jsdom
         expect(wrapper.classes()).toEqual(expect.arrayContaining(['c2c-map--flyover', 'c2c-map--flyover-window']));
         expect(map.getLayer('flyover-played')).toBeTruthy();
+        // the end of the played line, sent again at each frame (playedSplit)
+        expect(map.getLayer('flyover-tip')).toBeTruthy();
         // the part not played yet: hidden (FLYOVER.showAhead)
         expect(map.getLayer('flyover-ahead')).toMatchObject({ layout: { visibility: 'none' } });
         expect(map.layout['documents-3d'].visibility).toBe('none');
@@ -1347,7 +1349,11 @@ describe('C2cMap', () => {
 
         expect(wrapper.find('.map-flyover').exists()).toBe(false);
         expect(map.getLayer('flyover-played')).toBeUndefined();
+        expect(map.getLayer('flyover-tip')).toBeUndefined();
         expect(map.centerClampedToGround).toBe(true);
+        // the quality of the drawing as it was (map-3d-quality.ts)
+        expect(map.pixelRatio).toBe(1);
+        expect(map.lod).toBeNull();
         expect(map.terrain).toBeNull();
         expect(wrapper.classes()).not.toContain('c2c-map--flyover');
         wrapper.unmount();
@@ -1366,6 +1372,39 @@ describe('C2cMap', () => {
         expect(map.cameras.at(-1)).toMatchObject({ zoom: 12.5, pitch: 60 });
         expect(map.layout['documents-3d'].visibility).toBe('visible');
         wrapper.unmount();
+      });
+
+      it('flies over the orthophoto of the outing, and gives the 3D view its layer back', async () => {
+        const french = { ...outing, areas: [{ document_id: 14274 }] };
+        const { wrapper, map } = await mountMap({ documents: [french], show3d: true });
+        await open3d(wrapper);
+        await wrapper
+          .findAll('.layer-button')
+          .find((button) => button.text() === 'SwissTopo ortho')!
+          .trigger('click');
+        await flushPromises();
+
+        await play(wrapper);
+        expect(map.layout['IGN ortho'].visibility).toBe('visible');
+        expect(map.layout['SwissTopo ortho'].visibility).toBe('none');
+
+        await wrapper.find('.map-flyover-close button').trigger('click');
+        await flushPromises();
+        expect(map.layout['SwissTopo ortho'].visibility).toBe('visible');
+        expect(map.layout['IGN ortho'].visibility).toBe('none');
+        wrapper.unmount();
+
+        // far from the national orthophotos: the world one alone
+        const himalaya = {
+          ...outing,
+          geometry: { geom: point(86.9, 27.9), geom_detail: line([86.9, 27.9], [86.92, 27.95]) },
+        };
+        const far = await mountMap({ documents: [himalaya], show3d: true });
+        await play(far.wrapper);
+        const orthos = ['IGN ortho', 'SwissTopo ortho', 'IGN ortho (es)', 'ICGC ortho (ca)', 'Basemap ortho (at)'];
+        expect(orthos.filter((title) => far.map.layout[title]?.visibility === 'visible')).toEqual([]);
+        expect(far.map.layout.world.visibility).toBe('visible');
+        far.wrapper.unmount();
       });
 
       it('cycles the speeds, seeks, and stops following the track on a move of the user', async () => {

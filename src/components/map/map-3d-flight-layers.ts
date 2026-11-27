@@ -33,6 +33,9 @@ type Flights = {
   splits: FlightSplit[];
 };
 
+/** The paths played: the body, the same array until it moves, and the tip, up to the playhead */
+export type PlayedPaths = { body: Position[][]; tip: Position[][] };
+
 /** What the flight layers show and do */
 export type FlightLayers = {
   remove: () => void;
@@ -41,8 +44,9 @@ export type FlightLayers = {
   // the flyover: the flights of the first track, and their altitude as drawn per vertex
   air: () => { flights: [number, number][]; alt: Float64Array } | null;
   // the flyover: the flights faint, those played so far ([lon, lat, altitude as drawn]) in full, and the playhead in
-  // the air with its line down to the terrain; null: back to the flights as they were
-  progress: (played: Position[][] | null, head: Position | null, ground?: number, ahead?: boolean) => void;
+  // the air with its line down to the terrain; null: back to the flights as they were. The played paths in two parts
+  // (playedSplit): deck.gl computes again the paths of a part only when its array changes, the body seldom
+  progress: (played: PlayedPaths | null, head: Position | null, ground?: number, ahead?: boolean) => void;
 };
 
 // the place of a vertex, to about a metre: the profile and the 3D view read the same track
@@ -280,18 +284,19 @@ export async function addFlightLayers(map: MapLibreMap, flights: Flights): Promi
     return { flights: split.flights, alt };
   };
 
-  // the flyover: drawn again at each frame, the layers keep their ids (deck.gl only updates their data)
-  const faint = (layer: (typeof layers)[number]) =>
-    layer.clone({ opacity: 0.35, ...(layer.id === 'flight-drops' ? { visible: false } : {}) });
-  const progress = (played: Position[][] | null, head: Position | null, ground = 0, ahead = true) => {
+  // the flyover: drawn again at each frame, the layers keep their ids (deck.gl only updates the data that changed)
+  const faint = layers.map((layer) =>
+    layer.clone({ opacity: 0.35, ...(layer.id === 'flight-drops' ? { visible: false } : {}) })
+  );
+  const progress = (played: PlayedPaths | null, head: Position | null, ground = 0, ahead = true) => {
     if (!played) {
       overlay.setProps({ layers });
       return;
     }
-    const playedPaths = (id: string, color: [number, number, number], width: number) =>
+    const playedPaths = (id: string, data: Position[][], color: [number, number, number], width: number) =>
       new PathLayer<Position[]>({
         id,
-        data: played,
+        data,
         getPath: (path) => path as [number, number, number][],
         getColor: color,
         getWidth: width,
@@ -305,9 +310,12 @@ export async function addFlightLayers(map: MapLibreMap, flights: Flights): Promi
     overlay.setProps({
       layers: [
         // the flights not played yet, faint, or not at all
-        ...(ahead ? layers.map(faint) : []),
-        playedPaths('flyover-flight-casing', CASING_COLOR, 5),
-        playedPaths('flyover-flight-paths', FLIGHT_COLOR, 3),
+        ...(ahead ? faint : []),
+        // the casings under both parts: no seam where they meet
+        playedPaths('flyover-flight-casing', played.body, CASING_COLOR, 5),
+        playedPaths('flyover-flight-casing-tip', played.tip, CASING_COLOR, 5),
+        playedPaths('flyover-flight-paths', played.body, FLIGHT_COLOR, 3),
+        playedPaths('flyover-flight-paths-tip', played.tip, FLIGHT_COLOR, 3),
         new LineLayer<[Position, Position]>({
           id: 'flyover-flight-drop',
           data: head && bottom ? [[bottom, head]] : [],

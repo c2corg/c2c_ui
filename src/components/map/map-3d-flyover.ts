@@ -286,37 +286,66 @@ export function pointAt(track: FlyoverTrack, d: number): FlyoverPoint {
 /** The direction of the track at the distance d (degrees, unwrapped) */
 export const headingAt = (track: FlyoverTrack, d: number): number => interp(d, track.dist, track.heading);
 
-/** The lines of the track up to the distance d, by part, ending at the playhead; only the samples matching `keep` */
+/**
+ * The lines of the track up to the distance d, by part, ending at the playhead; only the samples matching `keep`. From
+ * the sample `from` on, and up to the sample `to` instead of the playhead when given (a played line drawn in two parts:
+ * playedSplit)
+ */
 export function playedLines(
   track: FlyoverTrack,
   d: number,
   keep: (k: number) => boolean = () => true,
-  withAlt = false
+  withAlt = false,
+  from = 0,
+  to?: number
 ): number[][][] {
   const lines: number[][][] = [];
   let line: number[][] = [];
   const position = (k: number) => (withAlt ? [track.lon[k], track.lat[k], track.alt[k]] : [track.lon[k], track.lat[k]]);
-  const end = sampleIndex(track, d);
+  const end = to ?? sampleIndex(track, d);
   const flush = () => {
     if (line.length > 1) lines.push(line);
     line = [];
   };
-  for (let k = 0; k <= end; k++) {
-    if (!keep(k) || (k > 0 && track.part[k] !== track.part[k - 1])) flush();
+  for (let k = from; k <= end; k++) {
+    if (!keep(k) || (k > from && track.part[k] !== track.part[k - 1])) flush();
     // the edge into a kept sample from one not kept: the line starts at the sample before (no hole at the switch)
     if (keep(k)) {
-      if (!line.length && k > 0 && track.part[k] === track.part[k - 1]) line.push(position(k - 1));
+      if (!line.length && k > from && track.part[k] === track.part[k - 1]) line.push(position(k - 1));
       line.push(position(k));
     }
   }
   // up to the playhead itself, when its edge is kept
   const next = Math.min(end + 1, track.dist.length - 1);
-  if (line.length && next > end && keep(next) && track.part[next] === track.part[end]) {
+  if (to === undefined && line.length && next > end && keep(next) && track.part[next] === track.part[end]) {
     const point = pointAt(track, d);
     line.push(withAlt ? [point.lon, point.lat, point.alt] : [point.lon, point.lat]);
   }
   flush();
   return lines;
+}
+
+/** The samples by which the body of a played line moves (playedSplit): about 50 times over the track */
+export const bodyChunk = (track: FlyoverTrack): number => Math.max(32, Math.ceil(track.dist.length / 50));
+
+/**
+ * The played line in two parts, so that the most of it is not drawn again at each frame: the body, up to the sample
+ * `bodyEnd`, which moves by bodyChunk samples, and the tip, from there to the playhead
+ */
+export function playedSplit(
+  track: FlyoverTrack,
+  d: number,
+  keep: (k: number) => boolean = () => true,
+  withAlt = false
+): { bodyEnd: number; body: () => number[][][]; tip: number[][][] } {
+  const chunk = bodyChunk(track);
+  const bodyEnd = Math.floor(sampleIndex(track, d) / chunk) * chunk;
+  return {
+    bodyEnd,
+    // built when the body moved only
+    body: () => playedLines(track, d, keep, withAlt, 0, bodyEnd),
+    tip: playedLines(track, d, keep, withAlt, bodyEnd),
+  };
 }
 
 export type FlyoverCamera = {
@@ -382,3 +411,62 @@ export function smoothAngle(current: number, wanted: number, dt: number, tau: nu
 /** One step of an exponential smoothing towards a value */
 export const smoothValue = (current: number, wanted: number, dt: number, tau: number): number =>
   current + (wanted - current) * (1 - Math.exp(-dt / tau));
+
+/** The camera from a frame to the next: its bearing and its altitude, smoothed */
+export type FollowState = { bearing: number; cameraAlt: number };
+
+/**
+ * The camera that follows the track at the distance d, dt seconds after the last frame (`state`, updated); snap: no
+ * smoothing (the start, a seek)
+ */
+export function followStep(
+  state: FollowState,
+  track: FlyoverTrack,
+  d: number,
+  dt: number,
+  snap: boolean,
+  terrainAt: (lon: number, lat: number) => number | null = () => null,
+  settings: FlyoverSettings = FLYOVER
+): FlyoverCamera {
+  const wanted = headingAt(track, d);
+  state.bearing = snap ? wanted : smoothAngle(state.bearing, wanted, dt, settings.bearingTau, settings.bearingRate);
+  const camera = cameraFor(track, d, state.bearing, terrainAt, settings);
+  if (snap) {
+    state.cameraAlt = camera.cameraAlt;
+  } else {
+    const tau = camera.cameraAlt > state.cameraAlt ? settings.climbTau : settings.descentTau;
+    state.cameraAlt = smoothValue(state.cameraAlt, camera.cameraAlt, dt, tau);
+    // never in the terrain
+    const ground = terrainAt(...camera.camera);
+    if (ground !== null) state.cameraAlt = Math.max(state.cameraAlt, ground + 20);
+  }
+  return { ...camera, cameraAlt: state.cameraAlt };
+}
+
+/**
+ * The cameras of a play at 1×, one every `every` seconds, at the distance `at` along the track: where the camera will
+ * be, to fetch the tiles it will show before it gets there. Followed at `fps` frames a second, as played.
+ */
+export function cameraPath(
+  track: FlyoverTrack,
+  terrainAt: (lon: number, lat: number) => number | null = () => null,
+  settings: FlyoverSettings = FLYOVER,
+  every = 1,
+  fps = 20
+): { at: number; camera: FlyoverCamera }[] {
+  const duration = durationAt1x(track.length, settings);
+  const state: FollowState = { bearing: 0, cameraAlt: 0 };
+  const path: { at: number; camera: FlyoverCamera }[] = [];
+  const frames = Math.ceil(duration * fps);
+  let next = 0;
+  for (let frame = 0; frame <= frames; frame++) {
+    const t = Math.min(frame / fps, duration);
+    const at = distanceFraction(t / duration, settings.ramp) * track.length;
+    const camera = followStep(state, track, at, 1 / fps, frame === 0, terrainAt, settings);
+    if (t >= next || frame === frames) {
+      path.push({ at, camera });
+      next += every;
+    }
+  }
+  return path;
+}

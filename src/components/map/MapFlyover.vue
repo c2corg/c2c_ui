@@ -17,6 +17,7 @@
       :settings="settings"
       :length="trackLength"
       :duration="durationAt1x(trackLength, settings)"
+      :stats="statsText"
       @tune="tune"
     />
 
@@ -77,20 +78,22 @@ import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, reactive, r
 import type { TrackPart } from './map-3d-flight';
 import type { FlightLayers } from './map-3d-flight-layers';
 import {
-  cameraFor,
+  cameraPath,
   distanceFraction,
   durationAt1x,
   FLYOVER,
   type FlyoverCamera,
   type FlyoverSettings,
   type FlyoverTrack,
-  headingAt,
+  followStep,
+  type FollowState,
   playedLines,
+  playedSplit,
   pointAt,
   prepareFlyover,
-  smoothAngle,
-  smoothValue,
 } from './map-3d-flyover';
+import { fetchTile, type PrefetchSource, TilePrefetcher, tileUrls, visibleTileSources } from './map-3d-prefetch';
+import { DEFAULT_LOD, FrameQuality, isSoftwareRendering, type QualityLevel, qualityLevels } from './map-3d-quality';
 import { sampleTerrain } from './map-3d-terrain';
 import { LINE_CASING_COLOR } from './map-documents';
 
@@ -149,8 +152,9 @@ const playLabel = computed(() =>
       : $gettext('Play', 'Map controls')
 );
 
-const SOURCES = { ahead: 'flyover-ahead', played: 'flyover-played' };
-const LAYERS = ['flyover-ahead', 'flyover-played-casing', 'flyover-played'];
+// the played line in two parts (playedSplit): the body, sent again to MapLibre when it moves only, and the tip
+const SOURCES = { ahead: 'flyover-ahead', played: 'flyover-played', tip: 'flyover-tip' };
+const LAYERS = ['flyover-ahead', 'flyover-played-casing', 'flyover-tip-casing', 'flyover-played', 'flyover-tip'];
 
 let map: MapLibreMap | null = null;
 let flightLayers: FlightLayers | null = null;
@@ -161,8 +165,10 @@ let lastTime: number | null = null;
 let unmounted = false;
 let clampedToGround = true;
 // the camera state, smoothed from a frame to the next
-let bearing = 0;
-let cameraAlt = 0;
+const follow: FollowState = { bearing: 0, cameraAlt: 0 };
+// the end of the body of the played line drawn, and its flights (the same array until it moves: playedSplit)
+let drawnBody = -1;
+let flightBody: Position[][] = [];
 // a move of the camera to the track (intro, recenter, replay): from where the camera was, over `duration` ms
 let transition: { from: CameraOptions; start: number | null; duration: number; then?: () => void } | null = null;
 // something changed while paused (a seek): drawn at the next frame
@@ -218,33 +224,31 @@ function blend(from: CameraOptions, to: CameraOptions, t: number): CameraOptions
 }
 
 // the camera that follows the track at the distance d; snap: no smoothing (start, seek)
-function followCamera(d: number, dt: number, snap: boolean): CameraOptions {
-  const wanted = headingAt(track!, d);
-  bearing = snap ? wanted : smoothAngle(bearing, wanted, dt, settings.bearingTau, settings.bearingRate);
-  const camera = cameraFor(track!, d, bearing, terrainAt, settings);
-  if (snap) {
-    cameraAlt = camera.cameraAlt;
-  } else {
-    const tau = camera.cameraAlt > cameraAlt ? settings.climbTau : settings.descentTau;
-    cameraAlt = smoothValue(cameraAlt, camera.cameraAlt, dt, tau);
-    // never in the terrain
-    const ground = terrainAt(...camera.camera);
-    if (ground !== null) cameraAlt = Math.max(cameraAlt, ground + 20);
-  }
-  return cameraOptions({ ...camera, cameraAlt });
-}
+const followCamera = (d: number, dt: number, snap: boolean): CameraOptions =>
+  cameraOptions(followStep(follow, track!, d, dt, snap, terrainAt, settings));
+
+const setData = (id: string, lines: Position[][]) =>
+  (map!.getSource(id) as { setData?: (data: FeatureCollection) => void } | undefined)?.setData?.(
+    collection(multiLine(lines))
+  );
 
 function draw(d: number) {
   if (!map || !track) return;
   const point = pointAt(track, d);
   const flights = hasFlights();
-  (map.getSource(SOURCES.played) as { setData?: (data: FeatureCollection) => void } | undefined)?.setData?.(
-    collection(multiLine(playedLines(track, d, flights ? onGround : undefined)))
-  );
-  if (flights) {
+  // the whole played line sent at each frame: MapLibre cuts it in tiles again, and draws again the terrain under it
+  const ground = playedSplit(track, d, flights ? onGround : undefined);
+  const air = flights ? playedSplit(track, d, inAir, true) : null;
+  if (ground.bodyEnd !== drawnBody) {
+    drawnBody = ground.bodyEnd;
+    setData(SOURCES.played, ground.body());
+    flightBody = air ? air.body() : [];
+  }
+  setData(SOURCES.tip, ground.tip);
+  if (air) {
     const head: Position | null = point.air ? [point.lon, point.lat, point.alt] : null;
     flightLayers!.progress(
-      playedLines(track, d, inAir, true),
+      { body: flightBody, tip: air.tip },
       head,
       head ? (terrainAt(point.lon, point.lat) ?? 0) : 0,
       settings.showAhead
@@ -261,8 +265,13 @@ function draw(d: number) {
 function tick(now: number) {
   frame = requestAnimationFrame(tick);
   if (!map || !track) return;
-  const dt = lastTime === null ? 0 : Math.min((now - lastTime) / 1000, 0.1);
+  const interval = lastTime === null ? 0 : (now - lastTime) / 1000;
+  const dt = Math.min(interval, 0.1);
   lastTime = now;
+  const started = performance.now();
+  // the quality of the drawing, measured while the camera moves along the track
+  if (playing.value && following.value && !transition) quality?.frame(interval);
+  else quality?.settle();
   if (playing.value) {
     progress.value = Math.min(1, progress.value + (dt * speed.value) / durationAt1x(track.length, settings));
   } else if (!transition && !dirty) {
@@ -284,7 +293,9 @@ function tick(now: number) {
   } else if (following.value) {
     map.jumpTo(followCamera(d, dt, snap));
   }
+  prefetchAhead(d);
   if (playing.value && progress.value >= 1) end();
+  stats.tick = 0.9 * stats.tick + 0.1 * (performance.now() - started);
 }
 
 // to the track, from where the camera is
@@ -319,10 +330,27 @@ function seek(u: number) {
   transition = null;
   following.value = true;
   dirty = true;
+  // the tiles there were not fetched ahead: first those of the camera
+  if (track) prefetchAhead(distanceFraction(progress.value, settings.ramp) * track.length, true);
 }
 
 function recenter() {
   moveToTrack(settings.recenter);
+}
+
+// the camera of the end: the whole track, seen from the bearing of the camera
+function outroCamera(bearing: number): CameraOptions | null {
+  if (!map || !track) return null;
+  const [west, south, east, north] = track.bounds;
+  const camera = map.cameraForBounds([west, south, east, north], { padding: 80, bearing });
+  if (!camera) return null;
+  let min = Infinity;
+  let max = -Infinity;
+  track.alt.forEach((alt) => {
+    min = Math.min(min, alt);
+    max = Math.max(max, alt);
+  });
+  return { ...camera, pitch: settings.outroPitch, elevation: (min + max) / 2 };
 }
 
 // the end: out to the whole track
@@ -330,16 +358,8 @@ function end() {
   playing.value = false;
   ended.value = true;
   if (!map || !track || !following.value) return;
-  const [west, south, east, north] = track.bounds;
-  const camera = map.cameraForBounds([west, south, east, north], { padding: 80, bearing: map.getBearing() });
-  if (!camera) return;
-  let min = Infinity;
-  let max = -Infinity;
-  track.alt.forEach((alt) => {
-    min = Math.min(min, alt);
-    max = Math.max(max, alt);
-  });
-  map.easeTo({ ...camera, pitch: settings.outroPitch, elevation: (min + max) / 2, duration: settings.outro });
+  const camera = outroCamera(map.getBearing());
+  if (camera) map.easeTo({ ...camera, duration: settings.outro });
 }
 
 // a move of the user: the camera stops following, the track goes on
@@ -375,6 +395,7 @@ function addLayers(created: MapLibreMap) {
     data: collection(multiLine(playedLines(t, t.length, flights ? onGround : undefined))),
   });
   created.addSource(SOURCES.played, { type: 'geojson', data: collection([]) });
+  created.addSource(SOURCES.tip, { type: 'geojson', data: collection([]) });
   const layout = { 'line-join': 'round' as const, 'line-cap': 'round' as const };
   created.addLayer({
     id: 'flyover-ahead',
@@ -383,23 +404,166 @@ function addLayers(created: MapLibreMap) {
     layout: { ...layout, visibility: settings.showAhead ? 'visible' : 'none' },
     paint: { 'line-color': props.color, 'line-opacity': 0.4, 'line-width': 3 },
   });
-  created.addLayer({
-    id: 'flyover-played-casing',
-    type: 'line',
-    source: SOURCES.played,
-    layout,
-    paint: { 'line-color': LINE_CASING_COLOR, 'line-width': 7 },
+  // the casings under both parts: no seam where they meet
+  for (const [id, source] of [
+    ['flyover-played-casing', SOURCES.played],
+    ['flyover-tip-casing', SOURCES.tip],
+  ]) {
+    created.addLayer({ id, type: 'line', source, layout, paint: { 'line-color': LINE_CASING_COLOR, 'line-width': 7 } });
+  }
+  for (const [id, source] of [
+    ['flyover-played', SOURCES.played],
+    ['flyover-tip', SOURCES.tip],
+  ]) {
+    created.addLayer({ id, type: 'line', source, layout, paint: { 'line-color': props.color, 'line-width': 4 } });
+  }
+}
+
+// --- the tiles ahead of the camera (map-3d-prefetch.ts) ---
+
+// in seconds of play at the speed chosen: the tiles of the first ones fetched before the start, behind the spinner (at
+// most `wait` ms after the flyover opened), then those of the next ones as it plays, the cameras one every `every` s
+const PREFETCH = { start: 6, ahead: 15, every: 1, wait: 3000 };
+let prefetcher: TilePrefetcher | null = null;
+let tileSources: PrefetchSource[] = [];
+// the cameras of the track by distance, how many of them have their tiles asked, and up to where to ask them
+let plan: { at: number; camera: CameraOptions }[] = [];
+let planned = 0;
+let prefetchHorizon = 0;
+let cancelIdle: (() => void) | null = null;
+
+// the distance played in `seconds` at the speed chosen
+const distanceIn = (seconds: number) => (track!.length * seconds * speed.value) / durationAt1x(track!.length, settings);
+
+function planCameras() {
+  plan = cameraPath(track!, terrainAt, settings, PREFETCH.every).map(({ at, camera }) => ({
+    at,
+    camera: cameraOptions(camera),
+  }));
+  const outro = outroCamera(plan.at(-1)?.camera.bearing ?? 0);
+  if (outro) plan.push({ at: track!.length, camera: outro });
+  planned = 0;
+}
+
+// asks the tiles of the cameras up to the distance `until`, for `budget` ms at most; false: the map does not tell them
+function queueTiles(until: number, budget = Infinity): boolean {
+  const deadline = performance.now() + budget;
+  while (planned < plan.length && plan[planned].at <= until && performance.now() < deadline) {
+    const { at, camera } = plan[planned++];
+    const urls = tileUrls(map!, camera, tileSources);
+    if (!urls) return false;
+    prefetcher!.add(urls.map((url) => ({ ...url, at })));
+  }
+  return true;
+}
+
+function stopPrefetch() {
+  cancelIdle?.();
+  cancelIdle = null;
+  prefetcher?.stop();
+  prefetcher = null;
+}
+
+// the tile sets of the cameras are computed when the browser is idle: not in the time of a frame
+function scheduleIdle() {
+  if (cancelIdle) return;
+  const run = (deadline?: IdleDeadline) => {
+    cancelIdle = null;
+    if (!prefetcher || !map || !track) return;
+    if (!queueTiles(prefetchHorizon, deadline ? Math.max(deadline.timeRemaining() - 1, 1) : 4)) {
+      stopPrefetch();
+      return;
+    }
+    if (planned < plan.length && plan[planned].at <= prefetchHorizon) scheduleIdle();
+  };
+  if ('requestIdleCallback' in window) {
+    const id = requestIdleCallback(run, { timeout: 500 });
+    cancelIdle = () => cancelIdleCallback(id);
+  } else {
+    const id = setTimeout(run, 50);
+    cancelIdle = () => clearTimeout(id);
+  }
+}
+
+// the camera at the distance d: the tiles of the next seconds; jump: it got there by a seek
+function prefetchAhead(d: number, jump = false) {
+  if (!prefetcher || !track) return;
+  prefetchHorizon = d + distanceIn(PREFETCH.ahead);
+  if (jump) {
+    const next = plan.findIndex((camera) => camera.at >= d);
+    planned = next < 0 ? plan.length : Math.max(0, next - 1);
+  }
+  prefetcher.window(d, prefetchHorizon, jump ? d + distanceIn(PREFETCH.every * 2) : -Infinity);
+  if (planned < plan.length && plan[planned].at <= prefetchHorizon) scheduleIdle();
+}
+
+// the cameras of the track, and the tiles of its first seconds
+function startPrefetch() {
+  try {
+    tileSources = visibleTileSources(map!);
+    if (!tileSources.length) return;
+    prefetcher = new TilePrefetcher(fetchTile);
+    planCameras();
+    const start = distanceIn(PREFETCH.start);
+    prefetcher.window(0, start, start);
+    if (!queueTiles(start)) stopPrefetch();
+  } catch {
+    // a MapLibre whose transform is not as expected: the tiles load as the camera gets there
+    stopPrefetch();
+  }
+}
+
+// --- the quality of the drawing, by the device (map-3d-quality.ts) ---
+
+let quality: FrameQuality | null = null;
+let pixelRatioBefore: number | null = null;
+let lodApplied: [number, number] | null = null;
+
+function applyQuality({ pixelRatio, lod }: QualityLevel) {
+  if (!map) return;
+  if (map.getPixelRatio() !== pixelRatio) map.setPixelRatio(pixelRatio);
+  if ((lod ?? null) !== lodApplied) {
+    map.setSourceTileLodParams(...(lod ?? DEFAULT_LOD));
+    lodApplied = lod;
+  }
+}
+
+function startQuality() {
+  const canvas = map!.getCanvas();
+  const gl = canvas.getContext('webgl2') ?? canvas.getContext('webgl');
+  const { levels, start } = qualityLevels({
+    devicePixelRatio: window.devicePixelRatio,
+    deviceMemory: (navigator as { deviceMemory?: number }).deviceMemory,
+    hardwareConcurrency: navigator.hardwareConcurrency,
+    softwareRendering: isSoftwareRendering(gl),
   });
-  created.addLayer({
-    id: 'flyover-played',
-    type: 'line',
-    source: SOURCES.played,
-    layout,
-    paint: { 'line-color': props.color, 'line-width': 4 },
-  });
+  pixelRatioBefore = map!.getPixelRatio();
+  quality = new FrameQuality(levels, start, applyQuality);
+}
+
+function stopQuality() {
+  if (!map || !quality) return;
+  if (pixelRatioBefore !== null && map.getPixelRatio() !== pixelRatioBefore) map.setPixelRatio(pixelRatioBefore);
+  if (lodApplied) map.setSourceTileLodParams(...DEFAULT_LOD);
+  quality = null;
+}
+
+// for the tuning panel: what a frame costs, refreshed twice a second while it is shown
+const stats = { tick: 0 };
+const statsText = ref('');
+let statsTimer: ReturnType<typeof setInterval> | undefined;
+function refreshStats() {
+  if (!map || !quality) return;
+  const median = quality.median;
+  const tiles = prefetcher ? `${prefetcher.loaded} fetched ahead, ${prefetcher.pending} to go` : 'not fetched ahead';
+  statsText.value =
+    `frame ${median ? `${(median * 1000).toFixed(1)} ms (${(1 / median).toFixed(0)} fps)` : '…'} · ` +
+    `flyover JS ${stats.tick.toFixed(2)} ms/frame · pixel ratio ${map.getPixelRatio()} ` +
+    `(level ${quality.level + 1}/${quality.levels.length}) · tiles ${tiles}`;
 }
 
 onMounted(async () => {
+  const mountedAt = performance.now();
   map = props.getMap();
   flightLayers = props.getFlightLayers();
   window.addEventListener('keydown', onKey);
@@ -420,16 +584,23 @@ onMounted(async () => {
   clampedToGround = map.getCenterClampedToGround();
   map.setCenterClampedToGround(false);
   marker = new Marker({ element: markerElement(), subpixelPositioning: true });
+  startQuality();
+  // the tiles of the first seconds, behind the spinner: 3 s at most since the flyover opened
+  startPrefetch();
+  await prefetcher?.ready(distanceIn(PREFETCH.start), PREFETCH.wait - (performance.now() - mountedAt));
+  if (unmounted) return;
   loading.value = false;
   draw(0);
-  bearing = headingAt(track, 0);
   moveToTrack(settings.intro, () => (playing.value = true));
   frame = requestAnimationFrame(tick);
+  statsTimer = setInterval(() => showTuning.value && refreshStats(), 500);
 });
 
 onBeforeUnmount(() => {
   unmounted = true;
   cancelAnimationFrame(frame);
+  clearInterval(statsTimer);
+  stopPrefetch();
   window.removeEventListener('keydown', onKey);
   marker?.remove();
   if (!map) return;
@@ -442,6 +613,7 @@ onBeforeUnmount(() => {
       Object.values(SOURCES).forEach((id) => map!.getSource(id) && map!.removeSource(id));
       map.setCenterClampedToGround(clampedToGround);
     }
+    stopQuality();
     flightLayers?.progress(null, null);
   } catch {
     // nothing left to clean
@@ -484,6 +656,8 @@ function tune(path: string | null, value?: number | boolean) {
       ).catch(() => null);
       if (!prepared || unmounted || !map) return;
       track = prepared;
+      drawnBody = -1;
+      if (prefetcher) planCameras();
       (map.getSource(SOURCES.ahead) as { setData?: (data: FeatureCollection) => void } | undefined)?.setData?.(
         collection(multiLine(playedLines(track, track.length, hasFlights() ? onGround : undefined)))
       );

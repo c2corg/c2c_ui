@@ -1,11 +1,16 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  bodyChunk,
   cameraFor,
+  cameraPath,
   distanceFraction,
   durationAt1x,
   FLYOVER,
+  followStep,
+  headingAt,
   playedLines,
+  playedSplit,
   pointAt,
   prepareFlyover,
   smoothAngle,
@@ -162,5 +167,77 @@ describe('cameraFor', () => {
     // a ridge 4000 m high under the camera
     const ridge = cameraFor(track, 5000, 0, () => 4000);
     expect(ridge.cameraAlt).toBeGreaterThanOrEqual(4000 + FLYOVER.clearance);
+  });
+});
+
+describe('playedSplit', () => {
+  // 10 km north, then a gap, then 2 km
+  const parts = [
+    [
+      [6, 45, 0],
+      [6, 45 + 10 * KM, 0],
+    ],
+    [
+      [6, 45 + 15 * KM, 0],
+      [6, 45 + 17 * KM, 0],
+    ],
+  ];
+
+  it('is the played line, in a body that moves by chunks and a tip', async () => {
+    const track = (await prepareFlyover(parts, flat, 1))!;
+    const chunk = bodyChunk(track);
+    const flatten = (lines: number[][][]) => lines.flat().map((point) => point.join(','));
+    for (const d of [0, 2 * chunk * track.step + 1, 0.5 * track.length, 9999, 10_001, track.length]) {
+      const { bodyEnd, body, tip } = playedSplit(track, d);
+      expect(bodyEnd % chunk).toBe(0);
+      expect(bodyEnd).toBeLessThanOrEqual(Math.floor(d / track.step));
+      // the same points as the whole line, the sample where they meet in both
+      const whole = flatten(playedLines(track, d));
+      const joined = [...flatten(body()), ...flatten(tip)];
+      expect(new Set(joined)).toEqual(new Set(whole));
+      expect(joined.length - whole.length).toBeLessThanOrEqual(1);
+    }
+    // across the gap: no line from a part to the other
+    const { body, tip } = playedSplit(track, track.length);
+    for (const line of [...body(), ...tip]) {
+      const lats = line.map(([, lat]) => (lat - 45) / KM);
+      expect(lats.every((lat) => lat <= 10 + 1e-6) || lats.every((lat) => lat >= 15 - 1e-6)).toBe(true);
+    }
+  });
+
+  it('keeps the body until it moves by a chunk', async () => {
+    const track = (await prepareFlyover(parts, flat, 1))!;
+    const step = track.step;
+    const chunk = bodyChunk(track);
+    expect(playedSplit(track, chunk * step + 1).bodyEnd).toBe(chunk);
+    expect(playedSplit(track, (2 * chunk - 1) * step).bodyEnd).toBe(chunk);
+    expect(playedSplit(track, 2 * chunk * step + 1).bodyEnd).toBe(2 * chunk);
+  });
+});
+
+describe('cameraPath', () => {
+  it('follows the track as played, one camera a second, to the end', async () => {
+    const parts = [
+      [
+        [6, 45, 0],
+        [6, 45 + 5 * KM, 0],
+        [6 + (5 * KM) / Math.cos((45 * Math.PI) / 180), 45 + 5 * KM, 0],
+      ],
+    ];
+    const track = (await prepareFlyover(parts, flat, 1))!;
+    const path = cameraPath(track);
+    const duration = durationAt1x(track.length);
+    expect(path.length).toBeGreaterThanOrEqual(duration);
+    expect(path.length).toBeLessThanOrEqual(duration + 2);
+    expect(path[0].at).toBe(0);
+    expect(path.at(-1)!.at).toBeCloseTo(track.length, 6);
+    path.slice(1).forEach(({ at }, i) => expect(at).toBeGreaterThan(path[i].at));
+    // the same camera as the player at the start
+    const state = { bearing: 0, cameraAlt: 0 };
+    expect(path[0].camera).toEqual(followStep(state, track, 0, 0, true));
+    // behind the track: south of it while it goes north
+    const north = path.find(({ at }) => at > 1000 && at < 3000)!;
+    expect(headingAt(track, north.at)).toBeCloseTo(0, 0);
+    expect(north.camera.camera[1]).toBeLessThan(north.camera.target[1]);
   });
 });

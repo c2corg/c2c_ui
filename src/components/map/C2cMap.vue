@@ -401,7 +401,7 @@ import {
   loadFlightLayers,
   withoutParaglidingTracks,
 } from './map-3d-flight-layers';
-import { orthoLayerAt, registerNoBlankProtocol } from './map-3d-layers';
+import { orthoLayerAt, orthoLayerOf, registerNoBlankProtocol } from './map-3d-layers';
 import { type Marker3d, markerElement } from './map-3d-markers';
 import { terrainSource } from './map-3d-terrain';
 import { fetchStyle, prepareVectorMap, vectorMaps } from './map-3d-vector';
@@ -2507,8 +2507,8 @@ const flyoverLoading = ref(false);
 // without the Fullscreen API (iPhone): the map over the whole window
 const flyoverWindow = ref(false);
 const flyoverParts = shallowRef<number[][][]>([]);
-// what to go back to: the 3D view or not, its camera, the full screen entered by the flyover
-let flyoverFrom: { was3d: boolean; camera: CameraOptions | null; fullscreen: boolean } | null = null;
+// what to go back to: the 3D view or not, its camera and its layer, the full screen entered by the flyover
+let flyoverFrom: { was3d: boolean; camera: CameraOptions | null; base3d: string; fullscreen: boolean } | null = null;
 // the documents changed during the flyover (an image located on the track): the 3D view redrawn after it
 let redraw3dPending = false;
 // the map back to its size after the flyover: its camera restored, not reset to the documents (resizeObserver)
@@ -2552,7 +2552,12 @@ async function startFlyover() {
     (feature) => feature.geometry.type === 'LineString' || feature.geometry.type === 'MultiLineString'
   );
   if (!line) return;
-  const from = { was3d: is3d.value, camera: is3d.value ? currentCamera() : null, fullscreen: false };
+  const from = {
+    was3d: is3d.value,
+    camera: is3d.value ? currentCamera() : null,
+    base3d: base3d.value,
+    fullscreen: false,
+  };
   flyoverFrom = from;
   flyoverLoading.value = true;
   showLayerSwitcher.value = false;
@@ -2576,6 +2581,17 @@ async function startFlyover() {
     : Promise.resolve(false);
   const fullscreen = Promise.race([entered, new Promise<boolean>((resolve) => setTimeout(resolve, 1500, false))]);
   if (!is3d.value) open3d();
+  // over the ground as it is, whatever map the 3D view showed: the orthophoto of the country of the outing (its areas:
+  // the boxes of the countries overlap, Chamonix is in that of Switzerland), else of the place of its track, else the
+  // world one
+  const geometry = line.geometry as LineString | MultiLineString;
+  const points = geometry.type === 'LineString' ? geometry.coordinates : geometry.coordinates.flat();
+  const country = documentsCountry();
+  base3d.value = (
+    (country && nationalOrthoLayers.find((layer) => layer.country === country)) ||
+    orthoLayerOf(points) ||
+    worldLayer
+  ).title;
   const [inFullscreen, loaded] = await Promise.all([
     fullscreen,
     loadFlyover().then(
@@ -2592,7 +2608,6 @@ async function startFlyover() {
   }
   flyoverLoading.value = false;
   flyoverWindow.value = !inFullscreen && !from.fullscreen;
-  const geometry = line.geometry as LineString | MultiLineString;
   flyoverParts.value = geometry.type === 'LineString' ? [geometry.coordinates] : geometry.coordinates;
   flyover.value = true;
   showLayers();
@@ -2618,6 +2633,7 @@ async function stopFlyover() {
     close3d();
     return;
   }
+  base3d.value = from.base3d;
   if (redraw3dPending) redraw3d();
   if (from.camera) {
     map.stop();
