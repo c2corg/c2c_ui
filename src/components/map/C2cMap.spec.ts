@@ -1756,10 +1756,19 @@ describe('C2cMap', () => {
       expect([x1, y1, x2, y2].map(Math.round)).toEqual([6800, 45900, 6838, 45900]);
       expect(wrapper.find('.c2c-map-position-distance').text()).toBe('3,9 km');
 
+      // the middle of the line out of the map: the distance near its centre, along the line
+      Object.defineProperties(map.container, {
+        clientWidth: { value: 10000, configurable: true },
+        clientHeight: { value: 50000, configurable: true },
+      });
+      fix({ longitude: 26.8, latitude: 45.9 });
+      await flushPromises();
+      expect(wrapper.find('.c2c-map-position-distance').attributes('style')).toContain('left: 6840px');
+
       // centred again by the button: no line
       await button(wrapper).trigger('click');
       expect(button(wrapper).classes()).toContain('c2c-map-position-centred');
-      expect(map.cameras.at(-1)).toMatchObject({ center: [6.851, 45.9] });
+      expect(map.cameras.at(-1)).toMatchObject({ center: [26.8, 45.9] });
       expect(wrapper.find('.c2c-map-position-line').exists()).toBe(false);
       wrapper.unmount();
     });

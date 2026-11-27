@@ -11,8 +11,8 @@
       <span
         class="c2c-map-position-distance"
         :style="{
-          left: `${(positionLine.x1 + positionLine.x2) / 2}px`,
-          top: `${(positionLine.y1 + positionLine.y2) / 2}px`,
+          left: `${positionLine.labelX}px`,
+          top: `${positionLine.labelY}px`,
           transform: `translate(-50%, -50%) rotate(${positionLine.angle}deg) translateY(-0.8em)`,
         }"
         >{{ positionLine.distance }}</span
@@ -1793,12 +1793,19 @@ const positionLine = ref<{
   x2: number;
   y2: number;
   angle: number;
+  // where the distance is written
+  labelX: number;
+  labelY: number;
   distance: string;
 } | null>(null);
 // closer, the line is under the dot
 const POSITION_LINE_MIN_PIXELS = 30;
 // the dot is 16 px wide, its border and shadow around it: the line stops just before
 const POSITION_DOT_RADIUS = 13;
+// the distance stays this far inside the edges of the map (pixels), its text turned along the line, else this far from
+// the centre
+const POSITION_LABEL_MARGIN = 30;
+const POSITION_LABEL_NEAR_CENTRE = 40;
 let positionWatch: number | null = null;
 let positionMarker: Marker | null = null;
 let lastPosition: GeolocationCoordinates | null = null;
@@ -1882,6 +1889,22 @@ function drawPositionLine() {
   let angle = (Math.atan2(dot.y - centre.y, dot.x - centre.x) * 180) / Math.PI;
   if (angle > 90) angle -= 180;
   else if (angle < -90) angle += 180;
+  // the distance in the middle of the line, else (the middle out of the map) near the centre, along the line
+  const { clientWidth: width, clientHeight: height } = map.getContainer();
+  const dx = dot.x - centre.x;
+  const dy = dot.y - centre.y;
+  const middle = { x: centre.x + (dx * end) / 2, y: centre.y + (dy * end) / 2 };
+  const inside = ({ x, y }: { x: number; y: number }) =>
+    x >= POSITION_LABEL_MARGIN &&
+    x <= width - POSITION_LABEL_MARGIN &&
+    y >= POSITION_LABEL_MARGIN &&
+    y <= height - POSITION_LABEL_MARGIN;
+  const label = inside(middle)
+    ? middle
+    : {
+        x: centre.x + (dx * POSITION_LABEL_NEAR_CENTRE) / pixels,
+        y: centre.y + (dy * POSITION_LABEL_NEAR_CENTRE) / pixels,
+      };
   positionLine.value =
     pixels < POSITION_LINE_MIN_PIXELS
       ? null
@@ -1891,6 +1914,8 @@ function drawPositionLine() {
           x2: centre.x + (dot.x - centre.x) * end,
           y2: centre.y + (dot.y - centre.y) * end,
           angle,
+          labelX: label.x,
+          labelY: label.y,
           distance: formatDistance(distanceBetween([lng, lat], position), $language.current),
         };
 }
@@ -2836,6 +2861,7 @@ defineExpose({
 .c2c-map-position-line {
   position: absolute;
   inset: 0;
+  overflow: hidden;
   width: 100%;
   height: 100%;
   pointer-events: none;
@@ -2852,7 +2878,7 @@ defineExpose({
   }
 }
 
-/* written like the scale */
+/* written like the scale, a white halo around it */
 .c2c-map-position-distance {
   position: absolute;
   z-index: 1;
@@ -2861,6 +2887,10 @@ defineExpose({
   font-size: 10px;
   line-height: 1.3;
   white-space: nowrap;
+  text-shadow:
+    0 0 2px white,
+    0 0 2px white,
+    0 0 3px white;
   pointer-events: none;
 }
 
