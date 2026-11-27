@@ -6,6 +6,10 @@ import {
   deletedDocumentsPage,
   dismissedDuplicates,
   duplicateImagesPage,
+  externalHostReview,
+  externalLinkRecheck,
+  externalLinkReview,
+  externalLinksPage,
   imagesOfDeletion,
   brokenEmbedsPage,
   brokenLinksPage,
@@ -15,6 +19,7 @@ import {
   type AccountRemoval,
   type AccountRemovalReason,
   type AccountRemovalSide,
+  type ExternalLinkStatus,
 } from './schemas';
 import type { Api, DocumentId } from './types';
 
@@ -105,6 +110,41 @@ export default class ModeratorService {
    */
   getBrokenLinks(offset = 0, limit = 30) {
     return this.api.getValidated('/documents/broken-links', brokenLinksPage, { params: { offset, limit } });
+  }
+
+  /*
+   * The links to other sites of collaborative documents, as checked: by default the ones that need a look (dead,
+   * failing, parked, suspect, offsite); `reviewed`: those reviewed genuine or of a trusted host instead
+   */
+  getExternalLinks(
+    offset = 0,
+    limit = 30,
+    { statuses, host, reviewed }: { statuses?: ExternalLinkStatus[]; host?: string; reviewed?: boolean } = {}
+  ) {
+    return this.api.getValidated('/documents/external-links', externalLinksPage, {
+      params: {
+        offset,
+        limit,
+        status: statuses?.length ? statuses.join(',') : undefined,
+        host: host || undefined,
+        reviewed: reviewed || undefined,
+      },
+    });
+  }
+
+  // null: no review any more
+  reviewExternalLink(url: string, review: 'genuine' | 'taken_over' | null) {
+    return this.api.postValidated('/documents/external-links/review', externalLinkReview, { url, review });
+  }
+
+  // a trusted host: its links are genuine, even those its robots.txt keeps from being checked
+  reviewExternalHost(host: string, review: 'trusted' | null) {
+    return this.api.postValidated('/documents/external-links/review-host', externalHostReview, { host, review });
+  }
+
+  // checked again at the next run of the checker (every 10 minutes)
+  recheckExternalLink(url: string) {
+    return this.api.postValidated('/documents/external-links/recheck', externalLinkRecheck, { url });
   }
 
   /*
