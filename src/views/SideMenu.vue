@@ -22,23 +22,20 @@
 
       <menu-footer class="menu-footer" />
 
-      <button
-        v-if="canPin"
-        :style="{ visibility: keptOpen ? 'hidden' : undefined }"
-        type="button"
-        class="menu-pin"
-        @click="togglePinned"
-      >
-        <fa-icon :icon="pinned ? 'angles-left' : 'angles-right'" fixed-width />
-        <span class="menu-pin-text">
-          {{ pinned ? $gettext('Collapse the menu') : $gettext('Keep the menu open') }}
-        </span>
-      </button>
-      <!-- too narrow to pin it (a tablet, a phone on its side): opened over the page, by a tap too -->
-      <button v-else type="button" class="menu-pin" :aria-expanded="expanded" @click="toggleOpened">
-        <fa-icon :icon="expanded ? 'angles-left' : 'angles-right'" fixed-width />
-        <span class="menu-pin-text">{{ expanded ? $gettext('Close') : $gettext('Menu') }}</span>
-      </button>
+      <!-- kept open (the welcome page): no button, the footer at the bottom of the window -->
+      <template v-if="!keptOpen">
+        <button v-if="canPin" type="button" class="menu-pin" @click="togglePinned">
+          <fa-icon :icon="pinned ? 'angles-left' : 'angles-right'" fixed-width />
+          <span class="menu-pin-text">
+            {{ pinned ? $gettext('Collapse the menu') : $gettext('Keep the menu open') }}
+          </span>
+        </button>
+        <!-- too narrow to pin it (a tablet, a phone on its side): opened over the page, by a tap too -->
+        <button v-else type="button" class="menu-pin" :aria-expanded="expanded" @click="toggleOpened">
+          <fa-icon :icon="expanded ? 'angles-left' : 'angles-right'" fixed-width />
+          <span class="menu-pin-text">{{ expanded ? $gettext('Close') : $gettext('Menu') }}</span>
+        </button>
+      </template>
     </div>
   </aside>
 </template>
