@@ -57,7 +57,8 @@
           >{{ activity.name }}&hairsp;&bull;&hairsp;</template
         >{{ activity.type[$user.lang] }}&hairsp;&bull;&hairsp;{{ activity.vendors
         }}<template v-if="activity.deviceName"
-          >&#32;<span :title="activity.fullDeviceName">({{ activity.deviceName }})</span></template
+          >&#32;(<span :title="activity.fullDeviceName">{{ activity.deviceName }}</span
+          >)</template
         ><template v-if="activity.duration"
           >&hairsp;&bull;&hairsp;<span role="img" :title="$gettext('Duration')" :aria-label="$gettext('Duration')"
             ><fa-icon :icon="['far', 'clock']" /></span
