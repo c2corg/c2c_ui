@@ -320,3 +320,31 @@ describe('elevationProfile', () => {
     expect(elevationProfile((await prepareFlyover(zeros, flat, 1))!)).toBeNull();
   });
 });
+
+describe('followStep', () => {
+  it('smooths the altitude of the camera, but never lets a ridge hide the point looked at', async () => {
+    const parts = [
+      [
+        [6, 45, 0],
+        [6, 45 + 5 * KM, 0],
+      ],
+    ];
+    const track = (await prepareFlyover(parts, flat, 1))!;
+    const d = 2000;
+    const state = { bearing: 0, cameraAlt: 0 };
+    const free = followStep(state, track, d, 0, true);
+    // a ridge of 3000 m between the camera and the track, found when its tiles load
+    const ridge = (lon: number, lat: number) => {
+      const north = (lat - 45) / KM;
+      const camera = (free.camera[1] - 45) / KM;
+      const target = (free.target[1] - 45) / KM;
+      return Math.abs(north - (camera + target) / 2) < 0.2 ? 3000 : 1000;
+    };
+    const step = followStep(state, track, d, 0.05, false, ridge);
+    // the wanted altitude is reached slowly, but the line of sight clears the ridge at once
+    expect(step.cameraAlt).toBeLessThan(step.minAlt + 1000);
+    expect(step.cameraAlt).toBeGreaterThanOrEqual(step.minAlt);
+    const atRidge = step.cameraAlt + 0.5 * (step.targetAlt - step.cameraAlt);
+    expect(atRidge).toBeGreaterThan(3000);
+  });
+});

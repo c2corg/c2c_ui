@@ -51,10 +51,16 @@ describe('TilePrefetcher', () => {
     ]);
     prefetcher.add([{ url: 'a', at: 30 }]);
     expect(prefetcher.pending).toBe(3);
+    // twice in the same batch: once
+    prefetcher.add([
+      { url: 'd', at: 40 },
+      { url: 'd', at: 40 },
+    ]);
+    expect(prefetcher.pending).toBe(4);
     // a seek: b is no longer needed
     prefetcher.window(15, Infinity);
     asked[0].resolve();
-    expect(prefetcher.pending).toBe(2);
+    expect(prefetcher.pending).toBe(3);
     expect(asked.map(({ request }) => request.url)).toEqual(['a']);
   });
 

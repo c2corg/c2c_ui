@@ -121,9 +121,9 @@ export class TilePrefetcher {
 
   /** Tiles to fetch; those already asked are not asked again */
   add(requests: TileRequest[]): void {
-    const added = requests.filter(({ url }) => !this.seen.has(url));
+    // once each, also within a batch
+    const added = requests.filter(({ url }) => !this.seen.has(url) && !!this.seen.add(url));
     if (!added.length) return;
-    added.forEach(({ url }) => this.seen.add(url));
     this.queue.push(...added);
     this.queue.sort((a, b) => a.at - b.at);
     this.pump();

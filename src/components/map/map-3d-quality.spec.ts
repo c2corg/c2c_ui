@@ -20,6 +20,13 @@ describe('qualityLevels', () => {
     ]);
   });
 
+  it('never goes above the pixel ratio of the screen (a page zoomed out)', () => {
+    expect(qualityLevels({ devicePixelRatio: 0.75 }).levels).toEqual([
+      { pixelRatio: 0.75, lod: null },
+      { pixelRatio: 0.75, lod: [4, 2] },
+    ]);
+  });
+
   it('starts lower on a small device, at the lowest without a GPU', () => {
     expect(qualityLevels({ devicePixelRatio: 2, deviceMemory: 2 }).start).toBe(1);
     expect(qualityLevels({ devicePixelRatio: 2, hardwareConcurrency: 2 }).start).toBe(1);

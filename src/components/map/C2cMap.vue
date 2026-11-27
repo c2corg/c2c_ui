@@ -2213,8 +2213,14 @@ function toggleFullscreen() {
 }
 
 function onFullscreenChange() {
-  // the full screen of the flyover left (Esc, the system): the flyover with it
-  if (flyoverFrom?.fullscreen && document.fullscreenElement !== rootElementEl.value) void stopFlyover();
+  // the full screen of the flyover left (Esc, the system), or that the map was in: the flyover with it
+  const root = rootElementEl.value;
+  if (
+    (flyoverFrom?.fullscreen && document.fullscreenElement !== root) ||
+    (flyoverFrom?.keptFullscreen && !(root && document.fullscreenElement?.contains(root)))
+  ) {
+    void stopFlyover();
+  }
   const fullscreen = !!document.fullscreenElement && document.fullscreenElement === fullScreenElement();
   if (fullscreen === isFullscreen.value) return;
   isFullscreen.value = fullscreen;
@@ -2507,8 +2513,15 @@ const flyoverLoading = ref(false);
 // without the Fullscreen API (iPhone): the map over the whole window
 const flyoverWindow = ref(false);
 const flyoverParts = shallowRef<number[][][]>([]);
-// what to go back to: the 3D view or not, its camera and its layer, the full screen entered by the flyover
-let flyoverFrom: { was3d: boolean; camera: CameraOptions | null; base3d: string; fullscreen: boolean } | null = null;
+// what to go back to: the 3D view or not, its camera and its layer, the full screen entered by the flyover (left when it
+// closes), or the full screen the map was already in (kept)
+let flyoverFrom: {
+  was3d: boolean;
+  camera: CameraOptions | null;
+  base3d: string;
+  fullscreen: boolean;
+  keptFullscreen: boolean;
+} | null = null;
 // the documents changed during the flyover (an image located on the track): the 3D view redrawn after it
 let redraw3dPending = false;
 // the map back to its size after the flyover: its camera restored, not reset to the documents (resizeObserver)
@@ -2557,6 +2570,8 @@ async function startFlyover() {
     camera: is3d.value ? currentCamera() : null,
     base3d: base3d.value,
     fullscreen: false,
+    // the map in full screen already (its button): the flyover plays in it, and leaves it as it was
+    keptFullscreen: !!document.fullscreenElement?.contains(rootElementEl.value!),
   };
   flyoverFrom = from;
   flyoverLoading.value = true;
@@ -2564,21 +2579,23 @@ async function startFlyover() {
   // asked first: the browser only allows it on the click itself
   const root = rootElementEl.value!;
   // a browser may never answer (some embedded views): over the window after a while, in full screen if it comes later
-  const entered: Promise<boolean> = document.fullscreenEnabled
-    ? root.requestFullscreen().then(
-        () => {
-          // granted after the flyover was closed: left at once
-          if (flyoverFrom !== from) {
-            if (document.fullscreenElement === root) document.exitFullscreen().catch(() => undefined);
-            return false;
-          }
-          from.fullscreen = true;
-          flyoverWindow.value = false;
-          return true;
-        },
-        () => false
-      )
-    : Promise.resolve(false);
+  const entered: Promise<boolean> = from.keptFullscreen
+    ? Promise.resolve(true)
+    : document.fullscreenEnabled
+      ? root.requestFullscreen().then(
+          () => {
+            // granted after the flyover was closed: left at once, unless another flyover plays in it
+            if (flyoverFrom !== from) {
+              if (!flyoverFrom && document.fullscreenElement === root) document.exitFullscreen().catch(() => undefined);
+              return false;
+            }
+            from.fullscreen = true;
+            flyoverWindow.value = false;
+            return true;
+          },
+          () => false
+        )
+      : Promise.resolve(false);
   const fullscreen = Promise.race([entered, new Promise<boolean>((resolve) => setTimeout(resolve, 1500, false))]);
   if (!is3d.value) open3d();
   // over the ground as it is, whatever map the 3D view showed: the orthophoto of the country of the outing (its areas:

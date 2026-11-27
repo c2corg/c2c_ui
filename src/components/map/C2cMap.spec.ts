@@ -1374,6 +1374,38 @@ describe('C2cMap', () => {
         wrapper.unmount();
       });
 
+      it('plays in the full screen the map was already in, and leaves it so', async () => {
+        const { wrapper } = await mountMap({ documents: [outing], show3d: true });
+        const root = wrapper.element as HTMLElement;
+        let fullscreenElement: Element | null = root;
+        const requestFullscreen = vi.fn(() => Promise.resolve());
+        const exitFullscreen = vi.fn(() => Promise.resolve());
+        root.requestFullscreen = requestFullscreen;
+        Object.defineProperty(document, 'fullscreenElement', { configurable: true, get: () => fullscreenElement });
+        Object.defineProperty(document, 'fullscreenEnabled', { configurable: true, value: true });
+        Object.defineProperty(document, 'exitFullscreen', { configurable: true, value: exitFullscreen });
+        try {
+          await play(wrapper);
+          expect(requestFullscreen).not.toHaveBeenCalled();
+          expect(wrapper.classes()).not.toContain('c2c-map--flyover-window');
+          await wrapper.find('.map-flyover-close button').trigger('click');
+          await flushPromises();
+          expect(exitFullscreen).not.toHaveBeenCalled();
+
+          // the full screen left (Esc) while it plays: the flyover with it
+          await play(wrapper);
+          fullscreenElement = null;
+          document.dispatchEvent(new Event('fullscreenchange'));
+          await flushPromises();
+          expect(wrapper.find('.map-flyover').exists()).toBe(false);
+        } finally {
+          for (const key of ['fullscreenElement', 'fullscreenEnabled', 'exitFullscreen']) {
+            delete (document as unknown as Record<string, unknown>)[key];
+          }
+          wrapper.unmount();
+        }
+      });
+
       it('shows the elevation profile over the bar when the track has elevations', async () => {
         // the outing of these tests: a track without elevation
         const { wrapper } = await mountMap({ documents: [outing], show3d: true });

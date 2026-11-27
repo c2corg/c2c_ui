@@ -53,6 +53,8 @@ export const FLYOVER = {
 export type FlyoverSettings = typeof FLYOVER;
 
 const EARTH = 6371008.8;
+// metres: the camera and its line of sight at least this high above the terrain, whatever the smoothing
+const MIN_CLEARANCE = 20;
 const METRES_PER_DEGREE = (EARTH * Math.PI) / 180;
 const toRad = Math.PI / 180;
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
@@ -408,6 +410,8 @@ export type FlyoverCamera = {
   cameraAlt: number;
   target: [number, number];
   targetAlt: number;
+  // the lowest altitude from which the terrain between the camera and the target does not hide it
+  minAlt: number;
 };
 
 /** The distance from the camera to the point it looks at, for this track (metres) */
@@ -439,13 +443,16 @@ export function cameraFor(
   const targetAlt = interp(at, track.dist, track.smoothAlt);
   const camera = offsetPoint(target[0], target[1], bearing + 180, distance);
   let cameraAlt = targetAlt + distance * Math.tan(settings.elevationAngle * toRad);
-  // the line of sight above the terrain: at the camera (t = 0), and on the way to the point
+  let minAlt = -Infinity;
+  // the line of sight above the terrain: at the camera (t = 0), and on the way to the point; by `clearance` for the
+  // altitude wanted, just above it for the lowest one
   for (const t of [0, 0.25, 0.5, 0.75]) {
     const ground = terrainAt(camera[0] + t * (target[0] - camera[0]), camera[1] + t * (target[1] - camera[1]));
     if (ground === null || !Number.isFinite(ground)) continue;
     cameraAlt = Math.max(cameraAlt, (ground + settings.clearance - t * targetAlt) / (1 - t));
+    minAlt = Math.max(minAlt, (ground + MIN_CLEARANCE - t * targetAlt) / (1 - t));
   }
-  return { camera, cameraAlt, target, targetAlt };
+  return { camera, cameraAlt, target, targetAlt, minAlt };
 }
 
 /** One step of an exponential smoothing towards an angle (degrees), at most `rate` degrees a second */
@@ -483,10 +490,8 @@ export function followStep(
     state.cameraAlt = camera.cameraAlt;
   } else {
     const tau = camera.cameraAlt > state.cameraAlt ? settings.climbTau : settings.descentTau;
-    state.cameraAlt = smoothValue(state.cameraAlt, camera.cameraAlt, dt, tau);
-    // never in the terrain
-    const ground = terrainAt(...camera.camera);
-    if (ground !== null) state.cameraAlt = Math.max(state.cameraAlt, ground + 20);
+    // smoothed, but never in the terrain, nor below a ridge that would hide the point looked at
+    state.cameraAlt = Math.max(smoothValue(state.cameraAlt, camera.cameraAlt, dt, tau), camera.minAlt);
   }
   return { ...camera, cameraAlt: state.cameraAlt };
 }

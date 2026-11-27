@@ -30,7 +30,8 @@ export function qualityLevels(hints: DeviceHints, maxPixelRatio = 2): { levels: 
   const ratios = [...new Set([best, 1.5, 1.25, 1].filter((ratio) => ratio <= best))];
   const levels: QualityLevel[] = [
     ...ratios.map((pixelRatio) => ({ pixelRatio, lod: null })),
-    { pixelRatio: 1, lod: LOW_LOD },
+    // never more pixels than the best: a screen below 1 (a page zoomed out)
+    { pixelRatio: Math.min(best, 1), lod: LOW_LOD },
   ];
   const low = (hints.deviceMemory !== undefined && hints.deviceMemory <= 2) || (hints.hardwareConcurrency ?? 8) <= 2;
   const start = hints.softwareRendering ? levels.length - 1 : low ? Math.min(1, levels.length - 1) : 0;
