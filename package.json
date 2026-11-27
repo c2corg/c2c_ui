@@ -51,7 +51,7 @@
     "exifreader": "4.54.0",
     "file-saver": "2.0.5",
     "idb-keyval": "6.3.0",
-    "maplibre-gl": "6.18.0",
+    "maplibre-gl": "6.19.0",
     "mitt": "3.0.1",
     "ol": "10.11.0",
     "pinia": "4.1.0",
