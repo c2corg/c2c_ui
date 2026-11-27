@@ -1342,7 +1342,8 @@ describe('C2cMap', () => {
         expect(map.getLayer('flyover-ahead')).toMatchObject({ layout: { visibility: 'none' } });
         expect(map.layout['documents-3d'].visibility).toBe('none');
         expect(map.centerClampedToGround).toBe(false);
-        expect(state.markers.some((marker) => marker.element?.className === 'map-flyover-head')).toBe(true);
+        // the track alone: no dot at the playhead
+        expect(state.markers.some((marker) => marker.element?.className === 'map-flyover-head')).toBe(false);
 
         await wrapper.find('.map-flyover-close button').trigger('click');
         await flushPromises();

@@ -90,7 +90,7 @@
 // the flyover of a track in the 3D view (the play button of C2cMap): the track drawn as it is played, over a faint
 // preview, a camera that follows it, and a bar as that of a video. Loaded on its own, on the first play.
 import type { Feature, FeatureCollection, Position } from 'geojson';
-import { type CameraOptions, LngLat, type Map as MapLibreMap, Marker } from 'maplibre-gl';
+import { type CameraOptions, LngLat, type Map as MapLibreMap } from 'maplibre-gl';
 import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
 
 import type { TrackPart } from './map-3d-flight';
@@ -108,7 +108,6 @@ import {
   type FollowState,
   playedLines,
   playedSplit,
-  pointAt,
   prepareFlyover,
 } from './map-3d-flyover';
 import { fetchTile, type PrefetchSource, TilePrefetcher, tileUrls, visibleTileSources } from './map-3d-prefetch';
@@ -198,7 +197,6 @@ const LAYERS = ['flyover-ahead', 'flyover-played-casing', 'flyover-tip-casing', 
 let map: MapLibreMap | null = null;
 let flightLayers: FlightLayers | null = null;
 let track: FlyoverTrack | null = null;
-let marker: Marker | null = null;
 let frame = 0;
 let lastTime: number | null = null;
 let unmounted = false;
@@ -273,7 +271,6 @@ const setData = (id: string, lines: Position[][]) =>
 
 function draw(d: number) {
   if (!map || !track) return;
-  const point = pointAt(track, d);
   const flights = hasFlights();
   // the whole played line sent at each frame: MapLibre cuts it in tiles again, and draws again the terrain under it
   const ground = playedSplit(track, d, flights ? onGround : undefined);
@@ -284,21 +281,8 @@ function draw(d: number) {
     flightBody = air ? air.body() : [];
   }
   setData(SOURCES.tip, ground.tip);
-  if (air) {
-    const head: Position | null = point.air ? [point.lon, point.lat, point.alt] : null;
-    flightLayers!.progress(
-      { body: flightBody, tip: air.tip },
-      head,
-      head ? (terrainAt(point.lon, point.lat) ?? 0) : 0,
-      settings.showAhead
-    );
-  }
-  // in the air, the playhead is that of deck.gl
-  if (point.air && flights) {
-    marker?.remove();
-  } else if (marker) {
-    marker.setLngLat([point.lon, point.lat]).addTo(map);
-  }
+  // the track alone: no dot at the playhead, nor its line down to the ground in the air
+  if (air) flightLayers!.progress({ body: flightBody, tip: air.tip }, null, 0, settings.showAhead);
 }
 
 function tick(now: number) {
@@ -425,14 +409,6 @@ function onKey(event: KeyboardEvent) {
   } else if (event.key === 'Escape') {
     emit('close');
   }
-}
-
-function markerElement(): HTMLElement {
-  const element = document.createElement('div');
-  element.className = 'map-flyover-head';
-  element.style.cssText = `width: 14px; height: 14px; border-radius: 50%; background: ${props.color};
-    border: 2px solid ${LINE_CASING_COLOR}; box-shadow: 0 0 0 2px white; pointer-events: none`;
-  return element;
 }
 
 function addLayers(created: MapLibreMap) {
@@ -632,7 +608,6 @@ onMounted(async () => {
   // the camera looks at the track, in the air on a flight: not at the ground under it
   clampedToGround = map.getCenterClampedToGround();
   map.setCenterClampedToGround(false);
-  marker = new Marker({ element: markerElement(), subpixelPositioning: true });
   startQuality();
   // the tiles of the first seconds, behind the spinner: 3 s at most since the flyover opened
   startPrefetch();
@@ -651,7 +626,6 @@ onBeforeUnmount(() => {
   clearInterval(statsTimer);
   stopPrefetch();
   window.removeEventListener('keydown', onKey);
-  marker?.remove();
   if (!map) return;
   // the page left: the map may already be removed (C2cMap removes it before its children)
   try {
