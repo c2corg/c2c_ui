@@ -18,4 +18,5 @@ What is the logic behind field distribution in edition views ?
 
 ### Ergonomics targets
 
-Keeping pages pretty with 2 activities (trying to have a godd ergonomy with more thant two activities is very hard, and useless)
+Keeping pages pretty with 2 activities (trying to have a godd ergonomy with more thant two activities is very hard,
+and useless)

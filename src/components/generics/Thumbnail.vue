@@ -1,53 +1,86 @@
 <template>
   <picture :class="$attrs.class" :style="$attrs.style">
-    <source v-if="avif" type="image/avif" :srcset="avif" />
-    <source v-if="webp" type="image/webp" :srcset="webp" />
-    <img ref="img" v-bind="imgAttrs" :src="standard" @error.once="onError" />
+    <source v-if="avif" type="image/avif" :srcset="avifSrcset ?? avif" :sizes="sizes" />
+    <img
+      ref="img"
+      v-bind="{ ...reservedSize, ...imgAttrs }"
+      :src="standard"
+      :srcset="standardSrcset"
+      :sizes="sizes"
+      @error.once="onError"
+    />
   </picture>
 </template>
 
-<script>
-import { getImageUrl } from '@/js/image-urls';
+<script setup lang="ts">
+import { computed, useAttrs, type PropType } from 'vue';
 
-export default {
-  // the classes and style stay on the picture, the other attributes and the listeners go to the image
-  inheritAttrs: false,
-  props: {
-    img: {
-      type: Object,
-      required: true,
-    },
-    size: {
-      type: String,
-      default: null,
-    },
-  },
-  computed: {
-    imgAttrs() {
-      // eslint-disable-next-line no-unused-vars
-      const { class: className, style, ...attrs } = this.$attrs;
-      return attrs;
-    },
+import {
+  fallBackToBasicImage,
+  getImageUrl,
+  getResponsiveSrcset,
+  getThumbnailSize,
+  type Image,
+  type ImageSize,
+} from '@/js/image-urls';
 
-    avif() {
-      return getImageUrl(this.img, this.size, 'avif');
-    },
-    webp() {
-      return getImageUrl(this.img, this.size, 'webp');
-    },
-    standard() {
-      return getImageUrl(this.img, this.size);
-    },
+// the classes and style stay on the picture, the other attributes and the listeners go to the image
+defineOptions({ inheritAttrs: false });
+
+const props = defineProps({
+  img: {
+    type: Object as PropType<Image>,
+    required: true,
   },
-  methods: {
-    // In case the "modern" thumbnail is not available, be sure
-    // to switch to the "basic" version.
-    onError(event) {
-      if (this.avif) {
-        const img = event.target;
-        img.parentNode.children[0].srcset = img.parentNode.children[1].srcset = img.src;
-      }
-    },
+  size: {
+    type: String as PropType<ImageSize>,
+    default: null,
   },
-};
+  // the size of the thumbnail on the <img> (width, height), when the image document gives the original's: the page
+  // keeps its space while it loads, instead of shifting (#4883). For an image not sized by CSS: the attributes would
+  // otherwise set its size
+  reserveSize: {
+    type: Boolean,
+    default: false,
+  },
+  // the sizes of an image shown at a size CSS decides: it also offers the BI thumbnail, which the browser loads only
+  // where the image is shown wider than the thumbnail. "auto" (lazy images only) lets the browser use the laid out
+  // width; browsers without it use the next value
+  sizes: {
+    type: String,
+    default: null,
+  },
+});
+
+const attrs = useAttrs();
+
+const imgAttrs = computed(() => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { class: className, style, ...imgAttrs } = attrs;
+  return imgAttrs;
+});
+
+const reservedSize = computed(() =>
+  props.reserveSize && props.size
+    ? getThumbnailSize(props.img as Parameters<typeof getThumbnailSize>[0], props.size)
+    : undefined
+);
+
+const avif = computed(() => getImageUrl(props.img, props.size, 'avif'));
+const standard = computed(() => getImageUrl(props.img, props.size));
+
+const avifSrcset = computed(() =>
+  props.sizes && props.size ? getResponsiveSrcset(props.img, props.size, 'avif') : undefined
+);
+const standardSrcset = computed(() =>
+  props.sizes && props.size ? getResponsiveSrcset(props.img, props.size) : undefined
+);
+
+// In case the AVIF thumbnail is not available, be sure
+// to switch to the "basic" version.
+function onError(event: Event) {
+  if (avif.value) {
+    fallBackToBasicImage(event.target as HTMLImageElement);
+  }
+}
 </script>

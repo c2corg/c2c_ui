@@ -1,5 +1,5 @@
 <template>
-  <modal-card ref="modalWindow">
+  <modal-card ref="modal">
     <template #title>
       <div>
         <slot name="title" />
@@ -16,19 +16,15 @@
       <div>
         <button
           @click="$emit('confirm')"
-          class="button is-danger"
-          :class="{ 'is-loading': promise && promise.loading }"
+          class="button"
+          :class="[confirmClass, { 'is-loading': promise && promise.loading }]"
+          :disabled="confirmDisabled || undefined"
         >
           <slot name="confirm-label">
             <span v-translate>Confirm</span>
           </slot>
         </button>
-        <button
-          @click="$refs.modalWindow.hide()"
-          class="button is-success"
-          :disabled="promise && promise.loading"
-          v-translate
-        >
+        <button @click="hide" class="button" :class="cancelClass" :disabled="promise && promise.loading" v-translate>
           Cancel
         </button>
       </div>
@@ -36,46 +32,67 @@
   </modal-card>
 </template>
 
-<script>
-export default {
-  props: {
-    showUncancelableWarning: {
-      type: Boolean,
-      default: false,
-    },
-    promise: {
-      type: Object,
-      default: null,
-    },
+<script setup lang="ts">
+import { useTemplateRef, watch } from 'vue';
+
+import { apiErrors } from '@/js/apis/c2c/api-errors';
+import { useGlobalProperties } from '@/js/composables/global-properties';
+
+const props = defineProps({
+  showUncancelableWarning: {
+    type: Boolean,
+    default: false,
   },
-
-  emits: ['confirm'],
-
-  watch: {
-    'promise.error': 'onError',
+  promise: {
+    type: Object,
+    default: null,
   },
-
-  methods: {
-    show() {
-      this.$refs.modalWindow.show();
-    },
-    hide() {
-      this.$refs.modalWindow.hide();
-    },
-    onError() {
-      if (!this.promise.error) {
-        return;
-      }
-
-      if (!this.promise.error.response || !this.promise.error.response.data) {
-        window.alert('Unexpected error');
-      } else if (!this.promise.error.response.data.errors) {
-        window.alert(!this.promise.error.response.data);
-      } else {
-        // $gettext('Only document less than 24h old can be deleted', 'API message')
-        window.alert(this.$gettext(this.promise.error.response.data.errors[0].description));
-      }
-    },
+  // red to confirm and green to cancel by default, for the actions that destroy something
+  confirmClass: {
+    type: String,
+    default: 'is-danger',
   },
-};
+  cancelClass: {
+    type: String,
+    default: 'is-success',
+  },
+  // the action would be refused (the reason is in the content)
+  confirmDisabled: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+defineEmits(['confirm']);
+
+const { $gettext } = useGlobalProperties();
+const modalWindow = useTemplateRef<{ show(): void; hide(): void }>('modal');
+
+function show() {
+  modalWindow.value!.show();
+}
+
+function hide() {
+  modalWindow.value!.hide();
+}
+
+function onError() {
+  if (!props.promise.error) {
+    return;
+  }
+
+  // the messages of the API that a confirmation may get, for the catalog of the translations:
+  // $gettext('Only documents less than 30 days old can be deleted', 'API message')
+  // $gettext('This outing has other participants: unlink them first', 'API message')
+  // $gettext('as the last document of the image, this document can not be disassociated: delete the image instead', 'API message')
+  // $gettext('as the last user of the outing, this user can not be disassociated', 'API message')
+  // $gettext('This waypoint cannot be deleted because it is a main waypoint.', 'API message')
+  // $gettext('This waypoint cannot be deleted because it is the only waypoint associated to some routes.', 'API message')
+  // $gettext('This route cannot be deleted because it is the only route associated to some outings.', 'API message')
+  window.alert($gettext(apiErrors(props.promise.error)[0].description, 'API message'));
+}
+
+watch(() => props.promise?.error, onError);
+
+defineExpose({ show, hide });
 </script>

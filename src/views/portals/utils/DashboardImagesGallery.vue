@@ -8,7 +8,7 @@
     </h4>
     <div class="images-container">
       <loading-notification :promise="imagesPromise" />
-      <gallery v-if="images" :images="images.documents" />
+      <gallery v-if="images" :images="images" />
     </div>
     <hr />
     <h6 class="title is-6 has-text-centered">
@@ -19,50 +19,45 @@
   </div>
 </template>
 
-<script>
-import Gallery from '@/components/gallery/Gallery';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+
+import { pickGalleryImages } from './pick-gallery-images';
+
+import Gallery from '@/components/gallery/Gallery.vue';
 import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
 
-export default {
-  name: 'DashboardImagesGallery',
+// the images come from the API: they have their ids
+type GalleryImages = InstanceType<typeof Gallery>['$props']['images'];
 
-  components: {
-    Gallery,
-  },
+const GALLERY_SIZE = 10;
 
-  data() {
-    return {
-      imagesPromise: null,
-    };
-  },
+// more images than shown, so that the gallery can skip images of the same upload (see pickGalleryImages)
+const imagesPromise = ref(
+  (c2c.image as DocumentService).getAll({
+    limit: 60,
+  })
+);
 
-  computed: {
-    images() {
-      return this.imagesPromise?.data;
-    },
-  },
-
-  created(query = {}) {
-    this.imagesPromise = c2c.image.getAll({
-      ...query,
-      limit: 10,
-    });
-  },
-};
+const images = computed(() => {
+  const documents = imagesPromise.value.data?.documents as GalleryImages | undefined;
+  return documents && pickGalleryImages(documents, GALLERY_SIZE);
+});
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .images-container {
   min-height: 200px;
 }
 
 h4 > a,
 h6 > a {
-  color: $color-text !important;
+  color: var(--c2c-color-text) !important;
 }
 
 h4 > a:hover,
 h6 > a:hover {
-  color: $color-link !important;
+  color: var(--c2c-color-link) !important;
 }
 </style>

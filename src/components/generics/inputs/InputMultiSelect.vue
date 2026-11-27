@@ -12,40 +12,43 @@
   </div>
 </template>
 
-<script>
-import { arrayMixin, baseMixin } from './mixins';
+<script setup lang="ts">
+import type { PropType } from 'vue';
 
-export default {
-  mixins: [baseMixin, arrayMixin],
+import { arrayInputProps, baseInputProps, useArrayInputValue } from './input-value';
 
-  props: {
-    options: {
-      type: Array,
-      required: true,
-    },
-    i18n: {
-      type: Boolean,
-      default: false,
-    },
-    i18nContext: {
-      type: String,
-      default: undefined,
-    },
+const props = defineProps({
+  ...baseInputProps,
+  ...arrayInputProps,
+  options: {
+    type: Array as PropType<string[]>,
+    required: true,
   },
-};
+  i18n: {
+    type: Boolean,
+    default: false,
+  },
+  i18nContext: {
+    type: String,
+    default: undefined,
+  },
+});
+const emit = defineEmits(['update:modelValue']);
+
+const { value_, toggle } = useArrayInputValue(props, emit);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .has-error {
-  box-shadow: 0px 0px 8px 0px $danger;
-  // border: 1px solid $danger;
+  box-shadow: 0px 0px 8px 0px var(--c2c-danger);
+  /* border: 1px solid $danger; */
 }
 
 .multi-select-item {
   max-width: 100%;
-  border: 1px solid $primary;
-  color: $primary;
-  background-color: $white;
+  border: 1px solid var(--c2c-primary);
+  color: var(--c2c-primary);
+  background-color: var(--c2c-white);
   border-radius: 20px;
   padding: 0.2rem 0.75em;
   margin-bottom: 0.5rem;
@@ -58,7 +61,7 @@ export default {
 }
 
 .multi-select-item:hover {
-  box-shadow: 0 0 3px 0 $primary;
+  box-shadow: 0 0 3px 0 var(--c2c-primary);
 }
 
 .multi-select-item:not(:last-child) {
@@ -67,6 +70,6 @@ export default {
 
 .multi-select-item[checked] {
   color: white;
-  background-color: $primary;
+  background-color: var(--c2c-primary);
 }
 </style>

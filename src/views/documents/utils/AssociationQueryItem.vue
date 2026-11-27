@@ -9,21 +9,20 @@
   />
 </template>
 
-<script>
-export default {
-  props: {
-    documentTypes: {
-      type: Array,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  documentTypes: {
+    type: Array,
+    required: true,
   },
-
-  emits: ['add'],
-};
+});
+defineEmits(['add']);
 </script>
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 .input-document {
-  @media screen and (min-width: $tablet) {
+  @media screen and (--c2c-min-tablet) {
     margin-right: 1rem;
   }
 }

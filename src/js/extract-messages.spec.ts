@@ -1,0 +1,70 @@
+// @vitest-environment node
+import { mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
+import { describe, expect, it, vi } from 'vitest';
+
+// tools/extract-messages.ts: the messages of the sources, for the .pot file sent to Transifex
+import extractMessages from '../../tools/extract-messages.ts';
+
+describe('extract-messages', () => {
+  it('extracts the messages of the JavaScript and TypeScript modules, not of the type declarations', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'extract-messages-'));
+    writeFileSync(join(dir, 'module.js'), "$gettext('from javascript');");
+    writeFileSync(join(dir, 'module.ts'), "app.config.globalProperties.$gettext('from typescript', 'some context');");
+    writeFileSync(join(dir, 'types.d.ts'), "declare const x: '$gettext(\\'from a declaration\\')';");
+    const pot = join(dir, 'messages.pot');
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+
+    extractMessages(dir, pot);
+
+    const content = readFileSync(pot, 'utf8');
+    expect(content).toContain('msgid "from javascript"');
+    expect(content).toContain('msgctxt "some context"\nmsgid "from typescript"');
+    expect(content).not.toContain('from a declaration');
+  });
+
+  it('extracts the messages in double quotes, as Prettier writes those with an apostrophe', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'extract-messages-'));
+    writeFileSync(
+      join(dir, 'module.ts'),
+      `$gettext("The route's access point");\n$gettext("A \\"quoted\\" word", 'some context');`
+    );
+    const pot = join(dir, 'messages.pot');
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+
+    extractMessages(dir, pot);
+
+    const content = readFileSync(pot, 'utf8');
+    expect(content).toContain(`msgid "The route's access point"`);
+    expect(content).toContain('msgctxt "some context"\nmsgid "A &quot;quoted&quot; word"');
+  });
+
+  it('leaves out the messages of the specs, which are test data', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'extract-messages-'));
+    writeFileSync(join(dir, 'module.ts'), "$gettext('from the app');");
+    writeFileSync(join(dir, 'module.spec.ts'), "$gettext('from a spec');");
+    const pot = join(dir, 'messages.pot');
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+
+    extractMessages(dir, pot);
+
+    const content = readFileSync(pot, 'utf8');
+    expect(content).toContain('msgid "from the app"');
+    expect(content).not.toContain('from a spec');
+  });
+
+  it('finds every message of the app: a message is always given to a function named $gettext', () => {
+    // a message given to gettext() is not extracted, and stays in English on the site
+    // (the files read by the extractor: no type declarations, no specs)
+    const sources = readdirSync('src', { recursive: true, encoding: 'utf8' }).filter(
+      (file) => /\.(js|ts|vue)$/.test(file) && !file.endsWith('.d.ts') && !/\.spec\.[jt]s$/.test(file)
+    );
+    const notExtracted = sources.filter((file) =>
+      /(?<!\$)\bgettext\(\s*['"`]/.test(readFileSync(join('src', file), 'utf8'))
+    );
+
+    expect(notExtracted).toEqual([]);
+  });
+});

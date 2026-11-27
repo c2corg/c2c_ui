@@ -8,14 +8,12 @@
   </div>
 </template>
 
-<style scoped lang="scss">
-@import '@/assets/sass/variables';
-
+<style scoped>
 h2 {
   display: inline-block;
   margin-left: -1.25rem;
   padding: 0.25em 0.5rem;
-  background: $grey-lighter;
+  background: var(--c2c-grey-lighter);
   text-transform: uppercase;
 }
 </style>

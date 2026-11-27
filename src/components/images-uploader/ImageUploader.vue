@@ -1,6 +1,8 @@
 <template>
   <div class="card">
     <div class="card-image img-container" :style="dataUrl ? 'background-image: url(' + dataUrl + ')' : ''">
+      <!-- a format the browser cannot show (HEIC in Chrome and Firefox): the server converts it -->
+      <fa-icon v-if="!dataUrl && !isInitial" icon="image" size="3x" class="no-preview" />
       <div class="action-buttons">
         <delete-button @click="$emit('delete-image')" :title="$gettext('Delete image')" />
         <rotate-button
@@ -32,15 +34,90 @@
       </progress>
     </div>
 
-    <div class="card-content">
-      <div v-if="!isFailed">
-        <div v-if="categoriesEdition" class="columns is-mobile is-multiline is-gapless category-select">
-          <div v-for="item of imageCategories" :key="item" class="column is-4">
-            <label class="checkbox">
-              <input type="checkbox" :checked="document.categories.includes(item)" @input="toggleCategory(item)" />
-              {{ $filters.uppercaseFirstLetter($gettext(item, 'image_categories')) }}
-            </label>
+    <div
+      class="card-content"
+      :class="{ 'is-categories': categoriesEdition && !isFailed, 'is-same-photo': samePhoto && !isFailed }"
+    >
+      <!-- a photo the page already has: often sent again to give it another title -->
+      <div v-if="!isFailed && samePhoto && samePhoto.choice === null" class="same-photo">
+        <p>
+          <strong v-translate>This photo is already on this page</strong>
+          <br />
+          <em v-if="samePhoto.title">{{ samePhoto.title }}</em>
+          <em v-else class="has-text-grey" v-translate>untitled</em>
+        </p>
+        <p v-if="samePhoto.loadFailed" class="is-size-7 has-text-grey" v-translate>
+          Couldn't check whether you can change its title.
+        </p>
+        <p v-else-if="samePhoto.editable === false" class="is-size-7 has-text-grey" v-translate>
+          Only its author or a moderator can change its title.
+        </p>
+        <div class="buttons is-centered">
+          <button
+            v-if="samePhoto.loadFailed"
+            class="button is-small is-primary"
+            @click="$emit('reload-same-photo')"
+            v-translate
+          >
+            Try again
+          </button>
+          <button
+            v-else-if="samePhoto.editable !== false"
+            class="button is-small is-primary"
+            :class="{ 'is-loading': samePhoto.editable === null }"
+            @click="$emit('choose', 'retitle')"
+            v-translate
+          >
+            Change its title
+          </button>
+          <button class="button is-small" @click="$emit('choose', 'add')" v-translate>Add a copy</button>
+        </div>
+      </div>
+
+      <div v-else-if="!isFailed && samePhoto && samePhoto.choice === 'retitle' && !categoriesEdition">
+        <p class="same-photo-label is-size-7">
+          <span v-translate>New title of the photo already on this page</span>
+          ·
+          <a @click="$emit('choose', null)" v-translate>Cancel</a>
+        </p>
+        <p v-if="samePhoto.loadFailed" class="same-photo-label is-size-7 has-text-danger">
+          <span v-translate>Couldn't load this photo</span>
+          ·
+          <a @click="$emit('reload-same-photo')" v-translate>Try again</a>
+        </p>
+        <div class="field title-input">
+          <div class="control">
+            <input
+              type="text"
+              :placeholder="$gettext('title')"
+              v-model="document.locales[0].title"
+              maxlength="150"
+              ref="retitleInput"
+            />
           </div>
+        </div>
+      </div>
+
+      <div v-else-if="!isFailed && samePhoto && samePhoto.choice === 'retitle'" class="same-photo">
+        <p class="is-size-7 has-text-grey" v-translate>Only the title of this photo changes.</p>
+        <p v-if="samePhoto.loadFailed" class="is-size-7 has-text-danger">
+          <span v-translate>Couldn't load this photo</span>
+          ·
+          <a @click="$emit('reload-same-photo')" v-translate>Try again</a>
+        </p>
+      </div>
+
+      <div v-else-if="!isFailed">
+        <p v-if="samePhoto && samePhoto.choice === 'add'" class="same-photo-label is-size-7">
+          <span v-translate>Copy of a photo already on this page</span>
+          ·
+          <a @click="$emit('choose', null)" v-translate>Cancel</a>
+        </p>
+        <div v-if="categoriesEdition" class="category-select">
+          <label v-for="item of imageCategories" :key="item" class="checkbox">
+            <input type="checkbox" :checked="document.categories.includes(item)" @input="toggleCategory(item)" />
+            {{ $filters.uppercaseFirstLetter($gettext(item, 'image_categories')) }}
+          </label>
         </div>
 
         <div v-else>
@@ -62,7 +139,7 @@
               :key="licence"
               @click="document.image_type = licence"
             >
-              <label>{{ licences.length }} {{ $filters.uppercaseFirstLetter(label) }}</label>
+              <label>{{ $filters.uppercaseFirstLetter(label) }}</label>
             </div>
           </div>
         </div>
@@ -76,127 +153,136 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 // https://github.com/c2corg/v6_ui/blob/master/c2corg_ui/static/js/imageuploader.js
-import RotateButton from './RotateButton';
+import { computed, nextTick, ref, useTemplateRef, watch, type PropType } from 'vue';
 
+import RotateButton from './RotateButton.vue';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
 
-export default {
-  components: {
-    RotateButton,
+const props = defineProps({
+  categoriesEdition: {
+    type: Boolean,
+    required: true,
   },
-  props: {
-    categoriesEdition: {
-      type: Boolean,
-      required: true,
-    },
-    dataUrl: {
-      type: String,
-      default: null,
-    },
-    status: {
-      type: String,
-      required: true,
-    },
-    percentCompleted: {
-      type: Number,
-      required: true,
-    },
-    document: {
-      type: Object,
-      required: true,
-    },
-    isInitial: {
-      type: Boolean,
-      required: true,
-    },
-    isSaving: {
-      type: Boolean,
-      required: true,
-    },
-    isSuccess: {
-      type: Boolean,
-      required: true,
-    },
-    isFailed: {
-      type: Boolean,
-      required: true,
-    },
-    canRotate: {
-      type: Boolean,
-      default: false,
-    },
+  dataUrl: {
+    type: String,
+    default: null,
   },
+  status: {
+    type: String,
+    required: true,
+  },
+  percentCompleted: {
+    type: Number,
+    required: true,
+  },
+  document: {
+    type: Object,
+    required: true,
+  },
+  isInitial: {
+    type: Boolean,
+    required: true,
+  },
+  isSaving: {
+    type: Boolean,
+    required: true,
+  },
+  isSuccess: {
+    type: Boolean,
+    required: true,
+  },
+  isFailed: {
+    type: Boolean,
+    required: true,
+  },
+  canRotate: {
+    type: Boolean,
+    default: false,
+  },
+  // the photo of the page this one is a copy of, and what the user chose to do (ImagesUploader)
+  samePhoto: {
+    type: Object as PropType<{
+      title: string;
+      editable: boolean | null;
+      loadFailed: boolean;
+      choice: 'retitle' | 'add' | null;
+    } | null>,
+    default: null,
+  },
+});
 
-  emits: ['delete-image', 'retry-upload', 'rotate-image'],
+const emit = defineEmits(['delete-image', 'retry-upload', 'rotate-image', 'choose', 'reload-same-photo']);
 
-  data() {
-    const result = {
-      licences: new Map([
-        ['collaborative', this.$gettext('collab')],
-        ['personal', this.$gettext('personal')],
-      ]),
-      rotate: 0,
-      rotateClicked: false,
-    };
+const { $gettext, $user } = useGlobalProperties();
 
-    if (this.$user.isModerator) {
-      result.licences.set('copyright', this.$gettext('copyright'));
+const licences = new Map([
+  ['collaborative', $gettext('collab')],
+  ['personal', $gettext('personal')],
+]);
+if ($user.isModerator) {
+  licences.set('copyright', $gettext('copyright'));
+}
+
+const rotate = ref(0);
+const rotateClicked = ref(false);
+
+const imageCategories = constants.objectDefinitions.image.fields.categories.values as string[];
+const disabled = computed(() => props.isSaving || props.isFailed);
+
+watch([() => props.isSaving, () => props.isFailed], () => {
+  rotateClicked.value = false;
+});
+
+// the title field gets the focus once the user chose to change the title
+const retitleInput = useTemplateRef<HTMLInputElement>('retitleInput');
+watch(
+  () => props.samePhoto?.choice,
+  (choice) => {
+    if (choice === 'retitle') {
+      nextTick(() => retitleInput.value?.select());
     }
+  }
+);
 
-    return result;
-  },
+function toggleCategory(category: string) {
+  const newValue = props.document.categories.slice(0);
 
-  computed: {
-    imageCategories() {
-      return constants.objectDefinitions.image.fields.categories.values;
-    },
+  if (!newValue.includes(category)) {
+    newValue.push(category);
+  } else {
+    newValue.splice(newValue.indexOf(category), 1);
+  }
 
-    disabled() {
-      return this.isSaving || this.isFailed;
-    },
-  },
+  // the document of the upload, shared with ImagesUploader: changed in place
 
-  watch: {
-    isSaving: function () {
-      this.rotateClicked = false;
-    },
-    isFailed: function () {
-      this.rotateClicked = false;
-    },
-  },
+  props.document.categories = newValue;
+}
 
-  methods: {
-    toggleCategory(category) {
-      const newValue = this.document.categories.slice(0);
-
-      if (!newValue.includes(category)) {
-        newValue.push(category);
-      } else {
-        newValue.splice(newValue.indexOf(category), 1);
-      }
-
-      this.document.categories = newValue;
-    },
-
-    applyRotation(angle) {
-      if (this.rotateClicked || this.disabled) {
-        return;
-      }
-      this.rotateClicked = true;
-      this.rotate = (this.rotate + angle) % 360;
-      if (this.rotate < 0) {
-        this.rotate += 360;
-      }
-      this.$emit('rotate-image', this.rotate);
-    },
-  },
-};
+function applyRotation(angle: number) {
+  if (rotateClicked.value || disabled.value) {
+    return;
+  }
+  rotateClicked.value = true;
+  rotate.value = (rotate.value + angle) % 360;
+  if (rotate.value < 0) {
+    rotate.value += 360;
+  }
+  emit('rotate-image', rotate.value);
+}
 </script>
 
-<style scoped lang="scss">
-@import 'bulma/sass/utilities/initial-variables.sass';
+<style scoped>
+.no-preview {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #9a9a9a;
+}
 
 .img-container {
   width: 100%;
@@ -209,18 +295,8 @@ export default {
   position: relative;
 
   &:hover {
-    // background-color: black;
+    /* background-color: black; */
     transition: 0.2s;
-
-    .exif {
-      background-color: rgba(83, 83, 83, 0.58);
-    }
-
-    .remove-image-btn,
-    .exif p {
-      opacity: 1;
-      transition: 0.2s;
-    }
   }
 
   progress {
@@ -234,16 +310,53 @@ export default {
   overflow-y: hidden;
   padding: 0;
 
+  /* the 17 categories need more than the height of the title and licence rows */
+  &.is-categories,
+  &.is-same-photo {
+    height: auto;
+    min-height: 115px;
+  }
+
+  /* as many columns as fit: two on phones, where three cut the longer labels (nivologie et avalanches) */
   .category-select {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+    column-gap: 0.5rem;
     padding: 0.5rem;
 
+    /* a label wraps rather than being cut, and the whole row is the tap target */
     label {
-      display: inherit;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      padding: 0.2rem 0.25rem 0.2rem 0;
+      line-height: 1.25;
       user-select: none;
+      overflow-wrap: break-word;
     }
+
+    input {
+      flex-shrink: 0;
+    }
+  }
+
+  .same-photo {
+    padding: 0.5rem;
+    text-align: center;
+
+    p {
+      margin-bottom: 0.5rem;
+      overflow-wrap: break-word;
+    }
+
+    .buttons {
+      margin-bottom: 0;
+    }
+  }
+
+  .same-photo-label {
+    padding: 0.4rem 0.5rem 0;
+    background: var(--c2c-white-ter);
   }
 
   .title-input {
@@ -260,11 +373,11 @@ export default {
   }
 
   .licence-select {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--c2c-grey-lighter);
     max-width: 100%;
 
     .column:not(:last-child) {
-      border-right: 1px solid #ddd;
+      border-right: 1px solid var(--c2c-grey-lighter);
     }
 
     label {

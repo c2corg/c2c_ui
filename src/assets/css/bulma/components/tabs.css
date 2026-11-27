@@ -1,0 +1,102 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): components/tabs */
+
+.tabs {
+  align-items: stretch;
+  display: flex;
+  font-size: var(--c2c-size-6);
+  justify-content: space-between;
+  overflow: hidden;
+  overflow-x: auto;
+  white-space: nowrap;
+
+  a {
+    align-items: center;
+    border-bottom-color: var(--c2c-grey-lighter);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    color: var(--c2c-text);
+    display: flex;
+    justify-content: center;
+    margin-bottom: -1px;
+    padding: 0.5em 1em;
+    vertical-align: top;
+
+    &:hover {
+      border-bottom-color: var(--c2c-grey-darker);
+      color: var(--c2c-grey-darker);
+    }
+  }
+
+  li {
+    display: block;
+
+    &.is-active a {
+      border-bottom-color: var(--c2c-link);
+      color: var(--c2c-link);
+    }
+  }
+
+  ul {
+    align-items: center;
+    border-bottom-color: var(--c2c-grey-lighter);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 0;
+    justify-content: flex-start;
+
+    &.is-left {
+      padding-right: 0.75em;
+    }
+
+    &.is-right {
+      justify-content: flex-end;
+      padding-left: 0.75em;
+    }
+  }
+
+  .icon:first-child {
+    margin-right: 0.5em;
+  }
+
+  .icon:last-child {
+    margin-left: 0.5em;
+  }
+
+  &.is-centered ul {
+    justify-content: center;
+  }
+
+  &.is-right ul {
+    justify-content: flex-end;
+  }
+
+  &.is-boxed a {
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+
+    &:hover {
+      background-color: var(--c2c-white-ter);
+      border-bottom-color: var(--c2c-grey-lighter);
+    }
+  }
+
+  &.is-boxed li.is-active a {
+    background-color: var(--c2c-white);
+    border-color: var(--c2c-grey-lighter);
+    border-bottom-color: transparent !important;
+  }
+
+  &.is-small {
+    font-size: var(--c2c-size-7);
+  }
+
+  &.is-medium {
+    font-size: var(--c2c-size-5);
+  }
+
+  &.is-large {
+    font-size: var(--c2c-size-4);
+  }
+}

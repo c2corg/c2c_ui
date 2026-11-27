@@ -3,41 +3,46 @@ import {
   createWebHashHistory,
   createWebHistory,
   type RouteComponent,
+  type RouteLocationNormalized,
   type RouteRecordRaw,
 } from 'vue-router';
 
+import { DISPLAY_URL_KEYS } from '@/components/map/map-url-keys';
 import config from '@/js/config';
 import constants, { type DocumentDefinition } from '@/js/constants';
+import { documentPathPrefix } from '@/js/document-paths';
 import { once } from '@/js/event-bus';
-import AreaView from '@/views/document/AreaView.vue';
-import ArticleView from '@/views/document/ArticleView.vue';
-import BookView from '@/views/document/BookView.vue';
-import ImageView from '@/views/document/ImageView.vue';
-import MapView from '@/views/document/MapView.vue';
-import OutingView from '@/views/document/OutingView.vue';
-import ProfileView from '@/views/document/ProfileView.vue';
-import RouteView from '@/views/document/RouteView.vue';
-import WaypointView from '@/views/document/WaypointView.vue';
-import XreportView from '@/views/document/XreportView.vue';
-import DocumentsPrintingView from '@/views/documents/DocumentsPrintingView.vue';
-import DocumentsView from '@/views/documents/DocumentsView.vue';
-import HomeView from '@/views/portals/HomeView.vue';
-import ItinevertView from '@/views/portals/ItinevertView.vue';
-import SophiePictureContestView from '@/views/portals/SophiePictureContestView.vue';
-import OutingsStatsView from '@/views/portals/outings-stats/OutingsStatsView.vue';
+import { forgetReturnUrl, relayTarget } from '@/js/trackers-oauth-relay';
 import NotFoundView from '@/views/static-views/NotFoundView.vue';
-import SeracView from '@/views/static-views/SeracView.vue';
-import TopoguideView from '@/views/static-views/TopoguideView.vue';
-import AccountView from '@/views/user/AccountView.vue';
-import FollowingView from '@/views/user/FollowingView.vue';
-import LoginView from '@/views/user/LoginView.vue';
-import PreferencesView from '@/views/user/PreferencesView.vue';
-import TrackersExchangeTokenView from '@/views/user/TrackersExchangeTokenView.vue';
-import TrackersView from '@/views/user/TrackersView.vue';
 
-// lazy-load components
-// actually, only diff is quite big, because of diff computation
-// but lets group together this three views.
+// The views are loaded with their first navigation, not in the startup bundle (#4875). NotFoundView stays in it:
+// LoadingNotification, a global component, shows it.
+const AreaView = () => import('@/views/document/AreaView.vue');
+const ArticleView = () => import('@/views/document/ArticleView.vue');
+const BookView = () => import('@/views/document/BookView.vue');
+const ImageView = () => import('@/views/document/ImageView.vue');
+const MapView = () => import('@/views/document/MapView.vue');
+const OutingView = () => import('@/views/document/OutingView.vue');
+const ProfileView = () => import('@/views/document/ProfileView.vue');
+const RouteView = () => import('@/views/document/RouteView.vue');
+const WaypointView = () => import('@/views/document/WaypointView.vue');
+const XreportView = () => import('@/views/document/XreportView.vue');
+const DocumentsPrintingView = () => import('@/views/documents/DocumentsPrintingView.vue');
+const DocumentsView = () => import('@/views/documents/DocumentsView.vue');
+const WaypointsMapView = () => import('@/views/documents/WaypointsMapView.vue');
+const HomeView = () => import('@/views/portals/HomeView.vue');
+const ItinevertView = () => import('@/views/portals/ItinevertView.vue');
+const SophiePictureContestView = () => import('@/views/portals/SophiePictureContestView.vue');
+const OutingsStatsView = () => import('@/views/portals/outings-stats/OutingsStatsView.vue');
+const LocateImagesView = () => import('@/views/user/LocateImagesView.vue');
+const SeracView = () => import('@/views/static-views/SeracView.vue');
+const TopoguideView = () => import('@/views/static-views/TopoguideView.vue');
+const AccountView = () => import('@/views/user/AccountView.vue');
+const FollowingView = () => import('@/views/user/FollowingView.vue');
+const ModerationView = () => import('@/views/moderation/ModerationView.vue');
+const LoginView = () => import('@/views/user/LoginView.vue');
+const TrackersExchangeTokenView = () => import('@/views/user/TrackersExchangeTokenView.vue');
+const TrackersView = () => import('@/views/user/TrackersView.vue');
 const AreaEditionView = () => import('@/views/wiki/edition/AreaEditionView.vue');
 const ArticleEditionView = () => import('@/views/wiki/edition/ArticleEditionView.vue');
 const BookEditionView = () => import('@/views/wiki/edition/BookEditionView.vue');
@@ -53,11 +58,19 @@ const HistoryView = () => import(`@/views/wiki/HistoryView.vue`);
 const AssociationsHistoryView = () => import(`@/views/wiki/AssociationsHistoryView.vue`);
 const DiffView = () => import(`@/views/wiki/DiffView.vue`);
 const YetiView = () => import(`@/views/portals/YetiView.vue`);
+// the pages of the phone layout (bottom tab bar)
+const MeView = () => import('@/views/user/MeView.vue');
+const SettingsView = () => import('@/views/user/SettingsView.vue');
+const FavouritesView = () => import('@/views/user/FavouritesView.vue');
+const AppGuideView = () => import('@/views/static-views/AppGuideView.vue');
 
 const routes: RouteRecordRaw[] = [
   { path: '/', name: 'home', component: HomeView },
   { path: '/topoguide', name: 'topoguide', component: TopoguideView },
   { path: '/itinevert', name: 'itinevert', component: ItinevertView },
+  { path: '/map', name: 'waypoints-map', component: WaypointsMapView },
+  // the topographic maps were at /maps (links of the API, of other sites)
+  { path: '/maps/:rest(.*)*', redirect: (to) => '/papermaps' + to.fullPath.slice('/maps'.length) },
   { path: '/serac', name: 'serac', component: SeracView },
   { path: '/whatsnew', name: 'whatsnew', component: WhatsNewView },
   { path: '/associations-history', name: 'associations-history', component: AssociationsHistoryView },
@@ -65,7 +78,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/auth-sso', name: 'auth-sso', component: LoginView },
   { path: '/account', name: 'account', component: AccountView, meta: { requiresAuth: true } },
   { path: '/following', name: 'following', component: FollowingView, meta: { requiresAuth: true } },
-  { path: '/preferences', name: 'preferences', component: PreferencesView, meta: { requiresAuth: true } },
+  { path: '/moderation/:tab?', name: 'moderation', component: ModerationView, meta: { requiresAuth: true } },
   { path: '/trackers', name: 'trackers', component: TrackersView, meta: { requiresAuth: true } },
   {
     path: '/trackers/:vendor/exchange-token',
@@ -75,7 +88,18 @@ const routes: RouteRecordRaw[] = [
   },
   { path: '/yeti/:document_id(\\d+)?/:page?', name: 'yeti', component: YetiView },
   { path: '/outings-stats', name: 'outings-stats', component: OutingsStatsView },
+  { path: '/locate-images', name: 'locate-images', component: LocateImagesView, meta: { requiresAuth: true } },
   { path: '/sophie-picture-contest/:year(\\d+)?', name: 'sophie-picture-contest', component: SophiePictureContestView },
+  { path: '/me', name: 'me', component: MeView },
+  // the settings of the device and the preferences of the account, on one page. The former pages lead there: the
+  // preferences to the part of the account
+  { path: '/settings', name: 'settings', component: SettingsView },
+  { path: '/preferences', name: 'preferences', redirect: { name: 'settings', hash: '#account' } },
+  { path: '/app-settings', name: 'app-settings', redirect: { name: 'settings' } },
+  // the favourites, and their offline copies (src/stores/favourites.ts). Its former name and URL kept: the service
+  // worker, the reminders and the links of the app use them
+  { path: '/offline', alias: '/favourites', name: 'offline', component: FavouritesView },
+  { path: '/app-guide', name: 'app-guide', component: AppGuideView },
 
   // leaves the UI for the forum before any component is needed: vue-router's types want one on every route
   {
@@ -91,52 +115,53 @@ const routes: RouteRecordRaw[] = [
 type Component = RouteComponent | (() => Promise<RouteComponent>);
 
 const addDocumentTypeView = function (def: DocumentDefinition, viewComponent: Component, editionComponent: Component) {
+  const prefix = documentPathPrefix(def.documentType);
   routes.push({
-    path: '/' + def.documentType + 's',
+    path: prefix,
     name: def.documentType + 's',
     component: DocumentsView,
   });
 
   routes.push({
-    path: '/' + def.documentType + 's/print',
+    path: prefix + '/print',
     name: def.documentType + 's-print',
     component: DocumentsPrintingView,
   });
 
   routes.push({
-    path: '/' + def.documentType + 's/:id(\\d+)/:lang?/:title?',
+    path: prefix + '/:id(\\d+)/:lang?/:title?',
     name: def.documentType,
     component: viewComponent,
   });
 
   routes.push({
-    path: '/' + def.documentType + 's/version/:id(\\d+)/:lang/:version',
+    path: prefix + '/version/:id(\\d+)/:lang/:version',
     name: def.documentType + '-version',
     component: viewComponent,
   });
 
   routes.push({
-    path: '/' + def.documentType + 's/history/:id(\\d+)/:lang',
+    path: prefix + '/history/:id(\\d+)/:lang',
     name: def.documentType + '-history',
     component: HistoryView,
   });
 
   routes.push({
-    path: '/' + def.documentType + 's/edit/:id(\\d+)/:lang',
+    path: prefix + '/edit/:id(\\d+)/:lang',
     name: def.documentType + '-edit',
     component: editionComponent,
     meta: { requiresAuth: true },
   });
 
   routes.push({
-    path: '/' + def.documentType + 's/add/:lang',
+    path: prefix + '/add/:lang',
     name: def.documentType + '-add',
     component: editionComponent,
     meta: { requiresAuth: true },
   });
 
   routes.push({
-    path: '/' + def.documentType + 's/diff/:id(\\d+)/:lang/:versionFrom/:versionTo',
+    path: prefix + '/diff/:id(\\d+)/:lang/:versionFrom/:versionTo',
     name: def.documentType + '-diff',
     component: DiffView,
   });
@@ -158,6 +183,19 @@ routes.push({ path: '/:pathMatch(.*)*', name: '404', component: NotFoundView });
 // removes the trigger-scroll handler of the last navigation that waits for its view's data
 let cancelPendingScroll: (() => void) | null = null;
 
+// the same page, with only how it is shown changed in the query (the settings of its map, the view of a list)
+function onlyDisplaySettingsChanged(to: RouteLocationNormalized, from: RouteLocationNormalized): boolean {
+  if (to.path !== from.path || to.hash !== from.hash) return false;
+  const keys = new Set([...Object.keys(to.query), ...Object.keys(from.query)]);
+  let changed = false;
+  for (const key of keys) {
+    if (JSON.stringify(to.query[key]) === JSON.stringify(from.query[key])) continue;
+    if (!DISPLAY_URL_KEYS.includes(key)) return false;
+    changed = true;
+  }
+  return changed;
+}
+
 const router = createRouter({
   routes,
   history: config.routerMode === 'history' ? createWebHistory(import.meta.env.BASE_URL) : createWebHashHistory(),
@@ -174,11 +212,18 @@ const router = createRouter({
       cancelPendingScroll = null;
     }
 
+    // the map writes its settings in the URL (base layer, slopes, overlays…), a list its view: the page stays where the user is, or
+    // goes back at once to the saved position of a history entry, as the view, already there, will not trigger the
+    // scroll
+    if (onlyDisplaySettingsChanged(to, from)) {
+      return savedPosition ?? false;
+    }
+
     let position: ScrollToOptions = {};
 
     if (to.hash) {
       // actually, scroll behavior is not fired at initial load
-      // so let document-view-mixin handle hash use case, as it's the
+      // so let useDocumentView() (views/document/utils/document-view.ts) handle hash use case, as it's the
       // only use case for a new-born tab
       // See https://github.com/vuejs/vue-router/issues/2358
 
@@ -207,7 +252,21 @@ const router = createRouter({
   },
 });
 
-// authentication guard. $user is installed on the app after the router is created: main.js adds it, before the
+// A provider answered to the production site for a pre-production or a preview: send the browser back there. Before
+// the authentication guard (added later): the visitor is not necessarily logged in on the production site
+router.beforeEach((to) => {
+  if (to.name !== 'trackers-exchange-token') {
+    return;
+  }
+  const target = relayTarget(String(to.params.vendor), to.query, document.cookie, window.location.origin);
+  if (target) {
+    forgetReturnUrl();
+    window.location.replace(target);
+    return false;
+  }
+});
+
+// authentication guard. $user is installed on the app after the router is created: main.ts adds it, before the
 // router starts the first navigation
 export function addAuthenticationGuard(user: { readonly isLogged: boolean }) {
   router.beforeEach((to) => {

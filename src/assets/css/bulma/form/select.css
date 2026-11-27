@@ -1,0 +1,112 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): form/select */
+
+.select {
+  display: inline-block;
+  max-width: 100%;
+  position: relative;
+  vertical-align: top;
+
+  &:not(.is-multiple) {
+    height: 2.25em;
+
+    &:not(.is-loading)::after {
+      border-color: var(--c2c-link);
+      right: 1.125em;
+      z-index: 4;
+    }
+  }
+
+  &.is-rounded select {
+    border-radius: 9999px;
+    padding-left: 1em;
+  }
+
+  select {
+    cursor: pointer;
+    display: block;
+    font-size: 1em;
+    max-width: 100%;
+    outline: none;
+  }
+}
+
+.select select[disabled]:hover,
+fieldset[disabled] .select select:hover {
+  border-color: var(--c2c-white-ter);
+}
+
+.select select:not([multiple]) {
+  padding-right: 2.5em;
+}
+
+.select select[multiple] {
+  height: auto;
+  padding: 0;
+
+  option {
+    padding: 0.5em 1em;
+  }
+}
+
+.select:not(.is-multiple):not(.is-loading):hover::after {
+  border-color: var(--c2c-grey-darker);
+}
+
+/* the colors: see ../palette.css */
+.select:is(.is-white, .is-light, .is-dark, .is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger) {
+  &:not(:hover)::after {
+    border-color: var(--palette);
+  }
+
+  select {
+    border-color: var(--palette);
+
+    &:hover {
+      border-color: var(--palette-active);
+    }
+
+    &:focus,
+    &:active,
+    &.is-active {
+      box-shadow: 0 0 0 0 var(--palette-focus);
+    }
+  }
+}
+
+.select.is-small {
+  border-radius: 2px;
+  font-size: var(--c2c-size-7);
+}
+
+.select.is-medium {
+  font-size: var(--c2c-size-5);
+}
+
+.select.is-large {
+  font-size: var(--c2c-size-4);
+}
+
+.select.is-disabled::after {
+  border-color: var(--c2c-grey) !important;
+  opacity: 0.5;
+}
+
+.select.is-loading::after {
+  margin-top: 0;
+  position: absolute;
+  right: 0.625em;
+  top: 0.625em;
+  transform: none;
+}
+
+.select.is-loading.is-small:after {
+  font-size: var(--c2c-size-7);
+}
+
+.select.is-loading.is-medium:after {
+  font-size: var(--c2c-size-5);
+}
+
+.select.is-loading.is-large:after {
+  font-size: var(--c2c-size-4);
+}

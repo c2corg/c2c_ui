@@ -35,6 +35,9 @@ const RICH_CONTENT_ATTR_ALLOWLIST = [
   'c2c:url',
   'c2c:url-proxy',
   'c2c:size',
+  // the size of the original of an embedded image (v6_api #2579)
+  'c2c:width',
+  'c2c:height',
   'c2c:position',
   'c2c:emoji-db',
   'c2c:svg-name',

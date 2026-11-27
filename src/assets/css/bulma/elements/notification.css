@@ -1,0 +1,49 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): elements/notification */
+
+.notification {
+  background-color: var(--c2c-white-ter);
+  border-radius: var(--c2c-radius);
+  position: relative;
+  padding: 1.25rem 2.5rem 1.25rem 1.5rem;
+
+  a:not(.button):not(.dropdown-item) {
+    color: currentColor;
+    text-decoration: underline;
+  }
+
+  strong {
+    color: currentColor;
+  }
+
+  code,
+  pre {
+    background: var(--c2c-white);
+  }
+
+  pre code {
+    background: transparent;
+  }
+
+  > .delete {
+    right: 0.5rem;
+    position: absolute;
+    top: 0.5rem;
+  }
+
+  .title,
+  .subtitle,
+  .content {
+    color: currentColor;
+  }
+
+  /* the colors: see ../palette.css */
+  &:is(.is-white, .is-light, .is-dark, .is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger) {
+    background-color: var(--palette);
+    color: var(--palette-invert);
+  }
+
+  &:is(.is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger).is-light {
+    background-color: var(--palette-light);
+    color: var(--palette-dark);
+  }
+}

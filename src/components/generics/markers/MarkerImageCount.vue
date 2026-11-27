@@ -5,13 +5,11 @@
   </span>
 </template>
 
-<script>
-export default {
-  props: {
-    imageCount: {
-      type: Number,
-      default: null,
-    },
+<script setup lang="ts">
+defineProps({
+  imageCount: {
+    type: Number,
+    default: null,
   },
-};
+});
 </script>

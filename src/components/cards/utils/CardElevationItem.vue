@@ -5,13 +5,11 @@
   </span>
 </template>
 
-<script>
-export default {
-  props: {
-    elevation: {
-      type: Number,
-      default: null,
-    },
+<script setup lang="ts">
+defineProps({
+  elevation: {
+    type: Number,
+    default: null,
   },
-};
+});
 </script>

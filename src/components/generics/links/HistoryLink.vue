@@ -7,17 +7,16 @@
   </router-link>
 </template>
 
-<script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import { documentProperty, useDocumentType } from '@/js/properties';
 
-export default {
-  mixins: [requireDocumentProperty],
-
-  props: {
-    lang: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  ...documentProperty,
+  lang: {
+    type: String,
+    required: true,
   },
-};
+});
+
+const { documentType } = useDocumentType(props);
 </script>

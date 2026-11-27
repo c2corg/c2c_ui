@@ -1,0 +1,26 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): elements/image */
+
+.image {
+  display: block;
+  position: relative;
+
+  img {
+    display: block;
+    height: auto;
+    width: 100%;
+
+    &.is-rounded {
+      border-radius: 9999px;
+    }
+  }
+
+  &.is-48x48 {
+    height: 48px;
+    width: 48px;
+  }
+
+  &.is-96x96 {
+    height: 96px;
+    width: 96px;
+  }
+}

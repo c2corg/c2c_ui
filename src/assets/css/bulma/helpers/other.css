@@ -1,0 +1,6 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): helpers/other */
+
+.is-clickable {
+  cursor: pointer !important;
+  pointer-events: all !important;
+}

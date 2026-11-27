@@ -21,7 +21,7 @@
           v-if="showAccessibilityInfo"
           class="button is-primary public-transports-button"
           :class="{ 'is-active': activeSection === 'nearbyStops' }"
-          @click="setActiveSection('nearbyStops')"
+          @click="activeSection = 'nearbyStops'"
         >
           <img class="public-transports-bus default-icon" src="@/assets/img/boxes/bus.svg" alt="transport" />
           <img class="public-transports-bus hover-icon" src="@/assets/img/boxes/public_transport.svg" alt="transport" />
@@ -32,7 +32,7 @@
           v-if="showAccessibilityInfo && isPlanATripSectionDisplayed"
           class="button is-primary public-transports-button"
           :class="{ 'is-active': activeSection === 'planATrip' }"
-          @click="setActiveSection('planATrip')"
+          @click="activeSection = 'planATrip'"
         >
           <img class="public-transports-bus default-icon" src="@/assets/img/boxes/itineraire-2.svg" alt="itinerary" />
           <img class="public-transports-bus hover-icon" src="@/assets/img/boxes/itineraire.svg" alt="itinerary" />
@@ -44,9 +44,9 @@
         v-if="activeSection === 'nearbyStops'"
         :document="document"
         :map-documents="mapDocuments"
-        @highlight-document="handleDocumentHighlight"
+        @highlight-document="$emit('highlight-document', $event)"
         @has-protection-area="$emit('has-protection-area')"
-        @stops-updated="handleStopsUpdated"
+        @stops-updated="stopDocuments = $event"
         @accessibility-info-changed="showAccessibilityInfo = $event"
       />
 
@@ -54,141 +54,102 @@
         v-if="activeSection === 'planATrip'"
         :map-documents="mapDocuments"
         :document="document"
-        @highlight-document="handleDocumentHighlight"
+        @highlight-document="$emit('highlight-document', $event)"
         @has-protection-area="$emit('has-protection-area')"
       />
     </div>
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+
 import NearbyStopsSection from './NearbyStopsSection.vue';
 import PlanATripSection from './PlanATripSection/PlanATripSection.vue';
 
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  components: {
-    NearbyStopsSection,
-    PlanATripSection,
-  },
-  mixins: [requireDocumentProperty],
-  emits: ['has-protection-area', 'highlight-document'],
+const props = defineProps({ ...documentProperty });
 
-  data() {
-    return {
-      activeSection: 'nearbyStops',
-      accessWaypoint: false,
-      stopDocuments: [],
-      isInFrance: false,
-      showAccessibilityInfo: false,
-      visible: false,
-    };
-  },
-  computed: {
-    /** Copy access points to customize them */
-    accessWaypoints() {
-      let accessWaypoints = [];
-      if (this.documentType === 'waypoint' && this.document.waypoint_type === 'access') {
-        // access waypoint
-        accessWaypoints = [this.document];
-      }
-      // for other types of documents, return the waypoints of type access associated (if any)
-      else {
-        accessWaypoints =
-          this.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access') ?? [];
-      }
+defineEmits(['has-protection-area', 'highlight-document']);
 
-      const accessPointsCopy = JSON.parse(JSON.stringify(accessWaypoints));
+const { documentType } = useDocumentType(props);
 
-      accessPointsCopy.forEach((doc) => {
-        if (doc.type === 'w') {
-          doc.type = 'z';
-        }
+// whether the "nearby stop" or "plan a trip" section is active
+const activeSection = ref('nearbyStops');
+const stopDocuments = ref<C2cDocument[]>([]);
+const showAccessibilityInfo = ref(false);
+const visible = ref(false);
 
-        if (doc.maps && Array.isArray(doc.maps)) {
-          doc.maps.forEach((map) => {
-            if (map.type === 'w') {
-              map.type = 'z';
-            }
-          });
+/** Copy access points to customize them */
+const accessWaypoints = computed(() => {
+  let accessWaypoints: C2cDocument[] = [];
+  if (documentType.value === 'waypoint' && props.document.waypoint_type === 'access') {
+    // access waypoint
+    accessWaypoints = [props.document];
+  }
+  // for other types of documents, return the waypoints of type access associated (if any)
+  else {
+    accessWaypoints =
+      props.document?.associations?.waypoints?.filter((doc) => doc && doc.waypoint_type === 'access') ?? [];
+  }
+
+  const accessPointsCopy: C2cDocument[] = JSON.parse(JSON.stringify(accessWaypoints));
+
+  accessPointsCopy.forEach((doc) => {
+    if (doc.type === 'w') {
+      doc.type = 'z';
+    }
+
+    if (doc.maps && Array.isArray(doc.maps)) {
+      doc.maps.forEach((map: C2cDocument) => {
+        if (map.type === 'w') {
+          map.type = 'z';
         }
       });
+    }
+  });
 
-      return accessPointsCopy;
-    },
+  return accessPointsCopy;
+});
 
-    isPlanATripSectionDisplayed() {
-      // plan a trip section is only available for routes and waypoints of type access
-      return (
-        this.documentType === 'route' || (this.documentType === 'waypoint' && this.document.waypoint_type === 'access')
-      );
-    },
+/** Whether there are any waypoints accessible by public transport */
+const accessWaypoint = computed(() => accessWaypoints.value.length > 0);
 
-    /** Adds custom points in document */
-    mapDocuments() {
-      if (!this.accessWaypoints || this.accessWaypoints.length === 0) {
-        return [];
-      }
-      const documents = [...this.accessWaypoints];
+/** Whether the route is in France */
+const isInFrance = computed(() => props.document.areas?.[0]?.document_id === 14274);
 
-      if (this.stopDocuments && this.stopDocuments.length > 0) {
-        documents.push(...this.stopDocuments);
-      }
+const isPlanATripSectionDisplayed = computed(
+  // plan a trip section is only available for routes and waypoints of type access
+  () =>
+    documentType.value === 'route' || (documentType.value === 'waypoint' && props.document.waypoint_type === 'access')
+);
 
-      return documents.filter(Boolean);
-    },
-  },
-  watch: {
-    document: {
-      handler() {
-        this.checkAccessWaypoints();
-        this.checkIfInFrance();
-      },
-      deep: true,
-      immediate: true,
-    },
-    showAccessibilityInfo(newValue) {
-      this.visible = newValue;
-    },
-  },
-  methods: {
-    /** Determines whether the "nearby stop" or "plan a trip" section is active */
-    setActiveSection(section) {
-      this.activeSection = section;
-    },
+/** Adds custom points in document */
+const mapDocuments = computed(() => {
+  if (!accessWaypoints.value || accessWaypoints.value.length === 0) {
+    return [];
+  }
+  const documents = [...accessWaypoints.value];
 
-    /** Checks if there are any waypoints accessible by public transport */
-    checkAccessWaypoints() {
-      const accessWaypoints = this.accessWaypoints;
-      this.accessWaypoint = accessWaypoints.length > 0;
-    },
+  if (stopDocuments.value && stopDocuments.value.length > 0) {
+    documents.push(...stopDocuments.value);
+  }
 
-    /** Emits an event for highlighting points */
-    handleDocumentHighlight(document) {
-      this.$emit('highlight-document', document);
-    },
+  return documents.filter(Boolean);
+});
 
-    /** Updates stops */
-    handleStopsUpdated(stopDocuments) {
-      this.stopDocuments = stopDocuments;
-    },
-
-    /** Check that the route is in France */
-    checkIfInFrance() {
-      try {
-        this.isInFrance =
-          this.document.areas && this.document.areas.length > 0 && this.document.areas[0].document_id === 14274;
-      } catch {
-        this.isInFrance = false;
-      }
-    },
-  },
-};
+watch(showAccessibilityInfo, (value) => {
+  visible.value = value;
+});
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+/* the box and its sections (NearbyStopsSection, PlanATripSection) stack their content when the box is narrow: its
+   width depends on the column it is in (the window, the side menu), not on the window alone */
 .public-transports-box {
+  container: public-transports / inline-size;
   position: relative;
 
   .hide-box-content {
@@ -214,11 +175,14 @@ export default {
     position: absolute;
     top: -100px;
   }
+  /* one below the other by default, side by side in a wide box (the container query below), which iOS 15 phones (no
+     container queries) never get */
   .public-transport-buttons {
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    gap: 20px;
     margin-top: 24px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
 
   .public-transports-button {
@@ -241,7 +205,7 @@ export default {
     }
     .hover-icon {
       position: absolute;
-      left: 12px; // Ajustez selon votre padding
+      left: 12px; /* Ajustez selon votre padding */
       opacity: 0;
     }
 
@@ -256,20 +220,25 @@ export default {
     }
 
     &.is-active {
-      background-color: #337ab7;
+      background-color: var(--c2c-primary);
       border: none;
       color: white;
     }
   }
 }
 
-@media only screen and (max-width: 600px) {
-  .public-transport-buttons {
-    flex-direction: column;
-
-    .public-transports-button {
-      margin-bottom: 10px;
-    }
+@container public-transports (min-width: 600px) {
+  .public-transports-box .public-transport-buttons {
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 10px;
   }
+}
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): the buttons not chosen are dark */
+html[data-theme='dark'] .public-transports-box .public-transports-button:not(.is-active) {
+  background-color: var(--app-dark-surface);
+  color: var(--app-dark-text);
+  border-color: var(--app-dark-border);
 }
 </style>

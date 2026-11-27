@@ -27,6 +27,15 @@
         icon="key"
       />
 
+      <div class="field">
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" v-model="rememberMe" />
+            <span v-translate>Remember me</span>
+          </label>
+        </div>
+      </div>
+
       <div class="field" v-if="showLoginTerms">
         <div class="control">
           <label class="checkbox">
@@ -100,12 +109,7 @@
       </div>
 
       <div class="field">
-        <re-captcha
-          ref="recaptcha"
-          :sitekey="$options.recaptchaKey"
-          @expired="onCaptchaExpired"
-          @verify="onCaptchaVerify"
-        />
+        <re-captcha ref="recaptcha" :sitekey="recaptchaKey" @expired="onCaptchaExpired" @verify="onCaptchaVerify" />
       </div>
 
       <div class="buttons is-centered">
@@ -122,7 +126,7 @@
       </div>
     </base-form>
 
-    <base-form ref="resetPasswordForm" v-show="mode == 'resetPassword'" :promise="promise" @submit="resetPassword">
+    <base-form v-show="mode == 'resetPassword'" :promise="promise" @submit="resetPassword">
       <template #header>
         <h3 class="title is-3" v-translate>Reset password</h3>
       </template>
@@ -148,12 +152,7 @@
       </div>
     </base-form>
 
-    <base-form
-      ref="changePasswordForm"
-      v-show="mode == 'changePassword'"
-      :promise="promise"
-      @submit="validateNewPassword"
-    >
+    <base-form v-show="mode == 'changePassword'" :promise="promise" @submit="validateNewPassword">
       <template #header>
         <h3 class="title is-3" v-translate>Change password</h3>
       </template>
@@ -176,6 +175,20 @@
       </div>
     </base-form>
 
+    <div class="invalid-reset-link has-text-centered" v-show="mode == 'invalidResetLink'">
+      <h1 class="is-size-4" v-translate>This password reset link is no longer valid</h1>
+      <p class="my-2" v-translate>
+        It has already been used, has expired, or was replaced by a more recent request: only the link of the last email
+        sent works.
+      </p>
+      <div class="buttons is-centered">
+        <button type="button" class="button is-link" @click="mode = 'resetPassword'" v-translate>
+          Request a new link
+        </button>
+        <button type="button" class="button is-link" @click="mode = 'signin'" v-translate>Login</button>
+      </div>
+    </div>
+
     <base-form v-show="mode == 'changeEmail' || mode == 'validateAccountCreation'" :promise="promise">
       <div v-if="promise.loading" v-translate>Checking...</div>
     </base-form>
@@ -189,17 +202,22 @@
   </div>
 </template>
 
-<script>
-import { toast } from 'bulma-toast';
+<script setup lang="ts">
+import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import BaseForm from './utils/BaseForm';
-import FormField from './utils/FormField';
-import PasswordRequirements from './utils/PasswordRequirements';
+import BaseForm from './utils/BaseForm.vue';
+import FormField from './utils/FormField.vue';
+import PasswordRequirements from './utils/PasswordRequirements.vue';
 
-import ReCaptcha from '@/components/recaptcha/ReCaptcha';
+import ReCaptcha from '@/components/recaptcha/ReCaptcha.vue';
 import c2c from '@/js/apis/c2c';
+import { apiErrors, errorStatus } from '@/js/apis/c2c/api-errors';
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { useNoRobots } from '@/js/composables/head';
 import config from '@/js/config';
-import noRobotsMixin from '@/js/no-robots-mixin';
+import { isForumSite } from '@/js/forum-site';
+import { toast } from '@/js/toast';
 
 // possible mode values :
 //
@@ -207,239 +225,250 @@ import noRobotsMixin from '@/js/no-robots-mixin';
 // * signup : create account
 // * resetPassword : get a mail with an secret URL to reset your password
 // * changePassword : with url from precedent mode, set a new password
+// * invalidResetLink : the url of changePassword is no longer valid (used, expired, or replaced by a newer one)
 // * changeEmail : if user has asked a new mail, a secret url has been sent
 // * validateAccountCreation : idem, but when account is created
 
-export default {
-  recaptchaKey: config.urls.recaptchaKey,
+const recaptchaKey = config.urls.recaptchaKey!;
 
-  components: {
-    FormField,
-    BaseForm,
-    PasswordRequirements,
-    ReCaptcha,
-  },
+useNoRobots();
 
-  mixins: [noRobotsMixin],
+// here is the trick : all auth action are on the same component.
+// vue won't reload it, even on route modification.
+// watch on the route will perform any action needed by url state.
+// the route entered is kept, to go back to it after login
 
-  // here is the trick : all auth action are on the same component.
-  // vue won't reload it, even on route modification.
-  // watch on $route will perform any action needed by url state.
-  // created() keeps the route entered, to go back to it after login
+const route = useRoute();
+const router = useRouter();
+const { $gettext, $language, $user } = useGlobalProperties();
 
-  data() {
-    return {
-      mode: '',
+type Focusable = { focus(): void };
+const signinMainInput = useTemplateRef<Focusable>('signinMainInput');
+const signupMainInput = useTemplateRef<Focusable>('signupMainInput');
+const resetPasswordMainInput = useTemplateRef<Focusable>('resetPasswordMainInput');
+const changePasswordMainInput = useTemplateRef<Focusable>('changePasswordMainInput');
+const recaptcha = useTemplateRef<{ reset(): void }>('recaptcha');
 
-      username: '',
-      password: '',
-      name: '',
-      forum_username: '',
-      email: '',
-      recaptchaAvailable: false,
-      captcha: null,
+const mode = ref('');
 
-      termsAgreed: false,
+const username = ref('');
+const password = ref('');
+const forum_username = ref('');
+const email = ref('');
+const captcha = ref<string | null>(null);
 
-      from: null,
+const termsAgreed = ref(false);
 
-      promise: {},
-      loginTermsAgreed: undefined,
-      termsRoute: { name: 'article', params: { id: 106731 } },
-    };
-  },
+// what the forms show of the current request: loading, success, error
+const promise = ref<any>({});
+const loginTermsAgreed = ref<boolean | undefined>(undefined);
+// "remember me": the session lasts and is renewed; unticked, it ends after a day
+const rememberMe = ref(true);
+const termsRoute = { name: 'article', params: { id: 106731 } };
 
-  computed: {
-    showLoginTerms() {
-      return this.loginTermsAgreed !== undefined;
-    },
-  },
+const showLoginTerms = computed(() => loginTermsAgreed.value !== undefined);
 
-  watch: {
-    $route: 'load',
-    mode: 'onModeChange',
-  },
+// the route entered (vue-router 5 deprecates the next() callback of beforeRouteEnter); a snapshot, as the route
+// would follow the next navigations
+const to = router.currentRoute.value;
+if (route.name === 'auth-sso') {
+  if (route.query.logout !== undefined) {
+    $user.signout();
+  }
+}
 
-  created() {
-    // the route entered (vue-router 5 deprecates the next() callback of beforeRouteEnter); a snapshot, as $route
-    // would follow the next navigations
-    this.to = this.$router.currentRoute.value;
-    if (this.$route.name === 'auth-sso') {
-      if (this.$route.query.logout !== undefined) {
-        this.$user.signout();
+function onModeChange() {
+  promise.value = {};
+
+  switch (mode.value) {
+    case 'signin':
+      nextTick(() => signinMainInput.value!.focus());
+      break;
+    case 'changePassword':
+      nextTick(() => changePasswordMainInput.value!.focus());
+      break;
+    case 'resetPassword':
+      nextTick(() => resetPasswordMainInput.value!.focus());
+      break;
+    case 'signup':
+    case 'verifyEmail':
+      nextTick(() => signupMainInput.value!.focus());
+      break;
+  }
+}
+
+function load() {
+  const query = route.query as Record<string, string | undefined>;
+
+  if (route.hash) {
+    // keep compatible with v6 AngularJs hacks...
+    router.replace(route.fullPath.replace('#', '?'));
+  }
+
+  if (query.change_password) {
+    // change password mode
+    // mode when user has forgotten his password.
+    // an url is sent to his mail, with an secret param
+    mode.value = 'changePassword';
+  } else if (query.validate_change_email) {
+    // when user changes his email.
+    // he receives on his new mail a secret url to validate
+    // that  he is the owner
+    mode.value = 'changeEmail';
+    promise.value = c2c.userProfile.validateChangeEmail(query.validate_change_email).then(() => {
+      toast({
+        message: $gettext('Your account is now bound to the new email address you filled in.'),
+        type: 'is-primary',
+        duration: 5000,
+        position: 'center',
+        closeOnClick: true,
+      });
+      router.push({ name: 'home' });
+    });
+  } else if (query.validate_register_email) {
+    // after account creation
+    mode.value = 'validateAccountCreation';
+    promise.value = c2c.userProfile
+      .validateRegisterEmail(query.validate_register_email)
+      .then(() => router.push({ name: 'home' }));
+  } else if (route.name === 'auth-sso' && query.sso && $user.isLogged) {
+    // already logged in (e.g. sent here by onSuccessSigin() below): answer
+    // the forum's SSO handshake without asking for the password again. On
+    // failure the sign in form shows, and signing in answers it instead.
+    mode.value = 'forum';
+    c2c.userProfile
+      .discourseRedirect(query.sso, query.sig!)
+      .then(({ data }) => {
+        window.location.href = data.redirect;
+      })
+      .catch(() => {
+        mode.value = 'signin';
+      });
+  } else if (query.signup !== undefined) {
+    // "Create an account" of the other pages (Favourites)
+    mode.value = 'signup';
+  } else {
+    mode.value = 'signin';
+  }
+}
+
+function isTermsError(error: unknown) {
+  return (
+    errorStatus(error) === 403 &&
+    apiErrors(error).some(({ description }) => description === 'Terms of Service need to be accepted')
+  );
+}
+
+function signin() {
+  // sso/sig are only meaningful when we were sent here by Discourse's
+  // own SSO redirect (see the auth-sso route) - forwarded through to
+  // the API, which verifies the signature server-side.
+  const { sso, sig } = (route.name === 'auth-sso' ? route.query : {}) as Record<string, string | undefined>;
+
+  promise.value = $user
+    // undefined until the terms are asked: accept_tos is then not sent
+    .signIn(username.value, password.value, loginTermsAgreed.value as boolean, sso, sig, rememberMe.value)
+    .then(onSuccessSigin)
+    .catch((e) => {
+      loginTermsAgreed.value = isTermsError(e) ? false : undefined;
+    });
+}
+
+function onSuccessSigin(data: { data: { redirect?: string } }) {
+  // present when Discourse itself initiated the SSO handshake (see
+  // signin()) - the user came from there and expects to land back on
+  // it, so this must be a real top-level navigation.
+  if (data.data.redirect) {
+    mode.value = 'forum';
+    window.location.href = data.data.redirect;
+    return;
+  }
+
+  const target = router.resolve(String(to?.query?.redirect ?? '/')).href;
+
+  // The forum sends the browser back only to the hosts of its own site (see isForumSite): elsewhere (a dev server on
+  // localhost, a preview) the user would be left on the forum, or on an error page when the forum is not reachable.
+  // There, the page asked for is opened, and the forum session opens when the user signs in on the forum (it starts
+  // the handshake itself, see the auth-sso route above).
+  if (!isForumSite(config.urls.forum, window.location.hostname)) {
+    router.push(target);
+    return;
+  }
+
+  // On the forum site, open the forum session as well. Discourse binds the SSO nonce to the
+  // browser session that asked for it (discourse_connect_csrf_protection),
+  // so the browser has to start the handshake itself: the forum sends it
+  // to the auth-sso route (see the route entered above), then to its own sso_login, which
+  // sends it back to return_path - provided the forum lists this host in
+  // discourse_connect_allowed_redirect_domains, else it lands on the forum.
+  mode.value = 'forum';
+  const returnPath = new URL(target, window.location.origin).href;
+  window.location.href = `${config.urls.forum}/session/sso?return_path=${encodeURIComponent(returnPath)}`;
+}
+
+function signup() {
+  promise.value = c2c.userProfile
+    .register({
+      name: username.value,
+      username: username.value,
+      forum_username: forum_username.value,
+      password: password.value,
+      email: email.value,
+      lang: $language.current,
+      captcha: captcha.value,
+    })
+    .then(() => {
+      captcha.value = null;
+      recaptcha.value!.reset();
+
+      mode.value = 'verifyEmail';
+    })
+    .catch(() => {
+      captcha.value = null;
+      recaptcha.value!.reset();
+    });
+}
+
+function resetPassword() {
+  promise.value = c2c.userProfile
+    .requestPasswordChange(email.value)
+    .then(() => toast({ message: $gettext('Mail has been sent'), type: 'is-danger' }));
+}
+
+function validateNewPassword() {
+  const nonce = String(route.query.change_password);
+
+  promise.value = c2c.userProfile
+    .validateNewPassword(nonce, password.value)
+    .then(() => router.push({ name: 'auth' }))
+    .catch((error) => {
+      // the API knows no valid nonce like this one: used, expired, or replaced by a more recent request (it keeps one
+      // nonce per account). Its 'invalid nonce' would tell the user nothing: explain, and offer a new link instead.
+      // (unless another link was opened meanwhile: the answer is about an older one)
+      if (
+        route.query.change_password === nonce &&
+        apiErrors(error).some(({ description }) => description === 'invalid nonce')
+      ) {
+        mode.value = 'invalidResetLink';
       }
-    }
-  },
+    });
+}
 
-  mounted() {
-    this.load();
-  },
+function onCaptchaExpired() {
+  recaptcha.value!.reset();
+}
 
-  methods: {
-    onModeChange() {
-      this.promise = {};
+function onCaptchaVerify(captchaKey: string) {
+  captcha.value = captchaKey;
+}
 
-      switch (this.mode) {
-        case 'signin':
-          this.$nextTick(this.$refs.signinMainInput.focus);
-          break;
-        case 'changePassword':
-          this.$nextTick(this.$refs.changePasswordMainInput.focus);
-          break;
-        case 'resetPassword':
-          this.$nextTick(this.$refs.resetPasswordMainInput.focus);
-          break;
-        case 'signup':
-        case 'verifyEmail':
-          this.$nextTick(this.$refs.signupMainInput.focus);
-          break;
-      }
-    },
+watch(() => route.fullPath, load);
+watch(mode, onModeChange);
 
-    load() {
-      if (this.$route.hash) {
-        // keep compatible with v6 AngularJs hacks...
-        this.$router.replace(this.$route.fullPath.replace('#', '?'));
-      }
-
-      if (this.$route.query.change_password) {
-        // change password mode
-        // mode when user has forgotten his password.
-        // an url is sent to his mail, with an secret param
-        this.mode = 'changePassword';
-      } else if (this.$route.query.validate_change_email) {
-        // when user changes his email.
-        // he receives on his new mail a secret url to validate
-        // that  he is the owner
-        this.mode = 'changeEmail';
-        this.promise = c2c.userProfile.validateChangeEmail(this.$route.query.validate_change_email).then(() => {
-          toast({
-            message: this.$gettext('Your account is now bound to the new email address you filled in.'),
-            type: 'is-primary',
-            duration: 5000,
-            position: 'center',
-            closeOnClick: true,
-          });
-          this.$router.push({ name: 'home' });
-        });
-      } else if (this.$route.query.validate_register_email) {
-        // after account creation
-        this.mode = 'validateAccountCreation';
-        this.promise = c2c.userProfile
-          .validateRegisterEmail(this.$route.query.validate_register_email)
-          .then(() => this.$router.push({ name: 'home' }));
-      } else if (this.$route.name === 'auth-sso' && this.$route.query.sso && this.$user.isLogged) {
-        // already logged in (e.g. sent here by onSuccessSigin() below): answer
-        // the forum's SSO handshake without asking for the password again. On
-        // failure the sign in form shows, and signing in answers it instead.
-        this.mode = 'forum';
-        c2c.userProfile
-          .discourseRedirect(this.$route.query.sso, this.$route.query.sig)
-          .then(({ data }) => {
-            window.location = data.redirect;
-          })
-          .catch(() => {
-            this.mode = 'signin';
-          });
-      } else {
-        this.mode = 'signin';
-      }
-    },
-
-    isTermsError(e) {
-      const { status } = e.response;
-      const { errors } = e.response.data;
-      const messageErrors = errors.map((e) => e.description);
-      return status === 403 && messageErrors.includes('Terms of Service need to be accepted');
-    },
-
-    signin() {
-      // sso/sig are only meaningful when we were sent here by Discourse's
-      // own SSO redirect (see the auth-sso route) - forwarded through to
-      // the API, which verifies the signature server-side.
-      const { sso, sig } = this.$route.name === 'auth-sso' ? this.$route.query : {};
-
-      this.promise = this.$user
-        .signIn(this.username, this.password, this.loginTermsAgreed, sso, sig)
-        .then(this.onSuccessSigin)
-        .catch((e) => {
-          this.loginTermsAgreed = this.isTermsError(e) ? false : undefined;
-        });
-    },
-
-    onSuccessSigin(data) {
-      // present when Discourse itself initiated the SSO handshake (see
-      // signin()) - the user came from there and expects to land back on
-      // it, so this must be a real top-level navigation, not the hidden
-      // iframe trick used below (which wouldn't navigate anywhere, and
-      // could hit third-party cookie restrictions on the Discourse side).
-      this.mode = 'forum';
-      if (data.data.redirect) {
-        window.location = data.data.redirect;
-        return;
-      }
-
-      // Open the forum session as well. Discourse binds the SSO nonce to the
-      // browser session that asked for it (discourse_connect_csrf_protection),
-      // so the browser has to start the handshake itself: the forum sends it
-      // to the auth-sso route (see created()), then to its own sso_login, which
-      // sends it back to return_path - provided the forum lists this host in
-      // discourse_connect_allowed_redirect_domains, else it lands on the forum.
-      const target = this.$router.resolve(this.to?.query?.redirect ?? '/').href;
-      const returnPath = new URL(target, window.location.origin).href;
-      window.location = `${config.urls.forum}/session/sso?return_path=${encodeURIComponent(returnPath)}`;
-    },
-
-    signup() {
-      this.promise = c2c.userProfile
-        .register({
-          name: this.username,
-          username: this.username,
-          forum_username: this.forum_username,
-          password: this.password,
-          email: this.email,
-          lang: this.$language.current,
-          captcha: this.captcha,
-        })
-        .then(() => {
-          this.captcha = null;
-          this.$refs.recaptcha.reset();
-
-          this.mode = 'verifyEmail';
-        })
-        .catch(() => {
-          this.captcha = null;
-          this.$refs.recaptcha.reset();
-        });
-    },
-
-    resetPassword() {
-      this.promise = c2c.userProfile
-        .requestPasswordChange(this.email)
-        .then(() => toast({ message: this.$gettext('Mail has been sent'), type: 'is-danger' }));
-    },
-
-    validateNewPassword() {
-      const password = this.password;
-      const nonce = this.$route.query.change_password;
-
-      this.promise = c2c.userProfile
-        .validateNewPassword(nonce, password)
-        .then(() => this.$router.push({ name: 'auth' }));
-    },
-
-    onCaptchaExpired() {
-      this.$refs.recaptcha.reset();
-    },
-
-    onCaptchaVerify(captchaKey) {
-      this.captcha = captchaKey;
-    },
-  },
-};
+onMounted(load);
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .login-view {
   height: 100%;
   align-items: center;
@@ -451,6 +480,11 @@ export default {
     width: 100%;
     padding: 1.5rem;
   }
+}
+
+.invalid-reset-link {
+  width: 100%;
+  padding: 1.5rem;
 }
 
 .forum-sso {

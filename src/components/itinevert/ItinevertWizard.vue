@@ -17,62 +17,56 @@
   </section>
 </template>
 
-<script>
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
 import ItinevertLoadingView from './ItinevertLoadingView.vue';
 import TransportFilterForm from './TransportFilterForm.vue';
 
 import { itinevertBanners } from '@/js/asset-urls';
 
-export default {
-  name: 'ItinevertWizard',
-  components: {
-    ItinevertLoadingView,
-    TransportFilterForm,
+defineProps({
+  view: {
+    type: String,
+    default: 'form',
   },
-  props: {
-    view: {
-      type: String,
-      default: 'form',
-    },
-  },
-  emits: ['change-view'],
+});
 
-  data() {
-    return {
-      bannerImage: null,
-    };
-  },
+const emit = defineEmits(['change-view']);
 
-  async mounted() {
-    // handle banner images
-    if (itinevertBanners.length) {
-      const randomIndex = Math.floor(Math.random() * itinevertBanners.length);
-      this.bannerImage = itinevertBanners[randomIndex];
-    }
+const route = useRoute();
+const router = useRouter();
 
-    // reset url parameters
-    if (Object.keys(this.$route.query)?.length > 0) {
-      this.$router.replace({
-        path: this.$route.path,
-        query: {},
-      });
-    }
-  },
+const bannerImage = ref<string | null>(null);
 
-  methods: {
-    /** TransportFilterForm reports its loading state while it resolves the reachable document IDs */
-    onLoading(isLoading) {
-      this.$emit('change-view', isLoading ? 'loading' : 'form');
-    },
-    /** On error, TransportFilterForm displays its own message; just go back to the form view to show it */
-    onError() {
-      this.$emit('change-view', 'form');
-    },
-  },
-};
+/** TransportFilterForm reports its loading state while it checks the search */
+function onLoading(isLoading: boolean) {
+  emit('change-view', isLoading ? 'loading' : 'form');
+}
+
+/** On error, TransportFilterForm displays its own message: back to the form view to show it */
+function onError() {
+  emit('change-view', 'form');
+}
+
+onMounted(() => {
+  // handle banner images
+  if (itinevertBanners.length) {
+    const randomIndex = Math.floor(Math.random() * itinevertBanners.length);
+    bannerImage.value = itinevertBanners[randomIndex];
+  }
+
+  // reset url parameters
+  if (Object.keys(route.query).length > 0) {
+    router.replace({ path: route.path, query: {} });
+  }
+});
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 .centered {
   margin: auto;
   min-height: 80vh;
@@ -92,13 +86,10 @@ export default {
   background-repeat: no-repeat;
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .centered {
     margin-left: auto;
     margin-right: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
     width: 90%;
     min-height: 100%;
   }

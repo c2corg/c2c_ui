@@ -9,18 +9,16 @@
   </li>
 </template>
 
-<script>
-export default {
-  props: {
-    article: {
-      type: Object,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  article: {
+    type: Object,
+    required: true,
   },
-};
+});
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .dashboard-link {
   .dashboard-link-main {
     flex-grow: 1;
@@ -29,6 +27,6 @@ export default {
   }
 }
 .dashboard-link:visited {
-  color: $grey-light;
+  color: var(--c2c-grey-light);
 }
 </style>

@@ -41,12 +41,12 @@
 
       <div class="column is-9">
         <div class="box is-paddingless">
-          <a :href="getOriginalImageUrl(document)">
-            <thumbnail class="main-image" :img="document" size="BI" />
+          <a :href="getOriginalImageUrl(document as Image)">
+            <thumbnail class="main-image" :img="document" size="BI" reserve-size />
           </a>
         </div>
 
-        <div v-if="locale.summary || locale.description" class="box">
+        <div v-if="locale!.summary || locale!.description" class="box">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" hide-title />
           <div style="clear: both" />
@@ -63,28 +63,35 @@
   </div>
 </template>
 
-<script>
-import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import documentViewMixin from './utils/document-view-mixin';
+<script setup lang="ts">
+import DocumentPrintLicense from './utils/DocumentPrintLicense.vue';
+import DocumentViewHeader from './utils/DocumentViewHeader.vue';
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo.vue';
+import CommentsBox from './utils/boxes/CommentsBox.vue';
+import ImagesBox from './utils/boxes/ImagesBox.vue';
+import MapBox from './utils/boxes/MapBox.vue';
+import RecentOutingsBox from './utils/boxes/RecentOutingsBox.vue';
+import RoutesBox from './utils/boxes/RoutesBox.vue';
+import ToolBox from './utils/boxes/ToolBox.vue';
+import { documentViewProps, useDocumentView } from './utils/document-view';
+import ActivitiesField from './utils/field-viewers/ActivitiesField.vue';
+import FieldView from './utils/field-viewers/FieldView.vue';
+import LabelValue from './utils/field-viewers/LabelValue.vue';
+import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 
-import { getImageUrl } from '@/js/image-urls';
+import type { Image as ImageDocument } from '@/js/apis/c2c/schemas';
+import { getImageUrl, type Image } from '@/js/image-urls';
 
-export default {
-  components: {
-    MaskedDocumentVersionInfo,
-  },
+const props = defineProps(documentViewProps);
 
-  mixins: [documentViewMixin],
+const { promise, documentType, fields, document, version, locale } = useDocumentView<ImageDocument>(props);
 
-  methods: {
-    getOriginalImageUrl: getImageUrl,
-  },
-};
+const getOriginalImageUrl = getImageUrl;
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .main-image {
-  // remove the ugly 4px in the bottom
+  /* remove the ugly 4px in the bottom */
   display: block;
 }
 </style>

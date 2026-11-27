@@ -2,44 +2,50 @@
   <div ref="widget" />
 </template>
 
-<script>
-import { loadRecaptcha } from '@/js/recaptcha';
+<script setup lang="ts">
+import { onBeforeUnmount, onMounted, useTemplateRef } from 'vue';
+
+import { loadRecaptcha, type Recaptcha } from '@/js/recaptcha';
 
 // The reCAPTCHA checkbox: emits verify(token) once solved, and expired when the token is no longer valid.
-export default {
-  props: {
-    sitekey: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  sitekey: {
+    type: String,
+    required: true,
   },
+});
 
-  emits: ['verify', 'expired'],
+const emit = defineEmits(['verify', 'expired']);
 
-  mounted() {
-    loadRecaptcha().then((grecaptcha) => {
-      if (this.isDestroyed) {
-        return;
-      }
-      this.grecaptcha = grecaptcha;
-      this.widgetId = grecaptcha.render(this.$refs.widget, {
-        sitekey: this.sitekey,
-        callback: (token) => this.$emit('verify', token),
-        'expired-callback': () => this.$emit('expired'),
-      });
+const widget = useTemplateRef<HTMLElement>('widget');
+let grecaptcha: Recaptcha | undefined;
+let widgetId: number | undefined;
+let isDestroyed = false;
+
+onMounted(() => {
+  loadRecaptcha().then((loaded) => {
+    if (isDestroyed) {
+      return;
+    }
+    grecaptcha = loaded;
+    widgetId = grecaptcha.render(widget.value!, {
+      sitekey: props.sitekey,
+      callback: (token: string) => emit('verify', token),
+      'expired-callback': () => emit('expired'),
     });
-  },
+  });
+});
 
-  beforeUnmount() {
-    this.isDestroyed = true;
-  },
+onBeforeUnmount(() => {
+  isDestroyed = true;
+});
 
-  methods: {
-    reset() {
-      if (this.widgetId !== undefined) {
-        this.grecaptcha.reset(this.widgetId);
-      }
-    },
-  },
-};
+function reset() {
+  if (widgetId !== undefined) {
+    grecaptcha!.reset(widgetId);
+  }
+}
+
+// the forms reset it after a failed submit: a token is valid once
+defineExpose({ reset });
 </script>

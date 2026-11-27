@@ -44,8 +44,8 @@ export default {
       }
 
       if (typeof value === 'string') {
-        // lgtm fail to parse the second argument
-        return `"${value.replace(/"/g, '\\"')}"`; // lgtm[js/incomplete-sanitization]
+        // RFC 4180: a double quote inside a quoted field is escaped by doubling it
+        return `"${value.replace(/"/g, '""')}"`;
       }
 
       if (typeof value === 'boolean' || typeof value === 'number') {
@@ -53,7 +53,7 @@ export default {
       }
 
       if (Array.isArray(value)) {
-        return `"${value.join(',')}"`;
+        return `"${value.join(',').replace(/"/g, '""')}"`;
       }
 
       return '';

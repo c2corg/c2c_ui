@@ -1,5 +1,5 @@
 <template>
-  <div class="dropdown control" :class="{ 'is-active': promise.data }">
+  <div ref="root" class="dropdown control" :class="{ 'is-active': isOpen }">
     <div class="control has-icons-left input-container">
       <input
         ref="input"
@@ -7,26 +7,26 @@
         :class="{ 'is-danger': hasError, 'is-small': isSmall }"
         type="text"
         :placeholder="placeholder || $gettext('Search ...')"
-        @input="onInput"
-        @focus="onInput"
+        @input="onFocus"
+        @focus="onFocus"
         v-model="searchText"
       />
       <span class="icon is-left">
         <fa-icon icon="search" />
       </span>
     </div>
-    <div class="dropdown-menu" role="menu" v-if="promise.data && showOptions">
+    <div class="dropdown-menu" role="menu" v-if="isOpen && showOptions">
       <div class="dropdown-content">
-        <div v-for="type of documentTypesWithResults" :key="type">
-          <div v-if="documentTypes_.length > 1" class="dropdown-item has-text-weight-bold is-size-5">
+        <div v-for="group of groups" :key="group.key">
+          <div v-if="group.header" class="dropdown-item has-text-weight-bold is-size-5">
             <!-- if several type are requested, add an header -->
-            {{ $filters.uppercaseFirstLetter($gettext(type + 's')) }}
+            {{ $filters.uppercaseFirstLetter($gettext(group.type + 's')) }}
           </div>
           <div
-            v-for="document of promise.data[type + 's'].documents"
+            v-for="document of group.documents"
             :key="document.document_id"
             @mousedown="toggle(document)"
-            class="dropdown-item dropdown-item-option columns is-gapless has-cursor-pointer"
+            class="dropdown-item dropdown-item-option columns is-mobile is-gapless is-vcentered has-cursor-pointer"
           >
             <div v-if="isSelected(document)" class="column has-text-success is-size-1 is-narrow">
               <fa-icon icon="check-circle" />
@@ -34,36 +34,46 @@
 
             <div class="column is-size-6">
               <document-title :document="document" />
-              <br />
-              <span v-if="document.elevation || document.elevation_max">
-                <span :title="$gettext('elevation_max')">
-                  <fa-icon icon="sort-amount-up" class="has-text-primary" />
+              <template v-if="document.forum_username">
+                <span class="has-text-grey-light">·</span>
+                <span class="is-italic">@{{ document.forum_username }}</span>
+              </template>
+              <template
+                v-if="document.elevation || document.elevation_max || document.height_diff_up || document.area_type"
+              >
+                <br />
+                <span v-if="document.elevation || document.elevation_max">
+                  <span :title="$gettext('elevation_max')">
+                    <fa-icon icon="sort-amount-up" class="has-text-primary" />
+                  </span>
+                  {{ document.elevation || document.elevation_max }}&nbsp;m
                 </span>
-                {{ document.elevation || document.elevation_max }}&nbsp;m
-              </span>
 
-              <span v-if="document.height_diff_up">
-                <icon-height-diff-up class="has-text-primary" />
-                {{ document.height_diff_up }}&nbsp;m
-              </span>
-              <span v-if="document.forum_username" class="is-italic"> @{{ document.forum_username }} </span>
-              <span v-if="document.area_type" class="is-italic">
-                {{ $filters.uppercaseFirstLetter($gettext(document.area_type, 'area_types')) }}
-              </span>
-
-              &nbsp;
+                <span v-if="document.height_diff_up">
+                  <icon-height-diff-up class="has-text-primary" />
+                  {{ document.height_diff_up }}&nbsp;m
+                </span>
+                <span v-if="document.area_type" class="is-italic">
+                  {{ $filters.uppercaseFirstLetter($gettext(document.area_type, 'area_types')) }}
+                </span>
+              </template>
             </div>
 
             <div class="column has-text-primary is-size-2 is-narrow">
-              <icon-document v-if="document.type == 'u'" document-type="profile" />
-              <icon-document v-else-if="document.type == 'a'" document-type="area" />
+              <!-- the icon of the type only tells something when several types are searched -->
+              <template v-if="document.type == 'u' || document.type == 'a'">
+                <icon-document
+                  v-if="documentTypes_.length > 1"
+                  :document-type="document.type == 'u' ? 'profile' : 'area'"
+                />
+              </template>
               <activities v-else-if="document.activities" :activities="document.activities" />
               <icon-waypoint-type v-else-if="document.waypoint_type" :waypoint-type="document.waypoint_type" />
             </div>
           </div>
           <router-link
-            v-if="showMoreResultsLink"
-            :to="{ name: type + 's', query: { q: searchText } }"
+            v-if="showMoreResultsLink && group.searched"
+            :to="{ name: group.type + 's', query: { q: searchText } }"
             class="dropdown-item is-italic has-text-centered"
             @click="closeDropdown"
             v-translate
@@ -73,7 +83,7 @@
         </div>
 
         <div v-if="proposeCreation">
-          <hr v-if="documentTypesWithResults.length > 0" class="dropdown-divider" />
+          <hr v-if="groups.length > 0" class="dropdown-divider" />
           <div class="dropdown-item has-text-weight-bold is-size-5" v-translate>No match?</div>
           <add-link
             v-for="type of documentTypes_"
@@ -83,183 +93,256 @@
           />
         </div>
 
-        <div v-else-if="documentTypesWithResults.length == 0" class="dropdown-item is-size-6" v-translate>
-          No result found
-        </div>
+        <div v-else-if="groups.length == 0" class="dropdown-item is-size-6" v-translate>No result found</div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import { arrayMixin, baseMixin } from './mixins';
+<script setup lang="ts">
+import { type PropType, computed, onBeforeUnmount, ref, useTemplateRef } from 'vue';
+
+import { arrayInputProps, baseInputProps } from './input-value';
 
 import c2c from '@/js/apis/c2c';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import constants from '@/js/constants';
 import debounce from '@/js/debounce';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-export default {
-  mixins: [baseMixin, arrayMixin],
+type SearchResults = Record<string, { documents: C2cDocument[] } | undefined>;
 
-  props: {
-    modelValue: {
-      type: [Array, Object],
-      default: null,
-    },
-    multiple: {
-      type: Boolean,
-      default: false,
-    },
-    documentType: {
-      type: [Array, String],
-      required: true,
-    },
-    proposeCreation: {
-      type: Boolean,
-      default: false,
-    },
-    showMoreResultsLink: {
-      type: Boolean,
-      default: false,
-    },
-    showOptions: {
-      type: Boolean,
-      default: true,
-    },
-    isSmall: {
-      type: Boolean,
-      default: false,
-    },
-    clearInputOnToggle: {
-      type: Boolean,
-      default: false,
-    },
+const props = defineProps({
+  ...baseInputProps,
+  ...arrayInputProps,
+  modelValue: {
+    type: [Array, Object],
+    default: null,
   },
-
-  emits: ['add', 'update:modelValue', 'load-options'],
-
-  data() {
-    return {
-      searchText: '',
-      promise: {},
-    };
+  multiple: {
+    type: Boolean,
+    default: false,
   },
+  documentType: {
+    type: [Array, String],
+    required: true,
+  },
+  proposeCreation: {
+    type: Boolean,
+    default: false,
+  },
+  showMoreResultsLink: {
+    type: Boolean,
+    default: false,
+  },
+  showOptions: {
+    type: Boolean,
+    default: true,
+  },
+  isSmall: {
+    type: Boolean,
+    default: false,
+  },
+  clearInputOnToggle: {
+    type: Boolean,
+    default: false,
+  },
+  // documents proposed as soon as the input has the focus, before the search results (e.g. the recent partners of
+  // the user); loaded on the first focus
+  loadSuggestions: {
+    type: Function as PropType<() => Promise<C2cDocument[]>>,
+    default: null,
+  },
+});
 
-  computed: {
-    value_: {
-      get() {
-        return this.multiple ? (this.modelValue ? this.modelValue : []) : this.modelValue;
-      },
-      set(value) {
-        if (!this.disabled) {
-          this.$emit('update:modelValue', value);
+const emit = defineEmits(['add', 'update:modelValue', 'load-options']);
+
+const { $documentUtils, $language } = useGlobalProperties();
+
+const searchText = ref('');
+const promise = ref<{ data?: SearchResults | null }>({});
+const input = useTemplateRef<HTMLInputElement>('input');
+const rootElement = useTemplateRef<HTMLElement>('root');
+
+const value_ = computed({
+  get: () => (props.multiple ? (props.modelValue ?? []) : props.modelValue) as C2cDocument[] | C2cDocument | null,
+  set(value) {
+    if (!props.disabled) {
+      emit('update:modelValue', value);
+    }
+  },
+});
+
+const documentTypes_ = computed(
+  () => (Array.isArray(props.documentType) ? props.documentType : [props.documentType]) as string[]
+);
+
+// the suggestions, null until loaded, and whether they are shown (from the focus until the dropdown is closed)
+const suggestions = ref<C2cDocument[] | null>(null);
+const showSuggestions = ref(false);
+let suggestionsRequested = false;
+
+// lower case, without accents
+const normalize = (text: string) =>
+  text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+
+// the suggestions matching the typed text, on their name or their forum name
+const shownSuggestions = computed(() => {
+  if (!showSuggestions.value || !suggestions.value) {
+    return [];
+  }
+  const text = normalize(searchText.value.trim());
+  return suggestions.value.filter(
+    (document) =>
+      !text || [document.name, document.forum_username].some((name) => normalize(String(name ?? '')).includes(text))
+  );
+});
+
+type Group = { key: string; type: string; header: boolean; searched: boolean; documents: C2cDocument[] };
+
+// what the dropdown lists: the suggestions first, then the search results not already among them
+const groups = computed<Group[]>(() => {
+  const result: Group[] = [];
+  const header = documentTypes_.value.length > 1;
+  const suggested = new Set(shownSuggestions.value.map((document) => document.document_id));
+
+  if (shownSuggestions.value.length) {
+    result.push({
+      key: 'suggestions',
+      type: documentTypes_.value[0]!,
+      header: false,
+      searched: false,
+      documents: shownSuggestions.value,
+    });
+  }
+
+  const data = promise.value.data;
+  for (const type of data ? documentTypes_.value : []) {
+    const documents = (data![type + 's']?.documents ?? []).filter((document) => !suggested.has(document.document_id));
+    if (documents.length) {
+      result.push({ key: type, type, header, searched: true, documents });
+    }
+  }
+
+  return result;
+});
+
+const isOpen = computed(() => Boolean(promise.value.data) || shownSuggestions.value.length > 0);
+
+const letterTypes = computed(() =>
+  documentTypes_.value.map(
+    (item) => constants.objectDefinitions[item as keyof typeof constants.objectDefinitions].letter
+  )
+);
+
+function focus() {
+  input.value!.focus();
+}
+
+function closeDropdown() {
+  promise.value = {};
+  showSuggestions.value = false;
+}
+
+function onFocus() {
+  if (props.loadSuggestions) {
+    showSuggestions.value = true;
+    if (!suggestionsRequested) {
+      suggestionsRequested = true;
+      props.loadSuggestions().then(
+        (documents) => {
+          suggestions.value = documents;
+        },
+        () => {
+          // a shortcut only: the search works without it; tried again on the next focus
+          suggestionsRequested = false;
         }
-      },
-    },
+      );
+    }
+  }
+  onInput();
+}
 
-    documentTypes_() {
-      return Array.isArray(this.documentType) ? this.documentType : [this.documentType];
-    },
+function onWindowClick(event: MouseEvent) {
+  // close dropdown when clicked outside
+  if (!rootElement.value?.contains(event.target as Node)) {
+    closeDropdown();
+  }
+}
 
-    documentTypesWithResults() {
-      const result = this.promise.data;
+function loadOptions() {
+  promise.value = c2c
+    .search({
+      q: searchText.value,
+      t: letterTypes.value.join(','),
+      limit: 7,
+      l: $language.current,
+      pl: $language.current,
+    })
+    .then((response) => {
+      response.data.profiles = response.data.users;
+      emit('load-options', response.data);
+    });
+}
 
-      return this.documentTypes_.filter((type) => result[type + 's'] && result[type + 's'].documents.length !== 0);
-    },
+const onInput = debounce(() => {
+  if (!searchText.value || searchText.value.length < 3) {
+    promise.value = {};
+    return;
+  }
 
-    letterTypes() {
-      return this.documentTypes_.map((item) => constants.objectDefinitions[item].letter);
-    },
-  },
+  loadOptions();
+}, 300);
 
-  created() {
-    window.addEventListener('click', this.onWindowClick);
-  },
+function isSelected(value: C2cDocument) {
+  if (props.multiple) {
+    return $documentUtils.isInArray(value_.value as C2cDocument[], value);
+  } else {
+    return props.modelValue ? (props.modelValue as C2cDocument).document_id === value.document_id : false;
+  }
+}
 
-  beforeUnmount() {
-    window.removeEventListener('click', this.onWindowClick);
-  },
+function toggle(value: C2cDocument) {
+  if (!props.multiple) {
+    value_.value = value;
+    if (value) {
+      emit('add', value);
+    }
+  } else {
+    const newValue = [];
+    let removed = false;
 
-  methods: {
-    focus() {
-      this.$refs.input.focus();
-    },
-
-    closeDropdown() {
-      this.promise = {};
-    },
-
-    onWindowClick(event) {
-      // close dropdown when clicked outside
-      if (!this.$el.contains(event.target)) {
-        this.closeDropdown();
-      }
-    },
-
-    onInput: debounce(function () {
-      if (!this.searchText || this.searchText.length < 3) {
-        this.promise = {};
-        return;
-      }
-
-      this.loadOptions();
-    }, 300),
-
-    loadOptions() {
-      this.promise = c2c
-        .search({
-          q: this.searchText,
-          t: this.letterTypes.join(','),
-          limit: 7,
-          l: this.$language.current,
-          pl: this.$language.current,
-        })
-        .then((response) => {
-          response.data.profiles = response.data.users;
-          this.$emit('load-options', response.data);
-        });
-    },
-
-    isSelected(value) {
-      if (this.multiple) {
-        return this.$documentUtils.isInArray(this.value_, value);
+    for (const document of value_.value as C2cDocument[]) {
+      if (document.document_id === value.document_id) {
+        removed = true;
       } else {
-        return this.modelValue ? this.modelValue.document_id === value.document_id : false;
+        newValue.push(document);
       }
-    },
+    }
 
-    toggle(value) {
-      if (!this.multiple) {
-        this.value_ = value;
-        if (value) {
-          this.$emit('add', value);
-        }
-      } else {
-        const newValue = [];
-        let removed = false;
+    if (!removed) {
+      newValue.push(value);
+      emit('add', value);
+    }
 
-        for (const document of this.value_) {
-          if (document.document_id === value.document_id) {
-            removed = true;
-          } else {
-            newValue.push(document);
-          }
-        }
+    value_.value = newValue;
+  }
+  closeDropdown();
+  if (props.clearInputOnToggle) {
+    searchText.value = '';
+  }
+}
 
-        if (!removed) {
-          newValue.push(value);
-          this.$emit('add', value);
-        }
+window.addEventListener('click', onWindowClick);
 
-        this.value_ = newValue;
-      }
-      this.closeDropdown();
-      if (this.clearInputOnToggle) {
-        this.searchText = '';
-      }
-    },
-  },
-};
+onBeforeUnmount(() => {
+  window.removeEventListener('click', onWindowClick);
+});
+
+defineExpose({ focus });
 </script>
 
 <style scoped>
@@ -269,16 +352,17 @@ export default {
 }
 
 div.dropdown-item-option:hover {
-  background: #eee; /* TODO variables */
+  background: var(--c2c-grey-lightest); /* TODO variables */
 }
 
 .input-container {
   width: 100%;
 }
 
+/* not wider than the window on mobile, where the input is near its left edge */
 .dropdown-menu {
-  max-width: 30rem;
-  min-width: 30rem;
+  width: min(30rem, calc(100vw - 2rem));
+  min-width: 0;
 }
 .dropdown-content {
   max-height: 80vh;
@@ -287,5 +371,10 @@ div.dropdown-item-option:hover {
 
 .columns {
   margin-bottom: 0 !important;
+}
+
+/* the icon, on the right of the text */
+.column.is-narrow:last-child {
+  padding-left: 0.5rem !important;
 }
 </style>

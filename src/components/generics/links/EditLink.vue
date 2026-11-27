@@ -3,6 +3,7 @@
     :to="{ name: documentType + '-edit', params: { id: document.document_id, lang: lang } }"
     @click="$emit('click')"
     rel="nofollow"
+    :class="{ 'is-non-production-backend': isNonProductionBackend }"
   >
     <slot>
       <span v-translate>Edit</span>
@@ -10,19 +11,18 @@
   </router-link>
 </template>
 
-<script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import { isNonProductionBackend } from '@/js/environment-label';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
-export default {
-  mixins: [requireDocumentProperty],
-
-  props: {
-    lang: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  ...documentProperty,
+  lang: {
+    type: String,
+    required: true,
   },
+});
+defineEmits(['click']);
 
-  emits: ['click'],
-};
+const { documentType } = useDocumentType(props);
 </script>

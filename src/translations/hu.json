@@ -87,10 +87,8 @@
     "Allow all": "Mindegyik engedélyezése",
     "Altitude": "Tengerszint feletti magasság",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "Tengerszint feletti magasság megadása kötelező amikor a magasan és alacsonyan fennálló veszély különböző. Kérjük, add meg a tengerszint feletti magasságot a területre vonatkozó lavinajelentés alapján.",
-    "An error occurred, couldn't (un)mark route as to do": "Nem lehetséges a kedvelt útvonal hozzáadása vagy eltávolítása",
     "An error occurred, couldn't save images": "Nem lehetséges a képek mentése",
     "Anonymity and confidentiality": "Névtelenség és bizalmasan kezelt adatok.",
-    "Are you sure you want to delete this document?": "Boztosan törölni akarod ezt a dokumentumot?\nFigyelemm, a társított fotók nem törlődnek és árvák lesznek.\nAmennyiben csak a címet vagy a társított dokumentumokat akarod megváltoztatni (pl. egy másik útvonallal társítani a kiruccanást), elegendő módosítani a dokumentumot.\nAmennyiben ez a dokumentum egy duplikátum, társított fotókkal, lépj kapcsolatba @Modo_Topo_FR, hogy egyesítsék a duplikátumokat a társított fotók megőrzésével. ",
     "Are you sure you want to delete this locale?": "Biztosan törölni akarod ezt a nyelvi verziót?",
     "Are you sure you want to merge?": "Biztosan össze akarod vonni?",
     "Are you sure you want to revert to this version of the document?": "Biztosan vissza akarod állítani a dokumentumnak ezt a verzióját?",
@@ -110,7 +108,6 @@
     },
     "Avalanche bulletins": "Lavina jelentés",
     "Average slope (degrees)": "Átlagos meredekség (fok)",
-    "Average slope in degree": "Átlagos meredeksêg fokban",
     "Back to code": "Vissza a kódhoz",
     "Back to edit mode": "Visszatérés a szerkesztési módba",
     "Base layer": "Térkép háttér",
@@ -128,7 +125,6 @@
     "Block account": "Fiók blokkolása",
     "Bolted rock climbing gear": "nittelt biztosítás",
     "Book content": "Könyv tartalmának rövid ismertetése",
-    "Both results and map": "Eredmények és térképek",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Írd le röviden az esetleges sérüléseket, és hogy ma mit tennél ezek elkerülésére. Más mezőbe nem való megjegyzéseket is itt lehet megadni.",
     "By month": "Hónap szerint",
     "By year": "Év szerint",
@@ -141,7 +137,10 @@
     "Checking...": "Ellenőrzés. alatt..",
     "Child": "Gyermek",
     "Clear": "Törlés",
-    "Close": "Bezár",
+    "Close": {
+      "$$noContext": "Bezár",
+      "Map controls": "Bezár"
+    },
     "Collapse": "Elrejt",
     "Comments": "Megjegyzések",
     "Comments are disabled.": "Megjegyzések nincsenek engedélyezve ehhez a dokumentumhoz.",
@@ -183,7 +182,6 @@
     "Current password": "Jelenlegi jelszó",
     "Danger level": "Veszélyességi szint",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "A lavinahíradóban jelzett veszélyességi fokozat minden irányú fekvésre vonatkozik. A szélrózsa a legkritikusabb, nagyobb veszélyességű szektorokat jelzi.",
-    "Danger level:": "Veszélyességi szint:",
     "Danger rating - considerable": "Veszélyességi besorás - jelentős",
     "Danger rating - high": "Veszélyességi besorolás - magas",
     "Danger rating - high to very high": "Veszélyességi besorolás - magastól nagyon magasig",
@@ -192,6 +190,7 @@
     "Danger rating - very high": "Veszélyességi besorolás - nagyon magas",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Adatok, mint például orientáció, szikla típus, út típus (pl. oda-vissza, vagy körtúra) és út körülmények (pl. gerinc vagy vízmosás).",
     "Delete": {
+      "$$noContext": "Törlés",
       "yeti": "Törlés"
     },
     "Delete a line chunk": "Vonalszakasz törlése",
@@ -262,6 +261,9 @@
     "FAQ?": "GYIK",
     "Feel free to edit it.": "Szabadon szerkeszthető.",
     "Filter results": "Szűrési eredmények",
+    "Follow the track": {
+      "Map controls": "Útvonal követése"
+    },
     "Followed users": "Követett felhasználók",
     "Forgot password?": "Elfelejtett jelszó?",
     "Forum": "Fórum",
@@ -283,11 +285,10 @@
     "Have an account?": "Van fiókod?",
     "Have you (re)evaluated the risks at each change in the situation? What factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the leader of the group, etc.": "Újraértékelted-e a rizikófaktorokat a helyzet változásaikor? Melyik faktorok befolyásolhatták a tudatosságodat? Például fáradtság, stressz, vagy a figyelmed lankadása a fő nehézségeken való túljutás után, ereszkedés közben, egy könnyű besorolású útszakaszon, más emberek lábnyomainak jelenléte, vagy a csoportvezetőbe vetett bizalom miatt, stb.",
     "Hazard potential": "Veszély lehetősége",
-    "Hazard potential:": "Veszély lehetősége:",
     "Heading": "Haladási irány",
+    "Help": "Segítség",
     "Help research activities to define new prevention means": "Segíts a kutatási erőfeszítésekben új megelőzési módszereket kidolgozni",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "E az általad követett felhasználók listája, akiknek a bejegyzéseit látni fogod a személyes hírfolyamodban",
-    "Here you may set activity and region filters that will apply to the homepage feed.": "Itt állíthatsz be tevékenység vagy terület szerinti szűrőket, amik az oldal hírfolyamára lesznek alkalmazva.",
     "High danger level from the avalanche bulletin": "A lavinajelentés alapján nagy veszély",
     "Hiking gear": "Kiránduló felszerelés",
     "History": {
@@ -296,7 +297,6 @@
     },
     "History is missing, please provide it if you have information.": "Történet hiányzik, kérlek add meg, ha van információd",
     "Home": "Otthon",
-    "Home page feed parameters": "Weboldal hírfolyam paraméterek",
     "How is my testimony used ? How / why is it useful ?": "Hogyan használják fel a beszámolómat? Miért hasznos?",
     "I choose to cancel the outing": "A kiruccanás lemondása mellett döntök",
     "I must not use slopes > 30°": "Nem szabad >30°-nál meredekebb lejtöket használnom",
@@ -320,7 +320,6 @@
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Az esemény helyszínére vonatkozó információk. Jelöld be a helyszínt a fenti térképen, még ha nem is tudod nagyon pontosan (ez esetben itt adj meg további információkat). A jelentés befejezése után társíthatod egy úthoz, egy mászóhelyhez vagy egy kiruccanáshoz.",
     "Informations about the access": "Megközelítésre vonatkozó információk",
     "Infos": "Információk",
-    "Insert a link": "Link beszúrása",
     "Insert emoji": "Emoji beszúrása",
     "Insert image": "Kép beszúrása",
     "Insert link": "Link beszúrása",
@@ -362,9 +361,7 @@
     "Make profile page public": "A profil oldal nyilvánossá tétele",
     "Map filter off": "Térkép szűrő kikapcsolva",
     "Map filter on": "Térkép szűrő bekapcsolva",
-    "Map only": "Csak térkép",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Térkép, utikalauz, ismert út, B terv, az útvonal újraértékelése menet közben?",
-    "Mark this route as to do": "Az útvonal megjelölése a bakancslistára",
     "Massifs could not be loaded": "Hegységeket nem sikerült betölteni",
     "Merge documents": "Dokumentumok összeolvasztás",
     "Merge with other document": "Összeolvasztás másik dokumentummal ",
@@ -385,7 +382,6 @@
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "További utak elérhetők. Mozgathatod a térképet, megadhatod a nevet vagy beállíthatsz egy tevékenységtípust a szűréshez.",
     "Multi-criteria search": "Több kritérium alapján történő keresés",
     "My account": "Fiókom",
-    "My bookmarks": "Könyvjelzőim",
     "My changes": "Változtatásaim",
     "My followed users": "Követett felhasználóim",
     "My outings": "Kiruccanásaim",
@@ -421,17 +417,12 @@
     "Numbers": "Számok",
     "Ok": "Rendben",
     "On a drawn line": "Egy rajzolt vonalon",
-    "Only document less than 24h old can be deleted": {
-      "API message": "Csak 24 óránál frissebb dokumentumokat lehet törölni"
-    },
-    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "A hírfolyamodban csak a kiválasztott tevékenységhez és területhez tartozó állapotfrissítéseket mutatunk. A követett felhasználók frissítései mindig megjelennek.",
     "Ooops": "Hoppácska",
     "Open fields to deeply explain the event circumstances.": "Szabad mező az esemény körülményeinek igen részletes leírására",
     "Open fields to detail the picture's context": "Szabad mező a kép körülményeinek leírására",
     "Open in a new tab": "Megnyitás új fülben",
     "Ordered list": "Rendezett lista",
     "Orientations": "Tájolások",
-    "Orientations:": "Tájolások:",
     "Oups! Something went wrong with forum. Here is the message :": "Hoppácska! Valami hiba történt a fórumban. Ez az üzenet:",
     "Oups! something went wrong...": "Hoppácska, valami félresikerült...",
     "Outings statistics": "Kiruccanások statisztikája",
@@ -439,6 +430,9 @@
     "Paragliding outings": "Siklóernyős kiruccanások",
     "Parameters of the Digital Camera": "A digitális kamera paraméterei",
     "Parent": "Szülő",
+    "Pause": {
+      "Map controls": "Szünet"
+    },
     "People who were with you, and your feelings about this outing": "A veled levő személyek, és a kiruccanásra vonatkozó érzéseid",
     "Period of protection": "Védett időszak",
     "Personal data are confidential": "A személyes adatok bizalmasak",
@@ -446,6 +440,12 @@
     "Personal feed on": "Személyes hírfolyam bekapcsolva",
     "Personal informations": "Személyes információk",
     "Pitch description tag": "Kötélhosszt jellemző címke",
+    "Play": {
+      "Map controls": "Lejátszás"
+    },
+    "Play the track": {
+      "Map controls": "Útvonal lejátszása"
+    },
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Írd le a technikai szintedet és jártasságodat a kiválasztott céllal összefüggésben, a fizikai állapotodat, az előzetesen felhalmozott fáradtságot, nagy magasságok esetén az akklimatizációdat, stb.",
     "Please move the map, or change the route's name.": "Mozgasd a térképet, vagy változtasd meg az út nevét.",
     "Please select a method before computing.": "Válassz egy módszert a számítás előtt.",
@@ -458,6 +458,9 @@
     "Press enter to select": "Nyomj Entert a kiválasztáshoz",
     "Preview": "Előnézet",
     "Professional Reduction Method": "Professzionális Redukciós Módszer",
+    "Progress": {
+      "Map controls": "Haladás"
+    },
     "Protect document": "A dokumentum védelme",
     "Protection area:": "Védett terület:",
     "Protection areas": "Védett területek",
@@ -470,6 +473,9 @@
     "Recenter on...": "Újrapozicionálás...",
     "Register": "Regisztráció",
     "Remove": "Eltávolít",
+    "Replay": {
+      "Map controls": "Újrajátszás"
+    },
     "Report an issue": "Probléma jelentése",
     "Report title, activity, linked routes or outings.": "Jelentés címe, tevékenység, társított utak vagy kiruccanások.",
     "Required": {
@@ -479,7 +485,6 @@
     "Reset geometry": "Geometria visszaállítása",
     "Reset password": "Jelszó visszaállítása",
     "Restore this version": "Ennek a verziónak a visszaállítása",
-    "Results only": "Csak eredmények",
     "Retry": "Újrapróbálkozás",
     "Risky slopes": "Kockázatos lejtők",
     "Risky slopes, increased risk due to orientation": "Kockázatos lejtők, megnövekedett kockázat a tájolás miatt",
@@ -507,12 +512,6 @@
     "Several days?": "Több nap?",
     "Share": "Megosztás",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "ShareAlike - ha más anyagokkal kevered, átalakítod ezt az anyagot, vagy erre alapozva újat hozol létre, ezt az eredetivel azonos felhasználási feltételekkel kell megtenned. ",
-    "Shorter than minimum length 1": {
-      "API message": "Rövidebb mint a minimális hosszúság 1"
-    },
-    "Shorter than minimum length 3": {
-      "API message": "Rövidebb mint a minimális hosszúság 3"
-    },
     "Show only updates from followed users in the homepage feed": "Csak a követett felhasználók bejegyzéseinek követése a hírfolyamban",
     "Simplify": "Egyszerűsítés",
     "Skiability": "Síelhetőség",
@@ -521,9 +520,11 @@
     "Small group = 2 to 4 people": "Kis csoport = 2-4 ember",
     "Small group with load shedding distance": "Kis csoport terheléscsökkentő távolságtartással",
     "Small group without distance": "Kis csoport távolságtartás nélkül",
-    "Social cookies": "Közösségi sütik",
     "Sort by": "Rendezés",
     "Source:": "Forrás:",
+    "Speed": {
+      "Map controls": "Sebesség"
+    },
     "Statistical cookies": "Statisztikai sütik",
     "Statistics": "Statisztika",
     "Stay careful while skiing": "Légy óvatos sízés közben",
@@ -540,7 +541,6 @@
     "The “slope traveled frequently” factor is not taken into account by the application, as it is often difficult to ascertain when preparing for an outing.": "A \"gyakran bejárt lejtő\" faktort az alkalmazás nem veszi figyelembe, mivel sokszor ezt nem lehet biztosítottnak venni egy kiruccanásra való felkészüléskor.",
     "There are sensitive areas on this route. Please refer to the map.": "Érzékeny területek találhatók az út mentén. Tájékozódj a térképről.",
     "These are positive experiences that reveal usefull risk-management skills.": "Ezek pozitív tapasztalatok, amik hasznos kockázatkezelési képességekről árulkodnak.",
-    "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the &quot;Share&quot; module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.": "Ezek a sütik lehetővé teszik, hogy ezen az oldalon közösségi média modulokat használhass, és az oldal tartalmát megoszd más emberekkel, vagy tudasd velük az itteni látogatásodat, véleményedet, pl. amikor a &quot;Megosztás&quot; modulra kattintasz. A sütik letiltásával nem fogsz tudni tartalmat megosztani a camptocamp.org oldalról a közösségi médiában.",
     "This book cover is the property of its editor and/or author": "Ez a könyv borító a szerkesztő és/vagy a szerző tulajdona",
     "This content is licensed under Creative Commons BY-SA 3.0": "Ezt a tartalom a Creative Commons BY-SA 3.0 licenc alá tartozik",
     "This document is a draft.": "Ez a dokumentum egy vázlat.",
@@ -573,7 +573,6 @@
     "Types of belay and protection used, verifications between climbers, snowpack stability tests, testing of avalanche transceivers, etc.": "Használt biztosítás és védőfelszerelések típusa, a mászók közti ellenőrzés, a hótakaró stabilitástesztjei, lavina adó-vevők tesztje, stb.",
     "Unblock account": "Fiók blokkolásának feloldása",
     "Unformatted text": "Formázatlan szöveg",
-    "Unmark this route as to do": "Az út levétele a bakancslistáról",
     "Unordered list": "Rendezetlen lista",
     "Unprotect document": "A dokumentum védelmének feloldása",
     "Upload a GPS track": "GPS nyomvonal feltöltése",
@@ -955,7 +954,6 @@
       "article_categories": "felszerelés"
     },
     "gender": "nem",
-    "general informations": "általános információ",
     "geolocation": "geolokáció",
     "geology": {
       "image_categories": "geológia"
@@ -1096,7 +1094,6 @@
     "key_needed": {
       "custodianship_types": "kulcs_szükséges"
     },
-    "kilometers": "kilométer",
     "labande_global_rating": "labande_globális_besorolás",
     "labande_ski_rating": "labande_sí_besorolás",
     "lake": {
@@ -1130,7 +1127,6 @@
     },
     "lift_access": "Megközelítés lifttel",
     "lift_status": "lift_állapot",
-    "loading": "feltöltés",
     "local_product": {
       "waypoint_types": "helyi_termék"
     },
@@ -1158,7 +1154,6 @@
     "medium": {
       "quality_types": "közepes"
     },
-    "meters": "méter",
     "migmatite": {
       "rock_types": "migmatit"
     },

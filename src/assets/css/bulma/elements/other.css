@@ -1,0 +1,24 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): elements/other */
+
+.heading {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.number {
+  align-items: center;
+  background-color: var(--c2c-white-ter);
+  border-radius: 9999px;
+  display: inline-flex;
+  font-size: var(--c2c-size-5);
+  height: 2em;
+  justify-content: center;
+  margin-right: 1.5rem;
+  min-width: 2.5em;
+  padding: 0.25rem 0.5rem;
+  text-align: center;
+  vertical-align: top;
+}

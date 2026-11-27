@@ -6,8 +6,7 @@ export function nextUid(): number {
   return ++lastUid;
 }
 
-export const uidMixin = {
-  data() {
-    return { uid: nextUid() };
-  },
-};
+/** A unique id for the component, in its setup() */
+export function useUid() {
+  return { uid: nextUid() };
+}

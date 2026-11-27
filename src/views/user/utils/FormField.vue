@@ -7,8 +7,7 @@
       <!-- $gettext('already used username', 'API message') -->
       <!-- $gettext('Invalid email address', 'API message') -->
       <!-- $gettext('already used email', 'API message') -->
-      <!-- $gettext('Shorter than minimum length 3', 'API message') -->
-      <!-- $gettext('Longer than maximum length 25', 'API message') -->
+      <!-- the texts with a limit (Longer than maximum length...) are in api-errors.ts -->
       <!-- $gettext('Contain invalid character(s)', 'API message') -->
       <!-- $gettext('First character is invalid', 'API message') -->
       <!-- $gettext('Last character is invalid', 'API message') -->
@@ -25,22 +24,22 @@
       <!-- $gettext('please consult the server logs', 'API message') -->
       <!-- $gettext('Terms of Service need to be accepted', 'API message') -->
 
-      <span class="has-text-danger has-text-weight-bold" v-if="errorMessage">
-        {{ $gettext(errorMessage, 'API message') }}
+      <span class="has-text-danger has-text-weight-bold" v-if="error">
+        {{ errorText(error, $gettext, 'API message') }}
       </span>
     </label>
     <div class="control has-icons-left has-icons-right">
       <input
-        ref="input"
         :type="unmasked ? 'text' : type"
         :placeholder="placeholder || label"
         :required="required"
         :disabled="disabled"
         :autocorrect="autocorrect"
         :autocapitalize="autocapitalize"
+        ref="input"
         v-model="value_"
         class="input"
-        :class="{ 'is-danger': hasError || errorMessage }"
+        :class="{ 'is-danger': hasError || error }"
       />
       <span v-if="type === 'password'" class="icon is-small is-right is-clickable" @click="onMaskToggle">
         <fa-icon
@@ -55,94 +54,94 @@
   </div>
 </template>
 
-<script>
-import { formField } from '@/js/form-registration';
+<script setup lang="ts">
+import { computed, reactive, ref, toRef, useTemplateRef } from 'vue';
 
-export default {
-  // registered with the BaseForm containing it
-  mixins: [formField('baseForm')],
+import { errorText, type ShownApiError } from '@/js/apis/c2c/api-errors';
+import { useFormField } from '@/js/composables/form-registration';
 
-  props: {
-    name: {
-      type: String,
-      required: true,
-    },
-    modelValue: {
-      type: [String, Number, Boolean],
-      default: null,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    type: {
-      type: String,
-      required: true,
-      validator: (value) => {
-        return ['text', 'number', 'checkbox', 'radio', 'email', 'password'].includes(value);
-      },
-    },
-    placeholder: {
-      type: String,
-      default: null,
-    },
-    icon: {
-      type: String,
-      required: true,
-    },
-    required: {
-      type: Boolean,
-      default: false,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    autocorrect: {
-      type: String,
-      default: undefined,
-    },
-    autocapitalize: {
-      type: String,
-      default: undefined,
+const props = defineProps({
+  name: {
+    type: String,
+    required: true,
+  },
+  modelValue: {
+    type: [String, Number, Boolean],
+    default: null,
+  },
+  label: {
+    type: String,
+    required: true,
+  },
+  type: {
+    type: String,
+    required: true,
+    validator: (value: string) => {
+      return ['text', 'number', 'checkbox', 'radio', 'email', 'password'].includes(value);
     },
   },
-
-  emits: ['update:modelValue'],
-
-  data() {
-    return {
-      errorMessage: null,
-      unmasked: false,
-    };
+  placeholder: {
+    type: String,
+    default: null,
   },
-
-  computed: {
-    value_: {
-      get() {
-        return this.modelValue;
-      },
-      set(value) {
-        this.$emit('update:modelValue', value);
-      },
-    },
-
-    hasError() {
-      if (this.required && !this.modelValue) {
-        return true;
-      }
-
-      return false;
-    },
+  icon: {
+    type: String,
+    required: true,
   },
-
-  methods: {
-    focus() {
-      this.$refs.input.focus();
-    },
-    onMaskToggle() {
-      this.unmasked = !this.unmasked;
-    },
+  required: {
+    type: Boolean,
+    default: false,
   },
-};
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  autocorrect: {
+    type: String,
+    default: undefined,
+  },
+  autocapitalize: {
+    type: String,
+    default: undefined,
+  },
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+// set by the BaseForm containing it, from the API errors
+const error = ref<ShownApiError | null | undefined>(null);
+const unmasked = ref(false);
+
+const value_ = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(value) {
+    emit('update:modelValue', value);
+  },
+});
+
+const hasError = computed(() => {
+  if (props.required && !props.modelValue) {
+    return true;
+  }
+
+  return false;
+});
+
+// registered with the BaseForm containing it
+useFormField('baseForm', reactive({ name: toRef(props, 'name'), hasError, error }));
+
+function onMaskToggle() {
+  unmasked.value = !unmasked.value;
+}
+
+const input = useTemplateRef<HTMLInputElement>('input');
+
+// the login view focuses the main input of each of its forms
+function focus() {
+  input.value!.focus();
+}
+
+defineExpose({ focus });
 </script>

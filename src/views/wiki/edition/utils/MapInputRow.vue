@@ -4,7 +4,7 @@
       <div class="column is-narrow">
         <div v-if="hasTrackingActivities">
           <button class="button is-primary is-small" @click="openGPSModal" v-translate>Upload a GPS track</button>
-          <gps-upload-modal ref="GpsUploadModal" @data="setGeometry"></gps-upload-modal>
+          <gps-upload-modal ref="gpsUploadModal" @data="setGeometry"></gps-upload-modal>
         </div>
         <gps-file-upload class="upload-button" @click="setGeometry" v-else>
           <span v-translate>Upload a GPS track</span>
@@ -14,13 +14,14 @@
         <em v-translate>You may also drag, draw or edit the track on the map.</em>
       </div>
     </div>
+    <tracking-invite v-if="geomDetailEditable && trackingLinked === false" class="mb-3"></tracking-invite>
 
     <div class="columns is-multiline">
       <div class="column is-12 map-container">
-        <map-view
+        <ol-map
           ref="map"
-          :initial-extent="initialExtent"
-          :documents="documents"
+          :initial-extent="initialExtent ?? undefined"
+          :documents="documents ?? undefined"
           :edited-document="document"
           :geom-detail-editable="geomDetailEditable"
           show-center-on-geolocation
@@ -44,126 +45,128 @@
   </div>
 </template>
 
-<script>
-import GpsFileUpload from '@/components/map/GpsFileUpload';
-import GpsUploadModal from '@/components/map/GpsUploadModal';
+<script setup lang="ts">
+import { onMounted, reactive, ref, useTemplateRef, watch, type PropType } from 'vue';
+
+import GpsFileUpload from '@/components/map/GpsFileUpload.vue';
+import GpsUploadModal from '@/components/map/GpsUploadModal.vue';
+// imported, not the global async map-view: the edition views call the map as soon as they load, and the edition
+// chunk is lazy anyway (#4876)
+import OlMap from '@/components/map/OlMap.vue';
+import TrackingInvite from '@/components/tracking/TrackingInvite.vue';
 import trackingService from '@/js/apis/tracking-service';
-import { formField } from '@/js/form-registration';
+import { useFormField } from '@/js/composables/form-registration';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import ol from '@/js/libs/ol';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty } from '@/js/properties';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 const geoJSONFormat = new ol.format.GeoJSON();
 const FORM_PROJ = 'EPSG:4326';
 const DATA_PROJ = 'EPSG:3857';
 
-export default {
-  components: { GpsUploadModal, GpsFileUpload },
-
-  // registered with the FormSection containing it
-  mixins: [formField('formSection'), requireDocumentProperty],
-
-  props: {
-    geomDetailEditable: {
-      type: Boolean,
-      default: false,
-    },
-    documents: {
-      type: Array,
-      default: null,
-    },
-    initialExtent: {
-      type: Array,
-      default: null,
-    },
+const props = defineProps({
+  ...documentProperty,
+  geomDetailEditable: {
+    type: Boolean,
+    default: false,
   },
-
-  emits: ['move'],
-
-  data() {
-    return {
-      latitude: null,
-      longitude: null,
-      hasTrackingActivities: false,
-    };
+  documents: {
+    type: Array as PropType<C2cDocument[] | null>,
+    default: null,
   },
-
-  computed: {
-    hasError() {
-      return false;
-    },
-    visible() {
-      return true;
-    },
+  initialExtent: {
+    type: Array as PropType<number[] | null>,
+    default: null,
   },
+});
 
-  watch: {
-    'document.geometry.geom': {
-      handler: 'setLatitudeLongitude',
-      immediate: true,
-    },
-  },
+const emit = defineEmits(['move', 'activities', 'replace']);
 
-  mounted() {
-    trackingService.getStatus(this.$user.id).then(
-      ({ data }) => {
-        if (Object.values(data).includes('configured')) {
-          this.hasTrackingActivities = true;
-        }
-      },
-      (error) => {
-        // Falls back to local GPX upload only, but this should not happen silently: a request that
-        // fails here (401, network, ...) looks identical to "no tracker connected" otherwise, which
-        // made a JWT misconfiguration between v6_api and c2c_tracking very hard to notice.
-        console.error('Error retrieving tracking status :', error);
+const { $user } = useGlobalProperties();
+
+// registered with the FormSection containing it: always visible, never in error
+useFormField('formSection', reactive({ visible: true, hasError: false }));
+
+const map = useTemplateRef<InstanceType<typeof OlMap>>('map');
+const gpsUploadModal = useTemplateRef<InstanceType<typeof GpsUploadModal>>('gpsUploadModal');
+
+const latitude = ref<number | string | null>(null);
+const longitude = ref<number | string | null>(null);
+const hasTrackingActivities = ref(false);
+// no tracking device account linked, not even one whose token was lost: invited to link one
+const trackingLinked = ref<boolean | null>(null);
+
+function openGPSModal() {
+  gpsUploadModal.value!.show();
+}
+
+// with the c2c activities of the tracking device activity, if any
+function setGeometry(geometry: unknown, c2cActivities: string[] = []) {
+  // a whole new track (a GPS file, a tracker activity), not an edit of the current one on the map
+  emit('replace');
+  map.value!.setDocumentGeometryFromGeoFile(geometry as never);
+  if (c2cActivities.length) {
+    emit('activities', c2cActivities);
+  }
+}
+
+function setGeometryPoint() {
+  if (latitude.value === null || longitude.value === null) {
+    return;
+  }
+
+  const lon = parseFloat(String(longitude.value).replace(',', '.'));
+  const lat = parseFloat(String(latitude.value).replace(',', '.'));
+
+  const point = new ol.geom.Point([lon, lat]);
+  point.transform(FORM_PROJ, DATA_PROJ);
+  props.document.geometry!.geom = geoJSONFormat.writeGeometry(point);
+}
+
+function setLatitudeLongitude() {
+  if (!props.document?.geometry?.geom) {
+    return;
+  }
+
+  const point = geoJSONFormat.readGeometry(props.document.geometry.geom) as InstanceType<typeof ol.geom.Point>;
+
+  point.transform(DATA_PROJ, FORM_PROJ);
+
+  const coords = point.getCoordinates();
+
+  longitude.value = Math.round(coords[0] * 1000000) / 1000000;
+  latitude.value = Math.round(coords[1] * 1000000) / 1000000;
+}
+
+watch(() => props.document?.geometry?.geom, setLatitudeLongitude, { immediate: true });
+
+onMounted(() => {
+  trackingService.getStatus($user.id!).then(
+    ({ data }) => {
+      if (Object.values(data).includes('configured')) {
+        hasTrackingActivities.value = true;
       }
-    );
-  },
-
-  methods: {
-    openGPSModal() {
-      this.$refs.GpsUploadModal.show();
+      trackingLinked.value = Object.values(data).some((status) => status !== 'not-configured');
     },
+    (error) => {
+      // Falls back to local GPX upload only, but this should not happen silently: a request that
+      // fails here (401, network, ...) looks identical to "no tracker connected" otherwise, which
+      // made a JWT misconfiguration between v6_api and c2c_tracking very hard to notice.
+      console.error('Error retrieving tracking status :', error);
+    }
+  );
+});
 
-    setGeometry(geometry) {
-      this.$refs.map.setDocumentGeometryFromGeoFile(geometry);
-    },
+function fitMapToDocuments() {
+  return map.value!.fitMapToDocuments(true);
+}
 
-    setGeometryPoint() {
-      if (this.latitude === null || this.longitude === null) {
-        return;
-      }
-
-      const longitude = parseFloat(String(this.longitude).replace(',', '.'));
-      const latitude = parseFloat(String(this.latitude).replace(',', '.'));
-
-      const point = new ol.geom.Point([longitude, latitude]);
-      point.transform(FORM_PROJ, DATA_PROJ);
-      this.document.geometry.geom = geoJSONFormat.writeGeometry(point);
-    },
-
-    setLatitudeLongitude() {
-      if (!this.document || !this.document.geometry || !this.document.geometry.geom) {
-        return {};
-      }
-
-      const point = geoJSONFormat.readGeometry(this.document.geometry.geom);
-
-      point.transform(DATA_PROJ, FORM_PROJ);
-
-      const coords = point.getCoordinates();
-
-      this.longitude = Math.round(coords[0] * 1000000) / 1000000;
-      this.latitude = Math.round(coords[1] * 1000000) / 1000000;
-    },
-
-    fitMapToDocuments() {
-      return this.$refs.map.fitMapToDocuments(true);
-    },
-  },
-};
+// the edition views fit the map to the associated documents
+defineExpose({ fitMapToDocuments, setGeometry });
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .upload-button {
   position: relative;
 }

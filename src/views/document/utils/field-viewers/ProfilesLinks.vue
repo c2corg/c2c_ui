@@ -11,15 +11,17 @@
   </span>
 </template>
 
-<script>
-export default {
-  props: {
-    profiles: {
-      type: Array,
-      required: true,
-    },
+<script setup lang="ts">
+import type { PropType } from 'vue';
+
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+
+defineProps({
+  profiles: {
+    type: Array as PropType<C2cDocument[]>,
+    required: true,
   },
-};
+});
 </script>
 
 <style scoped>

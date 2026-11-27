@@ -11,27 +11,24 @@
   </span>
 </template>
 
-<script>
-export default {
-  props: {
-    activities: {
-      type: Array,
-      default: null, // many object can contains null array for this...
-    },
+<script setup lang="ts">
+import { computed, type PropType } from 'vue';
+
+const props = defineProps({
+  activities: {
+    type: Array as PropType<string[]>,
+    default: null, // many object can contains null array for this...
   },
-  computed: {
-    sortedActivities() {
-      return this.activities.slice(0).sort();
-    },
-  },
-};
+});
+
+const sortedActivities = computed(() => props.activities.slice(0).sort());
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 @media print {
   /* write the activity's title instead of the icon */
   .replace-icon-by-names-on-print {
-    color: $text !important;
+    color: var(--c2c-text) !important;
   }
 
   .replace-icon-by-names-on-print:not(:last-child):after {

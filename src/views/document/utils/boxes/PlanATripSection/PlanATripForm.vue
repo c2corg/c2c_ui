@@ -14,7 +14,7 @@
                 :show-address-propositions="currentData.showAddressPropositions"
                 :default-address="currentData.fromAddress"
                 @update:props="
-                  (address) => {
+                  (address: unknown) => {
                     $emit('update-from-address', address);
                   }
                 "
@@ -72,7 +72,7 @@
                 :show-address-propositions="currentData.showAddressPropositions"
                 :default-address="currentData.fromAddress"
                 @update:props="
-                  (address) => {
+                  (address: unknown) => {
                     $emit('update-from-address', address);
                   }
                 "
@@ -146,7 +146,7 @@
             id="btnToggle"
             name="btnToggle"
             :checked="limitTransfers"
-            @change="$emit('update-limit-transfers', $event.target.checked)"
+            @change="$emit('update-limit-transfers', ($event.target as HTMLInputElement).checked)"
           />
           <span class="slider"></span>
         </label>
@@ -157,9 +157,9 @@
           id="number-dd"
           name="number"
           :value="maxTransfers"
-          @change="$emit('update-max-transfers', Number($event.target.value))"
+          @change="$emit('update-max-transfers', Number(($event.target as HTMLSelectElement).value))"
         >
-          <option value="0" :selected.attr="'selected'">0 (direct)</option>
+          <option value="0" selected>0 (direct)</option>
           <option value="1">1 max</option>
           <option value="2">2 max</option>
           <option value="3">3 max</option>
@@ -180,51 +180,54 @@
   </div>
 </template>
 
-<script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import type { PropType } from 'vue';
 
-export default {
-  mixins: [requireDocumentProperty],
-  props: {
-    activeTab: {
-      type: String,
-      required: true,
-    },
-    currentData: {
-      type: Object,
-      required: true,
-    },
-    accessWaypoints: {
-      type: Array,
-      required: true,
-    },
-    loadingReachable: {
-      type: Boolean,
-      default: false,
-    },
-    limitTransfers: {
-      type: Boolean,
-      default: false,
-    },
-    maxTransfers: {
-      type: Number,
-      default: 0,
-    },
+import { documentProperty, useDocumentType } from '@/js/properties';
+
+const props = defineProps({
+  ...documentProperty,
+  activeTab: {
+    type: String,
+    required: true,
   },
-  emits: [
-    'update-from-address',
-    'update-selected-waypoint',
-    'update-selected-date',
-    'update-time-preference',
-    'update-selected-time',
-    'update-limit-transfers',
-    'update-max-transfers',
-    'swap-addresses',
-  ],
-};
+  currentData: {
+    type: Object,
+    required: true,
+  },
+  // the access waypoints of the document, proposed as destination
+  accessWaypoints: {
+    type: Array as PropType<{ id: number; title: string }[]>,
+    required: true,
+  },
+  loadingReachable: {
+    type: Boolean,
+    default: false,
+  },
+  limitTransfers: {
+    type: Boolean,
+    default: false,
+  },
+  maxTransfers: {
+    type: Number,
+    default: 0,
+  },
+});
+defineEmits([
+  'update-from-address',
+  'update-selected-waypoint',
+  'update-selected-date',
+  'update-time-preference',
+  'update-selected-time',
+  'update-limit-transfers',
+  'update-max-transfers',
+  'swap-addresses',
+]);
+
+const { documentType } = useDocumentType(props);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .plan-trip-from-to {
   display: flex;
   width: 100%;
@@ -253,7 +256,7 @@ export default {
         }
       }
       .swap-button:hover {
-        background: #eeeeee;
+        background: var(--c2c-grey-lightest);
       }
     }
   }
@@ -275,51 +278,6 @@ export default {
         width: 32px;
         border-right: 1px solid lightgray;
         font-weight: 600;
-      }
-      .autocomplete-container {
-        width: 100%;
-        position: relative;
-        .from-address {
-          padding-left: 10px;
-          border: none;
-          outline: none;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          overflow: hidden;
-          width: inherit;
-        }
-        .autocomplete-results {
-          position: absolute;
-          background-color: white;
-          border: 1px solid lightgrey;
-          z-index: 2;
-          margin-top: 5px;
-          ul {
-            li {
-              padding: 6px;
-              border-bottom: 1px solid lightgrey;
-            }
-          }
-        }
-      }
-      .geolocalisation {
-        border-radius: 15px;
-        border: 1px solid lightgray;
-        background-color: white;
-        height: 25px;
-        position: absolute;
-        width: 29px;
-        right: 0;
-        margin-right: 5px;
-        top: 4px;
-        .geolocalisation-img {
-          height: 18px;
-          width: 18px;
-          display: flex;
-        }
-      }
-      .geolocalisation-return {
-        top: 52px;
       }
     }
     .from-container-return {
@@ -367,7 +325,7 @@ export default {
     label {
       position: absolute;
       font-size: 12px;
-      color: #333;
+      color: var(--c2c-grey-darker);
       padding-left: 5px;
       padding-right: 5px;
       left: 0px;
@@ -392,7 +350,7 @@ export default {
         border: none;
         outline: none;
         font-size: 15px;
-        color: #333;
+        color: var(--c2c-grey-darker);
         background-color: white;
         margin-right: 10px;
 
@@ -413,7 +371,7 @@ export default {
         border: none;
         outline: none;
         font-size: 15px;
-        color: #333;
+        color: var(--c2c-grey-darker);
 
         &::-webkit-calendar-picker-indicator {
           cursor: pointer;
@@ -433,10 +391,12 @@ export default {
     width: 107px;
   }
 }
+/* the number of connections beside the toggle, below it when the form is too narrow */
 .chose-transfer-limit {
   display: flex;
-  position: relative;
-  width: fit-content;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
   .chose-if-transfer-wanted {
     display: flex;
     align-items: center;
@@ -465,7 +425,7 @@ export default {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #333;
+    background-color: var(--c2c-grey-darker);
     transition: 0.4s;
     border-radius: 34px;
   }
@@ -477,13 +437,13 @@ export default {
     width: 13px;
     left: 2px;
     bottom: 2px;
-    background-color: #fff;
+    background-color: var(--c2c-white);
     transition: 0.4s;
     border-radius: 50%;
   }
 
   input:checked + .slider {
-    background-color: #337ab7;
+    background-color: var(--c2c-primary);
   }
 
   input:checked + .slider:before {
@@ -491,10 +451,6 @@ export default {
   }
 
   .chose-nb-transfer {
-    margin-left: 14px;
-    position: absolute;
-    right: -108px;
-    top: -2px;
     display: flex;
     gap: 4px;
     align-items: center;
@@ -507,21 +463,11 @@ export default {
   }
 }
 
-@media only screen and (max-width: 1650px) {
-  .chose-transfer-limit {
-    display: block;
-    .chose-nb-transfer {
-      position: initial;
-      margin-top: 10px;
-    }
-  }
-}
-
 .non-valid-address {
   color: red;
 }
 .input-address {
-  ::v-deep .from-container {
+  :deep(.from-container) {
     border: none !important;
     box-shadow: none !important;
   }
@@ -531,9 +477,64 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
 
-  > p {
-    margin-bottom: 10px;
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): dark buttons and fields */
+html[data-theme='dark'] .plan-trip-from-to {
+  .addresses-container .swap-icon .swap-button {
+    background: var(--app-dark-surface);
+    border-color: var(--app-dark-border);
+  }
+
+  .addresses-container .swap-icon .swap-button:hover {
+    background: var(--app-dark-surface-hover);
+  }
+
+  .from-to-container {
+    .from-container,
+    .from-container-return,
+    .to-container,
+    .to-container-return {
+      border-color: var(--app-dark-border);
+
+      .from-text,
+      .to-text {
+        border-right-color: var(--app-dark-border);
+      }
+    }
+
+    .to-container,
+    .to-container-return {
+      .to-address {
+        color: var(--app-dark-text);
+      }
+
+      .chose-waypoint {
+        background-color: var(--app-dark-field);
+        color: var(--app-dark-text);
+      }
+    }
+  }
+}
+
+html[data-theme='dark'] .select-date-container .date-picker-container {
+  label {
+    color: var(--app-dark-text);
+    background-color: var(--app-dark-surface);
+  }
+
+  .input-container {
+    border-color: var(--app-dark-border);
+
+    .date-input,
+    .hour-input {
+      color: var(--app-dark-text);
+      background-color: var(--app-dark-field);
+    }
+
+    .calendar-icon {
+      color: var(--c2c-grey-light);
+    }
   }
 }
 </style>

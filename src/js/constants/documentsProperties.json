@@ -137,6 +137,7 @@
         "properties": { "activities": ["ice_climbing", "skitouring", "snowshoeing", "snow_ice_mixed"] }
       },
       { "id": "lang", "properties": { "url": "l" } },
+      { "id": "has_track", "properties": { "url": "trk" } },
 
       { "id": "access_condition" },
       { "id": "activities", "properties": { "url": "act", "required": true } },
@@ -265,6 +266,7 @@
       { "id": "gear" },
       { "id": "external_resources" },
       { "id": "lang", "properties": { "url": "l" } },
+      { "id": "has_track", "properties": { "url": "trk" } },
 
       { "id": "activities", "properties": { "url": "act" } },
       { "id": "aid_rating", "properties": { "url": "arat", "activities": ["rock_climbing", "mountain_climbing"] } },

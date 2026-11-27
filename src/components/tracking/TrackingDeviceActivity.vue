@@ -6,31 +6,32 @@
         <div>{{ activity.type[$user.lang] }}</div>
         <div class="has-text-right">{{ $dateUtils.toTechnicalString(activity.date) }}</div>
       </div>
-      <div>
-        <span v-if="activity.name">{{ activity.name }}&nbsp;</span>
-        <span :class="{ 'is-size-7 is-italic': activity.name }">
-          <a v-if="activity.vendor === 'strava'" :href="'https://www.strava.com/activities/' + activity.vendorId">{{
-            $gettext(activity.vendor)
-          }}</a>
-          <a
-            v-else-if="activity.vendor === 'garmin'"
-            :href="'https://connect.garmin.com/modern/activity/' + activity.vendorId"
-            >{{ $gettext(activity.vendor) }}</a
-          >
-          <template v-else>{{ $gettext(activity.vendor) }}</template>
-        </span>
-      </div>
+      <div v-if="activity.name">{{ activity.name }}</div>
     </div>
-    <div class="activity-bottom is-flex is-justify-content-space-between is-size-7 is-italic px-2">
-      <div v-if="duration">
-        <fa-icon :icon="['far', 'clock']" :title="$gettext('Duration')"></fa-icon>&hairsp;<span
-          v-html="duration"
-        ></span>
+    <div class="activity-bottom is-size-7 is-italic px-2">
+      <div class="activity-sources">
+        <template v-for="(source, i) in sources" :key="source.vendor">
+          <template v-if="i > 0">&#32;·</template>
+          <a v-if="vendorUrl(source)" :href="vendorUrl(source)">{{ $gettext(source.vendor) }}</a>
+          <template v-else>{{ $gettext(source.vendor) }}</template>
+        </template>
+        <template v-if="device.name"
+          >&#32;<span class="activity-device-name" :title="device.fullName">({{ device.name }})</span></template
+        >
       </div>
-      <div v-if="length">
-        <fa-icon icon="ruler" :title="$gettext('length')"></fa-icon>&hairsp;<span v-html="length"></span>&nbsp;
+      <div class="is-flex is-justify-content-space-between">
+        <div v-if="duration" class="stat">
+          <span role="img" :title="$gettext('Duration')" :aria-label="$gettext('Duration')"
+            ><fa-icon :icon="['far', 'clock']"
+          /></span>
+          <span v-html="duration"></span>
+        </div>
+        <div v-if="length" class="stat">
+          <span role="img" :title="$gettext('length')" :aria-label="$gettext('length')"><fa-icon icon="ruler" /></span>
+          <span v-html="length"></span>
+        </div>
+        <div v-if="heightDiffUp" class="stat"><icon-height-diff-up /><span v-html="heightDiffUp"></span></div>
       </div>
-      <div v-if="heightDiffUp"><icon-height-diff-up />&hairsp;<span v-html="heightDiffUp"></span></div>
     </div>
     <div class="activity-center" v-show="hover">
       <slot />
@@ -38,56 +39,56 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+
+import { activityDevice, activitySources } from './activity-device';
+
+import type { Activity, ActivitySource } from '@/js/apis/tracking-service';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import config from '@/js/config';
 
-export default {
-  name: 'TrackingDeviceActivity',
-
-  props: {
-    activity: {
-      type: Object,
-      required: true,
-    },
+const props = defineProps({
+  activity: {
+    type: Object,
+    required: true,
   },
+});
 
-  data() {
-    return {
-      hover: false,
-    };
-  },
+const { $dateUtils, $documentUtils, $gettext } = useGlobalProperties();
 
-  computed: {
-    duration() {
-      if (!this.activity.duration) {
-        return undefined;
-      }
-      return this.$dateUtils.durationToTimeString(this.activity.duration);
-    },
+const hover = ref(false);
+const miniaturesBaseUrl = config.urls.miniatures;
 
-    heightDiffUp() {
-      return this.$documentUtils.heightDiffUpWithUnit(this.activity.heightDiffUp);
-    },
+const duration = computed(() =>
+  props.activity.duration ? $dateUtils.durationToTimeString(props.activity.duration) : undefined
+);
+const heightDiffUp = computed(() => $documentUtils.heightDiffUpWithUnit(props.activity.heightDiffUp));
+const length = computed(() => $documentUtils.lengthWithUnit(props.activity.length));
 
-    length() {
-      return this.$documentUtils.lengthWithUnit(this.activity.length);
-    },
+// the vendors that have this outing, Strava first
+const sources = computed(() => activitySources(props.activity as Activity));
+// the device, once after the vendors: the whole name on hover, the short one may be truncated
+const device = computed(() => activityDevice(sources.value, $gettext));
 
-    miniaturesBaseUrl() {
-      return config.urls.miniatures;
-    },
-  },
+const vendorUrl = ({ vendor, vendorId }: ActivitySource): string | undefined => {
+  switch (vendor) {
+    case 'strava':
+      return `https://www.strava.com/activities/${vendorId}`;
+    case 'garmin':
+      return `https://connect.garmin.com/modern/activity/${vendorId}`;
+    default:
+      return undefined;
+  }
 };
 </script>
 
-<style lang="scss" scoped>
-$size: 200px;
-
+<style scoped>
 .activity {
-  width: $size;
-  height: $size;
+  width: 200px;
+  height: 200px;
   position: relative;
-  background-color: $white-ter;
+  background-color: var(--c2c-white-ter);
 
   &.hovered > img {
     filter: brightness(80%);
@@ -107,12 +108,27 @@ a {
   position: absolute;
   width: 100%;
   left: 0;
-  background-color: rgba($color: #000, $alpha: 0.55);
+  background-color: rgba(0, 0, 0, 0.55);
   color: white;
 }
 
 .activity-bottom {
   bottom: 0;
+}
+
+.activity-device-name {
+  display: inline-block;
+  max-width: 12em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+
+.stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
 }
 
 .activity-top {
@@ -130,7 +146,7 @@ a {
   align-items: center;
   pointer-events: none;
 
-  button {
+  :slotted(button) {
     pointer-events: auto;
   }
 }

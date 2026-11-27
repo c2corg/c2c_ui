@@ -36,71 +36,68 @@
       <span v-else v-translate>no</span>
     </span>
 
-    <span v-else-if="field.i18n">{{ $gettext(value, field.i18nContext) }} </span>
+    <span v-else-if="field.i18n">{{ $gettext(value, field.i18nContext) }}</span>
 
-    <span v-else>
-      <span v-if="showPrefix">{{ prefix || field.prefix }}</span>
-      {{ divisor ? Math.round(value / divisor) : value }}
-    </span>
-
-    <span v-if="showUnit && !field.skipSpaceBeforeUnit">&nbsp;</span>
-    <span v-if="showUnit">{{ unit || field.unit }}</span>
-  </span>
+    <!-- no line break between prefix, value and unit: the templates keep whitespace, it would render as a space -->
+    <span v-else
+      ><span v-if="showPrefix">{{ prefix || field.prefix }}</span
+      >{{ shown.value }}</span
+    ><template v-if="showUnit"
+      ><template v-if="!field.skipSpaceBeforeUnit">&nbsp;</template>{{ shown.unit }}</template
+    ></span
+  >
 </template>
 
-<script>
-import { requireDocumentProperty, requireFieldProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import { computed } from 'vue';
 
-export default {
-  mixins: [requireDocumentProperty, requireFieldProperty],
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { formatLength } from '@/js/length-format';
+import { documentProperty, fieldProperty } from '@/js/properties';
 
-  props: {
-    unit: {
-      type: String,
-      default: null,
-    },
-    divisor: {
-      type: Number,
-      default: null,
-    },
-    sortValues: {
-      type: Boolean,
-      default: false,
-    },
-    prefix: {
-      type: String,
-      default: null,
-    },
+const props = defineProps({
+  ...documentProperty,
+  ...fieldProperty,
+  unit: {
+    type: String,
+    default: null,
   },
-
-  computed: {
-    value() {
-      return this.document[this.field.name];
-    },
-
-    isArray() {
-      return Array.isArray(this.value);
-    },
-
-    showUnit() {
-      return (this.unit || this.field.unit) && this.value !== null && this.value !== undefined;
-    },
-
-    showPrefix() {
-      return (this.prefix || this.field.prefix) && this.value !== null && this.value !== undefined;
-    },
-
-    license() {
-      switch (this.value) {
-        case 'personal':
-          return 'by-nc-nd';
-        case 'copyright':
-          return;
-        case 'colaborative':
-        default:
-          return 'by-sa';
-      }
-    },
+  divisor: {
+    type: Number,
+    default: null,
   },
-};
+  sortValues: {
+    type: Boolean,
+    default: false,
+  },
+  prefix: {
+    type: String,
+    default: null,
+  },
+});
+
+// the value of the field, of any type (string, number, list...)
+
+const value = computed<any>(() => props.document[props.field.name]);
+
+const { $language } = useGlobalProperties();
+
+// the value and unit shown: a length in metres shown in km gets the unit that suits its size (560 m, 4.5 km, 12 km)
+const shown = computed(() => {
+  const unit = props.unit || props.field.unit;
+
+  if (props.divisor === 1000 && unit === 'km' && typeof value.value === 'number') {
+    return formatLength(value.value, $language?.current);
+  }
+
+  return { value: props.divisor ? Math.round(value.value / props.divisor) : value.value, unit };
+});
+
+const isArray = computed(() => Array.isArray(value.value));
+
+const showUnit = computed(() => (props.unit || props.field.unit) && value.value !== null && value.value !== undefined);
+
+const showPrefix = computed(
+  () => (props.prefix || props.field.prefix) && value.value !== null && value.value !== undefined
+);
 </script>

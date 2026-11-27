@@ -34,65 +34,75 @@
   </div>
 </template>
 
-<script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 
-export default {
-  mixins: [requireDocumentProperty],
-  props: {
-    hideButtons: {
-      type: Boolean,
-      default: false,
-    },
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { documentProperty } from '@/js/properties';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
-    disableActivitySplit: {
-      type: Boolean,
-      default: false,
-    },
+const props = defineProps({
+  ...documentProperty,
+  hideButtons: {
+    type: Boolean,
+    default: false,
   },
 
-  computed: {
-    query() {
-      const query = {};
-      query[this.document.type] = this.document.document_id;
-      return query;
-    },
-
-    source() {
-      let routes = (this.document.associations.routes || this.document.associations.all_routes.documents)
-        .map((route) => ({ ...route, title: this.$documentUtils.getDocumentTitle(route, this.$route.params.lang) }))
-        .sort((r1, r2) => r1.title.localeCompare(r2.title));
-      if (this.document.type === 'w' && this.document?.waypoint_type !== 'climbing_outdoor') {
-        // filter out crags for non climbing sites waypoints
-        routes = routes.filter((route) => route?.climbing_outdoor_type !== 'single');
-      }
-      return routes;
-    },
-
-    routes() {
-      const result = {};
-
-      for (const route of this.source) {
-        for (const activity of route.activities) {
-          if (!result[activity]) {
-            result[activity] = [];
-          }
-
-          result[activity].push(route);
-        }
-      }
-
-      return result;
-    },
-
-    totalRoutes() {
-      return this.document.associations.all_routes?.total || this.document.associations.routes?.length;
-    },
+  disableActivitySplit: {
+    type: Boolean,
+    default: false,
   },
-};
+});
+
+const pageRoute = useRoute();
+const { $documentUtils } = useGlobalProperties();
+
+// the routes of a waypoint (all of them, as a page with its total), or the routes associated to a document
+const associations = computed(
+  () =>
+    props.document.associations as {
+      routes?: C2cDocument[];
+      all_routes?: { documents: C2cDocument[]; total: number };
+    }
+);
+
+const query = computed(() => ({ [props.document.type!]: props.document.document_id }));
+
+const source = computed(() => {
+  let routes = (associations.value.routes || associations.value.all_routes!.documents)
+    .map((route): C2cDocument & { title: string } => ({
+      ...route,
+      title: $documentUtils.getDocumentTitle(route, pageRoute.params.lang as string),
+    }))
+    .sort((r1, r2) => r1.title.localeCompare(r2.title));
+  if (props.document.type === 'w' && props.document?.waypoint_type !== 'climbing_outdoor') {
+    // filter out crags for non climbing sites waypoints
+    routes = routes.filter((route) => route?.climbing_outdoor_type !== 'single');
+  }
+  return routes;
+});
+
+const routes = computed(() => {
+  const result: Record<string, C2cDocument[]> = {};
+
+  for (const route of source.value) {
+    for (const activity of route.activities as string[]) {
+      if (!result[activity]) {
+        result[activity] = [];
+      }
+
+      result[activity].push(route);
+    }
+  }
+
+  return result;
+});
+
+const totalRoutes = computed(() => associations.value.all_routes?.total || associations.value.routes?.length);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 h3 {
   margin-top: 1.5rem !important;
   margin-bottom: 0.5rem !important;
@@ -108,6 +118,9 @@ h3 {
 }
 
 .badge {
-  @include button-badge-primary;
+  color: var(--c2c-primary);
+  background-color: var(--c2c-white);
+  border-radius: 1em;
+  padding: 0 0.35em;
 }
 </style>

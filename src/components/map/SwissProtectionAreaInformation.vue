@@ -1,5 +1,5 @@
 <template>
-  <modal-window ref="modalWindow">
+  <modal-window ref="modal">
     <template #header>
       <div class="has-text-centered">
         <span>
@@ -33,52 +33,51 @@
   </modal-window>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, useTemplateRef } from 'vue';
+
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import utils from '@/js/utils';
 
-export default {
-  props: {
-    data: {
-      type: Object,
-      required: true,
-    },
+const props = defineProps({
+  data: {
+    type: Object,
+    required: true,
   },
-  computed: {
-    type() {
-      switch (this.data.layerBodId) {
-        case 'ch.bafu.wrz-wildruhezonen_portal':
-          return this.$gettext('Protection area:');
-        case 'ch.bafu.wrz-jagdbanngebiete_select':
-          return this.$gettext('Fauna protection site:');
-        default:
-          return this.$gettext('Sensitive area:');
-      }
-    },
-    dispositions() {
-      let lang = this.$language.current;
-      if (!['fr', 'de', 'it'].includes(lang)) {
-        lang = 'fr';
-      }
-      const result = this.data.properties[`best_${lang}`] ?? '';
-      return utils.decodeHtmlEntities(result);
-    },
-    additionalInformation() {
-      const result = this.data.properties.zusatzinformation ?? '';
-      return utils.decodeHtmlEntities(result);
-    },
-    protectionStatus() {
-      let lang = this.$language.current;
-      if (!['fr', 'de', 'it'].includes(lang)) {
-        lang = 'fr';
-      }
+});
 
-      return utils.decodeHtmlEntities(this.data.properties[`schutzs_${lang}`] ?? '');
-    },
-  },
-  methods: {
-    show() {
-      this.$refs.modalWindow.show();
-    },
-  },
+const { $gettext, $language } = useGlobalProperties();
+const modal = useTemplateRef<{ show(): void }>('modal');
+
+// the texts of the area are in French, German and Italian
+const textLang = () => {
+  const lang = $language.current;
+  return lang && ['fr', 'de', 'it'].includes(lang) ? lang : 'fr';
 };
+
+const type = computed(() => {
+  switch (props.data.layerBodId) {
+    case 'ch.bafu.wrz-wildruhezonen_portal':
+      return $gettext('Protection area:');
+    case 'ch.bafu.wrz-jagdbanngebiete_select':
+      return $gettext('Fauna protection site:');
+    default:
+      return $gettext('Sensitive area:');
+  }
+});
+
+const dispositions = computed(() => utils.decodeHtmlEntities(props.data.properties[`best_${textLang()}`] ?? '') ?? '');
+const additionalInformation = computed(
+  () => utils.decodeHtmlEntities(props.data.properties.zusatzinformation ?? '') ?? ''
+);
+const protectionStatus = computed(
+  () => utils.decodeHtmlEntities(props.data.properties[`schutzs_${textLang()}`] ?? '') ?? ''
+);
+
+function show() {
+  modal.value!.show();
+}
+
+// the map shows it for the clicked area
+defineExpose({ show });
 </script>

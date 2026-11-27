@@ -1,35 +1,20 @@
 <template>
-  <div class="accessibility-cell">
-    <accessibility-badge :result="displayedResult" :duration-unknown="params.data.duration_unknown === true" />
-    <verify-accessibility-button
-      :document="params.data"
-      :transport-context="params.context.transportContext"
-      @verified="unitResult = $event"
-    />
-  </div>
+  <transport-accessibility
+    v-if="params.context?.transportContext"
+    :document="params.data"
+    :transport-context="params.context.transportContext"
+  />
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      unitResult: null,
-    };
-  },
+<script setup lang="ts">
+import type { ICellRendererParams } from 'ag-grid-community';
+import type { PropType } from 'vue';
 
-  computed: {
-    displayedResult() {
-      return this.unitResult ?? this.params.context?.transportContext?.results?.[this.params.data.document_id] ?? null;
-    },
+// the grid gives each cell its params: the row document is params.data, the transport search is in the grid context
+defineProps({
+  params: {
+    type: Object as PropType<ICellRendererParams>,
+    required: true,
   },
-};
+});
 </script>
-
-<style scoped lang="scss">
-.accessibility-cell {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-</style>

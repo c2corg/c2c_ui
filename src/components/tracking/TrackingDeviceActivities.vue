@@ -6,7 +6,7 @@
         <div v-for="activity in activities" :key="activity.id">
           <div class="column is-flex is-justify-content-space-around">
             <tracking-device-activity :activity="activity">
-              <button class="button" @click="fetch(activity.id)" v-if="!fetching">
+              <button class="button" @click="fetch(activity)" v-if="!fetching">
                 <fa-icon icon="download"></fa-icon>&hairsp;<span v-translate>Use track</span>
               </button>
               <spinner-icon v-else-if="fetching === activity.id" />
@@ -20,63 +20,59 @@
       </p>
     </div>
   </div>
-  <div v-else-if="promise !== null"><span v-translate>Loading...</span></div>
+  <div v-else-if="loading"><span v-translate>Loading...</span></div>
   <div v-else>
     <span v-translate>No activity found</span>
   </div>
 </template>
 
-<script>
-import { toast } from 'bulma-toast';
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
 
-import TrackingDeviceActivity from '@/components/tracking/TrackingDeviceActivity';
-import trackingService from '@/js/apis/tracking-service';
+import TrackingDeviceActivity from '@/components/tracking/TrackingDeviceActivity.vue';
+import trackingService, { type Activity } from '@/js/apis/tracking-service';
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { toast } from '@/js/toast';
 
-export default {
-  components: { TrackingDeviceActivity },
+const emit = defineEmits(['geojson']);
 
-  emits: ['geojson'],
+const { $gettext, $user } = useGlobalProperties();
 
-  data() {
-    return {
-      promise: null,
-      activities: [],
-      fetching: null,
-    };
-  },
+const loading = ref(true);
+const activities = ref<Activity[]>([]);
+const fetching = ref<number | null>(null);
 
-  mounted() {
-    this.loadActivities();
-  },
+function loadActivities() {
+  trackingService
+    .getActivities($user.id!, $user.lang)
+    .then(
+      (response) => {
+        activities.value = response.data;
+      },
+      () => undefined
+    )
+    // also when they could not be loaded: "No activity found" then, not loading forever
+    .finally(() => (loading.value = false));
+}
 
-  methods: {
-    async loadActivities() {
-      if (this.promise) {
-        this.promise.cancel();
+function fetch(activity: Activity) {
+  fetching.value = activity.id;
+  trackingService
+    .getActivityGeometry($user.id!, activity.id)
+    .then(
+      ({ data }) => {
+        emit('geojson', data, activity.c2cActivities ?? []);
+      },
+      () => {
+        toast({
+          message: $gettext('Geographical data could not be retrieved'),
+          type: 'is-danger',
+          position: 'center',
+        });
       }
-      this.promise = trackingService.getActivities(this.$user.id, this.$user.lang).then((response) => {
-        this.activities = response.data;
-      });
-    },
+    )
+    .finally(() => (fetching.value = null));
+}
 
-    fetch(activityId) {
-      this.fetching = activityId;
-      trackingService
-        .getActivityGeometry(this.$user.id, activityId)
-        .then(
-          ({ data }) => {
-            this.$emit('geojson', data);
-          },
-          () => {
-            toast({
-              message: this.$gettext('Geographical data could not be retrieved'),
-              type: 'is-danger',
-              position: 'center',
-            });
-          }
-        )
-        .finally(() => (this.fetching = null));
-    },
-  },
-};
+onMounted(loadActivities);
 </script>

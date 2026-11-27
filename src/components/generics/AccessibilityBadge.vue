@@ -1,139 +1,102 @@
 <template>
-  <span class="accessibility-badge" :class="stateClass">
-    <fa-icon :icon="stateIcon" aria-hidden="true" />
+  <span class="tag accessibility-badge" :class="STATES[state].class">
+    <fa-icon :icon="STATES[state].icon" aria-hidden="true" />
     {{ label }}
   </span>
 </template>
 
-<script>
-export default {
-  name: 'AccessibilityBadge',
+<script setup lang="ts">
+import { computed, type PropType } from 'vue';
 
-  props: {
-    /**
-     * The round-trip verification result for this document, or `null` when it has not been verified yet (only matched
-     * by the estimated aller/retour/intersection area). Shape: `{ aller: {found}, retour: {found}, compatible }`.
-     */
-    result: {
-      type: Object,
-      default: null,
-    },
-    /**
-     * The duration of the route is unknown: its accessibility cannot be verified (also the case of a result flagged
-     * `duration_unknown` by the API)
-     */
-    durationUnknown: {
-      type: Boolean,
-      default: false,
-    },
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import type { RoundTripResult } from '@/js/transport-accessibility';
+
+const props = defineProps({
+  /**
+   * The round-trip check of this document, or null when it has not been checked (only matched by the estimated
+   * outbound/return/intersection areas)
+   */
+  result: {
+    type: Object as PropType<RoundTripResult | null>,
+    default: null,
   },
-
-  computed: {
-    state() {
-      if (this.durationUnknown || this.result?.duration_unknown) {
-        return 'duration-unknown';
-      }
-
-      if (!this.result) {
-        return 'unverified';
-      }
-
-      const allerFound = Boolean(this.result.aller?.found);
-      const retourFound = Boolean(this.result.retour?.found);
-
-      if (allerFound && retourFound && this.result.compatible) {
-        return 'both';
-      }
-
-      if (allerFound && !retourFound) {
-        return 'partial-aller';
-      }
-
-      if (!allerFound && retourFound) {
-        return 'partial-retour';
-      }
-
-      return 'none';
-    },
-
-    stateClass() {
-      return `is-${this.state}`;
-    },
-
-    stateIcon() {
-      return (
-        {
-          unverified: 'question-circle',
-          'duration-unknown': 'question-circle',
-          both: 'check-circle',
-          'partial-aller': 'exclamation-circle',
-          'partial-retour': 'exclamation-circle',
-          none: 'ban',
-        }[this.state] ?? 'question-circle'
-      );
-    },
-
-    label() {
-      switch (this.state) {
-        case 'both':
-          return this.$gettext('Verified: round trip possible');
-        case 'partial-aller':
-          return this.$gettext('Verified: outbound only');
-        case 'partial-retour':
-          return this.$gettext('Verified: return only');
-        case 'none':
-          return this.$gettext('No compatible trip found');
-        case 'duration-unknown':
-          return this.$gettext('Duration unknown: not verifiable');
-        default:
-          return this.$gettext('Estimated area match');
-      }
-    },
+  /**
+   * The duration of the route is unknown: its accessibility cannot be checked (also the case of a result flagged
+   * `duration_unknown` by the API)
+   */
+  durationUnknown: {
+    type: Boolean,
+    default: false,
   },
+});
+
+const { $gettext } = useGlobalProperties();
+
+type State = 'unverified' | 'duration-unknown' | 'both' | 'partial-aller' | 'partial-retour' | 'none';
+
+const STATES: Record<State, { class: string; icon: string }> = {
+  unverified: { class: 'is-unverified', icon: 'question-circle' },
+  'duration-unknown': { class: 'is-light', icon: 'question-circle' },
+  both: { class: 'is-success is-light', icon: 'check-circle' },
+  'partial-aller': { class: 'is-warning is-light', icon: 'exclamation-circle' },
+  'partial-retour': { class: 'is-warning is-light', icon: 'exclamation-circle' },
+  none: { class: 'is-danger is-light', icon: 'ban' },
 };
+
+const state = computed<State>(() => {
+  if (props.durationUnknown || props.result?.duration_unknown) {
+    return 'duration-unknown';
+  }
+
+  if (!props.result) {
+    return 'unverified';
+  }
+
+  const allerFound = Boolean(props.result.aller?.found);
+  const retourFound = Boolean(props.result.retour?.found);
+
+  if (allerFound && retourFound && props.result.compatible) {
+    return 'both';
+  }
+
+  if (allerFound && !retourFound) {
+    return 'partial-aller';
+  }
+
+  if (!allerFound && retourFound) {
+    return 'partial-retour';
+  }
+
+  return 'none';
+});
+
+const label = computed(() => {
+  switch (state.value) {
+    case 'both':
+      return $gettext('Verified: round trip possible');
+    case 'partial-aller':
+      return $gettext('Verified: outbound only');
+    case 'partial-retour':
+      return $gettext('Verified: return only');
+    case 'none':
+      return $gettext('No compatible trip found');
+    case 'duration-unknown':
+      return $gettext('Duration unknown: not verifiable');
+    default:
+      return $gettext('Estimated area match');
+  }
+});
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .accessibility-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 0.75rem;
+  gap: 0.25rem;
   font-weight: bold;
-  white-space: nowrap;
-  line-height: 1.4;
 
   &.is-unverified {
-    border: 1px dashed #999;
-    color: #666;
+    border: 1px dashed var(--c2c-grey);
+    color: var(--c2c-grey-dark);
     background: transparent;
-  }
-
-  &.is-duration-unknown {
-    border: 1px solid #999;
-    background: #f0f0f0;
-    color: #555;
-  }
-
-  &.is-both {
-    border: 1px solid #2e7d32;
-    background: #e8f5e9;
-    color: #2e7d32;
-  }
-
-  &.is-partial-aller,
-  &.is-partial-retour {
-    border: 1px solid #e69500;
-    background: #fff3e0;
-    color: #b26a00;
-  }
-
-  &.is-none {
-    border: 1px solid #c62828;
-    background: #ffebee;
-    color: #c62828;
   }
 }
 </style>

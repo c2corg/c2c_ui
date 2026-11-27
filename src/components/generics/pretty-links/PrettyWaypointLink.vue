@@ -4,18 +4,16 @@
   </document-link>
 </template>
 
-<script>
-export default {
-  props: {
-    waypoint: {
-      type: Object,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  waypoint: {
+    type: Object,
+    required: true,
   },
-};
+});
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .pretty-waypoint-link {
   display: block;
 }

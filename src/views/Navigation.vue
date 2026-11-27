@@ -3,41 +3,21 @@
     class="is-size-5"
     :class="{
       'has-background-warning': siteConfiguration.urls.name != 'prod',
-      'with-ad': !homePage() && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop,
+      'with-ad': largeAd,
     }"
   >
-    <span
-      v-if="$screen.isMobile || $screen.isTablet"
-      class="navigation-item"
-      :class="{ 'is-hidden-mobile': !hideSearchInput }"
-      @click="$emit('toggle-side-menu')"
-    >
-      <span class="button">
-        <fa-icon icon="bars" />
-      </span>
-    </span>
+    <dfm-ad-large v-if="largeAd" />
 
-    <a
-      v-if="$screen.isMobile || $screen.isTablet"
-      :href="'/'"
-      class="navigation-item navigation-brand has-text-centered"
-      :class="{ 'is-hidden-mobile': !hideSearchInput }"
-    >
-      <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
-    </a>
-
-    <dfm-ad-large v-if="!homePage() && !$screen.isMobile && !$screen.isTablet && !$screen.isDesktop" />
-
-    <div class="navigation-end">
+    <div class="navigation-end" :class="{ 'is-search-shown': !hideSearchInput }">
       <router-link
-        :to="{ name: 'article', params: { id: 106732 } }"
+        :to="HELP_ROUTE"
         class="navigation-item has-text-centered"
         :class="{ 'is-hidden-mobile': !hideSearchInput }"
       >
         <icon-help fixed-width />
         <span class="is-hidden-mobile"> {{ $filters.uppercaseFirstLetter($gettext('help')) }} </span>
       </router-link>
-      <div ref="searchInputContainer">
+      <div ref="searchInputContainer" class="search-input-container">
         <input-document
           ref="searchInput"
           class="navigation-item search-input"
@@ -70,7 +50,8 @@
         </div>
         <div class="dropdown-menu">
           <div class="dropdown-content">
-            <a
+            <button
+              type="button"
               v-for="(urlsConfiguration, i) of Object.values(siteConfiguration.urlsConfigurations)"
               :key="i"
               class="dropdown-item is-size-5"
@@ -78,7 +59,7 @@
               @click="setUrlsConfiguration(urlsConfiguration.name)"
             >
               <span>{{ urlsConfiguration.name }}</span>
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -93,16 +74,16 @@
       <div class="navigation-item">
         <dropdown-button class="is-right add-button" ref="addDocumentMenu">
           <template #button>
-            <span class="button is-success">
+            <span class="button is-success" :class="{ 'is-non-production-backend': isNonProductionBackend }">
               <fa-icon icon="plus" />
             </span>
           </template>
           <add-link
-            v-for="documentType of ['outing', 'route', 'waypoint', 'article', 'book', 'xreport']"
+            v-for="documentType of ADDABLE_TYPES"
             :key="documentType"
             :document-type="documentType"
             class="dropdown-item is-size-5 is-ellipsed"
-            @click="$refs.addDocumentMenu.isActive = false"
+            @click="addDocumentMenu!.isActive = false"
           >
             <icon-document :document-type="documentType" fixed-width />
             <span>
@@ -123,23 +104,56 @@
       <div v-else class="navigation-item">
         <dropdown-button class="is-right" ref="userMenu">
           <template #button>
-            <span class="button">
-              <img
-                width="24"
-                height="24"
-                alt="Avatar"
-                :src="$options.forumUrl + '/user_avatar/forum.camptocamp.org/' + $user.forumUsername + '/24/1_1.png'"
-              />
+            <span class="button user-menu-button">
+              <span
+                class="forum-avatar"
+                :class="{
+                  'has-notifications': forumLinks.some((link) => link.kind === 'notifications'),
+                  'has-messages': forumLinks.some((link) => link.kind === 'messages'),
+                }"
+              >
+                <img width="24" height="24" alt="Avatar" :src="forum.getUserAvatarUrl($user.forumUsername ?? '', 24)" />
+                <!-- placed like on the forum: messages on the left, other notifications on the right -->
+                <span
+                  v-for="link of forumLinks"
+                  :key="link.kind"
+                  class="forum-badge is-on-avatar"
+                  :class="'is-' + link.kind"
+                  aria-hidden="true"
+                >
+                  {{ badgeText(link.count) }}
+                </span>
+              </span>
+              <span v-for="link of forumLinks" :key="link.kind" class="is-sr-only">
+                {{ link.text }}: {{ link.count }}
+              </span>
               <span class="has-text-weight-bold is-hidden-mobile"> &nbsp;{{ $user.name }} </span>
             </span>
           </template>
 
+          <template v-if="forumLinks.length">
+            <a
+              v-for="link of forumLinks"
+              :key="link.kind"
+              :href="link.href"
+              target="_blank"
+              rel="noopener"
+              class="dropdown-item is-size-5 forum-link"
+              @click="userMenu!.isActive = false"
+            >
+              <fa-icon :icon="link.icon" fixed-width />
+              <span>{{ link.text }}</span>
+              <span class="forum-badge" :class="'is-' + link.kind">{{ link.count }}</span>
+            </a>
+            <hr class="dropdown-divider" />
+          </template>
+
           <router-link
             v-for="item of userMenuLinks"
-            :key="item.text"
+            :key="item.key"
             :to="item.to"
             class="dropdown-item is-size-5"
-            @click="$refs.userMenu.isActive = false"
+            @click="userMenu!.isActive = false"
           >
             <component :is="item.iconComponent || 'fa-icon'" :icon="item.icon" fixed-width />
             <span>
@@ -149,21 +163,24 @@
 
           <hr class="dropdown-divider" />
 
-          <a class="dropdown-item is-size-5" @click="signout()">
+          <button type="button" class="dropdown-item is-size-5" @click="signout()">
             <fa-icon icon="sign-out-alt" />
             <span>&nbsp;</span>
             <span v-translate>Logout</span>
-          </a>
+          </button>
         </dropdown-button>
       </div>
+      <!-- logged out: the language, and what the user menu offers to anyone (favourites of the device, settings) -->
       <div v-if="!$user.isLogged" class="navigation-item">
-        <dropdown-button class="is-right">
+        <dropdown-button class="is-right" ref="settingsMenu">
           <template #button>
-            <button class="button">
-              {{ $language.current }}
+            <button class="button" :aria-label="$gettext('Settings')">
+              <fa-icon icon="gear" />
+              <span>&nbsp;{{ $language.current }}</span>
             </button>
           </template>
-          <a
+          <button
+            type="button"
             v-for="(language, key) in $language.availableUI"
             :key="key"
             class="dropdown-item is-size-5"
@@ -171,179 +188,194 @@
             @click="$language.setCurrent(key)"
           >
             {{ language }}
-          </a>
+          </button>
+          <hr class="dropdown-divider" />
+          <router-link
+            :to="{ name: 'offline' }"
+            class="dropdown-item is-size-5"
+            @click="settingsMenu!.isActive = false"
+          >
+            <fa-icon icon="bookmark" fixed-width />
+            <span>{{ $gettext('Favourites') }}</span>
+          </router-link>
+          <router-link
+            :to="{ name: 'settings' }"
+            class="dropdown-item is-size-5"
+            @click="settingsMenu!.isActive = false"
+          >
+            <fa-icon icon="gears" fixed-width />
+            <span>{{ $gettext('Settings') }}</span>
+          </router-link>
         </dropdown-button>
       </div>
     </div>
   </nav>
 </template>
 
-<script>
-import { isNavigationFailure } from 'vue-router';
+<script setup lang="ts">
+import { computed, nextTick, onBeforeUnmount, ref, shallowRef, useTemplateRef, watch } from 'vue';
+import { isNavigationFailure, useRoute, useRouter } from 'vue-router';
 
 import DfmAdLarge from './DfmAdLarge.vue';
 
-import IconHelp from '@/components/generics/icons/IconHelp';
-import IconJoinUs from '@/components/generics/icons/IconJoinUs';
+import IconHelp from '@/components/generics/icons/IconHelp.vue';
+import IconJoinUs from '@/components/generics/icons/IconJoinUs.vue';
 import JoinUsLink from '@/components/generics/links/JoinUsLink.vue';
+import forum from '@/js/apis/forum';
+import { urlWithBackend } from '@/js/backend-selection';
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { ADDABLE_TYPES, HELP_ROUTE, useAccountLinks } from '@/js/composables/main-menu';
 import config from '@/js/config';
+import { isNonProductionBackend } from '@/js/environment-label';
+import { toast } from '@/js/toast';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+import type { useForumNotificationsStore } from '@/stores/forum-notifications';
 
-export default {
-  components: {
-    DfmAdLarge,
-    IconHelp,
-    IconJoinUs,
-    JoinUsLink,
-  },
-  emits: ['toggle-side-menu'],
+// the large ad of the documents' views on wide screens, decided by App.vue, which leaves its room under the navigation
+defineProps<{ largeAd?: boolean }>();
 
-  data() {
-    return {
-      searchText: '',
-      hideSearchInput: true, // only on small screen,
-    };
-  },
+const route = useRoute();
+const router = useRouter();
+const { $gettext, $user, $documentUtils } = useGlobalProperties();
 
-  computed: {
-    siteConfiguration() {
-      return config;
-    },
+// the API refused the session (see the user store): tell the user why they are signed out
+watch(
+  () => $user.sessionEnded,
+  (reason) => {
+    if (!reason) {
+      return;
+    }
+    toast({
+      message:
+        reason === 'blocked'
+          ? $gettext('Your account is blocked: you have been signed out.')
+          : $gettext('Your session has ended: please sign in again.'),
+      type: 'is-warning',
+      position: 'center',
+    });
+  }
+);
 
-    userMenuLinks() {
-      const items = [
-        {
-          to: { name: 'profile', params: { id: this.$user.id } },
-          text: this.$gettext('My profile'),
-          icon: 'user',
-        },
-        {
-          to: { name: 'account' },
-          text: this.$gettext('My account'),
-          icon: 'check-circle',
-        },
-        {
-          to: { name: 'preferences' },
-          text: this.$gettext('My preferences'),
-          icon: 'gears',
-        },
-        {
-          to: { name: 'trackers' },
-          text: this.$gettext('Activity trackers'),
-          icon: 'location-crosshairs',
-        },
-        {
-          to: { name: 'outings', query: { u: this.$user.id } },
-          text: this.$gettext('My outings'),
-          iconComponent: 'icon-outing',
-        },
-        {
-          to: { name: 'outings-stats', query: { u: this.$user.id } },
-          text: this.$gettext('My statistics'),
-          icon: 'chart-bar',
-        },
-        {
-          to: { name: 'whatsnew', query: { u: this.$user.id } },
-          text: this.$gettext('My changes'),
-          icon: 'edit',
-        },
-        {
-          to: { name: 'following' },
-          text: this.$gettext('My followed users'),
-          icon: 'heart',
-        },
-        {
-          to: { name: 'routes', query: { u: this.$user.id } },
-          text: this.$gettext('My bookmarks'),
-          icon: 'star',
-        },
-      ];
-      return items;
-    },
-  },
+const forumUrl = config.urls.forum;
 
-  forumUrl: config.urls.forum,
-
-  created() {
-    window.addEventListener('click', this.onClick);
-  },
-
-  beforeUnmount() {
-    window.removeEventListener('click', this.onClick);
-  },
-
-  // do need to destroy event listener as Navigation component will always exists
-
-  methods: {
-    go(document) {
-      this.$router.push({
-        name: this.$documentUtils.getDocumentType(document.type),
-        params: { id: document.document_id },
-      });
-    },
-
-    setUrlsConfiguration(name) {
-      config.setUrlsName(name);
-      this.$router.go();
-    },
-
-    onClick(event) {
-      if (!this.$refs.searchInputContainer.contains(event.target)) {
-        this.hideSearchInput = true;
-      }
-    },
-
-    showSearchInput() {
-      this.hideSearchInput = false;
-
-      // after DOM update, input will be visible, and focusable
-      this.$nextTick(() => {
-        this.$refs.searchInput.focus();
-      });
-    },
-
-    signout() {
-      if (!this.$route.meta.requiresAuth) {
-        this.$user.signout();
+// the unread notifications of the user on the forum, while signed in. Loaded on the first sign in: visitors don't need it
+const forumNotifications = shallowRef<ReturnType<typeof useForumNotificationsStore> | null>(null);
+const followedForumUser = () => ($user.isLogged ? $user.forumUsername : null);
+watch(
+  followedForumUser,
+  async (forumUsername) => {
+    if (!forumUsername) {
+      forumNotifications.value?.stop();
+      return;
+    }
+    if (!forumNotifications.value) {
+      const { useForumNotificationsStore } = await import('@/stores/forum-notifications');
+      forumNotifications.value = useForumNotificationsStore();
+      // signed out or changed while loading: the watcher ran again
+      if (followedForumUser() !== forumUsername) {
         return;
       }
-
-      // leave the page first: its leave guard (e.g. unsaved edits) may cancel the
-      // navigation, in which case the user stays logged in on the current page
-      this.$router.push({ name: 'home' }).then(
-        () => this.$user.signout(),
-        (error) => {
-          if (!isNavigationFailure(error)) {
-            throw error;
-          }
-        }
-      );
-    },
-
-    homePage() {
-      if (this.$route.path === '/home' || this.$route.path === '/') {
-        return true;
-      } else {
-        return false;
-      }
-    },
+    }
+    forumNotifications.value.start(forumUsername);
   },
-};
-</script>
+  { immediate: true }
+);
 
-<style scoped lang="scss">
-nav {
-  max-width: 100vw;
-  height: $navbar-height;
-  background-color: $white;
-  box-shadow: 0 2px 0 $color-base-c2c;
-  display: flex;
+// the forum pages listing them, for the counts that are not zero
+const forumLinks = computed(() =>
+  [
+    {
+      kind: 'messages',
+      count: forumNotifications.value?.unreadHighPriority ?? 0,
+      href: `${forumUrl}/u/${$user.forumUsername}/messages`,
+      text: $gettext('Forum messages'),
+      icon: 'envelope',
+    },
+    {
+      kind: 'notifications',
+      count: forumNotifications.value?.unread ?? 0,
+      href: `${forumUrl}/u/${$user.forumUsername}/notifications`,
+      text: $gettext('Forum notifications'),
+      icon: 'bell',
+    },
+  ].filter((link) => link.count > 0)
+);
+
+function badgeText(count: number) {
+  return count > 9 ? '9+' : String(count);
+}
+const siteConfiguration = config;
+
+const searchInputContainer = useTemplateRef<HTMLDivElement>('searchInputContainer');
+const searchInput = useTemplateRef<{ focus(): void }>('searchInput');
+const addDocumentMenu = useTemplateRef<{ isActive: boolean }>('addDocumentMenu');
+const userMenu = useTemplateRef<{ isActive: boolean }>('userMenu');
+const settingsMenu = useTemplateRef<{ isActive: boolean }>('settingsMenu');
+
+const hideSearchInput = ref(true); // only on small screen
+
+const userMenuLinks = useAccountLinks();
+
+function go(document: C2cDocument) {
+  router.push({
+    name: $documentUtils.getDocumentType(document.type),
+    params: { id: document.document_id },
+  });
 }
 
-.navigation-brand {
-  padding: 4px 5px !important;
-  img {
-    height: calc(#{$navbar-height} - 8px);
+function setUrlsConfiguration(name: string) {
+  // reloads the page on the other backend, for this tab only
+  window.location.assign(urlWithBackend(window.location.href, name));
+}
+
+function onClick(event: MouseEvent) {
+  if (!searchInputContainer.value!.contains(event.target as Node)) {
+    hideSearchInput.value = true;
   }
+}
+
+function showSearchInput() {
+  hideSearchInput.value = false;
+
+  // after DOM update, input will be visible, and focusable
+  nextTick(() => {
+    searchInput.value!.focus();
+  });
+}
+
+function signout() {
+  if (!route.meta.requiresAuth) {
+    $user.signout();
+    return;
+  }
+
+  // leave the page first: its leave guard (e.g. unsaved edits) may cancel the
+  // navigation, in which case the user stays logged in on the current page.
+  // vue-router resolves push() with the failure (it rejects only on errors)
+  router.push({ name: 'home' }).then((failure) => {
+    if (!isNavigationFailure(failure)) {
+      $user.signout();
+    }
+  });
+}
+
+window.addEventListener('click', onClick);
+
+onBeforeUnmount(() => {
+  window.removeEventListener('click', onClick);
+  forumNotifications.value?.stop();
+});
+</script>
+
+<style scoped>
+@import '@/assets/css/media.css';
+
+nav {
+  max-width: 100vw;
+  height: var(--c2c-navbar-height);
+  background-color: var(--c2c-white);
+  box-shadow: 0 2px 0 var(--c2c-color-base-c2c);
+  display: flex;
 }
 
 .navigation-end {
@@ -358,13 +390,95 @@ nav {
   line-height: 1.5;
 }
 
+/* "Join us": like the green add button next to it, no grey border and darker on hover;
+   the padding is on the link (below), so that the whole button can be clicked */
 .c2c-color {
-  background-color: $color-base-c2c;
+  background-color: var(--c2c-color-base-c2c);
+  border-color: transparent;
+  padding: 0;
+
+  &:hover {
+    background-color: #e6791f;
+    border-color: transparent;
+  }
+}
+
+/* the avatar as close to the left border as to the top and bottom ones (3px) */
+.user-menu-button {
+  padding-left: 3px;
+}
+
+/* the forum's badges: its colors (tertiary, success), white text, rounded */
+
+.forum-avatar {
+  position: relative;
+  display: inline-flex;
+
+  /* rounded square like the forum's avatars and the buttons around it */
+  img {
+    border-radius: 4px;
+  }
+
+  /* room for the right badge before the name */
+  &.has-notifications {
+    margin-right: 9px;
+  }
+
+  /* room for the left badge within the button */
+  &.has-messages {
+    margin-left: 6px;
+  }
+}
+
+/* like Discourse's .badge-notification: one line of text, same padding above and below */
+.forum-badge {
+  display: inline-block;
+  box-sizing: content-box;
+  min-width: 8px;
+  padding: 2px 3px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 10px;
+  text-align: center;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  background-color: #337ab7;
+
+  /* where the digits sit in the line box depends on the font (Segoe UI, San Francisco, Roboto...):
+     trimmed to the digits' height (cap height to baseline), the same padding above and below centers them */
+  @supports (text-box: trim-both cap alphabetic) {
+    padding: 3.5px 3px;
+    text-box: trim-both cap alphabetic;
+  }
+
+  &.is-messages {
+    background-color: #090;
+  }
+
+  /* on the top corners of the avatar, within the button's border: there are only 3px above the avatar */
+  &.is-on-avatar {
+    position: absolute;
+    top: -2px;
+    right: -9px;
+    border: 1px solid var(--c2c-white);
+
+    &.is-messages {
+      right: auto;
+      left: -9px;
+    }
+  }
+}
+
+.forum-link .forum-badge {
+  margin-left: 0.5em;
+  vertical-align: middle;
 }
 
 .with-ad {
-  height: $navbarad-height;
-  margin-left: 200px;
+  height: var(--c2c-navbarad-height);
+  margin-left: var(--c2c-sidemenu-width);
 
   .navigation-end {
     flex-shrink: 1;
@@ -378,34 +492,8 @@ nav {
   }
 }
 
-@media screen and (max-width: $tablet) {
-  .navigation-brand {
-    img {
-      margin-left: 0px;
-      // height:31px;
-    }
-  }
-
-  .navigation-item {
-    padding: 0.5rem 0.1rem;
-  }
-
-  .navigation-end {
-    margin-right: 5px;
-  }
-
-  .search-input {
-    width: 160px;
-  }
-}
-
-@media screen and (min-width: $tablet) and (max-width: $desktop) {
-  .navigation-brand {
-    img {
-      margin-left: 5px;
-    }
-  }
-
+/* under the desktop width (a tablet, a phone on its side): the buttons closer together */
+@media screen and (--c2c-touch) {
   .navigation-item {
     padding: 0.5rem 0.2rem;
   }
@@ -413,55 +501,32 @@ nav {
   .navigation-end {
     margin-right: 5px;
   }
-
-  .search-input {
-    width: 160px;
-  }
 }
 
-@media screen and (min-width: $desktop) and (max-width: $widescreen) {
-  .navigation-brand {
-    img {
-      margin-left: 20px;
-    }
-  }
-
+@media screen and (--c2c-max-tablet) {
   .navigation-item {
-    padding: 0.5rem 0.75rem;
-  }
-
-  .navigation-end {
-    margin-right: 1rem;
-  }
-
-  .search-input {
-    width: 160px;
+    padding: 0.5rem 0.1rem;
   }
 }
 
-@media screen and (min-width: $widescreen) and (max-width: $fullhd) {
-  .navigation-brand {
-    img {
-      margin-left: 20px;
+/* on mobile, the search input shown takes the room left by the buttons */
+@media screen and (--c2c-mobile) {
+  .navigation-end.is-search-shown {
+    flex-grow: 1;
+  }
+
+  .is-search-shown .search-input-container {
+    flex-grow: 1;
+    display: flex;
+
+    .search-input {
+      flex-grow: 1;
+      width: auto;
     }
-  }
-
-  .navigation-item {
-    padding: 0.5rem 0.75rem;
-  }
-
-  .navigation-end {
-    margin-right: 1rem;
   }
 }
 
-@media screen and (min-width: $fullhd) {
-  .navigation-brand {
-    img {
-      margin-left: 20px;
-    }
-  }
-
+@media screen and (--c2c-min-desktop) {
   .navigation-item {
     padding: 0.5rem 0.75rem;
   }
@@ -471,9 +536,12 @@ nav {
   }
 }
 
-// search input : increase size to right on hover
-// only on screen wider than desktop
-@media screen and (min-width: $fullhd) {
+.search-input {
+  width: 160px;
+}
+
+/* on wide screens, a wider search input, wider still under the pointer */
+@media screen and (--c2c-min-widescreen) {
   .search-input {
     width: 250px;
     margin-right: 50px;
@@ -487,14 +555,23 @@ nav {
     margin-right: 0;
   }
 }
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark bar (the yellow one of the test servers stays) */
+html[data-theme='dark'] nav:not(.has-background-warning) {
+  background-color: var(--app-dark-field);
+}
 </style>
 
-<style lang="scss">
+<style>
+@import '@/assets/css/media.css';
+
 .c2c-color > a {
-  color: $color-text;
+  /* Bulma's button padding */
+  padding: calc(0.375em - 1px) 0.75em;
+  color: var(--c2c-color-text);
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (--c2c-max-tablet) {
   .add-button .dropdown-content {
     position: fixed;
     right: 0;

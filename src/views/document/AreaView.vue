@@ -17,7 +17,7 @@
       </div>
 
       <div class="column is-9">
-        <div class="box" v-if="document.cooked.summary || document.cooked.description">
+        <div class="box" v-if="document.cooked!.summary || document.cooked!.description">
           <markdown-section :document="document" :field="fields.summary" />
           <markdown-section :document="document" :field="fields.description" />
           <div style="clear: both" />
@@ -29,14 +29,14 @@
           <div class="level is-mobile">
             <div
               class="level-item has-text-centered"
-              v-for="documentType of ['waypoint', 'image', 'route', 'outing']"
-              :key="documentType"
+              v-for="listType of ['waypoint', 'image', 'route', 'outing']"
+              :key="listType"
             >
-              <router-link :to="{ name: documentType + 's', query: { a: documentId } }" class="">
+              <router-link :to="{ name: listType + 's', query: { a: documentId } }" class="">
                 <div>
-                  <icon-document class="is-size-1" :document-type="documentType.toLowerCase()" />
+                  <icon-document class="is-size-1" :document-type="listType.toLowerCase()" />
                 </div>
-                <p>{{ $filters.uppercaseFirstLetter($gettext(documentType + 's')) }}</p>
+                <p>{{ $filters.uppercaseFirstLetter($gettext(listType + 's')) }}</p>
               </router-link>
             </div>
           </div>
@@ -53,15 +53,22 @@
   </div>
 </template>
 
-<script>
-import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo';
-import documentViewMixin from './utils/document-view-mixin';
+<script setup lang="ts">
+import DocumentPrintLicense from './utils/DocumentPrintLicense.vue';
+import DocumentViewHeader from './utils/DocumentViewHeader.vue';
+import FundraiserBanner from './utils/FundraiserBanner.vue';
+import MaskedDocumentVersionInfo from './utils/MaskedDocumentVersionInfo.vue';
+import CommentsBox from './utils/boxes/CommentsBox.vue';
+import ImagesBox from './utils/boxes/ImagesBox.vue';
+import MapBox from './utils/boxes/MapBox.vue';
+import ToolBox from './utils/boxes/ToolBox.vue';
+import { documentViewProps, useDocumentView } from './utils/document-view';
+import FieldView from './utils/field-viewers/FieldView.vue';
+import MarkdownSection from './utils/field-viewers/MarkdownSection.vue';
 
-export default {
-  components: {
-    MaskedDocumentVersionInfo,
-  },
+import type { Area } from '@/js/apis/c2c/schemas';
 
-  mixins: [documentViewMixin],
-};
+const props = defineProps(documentViewProps);
+
+const { promise, documentId, documentType, fields, document, version } = useDocumentView<Area>(props);
 </script>

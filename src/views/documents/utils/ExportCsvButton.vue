@@ -6,14 +6,10 @@
   </button>
 </template>
 
-<script>
+<script setup lang="ts">
 import bus from '@/js/event-bus';
 
-export default {
-  methods: {
-    exportCsv() {
-      bus.emit('table-csv-export');
-    },
-  },
-};
+function exportCsv() {
+  bus.emit('table-csv-export');
+}
 </script>

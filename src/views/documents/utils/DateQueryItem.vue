@@ -7,42 +7,35 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      value: null,
-    };
-  },
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-  computed: {
-    urlValue: {
-      get() {
-        return this.$route.query.date ?? '';
-      },
-      set(value) {
-        const query = Object.assign({}, this.$route.query);
-        query.date = value;
+const route = useRoute();
+const router = useRouter();
 
-        if (query.date !== this.$route.query.date) {
-          this.$router.push({ query });
-        }
-      },
-    },
-  },
+const value = ref<string | null>(null);
 
-  watch: {
-    value: 'compute',
+const urlValue = computed({
+  get() {
+    return (route.query.date as string | undefined) ?? '';
   },
+  set(value: string | undefined) {
+    const query = Object.assign({}, route.query);
+    query.date = value as string;
 
-  created() {
-    this.value = this.urlValue;
+    if (query.date !== route.query.date) {
+      router.push({ query });
+    }
   },
+});
 
-  methods: {
-    compute() {
-      this.urlValue = this.value ? this.value : undefined;
-    },
-  },
-};
+function compute() {
+  urlValue.value = value.value ? value.value : undefined;
+}
+
+watch(value, () => compute());
+
+// created
+value.value = urlValue.value;
 </script>

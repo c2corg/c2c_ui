@@ -185,82 +185,94 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import type { PropType } from 'vue';
+
 import { assetUrl } from '@/js/asset-urls';
-import planATripUtils from '@/js/plan-a-trip-utils';
+import planATripUtils, { type Section } from '@/js/plan-a-trip-utils';
 
-export default {
-  components: {},
-  mixins: [],
-  props: {
-    activeTab: {
-      type: String,
-      default: 'outbound',
-    },
-    currentData: {
-      type: Object,
-      default: () => ({
-        fromAddress: '',
-        selectedAddress: null,
-        addressPropositions: [],
-        showAddressPropositions: false,
-        selectedDate: new Date().toISOString().slice(0, 10),
-        selectedTime: new Date().toTimeString().slice(0, 5),
-        timePreference: 'leave-after',
-        fromCoordinates: null,
-        selectedWaypoint: null,
-        journeys: [],
-        selectedJourney: null,
-        noResult: false,
-        selectedRouteJourney: null,
-        showTimeButton: false,
-        isUpdating: false,
-        missingDepartureAddress: false,
-        missingDestinationAddress: false,
-      }),
-    },
-    isUpdating: {
-      type: Boolean,
-      default: false,
-    },
-    noResult: {
-      type: Boolean,
-      default: false,
-    },
-    displayedFromAddress: {
-      type: String,
-      default: '',
-    },
-    displayedToAddress: {
-      type: String,
-      default: '',
-    },
+const {
+  formatTime,
+  formatDuration,
+  formatJourneyDuration,
+  getTransportIcon,
+  getTransportClass,
+  getTransportColorClass,
+  getDistance,
+  calculateSectionDuration,
+} = planATripUtils;
+
+// a journey proposed by Navitia, and the state of the section (PlanATripSection), as it reads them
+type Journey = { sections: Section[]; [property: string]: any };
+type PlanATripData = { journeys: Journey[]; [property: string]: any };
+
+const props = defineProps({
+  activeTab: {
+    type: String,
+    default: 'outbound',
   },
-  emits: ['selectJourney'],
-
-  computed: {},
-  methods: {
-    assetUrl,
-    ...planATripUtils,
-    /** Shows route details */
-    showJourneyDetails(journey) {
-      this.currentData.selectedRouteJourney = journey;
-
-      if (this.currentData.selectedJourney === journey) {
-        this.currentData.selectedJourney = null;
-      } else {
-        this.currentData.selectedJourney = journey;
-      }
-    },
-    /** Selects a route without opening details */
-    selectRouteOnly(journey) {
-      this.currentData.selectedRouteJourney = journey;
-      this.$emit('selectJourney', journey);
-    },
+  currentData: {
+    type: Object as PropType<PlanATripData>,
+    default: () => ({
+      fromAddress: '',
+      selectedAddress: null,
+      addressPropositions: [],
+      showAddressPropositions: false,
+      selectedDate: new Date().toISOString().slice(0, 10),
+      selectedTime: new Date().toTimeString().slice(0, 5),
+      timePreference: 'leave-after',
+      fromCoordinates: null,
+      selectedWaypoint: null,
+      journeys: [],
+      selectedJourney: null,
+      noResult: false,
+      selectedRouteJourney: null,
+      showTimeButton: false,
+      isUpdating: false,
+      missingDepartureAddress: false,
+      missingDestinationAddress: false,
+    }),
   },
-};
+  isUpdating: {
+    type: Boolean,
+    default: false,
+  },
+  noResult: {
+    type: Boolean,
+    default: false,
+  },
+  displayedFromAddress: {
+    type: String,
+    default: '',
+  },
+  displayedToAddress: {
+    type: String,
+    default: '',
+  },
+});
+
+const emit = defineEmits(['selectJourney']);
+
+/** Shows route details */
+function showJourneyDetails(journey: Journey) {
+  // the state of the section, shared with it
+
+  props.currentData.selectedRouteJourney = journey;
+
+  if (props.currentData.selectedJourney === journey) {
+    props.currentData.selectedJourney = null;
+  } else {
+    props.currentData.selectedJourney = journey;
+  }
+}
+
+/** Selects a route without opening details */
+function selectRouteOnly(journey: Journey) {
+  props.currentData.selectedRouteJourney = journey;
+  emit('selectJourney', journey);
+}
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .itineraries-container {
   max-width: 490px;
   flex: 1;
@@ -270,7 +282,7 @@ export default {
 
   .itinerary-header {
     border: 1px solid lightgrey;
-    border-left: 4px solid #337ab7;
+    border-left: 4px solid var(--c2c-primary);
     border-radius: 4px;
     padding: 10px;
     margin-top: 12px;
@@ -302,10 +314,10 @@ export default {
     }
   }
   .selected {
-    border-left: 4px solid #4baf50;
-    background-color: #fbfaf6;
+    border-left: 4px solid var(--c2c-green);
+    background-color: var(--c2c-body-background-color);
   }
-  // Bouton "Voir le détail"
+  /* Bouton "Voir le détail" */
   .itinerary-details-button {
     text-align: left;
 
@@ -324,7 +336,7 @@ export default {
     }
   }
 
-  // Détails du trajet
+  /* Détails du trajet */
   .journey-details {
     font-family: Arial, sans-serif;
     max-width: 650px;
@@ -334,7 +346,7 @@ export default {
     border-bottom-right-radius: 6px;
     border: solid 1px lightgray;
     border-top: none;
-    background-color: #fff;
+    background-color: var(--c2c-white);
 
     .journey-timeline {
       position: relative;
@@ -378,14 +390,14 @@ export default {
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        background-color: #fff;
+        background-color: var(--c2c-white);
         display: flex;
         align-items: center;
         justify-content: center;
         margin: 0 15px 0 -45px;
 
         &.stop {
-          background-color: #fff;
+          background-color: var(--c2c-white);
           width: 15px;
           height: 15px;
           border: 2px solid grey;
@@ -404,7 +416,7 @@ export default {
 
         &.transport {
           border: none;
-          color: #fff;
+          color: var(--c2c-white);
           width: 32px;
           height: 32px;
         }
@@ -433,7 +445,7 @@ export default {
 
         .timeline-walking-info {
           font-size: 14px;
-          color: #757575;
+          color: var(--c2c-grey);
           display: flex;
           align-items: center;
           margin-left: -14px;

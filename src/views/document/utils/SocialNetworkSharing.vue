@@ -1,88 +1,40 @@
 <template>
-  <span>
-    <span
-      v-if="addThisEnabled"
-      v-show="addThisVisible"
-      class="social-network-sharing"
-      addthis:ui_click="true"
-      addthis:data_track_clickback="false"
-      addthis:data_track_addressbar="false"
-      v-bind="$attrs"
-      :title="$gettext('Share')"
-    >
-      <fa-icon icon="share-alt" />
-    </span>
-    <span v-else-if="supportsWebShare" :title="$gettext('Share')" @click="webShare()">
-      <fa-icon icon="share-alt" />
-    </span>
+  <!-- the share sheet of the phone or of the browser; without one, the link is copied. No third-party widget: AddThis,
+       loaded with the "social networks" consent, was shut down in 2023 and its script no longer loads -->
+  <span v-if="canShare" class="social-network-sharing" :title="$gettext('Share')" @click="share">
+    <fa-icon icon="share-alt" />
   </span>
 </template>
 
-<script>
-import config from '@/js/config';
+<script setup lang="ts">
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { documentProperty } from '@/js/properties';
+import { notify } from '@/js/toast';
 
-const cdn = '//s7.addthis.com/js/300/addthis_widget.js';
+const props = defineProps({ ...documentProperty });
 
-export default {
-  props: {
-    document: {
-      type: Object,
-      required: true,
-    },
-  },
+const { $gettext, $documentUtils } = useGlobalProperties();
 
-  data() {
-    return { addThisVisible: false };
-  },
+const supportsWebShare = typeof navigator.share === 'function';
+// the clipboard needs a secure page (https, or localhost)
+const supportsClipboard = typeof navigator.clipboard?.writeText === 'function';
+const canShare = supportsWebShare || supportsClipboard;
 
-  computed: {
-    addThisEnabled: function () {
-      const enabled = this.$gdpr.get()?.social ?? false;
-      enabled ? this.installAddThis() : this.uninstallAddThis();
-      return enabled;
-    },
-
-    supportsWebShare() {
-      return !!navigator.share;
-    },
-  },
-
-  methods: {
-    onAddthisLoad() {
-      this.addThisVisible = true;
-      window.addthis?.button('.social-network-sharing');
-    },
-
-    installAddThis() {
-      if (document.getElementById('addthis-script') !== null) {
-        this.onAddthisLoad();
-        return;
-      }
-
-      const el = document.createElement('script');
-
-      el.setAttribute('id', 'addthis-script');
-      el.setAttribute('src', `${cdn}#pubid=${config.addthisPublicId}`);
-      el.onload = this.onAddthisLoad;
-      document.body.appendChild(el);
-    },
-
-    uninstallAddThis() {
-      this.addThisVisible = false;
-      const el = document.getElementById('addthis-script');
-      if (el === null) {
-        return;
-      }
-      document.body.removeChild(el);
-      delete window.addthis;
-    },
-
-    webShare() {
-      navigator.share({
-        title: this.$documentUtils.getDocumentTitle(this.document),
-        url: window.location.href,
-      });
-    },
-  },
-};
+async function share() {
+  const url = window.location.href;
+  if (supportsWebShare) {
+    try {
+      await navigator.share({ title: $documentUtils.getDocumentTitle(props.document), url });
+    } catch {
+      // closed by the user (AbortError), or refused: nothing to say
+    }
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(url);
+    notify($gettext('Link copied'), 'is-success');
+  } catch {
+    notify($gettext('The link could not be copied'), 'is-warning');
+  }
+}
 </script>

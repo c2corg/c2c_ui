@@ -92,12 +92,10 @@
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "当危险等级不同时，海拔是必需的。请按照对应区域的雪崩公告设置海拔高度。",
     "An error occurred, connection status could not be retrieved. Please refresh the page.": "发生错误，无法检索连接状态。请刷新页面。",
     "An error occurred, could not retrieve activities": "发生错误，无法检索活动",
-    "An error occurred, couldn't (un)mark route as to do": "发生错误，无法将路线（取消）标记为待办",
     "An error occurred, couldn't (un)mask version": "发生错误，无法（取消）屏蔽版本",
     "An error occurred, couldn't save images": "发生错误，无法保存图像",
     "Anonymity and confidentiality": "匿名与保密",
     "Applications": "应用",
-    "Are you sure you want to delete this document?": "你确定要删除此文档吗？",
     "Are you sure you want to delete this locale?": "你确定要删除这个语言版本吗？",
     "Are you sure you want to merge?": "你确定要合并吗？",
     "Are you sure you want to revert to this version of the document?": "你确定要还原到此版本的文档吗？",
@@ -117,7 +115,6 @@
     },
     "Avalanche bulletins": "雪崩公告",
     "Average slope (degrees)": "平均坡度",
-    "Average slope in degree": "平均坡度",
     "Back to code": "返回代码编辑模式",
     "Back to edit mode": "回到编辑模式",
     "Back to the top": "回到顶部",
@@ -136,7 +133,6 @@
     "Block account": "冻结该用户",
     "Bolted rock climbing gear": "多段运动攀岩装备",
     "Book content": "书籍目录的简短描述",
-    "Both results and map": "结果和地图",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "简要描述任何受伤。可以在此处输入不适合任何其他地方的评注。",
     "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "默认情况下，路书指南上将显示你的用户名，但你可以在之后的设置中随意更改它。",
     "By month": "按月",
@@ -151,7 +147,10 @@
     "Child": "子节点",
     "Choose file": "选择文件",
     "Clear": "清除所有",
-    "Close": "关闭",
+    "Close": {
+      "$$noContext": "关闭",
+      "Map controls": "关闭"
+    },
     "Collapse": "折叠",
     "Comments": "评论",
     "Comments are disabled.": "评论关闭",
@@ -206,7 +205,6 @@
     "Current password": "当前密码",
     "Danger level": "危险等级",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "雪崩公告中的危险等级适用于所有朝向。罗盘区分了风险增加的最关键区域。",
-    "Danger level:": "危险等级:",
     "Danger rating - considerable": "危险等级 - 可观的",
     "Danger rating - high": "危险等级 - 高",
     "Danger rating - high to very high": "危险等级 - 高到非常高",
@@ -216,6 +214,7 @@
     "Danger:": "危险:",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "朝向、岩石类型、路线类型(如原路返回或环线)以及线路地形类型(如山脊或冲沟)",
     "Delete": {
+      "$$noContext": "删除",
       "yeti": "删除"
     },
     "Delete a line chunk": "删除行块",
@@ -310,6 +309,9 @@
     "FlowCapt sensor": "FlowCapt 传感器",
     "FlowCapt sensors": "FlowCapt 传感器",
     "Fold section": "折叠章节",
+    "Follow the track": {
+      "Map controls": "跟随航迹"
+    },
     "Followed users": "关注的用户",
     "Forgot password?": "忘记密码？",
     "Forum": "论坛",
@@ -334,11 +336,10 @@
     "Have an account?": "是否有账户？",
     "Have you (re)evaluated the risks at each change in the situation? What factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the leader of the group, etc.": "您是否（重新）评估了每次情况变化后的风险？ 哪些因素可能会影响您的意识，例如疲倦，压力，经过主要困难后的放松，在下降过程中，在据说容易的部分，有脚印或其他人的存在的时候，对团队领导者的完全信任等 。",
     "Hazard potential": "潜在危险",
-    "Hazard potential:": "潜在危险：",
     "Heading": "标题",
+    "Help": "帮助",
     "Help research activities to define new prevention means": "帮助研究活动确定新的预防手段",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "这是你关注的用户列表，你将在你的个人订阅里看到他们的动态。",
-    "Here you may set activity and region filters that will apply to the homepage feed.": "你可以在这里设置运动和地区过滤，它们将会应用到首页订阅。",
     "High danger level from the avalanche bulletin": "雪崩公告给出的高危险等级",
     "Hiking gear": "徒步装备",
     "History": {
@@ -347,7 +348,6 @@
     },
     "History is missing, please provide it if you have information.": "缺少历史信息，如果你有相关信息，请补充。",
     "Home": "主页",
-    "Home page feed parameters": "主页订阅参数",
     "How is my testimony used ? How / why is it useful ?": "我的反馈是怎样被使用的？为什么它是有用的？",
     "I choose to cancel the outing": "我选择取消出行",
     "I contribute": "我贡献",
@@ -384,7 +384,6 @@
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "有关事件位置的信息。 请在上面的地图上标记位置，即使您无法非常精确地标记下来（在这种情况下，请在此处提供更多详细信息）。 完成报告后，您可以将其关联到路线，攀登地点或出行记录。",
     "Informations about the access": "关于交通节点的信息",
     "Infos": "信息",
-    "Insert a link": "插入链接",
     "Insert emoji": "插入表情",
     "Insert image": "插入图片",
     "Insert link": "插入链接",
@@ -427,9 +426,6 @@
       "API message": "登录失败"
     },
     "Logout": "登出",
-    "Longer than maximum length 25": {
-      "API message": "长于最大长度 25"
-    },
     "Longitude": "经度",
     "Low danger level from the avalanche bulletin": "雪崩公告给出的低危险等级",
     "Mail has been sent": "邮件已发送",
@@ -438,9 +434,7 @@
     "Make profile page public": "公开个人资料页面",
     "Map filter off": "地图过滤关闭",
     "Map filter on": "地图过滤开启",
-    "Map only": "仅地图",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "地图、路书、已知路线、备用计划、出行中的再评估",
-    "Mark this route as to do": "将这条路线标记为 To Do",
     "Masked": "被屏蔽",
     "Massifs could not be loaded": "无法加载山区",
     "Merge documents": "合并文档",
@@ -462,7 +456,6 @@
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "更多路线可供选择。您可以移动地图、指定名称或设置活动以筛选它们。",
     "Multi-criteria search": "多条件搜索",
     "My account": "我的账号",
-    "My bookmarks": "我的收藏",
     "My changes": "我的贡献",
     "My followed users": "我关注的用户",
     "My outings": "我的出行记录",
@@ -504,21 +497,16 @@
     "Numbers": "数据",
     "Ok": "OK",
     "On a drawn line": "在一条画出的线上",
-    "Only document less than 24h old can be deleted": {
-      "API message": "只能删除24小时内的文档"
-    },
-    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "主页订阅中仅显示所选运动和所选地区中的更新。 来自关注用户的状态更新将始终显示。",
     "Ooops": "哎呀",
     "Open fields to deeply explain the event circumstances.": "展开以深入解释事件情况。",
     "Open fields to detail the picture's context": "展开以详细说明图片背景",
     "Open in a new tab": "在新标签页中打开",
     "Ordered list": "有序列表",
     "Orientations": "朝向",
-    "Orientations:": "朝向:",
     "Other options": "其他选项",
     "Oups! Something went wrong with forum. Here is the message :": "哎呀！论坛出现错误。这是信息：",
     "Oups! something went wrong...": "哎呀！出现错误...",
-    "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "我们的网站使用我们自己和第三方提供的 cookie。 有些 cookie 是网站所必需的，而您可以随时调整其他 cookie，尤其是那些能让我们了解网站性能和为您提供社交媒体功能的 cookie。 你可以接受或拒绝所有，或",
+    "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to tailor the advertising you see. You can accept or reject all, or": "我们的网站使用我们自己和第三方提供的 cookie。 有些 cookie 是网站所必需的，而您可以随时调整其他 cookie，尤其是那些能让我们了解网站性能和为您定制所见广告的 cookie。 你可以接受或拒绝所有，或",
     "Outings statistics": "出行统计",
     "Page not found": "页面未找到",
     "Paragliding outings": "滑翔伞出行记录",
@@ -528,6 +516,9 @@
     "Password": "密码",
     "Password too short": {
       "API message": "密码太短"
+    },
+    "Pause": {
+      "Map controls": "暂停"
     },
     "Paysage": {
       "Sophie picture context": "风景"
@@ -542,6 +533,12 @@
     "Personal feed on": "个人订阅设置开启",
     "Personal informations": "个人信息",
     "Pitch description tag": "攀爬段描述标签",
+    "Play": {
+      "Map controls": "播放"
+    },
+    "Play the track": {
+      "Map controls": "播放航迹"
+    },
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "请描述您与所选目标相关的技术和经验水平，您的身体素质水平，先前的疲劳程度以及在高海拔上的适应程度等。",
     "Please move the map, or change the route's name.": "请移动地图，或更改路线名称。",
     "Please select a method before computing.": "请在计算前选择一种方法。",
@@ -556,9 +553,11 @@
     "Preview": "预览",
     "Print": "打印",
     "Print a selection of documents": "打印一系列文件",
-    "Print search results": "打印搜索结果",
     "Printing": "打印中",
     "Professional Reduction Method": "专业风险降低方法",
+    "Progress": {
+      "Map controls": "进度"
+    },
     "Protect document": "保护文档",
     "Protection area:": "保护区：",
     "Protection areas": "保护区",
@@ -574,6 +573,9 @@
     "Refresh": "刷新",
     "Register": "注册",
     "Remove": "移除",
+    "Replay": {
+      "Map controls": "重播"
+    },
     "Report an issue": "报告问题",
     "Report title, activity, linked routes or outings.": "报告标题、运动、关联的路线或者出行记录。",
     "Required": {
@@ -586,7 +588,6 @@
     "Residual risk >1.3": "剩余风险 >1.3",
     "Residual risk >1.5": "剩余风险 >1.5",
     "Restore this version": "还原此版本",
-    "Results only": "仅结果",
     "Retry": "重试",
     "Revoke": "撤销",
     "Risky slopes": "有风险的坡道",
@@ -617,12 +618,6 @@
     "Several days?": "多天行程？",
     "Share": "分享",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "相同方式共享 - 如果您重新组合，转换或在该材料上进行构建，则必须以与原始文件相同的许可分发您的贡献。",
-    "Shorter than minimum length 1": {
-      "API message": "必填项"
-    },
-    "Shorter than minimum length 3": {
-      "API message": "文本太短(至少3个字符)"
-    },
     "Show document history": "显示文档历史",
     "Show only updates from followed users in the homepage feed": "在主页订阅仅显示关注用户的更新",
     "Sign in to camptocamp today, it's free": "立即登录 camptocamp，它是免费的",
@@ -633,11 +628,13 @@
     "Small group = 2 to 4 people": "小团队 = 2至4个人",
     "Small group with load shedding distance": "具有降低雪层负载的间隔的小团队",
     "Small group without distance": "没有间隔的小团队",
-    "Social cookies": "社交 Cookies",
     "Soft mobility outing": "软交通出行",
     "Sophie Picture Contest": "Sophie 摄影比赛",
     "Sort by": "排序方式",
     "Source:": "来源：",
+    "Speed": {
+      "Map controls": "速度"
+    },
     "Statistical cookies": "统计 Cookies",
     "Statistics": "统计",
     "Stay careful while skiing": "滑雪时小心",
@@ -661,7 +658,6 @@
     "The “slope traveled frequently” factor is not taken into account by the application, as it is often difficult to ascertain when preparing for an outing.": "该应用没有考虑“经常经过的坡道”因素，因为在准备出行时通常很难确定。",
     "There are sensitive areas on this route. Please refer to the map.": "这条路线上有敏感区域。请参考地图。",
     "These are positive experiences that reveal usefull risk-management skills.": "这些积极的经验展现了有用的风险管理技能。",
-    "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the &quot;Share&quot; module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.": "这些 cookie 允许您从 camptocamp.org 网站与社交媒体模块进行交互，并与其他人分享网站内容或让他们知道您的参考或意见，例如，当您点击&quot;分享&quot;模块时。禁用这些 cookie，您将无法在社交网络上分享来自 camptocamp.org 的内容。",
     "This book cover is the property of its editor and/or author": "本书封面是其编辑和/或作者的财产",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "此内容采用知识共享协议BY-NC-ND 3.0进行许可",
     "This content is licensed under Creative Commons BY-SA 3.0": "此内容采用知识共享协议BY-SA 3.0进行许可",
@@ -707,7 +703,6 @@
     "Unblock account": "取消冻结账号",
     "Unfold section": "展开章节",
     "Unformatted text": "未格式化的文字",
-    "Unmark this route as to do": "取消这条路线的 To Do 标记",
     "Unordered list": "无序列表",
     "Unprotect document": "取消保护文件",
     "Upload a GPS track": "上传GPS航迹",
@@ -1168,7 +1163,6 @@
       "article_categories": "装备"
     },
     "gender": "性别",
-    "general informations": "一般信息",
     "geolocation": "地理坐标",
     "geology": {
       "image_categories": "地质"
@@ -1316,7 +1310,6 @@
     "key_needed": {
       "custodianship_types": "需要钥匙"
     },
-    "kilometers": "千米",
     "labande_global_rating": "滑雪整体定级",
     "labande_ski_rating": "滑雪滑降定级",
     "lake": {
@@ -1350,7 +1343,6 @@
     },
     "lift_access": "可缆车进入",
     "lift_status": "缆车状态",
-    "loading": "加载中",
     "local_product": {
       "waypoint_types": "当地特产"
     },
@@ -1378,7 +1370,6 @@
     "medium": {
       "quality_types": "中等"
     },
-    "meters": "米",
     "migmatite": {
       "rock_types": "混合岩"
     },

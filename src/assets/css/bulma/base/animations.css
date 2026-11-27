@@ -1,0 +1,12 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): base/animations */
+
+/* Bulma Base */
+
+@keyframes spinAround {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}

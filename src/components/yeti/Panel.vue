@@ -11,27 +11,24 @@
   </div>
 </template>
 
-<script>
-import Yetix from '@/components/yeti/Yetix';
+<script setup lang="ts">
+import { computed } from 'vue';
 
-export default {
-  props: {
-    index: {
-      type: Number,
-      required: true,
-    },
+import { useYetixStore } from '@/components/yeti/yetix';
+
+const Yetix = useYetixStore();
+
+defineProps({
+  index: {
+    type: Number,
+    required: true,
   },
-  computed: {
-    activeTab() {
-      return Yetix.activeTab;
-    },
-  },
-};
+});
+
+const activeTab = computed(() => Yetix.activeTab);
 </script>
 
-<style scoped lang="scss">
-@import '@/assets/sass/variables';
-
+<style scoped>
 .yeti-panel {
   position: relative;
 }

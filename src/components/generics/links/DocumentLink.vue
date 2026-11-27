@@ -2,7 +2,7 @@
   <router-link
     :to="{ name: documentType, params: { id: document.document_id, lang: lang } }"
     :target="target"
-    :title="$documentUtils.getDocumentTitle(document, $route.params.lang)"
+    :title="$documentUtils.getDocumentTitle(document, $route.params.lang as string)"
   >
     <slot>
       <document-title :document="document" :uppercase-first-letter="uppercaseFirstLetter" />
@@ -10,27 +10,26 @@
   </router-link>
 </template>
 
-<script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import { documentProperty, useDocumentType } from '@/js/properties';
 
-export default {
-  mixins: [requireDocumentProperty],
-
-  props: {
-    lang: {
-      type: String,
-      default: null,
-    },
-
-    uppercaseFirstLetter: {
-      type: Boolean,
-      default: false,
-    },
-
-    target: {
-      type: String,
-      default: undefined,
-    },
+const props = defineProps({
+  ...documentProperty,
+  lang: {
+    type: String,
+    default: null,
   },
-};
+
+  uppercaseFirstLetter: {
+    type: Boolean,
+    default: false,
+  },
+
+  target: {
+    type: String,
+    default: undefined,
+  },
+});
+
+const { documentType } = useDocumentType(props);
 </script>

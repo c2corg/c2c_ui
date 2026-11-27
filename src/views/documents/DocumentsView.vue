@@ -26,19 +26,16 @@
           </dropdown-button>
           &nbsp;
           <br class="is-hidden-tablet" />
-          <page-selector :documents="documents" />
+          <page-selector :key="documentType" :documents="documents" />
         </span>
         <span class="is-pulled-right is-flex header-right" v-if="documentType != 'profile'">
-          <span
-            v-if="hasTransportContext"
-            class="header-item verify-accessibility-batch tooltip-container"
-            :data-tooltip="!canVerifyBatch && !batchVerifying ? 'top' : null"
-          >
+          <span v-if="hasTransportContext" class="header-item verify-accessibility-batch">
             <button
               type="button"
               class="button is-small is-primary"
               :disabled="!canVerifyBatch || batchVerifying"
-              @click="verifyBatchAccessibility"
+              :title="canVerifyBatch ? undefined : verifyBatchDisabledReason"
+              @click="verifyBatch"
             >
               <fa-icon v-if="batchVerifying" icon="circle-notch" spin aria-hidden="true" />
               <span v-else>
@@ -46,21 +43,10 @@
                 <template v-if="documents">({{ documentsToVerify.length }})</template>
               </span>
             </button>
-            <span v-if="!canVerifyBatch" class="tooltip">
-              {{
-                durationUnknownCount
-                  ? $gettext(
-                      'The schedules of the documents of this page are already checked, or cannot be checked because the duration of the route is unknown'
-                    )
-                  : $gettext('The schedules of the documents of this page are already checked')
-              }}
-            </span>
             <span v-if="batchError" class="batch-error">{{ $gettext('Unable to check schedules right now.') }}</span>
           </span>
 
-          <load-user-preferences-button class="is-hidden-mobile" />
-
-          <span @click="toogleProperty('listMode')" class="header-item is-size-3 has-cursor-pointer is-hidden-mobile">
+          <span @click="setListMode(!listMode)" class="header-item is-size-3 has-cursor-pointer is-hidden-mobile">
             <fa-icon
               v-show="displayMode !== 'map'"
               icon="th-list"
@@ -77,38 +63,56 @@
           <template v-if="documentAreGeoLocalized">
             <display-mode-switch
               class="header-item is-hidden-mobile"
-              list-mode="listMode"
               :model-value="displayMode"
-              @update:model-value="setProperty('displayMode', $event)"
+              @update:model-value="setDisplayMode"
             />
 
-            <span class="is-size-3 is-hidden-tablet">
-              <fa-icon
-                :icon="displayMode === 'map' ? 'th' : 'map-marked-alt'"
-                class="has-text-primary"
-                @click="setProperty('displayMode', displayMode === 'map' ? 'both' : 'map')"
-              />
-            </span>
+            <button
+              type="button"
+              class="button is-small header-item is-hidden-tablet"
+              :title="displayMode === 'map' ? $gettext('Show results') : $gettext('Show the map')"
+              :aria-label="displayMode === 'map' ? $gettext('Show results') : $gettext('Show the map')"
+              @click="setDisplayMode(displayMode === 'map' ? 'both' : 'map')"
+            >
+              <fa-icon :icon="displayMode === 'map' ? 'th' : 'map-marked-alt'" class="has-text-primary" />
+            </button>
           </template>
+
+          <near-me-button v-if="documentAreGeoLocalized" class="header-item" />
         </span>
       </div>
 
       <query-items class="filter-section" :list-mode="listMode" @documents-load="onQueryDocumentsLoad" />
     </div>
 
-    <div class="columns result-section" :class="['mobile-mode-' + displayMode, { 'query-has-tags': queryHasTags }]">
+    <div
+      ref="resultSection"
+      class="columns result-section"
+      :class="[
+        'mobile-mode-' + displayMode,
+        displayMode === 'map' ? 'fills-window' : 'fills-window-from-tablet',
+        { 'query-has-tags': queryHasTags, 'has-splitter': showSplitter, 'is-resizing': splitter.resizing.value },
+      ]"
+    >
       <div
         v-if="showResults"
+        ref="documentsContainer"
         class="column documents-container"
         :class="{
           'is-12': !showMap,
-          'is-8 is-7-fullhd': showMap && listMode,
-          'is-8 is-7-widescreen is-6-fullhd': showMap && !listMode,
+          'is-8 is-7-widescreen': showMap && listMode,
+          'is-8 is-6-widescreen': showMap && !listMode,
+          'has-custom-width': hasCustomWidth,
         }"
+        :style="hasCustomWidth ? { '--results-width': `${splitter.width.value}%` } : undefined"
       >
         <loading-notification :promise="promise" />
 
-        <image-cards v-if="documents && !listMode && documentType === 'image'" :documents="documents" />
+        <image-cards
+          v-if="documents && !listMode && documentType === 'image'"
+          :documents="documents"
+          class="documents-image-cards"
+        />
 
         <div
           v-if="documents && !listMode && documentType !== 'image'"
@@ -120,13 +124,13 @@
             </p>
             <div
               :class="{
-                'is-full-mobile is-half-tablet is-half-desktop is-half-widescreen is-half-fullhd': showMap,
-                'is-full-mobile is-one-third-tablet is-one-third-desktop is-one-quarter-widescreen is-one-quarter-fullhd':
-                  !showMap,
+                'is-full': showMap && cardsSingleColumn,
+                'is-full-mobile is-half-tablet': showMap && !cardsSingleColumn,
+                'is-full-mobile is-one-third-tablet is-one-quarter-widescreen': !showMap,
               }"
               class="column card-container"
               @mouseenter="highlightedDocument = document"
-              @mouseleave="highlightedDocument = null"
+              @mouseleave="highlightedDocument = undefined"
             >
               <document-card
                 :highlighted="highlightedDocument === document"
@@ -150,344 +154,285 @@
           @highlight-document="highlightedDocument = $event"
           class="documents-table"
         />
+
+        <page-navigation v-if="documents" :documents="documents" class="documents-navigation" />
       </div>
+      <div
+        v-if="showSplitter"
+        class="results-splitter"
+        role="separator"
+        tabindex="0"
+        aria-orientation="vertical"
+        :aria-label="$gettext('Resize the map')"
+        :aria-valuenow="splitter.valueNow.value"
+        :aria-valuemin="MIN_RESULTS_WIDTH"
+        :aria-valuemax="MAX_RESULTS_WIDTH"
+        :title="$gettext('Drag to resize the map, double-click to reset')"
+        @pointerdown="splitter.onPointerDown"
+        @keydown="splitter.onKeydown"
+        @dblclick="splitter.reset"
+      />
       <div v-if="showMap" class="column map-container">
         <map-view
-          ref="map"
+          ref="olMap"
           :documents="documentsShownOnMap"
           :highlighted-document="highlightedDocument"
+          :tracks-filters="overlayFilters.outing"
+          :routes-filters="overlayFilters.route"
+          sync-url
           @highlight-document="highlightedDocument = $event"
-          show-filter-control
+          :show-filter-control="showResults"
+          :filter-by-default="mapVisible"
+          :force-filter="!showResults"
           show-center-on-geolocation
           show-recenter-on
+          show3d
         />
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import { defineAsyncComponent } from 'vue';
+<script setup lang="ts">
+import { computed, defineAsyncComponent, nextTick, ref, useTemplateRef, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import DisplayModeSwitch from './utils/DisplayModeSwitch';
-import ImageCards from './utils/ImageCards';
-import LoadUserPreferencesButton from './utils/LoadUserPreferencesButton';
-import PageSelector from './utils/PageSelector';
-import QueryItems from './utils/QueryItems';
+import DisplayModeSwitch from './utils/DisplayModeSwitch.vue';
+import ImageCards from './utils/ImageCards.vue';
+import NearMeButton from './utils/NearMeButton.vue';
+import PageNavigation from './utils/PageNavigation.vue';
+import PageSelector from './utils/PageSelector.vue';
+import QueryItems from './utils/QueryItems.vue';
+import { normalizedPageQuery } from './utils/page-query';
+import { MAX_RESULTS_WIDTH, MIN_RESULTS_WIDTH, useResultsSplitter } from './utils/results-splitter';
 
+import { searchOverlayFilters } from '@/components/map/density-overlays';
+import { VIEW_URL_KEY, withoutDisplaySettings } from '@/components/map/map-url-keys';
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
-import itinevertService, { MAX_ROUTE_THRESHOLD, buildIsochroneOverlayDocuments } from '@/js/apis/itinevert-service';
-import navitiaService from '@/js/apis/navitia-service';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { usePullRefresh } from '@/js/composables/pull-refresh';
+import { useTransportSearch } from '@/js/composables/transport-search';
 import constants from '@/js/constants';
 import bus from '@/js/event-bus';
-import { isDurationUnknown } from '@/js/transport-accessibility';
-import { hasTransportQuery, parseTransportQuery, transportSearchKey } from '@/js/transport-query';
+import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
 
 // lazy (ag-grid is big): an async component, as Vue 3 no longer takes a plain function returning the import
-const DocumentsTable = defineAsyncComponent(() => import('@/components/datatable/DocumentsTable'));
+const DocumentsTable = defineAsyncComponent(() => import('@/components/datatable/DocumentsTable.vue'));
 
 // stored under the component name, as before: existing preferences are kept
 const preferences = getPreferences('DocumentsView');
 
-export default {
-  name: 'DocumentsView',
+const documentTypes = ['route', 'waypoint', 'outing', 'image', 'book', 'area'];
 
-  components: {
-    QueryItems,
-    PageSelector,
-    DocumentsTable,
-    ImageCards,
-    DisplayModeSwitch,
-    LoadUserPreferencesButton,
-  },
+const route = useRoute();
+const router = useRouter();
+const { $gettext, $screen } = useGlobalProperties();
 
-  data() {
-    return {
-      promise: {},
+// the map component: OpenLayers needs an explicit resize when its container changes
+const olMap = useTemplateRef<{ resize(): void }>('olMap');
+// the list scrolls in its own container on large screens, which the router knows nothing about
+const documentsContainer = useTemplateRef<HTMLElement>('documentsContainer');
 
-      displayMode: 'both',
-      listMode: null,
+const promise = ref<ApiData | { data?: undefined }>({});
+const displayMode = ref('both');
+const listMode = ref(false);
+const highlightedDocument = ref<C2cDocument>();
+const filteredWaypoints = ref<C2cDocument[]>([]);
+const queryHasTags = ref(false);
 
-      isMobile: null,
+const showMap = computed(() => ['both', 'map'].includes(displayMode.value));
+const showResults = computed(() => ['result', 'both'].includes(displayMode.value));
+// in the phone layout, the map is hidden under the results when both are shown
+const mapVisible = computed(() => displayMode.value === 'map' || (displayMode.value === 'both' && !$screen.isMobile));
 
-      highlightedDocument: null,
+// on desktop, the results and the map share the width as the user drags it, one width for the list and one for the
+// cards, for all the document types
+const resultSection = useTemplateRef<HTMLElement>('resultSection');
+const splitter = useResultsSplitter({
+  preferences,
+  key: computed(() => (listMode.value ? 'resultsListWidth' : 'resultsGridWidth')),
+  row: resultSection,
+  results: documentsContainer,
+  onResize: () => olMap.value?.resize(),
+});
+const showSplitter = computed(() => showResults.value && showMap.value && !$screen.isMobile && !$screen.isTablet);
+const hasCustomWidth = computed(() => showSplitter.value && splitter.width.value !== undefined);
+// narrowed results: one card per row instead of two (the default widths always fit two)
+const CARDS_SINGLE_COLUMN_BELOW = 640;
+const cardsSingleColumn = computed(
+  () => hasCustomWidth.value && (splitter.pixelWidth.value ?? Infinity) < CARDS_SINGLE_COLUMN_BELOW
+);
+const documents = computed(() => promise.value.data);
+const documentType = computed(() => String(route.name).slice(0, -1));
+const documentAreGeoLocalized = computed(() => constants.objectDefinitions[documentType.value].geoLocalized === true);
 
-      filteredWaypoints: [],
+const queryWithoutOffsetAndSort = computed(() => {
+  const result = Object.assign({}, route.query);
+  delete result.offset;
+  delete result.sort;
 
-      queryHasTags: false,
+  return result;
+});
 
-      // transport search context: search of the url (address/date/window) + its isochrones + batch verify results
-      transportContext: null,
-      transportSearchKey: null,
-      batchVerifying: false,
-      batchProgress: 0,
-      batchTotal: 0,
-      batchError: null,
-    };
-  },
+// the search filters: the query of the page, but for how it is shown (the view, the settings of the map)
+const searchQuery = computed(() => withoutDisplaySettings(route.query));
+// the page the results are those of: how they are shown does not change them
+const searchKey = computed(() => JSON.stringify([route.path, searchQuery.value, route.hash]));
 
-  computed: {
-    hasTransportContext() {
-      return ['route', 'waypoint'].includes(this.documentType) && hasTransportQuery(this.$route.query);
-    },
-    /**
-     * The documents of the page which schedules are not checked yet. Results are kept while the search is the same. The
-     * routes of unknown duration are never checked: the accessibility of a route cannot be verified without its
-     * duration.
-     */
-    documentsToVerify() {
-      const results = this.transportContext?.results ?? {};
+// the "Tracks" and "Routes" overlays of the map follow the search
+const overlayFilters = computed(() => searchOverlayFilters(documentType.value, route.query));
 
-      return (this.documents?.documents ?? [])
-        .filter((document) => !results[document.document_id] && !isDurationUnknown(document))
-        .slice(0, MAX_ROUTE_THRESHOLD);
-    },
-    /** Number of documents of the page whose duration is unknown (the API lists them after the others) */
-    durationUnknownCount() {
-      return (this.documents?.documents ?? []).filter((document) => isDurationUnknown(document)).length;
-    },
-    firstDurationUnknownIndex() {
-      return (this.documents?.documents ?? []).findIndex((document) => isDurationUnknown(document));
-    },
-    durationUnknownNotice() {
-      return this.$gettext(
-        'Routes whose duration is unknown: they may be reachable, but their accessibility cannot be verified'
-      );
-    },
-    canVerifyBatch() {
-      return this.hasTransportContext && !!this.transportContext && this.documentsToVerify.length > 0;
-    },
-    showMap() {
-      return ['both', 'map'].includes(this.displayMode);
-    },
-    showResults() {
-      return ['result', 'both'].includes(this.displayMode);
-    },
-    documents() {
-      return this.promise.data;
-    },
-    documentType() {
-      return this.$route.name.slice(0, -1);
-    },
-    documentTypes() {
-      return ['route', 'waypoint', 'outing', 'image', 'book', 'area'];
-    },
-    documentAreGeoLocalized() {
-      return constants.objectDefinitions[this.documentType].geoLocalized === true;
-    },
-    addQuery() {
-      return {
-        act: this.$route.query.act,
-      };
-    },
-    queryWithoutOffsetAndSort() {
-      const result = Object.assign({}, this.$route.query);
-      delete result.offset;
-      delete result.sort;
+// the public transport search of the url, if any: the areas it reaches, and the round-trip checks of the page
+const {
+  transportContext,
+  hasTransportContext,
+  documentsToVerify,
+  durationUnknownCount,
+  firstDurationUnknownIndex,
+  canVerifyBatch,
+  batchVerifying,
+  batchError,
+  isochroneOverlays,
+  verifyBatch,
+} = useTransportSearch(
+  documentType,
+  computed(() => documents.value?.documents ?? [])
+);
+const durationUnknownNotice = computed(() =>
+  $gettext('Routes whose duration is unknown: they may be reachable, but their accessibility cannot be verified')
+);
+const verifyBatchDisabledReason = computed(() =>
+  durationUnknownCount.value
+    ? $gettext(
+        'The schedules of the documents of this page are already checked, or cannot be checked because the duration of the route is unknown'
+      )
+    : $gettext('The schedules of the documents of this page are already checked')
+);
 
-      return result;
-    },
-    documentsShownOnMap() {
-      const base = this.filteredWaypoints.concat(this.documents ? this.documents.documents : []);
-      if (!this.transportContext) {
-        return base;
-      }
-      return base.concat(buildIsochroneOverlayDocuments(this.transportContext));
-    },
-  },
+const documentsShownOnMap = computed(() =>
+  filteredWaypoints.value
+    .concat(documents.value ? documents.value.documents : [])
+    .concat(isochroneOverlays.value as unknown as C2cDocument[])
+);
 
-  watch: {
-    $route: {
-      handler: 'load',
-      immediate: true,
-    },
-    displayMode: 'updateMapSize',
-  },
+usePullRefresh(() => {
+  load();
+  return promise.value;
+});
 
-  methods: {
-    load() {
-      this.displayMode = preferences.get(
-        this.documentType + '.displayMode',
-        this.documentAreGeoLocalized ? 'both' : 'result'
-      );
-      this.listMode = preferences.get(this.documentType + '.listMode', false);
+// what the list shows: what its URL says (a shared link, back), else the preference of this document type. The
+// documents without a location only have their results
+const DISPLAY_MODES = ['result', 'both', 'map'];
+function readDisplayMode() {
+  const fromUrl = String(route.query[VIEW_URL_KEY] ?? '');
+  if (!documentAreGeoLocalized.value) {
+    displayMode.value = 'result';
+  } else if (DISPLAY_MODES.includes(fromUrl)) {
+    displayMode.value = fromUrl;
+  } else {
+    displayMode.value = preferences.get(documentType.value + '.displayMode', 'both') as string;
+  }
+}
 
-      if (this.$route.hash) {
-        // keep compatible with v6 AngularJs hacks...
-        this.$router.replace(this.$route.fullPath.replace('#', '?'));
-        // $route watcher will call load
+function load() {
+  readDisplayMode();
+  listMode.value = preferences.get(documentType.value + '.listMode', false) as boolean;
+
+  if (route.hash) {
+    // keep compatible with v6 AngularJs hacks...
+    router.replace(route.fullPath.replace('#', '?'));
+    // the route watcher will call load
+    return;
+  }
+
+  // offset in the middle of a page (old link...): go to the page it belongs to before loading anything
+  const pageQuery = normalizedPageQuery(route, null);
+  if (pageQuery) {
+    router.replace(pageQuery);
+    // the route watcher will call load
+    return;
+  }
+
+  const requested = searchKey.value;
+  promise.value = (c2c as unknown as Record<string, DocumentService>)[documentType.value]
+    .getAll(searchQuery.value)
+    .then((response) => {
+      // past the last page, which happens when the map is moved to a sparser area: show the last page instead
+      const lastPageQuery = normalizedPageQuery(route, response.data.total);
+      if (lastPageQuery && searchKey.value === requested) {
+        router.replace(lastPageQuery);
+        // the route watcher will call load
         return;
       }
 
-      this.promise = c2c[this.documentType].getAll(this.$route.query).then(() => {
-        // the list has its height: back from a document, the router can restore the scroll position
-        bus.emit('trigger-scroll');
-      });
+      // the list has its height: back from a document, the router can restore the scroll position
+      bus.emit('trigger-scroll');
+    });
+}
 
-      this.loadTransportContext();
-    },
+// as soon as another page is asked for, not once its results are loaded
+function scrollResultsToTop() {
+  if (documentsContainer.value) {
+    documentsContainer.value.scrollTop = 0;
+  }
+}
 
-    /**
-     * Reads the transport search of the url (see `transport-query`), with its isochrones for the map. They are asked to
-     * the API, which computes them once per search: the other filters change the url, not the search.
-     */
-    loadTransportContext() {
-      const search = this.hasTransportContext ? parseTransportQuery(this.$route.query) : null;
-      const key = search ? transportSearchKey(search) : null;
+// the display preferences, per document type
+function setListMode(value: boolean) {
+  listMode.value = value;
+  preferences.set(`${documentType.value}.listMode`, value);
+}
 
-      if (key === this.transportSearchKey) {
-        return;
-      }
+// kept for this document type, and in the URL of the list to share it (the page is the same: replaced, not added to the
+// history), but for the default view
+function setDisplayMode(value: string) {
+  displayMode.value = value;
+  preferences.set(`${documentType.value}.displayMode`, value);
+  const view = value === 'both' ? undefined : value;
+  if (view !== route.query[VIEW_URL_KEY]) router.replace({ query: { ...route.query, [VIEW_URL_KEY]: view } });
+}
 
-      this.transportSearchKey = key;
+function getDocumentTypeTitle(documentType: string) {
+  return $gettext(documentType + 's');
+}
 
-      if (!search) {
-        this.transportContext = null;
-        return;
-      }
+// when map container is resized (which happen when displayMode switchs between both and map),
+// openLayer need an explicit resize
+function updateMapSize(newValue: string, oldValue: string) {
+  if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
+    nextTick(() => olMap.value?.resize());
+  }
+}
 
-      this.transportContext = {
-        fromAddress: search.from,
-        date: search.date,
-        returnDate: search.returnDate,
-        minDeparture: search.minDeparture,
-        maxReturn: search.maxReturn,
-        hikingDuration: search.hikingDuration,
-        allerGeom: null,
-        retourGeom: null,
-        intersectionGeom: null,
-        results: null,
-      };
+function onQueryDocumentsLoad(documents: C2cDocument[]) {
+  queryHasTags.value = documents.length > 0;
+  filteredWaypoints.value = documents.filter((document) => document.type === 'w');
 
-      itinevertService
-        .getTransportIsochrones(search)
-        .then(({ data }) => {
-          // the search may have changed meanwhile
-          if (this.transportSearchKey === key) {
-            this.transportContext = {
-              ...this.transportContext,
-              allerGeom: data.aller_geom || null,
-              retourGeom: data.retour_geom || null,
-              intersectionGeom: data.intersection_geom || null,
-            };
-          }
-        })
-        .catch((error) => {
-          // the isochrones are only shown on the map
-          console.warn('Error while loading the transport isochrones:', error);
-        });
-    },
+  // do not display waypoints associated
+  filteredWaypoints.value.forEach((document) => delete document.associations);
+}
 
-    /**
-     * Starts the batch round-trip verification job for the documents of the current page which are not checked yet,
-     * then monitors its progress and adds the per-document results to the ones already known. The page is the unit: the
-     * wait is short and the user sees the results of what is on screen, then checks the next page if wanted.
-     */
-    async verifyBatchAccessibility() {
-      if (!this.canVerifyBatch || this.batchVerifying) {
-        return;
-      }
-
-      this.batchVerifying = true;
-      this.batchProgress = 0;
-      this.batchTotal = 0;
-      this.batchError = null;
-
-      try {
-        const ids = this.documentsToVerify.map((document) => document.document_id);
-
-        await itinevertService.startRoundTripJob(
-          ids,
-          this.documentType,
-          this.transportContext.date,
-          this.transportContext.minDeparture,
-          this.transportContext.maxReturn,
-          this.transportContext.fromAddress,
-          this.transportContext.hikingDuration || undefined,
-          this.transportContext.returnDate
-        );
-
-        const family = this.documentType === 'waypoint' ? 'journeyroundtripwaypoints' : 'journeyroundtriproutes';
-
-        itinevertService.monitorProgress(
-          (raw) => {
-            const progress = JSON.parse(raw);
-            this.batchProgress = progress.progress;
-            this.batchTotal = progress.total;
-          },
-          async () => {
-            const response = await itinevertService.getRoundTripJobResult(this.documentType);
-            const results = response.data?.result?.results ?? {};
-            this.transportContext = {
-              ...this.transportContext,
-              results: { ...this.transportContext.results, ...results },
-            };
-            this.batchVerifying = false;
-          },
-          (raw) => {
-            this.batchError = navitiaService.handleQueryError(raw);
-            this.batchVerifying = false;
-          },
-          family
-        );
-      } catch (error) {
-        this.batchError = { message: error.message };
-        this.batchVerifying = false;
-      }
-    },
-
-    toogleProperty(property) {
-      this.setProperty(property, !this[property]);
-    },
-
-    setProperty(property, value) {
-      this[property] = value;
-      preferences.set(`${this.documentType}.${property}`, this[property]);
-    },
-
-    getDocumentTypeTitle(documentType) {
-      return this.$gettext(documentType + 's');
-    },
-
-    // when map container is resized (which happen when displayMode switchs between both and map),
-    // openLayer need an explicit resize
-    updateMapSize(newValue, oldValue) {
-      if ((newValue === 'map' && oldValue === 'both') || (newValue === 'both' && oldValue === 'map')) {
-        this.$nextTick(this.$refs.map.map.updateSize.bind(this.$refs.map.map));
-      }
-    },
-
-    onQueryDocumentsLoad(documents) {
-      this.queryHasTags = documents.length > 0;
-      this.filteredWaypoints = documents.filter((document) => document.type === 'w');
-
-      // do not display waypoints associated
-      this.filteredWaypoints.forEach((document) => delete document.associations);
-    },
-  },
-};
+watch(searchKey, load, { immediate: true });
+watch(displayMode, updateMapSize);
+watch(() => route.query[VIEW_URL_KEY], readDisplayMode);
+watch(() => [route.query.offset, route.query.limit], scrollResultsToTop);
 </script>
 
-<style scoped lang="scss">
-$section-padding: 1.5rem; //TODO find this variable
-$header-height: 34px;
-$header-padding-bottom: 1.5rem; //TODO find this variable
-$filter-height: 32px;
-$tags-height: 28px;
-$filter-padding-bottom: 0.5rem;
-// prettier-ignore
-$result-height: calc(
-  100vh - #{$navbar-height} - 2 * #{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height}
-);
-// prettier-ignore
-$result-height-with-tags: calc(
-  100vh - #{$navbar-height} - 2 * #{$section-padding} - #{$header-height} - #{$header-padding-bottom} - #{$filter-padding-bottom} - #{$filter-height} - #{$tags-height}
-);
-$cards-gap: 0.25rem;
+<style scoped>
+@import '@/assets/css/media.css';
+
+/*
+ * The results and the map take what the header and the filters leave of the window (.fills-window, App.vue), whatever
+ * their height (the filters can wrap on two lines, the text size of the app settings): from the tablet width, the list
+ * scrolls in its container and the pagination stays below it. On phones the page scrolls under the search bars, which
+ * stick on top, but the map alone fills the window.
+ */
 
 .header-section {
-  padding-bottom: $header-padding-bottom;
+  padding-bottom: 1.5rem;
 }
 
 .header-right {
@@ -499,72 +444,45 @@ $cards-gap: 0.25rem;
   margin-left: 0.75rem;
 }
 
-.duration-unknown-heading {
-  font-weight: bold;
-  color: #555;
-  padding: 0.5rem 0.75rem;
-}
-
-.verify-accessibility-batch {
+/* the page selector (PageSelector.vue) hides its "per page" choice when the header is narrow. Until Chrome 129, Firefox 133
+   and Safari 18.4, a container is also a stacking context: the header takes a level above the map (its controls go up
+   to 4), else the map covers the menus of the header (near me, filters). Under the site notice (20, App.vue) */
+.search-infos {
+  container: documents-header / inline-size;
   position: relative;
-  display: inline-block;
-
-  .tooltip {
-    position: absolute;
-    opacity: 0;
-    transition: 0.2s;
-    top: calc(100% + 6px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 4px;
-    white-space: normal;
-    width: 220px;
-    text-align: center;
-    pointer-events: none;
-    z-index: 30;
-  }
-
-  &:hover .tooltip {
-    opacity: 1;
-  }
-
-  .batch-error {
-    display: block;
-    color: #c62828;
-    font-size: 0.75rem;
-    white-space: nowrap;
-  }
+  z-index: 10;
 }
 
 .filter-section {
-  padding-bottom: $filter-padding-bottom;
+  padding-bottom: 0.5rem;
   clear: both;
 }
 
-@media screen and (max-width: $tablet) {
-  $mobile-section-padding: 0.5rem;
-  $mobile-header-height: 56px;
-  $mobile-filters-height: 25px;
+.duration-unknown-heading {
+  font-weight: bold;
+  color: var(--c2c-grey-dark);
+  padding: 0.5rem 0.75rem;
+}
 
+.verify-accessibility-batch .batch-error {
+  display: block;
+  color: var(--c2c-danger);
+  font-size: var(--c2c-size-7);
+  white-space: nowrap;
+}
+
+@media screen and (--c2c-max-tablet) {
+  /* sticky, not fixed: a fixed bar would hide the top of the ad, which is in the flow above the page */
   .search-infos {
-    position: fixed;
-    top: $navbar-height;
-    left: 0;
-    right: 0;
+    position: sticky;
+    top: var(--c2c-header-height);
     z-index: 24;
-    background-color: $body-background-color;
-    padding-top: $mobile-section-padding;
-  }
-
-  .result-section {
-    padding-top: calc(2 * #{$mobile-section-padding} + #{$mobile-header-height} + #{$mobile-filters-height});
+    background-color: var(--c2c-body-background-color);
+    padding-top: 0.5rem;
   }
 
   .documents-view {
-    padding-top: $mobile-section-padding;
+    padding-top: 0;
     padding-left: 0;
     padding-right: 0;
     padding-bottom: 0;
@@ -574,7 +492,7 @@ $cards-gap: 0.25rem;
   .header-section {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-    padding-bottom: $mobile-section-padding;
+    padding-bottom: 0.5rem;
   }
 
   .header-right {
@@ -582,17 +500,13 @@ $cards-gap: 0.25rem;
   }
 
   .map-container {
-    height: $result-height;
     padding: 0;
   }
 
   .mobile-mode-map {
     margin-top: 0;
     .map-container {
-      height: calc(
-        100vh - #{$navbar-height} - 3 * #{$mobile-section-padding} - #{$mobile-header-height} -
-          #{$mobile-filters-height}
-      );
+      height: 100%;
     }
 
     .documents-container {
@@ -603,33 +517,48 @@ $cards-gap: 0.25rem;
   .mobile-mode-result,
   .mobile-mode-both {
     .map-container {
-      visibility: hidden; // map does not like to be in a display none...
+      /* map does not like to be in a display none: hidden and without height, so that it leaves no blank page under the list */
+      visibility: hidden;
+      height: 0;
+      overflow: hidden;
     }
   }
 }
 
-@media screen and (min-width: $tablet) {
+@media screen and (--c2c-min-tablet) {
+  .search-infos {
+    flex: 0 0 auto;
+  }
+
   .result-section {
     margin-top: 0;
-    height: $result-height;
-
-    &.query-has-tags {
-      height: $result-height-with-tags;
-    }
+    margin-bottom: 0;
 
     .documents-container {
       height: 100%;
       overflow: auto;
+      display: flex;
+      flex-direction: column;
       padding-top: 0;
       padding-bottom: 0;
 
       .cards-list {
         padding-top: 2px;
-        height: 100%;
       }
 
+      .cards-list,
+      .documents-image-cards {
+        flex: 0 0 auto;
+      }
+
+      /* the table scrolls by itself: it takes the room left by the navigation */
       .documents-table {
-        height: 100%;
+        flex: 1 1 0;
+        min-height: 0;
+      }
+
+      .documents-navigation {
+        flex: 0 0 auto;
       }
     }
 
@@ -638,6 +567,51 @@ $cards-gap: 0.25rem;
       padding-left: 0;
       padding-top: 0;
       padding-bottom: 0;
+    }
+
+    /* the splitter takes most of the gutter between the results and the map: by default, the widths do not change */
+    &.has-splitter .documents-container {
+      padding-right: 0.25rem;
+    }
+
+    .documents-container.has-custom-width {
+      flex: none;
+      width: var(--results-width);
+      /* one card, or a few columns of the table, whatever the width of the screen the width was chosen on */
+      min-width: 20rem;
+    }
+
+    .results-splitter {
+      flex: 0 0 0.5rem;
+      position: relative;
+      cursor: col-resize;
+      touch-action: none;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: calc(50% - 1px);
+        width: 2px;
+        border-radius: 1px;
+        background-color: var(--c2c-grey-lighter);
+        transition: background-color 0.15s;
+      }
+
+      &:hover::after,
+      &:focus-visible::after {
+        background-color: var(--c2c-primary);
+      }
+    }
+
+    &.is-resizing {
+      cursor: col-resize;
+      user-select: none;
+
+      .results-splitter::after {
+        background-color: var(--c2c-primary);
+      }
     }
   }
 }

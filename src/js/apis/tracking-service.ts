@@ -13,13 +13,20 @@ export type Activity = {
   vendorId: string;
   date: string;
   name?: string;
+  deviceName?: string;
   // the activity type, translated per language
   type: Record<string, string | undefined>;
   length?: number;
   heightDiffUp?: number;
   duration?: number;
   miniature?: string;
+  // the c2c activity matching the vendor's activity type, if any: to prefill the outing
+  c2cActivities?: string[];
+  // the vendors that have this outing, the one of `id` first (tracking groups the copies of an outing)
+  sources?: ActivitySource[];
 };
+
+export type ActivitySource = { id: number; vendor: Vendor; vendorId: string; deviceName?: string };
 
 export type Geometry = { type: 'LineString'; coordinates: number[][] };
 
@@ -48,8 +55,8 @@ class TrackingService {
     return this.axios.get(`/${vendor}/exchange-token/${userId}`, { params });
   }
 
-  requestGarminUnauthorizeRequestToken(userId: number) {
-    return this.axios.get<{ token: string }>(`/garmin/request-token/${userId}`);
+  requestGarminAuthorizationUrl(userId: number) {
+    return this.axios.get<{ url: string }>(`/garmin/request-token/${userId}`);
   }
 
   getStatus(userId: number) {

@@ -2,10 +2,9 @@
   <div class="section">
     <html-header :title="$gettext('Camptocamp.org')" />
     <div class="columns">
-      <div
-        class="column is-12-mobile"
-        :class="feed ? 'is-7-tablet is-7-desktop is-8-widescreen is-9-fullhd' : 'is-7 is-8-fullhd'"
-      >
+      <div class="column is-12-mobile" :class="feed ? 'is-7-tablet is-9-widescreen' : 'is-7 is-8-widescreen'">
+        <!-- announces the app to the visitors of the website, hidden once installed -->
+        <app-banner />
         <!-- Association and website introduction -->
         <div class="box intro">
           <div class="feed-title has-cursor-pointer">
@@ -48,7 +47,11 @@
                 <span v-translate>Load my preferences</span>
               </label>
             </span>
-            <router-link to="preferences" class="has-text-normal" :title="$gettext('My preferences')">
+            <router-link
+              :to="{ name: 'settings', hash: '#account' }"
+              class="has-text-normal"
+              :title="$gettext('My preferences')"
+            >
               <fa-icon icon="gears" />
             </router-link>
           </span>
@@ -70,7 +73,7 @@
       <div
         v-if="!$screen.isMobile"
         class="column"
-        :class="feed ? 'is-5-tablet is-5-desktop is-4-widescreen is-3-fullhd' : 'is-5 is-4-fullhd'"
+        :class="feed ? 'is-5-tablet is-3-widescreen' : 'is-5 is-4-widescreen'"
       >
         <board-announcement-widget />
         <dfm-ad-small />
@@ -82,67 +85,55 @@
   </div>
 </template>
 
-<script>
-import DfmAdSmall from '../DfmAdSmall';
+<script setup lang="ts">
+import { ref } from 'vue';
 
-import HomeBanner from './HomeBanner';
-import BoardAnnouncementWidget from './utils/BoardAnnoucementWidget';
-import DashboardArticlesList from './utils/DashboardArticlesList';
-import DashboardImagesGallery from './utils/DashboardImagesGallery';
-import DashboardOutingsList from './utils/DashboardOutingsList';
-import DashboardRoutesList from './utils/DashboardRoutesList';
-import ForumWidget from './utils/ForumWidget';
-import UsefulLinks from './utils/UsefulLinks';
+import DfmAdSmall from '../DfmAdSmall.vue';
 
-import FeedWidget from '@/components/feed-widget/FeedWidget';
+import HomeBanner from './HomeBanner.vue';
+import BoardAnnouncementWidget from './utils/BoardAnnoucementWidget.vue';
+import DashboardArticlesList from './utils/DashboardArticlesList.vue';
+import DashboardImagesGallery from './utils/DashboardImagesGallery.vue';
+import DashboardOutingsList from './utils/DashboardOutingsList.vue';
+import DashboardRoutesList from './utils/DashboardRoutesList.vue';
+import ForumWidget from './utils/ForumWidget.vue';
+import UsefulLinks from './utils/UsefulLinks.vue';
+
+import AppBanner from '@/components/app/AppBanner.vue';
+import FeedWidget from '@/components/feed-widget/FeedWidget.vue';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import { getPreferences } from '@/js/vue-plugins/local-storage';
+import { useAppSettingsStore } from '@/stores/app-settings';
 
 // stored under the component name, as before: existing preferences are kept
 const preferences = getPreferences('HomeView');
 
-export default {
-  name: 'HomeView',
+const { $user } = useGlobalProperties();
+const appSettings = useAppSettingsStore();
 
-  components: {
-    DfmAdSmall,
-    HomeBanner,
-    BoardAnnouncementWidget,
-    DashboardArticlesList,
-    DashboardImagesGallery,
-    DashboardOutingsList,
-    DashboardRoutesList,
-    ForumWidget,
-    UsefulLinks,
-    FeedWidget,
-  },
-
-  data() {
-    let state = true;
-
-    if (this.$user.isLogged) {
-      state = false;
-    }
-    return {
-      isPersonal: preferences.get('isPersonal', false),
-      feed: preferences.get('feed', false),
-      visible: state,
-    };
-  },
-
-  methods: {
-    toggleProperty(property) {
-      this.setProperty(property, !this[property]);
-    },
-    setProperty(property, value) {
-      this[property] = value;
-      preferences.set(`${property}`, this[property]);
-    },
-  },
+// the toggles of the page, stored when changed (the banner is shown to the visitors, hidden to the users)
+const toggles = {
+  isPersonal: ref<boolean>(preferences.get('isPersonal', false)),
+  // in the phone layout of the app, the activity feed: what its Recent tab promises
+  feed: ref<boolean>(preferences.get('feed', appSettings.isMobileShell)),
+  visible: ref(!$user.isLogged),
 };
+const { isPersonal, feed, visible } = toggles;
+
+function toggleProperty(property: keyof typeof toggles) {
+  setProperty(property, !toggles[property].value);
+}
+
+function setProperty(property: keyof typeof toggles, value: boolean) {
+  toggles[property].value = value;
+  preferences.set(`${property}`, value);
+}
 </script>
 
-<style scoped lang="scss">
-@media screen and (max-width: $tablet) {
+<style scoped>
+@import '@/assets/css/media.css';
+
+@media screen and (--c2c-max-tablet) {
   .feed-view {
     padding-left: 0;
     padding-right: 0;
@@ -173,9 +164,9 @@ export default {
   }
 }
 
-@media screen and (min-width: $tablet) {
+@media screen and (--c2c-min-tablet) {
   .feed-view {
-    margin-top: $size-3;
+    margin-top: var(--c2c-size-3);
   }
 
   .field {
@@ -193,11 +184,11 @@ export default {
 }
 
 .intro {
-  margin-bottom: $size-6;
+  margin-bottom: var(--c2c-size-6);
 }
 
 .switch[type='checkbox']:checked + label::before {
-  background: $color-base-c2c;
+  background: var(--c2c-color-base-c2c);
 }
 
 .toggleCheckbox {
@@ -208,7 +199,7 @@ export default {
   position: relative;
   border-radius: 20px;
   background: white;
-  border: 1px solid $color-base-c2c;
+  border: 1px solid var(--c2c-color-base-c2c);
   padding: 5px 2px;
   cursor: pointer;
 }
@@ -216,7 +207,7 @@ export default {
 .is-active {
   color: white;
   border-radius: 20px;
-  background: $color-base-c2c;
+  background: var(--c2c-color-base-c2c);
   transition: color 0.3s;
 }
 
@@ -232,7 +223,21 @@ export default {
   align-items: baseline;
 }
 
-.ams-ad {
-  margin-bottom: $size-7;
+/* no gap when the slot gets no ad, going with its room (DfmAdSmall.vue) */
+.ad-slot {
+  transition: margin-bottom 0.3s ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.ad-slot:not(.is-empty) {
+  margin-bottom: var(--c2c-size-7);
+}
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark switch */
+html[data-theme='dark'] .toggleContainer {
+  background: var(--app-dark-surface);
 }
 </style>

@@ -1,34 +1,40 @@
 <template>
-  <router-link target="_blank" :to="path" rel="nofollow">
+  <!-- the page shows the full content of the listed results (the current page of the list, with its query): to read
+    them one after the other, or to print them -->
+  <router-link
+    target="_blank"
+    :to="path"
+    rel="nofollow"
+    :title="$gettext('Show the full content of the listed results, one after the other (to read or print)')"
+  >
     <button v-if="display === 'button'" class="button is-primary is-size-7-mobile">
-      <fa-icon icon="print"></fa-icon>
-      <span>&nbsp;</span>
-      <span v-translate>Print search results</span>
+      <fa-icon icon="book-open"></fa-icon>
+      <span class="is-hidden-touch">&nbsp;</span>
+      <span class="is-hidden-touch" v-translate>Full view</span>
     </button>
     <span v-else class="dropdown-item">
-      <fa-icon icon="print"></fa-icon>
-      <span v-translate>Print search results</span>
+      <fa-icon icon="book-open"></fa-icon>
+      <span v-translate>Full view</span>
     </span>
   </router-link>
 </template>
 
-<script>
-import urlMixin from './url-mixin';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 
-export default {
-  mixins: [urlMixin],
+import { useUrlFilters } from '@/js/composables/url-filters';
 
-  props: {
-    display: {
-      type: String,
-      default: 'button',
-    },
+defineProps({
+  display: {
+    type: String,
+    default: 'button',
   },
+});
 
-  computed: {
-    path() {
-      return { path: this.documentType + 's/print', query: this.$route.query };
-    },
-  },
-};
+const route = useRoute();
+
+const { documentType } = useUrlFilters();
+
+const path = computed(() => ({ path: documentType.value + 's/print', query: route.query }));
 </script>

@@ -81,10 +81,10 @@
     "Beware of case-sensitive login and password": "Beware of case-sensitive login and password.",
     "Book content": "Short description of the book's contents",
     "Books and websites not already associated to this route": "Indicate the origin of information other than your personal experience. A (guide)book or magazine must have its own entry and be associated with the document (do not mention it in this field). This field is for links to websites, online topos, blogs, non-distributed sources (notebook in a refuge, bar or campsite), or additional information about the topo-books (false diagram, etc.). A link must be activated with the < link > chevrons.",
-    "Both results and map": "Results and map",
     "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "By default, your username on the topoguide will simply be your username, but you can change it freely in your settings afterwards.",
     "Candidates": "All proposed pictures",
     "Cards mode": "Cards view",
+    "Choice of massif": "Choose mountain range",
     "Conflict: version of document has changed": "Document has been modified in the meantime and a new version is available.",
     "Conflict: version of locale 'ca' has changed": "Document has been modified in the meantime and a new version is available.",
     "Conflict: version of locale 'de' has changed": "Document has been modified in the meantime and a new version is available.",
@@ -113,7 +113,7 @@
     "Describe road access": "Describe road access and facilities (accommodation, restaurant, etc.)",
     "Describe the conditions you encountered during your outing": "Describe the conditions encountered during your outing",
     "Describe the route following the structure below": "Describe the route following the structure below:\n## Approach # duration in h\nApproach description\n\n## Ascent # duration in h\nL# | rating | length | description (use # button above)\n\n## Descent # duration in h\nDescent description",
-    "Detailed figures, like ratings, height differences, frequentation...": "Detailed fiures (ratings, height differences, attendance...)",
+    "Detailed figures, like ratings, height differences, frequentation...": "Detailed figures (ratings, height differences, attendance...)",
     "Donate": "Donate to Camptocamp association",
     "ESRI World Imagery": {
       "Map layer": "ESRI Sat"
@@ -121,12 +121,12 @@
     "Easy mountain climbing gear": "Alpine rock climbing from F to AD",
     "Easy snow ice mixed gear": "Alpine snow, ice and mixed climbing from F to PD+",
     "Edit a document": "Edit document",
+    "Enter a massif name": "Enter mountain range name",
     "Everything about ratings : difficulties, exposition...": "Fill in all ratings and grades of the route (difficulties, exposure...)",
     "FF Vol Libre": "FFVL",
     "Fullname": "Topoguide username",
     "Have you (re)evaluated the risks at each change in the situation? What factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the leader of the group, etc.": "Have you (re) evaluated the risks at each change in the situation?\nWhat factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the group, etc.",
     "Hiking gear": "Summer hiking",
-    "Home page feed parameters": "Homepage feed parameters",
     "I contribute": "I take part",
     "ICGC ortho (ca)": {
       "Map layer": "ICGC Sat"
@@ -152,14 +152,15 @@
     "Ice and dry climbing gear": "Ice-climbing and dry-tooling",
     "Information about the terrain, like elevations, lengths...": "Information about the terrain, like height diffs, lengths...",
     "Interpolate value should be a number > 0": "Interpolate value should be a positive number",
+    "It has already been used, has expired, or was replaced by a more recent request: only the link of the last email sent works.": "The link has already been used, has expired, or was replaced by a more recent request: only the link of the last email sent works.",
+    "Itinevert": "Itinévert",
     "Login": "Sign in",
     "Logout": "Sign out",
-    "Longer than maximum length 25": {
-      "API message": "Text is too long (at most 25 characters)"
-    },
     "Mail has been sent": "An e-mail has been sent",
     "Main information about the route, such as title, activity, GPS, and waypoint (which mountain, place).": "Main information about the route, such as title, activity, GPS data, and environment.",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Map, guidebook, known route, planning for a plan B, (re)evaluation of a route during a trip?",
+    "Meteo": "Weather forecast ",
+    "Meter(s)": "meters",
     "Miscs": "Miscellaneous",
     "Modified the": {
       "modification date": "Modified on"
@@ -168,9 +169,6 @@
     "Narration": "Textual description",
     "No user with this email": {
       "API message": "There is no user with this email"
-    },
-    "Only document less than 24h old can be deleted": {
-      "API message": "Only recent documents (less than 24h old) can be deleted. Please contact moderators to delete this document."
     },
     "Ordnance Survey (uk)": {
       "Map layer": "Ordn. Survey"
@@ -194,12 +192,6 @@
     "See other documents nearby": "Other documents nearby...",
     "Seems fine! :)": "Computation possible ! :)",
     "Select option": "Choose option",
-    "Shorter than minimum length 1": {
-      "API message": "Required field"
-    },
-    "Shorter than minimum length 3": {
-      "API message": "Text is too short (at least 3 chars)"
-    },
     "Sign in to camptocamp today, it's free": "Sign in to camptocamp today, it's free!",
     "Skitouring gear": "Ski and snowboard touring, snowshoeing",
     "SwissTopo Slopes": {
@@ -209,7 +201,6 @@
       "Map layer": "SwissTopo Sat"
     },
     "There are sensitive areas on this route. Please refer to the map.": "There are sensitive areas on or near this route. Please consult the map to locate them, you can click on the areas for detailed information on the measures to be taken.",
-    "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the &quot;Share&quot; module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.": "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the \"Share\" module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.",
     "This field is too long": "Text is too long",
     "This field is too short": "Text is too short",
     "Too much points": "Too many points",
@@ -269,6 +260,9 @@
     },
     "already used username": {
       "API message": "This username is already in use"
+    },
+    "already-linked": {
+      "tracking": "This account of the service is already linked to another camptocamp account"
     },
     "always_accessible": {
       "custodianship_types": "always accessible"
@@ -368,8 +362,8 @@
     },
     "decathlon": "Decathlon",
     "describe conditions": "Describe ground conditions, equipment and rock quality.\nIf you meet defective equipment, contact local actors like mountain guides or tourism office.",
-    "describe route_conditions": "Describe route conditions",
-    "describe timing": "Describe timing",
+    "describe route_conditions": "Briefly describe the route you followed in the following cases: a route different from the one in the guidebook, a guidebook with alternative routes, a loop route, a series of routes, or a point reached during a partial hike.\nWARNING: Do not upload photos copied from a guidebook or a book. Moderators will delete them immediately, as this is illegal and violates the licenses used by the site.",
+    "describe timing": "Departure time / timetable",
     "describe weather": "Describe weather",
     "description": "Description",
     "difficult": {
@@ -430,7 +424,6 @@
     "gas_unstaffed": "Gas if unstaffed",
     "gear": "Gear",
     "gender": "Gender",
-    "general informations": "General information",
     "geolocation": "Geolocation",
     "glacier_gear": "glacier gear",
     "glacier_rating": "glacier rating",
@@ -439,6 +432,9 @@
     },
     "goulotte": {
       "route_configuration_types": "gully"
+    },
+    "granit": {
+      "rock_types": "granite"
     },
     "great": {
       "quality_types": "excellent"
@@ -530,7 +526,6 @@
     },
     "lift_access": "Lift access",
     "lift_status": "Lift status",
-    "loading": "loading in progress",
     "local_product": {
       "waypoint_types": "local product"
     },

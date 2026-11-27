@@ -1,238 +1,280 @@
 <template>
-  <aside>
-    <a :href="'/'" class="menu-brand has-text-centered">
-      <img src="@/assets/img/logo.svg" alt="Camptocamp.org" />
-    </a>
-    <router-link :to="{ name: 'topoguide' }">
-      <span
-        class="menu-item is-ellipsed"
-        :class="{
-          'router-link-active': ['topoguide', 'routes', 'waypoints', 'areas', 'route', 'waypoint', 'area'].includes(
-            $route.name
-          ),
-        }"
-      >
-        <icon-topoguide fixed-width />
-        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('Topoguide')) }} </span>
-      </span>
-    </router-link>
-    <router-link :to="{ name: 'outings', query: { qa: 'draft,great', bbox: '-431698,3115462,1931123,8442818' } }">
-      <span
-        class="menu-item is-ellipsed"
-        :class="{
-          'router-link-active': ['outings', 'outing'].includes($route.name),
-        }"
-      >
-        <icon-outing fixed-width />
-        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('outings')) }} </span>
-      </span>
-    </router-link>
-    <router-link :to="{ name: 'forum' }">
-      <span class="menu-item is-ellipsed">
-        <icon-forum />
-        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('Forum')) }} </span>
-      </span>
-    </router-link>
-    <router-link :to="{ name: 'serac' }">
-      <span
-        class="menu-item is-ellipsed"
-        :class="{
-          'router-link-active': ['serac', 'xreports', 'xreport'].includes($route.name),
-        }"
-      >
-        <icon-xreport fixed-width />
-        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('Accident database')) }} </span>
-      </span>
-    </router-link>
-    <router-link :to="{ name: 'articles' }">
-      <span
-        class="menu-item is-ellipsed"
-        :class="{ 'router-link-active': ['articles', 'article'].includes($route.name) }"
-      >
-        <icon-article fixed-width />
-        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('articles')) }} </span>
-      </span>
-    </router-link>
-    <router-link :to="{ name: 'yeti' }" v-if="isTall">
-      <span class="menu-item is-ellipsed" :class="{ 'router-link-active': ['yeti'].includes($route.name) }">
-        <icon-yeti fixed-width />
-        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('yeti')) }} </span>
-      </span>
-    </router-link>
-    <!-- use of a href instead of router link so that the page is refreshed if you are already on Itinevert -->
-    <a :href="$router.resolve({ name: 'itinevert' }).href">
-      <span class="menu-item is-ellipsed" :class="{ 'router-link-active': ['itinevert'].includes($route.name) }">
-        <icon-itinevert fixed-width />
-        <span class="menu-item-text"> {{ $filters.uppercaseFirstLetter($gettext('Itinevert')) }} </span>
-      </span>
-    </a>
+  <!-- a rail of icons, which opens over the page on hover or from the keyboard, or pinned open beside the page
+       (src/js/composables/side-menu.ts) -->
+  <aside
+    ref="root"
+    :class="{ 'is-expanded': expanded || keptOpen, 'is-pinned': pinned || keptOpen }"
+    @pointerenter="onPointerEnter"
+    @pointerleave="onPointerLeave"
+    @focusin="onFocusIn"
+    @focusout="onFocusOut"
+    @keydown.esc="close"
+    @click="onClick"
+  >
+    <!-- as wide as the open menu, which the rail clips: nothing wraps or moves while it opens -->
+    <div class="side-menu-content">
+      <!-- the logo inline (LogoCtc): its text turns light in the dark theme -->
+      <router-link :to="{ name: 'home' }" class="menu-brand" aria-label="Camptocamp.org">
+        <logo-ctc class="menu-logo" />
+        <logo-ctc mark class="menu-logo-mark" />
+      </router-link>
+      <menu-entries :items="menuItems" />
 
-    <div class="menu-footer is-size-7">
-      <div class="has-text-centered menu-links">
-        <router-link :to="{ name: 'article', params: { id: 106727 } }" v-translate>contact</router-link>
-        <span> &bull; </span>
-        <router-link :to="{ name: 'article', params: { id: 106731 } }" v-translate>EULA</router-link>
-        <span> &bull; </span>
-        <router-link :to="{ name: 'article', params: { id: 106728 } }" v-translate>Licenses</router-link>
-        <br />
-        <router-link :to="{ name: 'article', params: { id: 106726 } }" v-translate>Association</router-link>
-        <span> &bull; </span>
-        <a @click="showGdpr" v-translate>Cookies</a>
-      </div>
+      <menu-footer class="menu-footer" />
 
-      <div class="columns is-gapless has-text-centered is-mobile menu-socials">
-        <div class="column">
-          <a href="https://www.instagram.com/camptocamp_org/" title="Instagram">
-            <icon-instagram class="instagram-icon" />
-          </a>
-        </div>
-        <div class="column">
-          <a href="https://www.facebook.com/camptocamp.org/" title="Facebook">
-            <fa-icon :icon="['fab', 'facebook']" class="facebook-icon" />
-          </a>
-        </div>
-        <div class="column">
-          <a href="https://www.youtube.com/channel/UCllJ4-Ab7A0ZoqlAOAJtnCw" :title="$gettext('Youtube')">
-            <fa-icon :icon="['fab', 'youtube']" class="youtube-icon" />
-          </a>
-        </div>
-        <div class="column">
-          <a href="https://www.helloasso.com/associations/camptocamp-association" :title="$gettext('Donate')">
-            <fa-icon icon="heart" class="donate-icon" />
-          </a>
+      <!-- kept open (the welcome page): the button folds away, and the footer slides down to the bottom of the window
+           (and back up on the way out) -->
+      <div class="menu-pin-fold" :class="{ 'is-folded': keptOpen }" :inert="keptOpen">
+        <div class="menu-pin-fold-inner">
+          <button v-if="canPin" type="button" class="menu-pin" @click="togglePinned">
+            <fa-icon :icon="pinned ? 'angles-left' : 'angles-right'" fixed-width />
+            <span class="menu-pin-text">
+              {{ pinned ? $gettext('Collapse the menu') : $gettext('Keep the menu open') }}
+            </span>
+          </button>
+          <!-- too narrow to pin it (a tablet, a phone on its side): opened over the page, by a tap too -->
+          <button v-else type="button" class="menu-pin" :aria-expanded="expanded" @click="toggleOpened">
+            <fa-icon :icon="expanded ? 'angles-left' : 'angles-right'" fixed-width />
+            <span class="menu-pin-text">{{ expanded ? $gettext('Close') : $gettext('Menu') }}</span>
+          </button>
         </div>
       </div>
     </div>
   </aside>
 </template>
 
-<script>
-import IconYeti from '@/components/generics/icons/IconYeti';
-import bus from '@/js/event-bus';
+<script setup lang="ts">
+import { onBeforeUnmount, ref } from 'vue';
 
-export default {
-  components: { IconYeti },
+import LogoCtc from '@/components/app/LogoCtc.vue';
+import MenuEntries from '@/components/app/MenuEntries.vue';
+import MenuFooter from '@/components/app/MenuFooter.vue';
+import { useMainMenuItems } from '@/js/composables/main-menu';
+import { useSideMenu } from '@/js/composables/side-menu';
 
-  data() {
-    return {
-      isTall: false,
-    };
-  },
+defineProps<{ keptOpen?: boolean }>();
 
-  created() {
-    this.mediaQueryList = window.matchMedia('only screen and (min-height: 715px)');
-    if (this.mediaQueryList.addEventListener) {
-      this.mediaQueryList.addEventListener('change', this.onHeightBreakpointChange);
-    } else {
-      // Safari < 14 support
-      this.mediaQueryList.addListener(this.onHeightBreakpointChange);
-    }
-    this.onHeightBreakpointChange();
-  },
+const menuItems = useMainMenuItems();
 
-  beforeUnmount() {
-    if (this.mediaQueryList.removeEventListener) {
-      this.mediaQueryList.removeEventListener('change', this.onHeightBreakpointChange);
-    } else {
-      // Safari < 14 support
-      this.mediaQueryList.removeListener(this.onHeightBreakpointChange);
-    }
-  },
+const {
+  pinned,
+  canPin,
+  expanded,
+  onPointerEnter,
+  onPointerLeave,
+  onFocusIn,
+  onFocusOut,
+  close,
+  togglePinned,
+  toggleOpened,
+} = useSideMenu();
 
-  methods: {
-    showGdpr() {
-      bus.emit('show-gdpr');
-    },
+// opened over the page, a tap beside it closes it
+const root = ref<HTMLElement>();
+function onPointerDownOutside(event: PointerEvent) {
+  if (expanded.value && !pinned.value && !root.value?.contains(event.target as Node)) {
+    close();
+  }
+}
+document.addEventListener('pointerdown', onPointerDownOutside);
+onBeforeUnmount(() => document.removeEventListener('pointerdown', onPointerDownOutside));
 
-    onHeightBreakpointChange() {
-      this.isTall = this.mediaQueryList.matches;
-    },
-  },
-};
+// a link followed (or the cookies opened): the menu closes over the page it opens
+function onClick(event: MouseEvent) {
+  if (!pinned.value && (event.target as Element).closest('a')) {
+    close();
+  }
+}
 </script>
 
-<style scoped lang="scss">
-$brandLogoHeight: 70px;
-$brandLogoMargin: 5px;
-
-$menuLinkHeightPadding: 6px;
-
+<style scoped>
 aside {
-  // border-right: 1px solid $secondary;
+  /* opens decelerating, closes a little faster */
+  --side-menu-open: 200ms cubic-bezier(0.2, 0, 0, 1);
+  --side-menu-close: 150ms cubic-bezier(0.4, 0, 1, 1);
+
+  width: var(--c2c-sidemenu-rail-width);
+  /* too tall for the window (large text, short screen): it scrolls, without a bar in the rail */
+  overflow: hidden auto;
+  scrollbar-width: none;
+  /* border-right: 1px solid var(--c2c-secondary); */
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
-  background: $white;
+  background: var(--c2c-white);
+  transition:
+    width var(--side-menu-close),
+    box-shadow var(--side-menu-close);
+
+  &.is-expanded {
+    width: var(--c2c-sidemenu-open-width);
+    transition:
+      width var(--side-menu-open),
+      box-shadow var(--side-menu-open);
+  }
+
+  /* over the page: it floats */
+  &.is-expanded:not(.is-pinned) {
+    box-shadow:
+      0 1px 4px 0 rgba(0, 0, 0, 0.2),
+      8px 0 24px -4px rgba(0, 0, 0, 0.18);
+  }
+}
+
+.side-menu-content {
+  display: flex;
+  flex-direction: column;
+  width: var(--c2c-sidemenu-open-width);
+  min-height: 100%;
+}
+
+/* the labels, the logo and the footer: shown as the menu opens, hidden before it closes. Still read out on the rail */
+.menu-logo,
+.menu-footer,
+.menu-pin-text,
+:deep(.menu-item-text),
+:deep(.menu-badge) {
+  opacity: 0;
+  transition: opacity 100ms linear;
+}
+
+.is-expanded {
+  .menu-logo,
+  .menu-footer,
+  .menu-pin-text,
+  :deep(.menu-item-text),
+  :deep(.menu-badge) {
+    opacity: 1;
+    transition: opacity 150ms linear 50ms;
+  }
 }
 
 .menu-brand {
+  position: relative;
   display: block;
+  flex: none;
+  height: 80px;
   line-height: 0;
 
-  img {
-    height: $brandLogoHeight;
-    margin: $brandLogoMargin 0;
+  .menu-logo {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    height: 70px;
+    transform: translateX(-50%);
+  }
+
+  /* the mountains alone, in the middle of the rail */
+  .menu-logo-mark {
+    position: absolute;
+    top: 50%;
+    left: calc(var(--c2c-sidemenu-rail-width) / 2);
+    width: calc(var(--c2c-sidemenu-rail-width) - 12px);
+    height: auto;
+    transform: translate(-50%, -50%);
+    transition: opacity 150ms linear 50ms;
   }
 }
 
-.menu-item {
-  display: block;
-  padding: $menuLinkHeightPadding 10px;
-  border-left: 5px solid $white;
-  color: $text;
+.is-expanded .menu-brand .menu-logo-mark {
+  opacity: 0;
+  transition: opacity 100ms linear;
 }
 
-.menu-item:hover {
-  background: $light;
-  border-left: 5px solid $color-base-c2c-lighter;
+/* the icons in the middle of the rail, all as wide (the layered icons of the outings too) */
+:deep(.menu-item) {
+  padding-left: calc(var(--c2c-sidemenu-rail-width) / 2 - 5px - 0.625em);
+
+  > .fa-layers {
+    width: 1.25em;
+  }
 }
 
-.menu-item-text {
-  margin-left: 0;
-  font-size: 1.1rem;
-}
-
-.menu-item.router-link-active {
-  border-left: 5px solid $color-base-c2c;
-  font-weight: bold;
+/* on the rail, the current entry has more than its orange border */
+aside:not(.is-expanded) :deep(.menu-item.router-link-active) {
+  background: rgba(255, 153, 51, 0.14);
 }
 
 .menu-footer {
-  position: absolute;
-  width: 100%;
+  flex: none;
+  margin-top: auto;
+  /* closed, not focusable: the keyboard opens the menu on its way */
+  visibility: hidden;
+  transition:
+    opacity 100ms linear,
+    visibility 0s 100ms;
+}
+
+.is-expanded .menu-footer {
+  visibility: visible;
+}
+
+/* in view when the rail scrolls (a phone on its side): the way a finger opens it */
+.menu-pin-fold {
+  display: grid;
+  flex: none;
+  position: sticky;
   bottom: 0;
+  /* its row folds to nothing: the footer above it slides down, as the menu opens */
+  grid-template-rows: 1fr;
+  transition: grid-template-rows var(--side-menu-open);
 
-  .menu-socials,
-  .menu-ad,
-  .menu-links {
-    margin-bottom: 15px !important;
-    line-height: 1;
-  }
-
-  .instagram-icon,
-  .facebook-icon,
-  .donate-icon,
-  .youtube-icon {
-    font-size: 30px;
-  }
-
-  .facebook-icon {
-    color: #6d8bc9; //facebook color
-  }
-
-  .youtube-icon {
-    color: #f00; // youtube color
-  }
-
-  .donate-icon {
-    color: hsl(348, 100%, 71%);
-    &:hover {
-      color: hsl(348, 100%, 51%);
-    }
+  &.is-folded {
+    grid-template-rows: 0fr;
   }
 }
 
-@media screen and (max-height: 680px) {
-  .menu-socials {
-    display: none !important;
+.menu-pin-fold-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.menu-pin {
+  display: block;
+  width: 100%;
+  padding: 10px 10px 10px calc(var(--c2c-sidemenu-rail-width) / 2 - 0.625em);
+  border: 0;
+  border-top: 1px solid var(--c2c-grey-lightest);
+  background: var(--c2c-white);
+  color: var(--c2c-grey);
+  font-size: 1rem;
+  white-space: nowrap;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--c2c-light);
+    color: var(--c2c-text);
   }
+
+  .menu-pin-text {
+    margin-left: 0.5em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  aside,
+  aside *,
+  aside :deep(*) {
+    transition: none !important;
+  }
+}
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): a dark menu */
+html[data-theme='dark'] aside {
+  background: var(--app-dark-field);
+}
+
+/* a shadow does not show on the dark page: an edge too */
+html[data-theme='dark'] aside.is-expanded:not(.is-pinned) {
+  box-shadow:
+    1px 0 0 var(--app-dark-border),
+    8px 0 24px -4px rgba(0, 0, 0, 0.6);
+}
+
+html[data-theme='dark'] .menu-pin {
+  background: var(--app-dark-field);
+}
+
+html[data-theme='dark'] .menu-pin:hover {
+  background: var(--app-dark-surface);
 }
 </style>

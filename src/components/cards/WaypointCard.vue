@@ -12,50 +12,27 @@
     </card-row>
 
     <card-row>
-      <card-elevation-item :elevation="document.elevation" />
+      <card-elevation-item :elevation="document.elevation ?? undefined" />
 
       <textual-array :array="document.slackline_types" i18n i18n-context="slackline_types" />
 
       <marker-quality :quality="document.quality" />
     </card-row>
-
-    <card-row v-if="transportContext" class="accessibility-row">
-      <accessibility-badge
-        :result="displayedAccessibilityResult"
-        :duration-unknown="document.duration_unknown === true"
-      />
-      <verify-accessibility-button
-        :document="document"
-        :transport-context="transportContext"
-        @verified="unitAccessibilityResult = $event"
-      />
+    <card-row v-if="transportContext">
+      <transport-accessibility :document="document" :transport-context="transportContext" />
     </card-row>
   </card-container>
 </template>
 
-<script>
-import { documentCardMixin } from './utils/mixins';
+<script setup lang="ts">
+import CardContainer from './utils/CardContainer.vue';
+import CardElevationItem from './utils/CardElevationItem.vue';
+import CardRegionItem from './utils/CardRegionItem.vue';
+import CardRow from './utils/CardRow.vue';
+import CardTitle from './utils/CardTitle.vue';
+import { cardProps, transportContextProperty } from './utils/card';
 
-export default {
-  mixins: [documentCardMixin],
+import { documentProperty } from '@/js/properties';
 
-  data() {
-    return {
-      unitAccessibilityResult: null,
-    };
-  },
-
-  computed: {
-    displayedAccessibilityResult() {
-      return this.unitAccessibilityResult ?? this.transportContext?.results?.[this.document.document_id] ?? null;
-    },
-  },
-};
+defineProps({ ...cardProps, ...documentProperty, ...transportContextProperty });
 </script>
-
-<style scoped lang="scss">
-.accessibility-row {
-  flex-wrap: wrap;
-  align-items: flex-start;
-}
-</style>

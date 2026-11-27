@@ -32,6 +32,42 @@ const locales: Record<string, string> = {
   zh_CN: 'zh-cn',
   en: 'en-gb',
 };
+// The date ranges of several days, as each language writes them: the formats of the start and of the end date, when
+// both are in the same month, in the same year, or not. The month is short, the year written once when it is the same.
+type RangeFormats = Record<'month' | 'year' | 'other', [string, string]>;
+
+const dayFirst = (day: string, month = 'MMM', ofMonth = '', ofYear = ''): RangeFormats => ({
+  month: [day, `${day} ${ofMonth}${month} ${ofYear}YYYY`],
+  year: [`${day} ${ofMonth}${month}`, `${day} ${ofMonth}${month} ${ofYear}YYYY`],
+  other: [`${day} ${ofMonth}${month} ${ofYear}YYYY`, `${day} ${ofMonth}${month} ${ofYear}YYYY`],
+});
+
+const rangeFormats: Record<string, RangeFormats> = {
+  ca: dayFirst('D'),
+  de: dayFirst('D.'),
+  en: dayFirst('D'),
+  es: dayFirst('D', 'MMM', '[de] ', '[de] '),
+  fr: dayFirst('D'),
+  it: dayFirst('D'),
+  sl: dayFirst('D.'),
+  // year first
+  eu: {
+    month: ['YYYY[ko] MMM D[a]', 'D[a]'],
+    year: ['YYYY[ko] MMM D[a]', 'MMM D[a]'],
+    other: ['YYYY[ko] MMM D[a]', 'YYYY[ko] MMM D[a]'],
+  },
+  hu: {
+    month: ['YYYY. MMM D.', 'D.'],
+    year: ['YYYY. MMM D.', 'MMM D.'],
+    other: ['YYYY. MMM D.', 'YYYY. MMM D.'],
+  },
+  zh_CN: {
+    month: ['YYYY年M月D日', 'D日'],
+    year: ['YYYY年M月D日', 'M月D日'],
+    other: ['YYYY年M月D日', 'YYYY年M月D日'],
+  },
+};
+
 export type DateUtils = ReturnType<typeof dateUtils>;
 
 declare module 'vue' {
@@ -92,6 +128,21 @@ const dateUtils = (app: App) => {
         }
       }
       return dayjs(arg).locale(current()).format(formatString);
+    },
+
+    // "5–7 oct. 2026", "28 sept. – 2 oct. 2026": an en dash, without spaces between two days of the same month
+    toLocalizedRange(start: ConfigType, end: ConfigType) {
+      const formats = rangeFormats[languageOf(app).current ?? ''] ?? rangeFormats.en;
+      const same = !dayjs(start).isSame(dayjs(end), 'year')
+        ? 'other'
+        : !dayjs(start).isSame(dayjs(end), 'month')
+          ? 'year'
+          : 'month';
+      const [startFormat, endFormat] = formats[same];
+      const separator = same === 'month' ? '–' : ' – ';
+      return (
+        dayjs(start).locale(current()).format(startFormat) + separator + dayjs(end).locale(current()).format(endFormat)
+      );
     },
 
     toTechnicalString(arg: ConfigType) {

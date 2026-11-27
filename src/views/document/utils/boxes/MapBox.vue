@@ -11,28 +11,35 @@
 
     <!-- The fullscreen map container is used to display both the map
          and the elevation profile in fullscreen (if the elevation profile exists) -->
-    <div id="fullscreen-map-container">
+    <div id="fullscreen-map-container" :class="{ 'full-window': fullWindow }">
       <div
         class="map-container"
         :class="{
-          'with-elevation-profile': showElevationProfile && !elevationProfileHidden,
-          pinned: pinnedMode,
+          'with-elevation-profile': showElevationProfile && elevationProfileHasData && !elevationProfileHidden,
+          pinned: pinnedMode && !fullWindow,
           'pinned-to-top': pinnedSide === 'top',
           'pinned-to-right': pinnedSide === 'right',
           'fill-parent': !pinnedMode,
         }"
       >
         <map-view
-          ref="mapView"
+          ref="olMap"
           :documents="new Array(document)"
-          :show-protection-areas="['r', 'w'].includes(document.type)"
+          :show-protection-areas="['r', 'w'].includes(document.type!)"
+          :tracks-filters="overlayFilters.outing"
+          :routes-filters="overlayFilters.route"
           :biodiv-sports-activities="document.activities"
           :full-screen-element-id="
             !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
           "
           :show-pin-to-top-button="true"
+          :show-center-on-geolocation="onTouchScreen"
+          follow-position
+          remember-settings
+          :pinned-side="pinnedSide"
+          :show3d="show3d"
           @has-protection-area="$emit('has-protection-area')"
-          @pin-to-top-clicked="togglePinToSide(true)"
+          @pin-to-top-clicked="onPinClicked"
         />
       </div>
 
@@ -45,6 +52,8 @@
       <button
         v-if="hasMapLinks"
         class="button is-small"
+        :aria-label="$gettext('maps')"
+        :aria-expanded="mapLinksAreVisible"
         @click="mapLinksAreVisible = !mapLinksAreVisible"
         :class="{ 'is-success': mapLinksAreVisible }"
       >
@@ -55,159 +64,177 @@
   </div>
 </template>
 
-<script>
-import ElevationProfile from './ElevationProfile';
-import MapLinks from './MapLinks';
+<script setup lang="ts">
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue';
+import { useRoute } from 'vue-router';
 
+import ElevationProfile from './ElevationProfile.vue';
+import MapLinks from './MapLinks.vue';
+
+import { documentOverlayFilters } from '@/components/map/density-overlays';
+import { parseMapUrl, storedPin, storePin } from '@/components/map/map-url-state';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import bus from '@/js/event-bus';
-import ol from '@/js/libs/ol';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { writeGpx, writeKml, type ExportedFeature } from '@/js/geo/formats';
+import { documentProperty, useDocumentType } from '@/js/properties';
 import utils from '@/js/utils';
+import { TABLET_BREAKPOINT } from '@/stores/screen';
 
-const GeoJSON = new ol.format.GeoJSON();
+const props = defineProps({ ...documentProperty });
 
-export default {
-  components: {
-    ElevationProfile,
-    MapLinks,
-  },
+defineEmits(['has-protection-area']);
 
-  mixins: [requireDocumentProperty],
+const route = useRoute();
 
-  emits: ['has-protection-area'],
+// the 3D view for routes, outings and waypoints: around their waypoints (an outing: those of its routes) or their point
+// when they have no track
+const show3d = computed(() => ['r', 'o', 'w'].includes(props.document.type!));
+const { $documentUtils } = useGlobalProperties();
+const { documentType } = useDocumentType(props);
+// the "Tracks" and "Routes" overlays of the map show what is linked to the document
+const overlayFilters = computed(() => documentOverlayFilters(props.document));
 
-  data() {
-    return {
-      mapLinksAreVisible: false,
-      elevationProfileHasData: false,
-      elevationProfileHidden: false,
-      pinnedMode: 0,
-      pinnedSide: '',
-    };
-  },
+// named apart from the map-view tag
+const olMap = useTemplateRef<{ fitMapToDocuments(): void }>('olMap');
 
-  computed: {
-    showElevationProfile() {
-      return this.documentType === 'outing';
-    },
+const mapLinksAreVisible = ref(false);
+const elevationProfileHasData = ref(false);
+const elevationProfileHidden = ref(false);
+// 0: unpinned / 1: pinned side1 / 2: pinned side2 (not on a phone) / 3: the whole window below the navbar
+const pinnedMode = ref(0);
+const FULL_WINDOW = 3;
+// '', 'top', 'right' or 'window'
+const pinnedSide = ref('');
+const fullWindow = computed(() => pinnedSide.value === 'window');
 
-    showDownloadTraceButtons() {
-      return this.document.geometry && (this.document.geometry.geom_detail || this.documentType === 'waypoint');
-    },
+const showElevationProfile = computed(() => documentType.value === 'outing');
 
-    hasMapLinks() {
-      return (this.document.maps && this.document.maps.length !== 0) || this.document.maps_info;
-    },
-  },
+const showDownloadTraceButtons = computed(
+  () => props.document.geometry && (props.document.geometry.geom_detail || documentType.value === 'waypoint')
+);
 
-  mounted() {
-    bus.on('elevation_profile', this.onElevationProfile);
-    window.addEventListener('resize', this.resizePin);
-  },
+const hasMapLinks = computed(
+  () => (props.document.maps && props.document.maps.length !== 0) || props.document.maps_info
+);
 
-  beforeUnmount() {
-    bus.off('elevation_profile', this.onElevationProfile);
-    window.removeEventListener('resize', this.resizePin);
-    if (this.pinnedMode) this.togglePinToSide(true);
-    if (this.pinnedMode) this.togglePinToSide(true);
-  },
+function onElevationProfile(event: unknown) {
+  const { action, hide } = event as { action: string; hide: boolean };
+  if (action === 'toggle_fullscreen') {
+    elevationProfileHidden.value = hide;
+  }
+}
 
-  methods: {
-    onElevationProfile({ action, hide }) {
-      if (action === 'toggle_fullscreen') {
-        this.elevationProfileHidden = hide;
-      }
-    },
+// following the position on the map: on touch screens only (phones, tablets), the devices carried on the route; not on
+// a computer, whose position is that of its network
+const onTouchScreen = Boolean(window.matchMedia?.('(pointer: coarse)').matches);
 
-    togglePinToSide(toggle) {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const breakMobile = 769;
-      // disable eg pin-to-right on mobile
-      const maxMode = width < breakMobile || height < breakMobile ? 2 : 3;
+function togglePinToSide(toggle: boolean) {
+  // no second side (pinned to the right) where the window is narrower than a tablet, either way up
+  const isPhone = Math.min(window.innerWidth, window.innerHeight) < TABLET_BREAKPOINT;
 
-      const toggleAmount = toggle ? 1 : 0;
-      // 0: unpinned / 1: pinned side1 / 2: pinned side2
-      this.pinnedMode = (this.pinnedMode + toggleAmount) % maxMode;
+  let mode = toggle ? (pinnedMode.value + 1) % (FULL_WINDOW + 1) : pinnedMode.value;
+  if (isPhone && mode === 2) mode = toggle ? FULL_WINDOW : 0;
+  setPinnedMode(mode);
+}
 
-      // side1 is the preferred side for comfort, ie the larger dimension
-      const [side1, side2] = width < height * 1.5 ? ['top', 'right'] : ['right', 'top'];
-      this.pinnedSide = this.pinnedMode === 0 ? '' : this.pinnedMode === 1 ? side1 : side2;
+// a click on the pin button: the side is kept on this device, for the next document pages (storePin)
+function onPinClicked() {
+  togglePinToSide(true);
+  storePin(pinnedSide.value);
+}
 
-      if (this.pinnedSide === 'right') {
-        document.body.style.paddingRight = '30%';
-        document.body.style.paddingTop = null;
-      } else if (this.pinnedSide === 'top') {
-        document.body.style.paddingRight = null;
-        document.body.style.paddingTop = '45vh'; // as % is relative to width
-      } else {
-        document.body.style.paddingRight = null;
-        document.body.style.paddingTop = null;
-      }
-      setTimeout(() => {
-        // deferred so that map.getSize() gets updated
-        if (this.$refs.mapView) {
-          this.$refs.mapView.fitMapToDocuments();
-        }
-      });
-    },
+function setPinnedMode(mode: number) {
+  pinnedMode.value = mode;
 
-    resizePin() {
-      this.togglePinToSide(false);
-    },
+  // side1 is the preferred side for comfort, ie the larger dimension
+  const [side1, side2] = window.innerWidth < window.innerHeight * 1.5 ? ['top', 'right'] : ['right', 'top'];
+  pinnedSide.value = ['', side1, side2, 'window'][mode];
 
-    hasDataChanged(value) {
-      this.elevationProfileHasData = value;
-    },
+  // the document prop shadows the global document
+  const body = window.document.body;
+  body.style.paddingRight = pinnedSide.value === 'right' ? '30%' : '';
+  body.style.paddingTop = pinnedSide.value === 'top' ? '45vh' : ''; // as % is relative to width
+  // the page under the full window map does not scroll
+  window.document.documentElement.style.overflow = fullWindow.value ? 'hidden' : '';
 
-    downloadKml() {
-      this.downloadFeatures(new ol.format.KML(), '.kml', 'application/vnd.google-earth.kml+xml');
-    },
+  setTimeout(() => {
+    // deferred so that map.getSize() gets updated
+    if (olMap.value) {
+      olMap.value.fitMapToDocuments();
+    }
+  });
+}
 
-    downloadGpx() {
-      this.downloadFeatures(new ol.format.GPX(), '.gpx', 'application/gpx+xml');
-    },
+// Esc leaves the full window map (in the OS full screen, the browser takes it to leave the full screen first)
+function onKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape' && fullWindow.value && !window.document.fullscreenElement) {
+    setPinnedMode(0);
+    storePin('');
+  }
+}
 
-    downloadFeatures(format, extension, mimetype) {
-      let features = [];
-      if (this.document.geometry.geom_detail) {
-        features = GeoJSON.readFeatures(this.document.geometry.geom_detail);
-      } else if (this.document.geometry.geom) {
-        features = GeoJSON.readFeatures(this.document.geometry.geom);
-      }
-      if (!features.length) {
-        return;
-      }
+function resizePin() {
+  togglePinToSide(false);
+}
 
-      // Export only the current document geometry, not the associated features
-      const feature = features[0];
-      const name = this.$documentUtils.getDocumentTitle(this.document, this.$route.params.lang);
+function downloadKml() {
+  downloadFeature(writeKml, '.kml', 'application/vnd.google-earth.kml+xml');
+}
 
-      feature.set('name', name);
+function downloadGpx() {
+  downloadFeature(writeGpx, '.gpx', 'application/gpx+xml');
+}
 
-      const filename = this.getDownloadedFileName(name, extension);
-      const content = format.writeFeatures([feature], {
-        featureProjection: 'EPSG:3857',
-      });
+// only the geometry of the document, not the associated documents
+function downloadFeature(write: (features: ExportedFeature[]) => string, extension: string, mimetype: string) {
+  const { geom_detail: geomDetail, geom } = props.document.geometry!;
+  if (!geomDetail && !geom) {
+    return;
+  }
+  const name = $documentUtils.getDocumentTitle(props.document, route.params.lang as string);
+  const content = write([{ name, geometry: JSON.parse((geomDetail ?? geom)!) }]);
+  utils.download(content, getDownloadedFileName(name, extension), mimetype + ';charset=utf-8');
+}
 
-      utils.download(content, filename, mimetype + ';charset=utf-8');
-    },
+function getDownloadedFileName(name: string, extension: string) {
+  let filename = props.document.document_id + '_' + name.substring(0, 100);
+  if (documentType.value === 'outing') {
+    filename = filename + '_' + props.document.date_start;
+  }
+  // Remove forbidden characters/spaces, and replace them with '_'
+  return filename.replace(/[/\\?%*:|"<>]/g, ' ').replace(/\s+/g, '_') + extension;
+}
 
-    getDownloadedFileName(name, extension) {
-      let filename = this.document.document_id + '_' + name.substring(0, 100);
-      if (this.documentType === 'outing') {
-        filename = filename + '_' + this.document.date_start;
-      }
-      // Remove forbidden characters/spaces, and replace them with '_'
-      return filename.replace(/[/\\?%*:|"<>]/g, ' ').replace(/\s+/g, '_') + extension;
-    },
-  },
-};
+// pins the map on the side (or the whole window) asked for by the link of the page (?pin=top), else on the side kept on this
+// device; a side that is not available here (the right one on a phone) gives the first one
+function pinAtStart() {
+  const pin = parseMapUrl(route.query).pin ?? storedPin();
+  if (!pin) return;
+  // 0: unpinned, then the sides, in the order of this screen, then the whole window
+  for (let i = 0; i < FULL_WINDOW; i++) {
+    togglePinToSide(true);
+    if (pinnedSide.value === pin) return;
+  }
+  // the second side does not exist here (a phone): the first one this screen offers
+  setPinnedMode(1);
+}
+
+onMounted(() => {
+  pinAtStart();
+  bus.on('elevation_profile', onElevationProfile);
+  window.addEventListener('resize', resizePin);
+  window.addEventListener('keydown', onKeydown);
+});
+
+onBeforeUnmount(() => {
+  bus.off('elevation_profile', onElevationProfile);
+  window.removeEventListener('resize', resizePin);
+  window.removeEventListener('keydown', onKeydown);
+  if (pinnedMode.value) setPinnedMode(0);
+});
 </script>
 
-<style lang="scss" scoped>
-@import 'bulma/sass/utilities/mixins.sass';
-
+<style scoped>
 .map-container {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -221,23 +248,39 @@ export default {
 :not(:fullscreen) > .map-container {
   &.pinned {
     position: fixed;
-    top: $navbar-height;
-    margin-top: 0; /*avoid space between nav and map, where body text can be seen while scrolling*/
+    top: var(--c2c-header-height);
+    margin: 0; /*avoid space between nav and map, where body text can be seen while scrolling*/
     z-index: 10; /* on top of body but below navbar (z=25) and side-menu (z=30) */
-    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.4); // <o-x> <o-y> <radius>
+    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.4); /* <o-x> <o-y> <radius> */
   }
   &.pinned-to-top {
     right: 0px;
     height: 45vh;
     width: 100%;
-    @include desktop {
-      left: $sidemenu-width; /* when sidemenu is shown, as in App.vue */
-    }
   }
   &.pinned-to-right {
     right: 0px;
-    height: calc(100vh - #{$navbar-height});
+    bottom: var(--c2c-bottom-bar-height);
     width: 30vw;
+  }
+}
+
+/* the whole window below the navbar, with the elevation profile of an outing as in full screen */
+.full-window:not(:fullscreen) {
+  position: fixed;
+  top: var(--c2c-header-height);
+  right: 0;
+  bottom: var(--c2c-bottom-bar-height);
+  left: 0;
+  z-index: 10; /* as a pinned map */
+  background: white;
+}
+
+/* beside the side menu, where it is shown (data-shell, as App.vue) */
+html[data-shell='desktop'] {
+  :not(:fullscreen) > .map-container.pinned-to-top,
+  .full-window:not(:fullscreen) {
+    left: var(--c2c-sidemenu-width);
   }
 }
 
@@ -247,7 +290,7 @@ export default {
  * element that goes into fullscreen mode, so the
  * rule doesn't apply
  */
-:fullscreen .map-container {
+:is(:fullscreen, .full-window) .map-container {
   height: 100%;
   max-height: 100%;
   margin: 0;
@@ -257,5 +300,10 @@ export default {
     max-height: calc(100% - 200px);
     min-height: calc(100% - 350px);
   }
+}
+
+/* the dark theme of the app (src/stores/app-settings.ts, App.vue): the box around the tiles while they load */
+html[data-theme='dark'] :is(.map-container, .full-window) {
+  background: var(--app-dark-surface);
 }
 </style>

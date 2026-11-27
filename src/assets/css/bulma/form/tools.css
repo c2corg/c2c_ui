@@ -1,0 +1,206 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): form/tools */
+
+.label {
+  color: var(--c2c-grey-darker);
+  display: block;
+  font-size: var(--c2c-size-6);
+  font-weight: 700;
+
+  &:not(:last-child) {
+    margin-bottom: 0.5em;
+  }
+
+  &.is-small {
+    font-size: var(--c2c-size-7);
+  }
+
+  &.is-medium {
+    font-size: var(--c2c-size-5);
+  }
+
+  &.is-large {
+    font-size: var(--c2c-size-4);
+  }
+}
+
+.help {
+  display: block;
+  font-size: var(--c2c-size-7);
+  margin-top: 0.25rem;
+
+  /* the colors: see ../palette.css */
+  &:is(.is-white, .is-light, .is-dark, .is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger) {
+    color: var(--palette);
+  }
+}
+
+.field:not(:last-child) {
+  margin-bottom: 0.75rem;
+}
+
+.field.has-addons {
+  display: flex;
+  justify-content: flex-start;
+
+  .control:not(:last-child) {
+    margin-right: -1px;
+  }
+
+  .control:not(:first-child):not(:last-child) .button,
+  .control:not(:first-child):not(:last-child) .input,
+  .control:not(:first-child):not(:last-child) .select select {
+    border-radius: 0;
+  }
+
+  .control:first-child:not(:only-child) .button,
+  .control:first-child:not(:only-child) .input,
+  .control:first-child:not(:only-child) .select select {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  .control:last-child:not(:only-child) .button,
+  .control:last-child:not(:only-child) .input,
+  .control:last-child:not(:only-child) .select select {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+  }
+
+  .control .button:not([disabled]):hover,
+  .control .input:not([disabled]):hover,
+  .control .select select:not([disabled]):hover {
+    z-index: 2;
+  }
+
+  .control .button:not([disabled]):focus,
+  .control .button:not([disabled]):active,
+  .control .button:not([disabled]).is-active,
+  .control .input:not([disabled]):focus,
+  .control .input:not([disabled]):active,
+  .control .input:not([disabled]).is-active,
+  .control .select select:not([disabled]):focus,
+  .control .select select:not([disabled]):active,
+  .control .select select:not([disabled]).is-active {
+    z-index: 3;
+  }
+
+  .control .button:not([disabled]):focus:hover,
+  .control .button:not([disabled]):active:hover,
+  .control .button:not([disabled]).is-active:hover,
+  .control .input:not([disabled]):focus:hover,
+  .control .input:not([disabled]):active:hover,
+  .control .input:not([disabled]).is-active:hover,
+  .control .select select:not([disabled]):focus:hover,
+  .control .select select:not([disabled]):active:hover,
+  .control .select select:not([disabled]).is-active:hover {
+    z-index: 4;
+  }
+
+  .control.is-expanded {
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+}
+
+.field.is-grouped {
+  display: flex;
+  justify-content: flex-start;
+
+  > .control {
+    flex-shrink: 0;
+
+    &:not(:last-child) {
+      margin-bottom: 0;
+      margin-right: 0.75rem;
+    }
+
+    &.is-expanded {
+      flex-grow: 1;
+      flex-shrink: 1;
+    }
+  }
+}
+
+.control {
+  box-sizing: border-box;
+  clear: both;
+  font-size: var(--c2c-size-6);
+  position: relative;
+  text-align: inherit;
+
+  &.has-icons-left .input:focus ~ .icon,
+  &.has-icons-left .select:focus ~ .icon,
+  &.has-icons-right .input:focus ~ .icon,
+  &.has-icons-right .select:focus ~ .icon {
+    color: var(--c2c-text);
+  }
+
+  &.has-icons-left .input.is-small ~ .icon,
+  &.has-icons-left .select.is-small ~ .icon,
+  &.has-icons-right .input.is-small ~ .icon,
+  &.has-icons-right .select.is-small ~ .icon {
+    font-size: var(--c2c-size-7);
+  }
+
+  &.has-icons-left .input.is-medium ~ .icon,
+  &.has-icons-left .select.is-medium ~ .icon,
+  &.has-icons-right .input.is-medium ~ .icon,
+  &.has-icons-right .select.is-medium ~ .icon {
+    font-size: var(--c2c-size-5);
+  }
+
+  &.has-icons-left .input.is-large ~ .icon,
+  &.has-icons-left .select.is-large ~ .icon,
+  &.has-icons-right .input.is-large ~ .icon,
+  &.has-icons-right .select.is-large ~ .icon {
+    font-size: var(--c2c-size-4);
+  }
+
+  &.has-icons-left .icon,
+  &.has-icons-right .icon {
+    color: var(--c2c-grey-light);
+    height: 2.25em;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    width: 2.25em;
+    z-index: 4;
+  }
+
+  &.has-icons-left .input,
+  &.has-icons-left .select select {
+    padding-left: 2.25em;
+  }
+
+  &.has-icons-left .icon.is-left {
+    left: 0;
+  }
+
+  &.has-icons-right .input,
+  &.has-icons-right .select select {
+    padding-right: 2.25em;
+  }
+
+  &.has-icons-right .icon.is-right {
+    right: 0;
+  }
+
+  &.is-loading::after {
+    position: absolute !important;
+    right: 0.625em;
+    top: 0.625em;
+    z-index: 4;
+  }
+
+  &.is-loading.is-small:after {
+    font-size: var(--c2c-size-7);
+  }
+
+  &.is-loading.is-medium:after {
+    font-size: var(--c2c-size-5);
+  }
+
+  &.is-loading.is-large:after {
+    font-size: var(--c2c-size-4);
+  }
+}

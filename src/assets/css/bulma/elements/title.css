@@ -1,0 +1,81 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): elements/title */
+
+.title,
+.subtitle {
+  /* stylelint-disable-next-line declaration-property-value-keyword-no-deprecated -- overflow-wrap: anywhere differs */
+  word-break: break-word;
+
+  em,
+  span {
+    font-weight: inherit;
+  }
+
+  sub,
+  sup {
+    font-size: 0.75em;
+  }
+
+  .tag {
+    vertical-align: middle;
+  }
+
+  &.is-1 {
+    font-size: var(--c2c-size-1);
+  }
+
+  &.is-2 {
+    font-size: var(--c2c-size-2);
+  }
+
+  &.is-3 {
+    font-size: var(--c2c-size-3);
+  }
+
+  &.is-4 {
+    font-size: var(--c2c-size-4);
+  }
+
+  &.is-5 {
+    font-size: var(--c2c-size-5);
+  }
+
+  &.is-6 {
+    font-size: var(--c2c-size-6);
+  }
+
+  &.is-7 {
+    font-size: var(--c2c-size-7);
+  }
+}
+
+.title {
+  color: var(--c2c-grey-darker);
+  font-size: var(--c2c-size-3);
+  font-weight: 600;
+  line-height: 1.125;
+
+  strong {
+    color: inherit;
+    font-weight: inherit;
+  }
+
+  &:not(.is-spaced) + .subtitle {
+    margin-top: -1.25rem;
+  }
+}
+
+.subtitle {
+  color: var(--c2c-text);
+  font-size: var(--c2c-size-5);
+  font-weight: 400;
+  line-height: 1.25;
+
+  strong {
+    color: var(--c2c-grey-darker);
+    font-weight: 600;
+  }
+
+  &:not(.is-spaced) + .title {
+    margin-top: -1.25rem;
+  }
+}

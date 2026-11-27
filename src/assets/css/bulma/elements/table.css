@@ -1,0 +1,92 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): elements/table */
+
+.table {
+  background-color: var(--c2c-white);
+  color: var(--c2c-grey-darker);
+
+  td,
+  th {
+    border: 1px solid hsl(0, 0%, 86%);
+    border-width: 0 0 1px;
+    padding: 0.5em 0.75em;
+    vertical-align: top;
+  }
+
+  /* the colors: see ../palette.css */
+  :is(td, th) {
+    &:is(.is-white, .is-light, .is-dark, .is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger) {
+      background-color: var(--palette);
+      border-color: var(--palette);
+      color: var(--palette-invert);
+    }
+  }
+
+  td.is-narrow,
+  th.is-narrow {
+    white-space: nowrap;
+    width: 1%;
+  }
+
+  td.is-vcentered,
+  th.is-vcentered {
+    vertical-align: middle;
+  }
+
+  th {
+    color: var(--c2c-grey-darker);
+
+    &:not([align]) {
+      text-align: left;
+    }
+  }
+
+  thead {
+    background-color: transparent;
+
+    td,
+    th {
+      border-width: 0 0 2px;
+      color: var(--c2c-grey-darker);
+    }
+  }
+
+  tfoot {
+    background-color: transparent;
+
+    td,
+    th {
+      border-width: 2px 0 0;
+      color: var(--c2c-grey-darker);
+    }
+  }
+
+  tbody {
+    background-color: transparent;
+
+    tr:last-child td,
+    tr:last-child th {
+      border-bottom-width: 0;
+    }
+  }
+
+  &.is-hoverable tbody tr:not(.is-selected):hover {
+    background-color: hsl(0, 0%, 98%);
+  }
+
+  &.is-hoverable.is-striped tbody tr:not(.is-selected):hover {
+    background-color: hsl(0, 0%, 98%);
+
+    &:nth-child(even) {
+      background-color: var(--c2c-white-ter);
+    }
+  }
+
+  &.is-narrow td,
+  &.is-narrow th {
+    padding: 0.25em 0.5em;
+  }
+
+  &.is-striped tbody tr:not(.is-selected):nth-child(even) {
+    background-color: hsl(0, 0%, 98%);
+  }
+}

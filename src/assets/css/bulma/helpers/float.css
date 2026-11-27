@@ -1,0 +1,9 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): helpers/float */
+
+.is-pulled-left {
+  float: left !important;
+}
+
+.is-pulled-right {
+  float: right !important;
+}

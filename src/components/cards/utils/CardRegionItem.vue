@@ -5,16 +5,15 @@
   </span>
 </template>
 
-<script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import { computed } from 'vue';
 
-export default {
-  mixins: [requireDocumentProperty],
+import { useGlobalProperties } from '@/js/composables/global-properties';
+import { documentProperty } from '@/js/properties';
 
-  computed: {
-    text() {
-      return this.$documentUtils.getSortedAreaList(this.document);
-    },
-  },
-};
+const props = defineProps({ ...documentProperty });
+
+const { $documentUtils } = useGlobalProperties();
+
+const text = computed(() => $documentUtils.getSortedAreaList(props.document));
 </script>

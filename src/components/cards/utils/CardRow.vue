@@ -4,20 +4,23 @@
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 div {
   padding: 0.4rem 0.8rem;
   font-size: 0.9rem;
   min-height: 29px;
-  color: $text;
+  color: var(--c2c-text);
   align-items: center;
   justify-content: space-between;
   display: flex;
 }
 
-@media screen and (max-width: $tablet) {
-  span.is-ellipsed,
-  p.is-ellipsed {
+@media screen and (--c2c-max-tablet) {
+  /* .is-nowrap: component roots like card-elevation-item now get the slotted scope too */
+  :slotted(span.is-ellipsed:not(.is-nowrap)),
+  :slotted(p.is-ellipsed) {
     white-space: normal;
   }
 }

@@ -13,50 +13,52 @@
   </ul>
 </template>
 
-<script>
+<script setup lang="ts">
+import type Feature from 'ol/Feature';
+import type LineString from 'ol/geom/LineString';
+import type { PropType } from 'vue';
+
 import yetixEvents from '@/components/yeti/yetix-events';
 
-export default {
-  props: {
-    features: {
-      type: Array,
-      required: true,
-    },
+defineProps({
+  features: {
+    type: Array as PropType<Feature<LineString>[]>,
+    required: true,
   },
-  methods: {
-    removeFeature(feature) {
-      yetixEvents.emit('removeFeature', feature);
-    },
-    showFeature(feature, index) {
-      feature.setStyle(feature.get('highlightedStyle'));
-      yetixEvents.emit('showFeature', index);
-    },
-    hideFeature(feature, index) {
-      feature.setStyle(feature.get('normalStyle'));
-      yetixEvents.emit('hideFeature', index);
-    },
-    nbPointsOnFeature(feature) {
-      return feature.getGeometry().getCoordinates().length;
-    },
-  },
-};
+});
+
+function removeFeature(feature: Feature<LineString>) {
+  yetixEvents.emit('removeFeature', feature);
+}
+
+function showFeature(feature: Feature<LineString>, index: number) {
+  feature.setStyle(feature.get('highlightedStyle'));
+  yetixEvents.emit('showFeature', index);
+}
+
+function hideFeature(feature: Feature<LineString>, index: number) {
+  feature.setStyle(feature.get('normalStyle'));
+  yetixEvents.emit('hideFeature', index);
+}
+
+function nbPointsOnFeature(feature: Feature<LineString>) {
+  return feature.getGeometry()!.getCoordinates().length;
+}
 </script>
 
-<style scoped lang="scss">
-@import '@/assets/sass/variables';
-
+<style scoped>
 .featureslist {
   margin: 0 -0.5rem;
+}
 
-  &-item {
-    margin: 0.25rem;
-    font-size: 0.7em;
+.featureslist-item {
+  margin: 0.25rem;
+  font-size: 0.7em;
 
-    &:hover,
-    &:focus {
-      background: $grey-lighter;
-      cursor: default;
-    }
+  &:hover,
+  &:focus {
+    background: var(--c2c-grey-lighter);
+    cursor: default;
   }
 }
 </style>

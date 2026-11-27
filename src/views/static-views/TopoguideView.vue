@@ -2,6 +2,18 @@
   <div>
     <html-header :title="$gettext('Topoguide')" />
     <div class="topoguide">
+      <!-- the browser picks the size by the width it shows it at: no breakpoint -->
+      <img
+        class="background-image"
+        src="@/assets/img/backgrounds/laurentf-sajama-800w.jpg"
+        srcset="
+          @/assets/img/backgrounds/laurentf-sajama-800w.jpg   800w,
+          @/assets/img/backgrounds/laurentf-sajama-1024w.jpg 1024w,
+          @/assets/img/backgrounds/laurentf-sajama-1200w.jpg 1200w
+        "
+        sizes="100vw"
+        alt=""
+      />
       <h1 class="has-text-centered has-text-weight-semibold" v-translate>Topoguide</h1>
       <div class="links is-flex">
         <topoguide-view-link to="outings" :label="$gettext('outings')" icon="icon-outing" />
@@ -22,7 +34,7 @@
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
           <topoguide-view-small-link
-            class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-3-fullhd"
+            class="column is-4-mobile is-3-tablet"
             v-for="activity of activities"
             :key="activity"
             :to="{ name: 'outings', query: { act: activity } }"
@@ -34,7 +46,7 @@
           </topoguide-view-small-link>
 
           <topoguide-view-small-link
-            class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-3-fullhd"
+            class="column is-4-mobile is-3-tablet"
             :to="{ name: 'outing-add', params: { lang: $language.current } }"
           >
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
@@ -48,7 +60,7 @@
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
           <topoguide-view-small-link
-            class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-3-fullhd"
+            class="column is-4-mobile is-3-tablet"
             v-for="activity of activities"
             :key="activity"
             :to="{ name: 'routes', query: { act: activity } }"
@@ -60,7 +72,7 @@
           </topoguide-view-small-link>
 
           <topoguide-view-small-link
-            class="column is-4-mobile is-3-tablet is-3-desktop is-3-widescreen is-3-fullhd"
+            class="column is-4-mobile is-3-tablet"
             :to="{ name: 'route-add', params: { lang: $language.current } }"
           >
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
@@ -74,7 +86,7 @@
         </h2>
         <div class="columns is-multiline is-variable is-mobile is-1">
           <topoguide-view-small-link
-            class="column is-4-mobile is-2-tablet is-2-desktop is-2-widescreen is-2-fullhd"
+            class="column is-4-mobile is-2-tablet"
             v-for="waypoint_type of waypoint_types"
             :key="waypoint_type"
             :to="{ name: 'waypoints', query: { wtyp: waypoint_type } }"
@@ -86,7 +98,7 @@
           </topoguide-view-small-link>
 
           <topoguide-view-small-link
-            class="column is-4-mobile is-2-tablet is-2-desktop is-2-widescreen is-2-fullhd"
+            class="column is-4-mobile is-2-tablet"
             :to="{ name: 'waypoint-add', params: { lang: $language.current } }"
           >
             <span class="has-text-success is-size-1"><fa-icon icon="plus" /></span>
@@ -98,48 +110,44 @@
   </div>
 </template>
 
-<script>
-import TopoguideViewLink from './TopoguideViewLink';
-import TopoguideViewSmallLink from './TopoguideViewSmallLink';
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import TopoguideViewLink from './TopoguideViewLink.vue';
+import TopoguideViewSmallLink from './TopoguideViewSmallLink.vue';
 
 import constants from '@/js/constants';
 
-export default {
-  components: {
-    TopoguideViewLink,
-    TopoguideViewSmallLink,
-  },
+const activities = computed(() => constants.activities);
 
-  computed: {
-    activities() {
-      return constants.activities;
-    },
-    waypoint_types() {
-      return constants.waypoint_types;
-    },
-  },
-};
+const waypoint_types = computed(() => constants.waypoint_types);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+@import '@/assets/css/media.css';
+
 .topoguide {
-  background-image: url('@/assets/img/backgrounds/laurentf-sajama-800w.jpg');
-  background-position-x: center;
-  background-size: cover;
-  padding-top: 90px; //keep the header on a deep color zone
+  position: relative;
+  /* the image behind the content, above the background of the page */
+  isolation: isolate;
+  padding-top: 90px; /* keep the header on a deep color zone */
   padding-bottom: 25px;
   justify-content: center;
-  // 1224px because after 1024px breakpoint, we have an additional 200px wide menu on the left
-  @media (min-width: 800px) and (max-width: 1224px) {
-    background-image: url('@/assets/img/backgrounds/laurentf-sajama-1024w.jpg');
-  }
-  @media (min-width: 1224px) {
-    background-image: url('@/assets/img/backgrounds/laurentf-sajama-1200w.jpg');
+
+  .background-image {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* the top of the image, as a background */
+    object-position: center top;
   }
 
   h1 {
     font-size: 3rem;
-    color: $light;
+    color: var(--c2c-light);
     margin-bottom: 25px;
   }
 
@@ -149,9 +157,27 @@ export default {
     max-width: 700px;
     margin: auto;
   }
+
+  /* on a phone, the title near the top and the nine bubbles three by three: all on the first screen */
+  @media (--c2c-mobile) {
+    padding-top: 12px;
+    padding-bottom: 12px;
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+  }
 }
 
 .title {
   line-height: 1.5 !important;
+}
+
+/* In the phone layout of the app: the gap of these columns (is-variable is-8, 2rem) pushed them out of the screen on
+   both sides, 28px wider than it: the page scrolled sideways and the bars of the app showed a white band */
+html[data-shell='mobile'] .section.columns {
+  margin-left: 0;
+  margin-right: 0;
 }
 </style>

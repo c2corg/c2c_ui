@@ -14,7 +14,7 @@
         <document-rating :document="document" />
       </span>
 
-      <card-elevation-item :elevation="document.elevation_max" class="is-ellipsed" />
+      <card-elevation-item :elevation="document.elevation_max ?? undefined" class="is-ellipsed" />
 
       <span v-if="document.height_diff_up" class="is-ellipsed" :title="$gettext('height_diff_up')">
         <icon-height-diff-up class="card-icon" />
@@ -28,11 +28,11 @@
     </card-row>
 
     <card-row>
-      <card-activities-item :activities="document.activities" />
+      <card-activities-item :activities="document.activities ?? undefined" />
 
       <span class="card-icon">
         <!-- Englobing span is mandatory for tooltip ?? -->
-        <marker-gps-trace v-if="document.geometry.has_geom_detail" />
+        <marker-gps-trace v-if="document.geometry?.has_geom_detail" />
       </span>
 
       <span
@@ -46,44 +46,22 @@
 
       <marker-quality :quality="document.quality" />
     </card-row>
-
-    <card-row v-if="transportContext" class="accessibility-row">
-      <accessibility-badge
-        :result="displayedAccessibilityResult"
-        :duration-unknown="document.duration_unknown === true"
-      />
-      <verify-accessibility-button
-        :document="document"
-        :transport-context="transportContext"
-        @verified="unitAccessibilityResult = $event"
-      />
+    <card-row v-if="transportContext">
+      <transport-accessibility :document="document" :transport-context="transportContext" />
     </card-row>
   </card-container>
 </template>
 
-<script>
-import { documentCardMixin } from './utils/mixins';
+<script setup lang="ts">
+import CardActivitiesItem from './utils/CardActivitiesItem.vue';
+import CardContainer from './utils/CardContainer.vue';
+import CardElevationItem from './utils/CardElevationItem.vue';
+import CardRegionItem from './utils/CardRegionItem.vue';
+import CardRow from './utils/CardRow.vue';
+import CardTitle from './utils/CardTitle.vue';
+import { cardProps, transportContextProperty } from './utils/card';
 
-export default {
-  mixins: [documentCardMixin],
+import { documentProperty } from '@/js/properties';
 
-  data() {
-    return {
-      unitAccessibilityResult: null,
-    };
-  },
-
-  computed: {
-    displayedAccessibilityResult() {
-      return this.unitAccessibilityResult ?? this.transportContext?.results?.[this.document.document_id] ?? null;
-    },
-  },
-};
+defineProps({ ...cardProps, ...documentProperty, ...transportContextProperty });
 </script>
-
-<style scoped lang="scss">
-.accessibility-row {
-  flex-wrap: wrap;
-  align-items: flex-start;
-}
-</style>

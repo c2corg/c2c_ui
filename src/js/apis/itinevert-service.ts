@@ -1,9 +1,9 @@
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import { transform } from 'ol/proj';
 
 import navitiaService from './navitia-service';
 
 import config from '@/js/config';
+import { fromLonLat, toLonLat } from '@/js/geo/projection';
 
 /**
  * Constant to define the maximum number of documents that can go through the batch round-trip verification job (one
@@ -286,15 +286,16 @@ class ItinevertService {
   }
 }
 
-/** Project geometry's coordinates from sourceProj to targetProj */
+/** Project geometry's coordinates from sourceProj to targetProj (EPSG:4326 and EPSG:3857), x and y only */
 export function projectCoordinates(
   coords: NestedCoordinates[],
   sourceProj = 'EPSG:4326',
   targetProj = 'EPSG:3857'
 ): NestedCoordinates[] {
+  const transform = sourceProj === targetProj ? (c: number[]) => c : sourceProj === 'EPSG:4326' ? fromLonLat : toLonLat;
   return coords.map(function recur(node: NestedCoordinates): NestedCoordinates {
     if (isPosition(node)) {
-      return transform([node[0], node[1]], sourceProj, targetProj);
+      return transform([node[0], node[1]]);
     }
     return (node as NestedCoordinates[]).map(recur);
   });

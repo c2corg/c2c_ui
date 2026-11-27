@@ -322,7 +322,6 @@
   "exposure_time": {
     "type": "number",
     "min": 0,
-    "max": 0,
     "unit": "s"
   },
   "external_resources": {
@@ -397,7 +396,7 @@
   },
   "height_diff_access": {
     "type": "number",
-    "min": 0,
+    "min": -500,
     "max": 3000,
     "unit": "m",
     "helper": "1063045#height-diff-access"
@@ -406,6 +405,7 @@
     "type": "number",
     "min": 0,
     "max": 3000,
+    "maxMultiDay": 9000,
     "unit": "m",
     "helper": "1063027#height-diff_difficulties",
     "sortable": true
@@ -414,6 +414,7 @@
     "type": "number",
     "min": 0,
     "max": 9000,
+    "maxMultiDay": 32767,
     "unit": "m",
     "helper": "1063027#height-diff_down"
   },
@@ -421,6 +422,7 @@
     "type": "number",
     "min": 0,
     "max": 9000,
+    "maxMultiDay": 32767,
     "unit": "m",
     "helper": "1063027#height-diff_up",
     "sortable": true
@@ -534,6 +536,12 @@
     "unit": "m",
     "queryMode": "input"
   },
+  "has_track": {
+    "type": "boolean",
+    "parent": "query",
+    "label": "GPS Track",
+    "queryMode": "tristate"
+  },
   "lift_access": {
     "type": "boolean",
     "nullable": true
@@ -584,12 +592,14 @@
     "type": "number",
     "min": 0,
     "max": 500000,
+    "maxMultiDay": 20000000,
     "unit": "m"
   },
   "mtb_length_trail": {
     "type": "number",
     "min": 0,
     "max": 500000,
+    "maxMultiDay": 20000000,
     "unit": "m"
   },
   "mtb_up_rating": {
@@ -766,6 +776,7 @@
     "type": "number",
     "min": 0,
     "max": 500000,
+    "maxMultiDay": 20000000,
     "unit": "m",
     "sortable": true
   },

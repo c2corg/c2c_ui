@@ -20,34 +20,32 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'ItinevertLoadingView',
-  props: {
-    progress: {
-      type: Number,
-      default: 0,
-    },
-    total: {
-      type: Number,
-      default: 0,
-    },
-    isSpinner: {
-      type: Boolean,
-      default: true,
-    },
+<script setup lang="ts">
+import { computed } from 'vue';
+
+const props = defineProps({
+  progress: {
+    type: Number,
+    default: 0,
   },
-  computed: {
-    computedPercent() {
-      const t = Number(this.total) || 0;
-      if (t === 0) return 0;
-      return Math.min(100, Math.round((Number(this.progress) / t) * 100));
-    },
+  total: {
+    type: Number,
+    default: 0,
   },
-};
+  isSpinner: {
+    type: Boolean,
+    default: true,
+  },
+});
+
+const computedPercent = computed(() => {
+  const t = Number(props.total) || 0;
+  if (t === 0) return 0;
+  return Math.min(100, Math.round((Number(props.progress) / t) * 100));
+});
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 /* fills the entire parent container */
 .loading-wrapper {
   align-items: center;
@@ -70,14 +68,14 @@ export default {
   height: 100px;
   border-radius: 50%;
   border: 6px solid rgba(0, 0, 0, 0.1);
-  border-top-color: #ff9933;
+  border-top-color: var(--c2c-color-base-c2c);
   animation: spin 0.8s linear infinite;
   box-sizing: border-box;
 }
 
 .loading-text {
   margin: 0;
-  color: #4a4a4a;
+  color: var(--c2c-text);
 }
 
 @keyframes spin {
@@ -110,7 +108,7 @@ export default {
 .progress__bar {
   height: 100%;
   border-radius: 10px;
-  background: linear-gradient(90deg, #ffb366, #ff9933);
+  background: linear-gradient(90deg, #ffb366, var(--c2c-color-base-c2c));
   box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12);
   transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   will-change: width;
@@ -118,7 +116,7 @@ export default {
 
 /* label below the bar */
 .progress__label {
-  color: #333;
+  color: var(--c2c-grey-darker);
   text-align: center;
   user-select: none;
 }

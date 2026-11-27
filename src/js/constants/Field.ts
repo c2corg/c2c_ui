@@ -16,7 +16,8 @@ export type QueryMode =
   | 'date'
   | 'dates';
 
-export type FieldParent = 'document' | 'locales' | 'associations';
+// 'query': only a filter of the lists, not an attribute of the documents
+export type FieldParent = 'document' | 'locales' | 'associations' | 'query';
 
 // the properties of a field: fieldsProperties.json, overridden per document type by documentsProperties.json
 export type FieldProperties = {
@@ -25,6 +26,8 @@ export type FieldProperties = {
   // the possible values; in the JSON, the name of a common attribute giving them
   values?: string[] | string;
   i18nContext?: string;
+  // the text of the filter, when it is not the translation of the name of the field
+  label?: string;
   i18n?: boolean;
   multiple?: boolean;
   required?: boolean;
@@ -36,6 +39,8 @@ export type FieldProperties = {
   helper?: string | null;
   min?: number;
   max?: number;
+  // the max of a multi-day outing or route, when it is higher (a height difference over several days)
+  maxMultiDay?: number;
   minLength?: number;
   maxLength?: number;
   minLengthChinese?: number;
@@ -56,14 +61,28 @@ export type FieldProperties = {
 // a document, as far as the fields go
 export type FieldDocument = {
   type?: string;
-  activities?: string[];
-  waypoint_type?: string;
-  climbing_outdoor_type?: string;
+  // null when the API has none
+  activities?: string[] | null;
+  waypoint_type?: string | null;
+  climbing_outdoor_type?: string | null;
   associations?: Record<string, unknown>;
   [property: string]: unknown;
 };
 
-type FieldError = { name: string | undefined; description: string };
+// an error of a field: its text, the limit of the check (shown after the translated text), and the context of its
+// translation (an error of the API: 'API message')
+export type FieldError = { name?: string; description: string; limit?: number; context?: string };
+
+// an outing over several days, or a route of several days
+function isMultiDay(document: FieldDocument): boolean {
+  if (document.type === 'o') {
+    return Boolean(document.date_start && document.date_end && document.date_end !== document.date_start);
+  }
+  if (document.type === 'r') {
+    return Array.isArray(document.durations) && document.durations.some((duration) => duration !== '1');
+  }
+  return false;
+}
 
 const attrs = common.attributes as Record<string, string[]>;
 const fieldsProperties = fieldsPropertiesJson as Record<string, FieldProperties>;
@@ -130,12 +149,16 @@ const extraIsVisibleForHandlers: Record<string, (document: FieldDocument) => boo
 
 export default class Field {
   name: string;
-  error: unknown = null;
+  error: FieldError | null = null;
+  // the text of its input was rejected (a length typed as "4.5 km"): the document keeps the previous value, so the
+  // edit form must not be saved until it is corrected or emptied
+  rejectedInput = false;
   // the properties of the JSON files, copied by the constructor
   declare type: string;
   declare parent: FieldParent;
   declare values?: string[];
   declare i18nContext?: string;
+  declare label?: string;
   declare i18n: boolean;
   declare multiple?: boolean;
   declare required?: boolean;
@@ -147,6 +170,7 @@ export default class Field {
   declare helper?: string | null;
   declare min?: number;
   declare max?: number;
+  declare maxMultiDay?: number;
   declare minLength?: number;
   declare maxLength?: number;
   declare minLengthChinese?: number;
@@ -279,7 +303,8 @@ export default class Field {
         return 'yes';
       } else if (url === 'false' || url === false) {
         return 'no';
-      } else if (url === 'null' || url === null) {
+      } else if ((url === 'null' || url === null) && this.nullable) {
+        // only the fields that can be unknown have this choice
         return 'no info';
       } else {
         return undefined;
@@ -315,7 +340,12 @@ export default class Field {
     throw new Error('Unknow field queryMode for ' + this.name + ': ' + this.queryMode);
   }
 
-  getErrorObject(description: string): FieldError {
+  // the highest value of a number field for this document
+  maxFor(document: FieldDocument): number | undefined {
+    return this.maxMultiDay !== undefined && isMultiDay(document) ? this.maxMultiDay : this.max;
+  }
+
+  getErrorObject(description: string, limit?: number): FieldError {
     let errorName;
 
     if (this.parent === 'document') {
@@ -326,15 +356,21 @@ export default class Field {
       errorName = `associations.${this.name}`;
     }
 
-    return {
-      name: errorName,
-      description,
-    };
+    return limit === undefined ? { name: errorName, description } : { name: errorName, description, limit };
   }
 
   getError(document: FieldDocument, locale: Record<string, unknown>): FieldError | null {
+    // a filter of the lists: nothing to check in a document
+    if (this.parent === 'query') {
+      return null;
+    }
+
     if (!this.isVisibleFor(document)) {
       return null;
+    }
+
+    if (this.rejectedInput) {
+      return this.getErrorObject('Invalid value');
     }
 
     // a text, or a list for multiple values and associations
@@ -363,6 +399,19 @@ export default class Field {
       return this.getErrorObject('This field is too long');
     }
 
+    // the range of a number: the input only shows it, a typed value can be out of it
+    // $gettext('Less than minimum value')
+    // $gettext('Greater than maximum value')
+    if (this.type === 'number' && typeof value === 'number') {
+      const max = this.maxFor(document);
+      if (this.min !== undefined && value < this.min) {
+        return this.getErrorObject('Less than minimum value', this.min);
+      }
+      if (max !== undefined && value > max) {
+        return this.getErrorObject('Greater than maximum value', max);
+      }
+    }
+
     /* check presence */
     if (this.required && (!value || (this.multiple && value.length === 0))) {
       return this.getErrorObject(`required field`);
@@ -371,7 +420,7 @@ export default class Field {
     return null;
   }
 
-  isVisibleForActivities(activities?: string[]): boolean {
+  isVisibleForActivities(activities?: string[] | null): boolean {
     let result = true;
 
     if (this.activities && activities) {
@@ -381,7 +430,7 @@ export default class Field {
     return result;
   }
 
-  isVisibleForWaypointType(waypointType?: string): boolean {
+  isVisibleForWaypointType(waypointType?: string | null): boolean {
     if (!this.waypoint_types) {
       return true;
     }

@@ -9,39 +9,42 @@
   </modal-confirmation>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, useTemplateRef } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
-import { requireDocumentProperty } from '@/js/properties-mixins';
+import { documentProperty, useDocumentType } from '@/js/properties';
 
-export default {
-  mixins: [requireDocumentProperty],
-
-  props: {
-    lang: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  ...documentProperty,
+  lang: {
+    type: String,
+    required: true,
   },
+});
 
-  data() {
-    return {
-      promise: null,
-    };
-  },
+const route = useRoute();
+const router = useRouter();
+const { documentType } = useDocumentType(props);
 
-  methods: {
-    show() {
-      this.$refs.modalWindow.show();
-    },
+const promise = ref<ApiData | null>(null);
+const modalWindowRef = useTemplateRef<{ show(): void; hide(): void }>('modalWindow');
 
-    restoreVersion() {
-      this.promise = c2c.moderator
-        .revertDocument(this.document.document_id, this.lang, this.$route.params.version)
-        .then(() => {
-          this.$refs.modalWindow.hide();
-          this.$router.push({ name: this.documentType, id: this.document.document_id });
-        });
-    },
-  },
-};
+function show() {
+  modalWindowRef.value!.show();
+}
+
+// shown by ToolBox / DocumentVersionBanner through their template refs
+defineExpose({ show });
+
+function restoreVersion() {
+  promise.value = c2c.moderator
+    .revertDocument(props.document.document_id!, props.lang, route.params.version as string)
+    .then(() => {
+      modalWindowRef.value!.hide();
+      router.push({ name: documentType.value, params: { id: props.document.document_id } });
+    });
+}
 </script>

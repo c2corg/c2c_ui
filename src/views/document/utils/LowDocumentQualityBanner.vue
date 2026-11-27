@@ -10,16 +10,12 @@
   </div>
 </template>
 
-<script>
-import { requireDocumentProperty } from '@/js/properties-mixins';
+<script setup lang="ts">
+import { computed } from 'vue';
 
-export default {
-  mixins: [requireDocumentProperty],
+import { cookedDocumentProperty } from '@/js/properties';
 
-  computed: {
-    lang() {
-      return this.document ? this.document.cooked.lang : null;
-    },
-  },
-};
+const props = defineProps({ ...cookedDocumentProperty });
+
+const lang = computed(() => (props.document ? props.document.cooked.lang : null));
 </script>

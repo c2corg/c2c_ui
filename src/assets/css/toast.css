@@ -1,0 +1,76 @@
+/*
+ * The toasts of src/js/toast.ts: notifications in a container fixed on the screen, one container per position. The
+ * styles of bulma-toast 2.4.4 (MIT License, (c) 2018-present @rfoel), which wrote them inline.
+ */
+.toasts {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  pointer-events: none;
+  position: fixed;
+  width: 100%;
+  z-index: 99999;
+
+  &[data-position='top-left'] {
+    align-items: flex-start;
+    left: 0;
+    text-align: left;
+    top: 0;
+  }
+
+  &[data-position='top-right'] {
+    align-items: flex-end;
+    right: 0;
+    text-align: right;
+    top: 0;
+  }
+
+  &[data-position='top-center'] {
+    align-items: center;
+    left: 0;
+    right: 0;
+    text-align: center;
+    top: 0;
+  }
+
+  &[data-position='bottom-left'] {
+    align-items: flex-start;
+    bottom: 0;
+    left: 0;
+    text-align: left;
+  }
+
+  &[data-position='bottom-right'] {
+    align-items: flex-end;
+    bottom: 0;
+    right: 0;
+    text-align: right;
+  }
+
+  &[data-position='bottom-center'] {
+    align-items: center;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+
+  &[data-position='center'] {
+    align-items: center;
+    inset: 0;
+    justify-content: center;
+  }
+}
+
+.toast {
+  display: inline-flex;
+  opacity: 1;
+  pointer-events: auto;
+  white-space: pre-wrap;
+  width: auto;
+
+  /* no close button: no room for it */
+  &.is-plain {
+    padding: 1.25rem 1.5rem;
+  }
+}

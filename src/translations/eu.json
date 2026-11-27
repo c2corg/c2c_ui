@@ -9,13 +9,18 @@
     "Associated routes": "Lotutako ibilbideak",
     "Association": "Camptocamp Elkartea",
     "Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.": "Atribuzioa — Lanaren egilea zein den esan, lizentziara bideratzen duen lotura bat eman eta aldaketarik egin den esan behar da",
+    "Author": "Egilea",
     "Camptocamp.org aims to facilitate information sharing between mountain addicts and contribute to the safety of mountain activities.": "Camptocamp.org elkartearen helburuak mendiko kirolarien artean informazioa banatzea eta mendiko aktibitateen ziurtasuna hobetzen parte hartzea da. ",
     "Cancel": "Ezeztatu",
     "Change account parameters": "Kontuaren xehetasunak aldatu",
     "Change password": "Pasahitza aldatu",
-    "Close": "Itxi",
+    "Close": {
+      "$$noContext": "Itxi",
+      "Map controls": "Itxi"
+    },
     "Comments": "Iruzkinak",
     "Compare selected versions": "Aukeratutako bertsioak alderatu",
+    "Contact": "Kontaktua",
     "Created on": "Sortze data",
     "Current password": "Oraingo pasahitza",
     "Date": "Data",
@@ -36,6 +41,9 @@
     },
     "Email": "email helbidea",
     "Filter on map extent": "bilaketa mapan ikusten den eremura mugatu",
+    "Follow the track": {
+      "Map controls": "Hurratsari jarraitu"
+    },
     "Forgot password?": "Pasahitza ahaztu al duzu ?",
     "Forum": "Foroa",
     "Forum username": "Goitizena",
@@ -43,13 +51,13 @@
     "General": "Orokorra",
     "Go to the previous page": "Aurreko orrira itzuli",
     "Have an account?": "Kontua ba al duzu ?",
-    "Here you may set activity and region filters that will apply to the homepage feed.": "Orrialde nagusian erakutsitako aktibitate eta eskualdeen filtroa hemen definitu daiteke§",
     "History": {
       "$$noContext": "Bertsioak",
       "yeti": "Bertsioak"
     },
     "Home": "Sarrera orria",
     "Ice and dry climbing gear": "Escalada en hielo y dry-tooling",
+    "Images": "Irudiak",
     "Infos": "Argibideak",
     "Invalid email address": {
       "API message": "Email helbidea ez da egokia"
@@ -60,6 +68,7 @@
     "Login": "Konektatu",
     "Logout": "Deskonektatu",
     "Make profile page public": "Profilaren orria publikoa egin",
+    "More": "Gehiago",
     "My account": "Nire kontua",
     "My preferences": "Nire lehentasunak",
     "My profile": "Nire profila",
@@ -68,17 +77,34 @@
     "NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.": "Aldaketarik ez — Aldaketa edo konposiziorik egin ezkero ez duzu banatzeko eskubiderik",
     "NonCommercial — You may not use the material for commercial purposes.": "Erabilera komertzialik ez — Ez duzu lan honen erabilera komertzialik egiteko eskubiderik.",
     "Numbers": "Datuak",
-    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "Orri nagusiko jarioan aukeratutako eskualde et aktibitateen eguneratzeak soilik erakusten dira.\nJarraitutako erabiltzaileen eguneratzeak beti erakusten dira",
+    "Outings": "Irteerak",
     "Page not found": "Orria ez da aurkitu",
     "Password": "Pasahitza",
+    "Pause": {
+      "Map controls": "Pausatu"
+    },
     "Personal feed off": "Jario pertsonala geldirik dago",
     "Personal feed on": "Jario pertsonala martxan dago",
+    "Play": {
+      "Map controls": "Erreproduzitu"
+    },
+    "Play the track": {
+      "Map controls": "Hurratsa erreproduzitu"
+    },
     "Post the first comment": "Lehen iruzkina eman",
     "Preview": "Aurreikusi",
+    "Progress": {
+      "Map controls": "Aurrerapena"
+    },
     "Recenter on your current position": "Zure kokalekuan zentratu",
     "Recenter on...": "Zentratu",
     "Register": "Izena eman",
+    "Remember me": "Gogoratu",
+    "Replay": {
+      "Map controls": "Berriro erreproduzitu"
+    },
     "Reset password": "Pasahitza berrasieratu",
+    "Routes": "Ibilbideak",
     "Save": "Gorde",
     "Search ...": "Bilatu ...",
     "See the activity of this contributor in your feed": "Kolaboratzaile honen aktibitateak zure web-jarioan ikusi",
@@ -88,7 +114,11 @@
     "Several days?": "Egun bat baino gehiago ?",
     "ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.": "Baldintza berdinetan partekatu — Aldaketarik edo konposiziorik egin ezkero, lan originalak zituen baldintza berdinetan soilik banatzeko eskubidea duzu, hau da, lizentzia berdina erabiliz",
     "Show only updates from followed users in the homepage feed": "Orrialde nagusiko web-jarioan, jarraitutako erabiltzaileen eguneratzeak soilik erakutsi",
+    "Show results": "Emaitzak ikusi",
     "Skitouring gear": "Esquí y snowboard de montaña, raquetas",
+    "Speed": {
+      "Map controls": "Abiadura"
+    },
     "Stop following this contributor": "Kolaboratzaile hau ez jarraitu",
     "The page you are looking for does not exist or is broken.": "Eskatutako orria ez dago",
     "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Irudi honek liburuaren azala erakusten du. Irudia editore edo/eta egileaeren jabetza da.",
@@ -197,6 +227,7 @@
     "bus": {
       "public_transportation_types": "autobusa"
     },
+    "by": "egilea:",
     "c2c_meetings": {
       "article_categories": "c2c bilerak"
     },
@@ -316,7 +347,7 @@
       "image_categories": "jeitsiera"
     },
     "describe conditions": "Aurkitutako kondizioak, ekipamendua eta harkaitzaren kalitatea (gerturatzean, ibilbidean eta inguruan)",
-    "describe route_conditions": "Laburtu ezazu jarraitutako ibilbidea hurrengo kasuetako batekin bat egiten badu: topo gidan deskribatutakoren desberdina bada, topo-gidak saihesbideak proposatzen baditu, ibilbide zirkularrak, jarraian eginiko ibilbideak edo ibilbidea ez bada amaitu.",
+    "describe route_conditions": "Laburtu ezazu jarraitutako ibilbidea hurrengo kasuetako batekin bat egiten badu: topo gidan deskribatutakoren desberdina bada, topo-gidak saihesbideak proposatzen baditu, ibilbide zirkularrak, jarraian eginiko ibilbideak edo ibilbidea ez bada amaitu.\nOHARRA: ez igo gida-liburu batetik edo beste liburu batetik kopiaturiko argazkiak. Moderatzaileek berehala ezabatuko dituzte, ilegalak direlako eta gunearen erabilitako lizentziak urratzen dituztelako.",
     "describe timing": "Irteera ordua / iraupena",
     "describe weather": "Irteeran aurkitutako eguraldiaren egoera: lainoak, euria, haizea, tenperatura.",
     "description": "Deskribapena",
@@ -404,7 +435,6 @@
       "$$noContext": "Materiala",
       "article_categories": "materiala"
     },
-    "general informations": "Informazio orokorrak",
     "geolocation": "geolokalizazioa",
     "geology": {
       "image_categories": "geologia"
@@ -529,7 +559,6 @@
     "key_needed": {
       "custodianship_types": "sartzeko giltza behar da"
     },
-    "kilometers": "kilometro",
     "labande_global_rating": "Eski kotazio orokorra",
     "labande_ski_rating": "Eski kotazio zehatza",
     "lake": {
@@ -565,7 +594,6 @@
     "medium": {
       "quality_types": "batazbeste"
     },
-    "meters": "metro",
     "migmatite": {
       "rock_types": "migmatita"
     },

@@ -1,4 +1,4 @@
-// The build configuration, replaced at build time by the one of vite.config.mjs (define): see src/js/config.ts
+// The build configuration, replaced at build time by the one of vite.config.ts (define): see src/js/config.ts
 
 interface UrlsConfiguration {
   name: string;
@@ -9,7 +9,7 @@ interface UrlsConfiguration {
   tracking?: string;
   miniatures?: string;
   recaptchaKey?: string;
-  // images uploaded after this timestamp, or with a greater id, have webp and avif thumbnails (0: none)
+  // images uploaded after this timestamp, or with a greater id, have AVIF thumbnails (0: none, 1: all)
   modernThumbnailsTimestamp: number;
   modernThumbnailsId: number;
   // OAuth of the activity trackers (tracking service)
@@ -27,10 +27,8 @@ interface UrlsConfiguration {
 
 interface BuildConfiguration {
   routerMode?: 'history';
-  bingApiKey?: string;
   ordnanceSurveyApiKey: string;
   isBackendSelectable: boolean;
-  addthisPublicId: string;
   googleAnalyticsKey: string;
   urlsConfigurations: Record<string, UrlsConfiguration>;
   urls: UrlsConfiguration;
@@ -40,3 +38,20 @@ interface BuildConfiguration {
 }
 
 declare const CAMPTOCAMP_CONFIG: BuildConfiguration;
+// a new value for each build (vite.config.ts)
+declare const C2C_BUILD_ID: string;
+
+// Backend urls given when the container starts, over the ones of the build: see src/js/runtime-config.ts
+interface RuntimeConfiguration {
+  // one of the urlsConfigurations of the build, as the starting point
+  backend?: string;
+  urls?: Partial<UrlsConfiguration>;
+  // names a non-production environment (e.g. 'preprod'): a banner and a prefix in the tab title tell it
+  environmentLabel?: string;
+  // false: the Outings and Routes map overlays are not offered (see src/js/tracks-overlay.ts)
+  tracksOverlay?: boolean;
+}
+
+interface Window {
+  CAMPTOCAMP_RUNTIME_CONFIG?: RuntimeConfiguration;
+}

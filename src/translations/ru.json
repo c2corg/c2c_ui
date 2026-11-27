@@ -88,10 +88,8 @@
     "Allow all": "Принять всё",
     "Altitude": "Высота",
     "Altitude is mandatory when danger high and low are different. Please set altitude as specified on avalanche bulletin for the specific area.": "Указание высоты требуется если уровень опасности наверху и внизу различается. Укажите высоту так, как  в лавинном бюллетене.",
-    "An error occurred, couldn't (un)mark route as to do": "Произошла ошибка, невозможно добавить (или удалить) маршрут в избранное.",
     "An error occurred, couldn't save images": "Ошибка, невозможно сохранить изображение",
     "Anonymity and confidentiality": "Анонимность и конфиденциальность",
-    "Are you sure you want to delete this document?": "Уверены ли вы, что хотите удалить этот документ ?",
     "Are you sure you want to delete this locale?": "Вы хотите удалить версию на этом языке?",
     "Are you sure you want to merge?": "Ты уверен, что хочешь слиться?",
     "Are you sure you want to revert to this version of the document?": "Вы хотите откатить данную версию документа?",
@@ -109,7 +107,6 @@
     },
     "Avalanche bulletins": "Лавинный бюллетень",
     "Average slope (degrees)": "Средный наклон (градусы)",
-    "Average slope in degree": "Средный наклон в градусах",
     "Back to code": "Вернуться к коду",
     "Back to edit mode": "Вернуться в режим редактирования",
     "Base layer": "первая кожа",
@@ -126,7 +123,6 @@
     "Block account": "Заблокировать этого пользователя",
     "Bolted rock climbing gear": "Оборудованные мультипитчи",
     "Book content": "содержание книги",
-    "Both results and map": "Оба карта и результаты",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Кратко опишите телесные повреждения. Поместите здесь также комментарии, не соответствующие другим разделам.",
     "By month": "по месяцам",
     "By year": "по годам",
@@ -140,7 +136,10 @@
     "Child": "ребенок",
     "Choose file": "Выберите файл",
     "Clear": "стереть",
-    "Close": "закрыть",
+    "Close": {
+      "$$noContext": "закрыть",
+      "Map controls": "закрыть"
+    },
     "Collapse": "Свернуть",
     "Comments": "комментарии",
     "Comments are disabled.": "комментарии отключены",
@@ -172,6 +171,7 @@
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "Уровень опасности из лавинного бюллетеня распространяется на любую ориентацию. Роза ветров определяет наиболее важные сектора, представляющие повышенный риск.",
     "Data like orientation, rock type, route type (such as return trip or loop) and route configuration type (such as ridge or gully).": "Технические данные, такие как ориентация, тип скал или общая конфигурация маршрута (гребень, кулуар, стена)",
     "Delete": {
+      "$$noContext": "Удалить",
       "yeti": "Удалить"
     },
     "Delete this document": "Удалить этот документ",
@@ -209,6 +209,9 @@
     "Feel free to edit it.": "Отредактировать",
     "Filter on map extent": "Ограничить поиск видимой картой",
     "Filter results": "Фильтровать результаты",
+    "Follow the track": {
+      "Map controls": "Следовать за треком"
+    },
     "Forgot password?": "забыли пароль ?",
     "Forum": "Форум",
     "Forum username": "Имя ползователи на форуме",
@@ -222,15 +225,14 @@
     "Has this experience changed your habits? Describe the lessons you have learned from this experience": "Изменило ли это событие ваши привычки? Какие уроки вы извлекли из него?",
     "Have you (re)evaluated the risks at each change in the situation? What factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the leader of the group, etc.": "Вы (пере)оценивали риски при каждом изменении  ситуации? \nУчтите факторы, которые могли повлиять на ваш уровень внимания, такие как усталость, стресс, снижение внимания после преодоления трудностей или при спуске, известное или легкопроходимое место, наличие следов или других людей, полное доверие к лидеру группы, и т.п.",
     "Heading": "Название",
+    "Help": "Помощь",
     "Help research activities to define new prevention means": "Помогите научным исследованиям определить пути предотвращения",
     "Here is the list of users you are following and whose activity you will see in your personal feed.": "Вот список участников, на которых вы подписаны, и чьи действия вы увидите в своей личной ленте.",
-    "Here you may set activity and region filters that will apply to the homepage feed.": "Определите фильтры для видов активности и регионов, которые будут применяться к вашей ленте",
     "Hiking gear": "снаряжение для похода",
     "History": {
       "$$noContext": "Версии",
       "yeti": "Версии"
     },
-    "Home page feed parameters": "Настройка вашей ленты на главной странице",
     "How is my testimony used ? How / why is it useful ?": "Для чего будут использованы мои показания? Почему они важны?",
     "I must not use slopes > 30°": "Не показывать склоны круче 30°",
     "I must not use slopes > 35°": "Не показывать склоны круче 35°",
@@ -253,7 +255,6 @@
     "Information on the location of the incident. Mark the location on the map above, even if you cannot do very accurately, (in which case give more details here). After completing the report, you can associate it to a route, a climbing site or an outing.": "Информация о месте происшествия. Укажите место на карте ниже, даже если вы не можете сделать это точно (в этом случае дайте больше деталей). После заполнения отчета вы сможете привязать его к маршруту, сайту или выходу.",
     "Informations about the access": "Информация о подходе",
     "Infos": "информация",
-    "Insert a link": "Добавить ссылку",
     "Insert emoji": "Добавить смайл",
     "Insert image": "Добавить фотографию",
     "Invalid date": "Ошибочная дата",
@@ -288,7 +289,6 @@
     "Map filter off": "Выключить фильтр карты",
     "Map filter on": "Включить фильтр карты",
     "Map, guidebook, known route, planning for a plan B, (re) evaluation of route during trip?": "Карты, гайдбуки, известные маршруты, варианты плана \"Б\", (пере)оценка маршрута во время движения.",
-    "Mark this route as to do": "Добавить маршрут в избранные",
     "Massifs could not be loaded": "Массив не может быть загружен",
     "Merge documents": "документы о слиянии",
     "Merge with other document": "слияние с другим документом",
@@ -303,7 +303,6 @@
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Доступны другие маршруты. Вы можете переместить карту, ввести имя или выбрать вид активности для их отображения.",
     "Multi-criteria search": "Многокритериальный поиск",
     "My account": "мой аккаунт",
-    "My bookmarks": "мои любимчики",
     "My changes": "мои вклады",
     "My followed users": "миссис Друзья",
     "My profile": "Мой профиль",
@@ -326,10 +325,6 @@
     "Note that comments have to be transferred manually in Discourse before merging.": "Комментарии должны быть вручную загружены в Discourse перед слиянием документов.",
     "Numbers": "данные",
     "On a drawn line": "На линии",
-    "Only document less than 24h old can be deleted": {
-      "API message": "Документ не может быть удален по прошествии 24 часов. Обратитесь к модератору если это необходимо."
-    },
-    "Only status updates with the selected activities and in the selected areas are shown in your homepage feed. Status updates from followed users will always be shown.": "В вашей ленте отображаются только документы, относящиеся к выбранным регионам и видам деятельности.\nОбновления статуса отслеживаемых пользователей будут отображаться всегда.",
     "Ooops": "ойй",
     "Open fields to deeply explain the event circumstances.": "Поле, чтобы подробнее описать событие в свободной форме.",
     "Open fields to detail the picture's context": "Поле для детализации содержимого изображения в свободной форме",
@@ -338,7 +333,7 @@
     "Orientations": "Ориентации",
     "Oups! Something went wrong with forum. Here is the message :": "Ох! Что-то пошло не так с форумом. Сообщение об ошибке:",
     "Oups! something went wrong...": "Ой! Что-то пошло не так...",
-    "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to offer you social media features. You can accept or reject all, or": "Наш веб-сайт использует файлы cookie, предоставленные нами и третьими сторонами. Некоторые файлы cookie необходимы для работы веб-сайта, в то время как настройки других могут быть изменены вами в любое время, особенно тех, которые позволяют нам оценить производительность нашего веб-сайта и предоставить вам функции социальных сетей. Вы можете принять или отклонить их все или",
+    "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to tailor the advertising you see. You can accept or reject all, or": "Наш веб-сайт использует файлы cookie, предоставленные нами и третьими сторонами. Некоторые файлы cookie необходимы для работы веб-сайта, в то время как настройки других могут быть изменены вами в любое время, особенно тех, которые позволяют нам оценить производительность нашего веб-сайта и адаптировать показываемую вам рекламу. Вы можете принять или отклонить их все или",
     "Page not found": "Страница не найдена",
     "Paragliding outings": "Выход с парапланом",
     "Parameters of the Digital Camera": "Параметры цифровой камеры",
@@ -347,6 +342,9 @@
     "Password": "Пароль",
     "Password too short": {
       "API message": "Слишком короткий пароль"
+    },
+    "Pause": {
+      "Map controls": "Пауза"
     },
     "Paysage": {
       "Sophie picture context": "Пейзаж"
@@ -361,6 +359,12 @@
     "Personal feed on": "Личная лента включена",
     "Personal informations": "Персональная информация",
     "Pitch description tag": "Тэг описания питча",
+    "Play": {
+      "Map controls": "Воспроизвести"
+    },
+    "Play the track": {
+      "Map controls": "Воспроизвести трек"
+    },
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Опишите свой технический уровень и опыт в отношении выбранной цели, ваше физическое состояние, усталость, накопленную перед  выходом, уровень акклиматизации, etc",
     "Please move the map, or change the route's name.": "Переместите карту или поменяйте имя маршрута",
     "Please select a method before computing.": "Пожалуйста выберите метод расчета ",
@@ -373,11 +377,17 @@
     "Press enter to select": "Нажмите \"Ввод\" чтобы выбрать",
     "Preview": "Предпросмотр",
     "Professional Reduction Method": "метод для профессионалов",
+    "Progress": {
+      "Map controls": "Прогресс"
+    },
     "Protect document": "Защитить документ",
     "Protection area:": "Охраняемая зона:",
     "Protection areas": "Охраняемые зоны",
     "Protection status": "Статус охраны",
     "Register": "записываться",
+    "Replay": {
+      "Map controls": "Повторить"
+    },
     "Rotate image left": "Поверните налево",
     "Rotate image right": "Поверните направо",
     "SERAC": "Серак",
@@ -390,12 +400,14 @@
     "Settings": "настройки",
     "Skitouring gear": "снаряжение для скитуринга",
     "Small group = 2 to 4 people": "Небольшая группа - от 2 до 4 человек",
+    "Speed": {
+      "Map controls": "Скорость"
+    },
     "Statistics": "Статистика",
     "Target:": "Сохраняемый документ",
     "The page you are looking for does not exist or is broken.": "Запрашиваемая вами страница отсутствует или не работает",
     "The “slope traveled frequently” factor is not taken into account by the application, as it is often difficult to ascertain when preparing for an outing.": "Фактор частоты прохождения склона не принят во внимание, приложением, так как его трудно оценить при подготовке маршрута",
     "There are sensitive areas on this route. Please refer to the map.": "Этот маршрутпроходит черея или находится близко с защищаемой прирдной зоной. Проконсультируйтесь с картой.",
-    "These cookies allow you to interact from camptocamp.org website with social media modules and share content of the website with other people or let them know of your consultation or opinion on it, e.g. when you click on the &quot;Share&quot; module. By disabling these cookies, you won't be able to share content from camptocamp.org on social networks.": "Эти cookies позволяют взаимодействию через сайт  camptocamp.org с соцсетями и делиться содержанием сайта с другими людьми или поделиться своим мнением б например, когда вы нажимаете на кнопку \"поделиться\". Дезактивировав эту опцию вы не сможете делиться в соцсетях содержанием  camptocamp.org",
     "This content is licensed under Creative Commons BY-NC-ND 3.0": "Данный контент распространяется под лицензией Creative Commons BY-NC-ND 3.0",
     "This content is licensed under Creative Commons BY-SA 3.0": "Данный контент распространяется под лицензией Creative Commons BY-SA 3.0",
     "This field is too long": "Слишком длинный текст",
@@ -683,6 +695,7 @@
     "descent": {
       "image_categories": "Спуск"
     },
+    "describe route_conditions": "Кратко опишите маршрут, по которому вы шли, в следующих случаях: маршрут отличается от указанного в путеводителе; путеводитель содержит альтернативные варианты; маршрут представляет собой круговой маршрут или серию подъемов; точка, достигнутая в ходе частичного прохождения маршрута.\nВНИМАНИЕ: не загружайте фотографии, скопированные из топографического путеводителя или книги. Модераторы немедленно удаляют такие фотографии, поскольку это незаконно и нарушает условия лицензий, используемых сайтом.",
     "describe timing": "Время отправления",
     "description": "Описание",
     "durations": "Продолжительность",
@@ -756,7 +769,6 @@
       "article_categories": "снаряжение "
     },
     "gender": "Пол",
-    "general informations": "общая информация",
     "geolocation": "Геолокация",
     "glacier": {
       "route_configuration_types": "ледник"
@@ -823,7 +835,6 @@
     "key_needed": {
       "custodianship_types": "чтобы от крыть необходим ключ"
     },
-    "kilometers": "километры",
     "labande_global_rating": "Общий лыжный рейтинг",
     "labande_ski_rating": "Уточненный лыжный рейтинг",
     "lake": {
@@ -841,7 +852,6 @@
     },
     "lift_access": "Подъемники",
     "lift_status": "Подъемники",
-    "loading": "загрузка",
     "locality": {
       "waypoint_types": "место"
     },
@@ -860,7 +870,6 @@
     "medium": {
       "quality_types": "cредний"
     },
-    "meters": "метр",
     "migmatite": {
       "rock_types": "мигматит"
     },

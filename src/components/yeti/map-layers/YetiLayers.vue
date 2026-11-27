@@ -5,23 +5,15 @@
   </div>
 </template>
 
-<script>
-import layerMixin from './layer';
-
-import Yetix from '@/components/yeti/Yetix';
+<script setup lang="ts">
 import AreaLayer from '@/components/yeti/map-layers/AreaLayer.vue';
 import YetiLayer from '@/components/yeti/map-layers/YetiLayer.vue';
+import { useYetixStore } from '@/components/yeti/yetix';
+import type { SelectorLayer } from '@/components/yeti/yetix-types';
 
-export default {
-  components: {
-    AreaLayer,
-    YetiLayer,
-  },
-  mixins: [layerMixin],
-  methods: {
-    onLayer(layer, index) {
-      Yetix.addLayerToYetiLayersSelector(layer, index);
-    },
-  },
-};
+const Yetix = useYetixStore();
+
+function onLayer(layer: SelectorLayer, index: number) {
+  Yetix.addLayerToYetiLayersSelector(layer, index);
+}
 </script>

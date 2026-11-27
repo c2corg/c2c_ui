@@ -1,0 +1,176 @@
+/*
+ * Checkboxes and radios `<input class="is-checkradio">` with a styled label.
+ *
+ * From bulma-checkradio 2.1.3 (https://github.com/Wikiki/bulma-checkradio, MIT License, Copyright (c) 2017 Wikiki),
+ * with the c2c customization: only what the site uses (sizes normal and small, colors primary and info, disabled).
+ *
+ * The size is --checkradio-size, on the label (its ::before and ::after inherit it): 1rem, 0.75rem with is-small. The
+ * box is 1.5 times the size. Unchecked, the tick is centered and has no size; checked, it takes its place.
+ *
+ * Without is-primary or is-info, the colors are Bulma's default turquoise: bulma-checkradio was built with it.
+ */
+.is-checkradio[type='radio'],
+.is-checkradio[type='checkbox'] {
+  outline: 0;
+  user-select: none;
+  display: none;
+  position: absolute;
+  opacity: 0;
+
+  + label {
+    --checkradio-size: 1rem;
+
+    position: relative;
+    display: initial;
+    cursor: pointer;
+    vertical-align: middle;
+    margin: 0.5em;
+    padding: 0.2rem 0.5rem 0.2rem 0;
+    padding-left: calc(2 * var(--checkradio-size));
+    border-radius: var(--c2c-radius);
+    font-size: var(--checkradio-size);
+
+    &:first-of-type {
+      margin-left: 0;
+    }
+
+    &::before {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: calc(1.5 * var(--checkradio-size));
+      height: calc(1.5 * var(--checkradio-size));
+      content: '';
+      border: 0.1rem solid var(--c2c-grey-lighter);
+      background: white;
+    }
+
+    &::after {
+      position: absolute;
+      display: inline-block;
+      content: '';
+      transition: 0.1s;
+    }
+  }
+
+  &.is-small + label {
+    --checkradio-size: 0.75rem;
+  }
+
+  &:focus + label::before {
+    outline: 1px dotted var(--c2c-grey-light);
+  }
+
+  &:hover:not([disabled]) + label::before {
+    border-color: hsl(171, 100%, 41%) !important;
+  }
+
+  &:checked + label::before {
+    border: 0.1rem solid var(--c2c-grey-lighter);
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
+
+    + label {
+      opacity: 0.5;
+      cursor: not-allowed;
+
+      &:hover,
+      &::before,
+      &::after {
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.is-checkradio[type='checkbox'] {
+  + label::before {
+    border-radius: var(--c2c-radius);
+  }
+
+  /* the tick: the bottom and right borders of a rotated box */
+  + label::after {
+    box-sizing: border-box;
+    transform: rotate(45deg);
+    border: 0 solid hsl(171, 100%, 41%);
+    width: 0 !important;
+    height: 0 !important;
+    top: 0.8rem !important;
+    left: 0.8rem !important;
+  }
+
+  &:checked + label::after {
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    width: 0.4rem !important;
+    height: 0.7rem !important;
+    top: 0.35rem !important;
+    left: 0.6rem !important;
+  }
+
+  &.is-primary {
+    &:hover:not([disabled]) + label::before,
+    + label::after {
+      border-color: var(--c2c-primary) !important;
+    }
+  }
+
+  &.is-info {
+    &:hover:not([disabled]) + label::before,
+    &:checked + label::after {
+      border-color: var(--c2c-info) !important;
+    }
+  }
+}
+
+.is-checkradio[type='radio'] {
+  + label {
+    line-height: calc(1.5 * var(--checkradio-size));
+  }
+
+  + label::before {
+    border-radius: 50%;
+  }
+
+  /* the dot: a disc, half the size of the box */
+  + label::after {
+    border-radius: 50%;
+    background: hsl(171, 100%, 41%);
+    transform: scale(0.5);
+    width: 0 !important;
+    height: 0 !important;
+    left: 0.75em !important;
+    top: 0.75em !important;
+  }
+
+  &:checked + label::after {
+    width: 1.5em !important;
+    height: 1.5em !important;
+    left: 0 !important;
+    top: 0 !important;
+  }
+
+  &.is-primary {
+    &:hover:not([disabled]) + label::before {
+      border-color: var(--c2c-primary) !important;
+    }
+
+    + label::after {
+      border-color: var(--c2c-primary) !important;
+      background-color: var(--c2c-primary) !important;
+    }
+  }
+
+  &.is-info {
+    &:hover:not([disabled]) + label::before {
+      border-color: var(--c2c-info) !important;
+    }
+
+    &:checked + label::after {
+      border-color: var(--c2c-info) !important;
+      background-color: var(--c2c-info) !important;
+    }
+  }
+}

@@ -1,0 +1,119 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): helpers/color */
+
+/* Bulma Helpers */
+
+.has-text-white {
+  color: var(--c2c-white) !important;
+}
+
+a.has-text-white:hover,
+a.has-text-white:focus {
+  color: hsl(0, 0%, 90%) !important;
+}
+
+.has-text-black {
+  color: var(--c2c-black) !important;
+}
+
+a.has-text-black:hover,
+a.has-text-black:focus {
+  color: hsl(0, 0%, -6%) !important;
+}
+
+.has-text-light {
+  color: var(--c2c-light) !important;
+}
+
+a.has-text-light:hover,
+a.has-text-light:focus {
+  color: hsl(0, 0%, 86%) !important;
+}
+
+.has-background-light {
+  background-color: var(--c2c-light) !important;
+}
+
+.has-text-primary {
+  color: var(--c2c-primary) !important;
+}
+
+a.has-text-primary:hover,
+a.has-text-primary:focus {
+  color: rgb(15.641025641%, 37.4157868276%, 56.1236802413%) !important;
+}
+
+.has-background-primary {
+  background-color: var(--c2c-primary) !important;
+}
+
+.has-text-info {
+  color: var(--c2c-info) !important;
+}
+
+a.has-text-info:hover,
+a.has-text-info:focus {
+  color: hsl(207, 61%, 43%) !important;
+}
+
+.has-background-info {
+  background-color: var(--c2c-info) !important;
+}
+
+.has-text-success {
+  color: #4baf50 !important;
+}
+
+a.has-text-success:hover,
+a.has-text-success:focus {
+  color: rgb(23.4117647059%, 54.6274509804%, 24.9725490196%) !important;
+}
+
+.has-background-success {
+  background-color: #4baf50 !important;
+}
+
+.has-text-warning {
+  color: hsl(44, 100%, 77%) !important;
+}
+
+a.has-text-warning:hover,
+a.has-text-warning:focus {
+  color: hsl(44, 100%, 67%) !important;
+}
+
+.has-background-warning {
+  background-color: hsl(44, 100%, 77%) !important;
+}
+
+.has-text-danger {
+  color: var(--c2c-danger) !important;
+}
+
+a.has-text-danger:hover,
+a.has-text-danger:focus {
+  color: hsl(348, 86%, 51%) !important;
+}
+
+.has-background-danger {
+  background-color: var(--c2c-danger) !important;
+}
+
+.has-text-grey {
+  color: var(--c2c-grey) !important;
+}
+
+.has-text-grey-light {
+  color: var(--c2c-grey-light) !important;
+}
+
+.has-text-grey-lighter {
+  color: var(--c2c-grey-lighter) !important;
+}
+
+.has-background-grey-lighter {
+  background-color: var(--c2c-grey-lighter) !important;
+}
+
+.has-text-white-bis {
+  color: hsl(0, 0%, 98%) !important;
+}

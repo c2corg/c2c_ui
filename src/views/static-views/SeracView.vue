@@ -1,6 +1,18 @@
 <template>
   <div class="serac-view">
     <html-header :title="$gettext('Incidents and accidents')" />
+    <!-- the browser picks the size by the width it shows it at: no breakpoint -->
+    <img
+      class="background-image"
+      src="@/assets/img/backgrounds/cermygian-crevasse-800w.jpg"
+      srcset="
+        @/assets/img/backgrounds/cermygian-crevasse-800w.jpg   800w,
+        @/assets/img/backgrounds/cermygian-crevasse-1024w.jpg 1024w,
+        @/assets/img/backgrounds/cermygian-crevasse-1200w.jpg 1200w
+      "
+      sizes="100vw"
+      alt=""
+    />
     <div class="serac-view-content">
       <div class="columns is-multiline">
         <div class="column is-12">
@@ -92,7 +104,7 @@
             <div class="columns is-multiline is-mobile serac-activities">
               <topoguide-view-small-link
                 class="column topoguide-view-small-link"
-                v-for="eventActivity of $options.event_activities"
+                v-for="eventActivity of eventActivities"
                 :key="eventActivity"
                 :to="{ name: 'xreports', query: { act: eventActivity } }"
               >
@@ -109,32 +121,28 @@
   </div>
 </template>
 
-<script>
-import TopoguideViewSmallLink from './TopoguideViewSmallLink';
+<script setup lang="ts">
+import TopoguideViewSmallLink from './TopoguideViewSmallLink.vue';
 
 import constants from '@/js/constants';
 
-export default {
-  components: {
-    TopoguideViewSmallLink,
-  },
-
-  event_activities: constants.event_activities,
-};
+const eventActivities = constants.event_activities;
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .serac-view {
-  background-image: url('@/assets/img/backgrounds/cermygian-crevasse-800w.jpg');
-  background-size: cover;
-  background-position: center;
+  position: relative;
+  /* the image behind the content, above the background of the page */
+  isolation: isolate;
   min-height: 100%;
-  // 1224px because after 1024px breakpoint, we have an additional 200px wide menu on the left
-  @media (min-width: 800px) and (max-width: 1224px) {
-    background-image: url('@/assets/img/backgrounds/cermygian-crevasse-1024w.jpg');
-  }
-  @media (min-width: 1224px) {
-    background-image: url('@/assets/img/backgrounds/cermygian-crevasse-1200w.jpg');
+
+  .background-image {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .serac-view-content {

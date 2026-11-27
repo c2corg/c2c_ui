@@ -1,83 +1,105 @@
 <template>
-  <dropdown-button class="is-right" ref="displayModeSwitch">
-    <template #button>
-      <span class="button is-small">
-        <fa-icon :icon="['fas', 'eye']" class="is-size-4" />
-        <span>&nbsp;</span>
-        <fa-icon icon="angle-down" aria-hidden="true" />
-      </span>
-    </template>
-    <a
-      class="dropdown-item is-size-6"
-      :class="{ 'is-active': modelValue === 'result' }"
-      @click="
-        $refs.displayModeSwitch.isActive = false;
-        $emit('update:modelValue', 'result');
-      "
+  <div class="buttons has-addons display-mode-switch" role="group" :aria-label="$gettext('Display')">
+    <!-- $gettext('Results shown alone') $gettext('Map shown alone') $gettext('Hide results') $gettext('Hide the map') -->
+    <!-- $gettext('Show results') $gettext('Show the map') -->
+    <button
+      v-for="pane of PANES"
+      :key="pane.mode"
+      type="button"
+      class="button is-small"
+      :class="{ 'is-shown': shown(pane.mode), 'is-locked': locked(pane.mode) }"
+      :aria-pressed="shown(pane.mode)"
+      :aria-disabled="locked(pane.mode)"
+      :title="$gettext(title(pane.mode))"
+      :aria-label="$gettext(title(pane.mode))"
+      @click="toggle(pane.mode)"
     >
-      <span class="has-text-centered item-icons">
-        <fa-icon :icon="listMode ? 'th-list' : 'th'" />
-      </span>
-      <span class="is-nowrap" v-translate>Results only</span>
-    </a>
-    <a
-      class="dropdown-item is-size-6"
-      :class="{ 'is-active': modelValue === 'both' }"
-      @click="
-        $refs.displayModeSwitch.isActive = false;
-        $emit('update:modelValue', 'both');
-      "
-    >
-      <span class="is-nowrap item-icons">
-        <fa-icon :icon="listMode ? 'th-list' : 'th'" />
-        <fa-icon icon="map-marked-alt" />
-      </span>
-      <span class="is-nowrap" v-translate>Both results and map</span>
-    </a>
-    <a
-      class="dropdown-item is-size-6"
-      :class="{ 'is-active': modelValue === 'map' }"
-      @click="
-        $refs.displayModeSwitch.isActive = false;
-        $emit('update:modelValue', 'map');
-      "
-    >
-      <span class="has-text-centered item-icons">
-        <fa-icon icon="map-marked-alt" />
-      </span>
-      <span class="is-nowrap" v-translate>Map only</span>
-    </a>
-  </dropdown-button>
+      <fa-icon :icon="pane.icon" class="is-size-5" />
+    </button>
+  </div>
 </template>
 
-<script>
-export default {
-  props: {
-    modelValue: {
-      type: String,
-      required: true,
-    },
-    listMode: {
-      type: String,
-      required: true,
-    },
+<script setup lang="ts">
+// what the list shows: 'result', 'map' or 'both'. Each pane is a toggle; the last one shown cannot be hidden
+const props = defineProps({
+  modelValue: {
+    type: String,
+    required: true,
   },
+});
+const emit = defineEmits(['update:modelValue']);
 
-  emits: ['update:modelValue'],
-};
-</script>
+type Pane = 'result' | 'map';
+const PANES: { mode: Pane; icon: string }[] = [
+  { mode: 'result', icon: 'table' },
+  { mode: 'map', icon: 'map' },
+];
+const other = (pane: Pane): Pane => (pane === 'result' ? 'map' : 'result');
 
-<style lang="scss" scoped>
-.item-icons {
-  display: inline-block;
-  width: 2.2rem;
+const shown = (pane: Pane) => props.modelValue === 'both' || props.modelValue === pane;
+const locked = (pane: Pane) => props.modelValue === pane;
 
-  svg {
-    margin: 0 0.1rem;
-  }
+// the message of the button, translated by the template
+function title(pane: Pane) {
+  if (locked(pane)) return pane === 'result' ? 'Results shown alone' : 'Map shown alone';
+  if (shown(pane)) return pane === 'result' ? 'Hide results' : 'Hide the map';
+  return pane === 'result' ? 'Show results' : 'Show the map';
 }
 
-span:nth-child(2) {
-  padding-left: 0.5rem;
+function toggle(pane: Pane) {
+  if (locked(pane)) return;
+  emit('update:modelValue', shown(pane) ? other(pane) : 'both');
+}
+</script>
+
+<style scoped>
+.display-mode-switch {
+  flex-wrap: nowrap;
+  margin-bottom: 0;
+
+  .button {
+    margin-bottom: 0;
+    width: 2.6rem;
+    height: 2.2rem;
+    color: var(--c2c-grey-light);
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease;
+
+    /* what a click would show, lighter than what is shown */
+    &:hover {
+      color: rgba(51, 122, 183, 0.6);
+    }
+
+    &.is-shown {
+      background-color: var(--c2c-primary-light);
+      border-color: var(--c2c-primary);
+      /* above its neighbour: its whole border is seen */
+      z-index: 1;
+
+      &,
+      &:hover {
+        color: var(--c2c-primary);
+      }
+    }
+
+    &.is-locked {
+      cursor: default;
+    }
+
+    /* no ring after a click, only for the keyboard */
+    &:focus:not(:focus-visible) {
+      box-shadow: none;
+
+      &:not(.is-shown) {
+        border-color: var(--c2c-grey-lighter);
+      }
+    }
+
+    &:focus-visible {
+      z-index: 2;
+    }
+  }
 }
 </style>

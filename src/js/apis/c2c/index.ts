@@ -1,13 +1,14 @@
-import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+import type { AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 import AssociationService from './AssociationService';
 import DocumentService from './DocumentService';
+import FavouritesService from './FavouritesService';
 import FeedService from './FeedService';
 import ForumService from './ForumService';
 import ModeratorService from './ModeratorService';
-import TagsService from './TagsService';
 import UserProfileService from './UserProfileService';
-import { documentChanges, searchResults } from './schemas';
+import { densityHeatmap, densityTracks, documentChanges, documentsPage, rotatedImage, searchResults } from './schemas';
+import { type SessionRefusal, sentWithFormerToken, sessionRefusal } from './session-refusal';
 import type { Params } from './types';
 
 import BaseApi from '@/js/apis/BaseApi';
@@ -20,7 +21,7 @@ export class CamptocampApi extends BaseApi {
   association: AssociationService;
   feed: FeedService;
   forum: ForumService;
-  tags: TagsService;
+  favourites: FavouritesService;
   // one DocumentService per document type (c2c.route, c2c.waypoint...), from constants.documentTypes
   [documentType: string]: unknown;
 
@@ -32,11 +33,24 @@ export class CamptocampApi extends BaseApi {
     this.association = new AssociationService(this);
     this.feed = new FeedService(this);
     this.forum = new ForumService(this);
-    this.tags = new TagsService(this);
+    this.favourites = new FavouritesService(this);
 
     for (const type of constants.documentTypes) {
       this[type] = new DocumentService(this, type);
     }
+
+    // a request refused because its token was replaced meanwhile (renewed while it was on its way) is sent once more,
+    // with the current token. Added first: the other interceptors see the answer of the second request
+    this.axios.interceptors.response.use(undefined, (error: unknown) => {
+      const config = (error as { config?: InternalAxiosRequestConfig & { retriedWithCurrentToken?: boolean } })?.config;
+      const current = this.axios.defaults.headers.common.Authorization;
+      if (config && !config.retriedWithCurrentToken && sentWithFormerToken(error, current)) {
+        config.retriedWithCurrentToken = true;
+        config.headers.Authorization = current as string;
+        return this.axios.request(config);
+      }
+      return Promise.reject(error);
+    });
 
     // TODO
     // once https://github.com/c2corg/v6_api/issues/730 is fixed
@@ -50,7 +64,9 @@ export class CamptocampApi extends BaseApi {
     // )
   }
 
-  getApiLang(lang: string): string {
+  getApiLang(lang: string): string;
+  getApiLang(lang?: string): string | undefined;
+  getApiLang(lang?: string): string | undefined {
     // some UI langs may not yet be present in API
     // some UI langs may also be more precise than API lang (zh for instance)
 
@@ -59,6 +75,17 @@ export class CamptocampApi extends BaseApi {
     } else {
       return lang;
     }
+  }
+
+  // calls back when the API refuses the session of a request: its token is no longer valid, or the account blocked
+  onSessionRefused(callback: (reason: SessionRefusal) => void) {
+    this.axios.interceptors.response.use(undefined, (error: unknown) => {
+      const reason = sessionRefusal(error, this.axios.defaults.headers.common.Authorization);
+      if (reason) {
+        callback(reason);
+      }
+      return Promise.reject(error);
+    });
   }
 
   setAuthorizationToken(token: string | null) {
@@ -75,8 +102,32 @@ export class CamptocampApi extends BaseApi {
     return this.getValidated('/search', searchResults, { params });
   }
 
+  // the routes a GPS track most likely followed, best first; track: an encoded polyline (see encodeTrack)
+  suggestRoutes(track: string, params?: Params) {
+    return this.getValidated('/routes/suggest', documentsPage, { params: { ...params, track } });
+  }
+
   getRecentChanges(params?: Params) {
     return this.getValidated('/documents/changes', documentChanges, { params });
+  }
+
+  /* the map overlays: the density and the tracks of the outings and routes in a box (EPSG:3857). The request can be
+   * cancelled with `signal` */
+
+  getOutingsHeatmap(params?: Params, signal?: AbortSignal) {
+    return this.getValidated('/outings/map/heatmap', densityHeatmap, { params, signal });
+  }
+
+  getOutingsTracks(params?: Params, signal?: AbortSignal) {
+    return this.getValidated('/outings/map/tracks', densityTracks, { params, signal });
+  }
+
+  getRoutesHeatmap(params?: Params, signal?: AbortSignal) {
+    return this.getValidated('/routes/map/heatmap', densityHeatmap, { params, signal });
+  }
+
+  getRoutesTracks(params?: Params, signal?: AbortSignal) {
+    return this.getValidated('/routes/map/tracks', densityTracks, { params, signal });
   }
 
   /* image service, I'm lazy. TODO :
@@ -91,7 +142,9 @@ export class CamptocampApi extends BaseApi {
     file: Blob,
     onUploadProgress: AxiosRequestConfig['onUploadProgress'],
     onSuccess: (response: AxiosResponse) => unknown,
-    onFailure: (error: unknown) => unknown
+    onFailure: (error: unknown) => unknown,
+    // a small JPEG of the stored image in the response, for the files the browser cannot show (HEIC, TIFF)
+    { preview = false }: { preview?: boolean } = {}
   ) {
     const formData = new FormData();
 
@@ -107,13 +160,18 @@ export class CamptocampApi extends BaseApi {
     /* can't user post_ helper: it's not the API url */
     /* TODO : move this function in another service... */
     return this.axios
-      .post(config.urls.imageBackend + '/upload', formData, requestConfig)
+      .post(config.urls.imageBackend + '/upload' + (preview ? '?preview=1' : ''), formData, requestConfig)
       .then(onSuccess)
       .catch(onFailure);
   }
 
   createImages(images: object[]) {
     return this.post('/images/list', { images });
+  }
+
+  // a quarter turn clockwise (90), anticlockwise (-90), or a half turn: the image gets a new file, a new version
+  rotateImage(documentId: number, rotation: 90 | -90 | 180) {
+    return this.postValidated('/images/rotate', rotatedImage, { document_id: documentId, rotation });
   }
 
   cooker(data: object) {

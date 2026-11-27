@@ -1,0 +1,15 @@
+/*
+ * Font Awesome 7 gives every icon a fixed width: keep the width of each icon, as in Font Awesome 6, except for icons
+ * asking for fixed-width (fa-fw)
+ */
+:root {
+  --fa-width: auto;
+}
+
+/*
+ * but a stack of icons (fa-layers) takes its width from the same variable, and its icons are positioned in it, out of
+ * the flow: with an auto width, it has none, and the text after it overlaps it. Its width of Font Awesome 6
+ */
+:root .fa-layers {
+  width: 1em;
+}

@@ -1,0 +1,198 @@
+/*
+ * The controls of the map: the look of the OpenLayers ones (ol.css, BSD-2-Clause, and the c2c colours), which the map
+ * had before MapLibre. The controls are 0.5em from the edges of the map.
+ */
+.c2c-map {
+  --ol-background-color: rgba(0, 60, 136, 0.6);
+  --ol-accent-background-color: var(--c2c-white-ter);
+  --ol-subtle-background-color: rgba(128, 128, 128, 0.25);
+  --ol-partial-background-color: rgba(255, 255, 255, 0.75);
+  --ol-foreground-color: var(--c2c-white);
+  --ol-subtle-foreground-color: var(--c2c-white);
+  --ol-brand-color: #00aaff;
+
+  /*
+   * outer size of a button: 1.375em plus 1px margin on each side, buttons are 1.14 times bigger on touch devices, and
+   * 1.4 times in full screen there (the map is the whole screen, a finger needs a bigger target), stacked controls are
+   * positioned in em with it so they never overlap, even when the browser scales the text up (Android font size
+   * setting)
+   */
+  --map-button-scale: 1;
+  --map-button-size: calc(var(--map-button-scale) * 1.375em + 2px);
+
+  /* added to the distance of the controls from the top and the bottom of the map: more room in full screen on a phone,
+     whose rounded corners would cut the controls in the corners */
+  --map-inset-top: 0px;
+  --map-inset-bottom: 0px;
+
+  &.ol-touch {
+    --map-button-scale: 1.14;
+
+    .ol-control button,
+    .ol-control > a {
+      font-size: calc(var(--map-button-scale) * 1em);
+    }
+  }
+
+  &.ol-touch:fullscreen,
+  :fullscreen &.ol-touch {
+    --map-button-scale: 1.4;
+    --map-inset-top: 1em;
+    --map-inset-bottom: 1em;
+  }
+
+  .ol-unselectable {
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .ol-control {
+    position: absolute;
+    background-color: var(--ol-subtle-background-color);
+    border-radius: 4px;
+  }
+
+  .ol-control button,
+  .ol-control > a {
+    display: block;
+    margin: 1px;
+    padding: 0;
+    color: var(--ol-subtle-foreground-color);
+    font-weight: bold;
+    text-decoration: none;
+    font-size: inherit;
+    text-align: center;
+    height: 1.375em;
+    width: 1.375em;
+    line-height: 0.4em;
+    background-color: var(--ol-background-color);
+    border: none;
+    border-radius: 2px;
+  }
+
+  .ol-control button:hover,
+  .ol-control button:focus,
+  .ol-control > a:hover,
+  .ol-control > a:focus {
+    text-decoration: none;
+    outline: 1px solid var(--ol-subtle-foreground-color);
+    color: var(--ol-foreground-color);
+  }
+
+  /* the buttons of the top left corner, one below the other: a hidden one leaves no gap */
+  .c2c-map-controls-top-left {
+    position: absolute;
+    top: calc(0.5em + var(--map-inset-top));
+    left: 0.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+    /* the map between the buttons stays the map */
+    pointer-events: none;
+
+    > .ol-control {
+      position: relative;
+      pointer-events: auto;
+    }
+  }
+
+  .ol-zoom {
+    /* a finger zooms with two fingers: no buttons on a phone or a tablet, whatever its size */
+    @media (pointer: coarse) {
+      display: none;
+    }
+
+    .ol-zoom-in {
+      border-radius: 2px 2px 0 0;
+    }
+
+    .ol-zoom-out {
+      border-radius: 0 0 2px 2px;
+    }
+  }
+
+  .ol-full-screen {
+    /* the icon in the middle of its button */
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .ol-attribution {
+    /* above the scale, which it covers once open */
+    z-index: 3;
+    text-align: right;
+    bottom: calc(0.5em + var(--map-inset-bottom));
+    right: 0.5em;
+    max-width: calc(100% - 1.3em);
+    display: flex;
+    flex-flow: row-reverse;
+    align-items: center;
+
+    a {
+      color: #666666;
+      text-decoration: none;
+    }
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      padding: 1px 0.5em;
+      color: var(--c2c-grey-darker);
+      text-shadow: 0 0 2px var(--ol-background-color);
+      font-size: 12px;
+    }
+
+    li {
+      list-style: none;
+    }
+
+    /* the icon in the middle of its button */
+    button {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+
+      svg {
+        height: 0.7em;
+      }
+    }
+
+    &.ol-collapsed ul {
+      display: none;
+    }
+
+    &:not(.ol-collapsed) {
+      background: var(--ol-partial-background-color);
+    }
+  }
+
+  /* the MapLibre scale at the place and with the look of the OpenLayers one (.ol-scale-line and its inner element):
+     the corner container is the light rounded frame, the scale the grey bracket inside it */
+  .maplibregl-ctrl-bottom-right {
+    right: calc(1em + var(--map-button-size));
+    bottom: calc(0.5em + 1px + var(--map-inset-bottom));
+    padding: 2px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.75);
+  }
+
+  .maplibregl-ctrl-bottom-right .maplibregl-ctrl-scale {
+    margin: 1px;
+    padding: 0;
+    border: 1px solid #666666;
+    border-top: none;
+    background: none;
+    color: #333333;
+    font-size: 10px;
+    line-height: 1.3;
+    text-align: center;
+    transition: width 0.25s;
+  }
+}

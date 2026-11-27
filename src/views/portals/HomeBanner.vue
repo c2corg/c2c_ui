@@ -80,43 +80,12 @@
   </section>
 </template>
 
-<script>
-export default {
-  name: 'HomeBanner',
-};
-</script>
+<script setup lang="ts"></script>
 
-<style scoped lang="scss">
-.intro-banner {
-  padding-bottom: 40px;
-  padding-top: 70px;
-  color: #fff;
-  width: 80%;
-  min-width: 730px;
-  height: 100%;
-  margin: auto;
-  align-items: center;
-}
-
-.title.is-4 {
-  margin-top: 25px;
-}
-
+<style scoped>
 .with-circle {
   list-style: disc !important;
-  margin-left: $size-3;
-}
-
-@media screen and (max-width: $tablet) {
-  .intro-banner {
-    width: 100%;
-    min-width: auto;
-    padding: 20px;
-  }
-
-  .title.is-4 {
-    margin-top: 0;
-  }
+  margin-left: var(--c2c-size-3);
 }
 
 .logo-association {

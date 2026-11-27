@@ -1,0 +1,58 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): form/shared */
+
+.select select,
+.input,
+.textarea {
+  background-color: var(--c2c-white);
+  border-color: var(--c2c-grey-lighter);
+  border-radius: var(--c2c-radius);
+  color: var(--c2c-grey-darker);
+}
+
+.select select::placeholder,
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--c2c-input-placeholder-color);
+}
+
+.select select:hover,
+.input:hover,
+.textarea:hover {
+  border-color: var(--c2c-grey-light);
+}
+
+.select select:focus,
+.input:focus,
+.textarea:focus,
+.select select:active,
+.input:active,
+.textarea:active,
+.select select.is-active,
+.is-active.input,
+.is-active.textarea {
+  border-color: var(--c2c-color-base-c2c);
+  box-shadow: 0 0 0 0 rgba(51, 122, 183, 0.25);
+}
+
+.select select[disabled],
+[disabled].input,
+[disabled].textarea,
+fieldset[disabled] .select select,
+.select fieldset[disabled] select,
+fieldset[disabled] .input,
+fieldset[disabled] .textarea {
+  background-color: var(--c2c-white-ter);
+  border-color: var(--c2c-white-ter);
+  box-shadow: none;
+  color: var(--c2c-grey);
+}
+
+.select select[disabled]::placeholder,
+[disabled].input::placeholder,
+[disabled].textarea::placeholder,
+fieldset[disabled] .select select::placeholder,
+.select fieldset[disabled] select::placeholder,
+fieldset[disabled] .input::placeholder,
+fieldset[disabled] .textarea::placeholder {
+  color: rgba(48%, 48%, 48%, 0.3);
+}

@@ -15,7 +15,7 @@
 
     <button
       type="button"
-      class="button is-small is-outlined verify-button"
+      class="button is-small is-outlined"
       :disabled="!canVerify || loading"
       :title="disabledReason"
       @click.stop.prevent="verify"
@@ -58,13 +58,13 @@
         </span>
         <span v-else class="not-found">{{ $gettext('Not found') }}</span>
       </div>
-      <div class="verify-detail-row" v-if="marginMinutes !== null">
+      <div class="verify-detail-row" v-if="margin !== null">
         <strong>{{ $gettext('Time between outbound and return') }}</strong>
-        <span>{{ formatJourneyDuration(marginMinutes * 60) }}</span>
+        <span>{{ formatJourneyDuration(margin * 60) }}</span>
       </div>
       <div class="verify-detail-row" v-if="isRoute && marginOverHikingDuration !== null">
         <strong>{{ $gettext('Margin over hiking duration') }}</strong>
-        <span :class="{ 'margin-negative': marginOverHikingDuration < 0 }">
+        <span :class="{ 'not-found': marginOverHikingDuration < 0 }">
           {{ marginOverHikingDuration >= 0 ? '+' : '-'
           }}{{ formatJourneyDuration(Math.abs(marginOverHikingDuration) * 60) }}
         </span>
@@ -73,157 +73,130 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, type PropType, ref, useId } from 'vue';
+
 import itinevertService from '@/js/apis/itinevert-service';
+import { useGlobalProperties } from '@/js/composables/global-properties';
 import planATripUtils from '@/js/plan-a-trip-utils';
-import { formatResultDateTime, isDurationUnknown, marginMinutes } from '@/js/transport-accessibility';
+import { documentProperty } from '@/js/properties';
+import {
+  formatResultDateTime,
+  isDurationUnknown,
+  marginMinutes,
+  type RoundTripResult,
+} from '@/js/transport-accessibility';
+import type { TransportContext } from '@/js/transport-query';
 
-let uid = 0;
-
-export default {
-  name: 'VerifyAccessibilityButton',
-
-  props: {
-    /** The route or waypoint document to verify */
-    document: {
-      type: Object,
-      required: true,
-    },
-    /**
-     * The active transport search context: `{ fromAddress, date, returnDate, minDeparture, maxReturn, hikingDuration
-     * }`, as read from the url. `null` when no transport search is active.
-     */
-    transportContext: {
-      type: Object,
-      default: null,
-    },
+const props = defineProps({
+  /** The route or waypoint document to check */
+  ...documentProperty,
+  /** The transport search of the url, null when there is none */
+  transportContext: {
+    type: Object as PropType<TransportContext | null>,
+    default: null,
   },
+});
 
-  emits: ['verified'],
+const emit = defineEmits<{ verified: [result: RoundTripResult] }>();
 
-  data() {
-    return {
-      uid: `verify-accessibility-${uid++}`,
-      hikingDurationMinutes: this.computeDefaultHikingDuration(),
-      loading: false,
-      result: null,
-      expanded: false,
-      errorMessage: null,
-    };
-  },
+const { $gettext, $documentUtils } = useGlobalProperties();
+const { formatJourneyDuration } = planATripUtils;
 
-  computed: {
-    documentType() {
-      return this.$documentUtils.getDocumentType(this.document.type);
-    },
+const hikingDurationInputId = `verify-accessibility-${useId()}-hiking-duration`;
 
-    isRoute() {
-      return this.documentType === 'route';
-    },
+const documentType = computed(() => $documentUtils.getDocumentType(props.document.type));
+const isRoute = computed(() => documentType.value === 'route');
 
-    /** The duration of the route is unknown: its accessibility cannot be verified (the API lists those routes last) */
-    durationUnknown() {
-      return isDurationUnknown(this.document, this.result);
-    },
+const hikingDurationMinutes = ref<number | null>(
+  props.document.calculated_duration
+    ? Math.round(Number(props.document.calculated_duration) * 24 * 60)
+    : (props.transportContext?.hikingDuration ?? null)
+);
+const loading = ref(false);
+const result = ref<RoundTripResult | null>(null);
+const expanded = ref(false);
+const errorMessage = ref<string | null>(null);
 
-    canVerify() {
-      return Boolean(this.transportContext?.fromAddress && this.transportContext?.date) && !this.durationUnknown;
-    },
+/** The duration of the route is unknown: its accessibility cannot be checked (the API lists those routes last) */
+const durationUnknown = computed(() =>
+  isDurationUnknown(props.document as { duration_unknown?: boolean }, result.value)
+);
 
-    /** Why the button is disabled (the tooltip), empty when it is not */
-    disabledReason() {
-      if (this.durationUnknown) {
-        return this.$gettext('The duration of this route is unknown: its accessibility cannot be verified');
-      }
-      return this.canVerify ? '' : this.$gettext('No transport search context available');
-    },
+const canVerify = computed(
+  () => Boolean(props.transportContext?.fromAddress && props.transportContext?.date) && !durationUnknown.value
+);
 
-    hikingDurationInputId() {
-      return `${this.uid}-hiking-duration`;
-    },
+/** Why the button is disabled (the tooltip), empty when it is not */
+const disabledReason = computed(() => {
+  if (durationUnknown.value) {
+    return $gettext('The duration of this route is unknown: its accessibility cannot be verified');
+  }
+  return canVerify.value ? '' : $gettext('No transport search context available');
+});
 
-    marginMinutes() {
-      return marginMinutes(this.result);
-    },
+const margin = computed(() => marginMinutes(result.value));
 
-    marginOverHikingDuration() {
-      if (this.marginMinutes === null || !this.hikingDurationMinutes) {
-        return null;
-      }
-      return this.marginMinutes - this.hikingDurationMinutes;
-    },
-  },
+const marginOverHikingDuration = computed(() =>
+  margin.value === null || !hikingDurationMinutes.value ? null : margin.value - hikingDurationMinutes.value
+);
 
-  methods: {
-    // Expose plan-a-trip's formatting helpers (formatTime, formatJourneyDuration, ...) to the template
-    ...planATripUtils,
+/** A Navitia datetime or a plain "HH:MM[:SS]" string, with the day when it is not the departure */
+const formatResultTime = (value?: string) => formatResultDateTime(value, props.transportContext?.date);
 
-    computeDefaultHikingDuration() {
-      if (this.document?.calculated_duration) {
-        return Math.round(this.document.calculated_duration * 24 * 60);
-      }
-      return this.transportContext?.hikingDuration ?? null;
-    },
+async function verify() {
+  const context = props.transportContext;
+  if (!context || !canVerify.value || loading.value) {
+    return;
+  }
 
-    /** Formats a Navitia datetime or a plain "HH:MM[:SS]" string for display, with the day when it is not the departure */
-    formatResultTime(value) {
-      return formatResultDateTime(value, this.transportContext?.date);
-    },
+  loading.value = true;
+  errorMessage.value = null;
 
-    async verify() {
-      if (!this.canVerify || this.loading) {
-        return;
-      }
-
-      this.loading = true;
-      this.errorMessage = null;
-
-      try {
-        const { data } = await itinevertService.getRoundTripReachable(
-          this.document.document_id,
-          this.documentType,
-          this.transportContext.date,
-          this.transportContext.minDeparture,
-          this.transportContext.maxReturn,
-          this.transportContext.fromAddress,
-          this.isRoute ? this.hikingDurationMinutes || undefined : undefined,
-          this.transportContext.returnDate
-        );
-        this.result = data;
-        this.expanded = true;
-        this.$emit('verified', data);
-      } catch (error) {
-        this.result = null;
-        this.errorMessage = this.$gettext('Unable to check schedules right now.');
-        console.warn('Error checking round-trip accessibility:', error);
-      } finally {
-        this.loading = false;
-      }
-    },
-  },
-};
+  try {
+    const { data } = await itinevertService.getRoundTripReachable(
+      props.document.document_id!,
+      isRoute.value ? 'route' : 'waypoint',
+      context.date,
+      context.minDeparture,
+      context.maxReturn,
+      context.fromAddress,
+      isRoute.value ? hikingDurationMinutes.value || undefined : undefined,
+      context.returnDate
+    );
+    result.value = data;
+    expanded.value = true;
+    emit('verified', data);
+  } catch (error) {
+    result.value = null;
+    errorMessage.value = $gettext('Unable to check schedules right now.');
+    console.warn('Error checking round-trip accessibility:', error);
+  } finally {
+    loading.value = false;
+  }
+}
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .verify-accessibility-button {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
-  font-size: 0.8rem;
+  gap: 0.375rem;
+  font-size: var(--c2c-size-7);
 }
 
 .hiking-duration-field {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 0.25rem;
 
   label {
     white-space: nowrap;
   }
 
   .hiking-duration-input {
-    width: 55px;
+    width: 3.5rem;
   }
 }
 
@@ -231,14 +204,18 @@ export default {
   text-decoration: underline;
 }
 
-.error-message {
-  color: #c62828;
+.error-message,
+.not-found {
+  color: var(--c2c-danger);
+}
+
+.error-message,
+.duration-unknown-message {
   width: 100%;
 }
 
 .duration-unknown-message {
-  width: 100%;
-  color: #666;
+  color: var(--c2c-grey-dark);
   font-style: italic;
 }
 
@@ -246,24 +223,16 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  margin-top: 4px;
-  padding: 6px 8px;
-  background: #f5f5f5;
-  border-radius: 6px;
+  gap: 0.125rem;
+  margin-top: 0.25rem;
+  padding: 0.375rem 0.5rem;
+  background: var(--c2c-white-ter);
+  border-radius: var(--c2c-radius);
 
   .verify-detail-row {
     display: flex;
     justify-content: space-between;
-    gap: 8px;
-
-    .not-found {
-      color: #c62828;
-    }
-
-    .margin-negative {
-      color: #c62828;
-    }
+    gap: 0.5rem;
   }
 }
 </style>

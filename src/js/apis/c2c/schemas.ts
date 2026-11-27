@@ -1,5 +1,7 @@
 // The responses of the c2c API, as the UI reads them: checked when they arrive (check-response.ts), and typed from here
-import { z } from 'zod';
+import * as z from 'zod/mini';
+
+import common from '@/js/constants/common.json';
 
 // POST /users/login
 export const loginResponse = z.object({
@@ -12,6 +14,9 @@ export const loginResponse = z.object({
   forum_username: z.string(),
   lang: z.string(),
   roles: z.array(z.string()),
+  // a login for the forum (discourse in the request): where to go back, through the forum SSO
+  redirect: z.optional(z.string()),
+  redirect_internal: z.optional(z.string()),
 });
 
 // the data as the API gives it (check-response.ts): the schema's input type
@@ -20,28 +25,442 @@ export type LoginResponse = z.input<typeof loginResponse>;
 // a locale of a document; its other properties depend on the document type
 const locale = z.object({
   lang: z.string(),
-  version: z.number().optional(),
-  title: z.string().nullish(),
-  title_prefix: z.string().nullish(),
+  version: z.optional(z.number()),
+  title: z.nullish(z.string()),
+  title_prefix: z.nullish(z.string()),
 });
 
 // a document, in any answer: only its id is always there (a private profile is { not_authorized, document_id, name })
 export const document = z.object({
   document_id: z.number(),
   // the type letter: r (route), w (waypoint), o (outing)...
-  type: z.string().optional(),
-  version: z.number().optional(),
-  locales: z.array(locale).optional(),
-  available_langs: z.array(z.string()).nullish(),
-  geometry: z.object({ geom: z.string().nullish(), geom_detail: z.string().nullish() }).nullish(),
-  protected: z.boolean().optional(),
-  areas: z.array(z.object({ document_id: z.number() })).optional(),
+  type: z.optional(z.string()),
+  version: z.optional(z.number()),
+  locales: z.optional(z.array(locale)),
+  available_langs: z.nullish(z.array(z.string())),
+  geometry: z.nullish(z.object({ geom: z.nullish(z.string()), geom_detail: z.nullish(z.string()) })),
+  protected: z.optional(z.boolean()),
+  areas: z.optional(z.array(z.object({ document_id: z.number() }))),
   // a route of a public transport search whose duration is unknown: its accessibility cannot be verified
-  duration_unknown: z.boolean().optional(),
+  duration_unknown: z.optional(z.boolean()),
 });
 
 // GET /<type>s: a page of documents
 export const documentsPage = z.object({ documents: z.array(document), total: z.number() });
+
+// the values of an attribute of the documents (common.json, as the API's enums give them)
+const attributes = common.attributes as unknown as Record<string, [string, ...string[]]>;
+const oneOf = (name: string) => z.enum(attributes[name]);
+
+// a document, as GET /<type>s/:id gives it: its own fields depend on its type, and on its activities or waypoint type
+// (the others are left out); the associations and areas are short documents
+// the associated documents of a full document (v6_api views): lists, and pages for the last outings of a route or a
+// waypoint and the routes of a waypoint
+const associatedDocuments = z.optional(z.array(document));
+export const associations = z.object({
+  waypoints: associatedDocuments,
+  waypoint_children: associatedDocuments,
+  // an outing: the waypoints of its routes (not associated with it), for its map
+  route_waypoints: associatedDocuments,
+  routes: associatedDocuments,
+  outings: associatedDocuments,
+  images: associatedDocuments,
+  articles: associatedDocuments,
+  books: associatedDocuments,
+  xreports: associatedDocuments,
+  users: associatedDocuments,
+  areas: associatedDocuments,
+  recent_outings: z.optional(documentsPage),
+  all_routes: z.optional(documentsPage),
+});
+
+// a locale of a document, with the fields of its type
+const fullLocale = <L extends z.core.$ZodShape>(localeFields: L) =>
+  z.extend(locale, {
+    version: z.number(),
+    summary: z.nullish(z.string()),
+    description: z.nullish(z.string()),
+    topic_id: z.nullish(z.number()),
+    ...localeFields,
+  });
+
+const fullDocument = <T extends z.core.$ZodShape, L extends z.core.$ZodShape>(fields: T, localeFields: L) =>
+  z.extend(document, {
+    type: z.string(),
+    version: z.number(),
+    quality: oneOf('quality_types'),
+    protected: z.boolean(),
+    available_langs: z.nullish(z.array(z.string())),
+    locales: z.array(fullLocale(localeFields)),
+    // ?cook=<lang>: the locale in that language (or the best one), its markdown as HTML
+    cooked: z.optional(fullLocale(localeFields)),
+    associations: z.optional(associations),
+    // the areas of the document, with their type (range, administrative limits, country)
+    areas: z.optional(z.array(z.extend(document, { area_type: z.nullish(z.string()) }))),
+    // the maps of the document's area, with their editor and code
+    maps: z.optional(z.array(z.extend(document, { editor: z.nullish(z.string()), code: z.nullish(z.string()) }))),
+    ...fields,
+  });
+
+// GET /waypoints/:id (v6_api models/waypoint.py)
+export const waypoint = fullDocument(
+  {
+    waypoint_type: oneOf('waypoint_types'),
+    elevation: z.nullish(z.number()),
+    elevation_min: z.nullish(z.number()),
+    prominence: z.nullish(z.number()),
+    height_max: z.nullish(z.number()),
+    height_median: z.nullish(z.number()),
+    height_min: z.nullish(z.number()),
+    routes_quantity: z.nullish(z.number()),
+    climbing_outdoor_types: z.nullish(z.array(oneOf('climbing_outdoor_types'))),
+    climbing_indoor_types: z.nullish(z.array(oneOf('climbing_indoor_types'))),
+    climbing_rating_max: z.nullish(oneOf('climbing_ratings')),
+    climbing_rating_min: z.nullish(oneOf('climbing_ratings')),
+    climbing_rating_median: z.nullish(oneOf('climbing_ratings')),
+    equipment_ratings: z.nullish(z.array(oneOf('equipment_ratings'))),
+    climbing_styles: z.nullish(z.array(oneOf('climbing_styles'))),
+    children_proof: z.nullish(oneOf('children_proof_types')),
+    rain_proof: z.nullish(oneOf('rain_proof_types')),
+    orientations: z.nullish(z.array(oneOf('orientation_types'))),
+    best_periods: z.nullish(z.array(oneOf('months'))),
+    product_types: z.nullish(z.array(oneOf('product_types'))),
+    length: z.nullish(z.number()),
+    slope: z.nullish(z.number()),
+    ground_types: z.nullish(z.array(oneOf('ground_types'))),
+    paragliding_rating: z.nullish(oneOf('paragliding_ratings')),
+    exposition_rating: z.nullish(oneOf('exposition_ratings')),
+    rock_types: z.nullish(z.array(oneOf('rock_types'))),
+    weather_station_types: z.nullish(z.array(oneOf('weather_station_types'))),
+    url: z.nullish(z.string()),
+    maps_info: z.nullish(z.string()),
+    phone: z.nullish(z.string()),
+    public_transportation_types: z.nullish(z.array(oneOf('public_transportation_types'))),
+    public_transportation_rating: z.nullish(oneOf('public_transportation_ratings')),
+    snow_clearance_rating: z.nullish(oneOf('snow_clearance_ratings')),
+    lift_access: z.nullish(z.boolean()),
+    parking_fee: z.nullish(oneOf('parking_fee_types')),
+    phone_custodian: z.nullish(z.string()),
+    custodianship: z.nullish(oneOf('custodianship_types')),
+    // listings: what a hut offers (wardened, shelter, else its custodianship)
+    hut_category: z.nullish(z.string()),
+    matress_unstaffed: z.nullish(z.boolean()),
+    blanket_unstaffed: z.nullish(z.boolean()),
+    gas_unstaffed: z.nullish(z.boolean()),
+    heating_unstaffed: z.nullish(z.boolean()),
+    access_time: z.nullish(oneOf('access_times')),
+    capacity: z.nullish(z.number()),
+    capacity_staffed: z.nullish(z.number()),
+    slackline_types: z.nullish(z.array(oneOf('slackline_types'))),
+    slackline_length_min: z.nullish(z.number()),
+    slackline_length_max: z.nullish(z.number()),
+  },
+  {
+    access: z.nullish(z.string()),
+    access_period: z.nullish(z.string()),
+    external_resources: z.nullish(z.string()),
+  }
+);
+
+// GET /routes/:id (v6_api models/route.py)
+export const route = fullDocument(
+  {
+    main_waypoint_id: z.nullish(z.number()),
+    activities: z.array(oneOf('activities')),
+    elevation_min: z.nullish(z.number()),
+    elevation_max: z.nullish(z.number()),
+    height_diff_up: z.nullish(z.number()),
+    height_diff_down: z.nullish(z.number()),
+    route_length: z.nullish(z.number()),
+    difficulties_height: z.nullish(z.number()),
+    height_diff_access: z.nullish(z.number()),
+    height_diff_difficulties: z.nullish(z.number()),
+    route_types: z.nullish(z.array(oneOf('route_types'))),
+    orientations: z.nullish(z.array(oneOf('orientation_types'))),
+    durations: z.nullish(z.array(oneOf('route_duration_types'))),
+    calculated_duration: z.nullish(z.number()),
+    glacier_gear: z.nullish(oneOf('glacier_gear_types')),
+    configuration: z.nullish(z.array(oneOf('route_configuration_types'))),
+    lift_access: z.nullish(z.boolean()),
+    ski_rating: z.nullish(oneOf('ski_ratings')),
+    ski_exposition: z.nullish(oneOf('exposition_ratings')),
+    labande_ski_rating: z.nullish(oneOf('labande_ski_ratings')),
+    labande_global_rating: z.nullish(oneOf('global_ratings')),
+    global_rating: z.nullish(oneOf('global_ratings')),
+    engagement_rating: z.nullish(oneOf('engagement_ratings')),
+    risk_rating: z.nullish(oneOf('risk_ratings')),
+    equipment_rating: z.nullish(oneOf('equipment_ratings')),
+    ice_rating: z.nullish(oneOf('ice_ratings')),
+    mixed_rating: z.nullish(oneOf('mixed_ratings')),
+    exposition_rock_rating: z.nullish(oneOf('exposition_rock_ratings')),
+    rock_free_rating: z.nullish(oneOf('climbing_ratings')),
+    rock_required_rating: z.nullish(oneOf('climbing_ratings')),
+    aid_rating: z.nullish(oneOf('aid_ratings')),
+    via_ferrata_rating: z.nullish(oneOf('via_ferrata_ratings')),
+    hiking_rating: z.nullish(oneOf('hiking_ratings')),
+    hiking_mtb_exposition: z.nullish(oneOf('exposition_ratings')),
+    snowshoe_rating: z.nullish(oneOf('snowshoe_ratings')),
+    mtb_up_rating: z.nullish(oneOf('mtb_up_ratings')),
+    mtb_down_rating: z.nullish(oneOf('mtb_down_ratings')),
+    mtb_length_asphalt: z.nullish(z.number()),
+    mtb_length_trail: z.nullish(z.number()),
+    mtb_height_diff_portages: z.nullish(z.number()),
+    rock_types: z.nullish(z.array(oneOf('rock_types'))),
+    climbing_outdoor_type: z.nullish(oneOf('climbing_outdoor_types')),
+    slackline_type: z.nullish(oneOf('slackline_types')),
+    slackline_height: z.nullish(z.number()),
+    // computed from the access waypoints: unknown service without them
+    public_transportation_rating: z.nullish(z.enum([...attributes.public_transportation_ratings, 'unknown service'])),
+  },
+  {
+    title_prefix: z.nullish(z.string()),
+    slope: z.nullish(z.string()),
+    remarks: z.nullish(z.string()),
+    gear: z.nullish(z.string()),
+    external_resources: z.nullish(z.string()),
+    route_history: z.nullish(z.string()),
+    slackline_anchor1: z.nullish(z.string()),
+    slackline_anchor2: z.nullish(z.string()),
+  }
+);
+
+// who created a document, and when (its first version: the author may delete it for 30 days, v6_api #2747)
+const user = z.object({ user_id: z.number(), name: z.string(), created_at: z.optional(z.string()) });
+
+// GET /outings/:id (v6_api models/outing.py)
+export const outing = fullDocument(
+  {
+    // who created it (v6_api #2747; not in the listings of older APIs)
+    author: z.nullish(user),
+    activities: z.array(oneOf('activities')),
+    date_start: z.string(),
+    date_end: z.string(),
+    frequentation: z.nullish(oneOf('frequentation_types')),
+    participant_count: z.nullish(z.number()),
+    elevation_min: z.nullish(z.number()),
+    elevation_max: z.nullish(z.number()),
+    elevation_access: z.nullish(z.number()),
+    elevation_up_snow: z.nullish(z.number()),
+    elevation_down_snow: z.nullish(z.number()),
+    height_diff_up: z.nullish(z.number()),
+    height_diff_down: z.nullish(z.number()),
+    length_total: z.nullish(z.number()),
+    partial_trip: z.nullish(z.boolean()),
+    public_transport: z.nullish(z.boolean()),
+    access_condition: z.nullish(oneOf('access_conditions')),
+    lift_status: z.nullish(oneOf('lift_status')),
+    condition_rating: z.nullish(oneOf('condition_ratings')),
+    snow_quantity: z.nullish(oneOf('snow_quantity_ratings')),
+    snow_quality: z.nullish(oneOf('snow_quality_ratings')),
+    glacier_rating: z.nullish(oneOf('glacier_ratings')),
+    avalanche_signs: z.nullish(z.array(oneOf('avalanche_signs'))),
+    hut_status: z.nullish(oneOf('hut_status')),
+    disable_comments: z.nullish(z.boolean()),
+    hiking_rating: z.nullish(oneOf('hiking_ratings')),
+    ski_rating: z.nullish(oneOf('ski_ratings')),
+    labande_global_rating: z.nullish(oneOf('global_ratings')),
+    snowshoe_rating: z.nullish(oneOf('snowshoe_ratings')),
+    global_rating: z.nullish(oneOf('global_ratings')),
+    height_diff_difficulties: z.nullish(z.number()),
+    engagement_rating: z.nullish(oneOf('engagement_ratings')),
+    equipment_rating: z.nullish(oneOf('equipment_ratings')),
+    rock_free_rating: z.nullish(oneOf('climbing_ratings')),
+    ice_rating: z.nullish(oneOf('ice_ratings')),
+    via_ferrata_rating: z.nullish(oneOf('via_ferrata_ratings')),
+    mtb_up_rating: z.nullish(oneOf('mtb_up_ratings')),
+    mtb_down_rating: z.nullish(oneOf('mtb_down_ratings')),
+  },
+  {
+    participants: z.nullish(z.string()),
+    access_comment: z.nullish(z.string()),
+    weather: z.nullish(z.string()),
+    timing: z.nullish(z.string()),
+    conditions_levels: z.nullish(z.string()),
+    conditions: z.nullish(z.string()),
+    avalanches: z.nullish(z.string()),
+    hut_comment: z.nullish(z.string()),
+    route_description: z.nullish(z.string()),
+  }
+);
+
+export type Waypoint = z.input<typeof waypoint>;
+export type Route = z.input<typeof route>;
+export type Outing = z.input<typeof outing>;
+
+// a user, as the author of an article or an xreport, or the creator of an image
+// GET /areas/:id (v6_api models/area.py)
+export const area = fullDocument(
+  {
+    area_type: z.nullish(oneOf('area_types')),
+  },
+  {}
+);
+
+// GET /articles/:id (v6_api models/article.py)
+export const article = fullDocument(
+  {
+    categories: z.nullish(z.array(oneOf('article_categories'))),
+    activities: z.nullish(z.array(oneOf('activities'))),
+    article_type: z.nullish(oneOf('article_types')),
+    author: z.nullish(user),
+  },
+  {}
+);
+
+// GET /books/:id (v6_api models/book.py)
+export const book = fullDocument(
+  {
+    editor: z.nullish(z.string()),
+    activities: z.nullish(z.array(oneOf('activities'))),
+    url: z.nullish(z.string()),
+    isbn: z.nullish(z.string()),
+    book_types: z.nullish(z.array(oneOf('book_types'))),
+    nb_pages: z.nullish(z.number()),
+    publication_date: z.nullish(z.string()),
+    langs: z.nullish(z.array(z.string())),
+    author: z.nullish(z.string()),
+  },
+  {}
+);
+
+// GET /images/:id (v6_api models/image.py)
+export const image = fullDocument(
+  {
+    activities: z.nullish(z.array(oneOf('activities'))),
+    categories: z.nullish(z.array(oneOf('image_categories'))),
+    image_type: z.nullish(oneOf('image_types')),
+    elevation: z.nullish(z.number()),
+    height: z.nullish(z.number()),
+    width: z.nullish(z.number()),
+    file_size: z.nullish(z.number()),
+    date_time: z.nullish(z.string()),
+    camera_name: z.nullish(z.string()),
+    exposure_time: z.nullish(z.number()),
+    focal_length: z.nullish(z.number()),
+    fnumber: z.nullish(z.number()),
+    iso_speed: z.nullish(z.number()),
+    filename: z.string(),
+    author: z.nullish(z.string()),
+    creator: z.nullish(user),
+  },
+  {}
+);
+
+// GET /maps/:id (v6_api models/topo_map.py): its editors and scales are not in common.json
+export const map = fullDocument(
+  {
+    editor: z.nullish(z.enum(['IGN', 'Swisstopo', 'Escursionista'])),
+    scale: z.nullish(z.enum(['25000', '50000', '100000'])),
+    code: z.nullish(z.string()),
+  },
+  {}
+);
+
+// GET /profiles/:id (v6_api models/user_profile.py): a private profile, for a visitor, is only its id and name
+export const profile = z.union([
+  fullDocument(
+    {
+      activities: z.nullish(z.array(oneOf('activities'))),
+      categories: z.nullish(z.array(oneOf('user_categories'))),
+      name: z.string(),
+      forum_username: z.nullish(z.string()),
+    },
+    {}
+  ),
+  z.object({ not_authorized: z.literal(true), document_id: z.number(), name: z.string() }),
+]);
+
+// GET /xreports/:id (v6_api models/xreport.py): the personal fields only for its author and the moderators.
+// previous_injuries_3 was taken out of the UI's common.json, the API still has it
+export const xreport = fullDocument(
+  {
+    elevation: z.nullish(z.number()),
+    date: z.nullish(z.string()),
+    event_type: z.nullish(oneOf('event_types')),
+    event_activity: oneOf('event_activities'),
+    nb_participants: z.nullish(z.number()),
+    nb_impacted: z.nullish(z.number()),
+    rescue: z.nullish(z.boolean()),
+    avalanche_level: z.nullish(oneOf('avalanche_levels')),
+    avalanche_slope: z.nullish(oneOf('avalanche_slopes')),
+    severity: z.nullish(oneOf('severities')),
+    author_status: z.nullish(oneOf('author_statuses')),
+    activity_rate: z.nullish(oneOf('activity_rates')),
+    age: z.nullish(z.number()),
+    gender: z.nullish(oneOf('genders')),
+    previous_injuries: z.nullish(z.enum([...attributes.previous_injuries, 'previous_injuries_3'])),
+    autonomy: z.nullish(oneOf('autonomies')),
+    supervision: z.nullish(oneOf('supervision')),
+    qualification: z.nullish(oneOf('qualification')),
+    disable_comments: z.nullish(z.boolean()),
+    anonymous: z.nullish(z.boolean()),
+    author: z.nullish(user),
+  },
+  {
+    place: z.nullish(z.string()),
+    route_study: z.nullish(z.string()),
+    conditions: z.nullish(z.string()),
+    training: z.nullish(z.string()),
+    motivations: z.nullish(z.string()),
+    group_management: z.nullish(z.string()),
+    risk: z.nullish(z.string()),
+    time_management: z.nullish(z.string()),
+    safety: z.nullish(z.string()),
+    reduce_impact: z.nullish(z.string()),
+    increase_impact: z.nullish(z.string()),
+    modifications: z.nullish(z.string()),
+    other_comments: z.nullish(z.string()),
+  }
+);
+
+export type Area = z.input<typeof area>;
+export type Article = z.input<typeof article>;
+export type Book = z.input<typeof book>;
+export type Image = z.input<typeof image>;
+export type TopoMap = z.input<typeof map>;
+export type Profile = z.input<typeof profile>;
+export type Xreport = z.input<typeof xreport>;
+
+// GET /<type>s/:id of a merged document: only the document it was merged into (v6_api views/document.py)
+export const redirection = z.object({ redirects_to: z.number(), available_langs: z.nullish(z.array(z.string())) });
+
+// the full schema of each document type, by its name in the API urls
+export const fullDocuments: Record<string, z.ZodMiniType> = {
+  area,
+  article,
+  book,
+  image,
+  map,
+  outing,
+  profile,
+  route,
+  waypoint,
+  xreport,
+};
+
+// GET /outings/map/heatmap, /routes/map/heatmap: the density of the documents, in buckets (EPSG:3857)
+export const densityHeatmap = z.object({
+  buckets: z.array(z.object({ x: z.number(), y: z.number(), count: z.number() })),
+});
+
+// GET /outings/map/tracks, /routes/map/tracks: the tracks (GeoJSON) in a box, none if there are too many of them
+// (with the activities, the dates of an outing and the ratings that are set: the fields of the documents listing)
+export const densityTrack = z.looseObject({
+  document_id: z.number(),
+  type: z.string(),
+  title: z.nullish(z.string()),
+  geometry: z.object({ geom_detail: z.string() }),
+  activities: z.optional(z.array(z.string())),
+  date_start: z.optional(z.string()),
+  date_end: z.optional(z.string()),
+});
+export const densityTracks = z.object({
+  documents: z.array(densityTrack),
+  truncated: z.boolean(),
+  // when there are too many tracks, how many (when the API knows), and whether there are even more
+  count: z.optional(z.number()),
+  count_capped: z.optional(z.boolean()),
+});
 
 // GET /search: a page per document type (routes, waypoints...)
 export const searchResults = z.record(z.string(), documentsPage);
@@ -58,7 +477,7 @@ export const feed = z.object({
       participants: z.array(document),
     })
   ),
-  pagination_token: z.string().optional(),
+  pagination_token: z.optional(z.string()),
 });
 
 // GET /documents/changes: the recent changes; the last page has no pagination token
@@ -68,12 +487,12 @@ export const documentChanges = z.object({
       written_at: z.string(),
       lang: z.string(),
       version_id: z.number(),
-      comment: z.string().nullable(),
-      document: z.object({ document_id: z.number(), type: z.string(), title: z.string().nullish() }),
-      user: z.object({ user_id: z.number(), name: z.string() }),
+      comment: z.nullable(z.string()),
+      document: z.object({ document_id: z.number(), type: z.string(), title: z.nullish(z.string()) }),
+      user: z.object({ user_id: z.number(), name: z.string(), moderator: z.optional(z.boolean()) }),
     })
   ),
-  pagination_token: z.string().optional(),
+  pagination_token: z.optional(z.string()),
 });
 
 // GET /users/account
@@ -82,4 +501,409 @@ export const account = z.object({
   name: z.string(),
   forum_username: z.string(),
   is_profile_public: z.boolean(),
+});
+
+// an error of an error answer
+export const apiError = z.object({
+  // where the error is: body, querystring, url...
+  location: z.string(),
+  // the field in error (locales.0.title, associations.waypoints...), or a short label
+  name: z.string(),
+  description: z.string(),
+});
+
+export type ApiError = z.input<typeof apiError>;
+
+// an error answer, of any request: { status: 'error', errors: [{ location, name, description }] } (v6_api web/errors.py)
+export const errorResponse = z.object({ status: z.literal('error'), errors: z.array(apiError) });
+
+// an error of a validation answer of FastAPI: { loc: ['body', 'locales', 0, 'title'], msg: 'Field required',
+// type: 'missing' }, with the limits of the check in ctx ({ max_length: 25 })
+export const validationError = z.object({
+  loc: z.array(z.union([z.string(), z.number()])),
+  msg: z.string(),
+  type: z.string(),
+  ctx: z.optional(z.record(z.string(), z.unknown())),
+});
+
+export type ValidationError = z.input<typeof validationError>;
+
+// the 422 answer of invalid parameters or body: { detail: [...] } (FastAPI, see v6_api#2546)
+export const validationErrorResponse = z.object({ detail: z.array(validationError) });
+
+// GET /documents/deleted, GET /documents/deleted/{id}, POST /documents/deleted/{id}/restore: the deleted documents a
+// moderator can restore (kept 29 days by the API)
+
+// a user as the deleted documents name them: only the id once the account was removed
+const deletedDocumentUser = z.object({
+  user_id: z.number(),
+  name: z.nullable(z.string()),
+  forum_username: z.nullable(z.string()),
+});
+
+export type DeletedDocumentUser = z.input<typeof deletedDocumentUser>;
+
+const deletedDocument = z.object({
+  // the merges are listed with the deletions (absent from older API versions: a deletion)
+  kind: z.optional(z.literal('deleted')),
+  id: z.number(),
+  document_id: z.number(),
+  document_type: z.string(),
+  // the deleted locale, null when the whole document was deleted
+  lang: z.nullable(z.string()),
+  title: z.nullable(z.string()),
+  author: z.nullable(deletedDocumentUser),
+  created_at: z.nullable(z.string()),
+  // a few fields by document type: the dates and activities of an outing, the type of a waypoint...
+  fields: z.record(z.string(), z.unknown()),
+  deleted_at: z.string(),
+  deleted_by: z.nullable(deletedDocumentUser),
+  expires_at: z.string(),
+  restored_at: z.nullable(z.string()),
+  // the personal images of its author linked to it only, deleted and restored with it (absent from older API versions)
+  deleted_images: z.optional(z.number()),
+});
+
+export type DeletedDocument = z.input<typeof deletedDocument>;
+
+// A merge a moderator can undo (POST /documents/merged/{id}/unmerge), listed with the deleted documents: the source
+// document, merged into the target. Listed while the source redirects to the target only: not when one of them was
+// deleted since (listed again once restored), nor when the target was merged since into another document.
+const mergedDocument = z.object({
+  kind: z.literal('merged'),
+  id: z.number(),
+  // the source
+  document_id: z.number(),
+  document_type: z.string(),
+  lang: z.null(),
+  title: z.nullable(z.string()),
+  author: z.nullable(deletedDocumentUser),
+  target_document_id: z.number(),
+  target_title: z.nullable(z.string()),
+  // when merged, by whom (the names of a deletion, for one list)
+  deleted_at: z.string(),
+  deleted_by: z.nullable(deletedDocumentUser),
+  expires_at: z.string(),
+  // what the merge moved and removed: associations_moved, associations_removed, favourites_moved...
+  counts: z.record(z.string(), z.number()),
+  // the merges into the source before, hidden while this one is not undone, the nearest first
+  earlier_merges: z.array(
+    z.object({
+      id: z.number(),
+      document_id: z.number(),
+      title: z.nullable(z.string()),
+      target_document_id: z.number(),
+    })
+  ),
+});
+
+export type MergedDocument = z.input<typeof mergedDocument>;
+
+export type DeletedEntry = DeletedDocument | MergedDocument;
+
+export const deletedDocumentsPage = z.object({
+  total: z.number(),
+  documents: z.array(z.union([mergedDocument, deletedDocument])),
+});
+
+export const deletedDocumentDetails = z.extend(deletedDocument, {
+  locales: z.array(z.object({ lang: z.string(), title: z.nullable(z.string()) })),
+  last_edited_by: z.nullable(deletedDocumentUser),
+  last_edited_at: z.nullable(z.string()),
+  versions: z.number(),
+  contributors: z.array(deletedDocumentUser),
+  // the linked documents as they are now: exists is false for a document deleted since
+  associations: z.array(
+    z.object({
+      document_id: z.number(),
+      document_type: z.string(),
+      title: z.nullable(z.string()),
+      exists: z.boolean(),
+    })
+  ),
+  // the comment topics of the forum, by language
+  topics: z.array(z.object({ lang: z.string(), topic_id: z.number() })),
+  merged_document_ids: z.array(z.number()),
+  deleted_images: z.optional(
+    z.array(z.object({ document_id: z.number(), title: z.nullable(z.string()), filename: z.nullable(z.string()) }))
+  ),
+  rows: z.record(z.string(), z.number()),
+});
+
+export type DeletedDocumentDetails = z.input<typeof deletedDocumentDetails>;
+
+export const restoreResult = z.object({
+  document_id: z.number(),
+  lang: z.nullable(z.string()),
+  // the rows not restored, by table: their other end was deleted since (associations, tags...)
+  skipped: z.record(z.string(), z.number()),
+  // the image files without a version left in the bucket
+  missing_files: z.array(z.string()),
+});
+
+export type RestoreResult = z.input<typeof restoreResult>;
+
+export const unmergeResult = z.object({
+  source_document_id: z.number(),
+  target_document_id: z.number(),
+  // what could not be moved back (changed since the merge) or inserted again, by table
+  skipped: z.record(z.string(), z.number()),
+  // the image files without a version left in the bucket
+  missing_files: z.array(z.string()),
+});
+
+export type UnmergeResult = z.input<typeof unmergeResult>;
+
+// A document showing an image in the texts of some of its locales ([img=ID] tag)
+const embeddingDocument = z.object({
+  document_id: z.number(),
+  document_type: z.string(),
+  title: z.nullable(z.string()),
+  langs: z.array(z.string()),
+});
+
+export type EmbeddingDocument = z.input<typeof embeddingDocument>;
+
+// GET /images/orphans: the images linked to no document, the last created first (moderators)
+export const ORPHAN_IMAGE_TYPES = ['collaborative', 'personal', 'copyright'] as const;
+
+const orphanImage = z.object({
+  document_id: z.number(),
+  filename: z.string(),
+  image_type: z.nullable(z.enum(ORPHAN_IMAGE_TYPES)),
+  title: z.nullable(z.string()),
+  created_at: z.nullable(z.string()),
+  // who uploaded it
+  author: z.nullable(deletedDocumentUser),
+  // the last link removed, when known: the links of a deleted document are deleted with it
+  last_unlink: z.nullable(
+    z.object({
+      document_id: z.number(),
+      document_type: z.string(),
+      by: z.nullable(deletedDocumentUser),
+      at: z.string(),
+    })
+  ),
+  // the documents showing it in their texts: it is used, to link again rather than delete (optional: older API)
+  embedded_in: z.optional(z.array(embeddingDocument)),
+  // the documents linking to it in their texts ([[images/ID|label]] or a URL): same (optional: older API)
+  linked_from: z.optional(z.array(embeddingDocument)),
+});
+
+export type OrphanImage = z.input<typeof orphanImage>;
+
+export const orphanImagesPage = z.object({
+  total: z.number(),
+  images: z.array(orphanImage),
+});
+
+// GET /images/broken-embeds: the images shown in the texts of documents that do not show (moderators). Those that
+// can still be restored first, with the deleted entry bringing them back (the image, or the document it was deleted
+// with)
+export const BROKEN_EMBED_REASONS = ['deleted', 'missing', 'not_image'] as const;
+
+// the deleted entry bringing a target back: the target itself, or the document it was deleted with
+const deletedTarget = z.object({
+  entry_id: z.number(),
+  document_id: z.number(),
+  document_type: z.string(),
+  deleted_at: z.string(),
+  expires_at: z.string(),
+  by: z.nullable(deletedDocumentUser),
+});
+
+export type DeletedTarget = z.input<typeof deletedTarget>;
+
+const brokenEmbed = z.object({
+  document_id: z.number(),
+  document_type: z.string(),
+  title: z.nullable(z.string()),
+  // a route: the title of its main waypoint, shown before its title (optional: older API)
+  title_prefix: z.nullish(z.string()),
+  langs: z.array(z.string()),
+  image_id: z.number(),
+  reason: z.enum(BROKEN_EMBED_REASONS),
+  // the type of the document of this id, when it is not an image
+  image_document_type: z.nullable(z.string()),
+  image_document_title: z.optional(z.nullable(z.string())),
+  deleted: z.nullable(deletedTarget),
+});
+
+export type BrokenEmbed = z.input<typeof brokenEmbed>;
+
+export const brokenEmbedsPage = z.object({
+  total: z.number(),
+  embeds: z.array(brokenEmbed),
+});
+
+// GET /documents/broken-links: the links in the texts of collaborative documents ([[type/id|label]] or a URL of the
+// site) whose page does not show the document (moderators). Those that can still be restored first
+export const BROKEN_LINK_REASONS = ['deleted', 'missing', 'wrong_type', 'unknown_type'] as const;
+
+const brokenLink = z.object({
+  document_id: z.number(),
+  document_type: z.string(),
+  title: z.nullable(z.string()),
+  // a route: the title of its main waypoint, shown before its title (optional: older API)
+  title_prefix: z.nullish(z.string()),
+  langs: z.array(z.string()),
+  target_id: z.number(),
+  // the type as written in the link: "routes", "summits" (v5)...
+  target_type: z.string(),
+  // written as a URL of the site, not as [[type/id|label]]
+  is_url: z.boolean(),
+  reason: z.enum(BROKEN_LINK_REASONS),
+  // the document of this id, when it exists
+  target_document_type: z.nullable(z.string()),
+  target_document_title: z.nullable(z.string()),
+  target_document_title_prefix: z.nullish(z.string()),
+  deleted: z.nullable(deletedTarget),
+});
+
+export type BrokenLink = z.input<typeof brokenLink>;
+
+export const brokenLinksPage = z.object({
+  total: z.number(),
+  links: z.array(brokenLink),
+});
+
+// GET /images/duplicates: the sets of images with the same file (size, dimensions, EXIF date), the last uploaded
+// first (moderators)
+const duplicateImageLink = z.object({
+  document_id: z.number(),
+  document_type: z.string(),
+  title: z.nullable(z.string()),
+  // a route: the title of its main waypoint, shown before its title (optional: older API)
+  title_prefix: z.nullish(z.string()),
+});
+
+const duplicateImage = z.object({
+  document_id: z.number(),
+  filename: z.string(),
+  image_type: z.nullable(z.enum(ORPHAN_IMAGE_TYPES)),
+  title: z.nullable(z.string()),
+  file_size: z.nullable(z.number()),
+  width: z.nullable(z.number()),
+  height: z.nullable(z.number()),
+  date_time: z.nullable(z.string()),
+  camera_name: z.nullable(z.string()),
+  created_at: z.nullable(z.string()),
+  // who uploaded it
+  author: z.nullable(deletedDocumentUser),
+  // the documents it is linked to
+  documents: z.array(duplicateImageLink),
+  // the texts showing it with an [img=ID] tag, also through an image merged into it (`image_id`): deleting it
+  // breaks them, merging it keeps them
+  embedded_in: z.array(z.extend(duplicateImageLink, { lang: z.string(), image_id: z.number() })),
+  // the texts linking to it ([[images/ID|label]] or a URL), the same way (optional: older API)
+  linked_from: z.optional(z.array(z.extend(duplicateImageLink, { lang: z.string(), image_id: z.number() }))),
+});
+
+export type DuplicateImage = z.input<typeof duplicateImage>;
+
+const duplicateImageSet = z.object({
+  // two of the images are linked to the same document
+  same_document: z.boolean(),
+  images: z.array(duplicateImage),
+});
+
+export type DuplicateImageSet = z.input<typeof duplicateImageSet>;
+
+export const duplicateImagesPage = z.object({
+  total: z.number(),
+  sets: z.array(duplicateImageSet),
+});
+
+export const dismissedDuplicates = z.object({ dismissed: z.number() });
+
+// GET /documents/delete/{id}/images: what deleting a document does to its images, asked before deleting it. The
+// personal images of its author linked to it only are deleted with it; the other images linked to it only stay,
+// linked to no document, by type
+export const imagesOfDeletion = z.object({
+  deleted: z.number(),
+  orphaned: z.record(z.string(), z.number()),
+  // the texts of other documents that break: showing this image ([img=ID]), linking to it ([[type/ID|…]], a URL)
+  // (optional: v6_api #2748)
+  embedded_in: z.optional(z.array(embeddingDocument)),
+  linked_from: z.optional(z.array(embeddingDocument)),
+});
+
+export type ImagesOfDeletion = z.input<typeof imagesOfDeletion>;
+
+// The removal requests of user accounts (v6_api views/user_removal.py): a request is validated by a moderator of the
+// topoguide and by one of the forum, then a script removes the account
+export const ACCOUNT_REMOVAL_REASONS = ['anonymization', 'merge', 'spam'] as const;
+export const ACCOUNT_REMOVAL_SIDES = ['topoguide', 'forum'] as const;
+export const ACCOUNT_REMOVAL_STATUSES = ['in_progress', 'validated', 'done', 'cancelled'] as const;
+export type AccountRemovalReason = (typeof ACCOUNT_REMOVAL_REASONS)[number];
+export type AccountRemovalSide = (typeof ACCOUNT_REMOVAL_SIDES)[number];
+export type AccountRemovalStatus = (typeof ACCOUNT_REMOVAL_STATUSES)[number];
+
+// a moderator: the name is null once their account was removed
+const removalPerson = z.object({ id: z.number(), name: z.nullable(z.string()) });
+
+const accountRemovalRoles = z.object({ topoguide: z.boolean(), forum: z.boolean() });
+export type AccountRemovalRoles = z.input<typeof accountRemovalRoles>;
+
+const accountRemoval = z.object({
+  id: z.number(),
+  user_id: z.number(),
+  forum_id: z.nullable(z.number()),
+  user_name: z.string(),
+  user_forum_username: z.string(),
+  reason: z.enum(ACCOUNT_REMOVAL_REASONS),
+  user_request_date: z.nullable(z.string()),
+  executable_after: z.string(),
+  target_user_id: z.number(),
+  target_forum_id: z.number(),
+  forum_url: z.nullable(z.string()),
+  created_at: z.string(),
+  requested_by: removalPerson,
+  topoguide_validated_by: z.nullable(removalPerson),
+  topoguide_validated_at: z.nullable(z.string()),
+  forum_validated_by: z.nullable(removalPerson),
+  forum_validated_at: z.nullable(z.string()),
+  cancelled_by: z.nullable(removalPerson),
+  cancelled_at: z.nullable(z.string()),
+  done_at: z.nullable(z.string()),
+  status: z.enum(ACCOUNT_REMOVAL_STATUSES),
+  // when the script will process it, once validated by both sides
+  ready_at: z.nullable(z.string()),
+  // every action, oldest first; the script's "done" one has no moderator (by: null) but what it removed
+  history: z.array(
+    z.looseObject({
+      action: z.string(),
+      by: z.nullable(removalPerson),
+      at: z.string(),
+      side: z.optional(z.string()),
+      forum_url: z.optional(z.nullable(z.string())),
+    })
+  ),
+  // what the signed in moderator may do with it
+  can: z.object({
+    validate: z.array(z.enum(ACCOUNT_REMOVAL_SIDES)),
+    unvalidate: z.array(z.enum(ACCOUNT_REMOVAL_SIDES)),
+    update: z.boolean(),
+    cancel: z.boolean(),
+  }),
+});
+export type AccountRemoval = z.input<typeof accountRemoval>;
+export { accountRemoval };
+
+export const accountRemovalsPage = z.object({
+  total: z.number(),
+  removals: z.array(accountRemoval),
+  roles: accountRemovalRoles,
+});
+
+export const accountRemovalsCount = z.object({
+  open: z.number(),
+  // the open requests the user can validate now; missing before v6_api#2669
+  actionable: z.optional(z.number()),
+  roles: accountRemovalRoles,
+});
+
+// POST /images/rotate: the new file of the image
+export const rotatedImage = z.object({
+  filename: z.string(),
 });

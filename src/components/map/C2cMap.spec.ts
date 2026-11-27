@@ -1,0 +1,2213 @@
+import { flushPromises } from '@vue/test-utils';
+import type { FeatureCollection } from 'geojson';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { reactive } from 'vue';
+import type { LocationQueryRaw, Router } from 'vue-router';
+
+import C2cMap from './C2cMap.vue';
+import { type FakeMap, resetMocks, state } from './maplibre-mock';
+import { mountMap as mount } from './test-utils';
+
+import biodivSportsService from '@/js/apis/biodivsports-service';
+import c2c from '@/js/apis/c2c';
+import type DocumentService from '@/js/apis/c2c/DocumentService';
+import respecterCestProtegerService from '@/js/apis/respectercestproteger-service';
+import bus from '@/js/event-bus';
+import { extentToLonLat, fromLonLat } from '@/js/geo/projection';
+import { useOfflineStore } from '@/stores/offline';
+
+vi.mock('maplibre-gl', () => import('./maplibre-mock'));
+vi.mock('@/js/apis/biodivsports-service', () => ({ default: { fetchData: vi.fn() } }));
+vi.mock('@/js/apis/respectercestproteger-service', () => ({ default: { hasArea: vi.fn(), identify: vi.fn() } }));
+// the specs don't load Font Awesome: a plain icon
+vi.mock('@/js/icon-svg', () => ({
+  default: ({ iconName }: { iconName: string }) => `<svg data-icon="${iconName}" fill="currentColor"></svg>`,
+}));
+
+const mountMap = async (props: Record<string, unknown> = {}, path = '/') => {
+  const mounted = await mount(props, C2cMap, path);
+  await flushPromises();
+  return { ...mounted, map: state.maps[state.maps.length - 1] };
+};
+
+const point = (lon: number, lat: number) => JSON.stringify({ type: 'Point', coordinates: fromLonLat([lon, lat]) });
+const line = (...lonLats: [number, number][]) =>
+  JSON.stringify({ type: 'LineString', coordinates: lonLats.map((lonLat) => fromLonLat(lonLat)) });
+
+const route = { document_id: 1, type: 'r', geometry: { geom: point(6.8, 45.9) } };
+const waypoint = (id: number, type: string, lon: number) => ({
+  document_id: id,
+  type: 'w',
+  waypoint_type: type,
+  geometry: { geom: point(lon, 45.9) },
+});
+
+// the features drawn of the documents
+const drawn = (map: FakeMap) => (map.data.documents as FeatureCollection).features;
+const drawnKeys = (map: FakeMap) => drawn(map).map((feature) => feature.properties!.key);
+
+const selectedTitles = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) =>
+  wrapper.findAll('.ol-control-layer-switcher .layer-group').map((group) =>
+    group
+      .findAll(':scope > .selected')
+      .map((button) => button.text())
+      .join('+')
+  );
+
+beforeEach(() => {
+  resetMocks();
+  // no network: a vector map shown in 3D gets no style unless the test gives one (a failed style is not cached)
+  vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('no network in tests'));
+});
+afterEach(() => {
+  document.body.innerHTML = '';
+  vi.restoreAllMocks();
+});
+
+describe('C2cMap', () => {
+  it('draws compact markers: smaller, the icon in white on a disc of its colour', async () => {
+    const shown = async (compactMarkers: boolean) => {
+      const { wrapper, map } = await mountMap({ documents: [waypoint(3, 'summit', 6.8)], compactMarkers });
+      const { circleRadius, circleFill, circleStroke, icon } = drawn(map)[0].properties!;
+      wrapper.unmount();
+      return { circleRadius, circleFill, circleStroke, size: String(icon).split(':')[1] };
+    };
+
+    expect(await shown(false)).toEqual({
+      circleRadius: 14,
+      circleFill: 'rgba(255, 255, 255, 0.5)',
+      circleStroke: '#ddd',
+      size: '20',
+    });
+    expect(await shown(true)).toEqual({
+      circleRadius: 9.45,
+      circleFill: '#F93',
+      circleStroke: undefined,
+      size: '11',
+    });
+  });
+  it('draws the images of an outing once they are located away from it', async () => {
+    const outing = reactive({
+      document_id: 2,
+      type: 'o',
+      geometry: { geom: point(6.8, 45.9) },
+      associations: { images: [{ document_id: 5, type: 'i', geometry: { geom: null as string | null } }] },
+    });
+    const { wrapper, map } = await mountMap({ documents: [outing] });
+    expect(drawnKeys(map)).toEqual(['documents:o:2:point']);
+
+    outing.associations.images[0]!.geometry = { geom: point(6.84, 45.9) };
+    await flushPromises();
+
+    expect(drawnKeys(map)).toEqual(['documents:o:2:point', 'images:i:5:point']);
+    wrapper.unmount();
+  });
+  it('draws the documents, their waypoints, and the images of an outing away from it', async () => {
+    const outing = {
+      document_id: 2,
+      type: 'o',
+      geometry: { geom: point(6.8, 45.9), geom_detail: line([6.8, 45.9], [6.81, 45.91]) },
+      associations: {
+        waypoints: [waypoint(3, 'summit', 6.82), waypoint(4, 'virtual', 6.83)],
+        images: [{ document_id: 5, type: 'i', geometry: { geom: point(6.84, 45.9) } }],
+      },
+    };
+    const { wrapper, map } = await mountMap({ documents: [outing] });
+
+    // the line alone, without the point of the outing; no virtual waypoint
+    expect(drawnKeys(map)).toEqual(['documents:o:2:detail', 'waypoints:w:3:point', 'images:i:5:point']);
+    const [track, summit] = drawn(map);
+    expect(track.properties).toMatchObject({ casing: '#404040', casingWidth: 4.5, stroke: 'yellow', strokeWidth: 2.5 });
+    expect(track.geometry).toMatchObject({ type: 'LineString' });
+    expect((track.geometry as { coordinates: number[][] }).coordinates[0][0]).toBeCloseTo(6.8, 6);
+    // the circle of OpenLayers: radius 15 with its stroke of 2
+    expect(summit.properties).toMatchObject({ circleRadius: 14, circleStrokeWidth: 2, group: 'waypoints' });
+    wrapper.unmount();
+  });
+
+  it('draws the waypoints of the routes of an outing, which has none of its own', async () => {
+    const outing = {
+      document_id: 2,
+      type: 'o',
+      geometry: { geom: point(6.8, 45.9), geom_detail: line([6.8, 45.9], [6.81, 45.91]) },
+      associations: { route_waypoints: [waypoint(3, 'summit', 6.82), waypoint(4, 'virtual', 6.83)] },
+    };
+    const { wrapper, map } = await mountMap({ documents: [outing] });
+
+    expect(drawnKeys(map)).toEqual(['documents:o:2:detail', 'waypoints:w:3:point']);
+    wrapper.unmount();
+  });
+
+  it('draws the two versions of the diff: the old one in red under the new one in green', async () => {
+    const version = (lon: number) => ({
+      ...route,
+      geometry: { geom: point(lon, 45.9), geom_detail: line([lon, 45.9], [6.9, 46]) },
+    });
+    const { wrapper, map } = await mountMap({ oldDocument: version(6.8), newDocument: version(6.81) });
+
+    const styles = drawn(map).map(({ properties, geometry }) => [
+      properties!.key,
+      geometry.type === 'Point' ? properties!.circleFill : properties!.stroke,
+    ]);
+    expect(styles).toEqual([
+      ['old:r:1:point', 'rgba(255, 0, 0, 0.5)'],
+      ['old:r:1:detail', 'red'],
+      ['new:r:1:point', 'rgba(0, 255, 0, 0.9)'],
+      ['new:r:1:detail', 'green'],
+    ]);
+    wrapper.unmount();
+  });
+
+  describe('on pointer move', () => {
+    const move = (map: FakeMap, buttons = 0) =>
+      map.fire('mousemove', { point: { x: 10, y: 10 }, originalEvent: { buttons } });
+
+    it('highlights the hovered document, and tells the page only when it changes', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route] });
+      map.rendered = [
+        { layer: { id: 'documents-icon' }, geometry: { type: 'Point' }, properties: { key: 'documents:r:1:point' } },
+      ];
+
+      move(map);
+      move(map);
+      await flushPromises();
+      expect(drawn(map)[0].properties).toMatchObject({ circleRadius: 19, circleSort: 101 });
+
+      map.rendered = [];
+      move(map);
+      move(map);
+      await flushPromises();
+
+      expect(wrapper.emitted('highlight-document')).toEqual([[route], [null]]);
+      expect(drawn(map)[0].properties).toMatchObject({ circleRadius: 14 });
+      wrapper.unmount();
+    });
+  });
+
+  describe('on click', () => {
+    const click = (map: FakeMap, originalEvent: Record<string, unknown> = {}) =>
+      map.fire('click', { point: { x: 10, y: 10 }, lngLat: { lng: 6.8, lat: 45.9 }, originalEvent });
+
+    it('opens the document clicked, in a new tab with ctrl', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route, { ...route, document_id: 2 }] });
+      const push = vi.spyOn(wrapper.vm.$router, 'push');
+      const open = vi.spyOn(window, 'open').mockReturnValue(null);
+      map.rendered = [
+        { layer: { id: 'documents-icon' }, geometry: { type: 'Point' }, properties: { key: 'documents:r:2:point' } },
+      ];
+
+      click(map);
+      click(map, { ctrlKey: true });
+
+      expect(push).toHaveBeenCalledWith({ name: 'route', params: { id: 2 } });
+      expect(open).toHaveBeenCalledWith(expect.stringMatching(/\/routes\/2$/), '_blank');
+      wrapper.unmount();
+    });
+  });
+
+  it('highlights a stop with its name, then not', async () => {
+    const stop = { document_id: 4, type: 's', stoparea_name: 'Gare', geometry: { geom: point(6.8, 45.9) } };
+    const { wrapper, map } = await mountMap({ documents: [route, stop] });
+    const exposed = wrapper.vm as unknown as { highlightStop(id: number): void; resetStopStyles(): void };
+
+    exposed.highlightStop(4);
+    await flushPromises();
+    // the bus of the stops is green when highlighted, above the other points: their icons would be drawn on it
+    expect(drawn(map)[1].properties).toMatchObject({ circleFill: '#4baf50', circleRadius: 19, highlight: true });
+    expect(drawn(map)[0].properties).not.toHaveProperty('highlight');
+    expect(
+      state.markers.filter((marker) => marker.added && !marker.removed).map((m) => m.element?.textContent)
+    ).toEqual(['Gare']);
+
+    exposed.resetStopStyles();
+    await flushPromises();
+    expect(drawn(map)[1].properties).toMatchObject({ circleFill: '#337ab7', circleRadius: 14 });
+    expect(drawn(map)[1].properties).not.toHaveProperty('highlight');
+    wrapper.unmount();
+  });
+
+  it('updates the layer switcher selection, and the layers, when a layer is shown or hidden', async () => {
+    const { wrapper, map } = await mountMap();
+    const [baseLayers, slopesLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+
+    expect(selectedTitles(wrapper).slice(0, 2)).toEqual(['OpenTopoMap', '']);
+
+    await baseLayers.findAll(':scope > *')[1].trigger('click');
+    expect(selectedTitles(wrapper)[0]).toBe('ESRI World Imagery');
+    expect(map.layout['ESRI World Imagery'].visibility).toBe('visible');
+    expect(map.layout.OpenTopoMap.visibility).toBe('none');
+
+    await slopesLayers.findAll(':scope > *')[0].trigger('click');
+    expect(selectedTitles(wrapper)[1]).toBe('IGN Slopes');
+    expect(map.layout['IGN Slopes'].visibility).toBe('visible');
+
+    await slopesLayers.findAll(':scope > *')[0].trigger('click');
+    expect(selectedTitles(wrapper)[1]).toBe('');
+    wrapper.unmount();
+  });
+
+  it('without a network, keeps the base layer at best effort, says so, and offers only what works', async () => {
+    const { wrapper, map } = await mountMap({ show3d: true, showRecenterOn: true });
+    const [baseLayers, slopesLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+    await baseLayers.findAll(':scope > *')[3].trigger('click');
+    await slopesLayers.findAll(':scope > *')[0].trigger('click');
+    expect(map.layout['IGN maps'].visibility).toBe('visible');
+    expect(wrapper.find('.ol-control-3d').exists()).toBe(true);
+    expect(wrapper.find('.c2c-map-offline-chip').exists()).toBe(false);
+
+    const offline = useOfflineStore();
+    offline.online = false;
+    await flushPromises();
+
+    // the tiles in memory: no topo saved offline, nothing under it
+    expect(map.layout['IGN maps'].visibility).toBe('visible');
+    expect(map.layout.OpenTopoMap.visibility).toBe('none');
+    expect(map.layout['IGN Slopes'].visibility).toBe('none');
+    expect(wrapper.find('.c2c-map-offline-chip').text()).toContain('Offline');
+    expect(wrapper.find('.c2c-map-offline-status').text()).toContain('IGN maps: only the areas already seen');
+    expect(wrapper.find('.ol-control-3d').exists()).toBe(false);
+    expect(wrapper.find('.ol-control-recenter-on').isVisible()).toBe(false);
+    // one base layer to choose, no slopes
+    expect(selectedTitles(wrapper)).toEqual(['IGN maps']);
+
+    // the network back: the slopes again, the tiles that failed asked again
+    offline.online = true;
+    await flushPromises();
+    expect(map.layout['IGN maps'].visibility).toBe('visible');
+    expect(map.layout['IGN Slopes'].visibility).toBe('visible');
+    expect(map.reloaded).toEqual(['IGN maps']);
+    expect(wrapper.find('.c2c-map-offline-chip').exists()).toBe(false);
+    wrapper.unmount();
+  });
+
+  const frenchRoute = { ...route, areas: [{ document_id: 14274 }] };
+  const savedRoute = (layers: Record<string, number>) => ({
+    type: 'route',
+    id: 1,
+    lang: 'fr',
+    data: {},
+    title: 'Arête',
+    folderId: null,
+    mode: 'offline' as const,
+    savedAt: 0,
+    downloadedAt: Date.now(),
+    assets: { done: true, failed: 0, layers },
+  });
+
+  it('without a network, shows the downloaded OpenTopoMap under the base layer, which can be shown alone', async () => {
+    window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { layer: 'ign' } }));
+    const { wrapper, map } = await mountMap({ documents: [frenchRoute], rememberSettings: true }, '/routes/1');
+    expect(map.layout['IGN maps'].visibility).toBe('visible');
+    const stored = window.localStorage.getItem('DocumentMap.preferences');
+    const offline = useOfflineStore();
+    offline.savedDocs = [savedRoute({ OpenTopoMap: 15 })];
+    offline.online = false;
+    await flushPromises();
+
+    expect(map.layout['IGN maps'].visibility).toBe('visible');
+    expect(map.layout.OpenTopoMap.visibility).toBe('visible');
+    const status = wrapper.findAll('.c2c-map-offline-status p').map((line) => line.text());
+    expect(status).toEqual(['IGN maps: only the areas already seen', 'OpenTopoMap: downloaded, shown underneath']);
+
+    // OpenTopoMap alone, for now only
+    const [baseButtons] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+    expect(baseButtons.findAll(':scope > *').map((button) => button.text())).toEqual(['OpenTopoMap', 'IGN maps']);
+    await baseButtons.findAll(':scope > *')[0].trigger('click');
+    expect(map.layout['IGN maps'].visibility).toBe('none');
+    expect(map.layout.OpenTopoMap.visibility).toBe('visible');
+    expect(selectedTitles(wrapper)[0]).toBe('OpenTopoMap');
+    expect(wrapper.find('.c2c-map-offline-status').text()).toContain('OpenTopoMap: downloaded');
+    expect(window.localStorage.getItem('DocumentMap.preferences')).toBe(stored);
+
+    offline.online = true;
+    await flushPromises();
+    expect(map.layout['IGN maps'].visibility).toBe('visible');
+    expect(map.layout.OpenTopoMap.visibility).toBe('none');
+    wrapper.unmount();
+    window.localStorage.removeItem('DocumentMap.preferences');
+  });
+
+  it('opened without a network, shows the downloaded layer instead of the base layer, and says so', async () => {
+    window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { layer: 'ign' } }));
+    vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false);
+    const { wrapper, map } = await mountMap({ documents: [frenchRoute], rememberSettings: true }, '/routes/1');
+    useOfflineStore().savedDocs = [savedRoute({ OpenTopoMap: 15 })];
+    await flushPromises();
+
+    expect(map.layout['IGN maps'].visibility).toBe('none');
+    expect(map.layout.OpenTopoMap.visibility).toBe('visible');
+    expect(selectedTitles(wrapper)[0]).toBe('OpenTopoMap');
+    const status = wrapper.findAll('.c2c-map-offline-status p').map((line) => line.text());
+    expect(status).toEqual(['IGN maps: not available offline', 'OpenTopoMap: downloaded, shown instead']);
+    wrapper.unmount();
+    window.localStorage.removeItem('DocumentMap.preferences');
+  });
+
+  it('without a network, offers the layers downloaded with the topo shown', async () => {
+    // the layers chosen: SwissTopo and both slopes, kept on the device
+    window.localStorage.setItem(
+      'DocumentMap.preferences',
+      JSON.stringify({ settings: { layer: 'swiss', slopes: 'swiss,ign' } })
+    );
+    const { wrapper, map } = await mountMap(
+      { documents: [{ ...route, areas: [{ document_id: 14067 }] }], rememberSettings: true },
+      '/routes/1'
+    );
+    const offline = useOfflineStore();
+    // the route saved offline with SwissTopo and its slopes (offline-assets.ts)
+    offline.savedDocs = [savedRoute({ OpenTopoMap: 15, SwissTopo: 16, 'SwissTopo Slopes': 15 })];
+    offline.online = false;
+    await flushPromises();
+
+    expect(map.layout.SwissTopo.visibility).toBe('visible');
+    expect(map.layout['SwissTopo Slopes'].visibility).toBe('visible');
+    // the IGN slopes were not downloaded
+    expect(map.layout['IGN Slopes'].visibility).toBe('none');
+    expect(wrapper.find('.c2c-map-offline-status').text()).toContain('SwissTopo: downloaded');
+    const [baseButtons, slopeButtons] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+    expect(baseButtons.findAll(':scope > *').map((button) => button.text())).toEqual(['OpenTopoMap', 'SwissTopo']);
+    expect(slopeButtons.findAll(':scope > *').map((button) => button.text())).toEqual(['SwissTopo Slopes']);
+    wrapper.unmount();
+    window.localStorage.removeItem('DocumentMap.preferences');
+  });
+
+  it('shows the point under the cursor of the elevation profile', async () => {
+    const { wrapper, map } = await mountMap({ documents: [route] });
+
+    bus.emit('elevation_profile', { action: 'cursor_move', coord: fromLonLat([6.8, 45.9]) });
+    expect(map.data.profile).toMatchObject({ type: 'Point' });
+
+    bus.emit('elevation_profile', { action: 'cursor_end' });
+    expect(map.data.profile).toEqual({ type: 'FeatureCollection', features: [] });
+
+    wrapper.unmount();
+    bus.emit('elevation_profile', { action: 'cursor_move', coord: fromLonLat([6.8, 45.9]) });
+  });
+
+  it('shows the density of the Outings overlay, and turns the overlays off when the API does (503)', async () => {
+    const heatmap = vi
+      .spyOn(c2c, 'getOutingsHeatmap')
+      .mockResolvedValueOnce({ data: { buckets: [{ x: 750000, y: 5760000, count: 3 }] } } as never)
+      .mockRejectedValueOnce({ response: { status: 503 } });
+    const { wrapper, map } = await mountMap();
+    const outings = () => wrapper.findAll('.layer-button').filter((button) => button.text() === 'Outings');
+
+    await outings()[0].trigger('click');
+    await flushPromises();
+    expect(heatmap).toHaveBeenCalledTimes(1);
+    expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+    expect((map.data['heatmap-outing'] as FeatureCollection).features).toHaveLength(1);
+
+    map.zoom = 5;
+    map.extent = [0, 40, 10, 50];
+    map.fire('moveend');
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    await flushPromises();
+    expect(outings()).toHaveLength(0);
+    expect(map.layout['heatmap-outing'].visibility).toBe('none');
+    wrapper.unmount();
+  });
+
+  describe('a click on the density of an overlay', () => {
+    const outingLine = line([6.8, 45.9], [6.81, 45.91]);
+    const recentOuting = (title: string) => ({
+      document_id: 1,
+      type: 'o',
+      title,
+      geometry: { geom_detail: outingLine },
+    });
+    const mockLookups = (recent: (calls: number) => unknown) => {
+      let calls = 0;
+      vi.spyOn(c2c, 'getOutingsTracks').mockImplementation(((params: Record<string, unknown>) => {
+        // too many tracks to draw them: the density
+        if (!params.recent) return Promise.resolve({ data: { documents: [], truncated: true } });
+        return recent(++calls);
+      }) as never);
+      vi.spyOn(c2c, 'getOutingsHeatmap').mockResolvedValue({ data: { buckets: [] } } as never);
+    };
+    const showDensity = async (props: Record<string, unknown> = {}) => {
+      const mounted = await mountMap(props);
+      mounted.map.zoom = 15;
+      await mounted.wrapper
+        .findAll('.layer-button')
+        .find((button) => button.text() === 'Outings')!
+        .trigger('click');
+      await flushPromises();
+      expect(mounted.map.layout['heatmap-outing'].visibility).toBe('visible');
+      return mounted;
+    };
+    const clickAt = (map: FakeMap) =>
+      map.fire('click', {
+        point: { x: 10, y: 10 },
+        lngLat: { lng: 6.8, lat: 45.9 },
+        originalEvent: { pointerType: 'mouse' },
+      });
+
+    it('lists the most recent documents, and says how many there are', async () => {
+      mockLookups(() =>
+        Promise.resolve({
+          data: { documents: [recentOuting('Recent hike')], truncated: true, count: 412, count_capped: false },
+        })
+      );
+      const { wrapper, map } = await showDensity();
+
+      clickAt(map);
+      await flushPromises();
+
+      const panel = wrapper.find('.ol-track-panel');
+      expect(panel.text()).toContain('Recent hike');
+      expect(panel.text()).toContain('Only the most recent ones are listed');
+      expect(panel.text()).toContain('(412)');
+      wrapper.unmount();
+    });
+
+    it('says that there are more when the count is capped, and nothing when the API does not know', async () => {
+      mockLookups((call) =>
+        Promise.resolve({
+          data:
+            call === 1
+              ? { documents: [recentOuting('Capped')], truncated: true, count: 1000, count_capped: true }
+              : { documents: [recentOuting('Unknown')], truncated: true },
+        })
+      );
+      const { wrapper, map } = await showDensity();
+
+      clickAt(map);
+      await flushPromises();
+      expect(wrapper.find('.ol-track-panel').text()).toContain('(1000+)');
+
+      clickAt(map);
+      await flushPromises();
+      expect(wrapper.find('.ol-track-panel').text()).toContain('Unknown');
+      expect(wrapper.find('.ol-track-panel').text()).not.toMatch(/\(\d+\+?\)/);
+      wrapper.unmount();
+    });
+
+    it('keeps the last click: the answer of an older one does not replace it', async () => {
+      let releaseOld: () => void = () => undefined;
+      mockLookups((call) =>
+        call === 1
+          ? // the first lookup is slow, the second one is fast
+            new Promise((resolve) => {
+              releaseOld = () => resolve({ data: { documents: [recentOuting('Old')], truncated: true } });
+            })
+          : Promise.resolve({ data: { documents: [recentOuting('New')], truncated: true } })
+      );
+      const { wrapper, map } = await showDensity();
+
+      clickAt(map);
+      clickAt(map);
+      await flushPromises();
+      releaseOld();
+      await flushPromises();
+
+      expect(wrapper.find('.ol-track-panel').text()).toContain('New');
+      expect(wrapper.find('.ol-track-panel').text()).not.toContain('Old');
+      wrapper.unmount();
+    });
+
+    it('goes on to identify the protection areas under the click', async () => {
+      mockLookups(() => Promise.resolve({ data: { documents: [recentOuting('Recent hike')], truncated: true } }));
+      vi.mocked(biodivSportsService.fetchData).mockResolvedValue({ data: { results: [] } } as never);
+      vi.mocked(respecterCestProtegerService.hasArea).mockResolvedValue(false);
+      const identify = vi
+        .mocked(respecterCestProtegerService.identify)
+        .mockResolvedValue({ data: { results: [] } } as never);
+      const { wrapper, map } = await showDensity({ showProtectionAreas: true });
+
+      clickAt(map);
+      await flushPromises();
+
+      expect(wrapper.find('.ol-track-panel').text()).toContain('Recent hike');
+      expect(identify).toHaveBeenCalledTimes(1);
+      wrapper.unmount();
+    });
+  });
+
+  describe('settings of the document maps, kept on this device', () => {
+    const heatmap = () =>
+      vi
+        .spyOn(c2c, 'getOutingsHeatmap')
+        .mockResolvedValue({ data: { buckets: [{ x: 750000, y: 5760000, count: 3 }] } } as never);
+    const queryOf = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) =>
+      (wrapper.vm as unknown as { $route: { query: unknown } }).$route.query;
+    const stored = () => JSON.parse(window.localStorage.getItem('DocumentMap.preferences') ?? '{}').settings;
+
+    beforeEach(() => window.localStorage.removeItem('DocumentMap.preferences'));
+    afterEach(() => window.localStorage.removeItem('DocumentMap.preferences'));
+
+    it('stores the settings that differ from the default but the overlays, and writes all of them in the URL', async () => {
+      heatmap();
+      const { wrapper } = await mountMap({ rememberSettings: true }, '/routes/1/fr?debug=1#description');
+      const [baseLayers, slopesLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+
+      await baseLayers.findAll(':scope > *')[1].trigger('click');
+      await slopesLayers.findAll(':scope > *')[0].trigger('click');
+      await wrapper
+        .findAll('.layer-button')
+        .find((button) => button.text() === 'Outings')!
+        .trigger('click');
+      await flushPromises();
+      expect(stored()).toEqual({ category: 'ortho', slopes: 'ign' });
+      expect(queryOf(wrapper)).toEqual({ debug: '1', layer: 'esri', slopes: 'ign', overlays: 'outing' });
+      expect((wrapper.vm as unknown as { $route: { hash: string } }).$route.hash).toBe('#description');
+
+      await baseLayers.findAll(':scope > *')[0].trigger('click');
+      await flushPromises();
+      expect(stored()).toEqual({ slopes: 'ign' });
+      expect(queryOf(wrapper)).toEqual({ debug: '1', slopes: 'ign', overlays: 'outing' });
+      wrapper.unmount();
+    });
+
+    it('shows the stored settings on the next document map, but not the overlays a device stored before', async () => {
+      const outings = heatmap();
+      window.localStorage.setItem(
+        'DocumentMap.preferences',
+        // a layer stored before the categories: its category
+        JSON.stringify({ settings: { layer: 'esri', slopes: 'ign', overlays: 'outing' } })
+      );
+      const { wrapper, map } = await mountMap({ rememberSettings: true }, '/routes/2/fr');
+
+      expect(map.layout['ESRI World Imagery'].visibility).toBe('visible');
+      expect(map.layout['IGN Slopes'].visibility).toBe('visible');
+      expect(outings).not.toHaveBeenCalled();
+      expect(map.layout['heatmap-outing']?.visibility ?? 'none').toBe('none');
+      wrapper.unmount();
+    });
+
+    it('shows the settings of a shared link, over the stored ones, without storing them', async () => {
+      const outings = heatmap();
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { category: 'ortho' } }));
+      const { wrapper, map } = await mountMap(
+        { rememberSettings: true },
+        '/routes/1/fr?layer=es&slopes=ign&overlays=outing&protection=0'
+      );
+
+      expect(map.layout['IGN raster (es)'].visibility).toBe('visible');
+      expect(map.layout['IGN Slopes'].visibility).toBe('visible');
+      expect(outings).toHaveBeenCalled();
+      expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+      expect(stored()).toEqual({ category: 'ortho' });
+      // the protection areas are not offered by this map: nothing to hide in its URL
+      expect(queryOf(wrapper)).toEqual({ layer: 'es', slopes: 'ign', overlays: 'outing' });
+      wrapper.unmount();
+    });
+
+    it('stores only the setting the user changes, not the others of a shared link', async () => {
+      heatmap();
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { protection: '0' } }));
+      const { wrapper, map } = await mountMap({ rememberSettings: true }, '/routes/1/fr?layer=es&overlays=outing');
+      const [, slopesLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+
+      await slopesLayers.findAll(':scope > *')[0].trigger('click');
+      await flushPromises();
+      expect(map.layout['IGN raster (es)'].visibility).toBe('visible');
+      expect(stored()).toEqual({ slopes: 'ign', protection: '0' });
+      // the protection areas are not offered by this map: nothing to hide in its URL
+      expect(queryOf(wrapper)).toEqual({ layer: 'es', slopes: 'ign', overlays: 'outing' });
+      wrapper.unmount();
+    });
+
+    it('keeps the hidden protection areas when a map that does not offer them changes its layer', async () => {
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { protection: '0' } }));
+      const { wrapper } = await mountMap({ rememberSettings: true }, '/outings/1/fr');
+      const [baseLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+
+      await baseLayers.findAll(':scope > *')[1].trigger('click');
+      await flushPromises();
+      expect(stored()).toEqual({ category: 'ortho', protection: '0' });
+      wrapper.unmount();
+    });
+
+    it('shows the layer of the stored category in the country of each document', async () => {
+      const inCountry = (id: number) => ({ ...route, areas: [{ document_id: 14400 }, { document_id: id }] });
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { category: 'national' } }));
+
+      const { wrapper, map } = await mountMap({ documents: [inCountry(14274)], rememberSettings: true }, '/routes/1');
+      expect(selectedTitles(wrapper)[0]).toBe('IGN maps');
+
+      // the page of another document, in the same map
+      await wrapper.setProps({ documents: [inCountry(14067)] });
+      await flushPromises();
+      expect(selectedTitles(wrapper)[0]).toBe('SwissTopo');
+      expect(map.layout.SwissTopo.visibility).toBe('visible');
+
+      // in Catalonia (Spain, Girona): the ICGC map, not the IGN Spain one
+      await wrapper.setProps({ documents: [{ ...route, areas: [{ document_id: 14267 }, { document_id: 279939 }] }] });
+      await flushPromises();
+      expect(selectedTitles(wrapper)[0]).toBe('ICGC raster (ca)');
+
+      // no national map in Italy
+      await wrapper.setProps({ documents: [inCountry(14270)] });
+      await flushPromises();
+      expect(selectedTitles(wrapper)[0]).toBe('OpenTopoMap');
+      expect(stored()).toEqual({ category: 'national' });
+      wrapper.unmount();
+
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { category: 'ortho' } }));
+      const other = await mountMap({ documents: [inCountry(14081)], rememberSettings: true }, '/routes/1');
+      // no orthophoto of the United Kingdom
+      expect(selectedTitles(other.wrapper)[0]).toBe('ESRI World Imagery');
+      other.wrapper.unmount();
+    });
+
+    it('keeps the category of a layer clicked on a document, not the layer', async () => {
+      const { wrapper } = await mountMap(
+        { documents: [{ ...route, areas: [{ document_id: 14274 }] }], rememberSettings: true },
+        '/routes/1'
+      );
+      const [baseLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+
+      await baseLayers
+        .findAll(':scope > *')
+        .find((button) => button.text() === 'SwissTopo')!
+        .trigger('click');
+      await flushPromises();
+      expect(selectedTitles(wrapper)[0]).toBe('SwissTopo');
+      expect(stored()).toEqual({ category: 'national' });
+      wrapper.unmount();
+
+      const next = await mountMap(
+        { documents: [{ ...route, areas: [{ document_id: 14274 }] }], rememberSettings: true },
+        '/routes/2'
+      );
+      expect(selectedTitles(next.wrapper)[0]).toBe('IGN maps');
+      next.wrapper.unmount();
+    });
+
+    it('writes the stored settings in the URL of a document page, and the side the page pinned the map on', async () => {
+      window.localStorage.setItem(
+        'DocumentMap.preferences',
+        JSON.stringify({ settings: { category: 'ortho', slopes: 'ign' } })
+      );
+      const { wrapper } = await mountMap({ rememberSettings: true }, '/routes/1/fr?debug=1');
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({ debug: '1', layer: 'esri', slopes: 'ign' });
+
+      await wrapper.setProps({ pinnedSide: 'top' });
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({ debug: '1', layer: 'esri', slopes: 'ign', pin: 'top' });
+
+      await wrapper.setProps({ pinnedSide: '' });
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({ debug: '1', layer: 'esri', slopes: 'ign' });
+      wrapper.unmount();
+    });
+
+    it('does not write its settings in the URL of the page the user goes to from the document', async () => {
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { slopes: 'ign' } }));
+      const { wrapper } = await mountMap({ rememberSettings: true }, '/routes/1');
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({ slopes: 'ign' });
+
+      const router = (wrapper.vm as unknown as { $router: Router }).$router;
+      await router.push('/outings/2');
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({});
+
+      wrapper.unmount();
+    });
+
+    it('writes its settings in the URL of the next document of the same view, whose link has none', async () => {
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { slopes: 'ign' } }));
+      const { wrapper } = await mountMap({ rememberSettings: true }, '/routes/1');
+      await flushPromises();
+
+      await (wrapper.vm as unknown as { $router: Router }).$router.push('/routes/3');
+      await flushPromises();
+      expect((wrapper.vm as unknown as { $route: { fullPath: string } }).$route.fullPath).toBe('/routes/3?slopes=ign');
+      wrapper.unmount();
+    });
+
+    it('leaves the URL of a document page clean without settings, and that of a printed list alone', async () => {
+      const clean = await mountMap({ rememberSettings: true }, '/routes/1/fr');
+      await flushPromises();
+      expect(queryOf(clean.wrapper)).toEqual({});
+      clean.wrapper.unmount();
+
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { slopes: 'ign' } }));
+      const printed = await mountMap({ rememberSettings: true }, '/routes/print');
+      await flushPromises();
+      expect(queryOf(printed.wrapper)).toEqual({});
+      printed.wrapper.unmount();
+    });
+
+    it('neither reads nor stores them for a map that did not ask for it (a listing: its query is its filters)', async () => {
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { layer: 'es' } }));
+      const { wrapper, map } = await mountMap({}, '/routes?act=skitouring&layer=es');
+      const [baseLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+
+      expect(map.layout['IGN raster (es)']?.visibility).not.toBe('visible');
+      await baseLayers.findAll(':scope > *')[1].trigger('click');
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({ act: 'skitouring', layer: 'es' });
+      expect(stored()).toEqual({ layer: 'es' });
+      wrapper.unmount();
+    });
+  });
+
+  it('draws the waypoints in the colour of their category when not monochrome', async () => {
+    const access = (rating: string) => ({ ...waypoint(5, 'access', 6.84), public_transportation_rating: rating });
+    const documents = [
+      waypoint(3, 'summit', 6.8),
+      waypoint(4, 'hut', 6.82),
+      access('good service'),
+      waypoint(6, 'webcam', 6.86),
+    ];
+    const fills = (map: FakeMap) => drawn(map).map((feature) => feature.properties!.circleFill);
+    const { wrapper, map } = await mountMap({ documents, compactMarkers: true });
+    expect(new Set(fills(map))).toEqual(new Set(['#F93', '#4baf50']));
+
+    await wrapper.setProps({ monochromeMarkers: false });
+    await flushPromises();
+    expect(fills(map)).toEqual(['#008000', '#c99700', '#00008b', '#444444']);
+    wrapper.unmount();
+  });
+
+  it('draws the places to sleep by what they offer when not monochrome', async () => {
+    const hut = (id: number, category?: string) => ({ ...waypoint(id, 'hut', 6.8 + id / 100), hut_category: category });
+    const documents = [
+      hut(1, 'wardened'),
+      hut(2, 'no_warden'),
+      hut(3, 'key_needed'),
+      hut(4, 'shelter'),
+      waypoint(5, 'shelter', 6.85),
+      waypoint(6, 'gite', 6.86),
+      hut(7),
+    ];
+    const { wrapper, map } = await mountMap({ documents, compactMarkers: true, monochromeMarkers: false });
+    const looks = drawn(map).map((feature) => [
+      feature.properties!.circleFill,
+      /data-icon="([^"]+)"/.exec(String(feature.properties!.icon))![1],
+    ]);
+    expect(looks).toEqual([
+      ['#d32f2f', 'hut'],
+      ['#d32f2f', 'shelter'],
+      ['#c99700', 'key'],
+      ['#c99700', 'angle-up'],
+      ['#c99700', 'angle-up'],
+      ['#d32f2f', 'house-flag'],
+      // without its category (an older API): the colour of the places to sleep
+      ['#c99700', 'hut'],
+    ]);
+    wrapper.unmount();
+  });
+
+  it('tells its zoom when it is loaded and after each move', async () => {
+    const { wrapper, map } = await mountMap();
+    map.zoom = 12.5;
+    map.fire('moveend');
+    expect(wrapper.emitted('zoom')).toEqual([[expect.any(Number)], [12.5]]);
+    wrapper.unmount();
+  });
+
+  describe('the filter on the extent of the map', () => {
+    const queryOf = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) =>
+      (wrapper.vm as unknown as { $route: { query: Record<string, unknown> } }).$route.query;
+
+    it('on by default: placed on the first results, then filters them in place of the page', async () => {
+      const { wrapper, map } = await mountMap({ documents: [], filterByDefault: true }, '/routes?act=hiking');
+      const push = vi.spyOn(wrapper.vm.$router, 'push');
+      const replace = vi.spyOn(wrapper.vm.$router, 'replace');
+
+      // still on the default extent, waiting for the results
+      map.fire('moveend');
+      await flushPromises();
+      expect(queryOf(wrapper).bbox).toBeUndefined();
+
+      await wrapper.setProps({ documents: [route] });
+      map.fire('moveend');
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({ act: 'hiking', bbox: expect.stringMatching(/^-?\d+(,-?\d+){3}$/) });
+      expect(replace).toHaveBeenCalled();
+      expect(push).not.toHaveBeenCalled();
+
+      // moved by the user a moment later: one more step of the history
+      vi.spyOn(Date, 'now').mockReturnValue(Date.now() + 31_000);
+      map.fire('movestart', { originalEvent: {} });
+      map.extent = [6, 45, 7, 46];
+      map.fire('moveend');
+      await flushPromises();
+      expect(push).toHaveBeenCalledWith({ query: { act: 'hiking', bbox: expect.any(String) } });
+      wrapper.unmount();
+    });
+
+    it('makes one step of the history of the moves close to each other', async () => {
+      let now = 1_000_000;
+      vi.spyOn(Date, 'now').mockImplementation(() => now);
+      const { wrapper, map } = await mountMap({ documents: [route] }, '/routes?bbox=1,2,3,4');
+      const push = vi.spyOn(wrapper.vm.$router, 'push');
+      const replace = vi.spyOn(wrapper.vm.$router, 'replace');
+      const move = async (extent: [number, number, number, number], after: number) => {
+        now += after;
+        map.fire('movestart', { originalEvent: {} });
+        map.extent = extent;
+        map.fire('moveend');
+        await flushPromises();
+      };
+
+      await move([6, 45, 7, 46], 0);
+      await move([6.1, 45, 7.1, 46], 20_000);
+      await move([6.2, 45, 7.2, 46], 20_000);
+      expect(push).toHaveBeenCalledTimes(1);
+      expect(replace).toHaveBeenCalledTimes(2);
+
+      // after a pause
+      await move([6.3, 45, 7.3, 46], 31_000);
+      expect(push).toHaveBeenCalledTimes(2);
+      wrapper.unmount();
+    });
+
+    it('turned on when the results are hidden', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route], showFilterControl: true }, '/routes');
+      map.fire('moveend');
+      await flushPromises();
+      expect(queryOf(wrapper).bbox).toBeUndefined();
+
+      await wrapper.setProps({ forceFilter: true });
+      await flushPromises();
+      expect(queryOf(wrapper).bbox).toEqual(expect.any(String));
+      expect((wrapper.find('#filter-documents-with-map').element as HTMLInputElement).checked).toBe(true);
+      wrapper.unmount();
+    });
+  });
+
+  describe('settings in the URL of a list (syncUrl)', () => {
+    const queryOf = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) =>
+      (wrapper.vm as unknown as { $route: { query: unknown } }).$route.query;
+    const stored = () => window.localStorage.getItem('DocumentMap.preferences');
+
+    beforeEach(() => window.localStorage.removeItem('DocumentMap.preferences'));
+
+    it('shows the settings of the query, without storing them', async () => {
+      const outings = vi
+        .spyOn(c2c, 'getOutingsHeatmap')
+        .mockResolvedValue({ data: { buckets: [{ x: 750000, y: 5760000, count: 3 }] } } as never);
+      const { wrapper, map } = await mountMap(
+        { syncUrl: true },
+        '/routes?act=skitouring&layer=es&slopes=ign&overlays=outing'
+      );
+
+      expect(map.layout['IGN raster (es)'].visibility).toBe('visible');
+      expect(map.layout['IGN Slopes'].visibility).toBe('visible');
+      expect(outings).toHaveBeenCalled();
+      expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+      expect(stored()).toBeNull();
+      wrapper.unmount();
+    });
+
+    it('writes the settings the user changes in the query, next to the search filters, and not in the storage', async () => {
+      vi.spyOn(c2c, 'getOutingsHeatmap').mockResolvedValue({ data: { buckets: [] } } as never);
+      const { wrapper } = await mountMap({ syncUrl: true }, '/routes?act=skitouring&bbox=1,2,3,4');
+      const [baseLayers, slopesLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+
+      await baseLayers.findAll(':scope > *')[1].trigger('click');
+      await slopesLayers.findAll(':scope > *')[0].trigger('click');
+      await wrapper
+        .findAll('.layer-button')
+        .find((button) => button.text() === 'Routes')!
+        .trigger('click');
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({
+        act: 'skitouring',
+        bbox: '1,2,3,4',
+        layer: 'esri',
+        slopes: 'ign',
+        overlays: 'route',
+      });
+
+      await baseLayers.findAll(':scope > *')[0].trigger('click');
+      await flushPromises();
+      expect(queryOf(wrapper)).toEqual({ act: 'skitouring', bbox: '1,2,3,4', slopes: 'ign', overlays: 'route' });
+      expect(stored()).toBeNull();
+      wrapper.unmount();
+    });
+
+    it('follows the query when it changes (back, another link)', async () => {
+      const { wrapper, map } = await mountMap({ syncUrl: true }, '/routes?layer=es');
+      const router = (wrapper.vm as unknown as { $router: { replace(to: object): Promise<unknown> } }).$router;
+
+      await router.replace({ query: { act: 'hiking', slopes: 'swiss' } });
+      await flushPromises();
+      expect(map.layout['IGN raster (es)'].visibility).not.toBe('visible');
+      expect(map.layout['SwissTopo Slopes'].visibility).toBe('visible');
+      expect(queryOf(wrapper)).toEqual({ act: 'hiking', slopes: 'swiss' });
+      wrapper.unmount();
+    });
+
+    it('turns the overlays on again when the "Map" menu link is followed after the user turned them off', async () => {
+      const density = { data: { buckets: [{ x: 750000, y: 5760000, count: 3 }] } } as never;
+      vi.spyOn(c2c, 'getOutingsHeatmap').mockResolvedValue(density);
+      vi.spyOn(c2c, 'getRoutesHeatmap').mockResolvedValue(density);
+      const { wrapper, map } = await mountMap({ syncUrl: true }, '/waypoints?overlays=outing,route');
+      expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+      expect(map.layout['heatmap-route'].visibility).toBe('visible');
+
+      await wrapper
+        .findAll('.layer-button')
+        .find((button) => button.text() === 'Outings')!
+        .trigger('click');
+      await flushPromises();
+      expect(map.layout['heatmap-outing'].visibility).toBe('none');
+      expect(queryOf(wrapper)).toEqual({ overlays: 'route' });
+
+      await (wrapper.vm as unknown as { $router: Router }).$router.push('/waypoints?overlays=outing,route');
+      await flushPromises();
+      expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+      expect(map.layout['heatmap-route'].visibility).toBe('visible');
+      wrapper.unmount();
+    });
+  });
+
+  describe('a list shown before its results (a link to the outings of a route)', () => {
+    const outing = { document_id: 2, type: 'o', geometry: { geom: point(6.8, 45.9) } };
+    // the center of the last camera, in longitude
+    const lastLongitude = (map: FakeMap) => (map.cameras[map.cameras.length - 1].center as number[])[0];
+
+    it('fits the first results when they come', async () => {
+      const { wrapper, map } = await mountMap({ documents: [] }, '/outings?r=47805');
+      // France, until the results come
+      expect(lastLongitude(map)).not.toBeCloseTo(6.8, 2);
+
+      await wrapper.setProps({ documents: [outing] });
+      expect(lastLongitude(map)).toBeCloseTo(6.8, 6);
+      wrapper.unmount();
+    });
+
+    it('does not fit the next results, nor results the user moved the map away from', async () => {
+      const { wrapper, map } = await mountMap({ documents: [] }, '/outings?r=47805');
+      await wrapper.setProps({ documents: [outing] });
+      const cameras = map.cameras.length;
+
+      await wrapper.setProps({ documents: [{ ...outing, document_id: 3, geometry: { geom: point(7.5, 46) } }] });
+      expect(map.cameras).toHaveLength(cameras);
+      wrapper.unmount();
+
+      const moved = await mountMap({ documents: [] }, '/outings?r=47805');
+      moved.map.fire('movestart', { originalEvent: new MouseEvent('mousedown') });
+      const before = moved.map.cameras.length;
+      await moved.wrapper.setProps({ documents: [outing] });
+      expect(moved.map.cameras).toHaveLength(before);
+      moved.wrapper.unmount();
+    });
+
+    it('does not fit the results of another search, even after a first search without results', async () => {
+      const { wrapper, map } = await mountMap({ documents: [] }, '/outings?r=47805');
+      await wrapper.setProps({ documents: [] });
+      await wrapper.vm.$router.push({ query: { r: '47805', act: 'hiking' } });
+      const cameras = map.cameras.length;
+
+      await wrapper.setProps({ documents: [outing] });
+      expect(map.cameras).toHaveLength(cameras);
+      wrapper.unmount();
+    });
+
+    it('does not fit the results of the first search after another one, the documents unchanged meanwhile', async () => {
+      const { wrapper, map } = await mountMap({ documents: [] }, '/outings?r=47805');
+      await wrapper.vm.$router.push({ query: { r: '47805', act: 'hiking' } });
+      await wrapper.vm.$router.push({ query: { r: '47805' } });
+      await flushPromises();
+      const cameras = map.cameras.length;
+
+      await wrapper.setProps({ documents: [outing] });
+      expect(map.cameras).toHaveLength(cameras);
+      wrapper.unmount();
+    });
+
+    it('still fits the results after a change of the layers of the map', async () => {
+      const { wrapper, map } = await mountMap({ documents: [] }, '/outings?r=47805');
+      await wrapper.vm.$router.push({ query: { r: '47805', layer: 'esri' } });
+      await flushPromises();
+
+      await wrapper.setProps({ documents: [outing] });
+      expect(lastLongitude(map)).toBeCloseTo(6.8, 6);
+      wrapper.unmount();
+    });
+
+    it('does not fit the results after a zoom button or a place chosen by the user', async () => {
+      const zoomed = await mountMap({ documents: [] }, '/outings?r=47805');
+      await zoomed.wrapper.find('.ol-zoom-in').trigger('click');
+      const before = zoomed.map.cameras.length;
+      await zoomed.wrapper.setProps({ documents: [outing] });
+      expect(zoomed.map.cameras).toHaveLength(before);
+      zoomed.wrapper.unmount();
+
+      const placed = await mountMap({ documents: [] }, '/outings?r=47805');
+      (placed.wrapper.vm as unknown as { recenterOn(item: unknown): void }).recenterOn({
+        geometry: { coordinates: [5, 45] },
+        properties: {},
+      });
+      const cameras = placed.map.cameras.length;
+      await placed.wrapper.setProps({ documents: [outing] });
+      expect(placed.map.cameras).toHaveLength(cameras);
+      placed.wrapper.unmount();
+    });
+
+    it('fits the results in the 3D view opened while they were loading', async () => {
+      const { wrapper, map } = await mountMap({ documents: [], show3d: true }, '/outings?r=47805');
+      await wrapper.find('.ol-control-3d button').trigger('click');
+      await flushPromises();
+
+      await wrapper.setProps({
+        documents: [outing, { ...outing, document_id: 3, geometry: { geom: point(6.9, 46) } }],
+      });
+      expect(lastLongitude(map)).toBeCloseTo(6.85, 6);
+      expect(map.pitch).toBeGreaterThan(0);
+      wrapper.unmount();
+    });
+
+    it('keeps the extent of the URL', async () => {
+      const { wrapper, map } = await mountMap({ documents: [] }, '/outings?r=47805&bbox=1,2,3,4');
+      const cameras = map.cameras.length;
+
+      await wrapper.setProps({ documents: [outing] });
+      expect(map.cameras).toHaveLength(cameras);
+      wrapper.unmount();
+    });
+  });
+
+  describe('biodiv-sports areas', () => {
+    const fetchData = vi.mocked(biodivSportsService.fetchData);
+    // an area around [lon, 45.9]
+    const area = (id: number, lon = 6.8, lat = 45.9) => ({
+      id,
+      name: `area ${id}`,
+      geometry: {
+        type: 'Polygon',
+        coordinates: [
+          [
+            [lon - 0.001, lat - 0.001],
+            [lon + 0.001, lat - 0.001],
+            [lon + 0.001, lat + 0.001],
+            [lon - 0.001, lat - 0.001],
+          ],
+        ],
+      },
+    });
+    // a view of about 2 x halfSize metres around a point
+    const viewAround = (lon: number, lat: number, halfSize: number) => {
+      const degrees = halfSize / 111000;
+      return [lon - degrees, lat - degrees, lon + degrees, lat + degrees] as [number, number, number, number];
+    };
+    const moveTo = async (map: FakeMap, extent: [number, number, number, number]) => {
+      map.extent = extent;
+      map.fire('moveend');
+      await flushPromises();
+    };
+    const areas = (map: FakeMap) => (map.data.protection as FeatureCollection).features;
+
+    beforeEach(() => {
+      fetchData.mockReset();
+      vi.mocked(respecterCestProtegerService.hasArea).mockReset().mockResolvedValue(false);
+    });
+
+    it('are loaded once for the viewed extent and around it', async () => {
+      fetchData.mockResolvedValue({ data: { results: [area(1)] } } as never);
+      const { wrapper, map } = await mountMap({ showProtectionAreas: true });
+
+      // the first view, then far away
+      await moveTo(map, viewAround(7.5, 45.9, 5000));
+      // a small move, then zooming in: already loaded
+      await moveTo(map, viewAround(7.52, 45.9, 5000));
+      await moveTo(map, viewAround(7.5, 45.9, 1000));
+
+      expect(fetchData).toHaveBeenCalledTimes(2);
+      expect(areas(map)).toHaveLength(1);
+      expect(map.layout['protection-fill'].visibility).toBe('visible');
+      wrapper.unmount();
+    });
+
+    it('are loaded again after a failure, and tell the page once', async () => {
+      fetchData
+        .mockRejectedValueOnce(new Error('network'))
+        .mockResolvedValue({ data: { results: [area(1), area(2, 6.801)] } } as never);
+      const { wrapper, map } = await mountMap({ showProtectionAreas: true });
+      // the first load, at the first view, fails
+      await flushPromises();
+      expect(wrapper.emitted('has-protection-area')).toBeUndefined();
+
+      await moveTo(map, map.extent);
+      await moveTo(map, map.extent);
+      await moveTo(map, viewAround(7.5, 45.9, 500));
+
+      expect(areas(map)).toHaveLength(2);
+      expect(wrapper.emitted('has-protection-area')).toHaveLength(1);
+      wrapper.unmount();
+    });
+  });
+
+  describe('national layers far from the view', () => {
+    const buttons = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper'], group = 0) =>
+      wrapper.findAll('.ol-control-layer-switcher .layer-group')[group].findAll(':scope > .layer-button');
+    const outsideTitles = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper'], group = 0) =>
+      buttons(wrapper, group)
+        .filter((button) => button.classes('outside'))
+        .map((button) => button.text());
+    const moveTo = async (map: FakeMap, extent: [number, number, number, number]) => {
+      map.extent = extent;
+      map.fire('moveend');
+      await flushPromises();
+    };
+    // the layer chosen in a test is stored: not for the next one
+    afterEach(() => window.localStorage.removeItem('DocumentMap.preferences'));
+
+    it('are greyed out, still a choice, the world layers and the layer shown never', async () => {
+      const { wrapper, map } = await mountMap();
+      // the Mont Blanc: France and Switzerland near, not Spain, Catalonia, Austria nor Great Britain
+      expect(outsideTitles(wrapper)).toEqual([
+        'IGN raster (es)',
+        'IGN ortho (es)',
+        'ICGC raster (ca)',
+        'ICGC ortho (ca)',
+        'Basemap (at)',
+        'Basemap ortho (at)',
+        'Ordnance Survey (uk)',
+      ]);
+      expect(outsideTitles(wrapper, 1)).toEqual([]);
+      expect(
+        buttons(wrapper)
+          .find((button) => button.classes('outside'))!
+          .attributes('title')
+      ).toBe('Not available here');
+
+      // Barcelona: Spain and Catalonia, France is too far
+      await moveTo(map, [2.0, 41.3, 2.3, 41.5]);
+      expect(outsideTitles(wrapper)).toEqual([
+        'IGN maps',
+        'IGN ortho',
+        'SwissTopo',
+        'SwissTopo ortho',
+        'Basemap (at)',
+        'Basemap ortho (at)',
+        'Ordnance Survey (uk)',
+      ]);
+      expect(outsideTitles(wrapper, 1)).toEqual(['IGN Slopes', 'SwissTopo Slopes']);
+
+      // chosen all the same: shown, so not greyed out
+      await buttons(wrapper)
+        .find((button) => button.text() === 'SwissTopo')!
+        .trigger('click');
+      expect(selectedTitles(wrapper)[0]).toBe('SwissTopo');
+      expect(map.layout.SwissTopo.visibility).toBe('visible');
+      expect(outsideTitles(wrapper)).not.toContain('SwissTopo');
+
+      // zoomed out over Europe: every layer applies
+      await moveTo(map, [-10, 35, 20, 60]);
+      expect(outsideTitles(wrapper)).toEqual([]);
+      wrapper.unmount();
+    });
+
+    it('in the overseas departments, offer the IGN maps', async () => {
+      const { wrapper, map } = await mountMap();
+      // Réunion
+      await moveTo(map, [55.4, -21.2, 55.6, -21.0]);
+      expect(outsideTitles(wrapper)).not.toContain('IGN maps');
+      expect(outsideTitles(wrapper)).toContain('SwissTopo');
+      wrapper.unmount();
+    });
+
+    it('without a network, are greyed out among the layers offered offline', async () => {
+      window.localStorage.setItem('DocumentMap.preferences', JSON.stringify({ settings: { layer: 'swiss' } }));
+      const { wrapper, map } = await mountMap(
+        { documents: [{ ...route, areas: [{ document_id: 14067 }] }], rememberSettings: true },
+        '/routes/1'
+      );
+      const offline = useOfflineStore();
+      offline.savedDocs = [savedRoute({ OpenTopoMap: 15, SwissTopo: 16 })];
+      offline.online = false;
+      await flushPromises();
+      expect(buttons(wrapper).map((button) => button.text())).toEqual(['OpenTopoMap', 'SwissTopo']);
+
+      // shown: never greyed out, even far away
+      await moveTo(map, [0.5, 42.6, 0.7, 42.8]);
+      expect(outsideTitles(wrapper)).toEqual([]);
+
+      await buttons(wrapper)[0].trigger('click');
+      expect(selectedTitles(wrapper)[0]).toBe('OpenTopoMap');
+      expect(outsideTitles(wrapper)).toEqual(['SwissTopo']);
+
+      // back near Switzerland
+      await moveTo(map, [6.7, 45.8, 6.9, 46.0]);
+      expect(outsideTitles(wrapper)).toEqual([]);
+      offline.online = true;
+      await flushPromises();
+      wrapper.unmount();
+    });
+
+    it('in 3D, by the ground at the center of the view, not by the extent that reaches the horizon', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
+      await wrapper.find('.ol-control-3d button').trigger('click');
+      await flushPromises();
+
+      // the center in Switzerland, the extent down to the Pyrenees
+      await moveTo(map, [2, 44, 12, 49.4]);
+      expect(outsideTitles(wrapper)).toContain('IGN ortho (es)');
+      expect(outsideTitles(wrapper)).not.toContain('SwissTopo ortho');
+      expect(outsideTitles(wrapper)).not.toContain('Sentinel-2');
+
+      // the same extent in 2D: Spain is in it
+      await wrapper.find('.ol-control-3d button').trigger('click');
+      await moveTo(map, [2, 44, 12, 49.4]);
+      expect(outsideTitles(wrapper)).not.toContain('IGN ortho (es)');
+      wrapper.unmount();
+    });
+  });
+
+  describe('in 3D', () => {
+    const outing = {
+      document_id: 1,
+      type: 'o',
+      activities: ['hiking'],
+      geometry: { geom: point(6.28, 45.9), geom_detail: line([6.28, 45.9], [6.29, 45.91]) },
+      associations: { routes: [{ document_id: 7 }] },
+    };
+    const open3d = async (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) => {
+      await wrapper.find('.ol-control-3d button').trigger('click');
+      await flushPromises();
+    };
+    const shownMarkers = () => state.markers.filter((marker) => marker.added && !marker.removed);
+    // the layer chosen in a test is stored: not for the next one
+    afterEach(() => window.localStorage.removeItem('DocumentMap.preferences'));
+
+    it('tilts the same map on the terrain, and goes back to the 2D view', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
+      map.cameras.length = 0;
+      map.zoom = 11;
+
+      await open3d(wrapper);
+      expect(map.terrain).toMatchObject({ source: 'terrain' });
+      expect(map.pitch).toBe(60);
+      expect(map.dragRotate.enabled).toBe(true);
+      expect(map.layout['documents-3d'].visibility).toBe('visible');
+      expect(map.layout['documents-icon'].visibility).toBe('none');
+      expect(wrapper.find('.ol-control-3d').text()).toBe('2D');
+
+      await wrapper.find('.ol-control-3d button').trigger('click');
+      expect(map.terrain).toBeNull();
+      expect(map.cameras.at(-1)).toMatchObject({ zoom: 11, pitch: 0, bearing: 0 });
+      expect(map.dragRotate.enabled).toBe(false);
+      expect(map.layout['documents-icon'].visibility).toBe('visible');
+      wrapper.unmount();
+    });
+
+    describe('flyover', () => {
+      const play = async (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) => {
+        await wrapper.find('.ol-control-play button').trigger('click');
+        await vi.waitFor(() => expect(wrapper.find('.map-flyover-progress:not([disabled])').exists()).toBe(true));
+      };
+      // the animation is driven by the tests
+      const requestAnimationFrame = globalThis.requestAnimationFrame;
+      beforeEach(() => {
+        globalThis.requestAnimationFrame = () => 0;
+      });
+      afterEach(() => {
+        globalThis.requestAnimationFrame = requestAnimationFrame;
+      });
+
+      it('is offered for the track of an outing only', async () => {
+        for (const [documents, offered] of [
+          [[outing], true],
+          [[route], false],
+          [[{ ...outing, geometry: { geom: point(6.28, 45.9) } }], false],
+          [[outing, { ...outing, document_id: 2 }], false],
+        ] as const) {
+          const { wrapper } = await mountMap({ documents, show3d: true });
+          expect(wrapper.find('.ol-control-play').exists()).toBe(offered);
+          wrapper.unmount();
+        }
+        const { wrapper } = await mountMap({ documents: [outing] });
+        expect(wrapper.find('.ol-control-play').exists()).toBe(false);
+        wrapper.unmount();
+      });
+
+      it('opens the 3D view over the window, plays the track, and goes back to 2D', async () => {
+        const { wrapper, map } = await mountMap({ documents: [outing], show3d: true });
+
+        await play(wrapper);
+
+        expect(map.terrain).toMatchObject({ source: 'terrain' });
+        // no Fullscreen API in jsdom
+        expect(wrapper.classes()).toEqual(expect.arrayContaining(['c2c-map--flyover', 'c2c-map--flyover-window']));
+        expect(map.getLayer('flyover-played')).toBeTruthy();
+        // the end of the played line, sent again at each frame (playedSplit)
+        expect(map.getLayer('flyover-tip')).toBeTruthy();
+        // the part not played yet: hidden (FLYOVER.showAhead)
+        expect(map.getLayer('flyover-ahead')).toMatchObject({ layout: { visibility: 'none' } });
+        expect(map.layout['documents-3d'].visibility).toBe('none');
+        // the ground shadow of a whole flight: not over the track revealed as it is played
+        expect(map.layout['flight-shadows'].visibility).toBe('none');
+        expect(map.centerClampedToGround).toBe(false);
+        // the track alone: no dot at the playhead
+        expect(state.markers.some((marker) => marker.element?.className === 'map-flyover-head')).toBe(false);
+
+        await wrapper.find('.map-flyover-close button').trigger('click');
+        await flushPromises();
+
+        expect(wrapper.find('.map-flyover').exists()).toBe(false);
+        expect(map.getLayer('flyover-played')).toBeUndefined();
+        expect(map.getLayer('flyover-tip')).toBeUndefined();
+        expect(map.getSource('flyover-tip')).toBeUndefined();
+        expect(map.centerClampedToGround).toBe(true);
+        // the quality of the drawing as it was (map-3d-quality.ts)
+        expect(map.pixelRatio).toBe(1);
+        expect(map.lod).toBeNull();
+        expect(map.terrain).toBeNull();
+        expect(wrapper.classes()).not.toContain('c2c-map--flyover');
+        wrapper.unmount();
+      });
+
+      it('stops following the position: the flyover moves the camera itself', async () => {
+        let fix: PositionCallback = () => undefined;
+        const geolocation = { watchPosition: vi.fn((ok: PositionCallback) => ((fix = ok), 1)), clearWatch: vi.fn() };
+        Object.defineProperty(navigator, 'geolocation', { value: geolocation, configurable: true });
+        const { wrapper, map } = await mountMap({
+          documents: [outing],
+          show3d: true,
+          showCenterOnGeolocation: true,
+          followPosition: true,
+        });
+        await wrapper.find('.ol-control-center-on-geolocation button').trigger('click');
+        fix({ coords: { longitude: 6.85, latitude: 45.9, accuracy: 20 } } as GeolocationPosition);
+
+        await play(wrapper);
+        const cameras = map.cameras.length;
+        fix({ coords: { longitude: 6.86, latitude: 45.91, accuracy: 20 } } as GeolocationPosition);
+
+        expect(geolocation.clearWatch).toHaveBeenCalledWith(1);
+        expect(map.cameras.length).toBe(cameras);
+        expect(wrapper.find('.ol-control-center-on-geolocation button').classes()).toContain('c2c-map-position-off');
+        wrapper.unmount();
+        Reflect.deleteProperty(navigator, 'geolocation');
+      });
+
+      it('keeps the 3D view it started from, with its camera', async () => {
+        const { wrapper, map } = await mountMap({ documents: [outing], show3d: true });
+        await open3d(wrapper);
+        map.zoom = 12.5;
+
+        await play(wrapper);
+        await wrapper.find('.map-flyover-close button').trigger('click');
+        await flushPromises();
+
+        expect(map.terrain).toMatchObject({ source: 'terrain' });
+        expect(map.cameras.at(-1)).toMatchObject({ zoom: 12.5, pitch: 60 });
+        expect(map.layout['documents-3d'].visibility).toBe('visible');
+        expect(map.layout['flight-shadows'].visibility).toBe('visible');
+        wrapper.unmount();
+      });
+
+      it('flies over the orthophoto alone, without the slopes, and shows them again after', async () => {
+        const { wrapper, map } = await mountMap({ documents: [outing], show3d: true });
+        const [, slopesLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+        await slopesLayers.findAll(':scope > *')[0].trigger('click');
+        expect(map.layout['IGN Slopes'].visibility).toBe('visible');
+
+        await play(wrapper);
+        expect(map.layout['IGN Slopes'].visibility).toBe('none');
+        expect(map.layout.shading.visibility).toBe('none');
+        expect(wrapper.find('.ol-attribution').html()).not.toContain('Geoportail');
+
+        await wrapper.find('.map-flyover-close button').trigger('click');
+        await flushPromises();
+        expect(map.layout['IGN Slopes'].visibility).toBe('visible');
+        wrapper.unmount();
+      });
+
+      it('plays in the full screen the map was already in, and leaves it so', async () => {
+        const { wrapper } = await mountMap({ documents: [outing], show3d: true });
+        const root = wrapper.element as HTMLElement;
+        let fullscreenElement: Element | null = root;
+        const requestFullscreen = vi.fn(() => Promise.resolve());
+        const exitFullscreen = vi.fn(() => Promise.resolve());
+        root.requestFullscreen = requestFullscreen;
+        Object.defineProperty(document, 'fullscreenElement', { configurable: true, get: () => fullscreenElement });
+        Object.defineProperty(document, 'fullscreenEnabled', { configurable: true, value: true });
+        Object.defineProperty(document, 'exitFullscreen', { configurable: true, value: exitFullscreen });
+        try {
+          await play(wrapper);
+          expect(requestFullscreen).not.toHaveBeenCalled();
+          expect(wrapper.classes()).not.toContain('c2c-map--flyover-window');
+          await wrapper.find('.map-flyover-close button').trigger('click');
+          await flushPromises();
+          expect(exitFullscreen).not.toHaveBeenCalled();
+
+          // the full screen left (Esc) while it plays: the flyover with it
+          await play(wrapper);
+          fullscreenElement = null;
+          document.dispatchEvent(new Event('fullscreenchange'));
+          await flushPromises();
+          expect(wrapper.find('.map-flyover').exists()).toBe(false);
+        } finally {
+          for (const key of ['fullscreenElement', 'fullscreenEnabled', 'exitFullscreen']) {
+            delete (document as unknown as Record<string, unknown>)[key];
+          }
+          wrapper.unmount();
+        }
+      });
+
+      it('shows the elevation profile over the bar when the track has elevations', async () => {
+        // the outing of these tests: a track without elevation
+        const { wrapper } = await mountMap({ documents: [outing], show3d: true });
+        await play(wrapper);
+        expect(wrapper.find('.map-flyover-profile').exists()).toBe(false);
+        wrapper.unmount();
+
+        const climb = {
+          ...outing,
+          geometry: {
+            geom: point(6.28, 45.9),
+            geom_detail: JSON.stringify({
+              type: 'LineString',
+              coordinates: [
+                [...fromLonLat([6.28, 45.9]), 1200],
+                [...fromLonLat([6.29, 45.91]), 1800],
+              ],
+            }),
+          },
+        };
+        const withElevation = await mountMap({ documents: [climb], show3d: true });
+        await play(withElevation.wrapper);
+        const profile = withElevation.wrapper.find('.map-flyover-profile');
+        expect(profile.exists()).toBe(true);
+        // played and to come: the same path, cut at the playhead
+        expect(profile.findAll('path').map((path) => path.attributes('d'))).toEqual([
+          expect.stringMatching(/^M0,100 L0\.0,100\.0 .* L1000,100 Z$/),
+          expect.stringMatching(/^M0,100 L0\.0,100\.0 .* L1000,100 Z$/),
+        ]);
+        withElevation.wrapper.unmount();
+      });
+
+      it('flies over the orthophoto of the outing, and gives the 3D view its layer back', async () => {
+        const french = { ...outing, areas: [{ document_id: 14274 }] };
+        const { wrapper, map } = await mountMap({ documents: [french], show3d: true });
+        await open3d(wrapper);
+        await wrapper
+          .findAll('.layer-button')
+          .find((button) => button.text() === 'SwissTopo ortho')!
+          .trigger('click');
+        await flushPromises();
+
+        await play(wrapper);
+        expect(map.layout['IGN ortho'].visibility).toBe('visible');
+        expect(map.layout['SwissTopo ortho'].visibility).toBe('none');
+
+        await wrapper.find('.map-flyover-close button').trigger('click');
+        await flushPromises();
+        expect(map.layout['SwissTopo ortho'].visibility).toBe('visible');
+        expect(map.layout['IGN ortho'].visibility).toBe('none');
+        wrapper.unmount();
+
+        // far from the national orthophotos: the world one alone
+        const himalaya = {
+          ...outing,
+          geometry: { geom: point(86.9, 27.9), geom_detail: line([86.9, 27.9], [86.92, 27.95]) },
+        };
+        const far = await mountMap({ documents: [himalaya], show3d: true });
+        await play(far.wrapper);
+        const orthos = ['IGN ortho', 'SwissTopo ortho', 'IGN ortho (es)', 'ICGC ortho (ca)', 'Basemap ortho (at)'];
+        expect(orthos.filter((title) => far.map.layout[title]?.visibility === 'visible')).toEqual([]);
+        expect(far.map.layout.world.visibility).toBe('visible');
+        far.wrapper.unmount();
+      });
+
+      it('hides the overlays of the outings during the flyover, reads them again after it', async () => {
+        const heatmap = vi
+          .spyOn(c2c, 'getOutingsHeatmap')
+          .mockResolvedValue({ data: { buckets: [{ x: 750000, y: 5760000, count: 3 }] } } as never);
+        const { wrapper, map } = await mountMap({ documents: [outing], show3d: true });
+        const outings = wrapper.findAll('.layer-button').find((button) => button.text() === 'Outings')!;
+        await outings.trigger('click');
+        await flushPromises();
+        expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+
+        await play(wrapper);
+        expect(map.layout['heatmap-outing'].visibility).toBe('none');
+        const asked = heatmap.mock.calls.length;
+        // the camera of the flyover: no request at each of its moves
+        map.extent = [0, 40, 10, 50];
+        map.fire('moveend');
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        await flushPromises();
+        expect(heatmap).toHaveBeenCalledTimes(asked);
+        expect(map.layout['heatmap-outing'].visibility).toBe('none');
+
+        await wrapper.find('.map-flyover-close button').trigger('click');
+        await flushPromises();
+        expect(heatmap.mock.calls.length).toBeGreaterThan(asked);
+        expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+        wrapper.unmount();
+      });
+
+      it('leaves the filter of a list as it was: the box of the map, not that of the flyover', async () => {
+        const { wrapper, map } = await mountMap({ documents: [outing], show3d: true }, '/outings?bbox=1,2,3,4');
+        await open3d(wrapper);
+        const router = wrapper.vm.$router;
+        const replace = vi.spyOn(router, 'replace');
+        const push = vi.spyOn(router, 'push');
+
+        await play(wrapper);
+        map.extent = [6, 45, 7, 46];
+        map.fire('moveend');
+        await flushPromises();
+
+        expect(replace).not.toHaveBeenCalled();
+        expect(push).not.toHaveBeenCalled();
+        expect(map.data['filter-outline']).toEqual({ type: 'FeatureCollection', features: [] });
+        wrapper.unmount();
+      });
+
+      it('drops the cursor of the elevation profile, also one still waiting for the terrain', async () => {
+        const { wrapper } = await mountMap({ documents: [outing], show3d: true });
+        await open3d(wrapper);
+        const profileCursors = () =>
+          state.markers.filter((marker) => marker.element?.style.width === '10px' && marker.added && !marker.removed);
+        bus.emit('elevation_profile', { action: 'cursor_move', coord: fromLonLat([6.8, 45.9]) });
+        await flushPromises();
+        expect(profileCursors()).toHaveLength(1);
+
+        // asked, then the flyover before the answer
+        bus.emit('elevation_profile', { action: 'cursor_move', coord: fromLonLat([6.805, 45.905]) });
+        await play(wrapper);
+
+        expect(profileCursors()).toHaveLength(0);
+        wrapper.unmount();
+      });
+
+      it('stays paused when paused during the move to the track', async () => {
+        const frames: FrameRequestCallback[] = [];
+        globalThis.requestAnimationFrame = (callback) => frames.push(callback);
+        const runFrames = (time: number) => frames.splice(0).forEach((callback) => callback(time));
+        const { wrapper } = await mountMap({ documents: [outing], show3d: true });
+        await play(wrapper);
+        const button = () => wrapper.find('.map-flyover-bar .map-flyover-button');
+
+        // the move to the track started, then Play and Pause before its end
+        runFrames(1000);
+        await button().trigger('click');
+        expect(button().attributes('aria-label')).toBe('Pause');
+        await button().trigger('click');
+        runFrames(1_000_000);
+        runFrames(1_000_016);
+        await flushPromises();
+
+        expect(button().attributes('aria-label')).toBe('Play');
+        wrapper.unmount();
+      });
+
+      it('cycles the speeds, seeks, and stops following the track on a move of the user', async () => {
+        // the frames of the animation, run by the test
+        const frames: FrameRequestCallback[] = [];
+        globalThis.requestAnimationFrame = (callback) => frames.push(callback);
+        const runFrames = () => frames.splice(0).forEach((callback) => callback(performance.now()));
+        const { wrapper, map } = await mountMap({ documents: [outing], show3d: true });
+        await play(wrapper);
+
+        const speed = wrapper.find('.map-flyover-speed');
+        const speeds = [];
+        for (let i = 0; i < 4; i++) {
+          speeds.push(speed.text());
+          await speed.trigger('click');
+        }
+        expect(speeds).toEqual(['1×', '2×', '3×', '5×']);
+        expect(speed.text()).toBe('1×');
+
+        const playedPoints = () =>
+          (map.data['flyover-played'] as { features: { geometry: { coordinates: unknown[][] } }[] }).features.flatMap(
+            (feature) => feature.geometry.coordinates.flat()
+          ).length;
+        await wrapper.find('.map-flyover-progress').setValue('0');
+        runFrames();
+        const atStart = playedPoints();
+        await wrapper.find('.map-flyover-progress').setValue('500');
+        runFrames();
+        expect(wrapper.find<HTMLInputElement>('.map-flyover-progress').element.value).toBe('500');
+        // half of the track played
+        expect(playedPoints()).toBeGreaterThan(atStart);
+
+        expect(wrapper.find('.map-flyover-recenter').exists()).toBe(false);
+        map.fire('dragstart', { originalEvent: new MouseEvent('mousedown') });
+        await flushPromises();
+        expect(wrapper.find('.map-flyover-recenter').exists()).toBe(true);
+        // a move of the camera itself: not the user
+        await wrapper.find('.map-flyover-recenter').trigger('click');
+        map.fire('zoomstart', {});
+        await flushPromises();
+        expect(wrapper.find('.map-flyover-recenter').exists()).toBe(false);
+        wrapper.unmount();
+      });
+    });
+
+    it('tilts the view with the rotation of the mouse (right button or Ctrl + drag)', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
+      // MapLibre's default (true): with false, the mouse would only turn the view around the vertical
+      expect(map.options.pitchWithRotate).not.toBe(false);
+      wrapper.unmount();
+    });
+
+    it('keeps the button that pins the map to a side, the compass below it', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route], show3d: true, showPinToTopButton: true });
+
+      await open3d(wrapper);
+
+      expect(wrapper.find('.ol-control-pin-to-top').isVisible()).toBe(true);
+      // one stack in the top left corner: the compass just after the pin button
+      const stack = [...wrapper.find('.c2c-map-controls-top-left').element.children];
+      const pin = stack.indexOf(wrapper.find('.ol-control-pin-to-top').element);
+      expect(stack.indexOf(wrapper.find('.c2c-map-compass').element)).toBe(pin + 1);
+
+      // the page fits the map to its documents once pinned: the 3D view stays tilted on them
+      map.cameras.length = 0;
+      await (wrapper.vm as unknown as { fitMapToDocuments(): Promise<unknown> }).fitMapToDocuments();
+      expect(map.cameras.at(-1)).toMatchObject({ pitch: 60 });
+      wrapper.unmount();
+    });
+
+    it('multiplies the protection areas onto the ground, not the slopes', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route], show3d: true, showProtectionAreas: true });
+      expect(map.paint['Swiss tranquility zones']['raster-layer-blend']).toBe('normal');
+
+      await open3d(wrapper);
+
+      expect(map.paint['Swiss tranquility zones']).toMatchObject({
+        'raster-opacity': 0.7,
+        'raster-layer-blend': 'multiply',
+      });
+      expect(map.paint['protection-fill']).toMatchObject({ 'fill-opacity': 0.4, 'fill-layer-blend': 'multiply' });
+      expect(map.paint['IGN Slopes']).toEqual({ 'raster-opacity': 0.4 });
+      wrapper.unmount();
+    });
+
+    it('keeps SwissTopo, drawn from its vector tiles, and gives the layer chosen in 3D back to 2D', async () => {
+      const swissStyle = (raster?: boolean) => ({
+        version: 8,
+        glyphs: 'https://vectortiles.example/fonts/{fontstack}/{range}.pbf',
+        sprite: [{ id: 'default', url: 'https://vectortiles.example/sprite' }],
+        sources: {
+          'base_v1.0.0': { type: 'vector', url: 'https://vectortiles.example/base.json' },
+          ...(raster ? { swissimage: { type: 'raster', tiles: ['https://wmts.example/{z}/{x}/{y}.jpeg'] } } : {}),
+        },
+        layers: [
+          { id: 'background', type: 'background' },
+          ...(raster ? [{ id: 'swissimage', type: 'raster', source: 'swissimage' }] : []),
+          { id: 'water', type: 'fill', source: 'base_v1.0.0', 'source-layer': 'water' },
+          { id: 'peaks', type: 'symbol', source: 'base_v1.0.0', 'source-layer': 'mountain_peak' },
+        ],
+      });
+      const fetch = vi
+        .spyOn(globalThis, 'fetch')
+        .mockImplementation(async (url) => Response.json(swissStyle(String(url).includes('imagerybasemap'))));
+      const { wrapper, map } = await mountMap(
+        { documents: [route], show3d: true, rememberSettings: true },
+        '/routes/1/fr?layer=swiss'
+      );
+      const layerIds = () => map.style.layers.map((layer) => layer.id);
+
+      await open3d(wrapper);
+
+      // the raster map stays in 2D; in 3D, its vector tiles: the ground under our shading, the names over the slopes
+      expect(selectedTitles(wrapper)[0]).toBe('SwissTopo');
+      expect(map.layout.SwissTopo.visibility).toBe('none');
+      expect(map.layout.world.visibility).toBe('visible');
+      const ids = layerIds();
+      expect(ids.indexOf('vector-ground')).toBeLessThan(ids.indexOf('shading'));
+      expect(ids.indexOf('vector-water')).toBeLessThan(ids.indexOf('shading'));
+      expect(ids.indexOf('vector-peaks')).toBeGreaterThan(ids.indexOf('SwissTopo Slopes'));
+      expect(ids.indexOf('vector-peaks')).toBeLessThan(ids.indexOf('documents-3d'));
+      expect(map.glyphs).toBe('https://vectortiles.example/fonts/{fontstack}/{range}.pbf');
+      expect([...map.sprites.keys()]).toEqual(['default']);
+      // no relief drawn on a vector map: our shading goes on with it
+      expect(map.layout.shading.visibility).toBe('visible');
+
+      // the orthophoto, with the names of swisstopo over it: the first map is removed
+      await wrapper
+        .findAll('.layer-button')
+        .find((button) => button.text() === 'SwissTopo ortho')!
+        .trigger('click');
+      await flushPromises();
+      expect(map.layout['SwissTopo ortho'].visibility).toBe('visible');
+      expect(map.layout.shading.visibility).toBe('none');
+      expect(layerIds().filter((id) => id.startsWith('vector-'))).toEqual(['vector-water', 'vector-peaks']);
+      expect(Object.keys(map.style.sources).filter((id) => id.startsWith('vector-'))).toEqual(['vector-base_v1.0.0']);
+
+      await wrapper.find('.ol-control-3d button').trigger('click');
+      await flushPromises();
+      expect(map.layout['SwissTopo ortho'].visibility).toBe('visible');
+      expect(layerIds().filter((id) => id.startsWith('vector-'))).toEqual([]);
+      expect(map.sprites.size).toBe(0);
+      wrapper.unmount();
+      fetch.mockRestore();
+    });
+
+    it('goes back to the 2D layer after the orthophoto that 3D chose by itself, and stores nothing', async () => {
+      const { wrapper, map } = await mountMap(
+        { documents: [{ ...route, areas: [{ document_id: 14274 }] }], show3d: true, rememberSettings: true },
+        '/routes/1/fr'
+      );
+
+      await open3d(wrapper);
+      expect(map.layout['IGN ortho'].visibility).toBe('visible');
+      await wrapper.find('.ol-control-3d button').trigger('click');
+      await flushPromises();
+      expect(selectedTitles(wrapper)[0]).toBe('OpenTopoMap');
+      expect(map.layout.OpenTopoMap.visibility).toBe('visible');
+      expect(map.layout['IGN ortho'].visibility).toBe('none');
+      expect(window.localStorage.getItem('DocumentMap.preferences')).toBeNull();
+      wrapper.unmount();
+    });
+
+    it('keeps the category of a layer clicked in 3D, and shows its 2D layer back in 2D', async () => {
+      const { wrapper, map } = await mountMap(
+        { documents: [{ ...route, areas: [{ document_id: 14274 }] }], show3d: true, rememberSettings: true },
+        '/routes/1/fr'
+      );
+
+      await open3d(wrapper);
+      // the world orthophoto has no 2D layer: the orthophoto of the country in 2D
+      await wrapper
+        .findAll('.layer-button')
+        .find((button) => button.text() === 'Sentinel-2')!
+        .trigger('click');
+      await flushPromises();
+      expect(JSON.parse(window.localStorage.getItem('DocumentMap.preferences')!).settings).toEqual({
+        category: 'ortho',
+      });
+      await wrapper.find('.ol-control-3d button').trigger('click');
+      await flushPromises();
+      expect(selectedTitles(wrapper)[0]).toBe('IGN ortho');
+      expect(map.layout['IGN ortho'].visibility).toBe('visible');
+      wrapper.unmount();
+    });
+
+    it('offers no relief layer in 3D', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
+
+      await open3d(wrapper);
+      expect(wrapper.findAll('.layer-button').map((button) => button.text())).not.toContain('Relief');
+      expect(map.style.layers.map((layer) => layer.id)).not.toContain('relief');
+      wrapper.unmount();
+    });
+
+    it('keeps the IGN maps in 3D, with no shading of ours over their own', async () => {
+      const { wrapper, map } = await mountMap(
+        { documents: [route], show3d: true, rememberSettings: true },
+        '/routes/1/fr?layer=ign'
+      );
+
+      await open3d(wrapper);
+      // the TOP 25 at every zoom, also far from the camera (small zooms)
+      expect(map.layout['IGN maps'].visibility).toBe('none');
+      expect(map.layout['IGN maps 3D'].visibility).toBe('visible');
+      expect(map.style.sources['IGN maps 3D']).toMatchObject({ minzoom: 6, maxzoom: 16 });
+      expect((map.style.sources['IGN maps 3D'] as { tiles: string[] }).tiles[0]).toMatch(
+        /^https:\/\/data\.geopf\.fr\/private\/wmts\?apikey=/
+      );
+      expect((map.style.sources['IGN maps 3D'] as { tiles: string[] }).tiles[0]).toContain(
+        'LAYER=GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN25TOUR&'
+      );
+      // a raster map with its own relief: our shading stays off
+      expect(map.layout.shading.visibility).toBe('none');
+
+      await wrapper.find('.ol-control-3d button').trigger('click');
+      await flushPromises();
+      expect(map.layout['IGN maps'].visibility).toBe('visible');
+      expect(map.layout['IGN maps 3D'].visibility).toBe('none');
+      wrapper.unmount();
+    });
+
+    it('shows the orthophoto of the country of the documents when the 2D layer has no 3D one', async () => {
+      const { wrapper, map } = await mountMap(
+        { documents: [{ ...route, areas: [{ document_id: 14274 }] }], show3d: true, rememberSettings: true },
+        '/routes/1/fr?layer=esri'
+      );
+
+      await open3d(wrapper);
+      // not the IGN maps, also allowed in 3D
+      expect(map.layout['IGN ortho'].visibility).toBe('visible');
+      expect(map.layout['IGN maps'].visibility).toBe('none');
+      wrapper.unmount();
+    });
+
+    it('leaves our shading off when it was turned off on a vector map', async () => {
+      const fetch = vi
+        .spyOn(globalThis, 'fetch')
+        .mockImplementation(async () => Response.json({ version: 8, sources: {}, layers: [] }));
+      const { wrapper, map } = await mountMap(
+        { documents: [route], show3d: true, rememberSettings: true },
+        '/routes/1/fr?layer=swiss'
+      );
+      const click = (title: string) =>
+        wrapper
+          .findAll('.layer-button')
+          .find((button) => button.text() === title)!
+          .trigger('click');
+
+      await open3d(wrapper);
+      await click('Shading');
+      expect(map.layout.shading.visibility).toBe('none');
+      await click('SwissTopo ortho');
+      await click('Shading');
+      await click('SwissTopo');
+      await flushPromises();
+      // turned on by hand: kept on the next map
+      await click('SwissTopo ortho');
+      expect(map.layout.shading.visibility).toBe('visible');
+      wrapper.unmount();
+      fetch.mockRestore();
+    });
+
+    it('shades the relief softly (igor), at 40% until its slider is moved', async () => {
+      const { wrapper, map } = await mountMap({ documents: [route], show3d: true });
+
+      await open3d(wrapper);
+      await wrapper
+        .findAll('.layer-button')
+        .find((button) => button.text() === 'Shading')!
+        .trigger('click');
+
+      expect(map.layout.shading.visibility).toBe('visible');
+      expect(map.style.layers.find((layer) => layer.id === 'shading')).toMatchObject({
+        paint: { 'hillshade-method': 'igor' },
+      });
+      expect(map.paint.shading).toEqual({ 'hillshade-exaggeration': 0.4 });
+      wrapper.unmount();
+    });
+
+    it('also shows the waypoints of the routes of an outing, without another request', async () => {
+      const get = vi.spyOn(c2c.route as DocumentService, 'get');
+      const withWaypoints = {
+        ...outing,
+        associations: {
+          ...outing.associations,
+          route_waypoints: [waypoint(11, 'summit', 6.285), waypoint(12, 'access', 6.281), waypoint(13, 'virtual', 6.3)],
+        },
+      };
+      const { wrapper, map } = await mountMap({ documents: [withWaypoints], show3d: true });
+
+      await open3d(wrapper);
+
+      expect(get).not.toHaveBeenCalled();
+      // the virtual waypoint is left out, as on the 2D map
+      expect(shownMarkers()).toHaveLength(2);
+      expect(shownMarkers()[0].lngLat![0]).toBeCloseTo(6.285, 6);
+      expect((map.data['documents-3d'] as FeatureCollection).features).toHaveLength(1);
+      wrapper.unmount();
+    });
+
+    it('keeps the waypoints of the routes when the images of the outing are located', async () => {
+      const located = reactive({
+        ...outing,
+        associations: {
+          ...outing.associations,
+          route_waypoints: [waypoint(11, 'summit', 6.285)],
+          images: [] as unknown[],
+        },
+      });
+      const { wrapper } = await mountMap({ documents: [located], show3d: true });
+      await open3d(wrapper);
+      expect(shownMarkers()).toHaveLength(1);
+
+      located.associations.images.push({ document_id: 5, type: 'i', geometry: { geom: point(6.29, 45.9) } });
+      await flushPromises();
+
+      expect(shownMarkers().map((marker) => marker.lngLat![0])).toEqual(
+        expect.arrayContaining([expect.closeTo(6.285, 6)])
+      );
+      wrapper.unmount();
+    });
+
+    describe('of a list of documents', () => {
+      const pointOnly = { document_id: 2, type: 'o', activities: ['hiking'], geometry: { geom: point(6.5, 45.95) } };
+
+      it('keeps the marker of a result without a track when another result has one', async () => {
+        const { wrapper } = await mountMap({ documents: [outing, pointOnly], show3d: true });
+
+        await open3d(wrapper);
+
+        expect(shownMarkers()).toHaveLength(1);
+        expect(shownMarkers()[0].lngLat![0]).toBeCloseTo(6.5, 6);
+        wrapper.unmount();
+      });
+
+      it('keeps the filter on the extent of the map, with the box of what is seen', async () => {
+        const { wrapper, map } = await mountMap({
+          documents: [outing, pointOnly],
+          show3d: true,
+          showFilterControl: true,
+        });
+        await wrapper.find('#filter-documents-with-map').setValue(true);
+        await open3d(wrapper);
+        // right after the filter was turned on: the same step of the history
+        const replace = vi.spyOn(wrapper.vm.$router, 'replace');
+
+        expect(wrapper.find('.ol-control-use-map-as-filter').isVisible()).toBe(true);
+        map.extent = [6, 45, 7, 46];
+        map.fire('moveend');
+        await flushPromises();
+
+        expect(replace).toHaveBeenCalledWith({ query: { bbox: expect.stringMatching(/^\d+(,\d+){3}$/) } });
+        wrapper.unmount();
+      });
+
+      it('filters in 3D with the box within the ground seen, its top lowered with the tilt', async () => {
+        const { wrapper, map } = await mountMap({ documents: [outing], show3d: true, showFilterControl: true });
+        await wrapper.find('#filter-documents-with-map').setValue(true);
+        await open3d(wrapper);
+        Object.defineProperties(map.getContainer(), { clientWidth: { value: 1000 }, clientHeight: { value: 500 } });
+        // the ground seen: 5° deep, twice as wide at the top (far) as at the bottom (near)
+        map.unproject = ([x, y]: [number, number]) => ({
+          lng: ((x - 500) / 1000) * (1 + (500 - y) / 500),
+          lat: (500 - y) / 100,
+        });
+        // right after the filter was turned on: the same step of the history
+        const replace = vi.spyOn(wrapper.vm.$router, 'replace');
+        const sent = () =>
+          extentToLonLat(
+            String((replace.mock.lastCall![0] as { query: LocationQueryRaw }).query.bbox)
+              .split(',')
+              .map(Number)
+          );
+
+        map.fire('moveend');
+        await flushPromises();
+        // tilted 60°: the top lowered by 15 / 40 of half the screen (y = 93.75), and as wide as the middle of what is
+        // left, not as its top: the far corners left out
+        [-0.703, 0, 0.703, 4.0625].forEach((value, i) => expect(sent()[i]).toBeCloseTo(value, 2));
+        expect(map.data['filter-outline']).toMatchObject({ type: 'Polygon' });
+
+        // tilted 80°: lowered further, by 35 / 40 (y = 218.75)
+        map.pitch = 80;
+        map.fire('moveend');
+        await flushPromises();
+        expect(sent()[3]).toBeCloseTo(2.8125, 2);
+        wrapper.unmount();
+      });
+
+      it('goes back to 2D where it is, not to the view it left', async () => {
+        const { wrapper, map } = await mountMap({ documents: [outing, pointOnly], show3d: true });
+        map.zoom = 11;
+        await open3d(wrapper);
+
+        await wrapper.find('.ol-control-3d button').trigger('click');
+
+        expect(map.cameras.at(-1)).toEqual({ pitch: 0, bearing: 0 });
+        wrapper.unmount();
+      });
+
+      it('does not read the waypoints of the routes of its outings', async () => {
+        const get = vi.spyOn(c2c.route as DocumentService, 'get');
+        get.mockClear();
+        const { wrapper } = await mountMap({ documents: [outing, pointOnly], show3d: true });
+
+        await open3d(wrapper);
+
+        expect(get).not.toHaveBeenCalled();
+        wrapper.unmount();
+      });
+    });
+  });
+
+  describe('the position of the device', () => {
+    type Watcher = { ok: PositionCallback; error: PositionErrorCallback };
+    let watchers: Map<number, Watcher>;
+    let geolocation: Record<string, ReturnType<typeof vi.fn>>;
+    const positionError = (code: number) =>
+      ({ code, PERMISSION_DENIED: 1, POSITION_UNAVAILABLE: 2, TIMEOUT: 3 }) as GeolocationPositionError;
+    // a position given by the GPS to every watch
+    const fix = (coords: Partial<GeolocationCoordinates>) =>
+      [...watchers.values()].forEach(({ ok }) =>
+        ok({ coords: { accuracy: 20, heading: null, speed: null, ...coords } } as GeolocationPosition)
+      );
+    const fail = (code: number) => [...watchers.values()].forEach(({ error }) => error(positionError(code)));
+    const positionMarker = () => state.markers.find((marker) => marker.element?.classList.contains('c2c-map-position'));
+    const button = (wrapper: Awaited<ReturnType<typeof mountMap>>['wrapper']) =>
+      wrapper.find('.ol-control-center-on-geolocation button');
+    const mountFollowing = () => mountMap({ showCenterOnGeolocation: true, followPosition: true });
+
+    beforeEach(() => {
+      watchers = new Map();
+      let next = 1;
+      geolocation = {
+        watchPosition: vi.fn((ok: PositionCallback, error: PositionErrorCallback) => {
+          watchers.set(next, { ok, error });
+          return next++;
+        }),
+        clearWatch: vi.fn((id: number) => watchers.delete(id)),
+        getCurrentPosition: vi.fn((ok: PositionCallback) =>
+          ok({ coords: { longitude: 6.85, latitude: 45.9 } } as GeolocationPosition)
+        ),
+      };
+      Object.defineProperty(navigator, 'geolocation', { value: geolocation, configurable: true });
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback: FrameRequestCallback) => {
+        callback(0);
+        return 1;
+      });
+    });
+    afterEach(() => {
+      Reflect.deleteProperty(navigator, 'geolocation');
+      Reflect.deleteProperty(navigator, 'permissions');
+    });
+
+    it('centres the maps of the lists once, without following the position', async () => {
+      const { wrapper, map } = await mountMap({ showCenterOnGeolocation: true });
+
+      await button(wrapper).trigger('click');
+
+      expect(geolocation.getCurrentPosition).toHaveBeenCalled();
+      expect(geolocation.watchPosition).not.toHaveBeenCalled();
+      expect(map.cameras.at(-1)).toEqual({ center: [6.85, 45.9], zoom: 12 });
+      expect(positionMarker()).toBeUndefined();
+      wrapper.unmount();
+    });
+
+    it('follows the position on the document map: a dot kept in the middle, its accuracy around it', async () => {
+      const { wrapper, map } = await mountFollowing();
+      map.zoom = 14;
+
+      await button(wrapper).trigger('click');
+      expect(button(wrapper).classes()).toContain('c2c-map-position-waiting');
+      fix({ longitude: 6.85, latitude: 45.9, accuracy: 100 });
+      await flushPromises();
+
+      expect(button(wrapper).classes()).toContain('c2c-map-position-centred');
+      expect(button(wrapper).attributes('aria-pressed')).toBe('true');
+      expect(positionMarker()).toMatchObject({ lngLat: [6.85, 45.9], added: true });
+      // not zoomed out to the zoom of a place
+      expect(map.cameras.at(-1)).toEqual({ center: [6.85, 45.9], zoom: 14 });
+      // 100 m at zoom 14, latitude 45.9: 2 × 100 / (40075016.686 × cos(45.9°) / (512 × 2^14)) pixels
+      const accuracy = positionMarker()!.element!.firstElementChild as HTMLElement;
+      expect(parseFloat(accuracy.style.width)).toBeCloseTo(59.9, 0);
+
+      fix({ longitude: 6.86, latitude: 45.91 });
+      expect(map.cameras.at(-1)).toMatchObject({ center: [6.86, 45.91] });
+      wrapper.unmount();
+    });
+
+    it('stops keeping the position in the middle once the map is moved by hand, and draws how far it is', async () => {
+      const { wrapper, map } = await mountFollowing();
+      await button(wrapper).trigger('click');
+      fix({ longitude: 6.85, latitude: 45.9 });
+      await flushPromises();
+
+      map.fire('movestart', { originalEvent: new MouseEvent('mousedown') });
+      fix({ longitude: 6.85, latitude: 45.9 });
+      await flushPromises();
+      const cameras = map.cameras.length;
+      fix({ longitude: 6.851, latitude: 45.9 });
+      await flushPromises();
+
+      expect(map.cameras.length).toBe(cameras);
+      expect(button(wrapper).classes()).toContain('c2c-map-position-moved');
+      // from the centre of the map (6.8, 45.9), to the edge of the dot
+      const line = wrapper.find('.c2c-map-position-line line');
+      const [x1, y1, x2, y2] = ['x1', 'y1', 'x2', 'y2'].map((name) => Number(line.attributes(name)));
+      expect([x1, y1, x2, y2].map(Math.round)).toEqual([6800, 45900, 6838, 45900]);
+      expect(wrapper.find('.c2c-map-position-distance').text()).toBe('3,9 km');
+
+      // the middle of the line out of the map: the distance near its centre, along the line
+      Object.defineProperties(map.container, {
+        clientWidth: { value: 10000, configurable: true },
+        clientHeight: { value: 50000, configurable: true },
+      });
+      fix({ longitude: 26.8, latitude: 45.9 });
+      await flushPromises();
+      expect(wrapper.find('.c2c-map-position-distance').attributes('style')).toContain('left: 6840px');
+
+      // centred again by the button: no line
+      await button(wrapper).trigger('click');
+      expect(button(wrapper).classes()).toContain('c2c-map-position-centred');
+      expect(map.cameras.at(-1)).toMatchObject({ center: [26.8, 45.9] });
+      expect(wrapper.find('.c2c-map-position-line').exists()).toBe(false);
+      wrapper.unmount();
+    });
+
+    it('stops following the position at a tap on the button, or when the map goes', async () => {
+      const { wrapper } = await mountFollowing();
+      await button(wrapper).trigger('click');
+      fix({ longitude: 6.85, latitude: 45.9 });
+      await flushPromises();
+
+      await button(wrapper).trigger('click');
+
+      expect(geolocation.clearWatch).toHaveBeenCalledWith(1);
+      expect(positionMarker()!.removed).toBe(true);
+      expect(button(wrapper).classes()).toContain('c2c-map-position-off');
+
+      await button(wrapper).trigger('click');
+      wrapper.unmount();
+      expect(geolocation.clearWatch).toHaveBeenCalledWith(2);
+    });
+
+    it('shows the direction of the compass, else that of the movement when fast enough', async () => {
+      const { wrapper } = await mountFollowing();
+      await button(wrapper).trigger('click');
+      fix({ longitude: 6.85, latitude: 45.9, heading: 90, speed: 0.5 });
+      await flushPromises();
+      const marker = positionMarker()!;
+      // too slow: the direction of the GPS is noise
+      expect(marker.element!.classList.contains('with-heading')).toBe(false);
+
+      fix({ longitude: 6.85, latitude: 45.9, heading: 90, speed: 1.5 });
+      expect(marker.element!.classList.contains('with-heading')).toBe(true);
+      expect(marker.rotation).toBe(90);
+
+      // alpha goes counterclockwise from the north
+      window.dispatchEvent(Object.assign(new Event('deviceorientationabsolute'), { alpha: 300, absolute: true }));
+      expect(marker.rotation).toBe(60);
+      // the relative one says nothing of the north
+      window.dispatchEvent(Object.assign(new Event('deviceorientation'), { alpha: 10, absolute: false }));
+      expect(marker.rotation).toBe(60);
+      // iOS
+      window.dispatchEvent(Object.assign(new Event('deviceorientation'), { webkitCompassHeading: 200 }));
+      expect(marker.rotation).toBe(200);
+
+      wrapper.unmount();
+      window.dispatchEvent(Object.assign(new Event('deviceorientation'), { webkitCompassHeading: 10 }));
+      expect(marker.rotation).toBe(200);
+    });
+
+    it('crosses the icon out when the location is refused, and says how to allow it', async () => {
+      const { wrapper } = await mountFollowing();
+      await button(wrapper).trigger('click');
+
+      fail(1);
+      await flushPromises();
+
+      expect(button(wrapper).classes()).toEqual(
+        expect.arrayContaining(['c2c-map-position-off', 'c2c-map-position-blocked'])
+      );
+      expect(document.body.textContent).toContain('Location refused');
+      // a tap tries again: allowed since, the icon is no longer crossed out
+      await button(wrapper).trigger('click');
+      fix({ longitude: 6.85, latitude: 45.9 });
+      await flushPromises();
+      expect(button(wrapper).classes()).not.toContain('c2c-map-position-blocked');
+      wrapper.unmount();
+    });
+
+    it('crosses the icon out at once when the browser says the location is refused to the site', async () => {
+      Object.defineProperty(navigator, 'permissions', {
+        value: { query: vi.fn().mockResolvedValue({ state: 'denied', addEventListener: vi.fn() }) },
+        configurable: true,
+      });
+      const { wrapper } = await mountFollowing();
+
+      expect(button(wrapper).classes()).toContain('c2c-map-position-blocked');
+      wrapper.unmount();
+    });
+
+    it('keeps following through a weak signal once the position is known, not before', async () => {
+      const { wrapper } = await mountFollowing();
+      await button(wrapper).trigger('click');
+      fail(2);
+      await flushPromises();
+      expect(button(wrapper).classes()).toContain('c2c-map-position-off');
+
+      await button(wrapper).trigger('click');
+      fix({ longitude: 6.85, latitude: 45.9 });
+      fail(2);
+      await flushPromises();
+      expect(button(wrapper).classes()).toContain('c2c-map-position-centred');
+      wrapper.unmount();
+    });
+  });
+});

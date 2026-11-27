@@ -11,7 +11,17 @@
       {{ $filters.uppercaseFirstLetter(label) }}
     </span>
   </router-link>
-  <component v-else :is="href ? 'a' : 'div'" @click="$emit('click')" :href="href" class="toolbox-button">
+  <!-- disabled: shown with why (title), not clickable -->
+  <component
+    v-else
+    :is="href ? 'a' : 'div'"
+    @click="disabled || $emit('click')"
+    :href="disabled ? undefined : href"
+    :title="title ?? undefined"
+    :aria-disabled="disabled || undefined"
+    class="toolbox-button"
+    :class="{ 'is-disabled': disabled }"
+  >
     <span class="toolbox-button-icon">
       <slot name="icon">
         <fa-icon v-if="icon" :icon="icon" fixed-width :class="iconClass" />
@@ -23,55 +33,65 @@
   </component>
 </template>
 
-<script>
-export default {
-  props: {
-    icon: {
-      type: [String, Array],
-      default: null,
-    },
-    iconClass: {
-      type: String,
-      default: null,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    href: {
-      type: String,
-      default: null,
-    },
-    rel: {
-      type: String,
-      default: null,
-    },
-    to: {
-      type: Object,
-      default: null,
-    },
+<script setup lang="ts">
+defineProps({
+  icon: {
+    type: [String, Array],
+    default: null,
   },
-
-  emits: ['click'],
-};
+  iconClass: {
+    type: String,
+    default: null,
+  },
+  label: {
+    type: String,
+    required: true,
+  },
+  href: {
+    type: String,
+    default: null,
+  },
+  rel: {
+    type: String,
+    default: null,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  title: {
+    type: String,
+    default: null,
+  },
+  to: {
+    type: Object,
+    default: null,
+  },
+});
+defineEmits(['click']);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .toolbox-button {
   display: block;
   cursor: pointer;
 
+  &.is-disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
   span {
-    color: $link;
+    color: var(--c2c-link);
   }
 
   :hover {
-    color: $text;
+    color: var(--c2c-text);
   }
 
   .toolbox-button-icon {
     width: 1rem;
-    color: $text;
+    color: var(--c2c-text);
   }
 }
 </style>

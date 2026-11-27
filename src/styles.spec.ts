@@ -1,0 +1,257 @@
+// @vitest-environment node
+import { readdirSync, readFileSync } from 'node:fs';
+import { join, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { bundleAsync } from 'lightningcss';
+import { describe, expect, it } from 'vitest';
+import { compileStyle, parse } from 'vue/compiler-sfc';
+
+import viteConfig from '../vite.config.ts';
+
+import { DESKTOP_BREAKPOINT, PHONE_BREAKPOINT, TABLET_BREAKPOINT, WIDESCREEN_BREAKPOINT } from '@/stores/screen';
+
+// The styles are plain CSS, and compile as the build does (the specs run with `css: false`): the global CSS files of
+// src/assets/css, Bulma's included, and the <style> blocks of the components, with Vue and Lightning CSS.
+
+const root = fileURLToPath(new URL('..', import.meta.url));
+const src = join(root, 'src');
+
+const files = (dir: string, pattern: RegExp): string[] =>
+  readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      return files(path, pattern);
+    }
+    return pattern.test(entry.name) ? [path] : [];
+  });
+const vueFiles = (dir: string): string[] => files(dir, /\.vue$/);
+
+// the <style> blocks as @vitejs/plugin-vue sees them; the number is the block's position among all the file's styles
+const styleBlocks = (lang: string | undefined) =>
+  vueFiles(src).flatMap((file) =>
+    parse(readFileSync(file, 'utf8'), { filename: file })
+      .descriptor.styles.map((style, index) => ({ style, index }))
+      .filter(({ style }) => style.lang === lang && !style.src)
+      .map(({ style, index }) => ({
+        file,
+        name: `${relative(src, file)} #${index + 1}`,
+        content: style.content,
+        scoped: Boolean(style.scoped),
+      }))
+  );
+// the global CSS files
+const globalFiles = files(join(src, 'assets/css'), /\.css$/);
+// the <style> blocks in plain CSS, and the global CSS files
+const cssBlocks = [
+  ...styleBlocks(undefined),
+  ...globalFiles.map((file) => ({
+    file,
+    name: relative(src, file),
+    content: readFileSync(file, 'utf8'),
+    scoped: false,
+  })),
+];
+// all the CSS: global files and blocks of the components
+const allCss = (): string[] => cssBlocks.map(({ content }) => content);
+
+// The words of the code that can be class names: templates and scripts of the components, TypeScript and JavaScript
+// modules, translations, index.html. Not the styles, nor the specs.
+const code = (file: string): string => {
+  const content = readFileSync(file, 'utf8');
+  if (!file.endsWith('.vue')) {
+    return content;
+  }
+  // the blocks of the component as @vitejs/plugin-vue sees them, without its <style> blocks
+  const { template, script, scriptSetup } = parse(content, { filename: file }).descriptor;
+  return [template, script, scriptSetup].map((block) => block?.content ?? '').join('\n');
+};
+
+const codeWords = (): Set<string> => {
+  const sources = [
+    ...files(src, /\.(vue|ts|js|json|html)$/).filter((file) => !/\.spec\.ts$/.test(file)),
+    join(root, 'index.html'),
+  ].map(code);
+  return new Set(sources.join('\n').split(/[^\w-]+/));
+};
+
+// the classes a global CSS file requires: in its selectors, not in :not(...)
+const cssClasses = (css: string): string[] => {
+  const selectors = css.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\{[^{}]*\}/g, '{}');
+  return [...selectors.replace(/:not\([^)]*\)/g, '').matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)].map((m) => m[1]);
+};
+
+// classes of the global CSS that no source names: set at run time by a library
+const runTimeClasses = ['swiper-wrapper'];
+
+// the custom properties of assets/css/tokens.css: name (without --c2c-) and value
+const tokens = new Map(
+  [...readFileSync(join(src, 'assets/css/tokens.css'), 'utf8').matchAll(/--c2c-([\w-]+):\s*([^;]+);/g)].map((m) => [
+    m[1],
+    m[2],
+  ])
+);
+
+describe('styles', () => {
+  it('uses only breakpoints that exist', () => {
+    const media = readFileSync(join(src, 'assets/css/media.css'), 'utf8');
+    const used = new Set(allCss().flatMap((css) => [...css.matchAll(/(?<!var)\((--c2c-[\w-]+)\)/g)].map((m) => m[1])));
+    expect([...used].filter((name) => !media.includes(`@custom-media ${name} `))).toEqual([]);
+  });
+
+  // CSS cannot read the constants of the screen store: its custom media queries repeat them, and must agree
+  it('has the breakpoints of the screen store', () => {
+    const media = readFileSync(join(src, 'assets/css/media.css'), 'utf8');
+    const queries = Object.fromEntries(
+      [...media.matchAll(/@custom-media (--c2c-[\w-]+) (.+);/g)].map((m) => [m[1], m[2]])
+    );
+    const from = (width: number) => `(min-width: ${width}px)`;
+    const upTo = (width: number) => `(max-width: ${width}px)`;
+    expect(queries).toEqual({
+      '--c2c-phone': upTo(PHONE_BREAKPOINT - 1),
+      '--c2c-mobile': upTo(TABLET_BREAKPOINT - 1),
+      '--c2c-min-tablet': from(TABLET_BREAKPOINT),
+      '--c2c-max-tablet': upTo(TABLET_BREAKPOINT),
+      '--c2c-touch': upTo(DESKTOP_BREAKPOINT - 1),
+      '--c2c-min-desktop': from(DESKTOP_BREAKPOINT),
+      '--c2c-max-desktop': upTo(DESKTOP_BREAKPOINT),
+      '--c2c-min-widescreen': from(WIDESCREEN_BREAKPOINT),
+      '--c2c-max-widescreen': upTo(WIDESCREEN_BREAKPOINT),
+      // a height, which the screen store does not know: the windows too low for a page that fills them
+      '--c2c-short-window': '(max-height: 499px)',
+    });
+  });
+
+  // a width of its own in a media query guesses the size of a box from the window's, which the side menu and the
+  // columns change: a component lays out by its own box (a container query, or flex-wrap), the page by the named
+  // breakpoints. An image picks its size with srcset and sizes
+  it('uses no width of its own in a media query', () => {
+    const own = cssBlocks
+      .filter(({ file }) => !file.endsWith('assets/css/media.css'))
+      .flatMap(({ name, content }) =>
+        [...content.matchAll(/@media[^{]*\((?:min-|max-)?width:\s*\d+px\)/g)].map((m) => `${name}: ${m[0]}`)
+      );
+    expect(own).toEqual([]);
+  });
+
+  // a height computed from the window's repeats the heights of the navigation, of the paddings and of the headers above,
+  // and is wrong as soon as one of them changes (filters on two lines, the text size): the page takes what is left with
+  // .fills-window (App.vue). Bulma's modals, and the image viewer, over the whole window with its own bars, are fine,
+  // as the part that fills a low window under the navigation (App.vue), whose height switches in App.vue alone
+  it('computes no height from the window', () => {
+    const computed = cssBlocks
+      .filter(({ file }) => !file.includes('assets/css/bulma/'))
+      .flatMap(({ name, content }) =>
+        [...content.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/calc\([^;{}]*\d[dsl]?vh\b[^;{}]*/g)].map(
+          (m) => `${name}: ${m[0]}`
+        )
+      );
+    expect(computed).toEqual([
+      'App.vue #1: calc(100dvh - var(--c2c-header-height))',
+      'App.vue #1: calc(100dvh - var(--c2c-header-height))',
+      'components/image-viewer/ImageViewer.vue #1: calc(100dvh - 3rem - 30px)',
+    ]);
+  });
+
+  // what is under the navigation starts at --c2c-header-height, which App.vue alone switches with the large ad
+  // (.nav-dfm): a style of its own for the ad (top: var(--c2c-navbarad-height) under .nav-dfm) duplicates that switch
+  it('switches the header height in one place', () => {
+    const uses = cssBlocks
+      .filter(({ content }) =>
+        /\.nav-dfm\b|var\(--c2c-navbarad-height\)/.test(content.replace(/\/\*[\s\S]*?\*\//g, ''))
+      )
+      .map(({ name }) => name);
+    expect(uses).toEqual(['App.vue #1', 'views/Navigation.vue #1']);
+  });
+
+  // a data URL cannot use a custom property
+  it('draws the external link icon in the color of the links', () => {
+    const css = readFileSync(join(src, 'assets/css/external-links.css'), 'utf8');
+    expect(css).toContain(`fill='${encodeURIComponent(tokens.get('color-link')!)}'`);
+  });
+
+  it('uses only tokens that exist', () => {
+    expect(tokens.size).toBeGreaterThan(30);
+    const used = new Set(allCss().flatMap((css) => [...css.matchAll(/var\(--c2c-([\w-]+)/g)].map((m) => m[1])));
+    expect([...used].filter((name) => !tokens.has(name))).toEqual([]);
+  });
+
+  // Bulma 0.9.4 defines no custom property: a var(--bulma-...) only ever gives its fallback, outside the tokens
+  it('uses no custom property of Bulma 1', () => {
+    expect(allCss().filter((css) => css.includes('var(--bulma-'))).toEqual([]);
+  });
+
+  it('has no Sass', () => {
+    expect(files(src, /\.s[ac]ss$/).map((file) => relative(src, file))).toEqual([]);
+    expect(styleBlocks('scss').map(({ name }) => name)).toEqual([]);
+    expect(cssBlocks.length).toBeGreaterThan(200);
+  });
+
+  // a scoped style adds its data-v attribute to the rules it imports: they would not match the elements created by a
+  // library (the controls of ol/ol.css, c2corg/c2c_ui#4955); media.css has no rules, only breakpoints
+  it('imports only media.css in a scoped style', () => {
+    const imports = cssBlocks
+      .filter(({ scoped }) => scoped)
+      .flatMap(({ name, content }) =>
+        [...content.matchAll(/@import\s+(?:url\()?['"]([^'"]+)['"]/g)].map((m) => `${name}: ${m[1]}`)
+      );
+    expect(imports.length).toBeGreaterThan(20);
+    expect(imports.filter((line) => !line.endsWith(': @/assets/css/media.css'))).toEqual([]);
+  });
+
+  // the global CSS has only the classes the site uses: Bulma's included, kept from its 0.9.4 Sass with the variants the
+  // site used (c2corg/c2c_ui#4918); to use another one (`mt-6`, `is-outlined`...), write its rules
+  it('has only classes the code uses in the global CSS', () => {
+    const words = codeWords();
+    const unused = new Set(
+      globalFiles.flatMap((file) => cssClasses(readFileSync(file, 'utf8')).filter((name) => !words.has(name)))
+    );
+    expect([...unused].sort()).toEqual(runTimeClasses);
+  });
+
+  // the other way round for the sized columns of Bulma, which a breakpoint names (`is-6-widescreen`): a missing one
+  // leaves the column at its smaller size without a word
+  it('has the rules of the sized columns the code uses', () => {
+    const defined = new Set(globalFiles.flatMap((file) => cssClasses(readFileSync(file, 'utf8'))));
+    const sized = [...codeWords()].filter((word) =>
+      /^is-(\d+|full|half|one-third|two-thirds|one-quarter|three-quarters)-(mobile|tablet|touch|desktop|widescreen)$/.test(
+        word
+      )
+    );
+    expect(sized.length).toBeGreaterThan(10);
+    expect(sized.filter((name) => !defined.has(name))).toEqual([]);
+  });
+
+  // and the code uses no variant of Bulma the global CSS left out: its class would change nothing (is-outlined gave a
+  // solid button, is-toggle plain tabs)
+  it('uses no variant of Bulma the global CSS left out', () => {
+    const words = codeWords();
+    const css = new Set(globalFiles.flatMap((file) => cssClasses(readFileSync(file, 'utf8'))));
+    const variants = ['is-outlined', 'is-inverted', 'is-toggle', 'is-toggle-rounded', 'is-focused', 'is-hovered'];
+    expect(variants.filter((name) => words.has(name) && !css.has(name))).toEqual([]);
+  });
+
+  // a plain CSS style is valid CSS for Lightning CSS, scoped by Vue then bundled as Vite does with the options of
+  // vite.config.ts (no `//` comment, no Sass), and it imports media.css when it uses a breakpoint
+  it.each(cssBlocks)('compiles the style of $name with Lightning CSS', async ({ file, content: source, scoped }) => {
+    const { code: content, errors } = compileStyle({ source, filename: file, id: 'data-v-spec', scoped });
+    expect(errors).toEqual([]);
+    const { code, warnings } = await bundleAsync({
+      ...viteConfig.css?.lightningcss,
+      filename: file,
+      errorRecovery: false,
+      resolver: {
+        read: (path) => (path === file ? content : readFileSync(path, 'utf8')),
+        // the `@/` alias, a relative path or a package (ol/ol.css)
+        resolve: (specifier, from) => {
+          if (specifier.startsWith('@/')) {
+            return join(src, specifier.slice(2));
+          }
+          return specifier.startsWith('.') ? join(from, '..', specifier) : join(root, 'node_modules', specifier);
+        },
+      },
+    });
+    expect(warnings).toEqual([]);
+    expect(code.toString()).not.toMatch(/--c2c-(min|max)-/);
+  });
+});

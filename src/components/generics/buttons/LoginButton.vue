@@ -6,21 +6,12 @@
   </router-link>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      redirect: '/',
-    };
-  },
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 
-  watch: {
-    $route: {
-      handler(to) {
-        this.redirect = to.fullPath;
-      },
-      immediate: true,
-    },
-  },
-};
+const route = useRoute();
+
+// back to the current page once logged
+const redirect = computed(() => route.fullPath);
 </script>

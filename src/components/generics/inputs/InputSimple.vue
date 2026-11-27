@@ -17,14 +17,15 @@
 
     <input
       v-else
-      :type="type"
-      :min="divisor ? min / divisor : min"
-      :max="divisor ? max / divisor : max"
+      :type="divided ? 'text' : type"
+      :inputmode="divided ? 'decimal' : undefined"
+      :min="divided ? undefined : min"
+      :max="divided ? undefined : max"
       :disabled="disabled"
       :placeholder="placeholder"
       v-model.lazy="value_"
       class="input"
-      :class="{ 'is-danger': hasError }"
+      :class="{ 'is-danger': hasError || invalid }"
     />
 
     <span v-if="postfix" class="icon is-right">
@@ -33,60 +34,66 @@
   </div>
 </template>
 
-<script>
-import { baseMixin } from './mixins';
+<script setup lang="ts">
+import { computed, type PropType, watch } from 'vue';
 
-export default {
-  mixins: [baseMixin],
+import { baseInputProps, useInputValue } from './input-value';
 
-  props: {
-    min: {
-      type: Number,
-      default: null,
-    },
-    max: {
-      type: [Number, String], // string is for date
-      default: null,
-    },
-    modelValue: {
-      type: [String, Number, Boolean],
-      default: null,
-    },
-    prefix: {
-      type: String,
-      default: null,
-    },
-    postfix: {
-      type: String,
-      default: null,
-    },
-    options: {
-      type: Array,
-      default: null,
-    },
-    isExpanded: {
-      type: Boolean,
-      default: null,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    i18n: {
-      type: Boolean,
-      default: false,
-    },
-    i18nContext: {
-      type: String,
-      default: undefined,
-    },
+const props = defineProps({
+  ...baseInputProps,
+  min: {
+    type: Number,
+    default: null,
   },
+  max: {
+    type: [Number, String], // string is for date
+    default: null,
+  },
+  modelValue: {
+    type: [String, Number, Boolean],
+    default: null,
+  },
+  prefix: {
+    type: String,
+    default: null,
+  },
+  postfix: {
+    type: String,
+    default: null,
+  },
+  options: {
+    type: Array as PropType<string[]>,
+    default: null,
+  },
+  isExpanded: {
+    type: Boolean,
+    default: null,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  i18n: {
+    type: Boolean,
+    default: false,
+  },
+  i18nContext: {
+    type: String,
+    default: undefined,
+  },
+});
+// update:invalid: a divided number whose text is rejected (not a number, out of range), so that the form does not
+// save the previous value as if it were the one shown
+const emit = defineEmits(['update:modelValue', 'update:invalid', 'click-prefix']);
 
-  emits: ['click-prefix'],
-};
+const { value_, invalid } = useInputValue(props, emit);
+watch(invalid, (value) => emit('update:invalid', value));
+
+// a number shown divided (metres in km) is typed as text, read with a comma or a dot
+const divided = computed(() => props.type === 'number' && props.divisor !== undefined);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 select,
 input {
   min-width: 15rem;
@@ -103,8 +110,8 @@ select {
   .prefix {
     cursor: default;
     background-color: whitesmoke;
-    border-color: #dbdbdb;
-    color: #7a7a7a;
+    border-color: var(--c2c-grey-lighter);
+    color: var(--c2c-grey);
     box-shadow: none;
 
     margin-right: -1px;
@@ -119,6 +126,6 @@ select {
 }
 
 .prefix.is-danger {
-  border-color: $danger;
+  border-color: var(--c2c-danger);
 }
 </style>

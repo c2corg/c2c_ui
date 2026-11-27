@@ -1,0 +1,81 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): form/input-textarea */
+
+/* Bulma Form */
+
+.textarea,
+.input {
+  box-shadow: inset 0 0.0625em 0.125em rgba(4%, 4%, 4%, 0.05);
+  max-width: 100%;
+  width: 100%;
+}
+
+[readonly].textarea,
+[readonly].input {
+  box-shadow: none;
+}
+
+/* the colors: see ../palette.css */
+:is(.textarea, .input):is(
+  .is-white,
+  .is-light,
+  .is-dark,
+  .is-primary,
+  .is-link,
+  .is-info,
+  .is-success,
+  .is-warning,
+  .is-danger
+) {
+  border-color: var(--palette);
+
+  &:focus,
+  &:active,
+  &.is-active {
+    box-shadow: 0 0 0 0 var(--palette-focus);
+  }
+}
+
+.is-small.textarea,
+.is-small.input {
+  border-radius: 2px;
+  font-size: var(--c2c-size-7);
+}
+
+.is-medium.textarea,
+.is-medium.input {
+  font-size: var(--c2c-size-5);
+}
+
+.is-large.textarea,
+.is-large.input {
+  font-size: var(--c2c-size-4);
+}
+
+.is-inline.textarea,
+.is-inline.input {
+  display: inline;
+  width: auto;
+}
+
+.input.is-rounded {
+  border-radius: 9999px;
+  padding-left: calc(calc(0.625em - 1px) + 0.375em);
+  padding-right: calc(calc(0.625em - 1px) + 0.375em);
+}
+
+.textarea {
+  display: block;
+  max-width: 100%;
+  min-width: 100%;
+  padding: calc(0.625em - 1px);
+  resize: vertical;
+
+  &:not([rows]) {
+    max-height: 40em;
+    min-height: 8em;
+  }
+
+  &[rows] {
+    height: initial;
+  }
+}

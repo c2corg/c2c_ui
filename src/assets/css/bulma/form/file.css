@@ -1,0 +1,152 @@
+/* Bulma 0.9.4 (MIT License, see bulma/LICENSE): form/file */
+
+.file {
+  align-items: stretch;
+  display: flex;
+  justify-content: flex-start;
+  position: relative;
+
+  /* the colors: see ../palette.css */
+  &:is(.is-white, .is-light, .is-dark, .is-primary, .is-link, .is-info, .is-success, .is-warning, .is-danger) {
+    .file-cta {
+      background-color: var(--palette);
+      border-color: transparent;
+      color: var(--palette-invert);
+    }
+
+    &:hover .file-cta {
+      background-color: var(--palette-hover);
+      border-color: transparent;
+      color: var(--palette-invert);
+    }
+
+    &:focus .file-cta {
+      border-color: transparent;
+      box-shadow: 0 0 0.5em var(--palette-focus);
+      color: var(--palette-invert);
+    }
+
+    &:active .file-cta,
+    &.is-active .file-cta {
+      background-color: var(--palette-active);
+      border-color: transparent;
+      color: var(--palette-invert);
+    }
+  }
+
+  &.is-small {
+    font-size: var(--c2c-size-7);
+  }
+
+  &.is-medium {
+    font-size: var(--c2c-size-5);
+
+    .file-icon .fa {
+      font-size: 21px;
+    }
+  }
+
+  &.is-large {
+    font-size: var(--c2c-size-4);
+
+    .file-icon .fa {
+      font-size: 28px;
+    }
+  }
+
+  &.is-boxed .file-label {
+    flex-direction: column;
+  }
+
+  &.is-boxed .file-cta {
+    flex-direction: column;
+    height: auto;
+    padding: 1em 3em;
+  }
+
+  &.is-boxed .file-icon {
+    height: 1.5em;
+    width: 1.5em;
+
+    .fa {
+      font-size: 21px;
+    }
+  }
+
+  &.is-boxed.is-small .file-icon .fa {
+    font-size: 14px;
+  }
+
+  &.is-boxed.is-medium .file-icon .fa {
+    font-size: 28px;
+  }
+
+  &.is-boxed.is-large .file-icon .fa {
+    font-size: 35px;
+  }
+
+  &.is-centered {
+    justify-content: center;
+  }
+
+  &.is-right {
+    justify-content: flex-end;
+
+    .file-cta {
+      border-radius: 0 4px 4px 0;
+    }
+  }
+}
+
+.file-label {
+  align-items: stretch;
+  display: flex;
+  cursor: pointer;
+  justify-content: flex-start;
+  overflow: hidden;
+  position: relative;
+
+  &:hover .file-cta {
+    background-color: hsl(0, 0%, 93.5%);
+    color: var(--c2c-grey-darker);
+  }
+
+  &:active .file-cta {
+    background-color: hsl(0, 0%, 91%);
+    color: var(--c2c-grey-darker);
+  }
+}
+
+.file-input {
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  outline: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.file-cta {
+  border-color: var(--c2c-grey-lighter);
+  border-radius: var(--c2c-radius);
+  font-size: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
+  white-space: nowrap;
+  background-color: var(--c2c-white-ter);
+  color: var(--c2c-text);
+}
+
+.file-icon {
+  align-items: center;
+  display: flex;
+  height: 1em;
+  justify-content: center;
+  margin-right: 0.5em;
+  width: 1em;
+
+  .fa {
+    font-size: 14px;
+  }
+}

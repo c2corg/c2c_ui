@@ -3,7 +3,16 @@ import Geolocation from 'ol/Geolocation';
 import { Attribution, Control, FullScreen, ScaleLine, Zoom } from 'ol/control';
 import { format } from 'ol/coordinate';
 import { click, pointerMove } from 'ol/events/condition';
-import { boundingExtent, buffer, containsXY, createEmpty, extend, getWidth, intersects } from 'ol/extent';
+import {
+  boundingExtent,
+  buffer,
+  containsExtent,
+  containsXY,
+  createEmpty,
+  extend,
+  getWidth,
+  intersects,
+} from 'ol/extent';
 import GPX from 'ol/format/GPX';
 import GeoJSON from 'ol/format/GeoJSON';
 import KML from 'ol/format/KML';
@@ -11,12 +20,12 @@ import { LineString, MultiPolygon, Point, Polygon, GeometryCollection } from 'ol
 import { fromExtent } from 'ol/geom/Polygon';
 import { DragAndDrop, Draw, Modify, Pointer, Select, Snap } from 'ol/interaction';
 import GroupLayer from 'ol/layer/Group';
+import HeatmapLayer from 'ol/layer/Heatmap';
 import ImageLayer from 'ol/layer/Image';
 import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import { get as getProjection, toLonLat, transformExtent, transform as transformProjection } from 'ol/proj';
-import BingMaps from 'ol/source/BingMaps';
 import ImageStatic from 'ol/source/ImageStatic';
 import ImageTile from 'ol/source/ImageTile';
 import TileWMS from 'ol/source/TileWMS';
@@ -59,6 +68,7 @@ export default {
     boundingExtent,
     buffer,
     getWidth,
+    containsExtent,
     containsXY,
     createEmpty,
     extend,
@@ -95,6 +105,7 @@ export default {
     Tile: TileLayer,
     Image: ImageLayer,
     Group: GroupLayer,
+    Heatmap: HeatmapLayer,
   },
 
   proj: {
@@ -105,7 +116,6 @@ export default {
   },
 
   source: {
-    BingMaps,
     ImageStatic,
     ImageTile,
     TileWMS,

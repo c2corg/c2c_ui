@@ -6,13 +6,11 @@
   </span>
 </template>
 
-<script>
-export default {
-  props: {
-    book: {
-      type: Object,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  book: {
+    type: Object,
+    required: true,
   },
-};
+});
 </script>

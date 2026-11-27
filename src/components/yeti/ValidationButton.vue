@@ -4,7 +4,7 @@
       <button
         class="button is-primary"
         :class="{ 'is-loading': loading }"
-        :disabled="loading"
+        :disabled="Boolean(loading)"
         :tabindex="tabindex"
         @click="$emit('click')"
         v-translate
@@ -20,31 +20,27 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import Info from '@/components/yeti/Info.vue';
 
-export default {
-  components: { Info },
-  props: {
-    currentError: {
-      type: String,
-      default: '',
-    },
-    loading: {
-      type: [Promise, Object],
-      default: null,
-    },
-    tabindex: {
-      type: String,
-      default: '0',
-    },
+defineProps({
+  currentError: {
+    type: String,
+    default: '',
   },
-
-  emits: ['click'],
-};
+  loading: {
+    type: [Promise, Object],
+    default: null,
+  },
+  tabindex: {
+    type: String,
+    default: '0',
+  },
+});
+defineEmits(['click']);
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .info {
   margin-top: 0.25rem;
   margin-right: -0.75rem;

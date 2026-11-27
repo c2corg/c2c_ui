@@ -5,23 +5,105 @@
 
 import type { App } from 'vue';
 
+import type { FeatureProperties } from '@/components/map/map-documents';
 import c2c from '@/js/apis/c2c';
+import type {
+  Area,
+  Article,
+  Book,
+  Image,
+  Outing,
+  Profile,
+  Route,
+  TopoMap,
+  Waypoint,
+  Xreport,
+} from '@/js/apis/c2c/schemas';
 import constants from '@/js/constants';
+import { formatLength, formatNumber } from '@/js/length-format';
 
 // a locale of a document: its language, title...
-export type Locale = { lang: string; title?: string | null; title_prefix?: string | null; [property: string]: unknown };
+export type Locale = {
+  lang: string;
+  title?: string | null;
+  title_prefix?: string | null;
+  // the forum topic of its comments
+  topic_id?: number | null;
+  [property: string]: unknown;
+};
 
-// a document of the API, as far as this module goes. Its other properties stay untyped until the API responses are
-// typed (#4747)
+// the associated documents of a document, by kind
+export type Associations = {
+  waypoints?: C2cDocument[];
+  waypoint_children?: C2cDocument[];
+  // the waypoints of the routes of an outing (not associated with it), for its map
+  route_waypoints?: C2cDocument[];
+  routes?: C2cDocument[];
+  outings?: C2cDocument[];
+  images?: C2cDocument[];
+  articles?: C2cDocument[];
+  books?: C2cDocument[];
+  xreports?: C2cDocument[];
+  users?: C2cDocument[];
+  areas?: C2cDocument[];
+  // the last outings of a route or a waypoint, the routes of a waypoint: a page of them
+  recent_outings?: { documents: C2cDocument[]; total: number };
+  all_routes?: { documents: C2cDocument[]; total: number };
+};
+
+// the kinds of associations given as a list: those an edition can add to or remove from
+export type AssociationList = Exclude<keyof Associations, 'recent_outings' | 'all_routes'>;
+
+// a document of any type, as the API gives it (src/js/apis/c2c/schemas.ts), or as the UI builds it: the fields of every
+// document type, each optional, with the type they have in the document types that have it. Any other property is
+// unknown: read it through a typed field, or add it here
 export type C2cDocument = {
   type?: string;
   document_id?: number;
   locales?: Locale[];
-  associations?: Record<string, C2cDocument[]>;
-  geometry?: { geom: string | null; geom_detail?: string | null };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [property: string]: any;
+  // the associated documents (schemas.ts associations): lists, and pages for recent_outings and all_routes
+  associations?: Associations;
+  // the documents of the feeds, of the recent changes and of the moderation lists have a title instead of locales,
+  // and a route its title prefix (the title of its main waypoint)
+  title?: string | null;
+  title_prefix?: string | null;
+  // the drawing properties of the features of other services (public transports, start points), on the map
+  properties?: FeatureProperties;
+  // listings give has_geom_detail instead of geom_detail
+  geometry?: {
+    geom?: string | null;
+    geom_detail?: string | null;
+    has_geom_detail?: boolean;
+    version?: number;
+  } | null;
+  // ?cook=<lang>: the locale in that language, its markdown as HTML
+  cooked?: Locale;
+  [property: string]: unknown;
+} & AnyOf<
+  | Area
+  | Article
+  | Book
+  | Image
+  | TopoMap
+  | Outing
+  | Exclude<Profile, { not_authorized: true }>
+  | Route
+  | Waypoint
+  | Xreport
+>;
+
+// the fields of the document types, each optional, with the union of their types in the types that have it
+type AllKeys<U> = U extends unknown ? keyof U : never;
+type ValueOf<U, K extends PropertyKey> = U extends unknown ? (K extends keyof U ? U[K] : never) : never;
+type AnyOf<U> = {
+  [K in Exclude<AllKeys<U>, 'type' | 'document_id' | 'locales' | 'associations' | 'geometry' | 'cooked'>]?: ValueOf<
+    U,
+    K
+  >;
 };
+
+// a document as a document view shows it: with its locale in the language of the page, as HTML (?cook=<lang>)
+export type CookedDocument = C2cDocument & { cooked: Locale };
 
 export type DocumentUtils = ReturnType<typeof createDocumentUtils>;
 
@@ -55,16 +137,12 @@ function createDocumentUtils(app: App) {
     getDocumentTitle(document: C2cDocument, lang?: string): string {
       // profile does not have locale, get profile's name
       if (document.type === 'u' || !document.type) {
-        return document.name ?? '';
+        return document.name ?? document.title ?? '';
       }
 
-      // document object returned by whatsnew does not have locale either
+      // document object returned by whatsnew or the moderation lists does not have locale either
       // but provides title property
-      if (!document.locales) {
-        return document.title ?? '';
-      }
-
-      const locale = this.getLocaleSmart(document, lang);
+      const locale = document.locales ? this.getLocaleSmart(document, lang) : document;
 
       if (locale?.title_prefix) {
         return locale.title_prefix + ' : ' + locale.title;
@@ -173,9 +251,9 @@ function createDocumentUtils(app: App) {
       );
     },
 
-    getAssociationArrayName(child: C2cDocument): string {
+    getAssociationArrayName(child: C2cDocument): AssociationList {
       const documentType = this.getDocumentType(child.type);
-      return documentType === 'profile' ? 'users' : documentType + 's';
+      return (documentType === 'profile' ? 'users' : documentType + 's') as AssociationList;
     },
 
     isInArray(array: C2cDocument[], document: C2cDocument): boolean {
@@ -183,7 +261,7 @@ function createDocumentUtils(app: App) {
     },
 
     addAssociation(document: C2cDocument, child: C2cDocument) {
-      const array = document.associations![this.getAssociationArrayName(child)];
+      const array = document.associations![this.getAssociationArrayName(child)]!;
 
       if (this.isInArray(array, child)) {
         return;
@@ -195,7 +273,7 @@ function createDocumentUtils(app: App) {
 
     removeAssociation(document: C2cDocument, child: C2cDocument) {
       const arrayName = this.getAssociationArrayName(child);
-      const array = document.associations![arrayName];
+      const array = document.associations![arrayName]!;
 
       document.associations![arrayName] = array.filter((item) => item.document_id !== child.document_id);
     },
@@ -316,7 +394,7 @@ function createDocumentUtils(app: App) {
         const orderedAreas: Record<string, string[]> = { range: [], admin_limits: [], country: [] };
 
         for (const area of areas) {
-          orderedAreas[area.area_type].push(this.getLocaleSmart(area)?.title as string);
+          orderedAreas[area.area_type!].push(this.getLocaleSmart(area)?.title as string);
         }
 
         if (orderedAreas['range'].length) {
@@ -349,15 +427,10 @@ function createDocumentUtils(app: App) {
       const start = app.config.globalProperties.$dateUtils.parseDate(date_start);
       const end = app.config.globalProperties.$dateUtils.parseDate(date_end);
 
-      if (!app.config.globalProperties.$dateUtils.isSameYear(start, end)) {
-        return this.formatDate(start, 'll') + ' - ' + this.formatDate(end, 'll');
-      } else if (!app.config.globalProperties.$dateUtils.isSameMonth(start, end)) {
-        return this.formatDate(start, 'D MMMM') + ' - ' + this.formatDate(end, 'll');
-      } else if (!app.config.globalProperties.$dateUtils.isSameDay(start, end)) {
-        return this.formatDate(start, 'D') + ' - ' + this.formatDate(end, 'll');
-      } else {
-        return this.formatDate(end, '@1');
+      if (!app.config.globalProperties.$dateUtils.isSameDay(start, end)) {
+        return app.config.globalProperties.$dateUtils.toLocalizedRange(start, end);
       }
+      return this.formatDate(end, '@1');
     },
 
     formatDate(arg: Parameters<DateUtilsOf['toLocalizedString']>[0], formatString: string): string {
@@ -428,18 +501,16 @@ function createDocumentUtils(app: App) {
       if (!length) {
         return undefined;
       }
-      if (length > 1000) {
-        const l = (length / 1000.0).toFixed(1);
-        return `${l}&nbsp;${app.config.globalProperties.$gettext('kilometers')}`;
-      }
-      return `${length}&nbsp;${app.config.globalProperties.$gettext('meters')}`;
+      // the same unit symbols in every language: 560 m, 4,5 km, 12 km
+      const { value, unit } = formatLength(length, app.config.globalProperties.$language?.current);
+      return `${value}&nbsp;${unit}`;
     },
 
     heightDiffUpWithUnit(hdu?: number | null): string | undefined {
       if (!hdu) {
         return undefined;
       }
-      return `${hdu}&nbsp;${app.config.globalProperties.$gettext('meters')}`;
+      return `${formatNumber(hdu, app.config.globalProperties.$language?.current)}&nbsp;m`;
     },
   };
 

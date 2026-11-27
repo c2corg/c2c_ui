@@ -25,6 +25,35 @@ describe('constants', () => {
   });
 });
 
+describe('has_track', () => {
+  it('is a yes/no filter of the outings and routes lists, not an attribute of the documents', () => {
+    for (const type of ['outing', 'route']) {
+      expect(constants.objectDefinitions[type].fields.has_track).toMatchObject({
+        parent: 'query',
+        url: 'trk',
+        queryMode: 'tristate',
+        label: 'GPS Track',
+        defaultUrlQuery: '',
+      });
+    }
+    expect(constants.objectDefinitions.waypoint.fields.has_track).toBeUndefined();
+    expect(routeField('has_track').nullable).toBeFalsy();
+    expect(constants.categorizedFieldsDefault.Miscs).toContain('has_track');
+  });
+
+  it('has no "no info" choice, and no error in a document', () => {
+    const hasTrack = routeField('has_track');
+    expect(['true', 'false', 'null'].map((url) => hasTrack.urlToValue(url))).toEqual(['yes', 'no', undefined]);
+    expect(hasTrack.getError({ type: 'r' }, {})).toBeNull();
+  });
+
+  it('does not come in a new document', () => {
+    // buildDocument() gives a value to every field of the document
+    const fields = Object.values(constants.objectDefinitions.outing.fields);
+    expect(fields.filter((field) => field.parent === 'document').map((field) => field.name)).not.toContain('has_track');
+  });
+});
+
 describe('Field', () => {
   it('derives its query mode and default URL query from its type', () => {
     expect(routeField('elevation_max')).toMatchObject({
@@ -90,6 +119,60 @@ describe('Field', () => {
       name: 'activities',
       description: 'required field',
     });
+  });
+
+  it('checks the range of the numbers, with a higher max for a multi-day outing or route', () => {
+    const outingField = (name: string) => constants.objectDefinitions.outing.fields[name];
+    const heightDiff = outingField('height_diff_up');
+    const day = { type: 'o', activities: ['hiking'], date_start: '2026-07-24', date_end: '2026-07-24' };
+    const trek = { ...day, date_end: '2026-08-20' };
+
+    expect(heightDiff.getError({ ...day, height_diff_up: 9000 }, {})).toBeNull();
+    expect(heightDiff.getError({ ...day, height_diff_up: 35000 }, {})).toEqual({
+      name: 'height_diff_up',
+      description: 'Greater than maximum value',
+      limit: 9000,
+    });
+    expect(heightDiff.getError({ ...day, height_diff_up: -1 }, {})).toEqual({
+      name: 'height_diff_up',
+      description: 'Less than minimum value',
+      limit: 0,
+    });
+    expect(heightDiff.maxFor(trek)).toBe(32767);
+    expect(heightDiff.getError({ ...trek, height_diff_up: 30000 }, {})).toBeNull();
+    expect(heightDiff.getError({ ...trek, height_diff_up: 35000 }, {})).toMatchObject({ limit: 32767 });
+
+    // a route of several days
+    const routeHeightDiff = routeField('height_diff_down');
+    const route = { type: 'r', activities: ['hiking'], height_diff_down: 12000 };
+    expect(routeHeightDiff.getError({ ...route, durations: ['1'] }, {})).toMatchObject({ limit: 9000 });
+    expect(routeHeightDiff.getError({ ...route, durations: ['10+'] }, {})).toBeNull();
+    // the length and the height of the difficulties of a long journey
+    const bikeTour = { type: 'r', activities: ['mountain_biking'], durations: ['10+'] };
+    expect(routeField('route_length').getError({ ...bikeTour, route_length: 10300000 }, {})).toBeNull();
+    expect(routeField('mtb_length_asphalt').maxFor(bikeTour)).toBe(20000000);
+    expect(routeField('height_diff_difficulties').maxFor(bikeTour)).toBe(9000);
+    expect(routeField('route_length').maxFor({ ...bikeTour, durations: ['1'] })).toBe(500000);
+
+    // an approach that goes down to the climb
+    const access = routeField('height_diff_access');
+    const climb = { type: 'r', activities: ['rock_climbing'], durations: ['1'] };
+    expect(access.getError({ ...climb, height_diff_access: -200 }, {})).toBeNull();
+    expect(access.getError({ ...climb, height_diff_access: -600 }, {})).toMatchObject({ limit: -500 });
+
+    // a field without multi-day max, and an empty value
+    expect(outingField('elevation_max').maxFor(trek)).toBe(9000);
+    expect(heightDiff.getError({ ...day, height_diff_up: null }, {})).toBeNull();
+  });
+
+  it('is invalid while the text of its input is rejected: the document keeps the previous value', () => {
+    const length = routeField('route_length');
+    const route = { type: 'r', activities: ['hiking'], route_length: 560 };
+
+    length.rejectedInput = true;
+    expect(length.getError(route, {})).toEqual({ name: 'route_length', description: 'Invalid value' });
+    length.rejectedInput = false;
+    expect(length.getError(route, {})).toBeNull();
   });
 
   it('is visible for its activities, and for rock climbing routes of the right kind', () => {
