@@ -36,6 +36,12 @@ describe('orthoLayerOf', () => {
     expect(orthoLayerOf(pyrenees)?.title).toBe('IGN ortho (es)');
     expect(orthoLayerOf([[-0.4, 42.9]])?.title).toBe('IGN ortho');
     expect(orthoLayerOf([[86.9, 27.9]])).toBeUndefined();
+    // from Grenoble to the Himalaya: the most of it outside the countries we have one for, the world one
+    const far = [[5.72, 45.19], ...Array.from({ length: 9 }, () => [86.9, 27.9])];
+    expect(orthoLayerOf(far)).toBeUndefined();
+    expect(orthoLayerOf([...far, ...far.slice(0, 1).flatMap((point) => Array(9).fill(point))])?.title).toBe(
+      'IGN ortho'
+    );
     expect(orthoLayerOf([])).toBeUndefined();
   });
 });
