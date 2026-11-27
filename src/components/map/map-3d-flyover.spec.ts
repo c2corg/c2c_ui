@@ -26,11 +26,18 @@ const flat = (points: [number, number][]) => Promise.resolve(new Float64Array(po
 describe('durationAt1x', () => {
   it('grows by perDoubling for each doubling of the length, within its bounds', () => {
     expect(durationAt1x(10_000)).toBe(45);
-    expect(durationAt1x(20_000)).toBe(60);
     expect(durationAt1x(40_000)).toBe(75);
     expect(durationAt1x(2_000)).toBe(FLYOVER.duration.min);
-    expect(durationAt1x(5_000_000)).toBe(FLYOVER.duration.max);
     expect(durationAt1x(0)).toBe(FLYOVER.duration.min);
+  });
+
+  it('has no upper limit: a long track goes by at most maxSpeed distances of the camera a second', () => {
+    // the camera 1600 m away: 20 km at 0.2 × 1600 m/s
+    expect(durationAt1x(20_000)).toBeCloseTo(62.5, 6);
+    // the camera at its farthest, 4 km: 100 km in 125 s, 600 km in 750 s
+    expect(durationAt1x(100_000)).toBeCloseTo(125, 6);
+    expect(durationAt1x(600_000)).toBeCloseTo(750, 6);
+    expect(durationAt1x(600_000, { ...FLYOVER, duration: { ...FLYOVER.duration, maxSpeed: 0 } })).toBeLessThan(200);
   });
 
   it('reads its settings', () => {

@@ -55,7 +55,7 @@ const GROUPS: { title: string; fields: Field[] }[] = [
       { path: 'duration.base', label: 'at 10 km', min: 10, max: 240, step: 1 },
       { path: 'duration.perDoubling', label: 'per doubling', min: 0, max: 90, step: 1 },
       { path: 'duration.min', label: 'min', min: 5, max: 180, step: 1 },
-      { path: 'duration.max', label: 'max', min: 30, max: 600, step: 5 },
+      { path: 'duration.maxSpeed', label: 'speed at most (camera distances/s)', min: 0.05, max: 1, step: 0.01 },
       { path: 'ramp', label: 'ramp (share)', min: 0, max: 0.3, step: 0.01 },
     ],
   },

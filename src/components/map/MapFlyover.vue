@@ -145,8 +145,18 @@ function tunedSettings(): FlyoverSettings {
   const tuned = reactive(structuredClone(FLYOVER));
   try {
     const stored = JSON.parse(window.localStorage.getItem(TUNING_KEY) ?? 'null');
-    // the speeds are not tuned: those of the code, not those saved before they changed
-    if (stored) Object.assign(tuned, stored, { speeds: FLYOVER.speeds });
+    // the values saved over those of the code, a group with them (duration: a value added since is kept); the speeds
+    // are not tuned: those of the code, not those saved before they changed
+    if (stored) {
+      for (const [key, value] of Object.entries(stored as Record<string, unknown>)) {
+        if (!(key in tuned) || key === 'speeds') continue;
+        const current = (tuned as Record<string, unknown>)[key];
+        (tuned as Record<string, unknown>)[key] =
+          value && typeof value === 'object' && current && typeof current === 'object'
+            ? { ...current, ...value }
+            : value;
+      }
+    }
   } catch {
     // no storage
   }

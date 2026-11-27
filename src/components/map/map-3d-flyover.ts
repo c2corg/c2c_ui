@@ -5,8 +5,10 @@ import { interp, lonDelta, prepareTrack, wrapLon, type TrackPart } from './map-3
 
 export const FLYOVER = {
   // the duration at 1×, in seconds: logarithmic in the length, as the camera also goes farther on a longer track (the
-  // speed on screen stays readable): 30 s up to 5 km, 45 s at 10 km, 60 s at 20 km, 75 s at 40 km, 120 s at most
-  duration: { base: 45, refLength: 10_000, perDoubling: 15, min: 30, max: 120 },
+  // speed on screen stays readable): 30 s up to 5 km, 45 s at 10 km, 75 s at 40 km; and no upper limit: at most
+  // `maxSpeed` distances of the camera a second, as the camera stops going farther (distance.max), so that a long
+  // track does not go by too fast (2 min at 100 km, 12.5 min at 600 km, at 1×)
+  duration: { base: 45, refLength: 10_000, perDoubling: 15, min: 30, maxSpeed: 0.2 },
   // the share of the duration to speed up at the start, and to slow down at the end
   ramp: 0.06,
   speeds: [1, 2, 3, 5],
@@ -89,9 +91,11 @@ export type FlyoverAir = { flights: [number, number][]; alt: ArrayLike<number> }
 
 /** The duration of the flyover at 1×, in seconds */
 export function durationAt1x(length: number, settings: FlyoverSettings = FLYOVER): number {
-  const { base, refLength, perDoubling, min, max } = settings.duration;
+  const { base, refLength, perDoubling, min, maxSpeed } = settings.duration;
   if (!(length > 0)) return min;
-  return clamp(base + perDoubling * Math.log2(length / refLength), min, max);
+  const logarithmic = Math.max(base + perDoubling * Math.log2(length / refLength), min);
+  const camera = clamp(settings.distance.ratio * length, settings.distance.min, settings.distance.max);
+  return maxSpeed > 0 ? Math.max(logarithmic, length / (maxSpeed * camera)) : logarithmic;
 }
 
 /**
