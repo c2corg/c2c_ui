@@ -28,6 +28,8 @@ The Vue.js frontend of camptocamp.org: Vue 3, Vue Router, Pinia, Bulma (CSS), Ty
 
 - Branch from `master`. Title `<type>(<scope>): ...`, types: feat, fix, docs, style, refactor, perf, test, chore,
   revert, i18n (`semantic-pull-request.yml`). Releases follow SemVer (`package.json` version = tag).
+- Name branches after the change, `<type>/<short-description>` (e.g. `fix/mobile-more-menu-alignment`), never the
+  generated `ccr-...` names of Claude Code cloud sessions.
 
 ## Local API and demo database
 
