@@ -42,12 +42,7 @@ const menuElement = useTemplateRef<HTMLElement>('menu');
 const VIEWPORT_MARGIN = 8;
 const shift = ref(0);
 
-watch(isActive, async (active) => {
-  shift.value = 0;
-  if (!active) {
-    return;
-  }
-  await nextTick();
+function placeMenu() {
   const button = rootElement.value?.querySelector('.dropdown-trigger')?.getBoundingClientRect();
   const menu = menuElement.value?.getBoundingClientRect();
   if (!button || !menu) {
@@ -61,6 +56,32 @@ watch(isActive, async (active) => {
   const [preferred, other] = menu.left === alignedLeft ? [alignedLeft, alignedRight] : [alignedRight, alignedLeft];
   const left = fits(preferred) ? preferred : fits(other) ? other : Math.max(min, Math.min(max, preferred));
   shift.value = left - menu.left;
+}
+
+async function resetAndPlaceMenu() {
+  shift.value = 0;
+  await nextTick();
+  placeMenu();
+}
+
+// placed again when the window is resized (or the phone rotated) while the menu is open, once the
+// resizes end: the page lays itself out again after the resize event (screen store, re-renders)
+let resizeTimeout: ReturnType<typeof setTimeout> | undefined;
+
+function onResize() {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(resetAndPlaceMenu, 100);
+}
+
+watch(isActive, async (active) => {
+  if (!active) {
+    shift.value = 0;
+    clearTimeout(resizeTimeout);
+    window.removeEventListener('resize', onResize);
+    return;
+  }
+  window.addEventListener('resize', onResize);
+  await resetAndPlaceMenu();
 });
 
 function onClick(event: MouseEvent) {
@@ -74,6 +95,8 @@ window.addEventListener('click', onClick);
 
 onBeforeUnmount(() => {
   window.removeEventListener('click', onClick);
+  clearTimeout(resizeTimeout);
+  window.removeEventListener('resize', onResize);
 });
 
 // the menus close themselves when one of their items is clicked: $refs.menu.isActive = false
