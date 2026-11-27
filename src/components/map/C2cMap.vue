@@ -1653,7 +1653,8 @@ function toggleDensityOverlay(type: DensityType) {
 }
 
 async function updateDensityOverlay(type: DensityType) {
-  if (!densityEnabled[type] || !map) return;
+  // the flyover moves the camera at each frame: its overlays hidden, read again on close
+  if (!densityEnabled[type] || !map || flyoverFrom) return;
   const overlay = DENSITY_OVERLAYS[type];
   // the zooms of OpenLayers, which the API knows
   const tracksShown = Math.round(map.getZoom() + 1) >= DENSITY_TRACKS_MIN_ZOOM;
@@ -2584,6 +2585,16 @@ async function startFlyover() {
   showLayerSwitcher.value = false;
   // the flyover moves the camera itself: the position no longer followed (its button, hidden then, to follow it again)
   stopFollowingPosition();
+  // nor the outings and routes overlays, the filter outline and the cursor of the elevation profile (a cursor still
+  // waiting for the terrain dropped), over the track as it is played
+  DENSITY_TYPES.forEach((type) => {
+    cancelDensityRequest(type);
+    hideDensity(type);
+  });
+  closeTrackPanel();
+  showFilterOutline(null);
+  cursorEvent++;
+  hideProfileCursor();
   // asked first: the browser only allows it on the click itself
   const root = rootElementEl.value!;
   // a browser may never answer (some embedded views): over the window after a while, in full screen if it comes later
@@ -2653,7 +2664,13 @@ async function stopFlyover() {
   await nextTick();
   if (!map) return;
   showLayers();
-  if (!is3d.value) return;
+  restoreView(from);
+  // the overlays read again, over the view restored
+  updateDensityOverlays();
+}
+
+function restoreView(from: NonNullable<typeof flyoverFrom>) {
+  if (!map || !is3d.value) return;
   if (!from.was3d) {
     close3d();
     return;
@@ -2912,8 +2929,8 @@ onMounted(() => {
   });
   created.on('moveend', () => {
     updateViewPlace();
-    // in 3D, the box of what is seen, not too far from the center
-    sendBoundsToUrl();
+    // in 3D, the box of what is seen, not too far from the center; not that of the flyover, which moves at each frame
+    if (!flyoverFrom) sendBoundsToUrl();
     emit('zoom', created.getZoom());
     if (is3d.value) return;
     updateEditMapLink();

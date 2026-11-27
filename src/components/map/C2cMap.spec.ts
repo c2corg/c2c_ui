@@ -1346,6 +1346,7 @@ describe('C2cMap', () => {
         expect(wrapper.find('.map-flyover').exists()).toBe(false);
         expect(map.getLayer('flyover-played')).toBeUndefined();
         expect(map.getLayer('flyover-tip')).toBeUndefined();
+        expect(map.getSource('flyover-tip')).toBeUndefined();
         expect(map.centerClampedToGround).toBe(true);
         // the quality of the drawing as it was (map-3d-quality.ts)
         expect(map.pixelRatio).toBe(1);
@@ -1507,6 +1508,90 @@ describe('C2cMap', () => {
         expect(orthos.filter((title) => far.map.layout[title]?.visibility === 'visible')).toEqual([]);
         expect(far.map.layout.world.visibility).toBe('visible');
         far.wrapper.unmount();
+      });
+
+      it('hides the overlays of the outings during the flyover, reads them again after it', async () => {
+        const heatmap = vi
+          .spyOn(c2c, 'getOutingsHeatmap')
+          .mockResolvedValue({ data: { buckets: [{ x: 750000, y: 5760000, count: 3 }] } } as never);
+        const { wrapper, map } = await mountMap({ documents: [outing], show3d: true });
+        const outings = wrapper.findAll('.layer-button').find((button) => button.text() === 'Outings')!;
+        await outings.trigger('click');
+        await flushPromises();
+        expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+
+        await play(wrapper);
+        expect(map.layout['heatmap-outing'].visibility).toBe('none');
+        const asked = heatmap.mock.calls.length;
+        // the camera of the flyover: no request at each of its moves
+        map.extent = [0, 40, 10, 50];
+        map.fire('moveend');
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        await flushPromises();
+        expect(heatmap).toHaveBeenCalledTimes(asked);
+        expect(map.layout['heatmap-outing'].visibility).toBe('none');
+
+        await wrapper.find('.map-flyover-close button').trigger('click');
+        await flushPromises();
+        expect(heatmap.mock.calls.length).toBeGreaterThan(asked);
+        expect(map.layout['heatmap-outing'].visibility).toBe('visible');
+        wrapper.unmount();
+      });
+
+      it('leaves the filter of a list as it was: the box of the map, not that of the flyover', async () => {
+        const { wrapper, map } = await mountMap({ documents: [outing], show3d: true }, '/outings?bbox=1,2,3,4');
+        await open3d(wrapper);
+        const router = wrapper.vm.$router;
+        const replace = vi.spyOn(router, 'replace');
+        const push = vi.spyOn(router, 'push');
+
+        await play(wrapper);
+        map.extent = [6, 45, 7, 46];
+        map.fire('moveend');
+        await flushPromises();
+
+        expect(replace).not.toHaveBeenCalled();
+        expect(push).not.toHaveBeenCalled();
+        expect(map.data['filter-outline']).toEqual({ type: 'FeatureCollection', features: [] });
+        wrapper.unmount();
+      });
+
+      it('drops the cursor of the elevation profile, also one still waiting for the terrain', async () => {
+        const { wrapper } = await mountMap({ documents: [outing], show3d: true });
+        await open3d(wrapper);
+        const profileCursors = () =>
+          state.markers.filter((marker) => marker.element?.style.width === '10px' && marker.added && !marker.removed);
+        bus.emit('elevation_profile', { action: 'cursor_move', coord: fromLonLat([6.8, 45.9]) });
+        await flushPromises();
+        expect(profileCursors()).toHaveLength(1);
+
+        // asked, then the flyover before the answer
+        bus.emit('elevation_profile', { action: 'cursor_move', coord: fromLonLat([6.805, 45.905]) });
+        await play(wrapper);
+
+        expect(profileCursors()).toHaveLength(0);
+        wrapper.unmount();
+      });
+
+      it('stays paused when paused during the move to the track', async () => {
+        const frames: FrameRequestCallback[] = [];
+        globalThis.requestAnimationFrame = (callback) => frames.push(callback);
+        const runFrames = (time: number) => frames.splice(0).forEach((callback) => callback(time));
+        const { wrapper } = await mountMap({ documents: [outing], show3d: true });
+        await play(wrapper);
+        const button = () => wrapper.find('.map-flyover-bar .map-flyover-button');
+
+        // the move to the track started, then Play and Pause before its end
+        runFrames(1000);
+        await button().trigger('click');
+        expect(button().attributes('aria-label')).toBe('Pause');
+        await button().trigger('click');
+        runFrames(1_000_000);
+        runFrames(1_000_016);
+        await flushPromises();
+
+        expect(button().attributes('aria-label')).toBe('Play');
+        wrapper.unmount();
       });
 
       it('cycles the speeds, seeks, and stops following the track on a move of the user', async () => {

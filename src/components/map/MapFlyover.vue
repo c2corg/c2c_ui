@@ -298,8 +298,11 @@ function play() {
 
 function togglePlay() {
   if (loading.value) return;
-  if (playing.value) playing.value = false;
-  else play();
+  if (playing.value) {
+    playing.value = false;
+    // paused during the move to the track: it does not start playing at its end
+    if (transition) transition.then = undefined;
+  } else play();
 }
 
 function nextSpeed() {

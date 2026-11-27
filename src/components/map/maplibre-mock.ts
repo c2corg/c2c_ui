@@ -235,6 +235,7 @@ export class FakeMap {
       throw new Error(`source ${id} still used`);
     }
     delete this.style.sources[id];
+    delete this.data[id];
   }
   addLayer(layer: StyleSpecification['layers'][number], before?: string) {
     if (this.getLayer(layer.id)) throw new Error(`layer ${layer.id} already added`);
