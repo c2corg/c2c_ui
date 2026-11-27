@@ -1334,6 +1334,8 @@ describe('C2cMap', () => {
         // the part not played yet: hidden (FLYOVER.showAhead)
         expect(map.getLayer('flyover-ahead')).toMatchObject({ layout: { visibility: 'none' } });
         expect(map.layout['documents-3d'].visibility).toBe('none');
+        // the ground shadow of a whole flight: not over the track revealed as it is played
+        expect(map.layout['flight-shadows'].visibility).toBe('none');
         expect(map.centerClampedToGround).toBe(false);
         // the track alone: no dot at the playhead
         expect(state.markers.some((marker) => marker.element?.className === 'map-flyover-head')).toBe(false);
@@ -1365,6 +1367,7 @@ describe('C2cMap', () => {
         expect(map.terrain).toMatchObject({ source: 'terrain' });
         expect(map.cameras.at(-1)).toMatchObject({ zoom: 12.5, pitch: 60 });
         expect(map.layout['documents-3d'].visibility).toBe('visible');
+        expect(map.layout['flight-shadows'].visibility).toBe('visible');
         wrapper.unmount();
       });
 

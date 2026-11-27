@@ -1180,7 +1180,7 @@ function showLayers() {
   // the flyover draws the track itself, as it is played
   set('documents-3d', is3d.value && !flyover.value);
   set('documents-3d-casing', is3d.value && !flyover.value);
-  set('flight-shadows', is3d.value);
+  set('flight-shadows', is3d.value && !flyover.value);
   map.setPaintProperty('background', 'background-color', is3d.value ? '#e6eef5' : 'white');
 }
 
