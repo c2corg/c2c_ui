@@ -45,7 +45,7 @@
           <icon-join-us />
         </join-us-link>
 
-        <dropdown-button ref="addMenu" class="is-right top-bar-btn add-btn">
+        <dropdown-button ref="addMenu" class="top-bar-btn add-btn">
           <template #button>
             <!-- a real button: reached by the keyboard and named for the screen readers, not only by its title -->
             <button

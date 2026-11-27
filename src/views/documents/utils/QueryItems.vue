@@ -363,13 +363,5 @@ watch(() => JSON.stringify([route.path, withoutDisplaySettings(route.query), rou
   .query-item-component {
     margin-right: 0.25em;
   }
-
-  .query-items-filters {
-    position: relative; /* important, to force drop down on the left */
-  }
-
-  .dropdown {
-    position: unset; /* important, to force drop down on the left */
-  }
 }
 </style>

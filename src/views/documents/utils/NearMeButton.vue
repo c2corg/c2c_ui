@@ -1,6 +1,6 @@
 <template>
   <!-- the documents around the user, without opening the map: the bbox of the query, for a radius -->
-  <dropdown-button ref="menu" class="is-right" :disabled="busy">
+  <dropdown-button ref="menu" :disabled="busy">
     <template #button>
       <span
         class="button is-small"

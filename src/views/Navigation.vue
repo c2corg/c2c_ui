@@ -72,7 +72,7 @@
       </div>
 
       <div class="navigation-item">
-        <dropdown-button class="is-right add-button" ref="addDocumentMenu">
+        <dropdown-button class="add-button" ref="addDocumentMenu">
           <template #button>
             <span class="button is-success" :class="{ 'is-non-production-backend': isNonProductionBackend }">
               <fa-icon icon="plus" />
@@ -102,7 +102,7 @@
       </div>
 
       <div v-else class="navigation-item">
-        <dropdown-button class="is-right" ref="userMenu">
+        <dropdown-button ref="userMenu">
           <template #button>
             <span class="button user-menu-button">
               <span
@@ -172,7 +172,7 @@
       </div>
       <!-- logged out: the language, and what the user menu offers to anyone (favourites of the device, settings) -->
       <div v-if="!$user.isLogged" class="navigation-item">
-        <dropdown-button class="is-right" ref="settingsMenu">
+        <dropdown-button ref="settingsMenu">
           <template #button>
             <button class="button" :aria-label="$gettext('Settings')">
               <fa-icon icon="gear" />
