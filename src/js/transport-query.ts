@@ -108,18 +108,61 @@ export function laterReturnDate(search: { date?: string | null; returnDate?: str
 }
 
 /**
+ * The search space is kept small, as on the API (each new search costs 2 Navitia isochrones, and the searches of
+ * different users share its cache): the times are on the quarter hour, the dates within 6 months
+ */
+export const TIME_STEP_MINUTES = 15;
+export const MAX_MONTHS_AHEAD = 6;
+
+const pad = (value: number) => String(value).padStart(2, '0');
+
+/** "YYYY-MM-DD" of a day, in the time zone of the browser */
+export function isoDay(day: Date): string {
+  return `${day.getFullYear()}-${pad(day.getMonth() + 1)}-${pad(day.getDate())}`;
+}
+
+/** The first and last dates of a search: from today to 6 months ahead (the same day, or the last day of a shorter month) */
+export function transportDateRange(today: Date = new Date()): { min: string; max: string } {
+  const last = new Date(today.getFullYear(), today.getMonth() + MAX_MONTHS_AHEAD, 1);
+  const lastDay = new Date(last.getFullYear(), last.getMonth() + 1, 0).getDate();
+  last.setDate(Math.min(today.getDate(), lastDay));
+  return { min: isoDay(today), max: isoDay(last) };
+}
+
+/**
+ * A "HH:MM" time on the quarter hour: rounded up for a departure ("after"), down for a return ("before"), so that the
+ * search stays within the hours the user gave
+ */
+export function roundTime(value: string, direction: 'up' | 'down'): string {
+  const match = /^(\d{1,2}):(\d{2})/.exec(value ?? '');
+  if (!match) {
+    return value;
+  }
+  const minutes = Number(match[1]) * 60 + Number(match[2]);
+  const rounded = (direction === 'up' ? Math.ceil : Math.floor)(minutes / TIME_STEP_MINUTES) * TIME_STEP_MINUTES;
+  // not past the last quarter of the day
+  const bounded = Math.min(rounded, 24 * 60 - TIME_STEP_MINUTES);
+  return `${pad(Math.floor(bounded / 60))}:${pad(bounded % 60)}`;
+}
+
+/**
  * Checks the dates and times of a search
  *
  * @param search `{ date, returnDate, minDeparture, maxReturn }`
  * @returns The problem, if any: a return date before the departure date, or (for a return the same day) a return time
- *   that is not after the departure time
+ *   that is not after the departure time, or a date out of transportDateRange
  */
 export function transportDatesError(search: {
   date?: string | null;
   returnDate?: string | null;
   minDeparture?: string | null;
   maxReturn?: string | null;
-}): 'return-before-departure' | 'return-time-before-departure-time' | null {
+}): 'return-before-departure' | 'return-time-before-departure-time' | 'date-out-of-range' | null {
+  const { min, max } = transportDateRange();
+  if ([search.date, search.returnDate].some((day) => day && (day < min || day > max))) {
+    return 'date-out-of-range';
+  }
+
   if (search.returnDate && search.date && search.returnDate < search.date) {
     return 'return-before-departure';
   }
@@ -147,6 +190,8 @@ export function buildTransportQuery(search: TransportSearch): Record<string, str
       value = formatTransportFrom(search.from);
     } else if (key === 'returnDate') {
       value = laterReturnDate(search);
+    } else if (key === 'minDeparture' || key === 'maxReturn') {
+      value = roundTime(search[key], key === 'minDeparture' ? 'up' : 'down');
     } else {
       value = search[key];
     }
@@ -177,8 +222,9 @@ export function parseTransportQuery(query: LocationQuery | null | undefined): Pa
 
   const from = formatTransportFrom(read('from') ?? null);
   const date = read('date');
-  const minDeparture = read('minDeparture');
-  const maxReturn = read('maxReturn');
+  // the links made before the times were on the quarter hour
+  const minDeparture = read('minDeparture') && roundTime(read('minDeparture')!, 'up');
+  const maxReturn = read('maxReturn') && roundTime(read('maxReturn')!, 'down');
 
   if (!from || !date || !minDeparture || !maxReturn) {
     return null;

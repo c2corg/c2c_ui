@@ -38,13 +38,13 @@
         <div class="date-picker-container">
           <label :for="`${id}-date`">{{ $gettext('Date') }}</label>
           <div class="input-container">
-            <input type="date" :id="`${id}-date`" :min="twoDaysAgo" v-model="date" />
+            <input type="date" :id="`${id}-date`" :min="dateRange.min" :max="dateRange.max" v-model="date" />
           </div>
         </div>
         <div class="date-picker-container">
           <label :for="`${id}-min-departure`">{{ $gettext('Departure after') }}</label>
           <div class="input-container">
-            <input type="time" :id="`${id}-min-departure`" v-model="minDeparture" />
+            <input type="time" :id="`${id}-min-departure`" :step="TIME_STEP_MINUTES * 60" v-model.lazy="minDeparture" />
           </div>
         </div>
         <div class="date-picker-container">
@@ -54,6 +54,7 @@
               type="date"
               :id="`${id}-return-date`"
               :min="date"
+              :max="dateRange.max"
               v-model="returnDate"
               :aria-describedby="datesErrorMessage ? `${id}-dates-error` : undefined"
             />
@@ -62,7 +63,7 @@
         <div class="date-picker-container">
           <label :for="`${id}-max-return`">{{ $gettext('Return before') }}</label>
           <div class="input-container">
-            <input type="time" :id="`${id}-max-return`" v-model="maxReturn" />
+            <input type="time" :id="`${id}-max-return`" :step="TIME_STEP_MINUTES * 60" v-model.lazy="maxReturn" />
           </div>
         </div>
       </div>
@@ -149,6 +150,9 @@ import {
   type ParsedTransportSearch,
   parseTransportFrom,
   parseTransportQuery,
+  roundTime,
+  TIME_STEP_MINUTES,
+  transportDateRange,
   transportDatesError,
   transportSearchKey,
   withoutTransportQuery,
@@ -192,8 +196,6 @@ const router = useRouter();
 const { $gettext, $language } = useGlobalProperties();
 const id = `transport-${useId()}`;
 
-const today = () => new Date().toISOString().slice(0, 10);
-
 const storedContext = itinevertStorage.get<StoredContext | null>('context', null);
 const recentAddresses = ref(itinevertStorage.get<AddressSelection[]>('recentAddresses', []));
 // the search of the url (a shared link, the back button...) prevails over the last values of the form
@@ -225,11 +227,21 @@ const fromAddress = ref<AddressSelection | null>(
 const addressReady = ref(!urlSearch || fromAddress.value !== null);
 const addressKey = ref(0);
 // a past date is of no use: timetables are for the days to come
-const date = ref(search.date && search.date >= today() ? search.date : today());
+// the dates a search may use: from today to 6 months ahead
+const dateRange = transportDateRange();
+// a past date is of no use: timetables are for the days to come
+const date = ref(
+  search.date && search.date >= dateRange.min && search.date <= dateRange.max ? search.date : dateRange.min
+);
 // optional: empty for a return the same day as the departure
-const returnDate = ref(search.returnDate && search.returnDate >= today() ? search.returnDate : '');
-const minDeparture = ref(search.minDeparture ?? '07:30');
-const maxReturn = ref(search.maxReturn ?? '19:00');
+const returnDate = ref(
+  search.returnDate && search.returnDate >= dateRange.min && search.returnDate <= dateRange.max ? search.returnDate : ''
+);
+// on the quarter hour, as the API takes them
+const minDeparture = ref(roundTime(search.minDeparture ?? '07:30', 'up'));
+const maxReturn = ref(roundTime(search.maxReturn ?? '19:00', 'down'));
+watch(minDeparture, (value) => (minDeparture.value = roundTime(value, 'up')));
+watch(maxReturn, (value) => (maxReturn.value = roundTime(value, 'down')));
 const maxDuration = ref<number | null>(search.maxDuration ?? null);
 const hikingDuration = ref<number | null>(search.hikingDuration ?? null);
 const showAdvanced = ref(false);
@@ -245,6 +257,10 @@ const errorMessages: Record<string, string> = {
   navitia_internal_error: $gettext('Public transport data is currently unavailable.'),
   auth_error: $gettext('Authentication to public transport data service error.'),
   invalid_param: $gettext('Invalid parameters were sent to public transport data service.'),
+  // the daily budget of the public transport requests is used, or they are switched off (API)
+  navitia_budget_exceeded: $gettext('The public transport search is unavailable for today. Please try again tomorrow.'),
+  navitia_disabled: $gettext('The public transport search is temporarily unavailable.'),
+  navitia_budget_unavailable: $gettext('The public transport search is temporarily unavailable.'),
 };
 
 const effectiveDocumentType = computed(() => props.fixedDocumentType ?? documentType.value);
@@ -273,6 +289,8 @@ const datesErrorMessage = computed(() => {
       return $gettext('The return date must not be before the departure date.');
     case 'return-time-before-departure-time':
       return $gettext('For a return the same day, the return time must be after the departure time.');
+    case 'date-out-of-range':
+      return $gettext('The dates must be within the next 6 months.');
     default:
       return null;
   }
@@ -283,12 +301,6 @@ const otherRecentAddresses = computed(() => {
   const current = formatTransportFrom(fromAddress.value);
   return recentAddresses.value.filter((address) => formatTransportFrom(address) !== current);
 });
-
-const twoDaysAgo = (() => {
-  const d = new Date();
-  d.setDate(d.getDate() - 2);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-})();
 
 /** The search the form describes (null when it has no valid starting point) */
 function formSearch(): TransportSearch | null {
@@ -375,15 +387,9 @@ function rememberSearch() {
 }
 
 function formatError(error: unknown) {
-  const { response, message } = (error ?? {}) as {
-    response?: { data?: { errors?: { description?: unknown }[] } | string };
-    message?: string;
-  };
-  const data = response?.data;
-  const rawData = (typeof data === 'object' ? data?.errors?.[0]?.description : undefined) ?? data ?? message;
-  const parsed = navitiaService.handleQueryError(rawData) as string | { id?: string; message?: string } | undefined;
-  const errorId = typeof parsed === 'string' ? parsed : (parsed?.id ?? parsed?.message);
-  return (errorId && errorMessages[errorId]) || errorMessages.unknown_error;
+  // the id the API answers (no_solution, navitia_budget_exceeded...)
+  const { id } = navitiaService.handleRequestError(error);
+  return (id && errorMessages[id]) || errorMessages.unknown_error;
 }
 
 async function submit() {

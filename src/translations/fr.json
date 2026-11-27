@@ -435,11 +435,10 @@
     },
     "Followed users": "Contributeurs suivis",
     "For a return the same day, the return time must be after the departure time.": "Pour un retour le même jour, l'heure de retour doit être après l'heure de départ.",
-    "Forgot password?": "Mot de passe oublié ?",
+    "Forgot password?": "Mot de passe oublié ?",
     "Following": "Personnes suivies",
     "For the moderators": "Pour les modérateurs",
     "For the moderators of the topoguide": "Pour les modérateurs du topoguide",
-    "Forgot password?": "Mot de passe oublié ?",
     "Forum discussion": "Discussion forum",
     "Forum discussion (optional, the current one is kept)": "Discussion forum (optionnel, l'actuelle est conservée)",
     "Forum discussion changed": "La discussion forum a changé",
@@ -961,6 +960,7 @@
     "Protection status": "Status de la protection",
     "Provide information and improve its quality, following the contribution rules and respecting copyright.": "Vous êtes invité à compléter les informations et améliorer la qualité du document en suivant les règles de contribution et dans le respect du droit d'auteur.",
     "Public transport": {
+      "$$noContext": "Transports en commun",
       "Map layer": "Transports en commun"
     },
     "Public transport data is currently unavailable.": "Les données de transport en commun sont actuellement indisponibles.",
@@ -2654,7 +2654,6 @@
     "Not found": "Non trouvé",
     "Outbound": "Aller",
     "The schedules of the documents of this page are already checked": "Les horaires des documents de cette page sont déjà vérifiés",
-    "Public transport": "Transport en commun",
     "Return": "Retour",
     "Return before": "Revenir avant",
     "Show details": "Afficher le détail",
@@ -2666,6 +2665,9 @@
     "zh": {
       "langs": "chinois"
     },
-    "« Auto » follows the setting of your system.": "« Auto » suit le réglage de votre système."
+    "« Auto » follows the setting of your system.": "« Auto » suit le réglage de votre système.",
+    "The public transport search is unavailable for today. Please try again tomorrow.": "La recherche en transports en commun n'est plus disponible aujourd'hui. Réessayez demain.",
+    "The public transport search is temporarily unavailable.": "La recherche en transports en commun est temporairement indisponible.",
+    "The dates must be within the next 6 months.": "Les dates doivent être dans les 6 prochains mois."
   }
 }

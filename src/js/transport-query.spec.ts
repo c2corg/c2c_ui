@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   MAX_RECENT_ADDRESSES,
@@ -7,6 +7,8 @@ import {
   formatTransportFrom,
   hasTransportQuery,
   parseTransportQuery,
+  roundTime,
+  transportDateRange,
   transportDatesError,
   transportSearchKey,
   withoutTransportQuery,
@@ -126,6 +128,21 @@ describe('transport query', () => {
   });
 
   describe('transportDatesError', () => {
+    // the dates of the tests are within 6 months
+    beforeEach(() => {
+      vi.useFakeTimers({ now: new Date(2026, 0, 10, 12) });
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('refuses a date out of the next 6 months', () => {
+      expect(transportDatesError({ ...dates, date: '2026-01-09' })).toBe('date-out-of-range');
+      expect(transportDatesError({ ...dates, returnDate: '2026-07-11' })).toBe('date-out-of-range');
+      expect(transportDatesError({ ...dates, returnDate: '2026-07-10' })).toBeNull();
+    });
+
     const dates = { date: '2026-01-16', minDeparture: '08:00', maxReturn: '18:00' };
 
     it('accepts a return the same day, after the departure', () => {
@@ -192,5 +209,33 @@ describe('transport query', () => {
 
       expect(addRecentAddress(recent, { properties: {} })).toBe(recent);
     });
+  });
+
+  describe('roundTime', () => {
+    it('rounds a departure up and a return down to the quarter hour', () => {
+      expect(roundTime('07:40', 'up')).toBe('07:45');
+      expect(roundTime('07:45', 'up')).toBe('07:45');
+      expect(roundTime('19:10', 'down')).toBe('19:00');
+      expect(roundTime('7:05', 'down')).toBe('07:00');
+    });
+
+    it('stays within the day', () => {
+      expect(roundTime('23:50', 'up')).toBe('23:45');
+    });
+  });
+
+  it('rounds the times of the query, also of the links made before', () => {
+    const query = buildTransportQuery({ ...search, minDeparture: '08:05', maxReturn: '17:55' });
+    expect(query.transport_min_departure).toBe('08:15');
+    expect(query.transport_max_return).toBe('17:45');
+
+    const parsed = parse({ ...buildTransportQuery(search), transport_min_departure: '08:05' });
+    expect(parsed.minDeparture).toBe('08:15');
+  });
+
+  it('limits the dates to the next 6 months', () => {
+    expect(transportDateRange(new Date(2026, 10, 27))).toEqual({ min: '2026-11-27', max: '2027-05-27' });
+    // the last day of a shorter month
+    expect(transportDateRange(new Date(2026, 7, 31)).max).toBe('2027-02-28');
   });
 });
