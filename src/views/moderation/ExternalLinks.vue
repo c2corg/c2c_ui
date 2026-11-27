@@ -241,7 +241,7 @@ function statusLabel(status: ExternalLinkStatus): string {
     case 'suspect':
       return $gettext('Changed page');
     case 'offsite':
-      return $gettext('On another site');
+      return $gettext('Redirected to another site');
     case 'moved':
       return $gettext('Moved');
     case 'blocked':

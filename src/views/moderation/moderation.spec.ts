@@ -1123,7 +1123,7 @@ describe('ExternalLinks', () => {
       'Failing 0',
       'Domain for sale 1',
       'Changed page 1',
-      'On another site 0',
+      'Redirected to another site 0',
     ]);
     expect(wrapper.text()).toContain('Found: 4');
   });
