@@ -165,7 +165,7 @@ const tags = ref<CachedDocument[]>([]);
 
 const associations = computed(() => {
   if (documentType.value === 'outing') {
-    return ['area', 'route', 'waypoint', 'profile'];
+    return ['area', 'route', 'waypoint', 'profile', 'article'];
   }
 
   if (documentType.value === 'route') {

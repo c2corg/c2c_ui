@@ -11,6 +11,7 @@ import type DocumentService from '@/js/apis/c2c/DocumentService';
 
 const waypoints = c2c.waypoint as DocumentService;
 const routes = c2c.route as DocumentService;
+const articles = c2c.article as DocumentService;
 
 const mountItems = async (path: string) => {
   const router = createRouter({
@@ -67,5 +68,18 @@ describe('QueryItems', () => {
     await flushPromises();
     expect(router.currentRoute.value.query.r).toBe('7');
     expect(getRoute).toHaveBeenCalledWith(7);
+  });
+
+  it('shows the article filter of the outings of an article', async () => {
+    const get = vi
+      .spyOn(articles, 'get')
+      .mockImplementation(
+        (id) => Promise.resolve({ data: { document_id: id, type: 'c', title: 'By fair means' } }) as never
+      );
+
+    const { wrapper } = await mountItems('/outings?c=1943275');
+    const loaded = wrapper.emitted('documents-load')!.at(-1)![0] as { document_id: number; loading: boolean }[];
+    expect(loaded).toMatchObject([{ document_id: 1943275, loading: false, title: 'By fair means' }]);
+    expect(get).toHaveBeenCalledWith(1943275);
   });
 });
