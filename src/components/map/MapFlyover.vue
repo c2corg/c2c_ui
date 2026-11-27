@@ -80,7 +80,7 @@
         :aria-label="`${$gettext('Speed', 'Map controls')} ${speed}×`"
         @click="nextSpeed"
       >
-        {{ speed }}×
+        <span>{{ speed }}×</span>
       </button>
     </div>
   </div>
@@ -766,13 +766,10 @@ defineExpose({ seek, togglePlay, nextSpeed, recenter });
   margin: 0 auto;
 }
 
-/* the speed: two digits and the sign, smaller as the text of the 3D button */
-.map-flyover .ol-control .map-flyover-speed {
-  width: auto;
-  min-width: 2.2em;
-  padding: 0 0.3em;
-  font-size: 0.75em;
-  height: calc(1.375em / 0.75);
+/* the speed: a button of the size of the others, its text smaller, as that of the 3D button */
+.map-flyover-speed span {
+  font-size: 0.7em;
+  font-weight: bold;
 }
 
 .map-flyover-timeline {

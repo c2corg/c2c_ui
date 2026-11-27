@@ -3259,9 +3259,9 @@ defineExpose({
   }
 }
 
-/* above the 3D button */
+/* above the 3D button, as far from the bottom in full screen on a phone */
 .ol-control-play {
-  bottom: calc(1.5em + 2 * var(--map-button-size));
+  bottom: calc(1.5em + 2 * var(--map-button-size) + var(--map-inset-bottom));
   left: 0.5em;
 }
 
