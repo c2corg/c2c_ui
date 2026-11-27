@@ -41,9 +41,16 @@
       <div class="is-flex is-align-items-center is-justify-content-space-between host-header">
         <h3 class="is-size-6 has-text-weight-semibold">
           <fa-icon icon="globe" class="mr-1 has-text-grey" />
-          <a v-if="!host" class="host-name" :title="$gettext('Only this site')" @click="setHost(group.host)">{{
-            group.host
-          }}</a>
+          <!-- a button, as a link: reached with Tab, pressed with Enter -->
+          <button
+            v-if="!host"
+            type="button"
+            class="host-name"
+            :title="$gettext('Only this site')"
+            @click="setHost(group.host)"
+          >
+            {{ group.host }}
+          </button>
           <span v-else>{{ group.host }}</span>
           <span v-if="group.trusted" class="tag is-success is-light ml-2" v-translate>Trusted site</span>
         </h3>
@@ -94,7 +101,7 @@
                 {{ $gettext('Checked') }} {{ $dateUtils.timeAgo(link.last_checked_at) }}
               </template>
               <template v-else>{{ $gettext('Not checked yet') }}</template>
-              <template v-if="rechecked.has(link.url)"> · {{ $gettext('checked again within 10 minutes') }}</template>
+              <template v-if="recheckPending(link)"> · {{ $gettext('to be checked again at the next run') }}</template>
             </p>
             <ul class="mt-2 documents">
               <li v-for="doc of link.documents" :key="doc.document_id">
@@ -140,7 +147,7 @@
             </template>
             <button
               class="button recheck"
-              :disabled="rechecked.has(link.url)"
+              :disabled="recheckPending(link)"
               :class="{ 'is-loading': busy === 'recheck:' + link.url }"
               @click="recheck(link)"
             >
@@ -209,12 +216,22 @@ const host = ref<string | null>(null);
 const links = ref<ExternalLink[]>([]);
 const total = ref(0);
 const counts = ref<Record<string, number>>({});
+// the query the list shows: an answer to an earlier one (filters changed meanwhile) is dropped
+let generation = 0;
+
 const page = shallowRef<ApiData>(load(0));
 
 // the action going on: a URL (review), 'recheck:' + URL, 'host:' + host
 const busy = ref<string | null>(null);
 const actionError = ref(false);
-const rechecked = reactive(new Set<string>());
+// when a moderator asked to check a link again: until the list shows a later check
+const rechecked = reactive(new Map<string, Date>());
+
+/** A check asked for and not shown yet */
+function recheckPending(link: ExternalLink): boolean {
+  const asked = rechecked.get(link.url);
+  return !!asked && (!link.last_checked_at || new Date(link.last_checked_at) < asked);
+}
 
 /** The links of the page by site, in the order of the API (by host) */
 const groups = computed(() => {
@@ -296,6 +313,7 @@ const titleChanged = (link: ExternalLink) =>
   link.status === 'suspect' && !!link.first_title && !!link.last_title && link.first_title !== link.last_title;
 
 function load(offset: number): ApiData {
+  const asked = generation;
   return c2c.moderator
     .getExternalLinks(offset, PAGE_SIZE, {
       statuses: statuses.value,
@@ -303,6 +321,9 @@ function load(offset: number): ApiData {
       reviewed: reviewed.value,
     })
     .then((response) => {
+      if (asked !== generation) {
+        return;
+      }
       const known = new Set(links.value.map((link) => link.url));
       links.value.push(...response.data.links.filter((link) => !known.has(link.url)));
       total.value = response.data.total;
@@ -311,6 +332,7 @@ function load(offset: number): ApiData {
 }
 
 function reload() {
+  generation++;
   links.value = [];
   total.value = 0;
   page.value = load(0);
@@ -376,7 +398,7 @@ function recheck(link: ExternalLink) {
   act(
     'recheck:' + link.url,
     () => c2c.moderator.recheckExternalLink(link.url),
-    () => rechecked.add(link.url)
+    () => rechecked.set(link.url, new Date())
   );
 }
 </script>
@@ -399,7 +421,13 @@ function recheck(link: ExternalLink) {
   padding-bottom: 0.25rem;
 }
 
+/* a button that looks like the links */
 .host-name {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--c2c-color-link);
+  font: inherit;
   cursor: pointer;
 }
 </style>

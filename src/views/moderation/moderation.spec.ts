@@ -1177,7 +1177,7 @@ describe('ExternalLinks', () => {
     await items()[0]!.find('.recheck').trigger('click');
     await flushPromises();
     expect(api.recheckExternalLink).toHaveBeenCalledWith('http://dead.example/a');
-    expect(items()[0]!.text()).toContain('checked again within 10 minutes');
+    expect(items()[0]!.text()).toContain('to be checked again at the next run');
     expect(items()[0]!.find('.recheck').attributes('disabled')).toBeDefined();
 
     // genuine: it leaves the list
@@ -1190,6 +1190,55 @@ describe('ExternalLinks', () => {
     await flushPromises();
     expect(api.reviewExternalHost).toHaveBeenCalledWith('dead.example', 'trusted');
     expect(api.getExternalLinks).toHaveBeenCalledTimes(3);
+  });
+
+  it('shows a check asked for until a later one is loaded', async () => {
+    const link = externalLink('http://dead.example/a', { last_checked_at: '2020-01-01T00:00:00+00:00' });
+    api.getExternalLinks.mockReturnValueOnce(answer({ total: 1, counts: COUNTS, links: [link] }));
+    api.recheckExternalLink.mockReturnValue(answer({ url: link.url, next_check_at: null }));
+    const wrapper = mount(ExternalLinks, { global: global() });
+    await flushPromises();
+    await wrapper.find('.recheck').trigger('click');
+    await flushPromises();
+    expect(wrapper.find('.recheck').attributes('disabled')).toBeDefined();
+
+    // the list again, the link checked since
+    api.getExternalLinks.mockReturnValueOnce(
+      answer({
+        total: 1,
+        counts: COUNTS,
+        links: [{ ...link, last_checked_at: new Date(Date.now() + 1000).toISOString() }],
+      })
+    );
+    await wrapper.find('.reviewed-filter').setValue(true);
+    await flushPromises();
+    expect(wrapper.find('.recheck').attributes('disabled')).toBeUndefined();
+    expect(wrapper.text()).not.toContain('to be checked again');
+  });
+
+  it('drops the answer of a query replaced meanwhile', async () => {
+    let resolveFirst: (value: unknown) => void = () => {};
+    api.getExternalLinks.mockReturnValueOnce(new ApiData(new Promise((resolve) => (resolveFirst = resolve)) as never));
+    api.getExternalLinks.mockReturnValueOnce(
+      answer({ total: 1, counts: COUNTS, links: [externalLink('http://new.example/')] })
+    );
+    const wrapper = mount(ExternalLinks, { global: global() });
+    await wrapper.find('.reviewed-filter').setValue(true);
+    await flushPromises();
+    resolveFirst({ data: { total: 9, counts: COUNTS, links: [externalLink('http://old.example/')] } });
+    await flushPromises();
+    expect(wrapper.findAll('.external-link-item .url a').map((a) => a.text())).toEqual(['http://new.example/']);
+    expect(wrapper.text()).toContain('Found: 1');
+  });
+
+  it('filters by site with a button (keyboard)', async () => {
+    api.getExternalLinks.mockReturnValue(
+      answer({ total: 1, counts: COUNTS, links: [externalLink('http://dead.example/a')] })
+    );
+    const wrapper = mount(ExternalLinks, { global: global() });
+    await flushPromises();
+    expect(wrapper.find('.host-name').element.tagName).toBe('BUTTON');
+    expect(wrapper.find('.host-name').attributes('type')).toBe('button');
   });
 
   it('says when a review cannot be saved, and when no link is listed', async () => {
