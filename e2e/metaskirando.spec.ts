@@ -1,4 +1,6 @@
-import { call } from './api.ts';
+import type { Page } from '@playwright/test';
+
+import { API, call } from './api.ts';
 import { expect, test } from './fixtures.ts';
 
 // The outings of the partner sites come from the local API in fixture mode (see README.md: partners_transport=fixtures
@@ -117,20 +119,54 @@ test('the activity icon of a non-ski row follows its activity', async ({ page })
   }
 });
 
-test('an outing of c2c links inside the site', async ({ page }) => {
-  // the page has no date filter and the API shows the last 14 days, while the demo database stops in July 2026: its
-  // c2c outings only show when the demo data is recent enough
-  const { items } = (await call('/partner-outings?sources=c2c&limit=1')) as { items: Row[] };
-  test.skip(items.length === 0, 'no recent c2c outing in this database');
+// The page has no date filter and the API shows the last 14 days, while the demo database stops in July 2026: its c2c
+// outings never fall in that window. One of July is given the date of the newest partner outings in the answers of the
+// API, as the API merges them (when the request asks for c2c).
+async function withRecentC2cOuting(page: Page, baseURL: string) {
+  const july = (await call('/partner-outings?sources=c2c&date=2026-07-01,2026-07-31&limit=1')) as { items: Item[] };
+  const outing = july.items[0];
+  if (!outing) {
+    return null;
+  }
+  await page.route(new RegExp(`^${API}/partner-outings(\\?|$)`), async (route) => {
+    const url = new URL(route.request().url());
+    const answer = (await call(`/partner-outings${url.search}`)) as { total: number; items: Item[] };
+    const sources = url.searchParams.get('sources')?.split(',');
+    if (!sources || sources.includes('c2c')) {
+      answer.items.unshift({ ...outing, date: answer.items[0]?.date ?? outing.date });
+      answer.total += 1;
+    }
+    await route.fulfill({ json: answer, headers: { 'access-control-allow-origin': new URL(baseURL).origin } });
+  });
+  return outing;
+}
+
+test('an outing of c2c shows in the list, among the partner ones, and on the map', async ({ page, baseURL }) => {
+  const outing = await withRecentC2cOuting(page, baseURL!);
+  test.skip(!outing, 'no c2c outing in July 2026 in this database');
 
   await page.goto('/metaskirando');
-  const row = page
-    .locator('.partner-outing-row')
-    .filter({ has: page.locator('.source-badge--c2c') })
-    .first();
+  // in the first day, with the partner outings of that day
+  const firstDay = page.locator('[data-test=day]').first();
+  const row = firstDay.locator(`.partner-outing-row[data-outing-id="${outing!.id}"]`);
+  await expect(row).toBeVisible();
+  await expect(row.locator('.source-badge')).toHaveText('camptocamp.org');
+  expect(await firstDay.locator('.partner-outing-row').count()).toBeGreaterThan(1);
+  // its page in the site
   const link = row.locator('[data-test=outing-link]');
-  await expect(link).toHaveAttribute('href', /^\/outings\/\d+/);
+  await expect(link).toHaveAttribute('href', `/outings/${outing!.document_id}`);
   await expect(link).not.toHaveAttribute('target', '_blank');
+
+  // its marker, with the outing icon, and the legend names the site
+  const marker = page.locator(`.outing-marker--c2c[data-outing-id="${outing!.id}"]`);
+  await expect(marker).toHaveCount(1);
+  await expect(marker.locator('img')).toHaveCount(1);
+  await expect(page.locator('[data-test=legend]')).toContainText('camptocamp.org');
+
+  // the source chips filter it as the others
+  await page.locator('.source-chip[data-source=c2c]').click();
+  await expect(row).toHaveCount(0);
+  await expect(marker).toHaveCount(0);
 });
 
 // the map beside the list: one marker per outing that has a geometry, coloured by source
@@ -160,6 +196,20 @@ test('the map has a marker per located outing, coloured by source, the approxima
   const rough = page.locator(`.outing-marker[data-outing-id="${approximate[0].id}"]`);
   await expect(rough).toHaveAttribute('title', /approximate|approximative/i);
   await expect(page.locator('[data-test=legend-approximate]')).toBeVisible();
+  // a plain circle, smaller than an exact marker, without dashes
+  const dot = (marker: ReturnType<typeof page.locator>) => marker.locator('.outing-marker-dot');
+  const style = (marker: ReturnType<typeof page.locator>) =>
+    dot(marker).evaluate((el) => ({
+      border: getComputedStyle(el).borderStyle,
+      width: el.getBoundingClientRect().width,
+    }));
+  const exact = page.locator('.outing-marker.outing-marker--partner:not(.is-approximate)').first();
+  const [roughStyle, exactStyle] = [await style(rough), await style(exact)];
+  expect(roughStyle.border).toBe('solid');
+  expect(roughStyle.width).toBeLessThan(exactStyle.width);
+  expect(
+    await page.locator('[data-test=legend-approximate] .legend-dot').evaluate((el) => getComputedStyle(el).borderStyle)
+  ).toBe('solid');
 
   // the rows without a location stay in the list, and are counted
   const without = all.items.length - located.length;
@@ -221,7 +271,12 @@ test('the extent of the map filters the outings, and the URL follows', async ({ 
 });
 
 // the filters of the page: steep, sources, text, default areas, new since last visit
-type Item = Located & { steep: boolean | null; author: { name: string | null } | null };
+type Item = Located & {
+  steep: boolean | null;
+  author: { name: string | null } | null;
+  document_id: number | null;
+  date: string;
+};
 
 const normalize = (text: string) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 

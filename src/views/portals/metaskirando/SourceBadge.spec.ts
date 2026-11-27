@@ -12,6 +12,7 @@ describe('SourceBadge', () => {
   });
 
   it.each([
+    ['c2c', 'camptocamp.org'],
     ['gipfelbuch', 'Gipfelbuch'],
     ['bivouak', 'Bivouak'],
     ['skitourenportal', 'Skitourenportal'],

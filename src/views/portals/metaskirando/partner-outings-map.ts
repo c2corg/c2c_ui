@@ -16,9 +16,10 @@ export const SOURCE_COLORS: Record<string, string> = {
 };
 export const OTHER_SOURCE_COLOR = '#444';
 
-// the short label of the sources of the registry; another source shows the name of its site if known, else its id
+// the short label of the sources of the registry (c2c by the name of the site, as the old metaskirando); another source
+// shows the name of its site if known, else its id
 export const SOURCE_LABELS: Record<string, string> = {
-  c2c: 'c2c',
+  c2c: 'camptocamp.org',
   skitour: 'Skitour',
   gulliver: 'Gulliver',
   gipfelbuch: 'Gipfelbuch',

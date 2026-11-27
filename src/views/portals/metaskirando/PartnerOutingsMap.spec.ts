@@ -72,6 +72,7 @@ describe('PartnerOutingsMap', () => {
     const wrapper = mountMap();
     expect(wrapper.find('[data-test=legend]').text()).toContain('Skitour');
     expect(wrapper.find('[data-test=legend]').text()).toContain('Gulliver');
+    expect(wrapper.find('[data-test=legend]').text()).toContain('camptocamp.org');
     expect(wrapper.find('[data-test=legend-approximate]').exists()).toBe(true);
 
     await wrapper.setProps({ markers: markers().filter((m) => !m.approximate) });
