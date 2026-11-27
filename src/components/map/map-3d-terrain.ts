@@ -26,9 +26,11 @@ export async function getTerrainTile(
 // the elevations of a decoded terrain tile (terrarium: R * 256 + G + B / 256 - 32768)
 type Elevations = { size: number; values: Float32Array };
 const decoded = new Map<string, Promise<Elevations | null>>();
+// a tile that does not come within this time: none, as a tile that failed (its parent then), not a wait without end
+const TILE_TIMEOUT = 10_000;
 
 async function elevations(z: number, x: number, y: number): Promise<Elevations | null> {
-  const data = await getTerrainTile(z, x, y);
+  const data = await getTerrainTile(z, x, y, AbortSignal.timeout(TILE_TIMEOUT));
   if (!data) return null;
   const bitmap = await createImageBitmap(new Blob([data], { type: 'image/webp' }));
   const size = bitmap.width;
