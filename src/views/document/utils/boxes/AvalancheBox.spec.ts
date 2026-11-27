@@ -248,16 +248,10 @@ describe('AvalancheBox', () => {
       expect(wrapper.find('.avalanche-box').exists()).toBe(false);
     });
 
-    it('says only, in plain text, when no bulletin is stored for the day', async () => {
+    it('is hidden when no bulletin is stored for the day', async () => {
       getOfDay.mockResolvedValue([]);
       const wrapper = await mountOuting();
-      const box = wrapper.find('.avalanche-box');
-      expect(box.find('p').text()).toBe('No avalanche bulletin stored for this day');
-      expect(box.find('.title').exists()).toBe(false);
-      expect(box.find('hr').exists()).toBe(false);
-      expect(box.find('.router-link').exists()).toBe(false);
-      expect(wrapper.find('.icon-bra-level').exists()).toBe(false);
-      expect(wrapper.find('.bulletin-toggle').exists()).toBe(false);
+      expect(wrapper.find('.avalanche-box').exists()).toBe(false);
     });
 
     it('shows the day of the bulletin when it is not the one of the outing', async () => {
