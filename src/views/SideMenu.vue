@@ -22,23 +22,23 @@
 
       <menu-footer class="menu-footer" />
 
-      <button
-        v-if="canPin"
-        :style="{ visibility: keptOpen ? 'hidden' : undefined }"
-        type="button"
-        class="menu-pin"
-        @click="togglePinned"
-      >
-        <fa-icon :icon="pinned ? 'angles-left' : 'angles-right'" fixed-width />
-        <span class="menu-pin-text">
-          {{ pinned ? $gettext('Collapse the menu') : $gettext('Keep the menu open') }}
-        </span>
-      </button>
-      <!-- too narrow to pin it (a tablet, a phone on its side): opened over the page, by a tap too -->
-      <button v-else type="button" class="menu-pin" :aria-expanded="expanded" @click="toggleOpened">
-        <fa-icon :icon="expanded ? 'angles-left' : 'angles-right'" fixed-width />
-        <span class="menu-pin-text">{{ expanded ? $gettext('Close') : $gettext('Menu') }}</span>
-      </button>
+      <!-- kept open (the welcome page): the button folds away, and the footer slides down to the bottom of the window
+           (and back up on the way out) -->
+      <div class="menu-pin-fold" :class="{ 'is-folded': keptOpen }" :inert="keptOpen">
+        <div class="menu-pin-fold-inner">
+          <button v-if="canPin" type="button" class="menu-pin" @click="togglePinned">
+            <fa-icon :icon="pinned ? 'angles-left' : 'angles-right'" fixed-width />
+            <span class="menu-pin-text">
+              {{ pinned ? $gettext('Collapse the menu') : $gettext('Keep the menu open') }}
+            </span>
+          </button>
+          <!-- too narrow to pin it (a tablet, a phone on its side): opened over the page, by a tap too -->
+          <button v-else type="button" class="menu-pin" :aria-expanded="expanded" @click="toggleOpened">
+            <fa-icon :icon="expanded ? 'angles-left' : 'angles-right'" fixed-width />
+            <span class="menu-pin-text">{{ expanded ? $gettext('Close') : $gettext('Menu') }}</span>
+          </button>
+        </div>
+      </div>
     </div>
   </aside>
 </template>
@@ -207,12 +207,28 @@ aside:not(.is-expanded) :deep(.menu-item.router-link-active) {
   visibility: visible;
 }
 
-.menu-pin {
-  display: block;
+/* in view when the rail scrolls (a phone on its side): the way a finger opens it */
+.menu-pin-fold {
+  display: grid;
   flex: none;
-  /* in view when the rail scrolls (a phone on its side): the way a finger opens it */
   position: sticky;
   bottom: 0;
+  /* its row folds to nothing: the footer above it slides down, as the menu opens */
+  grid-template-rows: 1fr;
+  transition: grid-template-rows var(--side-menu-open);
+
+  &.is-folded {
+    grid-template-rows: 0fr;
+  }
+}
+
+.menu-pin-fold-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.menu-pin {
+  display: block;
   width: 100%;
   padding: 10px 10px 10px calc(var(--c2c-sidemenu-rail-width) / 2 - 0.625em);
   border: 0;
