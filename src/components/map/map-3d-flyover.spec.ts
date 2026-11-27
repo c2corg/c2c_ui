@@ -318,6 +318,19 @@ describe('elevationProfile', () => {
     expect(Math.max(...profile.map(([, y]) => y))).toBeCloseTo(0.1, 2);
   });
 
+  it('counts an elevation of 0 (by the sea), and many points', async () => {
+    const coast = [
+      [
+        [6, 45, 0],
+        [6, 45 + KM, 100],
+      ],
+    ];
+    expect(elevationProfile((await prepareFlyover(coast, flat, 1))!)).not.toBeNull();
+    // more points than a function call takes arguments
+    const long = [Array.from({ length: 200_000 }, (_, i) => [6, 45 + (i * KM) / 100, 1000 + (i % 50)])];
+    expect((await prepareFlyover(long, flat, 1))!.ele).not.toBeNull();
+  });
+
   it('is none without elevations, or with 0 everywhere', async () => {
     const flatParts = [
       [

@@ -190,8 +190,18 @@ export async function prepareFlyover(
   const inFlight = (i: number) => !!air?.flights.some(([a, b]) => a <= i && i < b);
   // a track without elevations has none, or 0 everywhere (the API fills the missing ones with 0)
   const z = (j: number) => (Number.isFinite(vertices[j][2]) ? vertices[j][2] : NaN);
-  const zs = vertices.map((_, j) => z(j)).filter((value) => Number.isFinite(value) && value !== 0);
-  const ele = zs.length && Math.max(...zs) - Math.min(...zs) >= 1 ? new Float64Array(n) : null;
+  // a loop, not Math.min(...): a raw track can have more points than a call has arguments
+  let lowest = Infinity;
+  let highest = -Infinity;
+  let recorded = false;
+  for (let j = 0; j < vertices.length; j++) {
+    const value = z(j);
+    if (!Number.isFinite(value)) continue;
+    lowest = Math.min(lowest, value);
+    highest = Math.max(highest, value);
+    recorded ||= value !== 0;
+  }
+  const ele = recorded && highest - lowest >= 1 ? new Float64Array(n) : null;
 
   // longitudes without the jump of 360° at the antimeridian: interpolated and smoothed the short way
   const vertexLon = new Float64Array(vertices.length);
