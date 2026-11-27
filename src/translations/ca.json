@@ -16,6 +16,11 @@
     "(MRE), you can enter the sectors of the compass rose that are reported as critical in the avalanche bulletin.": "(MRE), podeu marcar els sectors de la rosa dels vents indicats com a crítics añ butlletí d'allaus.",
     "(MRP), you can refine the hazard potential, set group size and any precautionary measures being considered.": "(MRP), podeu afinar el potencial de perill, tingueu en compte la mida del grup i les mesures de precaució considerades.",
     "(at the bottom of Safari, or next to the address).": "(a la part inferior de Safari, o al costat de l'adreça).",
+    "(forecast)": "(previsió)",
+    "(north)": "(nord)",
+    "(south)": "(sud)",
+    ", an association dedicated to improving and sharing knowledge about avalanches.": ", una associació dedicada a millorar i compartir el coneixement sobre les allaus.",
+    "0 °C isotherm": "Isoterma de 0 °C",
     "1 or 2 complications (steeper or narrow section...)": "1 o 2 complicacions (més dret o escanyall)",
     "10 meters minimum while ascending": "10 metres mínim a la pujada",
     "1d_to_3d": {
@@ -68,6 +73,7 @@
     "Add Camptocamp to your home screen: an icon like an app, the whole screen, and your data kept on the phone. On iPhone, Safari clears the data of a site that is not installed after seven days without a visit.": "Afegiu Camptocamp a la pantalla d'inici: una icona com una aplicació, tota la pantalla, i les vostres dades desades al telèfon. A l'iPhone, Safari esborra les dades d'un lloc no instal·lat després de set dies sense cap visita.",
     "Add a copy": "Afegir una còpia",
     "Add a document": "Afegeix un document",
+    "Add a report": "Informa d'una allau",
     "Add a title": "Afegir un títol",
     "Add here maps not automatically referenced": "Afegiu aquí els mapes no adjuntats automàticament",
     "Add images": "Afegeix imatges",
@@ -142,6 +148,7 @@
     },
     "Authentication to public transport data service error.": "Error d'autenticació amb el servei de dades de transport públic.",
     "Author": "Autor",
+    "Avalanche bulletin": "Butlletí d'allaus",
     "Avalanche bulletins": "Butlletins d'allaus",
     "Avalanche risk": "Risc d'allaus",
     "Avalanche risk evaluation tool:": "Eina d'avaluació del risc d'allaus:",
@@ -173,6 +180,9 @@
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Descrigueu breument les eventuals ferides, i allò que faríeu avui, vist en perspectiva. Els comentaris que no encaixin als altres camps es poden entrar aquí.",
     "Broken links": "Enllaços trencats",
     "Browse the topoguide": "Navega per la guia de ressenyes",
+    "Bug report — camptocamp.org": "Informe d'error — camptocamp.org",
+    "Bulletin": "Butlletí",
+    "Bulletin details": "Detalls del butlletí",
     "Buoux is maintained by local volunteers. Help keep it bolted and open!": "Buoux el mantenen voluntaris locals. Ajudeu a mantenir-lo equipat i obert!",
     "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "Per defecte, el vostre pseudònim serà el vostre identificador a la guia de ressenyes. El podeu canviar lliurement a continuació dins de la configuració.",
     "By month": "Per mes",
@@ -207,7 +217,10 @@
     "Clear": "Esborra-ho",
     "Clear the filters": "Esborra els filtres",
     "Click on the map to get weather forecasts": "Feu clic al mapa per obtenir la previsió meteorològica",
-    "Close": "Tanca",
+    "Close": {
+      "$$noContext": "Tanca",
+      "Map controls": "Tanca"
+    },
     "Close the search": "Tanca la cerca",
     "Collapse": "Plega",
     "Collapse the menu": "Plega el menú",
@@ -259,6 +272,7 @@
     "Control the use of your personal data": "Controleu l'ús de les vostres dades personals",
     "Cookies": "Galetes",
     "Copy of a photo already on this page": "Còpia d'una foto que ja és en aquesta pàgina",
+    "Cornices": "Cornises",
     "Could not save your outing on the phone. Please try again.": "No s'ha pogut desar la sortida al telèfon. Torneu-ho a provar.",
     "Couldn't check whether you can change its title.": "No s'ha pogut comprovar si en podeu canviar el títol.",
     "Couldn't load this photo": "No s'ha pogut carregar aquesta foto",
@@ -279,6 +293,7 @@
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "La vista actual del mapa no queda coberta per YETI. Només ho són els massissos muntanyosos de l'estat francès (delimitats per línies discontínues).",
     "Current map view is too large. Please zoom to level": "La zona del mapa és massa gran. Feu zoom",
     "Current password": "Contrasenya actual",
+    "Danger at the highest point of the outing": "Perill al punt més alt de la sortida",
     "Danger at the highest point of the route": "Perill al punt més alt de l'itinerari",
     "Danger level": "Nivell de perill",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "El nivell de perill del butlletí d'allaus fa referència a totes les orientacions. La rosa dels vents distingeix els sectors crítics on el perill s'accentua.",
@@ -423,6 +438,7 @@
     "FF Vol Libre": "Federació francesa de vol lliure",
     "Fauna protection areas": "Zona de protecció de la fauna",
     "Fauna protection site:": "Indret de protecció de la fauna:",
+    "Favourable situation": "Situació favorable",
     "Favourites": "Preferits",
     "Favourites saved on this device": "Preferits desats en aquest dispositiu",
     "Favourites: take a topo offline, with its photos and its map.": "Preferits: emporteu-vos una ressenya fora de línia, amb les seves fotos i el seu mapa.",
@@ -444,6 +460,9 @@
     "Folder": "Carpeta",
     "Folder name": "Nom de la carpeta",
     "Folders sort your topos, one trip per folder for example.": "Les carpetes ordenen les vostres ressenyes, per exemple una estada per carpeta.",
+    "Follow the track": {
+      "Map controls": "Segueix la traça"
+    },
     "Followed users": "Usuaris seguits",
     "Following": "Persones seguides",
     "For the moderators": "Per als moderadors",
@@ -461,6 +480,8 @@
     "Forum: a place to chat about technical matters, or just petty talk": "Un fòrum per tractar temes tècnics o per fer-la petar",
     "Found:": "Trobats:",
     "Free this space": "Allibera aquest espai",
+    "Fresh snow": "Neu recent",
+    "Fresh snow in 24 h (cm)": "Neu recent en 24 h (cm)",
     "From": "Des de",
     "From danger 3, consider the slopes which dominate the route": "A partir del nivell 3, tingueu en compte els pendents que dominen a l'itinerari",
     "From the interface": "Des de la interfase",
@@ -479,6 +500,7 @@
     "Getting around": "Orientar-se",
     "Give up": "Abandona",
     "Give up this outing? It will be lost.": "Voleu abandonar aquesta sortida? Es perdrà.",
+    "Gliding snow": "Lliscaments basals",
     "Go back to YETI": "Torna a YETI",
     "Go to the previous page": "Torna a la pàgina anterior",
     "Go to website": "Accedeix al lloc web",
@@ -609,6 +631,7 @@
     "Languages of the feed": "Llengües del fil",
     "Large": "Gran",
     "Large group = 5 people and more": "Grup gran = 5 persones o més",
+    "Large group with load shedding distance": "Grup gran amb distàncies de seguretat",
     "Last activities": "Darreres activitats",
     "Last character is invalid": {
       "API message": "El darrer caràcter ha de ser una lletra o una xifra."
@@ -659,7 +682,9 @@
     "List of versions for language:": "Llista de versions per idioma:",
     "Lists of routes, outings, waypoints…: their “My preferences” button applies them as filters, in one click.": "Llistes d'itineraris, sortides, punts de pas…: el seu botó «Les meves preferències» les aplica com a filtres, amb un clic.",
     "Load my preferences": "Activa les meves preferències",
+    "Load shedding distance": "Distància de seguretat",
     "Loading access points...": "Carregant punts d'accés...",
+    "Loading the bulletin": "Carregant el butlletí",
     "Loading...": "Carregant...",
     "Local file": "Document local",
     "Locate": "Localitza",
@@ -724,7 +749,6 @@
     },
     "Missing danger level": "Falta el nivell de perill",
     "Missing method": "Falta el mètode",
-    "Mobile app bug — camptocamp.org": "Error de l'aplicació mòbil — camptocamp.org",
     "Moderation": "Moderació",
     "Moderator role required": {
       "API message": "Cal tenir el rol de moderador"
@@ -739,6 +763,7 @@
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Hi ha més itineraris disponibles. Us podeu desplaçar pel mapa, escriure un nom o seleccionar una activitat per mostrar-los",
     "More than 30 days old": "Creat fa més de 30 dies",
     "More: topoguide, articles, SERAC, Yeti, Itinévert, forum.": "Més: guia de ressenyes, articles, SERAC, Yeti, Itinévert, fòrum.",
+    "Most dangerous aspects": "Orientacions més perilloses",
     "Multi-criteria search": "Cerca multi-criteri",
     "My account": "El meu compte",
     "My activities and areas": "Les meves activitats i regions",
@@ -754,6 +779,7 @@
     "My statistics": "Les meves estadístiques",
     "Name of the pack?": "Nom del paquet?",
     "Narration": "Descripció en text",
+    "Natural avalanches": "Allaus espontànies",
     "Near me": "A prop meu",
     "Near-accidents = delicate situation not leading to physical injury but could have lead to a much more serious event.": "Quasi-accidents que haurien pogut degenerar en esdeveniments més greus",
     "Near-accidents are valuable": "Els incidents i els quasi-accidents són experiències valuoses:",
@@ -766,6 +792,7 @@
     "New password": "Nova contrasenya",
     "New request": "Nova sol·licitud",
     "New route": "Nou itinerari",
+    "New snow": "Neu nova",
     "New title of the photo already on this page": "Nou títol de la foto que ja és en aquesta pàgina",
     "New waypoint": "Nou punt de pas",
     "Next": "Següent",
@@ -780,11 +807,13 @@
     "No activity retrieved yet. Have you connected your trackers?": "Encara no s'ha recuperat cap activitat. Heu connectat els vostres rastrejadors?",
     "No answer from Camptocamp: the outing may be published already. It is saved on the phone: check on the site, then decide from Favourites.": "No hi ha resposta de Camptocamp: potser la sortida ja s'ha publicat. Està desada al telèfon: comproveu-ho al lloc web i després decidiu des de Preferits.",
     "No avalanche bulletin right now": "Ara mateix no hi ha cap butlletí d'allaus ",
+    "No avalanche bulletin stored for this day": "No hi ha cap butlletí d'allaus desat per a aquest dia",
     "No broken image.": "Cap imatge trencada.",
     "No broken link.": "No hi ha cap enllaç trencat.",
     "No data could be extracted from GPS file": "No es pot extreure cap dada del fitxer GPS",
     "No deleted document to restore, nor merge to undo.": "No hi ha cap document suprimit per restaurar, ni cap fusió per desfer.",
     "No deleted or merged document matches these filters.": "Cap document suprimit o fusionat no coincideix amb aquests filtres.",
+    "No distinct avalanche problem": "Cap problema d'allaus destacat",
     "No document": "Cap document",
     "No duplicate image.": "Cap imatge duplicada.",
     "No favourite matches.": "Cap preferit no coincideix.",
@@ -817,6 +846,7 @@
     "Non sensitive period": "Període no sensible",
     "NonCommercial — You may not use the material for commercial purposes.": "No Comercial  — No podeu fer ús comercial de l'Obra, ni de la totalitat ni d'una part.",
     "None": "Cap",
+    "North (cm)": "Nord (cm)",
     "North up": {
       "Map controls": "Nord a dalt"
     },
@@ -908,6 +938,10 @@
     "Password too short": {
       "API message": "La contrasenya és massa curta"
     },
+    "Past days": "Dies anteriors",
+    "Pause": {
+      "Map controls": "Pausa"
+    },
     "Paysage": {
       "Sophie picture context": "Paisatge"
     },
@@ -916,6 +950,7 @@
     },
     "People who were with you, and your feelings about this outing": "L'altra gent que participava a la sortida, així com les vostres impressions sobre la sortida",
     "Period of protection": "Període de protecció",
+    "Persistent weak layers": "Capes febles persistents",
     "Personal data are confidential": "Les dades personals són confidencials",
     "Personal feed off": "Fil personal desactivat",
     "Personal feed on": "Fil personal activat",
@@ -925,6 +960,12 @@
     "Pitch description tag": "Balisa de descripció dels llargs",
     "Plan a public transport trip": "Planifica una sortida amb transport públic",
     "Plan my trip →": "Planifica la teva ruta →",
+    "Play": {
+      "Map controls": "Reprodueix"
+    },
+    "Play the track": {
+      "Map controls": "Reprodueix la traça"
+    },
     "Please describe the problem above. Technical context:": "Descriviu el problema a dalt. Context tècnic:",
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Descrigueu el vostre nivell tècnic i experiència en relació a l'objectiu escollit, la vostra condició física, la fatiga acumulada abans de la sortida, l'aclimatació en cas de sortides en altura, etc.",
     "Please move the map, or change the route's name.": "Desplaceu el mapa o modifiqueu el nom de l'itinerari.",
@@ -951,6 +992,9 @@
     "Printing": "Imprimeix",
     "Processed from:": "Processat a partir de:",
     "Professional Reduction Method": "mètode de reducció professional",
+    "Progress": {
+      "Map controls": "Progrés"
+    },
     "Protect document": "Protegeix el document",
     "Protected areas": "Zones protegides",
     "Protection area:": "Zona de protecció:",
@@ -971,6 +1015,7 @@
     "ROMMA station": "estació ROMMA",
     "ROMMA stations": "Estacions ROMMA",
     "Radius around your position:": "Radi al voltant de la vostra posició:",
+    "Rain-snow limit": "Cota de neu",
     "Read the app guide": "Llegiu la guia de l'aplicació",
     "Reason of the request": "Motiu de la sol·licitud",
     "Recent changes": "Canvis recents",
@@ -997,7 +1042,10 @@
     "Remove this account": "Elimina aquest compte",
     "Removed from favourites.": "Tret dels preferits.",
     "Rename folder": "Canvia el nom de la carpeta",
-    "Report a bug of the mobile app": "Informa d'un error de l'aplicació mòbil",
+    "Replay": {
+      "Map controls": "Torna a reproduir"
+    },
+    "Report a bug": "Informa d'un error",
     "Report an issue": "Alerteu d'un problema",
     "Report title, activity, linked routes or outings.": "Títol de l'escrit, activitat, enllaços amb itineraris o sortides",
     "Request a new link": "Sol·licita un enllaç nou",
@@ -1123,7 +1171,11 @@
     "Slopes": "Mapes de pendents",
     "Small": "Petit",
     "Small group = 2 to 4 people": "Grup petit = 2 a 4 persones",
+    "Small group with load shedding distance": "Grup petit amb distàncies de seguretat",
     "Small group without distance": "Grup petit sense distància",
+    "Snow cover from:": "Innivació a partir de:",
+    "Snow quality and snow cover": "Qualitat de la neu i innivació",
+    "Snowpack stability": "Estabilitat del mantell nival",
     "Soft mobility outing": "Sortida amb ecomobilitat",
     "Some changes to your favourites are not sent yet: without a network they will be lost. Sign out anyway?": "Alguns canvis als vostres preferits encara no s'han enviat: sense xarxa es perdran. Voleu tancar la sessió igualment?",
     "Some files could not be downloaded": "No s'han pogut descarregar alguns fitxers",
@@ -1135,8 +1187,12 @@
     "Sorry, euskara lang has been frozen. We're looking for a moderator, if you're interested, please contact board@camptocamp.org": "Ho sentim, el basc s'ha congelat. Busquem un moderador; si us interessa, contacteu amb board@camptocamp.org",
     "Sort by": "Ordena per",
     "Source:": "Document a fusionar (font):",
+    "South (cm)": "Sud (cm)",
     "Spam: its contributions are deleted, its forum account too": "Spam: se n'eliminen les contribucions i també el compte del fòrum",
     "Species zone": "Zona d'espècie",
+    "Speed": {
+      "Map controls": "Velocitat"
+    },
     "Split line": "Divideix la línia",
     "Start a search again": "Torna a començar una cerca",
     "Static map images": "Imatges estàtiques del mapa",
@@ -1186,6 +1242,7 @@
     "The base size of the whole interface.": "La mida base de tota la interfície.",
     "The broken images could not be loaded.": "No s'han pogut carregar les imatges trencades.",
     "The broken links could not be loaded.": "No s'han pogut carregar els enllaços trencats.",
+    "The bulletin could not be loaded": "No s'ha pogut carregar el butlletí",
     "The closed account (&quot;Compte fermé&quot;), in the topoguide and in the forum.": "El compte tancat (&quot;Compte fermé&quot;), a la guia de ressenyes i al fòrum.",
     "The current criteria will be retained": "Es mantindran els criteris actuals",
     "The date of the copy shows on each topo: orange after a week, red after a month. Conditions change: download it again before leaving. Incomplete means the network cut the download: download it again.": "La data de la còpia es mostra a cada ressenya: taronja al cap d'una setmana, vermella al cap d'un mes. Les condicions canvien: torneu-la a descarregar abans de sortir. Incompleta vol dir que la xarxa va tallar la descàrrega: torneu-la a descarregar.",
@@ -1324,7 +1381,7 @@
     "To define your destination, choose one of these 2 approaches": "Per definir la destinació, trieu un d'aquests 2 enfocaments",
     "To go further": "Per saber-ne més",
     "To handle": "Per gestionar",
-    "To report a problem: Me → Report a bug of the mobile app, the email leaves with the useful information.": "Per informar d'un problema: Jo → Informa d'un error de l'aplicació mòbil; el correu s'envia amb la informació útil.",
+    "To report a problem: Me → Report a bug, the email leaves with the useful information.": "Per informar d'un problema: Jo → Informa d'un error; el correu s'envia amb la informació útil.",
     "To write instead:": "Cal escriure en lloc seu:",
     "Toggle elevation profile": "Mostra o amaga el perfil altimètric",
     "Toggle full-screen": {
@@ -1356,7 +1413,9 @@
     "Tracks here": "Traces aquí",
     "Translate": "Tradueix",
     "Transport & road or PT access": "Accés per carretera / transport públic",
+    "Trend": "Tendència",
     "Tricky sections": "Seccions complexes",
+    "Triggered avalanches": "Allaus provocades",
     "Try again": "Torna-ho a provar",
     "Try again later or": "Torneu-ho a provar més tard o",
     "Type": "Tipus",
@@ -1417,11 +1476,13 @@
     "We can't find any results matching your search.": "No hem trobat cap resultat que coincideixi amb la vostra cerca.",
     "We did not find any public transport stop point in a 5 km foot range from any route access point.": "No hem trobat cap transport públic en un radi de 5 km caminant des de cap punt d'accés a la ruta. ",
     "We sent you an email, please click on the link to reset password.": "Us hem enviat un correu, si us plau, cliqueu-ne l'enllaç per restablir la contrasenya.",
+    "Weather": "Meteorologia",
     "Weather & conditions": "Méteo i condicions",
     "Weather forecast (meteoblue)": "Previsió meteorològica (Meteoblue)",
     "Welcome to Camptocamp": "Benvinguts a Camptocamp",
     "Welcome to Camptocamp, the mountain sports community!": "Benvingut/da a Camptocamp, la comunitat d'esports de muntanya!",
     "Welcome to Itinévert, the tool for planning your outing using public transport.": "Benvinguts a Itinévert, l'eina per planificar la vostra sortida amb transport públic.",
+    "Wet snow": "Neu humida",
     "Wet snow: orientation not taken into account": "Neu humida: no es té en compte l'orientació",
     "What activity(ies) would you like to do?": "Quina activitat (o activitats) voleu fer?",
     "What date and time would you like to leave?": "Quin dia i a quina hora voleu sortir?",
@@ -1433,6 +1494,8 @@
     "Why install it?": "Per què instal·lar-la?",
     "Wide and constant": "Ample i regular",
     "Will generate new points along route, at regular interval, defined by distance in meters": "Generarem nous punts al llarg de la ruta, a un interval regular, definit per una distància en metres. ",
+    "Wind": "Vent",
+    "Wind slab": "Placa de vent",
     "Winter hiking routes": "Trescs hivernals",
     "Winter routes": "Rutes hivernals",
     "With the": "Amb la",
@@ -1476,6 +1539,7 @@
     },
     "Zoom out and it will be OK": "Redueix el zoom i es veurà bé",
     "a new point on an existing line": "un punt nou a una línia existent",
+    "above": "per sobre de",
     "access": {
       "$$noContext": "accés",
       "waypoint_types": "accés"
@@ -1518,6 +1582,7 @@
       "area_types": "límit administratiu"
     },
     "after:": "després:",
+    "afternoon": "tarda",
     "age": "edat",
     "aid_rating": "Dificultat en escalada artificial",
     "alpine_climbing": {
@@ -1601,6 +1666,7 @@
     "base_camp": {
       "waypoint_types": "camp base"
     },
+    "below": "per sota de",
     "best_periods": "Millors períodes",
     "biography": {
       "book_types": "biografia"
@@ -2111,6 +2177,7 @@
     "more_than_3m": {
       "severities": "superior a 3m"
     },
+    "morning": "matí",
     "motivations": "motivacions",
     "mountain_biking": {
       "activities": "BTT"
@@ -2599,6 +2666,7 @@
     "traverse": {
       "route_types": "travessa"
     },
+    "treeline": "el límit del bosc",
     "unknown": {
       "tracking": "desconegut"
     },

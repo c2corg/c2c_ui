@@ -168,6 +168,7 @@
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Décrivez brièvement les blessures éventuelles, et ce que vous feriez aujourd'hui avec du recul. Les commentaires qui n'entrent dans aucun autre champ peuvent être saisis ici.",
     "Broken links": "Liens cassés",
     "Browse the topoguide": "Parcourir le topoguide",
+    "Bug report — camptocamp.org": "Signalement de bug — camptocamp.org",
     "Bulletin details": "Détails du bulletin",
     "Buoux is maintained by local volunteers. Help keep it bolted and open!": "Buoux est maintenu par des bénévoles locaux. Contribuez à le maintenir l'équipement et l'accès !",
     "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "Par défaut, votre pseudonyme dans la partie topoguide sera votre identifiant. Vous pourrez le changer librement par la suite dans les paramètres.",
@@ -202,7 +203,10 @@
     "Clear": "Effacer",
     "Clear the filters": "Supprimer les filtres",
     "Click on the map to get weather forecasts": "Cliquez sur la carte pour afficher les prévisions météo",
-    "Close": "Fermer",
+    "Close": {
+      "$$noContext": "Fermer",
+      "Map controls": "Fermer"
+    },
     "Close the search": "Fermer la recherche",
     "Collapse": "Replier",
     "Collapse the menu": "Replier le menu",
@@ -268,6 +272,7 @@
     "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "L’emprise actuelle de la carte n’est pas couverte par YETI. Seuls les massifs montagneux français le sont (délimités par des pointillés).",
     "Current map view is too large. Please zoom to level": "La zone de carte est trop grande. Zoomez au niveau",
     "Current password": "Mot de passe actuel",
+    "Danger at the highest point of the outing": "Danger au point le plus haut de la sortie",
     "Danger at the highest point of the route": "Danger au point le plus haut de l'itinéraire",
     "Danger level": "Niveau de danger",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "Le niveau de danger du bulletin d'avalanche concerne toutes les orientations. La rose des vents distingue les secteurs les plus critiques présentant un risque accru. ",
@@ -424,6 +429,9 @@
     "Folder": "Dossier",
     "Folder name": "Nom du dossier",
     "Folders sort your topos, one trip per folder for example.": "Les dossiers rangent vos topos, un séjour par dossier par exemple.",
+    "Follow the track": {
+      "Map controls": "Suivre la trace"
+    },
     "Followed users": "Contributeurs suivis",
     "Following": "Personnes suivies",
     "For the moderators": "Pour les modérateurs",
@@ -707,7 +715,6 @@
     },
     "Missing danger level": "Niveau de danger manquant",
     "Missing method": "Méthode manquante",
-    "Mobile app bug — camptocamp.org": "Bug de l'app mobile — camptocamp.org",
     "Moderation": "Modération",
     "Moderator role required": {
       "API message": "Vous devez être un modérateur"
@@ -767,6 +774,7 @@
     "No activity retrieved yet. Have you connected your trackers?": "Aucune activité n'a été récupérée. Avez vous connecté vos dispositifs ?",
     "No answer from Camptocamp: the outing may be published already. It is saved on the phone: check on the site, then decide from Favourites.": "Pas de réponse de Camptocamp : la sortie est peut-être déjà publiée. Elle est enregistrée sur le téléphone : vérifiez sur le site, puis décidez depuis Favoris.",
     "No avalanche bulletin right now": "Pas de bulletin d’avalanche pour le moment",
+    "No avalanche bulletin stored for this day": "Aucun bulletin d’avalanches enregistré pour ce jour",
     "No broken image.": "Aucune image cassée.",
     "No broken link.": "Aucun lien cassé.",
     "No data could be extracted from GPS file": "Aucune donnée n'a pu être extraite du fichier",
@@ -908,6 +916,12 @@
     "Pitch description tag": "Balise de description des longueurs",
     "Plan a public transport trip": "Planifier un trajet de transport en commun",
     "Plan my trip →": "Planifier mon déplacement →",
+    "Play": {
+      "Map controls": "Lecture"
+    },
+    "Play the track": {
+      "Map controls": "Jouer la trace"
+    },
     "Please describe the problem above. Technical context:": "Décrivez le problème ci-dessus. Contexte technique :",
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Décrivez votre niveau technique et expérience par rapport à l’objectif choisi, votre condition physique, la fatigue accumulée avant la sortie, l’acclimatation pour une sortie en altitude, etc.",
     "Please move the map, or change the route's name.": "Déplacez la carte, ou modifier le nom de l'itinéraire.",
@@ -934,6 +948,9 @@
     "Printing": "Impression",
     "Processed from:": "Traité à partir du :",
     "Professional Reduction Method": "méthode de réduction professionnelle",
+    "Progress": {
+      "Map controls": "Progression"
+    },
     "Protect document": "Protéger ce document",
     "Protected areas": "Zones de protection",
     "Protection area:": "Zone de protection :",
@@ -981,7 +998,10 @@
     "Remove this account": "Supprimer ce compte",
     "Removed from favourites.": "Retiré des favoris.",
     "Rename folder": "Renommer le dossier",
-    "Report a bug of the mobile app": "Signaler un bug de l'app mobile",
+    "Replay": {
+      "Map controls": "Revoir"
+    },
+    "Report a bug": "Signaler un bug",
     "Report an issue": "Signaler un problème",
     "Report title, activity, linked routes or outings.": "Titre du rapport, activité, liens avec des itinéraires ou sorties.",
     "Request a new link": "Demander un nouveau lien",
@@ -1126,6 +1146,9 @@
     "South (cm)": "Sud (cm)",
     "Spam: its contributions are deleted, its forum account too": "Spam : ses contributions sont supprimées, son compte du forum aussi",
     "Species zone": "Zone espèce",
+    "Speed": {
+      "Map controls": "Vitesse"
+    },
     "Split line": "Couper la ligne",
     "Start a search again": "Recommencer une recherche",
     "Static map images": "Images des cartes statiques",
@@ -1313,7 +1336,7 @@
     "To define your destination, choose one of these 2 approaches": "Pour définir votre destination, choisissez l'une de ces 2 approches",
     "To go further": "Pour aller plus loin",
     "To handle": "À traiter",
-    "To report a problem: Me → Report a bug of the mobile app, the email leaves with the useful information.": "Pour signaler un problème : Moi → Signaler un bug de l'app mobile, l'e-mail part avec les informations utiles.",
+    "To report a problem: Me → Report a bug, the email leaves with the useful information.": "Pour signaler un problème: Moi → Signaler un bug, l'e-mail part avec les informations utiles.",
     "To write instead:": "À écrire à la place :",
     "Toggle elevation profile": "Masquer ou afficher le profil altimétrique",
     "Toggle full-screen": {

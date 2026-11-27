@@ -147,7 +147,10 @@
     "Child": "子节点",
     "Choose file": "选择文件",
     "Clear": "清除所有",
-    "Close": "关闭",
+    "Close": {
+      "$$noContext": "关闭",
+      "Map controls": "关闭"
+    },
     "Collapse": "折叠",
     "Comments": "评论",
     "Comments are disabled.": "评论关闭",
@@ -306,6 +309,9 @@
     "FlowCapt sensor": "FlowCapt 传感器",
     "FlowCapt sensors": "FlowCapt 传感器",
     "Fold section": "折叠章节",
+    "Follow the track": {
+      "Map controls": "跟随航迹"
+    },
     "Followed users": "关注的用户",
     "Forgot password?": "忘记密码？",
     "Forum": "论坛",
@@ -511,6 +517,9 @@
     "Password too short": {
       "API message": "密码太短"
     },
+    "Pause": {
+      "Map controls": "暂停"
+    },
     "Paysage": {
       "Sophie picture context": "风景"
     },
@@ -524,6 +533,12 @@
     "Personal feed on": "个人订阅设置开启",
     "Personal informations": "个人信息",
     "Pitch description tag": "攀爬段描述标签",
+    "Play": {
+      "Map controls": "播放"
+    },
+    "Play the track": {
+      "Map controls": "播放航迹"
+    },
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "请描述您与所选目标相关的技术和经验水平，您的身体素质水平，先前的疲劳程度以及在高海拔上的适应程度等。",
     "Please move the map, or change the route's name.": "请移动地图，或更改路线名称。",
     "Please select a method before computing.": "请在计算前选择一种方法。",
@@ -540,6 +555,9 @@
     "Print a selection of documents": "打印一系列文件",
     "Printing": "打印中",
     "Professional Reduction Method": "专业风险降低方法",
+    "Progress": {
+      "Map controls": "进度"
+    },
     "Protect document": "保护文档",
     "Protection area:": "保护区：",
     "Protection areas": "保护区",
@@ -555,6 +573,9 @@
     "Refresh": "刷新",
     "Register": "注册",
     "Remove": "移除",
+    "Replay": {
+      "Map controls": "重播"
+    },
     "Report an issue": "报告问题",
     "Report title, activity, linked routes or outings.": "报告标题、运动、关联的路线或者出行记录。",
     "Required": {
@@ -611,6 +632,9 @@
     "Sophie Picture Contest": "Sophie 摄影比赛",
     "Sort by": "排序方式",
     "Source:": "来源：",
+    "Speed": {
+      "Map controls": "速度"
+    },
     "Statistical cookies": "统计 Cookies",
     "Statistics": "统计",
     "Stay careful while skiing": "滑雪时小心",

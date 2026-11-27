@@ -136,7 +136,10 @@
     "Child": "ребенок",
     "Choose file": "Выберите файл",
     "Clear": "стереть",
-    "Close": "закрыть",
+    "Close": {
+      "$$noContext": "закрыть",
+      "Map controls": "закрыть"
+    },
     "Collapse": "Свернуть",
     "Comments": "комментарии",
     "Comments are disabled.": "комментарии отключены",
@@ -206,6 +209,9 @@
     "Feel free to edit it.": "Отредактировать",
     "Filter on map extent": "Ограничить поиск видимой картой",
     "Filter results": "Фильтровать результаты",
+    "Follow the track": {
+      "Map controls": "Следовать за треком"
+    },
     "Forgot password?": "забыли пароль ?",
     "Forum": "Форум",
     "Forum username": "Имя ползователи на форуме",
@@ -337,6 +343,9 @@
     "Password too short": {
       "API message": "Слишком короткий пароль"
     },
+    "Pause": {
+      "Map controls": "Пауза"
+    },
     "Paysage": {
       "Sophie picture context": "Пейзаж"
     },
@@ -350,6 +359,12 @@
     "Personal feed on": "Личная лента включена",
     "Personal informations": "Персональная информация",
     "Pitch description tag": "Тэг описания питча",
+    "Play": {
+      "Map controls": "Воспроизвести"
+    },
+    "Play the track": {
+      "Map controls": "Воспроизвести трек"
+    },
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Опишите свой технический уровень и опыт в отношении выбранной цели, ваше физическое состояние, усталость, накопленную перед  выходом, уровень акклиматизации, etc",
     "Please move the map, or change the route's name.": "Переместите карту или поменяйте имя маршрута",
     "Please select a method before computing.": "Пожалуйста выберите метод расчета ",
@@ -362,11 +377,17 @@
     "Press enter to select": "Нажмите \"Ввод\" чтобы выбрать",
     "Preview": "Предпросмотр",
     "Professional Reduction Method": "метод для профессионалов",
+    "Progress": {
+      "Map controls": "Прогресс"
+    },
     "Protect document": "Защитить документ",
     "Protection area:": "Охраняемая зона:",
     "Protection areas": "Охраняемые зоны",
     "Protection status": "Статус охраны",
     "Register": "записываться",
+    "Replay": {
+      "Map controls": "Повторить"
+    },
     "Rotate image left": "Поверните налево",
     "Rotate image right": "Поверните направо",
     "SERAC": "Серак",
@@ -379,6 +400,9 @@
     "Settings": "настройки",
     "Skitouring gear": "снаряжение для скитуринга",
     "Small group = 2 to 4 people": "Небольшая группа - от 2 до 4 человек",
+    "Speed": {
+      "Map controls": "Скорость"
+    },
     "Statistics": "Статистика",
     "Target:": "Сохраняемый документ",
     "The page you are looking for does not exist or is broken.": "Запрашиваемая вами страница отсутствует или не работает",
