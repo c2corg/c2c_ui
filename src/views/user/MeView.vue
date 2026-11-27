@@ -117,7 +117,7 @@ const initial = computed(() => ($user.name || $user.userName || '?').charAt(0).t
 
 const linkAttributes = (action: Action) => (action.to ? { to: action.to } : { href: action.href });
 
-// a report sent from the app carries the context a maintainer needs
+// a report sent from the site or the installed app carries the context a maintainer needs
 const bugReportMailto = computed(() => {
   const lines = [
     $gettext('Please describe the problem above. Technical context:'),
@@ -128,7 +128,7 @@ const bugReportMailto = computed(() => {
     `Installed app: ${install.installed ? 'yes' : 'no'}`,
     `Theme: ${appSettings.effectiveTheme}, text size: ${appSettings.textSize}`,
   ];
-  const subject = encodeURIComponent($gettext('Mobile app bug — camptocamp.org'));
+  const subject = encodeURIComponent($gettext('Bug report — camptocamp.org'));
   return `mailto:dev@camptocamp.org?subject=${subject}&body=${encodeURIComponent(lines.join('\n'))}`;
 });
 
@@ -237,7 +237,7 @@ const sections = computed<Section[]>(() => {
       },
       {
         key: 'bug',
-        label: $gettext('Report a bug of the mobile app'),
+        label: $gettext('Report a bug'),
         desc: $gettext('Opens an email with the context filled in'),
         icon: 'bug',
         href: bugReportMailto.value,

@@ -173,6 +173,7 @@
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Descrivi brevemente eventuali ferite. Qui puoi inserire i commenti che non rientrano in nessun altro campo.",
     "Broken links": "Collegamenti interrotti",
     "Browse the topoguide": "Sfoglia la guida degli itinerari",
+    "Bug report — camptocamp.org": "Segnalazione di bug — camptocamp.org",
     "Bulletin": "Bollettino",
     "Bulletin details": "Dettagli del bollettino",
     "Buoux is maintained by local volunteers. Help keep it bolted and open!": "Buoux è mantenuta da volontari locali. Aiuta a mantenerla attrezzata e aperta!",
@@ -723,7 +724,6 @@
     },
     "Missing danger level": "Livello di rischio mancante",
     "Missing method": "Metodo mancante",
-    "Mobile app bug — camptocamp.org": "Bug dell'app mobile — camptocamp.org",
     "Moderation": "Moderazione",
     "Moderator role required": {
       "API message": "È richiesto il ruolo di moderatore"
@@ -1005,7 +1005,7 @@
     "Remove this account": "Elimina questo account",
     "Removed from favourites.": "Rimosso dai preferiti.",
     "Rename folder": "Rinomina cartella",
-    "Report a bug of the mobile app": "Segnala un bug dell'app mobile",
+    "Report a bug": "Segnala un bug",
     "Report an issue": "Segnalare un errore",
     "Report title, activity, linked routes or outings.": "Titolo del rapporto, attività, itinerari o gite collegati.",
     "Request a new link": "Richiedi un nuovo link",
@@ -1337,7 +1337,7 @@
     "To define your destination, choose one of these 2 approaches": "Per definire la destinazione, scegli uno di questi due approcci",
     "To go further": "Per saperne di più",
     "To handle": "Da gestire",
-    "To report a problem: Me → Report a bug of the mobile app, the email leaves with the useful information.": "Per segnalare un problema: Io → Segnala un bug dell’app mobile; l’e-mail verrà inviata con le informazioni utili.",
+    "To report a problem: Me → Report a bug, the email leaves with the useful information.": "Per segnalare un problema: Io → Segnala un bug; l’e-mail verrà inviata con le informazioni utili.",
     "To write instead:": "Da scrivere invece:",
     "Toggle elevation profile": "Visualizzare il profilo altimetrico",
     "Toggle full-screen": {

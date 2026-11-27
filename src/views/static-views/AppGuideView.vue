@@ -129,11 +129,7 @@
             }}
           </li>
           <li>
-            {{
-              $gettext(
-                'To report a problem: Me → Report a bug of the mobile app, the email leaves with the useful information.'
-              )
-            }}
+            {{ $gettext('To report a problem: Me → Report a bug, the email leaves with the useful information.') }}
           </li>
         </ul>
       </div>

@@ -165,6 +165,7 @@
     "Bouldering climbing gear": "Oprema za balvansko plezanje",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Na kratko opišite morebitne poškodbe, in kaj bi storili danes za nazaj. Tukaj tudi lahko vnesete komentarje, ki ne sodijo v nobeno drugo polje.",
     "Browse the topoguide": "Brskaj po Wikivodniku",
+    "Bug report — camptocamp.org": "Prijava napake — camptocamp.org",
     "Bulletin": "Bilten",
     "Bulletin details": "Podrobnosti biltena",
     "Buoux is maintained by local volunteers. Help keep it bolted and open!": "Za Buoux skrbijo lokalni prostovoljci. Pomagajte ohraniti opremljenost in dostopnost!",
@@ -664,7 +665,6 @@
     },
     "Missing danger level": "Manjka stopnja nevarnosti",
     "Missing method": "Manjka metoda",
-    "Mobile app bug — camptocamp.org": "Napaka v mobilni aplikaciji — camptocamp.org",
     "Modified the": {
       "modification date": "Spremenjeno "
     },
@@ -911,7 +911,7 @@
     "Remove the offline copy": "Odstrani offline kopijo",
     "Removed from favourites.": "Odstranjeno iz priljubljenih.",
     "Rename folder": "Preimenuj mapo",
-    "Report a bug of the mobile app": "Prijavi napako v mobilni aplikaciji",
+    "Report a bug": "Prijavi napako",
     "Report an issue": "Prijavi problem",
     "Report title, activity, linked routes or outings.": "Naslov poročila, dejavnost, povezane smeri ali vzponi",
     "Request a new link": "Zahtevaj novo povezavo",
@@ -1153,7 +1153,7 @@
     "To": "Do",
     "To define your destination, choose one of these 2 approaches": "Za določitev cilja izberite enega od teh 2 pristopov",
     "To go further": "Za več informacij",
-    "To report a problem: Me → Report a bug of the mobile app, the email leaves with the useful information.": "Za prijavo težave: »Jaz« → »Prijavi napako v mobilni aplikaciji«; pošlje se e-poštno sporočilo s koristnimi podatki.",
+    "To report a problem: Me → Report a bug, the email leaves with the useful information.": "Za prijavo težave: »Jaz« → »Prijavi napako«; pošlje se e-poštno sporočilo s koristnimi podatki.",
     "Toggle elevation profile": "preklopite na profil višine",
     "Toggle full-screen": {
       "Map Controls": "Celozaslonski način"
