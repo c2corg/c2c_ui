@@ -307,6 +307,17 @@ describe('elevationProfile', () => {
     profile.slice(1).forEach(([x], i) => expect(x).toBeGreaterThan(profile[i][0]));
   });
 
+  it('keeps a track almost flat low', async () => {
+    const parts = [
+      [
+        [6, 45, 1000],
+        [6, 45 + KM, 1020],
+      ],
+    ];
+    const profile = elevationProfile((await prepareFlyover(parts, flat, 1))!)!;
+    expect(Math.max(...profile.map(([, y]) => y))).toBeCloseTo(0.1, 2);
+  });
+
   it('is none without elevations, or with 0 everywhere', async () => {
     const flatParts = [
       [

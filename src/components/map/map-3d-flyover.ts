@@ -286,10 +286,14 @@ export async function prepareFlyover(
   };
 }
 
+// metres: the height of the profile of the bar at least, so that a track almost flat looks flat
+const PROFILE_MIN_RANGE = 200;
+
 /**
  * The profile of the elevation recorded with the track, for the bar of the player: about `points` points [x, y], x the
  * share of the bar (the share of the duration: the speed is not constant at the start and the end), y the share of the
- * height between the lowest and the highest; null when the track has no elevation
+ * height above the lowest point, 1 at the highest (at PROFILE_MIN_RANGE metres for a smaller range); null when the
+ * track has no elevation
  */
 export function elevationProfile(track: FlyoverTrack, ramp = FLYOVER.ramp, points = 200): [number, number][] | null {
   const ele = track.ele;
@@ -309,7 +313,7 @@ export function elevationProfile(track: FlyoverTrack, ramp = FLYOVER.ramp, point
     const value = interp(d, track.dist, ele);
     // a vertex without elevation: the point before
     if (Number.isFinite(value)) last = value;
-    profile.push([timeFraction(d / track.length, ramp), (last - min) / (max - min)]);
+    profile.push([timeFraction(d / track.length, ramp), (last - min) / Math.max(max - min, PROFILE_MIN_RANGE)]);
   }
   return profile;
 }

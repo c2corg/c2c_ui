@@ -758,7 +758,8 @@ defineExpose({ seek, togglePlay, nextSpeed, recenter });
   right: 2.5em;
   bottom: calc(0.5em + var(--map-inset-bottom));
   display: flex;
-  align-items: center;
+  /* the buttons beside the bar, under the profile */
+  align-items: flex-end;
   gap: 1px;
   max-width: 40em;
   margin: 0 auto;
@@ -785,10 +786,15 @@ defineExpose({ seek, togglePlay, nextSpeed, recenter });
   margin: 0 0.5em;
 }
 
-/* narrow, over the track of the bar: what is played darker than what is to come */
+.map-flyover-timeline--profile {
+  height: auto;
+}
+
+/* over the track of the bar, about a ninth of the height of the screen: what is played brighter than what is to come */
 .map-flyover-profile {
   display: block;
-  flex: 1;
+  flex: none;
+  height: clamp(40px, 11dvh, 110px);
   /* inset as the thumb of the bar is (6 px, half its width): the profile under it is where it is played */
   width: calc(100% - 12px);
   margin: 0 6px;
@@ -825,10 +831,10 @@ defineExpose({ seek, togglePlay, nextSpeed, recenter });
     background: linear-gradient(to right, var(--played) var(--progress), rgba(255, 255, 255, 0.8) var(--progress));
   }
 
-  /* under the profile: the bar at the bottom of the timeline */
+  /* under the profile, at the height of the buttons beside it */
   .map-flyover-timeline--profile & {
     flex: none;
-    height: 10px;
+    height: 1.375em;
   }
 
   &::-moz-range-track {
