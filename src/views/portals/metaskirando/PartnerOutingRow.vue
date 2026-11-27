@@ -20,6 +20,26 @@
       <span class="is-size-7 outing-credit">{{ credit }}</span>
     </span>
     <span class="outing-side">
+      <fa-icon
+        v-if="outing.has_track"
+        icon="route"
+        class="is-size-7 track-icon"
+        data-test="track"
+        :title="$gettext('Track shown on the map')"
+      />
+      <a
+        v-if="gpxUrl"
+        :href="gpxUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="gpx-link is-size-7"
+        data-test="gpx"
+        :title="$gettext('GPX track')"
+        @click.stop
+      >
+        <fa-icon icon="download" />
+        GPX
+      </a>
       <source-badge :source="outing.source" :title="outing.credit.site" :site-name="outing.credit.site" />
       <fa-icon v-if="isPartner" icon="external-link-alt" class="external-icon" />
     </span>
@@ -54,6 +74,12 @@ const isPartner = computed(() => props.outing.source !== 'c2c' && !!props.outing
 
 // the position of the outing is the summit or the middle of its area, not where it started
 const approximate = computed(() => isApproximate(props.outing));
+
+// the GPX file of the track, only from an https URL; it opens in a new tab, without opening the row's link
+const gpxUrl = computed(() => {
+  const url = props.outing.gpx_url;
+  return url && /^https:\/\/[^\s]+$/i.test(url) ? url : null;
+});
 
 const site = computed(() => props.outing.credit.site);
 
@@ -137,6 +163,16 @@ const credit = computed(() => {
   gap: 0.5em;
 }
 
+.gpx-link {
+  white-space: nowrap;
+  color: var(--c2c-grey-light);
+}
+
+.gpx-link:hover {
+  color: var(--c2c-primary);
+}
+
+.track-icon,
 .external-icon {
   color: var(--c2c-grey-light);
 }

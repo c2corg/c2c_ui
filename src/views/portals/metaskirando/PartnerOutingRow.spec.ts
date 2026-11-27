@@ -66,6 +66,44 @@ describe('PartnerOutingRow', () => {
   });
 });
 
+describe('PartnerOutingRow, GPX track', () => {
+  it('links the GPX file of the track in a new tab', () => {
+    const gpx = 'https://www.gulliver.it/gpx/1.gpx';
+    const link = mountRow(partnerOuting({ gpx_url: gpx })).find('[data-test="gpx"]');
+    expect(link.element.tagName).toBe('A');
+    expect(link.attributes()).toMatchObject({
+      href: gpx,
+      target: '_blank',
+      rel: 'noopener noreferrer',
+      title: 'GPX track',
+    });
+    expect(link.text()).toBe('GPX');
+  });
+
+  it.each([null, undefined, 'http://www.gulliver.it/gpx/1.gpx', 'javascript:alert(1)', ''])(
+    'shows no GPX link for %s',
+    (gpx_url) => {
+      expect(mountRow(partnerOuting({ gpx_url })).find('[data-test="gpx"]').exists()).toBe(false);
+    }
+  );
+});
+
+describe('PartnerOutingRow, stored track', () => {
+  it('shows a track icon only when the API stores a track of the outing', () => {
+    expect(
+      mountRow(partnerOuting({ has_track: true }))
+        .find('[data-test="track"]')
+        .attributes('title')
+    ).toBe('Track shown on the map');
+    expect(
+      mountRow(partnerOuting({ has_track: false }))
+        .find('[data-test="track"]')
+        .exists()
+    ).toBe(false);
+    expect(mountRow(partnerOuting()).find('[data-test="track"]').exists()).toBe(false);
+  });
+});
+
 describe('PartnerOutingRow, new and approximate', () => {
   it('tags an outing that is new since the last visit', () => {
     const wrapper = shallowMount(PartnerOutingRow, {

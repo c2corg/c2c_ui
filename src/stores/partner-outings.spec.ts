@@ -1,14 +1,16 @@
-import axios from 'axios';
+import axios, { AxiosError, type AxiosResponse } from 'axios';
 import { createPinia, setActivePinia } from 'pinia';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { emptyFilters, usePartnerOutingsStore } from './partner-outings';
 
 import service, { type PartnerOuting, type PartnerOutingsAnswer } from '@/js/apis/partner-outings-service';
+import { track } from '@/views/portals/metaskirando/fixtures';
 
-vi.mock('@/js/apis/partner-outings-service', () => ({ default: { getAll: vi.fn() } }));
+vi.mock('@/js/apis/partner-outings-service', () => ({ default: { getAll: vi.fn(), getTrack: vi.fn() } }));
 
 const getAll = vi.mocked(service.getAll);
+const getTrack = vi.mocked(service.getTrack);
 
 const outing = (id: string, date: string) => ({ id, date, source: id.split(':')[0], title: id }) as PartnerOuting;
 const answer = (items: PartnerOuting[], total = items.length): PartnerOutingsAnswer => ({
@@ -335,6 +337,38 @@ describe('partner outings store', () => {
       await usePartnerOutingsStore().load();
       expect(usePartnerOutingsStore().newIds).toEqual(['skitour:2']);
       vi.useRealTimers();
+    });
+  });
+
+  describe('tracks', () => {
+    const httpError = (status: number) =>
+      new AxiosError('failed', String(status), undefined, undefined, { status } as AxiosResponse);
+
+    it('loads the track of an outing once, and keeps it', async () => {
+      const store = usePartnerOutingsStore();
+      getTrack.mockResolvedValue(track());
+      const [first, second] = await Promise.all([store.loadTrack('gulliver:1'), store.loadTrack('gulliver:1')]);
+      expect(first).toEqual(track());
+      expect(second).toEqual(track());
+      expect(await store.loadTrack('gulliver:1')).toEqual(track());
+      expect(getTrack).toHaveBeenCalledTimes(1);
+      expect(getTrack).toHaveBeenCalledWith('gulliver:1');
+      expect(store.tracks['gulliver:1']).toEqual(track());
+    });
+
+    it('remembers that an outing has no track (404), and tries again after another failure', async () => {
+      const store = usePartnerOutingsStore();
+      getTrack.mockRejectedValueOnce(httpError(404));
+      expect(await store.loadTrack('gulliver:1')).toBeNull();
+      expect(await store.loadTrack('gulliver:1')).toBeNull();
+      expect(getTrack).toHaveBeenCalledTimes(1);
+      expect(store.tracks).toEqual({ 'gulliver:1': null });
+
+      getTrack.mockRejectedValueOnce(httpError(500)).mockResolvedValueOnce(track());
+      expect(await store.loadTrack('gulliver:2')).toBeNull();
+      expect('gulliver:2' in store.tracks).toBe(false);
+      expect(await store.loadTrack('gulliver:2')).toEqual(track());
+      expect(getTrack).toHaveBeenCalledTimes(3);
     });
   });
 });

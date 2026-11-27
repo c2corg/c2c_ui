@@ -67,7 +67,7 @@ describe('partner outings map helpers', () => {
   });
 
   it('colours by source, as the badges', () => {
-    const known = ['skitour', 'gulliver', 'gipfelbuch', 'bivouak', 'skitourenportal'];
+    const known = ['skitour', 'gulliver', 'gipfelbuch', 'bivouak', 'skitourenportal', 'onice'];
     expect(new Set(known.map(sourceColor)).size).toBe(known.length);
     expect(sourceColor('c2c')).toBe('#f93');
     expect(sourceColor('unknown')).toBe(sourceColor('other'));

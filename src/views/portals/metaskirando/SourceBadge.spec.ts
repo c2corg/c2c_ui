@@ -15,6 +15,7 @@ describe('SourceBadge', () => {
     ['gipfelbuch', 'Gipfelbuch'],
     ['bivouak', 'Bivouak'],
     ['skitourenportal', 'Skitourenportal'],
+    ['onice', 'On-Ice'],
   ])('has its own label and colour for %s', (source, label) => {
     const wrapper = shallowMount(SourceBadge, { props: { source, siteName: 'ignored' } });
     expect(wrapper.text()).toBe(label);

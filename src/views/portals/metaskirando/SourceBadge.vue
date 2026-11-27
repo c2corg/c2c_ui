@@ -69,6 +69,11 @@ const label = computed(() => sourceLabel(props.source, props.siteName));
   color: #8f1c48;
 }
 
+.source-badge.source-badge--onice {
+  background-color: #d5eff2;
+  color: #0b5f6b;
+}
+
 .source-badge.source-badge--other {
   background-color: #e8e8e8;
   color: #444;
