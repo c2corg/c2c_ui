@@ -10,6 +10,18 @@
           <span v-translate>Upload a GPS track</span>
         </gps-file-upload>
       </div>
+      <div class="column is-narrow" v-if="canFixElevation">
+        <button
+          class="button is-small"
+          :class="{ 'is-loading': fixingElevation }"
+          :title="
+            $gettext('Fill the missing elevations, remove the offset and the spikes, with a digital elevation model')
+          "
+          @click="fixElevation"
+        >
+          <span v-translate>Correct elevation</span>
+        </button>
+      </div>
       <div class="column">
         <em v-translate>You may also drag, draw or edit the track on the map.</em>
       </div>
@@ -46,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, useTemplateRef, watch, type PropType } from 'vue';
+import { computed, onMounted, reactive, ref, useTemplateRef, watch, type PropType } from 'vue';
 
 import GpsFileUpload from '@/components/map/GpsFileUpload.vue';
 import GpsUploadModal from '@/components/map/GpsUploadModal.vue';
@@ -57,8 +69,11 @@ import TrackingInvite from '@/components/tracking/TrackingInvite.vue';
 import trackingService from '@/js/apis/tracking-service';
 import { useFormField } from '@/js/composables/form-registration';
 import { useGlobalProperties } from '@/js/composables/global-properties';
+import { fixGeometryElevations } from '@/js/geo/elevation';
+import { geometryToLonLat } from '@/js/geo/projection';
 import ol from '@/js/libs/ol';
 import { documentProperty } from '@/js/properties';
+import { notify } from '@/js/toast';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
 
 const geoJSONFormat = new ol.format.GeoJSON();
@@ -83,7 +98,7 @@ const props = defineProps({
 
 const emit = defineEmits(['move', 'activities', 'replace']);
 
-const { $user } = useGlobalProperties();
+const { $user, $gettext } = useGlobalProperties();
 
 // registered with the FormSection containing it: always visible, never in error
 useFormField('formSection', reactive({ visible: true, hasError: false }));
@@ -108,6 +123,40 @@ function setGeometry(geometry: unknown, c2cActivities: string[] = []) {
   map.value!.setDocumentGeometryFromGeoFile(geometry as never);
   if (c2cActivities.length) {
     emit('activities', c2cActivities);
+  }
+}
+
+// a track (not an area) to correct with the terrain model: no API needed, it is sampled here and saved with the document
+const canFixElevation = computed(
+  () => props.document.type !== 'a' && /LineString/.test(props.document.geometry?.geom_detail ?? '')
+);
+const fixingElevation = ref(false);
+
+async function fixElevation() {
+  const detail = props.document.geometry?.geom_detail;
+  if (!detail || fixingElevation.value) {
+    return;
+  }
+  fixingElevation.value = true;
+  try {
+    const { sampleTerrain } = await import('@/components/map/map-3d-terrain');
+    const geometry = JSON.parse(detail) as { type: string; coordinates: number[][] };
+    const { coordinates, offset, replaced, filled } = await fixGeometryElevations(geometry.coordinates, sampleTerrain);
+    // through the import of a file, which draws the new track and keeps the document consistent; GeoJSON files are lon/lat
+    const fixed = geometryToLonLat({ ...geometry, coordinates });
+    map.value!.setDocumentGeometryFromGeoFile(JSON.stringify(fixed));
+    notify(
+      filled
+        ? $gettext('Elevations filled from the terrain model')
+        : $gettext('Elevations corrected with the terrain model:') +
+            ` ${replaced} ${$gettext('points replaced')}, ${$gettext('offset removed')}: ${offset} m`,
+      'is-success'
+    );
+  } catch (error) {
+    console.error('Elevation correction failed:', error);
+    notify($gettext('The terrain model could not be loaded'), 'is-warning');
+  } finally {
+    fixingElevation.value = false;
   }
 }
 
