@@ -3263,6 +3263,18 @@ defineExpose({
 .ol-control-play {
   bottom: calc(1.5em + 2 * var(--map-button-size) + var(--map-inset-bottom));
   left: 0.5em;
+
+  /* the triangle drawn in outline, not filled (the regular icons have no play) */
+  :deep(.fa-play) {
+    overflow: visible;
+
+    path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 48;
+      stroke-linejoin: round;
+    }
+  }
 }
 
 /* the flyover: its own controls only, the credits kept (the scale with its box: else a dot of its padding is left); no
