@@ -66,6 +66,8 @@ export type FlyoverTrack = {
   lon: Float64Array;
   lat: Float64Array;
   alt: Float64Array;
+  // the elevation recorded with the track (metres, not exaggerated), null when it has none: the profile of the bar
+  ele: Float64Array | null;
   // the part of the track, and whether the sample is in the air (a paragliding flight)
   part: Int32Array;
   air: Uint8Array;
@@ -184,6 +186,10 @@ export async function prepareFlyover(
   const airFlags = new Uint8Array(n);
   const airAlt = new Float64Array(n).fill(NaN);
   const inFlight = (i: number) => !!air?.flights.some(([a, b]) => a <= i && i < b);
+  // a track without elevations has none, or 0 everywhere (the API fills the missing ones with 0)
+  const z = (j: number) => (Number.isFinite(vertices[j][2]) ? vertices[j][2] : NaN);
+  const zs = vertices.map((_, j) => z(j)).filter((value) => Number.isFinite(value) && value !== 0);
+  const ele = zs.length && Math.max(...zs) - Math.min(...zs) >= 1 ? new Float64Array(n) : null;
 
   // longitudes without the jump of 360° at the antimeridian: interpolated and smoothed the short way
   const vertexLon = new Float64Array(vertices.length);
@@ -198,6 +204,7 @@ export async function prepareFlyover(
     const f = span > 0 ? clamp((d - vertexDist[i]) / span, 0, 1) : 0;
     dist[k] = d;
     lon[k] = vertexLon[i] + f * (vertexLon[i + 1] - vertexLon[i]);
+    if (ele) ele[k] = z(i) + f * (z(i + 1) - z(i));
     lat[k] = vertices[i][1] + f * (vertices[i + 1][1] - vertices[i][1]);
     part[k] = track.part[f < 1 ? i : i + 1];
     if (air && inFlight(i)) {
@@ -265,6 +272,7 @@ export async function prepareFlyover(
     lon,
     lat,
     alt,
+    ele,
     part,
     air: airFlags,
     smoothLon,
@@ -274,6 +282,34 @@ export async function prepareFlyover(
     heading: unwrap(raw),
     bounds,
   };
+}
+
+/**
+ * The profile of the elevation recorded with the track, for the bar of the player: about `points` points [x, y], x the
+ * share of the bar (the share of the duration: the speed is not constant at the start and the end), y the share of the
+ * height between the lowest and the highest; null when the track has no elevation
+ */
+export function elevationProfile(track: FlyoverTrack, ramp = FLYOVER.ramp, points = 200): [number, number][] | null {
+  const ele = track.ele;
+  if (!ele) return null;
+  let min = Infinity;
+  let max = -Infinity;
+  for (const value of ele) {
+    if (!Number.isFinite(value)) continue;
+    min = Math.min(min, value);
+    max = Math.max(max, value);
+  }
+  if (!(max - min >= 1)) return null;
+  const profile: [number, number][] = [];
+  let last = min;
+  for (let p = 0; p <= points; p++) {
+    const d = (p / points) * track.length;
+    const value = interp(d, track.dist, ele);
+    // a vertex without elevation: the point before
+    if (Number.isFinite(value)) last = value;
+    profile.push([timeFraction(d / track.length, ramp), (last - min) / (max - min)]);
+  }
+  return profile;
 }
 
 /** The index of the sample at or just before the distance d */

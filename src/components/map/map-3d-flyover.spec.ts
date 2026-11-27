@@ -6,6 +6,7 @@ import {
   cameraPath,
   distanceFraction,
   durationAt1x,
+  elevationProfile,
   FLYOVER,
   followStep,
   headingAt,
@@ -280,5 +281,42 @@ describe('the camera on a hilly ground', () => {
     const track = (await prepareFlyover(parts, rough, 1))!;
     const heights = Array.from({ length: 30 }, (_, i) => cameraFor(track, 1000 + i * 100, 0).targetAlt);
     expect(Math.max(...heights) - Math.min(...heights)).toBeLessThan(5);
+  });
+});
+
+describe('elevationProfile', () => {
+  it('draws the recorded elevation along the bar, the lowest at 0 and the highest at 1', async () => {
+    // up 1000 m over 5 km, down 500 m over 5 km
+    const parts = [
+      [
+        [6, 45, 1000],
+        [6, 45 + 5 * KM, 2000],
+        [6, 45 + 10 * KM, 1500],
+      ],
+    ];
+    const track = (await prepareFlyover(parts, flat, 1))!;
+    const profile = elevationProfile(track, 0.06, 100)!;
+    expect(profile).toHaveLength(101);
+    expect(profile[0]).toEqual([0, 0]);
+    expect(profile[100][0]).toBeCloseTo(1, 6);
+    expect(profile[100][1]).toBeCloseTo(0.5, 2);
+    expect(Math.max(...profile.map(([, y]) => y))).toBeCloseTo(1, 2);
+    // on the time of the bar: the top at half the length, half the duration
+    const top = profile.reduce((best, point) => (point[1] > best[1] ? point : best));
+    expect(top[0]).toBeCloseTo(timeFraction(0.5, 0.06), 2);
+    profile.slice(1).forEach(([x], i) => expect(x).toBeGreaterThan(profile[i][0]));
+  });
+
+  it('is none without elevations, or with 0 everywhere', async () => {
+    const flatParts = [
+      [
+        [6, 45],
+        [6, 45 + KM],
+      ],
+    ];
+    expect((await prepareFlyover(flatParts, flat, 1))!.ele).toBeNull();
+    expect(elevationProfile((await prepareFlyover(flatParts, flat, 1))!)).toBeNull();
+    const zeros = flatParts.map((part) => part.map((point) => [...point, 0]));
+    expect(elevationProfile((await prepareFlyover(zeros, flat, 1))!)).toBeNull();
   });
 });

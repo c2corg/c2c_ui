@@ -33,18 +33,36 @@
         <fa-icon v-if="loading" icon="circle-notch" spin />
         <fa-icon v-else :icon="playing ? 'pause' : ended ? 'rotate-right' : 'play'" />
       </button>
-      <input
-        class="map-flyover-progress"
-        type="range"
-        min="0"
-        :max="PROGRESS_STEPS"
-        step="1"
-        :value="Math.round(progress * PROGRESS_STEPS)"
-        :disabled="loading"
-        :aria-label="$gettext('Progress', 'Map controls')"
+      <div
+        class="map-flyover-timeline"
+        :class="{ 'map-flyover-timeline--profile': profile }"
         :style="{ '--progress': `${progress * 100}%` }"
-        @input="seek(Number(($event.target as HTMLInputElement).value) / PROGRESS_STEPS)"
-      />
+      >
+        <!-- the elevation recorded with the track, over the bar: played darker; a click or a drag on it seeks -->
+        <svg
+          v-if="profile"
+          class="map-flyover-profile"
+          viewBox="0 0 1000 100"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+          @pointerdown="seekOnProfile"
+          @pointermove="seekOnProfile"
+        >
+          <path class="map-flyover-profile-ahead" :d="profile" />
+          <path class="map-flyover-profile-played" :d="profile" />
+        </svg>
+        <input
+          class="map-flyover-progress"
+          type="range"
+          min="0"
+          :max="PROGRESS_STEPS"
+          step="1"
+          :value="Math.round(progress * PROGRESS_STEPS)"
+          :disabled="loading"
+          :aria-label="$gettext('Progress', 'Map controls')"
+          @input="seek(Number(($event.target as HTMLInputElement).value) / PROGRESS_STEPS)"
+        />
+      </div>
       <button
         v-if="!following && !loading"
         type="button"
@@ -81,6 +99,7 @@ import {
   cameraPath,
   distanceFraction,
   durationAt1x,
+  elevationProfile,
   FLYOVER,
   type FlyoverCamera,
   type FlyoverSettings,
@@ -136,6 +155,15 @@ const settings: FlyoverSettings = tunedSettings();
 const trackLength = ref(0);
 
 const loading = ref(true);
+// the path of the elevation profile over the bar (viewBox 0 0 1000 100), null without elevations
+const profile = ref<string | null>(null);
+function drawProfile() {
+  const points = track && elevationProfile(track, settings.ramp);
+  profile.value = points
+    ? `M0,100 ${points.map(([x, y]) => `L${(x * 1000).toFixed(1)},${(100 - y * 90).toFixed(1)}`).join(' ')} L1000,100 Z`
+    : null;
+}
+watch(() => settings.ramp, drawProfile);
 const playing = ref(false);
 const ended = ref(false);
 const following = ref(true);
@@ -332,6 +360,15 @@ function seek(u: number) {
   dirty = true;
   // the tiles there were not fetched ahead: first those of the camera
   if (track) prefetchAhead(distanceFraction(progress.value, settings.ramp) * track.length, true);
+}
+
+// a press on the profile, and a drag from it
+function seekOnProfile(event: PointerEvent) {
+  if (loading.value || (event.type === 'pointermove' && !event.buttons)) return;
+  const svg = event.currentTarget as SVGSVGElement;
+  if (event.type === 'pointerdown') svg.setPointerCapture?.(event.pointerId);
+  const { left, width } = svg.getBoundingClientRect();
+  if (width > 0) seek((event.clientX - left) / width);
 }
 
 function recenter() {
@@ -579,6 +616,7 @@ onMounted(async () => {
   }
   track = prepared;
   trackLength.value = track.length;
+  drawProfile();
   addLayers(map);
   // the camera looks at the track, in the air on a flight: not at the ground under it
   clampedToGround = map.getCenterClampedToGround();
@@ -669,6 +707,7 @@ function tune(path: string | null, value?: number | boolean) {
       ).catch(() => null);
       if (!prepared || unmounted || !map) return;
       track = prepared;
+      drawProfile();
       drawnBody = -1;
       if (prefetcher) planCameras();
       (map.getSource(SOURCES.ahead) as { setData?: (data: FeatureCollection) => void } | undefined)?.setData?.(
@@ -734,13 +773,48 @@ defineExpose({ seek, togglePlay, nextSpeed, recenter });
   height: calc(1.375em / 0.75);
 }
 
-.map-flyover-progress {
+.map-flyover-timeline {
   --played: rgb(0, 60, 136);
 
+  position: relative;
+  display: flex;
+  flex-direction: column;
   flex: 1;
   min-width: 0;
   height: 1.375em;
   margin: 0 0.5em;
+}
+
+/* narrow, over the track of the bar: what is played darker than what is to come */
+.map-flyover-profile {
+  display: block;
+  flex: 1;
+  /* inset as the thumb of the bar is (6 px, half its width): the profile under it is where it is played */
+  width: calc(100% - 12px);
+  margin: 0 6px;
+  min-height: 0;
+  cursor: pointer;
+  touch-action: none;
+
+  /* as the bar under it: light over the orthophotos */
+  path {
+    fill: white;
+  }
+}
+
+.map-flyover-profile-ahead {
+  opacity: 0.4;
+  clip-path: inset(0 0 0 var(--progress));
+}
+
+.map-flyover-profile-played {
+  opacity: 0.85;
+  clip-path: inset(0 calc(100% - var(--progress)) 0 0);
+}
+
+.map-flyover-progress {
+  width: 100%;
+  height: 100%;
   background: transparent;
   cursor: pointer;
   appearance: none;
@@ -749,6 +823,12 @@ defineExpose({ seek, togglePlay, nextSpeed, recenter });
     height: 4px;
     border-radius: 2px;
     background: linear-gradient(to right, var(--played) var(--progress), rgba(255, 255, 255, 0.8) var(--progress));
+  }
+
+  /* under the profile: the bar at the bottom of the timeline */
+  .map-flyover-timeline--profile & {
+    flex: none;
+    height: 10px;
   }
 
   &::-moz-range-track {

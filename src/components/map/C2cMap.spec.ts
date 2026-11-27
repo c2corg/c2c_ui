@@ -1374,6 +1374,38 @@ describe('C2cMap', () => {
         wrapper.unmount();
       });
 
+      it('shows the elevation profile over the bar when the track has elevations', async () => {
+        // the outing of these tests: a track without elevation
+        const { wrapper } = await mountMap({ documents: [outing], show3d: true });
+        await play(wrapper);
+        expect(wrapper.find('.map-flyover-profile').exists()).toBe(false);
+        wrapper.unmount();
+
+        const climb = {
+          ...outing,
+          geometry: {
+            geom: point(6.28, 45.9),
+            geom_detail: JSON.stringify({
+              type: 'LineString',
+              coordinates: [
+                [...fromLonLat([6.28, 45.9]), 1200],
+                [...fromLonLat([6.29, 45.91]), 1800],
+              ],
+            }),
+          },
+        };
+        const withElevation = await mountMap({ documents: [climb], show3d: true });
+        await play(withElevation.wrapper);
+        const profile = withElevation.wrapper.find('.map-flyover-profile');
+        expect(profile.exists()).toBe(true);
+        // played and to come: the same path, cut at the playhead
+        expect(profile.findAll('path').map((path) => path.attributes('d'))).toEqual([
+          expect.stringMatching(/^M0,100 L0\.0,100\.0 .* L1000,100 Z$/),
+          expect.stringMatching(/^M0,100 L0\.0,100\.0 .* L1000,100 Z$/),
+        ]);
+        withElevation.wrapper.unmount();
+      });
+
       it('flies over the orthophoto of the outing, and gives the 3D view its layer back', async () => {
         const french = { ...outing, areas: [{ document_id: 14274 }] };
         const { wrapper, map } = await mountMap({ documents: [french], show3d: true });
