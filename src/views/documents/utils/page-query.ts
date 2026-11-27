@@ -29,6 +29,12 @@ export function pageStartFor(offset: number, limit: number, total: number | null
   return total !== null && start >= total ? Math.floor(Math.max(total - 1, 0) / limit) * limit : start;
 }
 
+// positions (from 1) of the first and last documents of a page, as shown in "1-30 of 200": 0-0 when there are none
+export function pageRange(pageStart: number, limit: number, total: number | null) {
+  const last = Math.min(pageStart + limit, total ?? Infinity);
+  return { first: Math.min(pageStart + 1, last), last };
+}
+
 export function pageQuery(route: Route, offset: number, limit: number): RouteLocationRaw {
   const query = {
     ...route.query,

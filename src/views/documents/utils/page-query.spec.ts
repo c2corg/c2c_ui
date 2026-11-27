@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getLimit, getOffset, normalizedPageQuery, pageQuery, pageStartFor } from './page-query';
+import { getLimit, getOffset, normalizedPageQuery, pageQuery, pageRange, pageStartFor } from './page-query';
 
 const routeWith = (query: Record<string, string>) => ({ name: 'routes', params: {}, query });
 
@@ -22,6 +22,14 @@ describe('page query', () => {
     expect(pageStartFor(240, 30, 60)).toBe(30);
     expect(pageStartFor(240, 30, null)).toBe(240);
     expect(pageStartFor(30, 30, 0)).toBe(0);
+  });
+
+  it('gives the positions of the first and last documents of a page', () => {
+    expect(pageRange(0, 30, 200)).toEqual({ first: 1, last: 30 });
+    expect(pageRange(180, 30, 200)).toEqual({ first: 181, last: 200 });
+    expect(pageRange(0, 30, 1)).toEqual({ first: 1, last: 1 });
+    expect(pageRange(0, 30, null)).toEqual({ first: 1, last: 30 });
+    expect(pageRange(0, 30, 0)).toEqual({ first: 0, last: 0 });
   });
 
   it('keeps the other parameters and bounds the limit when building a page url', () => {

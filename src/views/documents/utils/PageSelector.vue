@@ -52,7 +52,7 @@
 <script setup lang="ts">
 import { computed, ref, useTemplateRef, watch, type PropType } from 'vue';
 
-import { usePageQuery } from './page-query';
+import { pageRange, usePageQuery } from './page-query';
 
 import type DropdownButton from '@/components/generics/DropdownButton.vue';
 
@@ -70,8 +70,9 @@ const limitSelector = useTemplateRef<InstanceType<typeof DropdownButton>>('limit
 
 const { queryLimit, pageStart, previousPageQuery, nextPageQuery, limitQuery } = usePageQuery(total);
 
-const firstDocumentPosition = computed(() => pageStart.value + 1);
-const lastDocumentPosition = computed(() => Math.min(pageStart.value + queryLimit.value, total.value ?? Infinity));
+const range = computed(() => pageRange(pageStart.value, queryLimit.value, total.value));
+const firstDocumentPosition = computed(() => range.value.first);
+const lastDocumentPosition = computed(() => range.value.last);
 
 function saveTotal() {
   if (props.documents) {
