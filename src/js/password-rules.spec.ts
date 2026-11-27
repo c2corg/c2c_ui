@@ -9,8 +9,8 @@ import checkPasswordRules, { MINIMUM_PASSWORD_LENGTH } from './password-rules';
 const NONE = { length: false, lower: false, upper: false, digit: false, special: false };
 
 describe('MINIMUM_PASSWORD_LENGTH', () => {
-  it('is 10, like the API', () => {
-    expect(MINIMUM_PASSWORD_LENGTH).toBe(10);
+  it('is 12, like the API', () => {
+    expect(MINIMUM_PASSWORD_LENGTH).toBe(12);
   });
 });
 
@@ -20,7 +20,7 @@ describe('checkPasswordRules', () => {
   });
 
   it('passes every rule for a strong password', () => {
-    expect(checkPasswordRules('Abcdefgh1!')).toEqual({
+    expect(checkPasswordRules('Abcdefghij1!')).toEqual({
       length: true,
       lower: true,
       upper: true,
@@ -30,26 +30,26 @@ describe('checkPasswordRules', () => {
   });
 
   describe('length', () => {
-    it('requires at least 10 characters', () => {
-      expect(checkPasswordRules('a'.repeat(9)).length).toBe(false);
-      expect(checkPasswordRules('a'.repeat(10)).length).toBe(true);
+    it('requires at least 12 characters', () => {
+      expect(checkPasswordRules('a'.repeat(11)).length).toBe(false);
+      expect(checkPasswordRules('a'.repeat(12)).length).toBe(true);
       expect(checkPasswordRules('a'.repeat(50)).length).toBe(true);
     });
 
     it('counts code points, not UTF-16 code units', () => {
       // each emoji is 2 UTF-16 code units, but 1 character for Python's len()
-      expect('😀'.repeat(9)).toHaveLength(18);
-      expect(checkPasswordRules('😀'.repeat(9)).length).toBe(false);
-      expect(checkPasswordRules('😀'.repeat(10)).length).toBe(true);
+      expect('😀'.repeat(11)).toHaveLength(22);
+      expect(checkPasswordRules('😀'.repeat(11)).length).toBe(false);
+      expect(checkPasswordRules('😀'.repeat(12)).length).toBe(true);
     });
 
     it('counts combining marks as separate characters, like Python', () => {
       // 'e' + U+0301 COMBINING ACUTE ACCENT: 1 grapheme, 2 code points
-      expect(checkPasswordRules('é'.repeat(5)).length).toBe(true);
+      expect(checkPasswordRules('é'.repeat(6)).length).toBe(true);
     });
 
     it('counts spaces', () => {
-      expect(checkPasswordRules('          ').length).toBe(true);
+      expect(checkPasswordRules('            ').length).toBe(true);
     });
   });
 

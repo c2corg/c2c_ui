@@ -1,7 +1,7 @@
 // Mirrors MINIMUM_PASSWORD_LENGTH and is_password_strong_enough() in
 // v6_api (c2corg_api/views/user.py). The API stays the authority: if both
 // ever disagree, its validation error is still displayed by BaseForm.
-export const MINIMUM_PASSWORD_LENGTH = 10;
+export const MINIMUM_PASSWORD_LENGTH = 12;
 
 // Python's str.isdigit() is true for Numeric_Type=Decimal (\p{Nd}) and Numeric_Type=Digit characters
 // (superscripts, subscripts, circled digits...). JS regexes have no Numeric_Type property, so the

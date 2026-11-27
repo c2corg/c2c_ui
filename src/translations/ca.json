@@ -135,7 +135,7 @@
     "Associated routes cotations": "Dificultat dels itineraris associats al punt de pas",
     "Association": "Associació",
     "Associations history": "Històric d'associacions",
-    "At least 10 characters": "Com a mínim 10 caràcters",
+    "At least 12 characters": "Com a mínim 12 caràcters",
     "At least one access point in the route do not have a public transport stop within 5km.": "Com a mínim un punt d'accés a la carretera no té una parada de transport públic en un radi de 5 km.  ",
     "At least one access point in the waypoint do not have a public transport stop within 5km.": "Almenys un punt d'accés del punt de pas no té cap parada de transport públic a menys de 5 km.",
     "Attempts:": "Intents:",
@@ -932,8 +932,8 @@
     "Parent": "Progenitor",
     "Participants and context": "Participants i context",
     "Password": "Contrasenya",
-    "Password must be at least 10 characters long and contain a lowercase letter, an uppercase letter, a digit and a special character": {
-      "API message": "La contrasenya ha de tenir almenys 10 caràcters i contenir una minúscula, una majúscula, una xifra i un caràcter especial"
+    "Password must be at least 12 characters long and contain a lowercase letter, an uppercase letter, a digit and a special character": {
+      "API message": "La contrasenya ha de tenir almenys 12 caràcters i contenir una minúscula, una majúscula, una xifra i un caràcter especial"
     },
     "Password too short": {
       "API message": "La contrasenya és massa curta"

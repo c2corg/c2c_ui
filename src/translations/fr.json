@@ -126,7 +126,7 @@
     "Associated routes cotations": "Cotations des itinéraires associés au point de passage",
     "Association": "Camptocamp Association",
     "Associations history": "Historique des associations",
-    "At least 10 characters": "Au moins 10 caractères",
+    "At least 12 characters": "Au moins 12 caractères",
     "At least one access point in the route do not have a public transport stop within 5km.": "Au moins un point d'accès du topo ne dispose pas d'arrêt de transport en commun à moins de 5km.",
     "At least one access point in the waypoint do not have a public transport stop within 5km.": "Au moins un point d'accès du point de passage ne dispose pas d'arrêt de transport en commun à moins de 5km.",
     "Attempts:": "Tentatives :",
@@ -897,8 +897,8 @@
     "Parameters of the Digital Camera": "Détails sur l'appareil photo numérique",
     "Participants and context": "Participants et contexte",
     "Password": "Mot de passe",
-    "Password must be at least 10 characters long and contain a lowercase letter, an uppercase letter, a digit and a special character": {
-      "API message": "Le mot de passe doit contenir au moins 10 caractères et contenir une minuscule, une majuscule, un nombre et un caractère spécial"
+    "Password must be at least 12 characters long and contain a lowercase letter, an uppercase letter, a digit and a special character": {
+      "API message": "Le mot de passe doit contenir au moins 12 caractères et contenir une minuscule, une majuscule, un nombre et un caractère spécial"
     },
     "Password too short": {
       "API message": "Le mot de passe est trop court"

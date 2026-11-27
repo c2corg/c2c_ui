@@ -29,7 +29,7 @@ const rules = computed(() => {
 
   return [
     // literal string (not built from MINIMUM_PASSWORD_LENGTH) so it can be extracted for translation
-    { key: 'length', ok: checks.length, label: $gettext('At least 10 characters') },
+    { key: 'length', ok: checks.length, label: $gettext('At least 12 characters') },
     { key: 'lower', ok: checks.lower, label: $gettext('A lowercase letter') },
     { key: 'upper', ok: checks.upper, label: $gettext('An uppercase letter') },
     { key: 'digit', ok: checks.digit, label: $gettext('A digit') },
