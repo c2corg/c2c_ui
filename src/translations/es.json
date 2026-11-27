@@ -215,7 +215,10 @@
     "Clear": "Limpiar",
     "Clear the filters": "Borrar los filtros",
     "Click on the map to get weather forecasts": "Haz clic en el mapa para obtener previsiones meteorológicas",
-    "Close": "Cerrar",
+    "Close": {
+      "$$noContext": "Cerrar",
+      "Map controls": "Cerrar"
+    },
     "Close the search": "Cerrar la búsqueda",
     "Collapse": "Contraer",
     "Collapse the menu": "Contraer el menú",
@@ -449,6 +452,9 @@
     "Folder": "Carpeta",
     "Folder name": "Nombre de la carpeta",
     "Folders sort your topos, one trip per folder for example.": "Las carpetas clasifican tus topos, por ejemplo, un viaje por carpeta.",
+    "Follow the track": {
+      "Map controls": "Seguir la traza"
+    },
     "Followed users": "Usuarios seguidos",
     "Following": "Siguiendo",
     "For the moderators": "Para los moderadores",
@@ -916,6 +922,9 @@
       "API message": "Contraseña demasiado corta"
     },
     "Past days": "Días anteriores",
+    "Pause": {
+      "Map controls": "Pausa"
+    },
     "Paysage": {
       "Sophie picture context": "Paisaje"
     },
@@ -934,6 +943,12 @@
     "Pitch description tag": "Etiqueta de descripción de largo",
     "Plan a public transport trip": "Planificar un viaje en transporte público",
     "Plan my trip →": "Planificar mi viaje →",
+    "Play": {
+      "Map controls": "Reproducir"
+    },
+    "Play the track": {
+      "Map controls": "Reproducir la traza"
+    },
     "Please describe the problem above. Technical context:": "Describe el problema arriba. Contexto técnico:",
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Describe tu nivel técnico y de experiencia en relación con el objetivo elegido, tu nivel de forma física, cansancio previo acumulado, aclimatación en caso de altitud, etc.",
     "Please move the map, or change the route's name.": "Mueve el mapa o cambia el nombre de la ruta.",
@@ -960,6 +975,9 @@
     "Printing": "Impresión",
     "Processed from:": "Procesada a partir del:",
     "Professional Reduction Method": "Método de reducción profesional",
+    "Progress": {
+      "Map controls": "Progreso"
+    },
     "Protect document": "Proteger documento",
     "Protected areas": "Áreas protegidas",
     "Protection area:": "Área de protección:",
@@ -1007,6 +1025,9 @@
     "Remove this account": "Eliminar esta cuenta",
     "Removed from favourites.": "Quitado de favoritos.",
     "Rename folder": "Cambiar nombre de carpeta",
+    "Replay": {
+      "Map controls": "Volver a reproducir"
+    },
     "Report a bug of the mobile app": "Informar un error de la aplicación móvil",
     "Report an issue": "Informar de un problema",
     "Report title, activity, linked routes or outings.": "Título del informe, actividad, rutas o salidas vinculadas.",
@@ -1152,6 +1173,9 @@
     "South (cm)": "Sur (cm)",
     "Spam: its contributions are deleted, its forum account too": "Spam: se eliminan sus contribuciones, y también su cuenta del foro",
     "Species zone": "Zona de especies",
+    "Speed": {
+      "Map controls": "Velocidad"
+    },
     "Split line": "Dividir línea",
     "Start a search again": "Iniciar una búsqueda nuevamente",
     "Static map images": "Imágenes de mapas estáticos",

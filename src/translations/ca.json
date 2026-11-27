@@ -207,7 +207,10 @@
     "Clear": "Esborra-ho",
     "Clear the filters": "Esborra els filtres",
     "Click on the map to get weather forecasts": "Feu clic al mapa per obtenir la previsió meteorològica",
-    "Close": "Tanca",
+    "Close": {
+      "$$noContext": "Tanca",
+      "Map controls": "Tanca"
+    },
     "Close the search": "Tanca la cerca",
     "Collapse": "Plega",
     "Collapse the menu": "Plega el menú",
@@ -444,6 +447,9 @@
     "Folder": "Carpeta",
     "Folder name": "Nom de la carpeta",
     "Folders sort your topos, one trip per folder for example.": "Les carpetes ordenen les vostres ressenyes, per exemple una estada per carpeta.",
+    "Follow the track": {
+      "Map controls": "Segueix la traça"
+    },
     "Followed users": "Usuaris seguits",
     "Following": "Persones seguides",
     "For the moderators": "Per als moderadors",
@@ -908,6 +914,9 @@
     "Password too short": {
       "API message": "La contrasenya és massa curta"
     },
+    "Pause": {
+      "Map controls": "Pausa"
+    },
     "Paysage": {
       "Sophie picture context": "Paisatge"
     },
@@ -925,6 +934,12 @@
     "Pitch description tag": "Balisa de descripció dels llargs",
     "Plan a public transport trip": "Planifica una sortida amb transport públic",
     "Plan my trip →": "Planifica la teva ruta →",
+    "Play": {
+      "Map controls": "Reprodueix"
+    },
+    "Play the track": {
+      "Map controls": "Reprodueix la traça"
+    },
     "Please describe the problem above. Technical context:": "Descriviu el problema a dalt. Context tècnic:",
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Descrigueu el vostre nivell tècnic i experiència en relació a l'objectiu escollit, la vostra condició física, la fatiga acumulada abans de la sortida, l'aclimatació en cas de sortides en altura, etc.",
     "Please move the map, or change the route's name.": "Desplaceu el mapa o modifiqueu el nom de l'itinerari.",
@@ -951,6 +966,9 @@
     "Printing": "Imprimeix",
     "Processed from:": "Processat a partir de:",
     "Professional Reduction Method": "mètode de reducció professional",
+    "Progress": {
+      "Map controls": "Progrés"
+    },
     "Protect document": "Protegeix el document",
     "Protected areas": "Zones protegides",
     "Protection area:": "Zona de protecció:",
@@ -997,6 +1015,9 @@
     "Remove this account": "Elimina aquest compte",
     "Removed from favourites.": "Tret dels preferits.",
     "Rename folder": "Canvia el nom de la carpeta",
+    "Replay": {
+      "Map controls": "Torna a reproduir"
+    },
     "Report a bug of the mobile app": "Informa d'un error de l'aplicació mòbil",
     "Report an issue": "Alerteu d'un problema",
     "Report title, activity, linked routes or outings.": "Títol de l'escrit, activitat, enllaços amb itineraris o sortides",
@@ -1137,6 +1158,9 @@
     "Source:": "Document a fusionar (font):",
     "Spam: its contributions are deleted, its forum account too": "Spam: se n'eliminen les contribucions i també el compte del fòrum",
     "Species zone": "Zona d'espècie",
+    "Speed": {
+      "Map controls": "Velocitat"
+    },
     "Split line": "Divideix la línia",
     "Start a search again": "Torna a començar una cerca",
     "Static map images": "Imatges estàtiques del mapa",

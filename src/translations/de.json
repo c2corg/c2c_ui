@@ -255,7 +255,10 @@
     "Clear": "Löschen",
     "Clear the filters": "Filter entfernen",
     "Click on the map to get weather forecasts": "Auf die Karte klicken, um die Wettervorhersage anzuzeigen",
-    "Close": "Schließen",
+    "Close": {
+      "$$noContext": "Schließen",
+      "Map controls": "Schließen"
+    },
     "Close the search": "Die Suche schließen",
     "Collapse": "Einklappen",
     "Collapse the menu": "Menü einklappen",
@@ -490,6 +493,9 @@
     "Folder": "Ordner",
     "Folder name": "Ordnername",
     "Folders sort your topos, one trip per folder for example.": "Mit Ordnern können Sie Ihre Touren organisieren, zum Beispiel eine Reise pro Ordner.",
+    "Follow the track": {
+      "Map controls": "Strecke folgen"
+    },
     "Followed users": "Gefolgte Benutzer",
     "Following": "Folgend",
     "For the moderators": "Für die Moderatoren",
@@ -983,6 +989,12 @@
     "Pitch description tag": "Tag für Seillängenbeschreibung",
     "Plan a public transport trip": "Eine Reise mit öffentlichen Verkehrsmitteln planen",
     "Plan my trip →": "Meine Reise planen →",
+    "Play": {
+      "Map controls": "Abspielen"
+    },
+    "Play the track": {
+      "Map controls": "Strecke abspielen"
+    },
     "Please describe the problem above. Technical context:": "Bitte beschreiben Sie das Problem oben. Technischer Kontext:",
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Bitte beschreiben Sie Ihr technisches und Erfahrungsniveau in Bezug auf das gewählte Ziel, Ihren Fitnessgrad, die zuvor angesammelte Müdigkeit, die Akklimatisation in der Höhe usw.",
     "Please move the map, or change the route's name.": "Bitte verschieben Sie die Karte, oder ändern Sie den Namen der Route.",
@@ -1009,6 +1021,9 @@
     "Printing": "Ausdruck",
     "Processed from:": "Bearbeitung ab:",
     "Professional Reduction Method": "Profi-Reduktionsmethode",
+    "Progress": {
+      "Map controls": "Fortschritt"
+    },
     "Protect document": "Dokument schützen",
     "Protected areas": "Naturschutzgebiete",
     "Protection area:": "Schutzgebiet:",
@@ -1056,6 +1071,9 @@
     "Remove this account": "Dieses Konto entfernen",
     "Removed from favourites.": "Aus den Favoriten entfernt.",
     "Rename folder": "Ordner umbenennen",
+    "Replay": {
+      "Map controls": "Erneut abspielen"
+    },
     "Report a bug of the mobile app": "Fehler in der mobilen App melden",
     "Report an issue": "Problem melden",
     "Report title, activity, linked routes or outings.": "Berichtstitel, Aktivitäten, verbundene Routen oder Tourenberichte.",
@@ -1200,6 +1218,9 @@
     "South (cm)": "Süd (cm)",
     "Spam: its contributions are deleted, its forum account too": "Spam: Die Beiträge werden gelöscht, ebenso das Forumskonto.",
     "Species zone": "Artenzone",
+    "Speed": {
+      "Map controls": "Geschwindigkeit"
+    },
     "Split line": "Linie teilen",
     "Start a search again": "Suche neu starten",
     "Static map images": "Statische Kartenbilder",

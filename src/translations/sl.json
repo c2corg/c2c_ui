@@ -197,7 +197,10 @@
     "Choose the activity and the date before saving.": "Pred shranjevanjem izberi dejavnost in datum.",
     "Clear": "Briši",
     "Click on the map to get weather forecasts": "Kliknite na zemljevid za pridobitev vremenskih napovedi",
-    "Close": "Zapri",
+    "Close": {
+      "$$noContext": "Zapri",
+      "Map controls": "Zapri"
+    },
     "Close the search": "Zapri iskanje",
     "Collapse": "Zapri",
     "Collapse the menu": "Skrči meni",
@@ -415,6 +418,9 @@
     "Folder": "Mapa",
     "Folder name": "Ime mape",
     "Folders sort your topos, one trip per folder for example.": "Mape razvrščajo vaše opise – na primer ena mapa za eno turo.",
+    "Follow the track": {
+      "Map controls": "Spremljaj sled"
+    },
     "Followed users": "Uporabniki ki jih spremljam",
     "Following": "Spremljanje",
     "Forgot password?": "Ste pozabili geslo?",
@@ -824,6 +830,9 @@
       "API message": "Geslo je prekratko"
     },
     "Past days": "Pretekli dnevi",
+    "Pause": {
+      "Map controls": "Premor"
+    },
     "Paysage": {
       "Sophie picture context": "Pokrajina"
     },
@@ -841,6 +850,12 @@
     "Pitch description tag": "Za opis raztežajev",
     "Plan a public transport trip": "Načrtuj potovanje z javnim prevozom",
     "Plan my trip →": "Načrtuj moje potovanje →",
+    "Play": {
+      "Map controls": "Predvajaj"
+    },
+    "Play the track": {
+      "Map controls": "Predvajaj sled"
+    },
     "Please describe the problem above. Technical context:": "Prosimo, opišite zgornjo težavo. Tehnični kontekst:",
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Opišite svojo tehnično raven in raven izkušenj v zvezi z izbranim ciljem, svojo fizično kondicijo, utrujenost, nabrano pred izletom, aklimatizacijo za višinsko potovanje itd.",
     "Please move the map, or change the route's name.": "Premaknite zemljevid ali spremenite ime smeri.",
@@ -866,6 +881,9 @@
     "Printed on": "Tiskano dne",
     "Printing": "Tiskanje",
     "Professional Reduction Method": "zmanjševalno metodo za strokovnjake",
+    "Progress": {
+      "Map controls": "Napredek"
+    },
     "Protect document": "Zaščiti dokument",
     "Protected areas": "Zavarovana območja",
     "Protection area:": "Varovalno območje:",
@@ -911,6 +929,9 @@
     "Remove the offline copy": "Odstrani offline kopijo",
     "Removed from favourites.": "Odstranjeno iz priljubljenih.",
     "Rename folder": "Preimenuj mapo",
+    "Replay": {
+      "Map controls": "Predvajaj znova"
+    },
     "Report a bug of the mobile app": "Prijavi napako v mobilni aplikaciji",
     "Report an issue": "Prijavi problem",
     "Report title, activity, linked routes or outings.": "Naslov poročila, dejavnost, povezane smeri ali vzponi",
@@ -1042,6 +1063,9 @@
     "South (cm)": "Jug (cm)",
     "Spam": "Neželena pošta",
     "Species zone": "Območje vrste",
+    "Speed": {
+      "Map controls": "Hitrost"
+    },
     "Split line": "Razdeli črto",
     "Start a search again": "Ponovno začni iskanje",
     "Static map images": "Statične slike zemljevidov",
