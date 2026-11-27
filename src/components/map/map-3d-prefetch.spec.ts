@@ -64,6 +64,29 @@ describe('TilePrefetcher', () => {
     expect(asked.map(({ request }) => request.url)).toEqual(['a']);
   });
 
+  it('asks again a tile dropped behind the camera when a camera ahead needs it', async () => {
+    const { asked, fetchTile } = deferredFetch();
+    const prefetcher = new TilePrefetcher(fetchTile, 1);
+    prefetcher.add([{ url: 'busy', at: 0 }]);
+    prefetcher.add([
+      { url: 'a', at: 10 },
+      { url: 'b', at: 10 },
+    ]);
+    // a seek past them: dropped, then the next camera needs them too
+    prefetcher.window(15, Infinity);
+    prefetcher.add([{ url: 'a', at: 20 }]);
+    // after a seek, the cameras from the one before the playhead: its tiles do not hide those of the next one
+    prefetcher.add([
+      { url: 'c', at: 12 },
+      { url: 'c', at: 25 },
+    ]);
+    asked[0].resolve();
+    await tick();
+    asked[1].resolve();
+    await tick();
+    expect(asked.map(({ request }) => request.url)).toEqual(['busy', 'a', 'c']);
+  });
+
   it('marks the tiles of the first seconds urgent', () => {
     const { asked, fetchTile } = deferredFetch();
     const prefetcher = new TilePrefetcher(fetchTile, 4);

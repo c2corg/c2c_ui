@@ -121,8 +121,8 @@ export class TilePrefetcher {
 
   /** Tiles to fetch; those already asked are not asked again */
   add(requests: TileRequest[]): void {
-    // once each, also within a batch
-    const added = requests.filter(({ url }) => !this.seen.has(url) && !!this.seen.add(url));
+    // once each, also within a batch; not those behind the camera already, which would hide the same tile further on
+    const added = requests.filter(({ url, at }) => at >= this.position && !this.seen.has(url) && !!this.seen.add(url));
     if (!added.length) return;
     this.queue.push(...added);
     this.queue.sort((a, b) => a.at - b.at);
@@ -170,8 +170,8 @@ export class TilePrefetcher {
 
   private pump(): void {
     if (this.controller.signal.aborted) return;
-    // behind the camera: no longer needed
-    while (this.queue.length && this.queue[0].at < this.position) this.queue.shift();
+    // behind the camera: no longer needed, but asked again when a camera ahead needs it
+    while (this.queue.length && this.queue[0].at < this.position) this.seen.delete(this.queue.shift()!.url);
     while (this.inFlight.size < this.concurrency && this.queue.length && this.queue[0].at <= this.horizon) {
       const request = this.queue.shift()!;
       this.inFlight.add(request);
