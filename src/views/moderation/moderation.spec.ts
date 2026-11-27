@@ -1040,6 +1040,15 @@ const externalLink = (url: string, extra: Partial<ExternalLink> = {}): ExternalL
 
 const COUNTS = { dead: 2, failing: 0, parked: 1, suspect: 1, offsite: 0, moved: 4, blocked: 0, ok: 9, unchecked: 0 };
 
+// the reason shown for a link with these fields
+const detailOf = (extra: Partial<ExternalLink>) => {
+  api.getExternalLinks.mockReturnValueOnce(
+    answer({ total: 1, counts: {}, links: [externalLink('http://x.example/', extra)] })
+  );
+  const wrapper = mount(ExternalLinks, { global: global() });
+  return flushPromises().then(() => wrapper.find('.external-link-item .has-text-grey').text());
+};
+
 describe('ExternalLinks', () => {
   beforeEach(() => {
     api.getExternalLinks.mockReset();
@@ -1109,6 +1118,7 @@ describe('ExternalLinks', () => {
     });
     expect(items[0]!.find('.documents a').attributes('href')).toBe('/waypoints/37/fr');
     expect(items[1]!.text()).toContain('Sent to the home page');
+    expect(await detailOf({ error: 'closed' })).toBe('Site closed by its host');
     expect(items[1]!.text()).toContain('→ http://dead.example/');
     expect(items[2]!.text()).toContain('Domain for sale');
     expect(items[3]!.text().replace(/\s+/g, ' ')).toContain('Title then: « Topo du Vercors » now: « Best casino »');

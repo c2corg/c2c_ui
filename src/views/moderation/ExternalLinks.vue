@@ -299,6 +299,8 @@ function detail(link: ExternalLink): string | null {
       return $gettext('Sent to the home page');
     case 'login':
       return $gettext('Sent to a login page');
+    case 'closed':
+      return $gettext('Site closed by its host');
     default:
       return link.http_status && link.http_status !== 200 ? `HTTP ${link.http_status}` : null;
   }
