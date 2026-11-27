@@ -2,40 +2,58 @@
   <div ref="rootElement" class="c2c-map" :class="{ 'ol-touch': isTouchDevice }">
     <div ref="mapElement" class="c2c-map-canvas" @click="showLayerSwitcher = false" />
 
-    <div class="ol-zoom ol-unselectable ol-control">
-      <button
-        class="ol-zoom-in"
-        type="button"
-        :title="$gettext('Zoom in', 'Map controls')"
-        @click="map?.zoomIn({}, { originalEvent: $event })"
-      >
-        +
-      </button>
-      <button
-        class="ol-zoom-out"
-        type="button"
-        :title="$gettext('Zoom out', 'Map controls')"
-        @click="map?.zoomOut({}, { originalEvent: $event })"
-      >
-        –
-      </button>
-    </div>
+    <!-- the buttons of the top left corner, stacked: a hidden one leaves no gap -->
+    <div class="c2c-map-controls-top-left">
+      <div class="ol-zoom ol-unselectable ol-control">
+        <button
+          class="ol-zoom-in"
+          type="button"
+          :title="$gettext('Zoom in', 'Map controls')"
+          @click="map?.zoomIn({}, { originalEvent: $event })"
+        >
+          +
+        </button>
+        <button
+          class="ol-zoom-out"
+          type="button"
+          :title="$gettext('Zoom out', 'Map controls')"
+          @click="map?.zoomOut({}, { originalEvent: $event })"
+        >
+          –
+        </button>
+      </div>
 
-    <div class="ol-full-screen ol-unselectable ol-control">
-      <button type="button" :title="$gettext('Toggle full-screen', 'Map Controls')" @click="toggleFullscreen">
-        <fa-icon :icon="isFullscreen ? 'xmark' : 'expand'" />
-      </button>
-    </div>
+      <div class="ol-full-screen ol-unselectable ol-control">
+        <button type="button" :title="$gettext('Toggle full-screen', 'Map Controls')" @click="toggleFullscreen">
+          <fa-icon :icon="isFullscreen ? 'xmark' : 'expand'" />
+        </button>
+      </div>
 
-    <div
-      v-if="is3d"
-      class="ol-control c2c-map-compass"
-      :class="{ 'below-pin': showPinToTopButton && !isFullscreen }"
-      :title="$gettext('North up', 'Map controls')"
-    >
-      <button type="button" :aria-label="$gettext('North up', 'Map controls')" @click="resetNorth">
-        <span class="c2c-map-compass-needle" :style="{ transform: `rotate(${-bearing}deg)` }">▲</span>
-      </button>
+      <div
+        v-show="showPinToTopButton && !isFullscreen"
+        class="ol-control ol-control-pin-to-top"
+        :title="$gettext('Pin the map to a side of the screen')"
+      >
+        <button :aria-label="$gettext('Pin the map to a side of the screen')" @click.stop="$emit('pin-to-top-clicked')">
+          <fa-icon icon="fa-regular fa-window-maximize" />
+        </button>
+      </div>
+
+      <div v-if="is3d" class="ol-control c2c-map-compass" :title="$gettext('North up', 'Map controls')">
+        <button type="button" :aria-label="$gettext('North up', 'Map controls')" @click="resetNorth">
+          <span class="c2c-map-compass-needle" :style="{ transform: `rotate(${-bearing}deg)` }">▲</span>
+        </button>
+      </div>
+
+      <div
+        v-show="showCenterOnGeolocation && !is3d"
+        :title="$gettext('Recenter on your current position')"
+        class="ol-control ol-control-center-on-geolocation"
+      >
+        <button :aria-label="$gettext('Recenter on your current position')" @click="centerOnGeolocation">
+          <fa-icon icon="bullseye" />
+        </button>
+      </div>
     </div>
 
     <div class="ol-control ol-control-layer-switcher-button" :title="$gettext('Layers', 'Map controls')">
@@ -50,16 +68,6 @@
     <div v-if="show3d && online" class="ol-control ol-control-3d" :title="is3d ? '2D' : '3D'">
       <button :aria-label="is3d ? '2D' : '3D'" @click.stop="is3d ? close3d() : open3d()">
         <span>{{ is3d ? '2D' : '3D' }}</span>
-      </button>
-    </div>
-
-    <div
-      v-show="showPinToTopButton && !isFullscreen"
-      class="ol-control ol-control-pin-to-top"
-      :title="$gettext('Pin the map to a side of the screen')"
-    >
-      <button :aria-label="$gettext('Pin the map to a side of the screen')" @click.stop="$emit('pin-to-top-clicked')">
-        <fa-icon icon="fa-regular fa-window-maximize" />
       </button>
     </div>
 
@@ -135,17 +143,6 @@
         @click.stop="showLayerSwitcher = false"
       >
         <fa-icon icon="chevron-left" />
-      </button>
-    </div>
-
-    <div
-      v-show="showCenterOnGeolocation && !is3d"
-      :title="$gettext('Recenter on your current position')"
-      class="ol-control ol-control-center-on-geolocation"
-      :class="{ 'below-pin': showPinToTopButton && !isFullscreen }"
-    >
-      <button :aria-label="$gettext('Recenter on your current position')" @click="centerOnGeolocation">
-        <fa-icon icon="bullseye" />
       </button>
     </div>
 
@@ -2546,16 +2543,6 @@ defineExpose({
   touch-action: pan-x pan-y !important;
 }
 
-.c2c-map-compass {
-  top: calc(1.5em + 3 * var(--map-button-size) + var(--map-inset-top));
-  left: 0.5em;
-
-  /* the place of the geolocation button, which the 3D view hides */
-  &.below-pin {
-    top: calc(2em + 4 * var(--map-button-size) + var(--map-inset-top));
-  }
-}
-
 /* without a network: just above the layer switcher button, which it opens, where the 3D button is (not offered
    offline); the bottom row has the scale, which a narrow map widens to its left */
 .c2c-map-offline-chip {
@@ -2595,21 +2582,6 @@ defineExpose({
   display: inline-block;
   font-size: 0.8em;
   line-height: 1;
-}
-
-.ol-control-pin-to-top {
-  top: calc(1.5em + 3 * var(--map-button-size) + var(--map-inset-top));
-  left: 0.5em;
-}
-
-/* just below the full-screen button, or below the pin button when it is shown */
-.ol-control-center-on-geolocation {
-  top: calc(1.5em + 3 * var(--map-button-size) + var(--map-inset-top));
-  left: 0.5em;
-
-  &.below-pin {
-    top: calc(2em + 4 * var(--map-button-size) + var(--map-inset-top));
-  }
 }
 
 .ol-control-layer-switcher {
@@ -2692,7 +2664,7 @@ defineExpose({
 
 .ol-control-use-map-as-filter {
   top: calc(0.5em + var(--map-inset-top));
-  left: 3em;
+  left: calc(1em + var(--map-button-size));
   padding: 0 2px;
   background: rgba(255, 255, 255, 0.8);
 
@@ -2703,7 +2675,7 @@ defineExpose({
 
 .ol-control-recenter-on {
   top: calc(35px + var(--map-inset-top));
-  left: 3em;
+  left: calc(1em + var(--map-button-size));
   opacity: 0.8;
 
   input {
@@ -2718,7 +2690,7 @@ defineExpose({
 
 .ol-control-recenter-on-propositions {
   top: calc(57px + var(--map-inset-top));
-  left: 3em;
+  left: calc(1em + var(--map-button-size));
   background: rgba(255, 255, 255, 0.9);
   padding: 5px;
 
