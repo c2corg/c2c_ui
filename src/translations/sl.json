@@ -96,6 +96,7 @@
     "An error occurred, could not retrieve activities": "Prišlo je do napake, dejavnosti ni bilo mogoče pridobiti",
     "An error occurred, couldn't (un)mask version": "Prišlo je do napake, ni bilo mogoče (raz)maskirati različice",
     "An error occurred, couldn't save images": "Prišlo je do napake, slik ni bilo mogoče shraniti",
+    "An error occurred, couldn't save the title": "Prišlo je do napake, naslova ni bilo mogoče shraniti.",
     "An error occurred, please try again": "Prišlo je do napake, poskusite znova",
     "An error occurred, the images could not all be located": "Prišlo je do napake; vseh slik ni bilo mogoče najti",
     "An icon on the home screen, and the app takes the whole screen, without the browser bar.": "Ikona na začetnem zaslonu, aplikacija pa zavzame celoten zaslon, brez vrstice brskalnika.",
@@ -167,6 +168,7 @@
     "Bouldering climbing gear": "Oprema za balvansko plezanje",
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Na kratko opišite morebitne poškodbe, in kaj bi storili danes za nazaj. Tukaj tudi lahko vnesete komentarje, ki ne sodijo v nobeno drugo polje.",
     "Browse the topoguide": "Brskaj po Wikivodniku",
+    "Bug report — camptocamp.org": "Prijava napake — camptocamp.org",
     "Bulletin": "Bilten",
     "Bulletin details": "Podrobnosti biltena",
     "Buoux is maintained by local volunteers. Help keep it bolted and open!": "Za Buoux skrbijo lokalni prostovoljci. Pomagajte ohraniti opremljenost in dostopnost!",
@@ -189,7 +191,9 @@
     "Candidates": "Vse slike",
     "Cards mode": "Kartice",
     "Change account parameters": "Nastavitve računa",
+    "Change its title": "Spremeni njen naslov",
     "Change password": "Spremeni geslo",
+    "Change the title": "Spremeni naslov",
     "Changes sync when the network is back": "Spremembe se sinhronizirajo, ko je omrežje spet vzpostavljeno",
     "Checking...": "Preverjanje...",
     "Child": "Otrok",
@@ -199,7 +203,10 @@
     "Choose the activity and the date before saving.": "Pred shranjevanjem izberi dejavnost in datum.",
     "Clear": "Briši",
     "Click on the map to get weather forecasts": "Kliknite na zemljevid za pridobitev vremenskih napovedi",
-    "Close": "Zapri",
+    "Close": {
+      "$$noContext": "Zapri",
+      "Map controls": "Zapri"
+    },
     "Close the search": "Zapri iskanje",
     "Collapse": "Zapri",
     "Collapse the menu": "Skrči meni",
@@ -247,8 +254,11 @@
     "Contributor": "Avtor prispevka",
     "Control the use of your personal data": "Nadzirajte uporabo svojih osebnih podatkov",
     "Cookies": "Piškotki",
+    "Copy of a photo already on this page": "Kopija fotografije, ki je že na tej strani",
     "Cornices": "Opasti",
     "Could not save your outing on the phone. Please try again.": "Vašega vzpona ni bilo mogoče shraniti na telefonu. Poskusite znova.",
+    "Couldn't check whether you can change its title.": "Ni bilo mogoče preveriti, ali lahko spremenite njen naslov.",
+    "Couldn't load this photo": "Te fotografije ni bilo mogoče naložiti",
     "Coup de coeur": {
       "Sophie picture context": "Srce bije"
     },
@@ -263,9 +273,10 @@
     "Create the first version in the following lang": "Ustvarite prvo različico v naslednjem jeziku",
     "Created on": "Ustvarjeno",
     "Creation?": "Ustvarjanje?",
-    "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "YETI ne pokriva trenutnega pogleda zemljevida. Zaenkrat so samo francoske gore (določene s pikčastimi črtami).",
+    "Current map view is not covered by YETI. Only french mountains are as of now (determined by a dashed stroke).": "YETI ne pokriva trenutnega pogleda zemljevida.",
     "Current map view is too large. Please zoom to level": "Trenutni pogled zemljevida je prevelik. Prosimo povečajte",
     "Current password": "Trenutno geslo",
+    "Danger at the highest point of the outing": "Nevarnost na najvišji točki vzpona",
     "Danger at the highest point of the route": "Nevarnost na najvišji točki smeri",
     "Danger level": "Stopnja nevarnosti",
     "Danger level from the avalanche bulletin applies to all orientations. The compass rose distinguishes the most critical sectors presenting an increased risk.": "Stopnja nevarnosti iz plazovnega biltena velja za vse orientacije. Kompas razlikuje najbolj kritične sektorje, ki predstavljajo povečano tveganje.",
@@ -282,6 +293,7 @@
     "Data-Avalanche": "Podatki-Plaz",
     "Date": "Datum",
     "Define the mountain range I wish to travel to by public transport": "Določite gorsko skupino, do katere želite potovati z javnim prevozom",
+    "Deletable until": "Lahko se izbriše do",
     "Delete": {
       "$$noContext": "Izbrišite",
       "yeti": "Izbrišite"
@@ -391,7 +403,7 @@
     "Export route": "Izvozi itinerar",
     "Export to CSV": "Izvoz v CSV",
     "Extent": "Obseg",
-    "FAQ?": "FAQ",
+    "FAQ?": "Pogosta vprašanja",
     "FF Vol Libre": "FFVL",
     "Fauna protection areas": "Favna",
     "Fauna protection site:": "Varovalno območje za favno:",
@@ -399,7 +411,7 @@
     "Favourites": "Priljubljene",
     "Favourites saved on this device": "Priljubljene vsebine, shranjene v tej napravi",
     "Favourites: take a topo offline, with its photos and its map.": "Priljubljene: shranite opis offline, vključno s fotografijami in zemljevidom.",
-    "Favourites: the topos you saved, and the ones taken offline.": "Priljubljene: opisi, ki ste jih shranili, in tisti, ki so na voljo brez povezave.",
+    "Favourites: the topos you saved, and the ones taken offline.": "Priljubljene: Smeri, ki ste jih shranili, in tiste, ki so na voljo brez povezave.",
     "Feature temporarily unavailable": "Funkcija začasno ni na voljo",
     "Feel free to edit it.": "Lahko ga uredite.",
     "Files no longer on this device:": "Datoteke, ki niso več v tej napravi:",
@@ -417,6 +429,9 @@
     "Folder": "Mapa",
     "Folder name": "Ime mape",
     "Folders sort your topos, one trip per folder for example.": "Mape razvrščajo vaše opise – na primer ena mapa za eno turo.",
+    "Follow the track": {
+      "Map controls": "Spremljaj sled"
+    },
     "Followed users": "Uporabniki ki jih spremljam",
     "Following": "Spremljanje",
     "Forgot password?": "Ste pozabili geslo?",
@@ -462,7 +477,7 @@
     "Have you (re)evaluated the risks at each change in the situation? What factors might have affected your awareness, such as tiredness, stress, relaxing having passed the main difficulties or on the descent, on a section reputed to be easy, presence of footprints or other people, complete confidence in the leader of the group, etc.": "Ali ste (ponovno) vrednotili tveganja ob vsaki spremembi situacije? Kateri dejavniki so lahko vplivali na vašo raven pozornosti, kot so utrujenost, stres, manjša pozornost po težavah ali pri sestopu, na odseku, za katerega velja, da je lahek, prisotnost sledi ali drugih ljudi, popolno zaupanje v vodjo skupine itd. ",
     "Hazard potential": "Potencial nevarnosti",
     "Heading": "Naslov",
-    "Help": "FAQ",
+    "Help": "Pogosta vprašanja",
     "Help and settings in the Me tab.": "Pomoč in nastavitve v zavihku »Jaz«.",
     "Help and support": "Pomoč in podpora",
     "Help research activities to define new prevention means": "Pomagati znanstvenim raziskavam pri opredelitvi novih preventivnih sredstev",
@@ -575,8 +590,11 @@
     "Last character is invalid": {
       "API message": "Zadnji znak ni veljaven"
     },
+    "Last document of the image: delete the image instead": "Zadnji dokument slike: namesto tega izbriši sliko",
     "Last error:": "Zadnja napaka:",
     "Last outings": "Zadnji vzponi",
+    "Last route of the outing": "Zadnja smer vzpona",
+    "Last user of the outing": "Zadnji uporabnik vzpona",
     "Latitude": "Zemljepisna širina",
     "Launch YETI": "Zaženi YETI",
     "Layers": {
@@ -666,7 +684,6 @@
     },
     "Missing danger level": "Manjka stopnja nevarnosti",
     "Missing method": "Manjka metoda",
-    "Mobile app bug — camptocamp.org": "Napaka v mobilni aplikaciji — camptocamp.org",
     "Modified the": {
       "modification date": "Spremenjeno "
     },
@@ -675,6 +692,7 @@
     "More info": "Več informacij",
     "More info on meteoblue.com": "Več informacij na meteoblue.com",
     "More routes are available. You can move the map, specify the name or set an activity to filter them out.": "Več smeri je na voljo. Zemljevid lahko premaknete, določite ime ali nastavite dejavnost, da jih filtrirate.",
+    "More than 30 days old": "Starejše od 30 dni",
     "More: topoguide, articles, SERAC, Yeti, Itinévert, forum.": "Več: Wikivodnik, članki, SERAC, Yeti, Zelena pot, forum.",
     "Most dangerous aspects": "Najnevarnejši vidiki",
     "Multi-criteria search": "Iskanje po več kriterijih",
@@ -704,6 +722,7 @@
     "New password": "Novo geslo",
     "New route": "Nova smer",
     "New snow": "Novi sneg",
+    "New title of the photo already on this page": "Nov naslov fotografije, ki je že na tej strani",
     "New waypoint": "Nova točka",
     "Next": "Naprej",
     "Next day": "Naslednji dan",
@@ -718,6 +737,7 @@
     "No activity retrieved yet. Have you connected your trackers?": "Nobena dejavnost še ni bila pridobljena. Ali ste povezali svoje naprave?",
     "No answer from Camptocamp: the outing may be published already. It is saved on the phone: check on the site, then decide from Favourites.": "Od Camptocampa ni odgovora: morda je vzpon že objavljen. Shranjen je na telefonu – preveri na spletni strani in se nato odloči v razdelku »Priljubljene«.",
     "No avalanche bulletin right now": "Trenutno ni plazovnega biltena",
+    "No avalanche bulletin stored for this day": "Za ta dan ni shranjenega plazovnega biltena",
     "No data could be extracted from GPS file": "Iz datoteke ni bilo mogoče izvleči nobenih podatkov",
     "No distinct avalanche problem": "Ni izrazite nevarnosti plazov",
     "No favourite matches.": "Ni ujemanj med priljubljenih.",
@@ -774,8 +794,13 @@
     "On your phone, open this site in the browser, then add it to the home screen from the Share menu (iPhone) or the ⋮ menu (Android).": "Na telefonu odprite to spletno mesto v brskalniku, nato pa ga dodajte na začetni zaslon prek menija za deljenje (iPhone) ali menija ⋮ (Android).",
     "One or more line chunks will generate more than 3000 points. Adjust distance to generate less points.": "En ali več delov črt bo ustvarilo več kot 3000 točk. Prilagodite razdaljo, da ustvarite manj točk.",
     "One or more route could not be processed:": "Enega ali več delov črt ni bilo mogoče obdelati:",
+    "Only documents less than 30 days old can be deleted": {
+      "API message": "Izbrisati je mogoče le dokumente, ki so stari manj kot 30 dni"
+    },
     "Only for the home page feed: the dashboard and the “My preferences” button of the lists ignore them.": "Velja le za tok na domači strani; nadzorna plošča (Dashboard) in gumb »Moje nastavitve« na seznamih ne upoštevata teh nastavitev.",
+    "Only its author or a moderator can change its title.": "Samo njen avtor ali moderator lahko spremeni njen naslov.",
     "Only the most recent ones are listed": "Navedeni so le najnovejši",
+    "Only the title of this photo changes.": "Spremeni se le naslov te fotografije.",
     "Ooops": "Ups",
     "Opacity": "Neprosojnost",
     "Open a route, a waypoint or an outing, and tap the bookmark at the top.": "Izberi smer, točko ali vzpon in tapni zaznamek na vrhu.",
@@ -792,6 +817,7 @@
     "Orientations": "Orientacije",
     "Orphan images": "Slike brez povezave",
     "Other options": "Druge možnosti",
+    "Other participants: unlink them first": "Drugi udeleženci: najprej jih odstranite",
     "Other tools can complement Itinévert:": "Itinévert lahko dopolnijo druga orodja:",
     "Oups! Something went wrong with forum. Here is the message :": "Ups! Prišlo je do težave s forumom. Tukaj je sporočilo:",
     "Oups! something went wrong...": "Ups! nekaj je šlo narobe...",
@@ -826,6 +852,9 @@
       "API message": "Geslo je prekratko"
     },
     "Past days": "Pretekli dnevi",
+    "Pause": {
+      "Map controls": "Premor"
+    },
     "Paysage": {
       "Sophie picture context": "Pokrajina"
     },
@@ -843,6 +872,12 @@
     "Pitch description tag": "Za opis raztežajev",
     "Plan a public transport trip": "Načrtuj potovanje z javnim prevozom",
     "Plan my trip →": "Načrtuj moje potovanje →",
+    "Play": {
+      "Map controls": "Predvajaj"
+    },
+    "Play the track": {
+      "Map controls": "Predvajaj sled"
+    },
     "Please describe the problem above. Technical context:": "Prosimo, opišite zgornjo težavo. Tehnični kontekst:",
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Opišite svojo tehnično raven in raven izkušenj v zvezi z izbranim ciljem, svojo fizično kondicijo, utrujenost, nabrano pred izletom, aklimatizacijo za višinsko potovanje itd.",
     "Please move the map, or change the route's name.": "Premaknite zemljevid ali spremenite ime smeri.",
@@ -857,7 +892,7 @@
     "Post the first comment": "Objavi prvi komentar",
     "Precise localisation of the shooting": "Od kod ste fotografirali? (natančna lokacija)",
     "Precise location of the event.": "Natančna lokacija dogodka",
-    "Preference": "Želeni čas",
+    "Preference": "Izberi!",
     "Preferences": "Nastavitve",
     "Press enter to select": "Enter - da izberete",
     "Preview": "Predogled",
@@ -868,6 +903,9 @@
     "Printed on": "Tiskano dne",
     "Printing": "Tiskanje",
     "Professional Reduction Method": "zmanjševalno metodo za strokovnjake",
+    "Progress": {
+      "Map controls": "Napredek"
+    },
     "Protect document": "Zaščiti dokument",
     "Protected areas": "Zavarovana območja",
     "Protection area:": "Varovalno območje:",
@@ -913,7 +951,10 @@
     "Remove the offline copy": "Odstrani offline kopijo",
     "Removed from favourites.": "Odstranjeno iz priljubljenih.",
     "Rename folder": "Preimenuj mapo",
-    "Report a bug of the mobile app": "Prijavi napako v mobilni aplikaciji",
+    "Replay": {
+      "Map controls": "Predvajaj znova"
+    },
+    "Report a bug": "Prijavi napako",
     "Report an issue": "Prijavi problem",
     "Report title, activity, linked routes or outings.": "Naslov poročila, dejavnost, povezane smeri ali vzponi",
     "Request a new link": "Zahtevaj novo povezavo",
@@ -937,7 +978,7 @@
     "Risky slopes, increased risk due to orientation": "Nevarna pobočja, povečano tveganje zaradi orientacije",
     "Rotate image left": "Zasukaj levo",
     "Rotate image right": "Zasukaj desno",
-    "Route": "Smeri",
+    "Route": "Smer",
     "Route linked: the outing is ready to publish.": "Smer je povezana: vzpon je pripravljen za objavo.",
     "Route not found": "Smer ni najdena",
     "Route not found? Save without a route": "Smer ni najdena? Shrani brez Smeri",
@@ -1044,6 +1085,9 @@
     "South (cm)": "Jug (cm)",
     "Spam": "Neželena pošta",
     "Species zone": "Območje vrste",
+    "Speed": {
+      "Map controls": "Hitrost"
+    },
     "Split line": "Razdeli črto",
     "Start a search again": "Ponovno začni iskanje",
     "Static map images": "Statične slike zemljevidov",
@@ -1135,12 +1179,19 @@
     "This is the last version": "To je zadnja verzija",
     "This is where you may describe the route extensively, maybe starting with a brief summary and then developing the description (including approach, descent, etc.). Don't forget to mention the route history if you know it.": "Tukaj lahko obširno opišete smer, morda začnete s kratkim povzetkom in nato razvijate opis (vključno s dostopom, sestopom itd.). Ne pozabite omeniti zgodovine smeri, če jo poznate.",
     "This needs a network: try again once online.": "Tu je potrebno omrežje: poskusite znova, ko boste online.",
+    "This outing has other participants: unlink them first": {
+      "API message": "Ta vzpon ima druge udeležence: najprej jih odstranite"
+    },
     "This outing is no longer waiting: it was published or removed meanwhile.": "Ta Vzpon ni več na čakanju: medtem je bil objavljen ali odstranjen.",
     "This outing is no longer waiting: it was published or removed meanwhile. Your changes are not saved: copy them before leaving the page.": "Ta Vzpon ni več na čakanju: medtem je bil objavljen ali odstranjen. Tvoje spremembe niso shranjene: kopiraj jih preden zapustiš stran.",
     "This page is reserved to the moderators.": "Ta stran je namenjena moderatorjem.",
     "This password reset link is no longer valid": "Ta povezava za ponastavitev gesla ni več veljavna",
+    "This photo is already on this page": "Ta fotografija je že na tej strani",
     "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Ta slika prikazuje platnico knjige. Je last založnika in/ali avtorja. Tukaj je predstavljena samo za ilustracijo.",
     "This profile is only available to authenticated users.": "Ta profil je na voljo samo vpisanim uporabnikom.",
+    "This route cannot be deleted because it is the only route associated to some outings.": {
+      "API message": "Te smeri ni mogoče izbrisati, saj je edina smer, povezana z nekaterimi vzponi."
+    },
     "This route guide has an estimated theoretical duration of": "Ta pot ima ocenjeno teoretično trajanje",
     "This route is partially accessible by public transport.": "Ta smer je delno dostopna z javnim prevozom.",
     "This site is maintained by local actors. Support them to help keep it open!": "To plezališče vzdržujejo lokalni akterji. Podprite jih in pomagajte ohraniti njegovo delovanje!",
@@ -1148,15 +1199,21 @@
     "This tool estimates the technical difficulty of a ski route (ski rating).": "To orodje oceni tehnično težavnost smučarske ture (smučarska ocena).",
     "This topo is saved offline": "Ta opis je shranjen offline",
     "This version has been masked.": "Ta različica je bila maskirana.",
+    "This waypoint cannot be deleted because it is a main waypoint.": {
+      "API message": "Te točke ni mogoče izbrisati, saj gre za glavno točko."
+    },
+    "This waypoint cannot be deleted because it is the only waypoint associated to some routes.": {
+      "API message": "Te točke ni mogoče izbrisati, saj je edina točka, povezana z nekaterimi smermi."
+    },
     "This waypoint is partially accessible by public transport.": "Do te točke je delno mogoče dostopati z javnim prevozom.",
-    "Time": "Trajanje",
+    "Time": "Ura",
     "Title changed from the image viewer": "Naslov spremenjen v pregledovalniku slik",
     "Title of the book, author, language and date of publication.": "Naslov dela, avtor, jezik in datum izida",
     "Title, activity and characteristics of the picture": "Naslov, dejavnost, in značilnosti slike",
     "To": "Do",
     "To define your destination, choose one of these 2 approaches": "Za določitev cilja izberite enega od teh 2 pristopov",
     "To go further": "Za več informacij",
-    "To report a problem: Me → Report a bug of the mobile app, the email leaves with the useful information.": "Za prijavo težave: »Jaz« → »Prijavi napako v mobilni aplikaciji«; pošlje se e-poštno sporočilo s koristnimi podatki.",
+    "To report a problem: Me → Report a bug, the email leaves with the useful information.": "Za prijavo težave: »Jaz« → »Prijavi napako«; pošlje se e-poštno sporočilo s koristnimi podatki.",
     "Toggle elevation profile": "preklopite na profil višine",
     "Toggle full-screen": {
       "Map Controls": "Celozaslonski način"
@@ -1176,8 +1233,8 @@
     },
     "Topoguide id:": "Wikivodnik ID:",
     "Topoguide moderator": "Moderator wikivodnika",
-    "Topos to download again": "Opisi za ponovni prenos",
-    "Topos without a network": "Opisi brez omrežja",
+    "Topos to download again": "Smeri za ponovni prenos",
+    "Topos without a network": "Smeri brez omrežja",
     "Topos, outings, conditions and stories of the mountains, in your pocket.": "Opisi smeri in vzponov, razmere ter gorske zgodbe – kar v žepu.",
     "Trace": "GPS sled",
     "Trace and date taken from this activity, distance and elevation gain too when known. Check them before publishing.": "Sled in datum sta povzeta iz te dejavnosti; prav tako razdalja in višinska razlika, če sta znani. Pred objavo ju preverite.",
@@ -1371,6 +1428,12 @@
     "articles": "članki",
     "artificial": {
       "rock_types": "umetna"
+    },
+    "as the last document of the image, this document can not be disassociated: delete the image instead": {
+      "API message": "ker je to zadnji dokument slike, ga ni mogoče odstraniti – namesto tega izbrišite sliko"
+    },
+    "as the last user of the outing, this user can not be disassociated": {
+      "API message": "ker je ta uporabnik zadnji udeleženec vzpona, ga ni mogoče odstraniti"
     },
     "ascending sort": "Naraščajoče razvrščanje",
     "association": {
@@ -2435,6 +2498,7 @@
     "unsufficient-scopes": {
       "tracking": "Nezadostna dovoljenja"
     },
+    "untitled": "brez naslova",
     "url": "URL",
     "users": "uporabniki",
     "vertical": {

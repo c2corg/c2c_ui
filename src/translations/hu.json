@@ -137,7 +137,10 @@
     "Checking...": "Ellenőrzés. alatt..",
     "Child": "Gyermek",
     "Clear": "Törlés",
-    "Close": "Bezár",
+    "Close": {
+      "$$noContext": "Bezár",
+      "Map controls": "Bezár"
+    },
     "Collapse": "Elrejt",
     "Comments": "Megjegyzések",
     "Comments are disabled.": "Megjegyzések nincsenek engedélyezve ehhez a dokumentumhoz.",
@@ -258,6 +261,9 @@
     "FAQ?": "GYIK",
     "Feel free to edit it.": "Szabadon szerkeszthető.",
     "Filter results": "Szűrési eredmények",
+    "Follow the track": {
+      "Map controls": "Útvonal követése"
+    },
     "Followed users": "Követett felhasználók",
     "Forgot password?": "Elfelejtett jelszó?",
     "Forum": "Fórum",
@@ -424,6 +430,9 @@
     "Paragliding outings": "Siklóernyős kiruccanások",
     "Parameters of the Digital Camera": "A digitális kamera paraméterei",
     "Parent": "Szülő",
+    "Pause": {
+      "Map controls": "Szünet"
+    },
     "People who were with you, and your feelings about this outing": "A veled levő személyek, és a kiruccanásra vonatkozó érzéseid",
     "Period of protection": "Védett időszak",
     "Personal data are confidential": "A személyes adatok bizalmasak",
@@ -431,6 +440,12 @@
     "Personal feed on": "Személyes hírfolyam bekapcsolva",
     "Personal informations": "Személyes információk",
     "Pitch description tag": "Kötélhosszt jellemző címke",
+    "Play": {
+      "Map controls": "Lejátszás"
+    },
+    "Play the track": {
+      "Map controls": "Útvonal lejátszása"
+    },
     "Please describe your technical and experience level related to the chosen goal, your level of fitness, prior tiredness accumulated, acclimatization if in altitude, etc.": "Írd le a technikai szintedet és jártasságodat a kiválasztott céllal összefüggésben, a fizikai állapotodat, az előzetesen felhalmozott fáradtságot, nagy magasságok esetén az akklimatizációdat, stb.",
     "Please move the map, or change the route's name.": "Mozgasd a térképet, vagy változtasd meg az út nevét.",
     "Please select a method before computing.": "Válassz egy módszert a számítás előtt.",
@@ -443,6 +458,9 @@
     "Press enter to select": "Nyomj Entert a kiválasztáshoz",
     "Preview": "Előnézet",
     "Professional Reduction Method": "Professzionális Redukciós Módszer",
+    "Progress": {
+      "Map controls": "Haladás"
+    },
     "Protect document": "A dokumentum védelme",
     "Protection area:": "Védett terület:",
     "Protection areas": "Védett területek",
@@ -455,6 +473,9 @@
     "Recenter on...": "Újrapozicionálás...",
     "Register": "Regisztráció",
     "Remove": "Eltávolít",
+    "Replay": {
+      "Map controls": "Újrajátszás"
+    },
     "Report an issue": "Probléma jelentése",
     "Report title, activity, linked routes or outings.": "Jelentés címe, tevékenység, társított utak vagy kiruccanások.",
     "Required": {
@@ -501,6 +522,9 @@
     "Small group without distance": "Kis csoport távolságtartás nélkül",
     "Sort by": "Rendezés",
     "Source:": "Forrás:",
+    "Speed": {
+      "Map controls": "Sebesség"
+    },
     "Statistical cookies": "Statisztikai sütik",
     "Statistics": "Statisztika",
     "Stay careful while skiing": "Légy óvatos sízés közben",

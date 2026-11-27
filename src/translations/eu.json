@@ -14,7 +14,10 @@
     "Cancel": "Ezeztatu",
     "Change account parameters": "Kontuaren xehetasunak aldatu",
     "Change password": "Pasahitza aldatu",
-    "Close": "Itxi",
+    "Close": {
+      "$$noContext": "Itxi",
+      "Map controls": "Itxi"
+    },
     "Comments": "Iruzkinak",
     "Compare selected versions": "Aukeratutako bertsioak alderatu",
     "Contact": "Kontaktua",
@@ -38,6 +41,9 @@
     },
     "Email": "email helbidea",
     "Filter on map extent": "bilaketa mapan ikusten den eremura mugatu",
+    "Follow the track": {
+      "Map controls": "Hurratsari jarraitu"
+    },
     "Forgot password?": "Pasahitza ahaztu al duzu ?",
     "Forum": "Foroa",
     "Forum username": "Goitizena",
@@ -74,14 +80,29 @@
     "Outings": "Irteerak",
     "Page not found": "Orria ez da aurkitu",
     "Password": "Pasahitza",
+    "Pause": {
+      "Map controls": "Pausatu"
+    },
     "Personal feed off": "Jario pertsonala geldirik dago",
     "Personal feed on": "Jario pertsonala martxan dago",
+    "Play": {
+      "Map controls": "Erreproduzitu"
+    },
+    "Play the track": {
+      "Map controls": "Hurratsa erreproduzitu"
+    },
     "Post the first comment": "Lehen iruzkina eman",
     "Preview": "Aurreikusi",
+    "Progress": {
+      "Map controls": "Aurrerapena"
+    },
     "Recenter on your current position": "Zure kokalekuan zentratu",
     "Recenter on...": "Zentratu",
     "Register": "Izena eman",
     "Remember me": "Gogoratu",
+    "Replay": {
+      "Map controls": "Berriro erreproduzitu"
+    },
     "Reset password": "Pasahitza berrasieratu",
     "Routes": "Ibilbideak",
     "Save": "Gorde",
@@ -95,6 +116,9 @@
     "Show only updates from followed users in the homepage feed": "Orrialde nagusiko web-jarioan, jarraitutako erabiltzaileen eguneratzeak soilik erakutsi",
     "Show results": "Emaitzak ikusi",
     "Skitouring gear": "Esquí y snowboard de montaña, raquetas",
+    "Speed": {
+      "Map controls": "Abiadura"
+    },
     "Stop following this contributor": "Kolaboratzaile hau ez jarraitu",
     "The page you are looking for does not exist or is broken.": "Eskatutako orria ez dago",
     "This picture depicts a book cover. It is the property of its editor and/or author. It is presented here only for illustration purposes.": "Irudi honek liburuaren azala erakusten du. Irudia editore edo/eta egileaeren jabetza da.",
