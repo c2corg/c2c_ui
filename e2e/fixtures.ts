@@ -14,7 +14,7 @@ const BLOCKED =
   /^https?:\/\/([^/]*\.)?(googletagmanager|google-analytics|doubleclick|admysports|forum\.camptocamp|forum\.demov6\.camptocamp|api\.camptocamp|api\.demov6\.camptocamp)\./;
 
 // the API of BUILD_ENV=local builds (vite.config.ts)
-const UI_API = 'http://localhost:6543';
+export const UI_API = 'http://localhost:6543';
 
 // errors from what is blocked above, and from reCAPTCHA (login page), which has no key in local builds. A failed
 // request to the UI or the API is reported by the response listener below, with its URL

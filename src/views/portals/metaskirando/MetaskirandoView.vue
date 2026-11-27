@@ -4,7 +4,7 @@
     <div class="search-infos">
       <div class="header-section">
         <h1 class="title is-3">
-          <fa-icon icon="mountain" />
+          <fa-icon icon="rss" />
           {{ $gettext('Metaskirando') }}
         </h1>
         <span class="is-flex header-right">
@@ -182,7 +182,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import PartnerOutingRow from './PartnerOutingRow.vue';
@@ -236,8 +236,13 @@ watch(trackId, (id) => id && store.loadTrack(id));
 
 // the map filters the outings with its extent (bbox of the URL, in EPSG:3857) when asked to, or when the link has one
 const filterByExtent = ref(false);
-// the extent of the link, where the map opens
+// the extent the map opens at when it is shown again: the extent of the link, then the last one of the map
 const initialExtent = ref<number[] | null>(null);
+
+// the user changed the page: a request of the defaults still running does not apply to it any more
+let pageEpoch = 0;
+// the page is left: nothing of it writes the query of the next one
+let mounted = true;
 
 const located = computed(() => markersOf(store.visibleItems));
 const markers = computed(() => located.value.markers);
@@ -254,6 +259,7 @@ function readDisplayMode() {
 }
 
 function setDisplayMode(value: string) {
+  pageEpoch++;
   displayMode.value = value;
   writeQuery();
   // the map was hidden or resized
@@ -274,6 +280,8 @@ function onSelect(id: string) {
 // the extent of the map changed: the outings of the extent, with a pause for a map being dragged
 let extentTimer: ReturnType<typeof setTimeout> | undefined;
 function onExtentChange(extent: number[]) {
+  pageEpoch++;
+  initialExtent.value = extent;
   clearTimeout(extentTimer);
   extentTimer = setTimeout(() => {
     store.filters = { ...store.filters, bbox: extent };
@@ -283,6 +291,7 @@ function onExtentChange(extent: number[]) {
 }
 
 function onFilterByExtent(value: boolean) {
+  pageEpoch++;
   filterByExtent.value = value;
   if (!value) {
     clearTimeout(extentTimer);
@@ -328,7 +337,12 @@ async function loadAreas() {
       }
     })
   );
-  areas.value = [...areas.value.filter((area) => store.filters.areas.includes(area.document_id!)), ...loaded];
+  // the selection may have changed while the areas loaded, and two loads may have fetched the same one
+  const selected = store.filters.areas;
+  const merged = [...areas.value, ...loaded].filter((area) => selected.includes(area.document_id!));
+  areas.value = merged.filter(
+    (area, index) => merged.findIndex((other) => other.document_id === area.document_id) === index
+  );
 }
 
 // the page opened, and the default areas are not known yet
@@ -360,12 +374,14 @@ const isSourceOn = (source: string) => !store.filters.sources.length || store.fi
 const siteName = (source: string) => store.sourceSites[source]?.site_name;
 
 function toggleSource(source: string) {
+  pageEpoch++;
   store.toggleSource(source);
   writeQuery();
   return reload();
 }
 
 function setSteep(value: boolean) {
+  pageEpoch++;
   store.filters = { ...store.filters, steep: value };
   writeQuery();
   return reload();
@@ -373,7 +389,10 @@ function setSteep(value: boolean) {
 
 // the text filter works on the outings already loaded: no request
 function setText(value: string) {
+  pageEpoch++;
   store.filters = { ...store.filters, q: value.trim() };
+  // the outings the text now shows are the ones seen by this visit
+  store.recordShown();
   writeQuery();
 }
 
@@ -392,15 +411,18 @@ async function defaultAreasOfLink() {
 }
 
 function syncFromRoute(defaults: Awaited<ReturnType<typeof loadDefaultAreas>> | null = null) {
+  // before the defaults are written in the query: they keep the display mode of the link
+  readDisplayMode();
   store.fromRouteQuery(route.query);
   if (defaults) {
     areas.value = defaults.documents;
     store.filters = { ...store.filters, areas: defaults.ids };
     writeQuery();
   }
-  readDisplayMode();
   filterByExtent.value = store.filters.bbox !== null;
-  initialExtent.value ??= store.filters.bbox;
+  if (store.filters.bbox) {
+    initialExtent.value = store.filters.bbox;
+  }
   activities.value = [...store.filters.activities];
   loadAreas();
   return reload();
@@ -408,6 +430,7 @@ function syncFromRoute(defaults: Awaited<ReturnType<typeof loadDefaultAreas>> | 
 
 // a filter changed: the query follows (a list can be shared), and the outings load again
 function onFilter() {
+  pageEpoch++;
   store.filters = {
     areas: areas.value.map((area) => area.document_id!),
     activities: [...activities.value],
@@ -434,11 +457,23 @@ watch(
 );
 
 onMounted(async () => {
-  store.onlyNew = false;
+  mounted = true;
+  store.startVisit();
   store.loadSources();
+  const epoch = pageEpoch;
   const defaults = await defaultAreasOfLink();
   starting.value = false;
-  return syncFromRoute(defaults);
+  if (!mounted) {
+    return;
+  }
+  // the visitor changed the page meanwhile: the query holds that change, so the defaults do not apply over it
+  return syncFromRoute(epoch === pageEpoch ? defaults : null);
+});
+
+onBeforeUnmount(() => {
+  mounted = false;
+  pageEpoch++;
+  clearTimeout(extentTimer);
 });
 </script>
 

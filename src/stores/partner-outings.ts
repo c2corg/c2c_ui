@@ -66,10 +66,30 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
   const tracks = ref<Record<string, PartnerTrack | null>>({});
   const trackRequests = new Map<string, Promise<PartnerTrack | null>>();
 
-  // "new since last visit": the ids of the outings that no visit of their source showed before
-  const tracker = createVisitTracker();
+  // "new since last visit": the ids of the outings that no visit of their source showed before. The tracker lives as
+  // long as a visit of the page: see `startVisit`
+  let tracker = createVisitTracker();
   const newIds = ref<string[]>([]);
   const onlyNew = ref(false);
+
+  // the outings the text filter shows: only those are recorded as shown
+  const shownByText = (items: PartnerOuting[]) => filterByText(items, filters.value.q);
+
+  /** Records the outings the text filter shows, and tells which of all the loaded ones are new. */
+  function recordShown() {
+    tracker.observe(shownByText(items.value));
+    newIds.value = items.value.filter(tracker.isNew).map((item) => item.id);
+  }
+
+  /**
+   * Starts a visit when the page is entered: the comparison of a visit still going on (see new-since-visit.ts) is kept,
+   * a later one compares with the visit that ended.
+   */
+  function startVisit() {
+    tracker = createVisitTracker();
+    onlyNew.value = false;
+    newIds.value = [];
+  }
 
   // the outings the filters keep: the loaded ones, narrowed by the text and, when asked, to the new ones
   const visibleItems = computed(() =>
@@ -119,8 +139,7 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
       items.value = answer.items;
       total.value = answer.total;
       sources.value = answer.sources;
-      tracker.observe(answer.items);
-      newIds.value = answer.items.filter(tracker.isNew).map((item) => item.id);
+      recordShown();
     } catch (e) {
       // replaced by a newer load (or aborted by it): that one owns the state
       if (controller !== current || axios.isCancel(e)) {
@@ -244,5 +263,7 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
     loadSources,
     fromRouteQuery,
     toRouteQuery,
+    recordShown,
+    startVisit,
   };
 });

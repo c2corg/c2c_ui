@@ -25,7 +25,8 @@ Not run in CI: run them before merging a change that touches pages, forms, maps 
 
    The fixtures are synthetic and contain broken items on purpose, so some sources may end `degraded`, which is the
    expected demo status. The spec reads the sources from `/partner-outings/sources`, so it does not depend on how many
-   there are. Without the harvest, it fails on its first check.
+   there are. Without the harvest, it fails on its first check. The API shows only the last 14 days of outings: once the
+   harvested outings are older than that, run `make harvest-partners` again, or the spec fails on its first check.
 
 4. Install the browser: `npx playwright install chromium`
 

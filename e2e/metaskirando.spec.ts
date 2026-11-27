@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 
-import { API, call } from './api.ts';
-import { expect, test } from './fixtures.ts';
+import { call } from './api.ts';
+import { UI_API, expect, test } from './fixtures.ts';
 
 // The outings of the partner sites come from the local API in fixture mode (see README.md: partners_transport=fixtures
 // and `make harvest-partners` run once). The fixtures are synthetic, dated so that the newest ones are those of the
@@ -128,7 +128,7 @@ async function withRecentC2cOuting(page: Page, baseURL: string) {
   if (!outing) {
     return null;
   }
-  await page.route(new RegExp(`^${API}/partner-outings(\\?|$)`), async (route) => {
+  await page.route(new RegExp(`^${UI_API}/partner-outings(\\?|$)`), async (route) => {
     const url = new URL(route.request().url());
     const answer = (await call(`/partner-outings${url.search}`)) as { total: number; items: Item[] };
     const sources = url.searchParams.get('sources')?.split(',');

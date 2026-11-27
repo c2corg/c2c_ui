@@ -53,6 +53,39 @@ describe('new since last visit', () => {
     expect(next.isNew(outing('skitour', 3))).toBe(true);
   });
 
+  it('does not write back a snapshot older than the visits of another tab', () => {
+    const page = tracker();
+    page.observe([outing('skitour', 1)]);
+    // another tab records gulliver meanwhile
+    const other = tracker();
+    other.observe([outing('gulliver', 2)]);
+    page.observe([outing('skitour', 3)]);
+    expect(Object.keys(readVisits()).sort()).toEqual(['gulliver', 'skitour']);
+    expect(readVisits().skitour.seen).toEqual(['skitour:1', 'skitour:3']);
+  });
+
+  it('keeps the outings of earlier visits when a new visit shows others', () => {
+    tracker().observe([outing('skitour', 1)]);
+    time += VISIT_GAP_MS + 1;
+    tracker().observe([outing('skitour', 2)]);
+    time += VISIT_GAP_MS + 1;
+    const third = tracker();
+    third.observe([outing('skitour', 1)]);
+    expect(third.isNew(outing('skitour', 1))).toBe(false);
+    expect(readVisits().skitour.seen).toEqual(['skitour:2', 'skitour:1']);
+  });
+
+  it('caps by the most recent observation: an id shown again is kept', () => {
+    const first = Array.from({ length: MAX_SEEN }, (_, n) => outing('skitour', n));
+    tracker().observe(first);
+    time += VISIT_GAP_MS + 1;
+    tracker().observe([outing('skitour', 0), outing('skitour', MAX_SEEN)]);
+    const seen = readVisits().skitour.seen;
+    expect(seen).toHaveLength(MAX_SEEN);
+    expect(seen).toContain('skitour:0');
+    expect(seen).not.toContain('skitour:1');
+  });
+
   it('caps what it keeps', () => {
     const many = Array.from({ length: MAX_SEEN + 50 }, (_, n) => outing('skitour', n));
     tracker().observe(many);

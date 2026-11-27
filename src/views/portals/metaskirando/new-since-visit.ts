@@ -11,20 +11,23 @@ export const VISIT_GAP_MS = 15 * 60 * 1000;
 export const MAX_SEEN = 500;
 
 /**
- * Records that these outings were shown, and tells which of them are new. Pass the same tracker for the whole life of
- * the page: the baseline of a source is fixed when it is first seen, filters changing later do not move it.
+ * Records that these outings were shown, and tells which of them are new. Pass the same tracker for the whole visit of
+ * the page: the baseline of a source is fixed when it is first seen, filters changing later do not move it. The stored
+ * history is read again at each observation, so that a tab does not write back a snapshot older than the visits
+ * recorded by another tab.
  */
 export function createVisitTracker(now: () => number = Date.now) {
-  // the visits as stored, updated as the page shows outings; null until the first observation
-  let visits: Visits | null = null;
   const baselines = new Map<string, Set<string> | null>();
 
   function observe(items: PartnerOuting[]) {
-    visits ??= readVisits();
     const bySource = new Map<string, string[]>();
     for (const item of items) {
       bySource.set(item.source, [...(bySource.get(item.source) ?? []), item.id]);
     }
+    if (!bySource.size) {
+      return;
+    }
+    const visits: Visits = readVisits();
     for (const [source, ids] of bySource) {
       const previous = visits[source];
       if (!baselines.has(source)) {
@@ -33,17 +36,20 @@ export function createVisitTracker(now: () => number = Date.now) {
         const baseline = sameVisit ? previous.baseline : (previous?.seen ?? null);
         baselines.set(source, baseline && new Set(baseline));
         visits[source] = {
-          seen: dedupe([...(sameVisit ? previous.seen : []), ...ids]),
+          // a new visit starts from what the source showed before, so that the outings it showed stay known
+          seen: dedupe([...(previous?.seen ?? []), ...ids]),
           baseline: baseline ?? null,
           at: sameVisit ? previous.at : now(),
         };
       } else {
-        visits[source] = { ...visits[source], seen: dedupe([...visits[source].seen, ...ids]) };
+        visits[source] = {
+          seen: dedupe([...(previous?.seen ?? []), ...ids]),
+          baseline: previous?.baseline ?? null,
+          at: previous?.at ?? now(),
+        };
       }
     }
-    if (bySource.size) {
-      writeVisits(visits);
-    }
+    writeVisits(visits);
   }
 
   /** Whether the source showed the outing neither at its previous visit nor before */
@@ -55,4 +61,5 @@ export function createVisitTracker(now: () => number = Date.now) {
   return { observe, isNew };
 }
 
-const dedupe = (ids: string[]) => [...new Set(ids)].slice(-MAX_SEEN);
+// the last occurrence of each id is kept, in order: an id shown again is recent, whatever its first position
+const dedupe = (ids: string[]) => [...new Set([...ids].reverse())].reverse().slice(-MAX_SEEN);

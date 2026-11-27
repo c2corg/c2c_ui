@@ -63,8 +63,9 @@ export function outingPosition(outing: PartnerOuting): [number, number] | null {
     if (!position || position.length < 2 || !position.every(Number.isFinite)) {
       return null;
     }
+    // a finite projected position can still give an infinite longitude or latitude
     const [lon, lat] = toLonLat(position);
-    return [lon, lat];
+    return Number.isFinite(lon) && Number.isFinite(lat) ? [lon, lat] : null;
   } catch {
     return null;
   }

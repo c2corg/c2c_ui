@@ -108,7 +108,7 @@ export function useMainMenuItems() {
             label: label($gettext('Metaskirando')),
             to: { name: 'metaskirando' },
             match: ['metaskirando'],
-            icon: 'mountain',
+            icon: 'rss',
           },
         ]
       : []),

@@ -136,7 +136,7 @@ describe('the Metaskirando entry of the main menu', () => {
 
   it('links the page, with the mountain icon', () => {
     config.urls = { ...urls, name: 'demo' };
-    expect(entry()).toMatchObject({ to: { name: 'metaskirando' }, match: ['metaskirando'], icon: 'mountain' });
+    expect(entry()).toMatchObject({ to: { name: 'metaskirando' }, match: ['metaskirando'], icon: 'rss' });
   });
 
   it('is hidden on the production backend', () => {

@@ -1,6 +1,6 @@
 import axios, { AxiosError, type AxiosResponse } from 'axios';
 import { createPinia, setActivePinia } from 'pinia';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { emptyFilters, usePartnerOutingsStore } from './partner-outings';
 
@@ -296,6 +296,7 @@ describe('partner outings store', () => {
 
   describe('new since last visit', () => {
     beforeEach(() => window.localStorage.clear());
+    afterEach(() => vi.useRealTimers());
 
     it('marks nothing at the first visit, then what the source did not show before', async () => {
       getAll.mockResolvedValue(answer([outing('skitour:1', '2026-11-23'), outing('skitour:2', '2026-11-23')]));
@@ -315,7 +316,6 @@ describe('partner outings store', () => {
 
       store.onlyNew = true;
       expect(store.visibleItems.map((item) => item.id)).toEqual(['skitour:3']);
-      vi.useRealTimers();
     });
 
     it('keeps its baseline when the page loads again within the visit', async () => {
@@ -336,7 +336,76 @@ describe('partner outings store', () => {
       setActivePinia(createPinia());
       await usePartnerOutingsStore().load();
       expect(usePartnerOutingsStore().newIds).toEqual(['skitour:2']);
-      vi.useRealTimers();
+    });
+
+    it('compares with the visit that ended when the page is entered again in the same store, after the gap', async () => {
+      const store = usePartnerOutingsStore();
+      getAll.mockResolvedValue(answer([outing('skitour:1', '2026-11-23')]));
+      await store.load();
+
+      vi.useFakeTimers({ now: Date.now() + 3600_000 });
+      store.startVisit();
+      getAll.mockResolvedValue(answer([outing('skitour:1', '2026-11-23'), outing('skitour:2', '2026-11-24')]));
+      await store.load();
+      expect(store.newIds).toEqual(['skitour:2']);
+
+      // back after the gap, in the same store: skitour:2 was shown by the visit that ended, so it is no longer new
+      vi.setSystemTime(Date.now() + 20 * 60_000);
+      store.startVisit();
+      await store.load();
+      expect(store.newIds).toEqual([]);
+    });
+
+    it('keeps the comparison when the page is entered again within the visit, in the same store', async () => {
+      const store = usePartnerOutingsStore();
+      getAll.mockResolvedValue(answer([outing('skitour:1', '2026-11-23')]));
+      await store.load();
+
+      vi.useFakeTimers({ now: Date.now() + 3600_000 });
+      store.startVisit();
+      getAll.mockResolvedValue(answer([outing('skitour:1', '2026-11-23'), outing('skitour:2', '2026-11-24')]));
+      await store.load();
+
+      vi.setSystemTime(Date.now() + 5 * 60_000);
+      store.startVisit();
+      await store.load();
+      expect(store.newIds).toEqual(['skitour:2']);
+    });
+
+    it('records only the outings the text filter shows', async () => {
+      const titled = (id: string, title: string) =>
+        ({ ...outing(id, '2026-11-23'), title, areas: [], author: null, region: null }) as PartnerOuting;
+      const store = usePartnerOutingsStore();
+      store.filters = { ...store.filters, q: 'glacier' };
+      getAll.mockResolvedValue(answer([titled('skitour:1', 'Glacier'), titled('skitour:2', 'Forest')]));
+      await store.load();
+
+      // the next visit: Forest was hidden by the text filter, so it was never shown and is new
+      vi.useFakeTimers({ now: Date.now() + 3600_000 });
+      setActivePinia(createPinia());
+      const next = usePartnerOutingsStore();
+      getAll.mockResolvedValue(answer([titled('skitour:0', 'Glacier'), titled('skitour:2', 'Forest')]));
+      await next.load();
+      expect(next.newIds).toEqual(['skitour:0', 'skitour:2']);
+    });
+
+    it('records an outing when the text filter starts to show it', async () => {
+      const titled = (id: string, title: string) =>
+        ({ ...outing(id, '2026-11-23'), title, areas: [], author: null, region: null }) as PartnerOuting;
+      const store = usePartnerOutingsStore();
+      store.filters = { ...store.filters, q: 'glacier' };
+      getAll.mockResolvedValue(answer([titled('skitour:1', 'Glacier'), titled('skitour:2', 'Forest')]));
+      await store.load();
+
+      store.filters = { ...store.filters, q: '' };
+      store.recordShown();
+
+      vi.useFakeTimers({ now: Date.now() + 3600_000 });
+      setActivePinia(createPinia());
+      const next = usePartnerOutingsStore();
+      getAll.mockResolvedValue(answer([titled('skitour:2', 'Forest')]));
+      await next.load();
+      expect(next.newIds).toEqual([]);
     });
   });
 

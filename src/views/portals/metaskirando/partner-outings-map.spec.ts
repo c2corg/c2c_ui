@@ -43,6 +43,11 @@ describe('partner outings map helpers', () => {
     expect(outingPosition(partnerOuting({ geometry: { geom: '{"type":"Point"}', quality: 'start' } }))).toBeNull();
   });
 
+  it('has no position when the projection gives an infinite longitude', () => {
+    // a finite position can overflow the longitude once projected back
+    expect(outingPosition(partnerOuting({ geometry: geometry('start', 1e308, 0) }))).toBeNull();
+  });
+
   it('tells the approximate locations: the centre of an area, a resolved summit', () => {
     expect(isApproximate(partnerOuting({ geometry: geometry('area_centroid') }))).toBe(true);
     expect(isApproximate(partnerOuting({ geometry: geometry('summit') }))).toBe(true);
