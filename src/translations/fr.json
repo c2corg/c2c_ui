@@ -168,7 +168,6 @@
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Décrivez brièvement les blessures éventuelles, et ce que vous feriez aujourd'hui avec du recul. Les commentaires qui n'entrent dans aucun autre champ peuvent être saisis ici.",
     "Broken links": "Liens cassés",
     "Browse the topoguide": "Parcourir le topoguide",
-    "Bug report — camptocamp.org": "Signalement de bug — camptocamp.org",
     "Bulletin details": "Détails du bulletin",
     "Buoux is maintained by local volunteers. Help keep it bolted and open!": "Buoux est maintenu par des bénévoles locaux. Contribuez à le maintenir l'équipement et l'accès !",
     "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "Par défaut, votre pseudonyme dans la partie topoguide sera votre identifiant. Vous pourrez le changer librement par la suite dans les paramètres.",
@@ -708,6 +707,7 @@
     },
     "Missing danger level": "Niveau de danger manquant",
     "Missing method": "Méthode manquante",
+    "Mobile app bug — camptocamp.org": "Bug de l'app mobile — camptocamp.org",
     "Moderation": "Modération",
     "Moderator role required": {
       "API message": "Vous devez être un modérateur"
@@ -981,7 +981,7 @@
     "Remove this account": "Supprimer ce compte",
     "Removed from favourites.": "Retiré des favoris.",
     "Rename folder": "Renommer le dossier",
-    "Report a bug": "Signaler un bug",
+    "Report a bug of the mobile app": "Signaler un bug de l'app mobile",
     "Report an issue": "Signaler un problème",
     "Report title, activity, linked routes or outings.": "Titre du rapport, activité, liens avec des itinéraires ou sorties.",
     "Request a new link": "Demander un nouveau lien",
@@ -1313,7 +1313,7 @@
     "To define your destination, choose one of these 2 approaches": "Pour définir votre destination, choisissez l'une de ces 2 approches",
     "To go further": "Pour aller plus loin",
     "To handle": "À traiter",
-    "To report a problem: Me → Report a bug, the email leaves with the useful information.": "Pour signaler un problème : Moi → Signaler un bug, l’e-mail part avec les informations utiles.",
+    "To report a problem: Me → Report a bug of the mobile app, the email leaves with the useful information.": "Pour signaler un problème : Moi → Signaler un bug de l'app mobile, l'e-mail part avec les informations utiles.",
     "To write instead:": "À écrire à la place :",
     "Toggle elevation profile": "Masquer ou afficher le profil altimétrique",
     "Toggle full-screen": {

@@ -173,7 +173,6 @@
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Descrigueu breument les eventuals ferides, i allò que faríeu avui, vist en perspectiva. Els comentaris que no encaixin als altres camps es poden entrar aquí.",
     "Broken links": "Enllaços trencats",
     "Browse the topoguide": "Navega per la guia de ressenyes",
-    "Bug report — camptocamp.org": "Informe d'error — camptocamp.org",
     "Buoux is maintained by local volunteers. Help keep it bolted and open!": "Buoux el mantenen voluntaris locals. Ajudeu a mantenir-lo equipat i obert!",
     "By default, your pseudo on the topoguide will be your username, but you can change it freely in your settings afterwards.": "Per defecte, el vostre pseudònim serà el vostre identificador a la guia de ressenyes. El podeu canviar lliurement a continuació dins de la configuració.",
     "By month": "Per mes",
@@ -725,6 +724,7 @@
     },
     "Missing danger level": "Falta el nivell de perill",
     "Missing method": "Falta el mètode",
+    "Mobile app bug — camptocamp.org": "Error de l'aplicació mòbil — camptocamp.org",
     "Moderation": "Moderació",
     "Moderator role required": {
       "API message": "Cal tenir el rol de moderador"
@@ -997,7 +997,7 @@
     "Remove this account": "Elimina aquest compte",
     "Removed from favourites.": "Tret dels preferits.",
     "Rename folder": "Canvia el nom de la carpeta",
-    "Report a bug": "Informa d'un error",
+    "Report a bug of the mobile app": "Informa d'un error de l'aplicació mòbil",
     "Report an issue": "Alerteu d'un problema",
     "Report title, activity, linked routes or outings.": "Títol de l'escrit, activitat, enllaços amb itineraris o sortides",
     "Request a new link": "Sol·licita un enllaç nou",
@@ -1324,7 +1324,7 @@
     "To define your destination, choose one of these 2 approaches": "Per definir la destinació, trieu un d'aquests 2 enfocaments",
     "To go further": "Per saber-ne més",
     "To handle": "Per gestionar",
-    "To report a problem: Me → Report a bug, the email leaves with the useful information.": "Per informar d'un problema: Jo → Informa d'un error; el correu s'envia amb la informació útil.",
+    "To report a problem: Me → Report a bug of the mobile app, the email leaves with the useful information.": "Per informar d'un problema: Jo → Informa d'un error de l'aplicació mòbil; el correu s'envia amb la informació útil.",
     "To write instead:": "Cal escriure en lloc seu:",
     "Toggle elevation profile": "Mostra o amaga el perfil altimètric",
     "Toggle full-screen": {

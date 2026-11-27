@@ -219,7 +219,6 @@
     "Briefly describe any injuries. Comments that do not fit into any other fields can be entered here.": "Beschreiben Sie kurz die möglichen Verletzungen und was Sie heute im Nachhinein tun würden. Kommentare, die in kein anderes Feld passen, können hier eingegeben werden.",
     "Broken links": "Defekte Links",
     "Browse the topoguide": "Tourenportal durchsuchen",
-    "Bug report — camptocamp.org": "Fehlermeldung – camptocamp.org",
     "Bulletin": "Lagebericht",
     "Bulletin details": "Details des Lageberichts",
     "Buoux is maintained by local volunteers. Help keep it bolted and open!": "Buoux wird von lokalen Ehrenamtlichen betreut. Helfen Sie mit, das Klettergebiet weiterhin gut abgesichert und offen zu halten!",
@@ -775,6 +774,7 @@
     },
     "Missing danger level": "Fehlende Gefahrenstufe",
     "Missing method": "Fehlende Methode",
+    "Mobile app bug — camptocamp.org": "Fehler in der mobilen App – camptocamp.org",
     "Moderator role required": {
       "API message": "Moderatorenrolle erforderlich"
     },
@@ -1056,7 +1056,7 @@
     "Remove this account": "Dieses Konto entfernen",
     "Removed from favourites.": "Aus den Favoriten entfernt.",
     "Rename folder": "Ordner umbenennen",
-    "Report a bug": "Fehler melden",
+    "Report a bug of the mobile app": "Fehler in der mobilen App melden",
     "Report an issue": "Problem melden",
     "Report title, activity, linked routes or outings.": "Berichtstitel, Aktivitäten, verbundene Routen oder Tourenberichte.",
     "Request a new link": "Neuen Link anfordern",
@@ -1391,7 +1391,7 @@
     "To define your destination, choose one of these 2 approaches": "Um Ihr Ziel festzulegen, wählen Sie eine dieser beiden Möglichkeiten aus.",
     "To go further": "Weiterführend",
     "To handle": "Zu bearbeiten",
-    "To report a problem: Me → Report a bug, the email leaves with the useful information.": "Um ein Problem zu melden: Ich → Fehler melden. Die E-Mail enthält die erforderlichen Informationen.",
+    "To report a problem: Me → Report a bug of the mobile app, the email leaves with the useful information.": "Um ein Problem zu melden: Ich → Fehler in der mobilen App melden. Die E-Mail enthält die erforderlichen Informationen.",
     "To write instead:": "Stattdessen zu schreiben:",
     "Toggle elevation profile": "Höhenprofil umschalten",
     "Toggle full-screen": {
