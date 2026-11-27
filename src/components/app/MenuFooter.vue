@@ -84,7 +84,8 @@ function showGdpr() {
 
 /* for a finger: each link is a target of at least 44 px */
 .is-touch {
-  .menu-links a {
+  .menu-links a,
+  .menu-links .link-button {
     display: inline-block;
     min-height: 44px;
     padding: 12px 10px;
