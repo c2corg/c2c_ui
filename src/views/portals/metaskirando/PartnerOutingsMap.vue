@@ -124,7 +124,9 @@ const trackCredit = computed(() => {
   if (!properties) return null;
   const credit = properties.attribution || properties.author || sourceLabel(properties.source);
   const text = $gettext('Track: {credit}').replace('{credit}', credit);
-  return properties.licence ? `${text} (${properties.licence})` : text;
+  // the attribution of the API may already name the licence
+  const licence = properties.licence;
+  return licence && !credit.includes(licence) ? `${text} (${licence})` : text;
 });
 const trackLink = computed(() => {
   const url = props.track?.properties?.url;
