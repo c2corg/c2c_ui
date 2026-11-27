@@ -49,6 +49,11 @@ describe('$documentUtils', () => {
     expect(install({ userLang: 'de' }).getDocumentTitle(route)).toBe('Mont Blanc : Face nord');
     expect(install().getDocumentTitle({ type: 'u', name: 'Alice' })).toBe('Alice');
     expect(install().getDocumentTitle({ type: 'r', title: 'from whatsnew' })).toBe('from whatsnew');
+    // the moderation lists: a title and its prefix, without locales
+    expect(install().getDocumentTitle({ type: 'r', title: 'Arête', title_prefix: 'Ben Nevis' })).toBe(
+      'Ben Nevis : Arête'
+    );
+    expect(install().getDocumentTitle({ type: 'u', title: 'Alice' })).toBe('Alice');
   });
 
   it('keeps working when a method is passed as a callback (OutingsDownloader)', () => {

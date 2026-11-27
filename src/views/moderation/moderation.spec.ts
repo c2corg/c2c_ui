@@ -23,6 +23,7 @@ import type {
   MergedDocument,
   OrphanImage,
 } from '@/js/apis/c2c/schemas';
+import documentUtils from '@/js/vue-plugins/document-utils';
 import { isForumModerator } from '@/stores/forum-role';
 import RemoveAccountWindow from '@/views/document/utils/windows/RemoveAccountWindow.vue';
 
@@ -145,7 +146,7 @@ beforeEach(async () => {
 });
 
 const global = (isModerator = true) => ({
-  plugins: [router],
+  plugins: [router, documentUtils],
   stubs: {
     HtmlHeader: true,
     FaIcon: true,
@@ -916,7 +917,16 @@ describe('BrokenLinks', () => {
           brokenLink(56, { target_type: 'waypoints', reason: 'deleted', deleted: deletedWith(56, 'w') }),
           brokenLink(9999999),
           brokenLink(38, { reason: 'wrong_type', target_document_type: 'w', target_document_title: 'Aiguille' }),
-          brokenLink(39, { target_type: 'summits', reason: 'unknown_type', target_document_type: 'w' }),
+          brokenLink(39, {
+            document_type: 'r',
+            title: 'Face nord',
+            title_prefix: 'Mont Blanc',
+            target_type: 'route',
+            reason: 'unknown_type',
+            target_document_type: 'r',
+            target_document_title: 'Arête',
+            target_document_title_prefix: 'Ben Nevis',
+          }),
           brokenLink(40, { is_url: true, target_type: 'outings' }),
         ],
       })
@@ -940,9 +950,12 @@ describe('BrokenLinks', () => {
     expect(rows[2]!.findAll('a')[1]!.attributes('href')).toBe('/waypoints/38');
     expect(rows[2]!.text()).toContain('« Aiguille »');
     expect(rows[2]!.text()).toContain('To write instead: [[waypoints/38|…]]');
-    expect(rows[3]!.text()).toContain('[[summits/39|…]]');
+    // a route: the title of its main waypoint before its title
+    expect(rows[3]!.find('a').text()).toBe('Mont Blanc : Face nord');
+    expect(rows[3]!.text()).toContain('[[route/39|…]]');
     expect(rows[3]!.text()).toContain('Unknown type');
-    expect(rows[3]!.text()).toContain('To write instead: [[waypoints/39|…]]');
+    expect(rows[3]!.text()).toContain('« Ben Nevis : Arête »');
+    expect(rows[3]!.text()).toContain('To write instead: [[routes/39|…]]');
     expect(rows[4]!.text()).toContain('camptocamp.org/outings/40');
     // one colour per reason
     expect(rows.map((row) => row.find('.tag.ml-2').classes())).toEqual([

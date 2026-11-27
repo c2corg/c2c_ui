@@ -716,6 +716,8 @@ const brokenEmbed = z.object({
   document_id: z.number(),
   document_type: z.string(),
   title: z.nullable(z.string()),
+  // a route: the title of its main waypoint, shown before its title (optional: older API)
+  title_prefix: z.nullish(z.string()),
   langs: z.array(z.string()),
   image_id: z.number(),
   reason: z.enum(BROKEN_EMBED_REASONS),
@@ -740,6 +742,8 @@ const brokenLink = z.object({
   document_id: z.number(),
   document_type: z.string(),
   title: z.nullable(z.string()),
+  // a route: the title of its main waypoint, shown before its title (optional: older API)
+  title_prefix: z.nullish(z.string()),
   langs: z.array(z.string()),
   target_id: z.number(),
   // the type as written in the link: "routes", "summits" (v5)...
@@ -750,6 +754,7 @@ const brokenLink = z.object({
   // the document of this id, when it exists
   target_document_type: z.nullable(z.string()),
   target_document_title: z.nullable(z.string()),
+  target_document_title_prefix: z.nullish(z.string()),
   deleted: z.nullable(deletedTarget),
 });
 
@@ -766,6 +771,8 @@ const duplicateImageLink = z.object({
   document_id: z.number(),
   document_type: z.string(),
   title: z.nullable(z.string()),
+  // a route: the title of its main waypoint, shown before its title (optional: older API)
+  title_prefix: z.nullish(z.string()),
 });
 
 const duplicateImage = z.object({
