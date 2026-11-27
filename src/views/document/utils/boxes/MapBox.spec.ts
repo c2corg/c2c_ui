@@ -258,4 +258,57 @@ describe('MapBox', () => {
       expect(replace).not.toHaveBeenCalled();
     });
   });
+
+  describe('the position of the device on the map', () => {
+    const shown = (coarse: boolean, width: number, height: number) => {
+      vi.stubGlobal('matchMedia', (query: string) => ({ matches: query === '(pointer: coarse)' && coarse }));
+      vi.stubGlobal('innerWidth', width);
+      vi.stubGlobal('innerHeight', height);
+      const wrapper = mount(MapBox, {
+        props: { document: { type: 'r', document_id: 1, areas: [] } },
+        global: {
+          plugins: [
+            createRouter({
+              history: createMemoryHistory(),
+              routes: [{ path: '/:p(.*)*', component: { render: () => null } }],
+            }),
+          ],
+          stubs: {
+            MapView: {
+              name: 'MapView',
+              props: { showCenterOnGeolocation: Boolean, followPosition: Boolean },
+              template: '<div class="map" />',
+            },
+            DocumentLink: true,
+            IconArea: true,
+            MapLinks: true,
+            ElevationProfile: true,
+            FaIcon: true,
+          },
+          config: {
+            globalProperties: {
+              $gettext: (value: string) => value,
+              $documentUtils: { getDocumentType: () => 'route' },
+              $screen: { isMobile: false },
+            } as never,
+          },
+        },
+      });
+      const map = wrapper.findComponent({ name: 'MapView' });
+      const props = { button: map.props('showCenterOnGeolocation'), follow: map.props('followPosition') };
+      wrapper.unmount();
+      vi.unstubAllGlobals();
+      return props;
+    };
+
+    it('is followed on phones, either way up', () => {
+      expect(shown(true, 390, 844)).toEqual({ button: true, follow: true });
+      expect(shown(true, 844, 390)).toEqual({ button: true, follow: true });
+    });
+
+    it('is not offered on tablets nor on computers, even in a short window', () => {
+      expect(shown(true, 820, 1180).button).toBe(false);
+      expect(shown(false, 1366, 650).button).toBe(false);
+    });
+  });
 });
