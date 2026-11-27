@@ -99,7 +99,7 @@ const documentsCache: Record<string, CachedDocument> = {};
 </script>
 
 <script setup lang="ts">
-import { computed, ref, useTemplateRef, watch } from 'vue';
+import { computed, reactive, ref, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router';
 
 import AssociationQueryItem from './AssociationQueryItem.vue';
@@ -261,12 +261,13 @@ function getDocument(documentType: string, documentId: number) {
   const key = `${documentType}#${documentId}`;
 
   if (documentsCache[key] === undefined) {
-    documentsCache[key] = {
+    // reactive: the tags show the title as soon as the document is loaded, not only when the page is displayed again
+    documentsCache[key] = reactive({
       document_id: documentId,
       // the type is needed to remove the tag before the document is loaded
       type: constants.objectDefinitions[documentType].letter,
       loading: true,
-    };
+    });
 
     (c2c as unknown as Record<string, DocumentService>)[documentType].get(documentId).then((response) => {
       documentsCache[key].loading = false;
