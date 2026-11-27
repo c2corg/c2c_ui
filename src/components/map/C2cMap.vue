@@ -808,8 +808,11 @@ const attributions = computed(() => {
   const shown = is3d.value
     ? [...[...orthoLayers, ...vectorLayers].filter((layer) => layer.title === base3d.value), worldLayer]
     : baseLayers.filter((layer) => layer.title === shownBase.value);
-  shown.push(...slopeLayers.filter((layer) => shownSlopes.value.includes(layer.title)));
-  if (props.showProtectionAreas && protectionAreasVisible.value && online.value) shown.push(...swissProtectionLayers);
+  // the flyover shows no overlay (showLayers)
+  if (!flyover.value) {
+    shown.push(...slopeLayers.filter((layer) => shownSlopes.value.includes(layer.title)));
+    if (props.showProtectionAreas && protectionAreasVisible.value && online.value) shown.push(...swissProtectionLayers);
+  }
   const credits = shown.filter(inView).map((layer) => layer.attribution);
   if (is3d.value) credits.push(terrainSource.attribution);
   return [...new Set(credits)];
@@ -1150,14 +1153,16 @@ function showLayers() {
     if (layer.tiles3d) set(layer3dId(layer), shown && is3d.value);
   }
   set('world', is3d.value);
-  set('shading', is3d.value && shading.value);
+  // the flyover over the orthophoto alone: no shading, slopes, protection areas nor names over it
+  const overlays = !flyover.value;
+  set('shading', is3d.value && shading.value && overlays);
   map.setPaintProperty('shading', 'hillshade-exaggeration', shadingStrength.value);
   for (const layer of slopeLayers) {
-    set(layer.title, shownSlopes.value.includes(layer.title));
+    set(layer.title, overlays && shownSlopes.value.includes(layer.title));
     map.setPaintProperty(layer.title, 'raster-opacity', slopesOpacity.value[layer.title]);
   }
   // the protection areas: lighter in 3D, multiplied onto the ground, which keeps its texture under their colours
-  const protection = props.showProtectionAreas && protectionAreasVisible.value && online.value;
+  const protection = overlays && props.showProtectionAreas && protectionAreasVisible.value && online.value;
   const opacity = protectionAreasOpacity.value;
   for (const layer of swissProtectionLayers) {
     set(layer.title, protection);
@@ -1219,7 +1224,8 @@ function removeVectorMap(from: MapLibreMap) {
 async function showVectorMap() {
   const created = map;
   if (!created) return;
-  const title = is3d.value && base3d.value in vectorMaps ? base3d.value : null;
+  // the names of swisstopo over its orthophoto: not in the flyover
+  const title = is3d.value && !flyover.value && base3d.value in vectorMaps ? base3d.value : null;
   if (vectorShown?.title === title) return;
   removeVectorMap(created);
   if (!title) return;
@@ -2701,7 +2707,7 @@ watch(
     loadProtectionAreas();
   }
 );
-watch([is3d, base3d], () => showVectorMap());
+watch([is3d, base3d, flyover], () => showVectorMap());
 
 // the network lost in 3D: back to the 2D map, whose tiles may be downloaded
 watch(online, (isOnline) => {

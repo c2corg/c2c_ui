@@ -1374,6 +1374,23 @@ describe('C2cMap', () => {
         wrapper.unmount();
       });
 
+      it('flies over the orthophoto alone, without the slopes, and shows them again after', async () => {
+        const { wrapper, map } = await mountMap({ documents: [outing], show3d: true });
+        const [, slopesLayers] = wrapper.findAll('.ol-control-layer-switcher .layer-group');
+        await slopesLayers.findAll(':scope > *')[0].trigger('click');
+        expect(map.layout['IGN Slopes'].visibility).toBe('visible');
+
+        await play(wrapper);
+        expect(map.layout['IGN Slopes'].visibility).toBe('none');
+        expect(map.layout.shading.visibility).toBe('none');
+        expect(wrapper.find('.ol-attribution').html()).not.toContain('Geoportail');
+
+        await wrapper.find('.map-flyover-close button').trigger('click');
+        await flushPromises();
+        expect(map.layout['IGN Slopes'].visibility).toBe('visible');
+        wrapper.unmount();
+      });
+
       it('plays in the full screen the map was already in, and leaves it so', async () => {
         const { wrapper } = await mountMap({ documents: [outing], show3d: true });
         const root = wrapper.element as HTMLElement;
