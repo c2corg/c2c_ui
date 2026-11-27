@@ -241,3 +241,44 @@ describe('cameraPath', () => {
     expect(north.camera.camera[1]).toBeLessThan(north.camera.target[1]);
   });
 });
+
+describe('the camera on a hilly ground', () => {
+  // 10 km north: hills of 40 m every 600 m, then a slope of 30 % from 5 km on
+  const north = (lat: number) => (lat - 45) / KM;
+  const height = (lat: number) =>
+    40 * Math.sin((2 * Math.PI * north(lat) * 1000) / 600) + 300 * Math.max(north(lat) - 5, 0);
+  const rough = (points: [number, number][]) => Promise.resolve(Float64Array.from(points, ([, lat]) => height(lat)));
+  const parts = [
+    [
+      [6, 45, 0],
+      [6, 45 + 10 * KM, 0],
+    ],
+  ];
+
+  // how much the distance of the camera varies over the hills (share of it)
+  const breathing = async (settings = FLYOVER) => {
+    const track = (await prepareFlyover(parts, rough, 1, null, settings))!;
+    const distances = Array.from({ length: 20 }, (_, i) => {
+      const { camera, target } = cameraFor(track, 1000 + i * 100, 0, undefined, settings);
+      return target[1] - camera[1];
+    });
+    return (Math.max(...distances) - Math.min(...distances)) / distances[0];
+  };
+
+  it('keeps its distance over the hills, and goes farther on the slope', async () => {
+    const track = (await prepareFlyover(parts, rough, 1))!;
+    const steepAt = (d: number) => track.steep[Math.round(d / track.step)];
+    expect(steepAt(2500)).toBeLessThan(1.1);
+    expect(steepAt(8500)).toBeCloseTo(1 + FLYOVER.steepGain * 0.3, 1);
+    expect(await breathing()).toBeLessThan(0.01);
+    // measured over 200 m and not smoothed, as it was: the camera went back and forth with the hills
+    const unsmoothed = { ...FLYOVER, steepSigma: 0, altitudeSigma: FLYOVER.positionSigma };
+    expect(await breathing(unsmoothed)).toBeGreaterThan(0.025);
+  });
+
+  it('looks at a height smoothed more than the hills', async () => {
+    const track = (await prepareFlyover(parts, rough, 1))!;
+    const heights = Array.from({ length: 30 }, (_, i) => cameraFor(track, 1000 + i * 100, 0).targetAlt);
+    expect(Math.max(...heights) - Math.min(...heights)).toBeLessThan(5);
+  });
+});

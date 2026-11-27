@@ -641,10 +641,23 @@ function tune(path: string | null, value?: number | boolean) {
   dirty = true;
 }
 
-// the smoothing and the resampling are computed once per track: again when they change in the panel
+// the smoothing, the resampling and the distance on slopes are computed once per track: again when they change in the
+// panel
 {
   watch(
-    () => JSON.stringify([settings.positionSigma, settings.headingSigma, settings.minStep, settings.maxSamples]),
+    () =>
+      JSON.stringify([
+        settings.positionSigma,
+        settings.altitudeSigma,
+        settings.headingSigma,
+        settings.minStep,
+        settings.maxSamples,
+        settings.distance,
+        settings.steepGain,
+        settings.steepSpan,
+        settings.steepMax,
+        settings.steepSigma,
+      ]),
     async () => {
       if (!track || !map) return;
       const prepared = await prepareFlyover(

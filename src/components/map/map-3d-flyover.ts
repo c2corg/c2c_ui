@@ -18,6 +18,9 @@ export const FLYOVER = {
   // gaussian smoothing of the track (metres: ratio of the length, clamped), for the point the camera looks at and for
   // the direction it looks to: the camera does not follow every zigzag
   positionSigma: { ratio: 0.015, min: 80, max: 500 },
+  // the height of the point looked at, smoothed more than its place: the camera does not bob with every bump of the
+  // ground (metres, as positionSigma)
+  altitudeSigma: { ratio: 0.03, min: 200, max: 800 },
   headingSigma: { ratio: 0.05, min: 300, max: 1500 },
   // the camera: this far behind the point it looks at (metres), seen from this angle above the horizon (degrees), and
   // at least this high above the terrain between it and the point (metres)
@@ -28,6 +31,9 @@ export const FLYOVER = {
   steepGain: 1.5,
   steepSpan: 200,
   steepMax: 2,
+  // that factor smoothed along the track over this share of the distance of the camera: measured over a few hundred
+  // metres, the slope of a rough ground changes every second, and the camera went back and forth with it
+  steepSigma: 0.5,
   clearance: 120,
   // the point looked at, ahead of the playhead (share of the distance of the camera)
   lead: 0.1,
@@ -67,6 +73,8 @@ export type FlyoverTrack = {
   smoothLon: Float64Array;
   smoothLat: Float64Array;
   smoothAlt: Float64Array;
+  // the distance of the camera, as a factor of cameraDistance: farther on steep slopes, smoothed
+  steep: Float64Array;
   heading: Float64Array;
   // [west, south, east, north]
   bounds: [number, number, number, number];
@@ -216,7 +224,17 @@ export async function prepareFlyover(
   const positionSigma = sigmaOf(settings.positionSigma);
   const smoothLon = gaussian(lon, positionSigma);
   const smoothLat = gaussian(lat, positionSigma);
-  const smoothAlt = gaussian(alt, positionSigma);
+  const smoothAlt = gaussian(alt, sigmaOf(settings.altitudeSigma));
+  // farther on steep slopes: the rise over run around each sample, smoothed
+  const span = Math.max(1, Math.round(settings.steepSpan / step));
+  const factor = Float64Array.from(smoothAlt, (_, k) => {
+    const a = Math.max(0, k - span);
+    const b = Math.min(n - 1, k + span);
+    const slope = b > a ? Math.abs(smoothAlt[b] - smoothAlt[a]) / (dist[b] - dist[a] || 1) : 0;
+    return Math.min(1 + settings.steepGain * slope, settings.steepMax);
+  });
+  const baseDistance = clamp(settings.distance.ratio * length, settings.distance.min, settings.distance.max);
+  const steep = gaussian(factor, (settings.steepSigma * baseDistance) / step);
   const headingSigma = sigmaOf(settings.headingSigma);
   const headingLon = gaussian(lon, headingSigma);
   const headingLat = gaussian(lat, headingSigma);
@@ -252,6 +270,7 @@ export async function prepareFlyover(
     smoothLon,
     smoothLat,
     smoothAlt,
+    steep,
     heading: unwrap(raw),
     bounds,
   };
@@ -378,14 +397,7 @@ export function cameraFor(
   terrainAt: (lon: number, lat: number) => number | null = () => null,
   settings: FlyoverSettings = FLYOVER
 ): FlyoverCamera {
-  const span = settings.steepSpan;
-  const slope =
-    Math.abs(
-      interp(clamp(d + span, 0, track.length), track.dist, track.smoothAlt) -
-        interp(clamp(d - span, 0, track.length), track.dist, track.smoothAlt)
-    ) /
-    (2 * span);
-  const distance = cameraDistance(track, settings) * Math.min(1 + settings.steepGain * slope, settings.steepMax);
+  const distance = cameraDistance(track, settings) * interp(d, track.dist, track.steep);
   const at = clamp(d + settings.lead * distance, 0, track.length);
   const target: [number, number] = [interp(at, track.dist, track.smoothLon), interp(at, track.dist, track.smoothLat)];
   const targetAlt = interp(at, track.dist, track.smoothAlt);

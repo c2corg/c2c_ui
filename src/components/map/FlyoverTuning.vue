@@ -71,6 +71,7 @@ const GROUPS: { title: string; fields: Field[] }[] = [
       { path: 'steepGain', label: 'farther on slopes (×slope)', min: 0, max: 5, step: 0.1 },
       { path: 'steepMax', label: 'farther at most (×)', min: 1, max: 4, step: 0.1 },
       { path: 'steepSpan', label: 'slope measured over (m)', min: 50, max: 1000, step: 50 },
+      { path: 'steepSigma', label: 'farther smoothed (×distance)', min: 0, max: 2, step: 0.05 },
     ],
   },
   {
@@ -86,6 +87,9 @@ const GROUPS: { title: string; fields: Field[] }[] = [
       { path: 'positionSigma.ratio', label: 'position / length', min: 0, max: 0.05, step: 0.001 },
       { path: 'positionSigma.min', label: 'position min (m)', min: 0, max: 1000, step: 10 },
       { path: 'positionSigma.max', label: 'position max (m)', min: 10, max: 2000, step: 10 },
+      { path: 'altitudeSigma.ratio', label: 'height / length', min: 0, max: 0.1, step: 0.001 },
+      { path: 'altitudeSigma.min', label: 'height min (m)', min: 0, max: 2000, step: 10 },
+      { path: 'altitudeSigma.max', label: 'height max (m)', min: 10, max: 3000, step: 10 },
     ],
   },
   {
