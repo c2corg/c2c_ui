@@ -12,6 +12,7 @@ export const SOURCE_COLORS: Record<string, string> = {
   gipfelbuch: '#54308a',
   bivouak: '#8a4100',
   skitourenportal: '#8f1c48',
+  onice: '#0b5f6b',
 };
 export const OTHER_SOURCE_COLOR = '#444';
 
@@ -23,6 +24,7 @@ export const SOURCE_LABELS: Record<string, string> = {
   gipfelbuch: 'Gipfelbuch',
   bivouak: 'Bivouak',
   skitourenportal: 'Skitourenportal',
+  onice: 'On-Ice',
 };
 
 export const sourceLabel = (source: string, siteName?: string) => SOURCE_LABELS[source] ?? (siteName || source);

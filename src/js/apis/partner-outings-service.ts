@@ -49,6 +49,25 @@ export type PartnerOuting = {
   geometry: { geom: string; quality: string } | null;
   areas: { document_id: number; area_type: string; title: string }[];
   credit: { site: string; site_url: string };
+  // a public GPX file of the track (gulliver.it gives some); absent from the answers of an API that predates it
+  gpx_url?: string | null;
+  // the API stores a track of the outing: GET /partner-outings/{id}/track; absent from an API that predates it
+  has_track?: boolean;
+};
+
+// GET /partner-outings/{id}/track: the track a source published, shown as it is with its attribution
+export type PartnerTrack = {
+  type: 'Feature';
+  // in EPSG:4326
+  geometry: { type: 'LineString'; coordinates: number[][] } | { type: 'MultiLineString'; coordinates: number[][][] };
+  properties: {
+    source: string;
+    url: string | null;
+    gpx_url: string | null;
+    author: string | null;
+    attribution: string | null;
+    licence: string | null;
+  };
 };
 
 export type PartnerSourceHealth = {
@@ -130,6 +149,13 @@ class PartnerOutingsService {
   getAll(query: PartnerOutingsQuery = {}, signal?: AbortSignal) {
     return this.axios
       .get<PartnerOutingsAnswer>('/partner-outings', { params: this.params(query), signal })
+      .then((response) => response.data);
+  }
+
+  /** The track of an outing (its `id`, '<source>:<id on the source>'); the API answers 404 when it has none */
+  getTrack(id: string, signal?: AbortSignal) {
+    return this.axios
+      .get<PartnerTrack>(`/partner-outings/${encodeURIComponent(id)}/track`, { signal })
       .then((response) => response.data);
   }
 

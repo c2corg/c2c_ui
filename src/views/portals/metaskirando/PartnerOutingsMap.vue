@@ -24,6 +24,11 @@
       </label>
     </div>
 
+    <p v-if="track && trackCredit" class="map-track-credit is-size-7" data-test="track-credit">
+      <a v-if="trackLink" :href="trackLink" target="_blank" rel="noopener noreferrer">{{ trackCredit }}</a>
+      <template v-else>{{ trackCredit }}</template>
+    </p>
+
     <ul class="map-legend is-size-7" data-test="legend">
       <li v-for="source of sourcesShown" :key="source">
         <span class="legend-dot" :style="{ backgroundColor: sourceColor(source) }" />
@@ -41,7 +46,14 @@
 // The map of the outings: a MapLibre map (as the lists of documents, C2cMap.vue) with one marker per outing. Kept to
 // what the list needs and apart from the rest of the page: the markers go in, the hover, the click and the extent come
 // out, so that its inside follows the MapLibre migration without the page noticing.
-import { LngLatBounds, Map as MapLibreMap, Marker, NavigationControl, setWorkerUrl } from 'maplibre-gl';
+import {
+  type GeoJSONSourceSpecification,
+  LngLatBounds,
+  Map as MapLibreMap,
+  Marker,
+  NavigationControl,
+  setWorkerUrl,
+} from 'maplibre-gl';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { computed, onBeforeUnmount, onMounted, type PropType, ref, useTemplateRef, watch } from 'vue';
@@ -50,6 +62,7 @@ import { type OutingMarker, bboxParam, sourceColor, sourceLabel } from './partne
 
 import { getDocumentIcon } from '@/components/map/map-documents';
 import { baseLayers, rasterSource } from '@/components/map/map-layers';
+import type { PartnerTrack } from '@/js/apis/partner-outings-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { extentFromLonLat, extentToLonLat } from '@/js/geo/projection';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
@@ -76,6 +89,11 @@ const props = defineProps({
     type: Array as PropType<number[] | null>,
     default: null,
   },
+  // the track of the outing under the pointer (or selected), drawn as the source published it
+  track: {
+    type: Object as PropType<PartnerTrack | null>,
+    default: null,
+  },
 });
 
 const emit = defineEmits<{
@@ -94,6 +112,48 @@ const unsupported = ref(false);
 // not reactive: Vue proxies break the objects of the map library
 let map: MapLibreMap | null = null;
 let drawn: { marker: Marker; element: HTMLElement; id: string }[] = [];
+
+// the map can take sources and layers once its style is loaded
+let loaded = false;
+const TRACK = 'partner-track';
+const TRACK_LAYERS = [`${TRACK}-casing`, TRACK];
+
+// the licence of the sources asks for the credit of a track wherever it shows
+const trackCredit = computed(() => {
+  const properties = props.track?.properties;
+  if (!properties) return null;
+  const credit = properties.attribution || properties.author || sourceLabel(properties.source);
+  const text = $gettext('Track: {credit}').replace('{credit}', credit);
+  return properties.licence ? `${text} (${properties.licence})` : text;
+});
+const trackLink = computed(() => {
+  const url = props.track?.properties?.url;
+  return url && /^https?:\/\//i.test(url) ? url : null;
+});
+
+// the track replaced as a whole: a source and two layers (a white casing under the colour of the source)
+function drawTrack() {
+  if (!map || !loaded) return;
+  TRACK_LAYERS.forEach((id) => map!.getLayer(id) && map!.removeLayer(id));
+  if (map.getSource(TRACK)) map.removeSource(TRACK);
+  const track = props.track;
+  if (!track?.geometry) return;
+  map.addSource(TRACK, { type: 'geojson', data: track as GeoJSONSourceSpecification['data'] });
+  map.addLayer({
+    id: TRACK_LAYERS[0],
+    type: 'line',
+    source: TRACK,
+    layout: { 'line-join': 'round', 'line-cap': 'round' },
+    paint: { 'line-color': '#fff', 'line-width': 6 },
+  });
+  map.addLayer({
+    id: TRACK,
+    type: 'line',
+    source: TRACK,
+    layout: { 'line-join': 'round', 'line-cap': 'round' },
+    paint: { 'line-color': sourceColor(track.properties?.source ?? ''), 'line-width': 3 },
+  });
+}
 
 const legendLabel = (source: string) => (source === 'c2c' ? 'camptocamp.org' : sourceLabel(source));
 const sourcesShown = computed(() => [...new Set(props.markers.map((m) => m.outing.source))].sort());
@@ -195,6 +255,8 @@ onMounted(() => {
   }
   map.addControl(new NavigationControl({ showCompass: false }), 'top-left');
   map.once('load', () => {
+    loaded = true;
+    drawTrack();
     if (props.initialExtent) {
       map!.fitBounds(extentToLonLat(props.initialExtent) as [number, number, number, number], { duration: 0 });
     } else if (!props.filterByExtent) {
@@ -212,6 +274,7 @@ onBeforeUnmount(() => {
   drawn.forEach(({ marker }) => marker.remove());
   map?.remove();
   map = null;
+  loaded = false;
 });
 
 watch(
@@ -223,6 +286,7 @@ watch(
   }
 );
 watch(() => props.highlightedId, showHighlight);
+watch(() => props.track, drawTrack);
 watch(
   () => props.filterByExtent,
   (on) => {
@@ -255,7 +319,8 @@ watch(
 }
 
 .map-filter,
-.map-legend {
+.map-legend,
+.map-track-credit {
   position: absolute;
   z-index: 2;
   background-color: rgb(255 255 255 / 90%);
@@ -267,6 +332,14 @@ watch(
 .map-filter {
   top: 0.5rem;
   right: 0.5rem;
+}
+
+/* above the attribution button of the map */
+.map-track-credit {
+  bottom: 2.5rem;
+  right: 0.5rem;
+  max-width: 50%;
+  margin: 0;
 }
 
 .map-legend {

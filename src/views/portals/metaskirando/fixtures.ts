@@ -1,5 +1,5 @@
 // Outings as GET /partner-outings answers them, for the specs of the page.
-import type { PartnerOuting, PartnerSourceHealth } from '@/js/apis/partner-outings-service';
+import type { PartnerOuting, PartnerSourceHealth, PartnerTrack } from '@/js/apis/partner-outings-service';
 
 export const partnerOuting = (overrides: Partial<PartnerOuting> = {}): PartnerOuting => ({
   id: 'gulliver:1',
@@ -22,6 +22,7 @@ export const partnerOuting = (overrides: Partial<PartnerOuting> = {}): PartnerOu
   geometry: null,
   areas: [{ document_id: 14, area_type: 'range', title: 'Monte Rosa' }],
   credit: { site: 'Gulliver', site_url: 'https://gulliver.it' },
+  gpx_url: null,
   ...overrides,
 });
 
@@ -49,4 +50,25 @@ export const sources: PartnerSourceHealth[] = [
 export const geometry = (quality = 'start', x = 700000, y = 5750000) => ({
   geom: JSON.stringify({ type: 'Point', coordinates: [x, y] }),
   quality,
+});
+
+// GET /partner-outings/{id}/track: a GeoJSON Feature in EPSG:4326
+export const track = (properties: Partial<PartnerTrack['properties']> = {}): PartnerTrack => ({
+  type: 'Feature',
+  geometry: {
+    type: 'LineString',
+    coordinates: [
+      [7.86, 45.92],
+      [7.87, 45.93],
+    ],
+  },
+  properties: {
+    source: 'gulliver',
+    url: 'https://gulliver.it/gita/1/',
+    gpx_url: 'https://www.gulliver.it/gpx/1.gpx',
+    author: 'Marco',
+    attribution: 'Marco on gulliver.it',
+    licence: 'CC BY-SA 4.0',
+    ...properties,
+  },
 });

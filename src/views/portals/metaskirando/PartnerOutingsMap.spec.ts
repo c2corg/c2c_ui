@@ -1,9 +1,9 @@
-import { mount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { nextTick } from 'vue';
 
 import PartnerOutingsMap from './PartnerOutingsMap.vue';
-import { c2cOuting, geometry, partnerOuting } from './fixtures';
+import { c2cOuting, geometry, partnerOuting, track } from './fixtures';
 import { type OutingMarker, markersOf } from './partner-outings-map';
 
 import { type FakeMap, FakeMarker, resetMocks, state } from '@/components/map/maplibre-mock';
@@ -170,5 +170,41 @@ describe('PartnerOutingsMap', () => {
     wrapper.unmount();
     expect(map().removed).toBe(true);
     expect(drawn()).toHaveLength(0);
+  });
+
+  describe('track', () => {
+    const lines = () => map().style.layers.filter((layer) => layer.id.startsWith('partner-track'));
+
+    it('draws the track it is given once the map is loaded, in the colour of the source, with its credit', async () => {
+      const wrapper = mountMap({ track: track() });
+      await flushPromises();
+      expect(map().style.sources['partner-track']).toMatchObject({ type: 'geojson', data: track() });
+      expect(lines().map((layer) => layer.id)).toEqual(['partner-track-casing', 'partner-track']);
+      expect(map().getLayer('partner-track')).toMatchObject({ paint: { 'line-color': '#1f6a35' } });
+      const credit = wrapper.find('[data-test=track-credit]');
+      expect(credit.text()).toBe('Track: Marco on gulliver.it (CC BY-SA 4.0)');
+      expect(credit.find('a').attributes()).toMatchObject({
+        href: 'https://gulliver.it/gita/1/',
+        target: '_blank',
+        rel: 'noopener noreferrer',
+      });
+    });
+
+    it('replaces the track, and removes it when there is none', async () => {
+      const wrapper = mountMap();
+      await flushPromises();
+      expect(map().style.sources['partner-track']).toBeUndefined();
+      expect(wrapper.find('[data-test=track-credit]').exists()).toBe(false);
+
+      await wrapper.setProps({ track: track({ source: 'skitour', attribution: null, licence: null, url: null }) });
+      expect(map().getLayer('partner-track')).toMatchObject({ paint: { 'line-color': '#1c5a8c' } });
+      expect(wrapper.find('[data-test=track-credit]').text()).toBe('Track: Marco');
+      expect(wrapper.find('[data-test=track-credit] a').exists()).toBe(false);
+
+      await wrapper.setProps({ track: null });
+      expect(lines()).toEqual([]);
+      expect(map().style.sources['partner-track']).toBeUndefined();
+      expect(wrapper.find('[data-test=track-credit]').exists()).toBe(false);
+    });
   });
 });
