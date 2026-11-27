@@ -612,6 +612,18 @@ defineExpose({ seek, togglePlay, nextSpeed, recenter });
   &:disabled {
     cursor: default;
   }
+
+  /* the triangle in outline, as the play button of the map (C2cMap) */
+  :deep(.fa-play) {
+    overflow: visible;
+
+    path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 48;
+      stroke-linejoin: round;
+    }
+  }
 }
 
 .map-flyover-close {
