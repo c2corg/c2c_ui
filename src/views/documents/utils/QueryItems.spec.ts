@@ -14,7 +14,7 @@ const waypoints = c2c.waypoint as DocumentService;
 const routes = c2c.route as DocumentService;
 const articles = c2c.article as DocumentService;
 
-const mountItems = async (path: string) => {
+const mountItems = async (path: string, stubs: Record<string, boolean> = {}) => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [{ path: '/outings', name: 'outings', component: { render: () => h('div') } }],
@@ -24,6 +24,7 @@ const mountItems = async (path: string) => {
   const wrapper = shallowMount(QueryItems, {
     global: {
       plugins: [router],
+      stubs,
       config: {
         globalProperties: {
           $gettext: (text: string) => text,
@@ -94,5 +95,20 @@ describe('QueryItems', () => {
     await flushPromises();
 
     expect(router.currentRoute.value.query.c).toBeUndefined();
+  });
+
+  it('shows the title of a filter once its document is loaded, the first time', async () => {
+    let resolve: (value: unknown) => void = () => {};
+    vi.spyOn(waypoints, 'get').mockImplementation(() => new Promise((r) => (resolve = r)) as never);
+    // the tags rendered, with their document title
+    const { wrapper } = await mountItems('/outings?w=1947801', { QueryTags: false });
+    const tag = () => wrapper.findAllComponents(QueryTags)[0].find('.tag');
+    expect(tag().text()).toBe('1947801');
+
+    resolve({ data: { document_id: 1947801, type: 'w', title: 'Ouvertures 2019' } });
+    await flushPromises();
+
+    expect(tag().text()).not.toContain('1947801');
+    expect(tag().find('document-title-stub').exists()).toBe(true);
   });
 });
