@@ -190,6 +190,15 @@ describe('PartnerOutingsMap', () => {
       });
     });
 
+    it('does not repeat a licence the attribution already names', async () => {
+      const wrapper = mountMap();
+      await flushPromises();
+      await wrapper.setProps({
+        track: track({ attribution: '© Marco / gulliver.it — CC BY-NC-ND', licence: 'CC BY-NC-ND' }),
+      });
+      expect(wrapper.find('[data-test=track-credit]').text()).toBe('Track: © Marco / gulliver.it — CC BY-NC-ND');
+    });
+
     it('replaces the track, and removes it when there is none', async () => {
       const wrapper = mountMap();
       await flushPromises();
