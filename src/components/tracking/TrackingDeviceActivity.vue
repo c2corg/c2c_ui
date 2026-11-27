@@ -16,8 +16,7 @@
           <template v-else>{{ $gettext(source.vendor) }}</template>
         </template>
         <template v-if="device.name"
-          >&#32;(<span class="activity-device-name" :title="device.fullName">{{ device.name }}</span
-          >)</template
+          >&#32;<span class="activity-device-name" :title="device.fullName">({{ device.name }})</span></template
         >
       </div>
       <div class="is-flex is-justify-content-space-between">
