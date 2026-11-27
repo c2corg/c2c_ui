@@ -622,7 +622,8 @@ defineExpose({ seek, togglePlay, nextSpeed, recenter });
 /* as the bar of a video, beside the credits of the map (bottom right) */
 .map-flyover-bar {
   left: 0.5em;
-  right: 2.5em;
+  /* beside the button of the credits, whatever the size of the buttons (map-controls.css) */
+  right: calc(1em + var(--map-button-size));
   bottom: calc(0.5em + var(--map-inset-bottom));
   display: flex;
   /* the buttons beside the bar, under the profile */
@@ -646,7 +647,8 @@ defineExpose({ seek, togglePlay, nextSpeed, recenter });
   flex-direction: column;
   flex: 1;
   min-width: 0;
-  height: 1.375em;
+  /* as high as the buttons beside it */
+  height: calc(var(--map-button-size) - 2px);
   margin: 0 0.5em;
 }
 
@@ -698,7 +700,7 @@ defineExpose({ seek, togglePlay, nextSpeed, recenter });
   /* under the profile, at the height of the buttons beside it */
   .map-flyover-timeline--profile & {
     flex: none;
-    height: 1.375em;
+    height: calc(var(--map-button-size) - 2px);
   }
 
   &::-moz-range-track {
