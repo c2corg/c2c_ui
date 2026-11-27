@@ -76,7 +76,7 @@
           <query-tags :documents="tags" @remove="removeTag"></query-tags>
         </div>
       </div>
-      <dropdown-button ref="moreMenu" class="is-hidden-tablet is-pulled-right is-right">
+      <dropdown-button ref="moreMenu" class="is-hidden-tablet is-pulled-right">
         <template #button>
           <span class="button is-white is-size-7-mobile">
             <fa-icon icon="ellipsis-vertical" />

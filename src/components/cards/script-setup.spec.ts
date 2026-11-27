@@ -1,6 +1,6 @@
 // the cards and generic components moved to <script setup lang="ts">: what their scripts compute
 import { mount, shallowMount } from '@vue/test-utils';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { defineComponent, h, nextTick, ref } from 'vue';
 
 import DocumentCard from './DocumentCard.vue';
@@ -136,6 +136,21 @@ describe('BestPeriods', () => {
 });
 
 describe('DropdownButton', () => {
+  // jsdom has none: the open menu observes the size of the page
+  beforeEach(() => {
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe() {}
+        disconnect() {}
+      }
+    );
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it('closes on a click outside', async () => {
     const wrapper = mount(DropdownButton, {
       attachTo: document.body,
