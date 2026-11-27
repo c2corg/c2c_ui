@@ -32,7 +32,7 @@
     <ul class="map-legend is-size-7" data-test="legend">
       <li v-for="source of sourcesShown" :key="source">
         <span class="legend-dot" :style="{ backgroundColor: sourceColor(source) }" />
-        {{ legendLabel(source) }}
+        {{ sourceLabel(source) }}
       </li>
       <li v-if="hasApproximate" data-test="legend-approximate">
         <span class="legend-dot is-approximate" />
@@ -157,7 +157,6 @@ function drawTrack() {
   });
 }
 
-const legendLabel = (source: string) => (source === 'c2c' ? 'camptocamp.org' : sourceLabel(source));
 const sourcesShown = computed(() => [...new Set(props.markers.map((m) => m.outing.source))].sort());
 const hasApproximate = computed(() => props.markers.some((m) => m.approximate));
 
@@ -361,11 +360,14 @@ watch(
   box-shadow: 0 0 0 1px rgb(0 0 0 / 40%);
 }
 
-/* the place is only roughly known: lighter, with a dashed outline */
+/* the place is only roughly known: a smaller, lighter plain circle, as the approximate markers */
 .legend-dot.is-approximate {
-  background-color: rgb(255 255 255 / 70%);
-  border: 2px dashed #555;
-  box-shadow: none;
+  width: 0.6rem;
+  height: 0.6rem;
+  margin-left: 0.075rem;
+  margin-right: 0.325rem;
+  background-color: color-mix(in srgb, #555 45%, white);
+  border-width: 1px;
 }
 </style>
 
@@ -402,11 +404,13 @@ watch(
   height: 0.9rem;
 }
 
-/* approximate: the colour lightened, with a dashed outline of it */
+/* approximate: a smaller plain circle, the colour lightened */
 .outing-marker.is-approximate .outing-marker-dot {
-  background-color: color-mix(in srgb, var(--marker-color) 30%, white);
-  border: 2px dashed var(--marker-color);
-  box-shadow: none;
+  width: 0.8rem;
+  height: 0.8rem;
+  background-color: color-mix(in srgb, var(--marker-color) 55%, white);
+  border-width: 1px;
+  box-shadow: 0 0 1px 1px rgb(0 0 0 / 35%);
 }
 
 .outing-marker.is-highlighted {
