@@ -33,7 +33,7 @@
             !$screen.isMobile && showElevationProfile && elevationProfileHasData ? 'fullscreen-map-container' : null
           "
           :show-pin-to-top-button="true"
-          :show-center-on-geolocation="onPhone"
+          :show-center-on-geolocation="onTouchScreen"
           follow-position
           remember-settings
           :pinned-side="pinnedSide"
@@ -124,11 +124,9 @@ function onElevationProfile(event: unknown) {
   }
 }
 
-// following the position on the map: on phones only (a touch screen, its smaller side narrower than a tablet), the
-// device carried on the route; not on a tablet, nor in a short window of a laptop
-const onPhone =
-  window.matchMedia?.('(pointer: coarse)').matches &&
-  Math.min(window.innerWidth, window.innerHeight) < TABLET_BREAKPOINT;
+// following the position on the map: on touch screens only (phones, tablets), the devices carried on the route; not on
+// a computer, whose position is that of its network
+const onTouchScreen = Boolean(window.matchMedia?.('(pointer: coarse)').matches);
 
 function togglePinToSide(toggle: boolean) {
   // no second side (pinned to the right) where the window is narrower than a tablet, either way up

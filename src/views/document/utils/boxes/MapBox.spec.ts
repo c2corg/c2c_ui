@@ -301,13 +301,13 @@ describe('MapBox', () => {
       return props;
     };
 
-    it('is followed on phones, either way up', () => {
+    it('is followed on touch screens: phones either way up, tablets', () => {
       expect(shown(true, 390, 844)).toEqual({ button: true, follow: true });
       expect(shown(true, 844, 390)).toEqual({ button: true, follow: true });
+      expect(shown(true, 820, 1180)).toEqual({ button: true, follow: true });
     });
 
-    it('is not offered on tablets nor on computers, even in a short window', () => {
-      expect(shown(true, 820, 1180).button).toBe(false);
+    it('is not offered on computers, even in a short window', () => {
       expect(shown(false, 1366, 650).button).toBe(false);
     });
   });
