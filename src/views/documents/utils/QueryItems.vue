@@ -76,7 +76,7 @@
           <query-tags :documents="tags" @remove="removeTag"></query-tags>
         </div>
       </div>
-      <dropdown-button ref="moreMenu" class="more-menu is-hidden-tablet is-pulled-right is-right">
+      <dropdown-button ref="moreMenu" class="is-hidden-tablet is-pulled-right is-right">
         <template #button>
           <span class="button is-white is-size-7-mobile">
             <fa-icon icon="ellipsis-vertical" />
@@ -362,19 +362,6 @@ watch(() => JSON.stringify([route.path, withoutDisplaySettings(route.query), rou
 @media screen and (--c2c-max-tablet) {
   .query-item-component {
     margin-right: 0.25em;
-  }
-
-  .query-items-filters {
-    position: relative; /* important, to force drop down on the left */
-  }
-
-  .dropdown {
-    position: unset; /* important, to force drop down on the left */
-  }
-
-  /* except the "more" menu, aligned under its button on the right */
-  .dropdown.more-menu {
-    position: relative;
   }
 }
 </style>
