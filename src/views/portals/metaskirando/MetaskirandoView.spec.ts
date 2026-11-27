@@ -3,13 +3,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { reactive } from 'vue';
 
 import MetaskirandoView from './MetaskirandoView.vue';
-import { c2cOuting, geometry, partnerOuting, sources } from './fixtures';
+import { c2cOuting, geometry, partnerOuting, sources, track } from './fixtures';
 
 import { emptyFilters, usePartnerOutingsStore } from '@/stores/partner-outings';
 
 const getAll = vi.hoisted(() => vi.fn());
 const getSources = vi.hoisted(() => vi.fn());
-vi.mock('@/js/apis/partner-outings-service', () => ({ default: { getAll, getSources } }));
+const getTrack = vi.hoisted(() => vi.fn());
+vi.mock('@/js/apis/partner-outings-service', () => ({ default: { getAll, getSources, getTrack } }));
 const getPreferences = vi.hoisted(() => vi.fn());
 vi.mock('@/js/apis/c2c', () => ({
   default: {
@@ -56,7 +57,7 @@ const mountView = () => {
         },
         PartnerOutingsMap: {
           name: 'PartnerOutingsMap',
-          props: ['markers', 'highlightedId', 'filterByExtent', 'initialExtent'],
+          props: ['markers', 'highlightedId', 'filterByExtent', 'initialExtent', 'track'],
           methods: { resize: () => {} },
           template: '<div class="map" />',
         },
@@ -467,6 +468,36 @@ describe('MetaskirandoView', () => {
         true,
         false,
       ]);
+    });
+
+    it('gives the map the track of the outing under the pointer, loaded once, when the API stores one', async () => {
+      getAll.mockResolvedValue(
+        answer([partnerOuting({ has_track: true }), partnerOuting({ id: 'gulliver:2', has_track: false })])
+      );
+      getTrack.mockReset();
+      getTrack.mockResolvedValue(track());
+      const wrapper = mountView();
+      await flushPromises();
+      expect(mapOf(wrapper).props('track')).toBeNull();
+
+      const rows = wrapper.findAll('.row');
+      await rows[0].trigger('mouseenter');
+      await flushPromises();
+      expect(getTrack).toHaveBeenCalledWith('gulliver:1');
+      expect(mapOf(wrapper).props('track')).toEqual(track());
+
+      await rows[0].trigger('mouseleave');
+      expect(mapOf(wrapper).props('track')).toBeNull();
+      // an outing without a stored track asks nothing
+      await rows[1].trigger('mouseenter');
+      await flushPromises();
+      expect(mapOf(wrapper).props('track')).toBeNull();
+      await rows[1].trigger('mouseleave');
+
+      mapOf(wrapper).vm.$emit('highlight', 'gulliver:1');
+      await flushPromises();
+      expect(mapOf(wrapper).props('track')).toEqual(track());
+      expect(getTrack).toHaveBeenCalledTimes(1);
     });
 
     it('scrolls to the row of a marker that is clicked', async () => {

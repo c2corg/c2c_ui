@@ -34,9 +34,10 @@ test('the menu entry opens the list, grouped by date, with a badge and an extern
   ]) {
     const row = rows.filter({ has: page.locator(`.source-badge--${source}`) }).first();
     await expect(row.locator('.source-badge')).toHaveText(label);
-    await expect(row).toHaveAttribute('target', '_blank');
-    await expect(row).toHaveAttribute('href', new RegExp(`^https://(www\\.)?${source}\\.`));
-    await expect(row).toHaveAttribute('rel', /noopener/);
+    const link = row.locator('[data-test=outing-link]');
+    await expect(link).toHaveAttribute('target', '_blank');
+    await expect(link).toHaveAttribute('href', new RegExp(`^https://(www\\.)?${source}\\.`));
+    await expect(link).toHaveAttribute('rel', /noopener/);
   }
 });
 
@@ -127,8 +128,9 @@ test('an outing of c2c links inside the site', async ({ page }) => {
     .locator('.partner-outing-row')
     .filter({ has: page.locator('.source-badge--c2c') })
     .first();
-  await expect(row).toHaveAttribute('href', /^\/outings\/\d+/);
-  await expect(row).not.toHaveAttribute('target', '_blank');
+  const link = row.locator('[data-test=outing-link]');
+  await expect(link).toHaveAttribute('href', /^\/outings\/\d+/);
+  await expect(link).not.toHaveAttribute('target', '_blank');
 });
 
 // the map beside the list: one marker per outing that has a geometry, coloured by source
@@ -437,4 +439,37 @@ test('"new since last visit": nothing at the first visit, then what the source d
   await page.locator('[data-test=only-new]').click();
   await expect(rows).toHaveCount(1);
   await expect(page).not.toHaveURL(/new/);
+});
+
+test('a row with a GPX track links its file, in a new tab', async ({ page }) => {
+  const all = (await call('/partner-outings?limit=100')) as { items: { id: string; gpx_url?: string | null }[] };
+  const withGpx = all.items.filter((item) => item.gpx_url?.startsWith('https://'));
+  // gpx_url is in the answers of the API from the version that harvests the GPX tracks of gulliver.it
+  test.skip(!withGpx.length, 'no outing with a GPX track in the demo data');
+
+  await page.goto('/metaskirando');
+  await expect(page.locator('.partner-outing-row').first()).toBeVisible();
+  await expect(page.locator('.partner-outing-row [data-test=gpx]')).toHaveCount(withGpx.length);
+  const link = page.locator(`.partner-outing-row[data-outing-id="${withGpx[0].id}"] [data-test=gpx]`);
+  await expect(link).toHaveAttribute('href', withGpx[0].gpx_url!);
+  await expect(link).toHaveAttribute('target', '_blank');
+  await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  // no link inside another one
+  await expect(page.locator('a a')).toHaveCount(0);
+});
+
+test('hovering a row with a stored track draws it on the map, with its credit', async ({ page }) => {
+  const all = (await call('/partner-outings?limit=100')) as { items: { id: string; has_track?: boolean }[] };
+  const withTrack = all.items.filter((item) => item.has_track);
+  // has_track is in the answers of the API from the version that stores the tracks of the sources
+  test.skip(!withTrack.length, 'no outing with a stored track in the demo data');
+
+  await page.goto('/metaskirando');
+  const row = page.locator(`.partner-outing-row[data-outing-id="${withTrack[0].id}"]`);
+  await expect(row.locator('[data-test=track]')).toBeVisible();
+  await expect(page.locator('[data-test=track-credit]')).toHaveCount(0);
+  await row.hover();
+  await expect(page.locator('[data-test=track-credit]')).toBeVisible();
+  await page.locator('.metaskirando .subtitle').hover();
+  await expect(page.locator('[data-test=track-credit]')).toHaveCount(0);
 });

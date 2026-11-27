@@ -5,7 +5,11 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import type { LocationQuery, LocationQueryRaw } from 'vue-router';
 
-import service, { type PartnerOuting, type PartnerSourceHealth } from '@/js/apis/partner-outings-service';
+import service, {
+  type PartnerOuting,
+  type PartnerSourceHealth,
+  type PartnerTrack,
+} from '@/js/apis/partner-outings-service';
 import { createVisitTracker } from '@/views/portals/metaskirando/new-since-visit';
 import { filterByText, toId } from '@/views/portals/metaskirando/text-filter';
 
@@ -57,6 +61,10 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
   const error = ref<unknown>(null);
 
   let controller: AbortController | null = null;
+
+  // the tracks loaded (GET /partner-outings/{id}/track), by outing id; null: the API has none for this outing
+  const tracks = ref<Record<string, PartnerTrack | null>>({});
+  const trackRequests = new Map<string, Promise<PartnerTrack | null>>();
 
   // "new since last visit": the ids of the outings that no visit of their source showed before
   const tracker = createVisitTracker();
@@ -139,6 +147,31 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
     }
   }
 
+  /**
+   * Loads the track of an outing once: the answer, or null when the API has none (404), stays in `tracks`. Another
+   * failure is not kept, so that a later call tries again.
+   */
+  function loadTrack(id: string): Promise<PartnerTrack | null> {
+    if (id in tracks.value) {
+      return Promise.resolve(tracks.value[id]);
+    }
+    let request = trackRequests.get(id);
+    if (!request) {
+      request = service
+        .getTrack(id)
+        .then((track) => (tracks.value[id] = track))
+        .catch((e) => {
+          if (axios.isAxiosError(e) && e.response?.status === 404) {
+            return (tracks.value[id] = null);
+          }
+          return null;
+        })
+        .finally(() => trackRequests.delete(id));
+      trackRequests.set(id, request);
+    }
+    return request;
+  }
+
   /** Turns a source on or off in the chips. All of them on is no filter: `sources` is then empty, and never all off. */
   function toggleSource(source: string) {
     const all = sourceIds.value;
@@ -204,8 +237,10 @@ export const usePartnerOutingsStore = defineStore('partner-outings', () => {
     sourceIds,
     newIds,
     onlyNew,
+    tracks,
     toggleSource,
     load,
+    loadTrack,
     loadSources,
     fromRouteQuery,
     toRouteQuery,

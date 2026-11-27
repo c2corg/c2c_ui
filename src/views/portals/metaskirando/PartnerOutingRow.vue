@@ -1,29 +1,52 @@
 <template>
-  <component
-    :is="isPartner ? 'a' : 'router-link'"
-    v-bind="linkProps"
-    class="partner-outing-row has-text-normal is-flex has-hover-background"
-  >
-    <activities :activities="outing.activities" class="is-size-3 activity-icons" />
-    <span class="partner-outing-main">
-      <span v-if="isNew" class="tag is-warning is-light outing-new" data-test="new">{{ $gettext('New') }}</span>
-      <span class="outing-title has-text-weight-bold">{{ outing.title }}</span>
-      <span v-if="rating" class="outing-rating"> &bull; {{ rating }}</span>
-      <span v-if="area" class="is-size-7 is-italic outing-area">{{ area.title }}</span>
-      <fa-icon
-        v-if="approximate"
-        icon="map-marker-alt"
-        class="is-size-7 outing-approximate"
-        data-test="approximate"
-        :title="$gettext('Approximate location')"
-      />
-      <span class="is-size-7 outing-credit">{{ credit }}</span>
-    </span>
-    <span class="outing-side">
-      <source-badge :source="outing.source" :title="outing.credit.site" :site-name="outing.credit.site" />
-      <fa-icon v-if="isPartner" icon="external-link-alt" class="external-icon" />
-    </span>
-  </component>
+  <!-- the row: its link takes the whole row but the GPX link, a sibling of it (a link cannot hold another) -->
+  <div class="partner-outing-row is-flex has-hover-background">
+    <component
+      :is="isPartner ? 'a' : 'router-link'"
+      v-bind="linkProps"
+      class="partner-outing-link has-text-normal is-flex"
+      data-test="outing-link"
+    >
+      <activities :activities="outing.activities" class="is-size-3 activity-icons" />
+      <span class="partner-outing-main">
+        <span v-if="isNew" class="tag is-warning is-light outing-new" data-test="new">{{ $gettext('New') }}</span>
+        <span class="outing-title has-text-weight-bold">{{ outing.title }}</span>
+        <span v-if="rating" class="outing-rating"> &bull; {{ rating }}</span>
+        <span v-if="area" class="is-size-7 is-italic outing-area">{{ area.title }}</span>
+        <fa-icon
+          v-if="approximate"
+          icon="map-marker-alt"
+          class="is-size-7 outing-approximate"
+          data-test="approximate"
+          :title="$gettext('Approximate location')"
+        />
+        <span class="is-size-7 outing-credit">{{ credit }}</span>
+      </span>
+      <span class="outing-side">
+        <fa-icon
+          v-if="outing.has_track"
+          icon="route"
+          class="is-size-7 track-icon"
+          data-test="track"
+          :title="$gettext('Track shown on the map')"
+        />
+        <source-badge :source="outing.source" :title="outing.credit.site" :site-name="outing.credit.site" />
+        <fa-icon v-if="isPartner" icon="external-link-alt" class="external-icon" />
+      </span>
+    </component>
+    <a
+      v-if="gpxUrl"
+      :href="gpxUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="gpx-link is-size-7"
+      data-test="gpx"
+      :title="$gettext('GPX track')"
+    >
+      <fa-icon icon="download" />
+      GPX
+    </a>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -54,6 +77,12 @@ const isPartner = computed(() => props.outing.source !== 'c2c' && !!props.outing
 
 // the position of the outing is the summit or the middle of its area, not where it started
 const approximate = computed(() => isApproximate(props.outing));
+
+// the GPX file of the track, only from an https URL; it opens in a new tab, without opening the row's link
+const gpxUrl = computed(() => {
+  const url = props.outing.gpx_url;
+  return url && /^https:\/\/[^\s]+$/i.test(url) ? url : null;
+});
 
 const site = computed(() => props.outing.credit.site);
 
@@ -99,6 +128,13 @@ const credit = computed(() => {
 <style scoped>
 .partner-outing-row {
   align-items: center;
+  gap: 0.5em;
+}
+
+.partner-outing-link {
+  flex-grow: 1;
+  min-width: 0;
+  align-items: center;
   padding: 4px 0;
 }
 
@@ -137,6 +173,16 @@ const credit = computed(() => {
   gap: 0.5em;
 }
 
+.gpx-link {
+  white-space: nowrap;
+  color: var(--c2c-grey-light);
+}
+
+.gpx-link:hover {
+  color: var(--c2c-primary);
+}
+
+.track-icon,
 .external-icon {
   color: var(--c2c-grey-light);
 }

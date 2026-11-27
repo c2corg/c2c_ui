@@ -170,6 +170,7 @@
           :highlighted-id="highlightedId"
           :filter-by-extent="filterByExtent"
           :initial-extent="initialExtent"
+          :track="track"
           @highlight="highlightedId = $event"
           @select="onSelect"
           @extent-change="onExtentChange"
@@ -224,6 +225,14 @@ const list = useTemplateRef<HTMLElement>('list');
 // the outing under the pointer, in the list or on the map, and the one a click on its marker brought to the list
 const highlightedId = ref<string | null>(null);
 const selectedId = ref<string | null>(null);
+
+// the track of the outing under the pointer, else of the one selected, when the API stores one (loaded once)
+const trackId = computed(() => {
+  const id = highlightedId.value ?? selectedId.value;
+  return id && store.items.some((item) => item.id === id && item.has_track) ? id : null;
+});
+const track = computed(() => (trackId.value ? (store.tracks[trackId.value] ?? null) : null));
+watch(trackId, (id) => id && store.loadTrack(id));
 
 // the map filters the outings with its extent (bbox of the URL, in EPSG:3857) when asked to, or when the link has one
 const filterByExtent = ref(false);
