@@ -12,30 +12,33 @@
   --ol-brand-color: #00aaff;
 
   /*
-   * outer size of a button: 1.375em plus 1px margin on each side, buttons are 1.14 times bigger on touch devices,
-   * stacked controls are positioned in em with it so they never overlap, even when the browser scales the text up
-   * (Android font size setting)
+   * outer size of a button: 1.375em plus 1px margin on each side, buttons are 1.14 times bigger on touch devices, and
+   * 1.4 times in full screen there (the map is the whole screen, a finger needs a bigger target), stacked controls are
+   * positioned in em with it so they never overlap, even when the browser scales the text up (Android font size
+   * setting)
    */
-  --map-button-size: calc(1.375em + 2px);
+  --map-button-scale: 1;
+  --map-button-size: calc(var(--map-button-scale) * 1.375em + 2px);
 
   /* added to the distance of the controls from the top and the bottom of the map: more room in full screen on a phone,
      whose rounded corners would cut the controls in the corners */
   --map-inset-top: 0px;
   --map-inset-bottom: 0px;
 
-  &.ol-touch:fullscreen,
-  :fullscreen &.ol-touch {
-    --map-inset-top: 1em;
-    --map-inset-bottom: 1em;
-  }
-
   &.ol-touch {
-    --map-button-size: calc(1.14 * 1.375em + 2px);
+    --map-button-scale: 1.14;
 
     .ol-control button,
     .ol-control > a {
-      font-size: 1.14em;
+      font-size: calc(var(--map-button-scale) * 1em);
     }
+  }
+
+  &.ol-touch:fullscreen,
+  :fullscreen &.ol-touch {
+    --map-button-scale: 1.4;
+    --map-inset-top: 1em;
+    --map-inset-bottom: 1em;
   }
 
   .ol-unselectable {
@@ -76,9 +79,29 @@
     color: var(--ol-foreground-color);
   }
 
-  .ol-zoom {
+  /* the buttons of the top left corner, one below the other: a hidden one leaves no gap */
+  .c2c-map-controls-top-left {
+    position: absolute;
     top: calc(0.5em + var(--map-inset-top));
     left: 0.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+    /* the map between the buttons stays the map */
+    pointer-events: none;
+
+    > .ol-control {
+      position: relative;
+      pointer-events: auto;
+    }
+  }
+
+  .ol-zoom {
+    /* a finger zooms with two fingers: no buttons on a phone or a tablet, whatever its size */
+    @media (pointer: coarse) {
+      display: none;
+    }
 
     .ol-zoom-in {
       border-radius: 2px 2px 0 0;
@@ -90,9 +113,6 @@
   }
 
   .ol-full-screen {
-    left: 0.5em;
-    top: calc(1em + 2 * var(--map-button-size) + var(--map-inset-top));
-
     /* the icon in the middle of its button */
     button {
       display: flex;

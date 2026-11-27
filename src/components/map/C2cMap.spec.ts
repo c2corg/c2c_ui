@@ -1303,7 +1303,10 @@ describe('C2cMap', () => {
       await open3d(wrapper);
 
       expect(wrapper.find('.ol-control-pin-to-top').isVisible()).toBe(true);
-      expect(wrapper.find('.c2c-map-compass').classes()).toContain('below-pin');
+      // one stack in the top left corner: the compass just after the pin button
+      const stack = [...wrapper.find('.c2c-map-controls-top-left').element.children];
+      const pin = stack.indexOf(wrapper.find('.ol-control-pin-to-top').element);
+      expect(stack.indexOf(wrapper.find('.c2c-map-compass').element)).toBe(pin + 1);
 
       // the page fits the map to its documents once pinned: the 3D view stays tilted on them
       map.cameras.length = 0;
