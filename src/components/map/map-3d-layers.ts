@@ -117,3 +117,25 @@ export function orthoLayerAt(lon: number, lat: number): MapLayer | undefined {
   }
   return undefined;
 }
+
+/**
+ * The orthophoto of a track (the flyover): that of the country of the most of its points, about 200 of them read, if we
+ * have one in 3D; none when more of them are outside the countries we have one for (the world one then)
+ */
+export function orthoLayerOf(points: number[][]): MapLayer | undefined {
+  const counts = new Map<MapLayer | undefined, number>();
+  const every = Math.max(1, Math.floor(points.length / 200));
+  for (let i = 0; i < points.length; i += every) {
+    const layer = orthoLayerAt(points[i][0], points[i][1]);
+    counts.set(layer, (counts.get(layer) ?? 0) + 1);
+  }
+  let best: MapLayer | undefined;
+  let bestCount = 0;
+  for (const [layer, count] of counts) {
+    if (count > bestCount) {
+      best = layer;
+      bestCount = count;
+    }
+  }
+  return best;
+}

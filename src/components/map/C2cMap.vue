@@ -1,5 +1,9 @@
 <template>
-  <div ref="rootElement" class="c2c-map" :class="{ 'ol-touch': isTouchDevice }">
+  <div
+    ref="rootElement"
+    class="c2c-map"
+    :class="{ 'ol-touch': isTouchDevice, 'c2c-map--flyover': flyover, 'c2c-map--flyover-window': flyoverWindow }"
+  >
     <div ref="mapElement" class="c2c-map-canvas" @click="showLayerSwitcher = false" />
 
     <!-- the map moved away from the position followed: a line from the centre to it, and how far it is -->
@@ -92,6 +96,29 @@
         <span>{{ is3d ? '2D' : '3D' }}</span>
       </button>
     </div>
+
+    <!-- the flyover of the track of an outing: in 3D, in full screen (MapFlyover.vue, loaded on the first play) -->
+    <div v-if="canPlay" class="ol-control ol-control-play" :title="$gettext('Play the track', 'Map controls')">
+      <button
+        :aria-label="$gettext('Play the track', 'Map controls')"
+        :disabled="flyoverLoading"
+        @click.stop="startFlyover"
+        @pointerenter="loadFlyover"
+        @focus="loadFlyover"
+      >
+        <fa-icon :icon="flyoverLoading ? 'circle-notch' : 'play'" :spin="flyoverLoading" />
+      </button>
+    </div>
+
+    <map-flyover
+      v-if="flyover"
+      :get-map="() => map!"
+      :get-flight-layers="() => flightLayers"
+      :parts="flyoverParts"
+      :exaggeration="EXAGGERATION"
+      :color="DOCUMENT_COLOR"
+      @close="stopFlyover"
+    />
 
     <div v-show="showLayerSwitcher" class="ol-control ol-control-layer-switcher" @click.stop="">
       <div class="ol-control-layer-switcher-layers">
@@ -317,8 +344,9 @@
 <script setup lang="ts">
 // THE map of the site, on MapLibre: the documents of a page, the layers of the catalogue (map-layers.ts), and a 3D view
 // on the same map (terrain, tilted camera, the paragliding flights in the air).
-import type { Feature, FeatureCollection, Geometry, Point, Position } from 'geojson';
+import type { Feature, FeatureCollection, Geometry, LineString, MultiLineString, Point, Position } from 'geojson';
 import {
+  type CameraOptions,
   type GeoJSONSource,
   type LayerSpecification,
   Map as MapLibreMap,
@@ -334,6 +362,8 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {
   computed,
+  defineAsyncComponent,
+  nextTick,
   onBeforeUnmount,
   onMounted,
   type PropType,
@@ -371,7 +401,7 @@ import {
   loadFlightLayers,
   withoutParaglidingTracks,
 } from './map-3d-flight-layers';
-import { orthoLayerAt, registerNoBlankProtocol } from './map-3d-layers';
+import { orthoLayerAt, orthoLayerOf, registerNoBlankProtocol } from './map-3d-layers';
 import { type Marker3d, markerElement } from './map-3d-markers';
 import { terrainSource } from './map-3d-terrain';
 import { fetchStyle, prepareVectorMap, vectorMaps } from './map-3d-vector';
@@ -778,8 +808,11 @@ const attributions = computed(() => {
   const shown = is3d.value
     ? [...[...orthoLayers, ...vectorLayers].filter((layer) => layer.title === base3d.value), worldLayer]
     : baseLayers.filter((layer) => layer.title === shownBase.value);
-  shown.push(...slopeLayers.filter((layer) => shownSlopes.value.includes(layer.title)));
-  if (props.showProtectionAreas && protectionAreasVisible.value && online.value) shown.push(...swissProtectionLayers);
+  // the flyover shows no overlay (showLayers)
+  if (!flyover.value) {
+    shown.push(...slopeLayers.filter((layer) => shownSlopes.value.includes(layer.title)));
+    if (props.showProtectionAreas && protectionAreasVisible.value && online.value) shown.push(...swissProtectionLayers);
+  }
   const credits = shown.filter(inView).map((layer) => layer.attribution);
   if (is3d.value) credits.push(terrainSource.attribution);
   return [...new Set(credits)];
@@ -1120,14 +1153,16 @@ function showLayers() {
     if (layer.tiles3d) set(layer3dId(layer), shown && is3d.value);
   }
   set('world', is3d.value);
-  set('shading', is3d.value && shading.value);
+  // the flyover over the orthophoto alone: no shading, slopes, protection areas nor names over it
+  const overlays = !flyover.value;
+  set('shading', is3d.value && shading.value && overlays);
   map.setPaintProperty('shading', 'hillshade-exaggeration', shadingStrength.value);
   for (const layer of slopeLayers) {
-    set(layer.title, shownSlopes.value.includes(layer.title));
+    set(layer.title, overlays && shownSlopes.value.includes(layer.title));
     map.setPaintProperty(layer.title, 'raster-opacity', slopesOpacity.value[layer.title]);
   }
   // the protection areas: lighter in 3D, multiplied onto the ground, which keeps its texture under their colours
-  const protection = props.showProtectionAreas && protectionAreasVisible.value && online.value;
+  const protection = overlays && props.showProtectionAreas && protectionAreasVisible.value && online.value;
   const opacity = protectionAreasOpacity.value;
   for (const layer of swissProtectionLayers) {
     set(layer.title, protection);
@@ -1142,9 +1177,10 @@ function showLayers() {
   map.setPaintProperty('protection-line', 'line-opacity', is3d.value ? 0.6 : opacity * 0.5);
   // the documents: in 3D, the lines of the 3D view and its markers
   for (const id of documentLayerIds) set(id, !is3d.value);
-  set('documents-3d', is3d.value);
-  set('documents-3d-casing', is3d.value);
-  set('flight-shadows', is3d.value);
+  // the flyover draws the track itself, as it is played
+  set('documents-3d', is3d.value && !flyover.value);
+  set('documents-3d-casing', is3d.value && !flyover.value);
+  set('flight-shadows', is3d.value && !flyover.value);
   map.setPaintProperty('background', 'background-color', is3d.value ? '#e6eef5' : 'white');
 }
 
@@ -1188,7 +1224,8 @@ function removeVectorMap(from: MapLibreMap) {
 async function showVectorMap() {
   const created = map;
   if (!created) return;
-  const title = is3d.value && base3d.value in vectorMaps ? base3d.value : null;
+  // the names of swisstopo over its orthophoto: not in the flyover
+  const title = is3d.value && !flyover.value && base3d.value in vectorMaps ? base3d.value : null;
   if (vectorShown?.title === title) return;
   removeVectorMap(created);
   if (!title) return;
@@ -1616,7 +1653,8 @@ function toggleDensityOverlay(type: DensityType) {
 }
 
 async function updateDensityOverlay(type: DensityType) {
-  if (!densityEnabled[type] || !map) return;
+  // the flyover moves the camera at each frame: its overlays hidden, read again on close
+  if (!densityEnabled[type] || !map || flyoverFrom) return;
   const overlay = DENSITY_OVERLAYS[type];
   // the zooms of OpenLayers, which the API knows
   const tracksShown = Math.round(map.getZoom() + 1) >= DENSITY_TRACKS_MIN_ZOOM;
@@ -2182,12 +2220,20 @@ function toggleFullscreen() {
 }
 
 function onFullscreenChange() {
+  // the full screen of the flyover left (Esc, the system), or that the map was in: the flyover with it
+  const root = rootElementEl.value;
+  if (
+    (flyoverFrom?.fullscreen && document.fullscreenElement !== root) ||
+    (flyoverFrom?.keptFullscreen && !(root && document.fullscreenElement?.contains(root)))
+  ) {
+    void stopFlyover();
+  }
   const fullscreen = !!document.fullscreenElement && document.fullscreenElement === fullScreenElement();
   if (fullscreen === isFullscreen.value) return;
   isFullscreen.value = fullscreen;
   showLayerSwitcher.value = false;
   // the 3D view goes back to its documents after a resize (resetCamera)
-  if (!is3d.value) setTimeout(() => fitMapToDocuments(), 0);
+  if (!is3d.value && !flyoverFrom) setTimeout(() => fitMapToDocuments(), 0);
 }
 
 // --- the elevation profile ---
@@ -2215,6 +2261,8 @@ function hideProfileCursor() {
 async function onElevationProfile(event: unknown) {
   const { action, coord } = event as { action: string; coord?: number[] };
   if (!map) return;
+  // the profile is not seen during the flyover, which has its own playhead
+  if (flyoverFrom) return;
   const asked = ++cursorEvent;
   if (action === 'cursor_end') {
     hideProfileCursor();
@@ -2246,6 +2294,8 @@ let flightLayers: FlightLayers | null = null;
 let documents3dVersion = 0;
 // where the 3D view opened, and the 2D view to go back to
 let bounds3d: Extent | null = null;
+// the flights of the 3D view found (or given up): the flyover of a paragliding track waits for them
+let flightsReady: Promise<void> = Promise.resolve();
 let view2d: { center: [number, number]; zoom: number } | null = null;
 
 // the country of the documents, by their areas: that of the first one in a country (or a region) we have layers for
@@ -2392,6 +2442,12 @@ function setRotation(enabled: boolean) {
 // the documents of a list that changed (another page of the results), while the 3D view is open
 function redraw3d() {
   if (!map) return;
+  // the flyover plays the layers it was given: redrawn once it is closed
+  if (flyoverFrom) {
+    redraw3dPending = true;
+    return;
+  }
+  redraw3dPending = false;
   const { lines, markers } = documents3d();
   documents3dVersion++;
   shownMarkers.forEach((marker) => marker.remove());
@@ -2400,7 +2456,7 @@ function redraw3d() {
   flightLayers = null;
   (map.getSource('flight-shadows') as GeoJSONSource).setData(EMPTY_COLLECTION);
   addMarkers(map, markers);
-  showFlights(map, lines);
+  flightsReady = showFlights(map, lines);
 }
 
 function open3d() {
@@ -2430,13 +2486,15 @@ function open3d() {
   setRotation(true);
   showLayers();
   addMarkers(created, markers);
-  showFlights(created, lines);
+  flightsReady = showFlights(created, lines);
   resetCamera();
 }
 
 function close3d() {
   if (!map) return;
+  void stopFlyover();
   is3d.value = false;
+  redraw3dPending = false;
   // back in 2D, the layer shown before 3D, or that of the category chosen in 3D (chooseBase)
   shownMarkers.forEach((marker) => marker.remove());
   shownMarkers = [];
@@ -2454,6 +2512,177 @@ function close3d() {
   updateDensityOverlays();
 }
 
+// --- the flyover of the track (MapFlyover.vue) ---
+
+// the flyover: shown, and its component and the flights it may follow being loaded
+const flyover = ref(false);
+const flyoverLoading = ref(false);
+// without the Fullscreen API (iPhone): the map over the whole window
+const flyoverWindow = ref(false);
+const flyoverParts = shallowRef<number[][][]>([]);
+// what to go back to: the 3D view or not, its camera and its layer, the full screen entered by the flyover (left when it
+// closes), or the full screen the map was already in (kept)
+let flyoverFrom: {
+  was3d: boolean;
+  camera: CameraOptions | null;
+  base3d: string;
+  fullscreen: boolean;
+  keptFullscreen: boolean;
+} | null = null;
+// the documents changed during the flyover (an image located on the track): the 3D view redrawn after it
+let redraw3dPending = false;
+// the map back to its size after the flyover: its camera restored, not reset to the documents (resizeObserver)
+let flyoverClosedAt = -Infinity;
+
+// in a chunk of its own, asked as soon as the play button is hovered or focused
+let flyoverModule: Promise<typeof import('./MapFlyover.vue')> | null = null;
+// a chunk that failed to load (network): asked again the next time
+const loadFlyover = () =>
+  (flyoverModule ??= import('./MapFlyover.vue').catch((error: unknown) => {
+    flyoverModule = null;
+    throw error;
+  }));
+const MapFlyover = defineAsyncComponent(loadFlyover);
+
+// the track of an outing (a single document), with the 3D view
+const canPlay = computed(
+  () =>
+    props.show3d &&
+    online.value &&
+    !isList.value &&
+    props.documents?.[0]?.type === 'o' &&
+    !!props.documents[0].geometry?.geom_detail
+);
+
+function currentCamera(): CameraOptions | null {
+  if (!map) return null;
+  const { lng, lat } = map.getCenter();
+  return {
+    center: [lng, lat],
+    zoom: map.getZoom(),
+    bearing: map.getBearing(),
+    pitch: map.getPitch(),
+    elevation: map.getCenterElevation(),
+  };
+}
+
+async function startFlyover() {
+  if (!map || flyoverFrom) return;
+  const line = documents3d().lines.features.find(
+    (feature) => feature.geometry.type === 'LineString' || feature.geometry.type === 'MultiLineString'
+  );
+  if (!line) return;
+  const from = {
+    was3d: is3d.value,
+    camera: is3d.value ? currentCamera() : null,
+    base3d: base3d.value,
+    fullscreen: false,
+    // the map in full screen already (its button): the flyover plays in it, and leaves it as it was
+    keptFullscreen: !!document.fullscreenElement?.contains(rootElementEl.value!),
+  };
+  flyoverFrom = from;
+  flyoverLoading.value = true;
+  showLayerSwitcher.value = false;
+  // the flyover moves the camera itself: the position no longer followed (its button, hidden then, to follow it again)
+  stopFollowingPosition();
+  // nor the outings and routes overlays, the filter outline and the cursor of the elevation profile (a cursor still
+  // waiting for the terrain dropped), over the track as it is played
+  DENSITY_TYPES.forEach((type) => {
+    cancelDensityRequest(type);
+    hideDensity(type);
+  });
+  closeTrackPanel();
+  showFilterOutline(null);
+  cursorEvent++;
+  hideProfileCursor();
+  // asked first: the browser only allows it on the click itself
+  const root = rootElementEl.value!;
+  // a browser may never answer (some embedded views): over the window after a while, in full screen if it comes later
+  const entered: Promise<boolean> = from.keptFullscreen
+    ? Promise.resolve(true)
+    : document.fullscreenEnabled
+      ? root.requestFullscreen().then(
+          () => {
+            // granted after the flyover was closed: left at once, unless another flyover plays in it
+            if (flyoverFrom !== from) {
+              if (!flyoverFrom && document.fullscreenElement === root) document.exitFullscreen().catch(() => undefined);
+              return false;
+            }
+            from.fullscreen = true;
+            flyoverWindow.value = false;
+            return true;
+          },
+          () => false
+        )
+      : Promise.resolve(false);
+  const fullscreen = Promise.race([entered, new Promise<boolean>((resolve) => setTimeout(resolve, 1500, false))]);
+  if (!is3d.value) open3d();
+  // over the ground as it is, whatever map the 3D view showed: the orthophoto of the country of the outing (its areas:
+  // the boxes of the countries overlap, Chamonix is in that of Switzerland), else of the place of its track, else the
+  // world one
+  const geometry = line.geometry as LineString | MultiLineString;
+  const points = geometry.type === 'LineString' ? geometry.coordinates : geometry.coordinates.flat();
+  const country = documentsCountry();
+  base3d.value = (
+    (country && nationalOrthoLayers.find((layer) => layer.country === country)) ||
+    orthoLayerOf(points) ||
+    worldLayer
+  ).title;
+  const [inFullscreen, loaded] = await Promise.all([
+    fullscreen,
+    loadFlyover().then(
+      () => true,
+      () => false
+    ),
+    flightsReady.catch(() => null),
+  ]);
+  if (flyoverFrom !== from || !map || !is3d.value) return;
+  // no player (its chunk did not load): the map as it was
+  if (!loaded) {
+    await stopFlyover();
+    return;
+  }
+  flyoverLoading.value = false;
+  flyoverWindow.value = !inFullscreen && !from.fullscreen;
+  flyoverParts.value = geometry.type === 'LineString' ? [geometry.coordinates] : geometry.coordinates;
+  flyover.value = true;
+  showLayers();
+}
+
+async function stopFlyover() {
+  const from = flyoverFrom;
+  if (!from) return;
+  flyoverFrom = null;
+  flyoverClosedAt = performance.now();
+  flyover.value = false;
+  flyoverLoading.value = false;
+  flyoverWindow.value = false;
+  if (from.fullscreen && document.fullscreenElement === rootElementEl.value) {
+    document.exitFullscreen().catch(() => undefined);
+  }
+  // MapFlyover removed its layers
+  await nextTick();
+  if (!map) return;
+  showLayers();
+  restoreView(from);
+  // the overlays read again, over the view restored
+  updateDensityOverlays();
+}
+
+function restoreView(from: NonNullable<typeof flyoverFrom>) {
+  if (!map || !is3d.value) return;
+  if (!from.was3d) {
+    close3d();
+    return;
+  }
+  base3d.value = from.base3d;
+  if (redraw3dPending) redraw3d();
+  if (from.camera) {
+    map.stop();
+    map.jumpTo(from.camera);
+  }
+}
+
 function resetNorth() {
   map?.easeTo({ bearing: 0, pitch: PITCH_3D });
 }
@@ -2466,7 +2695,9 @@ let lastSize = '';
 const resizeObserver = new ResizeObserver(([entry]) => {
   const size = `${Math.round(entry.contentRect.width)}x${Math.round(entry.contentRect.height)}`;
   // the first call is the size at mount: nothing to reset
-  if (lastSize && size !== lastSize && is3d.value) {
+  // the flyover has its own camera, and the one from before it is restored when it closes
+  const flyoverResize = flyoverFrom || performance.now() - flyoverClosedAt < 1000;
+  if (lastSize && size !== lastSize && is3d.value && !flyoverResize) {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(resetCamera, 200);
   }
@@ -2495,7 +2726,7 @@ watch(
     loadProtectionAreas();
   }
 );
-watch([is3d, base3d], () => showVectorMap());
+watch([is3d, base3d, flyover], () => showVectorMap());
 
 // the network lost in 3D: back to the 2D map, whose tiles may be downloaded
 watch(online, (isOnline) => {
@@ -2698,8 +2929,8 @@ onMounted(() => {
   });
   created.on('moveend', () => {
     updateViewPlace();
-    // in 3D, the box of what is seen, not too far from the center
-    sendBoundsToUrl();
+    // in 3D, the box of what is seen, not too far from the center; not that of the flyover, which moves at each frame
+    if (!flyoverFrom) sendBoundsToUrl();
     emit('zoom', created.getZoom());
     if (is3d.value) return;
     updateEditMapLink();
@@ -2745,13 +2976,21 @@ onMounted(() => {
 
   document.addEventListener('fullscreenchange', onFullscreenChange);
   // scrolling the page past the map does not zoom or pan it; nothing to scroll in full screen
-  stopScrollPassthrough = scrollPassthrough(mapElementEl.value!, rootElementEl.value!, () => !isFullscreen.value);
+  stopScrollPassthrough = scrollPassthrough(
+    mapElementEl.value!,
+    rootElementEl.value!,
+    () => !isFullscreen.value && !flyover.value
+  );
   bus.on('elevation_profile', onElevationProfile);
   if (props.followPosition && props.showCenterOnGeolocation) void watchPositionPermission();
   resizeObserver.observe(rootElementEl.value!);
 });
 
 onBeforeUnmount(() => {
+  if (flyoverFrom?.fullscreen && document.fullscreenElement === rootElementEl.value) {
+    document.exitFullscreen().catch(() => undefined);
+  }
+  flyoverFrom = null;
   DENSITY_TYPES.forEach(cancelDensityRequest);
   resizeObserver.disconnect();
   clearTimeout(resizeTimer);
@@ -3037,6 +3276,42 @@ defineExpose({
     font-size: 0.7em;
     font-weight: bold;
   }
+}
+
+/* above the 3D button, as far from the bottom in full screen on a phone */
+.ol-control-play {
+  bottom: calc(1.5em + 2 * var(--map-button-size) + var(--map-inset-bottom));
+  left: 0.5em;
+
+  /* the triangle drawn in outline, not filled (the regular icons have no play) */
+  :deep(.fa-play) {
+    overflow: visible;
+
+    path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 48;
+      stroke-linejoin: round;
+    }
+  }
+}
+
+/* the flyover: its own controls only, the credits kept (the scale with its box: else a dot of its padding is left); no
+   marker (waypoints, images) */
+.c2c-map--flyover > .ol-control:not(.ol-attribution),
+.c2c-map--flyover > .c2c-map-controls-top-left,
+.c2c-map--flyover :deep(.maplibregl-ctrl-bottom-right),
+.c2c-map--flyover :deep(.maplibregl-marker) {
+  display: none !important;
+}
+
+/* without the Fullscreen API: over the whole window */
+.c2c-map--flyover-window {
+  position: fixed !important;
+  inset: 0;
+  z-index: 2000;
+  width: 100vw !important;
+  height: 100dvh !important;
 }
 
 .ol-control-use-map-as-filter {

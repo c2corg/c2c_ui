@@ -55,8 +55,8 @@ const EARTH = 6371008.8;
 const toRad = Math.PI / 180;
 
 // the longitude difference the short way, also across the 180° meridian
-const lonDelta = (from: number, to: number) => ((((to - from) % 360) + 540) % 360) - 180;
-const wrapLon = (lon: number) => ((((lon + 180) % 360) + 360) % 360) - 180;
+export const lonDelta = (from: number, to: number) => ((((to - from) % 360) + 540) % 360) - 180;
+export const wrapLon = (lon: number) => ((((lon + 180) % 360) + 360) % 360) - 180;
 
 function groundDistance(a: number[], b: number[]): number {
   const lat = ((a[1] + b[1]) / 2) * toRad;
@@ -65,8 +65,8 @@ function groundDistance(a: number[], b: number[]): number {
   return Math.hypot(dx, dy) * EARTH;
 }
 
-// linear interpolation of ys over increasing xs, clamped (numpy.interp)
-function interp(x: number, xs: ArrayLike<number>, ys: ArrayLike<number>): number {
+/** Linear interpolation of ys over increasing xs, clamped (numpy.interp) */
+export function interp(x: number, xs: ArrayLike<number>, ys: ArrayLike<number>): number {
   const n = xs.length;
   if (x <= xs[0]) return ys[0];
   if (x >= xs[n - 1]) return ys[n - 1];

@@ -1,7 +1,7 @@
 import { addProtocol } from 'maplibre-gl';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { clearWhite, orthoLayerAt, registerNoBlankProtocol } from './map-3d-layers';
+import { clearWhite, orthoLayerAt, orthoLayerOf, registerNoBlankProtocol } from './map-3d-layers';
 import { orthoLayers, worldLayer } from './map-layers';
 
 vi.mock('maplibre-gl', () => ({ addProtocol: vi.fn() }));
@@ -26,6 +26,23 @@ describe('orthoLayerAt', () => {
     ['Kathmandu', 85.32, 27.71, undefined],
   ])('%s', (_, lon, lat, title) => {
     expect(orthoLayerAt(lon, lat)?.title).toBe(title);
+  });
+});
+
+describe('orthoLayerOf', () => {
+  it('is the orthophoto of the most of the track, none far from them', () => {
+    // from the Pyrenees in Spain (Aragon) to France, the most of it in Spain
+    const pyrenees = Array.from({ length: 1000 }, (_, i) => [-0.4, 42.0 + (0.5 * i) / 999]);
+    expect(orthoLayerOf(pyrenees)?.title).toBe('IGN ortho (es)');
+    expect(orthoLayerOf([[-0.4, 42.9]])?.title).toBe('IGN ortho');
+    expect(orthoLayerOf([[86.9, 27.9]])).toBeUndefined();
+    // from Grenoble to the Himalaya: the most of it outside the countries we have one for, the world one
+    const far = [[5.72, 45.19], ...Array.from({ length: 9 }, () => [86.9, 27.9])];
+    expect(orthoLayerOf(far)).toBeUndefined();
+    expect(orthoLayerOf([...far, ...far.slice(0, 1).flatMap((point) => Array(9).fill(point))])?.title).toBe(
+      'IGN ortho'
+    );
+    expect(orthoLayerOf([])).toBeUndefined();
   });
 });
 

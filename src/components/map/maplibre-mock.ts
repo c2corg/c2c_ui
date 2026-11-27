@@ -172,8 +172,26 @@ export class FakeMap {
   getContainer() {
     return this.container;
   }
+  // the flyover adapts them to the device (map-3d-quality.ts)
+  pixelRatio = 1;
+  lod: [number, number] | null = null;
   getPixelRatio() {
-    return 1;
+    return this.pixelRatio;
+  }
+  setPixelRatio(pixelRatio: number) {
+    this.pixelRatio = pixelRatio;
+  }
+  setSourceTileLodParams(maxZoomLevelsOnScreen: number, tileCountMaxMinRatio: number) {
+    this.lod = [maxZoomLevelsOnScreen, tileCountMaxMinRatio];
+  }
+  getCanvas() {
+    return { getContext: () => null };
+  }
+  getLayersOrder() {
+    return this.style.layers.map((layer) => layer.id);
+  }
+  getTerrain() {
+    return this.terrain;
   }
   cameraForBounds([west, south, east, north]: Bounds) {
     // as close as it can for a point
@@ -210,12 +228,14 @@ export class FakeMap {
   addSource(id: string, source: StyleSpecification['sources'][string]) {
     if (id in this.style.sources) throw new Error(`source ${id} already added`);
     this.style.sources[id] = source;
+    if ('data' in source) this.data[id] = source.data;
   }
   removeSource(id: string) {
     if (this.style.layers.some((layer) => 'source' in layer && layer.source === id)) {
       throw new Error(`source ${id} still used`);
     }
     delete this.style.sources[id];
+    delete this.data[id];
   }
   addLayer(layer: StyleSpecification['layers'][number], before?: string) {
     if (this.getLayer(layer.id)) throw new Error(`layer ${layer.id} already added`);
@@ -236,6 +256,31 @@ export class FakeMap {
   }
   setSky(sky: unknown) {
     this.sky = sky;
+  }
+  // the flyover: the terrain everywhere at `terrainElevation`, a camera looking from a point to another
+  terrainElevation: number | null = 1000;
+  centerElevation = 0;
+  centerClampedToGround = true;
+  queryTerrainElevation() {
+    return this.terrain ? this.terrainElevation : null;
+  }
+  getCenterElevation() {
+    return this.centerElevation;
+  }
+  getCenterClampedToGround() {
+    return this.centerClampedToGround;
+  }
+  setCenterClampedToGround(clamped: boolean) {
+    this.centerClampedToGround = clamped;
+  }
+  calculateCameraOptionsFromTo(
+    from: { lng: number; lat: number },
+    altitudeFrom: number,
+    to: { lng: number; lat: number },
+    altitudeTo = 0
+  ) {
+    const bearing = (Math.atan2(to.lng - from.lng, to.lat - from.lat) * 180) / Math.PI;
+    return { center: [to.lng, to.lat], elevation: altitudeTo, zoom: 13, pitch: 60, bearing, altitudeFrom };
   }
   resize() {}
   stop() {}
@@ -272,6 +317,16 @@ export class FakeMarker {
   }
   remove() {
     this.removed = true;
+  }
+}
+
+export class LngLat {
+  constructor(
+    public lng: number,
+    public lat: number
+  ) {}
+  static convert(value: LngLat | [number, number] | { lng: number; lat: number }) {
+    return Array.isArray(value) ? new LngLat(value[0], value[1]) : new LngLat(value.lng, value.lat);
   }
 }
 
