@@ -5,6 +5,7 @@ import { createMemoryHistory, createRouter } from 'vue-router';
 
 import AssociationQueryItem from './AssociationQueryItem.vue';
 import QueryItems from './QueryItems.vue';
+import QueryTags from './QueryTags.vue';
 
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
@@ -26,7 +27,7 @@ const mountItems = async (path: string) => {
       config: {
         globalProperties: {
           $gettext: (text: string) => text,
-          $documentUtils: { getDocumentType: (type: string) => ({ w: 'waypoint', r: 'route' })[type] },
+          $documentUtils: { getDocumentType: (type: string) => ({ w: 'waypoint', r: 'route', c: 'article' })[type] },
         } as never,
       },
     },
@@ -81,5 +82,17 @@ describe('QueryItems', () => {
     const loaded = wrapper.emitted('documents-load')!.at(-1)![0] as { document_id: number; loading: boolean }[];
     expect(loaded).toMatchObject([{ document_id: 1943275, loading: false, title: 'By fair means' }]);
     expect(get).toHaveBeenCalledWith(1943275);
+  });
+
+  it('removes a filter whose document is still loading', async () => {
+    vi.spyOn(articles, 'get').mockImplementation(() => new Promise(() => {}) as never);
+    const { wrapper, router } = await mountItems('/outings?c=1943276');
+
+    const [tag] = wrapper.findAllComponents(QueryTags)[0].props('documents') as { loading: boolean }[];
+    expect(tag).toMatchObject({ document_id: 1943276, loading: true });
+    wrapper.findAllComponents(QueryTags)[0].vm.$emit('remove', tag);
+    await flushPromises();
+
+    expect(router.currentRoute.value.query.c).toBeUndefined();
   });
 });
