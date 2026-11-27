@@ -80,6 +80,19 @@ describe('PartnerOutingRow, GPX track', () => {
     expect(link.text()).toBe('GPX');
   });
 
+  it('keeps the GPX link out of the link of the row: no link holds another', () => {
+    for (const outing of [
+      partnerOuting({ gpx_url: 'https://www.gulliver.it/gpx/1.gpx' }),
+      c2cOuting({ gpx_url: 'https://x.it/1.gpx' }),
+    ]) {
+      const wrapper = mountRow(outing);
+      expect(wrapper.findAll('a')).toHaveLength(2);
+      expect(wrapper.element.querySelector('a a')).toBeNull();
+      expect(wrapper.find('[data-test="outing-link"] [data-test="gpx"]').exists()).toBe(false);
+      expect(wrapper.find('.partner-outing-row > [data-test="gpx"]').exists()).toBe(true);
+    }
+  });
+
   it.each([null, undefined, 'http://www.gulliver.it/gpx/1.gpx', 'javascript:alert(1)', ''])(
     'shows no GPX link for %s',
     (gpx_url) => {

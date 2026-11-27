@@ -34,9 +34,10 @@ test('the menu entry opens the list, grouped by date, with a badge and an extern
   ]) {
     const row = rows.filter({ has: page.locator(`.source-badge--${source}`) }).first();
     await expect(row.locator('.source-badge')).toHaveText(label);
-    await expect(row).toHaveAttribute('target', '_blank');
-    await expect(row).toHaveAttribute('href', new RegExp(`^https://(www\\.)?${source}\\.`));
-    await expect(row).toHaveAttribute('rel', /noopener/);
+    const link = row.locator('[data-test=outing-link]');
+    await expect(link).toHaveAttribute('target', '_blank');
+    await expect(link).toHaveAttribute('href', new RegExp(`^https://(www\\.)?${source}\\.`));
+    await expect(link).toHaveAttribute('rel', /noopener/);
   }
 });
 
@@ -127,8 +128,9 @@ test('an outing of c2c links inside the site', async ({ page }) => {
     .locator('.partner-outing-row')
     .filter({ has: page.locator('.source-badge--c2c') })
     .first();
-  await expect(row).toHaveAttribute('href', /^\/outings\/\d+/);
-  await expect(row).not.toHaveAttribute('target', '_blank');
+  const link = row.locator('[data-test=outing-link]');
+  await expect(link).toHaveAttribute('href', /^\/outings\/\d+/);
+  await expect(link).not.toHaveAttribute('target', '_blank');
 });
 
 // the map beside the list: one marker per outing that has a geometry, coloured by source
@@ -452,6 +454,8 @@ test('a row with a GPX track links its file, in a new tab', async ({ page }) => 
   await expect(link).toHaveAttribute('href', withGpx[0].gpx_url!);
   await expect(link).toHaveAttribute('target', '_blank');
   await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  // no link inside another one
+  await expect(page.locator('a a')).toHaveCount(0);
 });
 
 test('hovering a row with a stored track draws it on the map, with its credit', async ({ page }) => {
