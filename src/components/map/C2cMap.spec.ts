@@ -1297,18 +1297,11 @@ describe('C2cMap', () => {
       };
       // the animation is driven by the tests
       const requestAnimationFrame = globalThis.requestAnimationFrame;
-      const matchMedia = globalThis.matchMedia;
-      // a phone: no tuning panel (the screen store reads matchMedia, which jsdom has not)
       beforeEach(() => {
         globalThis.requestAnimationFrame = () => 0;
-        globalThis.matchMedia = ((query: string) => {
-          const max = query.match(/max-width: (\d+)px/);
-          return { matches: !!max && 400 <= Number(max[1]), addEventListener() {} };
-        }) as unknown as typeof globalThis.matchMedia;
       });
       afterEach(() => {
         globalThis.requestAnimationFrame = requestAnimationFrame;
-        globalThis.matchMedia = matchMedia;
       });
 
       it('is offered for the track of an outing only', async () => {

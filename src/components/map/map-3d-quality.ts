@@ -55,7 +55,7 @@ export class FrameQuality {
   private intervals: number[] = [];
   private quiet = 0;
   level: number;
-  // the frame intervals measured, for the tuning panel: median of the last window
+  // the median of the frame intervals of the last window measured
   median = 0;
 
   constructor(

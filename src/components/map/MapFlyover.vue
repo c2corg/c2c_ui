@@ -12,15 +12,6 @@
       </button>
     </div>
 
-    <flyover-tuning
-      v-if="showTuning && !loading"
-      :settings="settings"
-      :length="trackLength"
-      :duration="durationAt1x(trackLength, settings)"
-      :stats="statsText"
-      @tune="tune"
-    />
-
     <div class="ol-control map-flyover-bar">
       <button
         type="button"
@@ -91,7 +82,7 @@
 // preview, a camera that follows it, and a bar as that of a video. Loaded on its own, on the first play.
 import type { Feature, FeatureCollection, Position } from 'geojson';
 import { type CameraOptions, LngLat, type Map as MapLibreMap } from 'maplibre-gl';
-import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
 import type { TrackPart } from './map-3d-flight';
 import type { FlightLayers } from './map-3d-flight-layers';
@@ -116,7 +107,6 @@ import { sampleTerrain } from './map-3d-terrain';
 import { LINE_CASING_COLOR } from './map-documents';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
-import { useScreenStore } from '@/stores/screen';
 
 const PROGRESS_STEPS = 1000;
 
@@ -134,35 +124,7 @@ const emit = defineEmits<{ close: [] }>();
 
 const { $gettext } = useGlobalProperties();
 
-// for now, a panel to tune FLYOVER live (FlyoverTuning.vue), on a desktop screen only, loaded on its own: to remove
-// once the values are settled
-const TUNING_KEY = 'flyover-tuning';
-const FlyoverTuning = defineAsyncComponent(() => import('./FlyoverTuning.vue'));
-const screen = useScreenStore();
-const showTuning = computed(() => screen.isDesktopOrWider);
-function tunedSettings(): FlyoverSettings {
-  const tuned = reactive(structuredClone(FLYOVER));
-  try {
-    const stored = JSON.parse(window.localStorage.getItem(TUNING_KEY) ?? 'null');
-    // the values saved over those of the code, a group with them (duration: a value added since is kept); the speeds
-    // are not tuned: those of the code, not those saved before they changed
-    if (stored) {
-      for (const [key, value] of Object.entries(stored as Record<string, unknown>)) {
-        if (!(key in tuned) || key === 'speeds') continue;
-        const current = (tuned as Record<string, unknown>)[key];
-        (tuned as Record<string, unknown>)[key] =
-          value && typeof value === 'object' && current && typeof current === 'object'
-            ? { ...current, ...value }
-            : value;
-      }
-    }
-  } catch {
-    // no storage
-  }
-  return tuned;
-}
-const settings: FlyoverSettings = tunedSettings();
-const trackLength = ref(0);
+const settings: FlyoverSettings = FLYOVER;
 
 const loading = ref(true);
 // the path of the elevation profile over the bar (viewBox 0 0 1000 100), null without elevations
@@ -173,7 +135,6 @@ function drawProfile() {
     ? `M0,100 ${points.map(([x, y]) => `L${(x * 1000).toFixed(1)},${(100 - y * 90).toFixed(1)}`).join(' ')} L1000,100 Z`
     : null;
 }
-watch(() => settings.ramp, drawProfile);
 const playing = ref(false);
 const ended = ref(false);
 const following = ref(true);
@@ -291,7 +252,6 @@ function tick(now: number) {
   const interval = lastTime === null ? 0 : (now - lastTime) / 1000;
   const dt = Math.min(interval, 0.1);
   lastTime = now;
-  const started = performance.now();
   // the quality of the drawing, measured while the camera moves along the track
   if (playing.value && following.value && !transition) quality?.frame(interval);
   else quality?.settle();
@@ -318,7 +278,6 @@ function tick(now: number) {
   }
   prefetchAhead(d);
   if (playing.value && progress.value >= 1) end();
-  stats.tick = 0.9 * stats.tick + 0.1 * (performance.now() - started);
 }
 
 // to the track, from where the camera is
@@ -572,20 +531,6 @@ function stopQuality() {
   quality = null;
 }
 
-// for the tuning panel: what a frame costs, refreshed twice a second while it is shown
-const stats = { tick: 0 };
-const statsText = ref('');
-let statsTimer: ReturnType<typeof setInterval> | undefined;
-function refreshStats() {
-  if (!map || !quality) return;
-  const median = quality.median;
-  const tiles = prefetcher ? `${prefetcher.loaded} fetched ahead, ${prefetcher.pending} to go` : 'not fetched ahead';
-  statsText.value =
-    `frame ${median ? `${(median * 1000).toFixed(1)} ms (${(1 / median).toFixed(0)} fps)` : '…'} · ` +
-    `flyover JS ${stats.tick.toFixed(2)} ms/frame · pixel ratio ${map.getPixelRatio()} ` +
-    `(level ${quality.level + 1}/${quality.levels.length}) · tiles ${tiles}`;
-}
-
 onMounted(async () => {
   const mountedAt = performance.now();
   map = props.getMap();
@@ -602,7 +547,6 @@ onMounted(async () => {
     return;
   }
   track = prepared;
-  trackLength.value = track.length;
   drawProfile();
   addLayers(map);
   // the camera looks at the track, in the air on a flight: not at the ground under it
@@ -617,13 +561,11 @@ onMounted(async () => {
   draw(0);
   moveToTrack(settings.intro, () => (playing.value = true));
   frame = requestAnimationFrame(tick);
-  statsTimer = setInterval(() => showTuning.value && refreshStats(), 500);
 });
 
 onBeforeUnmount(() => {
   unmounted = true;
   cancelAnimationFrame(frame);
-  clearInterval(statsTimer);
   stopPrefetch();
   window.removeEventListener('keydown', onKey);
   if (!map) return;
@@ -642,66 +584,6 @@ onBeforeUnmount(() => {
     // nothing left to clean
   }
 });
-
-// the dev panel: a value changed ('duration.base'), or all back to FLYOVER
-function tune(path: string | null, value?: number | boolean) {
-  if (path === null) {
-    Object.assign(settings, structuredClone(FLYOVER));
-  } else {
-    const keys = path.split('.');
-    let target = settings as unknown as Record<string, unknown>;
-    keys.slice(0, -1).forEach((key) => (target = target[key] as Record<string, unknown>));
-    target[keys[keys.length - 1]] = value;
-  }
-  if (map?.getLayer('flyover-ahead')) {
-    map.setLayoutProperty('flyover-ahead', 'visibility', settings.showAhead ? 'visible' : 'none');
-  }
-  try {
-    window.localStorage.setItem(TUNING_KEY, JSON.stringify(settings));
-  } catch {
-    // no storage
-  }
-  dirty = true;
-}
-
-// the smoothing, the resampling and the distance on slopes are computed once per track: again when they change in the
-// panel
-{
-  watch(
-    () =>
-      JSON.stringify([
-        settings.positionSigma,
-        settings.altitudeSigma,
-        settings.headingSigma,
-        settings.minStep,
-        settings.maxSamples,
-        settings.distance,
-        settings.steepGain,
-        settings.steepSpan,
-        settings.steepMax,
-        settings.steepSigma,
-      ]),
-    async () => {
-      if (!track || !map) return;
-      const prepared = await prepareFlyover(
-        props.parts,
-        sampleTerrain,
-        props.exaggeration,
-        flightLayers?.air() ?? null,
-        settings
-      ).catch(() => null);
-      if (!prepared || unmounted || !map) return;
-      track = prepared;
-      drawProfile();
-      drawnBody = -1;
-      if (prefetcher) planCameras();
-      (map.getSource(SOURCES.ahead) as { setData?: (data: FeatureCollection) => void } | undefined)?.setData?.(
-        collection(multiLine(playedLines(track, track.length, hasFlights() ? onGround : undefined)))
-      );
-      dirty = true;
-    }
-  );
-}
 
 defineExpose({ seek, togglePlay, nextSpeed, recenter });
 </script>
