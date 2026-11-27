@@ -174,7 +174,7 @@
     "Associated routes cotations": "Schwierigkeitsgrade der verbundenen Routen",
     "Association": "Verein Camptocamp",
     "Associations history": "Geschichte der Verbindungen",
-    "At least 10 characters": "Mindestens 10 Zeichen",
+    "At least 12 characters": "Mindestens 12 Zeichen",
     "At least one access point in the route do not have a public transport stop within 5km.": "Mindestens ein Zugangspunkt der Route hat keine Haltestelle öffentlicher Verkehrsmittel im Umkreis von 5 km.",
     "At least one access point in the waypoint do not have a public transport stop within 5km.": "Mindestens ein Zugangspunkt des Wegpunkts hat keine Haltestelle öffentlicher Verkehrsmittel im Umkreis von 5 km.",
     "Attempts:": "Versuche:",
@@ -966,8 +966,8 @@
     "Parent": "Übergeordnet",
     "Participants and context": "Teilnehmer und Kontext",
     "Password": "Passwort",
-    "Password must be at least 10 characters long and contain a lowercase letter, an uppercase letter, a digit and a special character": {
-      "API message": "Das Passwort muss mindestens 10 Zeichen lang sein, mit einem Großbuchstaben, einem Kleinbuchstaben, einer Ziffer und einem Sonderzeichen."
+    "Password must be at least 12 characters long and contain a lowercase letter, an uppercase letter, a digit and a special character": {
+      "API message": "Das Passwort muss mindestens 12 Zeichen lang sein, mit einem Großbuchstaben, einem Kleinbuchstaben, einer Ziffer und einem Sonderzeichen."
     },
     "Password too short": {
       "API message": "Passwort zu kurz"

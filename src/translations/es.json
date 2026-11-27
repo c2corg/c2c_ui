@@ -135,7 +135,7 @@
     "Associated routes cotations": "Cotaciones de las rutas asociadas",
     "Association": "Asociación",
     "Associations history": "Historia de las asociaciones",
-    "At least 10 characters": "Al menos 10 caracteres",
+    "At least 12 characters": "Al menos 12 caracteres",
     "At least one access point in the route do not have a public transport stop within 5km.": "Al menos un punto de acceso de la ruta no dispone de parada de transporte público en un radio de 5 kilómetros.",
     "At least one access point in the waypoint do not have a public transport stop within 5km.": "Al menos un punto de acceso del punto de ruta no tiene una parada de transporte público en un radio de 5 km.",
     "Attempts:": "Intentos:",
@@ -919,8 +919,8 @@
     "Parent": "Padre",
     "Participants and context": "Participantes y contexto",
     "Password": "Contraseña",
-    "Password must be at least 10 characters long and contain a lowercase letter, an uppercase letter, a digit and a special character": {
-      "API message": "La contraseña debe tener al menos 10 caracteres y contener una letra minúscula, una letra mayúscula, un dígito y un carácter especial"
+    "Password must be at least 12 characters long and contain a lowercase letter, an uppercase letter, a digit and a special character": {
+      "API message": "La contraseña debe tener al menos 12 caracteres y contener una letra minúscula, una letra mayúscula, un dígito y un carácter especial"
     },
     "Password too short": {
       "API message": "Contraseña demasiado corta"

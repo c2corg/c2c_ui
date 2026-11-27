@@ -126,7 +126,7 @@
     "Associated routes cotations": "Ocene smeri, povezanih s točko",
     "Association": "Camptocamp Association",
     "Associations history": "Zgodovina povezav",
-    "At least 10 characters": "Vsaj 10 znakov",
+    "At least 12 characters": "Vsaj 12 znakov",
     "At least one access point in the route do not have a public transport stop within 5km.": "Vsaj eno izhodišče nima postajališča javnega prevoza v krogu 5 km.",
     "At least one access point in the waypoint do not have a public transport stop within 5km.": "Vsaj eno izhodišče nima postajališča javnega prevoza v krogu 5 km.",
     "Attempts:": "Poskusi:",
@@ -845,8 +845,8 @@
     "Parent": "Starš",
     "Participants and context": "Udeleženci in kontekst",
     "Password": "Geslo",
-    "Password must be at least 10 characters long and contain a lowercase letter, an uppercase letter, a digit and a special character": {
-      "API message": "Geslo mora biti dolgo vsaj 10 znakov in vsebovati malo črko, veliko črko, številko in poseben znak"
+    "Password must be at least 12 characters long and contain a lowercase letter, an uppercase letter, a digit and a special character": {
+      "API message": "Geslo mora biti dolgo vsaj 12 znakov in vsebovati malo črko, veliko črko, številko in poseben znak"
     },
     "Password too short": {
       "API message": "Geslo je prekratko"
