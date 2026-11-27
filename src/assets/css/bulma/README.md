@@ -2,7 +2,7 @@
 
 The parts of [Bulma](https://bulma.io) 0.9.4 (MIT License, see `LICENSE`) the site uses, one file per module of
 Bulma's Sass (`elements/button.css` for `sass/elements/button.sass`...), loaded in Bulma's order by `index.css`.
-`shared.css` has the rules several modules share (controls, unselectable, block margins, delete, loader),
+`shared.css` has the rules several modules share (controls, unselectable, block margins, delete),
 `palette.css` the colors of the color classes.
 
 The style guide of the site's CSS is `../README.md`.

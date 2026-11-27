@@ -15,7 +15,7 @@
 
     <button
       type="button"
-      class="button is-small is-outlined"
+      class="button is-small"
       :disabled="!canVerify || loading"
       :title="disabledReason"
       @click.stop.prevent="verify"
