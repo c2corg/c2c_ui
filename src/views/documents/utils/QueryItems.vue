@@ -165,7 +165,7 @@ const tags = ref<CachedDocument[]>([]);
 
 const associations = computed(() => {
   if (documentType.value === 'outing') {
-    return ['area', 'route', 'waypoint', 'profile'];
+    return ['area', 'route', 'waypoint', 'profile', 'article'];
   }
 
   if (documentType.value === 'route') {
@@ -263,6 +263,8 @@ function getDocument(documentType: string, documentId: number) {
   if (documentsCache[key] === undefined) {
     documentsCache[key] = {
       document_id: documentId,
+      // the type is needed to remove the tag before the document is loaded
+      type: constants.objectDefinitions[documentType].letter,
       loading: true,
     };
 
