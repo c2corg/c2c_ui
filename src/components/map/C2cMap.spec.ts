@@ -1498,11 +1498,11 @@ describe('C2cMap', () => {
 
         const speed = wrapper.find('.map-flyover-speed');
         const speeds = [];
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 4; i++) {
           speeds.push(speed.text());
           await speed.trigger('click');
         }
-        expect(speeds).toEqual(['1×', '2×', '3×', '5×', '10×']);
+        expect(speeds).toEqual(['1×', '2×', '3×', '5×']);
         expect(speed.text()).toBe('1×');
 
         const playedPoints = () =>

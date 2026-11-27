@@ -9,7 +9,7 @@ export const FLYOVER = {
   duration: { base: 45, refLength: 10_000, perDoubling: 15, min: 30, max: 120 },
   // the share of the duration to speed up at the start, and to slow down at the end
   ramp: 0.06,
-  speeds: [1, 2, 3, 5, 10],
+  speeds: [1, 2, 3, 5],
   // the part of the track not played yet: hidden, or drawn faint
   showAhead: false,
   // the track resampled every step metres, at least minStep, at most maxSamples samples
