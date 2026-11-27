@@ -1,78 +1,93 @@
 <template>
   <div
-    v-if="showAvalancheInfo"
+    v-if="showBox"
     class="box no-print is-relative avalanche-box"
     @pointerenter="onPointerEnter"
     @pointerleave="onPointerLeave"
   >
-    <div class="title" v-translate>Avalanche risk</div>
-    <template v-if="regions?.length">
-      <template v-if="hasInfo">
-        <div v-if="maxLevel > 0" class="icon-bra is-flex is-justify-content-center">
-          <icon-bra :size="120" :level="maxLevel" />
-        </div>
-        <div class="has-text-centered">
-          <span v-for="(region, index) in sortedRegions" :key="region.bra.id">
-            <a :href="officialUrl(region)" :title="region.bra.fullname" target="_blank" rel="noopener">
-              {{ region.bra.name }}<template v-if="region.bra.fullname"> ({{ region.bra.country }})</template>
-            </a>
-            <template v-if="index + 1 < sortedRegions.length">&bull; </template>
-          </span>
-        </div>
-        <p
-          v-if="atElevation"
-          class="is-size-7 has-text-centered has-text-grey"
-          :title="$gettext('Danger at the highest point of the route')"
-        >
-          <fa-icon icon="mountain" class="mr-1" />{{ elevation }} m
-        </p>
-
-        <!-- the full bulletin, unfolded in the box: by this button (touch, keyboard), or by a long hover -->
-        <button
-          v-if="withBulletins.length"
-          type="button"
-          class="button is-white is-small is-fullwidth bulletin-toggle"
-          :aria-expanded="unfolded"
-          :aria-controls="panelId"
-          @click="onToggleClick"
-        >
-          <span v-translate>Avalanche bulletin</span>
-          <fa-icon :icon="unfolded ? 'angle-up' : 'angle-down'" class="ml-1" />
-        </button>
-        <div v-if="unfolded && current" :id="panelId" class="bulletin-panel">
-          <div v-if="withBulletins.length > 1" class="tabs is-small is-centered mb-2">
-            <ul>
-              <li v-for="region of withBulletins" :key="region.regionId!" :class="{ 'is-active': region === current }">
-                <a href="#" @click.prevent="activeRegionId = region.regionId">{{ region.bra.name }}</a>
-              </li>
-            </ul>
+    <!-- an outing with no bulletin for its day: only the text, in the normal font, to stay unobtrusive -->
+    <p v-if="outingWithoutBulletin"><span v-translate key="id3">No avalanche bulletin stored for this day</span></p>
+    <template v-else>
+      <div class="title" v-translate>Avalanche risk</div>
+      <!-- the day of the outing is the one of the page: shown only when the bulletin is for another one -->
+      <p v-if="isOuting && bulletinsDay && bulletinsDay !== day" class="is-size-7 has-text-centered has-text-grey mb-2">
+        {{ $dateUtils.toLocalizedString(new Date(bulletinsDay + 'T12:00:00'), 'dddd DD MMMM YYYY') }}
+      </p>
+      <template v-if="regions?.length">
+        <template v-if="hasInfo">
+          <div v-if="maxLevel > 0" class="icon-bra is-flex is-justify-content-center">
+            <icon-bra :size="120" :level="maxLevel" />
           </div>
-          <bulletin-detail
-            :selected="selected(current)"
-            :bulletins="current.bulletins ?? null"
-            :failed="current.failed"
-            embedded
-            :compact="!$screen.isMobile"
-            @more="fullBulletin?.show()"
-          />
+          <div class="has-text-centered">
+            <span v-for="(region, index) in sortedRegions" :key="region.bra.id">
+              <component
+                :is="officialUrl(region) ? 'a' : 'span'"
+                :href="officialUrl(region)"
+                :title="region.bra.fullname"
+                :target="officialUrl(region) ? '_blank' : undefined"
+                rel="noopener"
+              >
+                {{ region.bra.name }}<template v-if="region.bra.fullname"> ({{ region.bra.country }})</template>
+              </component>
+              <template v-if="index + 1 < sortedRegions.length">&bull; </template>
+            </span>
+          </div>
+          <p v-if="atElevation" class="is-size-7 has-text-centered has-text-grey" :title="elevationTitle">
+            <fa-icon icon="mountain" class="mr-1" />{{ elevation }} m
+          </p>
+
+          <!-- the full bulletin, unfolded in the box: by this button (touch, keyboard), or by a long hover -->
+          <button
+            v-if="withBulletins.length"
+            type="button"
+            class="button is-white is-small is-fullwidth bulletin-toggle"
+            :aria-expanded="unfolded"
+            :aria-controls="panelId"
+            @click="onToggleClick"
+          >
+            <span v-translate>Avalanche bulletin</span>
+            <fa-icon :icon="unfolded ? 'angle-up' : 'angle-down'" class="ml-1" />
+          </button>
+          <div v-if="unfolded && current" :id="panelId" class="bulletin-panel">
+            <div v-if="withBulletins.length > 1" class="tabs is-small is-centered mb-2">
+              <ul>
+                <li
+                  v-for="region of withBulletins"
+                  :key="region.regionId!"
+                  :class="{ 'is-active': region === current }"
+                >
+                  <a href="#" @click.prevent="activeRegionId = region.regionId">{{ region.bra.name }}</a>
+                </li>
+              </ul>
+            </div>
+            <bulletin-detail
+              :selected="selected(current)"
+              :bulletins="current.bulletins ?? null"
+              :failed="current.failed"
+              embedded
+              :historical="isOuting && !isToday"
+              :compact="!$screen.isMobile"
+              @more="fullBulletin?.show()"
+            />
+          </div>
+        </template>
+        <div v-else class="py-2">
+          <p><span v-translate key="id2">No avalanche bulletin right now</span></p>
+        </div>
+        <!-- unfolded, the links follow the bulletin: no rule between them -->
+        <hr v-if="!unfolded" />
+        <div v-else-if="current && officialUrl(current)" class="box-link mt-3">
+          <fa-icon icon="file-lines" fixed-width />
+          <a :href="officialUrl(current)" target="_blank" rel="noopener">
+            <span v-translate>Full bulletin</span> ({{ current.bra.name }})
+          </a>
         </div>
       </template>
-      <div v-else class="py-2">
-        <p><span v-translate key="id2">No avalanche bulletin right now</span></p>
-      </div>
-      <!-- unfolded, the links follow the bulletin: no rule between them -->
-      <hr v-if="!unfolded" />
-      <div v-else-if="current && officialUrl(current)" class="box-link mt-3">
-        <fa-icon icon="file-lines" fixed-width />
-        <a :href="officialUrl(current)" target="_blank" rel="noopener">
-          <span v-translate>Full bulletin</span> ({{ current.bra.name }})
-        </a>
+      <div v-if="showYeti" class="box-link">
+        <icon-yeti fixed-width />
+        <router-link :to="yetiUrl"><span v-translate>Use YETI to better analyze avalanche risk</span></router-link>
       </div>
     </template>
-    <div class="box-link">
-      <icon-yeti fixed-width />
-      <router-link :to="yetiUrl"><span v-translate>Use YETI to better analyze avalanche risk</span></router-link>
-    </div>
 
     <!-- the whole bulletin, too wide for the column of the box on a large screen -->
     <modal-card v-if="current" ref="fullBulletin">
@@ -82,6 +97,7 @@
         :bulletins="current.bulletins ?? null"
         :failed="current.failed"
         embedded
+        :historical="isOuting && !isToday"
       />
       <template #footer>
         <a
@@ -94,7 +110,7 @@
           <fa-icon icon="file-lines" />
           <span class="ml-1" v-translate>Full bulletin</span>
         </a>
-        <router-link :to="yetiUrl" class="button is-small">
+        <router-link v-if="showYeti" :to="yetiUrl" class="button is-small">
           <icon-yeti fixed-width />
           <span class="ml-1" v-translate>Open in YETI</span>
         </router-link>
@@ -103,51 +119,47 @@
   </div>
 </template>
 <script setup lang="ts">
-import { booleanIntersects as turfBooleanIntersects } from '@turf/boolean-intersects';
-import { buffer as turfBuffer } from '@turf/buffer';
-import { simplify as turfSimplify } from '@turf/simplify';
-import type { Feature, FeatureCollection, Geometry, MultiPolygon, Polygon } from 'geojson';
 import { computed, onBeforeUnmount, onMounted, ref, useId, useTemplateRef, watch } from 'vue';
 
 import IconBra from '@/components/generics/icons/IconBra.vue';
 import ModalCard from '@/components/generics/modals/ModalCard.vue';
 import BulletinDetail from '@/components/yeti/BulletinDetail.vue';
-import { bulletinRegionId, dangerAtElevation } from '@/components/yeti/avalanche-bulletin';
+import { dangerAtElevation } from '@/components/yeti/avalanche-bulletin';
+import { type DocumentGeometry, type Region, findBulletinRegions } from '@/components/yeti/bulletin-regions';
 import type { SelectedBulletin } from '@/components/yeti/yetix-types';
-import avalancheBulletins, { type AvalancheBulletin } from '@/js/apis/avalanche-bulletin-service';
-import yetiService from '@/js/apis/yeti-service';
+import avalancheBulletins from '@/js/apis/avalanche-bulletin-service';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { documentProperty } from '@/js/properties';
 
 const props = defineProps({ ...documentProperty });
 
-const { $language } = useGlobalProperties();
+const { $gettext, $language } = useGlobalProperties();
 
-// a zone of the avalanche bulletins (BRA), and its bulletin
-type Zone = Feature<Polygon | MultiPolygon, { name: string; country: string; numZone?: string | null }>;
-type Bra = {
-  id: string;
-  name: string;
-  fullname?: string;
-  country: string;
-  zone: string;
-  urls: { url: string }[];
-  danger: { max: number | null };
-  orientations: Record<string, unknown>;
-  validUntil: string;
-};
-// a zone of the route, its EAWS region (none when the c2c API has no bulletin for it) and the bulletins of the API:
-// undefined until asked, null while fetched
-type Region = { bra: Bra; regionId: string | null; bulletins?: AvalancheBulletin[] | null; failed: boolean };
+const isOuting = computed(() => props.document.type === 'o');
+// the day of an outing (when it lasts several, the first): its bulletins, not the latest ones
+const day = computed<string>(() => props.document.date_start as string);
+const isToday = computed(() => day.value === new Date().toISOString().slice(0, 10));
 
 const regions = ref<Region[] | null>(null);
 
-// the danger is the one at the highest point of the route, once its bulletin is there
-const elevation = computed(() => props.document.elevation_max as number | null | undefined);
+// the danger is the one at the highest point of the route (of the outing, else of its routes), once its bulletin is
+// there
+const elevation = computed<number | undefined>(() => {
+  if (props.document.elevation_max) return props.document.elevation_max;
+  const routes = (isOuting.value ? props.document.associations?.routes : []) as { elevation_max?: number }[];
+  return Math.max(0, ...routes.map((route) => route.elevation_max ?? 0)) || undefined;
+});
+const elevationTitle = computed(() =>
+  isOuting.value
+    ? $gettext('Danger at the highest point of the outing')
+    : $gettext('Danger at the highest point of the route')
+);
 const regionBulletin = (region: Region) => region.bulletins?.[0];
 const dangerOf = (region: Region) => {
   const bulletin = regionBulletin(region);
-  return (bulletin && dangerAtElevation(bulletin.dangerRatings, elevation.value)) ?? region.bra.danger.max ?? 0;
+  // the summary of the zones is the one of today: not for the day of an outing
+  const summary = isOuting.value ? undefined : region.bra.danger.max;
+  return (bulletin && dangerAtElevation(bulletin.dangerRatings, elevation.value)) ?? summary ?? 0;
 };
 // the most dangerous first
 const sortedRegions = computed(() => [...(regions.value ?? [])].sort((a, b) => dangerOf(b) - dangerOf(a)));
@@ -160,6 +172,19 @@ const hasInfo = computed(
     maxLevel.value > 0 ||
     withBulletins.value.some((region) => region.bulletins !== undefined && (region.bulletins?.length ?? 1) > 0)
 );
+// an outing: a danger, or a bulletin of its day that is there (not one being loaded, nor failed)
+const outingHasInfo = computed(
+  () =>
+    maxLevel.value > 0 ||
+    withBulletins.value.some((region) => Array.isArray(region.bulletins) && region.bulletins.length > 0)
+);
+// the day the bulletins are valid for, when the API gives it (the day of the outing, else)
+const bulletinsDay = computed(() =>
+  withBulletins.value
+    .flatMap((region) => region.bulletins ?? [])
+    .map((bulletin) => bulletin.customData?.ALBINA?.mainDate)
+    .find(Boolean)
+);
 
 const activeRegionId = ref<string | null>(null);
 const current = computed(
@@ -170,27 +195,46 @@ const selected = (region: Region): SelectedBulletin => ({ regionId: region.regio
 // the PDF of Météo-France, else the website of the service, else the link of the zone (not the ENSG page of the
 // French massifs, which goes away)
 function officialUrl(region: Region) {
+  // the PDF and the pages of the services are the ones of today
+  if (isOuting.value && !isToday.value) return undefined;
   if (region.regionId?.startsWith('FR-')) return avalancheBulletins.pdfUrl(region.regionId);
   const website = regionBulletin(region)?.source?.provider?.website;
   const zoneUrl = region.bra.urls[0]?.url;
   return website ?? (zoneUrl && !zoneUrl.includes('showbra.php') ? zoneUrl : undefined);
 }
 
-// YETI on the route, its bulletin tab on the most dangerous region
+// YETI shows the latest bulletin: not for the day of an outing in the past
+const showYeti = computed(() => !isOuting.value || isToday.value);
+
+// YETI on the route (not on an outing), its bulletin tab on the most dangerous region
 const yetiUrl = computed(() => ({
   name: 'yeti',
-  params: { document_id: props.document.document_id },
+  params: isOuting.value ? {} : { document_id: props.document.document_id },
   query: withBulletins.value.length ? { bulletin: withBulletins.value[0].regionId } : {},
 }));
 
 const showAvalancheInfo = computed(() => {
-  if (props.document?.type !== 'r') {
+  if (props.document?.type !== 'r' && !(props.document?.type === 'o' && props.document.date_start)) {
     return false;
   }
 
   const activities = ['skitouring', 'snow_ice_mixed', 'ice_climbing', 'snowshoeing'];
 
   return props.document.activities?.some((activity: string) => activities.includes(activity));
+});
+
+// --- an outing: the box waits for the bulletins of its day (none fetched yet, or loading: nothing shown), then shows
+// them, or only the "no bulletin" text; a failed fetch with no bulletin, nothing either ---
+
+// fetched (an array, even empty) or failed
+const settled = (region: Region) => Array.isArray(region.bulletins) || region.failed;
+const outingSettled = computed(() => regions.value !== null && withBulletins.value.every((region) => settled(region)));
+const anyFailed = computed(() => withBulletins.value.some((region) => region.failed));
+const outingWithoutBulletin = computed(() => isOuting.value && outingSettled.value && !outingHasInfo.value);
+const showBox = computed(() => {
+  if (!showAvalancheInfo.value) return false;
+  if (!isOuting.value) return true;
+  return outingSettled.value && (outingHasInfo.value || !anyFailed.value);
 });
 
 // --- unfolding: a long hover (cancelled when the pointer leaves before), folded a moment after it leaves; a click
@@ -246,8 +290,10 @@ function fetchBulletins() {
   for (const region of regions.value ?? []) {
     if (!region.regionId) continue;
     region.bulletins = null;
-    avalancheBulletins
-      .getLatestBulletins(region.regionId, $language.current, aborter.signal)
+    (isOuting.value
+      ? avalancheBulletins.getBulletinsOfDay(region.regionId, day.value, $language.current, aborter.signal)
+      : avalancheBulletins.getLatestBulletins(region.regionId, $language.current, aborter.signal)
+    )
       .then((bulletins) => (region.bulletins = bulletins))
       .catch(() => {
         if (!aborter.signal.aborted) region.failed = true;
@@ -255,62 +301,19 @@ function fetchBulletins() {
   }
 }
 
-onMounted(() => {
-  if (showAvalancheInfo.value) {
-    const geometry = props.document.geometry!;
-    // OpenLayers' GeoJSON format (reprojection) loaded with the zones, not in the startup bundle (#4876)
-    Promise.all([yetiService.zonesBra(), import('ol/format/GeoJSON')]).then(
-      ([response, { default: GeoJSONFormat }]: [
-        { data: FeatureCollection<Polygon | MultiPolygon, Zone['properties']> },
-        typeof import('ol/format/GeoJSON'),
-      ]) => {
-        const GeoJSON = new GeoJSONFormat();
-        // use WGS 84 projection for buffering with turf
-        const routeGeometry = (
-          turfBuffer(
-            turfSimplify(
-              GeoJSON.writeGeometryObject(
-                GeoJSON.readGeometry(JSON.parse((geometry.geom_detail ?? geometry.geom)!), {
-                  dataProjection: 'EPSG:3857',
-                  featureProjection: 'EPSG:4326',
-                })!
-              ) as Geometry,
-              { tolerance: 0.01, highQuality: false }
-            ),
-            geometry.geom_detail ? 1 : 2,
-            {
-              units: 'kilometers',
-            }
-          ) as Feature<Polygon | MultiPolygon>
-        ).geometry;
+// the geometry of the document, else (an outing with none) the ones of its routes
+function geometries(): DocumentGeometry[] {
+  const { geometry, associations } = props.document;
+  if (geometry?.geom || geometry?.geom_detail || !isOuting.value) return [geometry];
+  return (associations?.routes ?? []).map((route: { geometry?: DocumentGeometry }) => route.geometry);
+}
 
-        const zones = response.data.features.filter((feature) =>
-          turfBooleanIntersects(turfBuffer(feature.geometry, 0.001, { units: 'kilometers' })!.geometry, routeGeometry)
-        );
-
-        if (zones.length) {
-          const m = new Map(zones.map((zone) => [zone.properties.name + '@' + zone.properties.country, zone]));
-          yetiService.bra().then((response: { data: { zones: Bra[] } }) => {
-            regions.value = response.data.zones
-              .filter((zone) => m.has(zone.zone + '@' + zone.country))
-              .map((zone) => {
-                const feature = m.get(zone.zone + '@' + zone.country)!;
-                return {
-                  bra: { ...feature.properties, ...zone },
-                  regionId: bulletinRegionId({
-                    ...feature.properties,
-                    contains: (lonLat) =>
-                      turfBooleanIntersects({ type: 'Point', coordinates: lonLat }, feature.geometry),
-                  }),
-                  failed: false,
-                };
-              });
-            whenIdle(fetchBulletins);
-          });
-        }
-      }
-    );
-  }
+onMounted(async () => {
+  if (!showAvalancheInfo.value) return;
+  const found = await findBulletinRegions(geometries());
+  // the day of an outing: the regions with a bulletin to look for
+  regions.value = isOuting.value ? found.filter((region) => region.regionId) : found;
+  if (regions.value.length) whenIdle(fetchBulletins);
 });
 </script>
 <style scoped>
