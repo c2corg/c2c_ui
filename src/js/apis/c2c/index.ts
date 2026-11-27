@@ -7,7 +7,7 @@ import FeedService from './FeedService';
 import ForumService from './ForumService';
 import ModeratorService from './ModeratorService';
 import UserProfileService from './UserProfileService';
-import { densityHeatmap, densityTracks, documentChanges, documentsPage, searchResults } from './schemas';
+import { densityHeatmap, densityTracks, documentChanges, documentsPage, rotatedImage, searchResults } from './schemas';
 import { type SessionRefusal, sentWithFormerToken, sessionRefusal } from './session-refusal';
 import type { Params } from './types';
 
@@ -167,6 +167,11 @@ export class CamptocampApi extends BaseApi {
 
   createImages(images: object[]) {
     return this.post('/images/list', { images });
+  }
+
+  // a quarter turn clockwise (90), anticlockwise (-90), or a half turn: the image gets a new file, a new version
+  rotateImage(documentId: number, rotation: 90 | -90 | 180) {
+    return this.postValidated('/images/rotate', rotatedImage, { document_id: documentId, rotation });
   }
 
   cooker(data: object) {

@@ -65,7 +65,7 @@ const mountToolBox = async (
         globalProperties: {
           $gettext: (text: string) => text,
           $filters: { uppercaseFirstLetter: (text: string) => text },
-          $documentUtils: { getDocumentType: (type: string) => (type === 'o' ? 'outing' : 'route') },
+          $documentUtils: { getDocumentType: (type: string) => ({ o: 'outing', i: 'image' })[type] ?? 'route' },
           $language: { current: 'fr' },
           $user: { isLogged: true, isModerator: true, id: 1 },
           $dateUtils: { toLocalizedString: (value: string) => value.slice(0, 10) },
@@ -171,5 +171,54 @@ describe('ToolBox', () => {
       name: 'routes',
       query: { bbox: '720000,5740000,740000,5760000' },
     });
+  });
+
+  const image = (imageType: string, filename = '1764000000_123.jpg') =>
+    reactive({
+      ...route(),
+      type: 'i',
+      image_type: imageType,
+      filename,
+      creator: { user_id: 7, name: 'Lionel' },
+      associations: {},
+    }) as unknown as CookedDocument;
+  const user = (id: number, isModerator = false) => ({ $user: { isLogged: true, isModerator, id } });
+  const rotateButtons = (wrapper: Awaited<ReturnType<typeof mountToolBox>>) =>
+    ['Rotate image left', 'Rotate image right'].filter((label) => button(wrapper, label));
+
+  it.each([
+    ['a moderator, a collaborative image', image('collaborative'), user(1, true), 2],
+    ['its author, a personal image', image('personal'), user(7), 2],
+    ['its author, a collaborative image', image('collaborative'), user(7), 0],
+    ['another user, a personal image', image('personal'), user(8), 0],
+    ['a moderator, an SVG image', image('collaborative', '1764000000_123.svg'), user(1, true), 0],
+  ])('offers to rotate: %s', async (_, document, globals, count) => {
+    expect(rotateButtons(await mountToolBox(document, {}, globals))).toHaveLength(count);
+  });
+
+  it('rotates the image, then shows its new file', async () => {
+    const rotate = vi
+      .spyOn(c2c, 'rotateImage')
+      .mockResolvedValue({ data: { filename: '1764000001_456.jpg' } } as never);
+    const document = image('personal');
+    const wrapper = await mountToolBox(document, {}, user(7));
+
+    await button(wrapper, 'Rotate image left').trigger('click');
+    await flushPromises();
+
+    expect(rotate).toHaveBeenCalledWith(12, -90);
+    expect((document as unknown as { filename: string }).filename).toBe('1764000001_456.jpg');
+  });
+
+  it('keeps the image when the rotation fails', async () => {
+    vi.spyOn(c2c, 'rotateImage').mockRejectedValue(new Error('500'));
+    const document = image('collaborative');
+    const wrapper = await mountToolBox(document, {}, user(1, true));
+
+    await button(wrapper, 'Rotate image right').trigger('click');
+    await flushPromises();
+
+    expect((document as unknown as { filename: string }).filename).toBe('1764000000_123.jpg');
+    expect(button(wrapper, 'Rotate image right').classes()).not.toContain('is-disabled');
   });
 });
