@@ -25,7 +25,7 @@
           <p>
             <icon-document :document-type="letterToDocumentType[embed.document_type]" fixed-width />
             <router-link :to="documentRoute(embed.document_type, embed.document_id, embed.langs[0])">
-              {{ embed.title || '#' + embed.document_id }}
+              {{ titleOf(embed) }}
             </router-link>
             <span v-for="lang of embed.langs" :key="lang" class="tag is-light ml-1">{{ lang }}</span>
           </p>
@@ -115,7 +115,7 @@
 <script setup lang="ts">
 import { ref, shallowRef, useTemplateRef } from 'vue';
 
-import { daysLeft, documentRoute } from './deleted-documents';
+import { daysLeft, documentRoute, documentTitle, type ListedDocument } from './deleted-documents';
 
 import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
@@ -132,8 +132,10 @@ const REASON_CLASSES: Record<BrokenEmbed['reason'], string> = {
   not_image: 'is-warning is-light',
 };
 
-const { $gettext } = useGlobalProperties();
+const { $gettext, $documentUtils } = useGlobalProperties();
 const { letterToDocumentType } = constants;
+
+const titleOf = (doc: ListedDocument) => documentTitle($documentUtils, doc);
 
 const embeds = ref<BrokenEmbed[]>([]);
 const total = ref(0);

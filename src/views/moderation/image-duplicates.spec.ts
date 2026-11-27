@@ -7,6 +7,7 @@ import { defaultKept, fileSize, sameUploader, spanParts, uploadSpan } from './im
 
 import { ApiData } from '@/js/apis/BaseApi';
 import type { DuplicateImage, DuplicateImageSet } from '@/js/apis/c2c/schemas';
+import documentUtils from '@/js/vue-plugins/document-utils';
 
 const api = vi.hoisted(() => ({
   getDuplicateImages: vi.fn(),
@@ -84,7 +85,7 @@ beforeEach(async () => {
 });
 
 const global = () => ({
-  plugins: [router],
+  plugins: [router, documentUtils],
   stubs: {
     FaIcon: true,
     IconDocument: true,
@@ -124,7 +125,7 @@ describe('ImageDuplicates', () => {
           image(1),
           image(2, {
             image_type: 'collaborative',
-            documents: [{ document_id: 50, document_type: 'r', title: 'Route' }],
+            documents: [{ document_id: 50, document_type: 'r', title: 'Route', title_prefix: 'Summit' }],
             embedded_in: [{ document_id: 60, document_type: 'r', title: 'Other route', lang: 'fr', image_id: 9 }],
           }),
         ],
@@ -140,6 +141,7 @@ describe('ImageDuplicates', () => {
     // the collaborative copy is kept: no button on it
     expect(images[1]!.classes()).toContain('is-kept');
     expect(images[1]!.findAll('button')).toHaveLength(0);
+    expect(images[1]!.text()).toContain('Summit : Route');
     expect(images[1]!.text()).toContain('Other route');
     expect(images[1]!.text()).toContain('through #9');
     expect(images[0]!.text()).toContain('Outing 1');

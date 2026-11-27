@@ -26,7 +26,7 @@
           <p>
             <icon-document :document-type="letterToDocumentType[link.document_type]" fixed-width />
             <router-link :to="documentRoute(link.document_type, link.document_id, link.langs[0])">
-              {{ link.title || '#' + link.document_id }}
+              {{ titleOf(link) }}
             </router-link>
             <span v-for="lang of link.langs" :key="lang" class="tag is-light ml-1">{{ lang }}</span>
           </p>
@@ -38,7 +38,7 @@
               <icon-document :document-type="letterToDocumentType[link.target_document_type]" fixed-width />
               <router-link :to="documentRoute(link.target_document_type, link.target_id)"
                 >{{ $gettext(letterToDocumentType[link.target_document_type]) }} #{{ link.target_id }}</router-link
-              ><span v-if="link.target_document_title"> « {{ link.target_document_title }} »</span>
+              ><span v-if="link.target_document_title"> « {{ targetTitle(link) }} »</span>
             </template>
           </p>
           <p v-if="link.target_document_type" class="mt-1 is-size-7">
@@ -114,7 +114,7 @@
 <script setup lang="ts">
 import { ref, shallowRef, useTemplateRef } from 'vue';
 
-import { daysLeft, documentRoute } from './deleted-documents';
+import { daysLeft, documentRoute, documentTitle, type ListedDocument } from './deleted-documents';
 
 import type { ApiData } from '@/js/apis/BaseApi';
 import c2c from '@/js/apis/c2c';
@@ -133,8 +133,17 @@ const REASON_CLASSES: Record<BrokenLink['reason'], string> = {
   unknown_type: 'is-warning is-light',
 };
 
-const { $gettext } = useGlobalProperties();
+const { $gettext, $documentUtils } = useGlobalProperties();
 const { letterToDocumentType } = constants;
+
+const titleOf = (doc: ListedDocument) => documentTitle($documentUtils, doc);
+
+const targetTitle = (link: BrokenLink) =>
+  $documentUtils.getDocumentTitle({
+    type: link.target_document_type!,
+    title: link.target_document_title,
+    title_prefix: link.target_document_title_prefix,
+  });
 
 const links = ref<BrokenLink[]>([]);
 const total = ref(0);

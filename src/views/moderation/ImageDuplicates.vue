@@ -81,7 +81,7 @@
               <p v-for="doc of image.documents" :key="doc.document_id" class="is-clipped">
                 <icon-document :document-type="letterToDocumentType[doc.document_type]" fixed-width />
                 <router-link :to="documentRoute(doc.document_type, doc.document_id)">
-                  {{ doc.title || '#' + doc.document_id }}
+                  {{ titleOf(doc) }}
                 </router-link>
               </p>
             </div>
@@ -95,7 +95,7 @@
               >
                 <icon-document :document-type="letterToDocumentType[text.document_type]" fixed-width />
                 <router-link :to="documentRoute(text.document_type, text.document_id)">
-                  {{ text.title || '#' + text.document_id }}
+                  {{ titleOf(text) }}
                 </router-link>
                 ({{ text.lang }})<span v-if="text.image_id !== image.document_id" class="has-text-grey">
                   {{ $gettext('through') }} #{{ text.image_id }}</span
@@ -112,7 +112,7 @@
               >
                 <icon-document :document-type="letterToDocumentType[text.document_type]" fixed-width />
                 <router-link :to="documentRoute(text.document_type, text.document_id)">
-                  {{ text.title || '#' + text.document_id }}
+                  {{ titleOf(text) }}
                 </router-link>
                 ({{ text.lang }})<span v-if="text.image_id !== image.document_id" class="has-text-grey">
                   {{ $gettext('through') }} #{{ text.image_id }}</span
@@ -203,7 +203,7 @@
 <script setup lang="ts">
 import { reactive, ref, shallowRef } from 'vue';
 
-import { documentRoute } from './deleted-documents';
+import { documentRoute, documentTitle, type ListedDocument } from './deleted-documents';
 import { defaultKept, fileSize, sameUploader, spanParts, uploadSpan } from './image-duplicates';
 
 import type { ApiData } from '@/js/apis/BaseApi';
@@ -225,7 +225,9 @@ const TYPE_CLASSES: Record<string, string> = {
 type ShownSet = DuplicateImageSet & { key: string; kept: number };
 
 const { letterToDocumentType } = constants;
-const { $gettext, $dateUtils } = useGlobalProperties();
+const { $gettext, $dateUtils, $documentUtils } = useGlobalProperties();
+
+const titleOf = (doc: ListedDocument) => documentTitle($documentUtils, doc);
 
 const sameDocument = ref(false);
 const sets = ref<ShownSet[]>([]);

@@ -63,8 +63,10 @@ export type C2cDocument = {
   locales?: Locale[];
   // the associated documents (schemas.ts associations): lists, and pages for recent_outings and all_routes
   associations?: Associations;
-  // the documents of the feeds and of the recent changes have a title instead of locales
+  // the documents of the feeds, of the recent changes and of the moderation lists have a title instead of locales,
+  // and a route its title prefix (the title of its main waypoint)
   title?: string | null;
+  title_prefix?: string | null;
   // the drawing properties of the features of other services (public transports, start points), on the map
   properties?: FeatureProperties;
   // listings give has_geom_detail instead of geom_detail
@@ -135,16 +137,12 @@ function createDocumentUtils(app: App) {
     getDocumentTitle(document: C2cDocument, lang?: string): string {
       // profile does not have locale, get profile's name
       if (document.type === 'u' || !document.type) {
-        return document.name ?? '';
+        return document.name ?? document.title ?? '';
       }
 
-      // document object returned by whatsnew does not have locale either
+      // document object returned by whatsnew or the moderation lists does not have locale either
       // but provides title property
-      if (!document.locales) {
-        return document.title ?? '';
-      }
-
-      const locale = this.getLocaleSmart(document, lang);
+      const locale = document.locales ? this.getLocaleSmart(document, lang) : document;
 
       if (locale?.title_prefix) {
         return locale.title_prefix + ' : ' + locale.title;

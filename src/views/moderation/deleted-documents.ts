@@ -3,10 +3,24 @@
 import type { RouteLocationRaw } from 'vue-router';
 
 import constants from '@/js/constants';
+import type { DocumentUtils } from '@/js/vue-plugins/document-utils';
 
 const DAY = 24 * 60 * 60 * 1000;
 
 /** The page of a document (in a language, if given) */
+// a document of a moderation list: a route with the title of its main waypoint before its title, as elsewhere
+export type ListedDocument = {
+  document_id: number;
+  document_type: string;
+  title: string | null;
+  title_prefix?: string | null;
+};
+
+export function documentTitle(documentUtils: DocumentUtils, doc: ListedDocument): string {
+  const { document_type: type, title, title_prefix } = doc;
+  return documentUtils.getDocumentTitle({ type, title, title_prefix }) || '#' + doc.document_id;
+}
+
 export function documentRoute(letterType: string, documentId: number, lang?: string | null): RouteLocationRaw {
   return { name: constants.letterToDocumentType[letterType], params: { id: documentId, ...(lang ? { lang } : {}) } };
 }
