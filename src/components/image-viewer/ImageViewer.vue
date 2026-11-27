@@ -536,6 +536,8 @@ onBeforeUnmount(() => {
     .image-viewer-title.is-untitled {
       visibility: hidden;
       opacity: 0;
+      /* visibility only switches at the end of the 1 s fade: no tap on a control on its way out */
+      pointer-events: none;
     }
   }
 }
