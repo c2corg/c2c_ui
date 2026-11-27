@@ -1355,6 +1355,30 @@ describe('C2cMap', () => {
         wrapper.unmount();
       });
 
+      it('stops following the position: the flyover moves the camera itself', async () => {
+        let fix: PositionCallback = () => undefined;
+        const geolocation = { watchPosition: vi.fn((ok: PositionCallback) => ((fix = ok), 1)), clearWatch: vi.fn() };
+        Object.defineProperty(navigator, 'geolocation', { value: geolocation, configurable: true });
+        const { wrapper, map } = await mountMap({
+          documents: [outing],
+          show3d: true,
+          showCenterOnGeolocation: true,
+          followPosition: true,
+        });
+        await wrapper.find('.ol-control-center-on-geolocation button').trigger('click');
+        fix({ coords: { longitude: 6.85, latitude: 45.9, accuracy: 20 } } as GeolocationPosition);
+
+        await play(wrapper);
+        const cameras = map.cameras.length;
+        fix({ coords: { longitude: 6.86, latitude: 45.91, accuracy: 20 } } as GeolocationPosition);
+
+        expect(geolocation.clearWatch).toHaveBeenCalledWith(1);
+        expect(map.cameras.length).toBe(cameras);
+        expect(wrapper.find('.ol-control-center-on-geolocation button').classes()).toContain('c2c-map-position-off');
+        wrapper.unmount();
+        Reflect.deleteProperty(navigator, 'geolocation');
+      });
+
       it('keeps the 3D view it started from, with its camera', async () => {
         const { wrapper, map } = await mountMap({ documents: [outing], show3d: true });
         await open3d(wrapper);

@@ -2582,6 +2582,8 @@ async function startFlyover() {
   flyoverFrom = from;
   flyoverLoading.value = true;
   showLayerSwitcher.value = false;
+  // the flyover moves the camera itself: the position no longer followed (its button, hidden then, to follow it again)
+  stopFollowingPosition();
   // asked first: the browser only allows it on the click itself
   const root = rootElementEl.value!;
   // a browser may never answer (some embedded views): over the window after a while, in full screen if it comes later
