@@ -3265,9 +3265,11 @@ defineExpose({
   left: 0.5em;
 }
 
-/* the flyover: its own controls only, the credits kept */
+/* the flyover: its own controls only, the credits kept (the scale with its box: else a dot of its padding is left); no
+   marker but its playhead (waypoints, images) */
 .c2c-map--flyover > .ol-control:not(.ol-attribution),
-.c2c-map--flyover :deep(.maplibregl-ctrl-scale) {
+.c2c-map--flyover :deep(.maplibregl-ctrl-bottom-right),
+.c2c-map--flyover :deep(.maplibregl-marker:not(.map-flyover-head)) {
   display: none !important;
 }
 
