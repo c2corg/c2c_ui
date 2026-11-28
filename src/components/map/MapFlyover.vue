@@ -541,6 +541,9 @@ onMounted(async () => {
   window.addEventListener('keydown', onKey);
   USER_EVENTS.forEach((type) => map!.on(type, onUserMove));
   const air = flightLayers?.air() ?? null;
+  // the flights in the air as played, from the start: as the walk, hidden by C2cMap as soon as the flyover opens,
+  // not shown in full behind the spinner until the first frame
+  flightLayers?.progress({ body: [], tip: [] }, null, 0, settings.showAhead);
   const prepared = await prepareFlyover(props.parts, sampleTerrain, props.exaggeration, air, settings).catch(
     () => null
   );
