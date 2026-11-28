@@ -171,7 +171,7 @@ test('an outing of c2c shows in the list, among the partner ones, and on the map
 
 // the map beside the list: one marker per outing that has a geometry, coloured by source
 type Located = Row & { id: string; title: string; geometry: { geom: string; quality: string } | null };
-const APPROXIMATE = ['summit', 'area_centroid'];
+const APPROXIMATE = ['summit', 'summit_match', 'area_centroid'];
 
 test('the map has a marker per located outing, coloured by source, the approximate ones apart', async ({ page }) => {
   const all = (await call('/partner-outings?limit=100')) as { items: Located[] };

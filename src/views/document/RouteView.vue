@@ -137,6 +137,7 @@
         <images-box :document="document" />
 
         <recent-outings-box :document="document" />
+        <partner-outings-box :document="document" />
 
         <avalanche-box :document="document" v-if="$screen.isMobile" />
 
@@ -162,6 +163,7 @@ import CommentsBox from './utils/boxes/CommentsBox.vue';
 import ImagesBox from './utils/boxes/ImagesBox.vue';
 import IsReachableByPublicTransportsBox from './utils/boxes/IsReachableByPublicTransportsBox.vue';
 import MapBox from './utils/boxes/MapBox.vue';
+import PartnerOutingsBox from './utils/boxes/PartnerOutingsBox.vue';
 import RecentOutingsBox from './utils/boxes/RecentOutingsBox.vue';
 import RoutesBox from './utils/boxes/RoutesBox.vue';
 import ToolBox from './utils/boxes/ToolBox.vue';

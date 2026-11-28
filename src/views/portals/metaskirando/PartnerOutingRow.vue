@@ -10,6 +10,8 @@
       <activities :activities="outing.activities" class="is-size-3 activity-icons" />
       <span class="partner-outing-main">
         <span v-if="isNew" class="tag is-warning is-light outing-new" data-test="new">{{ $gettext('New') }}</span>
+        <!-- e.g. the date, where the rows are not grouped by date -->
+        <slot name="before-title" />
         <span class="outing-title has-text-weight-bold">{{ outing.title }}</span>
         <span v-if="rating" class="outing-rating"> &bull; {{ rating }}</span>
         <span v-if="area" class="is-size-7 is-italic outing-area">{{ area.title }}</span>
@@ -20,6 +22,8 @@
           data-test="approximate"
           :title="$gettext('Approximate location')"
         />
+        <!-- e.g. the distance to the document of the page -->
+        <slot />
         <span class="is-size-7 outing-credit">{{ credit }}</span>
       </span>
       <span class="outing-side">

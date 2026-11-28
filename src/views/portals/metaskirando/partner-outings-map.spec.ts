@@ -51,6 +51,7 @@ describe('partner outings map helpers', () => {
   it('tells the approximate locations: the centre of an area, a resolved summit', () => {
     expect(isApproximate(partnerOuting({ geometry: geometry('area_centroid') }))).toBe(true);
     expect(isApproximate(partnerOuting({ geometry: geometry('summit') }))).toBe(true);
+    expect(isApproximate(partnerOuting({ geometry: geometry('summit_match') }))).toBe(true);
     expect(isApproximate(partnerOuting({ geometry: geometry('start') }))).toBe(false);
     expect(isApproximate(partnerOuting({ geometry: geometry('route') }))).toBe(false);
     expect(isApproximate(partnerOuting({ geometry: null }))).toBe(false);
