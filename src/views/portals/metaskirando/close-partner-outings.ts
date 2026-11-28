@@ -1,4 +1,5 @@
-// The outings of the partner sites close to a route or a waypoint, for the box of their page (the "Last outings" box, use-close-partner-outings.ts).
+// The outings of the partner sites close to a route or a waypoint, for the "Last outings" box of their page
+// (use-close-partner-outings.ts).
 //
 // "Close" is a distance on the ground: the API stores no link from a partner outing to a c2c document, only a point
 // (where the outing started, its summit, or the c2c summit it was resolved to by name: `summit_match`, which is then
