@@ -102,6 +102,14 @@ export function useMainMenuItems() {
             match: ['waypoints-map'],
             icon: 'map',
           },
+          // the outings of the other sites, next to those of c2c. Not yet on camptocamp.org either
+          {
+            key: 'metaskirando',
+            label: label($gettext('Metaskirando')),
+            to: { name: 'metaskirando' },
+            match: ['metaskirando'],
+            icon: 'rss',
+          },
         ]
       : []),
     // for the moderators of the topoguide or of the forum

@@ -58,6 +58,7 @@ const HistoryView = () => import(`@/views/wiki/HistoryView.vue`);
 const AssociationsHistoryView = () => import(`@/views/wiki/AssociationsHistoryView.vue`);
 const DiffView = () => import(`@/views/wiki/DiffView.vue`);
 const YetiView = () => import(`@/views/portals/YetiView.vue`);
+const MetaskirandoView = () => import('@/views/portals/metaskirando/MetaskirandoView.vue');
 // the pages of the phone layout (bottom tab bar)
 const MeView = () => import('@/views/user/MeView.vue');
 const SettingsView = () => import('@/views/user/SettingsView.vue');
@@ -87,6 +88,7 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
   },
   { path: '/yeti/:document_id(\\d+)?/:page?', name: 'yeti', component: YetiView },
+  { path: '/metaskirando', name: 'metaskirando', component: MetaskirandoView },
   { path: '/outings-stats', name: 'outings-stats', component: OutingsStatsView },
   { path: '/locate-images', name: 'locate-images', component: LocateImagesView, meta: { requiresAuth: true } },
   { path: '/sophie-picture-contest/:year(\\d+)?', name: 'sophie-picture-contest', component: SophiePictureContestView },

@@ -1,0 +1,169 @@
+import axios, { type AxiosInstance } from 'axios';
+
+import config from '@/js/config';
+
+// The outings of the partner sites (skitour.fr, gulliver.it...) harvested by the API, merged with those of c2c:
+// GET /partner-outings and GET /partner-outings/sources.
+
+export type PartnerOutingRating = {
+  ski_rating_min: string | null;
+  ski_rating_max: string | null;
+  // the rating as the source writes it
+  raw: string | null;
+  // the scale of `raw`: 'c2c_ski' for the ski ratings of c2c, otherwise that of the source
+  system: string | null;
+};
+
+export type PartnerOutingSnow = {
+  line_m?: number | null;
+  low_cm?: number | null;
+  top_cm?: number | null;
+};
+
+export type PartnerOuting = {
+  // '<source>:<id on the source>', 'c2c:<document_id>' for the outings of c2c
+  id: string;
+  // name of a source of the registry, or 'c2c'
+  source: string;
+  // set for the outings of c2c only
+  document_id: number | null;
+  // the page on the partner site; null for the outings of c2c (the UI routes to the outing)
+  url: string | null;
+  title: string;
+  lang: string | null;
+  // YYYY-MM-DD
+  date: string;
+  author: { name: string | null; url: string | null } | null;
+  activities: string[];
+  // the activity as the source names it, when it maps to none of ours
+  source_activity: string | null;
+  rating: PartnerOutingRating | null;
+  steep: boolean | null;
+  elevation_max: number | null;
+  height_diff_up: number | null;
+  orientations: string[];
+  // the snow cover reported by the source (snow line and depths, in m and cm), when it gives one
+  snow: PartnerOutingSnow | null;
+  region: string | null;
+  // `geom` is a GeoJSON string in EPSG:3857; `quality` tells how precise the location is ('summit' is the best)
+  geometry: { geom: string; quality: string } | null;
+  areas: { document_id: number; area_type: string; title: string }[];
+  credit: { site: string; site_url: string };
+  // a public GPX file of the track (gulliver.it gives some); absent from the answers of an API that predates it
+  gpx_url?: string | null;
+  // the API stores a track of the outing: GET /partner-outings/{id}/track; absent from an API that predates it
+  has_track?: boolean;
+};
+
+// GET /partner-outings/{id}/track: the track a source published, shown as it is with its attribution
+export type PartnerTrack = {
+  type: 'Feature';
+  // in EPSG:4326
+  geometry: { type: 'LineString'; coordinates: number[][] } | { type: 'MultiLineString'; coordinates: number[][][] };
+  properties: {
+    source: string;
+    url: string | null;
+    gpx_url: string | null;
+    author: string | null;
+    attribution: string | null;
+    licence: string | null;
+  };
+};
+
+export type PartnerSourceHealth = {
+  source: string;
+  status: string;
+  last_success_at: string | null;
+  // only in GET /partner-outings/sources
+  site_name?: string;
+  site_url?: string;
+  status_detail?: string | null;
+  last_run_at?: string | null;
+  last_fetched?: number | null;
+  // the items left out by the last run, by reason (e.g. {too_old: 1})
+  last_skipped?: Record<string, number> | null;
+};
+
+export type PartnerOutingsAnswer = {
+  total: number;
+  items: PartnerOuting[];
+  sources: PartnerSourceHealth[];
+};
+
+export type PartnerOutingsQuery = {
+  // area ids
+  a?: number[];
+  // activities
+  act?: string[];
+  // the outings located in this extent: [xmin, ymin, xmax, ymax] in EPSG:3857 (those without a location are left out)
+  bbox?: number[];
+  // only the steep outings (`steep=true`); left out, the steep and the others
+  steep?: boolean;
+  // 'YYYY-MM-DD' or 'start,end'; the API defaults to the last 14 days
+  date?: string;
+  // names of sources, 'c2c' included; the API defaults to all
+  sources?: string[];
+  limit?: number;
+  offset?: number;
+  // the language of the titles of c2c and of the area names
+  pl?: string;
+};
+
+class PartnerOutingsService {
+  axios: AxiosInstance;
+
+  constructor() {
+    this.axios = axios.create({ baseURL: config.urls.api });
+  }
+
+  /** The query parameters of the API: arrays comma separated, the empty ones left out */
+  params(query: PartnerOutingsQuery) {
+    const params: Record<string, string | number> = {};
+    const lists = { a: query.a, act: query.act, sources: query.sources };
+    for (const [name, list] of Object.entries(lists)) {
+      if (list?.length) {
+        params[name] = list.join(',');
+      }
+    }
+    if (query.bbox?.length === 4) {
+      params.bbox = query.bbox.join(',');
+    }
+    if (query.steep !== undefined) {
+      params.steep = String(query.steep);
+    }
+    if (query.date) {
+      params.date = query.date;
+    }
+    if (query.pl) {
+      params.pl = query.pl;
+    }
+    if (query.limit !== undefined) {
+      params.limit = query.limit;
+    }
+    if (query.offset !== undefined) {
+      params.offset = query.offset;
+    }
+    return params;
+  }
+
+  getAll(query: PartnerOutingsQuery = {}, signal?: AbortSignal) {
+    return this.axios
+      .get<PartnerOutingsAnswer>('/partner-outings', { params: this.params(query), signal })
+      .then((response) => response.data);
+  }
+
+  /** The track of an outing (its `id`, '<source>:<id on the source>'); the API answers 404 when it has none */
+  getTrack(id: string, signal?: AbortSignal) {
+    return this.axios
+      .get<PartnerTrack>(`/partner-outings/${encodeURIComponent(id)}/track`, { signal })
+      .then((response) => response.data);
+  }
+
+  getSources(signal?: AbortSignal) {
+    return this.axios
+      .get<{ sources: PartnerSourceHealth[] }>('/partner-outings/sources', { signal })
+      .then((response) => response.data.sources);
+  }
+}
+
+export default new PartnerOutingsService();

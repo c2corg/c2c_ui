@@ -2,9 +2,10 @@ import { flushPromises, mount } from '@vue/test-utils';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { defineComponent, h } from 'vue';
 
-import { useAccountLinks, useMainMenuItems } from './main-menu';
+import { useAccountLinks, useMainMenuItems, type MainMenuItem } from './main-menu';
 
 import { ApiData } from '@/js/apis/BaseApi';
+import config from '@/js/config';
 import { isForumModerator } from '@/stores/forum-role';
 import { clearModerationCount } from '@/stores/moderation-count';
 
@@ -101,8 +102,52 @@ describe('the map in the main menu', () => {
     sessionStorage.clear();
   });
 
-  it('is the last section, before the moderation', () => {
-    expect(keysFor({ isLogged: false }).menu.at(-1)).toBe('map');
-    expect(keysFor({ isLogged: true, isModerator: true, id: 1 }).menu.slice(-2)).toEqual(['map', 'moderation']);
+  it('is followed by Metaskirando, before the moderation', () => {
+    expect(keysFor({ isLogged: false }).menu.slice(-2)).toEqual(['map', 'metaskirando']);
+    expect(keysFor({ isLogged: true, isModerator: true, id: 1 }).menu.slice(-3)).toEqual([
+      'map',
+      'metaskirando',
+      'moderation',
+    ]);
+  });
+});
+
+describe('the Metaskirando entry of the main menu', () => {
+  const { urls, isBackendSelectable } = config;
+  afterEach(() => {
+    config.urls = urls;
+    config.isBackendSelectable = isBackendSelectable;
+  });
+
+  const entry = () => {
+    let found: MainMenuItem | undefined;
+    mount(
+      defineComponent({
+        setup() {
+          const items = useMainMenuItems();
+          found = items.value.find((i) => i.key === 'metaskirando');
+          return () => h('div');
+        },
+      }),
+      { global: { config: { globalProperties: { $gettext: (t: string) => t, $user: { isLogged: false } } as never } } }
+    );
+    return found;
+  };
+
+  it('links the page, with the mountain icon', () => {
+    config.urls = { ...urls, name: 'demo' };
+    expect(entry()).toMatchObject({ to: { name: 'metaskirando' }, match: ['metaskirando'], icon: 'rss' });
+  });
+
+  it('is hidden on the production backend', () => {
+    config.isBackendSelectable = false;
+    config.urls = { ...urls, name: 'prod' };
+    expect(entry()).toBeUndefined();
+  });
+
+  it('is shown on production when the backend can be selected', () => {
+    config.isBackendSelectable = true;
+    config.urls = { ...urls, name: 'prod' };
+    expect(entry()).toBeDefined();
   });
 });

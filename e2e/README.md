@@ -13,7 +13,22 @@ Not run in CI: run them before merging a change that touches pages, forms, maps 
    E2E_PASSWORD=E2e-Test-Pass-42 python /path/to/c2c_ui/e2e/create-user.py development.ini
    ```
 
-3. Install the browser: `npx playwright install chromium`
+3. For `metaskirando.spec.ts`: v6_api in fixture mode (`harvest_partners_enabled="true"`, `partners_transport="fixtures"`
+   and `partners_allow_synthetic="true"`, all set by `config/env.dev`), with the partner tables migrated and the job run
+   once, as in v6_api `docs/partner-outings.md` ("Local demo"), in the app container:
+
+   ```sh
+   make CONFIG=config/env.devcontainer load-env   # only if the ini files predate the partners settings
+   uv run alembic upgrade head
+   make harvest-partners
+   ```
+
+   The fixtures are synthetic and contain broken items on purpose, so some sources may end `degraded`, which is the
+   expected demo status. The spec reads the sources from `/partner-outings/sources`, so it does not depend on how many
+   there are. Without the harvest, it fails on its first check. The API shows only the last 14 days of outings: once the
+   harvested outings are older than that, run `make harvest-partners` again, or the spec fails on its first check.
+
+4. Install the browser: `npx playwright install chromium`
 
 ## Run
 
