@@ -553,6 +553,8 @@ onMounted(async () => {
     return;
   }
   track = prepared;
+  // flights too short to have a sample in the air: not played (draw), shown as before the flyover
+  if (!hasFlights()) flightLayers?.progress(null, null);
   drawProfile();
   addLayers(map);
   // the camera looks at the track, in the air on a flight: not at the ground under it
