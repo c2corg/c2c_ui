@@ -1,0 +1,2 @@
+import{Fi as e,Gi as t,Ii as n,Mi as r,bi as i,mi as a,vi as o}from"./vendor-DKMFvvsa.js";import{t as s}from"./_plugin-vue_export-helper-BDNMzG2s.js";var c=s(i({__name:`TopoguideViewSmallLink`,props:{to:{type:Object,required:!0}},setup(i){return(s,c)=>{let l=n(`router-link`);return r(),a(`div`,null,[o(l,{to:i.to},{default:t(()=>[e(s.$slots,`default`,{},void 0,!0)]),_:3},8,[`to`])])}}}),[[`__scopeId`,`data-v-3728c177`]]);export{c as t};
+//# sourceMappingURL=TopoguideViewSmallLink-BnqsCCT2.js.map

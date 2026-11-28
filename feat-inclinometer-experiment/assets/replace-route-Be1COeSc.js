@@ -1,0 +1,2 @@
+import{Jr as e,qr as t}from"./vendor-DbyPHD8h.js";async function n(n,r,i){let a=n.currentRoute.value,o=e=>e.name===a.name&&e.params.id===a.params.id,s,c=!1,l=n.afterEach((e,t,n)=>{n||(l(),c?o(e)&&i():s=e)}),u=await n.replace(r);e(u,t.cancelled)?s?o(s)&&i():c=!0:l()}export{n as t};
+//# sourceMappingURL=replace-route-Be1COeSc.js.map

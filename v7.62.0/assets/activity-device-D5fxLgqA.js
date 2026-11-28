@@ -1,0 +1,2 @@
+var e=e=>e.replace(/[.*+?^${}()|[\]\\]/g,`\\$&`),t=/^[\s\-–—_·:,;/|]+|[\s\-–—_·:,;/|]+$/gu;function n(n,r){let i=n?.trim();if(!i)return;let a=[...new Set(r.map(e=>e.trim()).filter(Boolean))].sort((e,t)=>t.length-e.length);for(let t of a){let n=RegExp(`(?<![\\p{L}\\p{N}])${e(t)}(?![\\p{L}\\p{N}])`,`giu`);i=i.replace(n,` `)}return i=i.replace(/\(\s*\)|\[\s*\]/g,` `).replace(/\s+/g,` `).replace(t,``),i||void 0}var r=(e,t)=>e.flatMap(e=>[e,t(e)]);export{r as n,n as t};
+//# sourceMappingURL=activity-device-D5fxLgqA.js.map

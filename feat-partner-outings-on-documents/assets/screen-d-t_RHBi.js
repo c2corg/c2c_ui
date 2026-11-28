@@ -1,0 +1,2 @@
+import{hi as e,ia as t,ti as n}from"./vendor-BXYHlVC_.js";var r=1024,i=1216,a=n(`screen`,()=>{let n=t(-1),a=[769,r,i].map(e=>window.matchMedia(`only screen and (max-width: ${e-1}px)`)),o=()=>{n.value=a.findIndex(e=>e.matches)};a.forEach(e=>e.addEventListener(`change`,o)),o();let s=e(()=>n.value===0),c=e(()=>n.value===1);return{isMobile:s,isTablet:c,isDesktop:e(()=>n.value===2),isWidescreen:e(()=>n.value===-1),isDesktopOrWider:e(()=>!s.value&&!c.value)}});export{a as t};
+//# sourceMappingURL=screen-d-t_RHBi.js.map

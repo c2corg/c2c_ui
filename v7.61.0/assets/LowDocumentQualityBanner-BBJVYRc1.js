@@ -1,0 +1,4 @@
+import{Ki as e,Li as t,Ni as n,Ri as r,di as i,hi as a,qi as o,vi as s,xi as c,yi as l}from"./vendor-6yyPTkrz.js";import{t as u}from"./properties-BEzqA_5K.js";var d={class:`notification is-info no-print`},f=c({__name:`LowDocumentQualityBanner`,props:{...u},setup(c){let u=c,f=i(()=>u.document?u.document.cooked.lang:null);return(i,c)=>{let u=t(`edit-link`),p=r(`translate`);return n(),a(`div`,d,[o((n(),a(`span`,null,[...c[0]||=[s(`This document is a draft.`,-1)]])),[[p]]),c[3]||=s(),l(u,{document:i.document,lang:f.value},{default:e(()=>[o((n(),a(`span`,null,[...c[1]||=[s(`Feel free to edit it.`,-1)]])),[[p]])]),_:1},8,[`document`,`lang`]),c[4]||=s(),o((n(),a(`span`,null,[...c[2]||=[s(`
+      Provide information and improve its quality, following the contribution rules and respecting copyright.
+    `,-1)]])),[[p]])])}}});export{f as t};
+//# sourceMappingURL=LowDocumentQualityBanner-BBJVYRc1.js.map

@@ -1,0 +1,2 @@
+import{$i as e,Ci as t,Ni as n,ki as r}from"./vendor-DKMFvvsa.js";function i(t){let r=e([]);return n(t,{register:e=>r.value.push(e),unregister:e=>{let t=r.value.indexOf(e);t!==-1&&r.value.splice(t,1)}}),{formFields:r}}function a(e,n){let i=t(e,null);i&&(i.register(n),r(()=>i.unregister(n)))}export{a as n,i as t};
+//# sourceMappingURL=form-registration-D4oFH3Ms.js.map
