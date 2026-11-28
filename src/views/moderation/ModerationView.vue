@@ -31,7 +31,7 @@
           <router-link
             :to="{ name: 'moderation', params: { tab: 'broken-links' } }"
             class="button"
-            :class="{ 'is-primary is-selected': !showImages }"
+            :class="{ 'is-primary is-selected': !showImages && !showExternal }"
             v-translate
           >
             Links to documents
@@ -43,8 +43,17 @@
           >
             {{ $gettext('Images') }}&nbsp;<code>[img]</code>
           </router-link>
+          <router-link
+            :to="{ name: 'moderation', params: { tab: 'broken-links' }, query: { kind: 'external' } }"
+            class="button"
+            :class="{ 'is-primary is-selected': showExternal }"
+            v-translate
+          >
+            Other sites
+          </router-link>
         </div>
         <broken-embeds v-if="showImages" />
+        <external-links v-else-if="showExternal" />
         <broken-links v-else />
       </template>
       <image-duplicates v-else-if="activeTab === 'duplicates'" />
@@ -61,6 +70,7 @@ import AccountRemovals from './AccountRemovals.vue';
 import BrokenEmbeds from './BrokenEmbeds.vue';
 import BrokenLinks from './BrokenLinks.vue';
 import DeletedDocuments from './DeletedDocuments.vue';
+import ExternalLinks from './ExternalLinks.vue';
 import ImageDuplicates from './ImageDuplicates.vue';
 import OrphanImages from './OrphanImages.vue';
 
@@ -125,6 +135,8 @@ const tabs = computed(() => [
 
 // the broken images had their own tab: its address shows them
 const showImages = computed(() => route.query.kind === 'images' || route.params.tab === 'broken-images');
+// the links to other sites, as checked by the API
+const showExternal = computed(() => !showImages.value && route.query.kind === 'external');
 
 const activeTab = computed(() => {
   const asked = route.params.tab as string | undefined;

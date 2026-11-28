@@ -9,6 +9,7 @@ import BrokenEmbeds from './BrokenEmbeds.vue';
 import BrokenLinks from './BrokenLinks.vue';
 import DeletedDocumentItem from './DeletedDocumentItem.vue';
 import DeletedDocuments from './DeletedDocuments.vue';
+import ExternalLinks from './ExternalLinks.vue';
 import MergedDocumentItem from './MergedDocumentItem.vue';
 import ModerationView from './ModerationView.vue';
 import OrphanImages from './OrphanImages.vue';
@@ -20,6 +21,7 @@ import type {
   BrokenEmbed,
   BrokenLink,
   DeletedDocument,
+  ExternalLink,
   MergedDocument,
   OrphanImage,
 } from '@/js/apis/c2c/schemas';
@@ -41,6 +43,10 @@ const api = vi.hoisted(() => ({
   getOrphanImages: vi.fn(),
   getBrokenEmbeds: vi.fn(),
   getBrokenLinks: vi.fn(),
+  getExternalLinks: vi.fn(),
+  reviewExternalLink: vi.fn(),
+  reviewExternalHost: vi.fn(),
+  recheckExternalLink: vi.fn(),
   deleteDocument: vi.fn(),
 }));
 
@@ -170,7 +176,7 @@ const global = (isModerator = true) => ({
       $gettext: (s: string) => s,
       $filters: { uppercaseFirstLetter: (s: string) => s },
       $user: { isLogged: true, isModerator },
-      $dateUtils: { toLocalizedString: (value: string) => 'date:' + value },
+      $dateUtils: { toLocalizedString: (value: string) => 'date:' + value, timeAgo: () => '2 hours ago' },
     } as never,
   },
 });
@@ -234,6 +240,19 @@ describe('ModerationView', () => {
     await flushPromises();
     expect(wrapper.find('.tabs li.is-active').text()).toBe('Broken links');
     expect(wrapper.findComponent(BrokenEmbeds).exists()).toBe(true);
+    await router.push('/moderation');
+  });
+
+  it('shows the links to other sites by a third toggle', async () => {
+    api.getBrokenLinks.mockReturnValue(answer({ total: 0, links: [] }));
+    api.getExternalLinks.mockReturnValue(answer({ total: 0, counts: {}, links: [] }));
+    await router.push('/moderation/broken-links?kind=external');
+    const wrapper = mount(ModerationView, { global: global() });
+    await flushPromises();
+
+    expect(wrapper.findComponent(ExternalLinks).exists()).toBe(true);
+    expect(wrapper.findComponent(BrokenLinks).exists()).toBe(false);
+    expect(wrapper.find('.buttons .is-selected').text()).toBe('Other sites');
     await router.push('/moderation');
   });
 
@@ -994,5 +1013,258 @@ describe('BrokenLinks', () => {
     expect(api.getBrokenLinks).toHaveBeenCalledTimes(2);
     expect(wrapper.find('.notification.is-success a').attributes('href')).toBe('/waypoints/56');
     expect(wrapper.text()).toContain('No broken link.');
+  });
+});
+
+const externalLink = (url: string, extra: Partial<ExternalLink> = {}): ExternalLink => ({
+  url,
+  host: new URL(url).hostname,
+  host_review: null,
+  status: 'dead',
+  http_status: null,
+  error: 'dns',
+  final_url: null,
+  first_title: null,
+  last_title: null,
+  failures: 3,
+  first_failure_at: '2026-11-01T10:00:00+00:00',
+  last_ok_at: null,
+  last_checked_at: '2026-11-27T10:00:00+00:00',
+  next_check_at: '2027-02-25T10:00:00+00:00',
+  review: null,
+  reviewed_at: null,
+  documents_count: 1,
+  documents: [{ document_id: 37, document_type: 'w', title: 'Refuge', title_prefix: null, langs: ['fr'] }],
+  ...extra,
+});
+
+const COUNTS = { dead: 2, failing: 0, parked: 1, suspect: 1, offsite: 0, moved: 4, blocked: 0, ok: 9, unchecked: 0 };
+
+// the reason shown for a link with these fields
+const detailOf = (extra: Partial<ExternalLink>) => {
+  api.getExternalLinks.mockReturnValueOnce(
+    answer({ total: 1, counts: {}, links: [externalLink('http://x.example/', extra)] })
+  );
+  const wrapper = mount(ExternalLinks, { global: global() });
+  return flushPromises().then(() => wrapper.find('.external-link-item .has-text-grey').text());
+};
+
+describe('ExternalLinks', () => {
+  beforeEach(() => {
+    api.getExternalLinks.mockReset();
+    api.reviewExternalLink.mockReset();
+    api.reviewExternalHost.mockReset();
+    api.recheckExternalLink.mockReset();
+  });
+
+  it('lists the links by site, with their status, why, titles and documents', async () => {
+    api.getExternalLinks.mockReturnValue(
+      answer({
+        total: 4,
+        counts: COUNTS,
+        links: [
+          externalLink('http://dead.example/a'),
+          externalLink('http://dead.example/b', {
+            status: 'failing',
+            error: 'home',
+            final_url: 'http://dead.example/',
+          }),
+          externalLink('http://parked.example/', { status: 'parked', error: null, http_status: 200, failures: 0 }),
+          externalLink('http://blog.example/', {
+            status: 'suspect',
+            error: null,
+            http_status: 200,
+            failures: 0,
+            first_title: 'Topo du Vercors',
+            last_title: 'Best casino',
+            host_review: 'trusted',
+            documents_count: 25,
+            documents: [
+              {
+                document_id: 39,
+                document_type: 'r',
+                title: 'Face nord',
+                title_prefix: 'Mont Blanc',
+                langs: ['de', 'fr'],
+              },
+            ],
+          }),
+        ],
+      })
+    );
+    const wrapper = mount(ExternalLinks, { global: global() });
+    await flushPromises();
+
+    expect(api.getExternalLinks).toHaveBeenCalledWith(0, 30, {
+      statuses: ['dead', 'failing', 'parked', 'suspect', 'offsite'],
+      host: undefined,
+      reviewed: false,
+    });
+    const hosts = wrapper.findAll('.external-host');
+    expect(hosts.map((host) => host.find('h3').text())).toEqual([
+      'dead.example',
+      'parked.example',
+      'blog.example Trusted site',
+    ]);
+    expect(hosts[2]!.find('.host-trust').text()).toBe('Do not trust this site');
+    const items = wrapper.findAll('.external-link-item');
+    expect(items).toHaveLength(4);
+    expect(items[0]!.text()).toContain('Dead');
+    expect(items[0]!.text()).toContain('No such domain');
+    expect(items[0]!.text()).toContain('Failures: 3');
+    expect(items[0]!.find('.url a').attributes()).toMatchObject({
+      href: 'http://dead.example/a',
+      rel: 'noopener noreferrer nofollow',
+    });
+    expect(items[0]!.find('.documents a').attributes('href')).toBe('/waypoints/37/fr');
+    expect(items[1]!.text()).toContain('Sent to the home page');
+    expect(await detailOf({ error: 'closed' })).toBe('Site closed by its host');
+    expect(items[1]!.text()).toContain('→ http://dead.example/');
+    expect(items[2]!.text()).toContain('Domain for sale');
+    expect(items[3]!.text().replace(/\s+/g, ' ')).toContain('Title then: « Topo du Vercors » now: « Best casino »');
+    // a route: the title of its main waypoint before its title; the documents not shown are counted
+    expect(items[3]!.find('.documents a').text()).toBe('Mont Blanc : Face nord');
+    expect(items[3]!.text()).toContain('and others: 24');
+    // the counts of the filters, the default ones selected
+    const filters = wrapper.findAll('.status-filter');
+    expect(filters.map((f) => f.text().replace(/\s+/g, ' '))).toContain('Moved 4');
+    expect(filters.filter((f) => f.classes('is-primary')).map((f) => f.text().replace(/\s+/g, ' '))).toEqual([
+      'Dead 2',
+      'Failing 0',
+      'Domain for sale 1',
+      'Changed page 1',
+      'Redirected to another site 0',
+    ]);
+    expect(wrapper.text()).toContain('Found: 4');
+  });
+
+  it('filters by status, site and review', async () => {
+    api.getExternalLinks.mockReturnValue(
+      answer({ total: 1, counts: COUNTS, links: [externalLink('http://dead.example/a')] })
+    );
+    const wrapper = mount(ExternalLinks, { global: global() });
+    await flushPromises();
+
+    await wrapper.findAll('.status-filter')[5]!.trigger('click');
+    expect(api.getExternalLinks).toHaveBeenLastCalledWith(0, 30, {
+      statuses: ['dead', 'failing', 'parked', 'suspect', 'offsite', 'moved'],
+      host: undefined,
+      reviewed: false,
+    });
+    await flushPromises();
+    await wrapper.find('.host-name').trigger('click');
+    expect(api.getExternalLinks.mock.lastCall![2].host).toBe('dead.example');
+    await flushPromises();
+    await wrapper.find('.reviewed-filter').setValue(true);
+    expect(api.getExternalLinks.mock.lastCall![2].reviewed).toBe(true);
+    await flushPromises();
+    await wrapper.find('.host-clear').trigger('click');
+    expect(api.getExternalLinks.mock.lastCall![2].host).toBeUndefined();
+  });
+
+  it('reviews a link, trusts a site, asks for a check again', async () => {
+    api.getExternalLinks.mockReturnValue(
+      answer({
+        total: 2,
+        counts: COUNTS,
+        links: [externalLink('http://dead.example/a'), externalLink('http://parked.example/')],
+      })
+    );
+    api.reviewExternalLink.mockReturnValue(answer({ url: 'http://parked.example/', review: 'taken_over' }));
+    api.reviewExternalHost.mockReturnValue(answer({ host: 'dead.example', review: 'trusted' }));
+    api.recheckExternalLink.mockReturnValue(answer({ url: 'http://dead.example/a', next_check_at: null }));
+    const wrapper = mount(ExternalLinks, { global: global() });
+    await flushPromises();
+
+    const items = () => wrapper.findAll('.external-link-item');
+    await items()[1]!.find('.review-taken-over').trigger('click');
+    await flushPromises();
+    expect(api.reviewExternalLink).toHaveBeenCalledWith('http://parked.example/', 'taken_over');
+    // taken over: still listed, until removed from the texts
+    expect(items()[1]!.text()).toContain('Reviewed taken over');
+    expect(items()[1]!.find('.review-undo').exists()).toBe(true);
+
+    await items()[0]!.find('.recheck').trigger('click');
+    await flushPromises();
+    expect(api.recheckExternalLink).toHaveBeenCalledWith('http://dead.example/a');
+    expect(items()[0]!.text()).toContain('to be checked again at the next run');
+    expect(items()[0]!.find('.recheck').attributes('disabled')).toBeDefined();
+
+    // genuine: it leaves the list
+    await items()[0]!.find('.review-genuine').trigger('click');
+    await flushPromises();
+    expect(api.reviewExternalLink).toHaveBeenLastCalledWith('http://dead.example/a', 'genuine');
+    expect(api.getExternalLinks).toHaveBeenCalledTimes(2);
+
+    await wrapper.find('.host-trust').trigger('click');
+    await flushPromises();
+    expect(api.reviewExternalHost).toHaveBeenCalledWith('dead.example', 'trusted');
+    expect(api.getExternalLinks).toHaveBeenCalledTimes(3);
+  });
+
+  it('shows a check asked for until a later one is loaded', async () => {
+    const link = externalLink('http://dead.example/a', { last_checked_at: '2020-01-01T00:00:00+00:00' });
+    api.getExternalLinks.mockReturnValueOnce(answer({ total: 1, counts: COUNTS, links: [link] }));
+    api.recheckExternalLink.mockReturnValue(answer({ url: link.url, next_check_at: null }));
+    const wrapper = mount(ExternalLinks, { global: global() });
+    await flushPromises();
+    await wrapper.find('.recheck').trigger('click');
+    await flushPromises();
+    expect(wrapper.find('.recheck').attributes('disabled')).toBeDefined();
+
+    // the list again, the link checked since
+    api.getExternalLinks.mockReturnValueOnce(
+      answer({
+        total: 1,
+        counts: COUNTS,
+        links: [{ ...link, last_checked_at: new Date(Date.now() + 1000).toISOString() }],
+      })
+    );
+    await wrapper.find('.reviewed-filter').setValue(true);
+    await flushPromises();
+    expect(wrapper.find('.recheck').attributes('disabled')).toBeUndefined();
+    expect(wrapper.text()).not.toContain('to be checked again');
+  });
+
+  it('drops the answer of a query replaced meanwhile', async () => {
+    let resolveFirst: (value: unknown) => void = () => {};
+    api.getExternalLinks.mockReturnValueOnce(new ApiData(new Promise((resolve) => (resolveFirst = resolve)) as never));
+    api.getExternalLinks.mockReturnValueOnce(
+      answer({ total: 1, counts: COUNTS, links: [externalLink('http://new.example/')] })
+    );
+    const wrapper = mount(ExternalLinks, { global: global() });
+    await wrapper.find('.reviewed-filter').setValue(true);
+    await flushPromises();
+    resolveFirst({ data: { total: 9, counts: COUNTS, links: [externalLink('http://old.example/')] } });
+    await flushPromises();
+    expect(wrapper.findAll('.external-link-item .url a').map((a) => a.text())).toEqual(['http://new.example/']);
+    expect(wrapper.text()).toContain('Found: 1');
+  });
+
+  it('filters by site with a button (keyboard)', async () => {
+    api.getExternalLinks.mockReturnValue(
+      answer({ total: 1, counts: COUNTS, links: [externalLink('http://dead.example/a')] })
+    );
+    const wrapper = mount(ExternalLinks, { global: global() });
+    await flushPromises();
+    expect(wrapper.find('.host-name').element.tagName).toBe('BUTTON');
+    expect(wrapper.find('.host-name').attributes('type')).toBe('button');
+  });
+
+  it('says when a review cannot be saved, and when no link is listed', async () => {
+    api.getExternalLinks.mockReturnValue(
+      answer({ total: 1, counts: COUNTS, links: [externalLink('http://dead.example/a')] })
+    );
+    api.reviewExternalLink.mockReturnValue(new ApiData(Promise.reject(new Error('500'))));
+    const wrapper = mount(ExternalLinks, { global: global() });
+    await flushPromises();
+    await wrapper.find('.review-genuine').trigger('click');
+    await flushPromises();
+    expect(wrapper.text()).toContain('The change could not be saved.');
+
+    api.getExternalLinks.mockReturnValue(answer({ total: 0, counts: {}, links: [] }));
+    const empty = mount(ExternalLinks, { global: global() });
+    await flushPromises();
+    expect(empty.text()).toContain('No link.');
   });
 });

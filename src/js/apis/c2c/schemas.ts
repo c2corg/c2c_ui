@@ -765,6 +765,66 @@ export const brokenLinksPage = z.object({
   links: z.array(brokenLink),
 });
 
+// GET /documents/external-links: the links to other sites of the collaborative documents, as the link checker of the
+// API found them, by host (moderators). By default the ones that need a look
+export const EXTERNAL_LINK_STATUSES = [
+  'dead',
+  'failing',
+  'parked',
+  'suspect',
+  'offsite',
+  'moved',
+  'blocked',
+  'ok',
+  'unchecked',
+] as const;
+export type ExternalLinkStatus = (typeof EXTERNAL_LINK_STATUSES)[number];
+
+const externalLinkDocument = z.object({
+  document_id: z.number(),
+  document_type: z.string(),
+  title: z.nullable(z.string()),
+  title_prefix: z.nullish(z.string()),
+  langs: z.array(z.string()),
+});
+
+const externalLink = z.object({
+  url: z.string(),
+  host: z.string(),
+  // 'trusted': its links are genuine
+  host_review: z.nullable(z.string()),
+  status: z.enum(EXTERNAL_LINK_STATUSES),
+  http_status: z.nullable(z.number()),
+  // the kind of error: dns, tls, refused, timeout, private, home (sent to the home page), login (to a login page)...
+  error: z.nullable(z.string()),
+  // where the redirections led
+  final_url: z.nullable(z.string()),
+  first_title: z.nullable(z.string()),
+  last_title: z.nullable(z.string()),
+  failures: z.number(),
+  first_failure_at: z.nullable(z.string()),
+  last_ok_at: z.nullable(z.string()),
+  last_checked_at: z.nullable(z.string()),
+  next_check_at: z.nullable(z.string()),
+  // by a moderator: 'genuine' or 'taken_over'
+  review: z.nullable(z.string()),
+  reviewed_at: z.nullable(z.string()),
+  documents_count: z.number(),
+  documents: z.array(externalLinkDocument),
+});
+
+export type ExternalLink = z.input<typeof externalLink>;
+
+export const externalLinksPage = z.object({
+  total: z.number(),
+  counts: z.record(z.string(), z.number()),
+  links: z.array(externalLink),
+});
+
+export const externalLinkReview = z.object({ url: z.string(), review: z.nullable(z.string()) });
+export const externalHostReview = z.object({ host: z.string(), review: z.nullable(z.string()) });
+export const externalLinkRecheck = z.object({ url: z.string(), next_check_at: z.nullable(z.string()) });
+
 // GET /images/duplicates: the sets of images with the same file (size, dimensions, EXIF date), the last uploaded
 // first (moderators)
 const duplicateImageLink = z.object({
