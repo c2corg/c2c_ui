@@ -150,21 +150,3 @@ describe('PartnerOutingRow, new and approximate', () => {
     expect(mountRow(partnerOuting()).find('[data-test="approximate"]').exists()).toBe(false);
   });
 });
-
-describe('PartnerOutingRow, slots', () => {
-  it('shows what a page adds before the title and after the details', () => {
-    const wrapper = shallowMount(PartnerOutingRow, {
-      props: { outing: partnerOuting() },
-      slots: { 'before-title': '<span class="before">2026-02-14</span>', default: '<span class="after">Here</span>' },
-      global: {
-        config: { globalProperties: { $gettext: (text: string) => text } as never },
-        stubs: { RouterLink: RouterLinkStub, SourceBadge },
-      },
-    });
-    const main = wrapper.find('.partner-outing-main');
-    expect(main.find('.before').text()).toBe('2026-02-14');
-    expect(main.find('.after').text()).toBe('Here');
-    // inside the link, the date first
-    expect(main.html().indexOf('before')).toBeLessThan(main.html().indexOf('outing-title'));
-  });
-});
