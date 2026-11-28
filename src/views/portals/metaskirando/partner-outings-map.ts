@@ -32,9 +32,10 @@ export const sourceLabel = (source: string, siteName?: string) => SOURCE_LABELS[
 
 export const sourceColor = (source: string) => SOURCE_COLORS[source] ?? OTHER_SOURCE_COLOR;
 
-// the qualities of `geometry.quality` that tell the place of the outing only roughly: the centre of its area, or the
-// summit it was resolved to (the start of the outing is somewhere around)
-const APPROXIMATE_QUALITIES = ['area_centroid', 'summit'];
+// the qualities of `geometry.quality` that tell the place of the outing only roughly: the centre of its area, its
+// summit as the partner gives it, or the c2c summit the API resolved its name to (the start of the outing is somewhere
+// around)
+const APPROXIMATE_QUALITIES = ['area_centroid', 'summit', 'summit_match'];
 
 export const isApproximate = (outing: PartnerOuting) =>
   !!outing.geometry && APPROXIMATE_QUALITIES.includes(outing.geometry.quality);

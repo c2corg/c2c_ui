@@ -1,5 +1,8 @@
 <template>
-  <div class="box no-print" v-if="!isDraftView && (showAddOutingButton || outings.length !== 0)">
+  <div
+    class="box no-print"
+    v-if="!isDraftView && (showAddOutingButton || outings.length !== 0 || partnerOutings.length !== 0)"
+  >
     <div class="title is-2">
       <span v-if="['image', 'article'].includes(documentType)" v-translate>Associated outings</span>
       <span v-else v-translate>Last outings</span>
@@ -24,16 +27,26 @@
         <span v-translate v-if="outings.length === 0">Add the first outing</span>
       </add-link>
     </div>
+
+    <!-- the outings of the partner sites close to a route or a waypoint (not on camptocamp.org yet) -->
+    <div v-if="partnerOutings.length" class="partner-outings" data-test="partner-outings">
+      <p class="partner-outings-title has-text-grey">{{ $gettext('nearby, from other sites') }}</p>
+      <div v-for="outing of partnerOutings" :key="outing.id">
+        <pretty-partner-outing-link :outing="outing" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, toRef } from 'vue';
 
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { useViewMode } from '@/js/composables/view-mode';
 import { documentProperty, useDocumentType } from '@/js/properties';
 import type { C2cDocument } from '@/js/vue-plugins/document-utils';
+import PrettyPartnerOutingLink from '@/views/portals/metaskirando/PrettyPartnerOutingLink.vue';
+import { useClosePartnerOutings } from '@/views/portals/metaskirando/use-close-partner-outings';
 
 const props = defineProps({
   ...documentProperty,
@@ -47,9 +60,11 @@ const props = defineProps({
   },
 });
 
-const { $documentUtils } = useGlobalProperties();
+const { $documentUtils, $language } = useGlobalProperties();
 const { documentType } = useDocumentType(props);
 const { isDraftView } = useViewMode();
+
+const { outings: partnerOutings } = useClosePartnerOutings(toRef(props, 'document'), () => $language?.current);
 
 // the outings of a document, and for a waypoint the routes of the area: a page of the documents, and their total
 type Page = { documents: C2cDocument[]; total: number };
@@ -112,6 +127,15 @@ const showAddOutingButton = computed(() => {
 
 .add-section {
   margin-top: 1.5rem;
+}
+
+.partner-outings {
+  margin-top: 1.5rem;
+}
+
+.partner-outings-title {
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
 }
 
 .badge {
