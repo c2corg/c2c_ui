@@ -44,7 +44,12 @@
         <fa-icon icon="bug" size="lg" class="has-text-danger" />
       </div>
 
-      <div v-if="siteConfiguration.isBackendSelectable" class="navigation-item dropdown is-hoverable is-hidden-mobile">
+      <div
+        v-if="siteConfiguration.isBackendSelectable"
+        class="navigation-item dropdown is-hoverable is-hidden-mobile backend-menu"
+        @mouseenter="loadBackendsHealth"
+        @focusin="loadBackendsHealth"
+      >
         <div class="dropdown-trigger">
           <fa-icon icon="database" />
         </div>
@@ -59,6 +64,18 @@
               @click="setUrlsConfiguration(urlsConfiguration.name)"
             >
               <span>{{ urlsConfiguration.name }}</span>
+              <template v-if="backendsHealth[urlsConfiguration.name]">
+                <small
+                  v-if="backendsHealth[urlsConfiguration.name]!.ok"
+                  class="backend-version"
+                  :title="backendHealthTitle(backendsHealth[urlsConfiguration.name]!)"
+                >
+                  {{ backendHealthText(backendsHealth[urlsConfiguration.name]!) }}
+                </small>
+                <small v-else class="backend-version has-text-danger">
+                  {{ backendHealthText(backendsHealth[urlsConfiguration.name]!) }}
+                </small>
+              </template>
             </button>
           </div>
         </div>
@@ -213,7 +230,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, ref, shallowRef, useTemplateRef, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, reactive, ref, shallowRef, useTemplateRef, watch } from 'vue';
 import { isNavigationFailure, useRoute, useRouter } from 'vue-router';
 
 import DfmAdLarge from './DfmAdLarge.vue';
@@ -222,6 +239,7 @@ import IconHelp from '@/components/generics/icons/IconHelp.vue';
 import IconJoinUs from '@/components/generics/icons/IconJoinUs.vue';
 import JoinUsLink from '@/components/generics/links/JoinUsLink.vue';
 import forum from '@/js/apis/forum';
+import { type BackendHealth, getBackendHealth } from '@/js/backend-health';
 import { urlWithBackend } from '@/js/backend-selection';
 import { useGlobalProperties } from '@/js/composables/global-properties';
 import { ADDABLE_TYPES, HELP_ROUTE, useAccountLinks } from '@/js/composables/main-menu';
@@ -323,6 +341,38 @@ function go(document: C2cDocument) {
   });
 }
 
+// the API version of each backend of the drop-down, fetched when it opens (see backend-health.ts)
+const backendsHealth = reactive<Record<string, BackendHealth>>({});
+
+function loadBackendsHealth() {
+  for (const { name, api } of Object.values(siteConfiguration.urlsConfigurations)) {
+    getBackendHealth(api).then((health) => {
+      backendsHealth[name] = health;
+    });
+  }
+}
+
+function backendHealthText(health: BackendHealth) {
+  if (health.ok) {
+    return health.label;
+  }
+  switch (health.error) {
+    case 'http':
+      // the status code is the same in every language
+      return `HTTP ${health.status}`;
+    case 'timeout':
+      return $gettext('timeout');
+    case 'unreachable':
+      return $gettext('unreachable');
+    default:
+      return $gettext('invalid response');
+  }
+}
+
+function backendHealthTitle(health: BackendHealth) {
+  return health.ok ? health.commitDate : undefined;
+}
+
 function setUrlsConfiguration(name: string) {
   // reloads the page on the other backend, for this tab only
   window.location.assign(urlWithBackend(window.location.href, name));
@@ -401,6 +451,20 @@ nav {
     background-color: #e6791f;
     border-color: transparent;
   }
+}
+
+/* the API version of each backend, after its name */
+.backend-menu .dropdown-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  white-space: nowrap;
+}
+
+.backend-version {
+  font-size: 0.7em;
+  font-family: monospace;
+  margin-left: auto;
 }
 
 /* the avatar as close to the left border as to the top and bottom ones (3px) */

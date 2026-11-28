@@ -5,8 +5,14 @@ import { createMemoryHistory, createRouter } from 'vue-router';
 
 import Navigation from './Navigation.vue';
 
+import type { BackendHealth } from '@/js/backend-health';
+import config from '@/js/config';
+
 const forumNotifications = reactive({ unread: 0, unreadHighPriority: 0, start: vi.fn(), stop: vi.fn() });
 vi.mock('@/stores/forum-notifications', () => ({ useForumNotificationsStore: () => forumNotifications }));
+
+const getBackendHealth = vi.fn<(api: string) => Promise<BackendHealth>>();
+vi.mock('@/js/backend-health', () => ({ getBackendHealth: (api: string) => getBackendHealth(api) }));
 
 beforeEach(() => {
   Object.assign(forumNotifications, { unread: 0, unreadHighPriority: 0 });
@@ -132,5 +138,55 @@ describe('Navigation', () => {
 
     expect(wrapper.findAll('.forum-badge.is-on-avatar').map((badge) => badge.text())).toEqual(['3']);
     expect(wrapper.findAll('a.forum-link').map((link) => link.text())).toEqual(['Forum notifications 3']);
+  });
+
+  describe('backend drop-down', () => {
+    const backends = () => Object.values(config.urlsConfigurations);
+    const versions = (wrapper: Awaited<ReturnType<typeof mountNavigation>>['wrapper']) =>
+      wrapper.findAll('.backend-menu .dropdown-item').map((item) => {
+        const version = item.find('.backend-version');
+        return version.exists()
+          ? [version.text(), version.attributes('title') ?? null, version.classes('has-text-danger')]
+          : null;
+      });
+
+    it('fetches the health of the backends only when opened', async () => {
+      getBackendHealth.mockResolvedValue({ ok: true, label: '96def4e' });
+      const { wrapper } = await mountNavigation();
+      await flushPromises();
+
+      expect(backends().length).toBeGreaterThan(1);
+      expect(getBackendHealth).not.toHaveBeenCalled();
+      expect(versions(wrapper).every((version) => version === null)).toBe(true);
+
+      await wrapper.find('.backend-menu').trigger('mouseenter');
+      await flushPromises();
+
+      expect(getBackendHealth.mock.calls.map(([api]) => api)).toEqual(backends().map(({ api }) => api));
+      expect(versions(wrapper).every((version) => version?.[0] === '96def4e')).toBe(true);
+    });
+
+    it('shows the version, the commit date as tooltip, or the error in red', async () => {
+      const [first, second, ...others] = backends();
+      getBackendHealth.mockImplementation(async (api) => {
+        if (api === first.api) {
+          return { ok: true, label: 'v6.2.0-12-g96def4e', commitDate: '2026-11-20T10:00:00Z' };
+        }
+        if (api === second.api) {
+          return { ok: false, error: 'http', status: 429 };
+        }
+        return { ok: false, error: 'timeout' };
+      });
+      const { wrapper } = await mountNavigation();
+
+      await wrapper.find('.backend-menu').trigger('focusin');
+      await flushPromises();
+
+      expect(versions(wrapper)).toEqual([
+        ['v6.2.0-12-g96def4e', '2026-11-20T10:00:00Z', false],
+        ['HTTP 429', null, true],
+        ...others.map(() => ['timeout', null, true]),
+      ]);
+    });
   });
 });
