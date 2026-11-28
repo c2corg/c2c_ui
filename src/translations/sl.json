@@ -649,6 +649,9 @@
       "API message": "Nepravilno uporabniško ime ali geslo"
     },
     "Logout": "Odjava",
+    "Longer than maximum length": {
+      "API message": "Daljše od maksimalne dolžine"
+    },
     "Longitude": "Zemljepisna dolžina",
     "Low danger level from the avalanche bulletin": "Nizka stopnja nevarnosti iz plazovnega biltena",
     "Mail has been sent": "Email poslan",
@@ -818,6 +821,7 @@
     "Other options": "Druge možnosti",
     "Other participants: unlink them first": "Drugi udeleženci: najprej jih odstranite",
     "Other tools can complement Itinévert:": "Itinévert lahko dopolnijo druga orodja:",
+    "Others here:": "Drugi tukaj:",
     "Oups! Something went wrong with forum. Here is the message :": "Ups! Prišlo je do težave s forumom. Tukaj je sporočilo:",
     "Oups! something went wrong...": "Ups! nekaj je šlo narobe...",
     "Our website uses cookies provided by ourselves and third parties. Some cookies are necessary for the website, while you can adjust others at any time, in particular those that allow us to understand the performance of our website and to tailor the advertising you see. You can accept or reject all, or": "Naše spletno mesto uporablja piškotke, ki jih zagotovimo mi in tretje osebe. Nekateri piškotki so potrebni za spletno mesto, medtem ko lahko druge kadar koli prilagodite, zlasti tiste, ki nam omogočajo razumeti delovanja našega spletnega mesta in prilagoditi oglase, ki jih vidite. Vse jih lahko sprejmete ali zavrnete oz lahko ",
@@ -1075,7 +1079,7 @@
     "Some files could not be downloaded": "Nekaterih datotek ni bilo mogoče prenesti",
     "Some outings need your decision: see Favourites.": "Nekateri Vzponi zahtevajo vašo odločitev: glejte Priljubljene.",
     "Some points are out of extent": "Nekatere točke so izven obsega",
-    "Some routes feature tricky sections where there is a risk of slipping dangerously (risk of impact or falling from a great height), falling into crevasses, collapsing seracs or drowning after falling through the ice on a mountain lake. To reduce the risk of slipping, it is often advisable to progress on foot, wearing crampons and suitably secured with rope.": "Nekatere smeri vključujejo zahtevne odseke, kjer obstaja nevarnost nevarnega zdrsa (tveganje udarca ali padca z velike višine), padca v razpoke, podora serakov ali utopitve po prebitju ledene površine gorskega jezera. Za zmanjšanje tveganja zdrsa je pogosto priporočljivo napredovati peš, z nameščenimi derezami in ustrezno varovanjem z vrvjo.",
+    "Some routes feature tricky sections where there is a risk of slipping dangerously (risk of impact or falling from a great height), falling into crevasses, collapsing seracs or drowning after falling through the ice on a mountain lake. To reduce the risk of slipping, it is often advisable to progress on foot, wearing crampons and suitably secured with rope.": "Nekatere smeri vključujejo zahtevne odseke, kjer obstaja nevarnost nevarnega zdrsa (tveganje udarca ali padca z velike višine), padca v razpoke, podora serakov ali utopitve po prebitju ledene površine gorskega jezera. Za zmanjšanje tveganja zdrsa je pogosto priporočljivo napredovati peš, z nameščenimi derezami in ustreznim varovanjem z vrvjo.",
     "Something new does not show up: close the app completely and open it again, it then loads its latest version.": "Če se kaj novega ne prikaže: aplikacijo povsem zaprite in jo znova odprite – tako se bo naložila njena najnovejša različica.",
     "Sophie Picture Contest": "Foto Natečaj Sophie",
     "Sorry, euskara lang has been frozen. We're looking for a moderator, if you're interested, please contact board@camptocamp.org": "Žal je jezikovna različica v baskovščini (euskara) zamrznjena. Iščemo moderatorja; če vas to zanima, se obrnite na board@camptocamp.org.",
@@ -1141,6 +1145,7 @@
     "The feed then ignores the activities, areas and languages. The activities and areas still serve the “My preferences” button of the lists.": "Tok nato prezre dejavnosti, regije in jezike. Dejavnosti in regije še vedno služijo gumbu »Moje nastavitve« na seznamih.",
     "The hazard potential is calculated from the danger level of the avalanche bulletin. It can be fine-tuned by selecting a potential within the danger level’s corresponding range. For example: the avalanche bulletin evokes a danger 3 just after a period in danger 4. We can then indicate a hazard potential of 12 instead of 8.": "Potencial nevarnosti se izračuna iz stopnje nevarnosti plazovnega biltena. Lahko ga natančno nastavite z izbiro potenciala znotraj ustreznega območja stopnje nevarnosti. Na primer: plazovni bilten omenja nevarnost 3 takoj po obdobju v nevarnosti 4. Tako lahko navedemo potencial nevarnosti 12 namesto 8.",
     "The image could not be deleted:": "Slike ni bilo mogoče izbrisati:",
+    "The image could not be rotated": "Slike ni bilo mogoče zavrteti",
     "The link could not be copied": "Povezave ni bilo mogoče kopirati",
     "The outing stays on the phone: complete and publish it from Favourites.": "Vzpon ostane v telefonu: dokončajte in objavite ga iz razdelka Priljubljene.",
     "The outings I took part in": "Vzponi, pri katerih sem sodeloval/-a",
@@ -1410,6 +1415,9 @@
     "already used username": {
       "API message": "Že uporabljeno uporabniško ime"
     },
+    "already-linked": {
+      "tracking": "že-povezano"
+    },
     "always_accessible": {
       "custodianship_types": "zmeraj odprto"
     },
@@ -1640,6 +1648,7 @@
       "langs": "nemščina"
     },
     "decathlon": "Decathlon",
+    "deleted": "izbrisano",
     "descending sort": "Padajoče razvrščanje",
     "descent": {
       "image_categories": "sestop"
@@ -2493,6 +2502,9 @@
     "treeline": "gozdna meja",
     "unknown": {
       "tracking": "Neznano"
+    },
+    "unknown service": {
+      "public_transportation_ratings": "neznana storitev"
     },
     "unsufficient-scopes": {
       "tracking": "Nezadostna dovoljenja"
