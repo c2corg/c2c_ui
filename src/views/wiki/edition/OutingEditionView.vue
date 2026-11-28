@@ -345,6 +345,7 @@ import FormSection from './utils/FormSection.vue';
 import MapInputRow from './utils/MapInputRow.vue';
 import QualityField from './utils/QualityField.vue';
 import { useDocumentEdition } from './utils/document-edition';
+import { trackFromHash } from './utils/prefill-from-query';
 import { useRouteProposals } from './utils/route-proposals';
 
 import OutingTracePicker from '@/components/tracking/OutingTracePicker.vue';
@@ -483,10 +484,27 @@ async function loadRecentPartners(): Promise<C2cDocument[]> {
 let loadedTrack: string | null | undefined;
 
 function afterLoad() {
-  loadedTrack = document.value!.geometry?.geom_detail;
-  showBothDates.value = document.value!.date_start !== document.value!.date_end;
+  const doc = document.value!;
+  // a day given in the url alone (?date_start=): the outing lasts that day
+  if (mode.value === 'add' && doc.date_start && !doc.date_end) {
+    doc.date_end = doc.date_start;
+  }
+  loadedTrack = doc.geometry?.geom_detail;
+  showBothDates.value = doc.date_start !== doc.date_end;
   // on creation, the user is already a participant
-  proposePartners.value = (document.value!.associations?.users ?? []).some((user) => user.document_id === $user.id);
+  proposePartners.value = (doc.associations?.users ?? []).some((user) => user.document_id === $user.id);
+  const track = mode.value === 'add' ? trackFromHash(pageRoute.hash) : null;
+  if (track !== null) {
+    void setGeometryFromUrl(track);
+  }
+}
+
+// the track given in the url (#geom=): what a GPS file holds, as its text (GeoJSON in degrees, GPX, KML), read as
+// that file would be. With times, it gives the date when the url did not
+async function setGeometryFromUrl(geom: string) {
+  // the map is drawn with the document, after this hook
+  await nextTick();
+  mapInput.value?.setGeometry(geom);
 }
 
 function updateBbox(newBbox: number[]) {

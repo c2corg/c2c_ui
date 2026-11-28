@@ -18,6 +18,8 @@ import {
 } from 'vue';
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router';
 
+import { prefillFromQuery } from './prefill-from-query';
+
 import c2c from '@/js/apis/c2c';
 import type DocumentService from '@/js/apis/c2c/DocumentService';
 import { apiErrors, errorText, type ShownApiError } from '@/js/apis/c2c/api-errors';
@@ -182,6 +184,9 @@ export function useDocumentEdition(hooks: EditionHooks = {}) {
       if (route.query.act) {
         newDocument.activities = String(route.query.act).split(',');
       }
+
+      // the fields given in the url by their names (?date_start=, ?height_diff_up=, ?title=…)
+      prefillFromQuery(newDocument, fields.value, route.query);
 
       onload();
     }
